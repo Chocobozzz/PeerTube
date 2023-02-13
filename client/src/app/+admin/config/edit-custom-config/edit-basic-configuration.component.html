@@ -137,7 +137,7 @@
 
           <my-markdown-textarea
             name="broadcastMessageMessage" formControlName="message"
-            [formError]="formErrors['broadcastMessage.message']"
+            [formError]="formErrors['broadcastMessage.message']" markdownType="to-unsafe-html"
           ></my-markdown-textarea>
 
           <div *ngIf="formErrors.broadcastMessage.message" class="form-error">{{ formErrors.broadcastMessage.message }}</div>

@@ -28,7 +28,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
 
   @Input() truncate: number
 
-  @Input() markdownType: 'text' | 'enhanced' = 'text'
+  @Input() markdownType: 'text' | 'enhanced' | 'to-unsafe-html' = 'text'
   @Input() customMarkdownRenderer?: (text: string) => Promise<string | HTMLElement>
 
   @Input() debounceTime = 150
@@ -147,8 +147,10 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
       html = result
     } else if (this.markdownType === 'text') {
       html = await this.markdownService.textMarkdownToHTML({ markdown: text })
-    } else {
+    } else if (this.markdownType === 'enhanced') {
       html = await this.markdownService.enhancedMarkdownToHTML({ markdown: text })
+    } else if (this.markdownType === 'to-unsafe-html') {
+      html = await this.markdownService.markdownToUnsafeHTML({ markdown: text })
     }
 
     if (this.markdownVideo) {
