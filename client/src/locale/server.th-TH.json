@@ -54,7 +54,6 @@
     "Playlist: {1}": "เพลย์ลิสต์: {1}",
     "By {1}": "โดย {1}",
     "Unavailable video": "Unavailable video",
-    "Misc": "อื่น ๆ",
     "Unknown": "ไม่ทราบ",
     "Afar": "อะฟาร์",
     "Abkhazian": "อับคาเซียน",
@@ -65,6 +64,7 @@
     "Aragonese": "อารากอน",
     "American Sign Language": "ภาษามืออเมริกัน",
     "Assamese": "อัสสัม",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "อวาริค",
     "Kotava": "โคทาวา",
     "Aymara": "ไอมารา",
@@ -254,6 +254,7 @@
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Simplified Chinese",
     "Traditional Chinese": "Traditional Chinese",
+    "Misc": "อื่น ๆ",
     "Normal mode": "โหมดปกติ",
     "Theater mode": "โหมดโรงภาพยนตร์"
 }

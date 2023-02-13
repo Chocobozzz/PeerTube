@@ -54,7 +54,6 @@
     "Playlist: {1}": "Playlist: {1}",
     "By {1}": "By {1}",
     "Unavailable video": "Vídeo non dispoñible",
-    "Misc": "Variado",
     "Unknown": "Descoñecido",
     "Afar": "Lonxe",
     "Abkhazian": "Abkhazo",
@@ -65,6 +64,7 @@
     "Aragonese": "Aragonés",
     "American Sign Language": "Lingua de signos americana",
     "Assamese": "Assamese",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "Avaric",
     "Kotava": "Kotava",
     "Aymara": "Aymara",
@@ -253,5 +253,6 @@
     "No linguistic content": "No linguistic content",
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Simplified Chinese",
-    "Traditional Chinese": "Traditional Chinese"
+    "Traditional Chinese": "Traditional Chinese",
+    "Misc": "Variado"
 }

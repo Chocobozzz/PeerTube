@@ -54,7 +54,6 @@
     "Playlist: {1}": "播放清單：{1}",
     "By {1}": "{1} 製作",
     "Unavailable video": "影片不可用",
-    "Misc": "雜項",
     "Unknown": "未知",
     "Afar": "阿法爾語",
     "Abkhazian": "阿布哈茲語",
@@ -65,6 +64,7 @@
     "Aragonese": "亞拉岡語",
     "American Sign Language": "美國手語",
     "Assamese": "阿薩姆語",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "阿瓦爾語",
     "Kotava": "Kotava 語",
     "Aymara": "艾馬拉語",
@@ -254,6 +254,7 @@
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Simplified Chinese",
     "Traditional Chinese": "Traditional Chinese",
+    "Misc": "雜項",
     "Normal mode": "一般模式",
     "Theater mode": "劇院模式"
 }

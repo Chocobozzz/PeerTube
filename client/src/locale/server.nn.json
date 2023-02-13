@@ -54,7 +54,6 @@
     "Playlist: {1}": "Speleliste: {1}",
     "By {1}": "Av {1}",
     "Unavailable video": "Utilgjengeleg video",
-    "Misc": "Ymse",
     "Unknown": "Ukjent",
     "Afar": "Afar",
     "Abkhazian": "Abkhasisk",
@@ -65,6 +64,7 @@
     "Aragonese": "Aragonesisk",
     "American Sign Language": "Amerikansk teiknspråk",
     "Assamese": "Assamesisk",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "Avarisk",
     "Kotava": "Kotava",
     "Aymara": "Aymara",
@@ -253,5 +253,6 @@
     "No linguistic content": "No linguistic content",
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Simplified Chinese",
-    "Traditional Chinese": "Traditional Chinese"
+    "Traditional Chinese": "Traditional Chinese",
+    "Misc": "Ymse"
 }

@@ -54,7 +54,6 @@
     "Playlist: {1}": "Подборка: {1}",
     "By {1}": "От {1}",
     "Unavailable video": "Видео недоступно",
-    "Misc": "Разное",
     "Unknown": "Неизвестно",
     "Afar": "Афарский",
     "Abkhazian": "Абхазский",
@@ -65,6 +64,7 @@
     "Aragonese": "Арагонский",
     "American Sign Language": "Амслен",
     "Assamese": "Ассамский",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "Аварский",
     "Kotava": "Котава",
     "Aymara": "Аймара",
@@ -254,6 +254,7 @@
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Упрощённый Китайский",
     "Traditional Chinese": "Традиционный Китайский",
+    "Misc": "Разное",
     "Normal mode": "Обычный режим",
     "Theater mode": "Режим широкого экрана"
 }

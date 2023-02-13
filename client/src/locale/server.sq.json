@@ -54,7 +54,6 @@
     "Playlist: {1}": "Playlist: {1}",
     "By {1}": "By {1}",
     "Unavailable video": "Video jo e passhme",
-    "Misc": "Të ndryshme",
     "Unknown": "E panjohur",
     "Afar": "Afarisht",
     "Abkhazian": "Abkazisht",
@@ -65,6 +64,7 @@
     "Aragonese": "Aragonisht",
     "American Sign Language": "Gjuhë Shenjash Amerikane",
     "Assamese": "Asameze",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "Avarisht",
     "Kotava": "Kotava",
     "Aymara": "Ajmarisht",
@@ -253,5 +253,6 @@
     "No linguistic content": "No linguistic content",
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Simplified Chinese",
-    "Traditional Chinese": "Traditional Chinese"
+    "Traditional Chinese": "Traditional Chinese",
+    "Misc": "Të ndryshme"
 }
