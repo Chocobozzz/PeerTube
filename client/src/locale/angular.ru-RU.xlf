@@ -1035,7 +1035,7 @@
       </trans-unit>
       <trans-unit id="6994936570572804302" datatype="html">
         <source>Request an account</source>
-        <target state="translated">Запросить учётную запись</target>
+        <target state="translated">Запросить учетную запись</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/signup-label.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1220,7 +1220,7 @@
       </trans-unit>
       <trans-unit id="2101170466365500913" datatype="html">
         <source>Logging into an account lets you publish content</source>
-        <target state="translated">Вход в учётную запись позволяет размещать содержимое</target>
+        <target state="translated">Вход в учетную запись позволяет публиковать контент</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="6584143415159913044" datatype="html">
@@ -1467,7 +1467,7 @@
       </trans-unit>
       <trans-unit id="3848077896245199337" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="translated">Настройте свою учётную запись, управляйте плейлистами, используйте сторонние приложения...</target>
+        <target state="translated">Настройте свою учетную запись, управляйте списками воспроизведения видео, используйте сторонние приложения...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6284442506490785579" datatype="html">
@@ -1728,7 +1728,7 @@
       </trans-unit>
       <trans-unit id="8893390761160292681" datatype="html">
         <source>My account</source>
-        <target state="translated">Моя учётка</target>
+        <target state="translated">Мой аккаунт</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">63</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
@@ -2915,7 +2915,7 @@
       </trans-unit>
       <trans-unit id="285180972645018518" datatype="html">
         <source>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</source>
-        <target state="translated">Извините, загрузка файлов недоступна для вашей учётной записи. Если вы хотите добавлять видео, свяжитесь с администратором.</target>
+        <target state="translated">К сожалению, функция загрузки отключена для вашей учетной записи. Если вы хотите добавить видео, администратор должен увеличить вашу квоту.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="1138810463037464722" datatype="html">
@@ -3022,7 +3022,7 @@
       </trans-unit>
       <trans-unit id="2993949426196989262" datatype="html">
         <source>We recommend you to not use the <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK"/> Instead, <x id="START_LINK"/>create a dedicated account<x id="CLOSE_LINK"/> to upload your videos. </source>
-        <target state="translated">Лучше не использовать <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> пользователь должен размещать свои видео, так как это учётная запись супер-администратора вашего экземпляра. <x id="LINE_BREAK"/> вместо этого, <x id="START_LINK"/>создайте отдельную учётную запись <x id="CLOSE_LINK"/> чтобы загрузить свои видео. </target>
+        <target state="translated">Мы рекомендуем вам не использовать пользователя <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> для публикации ваших видео, поскольку это учетная запись суперадминистратора вашего экземпляра. <x id="LINE_BREAK"/> Вместо этого, <x id="START_LINK"/>создайте специальную учетную запись<x id="CLOSE_LINK"/> для загрузки ваших видео. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="293476877021544115">
@@ -3965,7 +3965,7 @@
       </trans-unit>
       <trans-unit id="2348557406282409966" datatype="html">
         <source>Open account in a new tab</source>
-        <target state="translated">Открыть учётную запись в новой вкладке</target>
+        <target state="translated">Открыть аккаунт в новой вкладке</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">69</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">94</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">32</context></context-group>
@@ -6155,7 +6155,7 @@
       </trans-unit>
       <trans-unit id="5417361655914085905" datatype="html">
         <source>Account page</source>
-        <target state="translated">Страница учётной записи</target>
+        <target state="translated">Страница аккаунта</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">69</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
