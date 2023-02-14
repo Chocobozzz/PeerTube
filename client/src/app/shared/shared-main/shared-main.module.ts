@@ -25,6 +25,7 @@ import {
   FromNowPipe,
   InfiniteScrollerDirective,
   LinkComponent,
+  LoginLinkComponent,
   NumberFormatterPipe,
   PeerTubeTemplateDirective
 } from './angular'
@@ -92,6 +93,7 @@ import { VideoChannelService } from './video-channel'
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
     LinkComponent,
+    LoginLinkComponent,
 
     ActionDropdownComponent,
     ButtonComponent,
@@ -152,6 +154,7 @@ import { VideoChannelService } from './video-channel'
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
     LinkComponent,
+    LoginLinkComponent,
 
     ActionDropdownComponent,
     ButtonComponent,

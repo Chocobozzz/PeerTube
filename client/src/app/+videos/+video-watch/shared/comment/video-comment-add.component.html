@@ -74,10 +74,7 @@
       (click)="hideModals()" (key.enter)="hideModals()"
     >
 
-    <input
-      type="submit" i18n-value value="Login to comment" class="peertube-button orange-button"
-      (click)="gotoLogin()"
-    >
+    <my-login-link i18n-label label="Login to comment" className="peertube-button-link orange-button"></my-login-link>
   </div>
 </ng-template>
 

@@ -1,7 +1,6 @@
 import { HotkeysService } from 'angular2-hotkeys'
 import * as debug from 'debug'
 import { switchMap } from 'rxjs/operators'
-import { environment } from 'src/environments/environment'
 import { ViewportScroller } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
@@ -22,7 +21,6 @@ import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
-import { PluginsManager } from '@root-helpers/plugins-manager'
 import { HTMLServerConfig, ServerConfig, UserRight, VideoConstant } from '@shared/models'
 
 const debugLogger = debug('peertube:menu:MenuComponent')
@@ -133,10 +131,6 @@ export class MenuComponent implements OnInit {
 
     this.modalService.openQuickSettingsSubject
       .subscribe(() => this.openQuickSettings())
-  }
-
-  getExternalLoginHref () {
-    return PluginsManager.getDefaultLoginHref(environment.apiUrl, this.serverConfig)
   }
 
   isRegistrationAllowed () {

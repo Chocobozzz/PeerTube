@@ -4,6 +4,8 @@ import { NavigationCancel, NavigationEnd, Router } from '@angular/router'
 import { logger } from '@root-helpers/logger'
 import { ServerService } from '../server'
 import { SessionStorageService } from '../wrappers/storage.service'
+import { PluginsManager } from '@root-helpers/plugins-manager'
+import { environment } from 'src/environments/environment'
 
 const debugLogger = debug('peertube:router:RedirectService')
 
@@ -98,6 +100,13 @@ export class RedirectService {
           return this.router.navigateByUrl(this.defaultRoute, { skipLocationChange })
         })
 
+  }
+
+  redirectToLogin () {
+    const externalLoginUrl = PluginsManager.getDefaultLoginHref(environment.apiUrl, this.serverService.getHTMLConfig())
+
+    if (externalLoginUrl) window.location.href = externalLoginUrl
+    else this.router.navigate([ '/login' ])
   }
 
   private doRedirect (redirectUrl: string, fallbackRoute?: string) {

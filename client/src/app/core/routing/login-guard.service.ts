@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core'
-import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router'
+import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, RouterStateSnapshot } from '@angular/router'
 import { AuthService } from '../auth/auth.service'
+import { RedirectService } from './redirect.service'
 
 @Injectable()
 export class LoginGuard implements CanActivate, CanActivateChild {
 
   constructor (
-    private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    private redirectService: RedirectService
   ) {}
 
   canActivate (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (this.auth.isLoggedIn() === true) return true
 
-    this.router.navigate([ '/login' ])
+    this.redirectService.redirectToLogin()
     return false
   }
 

@@ -13,7 +13,6 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core'
-import { Router } from '@angular/router'
 import { Notifier, User } from '@app/core'
 import { VIDEO_COMMENT_TEXT_VALIDATOR } from '@app/shared/form-validators/video-comment-validators'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
@@ -52,7 +51,6 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     private notifier: Notifier,
     private videoCommentService: VideoCommentService,
     private modalService: NgbModal,
-    private router: Router,
     @Inject(LOCALE_ID) private localeId: string
   ) {
     super()
@@ -159,11 +157,6 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
 
   getUri () {
     return window.location.href
-  }
-
-  gotoLogin () {
-    this.hideModals()
-    this.router.navigate([ '/login' ])
   }
 
   cancelCommentReply () {

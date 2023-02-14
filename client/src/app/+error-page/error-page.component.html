@@ -31,10 +31,7 @@
       <ng-container *ngIf="type !== 'video'" i18n>You might need to login to see the resource.</ng-container>
     </div>
 
-    <a class="peertube-button-big-link orange-button mt-5" i18n routerLink="/login">
-      Login
-    </a>
-
+    <my-login-link className="peertube-button-big-link orange-button mt-5"></my-login-link>
   </div>
 
   <div *ngIf="status === 403" class="box">

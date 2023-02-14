@@ -251,7 +251,8 @@ my-actor-avatar {
 .login-buttons-block {
   margin: 30px 25px 35px;
 
-  > a {
+  > a,
+  > my-login-link {
     display: block;
     width: 100%;
 

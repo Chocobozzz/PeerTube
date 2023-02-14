@@ -100,8 +100,7 @@
       </div>
 
       <div *ngIf="!isLoggedIn" class="login-buttons-block">
-        <a i18n *ngIf="!getExternalLoginHref()" routerLink="/login" class="peertube-button-link orange-button">Login</a>
-        <a i18n *ngIf="getExternalLoginHref()" [href]="getExternalLoginHref()" class="peertube-button-link orange-button">Login</a>
+        <my-login-link className="peertube-button-link orange-button w-100"></my-login-link>
 
         <a *ngIf="isRegistrationAllowed()" routerLink="/signup" class="peertube-button-link create-account-button">
           <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
