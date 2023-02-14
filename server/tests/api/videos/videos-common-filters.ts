@@ -31,6 +31,8 @@ describe('Test videos filter', function () {
     await setDefaultVideoChannel(servers)
     await setDefaultAccountAvatar(servers)
 
+    await servers[1].config.enableMinimumTranscoding()
+
     for (const server of servers) {
       const moderator = { username: 'moderator', password: 'my super password' }
       await server.users.create({ username: moderator.username, password: moderator.password, role: UserRole.MODERATOR })
