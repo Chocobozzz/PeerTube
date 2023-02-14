@@ -23,7 +23,10 @@ async function cutVideo (options: {
 
   command = presetCopy(command)
 
-  if (options.start) command.inputOption('-ss ' + options.start)
+  if (options.start) {
+    // Using -ss as output option is more precise than using it as input option
+    command.outputOption('-ss ' + options.start)
+  }
 
   if (options.end) {
     const endSeeking = options.end - (options.start || 0)
