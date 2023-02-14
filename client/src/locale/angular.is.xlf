@@ -2543,6 +2543,7 @@
       </trans-unit>
       <trans-unit id="594064951138382358" datatype="html">
         <source>Also transcode original resolution</source>
+        <target state="translated">Einnig umkóða upprunalega upplausn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">134</context>
@@ -2557,6 +2558,7 @@
       </trans-unit>
       <trans-unit id="5309195634424105927" datatype="html">
         <source>Live transcoding threads</source>
+        <target state="translated">Þræðir umkóðunar í beinu streymi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">145</context>
@@ -2762,6 +2764,7 @@
       </trans-unit>
       <trans-unit id="4437374135745051281" datatype="html">
         <source>Always transcode original resolution</source>
+        <target state="translated">Alltaf umkóða upprunalega upplausn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">116</context>
@@ -2776,6 +2779,7 @@
       </trans-unit>
       <trans-unit id="1126867109775813762" datatype="html">
         <source>Transcoding threads</source>
+        <target state="translated">Þræðir umkóðunar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">145</context>
@@ -3672,7 +3676,7 @@
       </trans-unit>
       <trans-unit id="4287036840463640002" datatype="html">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created with the moderation response you'll write below. </source>
-        <target state="new"> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created with the moderation response you'll write below. </target>
+        <target state="translated">Tölvupóstur verður sendur á <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> sem útskýrir að viðkomandi notandaaðgangur hafi verið útbúinn, með fylgir svar umsjónaraðila sem þú skrifar hér fyrir neðan. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">24,26</context>
@@ -3680,7 +3684,7 @@
       </trans-unit>
       <trans-unit id="6252848909934071768" datatype="html">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created. </source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created. </target>
+        <target state="translated">Tölvupóstsamskipti eru ekki virkjuð á þessum netþjóni þannig að PeerTube mun ekki geta sent tölvupóst á <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> þar sem útskýrt er að viðkomandi notandaaðgangur hafi verið útbúinn. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -3688,7 +3692,7 @@
       </trans-unit>
       <trans-unit id="908816482785584930" datatype="html">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. </source>
-        <target state="new"> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. </target>
+        <target state="translated">Tölvupóstur verður sendur á <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> sem útskýrir að viðkomandi skráningarbeiðni hafi verið hafnað <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, ásamt svari umsjónaraðila sem þú skrifar hér fyrir neðan. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">34,36</context>
@@ -3696,7 +3700,7 @@
       </trans-unit>
       <trans-unit id="2693506849974732500" datatype="html">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been rejected. </source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been rejected. </target>
+        <target state="translated">Tölvupóstsamskipti eru ekki virkjuð á þessum netþjóni þannig að PeerTube mun ekki geta sent tölvupóst á <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> þar sem útskýrt er að viðkomandi skráningarbeiðni hafi verið hafnað. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">38,40</context>
@@ -4753,6 +4757,7 @@
       </trans-unit>
       <trans-unit id="3855396975723886053" datatype="html">
         <source>User won't be able to login anymore, but videos and comments will be kept as is.</source>
+        <target state="translated">Notandinn mun ekki geta skráð sig inn lengur, en myndskeið og athugasemdir munu haldast óbreytt.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">107</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">352</context></context-group>
       </trans-unit>
@@ -4792,10 +4797,12 @@
       </trans-unit>
       <trans-unit id="7634059432691079352" datatype="html">
         <source>Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</source>
+        <target state="translated">Viltu í alvörunni taka {count, plural, =1 {1 notanda} other {<x id="count"/> notendur}} úr banni?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">213</context></context-group>
       </trans-unit>
       <trans-unit id="4884272193574287483" datatype="html">
         <source>Do you really want to unban <x id="PH" equiv-text="users.length"/> users?</source>
+        <target state="translated">Viltu í alvörunni taka <x id="PH" equiv-text="users.length"/> notendur úr banni?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">215</context></context-group>
       </trans-unit>
       <trans-unit id="738031253894929036" datatype="html">
@@ -4816,10 +4823,12 @@
       </trans-unit>
       <trans-unit id="5945924096465496818" datatype="html">
         <source>&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</source>
+        <target state="translated">&lt;p&gt;Þú getur ekki búið til notendur eða rásir með notandanafni sem þegar hefur verið notað af eyddum notanda/rás.&lt;/p&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
       <trans-unit id="5643060985393782358" datatype="html">
         <source>It means the following usernames will be permanently deleted and cannot be recovered:</source>
+        <target state="translated">Það þýðir að eftirfarandi notandanöfnum verður endanlega eytt og þau verður ekki hægt að endurheimta:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="1301767781765127363" datatype="html">
@@ -4834,10 +4843,12 @@
       </trans-unit>
       <trans-unit id="3104427236147521673" datatype="html">
         <source>{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</source>
+        <target state="translated">{count, plural, =1 {Tölvupóstfang 1 notanda merkt sem staðfest.} other {Tölvupóstföng <x id="count"/> notenda merkt sem staðfest.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">273</context></context-group>
       </trans-unit>
       <trans-unit id="8360664597512051242" datatype="html">
         <source><x id="PH" equiv-text="users.length"/> users email set as verified.</source>
+        <target state="translated">Tölvupóstföng <x id="PH" equiv-text="users.length"/> notenda merkt sem staðfest.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">275</context></context-group>
       </trans-unit>
       <trans-unit id="7483807629538115183" datatype="html">
@@ -5142,18 +5153,22 @@
       </trans-unit>
       <trans-unit id="6228449077605046873" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</source>
+        <target state="translated">Ertu viss um að þú viljir eyða {count, plural, =1 {spilunarlista HSL-streymi} other {<x id="count"/> spilunarlistum HSL-streyma}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">269</context></context-group>
       </trans-unit>
       <trans-unit id="9088099192924395359" datatype="html">
         <source>Are you sure you want to delete <x id="PH" equiv-text="videos.length"/> HLS streaming playlists?</source>
+        <target state="translated">Ertu viss um að þú viljir eyða <x id="PH" equiv-text="videos.length"/> spilunarlistum HSL-streyma}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">271</context></context-group>
       </trans-unit>
       <trans-unit id="653148876380254581" datatype="html">
         <source>Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
+        <target state="translated">Ertu viss um að þú viljir eyða WebTorrent-skrám {count, plural, =1 {1 myndskeiðs} other {<x id="count"/> myndskeiða}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">275</context></context-group>
       </trans-unit>
       <trans-unit id="5442133371267277333" datatype="html">
         <source>Are you sure you want to delete WebTorrent files of <x id="PH" equiv-text="videos.length"/> videos?</source>
+        <target state="translated">Ertu viss um að þú viljir eyða WebTorrent-skrám <x id="PH" equiv-text="videos.length"/> myndskeiða?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">277</context></context-group>
       </trans-unit>
       <trans-unit id="1571742433738679426" datatype="html">
@@ -5224,6 +5239,7 @@
       </trans-unit>
       <trans-unit id="931472057457682240" datatype="html">
         <source>Update to <x id="PH" equiv-text="plugin.latestVersion"/></source>
+        <target state="translated">Uppfæra í <x id="PH" equiv-text="plugin.latestVersion"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -5231,6 +5247,7 @@
       </trans-unit>
       <trans-unit id="9107383323119159110" datatype="html">
         <source>Do you really want to uninstall <x id="PH" equiv-text="plugin.name"/>?</source>
+        <target state="translated">Ert þú viss um að þú viljir fjarlægja <x id="PH" equiv-text="plugin.name"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">119</context>
@@ -5364,6 +5381,7 @@
       </trans-unit>
       <trans-unit id="3150704904301058778" datatype="html">
         <source>The plugin index is not available. Please retry later.</source>
+        <target state="translated">Yfirlit forritsviðbóta er ekki aðgengilegt. Reyndu aftur síðar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -5394,6 +5412,7 @@
       </trans-unit>
       <trans-unit id="2601639465696257054" datatype="html">
         <source>This <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> does not have settings. </source>
+        <target state="translated">Þessi <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> er ekki með stillingar. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
           <context context-type="linenumber">17,18</context>
@@ -5461,6 +5480,7 @@
       </trans-unit>
       <trans-unit id="3981257963098530375" datatype="html">
         <source>Navigate between installed plugins and themes or find new ones</source>
+        <target state="translated">Flakka á milli uppsettra forritsviðbóta og þema eða finndu ný</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-navigation.component.html</context>
           <context context-type="linenumber">2</context>
@@ -5479,6 +5499,7 @@
       </trans-unit>
       <trans-unit id="320689395528621696" datatype="html">
         <source>Navigate between plugins and themes</source>
+        <target state="translated">Flakka á milli forritsviðbóta og þema</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-navigation.component.html</context>
           <context context-type="linenumber">7</context>
@@ -5545,6 +5566,7 @@
       </trans-unit>
       <trans-unit id="4468853448271686046" datatype="html">
         <source>P2P system could not work correctly</source>
+        <target state="translated">P2P-kerfið virkaði ekki rétt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">10</context>
@@ -5811,6 +5833,7 @@
       </trans-unit>
       <trans-unit id="3343007694071351756" datatype="html">
         <source>We couldn't find any video tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
+        <target state="translated">Við gátum ekki fundið neitt myndskeið tengt slóðinni <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> sem þú varst að leita að.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">7</context>
@@ -5818,6 +5841,7 @@
       </trans-unit>
       <trans-unit id="7366678433039425999" datatype="html">
         <source>We couldn't find any resource tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
+        <target state="translated">Við gátum ekki fundið neitt tilfang tengt slóðinni <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> sem þú varst að leita að.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">8</context>
@@ -5834,6 +5858,7 @@
       </trans-unit>
       <trans-unit id="6925335998927745197" datatype="html">
         <source>You may have used an outdated or broken link</source>
+        <target state="translated">Þú gætir hafa notað úreltan eða rofinn tengil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">15</context>
@@ -5841,6 +5866,7 @@
       </trans-unit>
       <trans-unit id="1171455174603388942" datatype="html">
         <source>The video may have been moved or deleted</source>
+        <target state="translated">Myndskeiðið gæti hafa verið fært eða því eytt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">17</context>
@@ -5848,6 +5874,7 @@
       </trans-unit>
       <trans-unit id="2213348264902218064" datatype="html">
         <source>The resource may have been moved or deleted</source>
+        <target state="translated">Tilfangið gæti hafa verið fært eða því eytt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">18</context>
@@ -5855,6 +5882,7 @@
       </trans-unit>
       <trans-unit id="3209594685692897380" datatype="html">
         <source>You may have typed the address or URL incorrectly</source>
+        <target state="translated">Þú gætir hafa slegið rangt inn vistfangið eða slóðina</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">20</context>
@@ -5990,6 +6018,7 @@
       </trans-unit>
       <trans-unit id="1909492071130899005" datatype="html">
         <source>Sorry but there was an issue with the external login process. Please <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/about&quot;&gt;"/>contact an administrator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+        <target state="translated">Því miður kom upp vandamál í utanaðkomandi innskráningarferlinu. Hafðu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/about&quot;&gt;"/>samband við kerfisstjóra<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">26,28</context>
@@ -6087,6 +6116,7 @@
       </trans-unit>
       <trans-unit id="87327320394367488" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
+        <target state="translated">Okkur þykir það leitt, en þú getur ekki endurheimt lykilorðið þitt þar sem kerfisstjóri netþjónsins þíns hefur ekki stillt tölvupóstkerfi PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">124,126</context>
@@ -6294,6 +6324,7 @@
       </trans-unit>
       <trans-unit id="5278589041647101772" datatype="html">
         <source>Overwrite support field of all videos of this channel</source>
+        <target state="translated">Yfirskrifa stuðningsreit allra myndskeiða á þessari rás</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">79</context>
@@ -6690,6 +6721,7 @@
       </trans-unit>
       <trans-unit id="8173902679178787744" datatype="html">
         <source>Once you delete your account, there is no going back. You will be asked to confirm this action.</source>
+        <target state="translated">Þegar þú hefur eytt aðgangnum þínum er engin leið til baka. Þú verður beðin/n um að staðfesta þessa aðgerð.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context>
           <context context-type="linenumber">2</context>
@@ -6717,6 +6749,7 @@
       </trans-unit>
       <trans-unit id="2740531699780274491" datatype="html">
         <source>This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</source>
+        <target state="translated">Þetta mun eyða öllum gögnunum þínum, að meðtöldum rásum, myndskeiðum og athugasemdum. Þú munt ekki geta útbúið annan aðgang á þessum netþjóni með notandanafnið "<x id="PH" equiv-text="this.user.username"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -6860,6 +6893,7 @@
       </trans-unit>
       <trans-unit id="900099988467638766" datatype="html">
         <source>An abuse report received a new message</source>
+        <target state="translated">Misnotkunarkæra hefur fengið ný skilaboð</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -6867,6 +6901,7 @@
       </trans-unit>
       <trans-unit id="2326816287669585542" datatype="html">
         <source>One of your abuse reports has been accepted or rejected by moderators</source>
+        <target state="translated">Ein af misnotkunarkærunum þínum hefur verið samþykkt af umsjónaraðilum eða henni hafnað</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -6882,6 +6917,7 @@
       </trans-unit>
       <trans-unit id="2560339336098442670" datatype="html">
         <source>One of your plugin/theme has a new available version</source>
+        <target state="translated">Ný útgáfa er tiltæk af einni viðbótinni/þemanu hjá þér</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -7717,6 +7753,7 @@
       </trans-unit>
       <trans-unit id="2091927708110728875" datatype="html">
         <source>⚠️ The instance doesn't allow channel synchronization</source>
+        <target state="translated">⚠️ Tilvikið leyfir ekki samstillingu rása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">9</context>
@@ -7740,6 +7777,7 @@
       </trans-unit>
       <trans-unit id="4570488343211069802" datatype="html">
         <source>External Channel <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;externalChannelUrl&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target state="translated">Utanaðkomandi rás <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;externalChannelUrl&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">34</context>
@@ -7846,6 +7884,7 @@
       </trans-unit>
       <trans-unit id="1469193438847554223" datatype="html">
         <source>Only watch for new publications</source>
+        <target state="translated">Vakta einungis nýjar birtingar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">51</context>
@@ -8321,6 +8360,7 @@
       </trans-unit>
       <trans-unit id="3851357780293085233" datatype="html">
         <source>Remote interaction</source>
+        <target state="translated">Fjarlæg gagnvirkni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction-routing.module.ts</context>
           <context context-type="linenumber">13</context>
@@ -8378,6 +8418,7 @@
       </trans-unit>
       <trans-unit id="4180693983967989981" datatype="html">
         <source>Unable to find user id or verification string.</source>
+        <target state="translated">Fann ekki auðkenni notanda eða staðfestingarstreng.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="8781423666414310853" datatype="html">
@@ -8666,6 +8707,7 @@
       </trans-unit>
       <trans-unit id="8244789432276387088" datatype="html">
         <source>Result types</source>
+        <target state="translated">Tegundir niðurstaða</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">187</context>
@@ -8673,6 +8715,7 @@
       </trans-unit>
       <trans-unit id="283421392567624698" datatype="html">
         <source>Search target</source>
+        <target state="translated">Markmið leitar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">212</context>
@@ -9013,7 +9056,7 @@
       </trans-unit>
       <trans-unit id="8576568778101631795" datatype="html">
         <source>Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form. </source>
-        <target state="new"> Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form. </target>
+        <target state="translated">Umsjónaraðilar <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> munu þurfa að samþykkja skráningarbeiðnina þína eftir að þú hefur lokið við að fylla inn í skráningarformið. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -9284,7 +9327,7 @@
       </trans-unit>
       <trans-unit id="1433545855928203716" datatype="html">
         <source>A moderator will check your registration request soon and you'll receive an email when it will be accepted or rejected.</source>
-        <target state="new"> A moderator will check your registration request soon and you'll receive an email when it will be accepted or rejected. </target>
+        <target state="translated">Umsjónaraðili mun yfirfara skráningarbeiðnina þína fljótlega og þú munt fá tölvupóst þegar hún hefur verið samþykkt eða henni hafnað.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -13987,6 +14030,7 @@
       </trans-unit>
       <trans-unit id="6700357678556223012" datatype="html">
         <source>The channel is required.</source>
+        <target state="translated">Rásin er nauðsynleg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -13994,6 +14038,7 @@
       </trans-unit>
       <trans-unit id="7365924714339585574" datatype="html">
         <source>The username is required.</source>
+        <target state="translated">Notandanafnið er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -14031,6 +14076,7 @@
       </trans-unit>
       <trans-unit id="5437132245714159662" datatype="html">
         <source>Video name is required.</source>
+        <target state="translated">Heiti myndskeiðs er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -14067,6 +14113,7 @@
       </trans-unit>
       <trans-unit id="7309902991450450996" datatype="html">
         <source>Video channel is required.</source>
+        <target state="translated">Myndskeiðarás er nauðsynleg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">52</context>
@@ -14081,6 +14128,7 @@
       </trans-unit>
       <trans-unit id="725195891739570830" datatype="html">
         <source>Video description cannot be more than 10000 characters long.</source>
+        <target state="translated">Lýsing á myndskeiði má ekki vera lengri en 10.000 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">60</context>
@@ -14411,6 +14459,7 @@
       </trans-unit>
       <trans-unit id="1250415136605923486" datatype="html">
         <source>Do you really want to delete this abuse report?</source>
+        <target state="translated">Viltu í alvörunni eyða þessari misnotkunarkæru?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">133</context>
@@ -14605,6 +14654,7 @@
       </trans-unit>
       <trans-unit id="2558977494773636050" datatype="html">
         <source>Account <x id="PH" equiv-text="account.nameWithHost"/> muted by the instance.</source>
+        <target state="translated">Netþjónninn þaggaði niður í aðgangnum <x id="PH" equiv-text="account.nameWithHost"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">434</context>
@@ -14623,6 +14673,7 @@
       </trans-unit>
       <trans-unit id="397679576231234820" datatype="html">
         <source>Messages with the reporter</source>
+        <target state="translated">Skilaboð við kæranda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context>
           <context context-type="linenumber">4</context>
@@ -14630,6 +14681,7 @@
       </trans-unit>
       <trans-unit id="7417592908147948728" datatype="html">
         <source>Messages with the moderation team</source>
+        <target state="translated">Skilaboð við umsjónarfólk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context>
           <context context-type="linenumber">5</context>
@@ -16493,6 +16545,7 @@
       </trans-unit>
       <trans-unit id="8150022485860412528" datatype="html">
         <source>Account <x id="PH" equiv-text="account.nameWithHost"/> muted.</source>
+        <target state="translated">Aðgangurinn <x id="PH" equiv-text="account.nameWithHost"/> þaggaður.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -16504,6 +16557,7 @@
       </trans-unit>
       <trans-unit id="3085641638748358969" datatype="html">
         <source>Account <x id="PH" equiv-text="account.nameWithHost"/> unmuted by the instance.</source>
+        <target state="translated">Netþjónninn hætti að þagga niður í aðgangnum <x id="PH" equiv-text="account.nameWithHost"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">205</context>
@@ -16511,6 +16565,7 @@
       </trans-unit>
       <trans-unit id="4991892477258601737" datatype="html">
         <source>Instance <x id="PH" equiv-text="host"/> muted by the instance.</source>
+        <target state="translated">Netþjónnin <x id="PH" equiv-text="host"/> þaggaður af netþjóninum.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">219</context>
@@ -16518,6 +16573,7 @@
       </trans-unit>
       <trans-unit id="4379430340167561220" datatype="html">
         <source>Instance <x id="PH" equiv-text="host"/> unmuted by the instance.</source>
+        <target state="translated">Netþjónninn hætti að þagga niður í netþjóninum <x id="PH" equiv-text="host"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">233</context>
@@ -16525,6 +16581,7 @@
       </trans-unit>
       <trans-unit id="8173437618471379044" datatype="html">
         <source>Are you sure you want to remove all the comments of this account?</source>
+        <target state="translated">Ertu viss um að þú viljir fjarlægja allar athugasemdir frá þessum notandaaðgangi?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">244</context>
@@ -16540,6 +16597,7 @@
       </trans-unit>
       <trans-unit id="8559170154828316298" datatype="html">
         <source>Will remove comments of this account (may take several minutes).</source>
+        <target state="translated">Mun fjarlægja allar athugasemdir frá þessum notandaaðgangi (gæti tekið nokkrar mínútur).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">251</context>
@@ -16703,6 +16761,7 @@
       </trans-unit>
       <trans-unit id="5325628963747139770" datatype="html">
         <source>Unmute the instance by your instance</source>
+        <target state="translated">Hætta að þagga niður í netþjóninum á þínum netþjóni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">398</context>
@@ -16781,6 +16840,7 @@
       </trans-unit>
       <trans-unit id="7312374115603954471" datatype="html">
         <source>This will ask remote instances to delete local videos</source>
+        <target state="translated">Þetta mun biðja fjartengda netþjóna að eyða staðværum myndskeiðum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">34</context>
@@ -16788,6 +16848,7 @@
       </trans-unit>
       <trans-unit id="2728722206183105047" datatype="html">
         <source>This will ask remote instances to delete this video</source>
+        <target state="translated">Þetta mun biðja fjartengda netþjóna að eyða þessu myndskeiði</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">35</context>
@@ -17192,6 +17253,7 @@
       </trans-unit>
       <trans-unit id="3267631941074558910" datatype="html">
         <source>Cannot fetch information of this remote account</source>
+        <target state="translated">Tekst ekki að sækja upplýsingar af þessum fjartengda aðgangi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -17230,6 +17292,7 @@
       </trans-unit>
       <trans-unit id="1000724328916033777" datatype="html">
         <source>Multiple ways to subscribe to the current channel</source>
+        <target state="translated">Margar leiðir til að gerast áskrifandi að fyrirliggjandi rás</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">38</context>
@@ -17237,6 +17300,7 @@
       </trans-unit>
       <trans-unit id="363499678348067004" datatype="html">
         <source>Open subscription dropdown</source>
+        <target state="translated">Opna fellilista áskrifta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">40</context>
@@ -17244,6 +17308,7 @@
       </trans-unit>
       <trans-unit id="1779391511451594552" datatype="html">
         <source>Using an ActivityPub account</source>
+        <target state="translated">Með því að nota ActivityPub-aðgang</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">48</context>
@@ -17251,6 +17316,7 @@
       </trans-unit>
       <trans-unit id="6691897331062834756" datatype="html">
         <source>Subscribe with an account on this instance</source>
+        <target state="translated">Gerast áskrifandi með aðgangi á þessum netþjóni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">51</context>
@@ -17258,6 +17324,7 @@
       </trans-unit>
       <trans-unit id="1740917574463702967" datatype="html">
         <source>Subscribe with your local account</source>
+        <target state="translated">Gerast áskrifandi með aðgangnum þínum hér</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">52</context>
@@ -17265,6 +17332,7 @@
       </trans-unit>
       <trans-unit id="3372646000533908418" datatype="html">
         <source>Subscribe with a remote account:</source>
+        <target state="translated">Gerast áskrifandi með fjartengdum aðgangi:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">56</context>
@@ -17272,6 +17340,7 @@
       </trans-unit>
       <trans-unit id="2949829240129672512" datatype="html">
         <source>Using a syndication feed</source>
+        <target state="translated">Nota fréttastreymi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">62</context>
