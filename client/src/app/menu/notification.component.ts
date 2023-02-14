@@ -38,7 +38,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.userNotificationService.countUnreadNotifications()
         .subscribe({
           next: result => {
-            this.unreadNotifications = 102
+            this.unreadNotifications = result
             this.subscribeToNotifications()
           },
 
