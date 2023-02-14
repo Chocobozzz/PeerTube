@@ -78,10 +78,8 @@ function updateInstanceWithAnother <M, T extends U, U extends Model<M>> (instanc
   }
 }
 
-function resetSequelizeInstance (instance: Model<any>, savedFields: object) {
-  Object.keys(savedFields).forEach(key => {
-    instance[key] = savedFields[key]
-  })
+function resetSequelizeInstance <T> (instance: Model<T>) {
+  instance.set(instance.previous())
 }
 
 function filterNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): boolean }> (

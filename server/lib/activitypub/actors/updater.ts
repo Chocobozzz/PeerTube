@@ -13,19 +13,12 @@ export class APActorUpdater {
 
   private accountOrChannel: MAccount | MChannel
 
-  private readonly actorFieldsSave: object
-  private readonly accountOrChannelFieldsSave: object
-
   constructor (
     private readonly actorObject: ActivityPubActor,
     private readonly actor: MActorFull
   ) {
-    this.actorFieldsSave = this.actor.toJSON()
-
     if (this.actorObject.type === 'Group') this.accountOrChannel = this.actor.VideoChannel
     else this.accountOrChannel = this.actor.Account
-
-    this.accountOrChannelFieldsSave = this.accountOrChannel.toJSON()
   }
 
   async update () {
@@ -58,12 +51,12 @@ export class APActorUpdater {
 
       logger.info('Remote account %s updated', this.actorObject.url)
     } catch (err) {
-      if (this.actor !== undefined && this.actorFieldsSave !== undefined) {
-        resetSequelizeInstance(this.actor, this.actorFieldsSave)
+      if (this.actor !== undefined) {
+        resetSequelizeInstance(this.actor)
       }
 
-      if (this.accountOrChannel !== undefined && this.accountOrChannelFieldsSave !== undefined) {
-        resetSequelizeInstance(this.accountOrChannel, this.accountOrChannelFieldsSave)
+      if (this.accountOrChannel !== undefined) {
+        resetSequelizeInstance(this.accountOrChannel)
       }
 
       // This is just a debug because we will retry the insert

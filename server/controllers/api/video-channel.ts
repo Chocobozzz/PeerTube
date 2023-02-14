@@ -273,7 +273,6 @@ async function addVideoChannel (req: express.Request, res: express.Response) {
 
 async function updateVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInstance = res.locals.videoChannel
-  const videoChannelFieldsSave = videoChannelInstance.toJSON()
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannelInstance.toFormattedJSON())
   const videoChannelInfoToUpdate = req.body as VideoChannelUpdate
   let doBulkVideoUpdate = false
@@ -309,10 +308,9 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
   } catch (err) {
     logger.debug('Cannot update the video channel.', { err })
 
-    // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed
-    // So it will skip the SQL request, even if the last one was ROLLBACKed!
-    resetSequelizeInstance(videoChannelInstance, videoChannelFieldsSave)
+    // So we need to restore the previous fields
+    resetSequelizeInstance(videoChannelInstance)
 
     throw err
   }

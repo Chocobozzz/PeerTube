@@ -45,7 +45,6 @@ export {
 
 async function updateVideo (req: express.Request, res: express.Response) {
   const videoFromReq = res.locals.videoAll
-  const videoFieldsSave = videoFromReq.toJSON()
   const oldVideoAuditView = new VideoAuditView(videoFromReq.toFormattedDetailsJSON())
   const videoInfoToUpdate: VideoUpdate = req.body
 
@@ -151,10 +150,9 @@ async function updateVideo (req: express.Request, res: express.Response) {
       isNewVideo
     })
   } catch (err) {
-    // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed
-    // So it will skip the SQL request, even if the last one was ROLLBACKed!
-    resetSequelizeInstance(videoFromReq, videoFieldsSave)
+    // So we need to restore the previous fields
+    resetSequelizeInstance(videoFromReq)
 
     throw err
   } finally {
