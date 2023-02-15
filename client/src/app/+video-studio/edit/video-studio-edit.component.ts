@@ -69,6 +69,8 @@ export class VideoStudioEditComponent extends FormReactive implements OnInit {
 
   async runEdition () {
     if (this.isRunningEdition) return
+    if (!this.form.valid) return
+    if (this.noEdition()) return
 
     const title = $localize`Are you sure you want to edit "${this.video.name}"?`
     const listHTML = this.getTasksSummary().map(t => `<li>${t}</li>`).join('')
