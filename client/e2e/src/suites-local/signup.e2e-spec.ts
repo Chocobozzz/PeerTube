@@ -2,7 +2,16 @@ import { AdminConfigPage } from '../po/admin-config.po'
 import { AdminRegistrationPage } from '../po/admin-registration.po'
 import { LoginPage } from '../po/login.po'
 import { SignupPage } from '../po/signup.po'
-import { browserSleep, getVerificationLink, go, findEmailTo, isMobileDevice, MockSMTPServer, waitServerUp } from '../utils'
+import {
+  browserSleep,
+  findEmailTo,
+  getScreenshotPath,
+  getVerificationLink,
+  go,
+  isMobileDevice,
+  MockSMTPServer,
+  waitServerUp
+} from '../utils'
 
 function checkEndMessage (options: {
   message: string
@@ -155,7 +164,7 @@ describe('Signup', () => {
           afterEmailVerification: false
         })
 
-        await browser.saveScreenshot('./screenshots/direct-without-email.png')
+        await browser.saveScreenshot(getScreenshotPath('direct-without-email.png'))
 
         await loginPage.logout()
       })
@@ -203,7 +212,7 @@ describe('Signup', () => {
           afterEmailVerification: false
         })
 
-        await browser.saveScreenshot('./screenshots/request-without-email.png')
+        await browser.saveScreenshot(getScreenshotPath('request-without-email.png'))
       })
 
       it('Should display a message when trying to login with this account', async function () {
@@ -283,7 +292,7 @@ describe('Signup', () => {
           afterEmailVerification: false
         })
 
-        await browser.saveScreenshot('./screenshots/direct-with-email.png')
+        await browser.saveScreenshot(getScreenshotPath('direct-with-email.png'))
       })
 
       it('Should validate the email', async function () {
@@ -304,7 +313,7 @@ describe('Signup', () => {
           afterEmailVerification: true
         })
 
-        await browser.saveScreenshot('./screenshots/direct-after-email.png')
+        await browser.saveScreenshot(getScreenshotPath('direct-after-email.png'))
       })
     })
 
@@ -355,7 +364,7 @@ describe('Signup', () => {
           afterEmailVerification: false
         })
 
-        await browser.saveScreenshot('./screenshots/request-with-email.png')
+        await browser.saveScreenshot(getScreenshotPath('request-with-email.png'))
       })
 
       it('Should display a message when trying to login with this account', async function () {
@@ -391,7 +400,7 @@ describe('Signup', () => {
           afterEmailVerification: true
         })
 
-        await browser.saveScreenshot('./screenshots/request-after-email.png')
+        await browser.saveScreenshot(getScreenshotPath('request-after-email.png'))
       })
     })
 

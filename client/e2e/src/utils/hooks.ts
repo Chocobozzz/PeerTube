@@ -1,7 +1,8 @@
 import { ChildProcessWithoutNullStreams } from 'child_process'
 import { basename } from 'path'
-import { runCommand, runServer } from './server'
 import { setValue } from '@wdio/shared-store-service'
+import { createScreenshotsDirectory } from './files'
+import { runCommand, runServer } from './server'
 
 let appInstance: number
 let app: ChildProcessWithoutNullStreams
@@ -21,6 +22,8 @@ function afterLocalSuite () {
 }
 
 async function beforeLocalSession (config: { baseUrl: string }, capabilities: { browserName: string }) {
+  await createScreenshotsDirectory()
+
   appInstance = capabilities['browserName'] === 'chrome'
     ? 1
     : 2
