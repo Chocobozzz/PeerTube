@@ -119,18 +119,32 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
     if (startDate) queryOptions.replacements.startDate = startDate
     if (endDate) queryOptions.replacements.endDate = endDate
 
+    const buildTotalViewersPromise = () => {
+      let totalViewersDateWhere = ''
+
+      if (startDate) totalViewersDateWhere += ' AND "localVideoViewer"."endDate" >= :startDate'
+      if (endDate) totalViewersDateWhere += ' AND "localVideoViewer"."startDate" <= :endDate'
+
+      const totalViewersQuery = `SELECT ` +
+        `COUNT("localVideoViewer"."id") AS "totalViewers" ` +
+        `FROM "localVideoViewer" ` +
+        `WHERE "videoId" = :videoId ${totalViewersDateWhere}`
+
+      return LocalVideoViewerModel.sequelize.query<any>(totalViewersQuery, queryOptions)
+    }
+
     const buildWatchTimePromise = () => {
       let watchTimeDateWhere = ''
 
+      // We know this where is not exact
+      // But we prefer to take into account only watch section that started and ended **in** the interval
       if (startDate) watchTimeDateWhere += ' AND "localVideoViewer"."startDate" >= :startDate'
       if (endDate) watchTimeDateWhere += ' AND "localVideoViewer"."endDate" <= :endDate'
 
       const watchTimeQuery = `SELECT ` +
-        `COUNT("localVideoViewer"."id") AS "totalViewers", ` +
         `SUM("localVideoViewer"."watchTime") AS "totalWatchTime", ` +
         `AVG("localVideoViewer"."watchTime") AS "averageWatchTime" ` +
         `FROM "localVideoViewer" ` +
-        `INNER JOIN "video" ON "video"."id" = "localVideoViewer"."videoId" ` +
         `WHERE "videoId" = :videoId ${watchTimeDateWhere}`
 
       return LocalVideoViewerModel.sequelize.query<any>(watchTimeQuery, queryOptions)
@@ -194,7 +208,8 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
       return LocalVideoViewerModel.sequelize.query<any>(countriesQuery, queryOptions)
     }
 
-    const [ rowsWatchTime, rowsWatchPeak, rowsCountries ] = await Promise.all([
+    const [ rowsTotalViewers, rowsWatchTime, rowsWatchPeak, rowsCountries ] = await Promise.all([
+      buildTotalViewersPromise(),
       buildWatchTimePromise(),
       buildWatchPeakPromise(),
       buildCountriesPromise()
@@ -212,8 +227,8 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
         ? Math.round(rowsWatchTime[0].averageWatchTime) || 0
         : 0,
 
-      totalViewers: rowsWatchTime.length !== 0
-        ? Math.round(rowsWatchTime[0].totalViewers) || 0
+      totalViewers: rowsTotalViewers.length !== 0
+        ? Math.round(rowsTotalViewers[0].totalViewers) || 0
         : 0,
 
       viewersPeak,
