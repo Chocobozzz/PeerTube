@@ -109,7 +109,6 @@ import {
   servicesRouter,
   objectStorageProxyRouter,
   pluginsRouter,
-  webfingerRouter,
   trackerRouter,
   createWebsocketTrackerServer,
   botsRouter,
@@ -231,7 +230,6 @@ app.use('/', pluginsRouter)
 
 app.use('/', activityPubRouter)
 app.use('/', feedsRouter)
-app.use('/', webfingerRouter)
 app.use('/', trackerRouter)
 app.use('/', botsRouter)
 
