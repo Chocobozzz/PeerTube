@@ -168,6 +168,7 @@ export class UserLocalStorageService {
       UserLocalStorageKeys.NSFW_POLICY,
       UserLocalStorageKeys.P2P_ENABLED,
       UserLocalStorageKeys.AUTO_PLAY_VIDEO,
+      UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO,
       UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST,
       UserLocalStorageKeys.THEME,
       UserLocalStorageKeys.VIDEO_LANGUAGES
