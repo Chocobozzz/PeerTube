@@ -7393,11 +7393,6 @@ linkify-it@^4.0.1:
   dependencies:
     uc.micro "^1.0.1"
 
-linkify-plugin-mention@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/linkify-plugin-mention/-/linkify-plugin-mention-4.0.2.tgz#866e50d4047ea24fc647ebf706b15b0cd30afa63"
-  integrity sha512-W30NL/uQxZahg6Ao/roZSe8ndXaQ+3UjOwUUtM+dVEOAUH5L6L02eLncH/lZLU3ZBj3VjwfZ+r98gw6Tp/8zEw==
-
 linkifyjs@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-4.0.2.tgz#5844ea70f4427004e50036d983b66da50fe13389"

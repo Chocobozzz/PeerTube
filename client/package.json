@@ -105,7 +105,6 @@
     "intl-messageformat": "^10.1.0",
     "jschannel": "^1.0.2",
     "linkify-html": "^4.0.2",
-    "linkify-plugin-mention": "^4.0.2",
     "linkifyjs": "^4.0.2",
     "lodash-es": "^4.17.4",
     "markdown-it": "13.0.1",
