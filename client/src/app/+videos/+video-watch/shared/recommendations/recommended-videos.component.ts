@@ -68,7 +68,7 @@ export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy 
     }
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy () {
     if (this.userSub) this.userSub.unsubscribe()
   }
 
