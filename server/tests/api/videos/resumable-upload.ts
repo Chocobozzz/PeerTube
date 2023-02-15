@@ -30,8 +30,9 @@ describe('Test resumable upload', function () {
     size?: number
     originalName?: string
     lastModified?: number
+    videoUUID?: string
   } = {}) {
-    const { token, originalName, lastModified } = options
+    const { token, originalName, lastModified, videoUUID } = options
 
     const size = await buildSize(defaultFixture, options.size)
 
@@ -44,7 +45,7 @@ describe('Test resumable upload', function () {
 
     const mimetype = 'video/mp4'
 
-    const res = await server.videos.prepareResumableUpload({ token, attributes, size, mimetype, originalName, lastModified })
+    const res = await server.videos.prepareResumableUpload({ token, attributes, size, mimetype, originalName, lastModified, videoUUID })
 
     return res.header['location'].split('?')[1]
   }
@@ -58,8 +59,9 @@ describe('Test resumable upload', function () {
     contentRange?: string
     contentRangeBuilder?: (start: number, chunk: any) => string
     digestBuilder?: (chunk: any) => string
+    videoUUID?: string
   }) {
-    const { token, pathUploadId, expectedStatus, contentLength, contentRangeBuilder, digestBuilder } = options
+    const { token, pathUploadId, expectedStatus, contentLength, contentRangeBuilder, digestBuilder, videoUUID } = options
 
     const size = await buildSize(defaultFixture, options.size)
     const absoluteFilePath = buildAbsoluteFixturePath(defaultFixture)
@@ -72,7 +74,8 @@ describe('Test resumable upload', function () {
       contentLength,
       contentRangeBuilder,
       digestBuilder,
-      expectedStatus
+      expectedStatus,
+      videoUUID
     })
   }
 
@@ -202,6 +205,19 @@ describe('Test resumable upload', function () {
 
       expect(result1.body.video.uuid).to.exist
       expect(result1.body.video.uuid).to.equal(result2.body.video.uuid)
+
+      expect(result1.headers['x-resumable-upload-cached']).to.not.exist
+      expect(result2.headers['x-resumable-upload-cached']).to.equal('true')
+
+      await checkFileSize(uploadId, null)
+    })
+
+    it('Should be able to accept 2 PUT requests when updating a video file', async function () {
+      const { uuid } = await server.videos.quickUpload({ name: 'soon to be updated' })
+      const uploadId = await prepareUpload({ videoUUID: uuid })
+
+      const result1 = await sendChunks({ pathUploadId: uploadId, videoUUID: uuid })
+      const result2 = await sendChunks({ pathUploadId: uploadId, videoUUID: uuid })
 
       expect(result1.headers['x-resumable-upload-cached']).to.not.exist
       expect(result2.headers['x-resumable-upload-cached']).to.equal('true')
