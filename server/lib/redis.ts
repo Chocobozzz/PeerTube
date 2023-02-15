@@ -294,9 +294,7 @@ class Redis {
   setUploadSession (uploadId: string, isDone: boolean, response?: { video: { id: number, shortUUID: string, uuid: string } }) {
     return this.setValue(
       'resumable-upload-' + uploadId,
-      response
-        ? JSON.stringify({ isDone, response })
-        : '',
+      JSON.stringify({ isDone, response }),
       RESUMABLE_UPLOAD_SESSION_LIFETIME
     )
   }
