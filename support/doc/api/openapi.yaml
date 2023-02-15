@@ -8113,9 +8113,18 @@ components:
                 uuid:
                   $ref: '#/components/schemas/UUIDv4'
 
+    VideoChannelEdit:
+      properties:
+        displayName:
+          description: Channel display name
+        description:
+          description: Channel description
+        support:
+          description: How to support/fund the channel
+
     VideoChannelCreate:
       allOf:
-        - $ref: '#/components/schemas/VideoChannel'
+        - $ref: '#/components/schemas/VideoChannelEdit'
         - properties:
             name:
               description: username of the channel to create
@@ -8126,11 +8135,12 @@ components:
         - displayName
     VideoChannelUpdate:
       allOf:
-        - $ref: '#/components/schemas/VideoChannel'
+        - $ref: '#/components/schemas/VideoChannelEdit'
         - properties:
             bulkVideosSupportUpdate:
               type: boolean
               description: Update the support field for all videos of this channel
+
     VideoChannelList:
       properties:
         total:
