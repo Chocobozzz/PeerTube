@@ -1,7 +1,7 @@
 import { program } from 'commander'
 import { access, constants } from 'fs-extra'
 import { isAbsolute } from 'path'
-import { assignToken, buildCommonVideoOptions, buildServer, buildVideoAttributesFromCommander, getServerCredentials } from './cli'
+import { assignToken, buildCommonVideoOptions, buildServer, buildVideoAttributesFromCommander, getServerCredentials } from './shared'
 
 let command = program
   .name('upload')

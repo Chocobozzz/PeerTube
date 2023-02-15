@@ -2,7 +2,7 @@ import CliTable3 from 'cli-table3'
 import { Command, OptionValues, program } from 'commander'
 import { isAbsolute } from 'path'
 import { PluginType } from '../../shared/models'
-import { assignToken, buildServer, getServerCredentials } from './cli'
+import { assignToken, buildServer, getServerCredentials } from './shared'
 
 program
   .name('plugins')
