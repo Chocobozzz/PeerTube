@@ -183,7 +183,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
                           this.dataLoaded = true
                         },
 
-                        error: err => this.notifier.error(err.message),
+                        error: err => this.notifier.error(err.message)
                       })
   }
 
