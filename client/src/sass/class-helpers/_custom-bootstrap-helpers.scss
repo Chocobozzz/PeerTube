@@ -1,0 +1,36 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+// Font sizes
+
+.pt-fs-1 {
+  @include font-size(2.5rem);
+}
+
+.pt-fs-2 {
+  @include font-size(2rem);
+}
+
+.pt-fs-3 {
+  @include font-size(1.75rem);
+}
+
+.pt-fs-4 {
+  @include font-size(1.5rem);
+}
+
+.pt-fs-5 {
+  @include font-size(1.25rem);
+}
+
+.pt-fs-5-5 {
+  @include font-size(1.125rem);
+}
+
+.pt-fs-6 {
+  @include font-size(1rem);
+}
+
+.pt-fs-7 {
+  @include font-size(0.875rem);
+}
