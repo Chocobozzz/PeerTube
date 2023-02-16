@@ -145,11 +145,11 @@ export class PeerTubeEmbed {
 		try {
 			const { videoDetails } = await this.videoFetcher.loadVideoCache(uuid, host)
 
-			if(videoDetails.state.id == 7){
+			/*if(videoDetails.state.id == 7){
 				throw {
 					message : videoDetails.state.label
 				}
-			}
+			}*/
 
 			videoDetails.host = host
 
@@ -276,11 +276,11 @@ export class PeerTubeEmbed {
 
 				if (r){
 
-					if (this.details.state.id == 7){
+					/*if (this.details.state.id == 7){
 						this.playerHTML.removeErrorBlock()
 						this.playerHTML.displayError(this.details.state.label, 'critical')
 						return
-					}
+					}*/
 		
 
 
