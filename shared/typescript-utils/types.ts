@@ -27,7 +27,7 @@ export type DeepPartial<T> = {
       : DeepPartial<T[P]>
 }
 
-type Primitive = string | Function | number | boolean | Symbol | undefined | null
+type Primitive = string | Function | number | boolean | symbol | undefined | null
 export type DeepOmitHelper<T, K extends keyof T> = {
   [P in K]: // extra level of indirection needed to trigger homomorhic behavior
   T[P] extends infer TP // distribute over unions

@@ -22,7 +22,7 @@ function afterLocalSuite () {
 }
 
 async function beforeLocalSession (config: { baseUrl: string }, capabilities: { browserName: string }) {
-  await createScreenshotsDirectory()
+  createScreenshotsDirectory()
 
   appInstance = capabilities['browserName'] === 'chrome'
     ? 1

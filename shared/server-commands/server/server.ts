@@ -201,7 +201,7 @@ export class PeerTubeServer {
     return join(root(), testDirectory, directoryName)
   }
 
-  async flushAndRun (configOverride?: Object, options: RunServerOptions = {}) {
+  async flushAndRun (configOverride?: object, options: RunServerOptions = {}) {
     await ServersCommand.flushTests(this.internalServerNumber)
 
     return this.run(configOverride, options)

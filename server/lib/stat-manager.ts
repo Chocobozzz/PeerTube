@@ -16,7 +16,7 @@ class StatsManager {
 
   private readonly instanceStartDate = new Date()
 
-  private inboxMessages = {
+  private readonly inboxMessages = {
     processed: 0,
     errors: 0,
     successes: 0,

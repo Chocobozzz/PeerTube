@@ -11,7 +11,7 @@ import { getImagesInfoFromObject } from './shared/object-to-model-attributes'
 
 export class APActorUpdater {
 
-  private accountOrChannel: MAccount | MChannel
+  private readonly accountOrChannel: MAccount | MChannel
 
   constructor (
     private readonly actorObject: ActivityPubActor,

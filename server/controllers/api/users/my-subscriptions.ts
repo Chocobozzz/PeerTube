@@ -138,7 +138,9 @@ async function deleteUserSubscription (req: express.Request, res: express.Respon
   const subscription = res.locals.subscription
 
   await sequelizeTypescript.transaction(async t => {
-    if (subscription.state === 'accepted') await sendUndoFollow(subscription, t)
+    if (subscription.state === 'accepted') {
+      sendUndoFollow(subscription, t)
+    }
 
     return subscription.destroy({ transaction: t })
   })
