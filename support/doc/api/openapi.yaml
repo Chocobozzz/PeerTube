@@ -2215,8 +2215,20 @@ paths:
             - state
             - -state
       responses:
-        '204':
+        '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserRegistration'
 
   /api/v1/videos/ownership:
     get:
