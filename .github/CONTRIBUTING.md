@@ -17,6 +17,7 @@ Interested in contributing? Awesome!
   - [Server side](#server-side)
   - [Client side](#client-side)
   - [Client and server side](#client-and-server-side)
+  - [Embed](#embed)
   - [RTL layout](#rtl-layout)
   - [Testing](#testing)
     - [Unit/integration tests](#unitintegration-tests)
@@ -167,6 +168,16 @@ and the web server is automatically restarted.
 
 ```
 $ npm run dev
+```
+
+### Embed
+
+The embed is a standalone application built using Webpack.
+The generated files (HTML entrypoint and multiple JS and CSS files) are served by the PeerTube server (behind `localhost:9000/videos/embed/:videoUUID` or `localhost:9000/video-playlists/embed/:playlistUUID`).
+The following command will compile embed files and run the PeerTube server:
+
+```
+$ npm run dev:embed
 ```
 
 ### RTL layout
