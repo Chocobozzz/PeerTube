@@ -179,7 +179,7 @@
               "src/sass/application.scss"
             ],
             "allowedCommonJsDependencies": [
-              "@cordobo/qrcode",
+              "qrcode",
               "chart.js",
               "htmlparser2",
               "markdown-it-emoji/light",
