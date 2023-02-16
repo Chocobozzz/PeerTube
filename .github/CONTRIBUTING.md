@@ -22,6 +22,8 @@ Interested in contributing? Awesome!
     - [Unit/integration tests](#unitintegration-tests)
     - [Testing the federation of PeerTube servers](#testing-the-federation-of-peertube-servers)
   - [Emails](#emails)
+  - [OpenAPI documentation](#openapi-documentation)
+  - [Environment variables](#environment-variables)
 - [Plugins & Themes](#plugins--themes)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -220,6 +222,15 @@ To test emails with PeerTube:
 
  * Run [mailslurper](http://mailslurper.com/)
  * Run PeerTube using mailslurper SMTP port: `NODE_CONFIG='{ "smtp": { "hostname": "localhost", "port": 2500, "tls": false } }' NODE_ENV=dev node dist/server`
+
+### OpenAPI documentation
+
+The [REST API documentation](https://docs.joinpeertube.org/api-rest-reference.html) is generated from `support/doc/api/openapi.yaml` file.
+To quickly get a preview of your changes, you can generate the documentation *on the fly* using the following command:
+
+```
+npx redoc-cli serve --watch ./support/doc/api/openapi.yaml
+```
 
 ### Environment variables
 
