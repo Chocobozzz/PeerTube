@@ -1,6 +1,9 @@
 @use 'sass:math';
 @use '_variables' as *;
 
+@import '_bootstrap-mixins';
+
+
 @mixin disable-default-a-behaviour {
   &:hover,
   &:focus,
@@ -919,55 +922,53 @@
 @mixin margin ($block-start, $inline-end, $block-end, $inline-start) {
   @include margin-left($inline-start);
   @include margin-right($inline-end);
-
-  margin-top: $block-start;
-  margin-bottom: $block-end;
+  @include margin-top($block-start);
+  @include margin-bottom($block-end);
 }
 
 @mixin padding ($block-start, $inline-end, $block-end, $inline-start) {
   @include padding-left($inline-start);
   @include padding-right($inline-end);
-
-  padding-top: $block-start;
-  padding-bottom: $block-end;
+  @include padding-top($block-start);
+  @include padding-bottom($block-end);
 }
 
 @mixin margin-left ($value) {
   @supports (margin-inline-start: $value) {
-    margin-inline-start: $value;
+    @include rfs($value, margin-inline-start);
   }
 
   @supports not (margin-inline-start: $value) {
-    margin-left: $value;
+    @include rfs($value, margin-left);
   }
 }
 
 @mixin margin-right ($value) {
   @supports (margin-inline-end: $value) {
-    margin-inline-end: $value;
+    @include rfs($value, margin-inline-end);
   }
 
   @supports not (margin-inline-end: $value) {
-    margin-right: $value;
+    @include rfs($value, margin-right);
   }
 }
 
 @mixin padding-left ($value) {
   @supports (padding-inline-start: $value) {
-    padding-inline-start: $value;
+    @include rfs($value, padding-inline-start);
   }
 
   @supports not (padding-inline-start: $value) {
-    padding-left: $value;
+    @include rfs($value, padding-left);
   }
 }
 
 @mixin padding-right ($value) {
   @supports (padding-inline-end: $value) {
-    padding-inline-end: $value;
+    @include rfs($value, padding-inline-end);
   }
 
   @supports not (padding-inline-end: $value) {
-    padding-right: $value;
+    @include rfs($value, padding-right);
   }
 }
