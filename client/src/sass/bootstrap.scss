@@ -170,6 +170,8 @@
         opacity: 0.75;
         content: '';
         display: block;
+        position: fixed;
+        z-index: z(overlay);
       }
     }
   }
