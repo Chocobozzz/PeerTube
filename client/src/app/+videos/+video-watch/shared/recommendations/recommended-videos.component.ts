@@ -58,7 +58,6 @@ export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy 
       .subscribe(user => {
         this.user = user
         this.autoPlayNextVideo = user.autoPlayNextVideo
-        console.log(this.autoPlayNextVideo)
       })
   }
 
