@@ -107,7 +107,7 @@
     "bencode": "^2.0.2",
     "bittorrent-tracker": "^9.0.0",
     "bluebird": "^3.5.0",
-    "bullmq": "^1.87.0",
+    "bullmq": "^3.6.6",
     "bytes": "^3.0.0",
     "chokidar": "^3.4.2",
     "commander": "^10.0.0",

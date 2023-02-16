@@ -212,10 +212,10 @@ const JOB_TTL: { [id in JobType]: number } = {
 }
 const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
   'videos-views-stats': {
-    cron: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
+    pattern: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
   },
   'activitypub-cleaner': {
-    cron: '30 5 * * ' + randomInt(0, 7) // 1 time per week (random day) at 5:30 AM
+    pattern: '30 5 * * ' + randomInt(0, 7) // 1 time per week (random day) at 5:30 AM
   }
 }
 const JOB_PRIORITY = {
