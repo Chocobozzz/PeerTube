@@ -3,7 +3,6 @@ import { CustomPageService } from '@app/shared/shared-main/custom-page'
 
 @Component({
   templateUrl: './home.component.html',
-  styleUrls: [ './home.component.scss' ]
 })
 
 export class HomeComponent implements OnInit {
