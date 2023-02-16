@@ -238,8 +238,8 @@ class SettingsMenuItem extends MenuItem {
     mainMenuEl.style.opacity = '0'
 
     // back button will always take you to main menu, so set dialog sizes
-    const mainMenuAny = this.mainMenu as any
-    this.settingsButton.setDialogSize([ mainMenuAny.width, mainMenuAny.height ])
+    const mainMenuAny = this.mainMenu
+    this.settingsButton.setDialogSize([ mainMenuAny.width() as number, mainMenuAny.height() as number ])
 
     // animation not triggered without timeout (some async stuff ?!?)
     setTimeout(() => {

@@ -175,10 +175,7 @@ class SettingsButton extends Button {
       const el = element.el() as HTMLElement
 
       width = el.offsetWidth
-      height = el.offsetHeight;
-
-      (element as any).width = width;
-      (element as any).height = height
+      height = el.offsetHeight
     } else {
       width = element.offsetWidth
       height = element.offsetHeight
