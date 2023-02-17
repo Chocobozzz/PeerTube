@@ -13,17 +13,10 @@ class PlaylistMenu extends Component {
 
     const self = this
 
-    function userInactiveHandler () {
-      self.close()
-    }
+    
+    this.el().addEventListener('mouseenter', this.mouseenter)
 
-    this.el().addEventListener('mouseenter', () => {
-      this.player().off('userinactive', userInactiveHandler)
-    })
-
-    this.el().addEventListener('mouseleave', () => {
-      this.player().one('userinactive', userInactiveHandler)
-    })
+    this.el().addEventListener('mouseleave', this.mouseleave)
 
     this.player().on('click', event => {
       let current = event.target as HTMLElement
@@ -41,6 +34,23 @@ class PlaylistMenu extends Component {
 
       this.close()
     })
+  }
+
+  dispose(): void {
+    this.el().removeEventListener('mouseenter', this.mouseenter)
+
+    this.el().removeEventListener('mouseleave', this.mouseleave)
+  }
+
+  private userInactiveHandler(){
+    self.close()
+  }
+
+  private mouseenter(){
+    this.player().off('userinactive', this.userInactiveHandler)
+  }
+  private mouseleave(){
+    this.player().one('userinactive', this.userInactiveHandler)
   }
 
   createEl () {

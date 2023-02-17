@@ -111,6 +111,7 @@ class PeerTubePlugin extends Plugin {
   }
 
   dispose () {
+    this.stopListen()
     if (this.videoViewInterval) clearInterval(this.videoViewInterval)
   }
 
@@ -214,6 +215,23 @@ class PeerTubePlugin extends Plugin {
     this.player.on('fullscreenchange', () => {
       if (this.player.isFullscreen()) this.player.focus()
     })
+  }
+
+  private stopListen(){
+    const controlBar = this.player.controlBar
+    const settingsButton: SettingsButton = (controlBar as any).settingsButton
+
+
+    if(controlBar){
+      controlBar.off('mouseenter')
+      controlBar.off('mouseleave')
+    }
+
+    if(settingsButton){
+      settingsButton.dialog.off('mouseenter')
+      settingsButton.dialog.off('mouseleave')
+    }
+    
   }
 
   private listenControlBarMouse () {

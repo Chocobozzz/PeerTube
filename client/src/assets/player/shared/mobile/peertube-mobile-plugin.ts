@@ -95,6 +95,10 @@ class PeerTubeMobilePlugin extends Plugin {
     }, { passive: false })
   }
 
+  dispose () {
+    this.player.off('touchstart')
+  }
+
   private onDoubleTap (event: TouchEvent) {
     const playerWidth = this.player.currentWidth()
 

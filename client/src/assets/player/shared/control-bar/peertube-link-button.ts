@@ -5,6 +5,8 @@ import { PeerTubeLinkButtonOptions } from '../../types'
 const Button = videojs.getComponent('Button')
 class PeerTubeLinkButton extends Button {
 
+  ael : HTMLButtonElement | null
+
   constructor (player: videojs.Player, options?: PeerTubeLinkButtonOptions) {
     super(player, options as any)
   }
@@ -21,6 +23,13 @@ class PeerTubeLinkButton extends Button {
     this.player().pause()
   }
 
+  dispose() {
+
+    if(this.ael)
+      this.ael.removeEventListener('mouseenter', this.updateHref)
+    this.ael  = null
+  }
+
   private buildElement () {
     const el = videojs.dom.createEl('a', {
       href: this.buildLink(),
@@ -30,7 +39,9 @@ class PeerTubeLinkButton extends Button {
       target: '_blank'
     })
 
-    el.addEventListener('mouseenter', () => this.updateHref())
+    el.addEventListener('mouseenter', this.updateHref)
+
+    this.ael = el as HTMLButtonElement
 
     return el as HTMLButtonElement
   }
