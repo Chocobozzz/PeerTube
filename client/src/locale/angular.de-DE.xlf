@@ -3860,7 +3860,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="8975798495439347971" datatype="html">
         <source>Enable this checkbox if this user doesn't need to have its videos reviewed by moderators.</source>
-        <target state="new"> Enable this checkbox if this user doesn't need to have its videos reviewed by moderators. </target>
+        <target state="translated">Diese Checkbox aktivieren, wenn die Videos dieses Nutzers nicht von den Moderatoren geprüft werden müssen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">194,196</context>
@@ -3974,7 +3974,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="17234570072885140" datatype="html">
         <source>Registrations</source>
-        <target state="new">Registrations</target>
+        <target state="translated">Registration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -6568,7 +6568,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6904641160356013310" datatype="html">
         <source>Account request sent</source>
-        <target state="new">Account request sent</target>
+        <target state="translated">Registrationsanfrage gesendet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6708,7 +6708,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6001536520193131937" datatype="html">
         <source>Unable to find verification string in URL query.</source>
-        <target state="new">Unable to find verification string in URL query.</target>
+        <target state="translated">Bestätigungs Sting kann in der Query nicht gefunden werde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context>
           <context context-type="linenumber">53</context>
