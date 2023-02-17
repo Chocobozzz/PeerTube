@@ -2502,7 +2502,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="7630293677014706754" datatype="html">
         <source>Registration requests removed</source>
-        <target state="translated">Anfrage entfernt.</target>
+        <target state="translated">Anfrage entfernt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">138</context></context-group>
       </trans-unit>
       <trans-unit id="2806917038528218276" datatype="html">
@@ -2522,7 +2522,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="5503656190856739184" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2023</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2023</target>
+        <target state="translated">powered by PeerTube - CopyLeft 2015-2023</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="3722967224215437913" datatype="html">
@@ -4972,7 +4972,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="297360345401834321" datatype="html">
         <source>Global views</source>
-        <target state="new">Global views</target>
+        <target state="translated">Globale Aufrufe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">53</context>
@@ -5293,7 +5293,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1206277798664538171" datatype="html">
         <source>Signup requires approval by moderators</source>
-        <target state="new">Signup requires approval by moderators</target>
+        <target state="translated">Registrierung erfordert bestätigung der Moderatoren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">177</context>
