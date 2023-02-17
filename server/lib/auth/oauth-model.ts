@@ -34,7 +34,7 @@ export type BypassLogin = {
 }
 
 async function getAccessToken (bearerToken: string) {
-  logger.debug('Getting access token (bearerToken: ' + bearerToken + ').')
+  logger.debug('Getting access token.')
 
   if (!bearerToken) return undefined
 
