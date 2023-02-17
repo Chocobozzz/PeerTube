@@ -397,7 +397,7 @@
     position: absolute;
     pointer-events: none;
     border: 5px solid rgba(0, 0, 0, 0);
-    border-top-color: #000;
+    border-top-color: pvar(--mainForegroundColor);
     margin-top: -2px;
     z-index: 100;
   }
@@ -646,7 +646,7 @@
 }
 
 @mixin progressbar($small: false) {
-  background-color: $grey-background-color;
+  background-color: pvar(--greyBackgroundColor);
   display: flex;
   height: 1rem;
   overflow: hidden;
@@ -656,7 +656,7 @@
 
   span {
     position: absolute;
-    color: $grey-foreground-color;
+    color: pvar(--greyForegroundColor);
 
     @if $small {
       top: -1px;

@@ -30,9 +30,21 @@
 @import 'bootstrap/scss/helpers';
 @import 'bootstrap/scss/utilities/api';
 
+:root {
+  --bs-border-color-translucent: #{pvar(--inputBorderColor)};
+}
+
 .accordion {
   --bs-accordion-color: #{pvar(--mainForegroundColor)};
   --bs-accordion-bg: #{pvar(--mainBackgroundColor)};
+}
+
+.popover {
+  --bs-popover-bg: #{pvar(--mainBackgroundColor)};
+  --bs-popover-body-color: #{pvar(--mainForegroundColor)};
+  --bs-popover-header-color: #{pvar(--mainForegroundColor)};
+
+  font-family: $main-fonts;
 }
 
 .flex-auto {
@@ -48,12 +60,15 @@
 // ---------------------------------------------------------------------------
 
 .dropdown-menu {
+  --bs-dropdown-link-hover-bg: #{pvar(--mainBackgroundHoverColor)};
+  --bs-dropdown-link-color: #{pvar(--mainForegroundColor)};
+  --bs-dropdown-border-color: #{pvar(--inputBorderColor)};
+
   .dropdown-header {
     @include padding-left(1rem);
   }
 
   .dropdown-item {
-    color: pvar(--mainForegroundColor);
     padding: 3px 15px;
 
     &.active {

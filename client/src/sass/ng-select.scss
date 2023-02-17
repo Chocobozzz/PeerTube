@@ -1,19 +1,36 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-$ng-select-highlight: #f2690d;
-// $ng-select-primary-text: #333 !default;
+$ng-select-highlight: pvar(--mainColor);
+$ng-select-primary-text: pvar(--mainForegroundColor);
 // $ng-select-disabled-text: #f9f9f9 !default;
 $ng-select-border: $input-border-color;
 // $ng-select-border-radius: 4px !default;
-// $ng-select-bg: #ffffff !default;
-// $ng-select-selected: lighten($ng-select-highlight, 46) !default;
-// $ng-select-marke d: lighten($ng-select-highlight, 48) !default;
+$ng-select-bg: pvar(--mainBackgroundColor);
+
+// Cannot use a CSS variable as the default them use darken on this variable
+$ng-select-selected: lighten($main-color, 40%);
+// $ng-select-selected-text: $ng-select-primary-text !default;
+
+$ng-select-marked: pvar(--mainColorLightest);
+// $ng-select-marked-text: $ng-select-primary-text !default;
+
 $ng-select-box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
-// $ng-select-placeholder: lighten($ng-select-primary-text, 40) !default;
+$ng-select-placeholder: pvar(--greyForegroundColor);
 $ng-select-height: 30px;
 $ng-select-value-padding-left: 15px;
 $ng-select-value-font-size: $form-input-font-size;
+// $ng-select-value-text: $ng-select-primary-text !default;
+
+// $ng-select-dropdown-bg: $ng-select-bg !default;
+// $ng-select-dropdown-border: $ng-select-border !default;
+// $ng-select-dropdown-optgroup-text: rgba(0, 0, 0, 0.54) !default;
+// $ng-select-dropdown-optgroup-marked: $ng-select-dropdown-optgroup-text !default;
+// $ng-select-dropdown-option-bg: $ng-select-dropdown-bg !default;
+// $ng-select-dropdown-option-text: rgba(0, 0, 0, 0.87) !default;
+$ng-select-dropdown-option-disabled: pvar(--greyForegroundColor);
+
+$ng-select-input-text: pvar(--mainForegroundColor);
 
 @import '@ng-select/ng-select/scss/default.theme';
 
