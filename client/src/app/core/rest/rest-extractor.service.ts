@@ -133,6 +133,10 @@ export class RestExtractor {
       return $localize`Server error. Please retry later.`
     }
 
+    if (err.status === HttpStatusCode.BAD_GATEWAY_502) {
+      return $localize`Server is unavailable. Please retry later.`
+    }
+
     return $localize`Unknown server error`
   }
 }
