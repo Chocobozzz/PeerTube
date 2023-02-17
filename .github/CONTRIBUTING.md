@@ -21,10 +21,16 @@ Interested in contributing? Awesome!
   - [RTL layout](#rtl-layout)
   - [Testing](#testing)
     - [Unit/integration tests](#unitintegration-tests)
-    - [Testing the federation of PeerTube servers](#testing-the-federation-of-peertube-servers)
+    - [Play with a federation of PeerTube servers](#play-with-a-federation-of-peertube-servers)
   - [Emails](#emails)
   - [OpenAPI documentation](#openapi-documentation)
   - [Environment variables](#environment-variables)
+  - [Generate/pull translations](#generatepull-translations)
+  - [Release PeerTube](#release-peertube)
+  - [PeerTube packages](#peertube-packages)
+  - [CI](#ci)
+  - [Monitoring](#monitoring)
+  - [Test live stream](#test-live-stream)
 - [Plugins & Themes](#plugins--themes)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -182,7 +188,7 @@ $ npm run dev:embed
 
 ### RTL layout
 
-To test RTL layout using `ar` locale:
+To test RTL (right-to-left) layout using `ar` locale:
 
 ```
 $ npm run dev -- --ar-locale
@@ -197,7 +203,7 @@ as expected and respect the syntax conventions. They will run upon PR submission
 
 See the [dedicated documentation](/support/doc/development/tests.md) to run tests locally.
 
-#### Testing the federation of PeerTube servers
+#### Play with a federation of PeerTube servers
 
 Create a PostgreSQL user **with the same name as your username** in order to avoid using the *postgres* user.
 Then, we can create the databases (if they don't already exist):
@@ -254,6 +260,41 @@ Additionally to these ones, we provide some environment for dev/test purpose:
  `true`
  * `PEERTUBE_LOCAL_CONFIG`: directory to find the local configuration file (used by web admin)
  * `NODE_DB_LOG=false`: disable SQL request logging
+
+### Generate/pull translations
+
+See the [dedicated documentation](/support/doc/development/localization.md) to update PeerTube translations from Weblate or to support a new locale.
+
+### Release PeerTube
+
+See the [dedicated documentation](/support/doc/development/release.md) to release a new version of PeerTube.
+
+### PeerTube packages
+
+This repository also contains other packages/libraries than PeerTube (embed API, PeerTube types...).
+You can see the list on the [dedicated documentation](/support/doc/development/lib.md).
+
+### CI
+
+PeerTube uses Github actions to run tests every time a commit is pushed or a PR is opened.
+You can find more information about these tasks on the [dedicated documentation](/support/doc/development/ci.md).
+
+### Monitoring
+
+You can check the content of the client bundle or benchmark the REST API.
+To do so, see the [dedicated documentation](/support/doc/development/monitoring.md).
+
+### Test live stream
+
+To easily test a live on PeerTube:
+ * Enable live support in web admin configuration
+ * Create a permanent live on the PeerTube instance
+ * Get the **RTMP URL** and the **Live stream key**
+ * Send the live to PeerTube using `ffmpeg` using a local video:
+
+```
+ffmpeg -stream_loop -1 -re -i any-video.mp4 -c copy -f flv rtmp://{RTMP URL}/live/{STREAM KEY}
+```
 
 ## Plugins & Themes
 
