@@ -3878,7 +3878,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1412406834353485520">
         <source>Ask for new password</source>
-        <target>Zur Vergabe eines neuen Kennworts auffordern</target>
+        <target state="translated">Neues Passwort anfragen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">222</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">222</context></context-group>
       </trans-unit>
@@ -6700,7 +6700,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3458449147454605646" datatype="html">
         <source>Request a new verification email</source>
-        <target state="new"> Request a new verification email </target>
+        <target state="translated">Eine neue Verifizierungsmail anfordern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">15,17</context>
@@ -6762,7 +6762,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="5634180635200972996" datatype="html">
         <source>Email verified!</source>
-        <target state="new">Email verified!</target>
+        <target state="translated">Email verifiziert!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -6770,7 +6770,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2584956257063845668" datatype="html">
         <source>Your email has been verified and your account request has been sent!</source>
-        <target state="new">Your email has been verified and your account request has been sent!</target>
+        <target state="translated">Deine Email wurde verifiziert und deine Registrierungsanfrage wurde abgschickt!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">7</context>
