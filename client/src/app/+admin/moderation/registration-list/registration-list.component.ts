@@ -54,6 +54,7 @@ export class RegistrationListComponent extends RestTable <UserRegistration> impl
         },
         {
           label: $localize`Remove this request`,
+          description: $localize`Remove the request from the list. The user can register again.`,
           handler: registration => this.removeRegistrations([ registration ])
         }
       ]
