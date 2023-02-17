@@ -246,7 +246,7 @@ The [REST API documentation](https://docs.joinpeertube.org/api-rest-reference.ht
 To quickly get a preview of your changes, you can generate the documentation *on the fly* using the following command:
 
 ```
-npx redoc-cli serve --watch ./support/doc/api/openapi.yaml
+npx @redocly/cli preview-docs ./support/doc/api/openapi.yaml
 ```
 
 ### Environment variables
