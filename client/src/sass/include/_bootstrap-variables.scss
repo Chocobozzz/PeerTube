@@ -8,9 +8,9 @@ $grid-breakpoints: (
   // Extra small screen / phone
   xs: 0,
   // Small screen / phone
-  sm: 576px,
+  sm: $mobile-view,
   // Medium screen / tablet
-  md: 768px,
+  md: $small-view,
   // Large screen / desktop
   lg: 900px,
   // Extra large screens / wide desktops
