@@ -1,18 +1,8 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.margin-content {
-  padding-top: 20px;
-}
-
 .video-channel-title {
   @include settings-big-title;
-}
-
-my-actor-avatar-edit,
-my-actor-banner-edit {
-  display: block;
-  margin-bottom: 20px;
 }
 
 my-actor-banner-edit {
@@ -21,29 +11,17 @@ my-actor-banner-edit {
 
 input[type=text] {
   @include peertube-input-text(340px);
-
-  display: block;
-
-  &#name {
-    width: auto;
-    flex-grow: 1;
-  }
 }
 
 input[type=submit] {
-  @include peertube-button;
-  @include orange-button;
   @include margin-left(auto);
 }
 
 textarea {
   @include peertube-textarea(500px, 150px);
-
-  display: block;
 }
 
 my-markdown-textarea {
-  display: block;
   max-width: 500px;
 }
 
@@ -53,15 +31,4 @@ my-markdown-textarea {
 
 .breadcrumb {
   @include breadcrumb;
-}
-
-@media screen and (max-width: $small-view) {
-  input[type=text]#name {
-    width: auto !important;
-  }
-
-  label[for=name] + div,
-  textarea {
-    width: 100%;
-  }
 }
