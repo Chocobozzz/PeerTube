@@ -16,7 +16,7 @@
           size="75"
         ></my-actor-avatar>
 
-        <h2>
+        <h2 class="fs-5 lh-1 fw-bold m-0">
           <a [routerLink]="getVideoChannelLink(videoChannel)" i18n-title title="See this video channel">
             {{ videoChannel.displayName }}
           </a>
@@ -39,7 +39,7 @@
 
       <div class="videos-overflow-workaround">
         <div class="videos">
-          <div class="no-results" i18n *ngIf="getTotalVideosOf(videoChannel) === 0">This channel doesn't have any videos.</div>
+          <div class="no-results h-auto" i18n *ngIf="getTotalVideosOf(videoChannel) === 0">This channel doesn't have any videos.</div>
 
           <my-video-miniature
             *ngFor="let video of getVideosOf(videoChannel)"
