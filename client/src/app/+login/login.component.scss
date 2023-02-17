@@ -13,14 +13,13 @@ input[type=email] {
   @include peertube-input-text(100%);
 }
 
-//garder ça ou deux flex-grow-1 flex-shrink-1 lignes 39 et 104
 .wrapper {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   margin: auto;
 
-  >div {
+  > div {
     flex: 1 1;
   }
 }
@@ -31,7 +30,7 @@ input[type=email] {
 }
 
 .alert {
-  @include rfs(0 auto 2rem, margin);
+  @include margin(0, auto, 2rem, auto);
 }
 
 .login-form-and-externals {
