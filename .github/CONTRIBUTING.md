@@ -228,7 +228,7 @@ $ NODE_APP_INSTANCE=2 NODE_ENV=test npm start
 $ NODE_APP_INSTANCE=3 NODE_ENV=test npm start
 ```
 
-Then you will get access to the three nodes at `http://localhost:900{1,2,3}`
+Then you will get access to the three nodes at `http://127.0.0.1:900{1,2,3}`
 with the `root` as username and `test{1,2,3}` for the password.
 
 Instance configurations are in `config/test-{1,2,3}.yaml`.
