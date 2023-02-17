@@ -9,8 +9,7 @@ import { REGISTRATION_MODERATION_RESPONSE_VALIDATOR } from './process-registrati
 
 @Component({
   selector: 'my-process-registration-modal',
-  templateUrl: './process-registration-modal.component.html',
-  styleUrls: [ './process-registration-modal.component.scss' ]
+  templateUrl: './process-registration-modal.component.html'
 })
 export class ProcessRegistrationModalComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal

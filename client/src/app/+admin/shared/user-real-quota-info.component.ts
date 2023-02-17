@@ -4,8 +4,7 @@ import { HTMLServerConfig, VideoResolution } from '@shared/models/index'
 
 @Component({
   selector: 'my-user-real-quota-info',
-  templateUrl: './user-real-quota-info.component.html',
-  styleUrls: [ './user-real-quota-info.component.scss' ]
+  templateUrl: './user-real-quota-info.component.html'
 })
 export class UserRealQuotaInfoComponent implements OnInit {
   @Input() videoQuota: number | string

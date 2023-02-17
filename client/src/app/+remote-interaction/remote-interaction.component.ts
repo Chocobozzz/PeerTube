@@ -6,8 +6,7 @@ import { SearchService } from '@app/shared/shared-search'
 
 @Component({
   selector: 'my-remote-interaction',
-  templateUrl: './remote-interaction.component.html',
-  styleUrls: [ './remote-interaction.component.scss' ]
+  templateUrl: './remote-interaction.component.html'
 })
 export class RemoteInteractionComponent implements OnInit {
   error = ''
