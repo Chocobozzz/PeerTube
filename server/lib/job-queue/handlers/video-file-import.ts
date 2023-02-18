@@ -1,19 +1,20 @@
 import { Job } from 'bullmq'
 import { copy, stat } from 'fs-extra'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
-import { CONFIG } from '@server/initializers/config'
-import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
-import { buildMoveToObjectStorageJob } from '@server/lib/video'
+import { addVideoJobsAfterUpload, buildMoveToObjectStorageJob } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
-import { MVideoFullLight } from '@server/types/models'
+import { MVideoFile, MVideoFullLight } from '@server/types/models'
 import { getLowercaseExtension } from '@shared/core-utils'
 import { VideoFileImportPayload, VideoStorage } from '@shared/models'
 import { getVideoStreamFPS, getVideoStreamDimensionsInfo } from '../../../helpers/ffmpeg'
 import { logger } from '../../../helpers/logger'
+import { buildNextVideoState } from '@server/lib/video-state'
+import { CONFIG } from '@server/initializers/config'
 import { JobQueue } from '../job-queue'
+import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 
 async function processVideoFileImport (job: Job) {
   const payload = job.data as VideoFileImportPayload
@@ -26,12 +27,19 @@ async function processVideoFileImport (job: Job) {
     return undefined
   }
 
-  await updateVideoFile(video, payload.filePath)
+  const videoFile = await updateVideoFile(video, payload.filePath, payload.removeOldFiles)
 
-  if (CONFIG.OBJECT_STORAGE.ENABLED) {
-    await JobQueue.Instance.createJob(await buildMoveToObjectStorageJob({ video, previousVideoState: video.state }))
+  if (payload.createTranscodingJobs) {
+    const previousVideoState = video.state
+    video.state = buildNextVideoState()
+
+    await addVideoJobsAfterUpload(video, videoFile, payload.userId ? { id: payload.userId } : null, previousVideoState)
   } else {
-    await federateVideoIfNeeded(video, false)
+    if (CONFIG.OBJECT_STORAGE.ENABLED) {
+      await JobQueue.Instance.createJob(await buildMoveToObjectStorageJob({ video, previousVideoState: video.state }))
+    } else {
+      await federateVideoIfNeeded(video, false)
+    }
   }
 
   return video
@@ -45,22 +53,22 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
+async function updateVideoFile (video: MVideoFullLight, inputFilePath: string, removeOldFiles?: boolean): Promise<MVideoFile> {
   const { resolution } = await getVideoStreamDimensionsInfo(inputFilePath)
   const { size } = await stat(inputFilePath)
   const fps = await getVideoStreamFPS(inputFilePath)
 
   const fileExt = getLowercaseExtension(inputFilePath)
 
-  const currentVideoFile = video.VideoFiles.find(videoFile => videoFile.resolution === resolution)
+  const filesToBeRemoved = removeOldFiles ? video.VideoFiles : video.VideoFiles.filter(videoFile => videoFile.resolution === resolution)
 
-  if (currentVideoFile) {
+  for (const videoFile of filesToBeRemoved) {
     // Remove old file and old torrent
-    await video.removeWebTorrentFile(currentVideoFile)
+    await video.removeWebTorrentFile(videoFile)
     // Remove the old video file from the array
-    video.VideoFiles = video.VideoFiles.filter(f => f !== currentVideoFile)
+    video.VideoFiles = video.VideoFiles.filter(f => f !== videoFile)
 
-    await currentVideoFile.destroy()
+    await videoFile.destroy()
   }
 
   const newVideoFile = new VideoFileModel({
@@ -80,4 +88,6 @@ async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
   await createTorrentAndSetInfoHash(video, newVideoFile)
 
   await newVideoFile.save()
+
+  return newVideoFile
 }

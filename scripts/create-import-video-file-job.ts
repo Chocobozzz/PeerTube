@@ -6,6 +6,7 @@ import { JobQueue } from '../server/lib/job-queue'
 import { VideoModel } from '../server/models/video/video'
 
 program
+  .option('-t, --transcode', 'Create transcoding jobs', false)
   .option('-v, --video [videoUUID]', 'Video UUID')
   .option('-i, --import [videoFile]', 'Video file')
   .description('Import a video file to replace an already uploaded file or to add a new resolution')
@@ -40,6 +41,8 @@ async function run () {
   if (video.isOwned() === false) throw new Error('Cannot import files of a non owned video.')
 
   const dataInput = {
+    createTranscodingJobs: options.transcode,
+    removeOldFiles: options.transcode,
     videoUUID: video.uuid,
     filePath: resolve(options.import)
   }

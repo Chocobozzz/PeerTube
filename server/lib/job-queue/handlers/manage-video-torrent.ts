@@ -12,7 +12,7 @@ async function processManageVideoTorrent (job: Job) {
   const payload = job.data as ManageVideoTorrentPayload
   logger.info('Processing torrent in job %s.', job.id)
 
-  if (payload.action === 'create') return doCreateAction(payload)
+  if (payload.action === 'create' || payload.action === 'update-video-file') return doCreateOrUpdateVideoFileAction(payload)
   if (payload.action === 'update-metadata') return doUpdateMetadataAction(payload)
 }
 
@@ -24,7 +24,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function doCreateAction (payload: ManageVideoTorrentPayload & { action: 'create' }) {
+async function doCreateOrUpdateVideoFileAction (payload: ManageVideoTorrentPayload) {
   const [ video, file ] = await Promise.all([
     loadVideoOrLog(payload.videoId),
     loadFileOrLog(payload.videoFileId)

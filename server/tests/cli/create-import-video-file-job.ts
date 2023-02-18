@@ -40,7 +40,7 @@ function runTests (objectStorage: boolean) {
   let servers: PeerTubeServer[] = []
 
   before(async function () {
-    this.timeout(90000)
+    this.timeout(130000)
 
     const config = objectStorage
       ? ObjectStorageCommand.getDefaultMockConfig()
@@ -72,7 +72,7 @@ function runTests (objectStorage: boolean) {
     }
   })
 
-  it('Should run a import job on video 1 with a lower resolution', async function () {
+  it('Should run an import job on video 1 with a lower resolution', async function () {
     const command = `npm run create-import-video-file-job -- -v ${video1ShortId} -i server/tests/fixtures/video_short-480.webm`
     await servers[0].cli.execWithEnv(command)
 
@@ -94,7 +94,7 @@ function runTests (objectStorage: boolean) {
     }
   })
 
-  it('Should run a import job on video 2 with the same resolution and a different extension', async function () {
+  it('Should run an import job on video 2 with the same resolution and a different extension', async function () {
     const command = `npm run create-import-video-file-job -- -v ${video2UUID} -i server/tests/fixtures/video_short.ogv`
     await servers[1].cli.execWithEnv(command)
 
@@ -118,7 +118,7 @@ function runTests (objectStorage: boolean) {
     }
   })
 
-  it('Should run a import job on video 2 with the same resolution and the same extension', async function () {
+  it('Should run an import job on video 1 with the same resolution and the same extension', async function () {
     const command = `npm run create-import-video-file-job -- -v ${video1ShortId} -i server/tests/fixtures/video_short2.webm`
     await servers[0].cli.execWithEnv(command)
 
@@ -143,6 +143,33 @@ function runTests (objectStorage: boolean) {
   it('Should not have run transcoding after an import job', async function () {
     const { data } = await servers[0].jobs.list({ jobType: 'video-transcoding' })
     expect(data).to.have.lengthOf(0)
+  })
+
+  it('Should run an import and transcode jobs on video 1 with a lower resolution', async function () {
+    const command = `npm run create-import-video-file-job -- --transcode -v ${video1ShortId} -i server/tests/fixtures/video_short-480.webm`
+    await servers[0].cli.execWithEnv(command)
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const { data: videos } = await server.videos.listWithToken({ include: VideoInclude.NOT_PUBLISHED_STATE })
+      expect(videos).to.have.lengthOf(2)
+
+      const video = videos.find(({ shortUUID }) => shortUUID === video1ShortId)
+      const videoDetails = await server.videos.get({ id: video.shortUUID })
+
+      expect(videoDetails.files.find(({ resolution }) => resolution.id === 720))
+        .to.equal(undefined, 'Expected old resolution to have been removed')
+
+      expect(videoDetails.files).to.have.lengthOf(4)
+      const transcodedVideos = videoDetails.files
+
+      for (const video of transcodedVideos) {
+        expect(video.fileUrl).to.match(/mp4$/)
+      }
+
+      await checkFiles(videoDetails, objectStorage)
+    }
   })
 
   after(async function () {

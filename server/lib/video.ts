@@ -90,7 +90,7 @@ async function setVideoTags (options: {
 async function buildOptimizeOrMergeAudioJob (options: {
   video: MVideoUUID
   videoFile: MVideoFile
-  user: MUserId
+  user?: MUserId
   isNewVideo?: boolean // Default true
 }) {
   const { video, videoFile, user, isNewVideo } = options
@@ -128,7 +128,9 @@ async function buildTranscodingJob (payload: VideoTranscodingPayload, options: C
   return { type: 'video-transcoding' as 'video-transcoding', payload, ...options }
 }
 
-async function getTranscodingJobPriority (user: MUserId) {
+async function getTranscodingJobPriority (user?: MUserId) {
+  if (!user) return JOB_PRIORITY.TRANSCODING
+
   const now = new Date()
   const lastWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7)
 
@@ -178,6 +180,42 @@ const getCachedVideoDuration = memoizee(getVideoDuration, {
 
 // ---------------------------------------------------------------------------
 
+async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVideoFile, user?: MUserId, previousVideoState?: VideoState) {
+  return JobQueue.Instance.createSequentialJobFlow(
+    {
+      type: 'manage-video-torrent' as 'manage-video-torrent',
+      payload: {
+        videoId: video.id,
+        videoFileId: videoFile.id,
+        action: previousVideoState ? 'update-video-file' : 'create'
+      }
+    },
+
+    previousVideoState && {
+      type: 'notify',
+      payload: {
+        action: 'new-video',
+        videoUUID: video.uuid
+      }
+    },
+
+    {
+      type: 'federate-video' as 'federate-video',
+      payload: {
+        videoUUID: video.uuid,
+        isNewVideo: !previousVideoState
+      }
+    },
+
+    video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE
+      ? await buildMoveToObjectStorageJob({ video, previousVideoState })
+      : undefined,
+
+    video.state === VideoState.TO_TRANSCODE
+      ? await buildOptimizeOrMergeAudioJob({ video, videoFile, user })
+      : undefined
+  )
+}
 async function addVideoJobsAfterUpdate (options: {
   video: MVideoFullLight
   isNewVideo: boolean
@@ -239,6 +277,7 @@ export {
   buildTranscodingJob,
   buildMoveToObjectStorageJob,
   getTranscodingJobPriority,
+  addVideoJobsAfterUpload,
   addVideoJobsAfterUpdate,
   getCachedVideoDuration
 }

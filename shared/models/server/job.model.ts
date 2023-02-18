@@ -80,8 +80,11 @@ export type RefreshPayload = {
 export type EmailPayload = SendEmailOptions
 
 export type VideoFileImportPayload = {
+  createTranscodingJobs: boolean
   videoUUID: string
   filePath: string
+  removeOldFiles: boolean
+  userId?: number
 }
 
 // ---------------------------------------------------------------------------
@@ -117,7 +120,7 @@ export type VideoRedundancyPayload = {
 
 export type ManageVideoTorrentPayload =
   {
-    action: 'create'
+    action: 'create' | 'update-video-file'
     videoId: number
     videoFileId: number
   } | {
