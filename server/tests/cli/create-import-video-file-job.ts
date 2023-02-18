@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
-import { HttpStatusCode, VideoDetails, VideoFile, VideoInclude } from '@shared/models'
+import { HttpStatusCode, VideoFile, VideoInclude, VideoStreamingPlaylistType } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -25,8 +25,8 @@ function assertVideoProperties (video: VideoFile, resolution: number, extname: s
   if (size) expect(video.size).to.equal(size)
 }
 
-async function checkFiles (video: VideoDetails, objectStorage: boolean) {
-  for (const file of video.files) {
+async function checkFiles (videoFiles: VideoFile[], objectStorage: boolean) {
+  for (const file of videoFiles) {
     if (objectStorage) expectStartWith(file.fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
 
     await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
@@ -90,7 +90,7 @@ function runTests (objectStorage: boolean) {
       assertVideoProperties(originalVideo, 720, 'webm', 218910)
       assertVideoProperties(transcodedVideo, 480, 'webm', 69217)
 
-      await checkFiles(videoDetails, objectStorage)
+      await checkFiles(videoDetails.files, objectStorage)
     }
   })
 
@@ -114,7 +114,7 @@ function runTests (objectStorage: boolean) {
       assertVideoProperties(transcodedVideo320, 360, 'mp4')
       assertVideoProperties(transcodedVideo240, 240, 'mp4')
 
-      await checkFiles(videoDetails, objectStorage)
+      await checkFiles(videoDetails.files, objectStorage)
     }
   })
 
@@ -136,7 +136,7 @@ function runTests (objectStorage: boolean) {
       assertVideoProperties(video720, 720, 'webm', 942961)
       assertVideoProperties(video480, 480, 'webm', 69217)
 
-      await checkFiles(videoDetails, objectStorage)
+      await checkFiles(videoDetails.files, objectStorage)
     }
   })
 
@@ -145,30 +145,45 @@ function runTests (objectStorage: boolean) {
     expect(data).to.have.lengthOf(0)
   })
 
-  it('Should run an import and transcode jobs on video 1 with a lower resolution', async function () {
-    const command = `npm run create-import-video-file-job -- --transcode -v ${video1ShortId} -i server/tests/fixtures/video_short-480.webm`
+  it('Should run an import and transcode jobs on video 3 with a lower resolution', async function () {
+    const { shortUUID: video3ShortId } = await servers[0].videos.upload({ attributes: { name: 'video3' } })
+    await waitJobs(servers[0])
+
+    const command = `npm run create-import-video-file-job -- --transcode -v ${video3ShortId} -i server/tests/fixtures/video_short-480.webm`
     await servers[0].cli.execWithEnv(command)
 
     await waitJobs(servers)
 
     for (const server of servers) {
       const { data: videos } = await server.videos.listWithToken({ include: VideoInclude.NOT_PUBLISHED_STATE })
-      expect(videos).to.have.lengthOf(2)
+      expect(videos).to.have.lengthOf(3)
 
-      const video = videos.find(({ shortUUID }) => shortUUID === video1ShortId)
+      const video = videos.find(({ shortUUID }) => shortUUID === video3ShortId)
       const videoDetails = await server.videos.get({ id: video.shortUUID })
 
       expect(videoDetails.files.find(({ resolution }) => resolution.id === 720))
         .to.equal(undefined, 'Expected old resolution to have been removed')
 
       expect(videoDetails.files).to.have.lengthOf(4)
-      const transcodedVideos = videoDetails.files
 
-      for (const video of transcodedVideos) {
+      for (const video of videoDetails.files) {
         expect(video.fileUrl).to.match(/mp4$/)
       }
 
-      await checkFiles(videoDetails, objectStorage)
+      await checkFiles(videoDetails.files, objectStorage)
+
+      const hlsPlaylist = videoDetails.streamingPlaylists.find(playlist => playlist.type === VideoStreamingPlaylistType.HLS)
+
+      expect(hlsPlaylist.files.find(({ resolution }) => resolution.id === 720))
+      .to.equal(undefined, 'Expected old HLS resolution to have been removed')
+
+      expect(hlsPlaylist.files).to.have.lengthOf(4)
+
+      for (const video of hlsPlaylist.files) {
+        expect(video.fileUrl).to.match(/mp4$/)
+      }
+
+      await checkFiles(hlsPlaylist.files, objectStorage)
     }
   })
 

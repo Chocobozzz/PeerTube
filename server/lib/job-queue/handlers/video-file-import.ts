@@ -4,6 +4,7 @@ import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { addVideoJobsAfterUpload, buildMoveToObjectStorageJob } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
+import { removeHLSFile } from '@server/lib/video-file'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { MVideoFile, MVideoFullLight } from '@server/types/models'
@@ -14,6 +15,8 @@ import { logger } from '../../../helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { JobQueue } from '../job-queue'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
+import { lTags } from '@server/lib/object-storage/shared'
+import { updatePlaylistAfterFileChange } from '@server/lib/hls'
 
 async function processVideoFileImport (job: Job) {
   const payload = job.data as VideoFileImportPayload
@@ -62,13 +65,29 @@ async function updateVideoFile (video: MVideoFullLight, inputFilePath: string, r
 
   const filesToBeRemoved = removeOldFiles ? video.VideoFiles : video.VideoFiles.filter(videoFile => videoFile.resolution === resolution)
 
+  /**
+   * TODO: Only remove bigger resolutions. Set pending remove on rest.
+   */
   for (const videoFile of filesToBeRemoved) {
+    logger.info('Deleting video file %d of %s.', videoFile.id, video.url, lTags(video.uuid))
     // Remove old file and old torrent
     await video.removeWebTorrentFile(videoFile)
     // Remove the old video file from the array
     video.VideoFiles = video.VideoFiles.filter(f => f !== videoFile)
 
     await videoFile.destroy()
+  }
+
+  if (CONFIG.TRANSCODING.HLS.ENABLED) {
+    const files = video.getHLSPlaylist()?.VideoFiles || []
+    const hlsFilesToBeRemoved = removeOldFiles ? files : files.filter(videoFile => videoFile.resolution === resolution)
+
+    for (const videoFile of hlsFilesToBeRemoved) {
+      logger.info('Deleting HLS file %d of %s.', videoFile.id, video.url, lTags(video.uuid))
+
+      const playlist = await removeHLSFile(video, videoFile.id)
+      if (playlist) await updatePlaylistAfterFileChange(video, playlist)
+    }
   }
 
   const newVideoFile = new VideoFileModel({
