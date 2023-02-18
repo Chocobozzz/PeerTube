@@ -191,7 +191,7 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
       }
     },
 
-    previousVideoState && {
+    !previousVideoState && {
       type: 'notify',
       payload: {
         action: 'new-video',

@@ -8,10 +8,9 @@ import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { MVideoFile, MVideoFullLight } from '@server/types/models'
 import { getLowercaseExtension } from '@shared/core-utils'
-import { VideoFileImportPayload, VideoStorage } from '@shared/models'
+import { VideoFileImportPayload, VideoState, VideoStorage } from '@shared/models'
 import { getVideoStreamFPS, getVideoStreamDimensionsInfo } from '../../../helpers/ffmpeg'
 import { logger } from '../../../helpers/logger'
-import { buildNextVideoState } from '@server/lib/video-state'
 import { CONFIG } from '@server/initializers/config'
 import { JobQueue } from '../job-queue'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
@@ -31,7 +30,8 @@ async function processVideoFileImport (job: Job) {
 
   if (payload.createTranscodingJobs) {
     const previousVideoState = video.state
-    video.state = buildNextVideoState()
+    video.state = VideoState.TO_TRANSCODE
+    await video.save()
 
     await addVideoJobsAfterUpload(video, videoFile, payload.userId ? { id: payload.userId } : null, previousVideoState)
   } else {
