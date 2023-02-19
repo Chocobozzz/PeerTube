@@ -63,7 +63,7 @@
     "Loaded": "โหลดเสร็จสิ้น",
     "Progress": "ความคืบหน้า",
     "Progress Bar": "แถบความคืบหน้า",
-    "progress bar timing: currentTime={1} duration={2}": "{1} จาก {2}",
+    "progress bar timing: currentTime={1} duration={2}": "progress bar timing: currentTime={1} duration={2}",
     "Fullscreen": "เต็มหน้าจอ",
     "Non-Fullscreen": "ไม่เต็มหน้าจอ",
     "Mute": "ปิดเสียง",
