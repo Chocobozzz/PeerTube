@@ -25,9 +25,14 @@ function assertVideoProperties (video: VideoFile, resolution: number, extname: s
   if (size) expect(video.size).to.equal(size)
 }
 
-async function checkFiles (videoFiles: VideoFile[], objectStorage: boolean) {
+async function checkFiles (videoFiles: VideoFile[], objectStorage: boolean, hls?: boolean) {
   for (const file of videoFiles) {
-    if (objectStorage) expectStartWith(file.fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
+    if (objectStorage) {
+      expectStartWith(
+        file.fileUrl,
+        hls ? ObjectStorageCommand.getMockPlaylistBaseUrl() : ObjectStorageCommand.getMockWebTorrentBaseUrl()
+      )
+    }
 
     await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
@@ -183,7 +188,7 @@ function runTests (objectStorage: boolean) {
         expect(video.fileUrl).to.match(/mp4$/)
       }
 
-      await checkFiles(hlsPlaylist.files, objectStorage)
+      await checkFiles(hlsPlaylist.files, objectStorage, true)
     }
   })
 
