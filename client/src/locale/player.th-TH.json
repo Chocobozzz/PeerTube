@@ -81,7 +81,7 @@
     "You aborted the media playback": "คุณได้หยุดการเล่นสื่อ",
     "A network error caused the media download to fail part-way.": "การดาวน์โหลดสื่อได้หยุดเนื่องจากปัญหาเครือข่าย",
     "The media could not be loaded, either because the server or network failed or because the format is not supported.": "ไม่สามารถโหลดสื่อได้ เนื่องจากปัญหาระบบเซิร์ฟเวอร์หรือเครือข่ายขัดข้อง หรือรูปแบบสื่อไม่รองรับ",
-    "The media playback was aborted due to a corruption problem or because the media used features your browser did not support.": "การเล่นสื่อได้หยุดลงเนื่องจากปัญหาสื่อไม่สมบูรณ์ หรือสื่อที่รับชมใช้คุณสมบัติที่เบราเซอร์ของคุณไม่รองรับ",
+    "The media playback was aborted due to a corruption problem or because the media used features your browser did not support.": "การเล่นสื่อได้หยุดลงเนื่องจากปัญหาสื่อไม่สมบูรณ์ หรือสื่อที่รับชมใช้คุณสมบัติที่เบราว์เซอร์ของคุณไม่รองรับ",
     "No compatible source was found for this media.": "ไม่พบต้นทางที่เข้ากันได้สำหรับสื่อนี้",
     "The media is encrypted and we do not have the keys to decrypt it.": "สื่อนี้ถูกเข้ารหัสและไม่สามารถถอดรหัสได้ เนื่องจากเราไม่มีกุญแจสำหรับการถอดรหัส",
     "Play Video": "เล่นวิดีโอ",
