@@ -1460,7 +1460,7 @@
       </trans-unit>
       <trans-unit id="2279905277031617076" datatype="html">
         <source>Number of video captions to keep in cache</source>
-        <target state="translated">Fjöldi skýringartexta myndskeiða til að halda í skyndiminni</target>
+        <target state="translated">Fjöldi skjátexta myndskeiða til að halda í skyndiminni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1468,7 +1468,7 @@
       </trans-unit>
       <trans-unit id="6193666854590647323" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {skýringatexti í skyndiminni} other {skýringatextar í skyndiminni}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {skjátexti í skyndiminni} other {skjátextar í skyndiminni}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">36</context>
@@ -1741,6 +1741,7 @@
       </trans-unit>
       <trans-unit id="667372110624203230" datatype="html">
         <source>Import jobs concurrency</source>
+        <target state="translated">Samhliða innflutningsverk</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">269</context></context-group>
       </trans-unit>
       <trans-unit id="2184839376696112704" datatype="html">
@@ -2801,6 +2802,7 @@
       </trans-unit>
       <trans-unit id="7185278676178506632" datatype="html">
         <source>Transcoding jobs concurrency</source>
+        <target state="translated">Samhliða umkóðunarverk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">168</context>
@@ -6753,7 +6755,7 @@
       </trans-unit>
       <trans-unit id="7130088765428829942" datatype="html">
         <source>New abuse</source>
-        <target state="translated">Ný misnotkun</target>
+        <target state="translated">Ný tilkynning um misnotkun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -10232,7 +10234,7 @@
       </trans-unit>
       <trans-unit id="1909308046360229945" datatype="html">
         <source>Add caption</source>
-        <target state="translated">Bæta við myndatexta</target>
+        <target state="translated">Bæta við skjátexta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">5</context>
@@ -10240,7 +10242,7 @@
       </trans-unit>
       <trans-unit id="753928283782809091" datatype="html">
         <source>Select the caption file</source>
-        <target state="translated">Veldu skýringatextaskrána</target>
+        <target state="translated">Veldu skjátextaskrána</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">24</context>
@@ -10248,7 +10250,7 @@
       </trans-unit>
       <trans-unit id="4616828176080418150" datatype="html">
         <source>This will replace an existing caption!</source>
-        <target state="translated">Þetta mun skipta út fyrirliggjandi skýringatexta!</target>
+        <target state="translated">Þetta mun skipta út fyrirliggjandi skjátexta!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">30,32</context>
@@ -10256,7 +10258,7 @@
       </trans-unit>
       <trans-unit id="2752121353049766867" datatype="html">
         <source>Add this caption</source>
-        <target state="translated">Bæta við þessum skýringatexta</target>
+        <target state="translated">Bæta við þessum skjátexta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">42</context>
@@ -10264,7 +10266,7 @@
       </trans-unit>
       <trans-unit id="480001148850006323" datatype="html">
         <source>Edit caption</source>
-        <target state="translated">Breyta myndatexta</target>
+        <target state="translated">Breyta skjátexta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal-content/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">3</context>
@@ -10272,7 +10274,7 @@
       </trans-unit>
       <trans-unit id="6838559377527923778" datatype="html">
         <source>Caption</source>
-        <target state="translated">Skýringatexti</target>
+        <target state="translated">Skjátexti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal-content/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">8</context>
@@ -10280,7 +10282,7 @@
       </trans-unit>
       <trans-unit id="1989971680596153649" datatype="html">
         <source>Edit this caption</source>
-        <target state="translated">Breyta þessum skýringatexta</target>
+        <target state="translated">Breyta þessum skjátexta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal-content/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">30</context>
@@ -10380,7 +10382,7 @@
       </trans-unit>
       <trans-unit id="2602773901491715295" datatype="html">
         <source>Captions</source>
-        <target state="translated">Skýringatextar</target>
+        <target state="translated">Skjátextar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">165</context>
@@ -10396,7 +10398,7 @@
       </trans-unit>
       <trans-unit id="2142169012597585513" datatype="html">
         <source>Add another caption</source>
-        <target state="translated">Bæta við öðrum skýringatexta</target>
+        <target state="translated">Bæta við öðrum skjátexta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">173</context>
@@ -10468,7 +10470,7 @@
       </trans-unit>
       <trans-unit id="360396717319152766" datatype="html">
         <source>No captions for now.</source>
-        <target state="translated">Engir skýringartextar í augnablikinu.</target>
+        <target state="translated">Engir skjátextar í augnablikinu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">219,220</context>
@@ -12565,6 +12567,7 @@
       </trans-unit>
       <trans-unit id="732935381486595265" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
+        <target state="translated"><x id="PH" equiv-text="name"/> skrána þína var ekki hægt að flytja áður en milliþjónn féll á tíma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">35</context>
@@ -12860,6 +12863,7 @@
       </trans-unit>
       <trans-unit id="5910950876330656326" datatype="html">
         <source>Managing users, following other instances, dealing with spammers...</source>
+        <target state="translated">Sýsla með notendur, fylgjast með öðrum netþjónum, eiga við ruslpóstsendingar...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">22</context>
@@ -12899,6 +12903,7 @@
       </trans-unit>
       <trans-unit id="4614992717645869756" datatype="html">
         <source>Put your instance on the public PeerTube index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://instances.joinpeertube.org/instances&quot;&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <target state="translated">Settu tilvikið þitt á opinbera skrá PeerTube: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://instances.joinpeertube.org/instances&quot;&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">45</context>
@@ -12914,6 +12919,7 @@
       </trans-unit>
       <trans-unit id="1852111465407058121" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of instance they are. </source>
+        <target state="translated">Veldu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nafnið á veitunni þinni<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>settu inn lýsingu<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, sem tiltekur <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>hver þú sért<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, af hverju <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>þú útbjóst þessa veitu<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> og <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>hve lengi<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> þú hefur hugsað þér <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>að halda þessu úti<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> er mjög mikilvægt fyrir fólk til að skilja á hverskonar netþjóni það sé statt. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">57,61</context>
@@ -12921,6 +12927,7 @@
       </trans-unit>
       <trans-unit id="5329436244765769292" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your moderation rules<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance terms of service<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> PeerTube instance. </source>
+        <target state="translated">Ef þú vilt opna fyrir nýskráningar, þá skaltu ákveða <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>reglur varðandi leyfilegt efni<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> og <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>þjónustuskilmála veitunnar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, auk þess að tilgreina flokka og þau tungumál sem umsjónaraðilar tala. Þannig geturðu hjálpað fólki að skrá sig á <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>viðeigandi<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> PeerTube-netþjón. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">63,67</context>
@@ -13024,6 +13031,7 @@
       </trans-unit>
       <trans-unit id="5330788940795142335" datatype="html">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Without them, your instance may not be referenced on the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>JoinPeerTube website<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+        <target state="translated">Hugsaðu um að fylla í þessa reiti til að hjálpa fólki að velja <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the viðeigandi netþjón<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Án þessara upplýsinga er ekki víst að vísað verði í netþjóninn þinn á the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>JoinPeerTube-vefsvæðinu<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">24,27</context>
@@ -13159,6 +13167,7 @@
       </trans-unit>
       <trans-unit id="8198703669620791633" datatype="html">
         <source>Previews cache size is required.</source>
+        <target state="translated">Stærð skyndiminnis forskoðunar er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">28</context>
@@ -13166,6 +13175,7 @@
       </trans-unit>
       <trans-unit id="3971192070835972256" datatype="html">
         <source>Previews cache size must be greater than 1.</source>
+        <target state="translated">Stærð skyndiminnis forskoðunar verður að vera meiri en 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">29</context>
@@ -13173,6 +13183,7 @@
       </trans-unit>
       <trans-unit id="2903453036126968504" datatype="html">
         <source>Previews cache size must be a number.</source>
+        <target state="translated">Stærð skyndiminnis forskoðunar verður að vera tölugildi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">30</context>
@@ -13180,6 +13191,7 @@
       </trans-unit>
       <trans-unit id="6941976540222684735" datatype="html">
         <source>Captions cache size is required.</source>
+        <target state="translated">Stærð skyndiminnis skjátexta er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">37</context>
@@ -13187,6 +13199,7 @@
       </trans-unit>
       <trans-unit id="780869536819343075" datatype="html">
         <source>Captions cache size must be greater than 1.</source>
+        <target state="translated">Stærð skyndiminnis skjátexta verður að vera meiri en 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">38</context>
@@ -13194,6 +13207,7 @@
       </trans-unit>
       <trans-unit id="2498218540197718478" datatype="html">
         <source>Captions cache size must be a number.</source>
+        <target state="translated">Stærð skyndiminnis skjátexta verður að vera tölugildi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">39</context>
@@ -13265,6 +13279,7 @@
       </trans-unit>
       <trans-unit id="6172217783476989430" datatype="html">
         <source>Transcoding threads is required.</source>
+        <target state="translated">Fjöldi þráða umkóðunar er nauðsynlegur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">72</context>
@@ -13272,6 +13287,7 @@
       </trans-unit>
       <trans-unit id="5320424292625586941" datatype="html">
         <source>Transcoding threads must be greater or equal to 0.</source>
+        <target state="translated">Þræðir umkóðunar verða að vera fleiri en eða jafnt og 0.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">73</context>
@@ -13279,6 +13295,7 @@
       </trans-unit>
       <trans-unit id="8185661254949728718" datatype="html">
         <source>Max live duration is required.</source>
+        <target state="translated">Hámarkstími beins streymis er nauðsynlegur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">80</context>
@@ -13286,6 +13303,7 @@
       </trans-unit>
       <trans-unit id="8892863662898651766" datatype="html">
         <source>Max live duration should be greater or equal to -1.</source>
+        <target state="translated">Hámarkstími beins streymis verður að vera meiri en eða jafn -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">81</context>
@@ -13293,6 +13311,7 @@
       </trans-unit>
       <trans-unit id="8196240396863235661" datatype="html">
         <source>Max instance lives is required.</source>
+        <target state="translated">Hámarksfjöldi beinna streyma er nauðsynlegur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">88</context>
@@ -13300,6 +13319,7 @@
       </trans-unit>
       <trans-unit id="913683464711184925" datatype="html">
         <source>Max instance lives should be greater or equal to -1.</source>
+        <target state="translated">Hámarksfjöldi beinna streyma verður að vera meiri en eða jafn -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">89</context>
@@ -13307,6 +13327,7 @@
       </trans-unit>
       <trans-unit id="5614457087254770778" datatype="html">
         <source>Max user lives is required.</source>
+        <target state="translated">Hámarksfjöldi notenda beinna streyma er nauðsynlegur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">96</context>
@@ -13314,6 +13335,7 @@
       </trans-unit>
       <trans-unit id="2779726697233311712" datatype="html">
         <source>Max user lives should be greater or equal to -1.</source>
+        <target state="translated">Hámarksfjöldi notenda beinna streyma verður að vera meiri en eða jafn -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">97</context>
@@ -13321,6 +13343,7 @@
       </trans-unit>
       <trans-unit id="351272950792130803" datatype="html">
         <source>Max video channels per user is required.</source>
+        <target state="translated">Hámarksfjöldi myndskeiðarása á hvern notanda er nauðsynlegur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">104</context>
@@ -13328,6 +13351,7 @@
       </trans-unit>
       <trans-unit id="5253683089104713724" datatype="html">
         <source>Max video channels per user must be greater or equal to 1.</source>
+        <target state="translated">Hámarksfjöldi myndskeiðarása á hvern notanda verður að vera meiri en eða jafn -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">105</context>
@@ -13335,6 +13359,7 @@
       </trans-unit>
       <trans-unit id="8354695459880751923" datatype="html">
         <source>Max video channels per user must be a number.</source>
+        <target state="translated">Hámarksfjöldi myndskeiðarása á hvern notanda verður að vera tölugildi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">106</context>
@@ -13342,6 +13367,7 @@
       </trans-unit>
       <trans-unit id="5832601947705094130" datatype="html">
         <source>Concurrency is required.</source>
+        <target state="translated">Fjöldi samhliða verka er nauðsynlegur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">113</context>
@@ -13349,6 +13375,7 @@
       </trans-unit>
       <trans-unit id="4751566092251132371" datatype="html">
         <source>Concurrency should be greater or equal to 1.</source>
+        <target state="translated">Fjöldi samhliða verka verður að vera meiri en eða jafn -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">114</context>
@@ -13356,6 +13383,7 @@
       </trans-unit>
       <trans-unit id="75589896034107743" datatype="html">
         <source>Index URL should be a URL</source>
+        <target state="translated">Slóð á efnisyfirlit ætti að vera vefslóð</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">121</context>
@@ -13363,6 +13391,7 @@
       </trans-unit>
       <trans-unit id="3964961007325702684" datatype="html">
         <source>Search index URL should be a URL</source>
+        <target state="translated">Slóð á leitaryfirlit ætti að vera vefslóð</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">128</context>
@@ -13482,6 +13511,7 @@
       </trans-unit>
       <trans-unit id="7787099349830266861" datatype="html">
         <source>The subject must be at least 1 character long.</source>
+        <target state="translated">Viðfangsefni verður að vera a.m.k. 1 stafur að lengd.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">33</context>
@@ -13489,6 +13519,7 @@
       </trans-unit>
       <trans-unit id="5905189237950302829" datatype="html">
         <source>The subject cannot be more than 120 characters long.</source>
+        <target state="translated">Viðfangsefni má ekki vera lengra en 120 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">34</context>
@@ -13572,6 +13603,7 @@
       </trans-unit>
       <trans-unit id="5621067256208426608" datatype="html">
         <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
+        <target state="translated">Notendanöfn geta einungis innihaldið lágstafa tölur og bókstafi ásamt punktum og undirstrikun.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">17</context>
@@ -13579,6 +13611,7 @@
       </trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
         <source>Channel name is required.</source>
+        <target state="translated">Heiti rásar er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">29</context>
@@ -13586,6 +13619,7 @@
       </trans-unit>
       <trans-unit id="8178814467139959283" datatype="html">
         <source>Channel name must be at least 1 character long.</source>
+        <target state="translated">Heiti rásar verður að vera a.m.k. 1 stafur að lengd.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">30</context>
@@ -13593,6 +13627,7 @@
       </trans-unit>
       <trans-unit id="8602785819772117007" datatype="html">
         <source>Channel name cannot be more than 50 characters long.</source>
+        <target state="translated">Heiti rásar má ekki vera lengra en 50 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">31</context>
@@ -13600,6 +13635,7 @@
       </trans-unit>
       <trans-unit id="3419415520566928243" datatype="html">
         <source>Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</source>
+        <target state="translated">Heiti rása geta einungis innihaldið lágstafa tölur og bókstafi ásamt punktum og undirstrikun.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">32</context>
@@ -13623,6 +13659,7 @@
       </trans-unit>
       <trans-unit id="3159508433607320799" datatype="html">
         <source>OTP token is required.</source>
+        <target state="translated">OTP-teikn er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">69</context>
@@ -13662,6 +13699,7 @@
       </trans-unit>
       <trans-unit id="2027337371129904473" datatype="html">
         <source>Video quota is required.</source>
+        <target state="translated">Kvóti myndskeiða er nauðsynlegur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">107</context>
@@ -13669,6 +13707,7 @@
       </trans-unit>
       <trans-unit id="267386529333143660" datatype="html">
         <source>Quota must be greater than -1.</source>
+        <target state="translated">Kvóti verður að vera meiri en -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">108</context>
@@ -13676,6 +13715,7 @@
       </trans-unit>
       <trans-unit id="1220179061234048936" datatype="html">
         <source>Daily upload limit is required.</source>
+        <target state="translated">Dagleg takmörk innsendinga eru nauðsynleg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">114</context>
@@ -13683,6 +13723,7 @@
       </trans-unit>
       <trans-unit id="8959404382357999234" datatype="html">
         <source>Daily upload limit must be greater than -1.</source>
+        <target state="translated">Dagleg takmörk innsendinga verða að vera meiri en -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">115</context>
@@ -13690,6 +13731,7 @@
       </trans-unit>
       <trans-unit id="4796798537475457493" datatype="html">
         <source>User role is required.</source>
+        <target state="translated">Hlutverk notanda er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">122</context>
@@ -13697,6 +13739,7 @@
       </trans-unit>
       <trans-unit id="2761226139624435788" datatype="html">
         <source>Description must be at least 3 characters long.</source>
+        <target state="translated">Lýsing verður að vera a.m.k 3 stafa löng.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">134</context>
@@ -13712,6 +13755,7 @@
       </trans-unit>
       <trans-unit id="4717982586356605243" datatype="html">
         <source>Description cannot be more than 1000 characters long.</source>
+        <target state="translated">Lýsing má ekki vera lengri en 1000 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">135</context>
@@ -13727,6 +13771,7 @@
       </trans-unit>
       <trans-unit id="1814372869868173571" datatype="html">
         <source>You must agree with the instance terms in order to register on it.</source>
+        <target state="translated">Þú þarft að samþykkja skilmála veitunnar til að skrá þig á hana.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="27494409477574248" datatype="html">
@@ -13755,31 +13800,37 @@
       </trans-unit>
       <trans-unit id="7803960725351649605" datatype="html">
         <source>Ban reason must be at least 3 characters long.</source>
+        <target state="translated">Ástæða banns verður að vera a.m.k 3 stafa löng.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="3851609012243698179" datatype="html">
         <source>Ban reason cannot be more than 250 characters long.</source>
+        <target state="translated">Ástæða banns má ekki vera lengri en 250 stafir.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
       <trans-unit id="6632896893630378443" datatype="html">
         <source>Display name is required.</source>
+        <target state="translated">Birtingarnafn er nauðsynlegt.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">157</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="1303578752658966736" datatype="html">
         <source>Display name must be at least 1 character long.</source>
+        <target state="translated">Birtingarnafn verður að vera að minnsta kosti 1 stafur.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">158</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">25</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="4613240543124934954" datatype="html">
         <source>Display name cannot be more than 50 characters long.</source>
+        <target state="translated">Birtingarnafn má ekki vera lengra en 50 stafir.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">159</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="9191505323045740697" datatype="html">
         <source>Block reason must be at least 2 characters long.</source>
+        <target state="translated">Ástæða útilokunar verður að vera a.m.k 2 stafa löng.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -13787,6 +13838,7 @@
       </trans-unit>
       <trans-unit id="8581623418602419755" datatype="html">
         <source>Block reason cannot be more than 300 characters long.</source>
+        <target state="translated">Ástæða útilokunar má ekki vera lengri en 300 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -13794,6 +13846,7 @@
       </trans-unit>
       <trans-unit id="1099619384694370156" datatype="html">
         <source>Video caption language is required.</source>
+        <target state="translated">Tungumál skjátexta myndskeiðs er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -13801,6 +13854,7 @@
       </trans-unit>
       <trans-unit id="3438639650276868976" datatype="html">
         <source>Video caption file is required.</source>
+        <target state="translated">Skrá með skjátexta myndskeiðs er nauðsynleg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -13808,6 +13862,7 @@
       </trans-unit>
       <trans-unit id="9145435275110757909" datatype="html">
         <source>Caption content is required.</source>
+        <target state="translated">Efni skjátexta er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">21</context>
@@ -13839,6 +13894,7 @@
       </trans-unit>
       <trans-unit id="7915656854942800659" datatype="html">
         <source>Name should be lowercase alphanumeric; dots and underscores are allowed.</source>
+        <target state="translated">Nöfn geta einungis innihaldið lágstafa tölur og bókstafi ásamt punktum og undirstrikun.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">13</context>
@@ -13846,6 +13902,7 @@
       </trans-unit>
       <trans-unit id="6880459830525364741" datatype="html">
         <source>Support text must be at least 3 characters long.</source>
+        <target state="translated">Aðstoðartexti verður að vera a.m.k 3 stafa langur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">47</context>
@@ -13853,6 +13910,7 @@
       </trans-unit>
       <trans-unit id="6122525173522570480" datatype="html">
         <source>Support text cannot be more than 1000 characters long.</source>
+        <target state="translated">Aðstoðartexti má ekki vera lengri en 1000 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">48</context>
@@ -13860,6 +13918,7 @@
       </trans-unit>
       <trans-unit id="6149476559621965756" datatype="html">
         <source>Remote channel url is required.</source>
+        <target state="translated">Slóð á fjartengda rás er nauðsynleg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">59</context>
@@ -13867,6 +13926,7 @@
       </trans-unit>
       <trans-unit id="7820654428820536159" datatype="html">
         <source>External channel URL must begin with "https://" or "http://"</source>
+        <target state="translated">Slóð á fjartengda rás verður að byrja á "https://" eða "http://"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">60</context>
@@ -13874,6 +13934,7 @@
       </trans-unit>
       <trans-unit id="5090406837784732474" datatype="html">
         <source>External channel URL cannot be more than 1000 characters long</source>
+        <target state="translated">Slóð á fjartengda rás má ekki vera lengra en 1000 stafir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">61</context>
@@ -13929,6 +13990,7 @@
       </trans-unit>
       <trans-unit id="6854100952145697527" datatype="html">
         <source>Display name cannot be more than 120 characters long.</source>
+        <target state="translated">Birtingarnafn má ekki vera lengra en 120 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -13944,6 +14006,7 @@
       </trans-unit>
       <trans-unit id="1276238402004616037" datatype="html">
         <source>The channel is required when the playlist is public.</source>
+        <target state="translated">Rásin er nauðsynleg þegar spilunarlistinn er opinber.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context>
           <context context-type="linenumber">41</context>
@@ -13959,6 +14022,7 @@
       </trans-unit>
       <trans-unit id="2807676084745266104" datatype="html">
         <source>Video name must be at least 3 characters long.</source>
+        <target state="translated">Heiti myndskeiðs verður að vera a.m.k 3 stafa langt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -13966,6 +14030,7 @@
       </trans-unit>
       <trans-unit id="2155414141025589556" datatype="html">
         <source>Video name cannot be more than 120 characters long.</source>
+        <target state="translated">Heiti myndskeiðs má ekki vera lengra en 120 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">17</context>
@@ -13973,6 +14038,7 @@
       </trans-unit>
       <trans-unit id="1074634769552897790" datatype="html">
         <source>Video name has leading or trailing whitespace.</source>
+        <target state="translated">Heiti myndskeiðs er með bilstaf á undan eða á eftir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">18</context>
@@ -13996,6 +14062,7 @@
       </trans-unit>
       <trans-unit id="3959376623771116873" datatype="html">
         <source>Video description must be at least 3 characters long.</source>
+        <target state="translated">Lýsing á myndskeiði verður að vera a.m.k 3 stafa löng.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">59</context>
@@ -14011,6 +14078,7 @@
       </trans-unit>
       <trans-unit id="142488285332434408" datatype="html">
         <source>A tag should be more than 2 characters long.</source>
+        <target state="translated">Merki ætti vera lengra en 2 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">67</context>
@@ -14018,6 +14086,7 @@
       </trans-unit>
       <trans-unit id="691846635236293620" datatype="html">
         <source>A tag should be less than 30 characters long.</source>
+        <target state="translated">Merki ætti vera innan við 30 stafa langt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">68</context>
@@ -14025,6 +14094,7 @@
       </trans-unit>
       <trans-unit id="4146790476782316573" datatype="html">
         <source>A maximum of 5 tags can be used on a video.</source>
+        <target state="translated">Nota má að hámarki 5 merki á myndskeið.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">75</context>
@@ -14032,6 +14102,7 @@
       </trans-unit>
       <trans-unit id="2389667090302909529" datatype="html">
         <source>A tag should be more than 1 and less than 30 characters long.</source>
+        <target state="translated">Merki ætti vera meira en 1 stafur og minna en 30 stafa langt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">76</context>
@@ -14039,6 +14110,7 @@
       </trans-unit>
       <trans-unit id="4806300480558315727" datatype="html">
         <source>Video support must be at least 3 characters long.</source>
+        <target state="translated">Aðstoðartexti myndskeiðs verður að vera a.m.k 3 stafa langur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">83</context>
@@ -14046,6 +14118,7 @@
       </trans-unit>
       <trans-unit id="6655773021893755977" datatype="html">
         <source>Video support cannot be more than 1000 characters long.</source>
+        <target state="translated">Aðstoðartexti myndskeiðs má ekki vera lengri en 1000 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">84</context>
@@ -14053,6 +14126,7 @@
       </trans-unit>
       <trans-unit id="4246579596585402255" datatype="html">
         <source>A date is required to schedule video update.</source>
+        <target state="translated">Dagsetning er nauðsynleg til að geta sett upptöku myndskeiða á áætlun.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">91</context>
@@ -14280,6 +14354,7 @@
       </trans-unit>
       <trans-unit id="1420624050293070194" datatype="html">
         <source>No abuses found matching current filters.</source>
+        <target state="translated">Engar misnotkunartilkynningar fundust sem samsvara fyrirliggjandi síum.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">152</context>
@@ -14287,6 +14362,7 @@
       </trans-unit>
       <trans-unit id="639328713281980021" datatype="html">
         <source>No abuses found.</source>
+        <target state="translated">Engar misnotkunartilkynningar fundust.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">153</context>
@@ -14342,6 +14418,7 @@
       </trans-unit>
       <trans-unit id="3482559157143817408" datatype="html">
         <source>Abuse deleted.</source>
+        <target state="translated">Misnotkunartilkynningu var eytt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -14602,6 +14679,7 @@
       </trans-unit>
       <trans-unit id="7358611947192442969" datatype="html">
         <source>This comment can only be seen by you or the other moderators.</source>
+        <target state="translated">Aðeins þú eða aðrir umsjónarmenn geta séð þessa athugasemd.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.html</context>
           <context context-type="linenumber">20,22</context>
@@ -15438,6 +15516,7 @@
       </trans-unit>
       <trans-unit id="687236465759862933" datatype="html">
         <source>Open syndication dropdown</source>
+        <target state="translated">Opna fellilista dreifingar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/feeds/feed.component.html</context>
           <context context-type="linenumber">3</context>
@@ -15548,6 +15627,7 @@
       </trans-unit>
       <trans-unit id="506794214492992969" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>A new video abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created on video <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.abuse.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Ný tilkynning um misnotkun myndskeiðs<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> hefur verið gerð við myndskeiðið <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.abuse.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">49</context>
@@ -15555,6 +15635,7 @@
       </trans-unit>
       <trans-unit id="3487882822536102372" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>A new comment abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created on video <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.abuse.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Ný tilkynning um misnotkun á athugasemd<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> hefur verið gerð við myndskeiðið <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.abuse.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">53</context>
@@ -15562,6 +15643,7 @@
       </trans-unit>
       <trans-unit id="7885094785640544496" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>A new account abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created on account <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.abuse.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Ný tilkynning um misnotkun aðgangs<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> hefur verið gerð við aðganginn <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.abuse.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">57</context>
@@ -15569,6 +15651,7 @@
       </trans-unit>
       <trans-unit id="2008776855594205860" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>A new abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created </source>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Ný tilkynning um misnotkun<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> hefur verið gerð </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">62,63</context>
@@ -15576,6 +15659,7 @@
       </trans-unit>
       <trans-unit id="8816959058080937679" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Your abuse <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccepted(notification)&quot;&gt;"/>accepted<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;!isAccepted(notification)&quot;&gt;"/>rejected<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></source>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Misnotkunarkæran þín <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> hefur verið <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccepted(notification)&quot;&gt;"/>samþykkt<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;!isAccepted(notification)&quot;&gt;"/>hafnað<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">70,72</context>
@@ -15583,6 +15667,7 @@
       </trans-unit>
       <trans-unit id="6464941273929604379" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Abuse <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has a new message </source>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.abuseUrl&quot; [queryParams]=&quot;notification.abuseQueryParams&quot;&gt;"/>Misnotkunarkæra <x id="INTERPOLATION" equiv-text="{{ notification.abuse.id }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> hefur fengið ný skilaboð </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">80,81</context>
@@ -15878,7 +15963,7 @@
       </trans-unit>
       <trans-unit id="5779804235244672536" datatype="html">
         <source>The above can only be seen in captions (please describe which).</source>
-        <target state="translated">Ofangreint sést aðeins í skýringatextum (veldu hvaða).</target>
+        <target state="translated">Ofangreint sést aðeins í skjátextum (veldu hvaða).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">167</context>
@@ -16353,6 +16438,7 @@
       </trans-unit>
       <trans-unit id="3896582359861826661" datatype="html">
         <source>User <x id="PH" equiv-text="user.username"/> email set as verified</source>
+        <target state="translated">Tölvupóstfang notandans <x id="PH" equiv-text="user.username"/> merkt sem staðfest</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">123</context>
