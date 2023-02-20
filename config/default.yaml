@@ -236,12 +236,14 @@ open_telemetry:
 
 trending:
   videos:
-    interval_days: 7 # Compute trending videos for the last x days
+    interval_days: 7 # Compute trending videos for the last x days for 'most-viewed' algorithm
+
     algorithms:
       enabled:
-        - 'hot' # adaptation of Reddit's 'Hot' algorithm
-        - 'most-viewed' # default, used initially by PeerTube as the trending page
-        - 'most-liked'
+        - 'hot' # Adaptation of Reddit's 'Hot' algorithm
+        - 'most-viewed' # Number of views in the last x days
+        - 'most-liked' # Global views since the upload of the video
+
       default: 'most-viewed'
 
 # Cache remote videos on your server, to help other instances to broadcast the video

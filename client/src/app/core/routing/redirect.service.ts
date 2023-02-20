@@ -31,12 +31,15 @@ export class RedirectService {
     private serverService: ServerService,
     private storage: SessionStorageService
   ) {
-    // The config is first loaded from the cache so try to get the default route
+
+  }
+
+  init () {
     const config = this.serverService.getHTMLConfig()
-    if (config?.instance?.defaultClientRoute) {
+    if (config.instance.defaultClientRoute) {
       this.defaultRoute = config.instance.defaultClientRoute
     }
-    if (config?.trending?.videos?.algorithms?.default) {
+    if (config.trending.videos.algorithms.default) {
       this.defaultTrendingAlgorithm = config.trending.videos.algorithms.default
     }
 
@@ -47,7 +50,7 @@ export class RedirectService {
 
     // Track previous url
     this.currentUrl = this.router.url
-    router.events.subscribe(event => {
+    this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd || event instanceof NavigationCancel) {
         if ([ '/401', '/404' ].includes(event.url)) return
 
