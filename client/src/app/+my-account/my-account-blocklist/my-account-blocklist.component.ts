@@ -3,7 +3,6 @@ import { BlocklistComponentType, GenericAccountBlocklistComponent } from '@app/s
 
 @Component({
   selector: 'my-account-blocklist',
-  styleUrls: [ '../../shared/shared-moderation/account-blocklist.component.scss' ],
   templateUrl: '../../shared/shared-moderation/account-blocklist.component.html'
 })
 export class MyAccountBlocklistComponent extends GenericAccountBlocklistComponent {
