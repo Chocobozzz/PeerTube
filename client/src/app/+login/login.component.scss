@@ -2,7 +2,7 @@
 @use '_mixins' as *;
 
 label {
-  @include font-size(1.125rem);
+  @include font-size(18px);
 
   display: block;
   margin-bottom: 5px;
@@ -30,7 +30,7 @@ input[type=email] {
 }
 
 .alert {
-  @include margin(0, auto, 2rem, auto);
+  @include margin(0, auto, 2rem);
 }
 
 .login-form-and-externals {

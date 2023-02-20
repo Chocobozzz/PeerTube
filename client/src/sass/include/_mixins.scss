@@ -919,18 +919,23 @@
   }
 }
 
-@mixin margin ($block-start, $inline-end, $block-end, $inline-start) {
+@mixin margin ($arg1: null, $arg2: null, $arg3: null, $arg4: null) {
+  @if $arg2 ==null and $arg3 ==null and $arg4 ==null {
+    @include margin-original($arg1, $arg1, $arg1, $arg1);
+  } @else if $arg3 ==null and $arg4 ==null {
+    @include margin-original($arg1, $arg2, $arg1, $arg2);
+  } @else if $arg4 ==null {
+    @include margin-original($arg1, $arg2, $arg3, $arg2);
+  } @else {
+    @include margin-original($arg1, $arg2, $arg3, $arg4);
+  }
+}
+
+@mixin margin-original ($block-start, $inline-end, $block-end, $inline-start) {
   @include margin-left($inline-start);
   @include margin-right($inline-end);
   @include margin-top($block-start);
   @include margin-bottom($block-end);
-}
-
-@mixin padding ($block-start, $inline-end, $block-end, $inline-start) {
-  @include padding-left($inline-start);
-  @include padding-right($inline-end);
-  @include padding-top($block-start);
-  @include padding-bottom($block-end);
 }
 
 @mixin margin-left ($value) {
@@ -950,6 +955,26 @@
 
   @supports not (margin-inline-end: $value) {
     @include rfs($value, margin-right);
+  }
+}
+
+@mixin padding-original ($block-start, $inline-end, $block-end, $inline-start) {
+  @include padding-left($inline-start);
+  @include padding-right($inline-end);
+  @include padding-top($block-start);
+  @include padding-bottom($block-end);
+}
+
+
+@mixin padding ($arg1: null, $arg2: null, $arg3: null, $arg4: null) {
+  @if $arg2 ==null and $arg3 ==null and $arg4 ==null {
+    @include padding-original($arg1, $arg1, $arg1, $arg1);
+  } @else if $arg3 ==null and $arg4 ==null {
+    @include padding-original($arg1, $arg2, $arg1, $arg2);
+  } @else if $arg4 ==null {
+    @include padding-original($arg1, $arg2, $arg3, $arg2);
+  } @else {
+    @include padding-original($arg1, $arg2, $arg3, $arg4);
   }
 }
 

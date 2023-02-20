@@ -109,8 +109,8 @@
 
 @media screen and (max-width: $mobile-view) {
   .root {
-    --myFontSize: $font-size-rem-14px;
-    --myGreyFontSize: $font-size-rem-13px;
+    --myFontSize: 14px;
+    --myGreyFontSize: 13px;
   }
 
   .links {

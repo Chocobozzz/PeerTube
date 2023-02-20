@@ -13,7 +13,7 @@
               <h1 i18n-title [title]="'Created on ' + (account.createdAt | date)">{{ account.displayName }}</h1>
 
               <my-user-moderation-dropdown
-                class="mx-3" prependActions]="prependModerationActions"
+                class="mx-3" [prependActions]="prependModerationActions"
                 buttonSize="small" [account]="account" [user]="accountUser" placement="bottom-left auto"
                 (userChanged)="onUserChanged()" (userDeleted)="onUserDeleted()"
               ></my-user-moderation-dropdown>
