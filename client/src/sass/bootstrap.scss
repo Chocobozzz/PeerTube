@@ -339,7 +339,8 @@
 .input-group {
   > .btn,
   > .input-group-text {
-    height: $button-height;
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
 
   > .input-group-text {

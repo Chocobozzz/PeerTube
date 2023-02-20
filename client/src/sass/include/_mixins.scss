@@ -90,9 +90,8 @@
 }
 
 @mixin peertube-input-text($width) {
-  padding: 0 15px;
+  padding: 4px 15px;
   display: inline-block;
-  height: $button-height;
   width: $width;
   max-width: $width;
   color: pvar(--inputForegroundColor);
@@ -401,12 +400,11 @@
   }
 
   select {
-    padding: 0 35px 0 12px;
+    padding: 4px 35px 4px 12px;
     position: relative;
     border: 1px solid pvar(--inputBorderColor);
     background: transparent none;
     appearance: none;
-    height: $button-height;
     text-overflow: ellipsis;
     color: pvar(--mainForegroundColor);
     font-size: $form-input-font-size;
