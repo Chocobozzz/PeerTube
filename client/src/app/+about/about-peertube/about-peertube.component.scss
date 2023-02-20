@@ -7,7 +7,7 @@
 }
 
 .card {
-  @include rfs(2rem, margin);
+  @include margin(2rem);
 
   flex-basis: 300px;
 }

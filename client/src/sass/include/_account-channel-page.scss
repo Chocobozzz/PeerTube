@@ -16,7 +16,7 @@
 }
 
 @mixin show-more-description {
-  @include rfs(10px auto 45px, margin);
+  @include margin(10px, auto, 45px);
   
   color: pvar(--mainColor);
   cursor: pointer;

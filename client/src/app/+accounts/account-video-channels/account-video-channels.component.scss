@@ -8,8 +8,8 @@
 }
 
 .channel {
-  @include rfs(2rem, padding);
-  @include rfs(2rem 0, margin);
+  @include padding(1.75rem);
+  @include margin(2rem, 0);
 
   max-width: $max-channels-width;
   background-color: pvar(--channelBackgroundColor);
@@ -110,10 +110,6 @@ my-subscribe-button {
 }
 
 @include on-small-main-col {
-  .channel {
-    padding: 15px;
-  }
-
   .channel-avatar-row {
     grid-template-columns: auto auto auto 1fr;
 
