@@ -17,11 +17,11 @@
 
 .actor-img-edit-button {
   @include peertube-button-file(30px);
+  @include button-with-icon;
   @include orange-button;
 
   display: flex;
   justify-content: center;
-  padding: 0;
   margin-top: 10px;
   margin-bottom: 5px;
   cursor: pointer;
