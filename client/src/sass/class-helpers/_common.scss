@@ -1,7 +1,7 @@
 @use '_badges' as *;
 @use '_icons' as *;
-@use '_mixins' as *;
 @use '_variables' as *;
+@use '_mixins' as *;
 
 .link-orange {
   color: pvar(--mainForegroundColor);

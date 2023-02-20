@@ -1,5 +1,5 @@
-@use '_mixins' as *;
 @use '_variables' as *;
+@use '_mixins' as *;
 
 my-feed {
   @include margin-left(5px);
