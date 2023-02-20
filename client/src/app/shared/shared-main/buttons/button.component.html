@@ -1,6 +1,6 @@
-<div *ngIf="!routerLink" class="action-button" [ngClass]="classes" [ngbTooltip]="title" tabindex="0">
+<button *ngIf="!routerLink" class="action-button" [ngClass]="classes" [ngbTooltip]="title">
   <ng-container *ngTemplateOutlet="content"></ng-container>
-</div>
+</button>
 
 <a *ngIf="routerLink" class="action-button" [ngClass]="classes" [ngbTooltip]="title" [routerLink]="routerLink">
   <ng-container *ngTemplateOutlet="content"></ng-container>
