@@ -40,7 +40,7 @@
           <button (click)="onWantToReply()" class="comment-action-reply border-0 p-0" i18n>Reply</button>
 
           <my-user-moderation-dropdown
-            [prependActions]="prependModerationActions" tabindex=0 [buttonStyled]="false"
+            [prependActions]="prependModerationActions" [buttonStyled]="false"
             buttonSize="small" [account]="commentAccount" [user]="commentUser" i18n-label label="Options" placement="bottom-left auto"
           ></my-user-moderation-dropdown>
         </div>
