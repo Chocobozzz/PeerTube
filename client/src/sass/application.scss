@@ -14,6 +14,8 @@
 
 @use './z-index';
 
+@use './class-helpers/index.scss';
+
 body {
   /*** theme ***/
   // now beware sass requires interpolation
