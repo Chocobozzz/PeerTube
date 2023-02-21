@@ -919,11 +919,11 @@
 }
 
 @mixin margin ($arg1: null, $arg2: null, $arg3: null, $arg4: null) {
-  @if $arg2 ==null and $arg3 ==null and $arg4 ==null {
+  @if $arg2 == null and $arg3 == null and $arg4 == null {
     @include margin-original($arg1, $arg1, $arg1, $arg1);
-  } @else if $arg3 ==null and $arg4 ==null {
+  } @else if $arg3 == null and $arg4 == null {
     @include margin-original($arg1, $arg2, $arg1, $arg2);
-  } @else if $arg4 ==null {
+  } @else if $arg4 == null {
     @include margin-original($arg1, $arg2, $arg3, $arg2);
   } @else {
     @include margin-original($arg1, $arg2, $arg3, $arg4);
@@ -966,11 +966,11 @@
 
 
 @mixin padding ($arg1: null, $arg2: null, $arg3: null, $arg4: null) {
-  @if $arg2 ==null and $arg3 ==null and $arg4 ==null {
+  @if $arg2 == null and $arg3 == null and $arg4 == null {
     @include padding-original($arg1, $arg1, $arg1, $arg1);
-  } @else if $arg3 ==null and $arg4 ==null {
+  } @else if $arg3 == null and $arg4 == null {
     @include padding-original($arg1, $arg2, $arg1, $arg2);
-  } @else if $arg4 ==null {
+  } @else if $arg4 == null {
     @include padding-original($arg1, $arg2, $arg3, $arg2);
   } @else {
     @include padding-original($arg1, $arg2, $arg3, $arg4);
