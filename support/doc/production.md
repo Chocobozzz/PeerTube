@@ -10,7 +10,7 @@ If you want information about the appropriate hardware to run PeerTube, please s
 
 ### :hammer: Dependencies
 
-Follow the steps of the [dependencies guide](/support//doc/dependencies.md).
+Follow the steps of the [dependencies guide](/support/doc/dependencies.md).
 
 ### :construction_worker: PeerTube user
 
