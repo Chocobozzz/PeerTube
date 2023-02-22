@@ -5,8 +5,8 @@ body:
     attributes:
       value: |
         Please check the official documentation first:
-          - Classic installation: https://docs.joinpeertube.org/install-any-os
-          - Docker installation: https://docs.joinpeertube.org/install-docker
+          - Classic installation: https://docs.joinpeertube.org/install/any-os
+          - Docker installation: https://docs.joinpeertube.org/install/docker
 
   - type: markdown
     attributes:

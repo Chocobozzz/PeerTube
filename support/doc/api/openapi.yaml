@@ -21,7 +21,7 @@ info:
     - [Go](https://framagit.org/framasoft/peertube/clients/go)
     - [Kotlin](https://framagit.org/framasoft/peertube/clients/kotlin)
 
-    See the [REST API quick start](https://docs.joinpeertube.org/api-rest-getting-started) for a few
+    See the [REST API quick start](https://docs.joinpeertube.org/api/rest-getting-started) for a few
     examples of using the PeerTube API.
 
     # Authentication
@@ -33,7 +33,7 @@ info:
     ## Roles
 
     Accounts are given permissions based on their role. There are three roles on
-    PeerTube: Administrator, Moderator, and User. See the [roles guide](https://docs.joinpeertube.org/admin-managing-users?id=roles) for a detail of their permissions.
+    PeerTube: Administrator, Moderator, and User. See the [roles guide](https://docs.joinpeertube.org/admin/managing-users?id=roles) for a detail of their permissions.
 
     # Errors
 
@@ -46,7 +46,7 @@ info:
 
     {
       "detail": "Video not found",
-      "docs": "https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo",
+      "docs": "https://docs.joinpeertube.org/api/rest-reference.html#operation/getVideo",
       "status": 404,
       "title": "Not Found",
       "type": "about:blank"
@@ -63,10 +63,10 @@ info:
 
     {
       "detail": "Cannot get this video regarding follow constraints",
-      "docs": "https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo",
+      "docs": "https://docs.joinpeertube.org/api/rest-reference.html#operation/getVideo",
       "status": 403,
       "title": "Forbidden",
-      "type": "https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/does_not_respect_follow_constraints"
+      "type": "https://docs.joinpeertube.org/api/rest-reference.html#section/Errors/does_not_respect_follow_constraints"
     }
     ```
 
@@ -84,7 +84,7 @@ info:
 
     {
       "detail": "Incorrect request parameters: id",
-      "docs": "https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo",
+      "docs": "https://docs.joinpeertube.org/api/rest-reference.html#operation/getVideo",
       "instance": "/api/v1/videos/9c9de5e8-0a1e-484a-b099-e80766180",
       "invalid-params": {
         "id": {
@@ -149,7 +149,7 @@ info:
 
     In addition, all routes serving ActivityPub are CORS-enabled for all origins.
 externalDocs:
-  url: https://docs.joinpeertube.org/api-rest-reference.html
+  url: https://docs.joinpeertube.org/api/rest-reference.html
 tags:
   - name: Register
     description: |
@@ -204,7 +204,7 @@ tags:
       information across its social graph by posting activities to actors' inbox
       endpoints.
     externalDocs:
-      url: https://docs.joinpeertube.org/admin-following-instances?id=instances-follows
+      url: https://docs.joinpeertube.org/admin/following-instances?id=instances-follows
   - name: Instance Redundancy
     description: >
       Redundancy is part of the inter-server solidarity that PeerTube fosters.
@@ -212,12 +212,12 @@ tags:
       to the policy of video selection of your choice. Note that you have a similar functionality
       to mirror individual videos, see [video mirroring](#tag/Video-Mirroring).
     externalDocs:
-      url: https://docs.joinpeertube.org/admin-following-instances?id=instances-redundancy
+      url: https://docs.joinpeertube.org/admin/following-instances?id=instances-redundancy
   - name: Plugins
     description: >
       Managing plugins installed from a local path or from NPM, or search for new ones.
     externalDocs:
-      url: https://docs.joinpeertube.org/api-plugins
+      url: https://docs.joinpeertube.org/api/plugins
   - name: Abuses
     description: |
       Abuses deal with reports of local or remote videos/comments/accounts alike.
@@ -5933,7 +5933,7 @@ components:
         Note that the __access token is valid for 1 day__ and is given
         along with a __refresh token valid for 2 weeks__.
 
-        [Generate]: https://docs.joinpeertube.org/api-rest-getting-started
+        [Generate]: https://docs.joinpeertube.org/api/rest-getting-started
       type: oauth2
       flows:
         password:

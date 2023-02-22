@@ -585,7 +585,7 @@ async function register ({
 }
 ```
 
-See the [plugin API reference](https://docs.joinpeertube.org/api-plugins) to see the complete helpers list.
+See the [plugin API reference](https://docs.joinpeertube.org/api/plugins) to see the complete helpers list.
 
 ### Client API (themes & plugins)
 
@@ -839,7 +839,7 @@ PeerTube provides some selectors (using `id` HTML attribute) on important blocks
 
 For example `#plugin-selector-login-form` could be used to hide the login form.
 
-See the complete list on https://docs.joinpeertube.org/api-plugins
+See the complete list on https://docs.joinpeertube.org/api/plugins
 
 #### HTML placeholder elements
 
@@ -855,7 +855,7 @@ async function register (...) {
 }
 ```
 
-See the complete list on https://docs.joinpeertube.org/api-plugins
+See the complete list on https://docs.joinpeertube.org/api/plugins
 
 #### Add/remove left menu links
 
@@ -1140,7 +1140,7 @@ $ npm deprecate peertube-plugin-xxx@"> 0.0.0" "explain here why you deprecate yo
 
 ## Plugin & Theme hooks/helpers API
 
-See the dedicated documentation: https://docs.joinpeertube.org/api-plugins
+See the dedicated documentation: https://docs.joinpeertube.org/api/plugins
 
 
 ## Tips

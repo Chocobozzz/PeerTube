@@ -146,7 +146,7 @@ describe('Test follow constraints', function () {
         const body = await servers[0].videos.get({ id: video2UUID, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         const error = body as unknown as PeerTubeProblemDocument
 
-        const doc = 'https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/does_not_respect_follow_constraints'
+        const doc = 'https://docs.joinpeertube.org/api/rest-reference.html#section/Errors/does_not_respect_follow_constraints'
         expect(error.type).to.equal(doc)
         expect(error.code).to.equal(ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS)
 

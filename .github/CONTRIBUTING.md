@@ -138,7 +138,7 @@ You can get a complete PeerTube development setup with Gitpod, a free one-click 
 
 ### Server side
 
-You can find a documentation of the server code/architecture [here](https://docs.joinpeertube.org/contribute-architecture?id=server-code).
+You can find a documentation of the server code/architecture [here](https://docs.joinpeertube.org/contribute/architecture?id=server-code).
 
 To develop on the server-side:
 
@@ -153,7 +153,7 @@ restart.
 ### Client side
 
 You can find a documentation of the client code/architecture
-[here](https://docs.joinpeertube.org/contribute-architecture?id=client-code).
+[here](https://docs.joinpeertube.org/contribute/architecture?id=client-code).
 
 
 To develop on the client side:
@@ -242,7 +242,7 @@ To test emails with PeerTube:
 
 ### OpenAPI documentation
 
-The [REST API documentation](https://docs.joinpeertube.org/api-rest-reference.html) is generated from `support/doc/api/openapi.yaml` file.
+The [REST API documentation](https://docs.joinpeertube.org/api/rest-reference.html) is generated from `support/doc/api/openapi.yaml` file.
 To quickly get a preview of your changes, you can generate the documentation *on the fly* using the following command:
 
 ```
@@ -252,7 +252,7 @@ npx @redocly/cli preview-docs ./support/doc/api/openapi.yaml
 ### Environment variables
 
 PeerTube can be configured using environment variables.
-See the list on https://docs.joinpeertube.org/maintain-configuration?id=environment-variables
+See the list on https://docs.joinpeertube.org/maintain/configuration?id=environment-variables
 
 Additionally to these ones, we provide some environment for dev/test purpose:
 
@@ -298,4 +298,4 @@ ffmpeg -stream_loop -1 -re -i any-video.mp4 -c copy -f flv rtmp://{RTMP URL}/liv
 
 ## Plugins & Themes
 
-See the dedicated documentation: https://docs.joinpeertube.org/contribute-plugins
+See the dedicated documentation: https://docs.joinpeertube.org/contribute/plugins
