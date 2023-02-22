@@ -1094,7 +1094,7 @@ $ npm run build
 $ npm run setup:cli
 ```
 
- * Run PeerTube (you can access to your instance on http://localhost:9000):
+ * Run PeerTube (you can access to your instance on `localhost:9000`):
 
 ```
 $ NODE_ENV=dev npm start
