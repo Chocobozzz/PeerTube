@@ -34,14 +34,15 @@
 }
 
 .channel-info {
+  // Use the same margin as the videos grid
   @include grid-videos-miniature-margins(false, 15px);
+  @include margin-bottom(3rem);
 
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: auto auto;
 
   background-color: pvar(--channelBackgroundColor);
-  margin-bottom: 45px;
   padding-top: var(--myGlobalTopPadding);
   font-size: var(--myFontSize);
 }
@@ -68,24 +69,26 @@
 
 .channel-buttons {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
+  gap: 1rem;
 
-  > *:not(:last-child) {
-    @include margin-right(15px);
+  &.right {
+    @include margin-left(3rem);
   }
-}
 
-.channel-buttons.right {
-  @include margin-left(45px);
-}
+  // Only used on small screen
+  &.bottom {
+    @include margin-bottom(2rem);
 
-// Only used by mobile
-.channel-buttons.bottom {
-  display: none;
+    justify-content: center;
+    display: none;
+  }
 }
 
 .owner-card {
   @include margin-left(105px);
+
   grid-column: 2;
   // Takes all the column
   grid-row: 1 / 3;
@@ -194,14 +197,14 @@
     display: inline-block;
   }
 
-  .channel-buttons.bottom {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 30px;
-  }
+  .channel-buttons {
+    &.right {
+      display: none;
+    }
 
-  .channel-buttons.right {
-    display: none;
+    &.bottom {
+      display: flex;
+    }
   }
 
   .owner-card {
