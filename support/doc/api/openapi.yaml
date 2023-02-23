@@ -3801,6 +3801,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
 
+  '/api/v1/video-channels/{channelHandle}/video-playlists':
+    get:
+      summary: List playlists of a channel
+      tags:
+        - Video Playlists
+        - Video Channels
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/videoPlaylistType'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoPlaylist'
+
   '/api/v1/video-channels/{channelHandle}/followers':
     get:
       tags:
@@ -4045,6 +4073,7 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/videoPlaylistType'
       responses:
         '200':
           description: successful operation
@@ -4361,7 +4390,35 @@ paths:
                           format: seconds
                         stopTimestamp:
                           type: integer
-                          format: seconds
+
+  '/api/v1/accounts/{name}/video-playlists':
+    get:
+      summary: List playlists of an account
+      tags:
+        - Video Playlists
+        - Accounts
+      parameters:
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/videoPlaylistType'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoPlaylist'
 
   '/api/v1/accounts/{name}/video-channels':
     get:
@@ -5920,7 +5977,13 @@ components:
       description: Ask the server to reinject videoFileToken in URLs in m3u8 playlist
       schema:
         type: boolean
-
+    videoPlaylistType:
+      name: playlistType
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/VideoPlaylistTypeSet'
+        
   securitySchemes:
     OAuth2:
       description: |

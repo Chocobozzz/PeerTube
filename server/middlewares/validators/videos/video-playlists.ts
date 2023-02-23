@@ -142,7 +142,7 @@ const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) => {
 
       const videoPlaylist = res.locals.videoPlaylistFull || res.locals.videoPlaylistSummary
 
-      // Video is unlisted, check we used the uuid to fetch it
+      // Playlist is unlisted, check we used the uuid to fetch it
       if (videoPlaylist.privacy === VideoPlaylistPrivacy.UNLISTED) {
         if (isUUIDValid(req.params.playlistId)) return next()
 
