@@ -138,7 +138,7 @@ You can get a complete PeerTube development setup with Gitpod, a free one-click 
 
 ### Server side
 
-You can find a documentation of the server code/architecture [here](https://docs.joinpeertube.org/contribute/architecture?id=server-code).
+You can find a documentation of the server code/architecture [here](https://docs.joinpeertube.org/contribute/architecture#server).
 
 To develop on the server-side:
 
@@ -153,7 +153,7 @@ restart.
 ### Client side
 
 You can find a documentation of the client code/architecture
-[here](https://docs.joinpeertube.org/contribute/architecture?id=client-code).
+[here](https://docs.joinpeertube.org/contribute/architecture#client).
 
 
 To develop on the client side:
@@ -252,7 +252,7 @@ npx @redocly/cli preview-docs ./support/doc/api/openapi.yaml
 ### Environment variables
 
 PeerTube can be configured using environment variables.
-See the list on https://docs.joinpeertube.org/maintain/configuration?id=environment-variables
+See the list on https://docs.joinpeertube.org/maintain/configuration#environment-variables
 
 Additionally to these ones, we provide some environment for dev/test purpose:
 

@@ -557,7 +557,7 @@ import:
     # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
     http:
       # We recommend to use a HTTP proxy if you enable HTTP import to prevent private URL access from this server
-      # See https://docs.joinpeertube.org/maintain/configuration?id=security for more information
+      # See https://docs.joinpeertube.org/maintain/configuration#security for more information
       enabled: false
 
       youtube_dl_release:
@@ -581,7 +581,7 @@ import:
     # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
     torrent:
       # We recommend to only enable magnet URI/torrent import if you trust your users
-      # See https://docs.joinpeertube.org/maintain/configuration?id=security for more information
+      # See https://docs.joinpeertube.org/maintain/configuration#security for more information
       enabled: false
 
   # Add ability for your users to synchronize their channels with external channels, playlists, etc

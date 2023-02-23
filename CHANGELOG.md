@@ -181,7 +181,7 @@
     * `filter:transcoding.manual.resolutions-to-transcode.result` & `filter:transcoding.auto.resolutions-to-transcode.result`
     * `action:api.video-channel.created` & `action:api.video-channel.updated` & `action:api.video-channel.deleted`
     * `action:notifier.notification.created`
-  * Add HTML placeholder (https://docs.joinpeertube.org/contribute/plugins?id=html-placeholder-elements):
+  * Add HTML placeholder (https://docs.joinpeertube.org/contribute/plugins#html-placeholder-elements):
     * `share-modal-playlist-settings` & `share-modal-video-settings`
 
 ### Features
@@ -324,7 +324,7 @@
    * Classic installation: `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-4.2.js`
    * Docker installation: `cd /var/www/peertube-docker && docker-compose exec -u peertube peertube node dist/scripts/migrations/peertube-4.2.js`
  * **Important** SQL migrations (in particular `0685-multiple-actor-images`) can take several minutes to complete
- * **Important** You must update your nginx configuration to support video web editor: https://docs.joinpeertube.org/install/any-os?id=nginx
+ * **Important** You must update your nginx configuration to support video web editor: https://docs.joinpeertube.org/install/any-os#nginx
  * REST API:
    * `PUT /api/v1/videos/{id}/watching` is deprecated, use `POST /api/v1/videos/videos/{id}/views` instead: https://docs.joinpeertube.org/api/rest-reference.html#operation/addView
 
@@ -348,7 +348,7 @@
    * `filter:api.video-playlist.videos.list.params` and `filter:api.video-playlist.videos.list.result`
  * Support `getSettings()`, `isLoggedIn()` and `getAuthHeader()` client plugin helpers in embed
  * Player URL query parameters:
-   * Support `controlBar=0` to hide player control bar. See [the documentation](https://docs.joinpeertube.org/api/embed-player?id=url-parameters) for more information
+   * Support `controlBar=0` to hide player control bar. See [the documentation](https://docs.joinpeertube.org/api/embed-player#url-parameters) for more information
 
 ### Features
 
@@ -429,8 +429,8 @@
 
 ### Plugins/Themes/Embed API
 
- * Introduce ability for plugins to create client pages: https://docs.joinpeertube.org/contribute/plugins?id=create-client-page
- * Plugins that register custom video fields can choose in which tab they want to display them and can report errors: https://docs.joinpeertube.org/contribute/plugins?id=add-custom-fields-to-video-form
+ * Introduce ability for plugins to create client pages: https://docs.joinpeertube.org/contribute/plugins#create-client-page
+ * Plugins that register custom video fields can choose in which tab they want to display them and can report errors: https://docs.joinpeertube.org/contribute/plugins#add-custom-fields-to-video-form
  * Add new client plugin id selectors
    * Add `#plugin-selector-about-instance-moderation`, `#plugin-selector-about-instance-other-information`, `#plugin-selector-about-instance-features`, `#plugin-selector-about-instance-statistics`, `#plugin-selector-about-menu-instance`, `#plugin-selector-about-menu-peertube`, `#plugin-selector-about-menu-network` in about page [#4597](https://github.com/Chocobozzz/PeerTube/pull/4597)
    * Add `#plugin-selector-menu-user-dropdown-language-item` in menu [#4597](https://github.com/Chocobozzz/PeerTube/pull/4597)
@@ -564,7 +564,7 @@
 
  * Add client plugin hooks:
    * `filter:api.video-watch.video-playlist-elements.get.params` and `filter:api.video-watch.video-playlist-elements.get.result` [#4387](https://github.com/Chocobozzz/PeerTube/pull/4387)
- * Introduce plugin id selectors: https://docs.joinpeertube.org/contribute/plugins?id=plugin-selector-on-html-elements
+ * Introduce plugin id selectors: https://docs.joinpeertube.org/contribute/plugins#plugin-selector-on-html-elements
    * Add `#plugin-selector-login-form` to login form
 
 ### Docker
@@ -576,7 +576,7 @@
 
 ### CLI tools
 
- * Add [create-move-video-storage-jobs](https://docs.joinpeertube.org/maintain/tools?id=create-move-video-storage-jobjs) script to move local video files in object storage [#4481](https://github.com/Chocobozzz/PeerTube/pull/4481)
+ * Add [create-move-video-storage-jobs](https://docs.joinpeertube.org/maintain/tools#create-move-video-storage-jobjs) script to move local video files in object storage [#4481](https://github.com/Chocobozzz/PeerTube/pull/4481)
  * Removed `peertube-repl` and `peertube-watch` scripts
  * Apply import interval only when reasonable [#4552](https://github.com/Chocobozzz/PeerTube/pull/4552)
 
@@ -776,7 +776,7 @@
 ### IMPORTANT NOTES
 
  * **Important:** v3.2.0 introduced a `pg_dump` export bug in the auto upgrade script. v3.2.1 fixed this bug. To upgrade from v3.2.**0**:
-   * You can upgrade manually https://docs.joinpeertube.org/install/any-os?id=manually
+   * You can upgrade manually https://docs.joinpeertube.org/install/any-os#manually
    * Or you can apply the changes introduced in this commit: https://github.com/Chocobozzz/PeerTube/commit/86dc0b9cc9374cba7548bb613ff43d92f90570a8 and then use the auto upgrade script
  * **Important:** Due to a bug in ffmpeg, PeerTube is not compatible with ffmpeg 4.4. See https://github.com/Chocobozzz/PeerTube/issues/3990
 
@@ -861,7 +861,7 @@
 ### IMPORTANT NOTES
 
  * **Important:** v3.2.0 introduced a `pg_dump` export bug in the auto upgrade script. To upgrade from v3.2.0:
-   * You can upgrade manually https://docs.joinpeertube.org/install/any-os?id=manually
+   * You can upgrade manually https://docs.joinpeertube.org/install/any-os#manually
    * Or you can apply the changes introduced in this commit: https://github.com/Chocobozzz/PeerTube/commit/86dc0b9cc9374cba7548bb613ff43d92f90570a8 and then use the auto upgrade script
 
 ### Bug fixes
@@ -880,9 +880,9 @@
  * **Important:** Drop NodeJS 10 support
  * PeerTube is not compatible with NodeJS 16 yet
  * By default, HLS transcoding is now enabled and webtorrent is disabled. We suggest you to reflect this change.
- See [the documentation](https://docs.joinpeertube.org/admin/configuration?id=webtorrent-transcoding-or-hls-transcoding) for more information
+ See [the documentation](https://docs.joinpeertube.org/admin/configuration#webtorrent-transcoding-or-hls-transcoding) for more information
  * PeerTube client now displays bigger video thumbnails.
- To fix old thumbnails quality, run `regenerate-thumbnails` script after your PeerTube upgrade: https://docs.joinpeertube.org/maintain/tools?id=regenerate-thumbnailsjs
+ To fix old thumbnails quality, run `regenerate-thumbnails` script after your PeerTube upgrade: https://docs.joinpeertube.org/maintain/tools#regenerate-thumbnailsjs
 
 ### Docker
 
@@ -903,9 +903,9 @@
 
  * Theme:
    * `--submenuColor` becomes `--submenuBackgroundColor`
- * Support HTML placeholders for plugins. See [the documentation](https://docs.joinpeertube.org/contribute/plugins?id=html-placeholder-elements) for more information
+ * Support HTML placeholders for plugins. See [the documentation](https://docs.joinpeertube.org/contribute/plugins#html-placeholder-elements) for more information
    * `player-next` next to the PeerTube player
- * Support storing files for plugins in a dedicated directory. See [the documentation](https://docs.joinpeertube.org/contribute/plugins?id=storage) for more information
+ * Support storing files for plugins in a dedicated directory. See [the documentation](https://docs.joinpeertube.org/contribute/plugins#storage) for more information
  * Transcoding:
    * Add `inputOptions` option support for transcoding profile [#3917](https://github.com/Chocobozzz/PeerTube/pull/3917)
    * Add `scaleFilter.name` option support for transcoding profile [#3917](https://github.com/Chocobozzz/PeerTube/pull/3917)
@@ -1046,7 +1046,7 @@
    * `filter:api.user.me.videos.list.params` and `filter:api.user.me.videos.list.result`
  * Add server helpers:
    * `videos.loadByIdOrUUID`
- * Add server transcoding helpers (https://docs.joinpeertube.org/contribute/plugins?id=add-new-transcoding-profiles):
+ * Add server transcoding helpers (https://docs.joinpeertube.org/contribute/plugins#add-new-transcoding-profiles):
    * `transcodingManager.addVODProfile`
    * `transcodingManager.addVODEncoderPriority`
    * `transcodingManager.addLiveProfile`
@@ -1161,7 +1161,7 @@
 
 ### Docker
 
- * Fix [upgrade documentation](https://docs.joinpeertube.org/install/docker?id=upgrade)
+ * Fix [upgrade documentation](https://docs.joinpeertube.org/install/docker#upgrade)
  * Add live RTMP port in docker compose
 
 ### Bug fixes
@@ -1361,7 +1361,7 @@
  * Add plugins support in embed
  * Add client plugin hooks (https://docs.joinpeertube.org/api/plugins):
    * `action:embed.player.loaded` (for embed)
- * Add custom fields in video update/upload form using `registerVideoField` (https://docs.joinpeertube.org/contribute/plugins?id=add-custom-fields-to-video-form)
+ * Add custom fields in video update/upload form using `registerVideoField` (https://docs.joinpeertube.org/contribute/plugins#add-custom-fields-to-video-form)
 
 ### Features
 
@@ -1571,7 +1571,7 @@ A new endpoint to report videos will be created in PeerTube 2.4 and will also al
 
 ### CLI tools
 
- * Add redundancy CLI: https://docs.joinpeertube.org/maintain/tools?id=peertube-redundancyjs
+ * Add redundancy CLI: https://docs.joinpeertube.org/maintain/tools#peertube-redundancyjs
  * Add ability to pass remaining options to youtube-dl binary in peertube-import script ([@drzraf](https://github.com/drzraf))
 
 ### Docker
@@ -1826,7 +1826,7 @@ We added some sections in the documentation website:
 
  * PeerTube moved translations from Zanata to Weblate. Here is the new translations website URL: https://weblate.framasoft.org/projects/peertube/
  * We now provide a JavaScript library to control a PeerTube embed: https://www.npmjs.com/package/@peertube/embed-api
- * Add ability to generate HLS videos using `create-transcoding-job` script (see [the documentation](https://docs.joinpeertube.org/maintain/tools?id=create-transcoding-jobjs))
+ * Add ability to generate HLS videos using `create-transcoding-job` script (see [the documentation](https://docs.joinpeertube.org/maintain/tools#create-transcoding-jobjs))
  * Update nginx template: (you need to [update manually](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx))
    * Add streaming playlists endpoint
    * Add `client_body_temp_path` hint
