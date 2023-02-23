@@ -6908,112 +6908,112 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
         <source>P2P &amp; Privacy</source>
         <target>P2P och integritet</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">66</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">65</context></context-group></trans-unit>
       <trans-unit id="442017645619017020" datatype="html">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
         <target state="translated">Som standard använder PeerTube protokollet BitTorrent för att dela bandbredd mellan användarna och därmed bidra till att minska belastningen på servrarna. Du är däremot fri att växla tillbaka till klassisk strömning direkt från videons server. Följande gäller enbart om du väljer att fortsätta använda PeerTubes P2P-funktion.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">69</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">68</context></context-group></trans-unit>
       <trans-unit id="6314880288843792309" datatype="html">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
         <target state="translated">Det största hotet mot ditt privatliv som BitTorrent för med sig är att din IP-adress sparas i instansens BitTorrent-tracker under tiden du laddar ner eller tittar på videon.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">75</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">74</context></context-group></trans-unit>
       <trans-unit id="6868048887248005916">
         <source>What are the consequences?</source>
         <target>Vilka konsekvenser medför det?</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">80</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">79</context></context-group></trans-unit>
       <trans-unit id="1411398404280870617" datatype="html">
         <source>In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video. In practice, this is much more difficult because:</source>
         <target state="translated">Rent teoretiskt kan någon med tillräckliga tekniska kunskaper skriva ett skript som spårar vilken video som laddas ner av vilken IP-adress. I praktiken blir det mycket svårare eftersom:</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">82</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">81</context></context-group></trans-unit>
       <trans-unit id="6870500454322981404" datatype="html">
         <source>An HTTP request has to be sent on each tracker for each video to spy. If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)</source>
         <target state="translated">En HTTP-förfrågan måste skickas till trackern för varje video du vill spionera på. Om du vill spionera på samtliga PeerTube-video måste du skicka lika många förfrågningar som det finns videor (vilket kan bli en hel del)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">88</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">87</context></context-group></trans-unit>
       <trans-unit id="4042605201005159699" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
         <target state="translated">För varje förfrågan svarar trackern med ett begränsat antal slumpmässiga serventer. Om det till exempel finns 1000 serventer i svärmen och trackern endast svarar med 20 av dem per förfrågan, måste minst 50 förfrågningar skickas för att identifiera varje servent i svärmen</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">93</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">92</context></context-group></trans-unit>
       <trans-unit id="8817667841110447397" datatype="html">
         <source>Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour</source>
         <target state="translated">Dessa förfrågningar måste skickas ut regelbundet för att ha koll på vem som börjar och slutar titta på en video. Den sortens beteende är enkelt att upptäcka</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">99</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">98</context></context-group></trans-unit>
       <trans-unit id="4100327951517495019" datatype="html">
         <source>If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video</source>
         <target state="translated">Även om en IP-adress finns i trackern, betyder det inte nödvändigtvis att personen bakom IP-adressen (om personen ens existerar) har tittat på videon</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">103</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">102</context></context-group></trans-unit>
       <trans-unit id="7196664247366401915" datatype="html">
         <source>The IP address is a vague information: usually, it regularly changes and can represent many persons or entities</source>
         <target state="translated">IP-adressen ger mycket lite information: för det mesta byts den ut regelbundet och kan dessutom representera många personer och entiteter</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">108</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">107</context></context-group></trans-unit>
       <trans-unit id="1120376809358109718" datatype="html">
         <source>Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;>"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a> "/> for more information </source>
         <target state="translated">Webb-serverterna är inte offentliga eftersom vi använder websockets, ett protokoll som skiljer sig från den vanliga BitTorrent-trackern. När du använder webbläsaren skickar du ett meddelande med din IP-adress till trackern som slumpmässigt kommer välja andra serventer att vidarebefordra informationen till. Se <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;>"/>det här dokumentet<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a> "/> för mer information </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">112</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">111</context></context-group></trans-unit>
       <trans-unit id="7812408733559506009" datatype="html">
         <source>The worst-case scenario of an average person spying on their friends is quite unlikely. There are much more effective ways to get that kind of information.</source>
         <target state="translated">Det värsta som kan hända, att en person spionerar på sina vänner, är mycket osannolikt. Det finns mycket enklare sätt att få tag på den sortens information.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">120</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">119</context></context-group></trans-unit>
       <trans-unit id="8484650229450883706">
         <source>How does PeerTube compare with YouTube?</source>
         <target>Hur står sig PeerTube gentemot YouTube?</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">125</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">124</context></context-group></trans-unit>
       <trans-unit id="6213340208914097303" datatype="html">
         <source>The threats to privacy with YouTube are different from PeerTube's. In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you. Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).</source>
         <target state="translated">Det som inskränker privatlivet på YouTube är av ett helt annat slag än det på PeerTube. Vad gäller YouTube, samlar plattformen enorma mängder personlig information (inte bara din IP-adress) för att analysera och spåra dig. Dessutom ägs YouTube av Google / Alphabet, ett företag som spårar dig på en uppsjö webbplatser (via AdSense och Google Analytics).</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">127</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">126</context></context-group></trans-unit>
       <trans-unit id="2676074687792256808">
         <source>What can I do to limit the exposure of my IP address?</source>
         <target>Vad kan jag göra för att begränsa spridningen av min IP-adress?</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">133</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">132</context></context-group></trans-unit>
       <trans-unit id="8804946818315976118" datatype="html">
         <source>Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more. PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser. Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.</source>
         <target state="translated">Din IP-adress är offentlig, så varje gång du använder en webbplats kommer ett antal aktörer (utöver den efterfrågade webbplatsen) se din IP-adress i sina anslutningsloggar: internetleveratörer, routrar, spårare, innehållsleveransnätverk (CDN) och många fler. PeerTube försöker inte dölja detta: vi varnar dig att om du vill hålla din IP-adress för dig själv, måste du använda ett virtuellt privat nätverk (VPN) eller Tor-webbläsare. Därför är det inte sant att du får tillbaka din anonymitet genom att ta bort P2P från PeerTube.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">135</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">134</context></context-group></trans-unit>
       <trans-unit id="401806741040118292">
         <source>What will be done to mitigate this problem?</source>
         <target>Vad kan vi göra för att mildra det här problemet?</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">142</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">141</context></context-group></trans-unit>
       <trans-unit id="7404776804526394585" datatype="html">
         <source>PeerTube wants to deliver the best countermeasures possible, to give you more choice and render attacks less likely. Here is what we put in place so far:</source>
         <target state="translated">PeerTube vill erbjuda bästa möjliga lösningarna, ge dig fler valmöjligheter och minimera risken för attacker. Detta har vi gjort hitintills:</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">144</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">143</context></context-group></trans-unit>
       <trans-unit id="8635362984201852982" datatype="html">
         <source>We set a limit to the number of peers sent by the tracker</source>
         <target state="translated">Vi har begränsat antalet serventer som skickas ut av trackern</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">150</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">149</context></context-group></trans-unit>
       <trans-unit id="8903417899533541365" datatype="html">
         <source>We set a limit on the request frequency received by the tracker</source>
         <target state="translated">Vi har begränsat hur ofta trackern kan skicka ut serventer</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">151</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">150</context></context-group></trans-unit>
       <trans-unit id="2470460396724373169" datatype="html">
         <source>Allow instance admins to disable P2P from the administration interface</source>
         <target state="translated">Låta administratörer avaktivera P2P från administratörsgränssnittet</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">152</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">151</context></context-group></trans-unit>
       <trans-unit id="5991790391344625653" datatype="html">
         <source>Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling WebRTC in your browser.</source>
         <target state="translated">Kom ihåg att du alltid kan avaktivera P2P i videospelaren eller avaktivera WebRCT i din webbläsare.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">155</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">154</context></context-group></trans-unit>
       
       <trans-unit id="8438752523256358076" datatype="html">
         <source>Show full list</source>
@@ -7843,18 +7843,18 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
       <trans-unit id="2593763089859685916">
         <source>enabled</source>
         <target>aktiverad</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context><context context-type="linenumber">23</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context><context context-type="linenumber">22</context></context-group></trans-unit>
       <trans-unit id="8444272719785117681">
         <source>disabled</source>
         <target>avaktiverad</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context><context context-type="linenumber">23</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context><context context-type="linenumber">22</context></context-group></trans-unit>
       <trans-unit id="135214224090612796">
         <source>Redundancy for <x id="PH"/> is <x id="PH_1"/></source>
         <target>Redundans för <x id="PH"/> är <x id="PH_1"/></target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context><context context-type="linenumber">25</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context><context context-type="linenumber">24</context></context-group></trans-unit>
       <trans-unit id="5875705095657098468" datatype="html">
         <source>Do you really want to remove this video redundancy?</source>
         <target state="translated">Vill du verkligen ta bort den här videoredundansen?</target>
@@ -8404,29 +8404,17 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
         </context-group>
       </trans-unit><trans-unit id="1067821087200879310" datatype="html">
         <source>Accept registration</source><target state="new">Accept registration</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
-          <context context-type="linenumber">69</context>
-        </context-group>
-      </trans-unit><trans-unit id="9200323379330335050" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">68</context></context-group></trans-unit><trans-unit id="9200323379330335050" datatype="html">
         <source>Reject registration</source><target state="new">Reject registration</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
-          <context context-type="linenumber">72</context>
-        </context-group>
-      </trans-unit><trans-unit id="5919197630789088814" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">71</context></context-group></trans-unit><trans-unit id="5919197630789088814" datatype="html">
         <source><x id="PH" equiv-text="this.registration.username"/> account created</source><target state="new"><x id="PH" equiv-text="this.registration.username"/> account created</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
-          <context context-type="linenumber">96</context>
-        </context-group>
-      </trans-unit><trans-unit id="2989631909091294713" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">95</context></context-group></trans-unit><trans-unit id="2989631909091294713" datatype="html">
         <source><x id="PH" equiv-text="this.registration.username"/> registration rejected</source><target state="new"><x id="PH" equiv-text="this.registration.username"/> registration rejected</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
-          <context context-type="linenumber">113</context>
-        </context-group>
-      </trans-unit><trans-unit id="5941489410560989457" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">112</context></context-group></trans-unit><trans-unit id="5941489410560989457" datatype="html">
         <source>Moderation response is required.</source><target state="new">Moderation response is required.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
@@ -9034,19 +9022,13 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
       <trans-unit id="1009095940160473792" datatype="html">
         <source>URL parameter is missing in URL parameters</source>
         <target state="translated">URL-parameter saknas</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
-          <context context-type="linenumber">25</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context><context context-type="linenumber">24</context></context-group></trans-unit>
       <trans-unit id="7553172329217243895" datatype="html">
         <source>Cannot access to the remote resource</source>
         <target state="translated">Kan inte komma åt fjärresursen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
-          <context context-type="linenumber">48</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context><context context-type="linenumber">47</context></context-group></trans-unit>
       <trans-unit id="1636934520301910285" datatype="html">
         <source>Reset password</source>
         <target state="translated">Återställ lösenord</target>
