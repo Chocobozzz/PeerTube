@@ -1417,6 +1417,8 @@ paths:
                 email:
                   type: string
                   description: User email
+              required:
+                - email
       responses:
         '204':
           description: successful operation
@@ -1436,6 +1438,8 @@ paths:
                 email:
                   type: string
                   description: Registration email
+              required:
+                - email
       responses:
         '204':
           description: successful operation
