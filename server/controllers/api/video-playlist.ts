@@ -139,7 +139,7 @@ async function listVideoPlaylists (req: express.Request, res: express.Response) 
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    type: req.query.type
+    type: req.query.playlistType
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
