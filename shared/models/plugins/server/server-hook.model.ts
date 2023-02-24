@@ -27,6 +27,10 @@ export const serverFilterHookObject = {
   'filter:api.overviews.videos.list.params': true,
   'filter:api.overviews.videos.list.result': true,
 
+  // Filter params/result used to list subscription videos for the REST API
+  'filter:api.user.me.subscription-videos.list.params': true,
+  'filter:api.user.me.subscription-videos.list.result': true,
+
   // Filter params/results to search videos/channels in the DB or on the remote index
   'filter:api.search.videos.local.list.params': true,
   'filter:api.search.videos.local.list.result': true,
