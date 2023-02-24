@@ -71,6 +71,9 @@ describe('Test plugin filter hooks', function () {
         }
       }
     })
+
+    // Root subscribes to itself
+    await servers[0].subscriptions.add({ targetUri: 'root_channel@' + servers[0].host })
   })
 
   describe('Videos', function () {
@@ -146,6 +149,20 @@ describe('Test plugin filter hooks', function () {
 
     it('Should run filter:api.user.me.videos.list.result', async function () {
       const { total } = await servers[0].videos.listMyVideos({ start: 0, count: 2 })
+
+      // Plugin do +4 to the total result
+      expect(total).to.equal(14)
+    })
+
+    it('Should run filter:api.user.me.subscription-videos.list.params', async function () {
+      const { data } = await servers[0].subscriptions.listVideos()
+
+      // 1 plugin set the count parameter to 1
+      expect(data).to.have.lengthOf(1)
+    })
+
+    it('Should run filter:api.user.me.subscription-videos.list.result', async function () {
+      const { total } = await servers[0].subscriptions.listVideos()
 
       // Plugin do +4 to the total result
       expect(total).to.equal(14)
