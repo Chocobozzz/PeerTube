@@ -2,7 +2,10 @@
 
 import { expect } from 'chai'
 import { pathExists, readFile } from 'fs-extra'
+import JPEG from 'jpeg-js'
 import { join } from 'path'
+import pixelmatch from 'pixelmatch'
+import { PNG } from 'pngjs'
 import { root } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
 import { makeGetRequest, PeerTubeServer } from '@shared/server-commands'
@@ -41,7 +44,7 @@ async function expectLogContain (server: PeerTubeServer, str: string) {
   expect(content.toString()).to.contain(str)
 }
 
-async function testImage (url: string, imageName: string, imageHTTPPath: string, extension = '.jpg') {
+async function testImageSize (url: string, imageName: string, imageHTTPPath: string, extension = '.jpg') {
   const res = await makeGetRequest({
     url,
     path: imageHTTPPath,
@@ -56,6 +59,29 @@ async function testImage (url: string, imageName: string, imageHTTPPath: string,
 
   expect(body.length).to.be.above(minLength, 'the generated image is way smaller than the recorded fixture')
   expect(body.length).to.be.below(maxLength, 'the generated image is way larger than the recorded fixture')
+}
+
+async function testImage (url: string, imageName: string, imageHTTPPath: string, extension = '.jpg') {
+  const res = await makeGetRequest({
+    url,
+    path: imageHTTPPath,
+    expectedStatus: HttpStatusCode.OK_200
+  })
+
+  const body = res.body
+  const data = await readFile(join(root(), 'server', 'tests', 'fixtures', imageName + extension))
+
+  const img1 = imageHTTPPath.endsWith('.png')
+    ? PNG.sync.read(body)
+    : JPEG.decode(body)
+
+  const img2 = extension === '.png'
+    ? PNG.sync.read(data)
+    : JPEG.decode(data)
+
+  const result = pixelmatch(img1.data, img2.data, null, img1.width, img1.height, { threshold: 0.1 })
+
+  expect(result).to.equal(0, `${imageHTTPPath} image is not the same as ${imageName}${extension}`)
 }
 
 async function testFileExistsOrNot (server: PeerTubeServer, directory: string, filePath: string, exist: boolean) {
@@ -104,6 +130,7 @@ function checkBadSortPagination (url: string, path: string, token?: string, quer
 
 export {
   dateIsValid,
+  testImageSize,
   testImage,
   expectLogDoesNotContain,
   testFileExistsOrNot,

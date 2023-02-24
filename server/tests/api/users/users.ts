@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { testImage } from '@server/tests/shared'
+import { testImageSize } from '@server/tests/shared'
 import { AbuseState, HttpStatusCode, UserAdminFlag, UserRole, VideoPlaylistType } from '@shared/models'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
@@ -274,7 +274,7 @@ describe('Test users', function () {
 
       const user = await server.users.getMyInfo({ token: userToken })
       for (const avatar of user.account.avatars) {
-        await testImage(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, '.gif')
+        await testImageSize(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, '.gif')
       }
     })
 
@@ -286,7 +286,7 @@ describe('Test users', function () {
 
         const user = await server.users.getMyInfo({ token: userToken })
         for (const avatar of user.account.avatars) {
-          await testImage(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, extension)
+          await testImageSize(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, extension)
         }
       }
     })
