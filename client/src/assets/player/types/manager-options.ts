@@ -55,6 +55,8 @@ export interface CommonOptions extends CustomizationOptions {
   inactivityTimeout: number
   poster: string
 
+  videoViewIntervalMs: number
+
   instanceName: string
 
   theaterButton: boolean

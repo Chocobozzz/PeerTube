@@ -35,6 +35,7 @@ export class ManagerOptionsBuilder {
 
         ...pick(commonOptions, [
           'videoViewUrl',
+          'videoViewIntervalMs',
           'authorizationHeader',
           'startTime',
           'videoDuration',

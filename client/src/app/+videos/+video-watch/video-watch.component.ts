@@ -91,6 +91,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private hotkeys: Hotkey[] = []
 
+  private static VIEW_VIDEO_INTERVAL_MS = 5000
+
   constructor (
     private elementRef: ElementRef,
     private route: ActivatedRoute,
@@ -613,16 +615,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       const byLocalStorage = getStoredVideoWatchHistory(video.uuid)
 
       if (byUrl) return timeToInt(urlOptions.startTime)
-      if (byHistory) return video.userHistory.currentTime
-      if (byLocalStorage) return byLocalStorage.duration
 
-      return 0
+      let startTime = 0
+      if (byHistory) startTime = video.userHistory.currentTime
+      if (byLocalStorage) startTime = byLocalStorage.duration
+
+      // If we are at the end of the video, reset the timer
+      if (video.duration - startTime <= 1) startTime = 0
+
+      return startTime
     }
 
-    let startTime = getStartTime()
-
-    // If we are at the end of the video, reset the timer
-    if (video.duration - startTime <= 1) startTime = 0
+    const startTime = getStartTime()
 
     const playerCaptions = videoCaptions.map(c => ({
       label: c.language.label,
@@ -679,6 +683,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         videoViewUrl: video.privacy.id !== VideoPrivacy.PRIVATE
           ? this.videoService.getVideoViewUrl(video.uuid)
           : null,
+        videoViewIntervalMs: VideoWatchComponent.VIEW_VIDEO_INTERVAL_MS,
         authorizationHeader: () => this.authService.getRequestHeaderValue(),
 
         serverUrl: environment.originServerUrl || window.location.origin,

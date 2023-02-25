@@ -27,9 +27,7 @@ class PeerTubePlugin extends Plugin {
   private readonly videoUUID: string
   private readonly startTime: number
 
-  private readonly CONSTANTS = {
-    USER_VIEW_VIDEO_INTERVAL: 5000 // Every 5 seconds, notify the user is watching the video
-  }
+  private readonly videoViewIntervalMs: number
 
   private videoCaptions: VideoJSCaption[]
   private defaultSubtitle: string
@@ -48,6 +46,7 @@ class PeerTubePlugin extends Plugin {
     this.authorizationHeader = options.authorizationHeader
     this.videoUUID = options.videoUUID
     this.startTime = timeToInt(options.startTime)
+    this.videoViewIntervalMs = options.videoViewIntervalMs
 
     this.videoCaptions = options.videoCaptions
     this.initialInactivityTimeout = this.player.options_.inactivityTimeout
@@ -188,7 +187,7 @@ class PeerTubePlugin extends Plugin {
     })
 
     this.player.one('ended', () => {
-      const currentTime = Math.round(this.player.duration())
+      const currentTime = Math.floor(this.player.duration())
       lastCurrentTime = currentTime
 
       this.notifyUserIsWatching(currentTime, lastViewEvent)
@@ -197,7 +196,7 @@ class PeerTubePlugin extends Plugin {
     })
 
     this.videoViewInterval = setInterval(() => {
-      const currentTime = Math.round(this.player.currentTime())
+      const currentTime = Math.floor(this.player.currentTime())
 
       // No need to update
       if (currentTime === lastCurrentTime) return
@@ -213,7 +212,7 @@ class PeerTubePlugin extends Plugin {
       if (!this.authorizationHeader()) {
         saveVideoWatchHistory(this.videoUUID, currentTime)
       }
-    }, this.CONSTANTS.USER_VIEW_VIDEO_INTERVAL)
+    }, this.videoViewIntervalMs)
   }
 
   private notifyUserIsWatching (currentTime: number, viewEvent: VideoViewEvent) {
