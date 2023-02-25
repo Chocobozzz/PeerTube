@@ -205,6 +205,7 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
     this.videoAdminService.getAdminVideos({
       pagination: this.pagination,
       sort: this.sort,
+      nsfw: 'both', // Always list NSFW video, overriding instance/user setting
       search: this.search
     }).pipe(finalize(() => this.loading = false))
       .subscribe({
