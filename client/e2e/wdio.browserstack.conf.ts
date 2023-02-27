@@ -64,7 +64,7 @@ module.exports = {
       },
       {
         browserName: 'Safari',
-        browserVersion: '11.1',
+        browserVersion: '12.1',
 
         ...buildBStackDesktopOptions('Safari Desktop', '1280x1024')
       },
@@ -87,7 +87,7 @@ module.exports = {
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions('Safari iPhone', 'iPhone SE', '11')
+        ...buildBStackMobileOptions('Safari iPhone', 'iPhone 7', '12')
       },
       {
         browserName: 'Safari',

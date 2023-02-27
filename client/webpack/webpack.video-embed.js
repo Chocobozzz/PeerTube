@@ -179,7 +179,7 @@ module.exports = function () {
             ecma: 6,
             warnings: false,
             ie8: false,
-            safari10: true,
+            safari10: false,
             mangle: true,
             compress: {
               passes: 3,
@@ -214,7 +214,7 @@ function getBabelLoader () {
       presets: [
         [
           '@babel/preset-env', {
-            targets: 'last 1 Chrome version, last 2 Edge major versions, Firefox ESR, Safari >= 11, ios_saf >= 11'
+            targets: 'last 1 Chrome version, last 2 Edge major versions, Firefox ESR, Safari >= 12, ios_saf >= 12'
           }
         ]
       ]
