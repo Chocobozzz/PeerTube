@@ -75,7 +75,7 @@ $ng-select-input-text: pvar(--mainForegroundColor);
   &.ng-select-single .ng-value-container .ng-value {
     color: pvar(--inputForegroundColor);
 
-    .ng-value-label { /* stylelint-disable-line */
+    .ng-value-label {
       display: flex;
       align-items: center;
     }
@@ -84,8 +84,14 @@ $ng-select-input-text: pvar(--mainForegroundColor);
   &.ng-select-multiple .ng-select-container .ng-value-container {
     @include padding-left(12px);
 
-    .ng-value { /* stylelint-disable-line */
+    .ng-value {
       @include margin-left(12px);
+
+      background-color: pvar(--mainColorLightest);
+
+      .ng-value-icon {
+        border: none !important;
+      }
     }
   }
 }
