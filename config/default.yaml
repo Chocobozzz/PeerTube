@@ -222,6 +222,10 @@ open_telemetry:
   metrics:
     enabled: false
 
+    http_request_duration:
+      # You can disable HTTP request duration metric that can have a high tag cardinality
+      enabled: true
+
     # Create a prometheus exporter server on this port so prometheus server can scrape PeerTube metrics
     prometheus_exporter:
       hostname: '127.0.0.1'

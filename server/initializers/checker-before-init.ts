@@ -23,6 +23,7 @@ function checkMissedConfig () {
     'log.log_ping_requests', 'log.log_tracker_unknown_infohash', 'log.prettify_sql', 'log.accept_client_log',
     'open_telemetry.metrics.enabled', 'open_telemetry.metrics.prometheus_exporter.hostname',
     'open_telemetry.metrics.prometheus_exporter.port', 'open_telemetry.tracing.enabled', 'open_telemetry.tracing.jaeger_exporter.endpoint',
+    'open_telemetry.metrics.http_request_duration.enabled',
     'user.video_quota', 'user.video_quota_daily',
     'video_channels.max_per_user',
     'csp.enabled', 'csp.report_only', 'csp.report_uri',

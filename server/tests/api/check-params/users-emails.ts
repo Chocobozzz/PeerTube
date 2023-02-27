@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
-import { MockSmtpServer } from '@server/tests/shared'
 import { HttpStatusCode, UserRole } from '@shared/models'
 import { cleanupTests, createSingleServer, makePostBodyRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
@@ -112,8 +111,6 @@ describe('Test users API validators', function () {
   })
 
   after(async function () {
-    MockSmtpServer.Instance.kill()
-
     await cleanupTests([ server ])
   })
 })

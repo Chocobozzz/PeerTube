@@ -43,7 +43,7 @@ class MockSmtpServer {
   kill () {
     if (!this.maildev) return
 
-    this.maildev.shutdown()
+    this.maildev.close()
 
     this.maildev = null
     MockSmtpServer.instance = null
