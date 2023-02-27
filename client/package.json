@@ -86,7 +86,7 @@
     "cache-chunk-store": "^3.0.0",
     "chart.js": "^3.8.0",
     "chartjs-plugin-zoom": "~1.2.1",
-    "chromedriver": "^107.0.3",
+    "chromedriver": "^110.0.0",
     "core-js": "^3.22.8",
     "css-loader": "^6.2.0",
     "debug": "^4.3.1",

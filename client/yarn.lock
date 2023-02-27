@@ -3278,10 +3278,10 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.12.0.tgz#ce1c9d143389679e253b314241ea9aa5cec980d3"
   integrity sha512-NmWvPnx0F1SfrQbYwOi7OeaNGokp9XhzNioJ/CSBs8Qa4vxug81mhJEAVZwxXuBmYB5KDRfMq/F3RR0BIU7sWg==
 
-axios@^1.1.3:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.3.3.tgz#e7011384ba839b885007c9c9fae1ff23dceb295b"
-  integrity sha512-eYq77dYIFS77AQlhzEL937yUBSepBfPIe8FcgEDN35vMNZKMrs81pgnyrQpwfy4NF4b4XWX1Zgx7yX+25w8QJA==
+axios@^1.2.1:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.3.4.tgz#f5760cefd9cfb51fd2481acf88c05f67c4523024"
+  integrity sha512-toYm+Bsyl6VC5wSkfkbbNB6ROv7KY93PEBBL6xyDczaIHasAiv4wPqQ/c4RjoQzipxRD2W5g21cOqQulZ7rHwQ==
   dependencies:
     follow-redirects "^1.15.0"
     form-data "^4.0.0"
@@ -3946,13 +3946,13 @@ chrome-trace-event@^1.0.2:
   resolved "https://registry.yarnpkg.com/chrome-trace-event/-/chrome-trace-event-1.0.3.tgz#1015eced4741e15d06664a957dbbf50d041e26ac"
   integrity sha512-p3KULyQg4S7NIHixdwbGX+nFHkoBiA4YQmyWtjb8XngSKV124nJmRysgAeujbUVb15vh+RvFUfCPqU7rXk+hZg==
 
-chromedriver@^107.0.3:
-  version "107.0.3"
-  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-107.0.3.tgz#330c0808bb14a53f13ab7e2b0c78adf3cdb4c14b"
-  integrity sha512-jmzpZgctCRnhYAn0l/NIjP4vYN3L8GFVbterTrRr2Ly3W5rFMb9H8EKGuM5JCViPKSit8FbE718kZTEt3Yvffg==
+chromedriver@^110.0.0:
+  version "110.0.0"
+  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-110.0.0.tgz#d00a1a2976592d933faa8e9839e97692922834a4"
+  integrity sha512-Le6q8xrA/3fAt+g8qiN0YjsYxINIhQMC6wj9X3W5L77uN4NspEzklDrqYNwBcEVn7PcAEJ73nLlS7mTyZRspHA==
   dependencies:
     "@testim/chrome-version" "^1.1.3"
-    axios "^1.1.3"
+    axios "^1.2.1"
     compare-versions "^5.0.1"
     extract-zip "^2.0.1"
     https-proxy-agent "^5.0.1"

@@ -32,7 +32,7 @@ async function beforeLocalSession (config: { baseUrl: string }, capabilities: { 
 
   config.baseUrl = 'http://localhost:900' + appInstance
 
-  await setValue('emailPort', emailPort)
+  await setValue(config.baseUrl + '-emailPort', emailPort)
 }
 
 async function onBrowserStackPrepare () {

@@ -100,7 +100,7 @@ tail -f test1/logs/peertube.log | npm run parse-log -- --level debug --files -
 To run tests on local web browsers (comment web browsers you don't have in `client/e2e/wdio.local.conf.ts`):
 
 ```bash
-$ npm run e2e:local
+$ PEERTUBE2_E2E_PASSWORD=password npm run e2e:local
 ```
 
 ### Browserstack tests
