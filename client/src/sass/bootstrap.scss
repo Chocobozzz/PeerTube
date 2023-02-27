@@ -37,6 +37,9 @@
 .accordion {
   --bs-accordion-color: #{pvar(--mainForegroundColor)};
   --bs-accordion-bg: #{pvar(--mainBackgroundColor)};
+
+  --bs-accordion-btn-color: var(--bs-accordion-color);
+  --bs-accordion-btn-bg: var(--bs-accordion-bg)
 }
 
 .popover {
