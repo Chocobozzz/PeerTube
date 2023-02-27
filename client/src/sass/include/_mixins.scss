@@ -24,7 +24,7 @@
   text-overflow: ellipsis;
 }
 
-@mixin ellipsis-multiline($font-size: 16px, $number-of-lines: 2) {
+@mixin ellipsis-multiline($font-size: 16px, $number-of-lines: 2, $line-height: $font-size) {
   display: block;
   /* Fallback for non-webkit */
   display: -webkit-box; /* stylelint-disable-line value-no-vendor-prefix */
@@ -32,7 +32,7 @@
   -webkit-box-orient: vertical;
   /* Fallback for non-webkit */
   font-size: $font-size;
-  line-height: $font-size;
+  line-height: $line-height;
   overflow: hidden;
   text-overflow: ellipsis;
   max-height: $font-size * $number-of-lines;
