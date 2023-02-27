@@ -6795,14 +6795,14 @@ module-details-from-path@^1.0.3:
   resolved "https://registry.yarnpkg.com/module-details-from-path/-/module-details-from-path-1.0.3.tgz#114c949673e2a8a35e9d35788527aa37b679da2b"
   integrity sha512-ySViT69/76t8VhE1xXHK6Ch4NcDd26gx0MzKXLO+F7NOtnqH68d9zF94nT8ZWSxXh8ELOERsnJO/sWt1xZYw5A==
 
-moment-timezone@^0.5.34:
-  version "0.5.40"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.40.tgz#c148f5149fd91dd3e29bf481abc8830ecba16b89"
-  integrity sha512-tWfmNkRYmBkPJz5mr9GVDn9vRlVZOTe6yqY92rFxiOdWXbjaR0+9LwQnZGGuNR63X456NqmEkbskte8tWL5ePg==
+moment-timezone@^0.5.35:
+  version "0.5.41"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.41.tgz#a7ad3285fd24aaf5f93b8119a9d749c8039c64c5"
+  integrity sha512-e0jGNZDOHfBXJGz8vR/sIMXvBIGJJcqFjmlg9lmE+5KX1U7/RZNMswfD8nKnNCnQdKTIj50IaRKwl1fvMLyyRg==
   dependencies:
-    moment ">= 2.9.0"
+    moment "^2.29.4"
 
-"moment@>= 2.9.0", moment@^2.29.1:
+moment@^2.29.1, moment@^2.29.4:
   version "2.29.4"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
   integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
@@ -8212,10 +8212,10 @@ retimer@^3.0.0:
   resolved "https://registry.yarnpkg.com/retimer/-/retimer-3.0.0.tgz#98b751b1feaf1af13eb0228f8ea68b8f9da530df"
   integrity sha512-WKE0j11Pa0ZJI5YIk0nflGI7SQsfl2ljihVy7ogh7DeQSeYAUi0ubZ/yEueGtDfUPk6GH5LRw1hBdLq4IwUBWA==
 
-retry-as-promised@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/retry-as-promised/-/retry-as-promised-6.1.0.tgz#11eca9a0f97804d552ec8e74bc4eb839bd226dc4"
-  integrity sha512-Hj/jY+wFC+SB9SDlIIFWiGOHnNG0swYbGYsOj2BJ8u2HKUaobNKab0OIC0zOLYzDy0mb7A4xA5BMo4LMz5YtEA==
+retry-as-promised@^7.0.3:
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/retry-as-promised/-/retry-as-promised-7.0.4.tgz#9df73adaeea08cb2948b9d34990549dc13d800a2"
+  integrity sha512-XgmCoxKWkDofwH8WddD0w85ZfqYz+ZHlr5yo+3YUCfycWawU56T5ckWXsScsj5B8tqUcIG67DxXByo3VUgiAdA==
 
 reusify@^1.0.4:
   version "1.0.4"
@@ -8400,10 +8400,10 @@ sequelize-typescript@^2.0.0-beta.1:
   dependencies:
     glob "7.2.0"
 
-sequelize@6.25.5:
-  version "6.25.5"
-  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-6.25.5.tgz#d19982ce40f5d3663df662ac4cb34ba8649eb38f"
-  integrity sha512-QwA2kL4lSNy4mYTv1Zm4DjvloZLaYajuYF5QMOv0O7FameMUEl8Q5zOWRD+FNKGCLzyOJ28gQCo3HX0N9mcssA==
+sequelize@6.29.0:
+  version "6.29.0"
+  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-6.29.0.tgz#7b8750487adb7502ce8a7005b460d50c8ccc58b7"
+  integrity sha512-m8Wi90rs3NZP9coXE52c7PL4Q078nwYZXqt1IxPvgki7nOFn0p/F0eKsYDBXCPw9G8/BCEa6zZNk0DQUAT4ypA==
   dependencies:
     "@types/debug" "^4.1.7"
     "@types/validator" "^13.7.1"
@@ -8412,9 +8412,9 @@ sequelize@6.25.5:
     inflection "^1.13.2"
     lodash "^4.17.21"
     moment "^2.29.1"
-    moment-timezone "^0.5.34"
+    moment-timezone "^0.5.35"
     pg-connection-string "^2.5.0"
-    retry-as-promised "^6.1.0"
+    retry-as-promised "^7.0.3"
     semver "^7.3.5"
     sequelize-pool "^7.1.0"
     toposort-class "^1.0.1"

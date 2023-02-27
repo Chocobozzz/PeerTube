@@ -159,7 +159,7 @@
     "pug": "^3.0.0",
     "reflect-metadata": "^0.1.12",
     "sanitize-html": "2.x",
-    "sequelize": "6.25.5",
+    "sequelize": "6.29.0",
     "sequelize-typescript": "^2.0.0-beta.1",
     "short-uuid": "^4.2.0",
     "sitemap": "^7.0.0",
