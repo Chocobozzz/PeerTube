@@ -90,7 +90,7 @@ $ng-select-input-text: pvar(--mainForegroundColor);
       background-color: pvar(--mainColorLightest);
 
       .ng-value-icon {
-        border: none !important;
+        border: 0 !important;
       }
     }
   }
