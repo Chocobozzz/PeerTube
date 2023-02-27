@@ -286,6 +286,11 @@ security:
   frameguard:
     enabled: true
 
+  # Set x-powered-by HTTP header to "PeerTube"
+  # Can help remote software to know this is a PeerTube instance
+  powered_by_header:
+    enabled: true
+
 tracker:
   # If you disable the tracker, you disable the P2P on your PeerTube instance
   enabled: true

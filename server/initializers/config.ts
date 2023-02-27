@@ -236,6 +236,9 @@ const CONFIG = {
   SECURITY: {
     FRAMEGUARD: {
       ENABLED: config.get<boolean>('security.frameguard.enabled')
+    },
+    POWERED_BY_HEADER: {
+      ENABLED: config.get<boolean>('security.powered_by_header.enabled')
     }
   },
   TRACKER: {

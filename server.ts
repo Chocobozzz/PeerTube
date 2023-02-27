@@ -56,7 +56,12 @@ try {
 app.set('trust proxy', CONFIG.TRUST_PROXY)
 
 app.use((_req, res, next) => {
+  // OpenTelemetry
   res.locals.requestStart = Date.now()
+
+  if (CONFIG.SECURITY.POWERED_BY_HEADER.ENABLED === true) {
+    res.setHeader('x-powered-by', 'PeerTube')
+  }
 
   return next()
 })

@@ -26,7 +26,7 @@ function checkMissedConfig () {
     'user.video_quota', 'user.video_quota_daily',
     'video_channels.max_per_user',
     'csp.enabled', 'csp.report_only', 'csp.report_uri',
-    'security.frameguard.enabled',
+    'security.frameguard.enabled', 'security.powered_by_header.enabled',
     'cache.previews.size', 'cache.captions.size', 'cache.torrents.size', 'admin.email', 'contact_form.enabled',
     'signup.enabled', 'signup.limit', 'signup.requires_approval', 'signup.requires_email_verification', 'signup.minimum_age',
     'signup.filters.cidr.whitelist', 'signup.filters.cidr.blacklist',
