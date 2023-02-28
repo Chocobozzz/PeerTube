@@ -1,5 +1,100 @@
 # Changelog
 
+## v5.0.1-rc.1
+
+### IMPORTANT NOTES
+
+ * Update [web browsers support list](https://joinpeertube.org/faq#what-web-browsers-are-supported-by-peertube):
+   * Drop support of Safari 11 on iOS
+   * Drop support of Safari 11 on desktop
+   * Drop support of Firefox 68 on desktop
+
+### Maintenance
+
+ * [PeerTube OpenTelemetry](https://docs.joinpeertube.org/maintain/observability)
+   * Add BitTorrent tracker metrics
+   * Add ability to disable HTTP request duration metrics (can have a high tag cardinality)
+ * Add `x-powered-by` HTTP header in PeerTube response. Can be disabled in PeerTube configuration
+
+### Documentation
+
+  * PeerTube documentation website now uses VitePress: https://docs.joinpeertube.org
+
+### Plugins/Themes/Embed API
+
+ * Add ability to set `playbackRate` in URL (watch page and embed) [#5486](https://github.com/Chocobozzz/PeerTube/pull/5486)
+ * Auth plugins:
+   * Can set default `adminFlags`, `videoQuota` and `videoQuotaDaily` user attributes
+   * Introduce `userUpdater` hook function so external auth plugins can update the user on user login: https://docs.joinpeertube.org/contribute/plugins#add-external-auth-methods
+   * Automatically redirect to the default external auth on PeerTube refresh token expiration
+ * Add server plugin hooks (https://docs.joinpeertube.org/api/plugins):
+    * `filter:api.user.me.subscription-videos.list.params` & `filter:api.user.me.subscription-videos.list.result` [#5648](https://github.com/Chocobozzz/PeerTube/pull/5648)
+ * Add server plugin helpers:
+   * `getServerListeningConfig` to get PeerTube listening configuration
+ * Convert some colors to PeerTube CSS variables to improve theme compatibility
+
+### Features
+
+ * :tada: Implement user registration approval (https://docs.joinpeertube.org/admin/managing-users#registration-approval) [#5544](https://github.com/Chocobozzz/PeerTube/pull/5544)
+   * If enabled, the user has to fill a *Registration reason* input
+   * Moderators have to to accept/reject the registration with a *Moderation response* that will be sent by email to the user
+   * If the registration is accepted, the user and its channel are automatically created
+ * Add "back to live" button in player
+   * The *Live* button is red when the player is synced with the live
+   * It becomes grey when behind the live edge
+   * Clicking on the grey button re-sync the player with the live edge
+ * Add Icelandic & Ukrainian locales
+ * Add *Global views* default trending algorithm option in admin configuration [#5471](https://github.com/Chocobozzz/PeerTube/pull/5471)
+ * Performance:
+   * Blocked IPs by the tracker are now stored in NodeJS memory instead of Redis, reducing PeerTube load
+   * Optimize video comments SQL requests
+   * Optimize custom markup live rendering in admin
+  * UI/UX:
+    * Use `99+` instead of `99` when having more than `99` notifications
+    * Use channel display name instead of channel handle in *My videos* input filter [#5575](https://github.com/Chocobozzz/PeerTube/pull/5575)
+    * Display channel name in playlist element instead of account name
+    * Display channel as author in RSS feeds
+  * Custom markup:
+    * Support `mailto` links
+    * Support short UUID to fetch a video
+  * Admins can customize access and refresh tokens lifetime
+
+
+### Bug fixes
+
+ * Fix object storage incompatibility with some S3 providers that don't support ACL
+ * Fix signup limit
+ * Prevent `500` on invalid short UUID parameter
+ * Player:
+   * More robust player "stats for nerds" popup if there is not stream available
+   * Don't display playback rate setting for lives
+   * Don't handle playback rate hotkeys for lives
+   * Fix clicking on PeerTube instance button
+   * Fix always resuming the end of the video
+ * Process videos list requests in correct order
+ * Correctly fill the *Support* field when updating a video
+ * Fix *Auto play video* setting for anonymous users
+ * UI:
+   * Fix table columns max width
+   * Use *Unknown* instead of *Misc* when the video category is not set
+   * Prevent layout shift when listing videos
+   * Fix instance stats anchor link
+   * Fix menu content overlay on tablets
+   * Fix button overflows
+   * Handle `502` HTTP errors in client notifier
+   * Fix resetting chart zoom in video stats page
+   * Fix search page not loading all available results
+ * Display the update button when the stable release of beta/alpha plugin is available
+ * Always list NSFW videos in playlists (the frontend is in charge to blur the video element if the NSFW setting is *Hide* or *Blur*)
+ * Always list NSFW videos in admin
+ * Improve client log report:
+   * Don't send client error on 404
+   * Prevent sending invalid error/warn logs coming from HLS player [#5484](https://github.com/Chocobozzz/PeerTube/pull/5484)
+ * Fix out of sync audio when cutting a video in Studio
+ * Fix "unique viewers" inconsistency with countries
+ * Fix mention detection in comments
+
+
 ## v5.0.1
 
 ### IMPORTANT NOTES
