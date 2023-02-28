@@ -57,7 +57,7 @@ module.exports = {
       },
       {
         browserName: 'Firefox',
-        browserVersion: '68', // Very old ESR
+        browserVersion: '78', // Very old ESR
 
         ...buildBStackDesktopOptions('Firefox ESR Desktop', '1280x1024', 'Windows')
       },
@@ -86,7 +86,7 @@ module.exports = {
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions('Safari iPhone', 'iPhone 7', '12')
+        ...buildBStackMobileOptions('Safari iPhone', 'iPhone 8 Plus', '12.4')
       },
       {
         browserName: 'Safari',
