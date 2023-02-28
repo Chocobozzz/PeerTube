@@ -8,6 +8,7 @@
    * Drop support of Safari 11 on iOS
    * Drop support of Safari 11 on desktop
    * Drop support of Firefox 68 on desktop
+ * Minimum recommended Redis version is 6.2
 
 ### Maintenance
 
