@@ -14,7 +14,7 @@
 
       <input *ngIf="!isPasswordInput" type="text" id="confirmInput" name="confirmInput" [(ngModel)]="inputValue" />
 
-      <my-input-text inputId="confirmInput" [(ngModel)]="inputValue"></my-input-text>
+      <my-input-text *ngIf="isPasswordInput" inputId="confirmInput" [(ngModel)]="inputValue"></my-input-text>
     </div>
   </div>
 
