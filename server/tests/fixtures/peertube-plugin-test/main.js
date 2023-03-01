@@ -91,7 +91,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
 
   registerHook({
     target: 'filter:api.user.me.subscription-videos.list.params',
-    handler: obj => Object.assign({}, obj, { count: 1 })
+    handler: obj => addToCount(obj)
   })
 
   registerHook({

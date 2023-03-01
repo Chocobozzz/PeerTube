@@ -1,4 +1,4 @@
-import { HttpStatusCode, ResultList, Video, VideoChannel } from '@shared/models'
+import { HttpStatusCode, ResultList, VideoChannel } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class SubscriptionsCommand extends AbstractCommand {
@@ -33,22 +33,6 @@ export class SubscriptionsCommand extends AbstractCommand {
         sort,
         search
       },
-      implicitToken: true,
-      defaultExpectedStatus: HttpStatusCode.OK_200
-    })
-  }
-
-  listVideos (options: OverrideCommandOptions & {
-    sort?: string // default -createdAt
-  } = {}) {
-    const { sort = '-createdAt' } = options
-    const path = '/api/v1/users/me/subscriptions/videos'
-
-    return this.getRequestBody<ResultList<Video>>({
-      ...options,
-
-      path,
-      query: { sort },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
