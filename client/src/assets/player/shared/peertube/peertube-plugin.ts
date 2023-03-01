@@ -207,26 +207,20 @@ class PeerTubePlugin extends Plugin {
         .catch(err => logger.error('Cannot notify user is watching.', err))
 
       lastViewEvent = undefined
-
-      // Server won't save history, so save the video position in local storage
-      if (!this.authorizationHeader()) {
-        saveVideoWatchHistory(this.videoUUID, currentTime)
-      }
     }, this.videoViewIntervalMs)
   }
 
   private notifyUserIsWatching (currentTime: number, viewEvent: VideoViewEvent) {
-    if (!this.videoViewUrl) return Promise.resolve(undefined)
-
-    const body: VideoView = {
-      currentTime,
-      viewEvent
+    // Server won't save history, so save the video position in local storage
+    if (!this.authorizationHeader()) {
+      saveVideoWatchHistory(this.videoUUID, currentTime)
     }
 
-    const headers = new Headers({
-      'Content-type': 'application/json; charset=UTF-8'
-    })
+    if (!this.videoViewUrl) return
 
+    const body: VideoView = { currentTime, viewEvent }
+
+    const headers = new Headers({ 'Content-type': 'application/json; charset=UTF-8' })
     if (this.authorizationHeader()) headers.set('Authorization', this.authorizationHeader())
 
     return fetch(this.videoViewUrl, { method: 'POST', body: JSON.stringify(body), headers })
