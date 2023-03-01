@@ -34,9 +34,15 @@ $container-max-widths: (
   xl: 1140px
 );
 
+$input-color: pvar(--inputForegroundColor);
+$input-bg: pvar(--inputBackgroundColor);
+$input-focus-color: pvar(--inputForegroundColor);
+$input-focus-bg: pvar(--inputBackgroundColor);
 $input-btn-focus-width: 0;
 $input-btn-focus-color: inherit;
 $input-focus-border-color: #ced4da;
+
+$input-group-addon-color: pvar(--mainForegroundColor);
 
 $nav-pills-link-active-bg: #F0F0F0;
 $nav-pills-link-active-color: #000;
@@ -56,5 +62,3 @@ $accordion-button-active-color: pvar(--mainForegroundColor);
 $accordion-button-focus-border-color: pvar(--mainColorLightest);
 $accordion-button-focus-box-shadow: 0 0 0 .15rem pvar(--mainColorLightest);
 $accordion-border-color: pvar(--inputBorderColor);
-
-$input-group-addon-color: pvar(--mainForegroundColor);
