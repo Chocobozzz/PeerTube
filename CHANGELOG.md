@@ -8,7 +8,7 @@
    * Drop support of Safari 11 on iOS
    * Drop support of Safari 11 on desktop
    * Drop support of Firefox 68 on desktop
- * Minimum recommended Redis version is 6.2
+ * Minimum recommended Redis version is 6.2. Version 6.0 should still work: see [this comment](https://github.com/Chocobozzz/PeerTube/issues/5659#issuecomment-1449607001) for more information
 
 ### Maintenance
 
