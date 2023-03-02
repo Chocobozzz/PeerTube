@@ -20,6 +20,8 @@ describe('Test videos filter', function () {
   let paths: string[]
   let remotePaths: string[]
 
+  const subscriptionVideosPath = '/api/v1/users/me/subscriptions/videos'
+
   // ---------------------------------------------------------------
 
   before(async function () {
@@ -49,6 +51,9 @@ describe('Test videos filter', function () {
         const attributes = { name: 'private ' + server.serverNumber, privacy: VideoPrivacy.PRIVATE }
         await server.videos.upload({ attributes })
       }
+
+      // Subscribing to itself
+      await server.subscriptions.add({ targetUri: 'root_channel@' + server.host })
     }
 
     await doubleFollow(servers[0], servers[1])
@@ -57,7 +62,8 @@ describe('Test videos filter', function () {
       `/api/v1/video-channels/root_channel/videos`,
       `/api/v1/accounts/root/videos`,
       '/api/v1/videos',
-      '/api/v1/search/videos'
+      '/api/v1/search/videos',
+      subscriptionVideosPath
     ]
 
     remotePaths = [
@@ -102,6 +108,8 @@ describe('Test videos filter', function () {
     })
 
     it('Should display all local videos by the admin or the moderator', async function () {
+      // Remove the subscription videos path from the `paths` array as it is not needed for this test
+      paths.pop()
       for (const server of servers) {
         for (const token of [ server.accessToken, server['moderatorAccessToken'] ]) {
 
@@ -115,6 +123,8 @@ describe('Test videos filter', function () {
           }
         }
       }
+      // Add the previously removed path back to the `paths` array for the next tests
+      paths.push(subscriptionVideosPath)
     })
 
     it('Should display all videos by the admin or the moderator', async function () {
@@ -193,6 +203,8 @@ describe('Test videos filter', function () {
     })
 
     it('Should display local videos with hidden privacy by the admin or the moderator', async function () {
+      // Remove the subscription videos path from the `paths` array as it is not needed for this test
+      paths.pop()
       for (const server of servers) {
         for (const token of [ server.accessToken, server['moderatorAccessToken'] ]) {
 
@@ -212,6 +224,8 @@ describe('Test videos filter', function () {
           }
         }
       }
+      // Add the previously removed path back to the `paths` array for the next tests
+      paths.push(subscriptionVideosPath)
     })
 
     it('Should display all videos by the admin or the moderator', async function () {
