@@ -156,14 +156,14 @@ export class PeerTubeEmbed {
 			const pipMiniElem = this.playerHTML.getWrapperElement().closest('.pipmini')
 			const pipModeElem = this.playerHTML.getWrapperElement().closest('.pipmode')
 			parameters.isPip = (pipMiniElem != undefined || pipModeElem != undefined);
-			
+
 			if (parameters.light){
 
 				return this.buildVideoPlayerLight(videoDetails, async () => {
 					parameters.wasLight = true;
 					await this.buildVideoPlayer(videoDetails, host, parameters, clbk)
 				}, parameters, clbk);
-	
+
 			}
 
 			return this.buildVideoPlayer(videoDetails, host, parameters, clbk)
@@ -171,7 +171,7 @@ export class PeerTubeEmbed {
 
 
 			console.error(err)
-			
+
 			this.playerHTML.displayError(err.message)
 
 			this.initializeApi(clbk)
@@ -270,7 +270,7 @@ export class PeerTubeEmbed {
 			this.waitStatus([2, 4, 5]).then((r: any) => {
 
 				clearInterval(this.statusInterval)
-				
+
 				this.statusInterval = null
 
 
@@ -280,8 +280,7 @@ export class PeerTubeEmbed {
 						this.playerHTML.removeErrorBlock()
 						this.playerHTML.displayError(this.details.state.label, 'critical')
 						return
-					}*/
-		
+
 
 
 					this.buildVideoPlayer(this.details, host, parameters, clbk)
@@ -292,7 +291,7 @@ export class PeerTubeEmbed {
 						this.wrapperElement.removeChild(this.errorBlock);
 					}*/
 				}
-				 	
+
 
 
 			}).catch((e : any) => {
@@ -305,9 +304,9 @@ export class PeerTubeEmbed {
 		const alreadyHadPlayer = this.resetPlayerElement(videoDetails)
 
 		this.playerHTML.removeErrorBlock()
-		
+
 		const videoInfoPromise: Promise<{ video: VideoDetails, live?: LiveVideo }> = new Promise((resolve, reject) => {
-			
+
 			this.details = videoDetails
 			this.parameters = parameters
 			this.clbk = clbk
@@ -322,13 +321,13 @@ export class PeerTubeEmbed {
 				return resolve({ video: videoDetails })
 			}
 
-			
-		
-			
+
+
+
 
 			return this.videoFetcher.loadVideoWithLive(videoDetails, host).then(resolve).catch(reject)
 		})
-		
+
 
 		const [{ video, live }, PeertubePlayerManagerModule] = await Promise.all([
 			videoInfoPromise,
@@ -344,16 +343,21 @@ export class PeerTubeEmbed {
 
 
 			if (statuses.indexOf(video.state.id) > -1){
+        const transcodingMessage = `<i class="fas fa-spinner fa-spin"></i> <span>${
+          video.state.id === 4
+            ? "Live stream is yet to start"
+            : `${videoDetails.isAudio ? "Audio" : "Video"} is being processed`
+        }</span>`;
 
 				this.playerHTML.thumbPlayer(videoDetails, false)
-				this.playerHTML.transcodingMessage(videoDetails.isAudio || false)
+				this.playerHTML.transcodingMessage(transcodingMessage)
 
 				this.initWaiting(host, parameters, clbk)
 
 				return
 			}
 
-			
+
 		}
 
 
@@ -409,8 +413,8 @@ export class PeerTubeEmbed {
 			this.playerHTML.removePlayerElement()
 			this.playerHTML.displayError('This video is not available because the remote instance is not responding.')
 
-			this.api.send({ 
-				method: 'error', 
+			this.api.send({
+				method: 'error',
 				params: {
 					message: 'This video is not available because the remote instance is not responding.'
 				}
@@ -447,7 +451,7 @@ export class PeerTubeEmbed {
 			],
 		});
 
-		
+
 
 
 		if (this.api && this.api.playing){
@@ -467,7 +471,7 @@ export class PeerTubeEmbed {
 			}catch(e){
 				console.error(e)
 			}
-			
+
 		}
 
 		//if (this.isPlaylistEmbed()) {
@@ -509,7 +513,7 @@ export class PeerTubeEmbed {
 			var bufferLength = analyser.frequencyBinCount;
 			var dataArray = new Uint8Array(bufferLength);
 			var lda = new Uint8Array(bufferLength);
-			
+
 
 			const audioVisuWrapper = document.createElement('div')
 				audioVisuWrapper.className = 'vjs-audio-visualization';
@@ -541,7 +545,7 @@ export class PeerTubeEmbed {
 				audioVisu['mouseOver'] = false;
 			}*/
 			// Setup events when mouse is clicked over the player visualization and wallpaper
-			
+
 			var togglePlayerPlay = () => {
 				console.log("?", this.player)
 				if (this.player) {
@@ -582,7 +586,7 @@ export class PeerTubeEmbed {
 					// audioWallpaper.style.height = ((isPip) ? 0 : wrapperSize.height) + 'px';
 
 					// Add the canvas to the video player DOM if needed
-					
+
 					if (!canvasAdded) return
 
 					audioVisu.height = wrapperSize.height;
@@ -637,7 +641,7 @@ export class PeerTubeEmbed {
 					var wb = 2
 					var qua = 8
 					var cnt = bufferLength / qua
-					
+
 					const barWidth = ((1.2 * WIDTH - wb * (cnt)) / (cnt));
 					let barHeight;
 					let barHeightPourcentage;
@@ -655,7 +659,7 @@ export class PeerTubeEmbed {
 
 						ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight)
 						x += barWidth + (wb);
-						
+
 					}
 
 					ctx.stroke();
@@ -682,9 +686,9 @@ export class PeerTubeEmbed {
 		playerElement.className = 'video-js vjs-peertube-skin'
 		playerElement.setAttribute('playsinline', 'true')
 
-	
 
-		
+
+
 
 		this.playerHTML.setPlayerElement(playerElement)
 		this.playerHTML.addPlayerElementToDOM()

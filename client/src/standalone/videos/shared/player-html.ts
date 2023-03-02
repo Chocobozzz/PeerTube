@@ -149,17 +149,17 @@ export class PlayerHTML {
 		}, 1000)
 
 	})
-	
+
   }
 
   thumbPlayer(videoInfo: VideoDetails, addplaybutton : Boolean){
-	
+
 	const url = (videoInfo.from ? 'https://' + videoInfo.from : videoInfo.host) + videoInfo.thumbnailPath
 
 	var poster = document.createElement("div");
 		poster.className = "vjs-thumb video-js";
 		poster.style.backgroundImage = 'url('+url+')'
-		
+
 	if (videoInfo.isAudio)
 	 poster.className += " vjs-is-audio";
 
@@ -184,14 +184,14 @@ export class PlayerHTML {
 
 
 	return poster
-}	
+}
 
-	transcodingMessage(isAudio: Boolean){
+	transcodingMessage(transcodingMessage: string){
 		var message = document.createElement("div");
 			message.className = 'vjs-transcoding-message'
-			message.innerHTML = `<i class="fas fa-spinner fa-spin"></i> <span>${(isAudio) ? 'Audio' : 'Video'} is being processed</span>`
+			message.innerHTML = transcodingMessage
 
-			
+
 		this.wrapperElement.appendChild(message);
 	}
 
@@ -201,7 +201,7 @@ export class PlayerHTML {
 
 		const paddingSize: Number = 100 / (2 * videoSizeValue);
 
-		
+
 
 		var aslayer = document.createElement("div");
 		aslayer.classList.add("aspectratio-matte");
