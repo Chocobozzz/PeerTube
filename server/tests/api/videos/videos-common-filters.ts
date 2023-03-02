@@ -76,10 +76,18 @@ describe('Test videos filter', function () {
 
   describe('Check deprecated videos filter', function () {
 
-    async function getVideosNames (server: PeerTubeServer, token: string, filter: string, expectedStatus = HttpStatusCode.OK_200) {
+    async function getVideosNames (
+      server: PeerTubeServer,
+      token: string,
+      filter: string,
+      skipSubscription = false,
+      expectedStatus = HttpStatusCode.OK_200
+    ) {
       const videosResults: Video[][] = []
 
       for (const path of paths) {
+        if (skipSubscription && path === subscriptionVideosPath) continue
+
         const res = await makeGetRequest({
           url: server.url,
           path,
@@ -108,12 +116,10 @@ describe('Test videos filter', function () {
     })
 
     it('Should display all local videos by the admin or the moderator', async function () {
-      // Remove the subscription videos path from the `paths` array as it is not needed for this test
-      paths.pop()
       for (const server of servers) {
         for (const token of [ server.accessToken, server['moderatorAccessToken'] ]) {
 
-          const namesResults = await getVideosNames(server, token, 'all-local')
+          const namesResults = await getVideosNames(server, token, 'all-local', true)
           for (const names of namesResults) {
             expect(names).to.have.lengthOf(3)
 
@@ -123,8 +129,6 @@ describe('Test videos filter', function () {
           }
         }
       }
-      // Add the previously removed path back to the `paths` array for the next tests
-      paths.push(subscriptionVideosPath)
     })
 
     it('Should display all videos by the admin or the moderator', async function () {
@@ -172,17 +176,21 @@ describe('Test videos filter', function () {
       return res.body.data as Video[]
     }
 
-    async function getVideosNames (options: {
-      server: PeerTubeServer
-      isLocal?: boolean
-      include?: VideoInclude
-      privacyOneOf?: VideoPrivacy[]
-      token?: string
-      expectedStatus?: HttpStatusCode
-    }) {
+    async function getVideosNames (
+      options: {
+        server: PeerTubeServer
+        isLocal?: boolean
+        include?: VideoInclude
+        privacyOneOf?: VideoPrivacy[]
+        token?: string
+        expectedStatus?: HttpStatusCode
+      },
+      skipSubscription = false
+    ) {
       const videosResults: string[][] = []
 
       for (const path of paths) {
+        if (skipSubscription && path === subscriptionVideosPath) continue
         const videos = await listVideos({ ...options, path })
 
         videosResults.push(videos.map(v => v.name))
@@ -203,17 +211,18 @@ describe('Test videos filter', function () {
     })
 
     it('Should display local videos with hidden privacy by the admin or the moderator', async function () {
-      // Remove the subscription videos path from the `paths` array as it is not needed for this test
-      paths.pop()
       for (const server of servers) {
         for (const token of [ server.accessToken, server['moderatorAccessToken'] ]) {
 
-          const namesResults = await getVideosNames({
-            server,
-            token,
-            isLocal: true,
-            privacyOneOf: [ VideoPrivacy.UNLISTED, VideoPrivacy.PUBLIC, VideoPrivacy.PRIVATE ]
-          })
+          const namesResults = await getVideosNames(
+            {
+              server,
+              token,
+              isLocal: true,
+              privacyOneOf: [ VideoPrivacy.UNLISTED, VideoPrivacy.PUBLIC, VideoPrivacy.PRIVATE ]
+            },
+            true
+          )
 
           for (const names of namesResults) {
             expect(names).to.have.lengthOf(3)
@@ -224,8 +233,6 @@ describe('Test videos filter', function () {
           }
         }
       }
-      // Add the previously removed path back to the `paths` array for the next tests
-      paths.push(subscriptionVideosPath)
     })
 
     it('Should display all videos by the admin or the moderator', async function () {
