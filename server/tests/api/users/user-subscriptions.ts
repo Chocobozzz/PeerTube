@@ -167,14 +167,14 @@ describe('Test users subscriptions', function () {
 
     it('Should list subscription videos', async function () {
       {
-        const body = await command.listVideos()
+        const body = await servers[0].videos.listMySubscriptionVideos()
         expect(body.total).to.equal(0)
         expect(body.data).to.be.an('array')
         expect(body.data).to.have.lengthOf(0)
       }
 
       {
-        const body = await command.listVideos({ token: users[0].accessToken, sort: 'createdAt' })
+        const body = await servers[0].videos.listMySubscriptionVideos({ token: users[0].accessToken, sort: 'createdAt' })
         expect(body.total).to.equal(3)
 
         const videos = body.data
@@ -184,6 +184,17 @@ describe('Test users subscriptions', function () {
         expect(videos[0].name).to.equal('video 1-3')
         expect(videos[1].name).to.equal('video 2-3')
         expect(videos[2].name).to.equal('video server 3 added after follow')
+      }
+
+      {
+        const body = await servers[0].videos.listMySubscriptionVideos({ token: users[0].accessToken, count: 1, start: 1 })
+        expect(body.total).to.equal(3)
+
+        const videos = body.data
+        expect(videos).to.be.an('array')
+        expect(videos).to.have.lengthOf(1)
+
+        expect(videos[0].name).to.equal('video 2-3')
       }
     })
 
@@ -196,14 +207,14 @@ describe('Test users subscriptions', function () {
       await waitJobs(servers)
 
       {
-        const body = await command.listVideos()
+        const body = await servers[0].videos.listMySubscriptionVideos()
         expect(body.total).to.equal(0)
         expect(body.data).to.be.an('array')
         expect(body.data).to.have.lengthOf(0)
       }
 
       {
-        const body = await command.listVideos({ token: users[0].accessToken, sort: 'createdAt' })
+        const body = await servers[0].videos.listMySubscriptionVideos({ token: users[0].accessToken, sort: 'createdAt' })
         expect(body.total).to.equal(4)
 
         const videos = body.data
@@ -264,14 +275,14 @@ describe('Test users subscriptions', function () {
 
     it('Should still list subscription videos', async function () {
       {
-        const body = await command.listVideos()
+        const body = await servers[0].videos.listMySubscriptionVideos()
         expect(body.total).to.equal(0)
         expect(body.data).to.be.an('array')
         expect(body.data).to.have.lengthOf(0)
       }
 
       {
-        const body = await command.listVideos({ token: users[0].accessToken, sort: 'createdAt' })
+        const body = await servers[0].videos.listMySubscriptionVideos({ token: users[0].accessToken, sort: 'createdAt' })
         expect(body.total).to.equal(4)
 
         const videos = body.data
@@ -295,7 +306,7 @@ describe('Test users subscriptions', function () {
 
       await waitJobs(servers)
 
-      const body = await command.listVideos({ token: users[0].accessToken, sort: 'createdAt' })
+      const body = await servers[0].videos.listMySubscriptionVideos({ token: users[0].accessToken, sort: 'createdAt' })
       expect(body.data[2].name).to.equal('video server 3 added after follow updated')
     })
   })
@@ -311,7 +322,7 @@ describe('Test users subscriptions', function () {
     })
 
     it('Should not display its videos anymore', async function () {
-      const body = await command.listVideos({ token: users[0].accessToken, sort: 'createdAt' })
+      const body = await servers[0].videos.listMySubscriptionVideos({ token: users[0].accessToken, sort: 'createdAt' })
       expect(body.total).to.equal(1)
 
       const videos = body.data
@@ -360,7 +371,7 @@ describe('Test users subscriptions', function () {
       await waitJobs(servers)
 
       {
-        const body = await command.listVideos({ token: users[0].accessToken, sort: 'createdAt' })
+        const body = await servers[0].videos.listMySubscriptionVideos({ token: users[0].accessToken, sort: 'createdAt' })
         expect(body.total).to.equal(3)
 
         const videos = body.data
@@ -569,13 +580,13 @@ describe('Test users subscriptions', function () {
       await waitJobs(servers)
 
       {
-        const { data } = await command.listVideos({ token: users[0].accessToken })
+        const { data } = await servers[0].videos.listMySubscriptionVideos({ token: users[0].accessToken })
         expect(data.find(v => v.name === 'internal')).to.not.exist
       }
     })
 
     it('Should see internal from local user', async function () {
-      const { data } = await servers[2].subscriptions.listVideos({ token: servers[2].accessToken })
+      const { data } = await servers[2].videos.listMySubscriptionVideos({ token: servers[2].accessToken })
       expect(data.find(v => v.name === 'internal')).to.exist
     })
 
@@ -586,12 +597,12 @@ describe('Test users subscriptions', function () {
       await waitJobs(servers)
 
       {
-        const { data } = await command.listVideos({ token: users[0].accessToken })
+        const { data } = await servers[0].videos.listMySubscriptionVideos({ token: users[0].accessToken })
         expect(data.find(v => v.name === 'private')).to.not.exist
       }
 
       {
-        const { data } = await servers[2].subscriptions.listVideos({ token: servers[2].accessToken })
+        const { data } = await servers[2].videos.listMySubscriptionVideos({ token: servers[2].accessToken })
         expect(data.find(v => v.name === 'private')).to.not.exist
       }
     })

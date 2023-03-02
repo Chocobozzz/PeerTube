@@ -20,6 +20,8 @@ describe('Test videos filter', function () {
   let paths: string[]
   let remotePaths: string[]
 
+  const subscriptionVideosPath = '/api/v1/users/me/subscriptions/videos'
+
   // ---------------------------------------------------------------
 
   before(async function () {
@@ -49,6 +51,9 @@ describe('Test videos filter', function () {
         const attributes = { name: 'private ' + server.serverNumber, privacy: VideoPrivacy.PRIVATE }
         await server.videos.upload({ attributes })
       }
+
+      // Subscribing to itself
+      await server.subscriptions.add({ targetUri: 'root_channel@' + server.host })
     }
 
     await doubleFollow(servers[0], servers[1])
@@ -57,7 +62,8 @@ describe('Test videos filter', function () {
       `/api/v1/video-channels/root_channel/videos`,
       `/api/v1/accounts/root/videos`,
       '/api/v1/videos',
-      '/api/v1/search/videos'
+      '/api/v1/search/videos',
+      subscriptionVideosPath
     ]
 
     remotePaths = [
@@ -70,10 +76,20 @@ describe('Test videos filter', function () {
 
   describe('Check deprecated videos filter', function () {
 
-    async function getVideosNames (server: PeerTubeServer, token: string, filter: string, expectedStatus = HttpStatusCode.OK_200) {
+    async function getVideosNames (options: {
+      server: PeerTubeServer
+      token: string
+      filter: string
+      skipSubscription?: boolean
+      expectedStatus?: HttpStatusCode
+    }) {
+      const { server, token, filter, skipSubscription = false, expectedStatus = HttpStatusCode.OK_200 } = options
+
       const videosResults: Video[][] = []
 
       for (const path of paths) {
+        if (skipSubscription && path === subscriptionVideosPath) continue
+
         const res = await makeGetRequest({
           url: server.url,
           path,
@@ -93,7 +109,7 @@ describe('Test videos filter', function () {
 
     it('Should display local videos', async function () {
       for (const server of servers) {
-        const namesResults = await getVideosNames(server, server.accessToken, 'local')
+        const namesResults = await getVideosNames({ server, token: server.accessToken, filter: 'local' })
         for (const names of namesResults) {
           expect(names).to.have.lengthOf(1)
           expect(names[0]).to.equal('public ' + server.serverNumber)
@@ -105,7 +121,7 @@ describe('Test videos filter', function () {
       for (const server of servers) {
         for (const token of [ server.accessToken, server['moderatorAccessToken'] ]) {
 
-          const namesResults = await getVideosNames(server, token, 'all-local')
+          const namesResults = await getVideosNames({ server, token, filter: 'all-local', skipSubscription: true })
           for (const names of namesResults) {
             expect(names).to.have.lengthOf(3)
 
@@ -121,7 +137,7 @@ describe('Test videos filter', function () {
       for (const server of servers) {
         for (const token of [ server.accessToken, server['moderatorAccessToken'] ]) {
 
-          const [ channelVideos, accountVideos, videos, searchVideos ] = await getVideosNames(server, token, 'all')
+          const [ channelVideos, accountVideos, videos, searchVideos ] = await getVideosNames({ server, token, filter: 'all' })
           expect(channelVideos).to.have.lengthOf(3)
           expect(accountVideos).to.have.lengthOf(3)
 
@@ -162,17 +178,23 @@ describe('Test videos filter', function () {
       return res.body.data as Video[]
     }
 
-    async function getVideosNames (options: {
-      server: PeerTubeServer
-      isLocal?: boolean
-      include?: VideoInclude
-      privacyOneOf?: VideoPrivacy[]
-      token?: string
-      expectedStatus?: HttpStatusCode
-    }) {
+    async function getVideosNames (
+      options: {
+        server: PeerTubeServer
+        isLocal?: boolean
+        include?: VideoInclude
+        privacyOneOf?: VideoPrivacy[]
+        token?: string
+        expectedStatus?: HttpStatusCode
+        skipSubscription?: boolean
+      }
+    ) {
+      const { skipSubscription = false } = options
       const videosResults: string[][] = []
 
       for (const path of paths) {
+        if (skipSubscription && path === subscriptionVideosPath) continue
+
         const videos = await listVideos({ ...options, path })
 
         videosResults.push(videos.map(v => v.name))
@@ -196,12 +218,15 @@ describe('Test videos filter', function () {
       for (const server of servers) {
         for (const token of [ server.accessToken, server['moderatorAccessToken'] ]) {
 
-          const namesResults = await getVideosNames({
-            server,
-            token,
-            isLocal: true,
-            privacyOneOf: [ VideoPrivacy.UNLISTED, VideoPrivacy.PUBLIC, VideoPrivacy.PRIVATE ]
-          })
+          const namesResults = await getVideosNames(
+            {
+              server,
+              token,
+              isLocal: true,
+              privacyOneOf: [ VideoPrivacy.UNLISTED, VideoPrivacy.PUBLIC, VideoPrivacy.PRIVATE ],
+              skipSubscription: true
+            }
+          )
 
           for (const names of namesResults) {
             expect(names).to.have.lengthOf(3)
