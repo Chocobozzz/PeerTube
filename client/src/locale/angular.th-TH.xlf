@@ -1040,7 +1040,7 @@
       </trans-unit>
       <trans-unit id="6994936570572804302" datatype="html">
         <source>Request an account</source>
-        <target state="new">Request an account</target>
+        <target state="translated">ส่งคำขอสร้างบัญชี</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/signup-label.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1807,7 +1807,7 @@
       </trans-unit>
       <trans-unit id="2948577454705183445" datatype="html">
         <source>on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">บน <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">23,24</context>
@@ -2181,7 +2181,7 @@
       </trans-unit>
       <trans-unit id="5143793904897598509" datatype="html">
         <source>PeerTube instance host</source>
-        <target state="new">PeerTube instance host</target>
+        <target state="translated">โฮสต์เซิร์ฟเวอร์ PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">178</context>
@@ -2304,17 +2304,17 @@
       </trans-unit>
       <trans-unit id="6259523075362402245" datatype="html">
         <source>Upload a new banner</source>
-        <target state="new">Upload a new banner</target>
+        <target state="translated">อัปโหลดแบนเนอร์ใหม่</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="1117672957968812680" datatype="html">
         <source>Change your banner</source>
-        <target state="new">Change your banner</target>
+        <target state="translated">เปลี่ยนแบนเนอร์ของคุณ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="3394080812181176794" datatype="html">
         <source>Remove banner</source>
-        <target state="new">Remove banner</target>
+        <target state="translated">เอาแบนเนอร์ออก</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="7306351600905511107" datatype="html">
@@ -2334,7 +2334,7 @@
       </trans-unit>
       <trans-unit id="1358902062258458923" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>Markdown compatible<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> that also supports <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>custom PeerTube HTML tags<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>Markdown compatible<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> that also supports <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>custom PeerTube HTML tags<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>เข้ากันได้กับ Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ซึ่งยังรองรับ<x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>แท็ก HTML PeerTube ที่กำหนดเอง<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/custom-markup-help.component.html</context>
           <context context-type="linenumber">2</context>
@@ -2427,7 +2427,7 @@
       </trans-unit>
       <trans-unit id="5767444971673380379" datatype="html">
         <source>Moderation response</source>
-        <target state="new">Moderation response</target>
+        <target state="translated">การตอบสนองการดูแล</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">42</context>
@@ -2451,7 +2451,7 @@
       </trans-unit>
       <trans-unit id="5199584494687692924" datatype="html">
         <source>Moderation response:</source>
-        <target state="new">Moderation response:</target>
+        <target state="translated">การตอบสนองการดูแล:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">114</context>
@@ -2459,7 +2459,7 @@
       </trans-unit>
       <trans-unit id="7902116364830754147" datatype="html">
         <source>No registrations found matching current filters.</source>
-        <target state="new">No registrations found matching current filters.</target>
+        <target state="translated">ไม่พบการลงทะเบียนที่ตรงกับตัวกรองปัจจุบัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">127</context>
@@ -2475,7 +2475,7 @@
       </trans-unit>
       <trans-unit id="977007520755394668" datatype="html">
         <source>Accept this request</source>
-        <target state="new">Accept this request</target>
+        <target state="translated">ยอมรับคำขอนี้</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -2483,7 +2483,7 @@
       </trans-unit>
       <trans-unit id="2571315112879096897" datatype="html">
         <source>Reject this request</source>
-        <target state="new">Reject this request</target>
+        <target state="translated">ปฏิเสธคำขอนี้</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -2491,7 +2491,7 @@
       </trans-unit>
       <trans-unit id="2518898597119712407" datatype="html">
         <source>Remove this request</source>
-        <target state="new">Remove this request</target>
+        <target state="translated">ลบคำขอนี้</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -2499,7 +2499,7 @@
       </trans-unit>
       <trans-unit id="5778734409199071482" datatype="html">
         <source>Remove the request from the list. The user can register again.</source>
-        <target state="new">Remove the request from the list. The user can register again.</target>
+        <target state="translated">ลบคำขอออกจากรายการ ผู้ใช้จะสามารถลงทะเบียนอีกครั้ง</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -2507,22 +2507,22 @@
       </trans-unit>
       <trans-unit id="6096602245926393232" datatype="html">
         <source>Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</source>
-        <target state="new">Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</target>
+        <target state="translated">คุณต้องการลบ{count, plural, =1 {คำขอลงทะเบียนของ <x id="username"/> } other {คำขอลงทะเบียน <x id="count"/> รายการ}}จริง ๆ หรือไม่</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="4208645815154433842" datatype="html">
         <source>Do you really want to delete these registration requests?</source>
-        <target state="new">Do you really want to delete these registration requests?</target>
+        <target state="translated">คุณต้องการลบคำขอลงทะเบียนเหล่านี้จริง ๆ หรือไม่</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="9152096266184328708" datatype="html">
         <source>Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</source>
-        <target state="new">Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</target>
+        <target state="translated">ลบ{count, plural, =1 {คำขอการลงทะเบียนของ <x id="username"/> } other {คำขอการลงทะเบียน <x id="count"/> รายการ}}แล้ว</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="7630293677014706754" datatype="html">
         <source>Registration requests removed</source>
-        <target state="new">Registration requests removed</target>
+        <target state="translated">ลบคำขอการลงทะเบียนแล้ว</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">138</context></context-group>
       </trans-unit>
       <trans-unit id="2806917038528218276" datatype="html">
@@ -2793,7 +2793,7 @@
       </trans-unit>
       <trans-unit id="6760671759540007434" datatype="html">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="new"> You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </target>
+        <target state="translated">คุณสามารถนำเข้า URL ใดก็ได้ที่<x id="START_LINK"/>รองรับโดย youtube-dl<x id="CLOSE_LINK"/> หรือ URL ที่ชี้ไปยังไฟล์สื่อ คุณควรตรวจสอบให้แน่ใจว่าคุณมีสิทธิ์ในการเผยแพร่เนื้อหาที่ชี้ไป มิฉะนั้นอาจทำให้เกิดปัญหาทางกฎหมายกับตัวคุณและเซิร์ฟเวอร์ของคุณได้ </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="25952900092483482" datatype="html">
@@ -3504,7 +3504,7 @@
       </trans-unit>
       <trans-unit id="5793595564950675122" datatype="html">
         <source>Markdown compatible that supports:</source>
-        <target state="new">Markdown compatible that supports:</target>
+        <target state="translated">เข้ากันได้กับ Markdown ซึ่งรองรับ:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8422216333877786919" datatype="html">
