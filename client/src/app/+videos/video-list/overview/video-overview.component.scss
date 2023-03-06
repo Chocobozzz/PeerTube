@@ -39,8 +39,7 @@
       @include margin-right(8px);
 
       display: inline-block;
-      position: relative;
-      top: -2px;
+      vertical-align: text-top;
     }
   }
 
