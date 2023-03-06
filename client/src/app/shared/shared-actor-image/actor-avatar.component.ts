@@ -43,20 +43,17 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
   }
 
   classes: string[] = []
-  alt: string
   defaultAvatarUrl: string
   avatarUrl: string
 
   ngOnInit () {
     this.buildDefaultAvatarUrl()
 
-    this.buildAlt()
     this.buildAvatarUrl()
     this.buildClasses()
   }
 
   ngOnChanges () {
-    this.buildAlt()
     this.buildAvatarUrl()
     this.buildClasses()
   }
@@ -79,12 +76,6 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
       this.classes.push('initial')
       this.classes.push(this.getColorTheme())
     }
-  }
-
-  private buildAlt () {
-    if (this.isAccount()) this.alt = $localize`Account avatar`
-    else if (this.isChannel()) this.alt = $localize`Channel avatar`
-    else this.alt = ''
   }
 
   private buildDefaultAvatarUrl () {

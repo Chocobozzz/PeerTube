@@ -1,5 +1,5 @@
 <ng-template #img>
-  <img *ngIf="displayImage()" [class]="classes" [src]="previewImage || avatarUrl || defaultAvatarUrl" [alt]="alt" />
+  <img *ngIf="displayImage()" [class]="classes" [src]="previewImage || avatarUrl || defaultAvatarUrl" alt="" />
 
   <div *ngIf="displayActorInitial()" [ngClass]="classes">
     <span>{{ getActorInitial() }}</span>
