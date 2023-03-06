@@ -50,15 +50,15 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
   ngOnInit () {
     this.buildDefaultAvatarUrl()
 
-    this.buildClasses()
     this.buildAlt()
     this.buildAvatarUrl()
+    this.buildClasses()
   }
 
   ngOnChanges () {
-    this.buildClasses()
     this.buildAlt()
     this.buildAvatarUrl()
+    this.buildClasses()
   }
 
   private buildClasses () {
@@ -114,12 +114,13 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
 
   displayImage () {
     if (this.actorType === 'unlogged') return true
+    if (this.previewImage) return true
 
     return !!(this.actor && this.avatarUrl)
   }
 
   displayActorInitial () {
-    return this.actor && !this.avatarUrl
+    return !this.displayImage() && this.actor && !this.avatarUrl
   }
 
   displayPlaceholder () {
