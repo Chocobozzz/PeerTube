@@ -224,7 +224,7 @@
 
       <div class="form-group">
         <label i18n>Manually set the user password</label>
-        <my-user-password [userId]="user.id"></my-user-password>
+        <my-user-password [userId]="user.id" [username]="user.username"></my-user-password>
       </div>
 
       <div *ngIf="user.twoFactorEnabled" class="form-group">
