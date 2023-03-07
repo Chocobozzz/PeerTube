@@ -23,7 +23,7 @@
   .section-title {
     @include font-size(1.5rem);
     @include padding-top(1.25rem);
-    @include margin-bottom(30px);
+    @include margin-bottom(2rem);
 
     &:not(h2) {
       border-top: 1px solid $separator-border-color;
