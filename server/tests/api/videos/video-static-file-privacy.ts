@@ -256,10 +256,9 @@ describe('Test video static file privacy', function () {
       const videoFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid })
       await waitJobs([ server ])
 
-      const video = await server.videos.getWithToken({ id: uuid })
-      const hls = video.streamingPlaylists[0]
-
       {
+        const video = await server.videos.getWithToken({ id: uuid })
+        const hls = video.streamingPlaylists[0]
         const query = { videoFileToken }
         const { text } = await makeRawRequest({ url: hls.playlistUrl, query, expectedStatus: HttpStatusCode.OK_200 })
 
