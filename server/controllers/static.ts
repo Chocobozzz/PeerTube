@@ -90,6 +90,7 @@ export {
 
 async function servePrivateM3U8 (req: express.Request, res: express.Response) {
   const path = join(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, req.params.videoUUID, req.params.playlistName + '.m3u8')
+  const filename = req.params.playlistName + '.m3u8'
 
   let playlistContent: string
 
@@ -108,7 +109,7 @@ async function servePrivateM3U8 (req: express.Request, res: express.Response) {
 
   // Inject token in playlist so players that cannot alter the HTTP request can still watch the video
   const transformedContent = doReinjectVideoFileToken(req)
-    ? injectQueryToPlaylistUrls(playlistContent, buildReinjectVideoFileTokenQuery(req))
+    ? injectQueryToPlaylistUrls(playlistContent, buildReinjectVideoFileTokenQuery(req, filename.endsWith('master.m3u8')))
     : playlistContent
 
   return res.set('content-type', 'application/vnd.apple.mpegurl').send(transformedContent).end()
