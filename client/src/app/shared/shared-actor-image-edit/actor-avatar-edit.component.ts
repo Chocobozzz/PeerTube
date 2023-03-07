@@ -1,7 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
 import { Account, VideoChannel } from '@app/shared/shared-main'
-import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { getBytes } from '@root-helpers/bytes'
 import { imageToDataURL } from '@root-helpers/images'
 
@@ -15,7 +14,6 @@ import { imageToDataURL } from '@root-helpers/images'
 })
 export class ActorAvatarEditComponent implements OnInit {
   @ViewChild('avatarfileInput') avatarfileInput: ElementRef<HTMLInputElement>
-  @ViewChild('avatarPopover') avatarPopover: NgbPopover
 
   @Input() actor: VideoChannel | Account
   @Input() editable = true
@@ -58,7 +56,6 @@ export class ActorAvatarEditComponent implements OnInit {
 
     const formData = new FormData()
     formData.append('avatarfile', avatarfile)
-    this.avatarPopover?.close()
     this.avatarChange.emit(formData)
 
     if (this.previewImage) {

@@ -4,6 +4,7 @@
 
 ### IMPORTANT NOTES
 
+ * If your instance has signup enabled, user registration approval is automatically enabled by the default configuration of this release. You can change this setting in your `production.yaml` or in the configuration page in the web admin
  * Update [web browsers support list](https://joinpeertube.org/faq#what-web-browsers-are-supported-by-peertube):
    * Drop support of Safari 11 on iOS
    * Drop support of Safari 11 on desktop

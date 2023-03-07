@@ -155,6 +155,7 @@
 @mixin orange-button-inverted {
   @include button-focus(pvar(--mainColorLightest));
 
+  padding: 2px 13px;
   border: 2px solid pvar(--mainColor);
   font-weight: $font-semibold;
 
@@ -263,6 +264,7 @@
   cursor: pointer;
 
   font-size: $button-font-size;
+  line-height: $button-font-size + math.round(math.div($button-font-size, 2));
 
   my-global-icon + * {
     @include margin-right(4px);
@@ -311,6 +313,10 @@
     position: relative;
     width: $width;
     top: $top;
+  }
+
+  span {
+    vertical-align: middle;
   }
 }
 

@@ -21,9 +21,9 @@
   }
 
   .section-title {
-    font-size: 24px;
-    padding-top: 20px;
-    margin-bottom: 30px;
+    @include font-size(1.5rem);
+    @include padding-top(1.25rem);
+    @include margin-bottom(2rem);
 
     &:not(h2) {
       border-top: 1px solid $separator-border-color;
@@ -38,8 +38,8 @@
     my-actor-avatar {
       @include margin-right(8px);
 
-      position: relative;
-      top: -2px;
+      display: inline-block;
+      vertical-align: text-top;
     }
   }
 
@@ -49,8 +49,6 @@
 
     .section-title {
       @include margin-left(10px);
-
-      font-size: 17px;
     }
   }
 }

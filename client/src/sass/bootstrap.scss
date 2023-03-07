@@ -30,7 +30,7 @@
 @import 'bootstrap/scss/helpers';
 @import 'bootstrap/scss/utilities/api';
 
-:root {
+body {
   --bs-border-color-translucent: #{pvar(--inputBorderColor)};
 }
 
