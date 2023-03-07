@@ -96,7 +96,6 @@ export class HLSOptionsBuilder {
 
         segmentValidator: segmentValidatorFactory({
           segmentsSha256Url: this.options.p2pMediaLoader.segmentsSha256Url,
-          isLive: this.options.common.isLive,
           authorizationHeader: this.options.common.authorizationHeader,
           requiresAuth: this.options.common.requiresAuth,
           serverUrl: this.options.common.serverUrl
@@ -129,7 +128,7 @@ export class HLSOptionsBuilder {
           ...base,
 
           useP2P: false,
-          httpDownloadProbability: 1
+          requiredSegmentsPriority: 10
         }
 
       case LiveVideoLatencyMode.HIGH_LATENCY:

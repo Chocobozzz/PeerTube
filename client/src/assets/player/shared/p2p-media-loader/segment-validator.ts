@@ -7,24 +7,20 @@ import { isSameOrigin } from '../common'
 
 type SegmentsJSON = { [filename: string]: string | { [byterange: string]: string } }
 
-const maxRetries = 3
+const maxRetries = 10
 
 function segmentValidatorFactory (options: {
   serverUrl: string
   segmentsSha256Url: string
-  isLive: boolean
   authorizationHeader: () => string
   requiresAuth: boolean
 }) {
-  const { serverUrl, segmentsSha256Url, isLive, authorizationHeader, requiresAuth } = options
+  const { serverUrl, segmentsSha256Url, authorizationHeader, requiresAuth } = options
 
   let segmentsJSON = fetchSha256Segments({ serverUrl, segmentsSha256Url, authorizationHeader, requiresAuth })
   const regex = /bytes=(\d+)-(\d+)/
 
   return async function segmentValidator (segment: Segment, _method: string, _peerId: string, retry = 1) {
-    // Wait for hash generation from the server
-    if (isLive) await wait(1000)
-
     const filename = basename(removeQueryParams(segment.url))
 
     const segmentValue = (await segmentsJSON)[filename]
@@ -36,7 +32,7 @@ function segmentValidatorFactory (options: {
     if (!segmentValue) {
       logger.info(`Refetching sha segments for ${filename}`)
 
-      await wait(1000)
+      await wait(500)
 
       segmentsJSON = fetchSha256Segments({ serverUrl, segmentsSha256Url, authorizationHeader, requiresAuth })
       await segmentValidator(segment, _method, _peerId, retry + 1)
