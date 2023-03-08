@@ -79,7 +79,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
       // Fullscreen
       {
         // f key or Ctrl + Enter
-        accept: e => this.isNaked(e, 'F') || (!e.altKey && e.ctrlKey && e.key === 'Enter'),
+        accept: e => this.isNaked(e, 'f') || (!e.altKey && e.ctrlKey && e.key === 'Enter'),
         cb: e => {
           e.preventDefault()
 
@@ -90,7 +90,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
 
       // Mute
       {
-        accept: e => this.isNaked(e, 'M'),
+        accept: e => this.isNaked(e, 'm'),
         cb: e => {
           e.preventDefault()
 
@@ -218,6 +218,8 @@ class PeerTubeHotkeysPlugin extends Plugin {
   }
 
   private isNaked (event: KeyboardEvent, key: string) {
+    if (key.length === 1) key = key.toUpperCase()
+
     return (!event.ctrlKey && !event.altKey && !event.metaKey && !event.shiftKey && this.getLatinKey(event.key, event.code) === key)
   }
 
