@@ -79,7 +79,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
       // Fullscreen
       {
         // f key or Ctrl + Enter
-        accept: e => this.isNaked(e, 'f') || (!e.altKey && e.ctrlKey && e.key === 'Enter'),
+        accept: e => this.isNaked(e, 'F') || (!e.altKey && e.ctrlKey && e.key === 'Enter'),
         cb: e => {
           e.preventDefault()
 
@@ -90,7 +90,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
 
       // Mute
       {
-        accept: e => this.isNaked(e, 'm'),
+        accept: e => this.isNaked(e, 'M'),
         cb: e => {
           e.preventDefault()
 
@@ -218,11 +218,34 @@ class PeerTubeHotkeysPlugin extends Plugin {
   }
 
   private isNaked (event: KeyboardEvent, key: string) {
-    return (!event.ctrlKey && !event.altKey && !event.metaKey && !event.shiftKey && event.key === key)
+    return (!event.ctrlKey && !event.altKey && !event.metaKey && !event.shiftKey && this.getLatinKey(event.key, event.code) === key)
   }
 
   private isNakedOrShift (event: KeyboardEvent, key: string) {
     return (!event.ctrlKey && !event.altKey && !event.metaKey && event.key === key)
+  }
+
+  // Thanks Maciej Krawczyk
+  // https://stackoverflow.com/questions/70211837/keyboard-shortcuts-commands-on-non-latin-alphabet-keyboards-javascript?rq=1
+  private getLatinKey (key: string, code: string) {
+    if (key.length !== 1) {
+      return key
+    }
+
+    const capitalHetaCode = 880
+    const isNonLatin = key.charCodeAt(0) >= capitalHetaCode
+
+    if (isNonLatin) {
+      if (code.indexOf('Key') === 0 && code.length === 4) { // i.e. 'KeyW'
+        return code.charAt(3)
+      }
+
+      if (code.indexOf('Digit') === 0 && code.length === 6) { // i.e. 'Digit7'
+        return code.charAt(5)
+      }
+    }
+
+    return key.toUpperCase()
   }
 }
 
