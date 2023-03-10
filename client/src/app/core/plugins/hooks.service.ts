@@ -48,6 +48,15 @@ export class HooksService {
     return this.pluginService.runHook(hookResultName, result, params)
   }
 
+  async wrapFunResult <P, R, H extends ClientFilterHookName>
+  (fun: RawFunction<P, R>, params: P, scope: PluginClientScope, hookResultName: H) {
+    await this.pluginService.ensurePluginsAreLoaded(scope)
+
+    const result = fun(params)
+
+    return this.pluginService.runHook(hookResultName, result, params)
+  }
+
   runAction<T, U extends ClientActionHookName> (hookName: U, scope: PluginClientScope, params?: T) {
     // Use setTimeout to give priority to Angular change detector
     setTimeout(() => {

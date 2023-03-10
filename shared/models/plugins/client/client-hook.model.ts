@@ -87,6 +87,8 @@ export const clientFilterHookObject = {
   'filter:share.video-playlist-url.build.params': true,
   'filter:share.video-playlist-url.build.result': true,
 
+  'filter:video-watch.video-plugin-metadata.result': true,
+
   // Filter videojs options built for PeerTube player
   'filter:internal.player.videojs.options.result': true,
 
