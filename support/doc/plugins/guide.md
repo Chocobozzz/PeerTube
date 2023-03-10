@@ -290,7 +290,7 @@ You can create custom routes using an [express Router](https://expressjs.com/en/
 
 ```js
 function register ({
-  router
+  getRouter
 }) {
   const router = getRouter()
   router.get('/ping', (req, res) => res.json({ message: 'pong' }))
