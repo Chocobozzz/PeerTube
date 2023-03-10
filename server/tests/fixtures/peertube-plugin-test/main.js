@@ -208,6 +208,18 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   // ---------------------------------------------------------------------------
 
   registerHook({
+    target: 'filter:activity-pub.activity.context.build.result',
+    handler: context => context.concat([ 'https://example.com/new-context' ])
+  })
+
+  registerHook({
+    target: 'filter:activity-pub.video.json-ld.build.result',
+    handler: (jsonld, { video }) => ({ ...jsonld, videoName: video.name })
+  })
+
+  // ---------------------------------------------------------------------------
+
+  registerHook({
     target: 'filter:api.video-threads.list.params',
     handler: obj => addToCount(obj)
   })

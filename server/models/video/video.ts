@@ -1717,7 +1717,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   toActivityPubObject (this: MVideoAP): Promise<VideoObject> {
     return Hooks.wrapObject(
       videoModelToActivityPubObject(this),
-      'filter:activity-pub.video.jsonld.build.result',
+      'filter:activity-pub.video.json-ld.build.result',
       { video: this }
     )
   }

@@ -119,7 +119,7 @@ export const serverFilterHookObject = {
 
   // Filter the result of video JSON LD builder
   // You may also need to use filter:activity-pub.activity.context.build.result to also update JSON LD context
-  'filter:activity-pub.video.jsonld.build.result': true
+  'filter:activity-pub.video.json-ld.build.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject
