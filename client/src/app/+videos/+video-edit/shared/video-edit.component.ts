@@ -240,11 +240,11 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       this.schedulerInterval = setInterval(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
     })
 
-    const updateForm = (values: any) => {
+    const updateFormForPlugins = (values: any) => {
       this.form.patchValue(values)
       this.cd.detectChanges()
     }
-    this.hooks.runAction('action:video-edit.init', 'video-edit', { type: this.type, updateForm })
+    this.hooks.runAction('action:video-edit.init', 'video-edit', { type: this.type, updateForm: updateFormForPlugins })
 
     this.form.valueChanges.subscribe(() => {
       this.hooks.runAction('action:video-edit.form.updated', 'video-edit', { type: this.type, formValues: this.form.value })
