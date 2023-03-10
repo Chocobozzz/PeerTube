@@ -853,7 +853,9 @@ describe('Test plugin filter hooks', function () {
       const { body } = await makeActivityPubGetRequest(servers[0].url, '/w/' + videoUUID)
       expect(body.type).to.equal('Video')
 
-      expect(body['@context'].some(c => c === 'https://example.com/new-context')).to.be.true
+      expect(body['@context'].some(c => {
+        return typeof c === 'object' && c.recordedAt === 'https://schema.org/recordedAt'
+      })).to.be.true
     })
 
     it('Should run filter:activity-pub.video.json-ld.build.result', async function () {
