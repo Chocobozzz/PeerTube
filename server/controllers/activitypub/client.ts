@@ -48,7 +48,7 @@ activityPubClientRouter.get(
   [ '/accounts?/:name', '/accounts?/:name/video-channels', '/a/:name', '/a/:name/video-channels' ],
   executeIfActivityPub,
   asyncMiddleware(localAccountValidator),
-  accountController
+  asyncMiddleware(accountController)
 )
 activityPubClientRouter.get('/accounts?/:name/followers',
   executeIfActivityPub,
@@ -69,13 +69,13 @@ activityPubClientRouter.get('/accounts?/:name/likes/:videoId',
   executeIfActivityPub,
   cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
   asyncMiddleware(getAccountVideoRateValidatorFactory('like')),
-  getAccountVideoRateFactory('like')
+  asyncMiddleware(getAccountVideoRateFactory('like'))
 )
 activityPubClientRouter.get('/accounts?/:name/dislikes/:videoId',
   executeIfActivityPub,
   cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
   asyncMiddleware(getAccountVideoRateValidatorFactory('dislike')),
-  getAccountVideoRateFactory('dislike')
+  asyncMiddleware(getAccountVideoRateFactory('dislike'))
 )
 
 activityPubClientRouter.get(
@@ -131,7 +131,7 @@ activityPubClientRouter.get(
   executeIfActivityPub,
   asyncMiddleware(videoChannelsNameWithHostValidator),
   ensureIsLocalChannel,
-  videoChannelController
+  asyncMiddleware(videoChannelController)
 )
 activityPubClientRouter.get('/video-channels/:nameWithHost/followers',
   executeIfActivityPub,
@@ -172,13 +172,13 @@ activityPubClientRouter.get(
 activityPubClientRouter.get('/video-playlists/:playlistId/videos/:playlistElementId',
   executeIfActivityPub,
   asyncMiddleware(videoPlaylistElementAPGetValidator),
-  videoPlaylistElementController
+  asyncMiddleware(videoPlaylistElementController)
 )
 
 activityPubClientRouter.get('/videos/local-viewer/:localViewerId',
   executeIfActivityPub,
   asyncMiddleware(getVideoLocalViewerValidator),
-  getVideoLocalViewerController
+  asyncMiddleware(getVideoLocalViewerController)
 )
 
 // ---------------------------------------------------------------------------
@@ -189,10 +189,10 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function accountController (req: express.Request, res: express.Response) {
+async function accountController (req: express.Request, res: express.Response) {
   const account = res.locals.account
 
-  return activityPubResponse(activityPubContextify(account.toActivityPubObject(), 'Actor'), res)
+  return activityPubResponse(activityPubContextify(await account.toActivityPubObject(), 'Actor'), res)
 }
 
 async function accountFollowersController (req: express.Request, res: express.Response) {
@@ -246,7 +246,7 @@ async function videoController (req: express.Request, res: express.Response) {
   const videoWithCaptions = Object.assign(video, { VideoCaptions: captions })
 
   const audience = getAudience(videoWithCaptions.VideoChannel.Account.Actor, videoWithCaptions.privacy === VideoPrivacy.PUBLIC)
-  const videoObject = audiencify(videoWithCaptions.toActivityPubObject(), audience)
+  const videoObject = audiencify(await videoWithCaptions.toActivityPubObject(), audience)
 
   if (req.path.endsWith('/activity')) {
     const data = buildCreateActivity(videoWithCaptions.url, video.VideoChannel.Account.Actor, videoObject, audience)
@@ -321,10 +321,10 @@ async function videoCommentsController (req: express.Request, res: express.Respo
   return activityPubResponse(activityPubContextify(json, 'Collection'), res)
 }
 
-function videoChannelController (req: express.Request, res: express.Response) {
+async function videoChannelController (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
 
-  return activityPubResponse(activityPubContextify(videoChannel.toActivityPubObject(), 'Actor'), res)
+  return activityPubResponse(activityPubContextify(await videoChannel.toActivityPubObject(), 'Actor'), res)
 }
 
 async function videoChannelFollowersController (req: express.Request, res: express.Response) {

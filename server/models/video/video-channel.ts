@@ -809,8 +809,8 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
     return Object.assign(actor, videoChannel)
   }
 
-  toActivityPubObject (this: MChannelAP): ActivityPubActor {
-    const obj = this.Actor.toActivityPubObject(this.name)
+  async toActivityPubObject (this: MChannelAP): Promise<ActivityPubActor> {
+    const obj = await this.Actor.toActivityPubObject(this.name)
 
     return Object.assign(obj, {
       summary: this.description,

@@ -113,7 +113,13 @@ export const serverFilterHookObject = {
   'filter:transcoding.manual.resolutions-to-transcode.result': true,
   'filter:transcoding.auto.resolutions-to-transcode.result': true,
 
-  'filter:activity-pub.remote-video-comment.create.accept.result': true
+  'filter:activity-pub.remote-video-comment.create.accept.result': true,
+
+  'filter:activity-pub.activity.context.build.result': true,
+
+  // Filter the result of video JSON LD builder
+  // You may also need to use filter:activity-pub.activity.context.build.result to also update JSON LD context
+  'filter:activity-pub.video.jsonld.build.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject

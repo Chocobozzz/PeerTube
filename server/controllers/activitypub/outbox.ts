@@ -63,7 +63,7 @@ async function buildActivities (actor: MActorLight, start: number, count: number
 
       activities.push(announceActivity)
     } else {
-      const videoObject = video.toActivityPubObject()
+      const videoObject = await video.toActivityPubObject()
       const createActivity = buildCreateActivity(video.url, byActor, videoObject, createActivityAudience)
 
       activities.push(createActivity)
