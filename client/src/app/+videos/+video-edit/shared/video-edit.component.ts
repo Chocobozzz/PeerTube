@@ -355,6 +355,9 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     for (const setting of this.pluginFields) {
       await this.pluginService.translateSetting(setting.pluginInfo.plugin.npmName, setting.commonOptions)
 
+      // Not a form input, just a HTML tag
+      if (setting.commonOptions.type === 'html') continue
+
       const validator = async (control: AbstractControl) => {
         if (!setting.commonOptions.error) return null
 
