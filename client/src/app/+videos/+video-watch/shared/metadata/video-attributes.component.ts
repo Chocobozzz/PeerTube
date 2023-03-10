@@ -22,11 +22,11 @@ export class VideoAttributesComponent implements OnInit {
   constructor (private hooks: HooksService) { }
 
   async ngOnInit () {
-    this.pluginMetadata = await this.hooks.wrapFunResult(
-      this.buildPluginMetadata.bind(this),
-      { video: this.video },
+    this.pluginMetadata = await this.hooks.wrapObject(
+      this.pluginMetadata,
       'video-watch',
-      'filter:video-watch.video-plugin-metadata.result'
+      'filter:video-watch.video-plugin-metadata.result',
+      { video: this.video }
     )
   }
 
@@ -38,12 +38,5 @@ export class VideoAttributesComponent implements OnInit {
     if (!this.video || Array.isArray(this.video.tags) === false) return []
 
     return this.video.tags
-  }
-
-  // Used for plugin hooks
-  private buildPluginMetadata (_options: {
-    video: VideoDetails
-  }): PluginMetadata[] {
-    return []
   }
 }

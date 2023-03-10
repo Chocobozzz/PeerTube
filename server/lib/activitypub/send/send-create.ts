@@ -33,7 +33,7 @@ async function sendCreateVideo (video: MVideoAP, transaction: Transaction) {
   logger.info('Creating job to send video creation of %s.', video.url, lTags(video.uuid))
 
   const byActor = video.VideoChannel.Account.Actor
-  const videoObject = video.toActivityPubObject()
+  const videoObject = await video.toActivityPubObject()
 
   const audience = getAudience(byActor, video.privacy === VideoPrivacy.PUBLIC)
   const createActivity = buildCreateActivity(video.url, byActor, videoObject, audience)

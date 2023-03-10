@@ -36,7 +36,7 @@ async function sendUpdateVideo (videoArg: MVideoAPWithoutCaption, transaction: T
     video.VideoCaptions = await video.$get('VideoCaptions', { transaction })
   }
 
-  const videoObject = video.toActivityPubObject()
+  const videoObject = await video.toActivityPubObject()
   const audience = getAudience(byActor, video.privacy === VideoPrivacy.PUBLIC)
 
   const updateActivity = buildUpdateActivity(url, byActor, videoObject, audience)

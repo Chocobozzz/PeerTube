@@ -75,8 +75,7 @@ const I18N_LOCALE_ALIAS = {
   'zh': 'zh-Hans-CN'
 }
 
-export const POSSIBLE_LOCALES = Object.keys(I18N_LOCALES)
-                                      .concat(Object.keys(I18N_LOCALE_ALIAS))
+export const POSSIBLE_LOCALES = (Object.keys(I18N_LOCALES) as string[]).concat(Object.keys(I18N_LOCALE_ALIAS))
 
 export function getDefaultLocale () {
   return 'en-US'
