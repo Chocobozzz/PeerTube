@@ -240,7 +240,15 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       this.schedulerInterval = setInterval(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
     })
 
-    this.hooks.runAction('action:video-edit.init', 'video-edit', { type: this.type })
+    const updateForm = (values: any) => {
+      this.form.patchValue(values)
+      this.cd.detectChanges()
+    }
+    this.hooks.runAction('action:video-edit.init', 'video-edit', { type: this.type, updateForm })
+
+    this.form.valueChanges.subscribe(() => {
+      this.hooks.runAction('action:video-edit.form.updated', 'video-edit', { type: this.type, formValues: this.form.value })
+    })
   }
 
   ngOnDestroy () {
