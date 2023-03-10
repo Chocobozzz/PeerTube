@@ -129,7 +129,11 @@ export const clientActionHookObject = {
   'action:video-channel-playlists.playlists.loaded': true,
 
   // Fired when the video edit page (upload, URL/torrent import, update) is being initialized
+  // Contains a `type` and `updateForm` object attributes
   'action:video-edit.init': true,
+
+  // Fired when values of the video edit form changed
+  'action:video-edit.form.updated': true,
 
   // Fired when the login page is being initialized
   'action:login.init': true,
