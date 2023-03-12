@@ -1,6 +1,6 @@
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-<div class="margin-content">
+<div class="margin-content pt-4">
   <form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
 
     <div class="row"> <!-- channel grid -->
@@ -13,12 +13,12 @@
         <label i18n>Banner image of the channel</label>
 
         <my-actor-banner-edit
-          *ngIf="videoChannel" [previewImage]="isCreation()"
+          *ngIf="videoChannel" [previewImage]="isCreation()" class="d-block mb-4"
           [actor]="videoChannel" (bannerChange)="onBannerChange($event)" (bannerDelete)="onBannerDelete()"
         ></my-actor-banner-edit>
 
         <my-actor-avatar-edit
-          *ngIf="videoChannel" [previewImage]="isCreation()"
+          *ngIf="videoChannel" [previewImage]="isCreation()" class="d-block mb-4"
           [actor]="videoChannel" (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
           [displayUsername]="!isCreation()" [displaySubscribers]="!isCreation()"
         ></my-actor-avatar-edit>
@@ -29,7 +29,7 @@
           <div class="input-group">
             <input
               type="text" id="name" i18n-placeholder placeholder="Example: my_channel"
-              formControlName="name" [ngClass]="{ 'input-error': formErrors['name'] }" class="form-control"
+              formControlName="name" [ngClass]="{ 'input-error': formErrors['name'] }" class="form-control w-auto flex-grow-1 d-block"
             >
             <div class="input-group-text">@{{ instanceHost }}</div>
           </div>
@@ -41,7 +41,7 @@
         <div class="form-group">
           <label i18n for="display-name">Display name</label>
           <input
-            type="text" id="display-name" class="form-control"
+            type="text" id="display-name" class="form-control d-block"
             formControlName="display-name" [ngClass]="{ 'input-error': formErrors['display-name'] }"
           >
           <div *ngIf="formErrors['display-name']" class="form-error">
@@ -52,7 +52,7 @@
         <div class="form-group">
           <label i18n for="description">Description</label>
           <textarea
-            id="description" formControlName="description" class="form-control"
+            id="description" formControlName="description" class="form-control d-block"
             [ngClass]="{ 'input-error': formErrors['description'] }"
           ></textarea>
           <div *ngIf="formErrors.description" class="form-error">
@@ -68,8 +68,8 @@
           ></my-help>
 
           <my-markdown-textarea
-            id="support" formControlName="support" markdownType="enhanced"
-            [formError]="formErrors['support']"
+            id="support" formControlName="support" class="d-block"
+            markdownType="enhanced" [formError]="formErrors['support']"
           ></my-markdown-textarea>
         </div>
 
@@ -86,7 +86,7 @@
     <div class="row"> <!-- submit placement block -->
       <div class="col-md-7 col-xl-5"></div>
       <div class="col-md-5 col-xl-5 d-inline-flex">
-        <input type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
+        <input type="submit" class="peertube-button orange-button" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
       </div>
     </div>
   </form>

@@ -13,7 +13,7 @@ import {
   buildVideoAttributesFromCommander,
   getLogger,
   getServerCredentials
-} from './cli'
+} from './shared'
 
 import prompt = require('prompt')
 

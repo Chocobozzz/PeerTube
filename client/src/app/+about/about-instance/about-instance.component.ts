@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router'
 import { Notifier, ServerService } from '@app/core'
 import { AboutHTML } from '@app/shared/shared-instance'
 import { copyToClipboard } from '@root-helpers/utils'
-import { HTMLServerConfig } from '@shared/models/server'
+import { HTMLServerConfig, ServerStats } from '@shared/models/server'
 import { ResolverData } from './about-instance.resolver'
 import { ContactAdminModalComponent } from './contact-admin-modal.component'
 
@@ -25,6 +25,8 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   shortDescription = ''
 
   initialized = false
+
+  serverStats: ServerStats
 
   private serverConfig: HTMLServerConfig
 
@@ -50,7 +52,9 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit () {
-    const { about, languages, categories, aboutHTML, descriptionElement }: ResolverData = this.route.snapshot.data.instanceData
+    const { about, languages, categories, aboutHTML, descriptionElement, serverStats }: ResolverData = this.route.snapshot.data.instanceData
+
+    this.serverStats = serverStats
 
     this.aboutHTML = aboutHTML
     this.descriptionElement = descriptionElement

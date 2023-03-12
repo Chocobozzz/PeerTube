@@ -137,6 +137,7 @@ import { VideoShareModel } from './video-share'
 import { VideoSourceModel } from './video-source'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
+import { Hooks } from '@server/lib/plugins/hooks'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -1713,8 +1714,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return files
   }
 
-  toActivityPubObject (this: MVideoAP): VideoObject {
-    return videoModelToActivityPubObject(this)
+  toActivityPubObject (this: MVideoAP): Promise<VideoObject> {
+    return Hooks.wrapObject(
+      videoModelToActivityPubObject(this),
+      'filter:activity-pub.video.json-ld.build.result',
+      { video: this }
+    )
   }
 
   getTruncatedDescription () {

@@ -36,7 +36,7 @@ async function sendUpdateVideo (videoArg: MVideoAPWithoutCaption, transaction: T
     video.VideoCaptions = await video.$get('VideoCaptions', { transaction })
   }
 
-  const videoObject = video.toActivityPubObject()
+  const videoObject = await video.toActivityPubObject()
   const audience = getAudience(byActor, video.privacy === VideoPrivacy.PUBLIC)
 
   const updateActivity = buildUpdateActivity(url, byActor, videoObject, audience)
@@ -59,7 +59,7 @@ async function sendUpdateActor (accountOrChannel: MChannelDefault | MAccountDefa
   logger.info('Creating job to update actor %s.', byActor.url)
 
   const url = getUpdateActivityPubUrl(byActor.url, byActor.updatedAt.toISOString())
-  const accountOrChannelObject = (accountOrChannel as any).toActivityPubObject() // FIXME: typescript bug?
+  const accountOrChannelObject = await (accountOrChannel as any).toActivityPubObject() // FIXME: typescript bug?
   const audience = getAudience(byActor)
   const updateActivity = buildUpdateActivity(url, byActor, accountOrChannelObject, audience)
 

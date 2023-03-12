@@ -1,15 +1,20 @@
 import cors from 'cors'
 import express from 'express'
 import { join } from 'path'
+import { asyncMiddleware, handleStaticError, webfingerValidator } from '@server/middlewares'
 import { root } from '@shared/core-utils'
 import { CONFIG } from '../initializers/config'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
 import { cacheRoute } from '../middlewares/cache/cache'
-import { handleStaticError } from '@server/middlewares'
 
 const wellKnownRouter = express.Router()
 
 wellKnownRouter.use(cors())
+
+wellKnownRouter.get('/.well-known/webfinger',
+  asyncMiddleware(webfingerValidator),
+  webfingerController
+)
 
 wellKnownRouter.get('/.well-known/security.txt',
   cacheRoute(ROUTE_CACHE_LIFETIME.SECURITYTXT),
@@ -80,4 +85,28 @@ wellKnownRouter.use('/.well-known/',
 
 export {
   wellKnownRouter
+}
+
+// ---------------------------------------------------------------------------
+
+function webfingerController (req: express.Request, res: express.Response) {
+  const actor = res.locals.actorUrl
+
+  const json = {
+    subject: req.query.resource,
+    aliases: [ actor.url ],
+    links: [
+      {
+        rel: 'self',
+        type: 'application/activity+json',
+        href: actor.url
+      },
+      {
+        rel: 'http://ostatus.org/schema/1.0/subscribe',
+        template: WEBSERVER.URL + '/remote-interaction?uri={uri}'
+      }
+    ]
+  }
+
+  return res.json(json)
 }

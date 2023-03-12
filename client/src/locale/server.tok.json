@@ -54,7 +54,6 @@
     "Playlist: {1}": "kulupu sitelen: {1}",
     "By {1}": "tan {1}",
     "Unavailable video": "mi ken ala kama jo e sitelen",
-    "Misc": "toki mute",
     "Unknown": "toki pi sona ala",
     "Afar": "",
     "Abkhazian": "",
@@ -65,6 +64,7 @@
     "Aragonese": "",
     "American Sign Language": "toki luka Mewika (American Sign Language)",
     "Assamese": "",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "",
     "Kotava": "",
     "Aymara": "",
@@ -253,5 +253,6 @@
     "No linguistic content": "toki ala",
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "toki Sonko pi sitelen pona (简化字)",
-    "Traditional Chinese": "toki Sonko pi sitelen majuna (正體字)"
+    "Traditional Chinese": "toki Sonko pi sitelen majuna (正體字)",
+    "Misc": "toki mute"
 }

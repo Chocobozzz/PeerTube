@@ -4,8 +4,7 @@ import { RedundancyService } from '@app/shared/shared-main'
 
 @Component({
   selector: 'my-redundancy-checkbox',
-  templateUrl: './redundancy-checkbox.component.html',
-  styleUrls: [ './redundancy-checkbox.component.scss' ]
+  templateUrl: './redundancy-checkbox.component.html'
 })
 export class RedundancyCheckboxComponent {
   @Input() redundancyAllowed: boolean

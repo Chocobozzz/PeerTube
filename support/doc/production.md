@@ -10,7 +10,7 @@ If you want information about the appropriate hardware to run PeerTube, please s
 
 ### :hammer: Dependencies
 
-Follow the steps of the [dependencies guide](dependencies.md).
+Follow the steps of the [dependencies guide](/support/doc/dependencies.md).
 
 ### :construction_worker: PeerTube user
 
@@ -125,7 +125,7 @@ Then edit the `config/production.yaml` file according to your webserver and data
 
 Keys defined in `config/production.yaml` will override keys defined in `config/default.yaml`.
 
-**PeerTube does not support webserver host change**. Even though [PeerTube CLI can help you to switch hostname](https://docs.joinpeertube.org/maintain-tools?id=update-hostjs) there's no official support for that since it is a risky operation that might result in unforeseen errors.
+**PeerTube does not support webserver host change**. Even though [PeerTube CLI can help you to switch hostname](https://docs.joinpeertube.org/maintain/tools#update-host-js) there's no official support for that since it is a risky operation that might result in unforeseen errors.
 
 ### :truck: Webserver
 

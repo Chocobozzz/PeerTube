@@ -29,6 +29,8 @@ describe('Open Telemetry', function () {
     })
 
     it('Should enable open telemetry metrics', async function () {
+      this.timeout(120000)
+
       server = await createSingleServer(1, {
         open_telemetry: {
           metrics: {
@@ -37,8 +39,12 @@ describe('Open Telemetry', function () {
         }
       })
 
+      // Simulate a HTTP request
+      await server.videos.list()
+
       const res = await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.text).to.contain('peertube_job_queue_total{')
+      expect(res.text).to.contain('http_request_duration_ms_bucket{')
     })
 
     it('Should have playback metrics', async function () {
@@ -62,6 +68,27 @@ describe('Open Telemetry', function () {
 
       const res = await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.text).to.contain('peertube_playback_http_downloaded_bytes_total{')
+    })
+
+    it('Should disable http request duration metrics', async function () {
+      await server.kill()
+
+      server = await createSingleServer(1, {
+        open_telemetry: {
+          metrics: {
+            enabled: true,
+            http_request_duration: {
+              enabled: false
+            }
+          }
+        }
+      })
+
+      // Simulate a HTTP request
+      await server.videos.list()
+
+      const res = await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.OK_200 })
+      expect(res.text).to.not.contain('http_request_duration_ms_bucket{')
     })
 
     after(async function () {

@@ -14,6 +14,7 @@ import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  makeActivityPubGetRequest,
   makeGetRequest,
   makeRawRequest,
   PeerTubeServer,
@@ -71,6 +72,9 @@ describe('Test plugin filter hooks', function () {
         }
       }
     })
+
+    // Root subscribes to itself
+    await servers[0].subscriptions.add({ targetUri: 'root_channel@' + servers[0].host })
   })
 
   describe('Videos', function () {
@@ -146,6 +150,20 @@ describe('Test plugin filter hooks', function () {
 
     it('Should run filter:api.user.me.videos.list.result', async function () {
       const { total } = await servers[0].videos.listMyVideos({ start: 0, count: 2 })
+
+      // Plugin do +4 to the total result
+      expect(total).to.equal(14)
+    })
+
+    it('Should run filter:api.user.me.subscription-videos.list.params', async function () {
+      const { data } = await servers[0].videos.listMySubscriptionVideos({ start: 0, count: 2 })
+
+      // 1 plugin do +1 to the count parameter
+      expect(data).to.have.lengthOf(3)
+    })
+
+    it('Should run filter:api.user.me.subscription-videos.list.result', async function () {
+      const { total } = await servers[0].videos.listMySubscriptionVideos({ start: 0, count: 2 })
 
       // Plugin do +4 to the total result
       expect(total).to.equal(14)
@@ -826,6 +844,24 @@ describe('Test plugin filter hooks', function () {
     it('Should run filter:api.video-channel.get.result', async function () {
       const channel = await servers[0].channels.get({ channelName: 'root_channel' })
       expect(channel.displayName).to.equal('Main root channel <3')
+    })
+  })
+
+  describe('Activity Pub', function () {
+
+    it('Should run filter:activity-pub.activity.context.build.result', async function () {
+      const { body } = await makeActivityPubGetRequest(servers[0].url, '/w/' + videoUUID)
+      expect(body.type).to.equal('Video')
+
+      expect(body['@context'].some(c => {
+        return typeof c === 'object' && c.recordedAt === 'https://schema.org/recordedAt'
+      })).to.be.true
+    })
+
+    it('Should run filter:activity-pub.video.json-ld.build.result', async function () {
+      const { body } = await makeActivityPubGetRequest(servers[0].url, '/w/' + videoUUID)
+      expect(body.name).to.equal('default video 0')
+      expect(body.videoName).to.equal('default video 0')
     })
   })
 

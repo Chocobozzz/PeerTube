@@ -68,6 +68,8 @@ module.exports = function () {
         {
           test: /\.ts$/,
           use: [
+            getBabelLoader(),
+
             {
               loader: 'ts-loader',
               options: {
@@ -78,20 +80,7 @@ module.exports = function () {
         },
         {
           test: /\.m?js$/,
-          use: [
-            {
-              loader: 'babel-loader',
-              options: {
-                presets: [
-                  [
-                    '@babel/preset-env', {
-                      targets: 'last 1 Chrome version, last 2 Edge major versions, Firefox ESR, Safari >= 11, ios_saf >= 11'
-                    }
-                  ]
-                ]
-              }
-            }
-          ]
+          use: [ getBabelLoader() ]
         },
 
         {
@@ -190,7 +179,7 @@ module.exports = function () {
             ecma: 6,
             warnings: false,
             ie8: false,
-            safari10: true,
+            safari10: false,
             mangle: true,
             compress: {
               passes: 3,
@@ -216,4 +205,19 @@ module.exports = function () {
   }
 
   return configuration
+}
+
+function getBabelLoader () {
+  return {
+    loader: 'babel-loader',
+    options: {
+      presets: [
+        [
+          '@babel/preset-env', {
+            targets: 'last 1 Chrome version, last 2 Edge major versions, Firefox ESR, Safari >= 12, ios_saf >= 12'
+          }
+        ]
+      ]
+    }
+  }
 }

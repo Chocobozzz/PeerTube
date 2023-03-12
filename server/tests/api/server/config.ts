@@ -561,15 +561,13 @@ describe('Test config', function () {
   })
 
   it('Should remove the custom configuration', async function () {
-    this.timeout(10000)
-
     await server.config.deleteCustomConfig()
 
     const data = await server.config.getCustomConfig()
     checkInitialConfig(server, data)
   })
 
-  it('Should enable frameguard', async function () {
+  it('Should enable/disable security headers', async function () {
     this.timeout(25000)
 
     {
@@ -580,13 +578,15 @@ describe('Test config', function () {
       })
 
       expect(res.headers['x-frame-options']).to.exist
+      expect(res.headers['x-powered-by']).to.equal('PeerTube')
     }
 
     await killallServers([ server ])
 
     const config = {
       security: {
-        frameguard: { enabled: false }
+        frameguard: { enabled: false },
+        powered_by_header: { enabled: false }
       }
     }
     await server.run(config)
@@ -599,6 +599,7 @@ describe('Test config', function () {
       })
 
       expect(res.headers['x-frame-options']).to.not.exist
+      expect(res.headers['x-powered-by']).to.not.exist
     }
   })
 

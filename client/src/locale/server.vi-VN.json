@@ -54,7 +54,6 @@
     "Playlist: {1}": "Danh sách phát: {1}",
     "By {1}": "Bởi {1}",
     "Unavailable video": "Video không khả dụng",
-    "Misc": "Khác",
     "Unknown": "—",
     "Afar": "Afar",
     "Abkhazian": "Abkhazian",
@@ -65,6 +64,7 @@
     "Aragonese": "Aragon",
     "American Sign Language": "Ngôn ngữ ký hiệu Mỹ",
     "Assamese": "Assam",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "Avaric",
     "Kotava": "Kotava",
     "Aymara": "Aymara",
@@ -254,6 +254,7 @@
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Trung Quốc giản thể",
     "Traditional Chinese": "Trung Quốc phồn thể",
+    "Misc": "Khác",
     "Normal mode": "Chế độ bình thường",
     "Theater mode": "Chế độ chiếu rạp"
 }

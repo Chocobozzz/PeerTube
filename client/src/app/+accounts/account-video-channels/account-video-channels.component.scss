@@ -8,11 +8,11 @@
 }
 
 .channel {
+  @include padding(1.75rem);
+  @include margin(2rem, 0);
+
   max-width: $max-channels-width;
   background-color: pvar(--channelBackgroundColor);
-  padding: 30px;
-
-  margin: 30px 0;
 
   display: grid;
   grid-template-columns: 1fr auto;
@@ -44,10 +44,6 @@
   h2 {
     grid-row: 1;
     grid-column: 2;
-    font-size: 20px;
-    line-height: 1;
-    font-weight: $font-bold;
-    margin: 0;
   }
 
   .actor-counters {
@@ -87,13 +83,11 @@ my-subscribe-button {
     max-width: $video-thumbnail-medium-width;
   }
 
-  .no-results {
-    height: auto;
-  }
 }
 
 .videos-overflow-workaround {
-  margin-top: 30px;
+  @include margin-top(2rem);
+  
   overflow-x: hidden;
 }
 
@@ -116,10 +110,6 @@ my-subscribe-button {
 }
 
 @include on-small-main-col {
-  .channel {
-    padding: 15px;
-  }
-
   .channel-avatar-row {
     grid-template-columns: auto auto auto 1fr;
 

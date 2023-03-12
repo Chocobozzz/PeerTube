@@ -225,6 +225,14 @@ describe('Test a client controllers', function () {
       }
     })
 
+    it('Should have valid Open Graph tags on the watch page with thread id Angular param', async function () {
+      for (const path of watchVideoBasePaths) {
+        for (const id of videoIds) {
+          await watchVideoPageTest(path + id + ';threadId=1')
+        }
+      }
+    })
+
     it('Should have valid Open Graph tags on the watch playlist page', async function () {
       for (const path of watchPlaylistBasePaths) {
         for (const id of playlistIds) {

@@ -108,6 +108,8 @@ type PeerTubePluginOptions = {
   isLive: boolean
 
   videoUUID: string
+
+  videoViewIntervalMs: number
 }
 
 type MetricsPluginOptions = {

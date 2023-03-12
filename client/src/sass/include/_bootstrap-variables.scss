@@ -8,9 +8,9 @@ $grid-breakpoints: (
   // Extra small screen / phone
   xs: 0,
   // Small screen / phone
-  sm: 576px,
+  sm: $mobile-view,
   // Medium screen / tablet
-  md: 768px,
+  md: $small-view,
   // Large screen / desktop
   lg: 900px,
   // Extra large screens / wide desktops
@@ -34,12 +34,19 @@ $container-max-widths: (
   xl: 1140px
 );
 
+$input-color: pvar(--inputForegroundColor);
+$input-bg: pvar(--inputBackgroundColor);
+$input-focus-color: pvar(--inputForegroundColor);
+$input-focus-bg: pvar(--inputBackgroundColor);
 $input-btn-focus-width: 0;
 $input-btn-focus-color: inherit;
 $input-focus-border-color: #ced4da;
 
-$nav-pills-link-active-bg: #F0F0F0;
-$nav-pills-link-active-color: #000;
+$input-group-addon-color: pvar(--mainForegroundColor);
+$input-group-addon-bg: pvar(--greyBackgroundColor);
+
+$nav-pills-link-active-bg: pvar(--greySecondaryBackgroundColor);
+$nav-pills-link-active-color: pvar(--mainForegroundColor);
 $nav-link-transition: none;
 
 $dropdown-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
@@ -56,5 +63,3 @@ $accordion-button-active-color: pvar(--mainForegroundColor);
 $accordion-button-focus-border-color: pvar(--mainColorLightest);
 $accordion-button-focus-box-shadow: 0 0 0 .15rem pvar(--mainColorLightest);
 $accordion-border-color: pvar(--inputBorderColor);
-
-$input-group-addon-color: pvar(--mainForegroundColor);

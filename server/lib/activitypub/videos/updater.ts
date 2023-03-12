@@ -13,8 +13,6 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
   private readonly wasPrivateVideo: boolean
   private readonly wasUnlistedVideo: boolean
 
-  private readonly videoFieldsSave: any
-
   private readonly oldVideoChannel: MChannelAccountLight
 
   protected lTags: LoggerTagsFn
@@ -29,8 +27,6 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     this.wasUnlistedVideo = this.video.privacy === VideoPrivacy.UNLISTED
 
     this.oldVideoChannel = this.video.VideoChannel
-
-    this.videoFieldsSave = this.video.toJSON()
 
     this.lTags = loggerTagsFactory('ap', 'video', 'update', video.uuid, video.url)
   }
@@ -156,8 +152,8 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
   }
 
   private catchUpdateError (err: Error) {
-    if (this.video !== undefined && this.videoFieldsSave !== undefined) {
-      resetSequelizeInstance(this.video, this.videoFieldsSave)
+    if (this.video !== undefined) {
+      resetSequelizeInstance(this.video)
     }
 
     // This is just a debug because we will retry the insert

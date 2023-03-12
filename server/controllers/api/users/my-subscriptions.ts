@@ -30,6 +30,7 @@ import {
 } from '../../../middlewares/validators'
 import { ActorFollowModel } from '../../../models/actor/actor-follow'
 import { VideoModel } from '../../../models/video/video'
+import { Hooks } from '@server/lib/plugins/hooks'
 
 const mySubscriptionsRouter = express.Router()
 
@@ -138,7 +139,9 @@ async function deleteUserSubscription (req: express.Request, res: express.Respon
   const subscription = res.locals.subscription
 
   await sequelizeTypescript.transaction(async t => {
-    if (subscription.state === 'accepted') await sendUndoFollow(subscription, t)
+    if (subscription.state === 'accepted') {
+      sendUndoFollow(subscription, t)
+    }
 
     return subscription.destroy({ transaction: t })
   })
@@ -168,7 +171,7 @@ async function getUserSubscriptionVideos (req: express.Request, res: express.Res
   const countVideos = getCountVideos(req)
   const query = pickCommonVideoQuery(req.query)
 
-  const resultList = await VideoModel.listForApi({
+  const apiOptions = await Hooks.wrapObject({
     ...query,
 
     displayOnlyForFollower: {
@@ -178,7 +181,13 @@ async function getUserSubscriptionVideos (req: express.Request, res: express.Res
     nsfw: buildNSFWFilter(res, query.nsfw),
     user,
     countVideos
-  })
+  }, 'filter:api.user.me.subscription-videos.list.params')
+
+  const resultList = await Hooks.wrapPromiseFun(
+    VideoModel.listForApi,
+    apiOptions,
+    'filter:api.user.me.subscription-videos.list.result'
+  )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total, guessAdditionalAttributesFromQuery(query)))
 }

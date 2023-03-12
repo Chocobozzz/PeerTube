@@ -447,8 +447,8 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
     }
   }
 
-  toActivityPubObject (this: MAccountAP) {
-    const obj = this.Actor.toActivityPubObject(this.name)
+  async toActivityPubObject (this: MAccountAP) {
+    const obj = await this.Actor.toActivityPubObject(this.name)
 
     return Object.assign(obj, {
       summary: this.description

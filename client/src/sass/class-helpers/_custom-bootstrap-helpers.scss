@@ -1,0 +1,8 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+// Font sizes
+
+.fs-5-5 {
+  @include font-size(18px);
+}

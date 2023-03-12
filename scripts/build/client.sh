@@ -8,6 +8,7 @@ defaultLanguage="en-US"
 # Supported languages
 languages=(
     ["ar"]="ar"
+    ["is"]="is"
     ["fa"]="fa-IR"
     ["en"]="en-US"
     ["vi"]="vi-VN"
@@ -36,6 +37,7 @@ languages=(
     ["eo"]="eo"
     ["de"]="de-DE"
     ["it"]="it-IT"
+    ["uk"]="uk-UA"
     ["sq"]="sq"
     ["tok"]="tok"
     ["nn"]="nn"

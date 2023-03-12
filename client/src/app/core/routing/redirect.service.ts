@@ -4,6 +4,8 @@ import { NavigationCancel, NavigationEnd, Router } from '@angular/router'
 import { logger } from '@root-helpers/logger'
 import { ServerService } from '../server'
 import { SessionStorageService } from '../wrappers/storage.service'
+import { PluginsManager } from '@root-helpers/plugins-manager'
+import { environment } from 'src/environments/environment'
 
 const debugLogger = debug('peertube:router:RedirectService')
 
@@ -29,12 +31,15 @@ export class RedirectService {
     private serverService: ServerService,
     private storage: SessionStorageService
   ) {
-    // The config is first loaded from the cache so try to get the default route
+
+  }
+
+  init () {
     const config = this.serverService.getHTMLConfig()
-    if (config?.instance?.defaultClientRoute) {
+    if (config.instance.defaultClientRoute) {
       this.defaultRoute = config.instance.defaultClientRoute
     }
-    if (config?.trending?.videos?.algorithms?.default) {
+    if (config.trending.videos.algorithms.default) {
       this.defaultTrendingAlgorithm = config.trending.videos.algorithms.default
     }
 
@@ -45,7 +50,7 @@ export class RedirectService {
 
     // Track previous url
     this.currentUrl = this.router.url
-    router.events.subscribe(event => {
+    this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd || event instanceof NavigationCancel) {
         if ([ '/401', '/404' ].includes(event.url)) return
 
@@ -98,6 +103,13 @@ export class RedirectService {
           return this.router.navigateByUrl(this.defaultRoute, { skipLocationChange })
         })
 
+  }
+
+  redirectToLogin () {
+    const externalLoginUrl = PluginsManager.getDefaultLoginHref(environment.apiUrl, this.serverService.getHTMLConfig())
+
+    if (externalLoginUrl) window.location.href = externalLoginUrl
+    else this.router.navigate([ '/login' ])
   }
 
   private doRedirect (redirectUrl: string, fallbackRoute?: string) {

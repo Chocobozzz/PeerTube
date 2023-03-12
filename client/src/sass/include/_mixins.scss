@@ -1,6 +1,8 @@
 @use 'sass:math';
 @use '_variables' as *;
 
+@import '_bootstrap-mixins';
+
 @mixin disable-default-a-behaviour {
   &:hover,
   &:focus,
@@ -22,7 +24,7 @@
   text-overflow: ellipsis;
 }
 
-@mixin ellipsis-multiline($font-size: 16px, $number-of-lines: 2) {
+@mixin ellipsis-multiline($font-size: 16px, $number-of-lines: 2, $line-height: $font-size) {
   display: block;
   /* Fallback for non-webkit */
   display: -webkit-box; /* stylelint-disable-line value-no-vendor-prefix */
@@ -30,7 +32,7 @@
   -webkit-box-orient: vertical;
   /* Fallback for non-webkit */
   font-size: $font-size;
-  line-height: $font-size;
+  line-height: $line-height;
   overflow: hidden;
   text-overflow: ellipsis;
   max-height: $font-size * $number-of-lines;
@@ -90,9 +92,8 @@
 }
 
 @mixin peertube-input-text($width) {
-  padding: 0 15px;
+  padding: 4px 15px;
   display: inline-block;
-  height: $button-height;
   width: $width;
   max-width: $width;
   color: pvar(--inputForegroundColor);
@@ -154,6 +155,7 @@
 @mixin orange-button-inverted {
   @include button-focus(pvar(--mainColorLightest));
 
+  padding: 2px 13px;
   border: 2px solid pvar(--mainColor);
   font-weight: $font-semibold;
 
@@ -250,12 +252,10 @@
 }
 
 @mixin peertube-button {
-  padding: 0 13px;
+  padding: 4px 13px;
 
   border: 0;
   font-weight: $font-semibold;
-  height: $button-height;
-  line-height: $button-height;
 
   // Because of primeng that redefines border-radius of all input[type="..."]
   border-radius: 3px !important;
@@ -264,9 +264,11 @@
   cursor: pointer;
 
   font-size: $button-font-size;
+  line-height: $button-font-size + math.round(math.div($button-font-size, 2));
 
   my-global-icon + * {
     @include margin-right(4px);
+    @include margin-left(4px);
   }
 }
 
@@ -312,13 +314,16 @@
     width: $width;
     top: $top;
   }
+
+  span {
+    vertical-align: middle;
+  }
 }
 
 @mixin peertube-file {
   position: relative;
   overflow: hidden;
   display: inline-block;
-  min-height: 30px;
 
   input[type=file] {
     position: absolute;
@@ -331,7 +336,7 @@
     filter: alpha(opacity=0);
     opacity: 0;
     outline: none;
-    background: #fff;
+    background: pvar(--mainBackgroundColor);
     cursor: inherit;
     display: block;
   }
@@ -397,18 +402,17 @@
     position: absolute;
     pointer-events: none;
     border: 5px solid rgba(0, 0, 0, 0);
-    border-top-color: #000;
+    border-top-color: pvar(--mainForegroundColor);
     margin-top: -2px;
     z-index: 100;
   }
 
   select {
-    padding: 0 35px 0 12px;
+    padding: 4px 35px 4px 12px;
     position: relative;
     border: 1px solid pvar(--inputBorderColor);
     background: transparent none;
     appearance: none;
-    height: $button-height;
     text-overflow: ellipsis;
     color: pvar(--mainForegroundColor);
     font-size: $form-input-font-size;
@@ -646,7 +650,7 @@
 }
 
 @mixin progressbar($small: false) {
-  background-color: $grey-background-color;
+  background-color: pvar(--greyBackgroundColor);
   display: flex;
   height: 1rem;
   overflow: hidden;
@@ -656,7 +660,7 @@
 
   span {
     position: absolute;
-    color: $grey-foreground-color;
+    color: pvar(--greyForegroundColor);
 
     @if $small {
       top: -1px;
@@ -920,58 +924,81 @@
   }
 }
 
-@mixin margin ($block-start, $inline-end, $block-end, $inline-start) {
-  @include margin-left($inline-start);
-  @include margin-right($inline-end);
-
-  margin-top: $block-start;
-  margin-bottom: $block-end;
+@mixin margin ($arg1: null, $arg2: null, $arg3: null, $arg4: null) {
+  @if $arg2 == null and $arg3 == null and $arg4 == null {
+    @include margin-original($arg1, $arg1, $arg1, $arg1);
+  } @else if $arg3 == null and $arg4 == null {
+    @include margin-original($arg1, $arg2, $arg1, $arg2);
+  } @else if $arg4 == null {
+    @include margin-original($arg1, $arg2, $arg3, $arg2);
+  } @else {
+    @include margin-original($arg1, $arg2, $arg3, $arg4);
+  }
 }
 
-@mixin padding ($block-start, $inline-end, $block-end, $inline-start) {
-  @include padding-left($inline-start);
-  @include padding-right($inline-end);
-
-  padding-top: $block-start;
-  padding-bottom: $block-end;
+@mixin margin-original ($block-start, $inline-end, $block-end, $inline-start) {
+  @include margin-left($inline-start);
+  @include margin-right($inline-end);
+  @include margin-top($block-start);
+  @include margin-bottom($block-end);
 }
 
 @mixin margin-left ($value) {
   @supports (margin-inline-start: $value) {
-    margin-inline-start: $value;
+    @include rfs($value, margin-inline-start);
   }
 
   @supports not (margin-inline-start: $value) {
-    margin-left: $value;
+    @include rfs($value, margin-left);
   }
 }
 
 @mixin margin-right ($value) {
   @supports (margin-inline-end: $value) {
-    margin-inline-end: $value;
+    @include rfs($value, margin-inline-end);
   }
 
   @supports not (margin-inline-end: $value) {
-    margin-right: $value;
+    @include rfs($value, margin-right);
+  }
+}
+
+@mixin padding-original ($block-start, $inline-end, $block-end, $inline-start) {
+  @include padding-left($inline-start);
+  @include padding-right($inline-end);
+  @include padding-top($block-start);
+  @include padding-bottom($block-end);
+}
+
+
+@mixin padding ($arg1: null, $arg2: null, $arg3: null, $arg4: null) {
+  @if $arg2 == null and $arg3 == null and $arg4 == null {
+    @include padding-original($arg1, $arg1, $arg1, $arg1);
+  } @else if $arg3 == null and $arg4 == null {
+    @include padding-original($arg1, $arg2, $arg1, $arg2);
+  } @else if $arg4 == null {
+    @include padding-original($arg1, $arg2, $arg3, $arg2);
+  } @else {
+    @include padding-original($arg1, $arg2, $arg3, $arg4);
   }
 }
 
 @mixin padding-left ($value) {
   @supports (padding-inline-start: $value) {
-    padding-inline-start: $value;
+    @include rfs($value, padding-inline-start);
   }
 
   @supports not (padding-inline-start: $value) {
-    padding-left: $value;
+    @include rfs($value, padding-left);
   }
 }
 
 @mixin padding-right ($value) {
   @supports (padding-inline-end: $value) {
-    padding-inline-end: $value;
+    @include rfs($value, padding-inline-end);
   }
 
   @supports not (padding-inline-end: $value) {
-    padding-right: $value;
+    @include rfs($value, padding-right);
   }
 }

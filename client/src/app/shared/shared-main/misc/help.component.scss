@@ -23,12 +23,8 @@
     max-width: 300px;
 
     .popover-body {
-      font-family: $main-fonts;
-      text-align: start;
       padding: 10px;
       font-size: 13px;
-      background-color: pvar(--mainBackgroundColor);
-      color: pvar(--mainForegroundColor);
       border-radius: 3px;
 
       p {
@@ -37,6 +33,7 @@
 
       ul {
         @include padding-left(20px);
+
         margin-bottom: 0;
       }
     }

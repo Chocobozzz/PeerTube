@@ -27,6 +27,10 @@ export const serverFilterHookObject = {
   'filter:api.overviews.videos.list.params': true,
   'filter:api.overviews.videos.list.result': true,
 
+  // Filter params/result used to list subscription videos for the REST API
+  'filter:api.user.me.subscription-videos.list.params': true,
+  'filter:api.user.me.subscription-videos.list.result': true,
+
   // Filter params/results to search videos/channels in the DB or on the remote index
   'filter:api.search.videos.local.list.params': true,
   'filter:api.search.videos.local.list.result': true,
@@ -109,7 +113,13 @@ export const serverFilterHookObject = {
   'filter:transcoding.manual.resolutions-to-transcode.result': true,
   'filter:transcoding.auto.resolutions-to-transcode.result': true,
 
-  'filter:activity-pub.remote-video-comment.create.accept.result': true
+  'filter:activity-pub.remote-video-comment.create.accept.result': true,
+
+  'filter:activity-pub.activity.context.build.result': true,
+
+  // Filter the result of video JSON LD builder
+  // You may also need to use filter:activity-pub.activity.context.build.result to also update JSON LD context
+  'filter:activity-pub.video.json-ld.build.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject

@@ -62,7 +62,9 @@ class OpenTelemetryMetrics {
 
     this.meter = metrics.getMeter('default')
 
-    this.buildRequestObserver()
+    if (CONFIG.OPEN_TELEMETRY.METRICS.HTTP_REQUEST_DURATION.ENABLED === true) {
+      this.buildRequestObserver()
+    }
 
     this.playbackMetrics = new PlaybackMetrics(this.meter)
     this.playbackMetrics.buildCounters()

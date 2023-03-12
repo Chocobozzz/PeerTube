@@ -1,5 +1,5 @@
 <div *ngIf="account" class="root">
-  <div class="account-info">
+  <div class="account-info d-md-grid d-block">
 
     <div class="account-avatar-row">
       <my-actor-avatar class="main-avatar" actorType="account" [actor]="account"></my-actor-avatar>
@@ -9,11 +9,11 @@
 
         <div class="actor-info">
           <div>
-            <div class="actor-display-name">
+            <div class="actor-display-name align-items-center">
               <h1 i18n-title [title]="'Created on ' + (account.createdAt | date)">{{ account.displayName }}</h1>
 
               <my-user-moderation-dropdown
-                [prependActions]="prependModerationActions"
+                class="mx-3" [prependActions]="prependModerationActions"
                 buttonSize="small" [account]="account" [user]="accountUser" placement="bottom-left auto"
                 (userChanged)="onUserChanged()" (userDeleted)="onUserDeleted()"
               ></my-user-moderation-dropdown>
@@ -48,7 +48,7 @@
       <div class="description-html" [innerHTML]="accountDescriptionHTML"></div>
     </div>
 
-    <div *ngIf="hasShowMoreDescription()" class="show-more" role="button"
+    <div *ngIf="hasShowMoreDescription()" class="show-more d-md-none d-block" role="button"
       (click)="accountDescriptionExpanded = !accountDescriptionExpanded"
       title="Show the complete description" i18n-title i18n
     >

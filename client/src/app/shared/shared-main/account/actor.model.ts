@@ -23,7 +23,7 @@ export abstract class Actor implements ServerActor {
   static GET_ACTOR_AVATAR_URL (actor: { avatars: { width: number, url?: string, path: string }[] }, size?: number) {
     const avatarsAscWidth = actor.avatars.sort((a, b) => a.width - b.width)
 
-    const avatar = size
+    const avatar = size && avatarsAscWidth.length > 1
       ? avatarsAscWidth.find(a => a.width >= size)
       : avatarsAscWidth[avatarsAscWidth.length - 1] // Bigger one
 

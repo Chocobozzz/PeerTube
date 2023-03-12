@@ -60,6 +60,10 @@ export class LoginPage {
   }
 
   loginOnPeerTube2 () {
+    if (!process.env.PEERTUBE2_E2E_PASSWORD) {
+      throw new Error('PEERTUBE2_E2E_PASSWORD env is missing for user e2e on peertube2.cpy.re')
+    }
+
     return this.login({ username: 'e2e', password: process.env.PEERTUBE2_E2E_PASSWORD, url: 'https://peertube2.cpy.re/login' })
   }
 

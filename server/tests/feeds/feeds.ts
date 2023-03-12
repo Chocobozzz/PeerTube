@@ -387,7 +387,7 @@ describe('Test syndication feeds', () => {
       }
 
       {
-        const body = await servers[0].subscriptions.listVideos({ token: feeduserAccessToken })
+        const body = await servers[0].videos.listMySubscriptionVideos({ token: feeduserAccessToken })
         expect(body.total).to.equal(0)
 
         const query = { accountId: feeduserAccountId, token: feeduserFeedToken }
@@ -408,7 +408,7 @@ describe('Test syndication feeds', () => {
     })
 
     it('Should list no videos for a user with videos but no subscriptions', async function () {
-      const body = await servers[0].subscriptions.listVideos({ token: userAccessToken })
+      const body = await servers[0].videos.listMySubscriptionVideos({ token: userAccessToken })
       expect(body.total).to.equal(0)
 
       const query = { accountId: userAccountId, token: userFeedToken }
@@ -424,7 +424,7 @@ describe('Test syndication feeds', () => {
       await waitJobs(servers)
 
       {
-        const body = await servers[0].subscriptions.listVideos({ token: userAccessToken })
+        const body = await servers[0].videos.listMySubscriptionVideos({ token: userAccessToken })
         expect(body.total).to.equal(1)
         expect(body.data[0].name).to.equal('user video')
 
@@ -442,7 +442,7 @@ describe('Test syndication feeds', () => {
       await waitJobs(servers)
 
       {
-        const body = await servers[0].subscriptions.listVideos({ token: userAccessToken })
+        const body = await servers[0].videos.listMySubscriptionVideos({ token: userAccessToken })
         expect(body.total).to.equal(2, 'there should be 2 videos part of the subscription')
 
         const query = { accountId: userAccountId, token: userFeedToken }

@@ -26,6 +26,9 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
 
   noRedundancies = false
 
+  // Prevent layout shift for redundancy stats
+  dataLoaded = false
+
   private bytesPipe: BytesPipe
 
   constructor (
@@ -163,6 +166,8 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
   }
 
   protected reloadDataInternal () {
+    this.dataLoaded = false
+
     const options = {
       pagination: this.pagination,
       sort: this.sort,
@@ -174,6 +179,8 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
                         next: resultList => {
                           this.videoRedundancies = resultList.data
                           this.totalRecords = resultList.total
+
+                          this.dataLoaded = true
                         },
 
                         error: err => this.notifier.error(err.message)

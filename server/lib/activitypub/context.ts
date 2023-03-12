@@ -1,7 +1,8 @@
 import { ContextType } from '@shared/models'
+import { Hooks } from '../plugins/hooks'
 
-function activityPubContextify <T> (data: T, type: ContextType) {
-  return { ...getContextData(type), ...data }
+async function activityPubContextify <T> (data: T, type: ContextType) {
+  return { ...await getContextData(type), ...data }
 }
 
 // ---------------------------------------------------------------------------
@@ -165,10 +166,13 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
   Rate: buildContext()
 }
 
-function getContextData (type: ContextType) {
-  return {
-    '@context': contextStore[type]
-  }
+async function getContextData (type: ContextType) {
+  const contextData = await Hooks.wrapObject(
+    contextStore[type],
+    'filter:activity-pub.activity.context.build.result'
+  )
+
+  return { '@context': contextData }
 }
 
 function buildContext (contextValue?: ContextValue) {

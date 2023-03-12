@@ -30,9 +30,24 @@
 @import 'bootstrap/scss/helpers';
 @import 'bootstrap/scss/utilities/api';
 
+body {
+  --bs-border-color-translucent: #{pvar(--inputBorderColor)};
+}
+
 .accordion {
   --bs-accordion-color: #{pvar(--mainForegroundColor)};
   --bs-accordion-bg: #{pvar(--mainBackgroundColor)};
+
+  --bs-accordion-btn-color: var(--bs-accordion-color);
+  --bs-accordion-btn-bg: var(--bs-accordion-bg);
+}
+
+.popover {
+  --bs-popover-bg: #{pvar(--mainBackgroundColor)};
+  --bs-popover-body-color: #{pvar(--mainForegroundColor)};
+  --bs-popover-header-color: #{pvar(--mainForegroundColor)};
+
+  font-family: $main-fonts;
 }
 
 .flex-auto {
@@ -48,12 +63,15 @@
 // ---------------------------------------------------------------------------
 
 .dropdown-menu {
+  --bs-dropdown-link-hover-bg: #{pvar(--mainBackgroundHoverColor)};
+  --bs-dropdown-link-color: #{pvar(--mainForegroundColor)};
+  --bs-dropdown-border-color: #{pvar(--inputBorderColor)};
+
   .dropdown-header {
     @include padding-left(1rem);
   }
 
   .dropdown-item {
-    color: pvar(--mainForegroundColor);
     padding: 3px 15px;
 
     &.active {
@@ -170,6 +188,8 @@
         opacity: 0.75;
         content: '';
         display: block;
+        position: fixed;
+        z-index: z(overlay);
       }
     }
   }
@@ -322,7 +342,8 @@
 .input-group {
   > .btn,
   > .input-group-text {
-    height: $button-height;
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
 
   > .input-group-text {

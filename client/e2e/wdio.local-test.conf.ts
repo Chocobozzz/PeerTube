@@ -8,6 +8,12 @@ const prefs = {
 // Chrome headless does not support prefs
 process.env.LANG = 'en'
 
+// https://github.com/mozilla/geckodriver/issues/1354#issuecomment-479456411
+process.env.MOZ_HEADLESS_WIDTH = '1280'
+process.env.MOZ_HEADLESS_HEIGHT = '1024'
+
+const windowSizeArg = `--window-size=${process.env.MOZ_HEADLESS_WIDTH},${process.env.MOZ_HEADLESS_HEIGHT}`
+
 module.exports = {
   config: {
     ...mainConfig,
@@ -22,19 +28,19 @@ module.exports = {
         browserName: 'chrome',
         acceptInsecureCerts: true,
         'goog:chromeOptions': {
-          args: [ '--disable-gpu', '--window-size=1280,1024' ],
+          args: [ '--disable-gpu', windowSizeArg ],
+          prefs
+        }
+      },
+      {
+        browserName: 'firefox',
+        'moz:firefoxOptions': {
+          binary: '/usr/bin/firefox-developer-edition',
+          args: [ '--headless', windowSizeArg ],
+
           prefs
         }
       }
-      // {
-      //   browserName: 'firefox',
-      //   'moz:firefoxOptions': {
-      //     binary: '/usr/bin/firefox-developer-edition',
-      //     args: [ '--headless', '--window-size=1280,1024' ],
-
-      //     prefs
-      //   }
-      // }
     ],
 
     services: [ 'chromedriver', 'geckodriver', 'shared-store' ],

@@ -3,8 +3,8 @@ import { CONSTRAINTS_FIELDS } from '@server/initializers/constants'
 import { ClientLogLevel, ServerLogLevel } from '@shared/models'
 import { exists } from './misc'
 
-const serverLogLevels: Set<ServerLogLevel> = new Set([ 'debug', 'info', 'warn', 'error' ])
-const clientLogLevels: Set<ClientLogLevel> = new Set([ 'warn', 'error' ])
+const serverLogLevels = new Set<ServerLogLevel>([ 'debug', 'info', 'warn', 'error' ])
+const clientLogLevels = new Set<ClientLogLevel>([ 'warn', 'error' ])
 
 function isValidLogLevel (value: any) {
   return exists(value) && serverLogLevels.has(value)

@@ -7,13 +7,15 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared'
 export class ImportsCommand extends AbstractCommand {
 
   importVideo (options: OverrideCommandOptions & {
-    attributes: VideoImportCreate & { torrentfile?: string }
+    attributes: (VideoImportCreate | { torrentfile?: string, previewfile?: string, thumbnailfile?: string })
   }) {
     const { attributes } = options
     const path = '/api/v1/videos/imports'
 
     let attaches: any = {}
     if (attributes.torrentfile) attaches = { torrentfile: attributes.torrentfile }
+    if (attributes.thumbnailfile) attaches = { thumbnailfile: attributes.thumbnailfile }
+    if (attributes.previewfile) attaches = { previewfile: attributes.previewfile }
 
     return unwrapBody<VideoImport>(this.postUploadRequest({
       ...options,

@@ -16,9 +16,17 @@
   align-items: center;
 }
 
-.actor-img-edit-button {
+.dropdown {
   position: absolute;
+
+  > .actor-img-edit-button {
+    position: relative;
+  }
+}
+
+.actor-img-edit-button {
   width: auto;
+  position: absolute;
 
   label {
     font-weight: $font-semibold;
@@ -26,6 +34,10 @@
   }
 }
 
-my-global-icon {
-  margin: 0 5px;
+.dropdown-item {
+  @include dropdown-with-icon-item;
+}
+
+.dropdown-toggle::after {
+  display: none;
 }

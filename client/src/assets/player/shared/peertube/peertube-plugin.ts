@@ -27,9 +27,7 @@ class PeerTubePlugin extends Plugin {
   private readonly videoUUID: string
   private readonly startTime: number
 
-  private readonly CONSTANTS = {
-    USER_VIEW_VIDEO_INTERVAL: 5000 // Every 5 seconds, notify the user is watching the video
-  }
+  private readonly videoViewIntervalMs: number
 
   private videoCaptions: VideoJSCaption[]
   private defaultSubtitle: string
@@ -48,6 +46,7 @@ class PeerTubePlugin extends Plugin {
     this.authorizationHeader = options.authorizationHeader
     this.videoUUID = options.videoUUID
     this.startTime = timeToInt(options.startTime)
+    this.videoViewIntervalMs = options.videoViewIntervalMs
 
     this.videoCaptions = options.videoCaptions
     this.initialInactivityTimeout = this.player.options_.inactivityTimeout
@@ -188,7 +187,7 @@ class PeerTubePlugin extends Plugin {
     })
 
     this.player.one('ended', () => {
-      const currentTime = Math.round(this.player.duration())
+      const currentTime = Math.floor(this.player.duration())
       lastCurrentTime = currentTime
 
       this.notifyUserIsWatching(currentTime, lastViewEvent)
@@ -197,7 +196,7 @@ class PeerTubePlugin extends Plugin {
     })
 
     this.videoViewInterval = setInterval(() => {
-      const currentTime = Math.round(this.player.currentTime())
+      const currentTime = Math.floor(this.player.currentTime())
 
       // No need to update
       if (currentTime === lastCurrentTime) return
@@ -208,26 +207,20 @@ class PeerTubePlugin extends Plugin {
         .catch(err => logger.error('Cannot notify user is watching.', err))
 
       lastViewEvent = undefined
-
-      // Server won't save history, so save the video position in local storage
-      if (!this.authorizationHeader()) {
-        saveVideoWatchHistory(this.videoUUID, currentTime)
-      }
-    }, this.CONSTANTS.USER_VIEW_VIDEO_INTERVAL)
+    }, this.videoViewIntervalMs)
   }
 
   private notifyUserIsWatching (currentTime: number, viewEvent: VideoViewEvent) {
-    if (!this.videoViewUrl) return Promise.resolve(undefined)
-
-    const body: VideoView = {
-      currentTime,
-      viewEvent
+    // Server won't save history, so save the video position in local storage
+    if (!this.authorizationHeader()) {
+      saveVideoWatchHistory(this.videoUUID, currentTime)
     }
 
-    const headers = new Headers({
-      'Content-type': 'application/json; charset=UTF-8'
-    })
+    if (!this.videoViewUrl) return
 
+    const body: VideoView = { currentTime, viewEvent }
+
+    const headers = new Headers({ 'Content-type': 'application/json; charset=UTF-8' })
     if (this.authorizationHeader()) headers.set('Authorization', this.authorizationHeader())
 
     return fetch(this.videoViewUrl, { method: 'POST', body: JSON.stringify(body), headers })

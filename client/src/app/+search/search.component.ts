@@ -1,4 +1,4 @@
-import { forkJoin, Subscription } from 'rxjs'
+import { forkJoin, Subject, Subscription } from 'rxjs'
 import { LinkType } from 'src/types/link.type'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -43,6 +43,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   errorMessage: string
 
   userMiniature: User
+
+  onSearchDataSubject = new Subject<any>()
 
   private subActivatedRoute: Subscription
   private isInitialLoad = false // set to false to show the search filters on first arrival
@@ -147,6 +149,8 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.lastSearchTarget = this.advancedSearch.searchTarget
 
         this.hasMoreResults = this.results.length < this.pagination.totalItems
+
+        this.onSearchDataSubject.next(results)
       },
 
       error: err => {

@@ -15,6 +15,10 @@ function isSafePath (p: string) {
     })
 }
 
+function isSafePeerTubeFilenameWithoutExtension (filename: string) {
+  return filename.match(/^[a-z0-9-]+$/)
+}
+
 function isArray (value: any): value is any[] {
   return Array.isArray(value)
 }
@@ -172,5 +176,6 @@ export {
   areUUIDsValid,
   toIntArray,
   isFileValid,
+  isSafePeerTubeFilenameWithoutExtension,
   checkMimetypeRegex
 }

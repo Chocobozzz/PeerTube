@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs'
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
+import { Observable, startWith, Subscription, switchMap } from 'rxjs'
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core'
 import { AuthService, Notifier, User, UserService } from '@app/core'
 import { Video } from '@app/shared/shared-main'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
@@ -12,7 +12,7 @@ import { RecommendedVideosStore } from './recommended-videos.store'
   templateUrl: './recommended-videos.component.html',
   styleUrls: [ './recommended-videos.component.scss' ]
 })
-export class RecommendedVideosComponent implements OnInit, OnChanges {
+export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy {
   @Input() inputRecommendation: RecommendationInfo
   @Input() playlist: VideoPlaylist
   @Input() displayAsRow: boolean
@@ -29,7 +29,9 @@ export class RecommendedVideosComponent implements OnInit, OnChanges {
     avatar: true
   }
 
-  userMiniature: User
+  user: User
+
+  private userSub: Subscription
 
   readonly hasVideos$: Observable<boolean>
   readonly videos$: Observable<Video[]>
@@ -44,21 +46,29 @@ export class RecommendedVideosComponent implements OnInit, OnChanges {
     this.hasVideos$ = this.store.hasRecommendations$
     this.videos$.subscribe(videos => this.gotRecommendations.emit(videos))
 
-    this.userService.getAnonymousOrLoggedUser()
-      .subscribe(user => this.autoPlayNextVideo = user.autoPlayNextVideo)
-
     this.autoPlayNextVideoTooltip = $localize`When active, the next video is automatically played after the current one.`
   }
 
   ngOnInit () {
-    this.userService.getAnonymousOrLoggedUser()
-      .subscribe(user => this.userMiniature = user)
+    this.userSub = this.userService.listenAnonymousUpdate()
+      .pipe(
+        startWith(true),
+        switchMap(() => this.userService.getAnonymousOrLoggedUser())
+      )
+      .subscribe(user => {
+        this.user = user
+        this.autoPlayNextVideo = user.autoPlayNextVideo
+      })
   }
 
   ngOnChanges () {
     if (this.inputRecommendation) {
       this.store.requestNewRecommendations(this.inputRecommendation)
     }
+  }
+
+  ngOnDestroy () {
+    if (this.userSub) this.userSub.unsubscribe()
   }
 
   onVideoRemoved () {

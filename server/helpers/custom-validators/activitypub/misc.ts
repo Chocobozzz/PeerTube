@@ -13,7 +13,7 @@ function isUrlValid (url: string) {
   }
 
   // We validate 'localhost', so we don't have the top level domain
-  if (CONFIG.WEBSERVER.HOSTNAME === 'localhost') {
+  if (CONFIG.WEBSERVER.HOSTNAME === 'localhost' || CONFIG.WEBSERVER.HOSTNAME === '127.0.0.1') {
     isURLOptions.require_tld = false
   }
 

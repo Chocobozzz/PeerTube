@@ -114,7 +114,7 @@ describe('Test video playlists', function () {
     await waitJobs(servers)
   })
 
-  describe('Get default playlists', function () {
+  describe('Check playlists filters and privacies', function () {
 
     it('Should list video playlist privacies', async function () {
       const privacies = await commands[0].getPrivacies()
@@ -123,8 +123,20 @@ describe('Test video playlists', function () {
       expect(privacies[3]).to.equal('Private')
     })
 
-    it('Should list watch later playlist', async function () {
+    it('Should filter on playlist type', async function () {
+      this.timeout(30000)
+
       const token = servers[0].accessToken
+
+      await commands[0].create({
+        attributes: {
+          displayName: 'my super playlist',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          description: 'my super description',
+          thumbnailfile: 'thumbnail.jpg',
+          videoChannelId: servers[0].store.channel.id
+        }
+      })
 
       {
         const body = await commands[0].listByAccount({ token, handle: 'root', playlistType: VideoPlaylistType.WATCH_LATER })
@@ -136,13 +148,51 @@ describe('Test video playlists', function () {
         expect(playlist.displayName).to.equal('Watch later')
         expect(playlist.type.id).to.equal(VideoPlaylistType.WATCH_LATER)
         expect(playlist.type.label).to.equal('Watch later')
+        expect(playlist.privacy.id).to.equal(VideoPlaylistPrivacy.PRIVATE)
       }
 
       {
-        const body = await commands[0].listByAccount({ token, handle: 'root', playlistType: VideoPlaylistType.REGULAR })
+        const bodyList = await commands[0].list({ playlistType: VideoPlaylistType.WATCH_LATER })
+        const bodyChannel = await commands[0].listByChannel({ handle: 'root_channel', playlistType: VideoPlaylistType.WATCH_LATER })
 
-        expect(body.total).to.equal(0)
-        expect(body.data).to.have.lengthOf(0)
+        for (const body of [ bodyList, bodyChannel ]) {
+          expect(body.total).to.equal(0)
+          expect(body.data).to.have.lengthOf(0)
+        }
+      }
+
+      {
+        const bodyList = await commands[0].list({ playlistType: VideoPlaylistType.REGULAR })
+        const bodyChannel = await commands[0].listByChannel({ handle: 'root_channel', playlistType: VideoPlaylistType.REGULAR })
+
+        let playlist: VideoPlaylist = null
+        for (const body of [ bodyList, bodyChannel ]) {
+
+          expect(body.total).to.equal(1)
+          expect(body.data).to.have.lengthOf(1)
+
+          playlist = body.data[0]
+          expect(playlist.displayName).to.equal('my super playlist')
+          expect(playlist.privacy.id).to.equal(VideoPlaylistPrivacy.PUBLIC)
+          expect(playlist.type.id).to.equal(VideoPlaylistType.REGULAR)
+        }
+
+        await commands[0].update({
+          playlistId: playlist.id,
+          attributes: {
+            privacy: VideoPlaylistPrivacy.PRIVATE
+          }
+        })
+      }
+
+      {
+        const bodyList = await commands[0].list({ playlistType: VideoPlaylistType.REGULAR })
+        const bodyChannel = await commands[0].listByChannel({ handle: 'root_channel', playlistType: VideoPlaylistType.REGULAR })
+
+        for (const body of [ bodyList, bodyChannel ]) {
+          expect(body.total).to.equal(0)
+          expect(body.data).to.have.lengthOf(0)
+        }
       }
 
       {

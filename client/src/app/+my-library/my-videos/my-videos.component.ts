@@ -108,7 +108,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
       const channelFilters = this.userChannels.map(c => {
         return {
           value: 'channel:' + c.name,
-          label: c.name
+          label: c.displayName
         }
       })
 

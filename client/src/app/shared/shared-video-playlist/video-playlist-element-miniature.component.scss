@@ -133,13 +133,13 @@ my-video-thumbnail,
     }
   }
 
-  .video-info-account,
+  .video-info-owner,
   .video-info-timestamp {
     color: pvar(--greyForegroundColor);
   }
 }
 
-.video-info-account,
+.video-info-owner,
 .video-miniature-created-at-views {
   font-size: 14px;
 }

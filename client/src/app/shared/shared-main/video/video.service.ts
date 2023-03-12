@@ -420,6 +420,24 @@ export class VideoService {
       : 'both'
   }
 
+  // Choose if we display by default the account or the channel
+  buildDefaultOwnerDisplayType (video: Video) {
+    const accountName = video.account.name
+
+    // If the video channel name is an UUID (not really displayable, we changed this behaviour in v1.0.0-beta.12)
+    // Or has not been customized (default created channel display name)
+    // -> Use the account name
+    if (
+      video.channel.displayName === `Default ${accountName} channel` ||
+      video.channel.displayName === `Main ${accountName} channel` ||
+      video.channel.name.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
+    ) {
+      return 'account' as 'account'
+    }
+
+    return 'videoChannel' as 'videoChannel'
+  }
+
   buildCommonVideosParams (options: CommonVideoParams & { params: HttpParams }) {
     const {
       params,

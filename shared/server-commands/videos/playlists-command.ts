@@ -24,9 +24,10 @@ export class PlaylistsCommand extends AbstractCommand {
     start?: number
     count?: number
     sort?: string
+    playlistType?: VideoPlaylistType
   }) {
     const path = '/api/v1/video-playlists'
-    const query = pick(options, [ 'start', 'count', 'sort' ])
+    const query = pick(options, [ 'start', 'count', 'sort', 'playlistType' ])
 
     return this.getRequestBody<ResultList<VideoPlaylist>>({
       ...options,
@@ -43,9 +44,10 @@ export class PlaylistsCommand extends AbstractCommand {
     start?: number
     count?: number
     sort?: string
+    playlistType?: VideoPlaylistType
   }) {
     const path = '/api/v1/video-channels/' + options.handle + '/video-playlists'
-    const query = pick(options, [ 'start', 'count', 'sort' ])
+    const query = pick(options, [ 'start', 'count', 'sort', 'playlistType' ])
 
     return this.getRequestBody<ResultList<VideoPlaylist>>({
       ...options,

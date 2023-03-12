@@ -2,7 +2,7 @@ import { HttpStatusCode } from '../../models'
 import { OAuth2ErrorCode, ServerErrorCode } from './server-error-code.enum'
 
 export interface PeerTubeProblemDocumentData {
-  'invalid-params'?: Record<string, Object>
+  'invalid-params'?: Record<string, object>
 
   originUrl?: string
 

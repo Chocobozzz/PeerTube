@@ -1,8 +1,8 @@
 import { ChartData, ChartOptions, TooltipItem, TooltipModel } from 'chart.js'
 import { max, maxBy, min, minBy } from 'lodash-es'
-import { mergeMap } from 'rxjs/operators'
+import { Subject } from 'rxjs'
 import { Component } from '@angular/core'
-import { AuthService, ConfirmService, Notifier, ScreenService } from '@app/core'
+import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, ScreenService } from '@app/core'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 
 @Component({
@@ -15,12 +15,18 @@ export class MyVideoChannelsComponent {
   videoChannels: VideoChannel[] = []
 
   videoChannelsChartData: ChartData[]
-  videoChannelsMinimumDailyViews = 0
-  videoChannelsMaximumDailyViews: number
 
   chartOptions: ChartOptions
 
   search: string
+
+  onChannelDataSubject = new Subject<any>()
+
+  pagination: ComponentPagination = {
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItems: null
+  }
 
   constructor (
     private authService: AuthService,
@@ -36,7 +42,12 @@ export class MyVideoChannelsComponent {
 
   onSearch (search: string) {
     this.search = search
-    this.loadVideoChannels()
+
+    this.pagination.currentPage = 1
+    this.videoChannels = []
+
+    this.authService.userInformationLoaded
+      .subscribe(() => this.loadMoreVideoChannels())
   }
 
   async deleteVideoChannel (videoChannel: VideoChannel) {
@@ -56,7 +67,7 @@ channel with the same name (${videoChannel.name})!`,
     this.videoChannelService.removeVideoChannel(videoChannel)
       .subscribe({
         next: () => {
-          this.loadVideoChannels()
+          this.videoChannels = this.videoChannels.filter(c => c.id !== videoChannel.id)
           this.notifier.success($localize`Video channel ${videoChannel.displayName} deleted.`)
         },
 
@@ -64,58 +75,67 @@ channel with the same name (${videoChannel.name})!`,
       })
   }
 
-  private loadVideoChannels () {
-    this.authService.userInformationLoaded
-        .pipe(mergeMap(() => {
-          const user = this.authService.getUser()
-          const options = {
-            account: user.account,
-            withStats: true,
-            search: this.search,
-            sort: '-updatedAt'
-          }
+  onNearOfBottom () {
+    if (!hasMoreItems(this.pagination)) return
 
-          return this.videoChannelService.listAccountVideoChannels(options)
-        })).subscribe(res => {
-          this.videoChannels = res.data
-          this.totalItems = res.total
+    this.pagination.currentPage += 1
 
-          // chart data
-          this.videoChannelsChartData = this.videoChannels.map(v => ({
-            labels: v.viewsPerDay.map(day => day.date.toLocaleDateString()),
-            datasets: [
-              {
-                label: $localize`Views for the day`,
-                data: v.viewsPerDay.map(day => day.views),
-                fill: false,
-                borderColor: '#c6c6c6'
-              }
-            ]
-          } as ChartData))
+    this.loadMoreVideoChannels()
+  }
 
-          // chart options that depend on chart data:
-          // we don't want to skew values and have min at 0, so we define what the floor/ceiling is here
-          this.videoChannelsMinimumDailyViews = min(
-            // compute local minimum daily views for each channel, by their "views" attribute
-            this.videoChannels.map(v => minBy(
-              v.viewsPerDay,
-              day => day.views
-            ).views) // the object returned is a ViewPerDate, so we still need to get the views attribute
-          )
+  private loadMoreVideoChannels () {
+    const user = this.authService.getUser()
+    const options = {
+      account: user.account,
+      withStats: true,
+      search: this.search,
+      componentPagination: this.pagination,
+      sort: '-updatedAt'
+    }
 
-          this.videoChannelsMaximumDailyViews = max(
-            // compute local maximum daily views for each channel, by their "views" attribute
-            this.videoChannels.map(v => maxBy(
-              v.viewsPerDay,
-              day => day.views
-            ).views) // the object returned is a ViewPerDate, so we still need to get the views attribute
-          )
+    return this.videoChannelService.listAccountVideoChannels(options)
+      .subscribe(res => {
+        this.videoChannels = this.videoChannels.concat(res.data)
+        this.totalItems = res.total
 
-          this.buildChartOptions()
-        })
+        // chart data
+        this.videoChannelsChartData = this.videoChannels.map(v => ({
+          labels: v.viewsPerDay.map(day => day.date.toLocaleDateString()),
+          datasets: [
+            {
+              label: $localize`Views for the day`,
+              data: v.viewsPerDay.map(day => day.views),
+              fill: false,
+              borderColor: '#c6c6c6'
+            }
+          ]
+        } as ChartData))
+
+        this.buildChartOptions()
+
+        this.onChannelDataSubject.next(res.data)
+      })
   }
 
   private buildChartOptions () {
+    // chart options that depend on chart data:
+    // we don't want to skew values and have min at 0, so we define what the floor/ceiling is here
+    const videoChannelsMinimumDailyViews = min(
+      // compute local minimum daily views for each channel, by their "views" attribute
+      this.videoChannels.map(v => minBy(
+        v.viewsPerDay,
+        day => day.views
+      ).views) // the object returned is a ViewPerDate, so we still need to get the views attribute
+    )
+
+    const videoChannelsMaximumDailyViews = max(
+      // compute local maximum daily views for each channel, by their "views" attribute
+      this.videoChannels.map(v => maxBy(
+        v.viewsPerDay,
+        day => day.views
+      ).views) // the object returned is a ViewPerDate, so we still need to get the views attribute
+    )
+
     this.chartOptions = {
       plugins: {
         legend: {
@@ -141,8 +161,8 @@ channel with the same name (${videoChannel.name})!`,
         },
         y: {
           display: false,
-          min: Math.max(0, this.videoChannelsMinimumDailyViews - (3 * this.videoChannelsMaximumDailyViews / 100)),
-          max: Math.max(1, this.videoChannelsMaximumDailyViews)
+          min: Math.max(0, videoChannelsMinimumDailyViews - (3 * videoChannelsMaximumDailyViews / 100)),
+          max: Math.max(1, videoChannelsMaximumDailyViews)
         }
       },
       layout: {

@@ -13,6 +13,7 @@ import { FormReactiveService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { HTMLServerConfig, VideoChannelUpdate } from '@shared/models'
 import { VideoChannelEdit } from './video-channel-edit'
+import { shallowCopy } from '@shared/core-utils'
 
 @Component({
   selector: 'my-video-channel-update',
@@ -118,6 +119,9 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
             this.notifier.success($localize`Avatar changed.`)
 
             this.videoChannel.updateAvatar(data.avatars)
+
+            // So my-actor-avatar component detects changes
+            this.videoChannel = shallowCopy(this.videoChannel)
           },
 
           error: (err: HttpErrorResponse) => genericUploadErrorHandler({
@@ -135,6 +139,9 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
                                 this.notifier.success($localize`Avatar deleted.`)
 
                                 this.videoChannel.resetAvatar()
+
+                                // So my-actor-avatar component detects changes
+                                this.videoChannel = shallowCopy(this.videoChannel)
                               },
 
                               error: err => this.notifier.error(err.message)

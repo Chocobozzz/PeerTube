@@ -5,6 +5,7 @@ import { ComponentPagination, hasMoreItems, MarkdownService, User, UserService }
 import { Account, AccountService, Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
 import { NSFWPolicyType, VideoSortField } from '@shared/models'
+import { SimpleMemoize } from '@app/helpers'
 
 @Component({
   selector: 'my-account-video-channels',
@@ -145,6 +146,7 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
     this.loadMoreChannels()
   }
 
+  @SimpleMemoize()
   getVideoChannelLink (videoChannel: VideoChannel) {
     return [ '/c', videoChannel.nameWithHost ]
   }

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { join } from 'path'
 import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoDetails } from '@shared/models'
 import {
@@ -12,7 +13,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-import { expectStartWith } from '../shared'
+import { checkDirectoryIsEmpty, expectStartWith } from '../shared'
 
 async function checkFiles (origin: PeerTubeServer, video: VideoDetails, inObjectStorage: boolean) {
   for (const file of video.files) {
@@ -104,6 +105,14 @@ describe('Test create move video storage job', function () {
         await checkFiles(servers[0], video, true)
       }
     }
+  })
+
+  it('Should not have files on disk anymore', async function () {
+    await checkDirectoryIsEmpty(servers[0], 'videos', [ 'private' ])
+    await checkDirectoryIsEmpty(servers[0], join('videos', 'private'))
+
+    await checkDirectoryIsEmpty(servers[0], join('streaming-playlists', 'hls'), [ 'private' ])
+    await checkDirectoryIsEmpty(servers[0], join('streaming-playlists', 'hls', 'private'))
   })
 
   after(async function () {

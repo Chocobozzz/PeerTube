@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="bn">
     <body>
@@ -3053,7 +3053,7 @@
       </trans-unit>
       <trans-unit id="240806681889331244" datatype="html">
         <source>Unlimited</source>
-        <target/>
+        <target state="translated">অসীম</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -3093,7 +3093,7 @@
       </trans-unit>
       <trans-unit id="616370606803836610" datatype="html">
         <source>100MB</source>
-        <target/>
+        <target state="translated">১০০এমবি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">24</context>
@@ -3105,7 +3105,7 @@
       </trans-unit>
       <trans-unit id="9162997081789455476" datatype="html">
         <source>500MB</source>
-        <target/>
+        <target state="translated">৫০০এমবি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">25</context>
@@ -3117,7 +3117,7 @@
       </trans-unit>
       <trans-unit id="1541266817985876981" datatype="html">
         <source>1GB</source>
-        <target/>
+        <target state="translated">১জিবি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">26</context>
@@ -3125,7 +3125,7 @@
       </trans-unit>
       <trans-unit id="6075751004411938819" datatype="html">
         <source>5GB</source>
-        <target/>
+        <target state="translated">৫জিবি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">27</context>
@@ -3137,7 +3137,7 @@
       </trans-unit>
       <trans-unit id="246811372655482890" datatype="html">
         <source>20GB</source>
-        <target/>
+        <target state="translated">২০জিবি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">28</context>
@@ -3149,7 +3149,7 @@
       </trans-unit>
       <trans-unit id="2491910291056632032" datatype="html">
         <source>50GB</source>
-        <target/>
+        <target state="translated">৫০জিবি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">29</context>
@@ -3161,7 +3161,7 @@
       </trans-unit>
       <trans-unit id="5514849824631859021" datatype="html">
         <source>100GB</source>
-        <target/>
+        <target state="translated">১০০জিবি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -3169,7 +3169,7 @@
       </trans-unit>
       <trans-unit id="8245180845645676506" datatype="html">
         <source>200GB</source>
-        <target/>
+        <target state="translated">২০০জিবি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -3177,7 +3177,7 @@
       </trans-unit>
       <trans-unit id="5468089754278798237" datatype="html">
         <source>500GB</source>
-        <target/>
+        <target state="translated">৫০০জিবি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">32</context>
@@ -3733,7 +3733,7 @@
       </trans-unit>
       <trans-unit id="9160510009013134726" datatype="html">
         <source>Unfollow</source>
-        <target/>
+        <target state="translated">অননুসরণ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -3765,7 +3765,7 @@
       </trans-unit>
       <trans-unit id="2593763089859685916" datatype="html">
         <source>enabled</source>
-        <target/>
+        <target state="translated">সক্রিয়</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context>
           <context context-type="linenumber">23</context>
@@ -3773,7 +3773,7 @@
       </trans-unit>
       <trans-unit id="8444272719785117681" datatype="html">
         <source>disabled</source>
-        <target/>
+        <target state="translated">নিষ্ক্রিয়</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context>
           <context context-type="linenumber">23</context>
@@ -3889,7 +3889,7 @@
       </trans-unit>
       <trans-unit id="81585474102700882" datatype="html">
         <source>Used</source>
-        <target/>
+        <target state="translated">ব্যবহৃত</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -3897,7 +3897,7 @@
       </trans-unit>
       <trans-unit id="3955868613858648955" datatype="html">
         <source>Available</source>
-        <target/>
+        <target state="translated">উপলভ্য</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -4697,7 +4697,7 @@
       </trans-unit>
       <trans-unit id="2798270190074840767" datatype="html">
         <source>Themes</source>
-        <target/>
+        <target state="translated">রঙ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">37</context>
@@ -4713,7 +4713,7 @@
       </trans-unit>
       <trans-unit id="840045833311458646" datatype="html">
         <source>theme</source>
-        <target/>
+        <target state="translated">রঙ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">48</context>
@@ -4898,7 +4898,7 @@
       </trans-unit>
       <trans-unit id="4279081882680795350" datatype="html">
         <source>info</source>
-        <target/>
+        <target state="translated">তথ্য</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">113</context>
@@ -4906,7 +4906,7 @@
       </trans-unit>
       <trans-unit id="3379167598974960777" datatype="html">
         <source>warning</source>
-        <target/>
+        <target state="translated">সতর্কতা</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">117</context>
@@ -4914,7 +4914,7 @@
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
         <source>error</source>
-        <target/>
+        <target state="translated">ত্রুটি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -4962,7 +4962,7 @@
       </trans-unit>
       <trans-unit id="3229595422546554334" datatype="html">
         <source>Jobs</source>
-        <target/>
+        <target state="translated">কাজ(জব)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/system.routes.ts</context>
           <context context-type="linenumber">26</context>
@@ -4970,7 +4970,7 @@
       </trans-unit>
       <trans-unit id="4804785061014590286" datatype="html">
         <source>Logs</source>
-        <target/>
+        <target state="translated">সূচি(লগ)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/system.routes.ts</context>
           <context context-type="linenumber">37</context>
@@ -4978,7 +4978,7 @@
       </trans-unit>
       <trans-unit id="3422890808980876594" datatype="html">
         <source>Debug</source>
-        <target/>
+        <target state="translated">ডিবাগ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/system.routes.ts</context>
           <context context-type="linenumber">48</context>
@@ -5670,7 +5670,7 @@
       </trans-unit>
       <trans-unit id="4451482225013335720" datatype="html">
         <source>Unban</source>
-        <target/>
+        <target state="translated">অনিষিদ্ধ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">88</context>
@@ -5842,7 +5842,7 @@
       </trans-unit>
       <trans-unit id="2454050363478003966" datatype="html">
         <source>Login</source>
-        <target/>
+        <target state="translated">প্রবেশ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">44</context>
@@ -6127,7 +6127,7 @@
       </trans-unit>
       <trans-unit id="5851560788527570644" datatype="html">
         <source>Notifications</source>
-        <target/>
+        <target state="translated">বিজ্ঞপ্তি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">109</context>
@@ -6587,7 +6587,7 @@
       </trans-unit>
       <trans-unit id="8920809083620698740" datatype="html">
         <source>avatar</source>
-        <target/>
+        <target state="translated">অবতার</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -6619,7 +6619,7 @@
       </trans-unit>
       <trans-unit id="4930506384627295710" datatype="html">
         <source>Settings</source>
-        <target/>
+        <target state="translated">পছন্দসমূহ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -6643,7 +6643,7 @@
       </trans-unit>
       <trans-unit id="5674286808255988565" datatype="html">
         <source>Create</source>
-        <target/>
+        <target state="translated">তৈরি করো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-create.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -7527,7 +7527,7 @@
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
         <source>Delete</source>
-        <target/>
+        <target state="translated">মুছো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">44</context>
@@ -9416,7 +9416,7 @@
       </trans-unit>
       <trans-unit id="4021752662928002901" datatype="html">
         <source>Update</source>
-        <target/>
+        <target state="translated">হালনাগাদ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">45</context>
@@ -14956,7 +14956,7 @@
       </trans-unit>
       <trans-unit id="4209525355702493436" datatype="html">
         <source>Ban</source>
-        <target/>
+        <target state="translated">নিষিদ্ধ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">3</context>

@@ -90,6 +90,16 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   })
 
   registerHook({
+    target: 'filter:api.user.me.subscription-videos.list.params',
+    handler: obj => addToCount(obj)
+  })
+
+  registerHook({
+    target: 'filter:api.user.me.subscription-videos.list.result',
+    handler: obj => addToTotal(obj, 4)
+  })
+
+  registerHook({
     target: 'filter:api.video.get.result',
     handler: video => {
       video.name += ' <3'
@@ -193,6 +203,18 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   registerHook({
     target: 'filter:activity-pub.remote-video-comment.create.accept.result',
     handler: ({ accepted }, { comment }) => checkCommentBadWord(accepted, comment)
+  })
+
+  // ---------------------------------------------------------------------------
+
+  registerHook({
+    target: 'filter:activity-pub.activity.context.build.result',
+    handler: context => context.concat([ { recordedAt: 'https://schema.org/recordedAt' } ])
+  })
+
+  registerHook({
+    target: 'filter:activity-pub.video.json-ld.build.result',
+    handler: (jsonld, { video }) => ({ ...jsonld, videoName: video.name })
   })
 
   // ---------------------------------------------------------------------------

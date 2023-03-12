@@ -6,7 +6,6 @@
 
 @use '_fonts';
 
-@use './class-helpers';
 @use './custom-markup';
 @use './ng-select';
 
@@ -14,6 +13,8 @@
 @use './primeng-custom';
 
 @use './z-index';
+
+@use './class-helpers/index.scss';
 
 body {
   /*** theme ***/

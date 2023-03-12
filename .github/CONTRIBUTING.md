@@ -17,11 +17,20 @@ Interested in contributing? Awesome!
   - [Server side](#server-side)
   - [Client side](#client-side)
   - [Client and server side](#client-and-server-side)
+  - [Embed](#embed)
   - [RTL layout](#rtl-layout)
   - [Testing](#testing)
     - [Unit/integration tests](#unitintegration-tests)
-    - [Testing the federation of PeerTube servers](#testing-the-federation-of-peertube-servers)
+    - [Play with a federation of PeerTube servers](#play-with-a-federation-of-peertube-servers)
   - [Emails](#emails)
+  - [OpenAPI documentation](#openapi-documentation)
+  - [Environment variables](#environment-variables)
+  - [Generate/pull translations](#generatepull-translations)
+  - [Release PeerTube](#release-peertube)
+  - [PeerTube packages](#peertube-packages)
+  - [CI](#ci)
+  - [Monitoring](#monitoring)
+  - [Test live stream](#test-live-stream)
 - [Plugins & Themes](#plugins--themes)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -129,7 +138,7 @@ You can get a complete PeerTube development setup with Gitpod, a free one-click 
 
 ### Server side
 
-You can find a documentation of the server code/architecture [here](https://docs.joinpeertube.org/contribute-architecture?id=server-code).
+You can find a documentation of the server code/architecture [here](https://docs.joinpeertube.org/contribute/architecture#server).
 
 To develop on the server-side:
 
@@ -144,7 +153,7 @@ restart.
 ### Client side
 
 You can find a documentation of the client code/architecture
-[here](https://docs.joinpeertube.org/contribute-architecture?id=client-code).
+[here](https://docs.joinpeertube.org/contribute/architecture#client).
 
 
 To develop on the client side:
@@ -167,9 +176,19 @@ and the web server is automatically restarted.
 $ npm run dev
 ```
 
+### Embed
+
+The embed is a standalone application built using Webpack.
+The generated files (HTML entrypoint and multiple JS and CSS files) are served by the PeerTube server (behind `localhost:9000/videos/embed/:videoUUID` or `localhost:9000/video-playlists/embed/:playlistUUID`).
+The following command will compile embed files and run the PeerTube server:
+
+```
+$ npm run dev:embed
+```
+
 ### RTL layout
 
-To test RTL layout using `ar` locale:
+To test RTL (right-to-left) layout using `ar` locale:
 
 ```
 $ npm run dev -- --ar-locale
@@ -184,7 +203,7 @@ as expected and respect the syntax conventions. They will run upon PR submission
 
 See the [dedicated documentation](/support/doc/development/tests.md) to run tests locally.
 
-#### Testing the federation of PeerTube servers
+#### Play with a federation of PeerTube servers
 
 Create a PostgreSQL user **with the same name as your username** in order to avoid using the *postgres* user.
 Then, we can create the databases (if they don't already exist):
@@ -209,7 +228,7 @@ $ NODE_APP_INSTANCE=2 NODE_ENV=test npm start
 $ NODE_APP_INSTANCE=3 NODE_ENV=test npm start
 ```
 
-Then you will get access to the three nodes at `http://localhost:900{1,2,3}`
+Then you will get access to the three nodes at `http://127.0.0.1:900{1,2,3}`
 with the `root` as username and `test{1,2,3}` for the password.
 
 Instance configurations are in `config/test-{1,2,3}.yaml`.
@@ -221,10 +240,19 @@ To test emails with PeerTube:
  * Run [mailslurper](http://mailslurper.com/)
  * Run PeerTube using mailslurper SMTP port: `NODE_CONFIG='{ "smtp": { "hostname": "localhost", "port": 2500, "tls": false } }' NODE_ENV=dev node dist/server`
 
+### OpenAPI documentation
+
+The [REST API documentation](https://docs.joinpeertube.org/api/rest-reference.html) is generated from `support/doc/api/openapi.yaml` file.
+To quickly get a preview of your changes, you can generate the documentation *on the fly* using the following command:
+
+```
+npx @redocly/cli preview-docs ./support/doc/api/openapi.yaml
+```
+
 ### Environment variables
 
 PeerTube can be configured using environment variables.
-See the list on https://docs.joinpeertube.org/maintain-configuration?id=environment-variables
+See the list on https://docs.joinpeertube.org/maintain/configuration#environment-variables
 
 Additionally to these ones, we provide some environment for dev/test purpose:
 
@@ -233,6 +261,41 @@ Additionally to these ones, we provide some environment for dev/test purpose:
  * `PEERTUBE_LOCAL_CONFIG`: directory to find the local configuration file (used by web admin)
  * `NODE_DB_LOG=false`: disable SQL request logging
 
+### Generate/pull translations
+
+See the [dedicated documentation](/support/doc/development/localization.md) to update PeerTube translations from Weblate or to support a new locale.
+
+### Release PeerTube
+
+See the [dedicated documentation](/support/doc/development/release.md) to release a new version of PeerTube.
+
+### PeerTube packages
+
+This repository also contains other packages/libraries than PeerTube (embed API, PeerTube types...).
+You can see the list on the [dedicated documentation](/support/doc/development/lib.md).
+
+### CI
+
+PeerTube uses Github actions to run tests every time a commit is pushed or a PR is opened.
+You can find more information about these tasks on the [dedicated documentation](/support/doc/development/ci.md).
+
+### Monitoring
+
+You can check the content of the client bundle or benchmark the REST API.
+To do so, see the [dedicated documentation](/support/doc/development/monitoring.md).
+
+### Test live stream
+
+To easily test a live on PeerTube:
+ * Enable live support in web admin configuration
+ * Create a permanent live on the PeerTube instance
+ * Get the **RTMP URL** and the **Live stream key**
+ * Send the live to PeerTube using `ffmpeg` using a local video:
+
+```
+ffmpeg -stream_loop -1 -re -i any-video.mp4 -c copy -f flv rtmp://{RTMP URL}/live/{STREAM KEY}
+```
+
 ## Plugins & Themes
 
-See the dedicated documentation: https://docs.joinpeertube.org/contribute-plugins
+See the dedicated documentation: https://docs.joinpeertube.org/contribute/plugins

@@ -3,6 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { AfterViewChecked, Component, OnInit } from '@angular/core'
 import { AuthService, Notifier, User, UserService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
+import { shallowCopy } from '@shared/core-utils'
 
 @Component({
   selector: 'my-account-settings',
@@ -44,6 +45,9 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
           this.notifier.success($localize`Avatar changed.`)
 
           this.user.updateAccountAvatar(data.avatars)
+
+          // So my-actor-avatar component detects changes
+          this.user.account = shallowCopy(this.user.account)
         },
 
         error: (err: HttpErrorResponse) => genericUploadErrorHandler({
@@ -57,10 +61,13 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
   onAvatarDelete () {
     this.userService.deleteAvatar()
       .subscribe({
-        next: data => {
+        next: () => {
           this.notifier.success($localize`Avatar deleted.`)
 
           this.user.updateAccountAvatar()
+
+          // So my-actor-avatar component detects changes
+          this.user.account = shallowCopy(this.user.account)
         },
 
         error: (err: HttpErrorResponse) => this.notifier.error(err.message)

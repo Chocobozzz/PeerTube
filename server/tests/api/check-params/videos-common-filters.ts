@@ -42,7 +42,8 @@ describe('Test video filters validators', function () {
         '/api/v1/video-channels/root_channel/videos',
         '/api/v1/accounts/root/videos',
         '/api/v1/videos',
-        '/api/v1/search/videos'
+        '/api/v1/search/videos',
+        '/api/v1/users/me/subscriptions/videos'
       ]
 
       for (const path of paths) {

@@ -139,7 +139,7 @@ async function listVideoPlaylists (req: express.Request, res: express.Response) 
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    type: req.query.type
+    type: req.query.playlistType
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
@@ -210,7 +210,6 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
 
 async function updateVideoPlaylist (req: express.Request, res: express.Response) {
   const videoPlaylistInstance = res.locals.videoPlaylistFull
-  const videoPlaylistFieldsSave = videoPlaylistInstance.toJSON()
   const videoPlaylistInfoToUpdate = req.body as VideoPlaylistUpdate
 
   const wasPrivatePlaylist = videoPlaylistInstance.privacy === VideoPlaylistPrivacy.PRIVATE
@@ -275,10 +274,9 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
   } catch (err) {
     logger.debug('Cannot update the video playlist.', { err })
 
-    // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed
-    // So it will skip the SQL request, even if the last one was ROLLBACKed!
-    resetSequelizeInstance(videoPlaylistInstance, videoPlaylistFieldsSave)
+    // So we need to restore the previous fields
+    resetSequelizeInstance(videoPlaylistInstance)
 
     throw err
   }

@@ -77,7 +77,7 @@ async function proxifyHLS (req: express.Request, res: express.Response) {
     setS3Headers(res, s3Response)
 
     const streamReplacer = filename.endsWith('.m3u8') && doReinjectVideoFileToken(req)
-      ? new StreamReplacer(line => injectQueryToPlaylistUrls(line, buildReinjectVideoFileTokenQuery(req)))
+      ? new StreamReplacer(line => injectQueryToPlaylistUrls(line, buildReinjectVideoFileTokenQuery(req, filename.endsWith('master.m3u8'))))
       : new PassThrough()
 
     return pipeline(

@@ -217,6 +217,7 @@ export class PlayerManagerOptions {
         videoCaptions,
         inactivityTimeout: 2500,
         videoViewUrl: this.videoFetcher.getVideoViewsUrl(video.uuid),
+        videoViewIntervalMs: 5000,
         metricsUrl: window.location.origin + '/api/v1/metrics/playback',
 
         videoShortUUID: video.shortUUID,

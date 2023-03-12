@@ -18,9 +18,8 @@ describe('Test comments notifications', function () {
   let emails: object[] = []
 
   const commentText = '**hello** <a href="https://joinpeertube.org">world</a>, <h1>what do you think about peertube?</h1>'
-  const expectedHtml = '<strong style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">hello</strong> ' +
-  '<a href="https://joinpeertube.org" target="_blank" rel="noopener noreferrer" style="-ms-text-size-adjust: 100%; ' +
-  '-webkit-text-size-adjust: 100%; text-decoration: none; color: #f2690d;">world</a>, </p>what do you think about peertube?'
+  const expectedHtml = '<strong>hello</strong> <a href="https://joinpeertube.org" target="_blank" rel="noopener noreferrer">world</a>' +
+                       ', </p>what do you think about peertube?'
 
   before(async function () {
     this.timeout(120000)

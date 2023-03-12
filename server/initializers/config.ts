@@ -195,6 +195,10 @@ const CONFIG = {
     METRICS: {
       ENABLED: config.get<boolean>('open_telemetry.metrics.enabled'),
 
+      HTTP_REQUEST_DURATION: {
+        ENABLED: config.get<boolean>('open_telemetry.metrics.http_request_duration.enabled')
+      },
+
       PROMETHEUS_EXPORTER: {
         HOSTNAME: config.get<string>('open_telemetry.metrics.prometheus_exporter.hostname'),
         PORT: config.get<number>('open_telemetry.metrics.prometheus_exporter.port')
@@ -236,6 +240,9 @@ const CONFIG = {
   SECURITY: {
     FRAMEGUARD: {
       ENABLED: config.get<boolean>('security.frameguard.enabled')
+    },
+    POWERED_BY_HEADER: {
+      ENABLED: config.get<boolean>('security.powered_by_header.enabled')
     }
   },
   TRACKER: {

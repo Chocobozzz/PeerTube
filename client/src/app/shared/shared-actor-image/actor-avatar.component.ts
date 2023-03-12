@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core'
+import { Component, Input, OnChanges, OnInit } from '@angular/core'
 import { VideoChannel } from '../shared-main'
 import { Account } from '../shared-main/account/account.model'
 
@@ -15,7 +15,7 @@ export type ActorAvatarSize = '18' | '25' | '28' | '32' | '34' | '35' | '36' | '
   styleUrls: [ './actor-avatar.component.scss' ],
   templateUrl: './actor-avatar.component.html'
 })
-export class ActorAvatarComponent implements OnChanges {
+export class ActorAvatarComponent implements OnInit, OnChanges {
   private _title: string
 
   @Input() actor: ActorInput
@@ -43,31 +43,22 @@ export class ActorAvatarComponent implements OnChanges {
   }
 
   classes: string[] = []
+  defaultAvatarUrl: string
+  avatarUrl: string
 
-  get alt () {
-    if (this.isAccount()) return $localize`Account avatar`
-    if (this.isChannel()) return $localize`Channel avatar`
+  ngOnInit () {
+    this.buildDefaultAvatarUrl()
 
-    return ''
-  }
-
-  get defaultAvatarUrl () {
-    if (this.isChannel()) return VideoChannel.GET_DEFAULT_AVATAR_URL(this.getSizeNumber())
-
-    // account or unlogged
-    return Account.GET_DEFAULT_AVATAR_URL(this.getSizeNumber())
-  }
-
-  get avatarUrl () {
-    if (!this.actor) return ''
-
-    if (this.isAccount()) return Account.GET_ACTOR_AVATAR_URL(this.actor, this.getSizeNumber())
-    if (this.isChannel()) return VideoChannel.GET_ACTOR_AVATAR_URL(this.actor, this.getSizeNumber())
-
-    return ''
+    this.buildAvatarUrl()
+    this.buildClasses()
   }
 
   ngOnChanges () {
+    this.buildAvatarUrl()
+    this.buildClasses()
+  }
+
+  private buildClasses () {
     this.classes = [ 'avatar' ]
 
     if (this.size) {
@@ -87,14 +78,40 @@ export class ActorAvatarComponent implements OnChanges {
     }
   }
 
+  private buildDefaultAvatarUrl () {
+    this.defaultAvatarUrl = this.isChannel()
+      ? VideoChannel.GET_DEFAULT_AVATAR_URL(this.getSizeNumber())
+      : Account.GET_DEFAULT_AVATAR_URL(this.getSizeNumber())
+  }
+
+  private buildAvatarUrl () {
+    if (!this.actor) {
+      this.avatarUrl = ''
+      return
+    }
+
+    if (this.isAccount()) {
+      this.avatarUrl = Account.GET_ACTOR_AVATAR_URL(this.actor, this.getSizeNumber())
+      return
+    }
+
+    if (this.isChannel()) {
+      this.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(this.actor, this.getSizeNumber())
+      return
+    }
+
+    this.avatarUrl = ''
+  }
+
   displayImage () {
     if (this.actorType === 'unlogged') return true
+    if (this.previewImage) return true
 
     return !!(this.actor && this.avatarUrl)
   }
 
   displayActorInitial () {
-    return this.actor && !this.avatarUrl
+    return !this.displayImage() && this.actor && !this.avatarUrl
   }
 
   displayPlaceholder () {

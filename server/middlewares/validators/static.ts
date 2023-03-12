@@ -2,7 +2,7 @@ import express from 'express'
 import { query } from 'express-validator'
 import LRUCache from 'lru-cache'
 import { basename, dirname } from 'path'
-import { exists, isUUIDValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc'
+import { exists, isSafePeerTubeFilenameWithoutExtension, isUUIDValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc'
 import { logger } from '@server/helpers/logger'
 import { LRU_CACHE } from '@server/initializers/constants'
 import { VideoModel } from '@server/models/video/video'
@@ -68,6 +68,10 @@ const ensureCanAccessPrivateVideoHLSFiles = [
     .optional()
     .customSanitizer(toBooleanOrNull)
     .isBoolean().withMessage('Should be a valid reinjectVideoFileToken boolean'),
+
+  query('playlistName')
+    .optional()
+    .customSanitizer(isSafePeerTubeFilenameWithoutExtension),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

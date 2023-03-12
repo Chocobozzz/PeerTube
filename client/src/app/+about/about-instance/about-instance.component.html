@@ -1,22 +1,22 @@
 <div class="row">
   <div class="col-md-12 col-xl-6">
 
-    <div class="about-instance-title">
-      <h1 i18n class="title">About {{ instanceName }}</h1>
+    <div class="d-flex justify-content-between">
+      <h1 i18n class="fw-semibold fs-5">About {{ instanceName }}</h1>
 
-      <a routerLink="/about/contact" i18n *ngIf="isContactFormEnabled" class="contact-admin">Contact us</a>
+      <a routerLink="/about/contact" i18n *ngIf="isContactFormEnabled" class="peertube-button-link orange-button h-100 d-flex align-items-center">Contact us</a>
     </div>
 
-    <div class="instance-badges" *ngIf="categories.length !== 0 || languages.length !== 0">
+    <div class="mb-4" *ngIf="categories.length !== 0 || languages.length !== 0">
       <span *ngFor="let category of categories" class="pt-badge badge-primary">{{ category }}</span>
 
       <span *ngFor="let language of languages" class="pt-badge badge-secondary">{{ language }}</span>
     </div>
 
-    <div class="short-description">
-      <div class="block short-description">{{ shortDescription }}</div>
+    <div class="mt-2">
+      <div class="block">{{ shortDescription }}</div>
 
-      <div i18n *ngIf="isNSFW" class="block dedicated-to-nsfw">This instance is dedicated to sensitive/NSFW content.</div>
+      <div i18n *ngIf="isNSFW" class="block mt-4 fw-semibold">This instance is dedicated to sensitive/NSFW content.</div>
     </div>
 
     <div class="anchor" id="administrators-and-sustainability"></div>
@@ -210,6 +210,7 @@
 
   <div class="col" myPluginSelector pluginSelectorId="about-instance-statistics">
     <div class="anchor" id="statistics"></div>
+
     <a
       class="anchor-link"
       routerLink="/about/instance"
@@ -218,7 +219,8 @@
       (click)="onClickCopyLink(anchorLink)">
       <h2 i18n class="middle-title">STATISTICS</h2>
     </a>
-    <my-instance-statistics></my-instance-statistics>
+
+    <my-instance-statistics [serverStats]="serverStats"></my-instance-statistics>
   </div>
 </div>
 

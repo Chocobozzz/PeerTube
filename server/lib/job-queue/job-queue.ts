@@ -7,11 +7,10 @@ import {
   QueueEvents,
   QueueEventsOptions,
   QueueOptions,
-  QueueScheduler,
-  QueueSchedulerOptions,
   Worker,
   WorkerOptions
 } from 'bullmq'
+import { parseDurationToMs } from '@server/helpers/core-utils'
 import { jobStates } from '@server/helpers/custom-validators/jobs'
 import { CONFIG } from '@server/initializers/config'
 import { processVideoRedundancy } from '@server/lib/job-queue/handlers/video-redundancy'
@@ -41,14 +40,7 @@ import {
   VideoTranscodingPayload
 } from '../../../shared/models'
 import { logger } from '../../helpers/logger'
-import {
-  JOB_ATTEMPTS,
-  JOB_CONCURRENCY,
-  JOB_REMOVAL_OPTIONS,
-  JOB_TTL,
-  REPEAT_JOBS,
-  WEBSERVER
-} from '../../initializers/constants'
+import { JOB_ATTEMPTS, JOB_CONCURRENCY, JOB_REMOVAL_OPTIONS, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants'
 import { Hooks } from '../plugins/hooks'
 import { Redis } from '../redis'
 import { processActivityPubCleaner } from './handlers/activitypub-cleaner'
@@ -71,7 +63,6 @@ import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoStudioEdition } from './handlers/video-studio-edition'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViewsStats } from './handlers/video-views-stats'
-import { parseDurationToMs } from '@server/helpers/core-utils'
 
 export type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -166,7 +157,6 @@ class JobQueue {
 
   private workers: { [id in JobType]?: Worker } = {}
   private queues: { [id in JobType]?: Queue } = {}
-  private queueSchedulers: { [id in JobType]?: QueueScheduler } = {}
   private queueEvents: { [id in JobType]?: QueueEvents } = {}
 
   private flowProducer: FlowProducer
@@ -187,7 +177,6 @@ class JobQueue {
     for (const handlerName of Object.keys(handlers)) {
       this.buildWorker(handlerName)
       this.buildQueue(handlerName)
-      this.buildQueueScheduler(handlerName)
       this.buildQueueEvent(handlerName)
     }
 
@@ -205,7 +194,8 @@ class JobQueue {
       autorun: false,
       concurrency: this.getJobConcurrency(handlerName),
       prefix: this.jobRedisPrefix,
-      connection: Redis.getRedisClientOptions('Worker')
+      connection: Redis.getRedisClientOptions('Worker'),
+      maxStalledCount: 10
     }
 
     const handler = function (job: Job) {
@@ -255,20 +245,6 @@ class JobQueue {
     this.queues[handlerName] = queue
   }
 
-  private buildQueueScheduler (handlerName: JobType) {
-    const queueSchedulerOptions: QueueSchedulerOptions = {
-      autorun: false,
-      connection: Redis.getRedisClientOptions('QueueScheduler'),
-      prefix: this.jobRedisPrefix,
-      maxStalledCount: 10
-    }
-
-    const queueScheduler = new QueueScheduler(handlerName, queueSchedulerOptions)
-    queueScheduler.on('error', err => { logger.error('Error in job queue scheduler %s.', handlerName, { err }) })
-
-    this.queueSchedulers[handlerName] = queueScheduler
-  }
-
   private buildQueueEvent (handlerName: JobType) {
     const queueEventsOptions: QueueEventsOptions = {
       autorun: false,
@@ -289,13 +265,11 @@ class JobQueue {
       .map(handlerName => {
         const worker: Worker = this.workers[handlerName]
         const queue: Queue = this.queues[handlerName]
-        const queueScheduler: QueueScheduler = this.queueSchedulers[handlerName]
         const queueEvent: QueueEvents = this.queueEvents[handlerName]
 
         return Promise.all([
           worker.close(false),
           queue.close(),
-          queueScheduler.close(),
           queueEvent.close()
         ])
       })
@@ -307,12 +281,10 @@ class JobQueue {
     const promises = Object.keys(this.workers)
       .map(handlerName => {
         const worker: Worker = this.workers[handlerName]
-        const queueScheduler: QueueScheduler = this.queueSchedulers[handlerName]
         const queueEvent: QueueEvents = this.queueEvents[handlerName]
 
         return Promise.all([
           worker.run(),
-          queueScheduler.run(),
           queueEvent.run()
         ])
       })

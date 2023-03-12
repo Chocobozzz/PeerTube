@@ -309,7 +309,7 @@ async function changeUserBlock (res: express.Response, user: MUserAccountDefault
     await user.save({ transaction: t })
   })
 
-  await Emailer.Instance.addUserBlockJob(user, block, reason)
+  Emailer.Instance.addUserBlockJob(user, block, reason)
 
   auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 }

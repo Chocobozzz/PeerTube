@@ -251,7 +251,7 @@ function checkLiveConfig () {
 
     if (CONFIG.LIVE.RTMPS.ENABLED) {
       if (!CONFIG.LIVE.RTMPS.KEY_FILE) {
-        throw new Error('You must specify a key file to enabled RTMPS')
+        throw new Error('You must specify a key file to enable RTMPS')
       }
 
       if (!CONFIG.LIVE.RTMPS.CERT_FILE) {

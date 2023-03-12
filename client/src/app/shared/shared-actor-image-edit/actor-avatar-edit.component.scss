@@ -5,10 +5,6 @@
   display: flex;
 }
 
-my-actor-avatar {
-  @include margin-right(15px);
-}
-
 .actor-info {
   display: inline-flex;
   flex-direction: column;
@@ -16,12 +12,12 @@ my-actor-avatar {
 
 .actor-info-display-name {
   @include peertube-word-wrap;
+  @include font-size(1.25rem);
 
-  font-size: 20px;
   font-weight: $font-bold;
 
   @media screen and (max-width: $small-view) {
-    font-size: 16px;
+    @include font-size(18px);
   }
 }
 
@@ -35,17 +31,18 @@ my-actor-avatar {
   padding-bottom: .5rem;
 }
 
-.actor-img-edit-container {
-  position: relative;
-  width: 0;
-}
-
 .actor-img-edit-button {
-  top: 55px;
-  right: 45px;
   border-radius: 50%;
+
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
 }
 
 .dropdown-item {
   @include dropdown-with-icon-item;
+}
+
+.dropdown-toggle::after {
+  display: none;
 }

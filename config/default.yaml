@@ -217,10 +217,14 @@ log:
   accept_client_log: true
 
 # Support of Open Telemetry metrics and tracing
-# For more information: https://docs.joinpeertube.org/maintain-observability
+# For more information: https://docs.joinpeertube.org/maintain/observability
 open_telemetry:
   metrics:
     enabled: false
+
+    http_request_duration:
+      # You can disable HTTP request duration metric that can have a high tag cardinality
+      enabled: true
 
     # Create a prometheus exporter server on this port so prometheus server can scrape PeerTube metrics
     prometheus_exporter:
@@ -236,12 +240,14 @@ open_telemetry:
 
 trending:
   videos:
-    interval_days: 7 # Compute trending videos for the last x days
+    interval_days: 7 # Compute trending videos for the last x days for 'most-viewed' algorithm
+
     algorithms:
       enabled:
-        - 'hot' # adaptation of Reddit's 'Hot' algorithm
-        - 'most-viewed' # default, used initially by PeerTube as the trending page
-        - 'most-liked'
+        - 'hot' # Adaptation of Reddit's 'Hot' algorithm
+        - 'most-viewed' # Number of views in the last x days
+        - 'most-liked' # Global views since the upload of the video
+
       default: 'most-viewed'
 
 # Cache remote videos on your server, to help other instances to broadcast the video
@@ -284,6 +290,11 @@ csp:
 security:
   # Set the X-Frame-Options header to help to mitigate clickjacking attacks
   frameguard:
+    enabled: true
+
+  # Set x-powered-by HTTP header to "PeerTube"
+  # Can help remote software to know this is a PeerTube instance
+  powered_by_header:
     enabled: true
 
 tracker:
@@ -555,7 +566,7 @@ import:
     # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
     http:
       # We recommend to use a HTTP proxy if you enable HTTP import to prevent private URL access from this server
-      # See https://docs.joinpeertube.org/maintain-configuration?id=security for more information
+      # See https://docs.joinpeertube.org/maintain/configuration#security for more information
       enabled: false
 
       youtube_dl_release:
@@ -579,7 +590,7 @@ import:
     # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
     torrent:
       # We recommend to only enable magnet URI/torrent import if you trust your users
-      # See https://docs.joinpeertube.org/maintain-configuration?id=security for more information
+      # See https://docs.joinpeertube.org/maintain/configuration#security for more information
       enabled: false
 
   # Add ability for your users to synchronize their channels with external channels, playlists, etc
@@ -739,7 +750,7 @@ search:
   search_index:
     enabled: false
     # URL of the search index, that should use the same search API and routes
-    # than PeerTube: https://docs.joinpeertube.org/api-rest-reference.html
+    # than PeerTube: https://docs.joinpeertube.org/api/rest-reference.html
     # You should deploy your own with https://framagit.org/framasoft/peertube/search-index,
     # and can use https://search.joinpeertube.org/ for tests, but keep in mind the latter is an unmoderated search index
     url: ''

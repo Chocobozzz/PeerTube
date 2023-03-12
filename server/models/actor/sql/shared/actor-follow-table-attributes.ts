@@ -1,4 +1,3 @@
-import { logger } from '@server/helpers/logger'
 import { Memoize } from '@server/helpers/memoize'
 import { ServerModel } from '@server/models/server/server'
 import { ActorModel } from '../../actor'
@@ -9,8 +8,6 @@ export class ActorFollowTableAttributes {
 
   @Memoize()
   getFollowAttributes () {
-    logger.error('coucou')
-
     return ActorFollowModel.getSQLAttributes('ActorFollowModel').join(', ')
   }
 

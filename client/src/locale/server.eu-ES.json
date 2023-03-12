@@ -54,7 +54,6 @@
     "Playlist: {1}": "Playlist: {1}",
     "By {1}": "Honek: {1}",
     "Unavailable video": "Bideo eskuraezina",
-    "Misc": "Denetarik",
     "Unknown": "Ezezaguna",
     "Afar": "Afar",
     "Abkhazian": "Abkhaziera",
@@ -65,6 +64,7 @@
     "Aragonese": "Aragoiera",
     "American Sign Language": "Amerikako zeinu-hizkuntza",
     "Assamese": "Assamera",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "Avarera",
     "Kotava": "Kotava",
     "Aymara": "Aimara",
@@ -254,6 +254,7 @@
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Simplified Chinese",
     "Traditional Chinese": "Traditional Chinese",
+    "Misc": "Denetarik",
     "Normal mode": "Modu normala",
     "Theater mode": "Antzoki modua"
 }

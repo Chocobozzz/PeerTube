@@ -1,6 +1,5 @@
 @use 'sass:math';
 @use 'sass:color';
-@use 'bootstrap/scss/functions' as *;
 
 $small-view: 800px;
 $mobile-view: 500px;
@@ -40,7 +39,6 @@ $expanded-horizontal-margins: 150px;
 $not-expanded-horizontal-margins: 30px;
 
 $button-font-size: 15px;
-$button-height: 30px;
 
 $header-height: 50px;
 $header-border-color: #e9eff6;

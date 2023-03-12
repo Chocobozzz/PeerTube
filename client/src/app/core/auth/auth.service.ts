@@ -5,11 +5,11 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { Notifier } from '@app/core/notification/notifier.service'
-import { logger, OAuthUserTokens, objectToUrlEncoded, peertubeLocalStorage, PluginsManager } from '@root-helpers/index'
+import { logger, OAuthUserTokens, objectToUrlEncoded, peertubeLocalStorage } from '@root-helpers/index'
 import { HttpStatusCode, MyUser as UserServerModel, OAuthClientLocal, User, UserLogin, UserRefreshToken } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest/rest-extractor.service'
-import { ServerService } from '../server'
+import { RedirectService } from '../routing'
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
 
@@ -45,7 +45,7 @@ export class AuthService {
   private refreshingTokenObservable: Observable<any>
 
   constructor (
-    private serverService: ServerService,
+    private redirectService: RedirectService,
     private http: HttpClient,
     private notifier: Notifier,
     private hotkeysService: HotkeysService,
@@ -227,9 +227,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           logger.info('Cannot refresh token -> logout...')
           this.logout()
 
-          const externalLoginUrl = PluginsManager.getDefaultLoginHref(environment.apiUrl, this.serverService.getHTMLConfig())
-          if (externalLoginUrl) window.location.href = externalLoginUrl
-          else this.router.navigate([ '/login' ])
+          this.redirectService.redirectToLogin()
 
           return observableThrowError(() => ({
             error: $localize`You need to reconnect.`
