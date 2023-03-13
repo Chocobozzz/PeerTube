@@ -29,6 +29,7 @@ type Customizations = {
   warningTitle: boolean
   controlBar: boolean
   peertubeLink: boolean
+  responsive: boolean
 
   includeVideoInPlaylist: boolean
 }
@@ -100,6 +101,7 @@ export class VideoShareComponent {
       warningTitle: true,
       controlBar: true,
       peertubeLink: true,
+      responsive: false,
 
       includeVideoInPlaylist: false
     }, {
@@ -152,10 +154,10 @@ export class VideoShareComponent {
     )
   }
 
-  async getVideoIframeCode () {
+  async getVideoEmbedCode (responsive = false) {
     return this.hooks.wrapFun(
       buildVideoOrPlaylistEmbed,
-      { embedUrl: await this.getVideoEmbedUrl(), embedTitle: this.video.name },
+      { embedUrl: await this.getVideoEmbedUrl(), embedTitle: this.video.name, responsive },
       'video-watch',
       'filter:share.video-embed-code.build.params',
       'filter:share.video-embed-code.build.result'
@@ -186,10 +188,10 @@ export class VideoShareComponent {
     )
   }
 
-  async getPlaylistEmbedCode () {
+  async getPlaylistEmbedCode (responsive = false) {
     return this.hooks.wrapFun(
       buildVideoOrPlaylistEmbed,
-      { embedUrl: await this.getPlaylistEmbedUrl(), embedTitle: this.playlist.displayName },
+      { embedUrl: await this.getPlaylistEmbedUrl(), embedTitle: this.playlist.displayName, responsive },
       'video-watch',
       'filter:share.video-playlist-embed-code.build.params',
       'filter:share.video-playlist-embed-code.build.result'
@@ -204,15 +206,19 @@ export class VideoShareComponent {
     if (this.playlist) {
       this.playlistUrl = await this.getPlaylistUrl()
       this.playlistEmbedUrl = await this.getPlaylistEmbedUrl()
-      this.playlistEmbedHTML = await this.getPlaylistEmbedCode()
-      this.playlistEmbedSafeHTML = this.sanitizer.bypassSecurityTrustHtml(this.playlistEmbedHTML)
+      this.playlistEmbedHTML = await this.getPlaylistEmbedCode(this.customizations.responsive)
+      this.videoEmbedSafeHTML = this.sanitizer.bypassSecurityTrustHtml(this.customizations.responsive
+        ? await this.getPlaylistEmbedCode()
+        : this.playlistEmbedHTML)
     }
 
     if (this.video) {
       this.videoUrl = await this.getVideoUrl()
       this.videoEmbedUrl = await this.getVideoEmbedUrl()
-      this.videoEmbedHTML = await this.getVideoIframeCode()
-      this.videoEmbedSafeHTML = this.sanitizer.bypassSecurityTrustHtml(this.videoEmbedHTML)
+      this.videoEmbedHTML = await this.getVideoEmbedCode(this.customizations.responsive)
+      this.videoEmbedSafeHTML = this.sanitizer.bypassSecurityTrustHtml(this.customizations.responsive
+        ? await this.getVideoEmbedCode()
+        : this.videoEmbedHTML)
     }
   }
 
