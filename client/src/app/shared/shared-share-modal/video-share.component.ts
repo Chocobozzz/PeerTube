@@ -207,7 +207,7 @@ export class VideoShareComponent {
       this.playlistUrl = await this.getPlaylistUrl()
       this.playlistEmbedUrl = await this.getPlaylistEmbedUrl()
       this.playlistEmbedHTML = await this.getPlaylistEmbedCode(this.customizations.responsive)
-      this.videoEmbedSafeHTML = this.sanitizer.bypassSecurityTrustHtml(this.customizations.responsive
+      this.playlistEmbedSafeHTML = this.sanitizer.bypassSecurityTrustHtml(this.customizations.responsive
         ? await this.getPlaylistEmbedCode()
         : this.playlistEmbedHTML)
     }
