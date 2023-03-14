@@ -555,13 +555,6 @@ p-table {
 
     &.p-sortable-column:hover {
       background-color: pvar(--submenuBackgroundColor) !important;
-      border: 1px solid !important;
-      border-color: pvar(--submenuBackgroundColor) !important;
-      border-width: 0 1px !important;
-
-      &:first-child {
-        border-width: 0 1px 0 0 !important;
-      }
     }
 
     &.p-highlight {
