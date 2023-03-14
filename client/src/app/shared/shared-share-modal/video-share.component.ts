@@ -154,7 +154,8 @@ export class VideoShareComponent {
     )
   }
 
-  async getVideoEmbedCode (responsive = false) {
+  async getVideoEmbedCode (options: { responsive: boolean }) {
+    const { responsive } = options
     return this.hooks.wrapFun(
       buildVideoOrPlaylistEmbed,
       { embedUrl: await this.getVideoEmbedUrl(), embedTitle: this.video.name, responsive },
@@ -188,7 +189,8 @@ export class VideoShareComponent {
     )
   }
 
-  async getPlaylistEmbedCode (responsive = false) {
+  async getPlaylistEmbedCode (options: { responsive: boolean }) {
+    const { responsive } = options
     return this.hooks.wrapFun(
       buildVideoOrPlaylistEmbed,
       { embedUrl: await this.getPlaylistEmbedUrl(), embedTitle: this.playlist.displayName, responsive },
@@ -206,19 +208,15 @@ export class VideoShareComponent {
     if (this.playlist) {
       this.playlistUrl = await this.getPlaylistUrl()
       this.playlistEmbedUrl = await this.getPlaylistEmbedUrl()
-      this.playlistEmbedHTML = await this.getPlaylistEmbedCode(this.customizations.responsive)
-      this.playlistEmbedSafeHTML = this.sanitizer.bypassSecurityTrustHtml(this.customizations.responsive
-        ? await this.getPlaylistEmbedCode()
-        : this.playlistEmbedHTML)
+      this.playlistEmbedHTML = await this.getPlaylistEmbedCode({ responsive: this.customizations.responsive })
+      this.playlistEmbedSafeHTML = this.sanitizer.bypassSecurityTrustHtml(await this.getPlaylistEmbedCode({ responsive: false }))
     }
 
     if (this.video) {
       this.videoUrl = await this.getVideoUrl()
       this.videoEmbedUrl = await this.getVideoEmbedUrl()
-      this.videoEmbedHTML = await this.getVideoEmbedCode(this.customizations.responsive)
-      this.videoEmbedSafeHTML = this.sanitizer.bypassSecurityTrustHtml(this.customizations.responsive
-        ? await this.getVideoEmbedCode()
-        : this.videoEmbedHTML)
+      this.videoEmbedHTML = await this.getVideoEmbedCode({ responsive: this.customizations.responsive })
+      this.videoEmbedSafeHTML = this.sanitizer.bypassSecurityTrustHtml(await this.getVideoEmbedCode({ responsive: false }))
     }
   }
 
