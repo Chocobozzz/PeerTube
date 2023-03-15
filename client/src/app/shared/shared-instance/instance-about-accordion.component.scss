@@ -6,8 +6,7 @@
 }
 
 .instance-short-description {
-  @include ellipsis-multiline(1rem, 3, inherit);
-
+  font-size: 1rem;
   margin: 25px 0;
 }
 

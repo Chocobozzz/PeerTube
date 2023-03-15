@@ -3,15 +3,16 @@
   <div *ngIf="unreadNotifications >= 100" class="unread-notifications">99+</div>
 </ng-template>
 
-<div
+<button
   [ngbPopover]="popContent" autoClose="outside" placement="bottom" container={this} popoverClass="popover-notifications"
-  i18n-title title="View your notifications" [ngClass]="{ 'notification-inbox-popover': true, 'shown': opened, 'hidden': isInMobileView }"
+  i18n-title title="View your notifications"
+  class="border-0 text-start" [ngClass]="{ 'notification-inbox-popover': true, 'shown': opened, 'hidden': isInMobileView }"
   #popover="ngbPopover" (shown)="onPopoverShown()" (hidden)="onPopoverHidden()"
 >
   <ng-container *ngTemplateOutlet="notificationNumber"></ng-container>
 
   <my-global-icon iconName="bell"></my-global-icon>
-</div>
+</button>
 
 <div *ngIf="isInMobileView" i18n-title title="View your notifications" class="notification-inbox-link">
   <ng-container *ngTemplateOutlet="notificationNumber"></ng-container>

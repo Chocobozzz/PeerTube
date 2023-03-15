@@ -50,6 +50,10 @@
   padding: 4px 15px;
   margin-bottom: 15px;
   cursor: pointer;
+
+  &:focus-visible {
+    outline: pvar(--mainColor) auto 1px;
+  }
 }
 
 .filters-toggle {

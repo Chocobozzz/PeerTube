@@ -56,7 +56,7 @@
 
       <div [ngbNavOutlet]="resolutionNav"></div>
 
-      <div class="advanced-filters collapse-transition" [ngbCollapse]="isAdvancedCustomizationCollapsed">
+      <div class="advanced-filters" [ngbCollapse]="isAdvancedCustomizationCollapsed" [animation]="true">
         <div ngbNav #navMetadata="ngbNav" class="nav-tabs nav-metadata">
           <ng-container ngbNavItem>
             <a ngbNavLink i18n>Format</a>

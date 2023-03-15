@@ -25,15 +25,11 @@
       </ng-template>
     </ng-container>
 
-    <my-global-icon
-      *ngIf="!isMaximized" role="button" [ngbTooltip]="maximizeInText"
-      class="maximize-button" iconName="fullscreen" (click)="onMaximizeClick()" [ngClass]="{ disabled: disabled }"
-    ></my-global-icon>
+    <button (click)="onMaximizeClick()" class="maximize-button border-0 m-3" [disabled]="disabled">
+      <my-global-icon *ngIf="!isMaximized" [ngbTooltip]="maximizeInText" iconName="fullscreen"></my-global-icon>
 
-    <my-global-icon
-      *ngIf="isMaximized" role="button" [ngbTooltip]="maximizeOutText"
-      class="maximize-button" iconName="exit-fullscreen" (click)="onMaximizeClick()" [ngClass]="{ disabled: disabled }"
-    ></my-global-icon>
+      <my-global-icon *ngIf="isMaximized" [ngbTooltip]="maximizeOutText" iconName="exit-fullscreen"></my-global-icon>
+    </button>
   </div>
 
   <div [ngbNavOutlet]="nav"></div>

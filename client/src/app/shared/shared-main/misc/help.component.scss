@@ -2,12 +2,6 @@
 @use '_mixins' as *;
 
 .help-tooltip-button {
-  @include disable-outline;
-
-  cursor: pointer;
-  border: 0;
-  margin: 5px;
-
   my-global-icon {
     @include apply-svg-color(pvar(--greyForegroundColor));
 

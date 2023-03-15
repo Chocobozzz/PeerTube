@@ -3,15 +3,19 @@
 
 .feed {
   width: 100%;
+  color: inherit;
 
   a {
-    color: #000;
+    color: pvar(--mainForegroundColor);
     display: block;
     min-width: 100px;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
 my-global-icon {
-  cursor: pointer;
   width: 100%;
 }

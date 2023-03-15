@@ -1,7 +1,10 @@
 <ng-template #modal let-hide="close">
   <div class="modal-header">
     <h4 i18n class="modal-title">Share</h4>
-    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
+
+    <button class="border-0 p-0" (click)="hide()">
+      <my-global-icon iconName="cross" aria-label="Close" role="button" ></my-global-icon>
+    </button>
   </div>
 
 
@@ -150,89 +153,85 @@
       <div [ngbNavOutlet]="nav"></div>
 
       <div class="filters">
-        <div>
-          <div class="form-group start-at" *ngIf="!video.isLive">
+        <div class="form-group start-at" *ngIf="!video.isLive">
+          <my-peertube-checkbox
+            inputName="startAt" [(ngModel)]="customizations.startAtCheckbox"
+            i18n-labelText labelText="Start at"
+          ></my-peertube-checkbox>
+
+          <my-timestamp-input
+            [timestamp]="customizations.startAt"
+            [maxTimestamp]="video.duration"
+            [disabled]="!customizations.startAtCheckbox"
+            [(ngModel)]="customizations.startAt"
+          >
+          </my-timestamp-input>
+        </div>
+
+        <div *ngIf="videoCaptions.length !== 0" class="form-group video-caption-block">
+          <my-peertube-checkbox
+            inputName="subtitleCheckbox" [(ngModel)]="customizations.subtitleCheckbox"
+            i18n-labelText labelText="Auto select subtitle"
+          ></my-peertube-checkbox>
+
+          <div class="peertube-select-container" [ngClass]="{ disabled: !customizations.subtitleCheckbox }">
+            <select [(ngModel)]="customizations.subtitle" [disabled]="!customizations.subtitleCheckbox" class="form-control">
+              <option *ngFor="let caption of videoCaptions" [value]="caption.language.id">{{ caption.language.label }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="isInVideoEmbedTab()">
+          <my-peertube-checkbox
+            inputName="onlyEmbedUrl" [(ngModel)]="customizations.onlyEmbedUrl"
+            i18n-labelText labelText="Only display embed URL"
+          ></my-peertube-checkbox>
+        </div>
+
+        <my-plugin-placeholder pluginId="share-modal-video-settings"></my-plugin-placeholder>
+
+        <div class="advanced-filters" [ngbCollapse]="isAdvancedCustomizationCollapsed" [animation]="true">
+          <div class="form-group stop-at" *ngIf="!video.isLive">
             <my-peertube-checkbox
-              inputName="startAt" [(ngModel)]="customizations.startAtCheckbox"
-              i18n-labelText labelText="Start at"
+              inputName="stopAt" [(ngModel)]="customizations.stopAtCheckbox"
+              i18n-labelText labelText="Stop at"
             ></my-peertube-checkbox>
 
             <my-timestamp-input
-              [timestamp]="customizations.startAt"
+              [timestamp]="customizations.stopAt"
               [maxTimestamp]="video.duration"
-              [disabled]="!customizations.startAtCheckbox"
-              [(ngModel)]="customizations.startAt"
+              [disabled]="!customizations.stopAtCheckbox"
+              [(ngModel)]="customizations.stopAt"
             >
             </my-timestamp-input>
           </div>
 
-          <div *ngIf="videoCaptions.length !== 0" class="form-group video-caption-block">
+          <div class="form-group">
             <my-peertube-checkbox
-              inputName="subtitleCheckbox" [(ngModel)]="customizations.subtitleCheckbox"
-              i18n-labelText labelText="Auto select subtitle"
-            ></my-peertube-checkbox>
-
-            <div class="peertube-select-container" [ngClass]="{ disabled: !customizations.subtitleCheckbox }">
-              <select [(ngModel)]="customizations.subtitle" [disabled]="!customizations.subtitleCheckbox" class="form-control">
-                <option *ngFor="let caption of videoCaptions" [value]="caption.language.id">{{ caption.language.label }}</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group" *ngIf="isInVideoEmbedTab()">
-            <my-peertube-checkbox
-              inputName="onlyEmbedUrl" [(ngModel)]="customizations.onlyEmbedUrl"
-              i18n-labelText labelText="Only display embed URL"
+              inputName="autoplay" [(ngModel)]="customizations.autoplay"
+              i18n-labelText labelText="Autoplay"
             ></my-peertube-checkbox>
           </div>
 
-          <my-plugin-placeholder pluginId="share-modal-video-settings"></my-plugin-placeholder>
-        </div>
+          <div class="form-group">
+            <my-peertube-checkbox
+              inputName="muted" [(ngModel)]="customizations.muted"
+              i18n-labelText labelText="Muted"
+            ></my-peertube-checkbox>
+          </div>
 
-        <div class="advanced-filters collapse-transition" [ngbCollapse]="isAdvancedCustomizationCollapsed">
-          <div>
-            <div class="form-group stop-at" *ngIf="!video.isLive">
-              <my-peertube-checkbox
-                inputName="stopAt" [(ngModel)]="customizations.stopAtCheckbox"
-                i18n-labelText labelText="Stop at"
-              ></my-peertube-checkbox>
+          <div class="form-group" *ngIf="!video.isLive">
+            <my-peertube-checkbox
+              inputName="loop" [(ngModel)]="customizations.loop"
+              i18n-labelText labelText="Loop"
+            ></my-peertube-checkbox>
+          </div>
 
-              <my-timestamp-input
-                [timestamp]="customizations.stopAt"
-                [maxTimestamp]="video.duration"
-                [disabled]="!customizations.stopAtCheckbox"
-                [(ngModel)]="customizations.stopAt"
-              >
-              </my-timestamp-input>
-            </div>
-
-            <div class="form-group">
-              <my-peertube-checkbox
-                inputName="autoplay" [(ngModel)]="customizations.autoplay"
-                i18n-labelText labelText="Autoplay"
-              ></my-peertube-checkbox>
-            </div>
-
-            <div class="form-group">
-              <my-peertube-checkbox
-                inputName="muted" [(ngModel)]="customizations.muted"
-                i18n-labelText labelText="Muted"
-              ></my-peertube-checkbox>
-            </div>
-
-            <div class="form-group" *ngIf="!video.isLive">
-              <my-peertube-checkbox
-                inputName="loop" [(ngModel)]="customizations.loop"
-                i18n-labelText labelText="Loop"
-              ></my-peertube-checkbox>
-            </div>
-
-            <div *ngIf="!isLocalVideo() && !isInVideoEmbedTab()" class="form-group">
-              <my-peertube-checkbox
-                inputName="originUrl" [(ngModel)]="customizations.originUrl"
-                i18n-labelText labelText="Use origin instance URL"
-              ></my-peertube-checkbox>
-            </div>
+          <div *ngIf="!isLocalVideo() && !isInVideoEmbedTab()" class="form-group">
+            <my-peertube-checkbox
+              inputName="originUrl" [(ngModel)]="customizations.originUrl"
+              i18n-labelText labelText="Use origin instance URL"
+            ></my-peertube-checkbox>
           </div>
 
           <ng-container *ngIf="isInVideoEmbedTab()">
@@ -280,9 +279,11 @@
           </ng-container>
         </div>
 
-        <div (click)="isAdvancedCustomizationCollapsed = !isAdvancedCustomizationCollapsed" role="button" class="advanced-filters-button"
-             [attr.aria-expanded]="!isAdvancedCustomizationCollapsed" aria-controls="collapseBasic">
-
+        <button
+          class="border-0 p-0 mt-4 mx-auto fw-semibold d-block"
+          (click)="isAdvancedCustomizationCollapsed = !isAdvancedCustomizationCollapsed"
+          [attr.aria-expanded]="!isAdvancedCustomizationCollapsed" aria-controls="collapseBasic"
+        >
           <ng-container *ngIf="isAdvancedCustomizationCollapsed">
             <span class="chevron-down"></span>
 
@@ -298,7 +299,7 @@
               Less customization
             </ng-container>
           </ng-container>
-        </div>
+        </button>
       </div>
     </div>
   </div>

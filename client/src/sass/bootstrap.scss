@@ -15,6 +15,7 @@
 @import 'bootstrap/scss/grid';
 @import 'bootstrap/scss/forms';
 @import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/transitions';
 @import 'bootstrap/scss/dropdown';
 @import 'bootstrap/scss/button-group';
 @import 'bootstrap/scss/nav';
@@ -203,7 +204,6 @@ body {
   display: flex !important;
   align-items: center;
   height: 30px !important;
-  padding: 10px 15px !important;
 }
 
 .nav.nav-pills {
@@ -258,19 +258,6 @@ body {
 .card {
   background-color: pvar(--mainBackgroundColor);
   border-color: #dee2e6;
-}
-
-.collapse-transition {
-  // Animation when we show/hide the filters
-  transition: max-height 0.3s;
-  display: block !important;
-  overflow: hidden !important;
-  max-height: 0;
-
-  &.show {
-    max-height: 1500px;
-    overflow: inherit !important;
-  }
 }
 
 .accordion-button {
@@ -388,4 +375,9 @@ body {
   input:placeholder-shown + .form-control-clear {
     display: none;
   }
+}
+
+.text-truncate {
+  // Prevent invalid height in parent: https://stackoverflow.com/a/22425601
+  vertical-align: top;
 }

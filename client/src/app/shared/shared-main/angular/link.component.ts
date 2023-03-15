@@ -14,14 +14,17 @@ export class LinkComponent implements OnInit {
   @Input() title?: string
 
   @Input() className?: string
+  @Input() inheritParentCSS = false
 
   @Input() tabindex: string | number
 
   builtClasses: string
 
   ngOnInit () {
-    this.builtClasses = this.className
-      ? this.className
-      : 'no-class'
+    this.builtClasses = this.className || ''
+
+    if (!this.builtClasses || this.inheritParentCSS) {
+      this.builtClasses += ' inherit-parent'
+    }
   }
 }

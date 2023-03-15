@@ -252,8 +252,6 @@ my-actor-avatar {
 
   > a,
   > my-login-link {
-    @include ellipsis;
-
     display: block;
     width: 100%;
 

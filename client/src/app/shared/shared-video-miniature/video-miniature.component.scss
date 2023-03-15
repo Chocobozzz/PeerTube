@@ -167,7 +167,7 @@ my-actor-avatar {
   }
 
   .video-miniature-name {
-    @include ellipsis-multiline($video-miniature-row-name-font-size, 2);
+    font-size: $video-miniature-row-name-font-size;
   }
 
   .video-miniature-created-at-views,

@@ -1,4 +1,4 @@
-<div class="feed" *ngIf="syndicationItems && syndicationItems.length !== 0">
+<button class="feed border-0 p-0" *ngIf="syndicationItems && syndicationItems.length !== 0">
   <my-global-icon
     role="button" aria-label="Open syndication dropdown" i18n-aria-label
     *ngIf="syndicationItems.length !== 0" [ngbPopover]="feedsList" [autoClose]="true" placement="bottom left auto"
@@ -9,4 +9,4 @@
   <ng-template #feedsList>
     <a *ngFor="let item of syndicationItems" [href]="item.url" target="_blank" rel="noopener noreferrer">{{ item.label }}</a>
   </ng-template>
-</div>
+</button>

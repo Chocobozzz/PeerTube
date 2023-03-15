@@ -41,6 +41,7 @@ $input-focus-bg: pvar(--inputBackgroundColor);
 $input-btn-focus-width: 0;
 $input-btn-focus-color: inherit;
 $input-focus-border-color: #ced4da;
+$input-focus-box-shadow: 0 0 0 0.25rem pvar(--mainColorLightest);
 
 $input-group-addon-color: pvar(--mainForegroundColor);
 $input-group-addon-bg: pvar(--greyBackgroundColor);

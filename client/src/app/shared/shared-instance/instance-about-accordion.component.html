@@ -1,6 +1,6 @@
 <h2 *ngIf="displayInstanceName" class="instance-name">{{ about?.instance.name }}</h2>
 
-<div *ngIf="displayInstanceShortDescription" class="instance-short-description">{{ about?.instance.shortDescription }}</div>
+<div *ngIf="displayInstanceShortDescription" class="instance-short-description ellipsis-multiline-3">{{ about?.instance.shortDescription }}</div>
 
 <ngb-accordion #accordion="ngbAccordion" [closeOthers]="true">
   <ngb-panel *ngIf="panels.features" id="instance-features">

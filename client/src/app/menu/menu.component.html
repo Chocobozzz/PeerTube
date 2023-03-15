@@ -7,7 +7,7 @@
             class="logged-in-more" ngbDropdown #dropdown="ngbDropdown" placement="bottom-left auto"
             [container]="dropdownContainer" (openChange)="onDropdownOpenChange($event)" autoClose="outside"
           >
-            <div ngbDropdownToggle>
+            <button class="border-0 text-start" ngbDropdownToggle>
               <my-actor-avatar [actor]="user.account" actorType="account" size="34"></my-actor-avatar>
 
               <div class="logged-in-info">
@@ -19,7 +19,7 @@
               <div class="dropdown-toggle-indicator">
                 <span class="chevron-down"></span>
               </div>
-            </div>
+            </button>
 
             <div ngbDropdownMenu>
               <a
@@ -31,14 +31,14 @@
 
               <div class="dropdown-divider"></div>
 
-              <a
+              <button
                 myPluginSelector pluginSelectorId="menu-user-dropdown-language-item"
                 ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openLanguageChooser()"
               >
                 <my-global-icon iconName="language" aria-hidden="true"></my-global-icon>
                 <span i18n>Interface:</span>
                 <span class="ms-auto muted">{{ currentInterfaceLanguage }}</span>
-              </a>
+              </button>
 
               <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-languages-subtitles"
                 #settingsLanguagesSubtitles (click)="onActiveLinkScrollToAnchor(settingsLanguagesSubtitles)">
@@ -57,12 +57,12 @@
                 <span class="ms-auto muted">{{ nsfwPolicy }}</span>
               </a>
 
-              <a ngbDropdownItem class="dropdown-item" (click)="toggleUseP2P()">
+              <button ngbDropdownItem class="dropdown-item" (click)="toggleUseP2P()">
                 <my-global-icon iconName="p2p" aria-hidden="true"></my-global-icon>
                 <ng-container i18n>Help share videos</ng-container>
 
                 <my-input-switch class="ms-auto" [checked]="user.p2pEnabled"></my-input-switch>
-              </a>
+              </button>
 
               <div class="dropdown-divider"></div>
 
@@ -100,9 +100,9 @@
       </div>
 
       <div *ngIf="!isLoggedIn" class="login-buttons-block">
-        <my-login-link className="peertube-button-link orange-button w-100"></my-login-link>
+        <my-login-link className="peertube-button-link orange-button w-100 text-truncate"></my-login-link>
 
-        <a *ngIf="isRegistrationAllowed()" routerLink="/signup" class="peertube-button-link create-account-button">
+        <a *ngIf="isRegistrationAllowed()" routerLink="/signup" class="peertube-button-link create-account-button text-truncate">
           <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
         </a>
       </div>

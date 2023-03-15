@@ -1,6 +1,6 @@
 <div class="miniature" [ngClass]="{ 'no-videos': playlist.videosLength === 0, 'to-manage': toManage, 'display-as-row': displayAsRow }">
   <my-link
-    [internalLink]="routerLink" [href]="playlistHref" [target]="playlistTarget"
+    [internalLink]="routerLink" [href]="playlistHref" [target]="playlistTarget" [inheritParentCSS]="true"
     [title]="playlist.description" class="miniature-thumbnail"
   >
     <img alt="" [attr.aria-labelledby]="playlist.displayName" [attr.src]="playlist.thumbnailUrl" />
@@ -16,8 +16,8 @@
 
   <div class="miniature-info">
     <my-link
-      [internalLink]="routerLink" [href]="playlistHref" [target]="playlistTarget"
-      [title]="playlist.description" class="miniature-name" tabindex="-1"
+      [internalLink]="routerLink" [href]="playlistHref" [target]="playlistTarget" [inheritParentCSS]="true"
+      [title]="playlist.description" class="miniature-name" className="ellipsis-multiline-2"
     >
       {{ playlist.displayName }}
     </my-link>

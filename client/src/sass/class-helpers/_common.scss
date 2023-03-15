@@ -3,30 +3,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.link-orange {
-  color: pvar(--mainForegroundColor);
-  font-weight: $font-semibold;
-  border-bottom: 0.18em solid pvar(--mainColor);
-  display: inline-block;
-  line-height: 1.1;
-
-  &:hover {
-    color: pvar(--mainForegroundColor);
-    opacity: 0.8;
-  }
-}
-
-.underline-orange {
-  display: inline-block;
-  border-bottom: 0.19em solid pvar(--mainColor);
-}
-
-// ---------------------------------------------------------------------------
-
-.muted {
-  @include muted;
-}
-
 // ---------------------------------------------------------------------------
 
 .pt-badge {

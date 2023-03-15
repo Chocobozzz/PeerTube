@@ -24,8 +24,8 @@
 
         <div class="w-100 d-flex flex-column">
           <my-link
-            [internalLink]="videoRouterLink" [href]="videoHref" [target]="videoTarget"
-            [title]="video.name"class="video-miniature-name" [ngClass]="{ 'blur-filter': isVideoBlur }" tabindex="-1"
+            [internalLink]="videoRouterLink" [href]="videoHref" [target]="videoTarget" [inheritParentCSS]="true"
+            [title]="video.name" class="video-miniature-name" className="ellipsis-multiline-2" [ngClass]="{ 'blur-filter': isVideoBlur }"
           >
             {{ video.name }}
           </my-link>
@@ -40,7 +40,7 @@
             </span>
           </span>
 
-          <a tabindex="-1" *ngIf="displayOptions.by" class="video-miniature-account" [routerLink]="[ '/c', video.byVideoChannel ]">
+          <a *ngIf="displayOptions.by" class="video-miniature-account" [routerLink]="[ '/c', video.byVideoChannel ]">
             <ng-container *ngIf="displayOwnerAccount()">{{ authorAccount }}</ng-container>
             <ng-container *ngIf="displayOwnerVideoChannel()">{{ authorChannel }}</ng-container>
           </a>
