@@ -4,7 +4,7 @@
 
 Main dependencies version supported by PeerTube:
 
- * `node` >=14.x
+ * `node` >=16.x
  * `yarn` >=1.x
  * `postgres` >=10.x
  * `redis-server` >=6.x
