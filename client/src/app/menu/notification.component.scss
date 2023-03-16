@@ -120,8 +120,12 @@
           }
         }
 
-        my-global-icon {
+        my-global-icon[iconName=cog] {
           width: 20px;
+        }
+
+        my-global-icon[iconName=tick] {
+          width: 26px;
         }
       }
 
