@@ -3,17 +3,13 @@
 
 .header {
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 
   a {
-    @include peertube-button-link;
-    @include grey-button;
     @include button-with-icon(18px, 3px, -1px);
   }
 
   button {
-    @include peertube-button;
-    @include grey-button;
     @include button-with-icon(20px, 3px, -1px);
   }
 

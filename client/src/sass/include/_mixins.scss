@@ -91,8 +91,16 @@
   }
 }
 
-@mixin peertube-input-text($width) {
-  padding: 4px 15px;
+@mixin rounded-line-height-1-5 ($font-size) {
+  line-height: $font-size + math.round(math.div($font-size, 2));
+}
+
+@mixin peertube-input-text($width, $font-size: $form-input-font-size) {
+  @include rounded-line-height-1-5($font-size);
+
+  font-size: $font-size;
+
+  padding: 3px 15px;
   display: inline-block;
   width: $width;
   max-width: $width;
@@ -100,8 +108,6 @@
   background-color: pvar(--inputBackgroundColor);
   border: 1px solid pvar(--inputBorderColor);
   border-radius: 3px;
-  font-size: $form-input-font-size;
-  line-height: $form-input-line-height;
 
   &::placeholder {
     color: pvar(--inputPlaceholderColor);
@@ -252,6 +258,8 @@
 }
 
 @mixin peertube-button {
+  @include rounded-line-height-1-5($button-font-size);
+
   padding: 4px 13px;
 
   border: 0;
@@ -264,7 +272,6 @@
   cursor: pointer;
 
   font-size: $button-font-size;
-  line-height: $button-font-size + math.round(math.div($button-font-size, 2));
 
   my-global-icon + * {
     @include margin-right(4px);
@@ -313,10 +320,6 @@
     position: relative;
     width: $width;
     top: $top;
-  }
-
-  span {
-    vertical-align: middle;
   }
 }
 
@@ -408,15 +411,17 @@
   }
 
   select {
-    padding: 4px 35px 4px 12px;
+    @include rounded-line-height-1-5($form-input-font-size);
+
+    font-size: $form-input-font-size;
+
+    padding: 3px 35px 3px 12px;
     position: relative;
     border: 1px solid pvar(--inputBorderColor);
     background: transparent none;
     appearance: none;
     text-overflow: ellipsis;
     color: pvar(--mainForegroundColor);
-    font-size: $form-input-font-size;
-    line-height: $form-input-line-height;
 
     &:focus {
       outline: none;
@@ -443,6 +448,9 @@
       font-weight: $font-semibold;
       color: pvar(--greyForegroundColor);
       border: 0;
+
+      // No border, add +1 to vertical padding
+      padding: 4px 35px 4px 12px;
     }
   }
 }

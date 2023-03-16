@@ -2,9 +2,7 @@
 @use '_mixins' as *;
 
 .publish-button {
-  @include peertube-button-link;
-  @include orange-button;
-  @include button-with-icon(22px, 3px, -1px);
+  @include button-with-icon(21px, 3px, -1px);
   @include margin-right(25px);
 
   @media screen and (max-width: $mobile-view) {

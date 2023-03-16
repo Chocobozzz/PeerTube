@@ -2,12 +2,10 @@
 @use '_mixins' as *;
 
 #search-video {
-  @include peertube-input-text($search-input-width);
+  @include peertube-input-text($search-input-width, 14px);
 
   @include padding-left(10px);
   @include padding-right(40px); // For the search icon
-
-  font-size: 14px;
 
   &::placeholder {
     color: pvar(--inputPlaceholderColor);
