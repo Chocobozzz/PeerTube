@@ -1,4 +1,4 @@
-// {hookType}:{api?}.{location}.{subLocation?}.{actionType}.{target}
+// {hookType}:{root}.{location}.{subLocation?}.{actionType}.{target}
 
 export const serverFilterHookObject = {
   // Filter params/result used to list videos for the REST API
@@ -184,7 +184,11 @@ export const serverActionHookObject = {
   'action:api.user.oauth2-got-token': true,
 
   // Fired when a video is added to a playlist
-  'action:api.video-playlist-element.created': true
+  'action:api.video-playlist-element.created': true,
+
+  // Fired when a remote video has been created/updated
+  'action:activity-pub.remote-video.created': true,
+  'action:activity-pub.remote-video.updated': true
 }
 
 export type ServerActionHookName = keyof typeof serverActionHookObject

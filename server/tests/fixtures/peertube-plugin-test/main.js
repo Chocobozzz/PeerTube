@@ -1,42 +1,53 @@
 async function register ({ registerHook, registerSetting, settingsManager, storageManager, peertubeHelpers }) {
-  const actionHooks = [
-    'action:application.listening',
-    'action:notifier.notification.created',
+  {
+    const actionHooks = [
+      'action:application.listening',
+      'action:notifier.notification.created',
 
-    'action:api.video.updated',
-    'action:api.video.deleted',
-    'action:api.video.uploaded',
-    'action:api.video.viewed',
+      'action:api.video.updated',
+      'action:api.video.deleted',
+      'action:api.video.uploaded',
+      'action:api.video.viewed',
 
-    'action:api.video-channel.created',
-    'action:api.video-channel.updated',
-    'action:api.video-channel.deleted',
+      'action:api.video-channel.created',
+      'action:api.video-channel.updated',
+      'action:api.video-channel.deleted',
 
-    'action:api.live-video.created',
+      'action:api.live-video.created',
 
-    'action:api.video-thread.created',
-    'action:api.video-comment-reply.created',
-    'action:api.video-comment.deleted',
+      'action:api.video-thread.created',
+      'action:api.video-comment-reply.created',
+      'action:api.video-comment.deleted',
 
-    'action:api.video-caption.created',
-    'action:api.video-caption.deleted',
+      'action:api.video-caption.created',
+      'action:api.video-caption.deleted',
 
-    'action:api.user.blocked',
-    'action:api.user.unblocked',
-    'action:api.user.registered',
-    'action:api.user.created',
-    'action:api.user.deleted',
-    'action:api.user.updated',
-    'action:api.user.oauth2-got-token',
+      'action:api.user.blocked',
+      'action:api.user.unblocked',
+      'action:api.user.registered',
+      'action:api.user.created',
+      'action:api.user.deleted',
+      'action:api.user.updated',
+      'action:api.user.oauth2-got-token',
 
-    'action:api.video-playlist-element.created'
-  ]
+      'action:api.video-playlist-element.created'
+    ]
 
-  for (const h of actionHooks) {
-    registerHook({
-      target: h,
-      handler: () => peertubeHelpers.logger.debug('Run hook %s.', h)
-    })
+    for (const h of actionHooks) {
+      registerHook({
+        target: h,
+        handler: () => peertubeHelpers.logger.debug('Run hook %s.', h)
+      })
+    }
+
+    for (const h of [ 'action:activity-pub.remote-video.created', 'action:activity-pub.remote-video.updated' ]) {
+      registerHook({
+        target: h,
+        handler: ({ video, videoAPObject }) => {
+          peertubeHelpers.logger.debug('Run hook %s - AP %s - video %s.', h, video.name, videoAPObject.name )
+        }
+      })
+    }
   }
 
   registerHook({

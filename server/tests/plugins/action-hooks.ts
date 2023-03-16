@@ -4,6 +4,7 @@ import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/mode
 import {
   cleanupTests,
   createMultipleServers,
+  doubleFollow,
   killallServers,
   PeerTubeServer,
   PluginsCommand,
@@ -36,6 +37,8 @@ describe('Test plugin action hooks', function () {
         enabled: true
       }
     })
+
+    await doubleFollow(servers[0], servers[1])
   })
 
   describe('Application hooks', function () {
@@ -228,6 +231,27 @@ describe('Test plugin action hooks', function () {
 
     it('Should run action:notifier.notification.created', async function () {
       await checkHook('action:notifier.notification.created', false)
+    })
+  })
+
+  describe('Activity Pub hooks', function () {
+    let videoUUID: string
+
+    it('Should run action:activity-pub.remote-video.created', async function () {
+      this.timeout(30000)
+
+      const { uuid } = await servers[1].videos.quickUpload({ name: 'remote video' })
+      videoUUID = uuid
+
+      await servers[0].servers.waitUntilLog('action:activity-pub.remote-video.created - AP remote video - video remote video')
+    })
+
+    it('Should run action:activity-pub.remote-video.updated', async function () {
+      this.timeout(30000)
+
+      await servers[1].videos.update({ id: videoUUID, attributes: { name: 'remote video updated' } })
+
+      await servers[0].servers.waitUntilLog('action:activity-pub.remote-video.updated - AP remote video - video remote video')
     })
   })
 

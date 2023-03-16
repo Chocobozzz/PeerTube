@@ -1,6 +1,7 @@
 
 import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger'
 import { sequelizeTypescript } from '@server/initializers/database'
+import { Hooks } from '@server/lib/plugins/hooks'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist'
 import { VideoModel } from '@server/models/video/video'
 import { MThumbnail, MVideoFullLight, MVideoThumbnail } from '@server/types/models'
@@ -60,6 +61,8 @@ export class APVideoCreator extends APVideoAbstractBuilder {
         })
 
         logger.info('Remote video with uuid %s inserted.', this.videoObject.uuid, this.lTags())
+
+        Hooks.runAction('action:activity-pub.remote-video.created', { video: videoCreated, videoAPObject: this.videoObject })
 
         return { autoBlacklisted, videoCreated }
       } catch (err) {
