@@ -3,6 +3,7 @@ import { resetSequelizeInstance, runInReadCommittedTransaction } from '@server/h
 import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger'
 import { Notifier } from '@server/lib/notifier'
 import { PeerTubeSocket } from '@server/lib/peertube-socket'
+import { Hooks } from '@server/lib/plugins/hooks'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { MActor, MChannelAccountLight, MChannelId, MVideoAccountLightBlacklistAllFiles, MVideoFullLight } from '@server/types/models'
@@ -80,6 +81,8 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
       if (videoUpdated.isLive) {
         PeerTubeSocket.Instance.sendVideoLiveNewState(videoUpdated)
       }
+
+      Hooks.runAction('action:activity-pub.remote-video.updated', { video: videoUpdated, videoAPObject: this.videoObject })
 
       logger.info('Remote video with uuid %s updated', this.videoObject.uuid, this.lTags())
 

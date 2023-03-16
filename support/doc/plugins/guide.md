@@ -16,6 +16,7 @@
     - [Add external auth methods](#add-external-auth-methods)
     - [Add new transcoding profiles](#add-new-transcoding-profiles)
     - [Server helpers](#server-helpers)
+    - [Federation](#federation)
   - [Client API (themes & plugins)](#client-api-themes--plugins)
     - [Get plugin static and router routes](#get-plugin-static-and-router-routes)
     - [Notifier](#notifier)
@@ -586,6 +587,49 @@ async function register ({
 ```
 
 See the [plugin API reference](https://docs.joinpeertube.org/api/plugins) to see the complete helpers list.
+
+#### Federation
+
+You can use some server hooks to federate plugin data to other PeerTube instances that may have installed your plugin.
+
+For example to federate additional video metadata:
+
+```js
+async function register ({ registerHook }) {
+
+  // Send plugin metadata to remote instances
+  // We also update the JSON LD context because we added a new field
+  {
+    registerHook({
+      target: 'filter:activity-pub.video.json-ld.build.result',
+      handler: async (jsonld, { video }) => {
+        return Object.assign(jsonld, { recordedAt: 'https://example.com/event' })
+      }
+    })
+
+    registerHook({
+      target: 'filter:activity-pub.activity.context.build.result',
+      handler: jsonld => {
+        return jsonld.concat([ { recordedAt: 'https://schema.org/recordedAt' } ])
+      }
+    })
+  }
+
+  // Save remote video metadata
+  {
+    for (const h of [ 'action:activity-pub.remote-video.created', 'action:activity-pub.remote-video.updated' ]) {
+      registerHook({
+        target: h,
+        handler: ({ video, videoAPObject }) => {
+          if (videoAPObject.recordedAt) {
+            // Save information about the video
+          }
+        }
+      })
+    }
+  }
+```
+
 
 ### Client API (themes & plugins)
 
