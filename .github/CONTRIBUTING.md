@@ -138,8 +138,6 @@ You can get a complete PeerTube development setup with Gitpod, a free one-click 
 
 ### Server side
 
-You can find a documentation of the server code/architecture [here](https://docs.joinpeertube.org/contribute/architecture#server).
-
 To develop on the server-side:
 
 ```
@@ -150,11 +148,11 @@ Then, the server will listen on `localhost:9000`. When server source files
 change, these are automatically recompiled and the server will automatically
 restart.
 
+More detailed documentation is available:
+  * [Server code/architecture](https://docs.joinpeertube.org/contribute/architecture#server)
+  * [Server development (adding a new feature...)](/support/doc/development/server.md)
+
 ### Client side
-
-You can find a documentation of the client code/architecture
-[here](https://docs.joinpeertube.org/contribute/architecture#client).
-
 
 To develop on the client side:
 
@@ -165,6 +163,10 @@ $ npm run dev:client
 The API will listen on `localhost:9000` and the frontend on `localhost:3000`.
 Client files are automatically compiled on change, and the web browser will
 reload them automatically thanks to hot module replacement.
+
+More detailed documentation is available:
+  * [Client code/architecture](https://docs.joinpeertube.org/contribute/architecture#client)
+
 
 ### Client and server side
 
