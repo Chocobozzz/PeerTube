@@ -1,5 +1,13 @@
 # Server code
 
+## Database model typing
+
+Sequelize models contain optional fields corresponding to table joins.
+For example, `VideoModel` has a `VideoChannel?: VideoChannelModel` field. It can be filled if the SQL query joined with the `videoChannel` table or empty if not.
+It can be difficult in TypeScript to understand if a function argument expects associations to be filled or not.
+To improve clarity and reduce bugs, PeerTube defines multiple versions of a database model depending on its associations in `server/types/models/`.
+These models start with `M` and by default do not include any association. `MVideo` for example corresponds to `VideoModel` without any association, where `VideoChannel` attribute doesn't exist. On the other hand, `MVideoWithChannel` is a `MVideo` that has a `VideoChannel` field. This way, a function that accepts `video: MVideoWithChannel` argument expects a video with channel populated. Main PeerTube code should never use `...Model` (`VideoModel`) database type, but always `M...` instead (`MVideo`, `MVideoChannel` etc).
+
 ## Add a new feature walkthrough
 
 Here's a list of all the parts of the server to update if you want to add a new feature (new API REST endpoints for example) to the PeerTube server.
