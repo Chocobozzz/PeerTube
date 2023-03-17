@@ -330,7 +330,7 @@
       </trans-unit>
       <trans-unit id="906167214730624194" datatype="html">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{spettatori, plurale, =0 {Nessuno spettatore} =1 {1 spettatore} altri {<x id="viewers"/> spettatori}}</target>
+        <target state="translated">{spettatori, plural, =0 {Nessuno spettatore} =1 {1 spettatore} other {<x id="viewers"/> spettatori}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">22</context>
@@ -338,7 +338,7 @@
       </trans-unit>
       <trans-unit id="4873265433447388314" datatype="html">
         <source>{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</source>
-        <target state="translated">{spettatori, plurale, =0 {Nessuno spettatore} =1 {1 spettatore} altri {<x id="viewers"/> spettatori}}</target>
+        <target state="translated">{spettatori, plural, =0 {Nessuno spettatore} =1 {1 spettatore} other {<x id="viewers"/> spettatori}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">23</context>
@@ -3423,7 +3423,7 @@
       </trans-unit>
       <trans-unit id="4036338619293319383" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</source>
-        <target state="translated">{VAR_PLURAL, plurale, =1 {1 risposta} other {<x id="INTERPOLATION"/> risposte}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 risposta} other {<x id="INTERPOLATION"/> risposte}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">74</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">77</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">81</context></context-group>
@@ -3743,7 +3743,7 @@
       </trans-unit>
       <trans-unit id="8168516547268350654" datatype="html">
         <source>Do you really want to unfollow {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> entries?}}</source>
-        <target state="translated">Vuoi davvero non seguire {conteggio, plurale, =1 {<x id="entryName"/>?} altre {<x id="count"/> voci?}}</target>
+        <target state="translated">Vuoi davvero non seguire {conteggio, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> voci?}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="8061023631336698211" datatype="html">
@@ -4385,7 +4385,7 @@
       </trans-unit>
       <trans-unit id="2959657578684395250" datatype="html">
         <source>{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}</source>
-        <target state="translated">{conteggio, plurale, =1 {Richiesta di follow inviata!} altro {Richiesta di follow inviata!}</target>
+        <target state="translated">{conteggio, plural, =1 {Richiesta di follow inviata!} other {Richiesta di follow inviata!}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -4586,7 +4586,7 @@
       </trans-unit>
       <trans-unit id="1271241007621398467" datatype="html">
         <source>{count, plural, =1 {1 comment deleted.} other {<x id="count"/> comments deleted.}}</source>
-        <target state="translated">{conto, plurale, =1 {1 commento cancellato.} altro {<x id="count"/> commenti cancellati.}}</target>
+        <target state="translated">{conto, plural, =1 {1 commento cancellato.} other {<x id="count"/> commenti cancellati.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">149</context></context-group>
       </trans-unit>
       <trans-unit id="264978617337249011" datatype="html">
@@ -5058,7 +5058,7 @@
       </trans-unit>
       <trans-unit id="8342879272354516454" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {year old} other {years old}}</source>
-        <target state="translated">{VAR_PLURAL, plurale, =1 {anni} other {anni}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {anni} other {anni}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">209</context></context-group>
       </trans-unit>
       <trans-unit id="7456307533995141215" datatype="html">
@@ -10229,7 +10229,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8562677309401914974" datatype="html">
         <source>{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</source>
-        <target state="translated">{Intervallo, plurale, =1 {1 ora fa} altro {<x id="interval"/> ore fa}}</target>
+        <target state="translated">{Intervallo, plural, =1 {1 ora fa} other {<x id="interval"/> ore fa}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">11</context>
@@ -11558,7 +11558,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3911025298999036211" datatype="html">
         <source>~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</source>
-        <target state="translated">~ {ore, plurale, =1 {1 ora} altro {<x id="hours"/> ore}}</target>
+        <target state="translated">~ {ore, plural, =1 {1 ora} other {<x id="hours"/> ore}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="8587199198938218660" datatype="html">
