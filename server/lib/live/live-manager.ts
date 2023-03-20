@@ -480,13 +480,15 @@ class LiveManager {
       : null
 
     return sequelizeTypescript.transaction(async t => {
-      await replaySettings.save({ transaction: t })
+      if (videoLive.saveReplay) {
+        await replaySettings.save({ transaction: t })
+      }
 
       const liveSession = new VideoLiveSessionModel({
         startDate: new Date(),
         liveVideoId: videoLive.videoId,
         saveReplay: videoLive.saveReplay,
-        replaySettingId: replaySettings.id,
+        replaySettingId: videoLive.saveReplay ? replaySettings.id : null,
         endingProcessed: false
       })
 

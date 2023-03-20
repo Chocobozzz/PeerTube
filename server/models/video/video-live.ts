@@ -78,7 +78,8 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
   @BelongsTo(() => VideoLiveReplaySettingModel, {
     foreignKey: {
       allowNull: true
-    }
+    },
+    onDelete: 'set null'
   })
   ReplaySetting: VideoLiveReplaySettingModel
 
