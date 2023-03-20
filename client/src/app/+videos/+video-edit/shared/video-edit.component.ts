@@ -165,7 +165,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       liveStreamKey: null,
       permanentLive: null,
       latencyMode: null,
-      saveReplay: null
+      saveReplay: null,
+      replayPrivacy: null
     }
 
     this.formValidatorService.updateFormGroup(

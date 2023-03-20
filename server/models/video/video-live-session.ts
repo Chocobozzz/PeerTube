@@ -5,6 +5,7 @@ import { uuidToShort } from '@shared/extra-utils'
 import { LiveVideoError, LiveVideoSession } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoModel } from './video'
+import { VideoLiveReplaySettingModel } from './video-live-replay-setting'
 
 export enum ScopeNames {
   WITH_REPLAY = 'WITH_REPLAY'
@@ -16,6 +17,10 @@ export enum ScopeNames {
       {
         model: VideoModel.unscoped(),
         as: 'ReplayVideo',
+        required: false
+      },
+      {
+        model: VideoLiveReplaySettingModel,
         required: false
       }
     ]
@@ -89,6 +94,17 @@ export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiv
   })
   LiveVideo: VideoModel
 
+  @ForeignKey(() => VideoLiveReplaySettingModel)
+  @Column
+  replaySettingId: number
+
+  @BelongsTo(() => VideoLiveReplaySettingModel, {
+    foreignKey: {
+      allowNull: true
+    }
+  })
+  ReplaySetting: VideoLiveReplaySettingModel
+
   static load (id: number): Promise<MVideoLiveSession> {
     return VideoLiveSessionModel.findOne({
       where: { id }
@@ -154,6 +170,7 @@ export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiv
         : null,
       endingProcessed: this.endingProcessed,
       saveReplay: this.saveReplay,
+      replaySettings: this.ReplaySetting,
       replayVideo,
       error: this.error
     }

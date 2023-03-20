@@ -67,6 +67,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     if (this.liveVideo) {
       this.form.patchValue({
         saveReplay: this.liveVideo.saveReplay,
+        replayPrivacy: this.liveVideo.replaySettings ? this.liveVideo.replaySettings.privacy : VideoPrivacy.PRIVATE,
         latencyMode: this.liveVideo.latencyMode,
         permanentLive: this.liveVideo.permanentLive
       })
@@ -127,6 +128,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
             const liveVideoUpdate: LiveVideoUpdate = {
               saveReplay: !!this.form.value.saveReplay,
+              replaySettings: { privacy: this.form.value.replayPrivacy },
               permanentLive: !!this.form.value.permanentLive,
               latencyMode: this.form.value.latencyMode
             }

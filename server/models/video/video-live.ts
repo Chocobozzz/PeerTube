@@ -1,11 +1,12 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, DefaultScope, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
-import { MVideoLive, MVideoLiveVideo } from '@server/types/models'
-import { LiveVideo, LiveVideoLatencyMode, VideoState } from '@shared/models'
+import { MVideoLive, MVideoLiveVideoFormattable } from '@server/types/models'
+import { LiveVideo, LiveVideoLatencyMode, VideoPrivacy, VideoState } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoModel } from './video'
 import { VideoBlacklistModel } from './video-blacklist'
+import { VideoLiveReplaySettingModel } from './video-live-replay-setting'
 
 @DefaultScope(() => ({
   include: [
@@ -18,6 +19,10 @@ import { VideoBlacklistModel } from './video-blacklist'
           required: false
         }
       ]
+    },
+    {
+      model: VideoLiveReplaySettingModel,
+      required: false
     }
   ]
 }))
@@ -66,6 +71,17 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
   })
   Video: VideoModel
 
+  @ForeignKey(() => VideoLiveReplaySettingModel)
+  @Column
+  replaySettingId: number
+
+  @BelongsTo(() => VideoLiveReplaySettingModel, {
+    foreignKey: {
+      allowNull: true
+    }
+  })
+  ReplaySetting: VideoLiveReplaySettingModel
+
   static loadByStreamKey (streamKey: string) {
     const query = {
       where: {
@@ -84,11 +100,15 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
               required: false
             }
           ]
+        },
+        {
+          model: VideoLiveReplaySettingModel.unscoped(),
+          required: false
         }
       ]
     }
 
-    return VideoLiveModel.findOne<MVideoLiveVideo>(query)
+    return VideoLiveModel.findOne<MVideoLiveVideoFormattable>(query)
   }
 
   static loadByVideoId (videoId: number) {
@@ -120,11 +140,18 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
       }
     }
 
+    let replaySettings: { privacy: VideoPrivacy }
+
+    if (this.saveReplay) {
+      replaySettings = this.ReplaySetting.toFormattedJSON()
+    }
+
     return {
       ...privateInformation,
 
       permanentLive: this.permanentLive,
       saveReplay: this.saveReplay,
+      replaySettings,
       latencyMode: this.latencyMode
     }
   }

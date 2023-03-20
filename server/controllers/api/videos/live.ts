@@ -24,6 +24,7 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { updateVideoMiniatureFromExisting } from '../../../lib/thumbnail'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, optionalAuthenticate } from '../../../middlewares'
 import { VideoModel } from '../../../models/video/video'
+import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting'
 
 const liveRouter = express.Router()
 
@@ -105,7 +106,33 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
   const videoLive = res.locals.videoLive
 
-  if (exists(body.saveReplay)) videoLive.saveReplay = body.saveReplay
+  await sequelizeTypescript.transaction(async (t) => {
+    if (exists(body.saveReplay)) {
+      videoLive.saveReplay = body.saveReplay
+
+      let replaySetting = await VideoLiveReplaySettingModel.load(videoLive.replaySettingId, t)
+
+      if (videoLive.saveReplay) {
+        if (replaySetting) {
+          replaySetting.privacy = body.replaySettings.privacy
+        } else {
+          replaySetting = new VideoLiveReplaySettingModel({
+            privacy: body.replaySettings.privacy
+          })
+          videoLive.replaySettingId = replaySetting.id
+        }
+        await replaySetting.save({ transaction: t })
+      } else {
+        await VideoLiveReplaySettingModel.destroy({
+          where: {
+            id: videoLive.replaySettingId
+          },
+          transaction: t
+        })
+      }
+    }
+  })
+
   if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
   if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
 
@@ -160,6 +187,16 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
 
     // Do not forget to add video channel information to the created video
     videoCreated.VideoChannel = res.locals.videoChannel
+
+    if (videoLive.saveReplay) {
+      const replaySettings = new VideoLiveReplaySettingModel({
+        privacy: videoInfo.replaySettings.privacy
+      })
+      await replaySettings.save(sequelizeOptions)
+
+      videoLive.replaySettingId = replaySettings.id
+
+    }
 
     videoLive.videoId = videoCreated.id
     videoCreated.VideoLive = await videoLive.save(sequelizeOptions)

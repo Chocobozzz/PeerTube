@@ -160,6 +160,7 @@ export class VideoTableAttributes {
       'permanentLive',
       'latencyMode',
       'videoId',
+      'replaySettingId',
       'createdAt',
       'updatedAt'
     ]

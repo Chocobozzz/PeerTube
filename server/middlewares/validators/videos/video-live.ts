@@ -17,7 +17,7 @@ import {
   VideoState
 } from '@shared/models'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
-import { isVideoNameValid } from '../../../helpers/custom-validators/videos'
+import { isVideoNameValid, isVideoPrivacyValid } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
@@ -65,6 +65,11 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     .optional()
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid saveReplay boolean'),
+
+  body('replaySettings.privacy')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isVideoPrivacyValid),
 
   body('permanentLive')
     .optional()
@@ -152,6 +157,11 @@ const videoLiveUpdateValidator = [
     .optional()
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid saveReplay boolean'),
+
+  body('replaySettings.privacy')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isVideoPrivacyValid),
 
   body('latencyMode')
     .optional()

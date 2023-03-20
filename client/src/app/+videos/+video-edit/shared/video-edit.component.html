@@ -284,6 +284,17 @@
               </my-peertube-checkbox>
             </div>
 
+            <div class="form-group mx-4" *ngIf="form.controls.saveReplay.value">
+              <label i18n for="replayPrivacy">Privacy of the new replay</label>
+              <my-select-options
+                labelForId="replayPrivacy" [items]="videoPrivacies" [clearable]="false" formControlName="replayPrivacy"
+              ></my-select-options>
+
+              <div *ngIf="formErrors.privacy" class="form-error">
+                {{ formErrors.privacy }}
+              </div>
+            </div>
+
             <div class="form-group" *ngIf="isLatencyModeEnabled()">
               <label i18n for="latencyMode">Latency mode</label>
               <my-select-options
