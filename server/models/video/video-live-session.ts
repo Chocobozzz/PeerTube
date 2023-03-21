@@ -163,6 +163,8 @@ export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiv
       }
       : undefined
 
+    const replaySettings = this.replaySettingId ? this.ReplaySetting : undefined
+
     return {
       id: this.id,
       startDate: this.startDate.toISOString(),
@@ -171,7 +173,7 @@ export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiv
         : null,
       endingProcessed: this.endingProcessed,
       saveReplay: this.saveReplay,
-      replaySettings: this.ReplaySetting,
+      replaySettings,
       replayVideo,
       error: this.error
     }

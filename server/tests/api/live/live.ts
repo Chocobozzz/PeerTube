@@ -68,7 +68,7 @@ describe('Test live', function () {
   })
 
   describe('Live creation, update and delete', function () {
-    let liveVideoUUID: string
+    let liveVideoId: number
 
     it('Should create a live with the appropriate parameters', async function () {
       this.timeout(20000)
@@ -95,12 +95,12 @@ describe('Test live', function () {
       }
 
       const live = await commands[0].create({ fields: attributes })
-      liveVideoUUID = live.uuid
+      liveVideoId = live.id
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const video = await server.videos.get({ id: liveVideoUUID })
+        const video = await server.videos.get({ id: liveVideoId })
 
         expect(video.category.id).to.equal(1)
         expect(video.licence.id).to.equal(2)
@@ -124,7 +124,7 @@ describe('Test live', function () {
         await testImage(server.url, 'video_short1-preview.webm', video.previewPath)
         await testImage(server.url, 'video_short1.webm', video.thumbnailPath)
 
-        const live = await server.live.get({ videoId: liveVideoUUID })
+        const live = await server.live.get({ videoId: liveVideoId })
 
         if (server.url === servers[0].url) {
           expect(live.rtmpUrl).to.equal('rtmp://' + server.hostname + ':' + servers[0].rtmpPort + '/live')
@@ -174,19 +174,19 @@ describe('Test live', function () {
     })
 
     it('Should not be able to update a live of another server', async function () {
-      await commands[1].update({ videoId: liveVideoUUID, fields: { saveReplay: false }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await commands[1].update({ videoId: liveVideoId, fields: { saveReplay: false }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should update the live', async function () {
       this.timeout(10000)
 
-      await commands[0].update({ videoId: liveVideoUUID, fields: { saveReplay: false, latencyMode: LiveVideoLatencyMode.DEFAULT } })
+      await commands[0].update({ videoId: liveVideoId, fields: { saveReplay: false, latencyMode: LiveVideoLatencyMode.DEFAULT } })
       await waitJobs(servers)
     })
 
     it('Have the live updated', async function () {
       for (const server of servers) {
-        const live = await server.live.get({ videoId: liveVideoUUID })
+        const live = await server.live.get({ videoId: liveVideoId })
 
         if (server.url === servers[0].url) {
           expect(live.rtmpUrl).to.equal('rtmp://' + server.hostname + ':' + servers[0].rtmpPort + '/live')
@@ -204,14 +204,14 @@ describe('Test live', function () {
     it('Delete the live', async function () {
       this.timeout(10000)
 
-      await servers[0].videos.remove({ id: liveVideoUUID })
+      await servers[0].videos.remove({ id: liveVideoId })
       await waitJobs(servers)
     })
 
     it('Should have the live deleted', async function () {
       for (const server of servers) {
-        await server.videos.get({ id: liveVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
-        await server.live.get({ videoId: liveVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        await server.videos.get({ id: liveVideoId, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        await server.live.get({ videoId: liveVideoId, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       }
     })
   })
@@ -368,7 +368,7 @@ describe('Test live', function () {
         channelId: servers[0].store.channel.id,
         privacy: VideoPrivacy.PUBLIC,
         saveReplay,
-        replaySettings: saveReplay ? { privacy: VideoPrivacy.PUBLIC } : null
+        replaySettings: saveReplay ? { privacy: VideoPrivacy.PUBLIC } : undefined
       }
 
       const { uuid } = await commands[0].create({ fields: liveAttributes })
@@ -672,7 +672,7 @@ describe('Test live', function () {
         channelId: servers[0].store.channel.id,
         privacy: VideoPrivacy.PUBLIC,
         saveReplay: options.saveReplay,
-        replaySettings: options.saveReplay ? { privacy: VideoPrivacy.PUBLIC } : null,
+        replaySettings: options.saveReplay ? { privacy: VideoPrivacy.PUBLIC } : undefined,
         permanentLive: options.permanent
       }
 
