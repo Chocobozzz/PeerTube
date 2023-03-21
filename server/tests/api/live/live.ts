@@ -87,6 +87,7 @@ describe('Test live', function () {
         commentsEnabled: false,
         downloadEnabled: false,
         saveReplay: true,
+        replaySettings: { privacy: VideoPrivacy.PUBLIC },
         latencyMode: LiveVideoLatencyMode.SMALL_LATENCY,
         privacy: VideoPrivacy.PUBLIC,
         previewfile: 'video_short1-preview.webm.jpg',

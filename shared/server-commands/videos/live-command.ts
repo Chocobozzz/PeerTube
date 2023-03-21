@@ -118,7 +118,7 @@ export class LiveCommand extends AbstractCommand {
 
   async quickCreate (options: OverrideCommandOptions & {
     saveReplay: boolean
-    replaySettings: { privacy: VideoPrivacy }
+    replaySettings?: { privacy: VideoPrivacy }
     permanentLive: boolean
     privacy?: VideoPrivacy
   }) {

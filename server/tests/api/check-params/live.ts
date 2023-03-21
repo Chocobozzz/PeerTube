@@ -277,7 +277,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should allow to save replay if enabled by the admin', async function () {
-      const fields = { ...baseCorrectParams, saveReplay: true }
+      const fields = { ...baseCorrectParams, saveReplay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC } }
 
       await server.config.updateCustomSubConfig({
         newConfig: {
