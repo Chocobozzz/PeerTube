@@ -1,6 +1,6 @@
 # Changelog
 
-## v5.1.0-rc.1
+## v5.1.0
 
 ### IMPORTANT NOTES
 
@@ -10,6 +10,7 @@
    * Drop support of Safari 11 on desktop
    * Drop support of Firefox 68 on desktop
  * Minimum recommended Redis version is 6.2. Version 6.0 should still work: see [this comment](https://github.com/Chocobozzz/PeerTube/issues/5659#issuecomment-1449607001) for more information
+ * Deprecate NodeJS 14: support will be removed in the next release (PeerTube 5.2)
 
 ### Maintenance
 
@@ -18,9 +19,14 @@
    * Add ability to disable HTTP request duration metrics (can have a high tag cardinality)
  * Add `x-powered-by` HTTP header in PeerTube response. Can be disabled in PeerTube configuration
 
+### Docker
+
+ * Add env variables to configure object storage
+
 ### Documentation
 
   * PeerTube documentation website now uses VitePress: https://docs.joinpeertube.org
+  * Add *Server code* documentation explaining the database model typing and how to add a new feature in PeerTube server: https://docs.joinpeertube.org/support/doc/development/server
 
 ### Plugins/Themes/Embed API
 
@@ -29,8 +35,15 @@
    * Can set default `adminFlags`, `videoQuota` and `videoQuotaDaily` user attributes
    * Introduce `userUpdater` hook function so external auth plugins can update the user on user login: https://docs.joinpeertube.org/contribute/plugins#add-external-auth-methods
    * Automatically redirect to the default external auth on PeerTube refresh token expiration
- * Add server plugin hooks (https://docs.joinpeertube.org/api/plugins):
-    * `filter:api.user.me.subscription-videos.list.params` & `filter:api.user.me.subscription-videos.list.result` [#5648](https://github.com/Chocobozzz/PeerTube/pull/5648)
+ * Server plugin hooks (https://docs.joinpeertube.org/api/plugins):
+    * Add `filter:api.user.me.subscription-videos.list.params` & `filter:api.user.me.subscription-videos.list.result` [#5648](https://github.com/Chocobozzz/PeerTube/pull/5648)
+    * Add `filter:activity-pub.activity.context.build.result` to update ActivityPub JSON-LD context
+    * Add `filter:activity-pub.video.json-ld.build.result` to update `Video` ActivityPub JSON-LD object
+    * Add `action:activity-pub.remote-video.created` & `action:activity-pub.remote-video.updated` to react on remote video creation/update
+  * Client plugin hooks (https://docs.joinpeertube.org/api/plugins):
+    * Add `action:video-edit.form.updated` fired every time the video upload/import/live/update form values change
+    * Add `filter:video-watch.video-plugin-metadata.result` to add custom video metadata in watch page
+    * Existing `action:video-edit.init` hook now contains a `updateForm` attribute in options that you can use to update video upload/import/live/update form values
  * Add server plugin helpers:
    * `getServerListeningConfig` to get PeerTube listening configuration
  * Convert some colors to PeerTube CSS variables to improve theme compatibility
@@ -52,10 +65,12 @@
    * Optimize video comments SQL requests
    * Optimize custom markup live rendering in admin
   * UI/UX:
+    * Add option in video/playlist share modal to create a responsive embed [#5690](https://github.com/Chocobozzz/PeerTube/pull/5690)
     * Use `99+` instead of `99` when having more than `99` notifications
     * Use channel display name instead of channel handle in *My videos* input filter [#5575](https://github.com/Chocobozzz/PeerTube/pull/5575)
     * Display channel name in playlist element instead of account name
     * Display channel as author in RSS feeds
+    * Improve/fix main pages keyboard navigation
   * Custom markup:
     * Support `mailto` links
     * Support short UUID to fetch a video
@@ -68,11 +83,14 @@
  * Fix signup limit
  * Prevent `500` on invalid short UUID parameter
  * Player:
+   * Fix live buffering with small latency setting
    * More robust player "stats for nerds" popup if there is not stream available
    * Don't display playback rate setting for lives
    * Don't handle playback rate hotkeys for lives
    * Fix clicking on PeerTube instance button
    * Fix always resuming the end of the video
+   * Fix saving last video current time for anonymous users
+   * Fix player keyboard shortcuts for non latin keyboards [#5684](https://github.com/Chocobozzz/PeerTube/pull/5684)
  * Process videos list requests in correct order
  * Correctly fill the *Support* field when updating a video
  * Fix *Auto play video* setting for anonymous users
@@ -86,6 +104,7 @@
    * Handle `502` HTTP errors in client notifier
    * Fix resetting chart zoom in video stats page
    * Fix search page not loading all available results
+   * Fix confirmation modal that contains 2 text inputs
  * Display the update button when the stable release of beta/alpha plugin is available
  * Always list NSFW videos in playlists (the frontend is in charge to blur the video element if the NSFW setting is *Hide* or *Blur*)
  * Always list NSFW videos in admin
@@ -95,6 +114,12 @@
  * Fix out of sync audio when cutting a video in Studio
  * Fix "unique viewers" inconsistency with countries
  * Fix mention detection in comments
+ * Fix listing all my channels in *My library*
+ * Fix displaying remote avatars
+ * Fix 404 HTTP code in watch page when having `;threadId` param in URL
+ * Correctly re-inject video file token in `.m3u8` resolution playlists to fetch private mp4 video file [#5677](https://github.com/Chocobozzz/PeerTube/pull/5677)
+ * Don't process live when moving videos to external storage
+ * Handle Redis disconnection gracefully [#5599](https://github.com/Chocobozzz/PeerTube/pull/5599)
 
 
 ## v5.0.1

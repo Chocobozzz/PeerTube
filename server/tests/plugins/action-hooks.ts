@@ -251,7 +251,7 @@ describe('Test plugin action hooks', function () {
 
       await servers[1].videos.update({ id: videoUUID, attributes: { name: 'remote video updated' } })
 
-      await servers[0].servers.waitUntilLog('action:activity-pub.remote-video.updated - AP remote video - video remote video')
+      await servers[0].servers.waitUntilLog('action:activity-pub.remote-video.updated - AP remote video - video remote video', 1, false)
     })
   })
 
