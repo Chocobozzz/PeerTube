@@ -40,6 +40,7 @@ describe('Save replay setting', function () {
       privacy: VideoPrivacy.PUBLIC,
       name: 'my super live',
       saveReplay: options.replay,
+      replaySettings: { privacy: VideoPrivacy.PUBLIC },
       permanentLive: options.permanent
     }
 

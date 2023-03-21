@@ -367,7 +367,8 @@ describe('Test live', function () {
         name: 'live video',
         channelId: servers[0].store.channel.id,
         privacy: VideoPrivacy.PUBLIC,
-        saveReplay
+        saveReplay,
+        replaySettings: saveReplay ? { privacy: VideoPrivacy.PUBLIC } : null
       }
 
       const { uuid } = await commands[0].create({ fields: liveAttributes })
@@ -671,6 +672,7 @@ describe('Test live', function () {
         channelId: servers[0].store.channel.id,
         privacy: VideoPrivacy.PUBLIC,
         saveReplay: options.saveReplay,
+        replaySettings: options.saveReplay ? { privacy: VideoPrivacy.PUBLIC } : null,
         permanentLive: options.permanent
       }
 
