@@ -24,9 +24,11 @@ jobs:
           # FIXME: https://github.com/actions/checkout/issues/290
           git fetch --force --tags
 
-          one="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"develop\", \"tags\": \"chocobozzz/peertube:develop-bullseye\" }"
-          two="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube:production-bullseye,chocobozzz/peertube:$(git describe --abbrev=0)-bullseye\" }"
-          three="{ \"file\": \"./support/docker/production/Dockerfile.nginx\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube-webserver:latest\" }"
+          one="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"develop\", \"tags\": \"chocobozzz/peertube:develop-bullseye\", \"platforms\": \"linux/amd64\" }"
+          one="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"develop\", \"tags\": \"chocobozzz/peertube:develop-bullseye\", \"platforms\": \"linux/arm64\" }"
+          two="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube:production-bullseye,chocobozzz/peertube:$(git describe --abbrev=0)-bullseye\", \"platforms\": \"linux/amd64\" }"
+          two="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube:production-bullseye,chocobozzz/peertube:$(git describe --abbrev=0)-bullseye\", \"platforms\": \"linux/arm64\" }"
+          three="{ \"file\": \"./support/docker/production/Dockerfile.nginx\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube-webserver:latest\", \"platforms\": \"linux/amd64,linux/arm64\" }"
 
           matrix="[$one,$two,$three]"
           echo "matrix={\"include\":$matrix}" >> $GITHUB_OUTPUT
@@ -66,7 +68,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: '.'
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ matrix.platforms }}
           push: true
           file: ${{ matrix.file }}
           tags: ${{ matrix.tags }}
