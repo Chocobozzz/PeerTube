@@ -7694,7 +7694,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="3273586660042053098" datatype="html">
         <source>Why do you want to join <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>?</source>
-        <target state="new">Why do you want to join <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>?</target>
+        <target state="translated">Zergatik nahi duzu <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>(e)ra batu?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-terms.component.html</context>
           <context context-type="linenumber">4</context>
