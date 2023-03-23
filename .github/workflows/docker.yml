@@ -25,12 +25,12 @@ jobs:
           git fetch --force --tags
 
           one="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"develop\", \"tags\": \"chocobozzz/peertube:develop-bullseye\", \"platforms\": \"linux/amd64\" }"
-          one="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"develop\", \"tags\": \"chocobozzz/peertube:develop-bullseye\", \"platforms\": \"linux/arm64\" }"
-          two="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube:production-bullseye,chocobozzz/peertube:$(git describe --abbrev=0)-bullseye\", \"platforms\": \"linux/amd64\" }"
-          two="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube:production-bullseye,chocobozzz/peertube:$(git describe --abbrev=0)-bullseye\", \"platforms\": \"linux/arm64\" }"
-          three="{ \"file\": \"./support/docker/production/Dockerfile.nginx\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube-webserver:latest\", \"platforms\": \"linux/amd64,linux/arm64\" }"
+          two="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"develop\", \"tags\": \"chocobozzz/peertube:develop-bullseye\", \"platforms\": \"linux/arm64\" }"
+          three="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube:production-bullseye,chocobozzz/peertube:$(git describe --abbrev=0)-bullseye\", \"platforms\": \"linux/amd64\" }"
+          four="{ \"file\": \"./support/docker/production/Dockerfile.bullseye\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube:production-bullseye,chocobozzz/peertube:$(git describe --abbrev=0)-bullseye\", \"platforms\": \"linux/arm64\" }"
+          five="{ \"file\": \"./support/docker/production/Dockerfile.nginx\", \"ref\": \"master\", \"tags\": \"chocobozzz/peertube-webserver:latest\", \"platforms\": \"linux/amd64,linux/arm64\" }"
 
-          matrix="[$one,$two,$three]"
+          matrix="[$one,$two,$three,$four,$five]"
           echo "matrix={\"include\":$matrix}" >> $GITHUB_OUTPUT
 
   docker:
