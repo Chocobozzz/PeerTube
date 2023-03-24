@@ -859,7 +859,7 @@
       </trans-unit>
       <trans-unit id="5842305303142677924" datatype="html">
         <source>User registration</source>
-        <target state="new">User registration</target>
+        <target state="translated">ユーザー登録</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1019,7 +1019,7 @@
       </trans-unit>
       <trans-unit id="6994936570572804302" datatype="html">
         <source>Request an account</source>
-        <target state="new">Request an account</target>
+        <target state="translated">アカウントをリクエスト</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/signup-label.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1360,7 +1360,7 @@
       </trans-unit>
       <trans-unit id="8576568778101631795" datatype="html">
         <source>Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form. </source>
-        <target state="new"> Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form. </target>
+        <target state="translated">登録フォームの入力が完了すると、<x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>のモデレーターはあなたの登録リクエストを承認する必要があります。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -1782,7 +1782,7 @@
       </trans-unit>
       <trans-unit id="2948577454705183445" datatype="html">
         <source>on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>インスタンス</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">23,24</context>
@@ -2392,7 +2392,7 @@
       </trans-unit>
       <trans-unit id="8025853188527690631" datatype="html">
         <source>Registration reason</source>
-        <target state="new">Registration reason</target>
+        <target state="translated">登録理由</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">40</context>
@@ -2400,7 +2400,7 @@
       </trans-unit>
       <trans-unit id="5767444971673380379" datatype="html">
         <source>Moderation response</source>
-        <target state="new">Moderation response</target>
+        <target state="translated">モデレーション回答</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">42</context>
@@ -2408,7 +2408,7 @@
       </trans-unit>
       <trans-unit id="2710484935079923248" datatype="html">
         <source>Requested on <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;     &lt;/"/></source>
-        <target state="new">Requested on <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;     &lt;/"/></target>
+        <target state="translated"><x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;     &lt;/"/>にリクエスト</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">43,45</context>
@@ -2416,7 +2416,7 @@
       </trans-unit>
       <trans-unit id="7009543831499017491" datatype="html">
         <source>Registration reason:</source>
-        <target state="new">Registration reason:</target>
+        <target state="translated">登録理由:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">109</context>
@@ -2424,7 +2424,7 @@
       </trans-unit>
       <trans-unit id="5199584494687692924" datatype="html">
         <source>Moderation response:</source>
-        <target state="new">Moderation response:</target>
+        <target state="translated">モデレーション回答:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">114</context>
@@ -2432,7 +2432,7 @@
       </trans-unit>
       <trans-unit id="7902116364830754147" datatype="html">
         <source>No registrations found matching current filters.</source>
-        <target state="new">No registrations found matching current filters.</target>
+        <target state="translated">現在のフィルターに一致する登録は見つかりませんでした。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">127</context>
@@ -2440,7 +2440,7 @@
       </trans-unit>
       <trans-unit id="178076727880316864" datatype="html">
         <source>No registrations found.</source>
-        <target state="new">No registrations found.</target>
+        <target state="translated">登録は見つかりませんでした。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">128</context>
@@ -2448,7 +2448,7 @@
       </trans-unit>
       <trans-unit id="977007520755394668" datatype="html">
         <source>Accept this request</source>
-        <target state="new">Accept this request</target>
+        <target state="translated">このリクエストを承認</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -2456,7 +2456,7 @@
       </trans-unit>
       <trans-unit id="2571315112879096897" datatype="html">
         <source>Reject this request</source>
-        <target state="new">Reject this request</target>
+        <target state="translated">このリクエストを拒否</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -2464,7 +2464,7 @@
       </trans-unit>
       <trans-unit id="2518898597119712407" datatype="html">
         <source>Remove this request</source>
-        <target state="new">Remove this request</target>
+        <target state="translated">このリクエストを削除</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -2472,7 +2472,7 @@
       </trans-unit>
       <trans-unit id="5778734409199071482" datatype="html">
         <source>Remove the request from the list. The user can register again.</source>
-        <target state="new">Remove the request from the list. The user can register again.</target>
+        <target state="translated">リストからリクエストを削除します。ユーザーは再度登録することができます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -2480,22 +2480,22 @@
       </trans-unit>
       <trans-unit id="6096602245926393232" datatype="html">
         <source>Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</source>
-        <target state="new">Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</target>
+        <target state="translated">本当に {count, plural, =1 {<x id="username"/> の登録リクエストを削除しますか？} other {<x id="count"/> 件の登録リクエストを削除しますか？}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="4208645815154433842" datatype="html">
         <source>Do you really want to delete these registration requests?</source>
-        <target state="new">Do you really want to delete these registration requests?</target>
+        <target state="translated">本当にこれらの登録リクエストを削除しますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="9152096266184328708" datatype="html">
         <source>Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</source>
-        <target state="new">Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</target>
+        <target state="translated">{count, plural, =1 {<x id="username"/> の登録リクエスト} other {<x id="count"/> 件の登録リクエスト}}を削除しました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="7630293677014706754" datatype="html">
         <source>Registration requests removed</source>
-        <target state="new">Registration requests removed</target>
+        <target state="translated">登録リクエストを削除しました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">138</context></context-group>
       </trans-unit>
       <trans-unit id="2806917038528218276" datatype="html">
@@ -2515,7 +2515,7 @@
       </trans-unit>
       <trans-unit id="5503656190856739184" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2023</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2023</target>
+        <target state="translated">powered by PeerTube - CopyLeft 2015-2023</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="3722967224215437913" datatype="html">
@@ -3806,7 +3806,7 @@
       </trans-unit>
       <trans-unit id="3141984777339778129" datatype="html">
         <source>User bypasses video validation by moderators</source>
-        <target state="new">User bypasses video validation by moderators</target>
+        <target state="translated">ユーザーがモデレーターによる動画の審査を回避する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">192</context>
@@ -3818,7 +3818,7 @@
       </trans-unit>
       <trans-unit id="8975798495439347971" datatype="html">
         <source>Enable this checkbox if this user doesn't need to have its videos reviewed by moderators.</source>
-        <target state="new"> Enable this checkbox if this user doesn't need to have its videos reviewed by moderators. </target>
+        <target state="translated">このチェックボックスを有効にすると、このユーザーはモデレーターによる動画の審査を受ける必要がなくなります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">194,196</context>
@@ -3932,7 +3932,7 @@
       </trans-unit>
       <trans-unit id="17234570072885140" datatype="html">
         <source>Registrations</source>
-        <target state="new">Registrations</target>
+        <target state="translated">登録</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -4912,7 +4912,7 @@
       </trans-unit>
       <trans-unit id="4046343890883004514" datatype="html">
         <source>Recent views</source>
-        <target state="new">Recent views</target>
+        <target state="translated">最近の再生</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="8177374861384376651" datatype="html">
@@ -4922,7 +4922,7 @@
       </trans-unit>
       <trans-unit id="297360345401834321" datatype="html">
         <source>Global views</source>
-        <target state="new">Global views</target>
+        <target state="translated">グローバルでの再生</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="5862227717871131052" datatype="html">
@@ -5240,7 +5240,7 @@
       </trans-unit>
       <trans-unit id="1206277798664538171" datatype="html">
         <source>Signup requires approval by moderators</source>
-        <target state="new">Signup requires approval by moderators</target>
+        <target state="translated">新規登録はモデレーターによる承認が必要</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">174</context></context-group>
       </trans-unit>
       <trans-unit id="1718269478813020014" datatype="html">
@@ -6510,7 +6510,7 @@
       </trans-unit>
       <trans-unit id="6904641160356013310" datatype="html">
         <source>Account request sent</source>
-        <target state="new">Account request sent</target>
+        <target state="translated">アカウントリクエストが送信されました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6642,7 +6642,7 @@
       </trans-unit>
       <trans-unit id="3458449147454605646" datatype="html">
         <source>Request a new verification email</source>
-        <target state="new"> Request a new verification email </target>
+        <target state="translated">新しい認証メールをリクエスト</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">15,17</context>
@@ -6650,7 +6650,7 @@
       </trans-unit>
       <trans-unit id="6001536520193131937" datatype="html">
         <source>Unable to find verification string in URL query.</source>
-        <target state="new">Unable to find verification string in URL query.</target>
+        <target state="translated">URLクエリ内に認証文字列が見つかりませんでした。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -6658,7 +6658,7 @@
       </trans-unit>
       <trans-unit id="7264033009244104285" datatype="html">
         <source>Unable to find user id or registration id in URL query.</source>
-        <target state="new">Unable to find user id or registration id in URL query.</target>
+        <target state="translated">URLクエリ内にユーザーIDまたは登録IDが見つかりませんでした。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -6704,7 +6704,7 @@
       </trans-unit>
       <trans-unit id="5634180635200972996" datatype="html">
         <source>Email verified!</source>
-        <target state="new">Email verified!</target>
+        <target state="translated">メールが認証されました!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -6712,7 +6712,7 @@
       </trans-unit>
       <trans-unit id="2584956257063845668" datatype="html">
         <source>Your email has been verified and your account request has been sent!</source>
-        <target state="new">Your email has been verified and your account request has been sent!</target>
+        <target state="translated">あなたのメールが認証され、アカウントリクエストが送信されました!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">7</context>
@@ -6720,7 +6720,7 @@
       </trans-unit>
       <trans-unit id="1433545855928203716" datatype="html">
         <source>A moderator will check your registration request soon and you'll receive an email when it will be accepted or rejected.</source>
-        <target state="new"> A moderator will check your registration request soon and you'll receive an email when it will be accepted or rejected. </target>
+        <target state="translated">まもなくモデレーターがあなたの登録リクエストをチェックし、そのリクエストを承認または拒否された時に、あなたはメールを受信するでしょう。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -6732,7 +6732,7 @@
       </trans-unit>
       <trans-unit id="381800444567495906" datatype="html">
         <source>Your email has been verified and your account has been created!</source>
-        <target state="new">Your email has been verified and your account has been created!</target>
+        <target state="translated">あなたのメールが認証され、アカウントが作成されました!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">15</context>
@@ -6745,7 +6745,7 @@
       </trans-unit>
       <trans-unit id="8412827353958624080" datatype="html">
         <source>Your account request has been sent!</source>
-        <target state="new">Your account request has been sent!</target>
+        <target state="translated">アカウントリクエストが送信されました!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">13</context>
@@ -6758,7 +6758,7 @@
       </trans-unit>
       <trans-unit id="4317139736111772472" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your emails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration request. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your emails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration request. </target>
+        <target state="translated">アカウントを有効化し、登録リクエストを完了するには<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>あなたのメールをチェック<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>してください。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">18,19</context>
@@ -6766,7 +6766,7 @@
       </trans-unit>
       <trans-unit id="8391065843806310539" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your emails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your emails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration. </target>
+        <target state="translated">アカウントを有効化し、登録を完了するには<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>あなたのメールをチェック<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>してください。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">22,23</context>
@@ -7383,7 +7383,7 @@
       </trans-unit>
       <trans-unit id="3273586660042053098" datatype="html">
         <source>Why do you want to join <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>?</source>
-        <target state="new">Why do you want to join <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>?</target>
+        <target state="translated">なぜ、<x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>に参加したいと思ったのですか?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-terms.component.html</context>
           <context context-type="linenumber">4</context>
@@ -7391,7 +7391,7 @@
       </trans-unit>
       <trans-unit id="603966779971722604" datatype="html">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </source>
-        <target state="new"> I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </target>
+        <target state="translated">私は少なくとも<x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> 歳以上であり、<x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/>の<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>利用規約<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/>と<x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>行動規範<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/>に同意します </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-terms.component.html</context>
           <context context-type="linenumber">17,22</context>
@@ -8582,7 +8582,7 @@
       </trans-unit>
       <trans-unit id="2434590176499222618" datatype="html">
         <source>User registrations</source>
-        <target state="new">User registrations</target>
+        <target state="translated">ユーザー登録</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">79</context>
@@ -8595,7 +8595,7 @@
       </trans-unit>
       <trans-unit id="2072636325858679364" datatype="html">
         <source><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;&gt;"/>Accept <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;&gt;"/>Reject <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></source>
-        <target state="new"><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;&gt;"/>Accept <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;&gt;"/>Reject <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
+        <target state="translated"><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/>の登録を承認<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/>の登録を拒否<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">4,5</context>
@@ -8603,7 +8603,7 @@
       </trans-unit>
       <trans-unit id="2237982448344718491" datatype="html">
         <source>Registration email has not been verified. Email delivery has been disabled by default.</source>
-        <target state="new"> Registration email has not been verified. Email delivery has been disabled by default. </target>
+        <target state="translated">登録メールは認証されていません。メール配送はデフォルトで無効化されています。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -8611,7 +8611,7 @@
       </trans-unit>
       <trans-unit id="2884115244144130373" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registration will create the account and channel. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registration will create the account and channel. </target>
+        <target state="translated"><x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>の登録を<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>承認<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>し、アカウントとチャンネルを作成する。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -8619,7 +8619,7 @@
       </trans-unit>
       <trans-unit id="4287036840463640002" datatype="html">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created with the moderation response you'll write below. </source>
-        <target state="new"> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created with the moderation response you'll write below. </target>
+        <target state="translated"><x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>に送信されたメールで、あなたが下記のように書いたモデレーション回答に基づいてアカウントが作成されたことを説明しています。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">24,26</context>
@@ -8627,7 +8627,7 @@
       </trans-unit>
       <trans-unit id="6252848909934071768" datatype="html">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created. </source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created. </target>
+        <target state="translated">このインスタンスではメールが有効化されていないため、PeerTubeは<x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>にアカウントが作成されたことを説明するためのメールを送信できません。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -8635,7 +8635,7 @@
       </trans-unit>
       <trans-unit id="908816482785584930" datatype="html">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. </source>
-        <target state="new"> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. </target>
+        <target state="translated"><x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>に送信されたメールで、この登録リクエストが<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>拒否<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>されたことを下記のように書いたモデレーション回答に基づいて説明しています。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">34,36</context>
@@ -8643,7 +8643,7 @@
       </trans-unit>
       <trans-unit id="2693506849974732500" datatype="html">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been rejected. </source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been rejected. </target>
+        <target state="translated">このインスタンスではメールが有効化されていないため、PeerTubeは<x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>に登録リクエストが拒否されたことを説明するためのメールを送信できません。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">38,40</context>
@@ -8651,7 +8651,7 @@
       </trans-unit>
       <trans-unit id="8494092276635837685" datatype="html">
         <source>Send a message to the user</source>
-        <target state="new">Send a message to the user</target>
+        <target state="translated">ユーザーにメッセージを送信する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">45</context>
@@ -8659,7 +8659,7 @@
       </trans-unit>
       <trans-unit id="608706297814044931" datatype="html">
         <source>Prevent email from being sent to the user</source>
-        <target state="new">Prevent email from being sent to the user</target>
+        <target state="translated">ユーザーへのメールの送信を禁止する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">60</context>
@@ -8667,27 +8667,27 @@
       </trans-unit>
       <trans-unit id="1067821087200879310" datatype="html">
         <source>Accept registration</source>
-        <target state="new">Accept registration</target>
+        <target state="translated">登録を承認</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="9200323379330335050" datatype="html">
         <source>Reject registration</source>
-        <target state="new">Reject registration</target>
+        <target state="translated">登録を拒否</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="5919197630789088814" datatype="html">
         <source><x id="PH" equiv-text="this.registration.username"/> account created</source>
-        <target state="new"><x id="PH" equiv-text="this.registration.username"/> account created</target>
+        <target state="translated"><x id="PH" equiv-text="this.registration.username"/> のアカウントが作成されました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="2989631909091294713" datatype="html">
         <source><x id="PH" equiv-text="this.registration.username"/> registration rejected</source>
-        <target state="new"><x id="PH" equiv-text="this.registration.username"/> registration rejected</target>
+        <target state="translated"><x id="PH" equiv-text="this.registration.username"/> の登録は拒否されました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">112</context></context-group>
       </trans-unit>
       <trans-unit id="5941489410560989457" datatype="html">
         <source>Moderation response is required.</source>
-        <target state="new">Moderation response is required.</target>
+        <target state="translated">モデレーション回答は必須です。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -8695,7 +8695,7 @@
       </trans-unit>
       <trans-unit id="1762427369052469243" datatype="html">
         <source>Moderation response must be at least 2 characters long.</source>
-        <target state="new">Moderation response must be at least 2 characters long.</target>
+        <target state="translated">モデレーション回答は必ず2文字以上にしてください。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -8703,7 +8703,7 @@
       </trans-unit>
       <trans-unit id="3326945092799111194" datatype="html">
         <source>Moderation response cannot be more than 3000 characters long.</source>
-        <target state="new">Moderation response cannot be more than 3000 characters long.</target>
+        <target state="translated">モデレーション回答は3,000文字以上は入力できません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -8711,7 +8711,7 @@
       </trans-unit>
       <trans-unit id="7060967501175301883" datatype="html">
         <source>Registration requests</source>
-        <target state="new">Registration requests</target>
+        <target state="translated">登録リクエスト</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -9593,7 +9593,7 @@
       </trans-unit>
       <trans-unit id="4227831333725112678" datatype="html">
         <source>Verify email</source>
-        <target state="new">Verify email</target>
+        <target state="translated">メールを認証する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -9854,7 +9854,7 @@
       </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html">
         <source>This account is awaiting approval by moderators.</source>
-        <target state="new">This account is awaiting approval by moderators.</target>
+        <target state="translated">このアカウントはモデレーターによる承認を待っています。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">224</context>
@@ -9862,7 +9862,7 @@
       </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html">
         <source>Registration approval has been rejected for this account.</source>
-        <target state="new">Registration approval has been rejected for this account.</target>
+        <target state="translated">このアカウントへの登録承認は拒否されました。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">229</context>
@@ -10037,7 +10037,7 @@
       </trans-unit>
       <trans-unit id="5378618511917875694" datatype="html">
         <source>User email has been verified</source>
-        <target state="new">User email has been verified</target>
+        <target state="translated">ユーザーのメールは認証されました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">15</context>
@@ -10045,7 +10045,7 @@
       </trans-unit>
       <trans-unit id="2754481302921121772" datatype="html">
         <source>User email hasn't been verified</source>
-        <target state="new">User email hasn't been verified</target>
+        <target state="translated">ユーザーのメールは認証されていません</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">18</context>
@@ -10604,7 +10604,7 @@
       </trans-unit>
       <trans-unit id="27494409477574248" datatype="html">
         <source>Registration reason is required.</source>
-        <target state="new">Registration reason is required.</target>
+        <target state="translated">登録理由は必須です。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -10612,7 +10612,7 @@
       </trans-unit>
       <trans-unit id="7602123087076969338" datatype="html">
         <source>Registration reason must be at least 2 characters long.</source>
-        <target state="new">Registration reason must be at least 2 characters long.</target>
+        <target state="translated">登録理由は必ず2文字以上にしてください。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -10620,7 +10620,7 @@
       </trans-unit>
       <trans-unit id="2092241175249165802" datatype="html">
         <source>Registration reason cannot be more than 3000 characters long.</source>
-        <target state="new">Registration reason cannot be more than 3000 characters long.</target>
+        <target state="translated">登録理由は3,000文字以上入力できません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -11463,7 +11463,7 @@
       </trans-unit>
       <trans-unit id="5769292297914455214" datatype="html">
         <source>Disabled</source>
-        <target state="new">Disabled</target>
+        <target state="translated">無効</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">62</context>
@@ -11471,7 +11471,7 @@
       </trans-unit>
       <trans-unit id="2684349290932402590" datatype="html">
         <source>Requires approval by moderators</source>
-        <target state="new">Requires approval by moderators</target>
+        <target state="translated">モデレーターによる承認が必要</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -11479,7 +11479,7 @@
       </trans-unit>
       <trans-unit id="4816216590591222133" datatype="html">
         <source>Enabled</source>
-        <target state="new">Enabled</target>
+        <target state="translated">有効</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -11936,7 +11936,7 @@
       </trans-unit>
       <trans-unit id="7793333806747606771" datatype="html">
         <source>Server is unavailable. Please retry later.</source>
-        <target state="new">Server is unavailable. Please retry later.</target>
+        <target state="translated">サーバーを利用できません。しばらく経ってから、お試しください。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">137</context>
@@ -12743,7 +12743,7 @@
       </trans-unit>
       <trans-unit id="3093549590814158078" datatype="html">
         <source>You need to be logged in to rate this video.</source>
-        <target state="new">You need to be logged in to rate this video.</target>
+        <target state="translated">この動画を評価するにはログインが必要です。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">85</context>
