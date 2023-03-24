@@ -1,7 +1,19 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, DefaultScope, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import {
+  BeforeDestroy,
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  DefaultScope,
+  ForeignKey,
+  Model,
+  Table,
+  UpdatedAt
+} from 'sequelize-typescript'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
-import { MVideoLive, MVideoLiveVideoFormattable } from '@server/types/models'
+import { MVideoLiveFormattable, MVideoLiveVideoFormattable } from '@server/types/models'
 import { LiveVideo, LiveVideoLatencyMode, VideoState } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoModel } from './video'
@@ -83,6 +95,15 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
   })
   ReplaySetting: VideoLiveReplaySettingModel
 
+  @BeforeDestroy
+  static deleteReplaySetting (instance: VideoLiveModel) {
+    return VideoLiveReplaySettingModel.destroy({
+      where: {
+        id: instance.replaySettingId
+      }
+    })
+  }
+
   static loadByStreamKey (streamKey: string) {
     const query = {
       where: {
@@ -116,10 +137,16 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
     const query = {
       where: {
         videoId
-      }
+      },
+      include: [
+        {
+          model: VideoLiveReplaySettingModel.unscoped(),
+          required: false
+        }
+      ]
     }
 
-    return VideoLiveModel.findOne<MVideoLive>(query)
+    return VideoLiveModel.findOne<MVideoLiveFormattable>(query)
   }
 
   toFormattedJSON (canSeePrivateInformation: boolean): LiveVideo {
@@ -141,7 +168,9 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
       }
     }
 
-    const replaySettings = this.replaySettingId ? this.ReplaySetting : undefined
+    const replaySettings = this.replaySettingId
+      ? this.ReplaySetting.toFormattedJSON()
+      : undefined
 
     return {
       ...privateInformation,

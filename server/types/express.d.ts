@@ -16,7 +16,7 @@ import {
   MVideoFormattableDetails,
   MVideoId,
   MVideoImmutable,
-  MVideoLive,
+  MVideoLiveFormattable,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary
 } from '@server/types/models'
@@ -124,7 +124,7 @@ declare module 'express' {
       onlyVideo?: MVideoThumbnail
       videoId?: MVideoId
 
-      videoLive?: MVideoLive
+      videoLive?: MVideoLiveFormattable
       videoLiveSession?: MVideoLiveSession
 
       videoShare?: MVideoShareActor

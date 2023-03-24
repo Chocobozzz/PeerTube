@@ -83,6 +83,7 @@ describe('Test video lives API validator', function () {
         privacy: VideoPrivacy.PUBLIC,
         channelId,
         saveReplay: false,
+        replaySettings: undefined,
         permanentLive: false,
         latencyMode: LiveVideoLatencyMode.DEFAULT
       }
@@ -137,6 +138,12 @@ describe('Test video lives API validator', function () {
 
     it('Should fail with a bad channel', async function () {
       const fields = { ...baseCorrectParams, channelId: 545454 }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a bad privacy for replay settings', async function () {
+      const fields = { ...baseCorrectParams, replaySettings: { privacy: 5 } }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -256,7 +263,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should forbid to save replay if not enabled by the admin', async function () {
-      const fields = { ...baseCorrectParams, saveReplay: true }
+      const fields = { ...baseCorrectParams, saveReplay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC } }
 
       await server.config.updateCustomSubConfig({
         newConfig: {
@@ -460,6 +467,12 @@ describe('Test video lives API validator', function () {
 
     it('Should fail with bad latency setting', async function () {
       const fields = { latencyMode: 42 }
+
+      await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with a bad privacy for replay settings', async function () {
+      const fields = { saveReplay: true, replaySettings: { privacy: 5 } }
 
       await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })

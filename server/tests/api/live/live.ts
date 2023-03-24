@@ -129,6 +129,9 @@ describe('Test live', function () {
         if (server.url === servers[0].url) {
           expect(live.rtmpUrl).to.equal('rtmp://' + server.hostname + ':' + servers[0].rtmpPort + '/live')
           expect(live.streamKey).to.not.be.empty
+
+          expect(live.replaySettings).to.exist
+          expect(live.replaySettings.privacy).to.equal(VideoPrivacy.PUBLIC)
         } else {
           expect(live.rtmpUrl).to.not.exist
           expect(live.streamKey).to.not.exist
@@ -197,6 +200,7 @@ describe('Test live', function () {
         }
 
         expect(live.saveReplay).to.be.false
+        expect(live.replaySettings).to.not.exist
         expect(live.latencyMode).to.equal(LiveVideoLatencyMode.DEFAULT)
       }
     })

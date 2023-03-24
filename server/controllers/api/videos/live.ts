@@ -106,32 +106,26 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
   const videoLive = res.locals.videoLive
 
-  await sequelizeTypescript.transaction(async (t) => {
-    if (exists(body.saveReplay)) {
-      videoLive.saveReplay = body.saveReplay
+  if (exists(body.saveReplay)) videoLive.saveReplay = body.saveReplay
 
-      let replaySetting = await VideoLiveReplaySettingModel.load(videoLive.replaySettingId, t)
-
-      if (videoLive.saveReplay) {
-        if (replaySetting) {
-          replaySetting.privacy = body.replaySettings.privacy
-        } else {
-          replaySetting = new VideoLiveReplaySettingModel({
-            privacy: body.replaySettings.privacy
-          })
-          videoLive.replaySettingId = replaySetting.id
-        }
-        await replaySetting.save({ transaction: t })
+  if (videoLive.saveReplay) {
+    if (exists(body.replaySettings)) {
+      let replaySetting = videoLive.ReplaySetting
+      if (replaySetting) {
+        replaySetting.privacy = body.replaySettings.privacy
       } else {
-        await VideoLiveReplaySettingModel.destroy({
-          where: {
-            id: videoLive.replaySettingId
-          },
-          transaction: t
+        replaySetting = new VideoLiveReplaySettingModel({
+          privacy: body.replaySettings.privacy
         })
+        videoLive.replaySettingId = replaySetting.id
       }
+      await replaySetting.save()
+    } else {
+      // erreur
     }
-  })
+  } else {
+    if (videoLive.replaySettingId) await videoLive.ReplaySetting.destroy()
+  }
 
   if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
   if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode

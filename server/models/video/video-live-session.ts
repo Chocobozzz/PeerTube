@@ -163,7 +163,9 @@ export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiv
       }
       : undefined
 
-    const replaySettings = this.replaySettingId ? this.ReplaySetting : undefined
+    const replaySettings = this.replaySettingId
+      ? this.ReplaySetting.toFormattedJSON()
+      : undefined
 
     return {
       id: this.id,
