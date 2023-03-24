@@ -1360,7 +1360,7 @@
       </trans-unit>
       <trans-unit id="8576568778101631795" datatype="html">
         <source>Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form. </source>
-        <target state="translated">登録フォームの入力が完了すると、<x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>のモデレーターはあなたの登録リクエストを承認する必要があります。 </target>
+        <target state="translated">フォームの入力が完了すると、<x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>のモデレーターはあなたの登録リクエストを承認する必要があります。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -11936,7 +11936,7 @@
       </trans-unit>
       <trans-unit id="7793333806747606771" datatype="html">
         <source>Server is unavailable. Please retry later.</source>
-        <target state="translated">サーバーを利用できません。しばらく経ってから、お試しください。</target>
+        <target state="translated">サーバーを利用できません。後ほど、再度お試し下さい。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">137</context>
