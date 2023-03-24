@@ -7,13 +7,7 @@ type Use<K extends keyof VideoLiveModel, M> = PickWith<VideoLiveModel, K, M>
 
 // ############################################################################
 
-export type MVideoLive = Omit<VideoLiveModel, 'Video'>
-
-// ############################################################################
-
-export type MVideoLiveFormattable =
-  MVideoLive &
-  Use<'ReplaySetting', MLiveReplaySetting>
+export type MVideoLive = Omit<VideoLiveModel, 'Video' | 'ReplaySetting'>
 
 // ############################################################################
 

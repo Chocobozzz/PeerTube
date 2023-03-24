@@ -7,7 +7,7 @@ type Use<K extends keyof VideoLiveSessionModel, M> = PickWith<VideoLiveSessionMo
 
 // ############################################################################
 
-export type MVideoLiveSession = Omit<VideoLiveSessionModel, 'Video' | 'VideoLive'>
+export type MVideoLiveSession = Omit<VideoLiveSessionModel, 'Video' | 'VideoLive' | 'ReplaySetting'>
 
 // ############################################################################
 

@@ -15,7 +15,7 @@ import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MVideo, MVideoLiveFormattable, MVideoLiveSession, MVideoWithAllFiles } from '@server/types/models'
+import { MVideo, MVideoLive, MVideoLiveSession, MVideoWithAllFiles } from '@server/types/models'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { VideoPathManager } from '@server/lib/video-path-manager'
@@ -146,12 +146,13 @@ async function saveReplayToExternalVideo (options: {
 async function replaceLiveByReplay (options: {
   video: MVideo
   liveSession: MVideoLiveSession
-  live: MVideoLiveFormattable
+  live: MVideoLive
   permanentLive: boolean
   replayDirectory: string
 }) {
   const { video, liveSession, live, permanentLive, replayDirectory } = options
 
+  const replaySettings = await VideoLiveReplaySettingModel.load(liveSession.replaySettingId)
   const videoWithFiles = await VideoModel.loadFull(video.id)
   const hlsPlaylist = videoWithFiles.getHLSPlaylist()
 
@@ -160,7 +161,7 @@ async function replaceLiveByReplay (options: {
   await live.destroy()
 
   videoWithFiles.isLive = false
-  videoWithFiles.privacy = liveSession.ReplaySetting.privacy
+  videoWithFiles.privacy = replaySettings.privacy
   videoWithFiles.waitTranscoding = true
   videoWithFiles.state = VideoState.TO_TRANSCODE
 

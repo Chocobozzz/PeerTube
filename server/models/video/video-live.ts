@@ -13,7 +13,7 @@ import {
 } from 'sequelize-typescript'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
-import { MVideoLiveFormattable, MVideoLiveVideoFormattable } from '@server/types/models'
+import { MVideoLive, MVideoLiveVideoFormattable } from '@server/types/models'
 import { LiveVideo, LiveVideoLatencyMode, VideoState } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoModel } from './video'
@@ -137,16 +137,10 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
     const query = {
       where: {
         videoId
-      },
-      include: [
-        {
-          model: VideoLiveReplaySettingModel.unscoped(),
-          required: false
-        }
-      ]
+      }
     }
 
-    return VideoLiveModel.findOne<MVideoLiveFormattable>(query)
+    return VideoLiveModel.findOne<MVideoLive>(query)
   }
 
   toFormattedJSON (canSeePrivateInformation: boolean): LiveVideo {

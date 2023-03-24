@@ -108,9 +108,10 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
 
   if (exists(body.saveReplay)) videoLive.saveReplay = body.saveReplay
 
+  let replaySetting = await VideoLiveReplaySettingModel.load(videoLive.replaySettingId)
+
   if (videoLive.saveReplay) {
     if (exists(body.replaySettings)) {
-      let replaySetting = videoLive.ReplaySetting
       if (replaySetting) {
         replaySetting.privacy = body.replaySettings.privacy
       } else {
@@ -124,7 +125,7 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
       // erreur
     }
   } else {
-    if (videoLive.replaySettingId) await videoLive.ReplaySetting.destroy()
+    if (videoLive.replaySettingId) await replaySetting.destroy()
   }
 
   if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
