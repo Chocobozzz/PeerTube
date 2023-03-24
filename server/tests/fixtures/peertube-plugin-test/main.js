@@ -312,6 +312,8 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     }
   })
 
+  // ---------------------------------------------------------------------------
+
   registerHook({
     target: 'filter:html.embed.video.allowed.result',
     handler: (result, params) => {
@@ -331,6 +333,19 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       }
     }
   })
+
+  // ---------------------------------------------------------------------------
+
+  registerHook({
+    target: 'filter:html.client.json-ld.result',
+    handler: (jsonld, context) => {
+      if (!context || !context.video) return jsonld
+
+      return Object.assign(jsonld, { recordedAt: 'http://example.com/recordedAt' })
+    }
+  })
+
+  // ---------------------------------------------------------------------------
 
   registerHook({
     target: 'filter:api.server.stats.get.result',

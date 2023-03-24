@@ -27,9 +27,10 @@ import { AccountModel } from '../models/account/account'
 import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
-import { MAccountActor, MChannelActor } from '../types/models'
+import { MAccountActor, MChannelActor, MVideo, MVideoPlaylist } from '../types/models'
 import { getActivityStreamDuration } from './activitypub/activity'
 import { getBiggestActorImage } from './actor-image'
+import { Hooks } from './plugins/hooks'
 import { ServerConfigManager } from './server-config-manager'
 
 type Tags = {
@@ -62,6 +63,11 @@ type Tags = {
     width?: number
     height?: number
   }
+}
+
+type HookContext = {
+  video?: MVideo
+  playlist?: MVideoPlaylist
 }
 
 class ClientHtml {
@@ -129,7 +135,7 @@ class ClientHtml {
     const twitterCard = CONFIG.SERVICES.TWITTER.WHITELISTED ? 'player' : 'summary_large_image'
     const schemaType = 'VideoObject'
 
-    customHtml = ClientHtml.addTags(customHtml, {
+    customHtml = await ClientHtml.addTags(customHtml, {
       url,
       originUrl,
       escapedSiteName: escapeHTML(siteName),
@@ -141,7 +147,7 @@ class ClientHtml {
       ogType,
       twitterCard,
       schemaType
-    })
+    }, { video })
 
     return customHtml
   }
@@ -193,7 +199,7 @@ class ClientHtml {
     const twitterCard = CONFIG.SERVICES.TWITTER.WHITELISTED ? 'player' : 'summary'
     const schemaType = 'ItemList'
 
-    customHtml = ClientHtml.addTags(customHtml, {
+    customHtml = await ClientHtml.addTags(customHtml, {
       url,
       originUrl,
       escapedSiteName: escapeHTML(siteName),
@@ -206,7 +212,7 @@ class ClientHtml {
       ogType,
       twitterCard,
       schemaType
-    })
+    }, { playlist: videoPlaylist })
 
     return customHtml
   }
@@ -290,7 +296,7 @@ class ClientHtml {
     const twitterCard = 'summary'
     const schemaType = 'ProfilePage'
 
-    customHtml = ClientHtml.addTags(customHtml, {
+    customHtml = await ClientHtml.addTags(customHtml, {
       url,
       originUrl,
       escapedTitle: escapeHTML(title),
@@ -301,7 +307,7 @@ class ClientHtml {
       twitterCard,
       schemaType,
       disallowIndexation: !entity.Actor.isOwned()
-    })
+    }, {})
 
     return customHtml
   }
@@ -469,7 +475,7 @@ class ClientHtml {
     return metaTags
   }
 
-  private static generateSchemaTags (tags: Tags) {
+  private static async generateSchemaTags (tags: Tags, context: HookContext) {
     const schema = {
       '@context': 'http://schema.org',
       '@type': tags.schemaType,
@@ -495,14 +501,14 @@ class ClientHtml {
       schema['contentUrl'] = tags.url
     }
 
-    return schema
+    return Hooks.wrapObject(schema, 'filter:html.client.json-ld.result', context)
   }
 
-  private static addTags (htmlStringPage: string, tagsValues: Tags) {
+  private static async addTags (htmlStringPage: string, tagsValues: Tags, context: HookContext) {
     const openGraphMetaTags = this.generateOpenGraphMetaTags(tagsValues)
     const standardMetaTags = this.generateStandardMetaTags(tagsValues)
     const twitterCardMetaTags = this.generateTwitterCardMetaTags(tagsValues)
-    const schemaTags = this.generateSchemaTags(tagsValues)
+    const schemaTags = await this.generateSchemaTags(tagsValues, context)
 
     const { url, escapedTitle, embed, originUrl, disallowIndexation } = tagsValues
 
