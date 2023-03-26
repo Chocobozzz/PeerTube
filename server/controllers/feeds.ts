@@ -1,6 +1,6 @@
 import express from 'express'
 import { groupBy, isNull, map, orderBy } from 'lodash'
-import { extname } from 'path'
+import { extname, join } from 'path'
 import { Feed } from 'pfeed-podcast'
 import { CustomTag, LiveItemStatus } from 'pfeed-podcast/lib/typings'
 import { mdToOneLinePlainText, toSafeHtml } from '@server/helpers/markdown'
@@ -10,7 +10,7 @@ import { MAccountDefault, MChannelBannerAccountDefault, MUser, MVideoFullLight }
 import { ActorImageType, VideoInclude, VideoResolution, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
-import { MIMETYPES, PREVIEWS_SIZE, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
+import { LAZY_STATIC_PATHS, MIMETYPES, PREVIEWS_SIZE, ROUTE_CACHE_LIFETIME, STATIC_PATHS, WEBSERVER } from '../initializers/constants'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
@@ -392,6 +392,8 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
         name: video.VideoChannel.Account.getDisplayName(),
         href: video.VideoChannel.Account.Actor.url
       }
+      const preview = video.hasPreview() && video.getPreview()
+      const miniature = video.getMiniature()
       const item = {
         trackers: video.getTrackerUrls(),
         title: video.name,
@@ -416,9 +418,16 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
           { uri: video.url, protocol: 'activitypub', accountUrl: video.VideoChannel.Account.getLocalUrl() }
         ],
         subTitle: captions,
-        thumbnail: [
+        thumbnails: [
           {
-            url: WEBSERVER.URL + video.getPreviewStaticPath()
+            ...(preview && {
+              url: WEBSERVER.URL + join(LAZY_STATIC_PATHS.PREVIEWS, preview.filename),
+              width: preview.width
+            }),
+            ...(miniature && {
+              url: WEBSERVER.URL + join(STATIC_PATHS.THUMBNAILS, miniature.filename),
+              width: miniature.width
+            })
           }
         ],
         customTags
@@ -478,6 +487,8 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
         name: video.VideoChannel.Account.getDisplayName(),
         href: video.VideoChannel.Account.Actor.url
       }
+      const preview = video.hasPreview() && video.getPreview()
+      const miniature = video.getMiniature()
       const item = {
         isLive: true,
         status,
@@ -506,9 +517,16 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
         socialInteract: [
           { uri: video.url, protocol: 'activitypub', accountUrl: video.VideoChannel.Account.getLocalUrl() }
         ],
-        thumbnail: [
+        thumbnails: [
           {
-            url: WEBSERVER.URL + video.getPreviewStaticPath()
+            ...(preview && {
+              url: WEBSERVER.URL + join(LAZY_STATIC_PATHS.PREVIEWS, preview.filename),
+              width: preview.width
+            }),
+            ...(miniature && {
+              url: WEBSERVER.URL + join(STATIC_PATHS.THUMBNAILS, miniature.filename),
+              width: miniature.width
+            })
           }
         ],
         customTags
