@@ -1,4 +1,4 @@
-// {hookType}:{api?}.{location}.{subLocation?}.{actionType}.{target}
+// {hookType}:{root}.{location}.{subLocation?}.{actionType}.{target}
 
 export const serverFilterHookObject = {
   // Filter params/result used to list videos for the REST API
@@ -26,6 +26,10 @@ export const serverFilterHookObject = {
   // Filter params/result used to list overview videos for the REST API
   'filter:api.overviews.videos.list.params': true,
   'filter:api.overviews.videos.list.result': true,
+
+  // Filter params/result used to list subscription videos for the REST API
+  'filter:api.user.me.subscription-videos.list.params': true,
+  'filter:api.user.me.subscription-videos.list.result': true,
 
   // Filter params/results to search videos/channels in the DB or on the remote index
   'filter:api.search.videos.local.list.params': true,
@@ -91,6 +95,10 @@ export const serverFilterHookObject = {
   // Filter result used to check if a user can register on the instance
   'filter:api.user.signup.allowed.result': true,
 
+  // Filter result used to check if a user can send a registration request on the instance
+  // PeerTube >= 5.1
+  'filter:api.user.request-signup.allowed.result': true,
+
   // Filter result used to check if video/torrent download is allowed
   'filter:api.download.video.allowed.result': true,
   'filter:api.download.torrent.allowed.result': true,
@@ -107,6 +115,12 @@ export const serverFilterHookObject = {
 
   'filter:activity-pub.remote-video-comment.create.accept.result': true,
 
+  'filter:activity-pub.activity.context.build.result': true,
+
+  // Filter the result of video JSON LD builder
+  // You may also need to use filter:activity-pub.activity.context.build.result to also update JSON LD context
+  'filter:activity-pub.video.json-ld.build.result': true,
+  
   // Filter result to allow custom tags in podcast RSS feeds
   'filter:api.feed.podcast.channel.custom-tags.result': true,
   'filter:api.feed.podcast.item.custom-tags.result': true,
@@ -163,6 +177,9 @@ export const serverActionHookObject = {
   'action:api.user.unblocked': true,
   // Fired when a user registered on the instance
   'action:api.user.registered': true,
+  // Fired when a user requested registration on the instance
+  // PeerTube >= 5.1
+  'action:api.user.requested-registration': true,
   // Fired when an admin/moderator created a user
   'action:api.user.created': true,
   // Fired when a user is removed by an admin/moderator
@@ -174,7 +191,11 @@ export const serverActionHookObject = {
   'action:api.user.oauth2-got-token': true,
 
   // Fired when a video is added to a playlist
-  'action:api.video-playlist-element.created': true
+  'action:api.video-playlist-element.created': true,
+
+  // Fired when a remote video has been created/updated
+  'action:activity-pub.remote-video.created': true,
+  'action:activity-pub.remote-video.updated': true
 }
 
 export type ServerActionHookName = keyof typeof serverActionHookObject

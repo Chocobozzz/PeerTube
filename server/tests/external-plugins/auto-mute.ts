@@ -21,7 +21,7 @@ describe('Official plugin auto-mute', function () {
   let port: number
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)

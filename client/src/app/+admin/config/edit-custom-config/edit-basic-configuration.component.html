@@ -44,9 +44,6 @@
 
             <div class="peertube-select-container">
               <select id="trendingVideosAlgorithmsDefault" formControlName="default" class="form-control">
-                <option i18n value="publishedAt">Recently added videos</option>
-                <option i18n value="originallyPublishedAt">Original publication date</option>
-                <option i18n value="name">Name</option>
                 <option i18n value="hot">Hot videos</option>
                 <option i18n value="most-viewed">Recent views</option>
                 <option i18n value="most-liked">Most liked videos</option>
@@ -137,7 +134,7 @@
 
           <my-markdown-textarea
             name="broadcastMessageMessage" formControlName="message"
-            [formError]="formErrors['broadcastMessage.message']"
+            [formError]="formErrors['broadcastMessage.message']" markdownType="to-unsafe-html"
           ></my-markdown-textarea>
 
           <div *ngIf="formErrors.broadcastMessage.message" class="form-error">{{ formErrors.broadcastMessage.message }}</div>
@@ -171,12 +168,21 @@
             </ng-container>
 
             <ng-container ngProjectAs="extra">
-              <my-peertube-checkbox [ngClass]="getDisabledSignupClass()"
-                inputName="signupRequiresEmailVerification" formControlName="requiresEmailVerification"
-                i18n-labelText labelText="Signup requires email verification"
-              ></my-peertube-checkbox>
+              <div class="form-group">
+                <my-peertube-checkbox [ngClass]="getDisabledSignupClass()"
+                  inputName="signupRequiresApproval" formControlName="requiresApproval"
+                  i18n-labelText labelText="Signup requires approval by moderators"
+                ></my-peertube-checkbox>
+              </div>
 
-              <div [ngClass]="getDisabledSignupClass()" class="mt-3">
+              <div class="form-group">
+                <my-peertube-checkbox [ngClass]="getDisabledSignupClass()"
+                  inputName="signupRequiresEmailVerification" formControlName="requiresEmailVerification"
+                  i18n-labelText labelText="Signup requires email verification"
+                ></my-peertube-checkbox>
+              </div>
+
+              <div [ngClass]="getDisabledSignupClass()">
                 <label i18n for="signupLimit">Signup limit</label>
 
                 <div class="number-with-unit">
@@ -274,7 +280,7 @@
               i18n-labelText labelText="Allow import with HTTP URL (e.g. YouTube)"
             >
               <ng-container ngProjectAs="description">
-                <span i18n>⚠️ If enabled, we recommend to use <a class="link-orange" href="https://docs.joinpeertube.org/maintain-configuration?id=security">a HTTP proxy</a> to prevent private URL access from your PeerTube server</span>
+                <span i18n>⚠️ If enabled, we recommend to use <a class="link-orange" href="https://docs.joinpeertube.org/maintain/configuration#security">a HTTP proxy</a> to prevent private URL access from your PeerTube server</span>
               </ng-container>
             </my-peertube-checkbox>
           </div>
@@ -497,7 +503,7 @@
                   <div i18n>⚠️ This functionality requires a lot of attention and extra moderation.</div>
 
                   <span i18n>
-                    See <a class="link-orange" href="https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances" rel="noopener noreferrer" target="_blank">the documentation</a> for more information about the expected URL
+                    See <a class="link-orange" href="https://docs.joinpeertube.org/admin/following-instances#automatically-follow-other-instances" rel="noopener noreferrer" target="_blank">the documentation</a> for more information about the expected URL
                   </span>
                 </ng-container>
 

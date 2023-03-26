@@ -3,7 +3,7 @@ import { VIDEO_FILTERS } from '@server/initializers/constants'
 import { AvailableEncoders } from '@shared/models'
 import { logger, loggerTagsFactory } from '../logger'
 import { getFFmpeg, runCommand } from './ffmpeg-commons'
-import { presetCopy, presetVOD } from './ffmpeg-presets'
+import { presetVOD } from './ffmpeg-presets'
 import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamDuration, getVideoStreamFPS, hasAudioStream } from './ffprobe-utils'
 
 const lTags = loggerTagsFactory('ffmpeg')
@@ -13,22 +13,38 @@ async function cutVideo (options: {
   outputPath: string
   start?: number
   end?: number
+
+  availableEncoders: AvailableEncoders
+  profile: string
 }) {
-  const { inputPath, outputPath } = options
+  const { inputPath, outputPath, availableEncoders, profile } = options
 
   logger.debug('Will cut the video.', { options, ...lTags() })
+
+  const mainProbe = await ffprobePromise(inputPath)
+  const fps = await getVideoStreamFPS(inputPath, mainProbe)
+  const { resolution } = await getVideoStreamDimensionsInfo(inputPath, mainProbe)
 
   let command = getFFmpeg(inputPath, 'vod')
     .output(outputPath)
 
-  command = presetCopy(command)
+  command = await presetVOD({
+    command,
+    input: inputPath,
+    availableEncoders,
+    profile,
+    resolution,
+    fps,
+    canCopyAudio: false,
+    canCopyVideo: false
+  })
 
-  if (options.start) command.inputOption('-ss ' + options.start)
+  if (options.start) {
+    command.outputOption('-ss ' + options.start)
+  }
 
   if (options.end) {
-    const endSeeking = options.end - (options.start || 0)
-
-    command.outputOption('-to ' + endSeeking)
+    command.outputOption('-to ' + options.end)
   }
 
   await runCommand({ command })

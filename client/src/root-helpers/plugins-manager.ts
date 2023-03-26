@@ -3,7 +3,7 @@ import * as debug from 'debug'
 import { firstValueFrom, ReplaySubject } from 'rxjs'
 import { first, shareReplay } from 'rxjs/operators'
 import { RegisterClientHelpers } from 'src/types/register-client-option.model'
-import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
+import { getExternalAuthHref, getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
 import {
   ClientHookName,
   clientHookObject,
@@ -16,7 +16,6 @@ import {
   RegisterClientRouteOptions,
   RegisterClientSettingsScriptOptions,
   RegisterClientVideoFieldOptions,
-  RegisteredExternalAuthConfig,
   ServerConfigPlugin
 } from '@shared/models'
 import { environment } from '../environments/environment'
@@ -94,9 +93,13 @@ class PluginsManager {
     return isTheme ? '/themes' : '/plugins'
   }
 
-  static getExternalAuthHref (auth: RegisteredExternalAuthConfig) {
-    return environment.apiUrl + `/plugins/${auth.name}/${auth.version}/auth/${auth.authName}`
+  static getDefaultLoginHref (apiUrl: string, serverConfig: HTMLServerConfig) {
+    if (!serverConfig || serverConfig.client.menu.login.redirectOnSingleExternalAuth !== true) return undefined
 
+    const externalAuths = serverConfig.plugin.registeredExternalAuths
+    if (externalAuths.length !== 1) return undefined
+
+    return getExternalAuthHref(apiUrl, externalAuths[0])
   }
 
   loadPluginsList (config: HTMLServerConfig) {
@@ -105,10 +108,15 @@ class PluginsManager {
     }
   }
 
-  async runHook<T> (hookName: ClientHookName, result?: T, params?: any) {
-    if (!this.hooks[hookName]) return result
+  async runHook<T> (hookName: ClientHookName, resultArg?: T | Promise<T>, params?: any) {
+    if (!this.hooks[hookName]) {
+      // eslint-disable-next-line no-return-await
+      return await resultArg
+    }
 
     const hookType = getHookType(hookName)
+
+    let result = await resultArg
 
     for (const hook of this.hooks[hookName]) {
       logger.info(`Running hook ${hookName} of plugin ${hook.plugin.name}`)

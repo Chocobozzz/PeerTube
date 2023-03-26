@@ -450,12 +450,16 @@ body p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
 // ---------------------------------------------------------------------------
 
 p-table {
+  table {
+    table-layout: fixed;
+  }
+
   .p-datatable-header {
     border: none !important;
     background-color: pvar(--mainBackgroundColor) !important;
 
     .caption {
-      height: 40px;
+      min-height: 40px;
       width: 100%;
       display: inline-flex;
       align-items: center;
@@ -551,13 +555,6 @@ p-table {
 
     &.p-sortable-column:hover {
       background-color: pvar(--submenuBackgroundColor) !important;
-      border: 1px solid !important;
-      border-color: pvar(--submenuBackgroundColor) !important;
-      border-width: 0 1px !important;
-
-      &:first-child {
-        border-width: 0 1px 0 0 !important;
-      }
     }
 
     &.p-highlight {
@@ -634,6 +631,11 @@ p-table {
         right: 0;
         color: pvar(--inputPlaceholderColor);
         overflow: visible;
+
+        @media screen and (max-width: $small-view) {
+          left: 0;
+          top: 40px;
+        }
       }
 
       .p-paginator-first,

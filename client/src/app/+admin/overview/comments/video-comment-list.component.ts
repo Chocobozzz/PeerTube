@@ -14,7 +14,7 @@ import { prepareIcu } from '@app/helpers'
   templateUrl: './video-comment-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './video-comment-list.component.scss' ]
 })
-export class VideoCommentListComponent extends RestTable implements OnInit {
+export class VideoCommentListComponent extends RestTable <VideoCommentAdmin> implements OnInit {
   comments: VideoCommentAdmin[]
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: -1 }
@@ -40,8 +40,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
     }
   ]
 
-  selectedComments: VideoCommentAdmin[] = []
-  bulkCommentActions: DropdownAction<VideoCommentAdmin[]>[] = []
+  bulkActions: DropdownAction<VideoCommentAdmin[]>[] = []
 
   inputFilters: AdvancedInputFilter[] = [
     {
@@ -100,7 +99,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
   ngOnInit () {
     this.initialize()
 
-    this.bulkCommentActions = [
+    this.bulkActions = [
       {
         label: $localize`Delete`,
         handler: comments => this.removeComments(comments),
@@ -118,11 +117,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
     return this.markdownRenderer.textMarkdownToHTML({ markdown: text, withHtml: true, withEmoji: true })
   }
 
-  isInSelectionMode () {
-    return this.selectedComments.length !== 0
-  }
-
-  reloadData () {
+  protected reloadDataInternal () {
     this.videoCommentService.getAdminVideoComments({
       pagination: this.pagination,
       sort: this.sort,
@@ -162,7 +157,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
 
         error: err => this.notifier.error(err.message),
 
-        complete: () => this.selectedComments = []
+        complete: () => this.selectedRows = []
       })
   }
 

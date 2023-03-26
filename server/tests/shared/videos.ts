@@ -59,7 +59,7 @@ async function completeVideoCheck (
 
   expect(video.name).to.equal(attributes.name)
   expect(video.category.id).to.equal(attributes.category)
-  expect(video.category.label).to.equal(attributes.category !== null ? VIDEO_CATEGORIES[attributes.category] : 'Misc')
+  expect(video.category.label).to.equal(attributes.category !== null ? VIDEO_CATEGORIES[attributes.category] : 'Unknown')
   expect(video.licence.id).to.equal(attributes.licence)
   expect(video.licence.label).to.equal(attributes.licence !== null ? VIDEO_LICENCES[attributes.licence] : 'Unknown')
   expect(video.language.id).to.equal(attributes.language)

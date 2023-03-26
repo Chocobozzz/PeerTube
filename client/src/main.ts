@@ -25,7 +25,19 @@ const bootstrap = () => platformBrowserDynamic()
     return bootstrapModule
   })
   .catch(err => {
-    logger.error(err)
+    try {
+      logger.error(err)
+    } catch (err2) {
+      console.error('Cannot log error', { err, err2 })
+    }
+
+    // Ensure we display an "incompatible message" on Angular bootstrap error
+    setTimeout(() => {
+      if (document.querySelector('my-app').innerHTML === '') {
+        throw err
+      }
+    }, 1000)
+
     return null
   })
 

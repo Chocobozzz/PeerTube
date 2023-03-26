@@ -1,11 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { HttpStatusCode, VideoDetails, VideoImportState, VideoPlaylist, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+import {
+  HttpStatusCode,
+  PeerTubeProblemDocument,
+  VideoDetails,
+  VideoImportState,
+  VideoPlaylist,
+  VideoPlaylistPrivacy,
+  VideoPrivacy
+} from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  makeActivityPubGetRequest,
   makeGetRequest,
   makeRawRequest,
   PeerTubeServer,
@@ -63,6 +72,9 @@ describe('Test plugin filter hooks', function () {
         }
       }
     })
+
+    // Root subscribes to itself
+    await servers[0].subscriptions.add({ targetUri: 'root_channel@' + servers[0].host })
   })
 
   describe('Videos', function () {
@@ -138,6 +150,20 @@ describe('Test plugin filter hooks', function () {
 
     it('Should run filter:api.user.me.videos.list.result', async function () {
       const { total } = await servers[0].videos.listMyVideos({ start: 0, count: 2 })
+
+      // Plugin do +4 to the total result
+      expect(total).to.equal(14)
+    })
+
+    it('Should run filter:api.user.me.subscription-videos.list.params', async function () {
+      const { data } = await servers[0].videos.listMySubscriptionVideos({ start: 0, count: 2 })
+
+      // 1 plugin do +1 to the count parameter
+      expect(data).to.have.lengthOf(3)
+    })
+
+    it('Should run filter:api.user.me.subscription-videos.list.result', async function () {
+      const { total } = await servers[0].videos.listMySubscriptionVideos({ start: 0, count: 2 })
 
       // Plugin do +4 to the total result
       expect(total).to.equal(14)
@@ -408,23 +434,52 @@ describe('Test plugin filter hooks', function () {
 
   describe('Should run filter:api.user.signup.allowed.result', function () {
 
+    before(async function () {
+      await servers[0].config.updateExistingSubConfig({ newConfig: { signup: { requiresApproval: false } } })
+    })
+
     it('Should run on config endpoint', async function () {
       const body = await servers[0].config.getConfig()
       expect(body.signup.allowed).to.be.true
     })
 
     it('Should allow a signup', async function () {
-      await servers[0].users.register({ username: 'john', password: 'password' })
+      await servers[0].registrations.register({ username: 'john1' })
     })
 
     it('Should not allow a signup', async function () {
-      const res = await servers[0].users.register({
-        username: 'jma',
-        password: 'password',
+      const res = await servers[0].registrations.register({
+        username: 'jma 1',
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
 
-      expect(res.body.error).to.equal('No jma')
+      expect(res.body.error).to.equal('No jma 1')
+    })
+  })
+
+  describe('Should run filter:api.user.request-signup.allowed.result', function () {
+
+    before(async function () {
+      await servers[0].config.updateExistingSubConfig({ newConfig: { signup: { requiresApproval: true } } })
+    })
+
+    it('Should run on config endpoint', async function () {
+      const body = await servers[0].config.getConfig()
+      expect(body.signup.allowed).to.be.true
+    })
+
+    it('Should allow a signup request', async function () {
+      await servers[0].registrations.requestRegistration({ username: 'john2', registrationReason: 'tt' })
+    })
+
+    it('Should not allow a signup request', async function () {
+      const body = await servers[0].registrations.requestRegistration({
+        username: 'jma 2',
+        registrationReason: 'tt',
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+
+      expect((body as unknown as PeerTubeProblemDocument).error).to.equal('No jma 2')
     })
   })
 
@@ -789,6 +844,24 @@ describe('Test plugin filter hooks', function () {
     it('Should run filter:api.video-channel.get.result', async function () {
       const channel = await servers[0].channels.get({ channelName: 'root_channel' })
       expect(channel.displayName).to.equal('Main root channel <3')
+    })
+  })
+
+  describe('Activity Pub', function () {
+
+    it('Should run filter:activity-pub.activity.context.build.result', async function () {
+      const { body } = await makeActivityPubGetRequest(servers[0].url, '/w/' + videoUUID)
+      expect(body.type).to.equal('Video')
+
+      expect(body['@context'].some(c => {
+        return typeof c === 'object' && c.recordedAt === 'https://schema.org/recordedAt'
+      })).to.be.true
+    })
+
+    it('Should run filter:activity-pub.video.json-ld.build.result', async function () {
+      const { body } = await makeActivityPubGetRequest(servers[0].url, '/w/' + videoUUID)
+      expect(body.name).to.equal('default video 0')
+      expect(body.videoName).to.equal('default video 0')
     })
   })
 

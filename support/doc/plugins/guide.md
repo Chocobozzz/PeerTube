@@ -16,6 +16,7 @@
     - [Add external auth methods](#add-external-auth-methods)
     - [Add new transcoding profiles](#add-new-transcoding-profiles)
     - [Server helpers](#server-helpers)
+    - [Federation](#federation)
   - [Client API (themes & plugins)](#client-api-themes--plugins)
     - [Get plugin static and router routes](#get-plugin-static-and-router-routes)
     - [Notifier](#notifier)
@@ -290,7 +291,7 @@ You can create custom routes using an [express Router](https://expressjs.com/en/
 
 ```js
 function register ({
-  router
+  getRouter
 }) {
   const router = getRouter()
   router.get('/ping', (req, res) => res.json({ message: 'pong' }))
@@ -433,7 +434,27 @@ function register (...) {
       username: 'user'
       email: 'user@example.com'
       role: 2
-      displayName: 'User display name'
+      displayName: 'User display name',
+
+      // Custom admin flags (bypass video auto moderation etc.)
+      // https://github.com/Chocobozzz/PeerTube/blob/develop/shared/models/users/user-flag.model.ts
+      // PeerTube >= 5.1
+      adminFlags: 0,
+      // Quota in bytes
+      // PeerTube >= 5.1
+      videoQuota: 1024 * 1024 * 1024, // 1GB
+      // PeerTube >= 5.1
+      videoQuotaDaily: -1, // Unlimited
+
+      // Update the user profile if it already exists
+      // Default behaviour is no update
+      // Introduced in PeerTube >= 5.1
+      userUpdater: ({ fieldName, currentValue, newValue }) => {
+        // Always use new value except for videoQuotaDaily field
+        if (fieldName === 'videoQuotaDaily') return currentValue
+
+        return newValue
+      }
     })
   })
 
@@ -565,7 +586,50 @@ async function register ({
 }
 ```
 
-See the [plugin API reference](https://docs.joinpeertube.org/api-plugins) to see the complete helpers list.
+See the [plugin API reference](https://docs.joinpeertube.org/api/plugins) to see the complete helpers list.
+
+#### Federation
+
+You can use some server hooks to federate plugin data to other PeerTube instances that may have installed your plugin.
+
+For example to federate additional video metadata:
+
+```js
+async function register ({ registerHook }) {
+
+  // Send plugin metadata to remote instances
+  // We also update the JSON LD context because we added a new field
+  {
+    registerHook({
+      target: 'filter:activity-pub.video.json-ld.build.result',
+      handler: async (jsonld, { video }) => {
+        return Object.assign(jsonld, { recordedAt: 'https://example.com/event' })
+      }
+    })
+
+    registerHook({
+      target: 'filter:activity-pub.activity.context.build.result',
+      handler: jsonld => {
+        return jsonld.concat([ { recordedAt: 'https://schema.org/recordedAt' } ])
+      }
+    })
+  }
+
+  // Save remote video metadata
+  {
+    for (const h of [ 'action:activity-pub.remote-video.created', 'action:activity-pub.remote-video.updated' ]) {
+      registerHook({
+        target: h,
+        handler: ({ video, videoAPObject }) => {
+          if (videoAPObject.recordedAt) {
+            // Save information about the video
+          }
+        }
+      })
+    }
+  }
+```
+
 
 ### Client API (themes & plugins)
 
@@ -819,7 +883,7 @@ PeerTube provides some selectors (using `id` HTML attribute) on important blocks
 
 For example `#plugin-selector-login-form` could be used to hide the login form.
 
-See the complete list on https://docs.joinpeertube.org/api-plugins
+See the complete list on https://docs.joinpeertube.org/api/plugins
 
 #### HTML placeholder elements
 
@@ -835,7 +899,7 @@ async function register (...) {
 }
 ```
 
-See the complete list on https://docs.joinpeertube.org/api-plugins
+See the complete list on https://docs.joinpeertube.org/api/plugins
 
 #### Add/remove left menu links
 
@@ -1074,7 +1138,7 @@ $ npm run build
 $ npm run setup:cli
 ```
 
- * Run PeerTube (you can access to your instance on http://localhost:9000):
+ * Run PeerTube (you can access to your instance on `localhost:9000`):
 
 ```
 $ NODE_ENV=dev npm start
@@ -1120,7 +1184,7 @@ $ npm deprecate peertube-plugin-xxx@"> 0.0.0" "explain here why you deprecate yo
 
 ## Plugin & Theme hooks/helpers API
 
-See the dedicated documentation: https://docs.joinpeertube.org/api-plugins
+See the dedicated documentation: https://docs.joinpeertube.org/api/plugins
 
 
 ## Tips

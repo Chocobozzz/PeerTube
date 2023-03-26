@@ -2,7 +2,7 @@ import { ensureDir } from 'fs-extra'
 import { isGithubCI } from '@shared/core-utils'
 import { PeerTubeServer, RunServerOptions } from './server'
 
-async function createSingleServer (serverNumber: number, configOverride?: Object, options: RunServerOptions = {}) {
+async function createSingleServer (serverNumber: number, configOverride?: object, options: RunServerOptions = {}) {
   const server = new PeerTubeServer({ serverNumber })
 
   await server.flushAndRun(configOverride, options)
@@ -10,7 +10,7 @@ async function createSingleServer (serverNumber: number, configOverride?: Object
   return server
 }
 
-function createMultipleServers (totalServers: number, configOverride?: Object, options: RunServerOptions = {}) {
+function createMultipleServers (totalServers: number, configOverride?: object, options: RunServerOptions = {}) {
   const serverPromises: Promise<PeerTubeServer>[] = []
 
   for (let i = 1; i <= totalServers; i++) {

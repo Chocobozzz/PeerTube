@@ -83,10 +83,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     return this.serverConfig.instance.name
   }
 
-  goToDefaultRoute () {
-    return this.router.navigateByUrl(this.redirectService.getDefaultRoute())
-  }
-
   ngOnInit () {
     document.getElementById('incompatible-browser').className += ' browser-ok'
 
@@ -133,6 +129,10 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit () {
     this.pluginService.initializeCustomModal(this.customModal)
+  }
+
+  getDefaultRoute () {
+    return this.redirectService.getDefaultRoute()
   }
 
   getToggleTitle () {

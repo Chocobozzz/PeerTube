@@ -33,7 +33,7 @@ You need to follow all the following steps even if you are on a PeerTube server 
 
 ### Dependencies
 
-Install the [PeerTube dependencies](dependencies.md) except PostgreSQL and Redis.
+Install the [PeerTube dependencies](/support/doc/dependencies.md) except PostgreSQL and Redis.
 
 ### Installation
 

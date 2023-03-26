@@ -1,12 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.subtitle {
-  font-size: 18px;
-  font-weight: $font-semibold;
-  margin-bottom: 20px;
-}
-
 a {
   display: block;
   width: fit-content;
@@ -16,11 +10,4 @@ a {
 .no-results {
   justify-content: flex-start;
   align-items: flex-start;
-}
-
-.show-more {
-  @include peertube-button-link;
-  @include grey-button;
-
-  margin-top: 1%;
 }

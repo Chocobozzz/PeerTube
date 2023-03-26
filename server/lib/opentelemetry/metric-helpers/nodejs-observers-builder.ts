@@ -1,5 +1,5 @@
 import { readdir } from 'fs-extra'
-import { constants, PerformanceObserver } from 'perf_hooks'
+import { constants, NodeGCPerformanceDetail, PerformanceObserver } from 'perf_hooks'
 import * as process from 'process'
 import { Meter, ObservableResult } from '@opentelemetry/api'
 import { ExplicitBucketHistogramAggregation } from '@opentelemetry/sdk-metrics'
@@ -110,9 +110,9 @@ export class NodeJSObserversBuilder {
       // Node < 16 uses entry.kind
       // Node >= 16 uses entry.detail.kind
       // See: https://nodejs.org/docs/latest-v16.x/api/deprecations.html#deprecations_dep0152_extension_performanceentry_properties
-      const kind = (entry as any).detail
-        ? kinds[(entry as any).detail.kind]
-        : kinds[entry.kind]
+      const kind = entry.detail
+        ? kinds[(entry.detail as NodeGCPerformanceDetail).kind]
+        : kinds[(entry as any).kind]
 
       // Convert duration from milliseconds to seconds
       histogram.record(entry.duration / 1000, {

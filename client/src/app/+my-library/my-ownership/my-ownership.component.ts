@@ -59,7 +59,7 @@ export class MyOwnershipComponent extends RestTable implements OnInit {
       })
   }
 
-  protected reloadData () {
+  protected reloadDataInternal () {
     return this.videoOwnershipService.getOwnershipChanges(this.pagination, this.sort)
       .subscribe({
         next: resultList => {

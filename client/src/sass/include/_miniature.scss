@@ -2,9 +2,9 @@
 @use '_mixins' as *;
 
 @mixin miniature-name {
-  @include ellipsis-multiline(1.1em, 2);
   @include peertube-word-wrap(false);
 
+  font-size: 1.1em;
   transition: color 0.2s;
   font-weight: $font-semibold;
   color: pvar(--mainForegroundColor);

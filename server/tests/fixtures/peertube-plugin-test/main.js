@@ -1,43 +1,54 @@
 async function register ({ registerHook, registerSetting, settingsManager, storageManager, peertubeHelpers }) {
-  const actionHooks = [
-    'action:application.listening',
-    'action:notifier.notification.created',
+  {
+    const actionHooks = [
+      'action:application.listening',
+      'action:notifier.notification.created',
 
-    'action:api.video.updated',
-    'action:api.video.deleted',
-    'action:api.video.uploaded',
-    'action:api.video.viewed',
+      'action:api.video.updated',
+      'action:api.video.deleted',
+      'action:api.video.uploaded',
+      'action:api.video.viewed',
 
-    'action:api.video-channel.created',
-    'action:api.video-channel.updated',
-    'action:api.video-channel.deleted',
+      'action:api.video-channel.created',
+      'action:api.video-channel.updated',
+      'action:api.video-channel.deleted',
 
-    'action:api.live-video.created',
-    'action:api.live-video.state.updated',
+      'action:api.live-video.created',
+      'action:api.live-video.state.updated',
 
-    'action:api.video-thread.created',
-    'action:api.video-comment-reply.created',
-    'action:api.video-comment.deleted',
+      'action:api.video-thread.created',
+      'action:api.video-comment-reply.created',
+      'action:api.video-comment.deleted',
 
-    'action:api.video-caption.created',
-    'action:api.video-caption.deleted',
+      'action:api.video-caption.created',
+      'action:api.video-caption.deleted',
 
-    'action:api.user.blocked',
-    'action:api.user.unblocked',
-    'action:api.user.registered',
-    'action:api.user.created',
-    'action:api.user.deleted',
-    'action:api.user.updated',
-    'action:api.user.oauth2-got-token',
+      'action:api.user.blocked',
+      'action:api.user.unblocked',
+      'action:api.user.registered',
+      'action:api.user.created',
+      'action:api.user.deleted',
+      'action:api.user.updated',
+      'action:api.user.oauth2-got-token',
 
-    'action:api.video-playlist-element.created'
-  ]
+      'action:api.video-playlist-element.created'
+    ]
 
-  for (const h of actionHooks) {
-    registerHook({
-      target: h,
-      handler: () => peertubeHelpers.logger.debug('Run hook %s.', h)
-    })
+    for (const h of actionHooks) {
+      registerHook({
+        target: h,
+        handler: () => peertubeHelpers.logger.debug('Run hook %s.', h)
+      })
+    }
+
+    for (const h of [ 'action:activity-pub.remote-video.created', 'action:activity-pub.remote-video.updated' ]) {
+      registerHook({
+        target: h,
+        handler: ({ video, videoAPObject }) => {
+          peertubeHelpers.logger.debug('Run hook %s - AP %s - video %s.', h, video.name, videoAPObject.name )
+        }
+      })
+    }
   }
 
   registerHook({
@@ -87,6 +98,16 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
 
   registerHook({
     target: 'filter:api.user.me.videos.list.result',
+    handler: obj => addToTotal(obj, 4)
+  })
+
+  registerHook({
+    target: 'filter:api.user.me.subscription-videos.list.params',
+    handler: obj => addToCount(obj)
+  })
+
+  registerHook({
+    target: 'filter:api.user.me.subscription-videos.list.result',
     handler: obj => addToTotal(obj, 4)
   })
 
@@ -199,6 +220,18 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   // ---------------------------------------------------------------------------
 
   registerHook({
+    target: 'filter:activity-pub.activity.context.build.result',
+    handler: context => context.concat([ { recordedAt: 'https://schema.org/recordedAt' } ])
+  })
+
+  registerHook({
+    target: 'filter:activity-pub.video.json-ld.build.result',
+    handler: (jsonld, { video }) => ({ ...jsonld, videoName: video.name })
+  })
+
+  // ---------------------------------------------------------------------------
+
+  registerHook({
     target: 'filter:api.video-threads.list.params',
     handler: obj => addToCount(obj)
   })
@@ -227,16 +260,29 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     }
   })
 
-  registerHook({
-    target: 'filter:api.user.signup.allowed.result',
-    handler: (result, params) => {
-      if (params && params.body && params.body.email && params.body.email.includes('jma')) {
-        return { allowed: false, errorMessage: 'No jma' }
-      }
+  {
+    registerHook({
+      target: 'filter:api.user.signup.allowed.result',
+      handler: (result, params) => {
+        if (params && params.body && params.body.email && params.body.email.includes('jma 1')) {
+          return { allowed: false, errorMessage: 'No jma 1' }
+        }
 
-      return result
-    }
-  })
+        return result
+      }
+    })
+
+    registerHook({
+      target: 'filter:api.user.request-signup.allowed.result',
+      handler: (result, params) => {
+        if (params && params.body && params.body.email && params.body.email.includes('jma 2')) {
+          return { allowed: false, errorMessage: 'No jma 2' }
+        }
+
+        return result
+      }
+    })
+  }
 
   registerHook({
     target: 'filter:api.download.torrent.allowed.result',

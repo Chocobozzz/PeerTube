@@ -7,7 +7,7 @@ import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { MActorDefault, MActorFollowersUrl, MActorId } from '../../types/models'
 import { MVideoShareActor, MVideoShareFull } from '../../types/models/video'
 import { ActorModel } from '../actor/actor'
-import { buildLocalActorIdsIn, throwIfNotValid } from '../utils'
+import { buildLocalActorIdsIn, throwIfNotValid } from '../shared'
 import { VideoModel } from './video'
 
 enum ScopeNames {

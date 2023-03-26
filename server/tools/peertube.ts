@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { CommandOptions, program } from 'commander'
-import { getSettings, version } from './cli'
+import { getSettings, version } from './shared'
 
 program
   .version(version, '-v, --version')

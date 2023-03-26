@@ -16,4 +16,4 @@ yarn add --dev @peertube/peertube-types
 
 ## Usage
 
-> See [contribute-plugins](https://docs.joinpeertube.org/contribute-plugins?id=typescript) **Typescript** section of the doc.
+> See [contribute-plugins](https://docs.joinpeertube.org/contribute/plugins#typescript) **Typescript** section of the doc.

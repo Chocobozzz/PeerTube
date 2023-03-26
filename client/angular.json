@@ -144,6 +144,14 @@
           "nn": {
             "translation": "src/locale/angular.nn.xlf",
             "baseHref": "/client/nn/"
+          },
+          "is": {
+            "translation": "src/locale/angular.is.xlf",
+            "baseHref": "/client/is/"
+          },
+          "uk": {
+            "translation": "src/locale/angular.uk-UA.xlf",
+            "baseHref": "/client/uk-UA/"
           }
         }
       },
@@ -171,7 +179,7 @@
               "src/sass/application.scss"
             ],
             "allowedCommonJsDependencies": [
-              "@cordobo/qrcode",
+              "qrcode",
               "chart.js",
               "htmlparser2",
               "markdown-it-emoji/light",
@@ -289,23 +297,6 @@
             "browserTarget": "PeerTube:build"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "karmaConfig": "./karma.conf.js",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [],
-            "styles": [
-              "src/sass/application.scss"
-            ],
-            "assets": [
-              "src/assets/images",
-              "src/manifest.webmanifest"
-            ]
-          }
-        },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
@@ -329,6 +320,12 @@
     },
     "@schematics/angular:directive": {
       "prefix": "my"
+    },
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
     }
   },
   "cli": {

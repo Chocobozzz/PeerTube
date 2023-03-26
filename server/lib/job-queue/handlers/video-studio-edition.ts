@@ -164,7 +164,10 @@ function processCut (options: TaskProcessorOptions<VideoStudioTaskCutPayload>) {
     ...pick(options, [ 'inputPath', 'outputPath' ]),
 
     start: task.options.start,
-    end: task.options.end
+    end: task.options.end,
+
+    availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
+    profile: CONFIG.TRANSCODING.PROFILE
   })
 }
 

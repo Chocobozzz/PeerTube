@@ -1,9 +1,13 @@
 import { ChildProcessWithoutNullStreams } from 'child_process'
 import { basename } from 'path'
+import { setValue } from '@wdio/shared-store-service'
+import { createScreenshotsDirectory } from './files'
 import { runCommand, runServer } from './server'
 
-let appInstance: string
+let appInstance: number
 let app: ChildProcessWithoutNullStreams
+
+let emailPort: number
 
 async function beforeLocalSuite (suite: any) {
   const config = buildConfig(suite.file)
@@ -17,13 +21,22 @@ function afterLocalSuite () {
   app = undefined
 }
 
-function beforeLocalSession (config: { baseUrl: string }, capabilities: { browserName: string }) {
-  appInstance = capabilities['browserName'] === 'chrome' ? '1' : '2'
+async function beforeLocalSession (config: { baseUrl: string }, capabilities: { browserName: string }) {
+  createScreenshotsDirectory()
+
+  appInstance = capabilities['browserName'] === 'chrome'
+    ? 1
+    : 2
+
+  emailPort = 1025 + appInstance
+
   config.baseUrl = 'http://localhost:900' + appInstance
+
+  await setValue(config.baseUrl + '-emailPort', emailPort)
 }
 
 async function onBrowserStackPrepare () {
-  const appInstance = '1'
+  const appInstance = 1
 
   await runCommand('npm run clean:server:test -- ' + appInstance)
   app = runServer(appInstance)
@@ -71,7 +84,11 @@ function buildConfig (suiteFile: string = undefined) {
   if (filename === 'signup.e2e-spec.ts') {
     return {
       signup: {
-        enabled: true
+        limit: -1
+      },
+      smtp: {
+        hostname: '127.0.0.1',
+        port: emailPort
       }
     }
   }

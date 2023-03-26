@@ -8,7 +8,6 @@
       "@shared/*": [ "shared/*" ]
     },
     "typeRoots": [
-      "server/typings",
       "node_modules/@types"
     ]
   },
@@ -17,5 +16,5 @@
     { "path": "./server" },
     { "path": "./scripts" }
   ],
-  "files": [ "server.ts", "server/types/express.d.ts" ]
+  "files": [ "server.ts", "server/types/express.d.ts", "server/types/lib.d.ts" ]
 }

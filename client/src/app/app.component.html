@@ -6,9 +6,11 @@
   <div class="root-header">
 
     <div class="top-left-block">
-      <span class="icon icon-menu" role="button" [title]="getToggleTitle()" (click)="menu.toggleMenu()"></span>
+      <span role="button" tabindex="0" [title]="getToggleTitle()" (click)="menu.toggleMenu()" (keyup.enter)="menu.toggleMenu()">
+        <span class="icon icon-menu"></span>
+      </span>
 
-      <a class="peertube-title c-hand" (click)="goToDefaultRoute()">
+      <a class="peertube-title c-hand" [routerLink]="getDefaultRoute()">
         <span class="icon icon-logo"></span>
         <span class="instance-name">{{ instanceName }}</span>
       </a>
@@ -22,7 +24,7 @@
   <div class="sub-header-container">
     <my-menu *ngIf="menu.isMenuDisplayed"></my-menu>
 
-    <div id="content" tabindex="-1" class="main-col" [ngClass]="{ expanded: menu.isMenuDisplayed === false }">
+    <div id="content" class="main-col" [ngClass]="{ expanded: menu.isMenuDisplayed === false }">
 
       <div class="main-row">
 

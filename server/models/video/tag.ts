@@ -4,7 +4,7 @@ import { MTag } from '@server/types/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoPrivacy, VideoState } from '../../../shared/models/videos'
 import { isVideoTagValid } from '../../helpers/custom-validators/videos'
-import { throwIfNotValid } from '../utils'
+import { throwIfNotValid } from '../shared'
 import { VideoModel } from './video'
 import { VideoTagModel } from './video-tag'
 

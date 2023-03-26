@@ -5,29 +5,34 @@
   </div>
 
   <ng-container *ngIf="!signupDisabled">
-    <h1 i18n class="title-page-v2">
+    <h1 class="title-page-v2">
       <strong class="underline-orange">{{ instanceName }}</strong>
       >
-      Create an account
+      <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
     </h1>
 
     <div class="register-content">
       <my-custom-stepper linear>
 
         <cdk-step i18n-label label="About" [editable]="!signupSuccess">
-          <my-signup-step-title mascotImageName="about" i18n>
-            <strong>Create an account</strong>
-            <div>on {{ instanceName }}</div>
+          <my-signup-step-title mascotImageName="about">
+            <strong>
+              <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
+            </strong>
+
+            <div i18n>on {{ instanceName }}</div>
           </my-signup-step-title>
 
-          <my-register-step-about [videoUploadDisabled]="videoUploadDisabled"></my-register-step-about>
+          <my-register-step-about [requiresApproval]="requiresApproval" [videoUploadDisabled]="videoUploadDisabled"></my-register-step-about>
 
           <div class="step-buttons">
             <a i18n class="skip-step underline-orange" routerLink="/login">
               <strong>I already have an account</strong>, I log in
             </a>
 
-            <button i18n cdkStepperNext>Create an account</button>
+            <button cdkStepperNext>
+              <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
+            </button>
           </div>
         </cdk-step>
 
@@ -44,8 +49,8 @@
           ></my-instance-about-accordion>
 
           <my-register-step-terms
-            [hasCodeOfConduct]="!!aboutHtml.codeOfConduct"
-            [minimumAge]="minimumAge"
+            [hasCodeOfConduct]="!!aboutHtml.codeOfConduct" [minimumAge]="minimumAge" [instanceName]="instanceName"
+            [requiresApproval]="requiresApproval"
             (formBuilt)="onTermsFormBuilt($event)" (termsClick)="onTermsClick()" (codeOfConductClick)="onCodeOfConductClick()"
           ></my-register-step-terms>
 
@@ -94,14 +99,15 @@
               <div class="skip-step-description" i18n>You will be able to create a channel later</div>
             </div>
 
-            <button cdkStepperNext [disabled]="!formStepChannel || !formStepChannel.valid || hasSameChannelAndAccountNames()" (click)="signup()" i18n>
-              Create my account
+            <button cdkStepperNext [disabled]="!formStepChannel || !formStepChannel.valid || hasSameChannelAndAccountNames()" (click)="signup()">
+              <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
             </button>
           </div>
         </cdk-step>
 
         <cdk-step #lastStep i18n-label label="Done!" [editable]="false">
-          <div *ngIf="!signupSuccess && !signupError" class="done-loader">
+          <!-- Account creation can be a little bit long so display a loader  -->
+          <div *ngIf="!requiresApproval && !signupSuccess && !signupError" class="done-loader">
             <my-loader [loading]="true"></my-loader>
 
             <div i18n>PeerTube is creating your account...</div>
@@ -109,7 +115,10 @@
 
           <div *ngIf="signupError" class="alert alert-danger">{{ signupError }}</div>
 
-          <my-signup-success *ngIf="signupSuccess" [requiresEmailVerification]="requiresEmailVerification"></my-signup-success>
+          <my-signup-success-before-email
+            *ngIf="signupSuccess"
+            [requiresEmailVerification]="requiresEmailVerification" [requiresApproval]="requiresApproval" [instanceName]="instanceName"
+          ></my-signup-success-before-email>
 
           <div *ngIf="signupError" class="steps-button">
             <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>

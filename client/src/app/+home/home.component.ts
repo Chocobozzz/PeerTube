@@ -2,8 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { CustomPageService } from '@app/shared/shared-main/custom-page'
 
 @Component({
-  templateUrl: './home.component.html',
-  styleUrls: [ './home.component.scss' ]
+  templateUrl: './home.component.html'
 })
 
 export class HomeComponent implements OnInit {

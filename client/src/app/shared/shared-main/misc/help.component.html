@@ -22,11 +22,9 @@
   </p>
 </ng-template>
 
-<span
-  role="button"
-  class="help-tooltip-button"
+<button
+  class="help-tooltip-button p-0 border-0 mx-1"
   [title]="title"
-  tabindex=0
   popoverClass="help-popover"
   [attr.aria-pressed]="isPopoverOpened"
   [ngbPopover]="tooltipTemplate"
@@ -36,4 +34,4 @@
   (onShown)="onPopoverShown()"
 >
   <my-global-icon [iconName]="iconName"></my-global-icon>
-</span>
+</button>

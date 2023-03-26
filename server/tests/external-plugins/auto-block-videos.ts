@@ -30,7 +30,7 @@ describe('Official plugin auto-block videos', function () {
   let port: number
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)

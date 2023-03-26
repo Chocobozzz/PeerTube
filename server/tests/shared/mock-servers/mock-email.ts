@@ -1,4 +1,3 @@
-import { ChildProcess } from 'child_process'
 import MailDev from '@peertube/maildev'
 import { parallelTests, randomInt } from '@shared/core-utils'
 
@@ -6,7 +5,7 @@ class MockSmtpServer {
 
   private static instance: MockSmtpServer
   private started = false
-  private emailChildProcess: ChildProcess
+  private maildev: any
   private emails: object[]
 
   private constructor () { }
@@ -20,18 +19,18 @@ class MockSmtpServer {
         return res(undefined)
       }
 
-      const maildev = new MailDev({
+      this.maildev = new MailDev({
         ip: '127.0.0.1',
         smtp: port,
         disableWeb: true,
         silent: true
       })
 
-      maildev.on('new', email => {
+      this.maildev.on('new', email => {
         this.emails.push(email)
       })
 
-      maildev.listen(err => {
+      this.maildev.listen(err => {
         if (err) return rej(err)
 
         this.started = true
@@ -42,11 +41,11 @@ class MockSmtpServer {
   }
 
   kill () {
-    if (!this.emailChildProcess) return
+    if (!this.maildev) return
 
-    process.kill(this.emailChildProcess.pid)
+    this.maildev.close()
 
-    this.emailChildProcess = null
+    this.maildev = null
     MockSmtpServer.instance = null
   }
 

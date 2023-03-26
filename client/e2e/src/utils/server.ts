@@ -1,10 +1,10 @@
 import { exec, spawn } from 'child_process'
 import { join, resolve } from 'path'
 
-function runServer (appInstance: string, config: any = {}) {
+function runServer (appInstance: number, config: any = {}) {
   const env = Object.create(process.env)
   env['NODE_ENV'] = 'test'
-  env['NODE_APP_INSTANCE'] = appInstance
+  env['NODE_APP_INSTANCE'] = appInstance + ''
 
   env['NODE_CONFIG'] = JSON.stringify({
     rates_limit: {

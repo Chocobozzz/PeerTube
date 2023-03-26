@@ -8,6 +8,11 @@
 .view-replies {
   font-weight: $font-semibold;
   cursor: pointer;
+  position: relative;
+
+  .chevron-down {
+    @include margin-left(0);
+  }
 }
 
 .title-block {
@@ -35,12 +40,6 @@
   font-weight: $font-semibold;
   text-transform: uppercase;
   border: 0;
-}
-
-@media screen and (max-width: 600px) {
-  .view-replies {
-    @include margin-left(46px);
-  }
 }
 
 @media screen and (max-width: 450px) {

@@ -138,7 +138,14 @@ async function generateEmbedHtmlPage (req: express.Request, res: express.Respons
 }
 
 async function generateWatchHtmlPage (req: express.Request, res: express.Response) {
-  const html = await ClientHtml.getWatchHTMLPage(req.params.id + '', req, res)
+  // Thread link is '/w/:videoId;threadId=:threadId'
+  // So to get the videoId we need to remove the last part
+  let videoId = req.params.id + ''
+
+  const threadIdIndex = videoId.indexOf(';threadId')
+  if (threadIdIndex !== -1) videoId = videoId.substring(0, threadIdIndex)
+
+  const html = await ClientHtml.getWatchHTMLPage(videoId, req, res)
 
   return sendHTML(html, res, true)
 }

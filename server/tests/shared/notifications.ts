@@ -11,6 +11,7 @@ import {
   UserNotificationType
 } from '@shared/models'
 import {
+  ConfigCommand,
   createMultipleServers,
   doubleFollow,
   PeerTubeServer,
@@ -173,6 +174,8 @@ async function checkMyVideoImportIsFinished (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
+// ---------------------------------------------------------------------------
+
 async function checkUserRegistered (options: CheckerBaseParams & {
   username: string
   checkType: CheckerType
@@ -200,6 +203,36 @@ async function checkUserRegistered (options: CheckerBaseParams & {
 
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
+
+async function checkRegistrationRequest (options: CheckerBaseParams & {
+  username: string
+  registrationReason: string
+  checkType: CheckerType
+}) {
+  const { username, registrationReason } = options
+  const notificationType = UserNotificationType.NEW_USER_REGISTRATION_REQUEST
+
+  function notificationChecker (notification: UserNotification, checkType: CheckerType) {
+    if (checkType === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      expect(notification.registration.username).to.equal(username)
+    } else {
+      expect(notification).to.satisfy(n => n.type !== notificationType || n.registration.username !== username)
+    }
+  }
+
+  function emailNotificationFinder (email: object) {
+    const text: string = email['text']
+
+    return text.includes(' wants to register ') && text.includes(username) && text.includes(registrationReason)
+  }
+
+  await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
+}
+
+// ---------------------------------------------------------------------------
 
 async function checkNewActorFollow (options: CheckerBaseParams & {
   followType: 'channel' | 'account'
@@ -673,10 +706,8 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
   const port = await MockSmtpServer.Instance.collectEmails(emails)
 
   const overrideConfig = {
-    smtp: {
-      hostname: '127.0.0.1',
-      port
-    },
+    ...ConfigCommand.getEmailOverrideConfig(port),
+
     signup: {
       limit: 20
     }
@@ -735,7 +766,8 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
     userAccessToken,
     emails,
     servers,
-    channelId
+    channelId,
+    baseOverrideConfig: overrideConfig
   }
 }
 
@@ -765,7 +797,8 @@ export {
   checkNewAccountAbuseForModerators,
   checkNewPeerTubeVersion,
   checkNewPluginVersion,
-  checkVideoStudioEditionIsFinished
+  checkVideoStudioEditionIsFinished,
+  checkRegistrationRequest
 }
 
 // ---------------------------------------------------------------------------

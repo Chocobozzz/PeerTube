@@ -3,6 +3,7 @@
 import { expect } from 'chai'
 import { pathExists, readdir } from 'fs-extra'
 import { join } from 'path'
+import { sha1 } from '@shared/extra-utils'
 import { LiveVideo, VideoStreamingPlaylistType } from '@shared/models'
 import { ObjectStorageCommand, PeerTubeServer } from '@shared/server-commands'
 import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist } from './streaming-playlists'
@@ -41,9 +42,19 @@ async function testVideoResolutions (options: {
   liveVideoId: string
   resolutions: number[]
   transcoded: boolean
+
   objectStorage: boolean
+  objectStorageBaseUrl?: string
 }) {
-  const { originServer, servers, liveVideoId, resolutions, transcoded, objectStorage } = options
+  const {
+    originServer,
+    servers,
+    liveVideoId,
+    resolutions,
+    transcoded,
+    objectStorage,
+    objectStorageBaseUrl = ObjectStorageCommand.getMockPlaylistBaseUrl()
+  } = options
 
   for (const server of servers) {
     const { data } = await server.videos.list()
@@ -65,7 +76,7 @@ async function testVideoResolutions (options: {
     })
 
     if (objectStorage) {
-      expect(hlsPlaylist.playlistUrl).to.contain(ObjectStorageCommand.getMockPlaylistBaseUrl())
+      expect(hlsPlaylist.playlistUrl).to.contain(objectStorageBaseUrl)
     }
 
     for (let i = 0; i < resolutions.length; i++) {
@@ -76,15 +87,16 @@ async function testVideoResolutions (options: {
         videoUUID: video.uuid,
         playlistNumber: i,
         segment: segmentNum,
-        objectStorage
+        objectStorage,
+        objectStorageBaseUrl
       })
 
       const baseUrl = objectStorage
-        ? ObjectStorageCommand.getMockPlaylistBaseUrl() + 'hls'
+        ? join(objectStorageBaseUrl, 'hls')
         : originServer.url + '/static/streaming-playlists/hls'
 
       if (objectStorage) {
-        expect(hlsPlaylist.segmentsSha256Url).to.contain(ObjectStorageCommand.getMockPlaylistBaseUrl())
+        expect(hlsPlaylist.segmentsSha256Url).to.contain(objectStorageBaseUrl)
       }
 
       const subPlaylist = await originServer.streamingPlaylists.get({
@@ -101,6 +113,13 @@ async function testVideoResolutions (options: {
         segmentName,
         hlsPlaylist
       })
+
+      if (originServer.internalServerNumber === server.internalServerNumber) {
+        const infohash = sha1(`${2 + hlsPlaylist.playlistUrl}+V${i}`)
+        const dbInfohashes = await originServer.sql.getPlaylistInfohash(hlsPlaylist.id)
+
+        expect(dbInfohashes).to.include(infohash)
+      }
     }
   }
 }

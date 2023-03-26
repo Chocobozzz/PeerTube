@@ -17,7 +17,7 @@ import {
 } from 'sequelize-typescript'
 import { activityPubContextify } from '@server/lib/activitypub/context'
 import { getBiggestActorImage } from '@server/lib/actor-image'
-import { ModelCache } from '@server/models/model-cache'
+import { ModelCache } from '@server/models/shared/model-cache'
 import { forceNumber, getLowercaseExtension } from '@shared/core-utils'
 import { ActivityIconObject, ActivityPubActorType, ActorImageType } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
@@ -55,7 +55,7 @@ import {
 import { AccountModel } from '../account/account'
 import { getServerActor } from '../application/application'
 import { ServerModel } from '../server/server'
-import { isOutdated, throwIfNotValid } from '../utils'
+import { buildSQLAttributes, isOutdated, throwIfNotValid } from '../shared'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorFollowModel } from './actor-follow'
@@ -65,7 +65,7 @@ enum ScopeNames {
   FULL = 'FULL'
 }
 
-export const unusedActorAttributesForAPI = [
+export const unusedActorAttributesForAPI: (keyof AttributesOnly<ActorModel>)[] = [
   'publicKey',
   'privateKey',
   'inboxUrl',
@@ -305,6 +305,27 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     hooks: true
   })
   VideoChannel: VideoChannelModel
+
+  // ---------------------------------------------------------------------------
+
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
+    })
+  }
+
+  static getSQLAPIAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix,
+      excludeAttributes: unusedActorAttributesForAPI
+    })
+  }
+
+  // ---------------------------------------------------------------------------
 
   static async load (id: number): Promise<MActor> {
     const actorServer = await getServerActor()

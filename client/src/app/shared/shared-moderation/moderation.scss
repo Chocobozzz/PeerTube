@@ -1,6 +1,6 @@
 @use 'sass:math';
-@use '_mixins' as *;
 @use '_variables' as *;
+@use '_mixins' as *;
 @use '_miniature' as *;
 
 .moderation-expanded {
@@ -38,10 +38,6 @@
       width: 100%;
     }
   }
-}
-
-.chip {
-  @include chip;
 }
 
 my-action-dropdown.show {

@@ -13,6 +13,7 @@ describe('Test id and pass auth plugins', function () {
 
   let lagunaAccessToken: string
   let lagunaRefreshToken: string
+  let lagunaId: number
 
   before(async function () {
     this.timeout(30000)
@@ -78,8 +79,10 @@ describe('Test id and pass auth plugins', function () {
       const body = await server.users.getMyInfo({ token: lagunaAccessToken })
 
       expect(body.username).to.equal('laguna')
-      expect(body.account.displayName).to.equal('laguna')
+      expect(body.account.displayName).to.equal('Laguna Loire')
       expect(body.role.id).to.equal(UserRole.USER)
+
+      lagunaId = body.id
     }
   })
 
@@ -132,6 +135,33 @@ describe('Test id and pass auth plugins', function () {
     expect(body.role.id).to.equal(UserRole.MODERATOR)
   })
 
+  it('Should login Laguna and update the profile', async function () {
+    {
+      await server.users.update({ userId: lagunaId, videoQuota: 43000, videoQuotaDaily: 43100 })
+      await server.users.updateMe({ token: lagunaAccessToken, displayName: 'laguna updated' })
+
+      const body = await server.users.getMyInfo({ token: lagunaAccessToken })
+      expect(body.username).to.equal('laguna')
+      expect(body.account.displayName).to.equal('laguna updated')
+      expect(body.videoQuota).to.equal(43000)
+      expect(body.videoQuotaDaily).to.equal(43100)
+    }
+
+    {
+      const body = await server.login.login({ user: { username: 'laguna', password: 'laguna password' } })
+      lagunaAccessToken = body.access_token
+      lagunaRefreshToken = body.refresh_token
+    }
+
+    {
+      const body = await server.users.getMyInfo({ token: lagunaAccessToken })
+      expect(body.username).to.equal('laguna')
+      expect(body.account.displayName).to.equal('Laguna Loire')
+      expect(body.videoQuota).to.equal(42000)
+      expect(body.videoQuotaDaily).to.equal(43100)
+    }
+  })
+
   it('Should reject token of laguna by the plugin hook', async function () {
     this.timeout(10000)
 
@@ -147,7 +177,7 @@ describe('Test id and pass auth plugins', function () {
     await server.servers.waitUntilLog('valid username')
 
     await command.login({ user: { username: 'kiros', password: 'kiros password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
-    await server.servers.waitUntilLog('valid display name')
+    await server.servers.waitUntilLog('valid displayName')
 
     await command.login({ user: { username: 'raine', password: 'raine password' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     await server.servers.waitUntilLog('valid role')

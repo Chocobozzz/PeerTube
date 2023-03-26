@@ -15,6 +15,7 @@
 @import 'bootstrap/scss/grid';
 @import 'bootstrap/scss/forms';
 @import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/transitions';
 @import 'bootstrap/scss/dropdown';
 @import 'bootstrap/scss/button-group';
 @import 'bootstrap/scss/nav';
@@ -30,9 +31,24 @@
 @import 'bootstrap/scss/helpers';
 @import 'bootstrap/scss/utilities/api';
 
+body {
+  --bs-border-color-translucent: #{pvar(--inputBorderColor)};
+}
+
 .accordion {
   --bs-accordion-color: #{pvar(--mainForegroundColor)};
   --bs-accordion-bg: #{pvar(--mainBackgroundColor)};
+
+  --bs-accordion-btn-color: var(--bs-accordion-color);
+  --bs-accordion-btn-bg: var(--bs-accordion-bg);
+}
+
+.popover {
+  --bs-popover-bg: #{pvar(--mainBackgroundColor)};
+  --bs-popover-body-color: #{pvar(--mainForegroundColor)};
+  --bs-popover-header-color: #{pvar(--mainForegroundColor)};
+
+  font-family: $main-fonts;
 }
 
 .flex-auto {
@@ -48,12 +64,15 @@
 // ---------------------------------------------------------------------------
 
 .dropdown-menu {
+  --bs-dropdown-link-hover-bg: #{pvar(--mainBackgroundHoverColor)};
+  --bs-dropdown-link-color: #{pvar(--mainForegroundColor)};
+  --bs-dropdown-border-color: #{pvar(--inputBorderColor)};
+
   .dropdown-header {
     @include padding-left(1rem);
   }
 
   .dropdown-item {
-    color: pvar(--mainForegroundColor);
     padding: 3px 15px;
 
     &.active {
@@ -170,6 +189,8 @@
         opacity: 0.75;
         content: '';
         display: block;
+        position: fixed;
+        z-index: z(overlay);
       }
     }
   }
@@ -183,7 +204,6 @@
   display: flex !important;
   align-items: center;
   height: 30px !important;
-  padding: 10px 15px !important;
 }
 
 .nav.nav-pills {
@@ -238,19 +258,6 @@
 .card {
   background-color: pvar(--mainBackgroundColor);
   border-color: #dee2e6;
-}
-
-.collapse-transition {
-  // Animation when we show/hide the filters
-  transition: max-height 0.3s;
-  display: block !important;
-  overflow: hidden !important;
-  max-height: 0;
-
-  &.show {
-    max-height: 1500px;
-    overflow: inherit !important;
-  }
 }
 
 .accordion-button {
@@ -322,7 +329,8 @@
 .input-group {
   > .btn,
   > .input-group-text {
-    height: $button-height;
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
 
   > .input-group-text {
@@ -367,4 +375,9 @@
   input:placeholder-shown + .form-control-clear {
     display: none;
   }
+}
+
+.text-truncate {
+  // Prevent invalid height in parent: https://stackoverflow.com/a/22425601
+  vertical-align: top;
 }

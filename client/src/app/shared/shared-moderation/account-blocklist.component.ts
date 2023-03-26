@@ -48,7 +48,7 @@ export class GenericAccountBlocklistComponent extends RestTable implements OnIni
     )
   }
 
-  protected reloadData () {
+  protected reloadDataInternal () {
     const operation = this.mode === BlocklistComponentType.Account
       ? this.blocklistService.getUserAccountBlocklist({
         pagination: this.pagination,

@@ -36,8 +36,8 @@ export class TokensCache {
     const token = this.userHavingToken.get(userId)
 
     if (token !== undefined) {
-      this.accessTokenCache.del(token)
-      this.userHavingToken.del(userId)
+      this.accessTokenCache.delete(token)
+      this.userHavingToken.delete(userId)
     }
   }
 
@@ -45,8 +45,8 @@ export class TokensCache {
     const tokenModel = this.accessTokenCache.get(token)
 
     if (tokenModel !== undefined) {
-      this.userHavingToken.del(tokenModel.userId)
-      this.accessTokenCache.del(token)
+      this.userHavingToken.delete(tokenModel.userId)
+      this.accessTokenCache.delete(token)
     }
   }
 }

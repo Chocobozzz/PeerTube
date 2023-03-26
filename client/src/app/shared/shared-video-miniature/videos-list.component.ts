@@ -415,8 +415,6 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(concatMap(({ reset, obs }) => obs.pipe(map(({ data }) => ({ data, reset })))))
       .subscribe({
         next: ({ data, reset }) => {
-          console.log(data[0].name)
-
           this.hasDoneFirstQuery = true
           this.lastQueryLength = data.length
 

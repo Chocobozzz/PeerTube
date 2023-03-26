@@ -13,14 +13,14 @@
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} comments"
-  [expandedRowKeys]="expandedRows" [(selection)]="selectedComments"
+  [expandedRowKeys]="expandedRows" [(selection)]="selectedRows"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
       <div>
         <my-action-dropdown
           *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
-          [actions]="bulkCommentActions" [entry]="selectedComments"
+          [actions]="bulkActions" [entry]="selectedRows"
         >
         </my-action-dropdown>
       </div>

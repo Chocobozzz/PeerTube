@@ -17,7 +17,7 @@ import { VideoAdminService } from './video-admin.service'
   templateUrl: './video-list.component.html',
   styleUrls: [ './video-list.component.scss' ]
 })
-export class VideoListComponent extends RestTable implements OnInit {
+export class VideoListComponent extends RestTable <Video> implements OnInit {
   @ViewChild('videoBlockModal') videoBlockModal: VideoBlockComponent
 
   videos: Video[] = []
@@ -26,9 +26,7 @@ export class VideoListComponent extends RestTable implements OnInit {
   sort: SortMeta = { field: 'publishedAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
-  bulkVideoActions: DropdownAction<Video[]>[][] = []
-
-  selectedVideos: Video[] = []
+  bulkActions: DropdownAction<Video[]>[][] = []
 
   inputFilters: AdvancedInputFilter[]
 
@@ -72,7 +70,7 @@ export class VideoListComponent extends RestTable implements OnInit {
 
     this.inputFilters = this.videoAdminService.buildAdminInputFilter()
 
-    this.bulkVideoActions = [
+    this.bulkActions = [
       [
         {
           label: $localize`Delete`,
@@ -124,10 +122,6 @@ export class VideoListComponent extends RestTable implements OnInit {
 
   getIdentifier () {
     return 'VideoListComponent'
-  }
-
-  isInSelectionMode () {
-    return this.selectedVideos.length !== 0
   }
 
   getPrivacyBadgeClass (video: Video) {
@@ -189,26 +183,6 @@ export class VideoListComponent extends RestTable implements OnInit {
     return files.reduce((p, f) => p += f.size, 0)
   }
 
-  reloadData () {
-    this.selectedVideos = []
-
-    this.loading = true
-
-    this.videoAdminService.getAdminVideos({
-      pagination: this.pagination,
-      sort: this.sort,
-      search: this.search
-    }).pipe(finalize(() => this.loading = false))
-      .subscribe({
-        next: resultList => {
-          this.videos = resultList.data
-          this.totalRecords = resultList.total
-        },
-
-        error: err => this.notifier.error(err.message)
-      })
-  }
-
   async removeVideoFile (video: Video, file: VideoFile, type: 'hls' | 'webtorrent') {
     const message = $localize`Are you sure you want to delete this ${file.resolution.label} file?`
     const res = await this.confirmService.confirm(message, $localize`Delete file`)
@@ -219,6 +193,25 @@ export class VideoListComponent extends RestTable implements OnInit {
         next: () => {
           this.notifier.success($localize`File removed.`)
           this.reloadData()
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  protected reloadDataInternal () {
+    this.loading = true
+
+    this.videoAdminService.getAdminVideos({
+      pagination: this.pagination,
+      sort: this.sort,
+      nsfw: 'both', // Always list NSFW video, overriding instance/user setting
+      search: this.search
+    }).pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: resultList => {
+          this.videos = resultList.data
+          this.totalRecords = resultList.total
         },
 
         error: err => this.notifier.error(err.message)

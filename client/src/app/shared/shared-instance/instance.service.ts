@@ -7,6 +7,11 @@ import { peertubeTranslate } from '@shared/core-utils/i18n'
 import { About } from '@shared/models'
 import { environment } from '../../../environments/environment'
 
+export type AboutHTML = Pick<About['instance'],
+'terms' | 'codeOfConduct' | 'moderationInformation' | 'administrator' | 'creationReason' |
+'maintenanceLifetime' | 'businessModel' | 'hardwareInformation'
+>
+
 @Injectable()
 export class InstanceService {
   private static BASE_CONFIG_URL = environment.apiUrl + '/api/v1/config'
@@ -39,7 +44,7 @@ export class InstanceService {
   }
 
   async buildHtml (about: About) {
-    const html = {
+    const html: AboutHTML = {
       terms: '',
       codeOfConduct: '',
       moderationInformation: '',

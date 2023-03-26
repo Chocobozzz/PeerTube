@@ -18,6 +18,7 @@ import {
   BlocklistCommand,
   LoginCommand,
   NotificationsCommand,
+  RegistrationsCommand,
   SubscriptionsCommand,
   TwoFactorCommand,
   UsersCommand
@@ -147,6 +148,7 @@ export class PeerTubeServer {
   views?: ViewsCommand
   twoFactor?: TwoFactorCommand
   videoToken?: VideoTokenCommand
+  registrations?: RegistrationsCommand
 
   constructor (options: { serverNumber: number } | { url: string }) {
     if ((options as any).url) {
@@ -199,7 +201,7 @@ export class PeerTubeServer {
     return join(root(), testDirectory, directoryName)
   }
 
-  async flushAndRun (configOverride?: Object, options: RunServerOptions = {}) {
+  async flushAndRun (configOverride?: object, options: RunServerOptions = {}) {
     await ServersCommand.flushTests(this.internalServerNumber)
 
     return this.run(configOverride, options)
@@ -430,5 +432,6 @@ export class PeerTubeServer {
     this.views = new ViewsCommand(this)
     this.twoFactor = new TwoFactorCommand(this)
     this.videoToken = new VideoTokenCommand(this)
+    this.registrations = new RegistrationsCommand(this)
   }
 }

@@ -16,7 +16,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { ModelCache } from '@server/models/model-cache'
+import { ModelCache } from '@server/models/shared/model-cache'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { Account, AccountSummary } from '../../../shared/models/actors'
 import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts'
@@ -38,7 +38,7 @@ import { ApplicationModel } from '../application/application'
 import { ServerModel } from '../server/server'
 import { ServerBlocklistModel } from '../server/server-blocklist'
 import { UserModel } from '../user/user'
-import { getSort, throwIfNotValid } from '../utils'
+import { buildSQLAttributes, getSort, throwIfNotValid } from '../shared'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
@@ -251,6 +251,18 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
     return undefined
   }
 
+  // ---------------------------------------------------------------------------
+
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   static load (id: number, transaction?: Transaction): Promise<MAccountDefault> {
     return AccountModel.findByPk(id, { transaction })
   }
@@ -435,8 +447,8 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
     }
   }
 
-  toActivityPubObject (this: MAccountAP) {
-    const obj = this.Actor.toActivityPubObject(this.name)
+  async toActivityPubObject (this: MAccountAP) {
+    const obj = await this.Actor.toActivityPubObject(this.name)
 
     return Object.assign(obj, {
       summary: this.description

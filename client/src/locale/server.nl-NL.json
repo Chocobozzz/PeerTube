@@ -54,7 +54,6 @@
     "Playlist: {1}": "Playlist: {1}",
     "By {1}": "By {1}",
     "Unavailable video": "Video niet beschikbaar",
-    "Misc": "Varia",
     "Unknown": "Onbekend",
     "Afar": "Ver",
     "Abkhazian": "Abchazisch",
@@ -65,6 +64,7 @@
     "Aragonese": "Aragonees",
     "American Sign Language": "Amerikaanse gebarentaal",
     "Assamese": "Assamees",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "Avaars",
     "Kotava": "Kotava",
     "Aymara": "Aymara",
@@ -254,6 +254,7 @@
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Simplified Chinese",
     "Traditional Chinese": "Traditional Chinese",
+    "Misc": "Varia",
     "Normal mode": "Normale modus",
     "Theater mode": "Theater modus"
 }

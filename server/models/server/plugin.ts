@@ -11,7 +11,7 @@ import {
   isPluginStableVersionValid,
   isPluginTypeValid
 } from '../../helpers/custom-validators/plugins'
-import { getSort, throwIfNotValid } from '../utils'
+import { getSort, throwIfNotValid } from '../shared'
 
 @DefaultScope(() => ({
   attributes: {

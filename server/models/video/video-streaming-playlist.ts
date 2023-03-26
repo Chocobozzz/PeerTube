@@ -37,8 +37,7 @@ import {
   WEBSERVER
 } from '../../initializers/constants'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
-import { doesExist } from '../shared'
-import { throwIfNotValid } from '../utils'
+import { doesExist, throwIfNotValid } from '../shared'
 import { VideoModel } from './video'
 
 @Table({
@@ -138,7 +137,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   static doesInfohashExist (infoHash: string) {
     const query = 'SELECT 1 FROM "videoStreamingPlaylist" WHERE $infoHash = ANY("p2pMediaLoaderInfohashes") LIMIT 1'
 
-    return doesExist(query, { infoHash })
+    return doesExist(this.sequelize, query, { infoHash })
   }
 
   static buildP2PMediaLoaderInfoHashes (playlistUrl: string, files: unknown[]) {
@@ -237,7 +236,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
       `AND "video"."remote" IS FALSE AND "video"."uuid" = $videoUUID ` +
       `AND "storage" = ${VideoStorage.FILE_SYSTEM} LIMIT 1`
 
-    return doesExist(query, { videoUUID })
+    return doesExist(this.sequelize, query, { videoUUID })
   }
 
   assignP2PMediaLoaderInfoHashes (video: MVideo, files: unknown[]) {

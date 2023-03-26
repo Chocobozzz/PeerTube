@@ -16,15 +16,17 @@
 }
 
 @mixin show-more-description {
+  @include margin(10px, auto, 45px);
+  
   color: pvar(--mainColor);
   cursor: pointer;
-  margin: 10px auto 45px;
 }
 
 @mixin avatar-row-responsive ($img-margin, $grey-font-size) {
+  @include margin-bottom(2rem);
+
   display: flex;
   grid-column: 1;
-  margin-bottom: 30px;
 
   > div {
     @include margin-left($img-margin);
@@ -49,7 +51,8 @@
   }
 
   h1 {
-    font-size: 28px;
+    @include font-size(2rem);
+
     font-weight: $font-bold;
     margin: 0;
   }
@@ -60,8 +63,9 @@
 
   .actor-handle,
   .actor-counters {
+    @include font-size($grey-font-size);
+
     color: pvar(--greyForegroundColor);
-    font-size: $grey-font-size;
   }
 
   .actor-counters > *:not(:last-child)::after {
@@ -75,11 +79,6 @@
   }
 
   @media screen and (max-width: $mobile-view) {
-    margin-bottom: 15px;
-
-    h1 {
-      font-size: 22px;
-    }
 
     .main-avatar {
       @include actor-avatar-size(80px);

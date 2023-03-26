@@ -136,13 +136,6 @@ export const USER_DESCRIPTION_VALIDATOR: BuildFormValidator = {
   }
 }
 
-export const USER_TERMS_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [ Validators.requiredTrue ],
-  MESSAGES: {
-    required: $localize`You must agree with the instance terms in order to register on it.`
-  }
-}
-
 export const USER_BAN_REASON_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [
     Validators.minLength(3),

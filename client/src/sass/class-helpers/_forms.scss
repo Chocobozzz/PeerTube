@@ -1,0 +1,55 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.input-error:not(:focus) {
+
+  &,
+  +.nav-preview,
+  // Markdown textarea
+  +*+.tab-content {
+    border-color: $red !important;
+  }
+}
+
+.input-group .input-error {
+  z-index: 3;
+}
+
+.form-error,
+.form-warning {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.9em;
+}
+
+.form-error {
+  color: $red;
+}
+
+// Disable red error on input focus
+.input-error:focus,
+.input-group:focus-within {
+
+  +.form-error,
+  +*+.form-error,
+  // Markdown textarea
+  +*+*+.form-error {
+    color: pvar(--mainForegroundColor);
+  }
+}
+
+.form-group-description {
+  @include muted;
+
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+label+.form-group-description {
+  margin-bottom: 10px;
+  margin-top: 0;
+}

@@ -27,42 +27,39 @@ export class SignupPage {
     return terms.click()
   }
 
+  async getEndMessage () {
+    const alert = $('.pt-alert-primary')
+    await alert.waitForDisplayed()
+
+    return alert.getText()
+  }
+
+  async fillRegistrationReason (reason: string) {
+    await $('#registrationReason').setValue(reason)
+  }
+
   async fillAccountStep (options: {
-    displayName: string
     username: string
-    email: string
-    password: string
+    password?: string
+    displayName?: string
+    email?: string
   }) {
-    if (options.displayName) {
-      await $('#displayName').setValue(options.displayName)
-    }
+    await $('#displayName').setValue(options.displayName || `${options.username} display name`)
 
-    if (options.username) {
-      await $('#username').setValue(options.username)
-    }
+    await $('#username').setValue(options.username)
+    await $('#password').setValue(options.password || 'password')
 
-    if (options.email) {
-      // Fix weird bug on firefox that "cannot scroll into view" when using just `setValue`
-      await $('#email').scrollIntoView(false)
-      await $('#email').waitForClickable()
-      await $('#email').setValue(options.email)
-    }
-
-    if (options.password) {
-      await $('#password').setValue(options.password)
-    }
+    // Fix weird bug on firefox that "cannot scroll into view" when using just `setValue`
+    await $('#email').scrollIntoView(false)
+    await $('#email').waitForClickable()
+    await $('#email').setValue(options.email || `${options.username}@example.com`)
   }
 
   async fillChannelStep (options: {
-    displayName: string
     name: string
+    displayName?: string
   }) {
-    if (options.displayName) {
-      await $('#displayName').setValue(options.displayName)
-    }
-
-    if (options.name) {
-      await $('#name').setValue(options.name)
-    }
+    await $('#displayName').setValue(options.displayName || `${options.name} channel display name`)
+    await $('#name').setValue(options.name)
   }
 }

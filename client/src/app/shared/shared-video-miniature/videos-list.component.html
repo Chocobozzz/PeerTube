@@ -4,7 +4,7 @@
       {{ title }}
     </h1>
 
-    <div *ngIf="syndicationItems" [ngClass]="{ 'no-title': !displayTitle }" class="title-subscription">
+    <div [ngClass]="{ 'no-title': !displayTitle, invisible: !syndicationItems || syndicationItems.length === 0 }" class="title-subscription">
       <ng-container i18n>Subscribe to RSS feed "{{ title }}"</ng-container>
 
       <my-feed [syndicationItems]="syndicationItems"></my-feed>

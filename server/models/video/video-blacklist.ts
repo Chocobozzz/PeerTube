@@ -5,7 +5,7 @@ import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoBlacklist, VideoBlacklistType } from '../../../shared/models/videos'
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
-import { getBlacklistSort, searchAttribute, SortType, throwIfNotValid } from '../utils'
+import { getBlacklistSort, searchAttribute, throwIfNotValid } from '../shared'
 import { ThumbnailModel } from './thumbnail'
 import { VideoModel } from './video'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
@@ -57,7 +57,7 @@ export class VideoBlacklistModel extends Model<Partial<AttributesOnly<VideoBlack
   static listForApi (parameters: {
     start: number
     count: number
-    sort: SortType
+    sort: string
     search?: string
     type?: VideoBlacklistType
   }) {
@@ -67,7 +67,7 @@ export class VideoBlacklistModel extends Model<Partial<AttributesOnly<VideoBlack
       return {
         offset: start,
         limit: count,
-        order: getBlacklistSort(sort.sortModel, sort.sortValue)
+        order: getBlacklistSort(sort)
       }
     }
 

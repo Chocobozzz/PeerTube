@@ -12,7 +12,7 @@ import { ActorFollow } from '@shared/models'
   templateUrl: './followers-list.component.html',
   styleUrls: [ './followers-list.component.scss' ]
 })
-export class FollowersListComponent extends RestTable implements OnInit {
+export class FollowersListComponent extends RestTable <ActorFollow> implements OnInit {
   followers: ActorFollow[] = []
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: -1 }
@@ -20,8 +20,7 @@ export class FollowersListComponent extends RestTable implements OnInit {
 
   searchFilters: AdvancedInputFilter[] = []
 
-  selectedFollows: ActorFollow[] = []
-  bulkFollowsActions: DropdownAction<ActorFollow[]>[] = []
+  bulkActions: DropdownAction<ActorFollow[]>[] = []
 
   constructor (
     private confirmService: ConfirmService,
@@ -36,7 +35,7 @@ export class FollowersListComponent extends RestTable implements OnInit {
 
     this.searchFilters = this.followService.buildFollowsListFilters()
 
-    this.bulkFollowsActions = [
+    this.bulkActions = [
       {
         label: $localize`Reject`,
         handler: follows => this.rejectFollower(follows),
@@ -105,12 +104,14 @@ export class FollowersListComponent extends RestTable implements OnInit {
   }
 
   async deleteFollowers (follows: ActorFollow[]) {
+    const icuParams = { count: follows.length, followerName: this.buildFollowerName(follows[0]) }
+
     let message = $localize`Deleted followers will be able to send again a follow request.`
     message += '<br /><br />'
 
     // eslint-disable-next-line max-len
     message += prepareIcu($localize`Do you really want to delete {count, plural, =1 {{followerName} follow request?} other {{count} follow requests?}}`)(
-      { count: follows.length, followerName: this.buildFollowerName(follows[0]) },
+      icuParams,
       $localize`Do you really want to delete these follow requests?`
     )
 
@@ -122,7 +123,7 @@ export class FollowersListComponent extends RestTable implements OnInit {
           next: () => {
             // eslint-disable-next-line max-len
             const message = prepareIcu($localize`Removed {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`)(
-              { count: follows.length, followerName: this.buildFollowerName(follows[0]) },
+              icuParams,
               $localize`Follow requests removed`
             )
 
@@ -139,11 +140,7 @@ export class FollowersListComponent extends RestTable implements OnInit {
     return follow.follower.name + '@' + follow.follower.host
   }
 
-  isInSelectionMode () {
-    return this.selectedFollows.length !== 0
-  }
-
-  protected reloadData () {
+  protected reloadDataInternal () {
     this.followService.getFollowers({ pagination: this.pagination, sort: this.sort, search: this.search })
                       .subscribe({
                         next: resultList => {

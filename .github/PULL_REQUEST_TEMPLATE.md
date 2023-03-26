@@ -10,7 +10,7 @@
 ## Has this been tested?
 
 <!-- Put an `x` in the box that applies: -->
-<!-- Check the unit test guide: https://docs.joinpeertube.org/contribute-getting-started?id=unit-tests -->
+<!-- Check the unit test guide: https://docs.joinpeertube.org/contribute/getting-started#unit-integration-tests -->
 
 - [ ] 👍 yes, I added tests to the test suite
 - [ ] 💭 no, because this PR is a draft and still needs work

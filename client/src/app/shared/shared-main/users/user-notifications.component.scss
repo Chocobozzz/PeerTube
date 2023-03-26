@@ -21,7 +21,7 @@
   }
 
   my-global-icon {
-    @include apply-svg-color(#333);
+    @include apply-svg-color(#{pvar(--mainForegroundColor)});
     @include margin-right(11px);
     @include margin-left(3px);
 

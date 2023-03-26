@@ -3,6 +3,7 @@ import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse
 import { ApplicationModel } from '@server/models/application/application'
 import { PluginModel } from '@server/models/server/plugin'
 import { UserNotificationModel } from '@server/models/user/user-notification'
+import { UserRegistrationModel } from '@server/models/user/user-registration'
 import { PickWith, PickWithOpt } from '@shared/typescript-utils'
 import { AbuseModel } from '../../../models/abuse/abuse'
 import { AccountModel } from '../../../models/account/account'
@@ -94,13 +95,16 @@ export module UserNotificationIncludes {
 
   export type ApplicationInclude =
     Pick<ApplicationModel, 'latestPeerTubeVersion'>
+
+  export type UserRegistrationInclude =
+    Pick<UserRegistrationModel, 'id' | 'username'>
 }
 
 // ############################################################################
 
 export type MUserNotification =
   Omit<UserNotificationModel, 'User' | 'Video' | 'VideoComment' | 'Abuse' | 'VideoBlacklist' |
-  'VideoImport' | 'Account' | 'ActorFollow' | 'Plugin' | 'Application'>
+  'VideoImport' | 'Account' | 'ActorFollow' | 'Plugin' | 'Application' | 'UserRegistration'>
 
 // ############################################################################
 
@@ -114,4 +118,5 @@ export type UserNotificationModelForApi =
   Use<'ActorFollow', UserNotificationIncludes.ActorFollowInclude> &
   Use<'Plugin', UserNotificationIncludes.PluginInclude> &
   Use<'Application', UserNotificationIncludes.ApplicationInclude> &
-  Use<'Account', UserNotificationIncludes.AccountIncludeActor>
+  Use<'Account', UserNotificationIncludes.AccountIncludeActor> &
+  Use<'UserRegistration', UserNotificationIncludes.UserRegistrationInclude>

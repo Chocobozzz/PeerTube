@@ -72,6 +72,8 @@ async function run () {
   for (const id of ids) {
     const videoFull = await VideoModel.loadFull(id)
 
+    if (videoFull.isLive) continue
+
     const files = videoFull.VideoFiles || []
     const hls = videoFull.getHLSPlaylist()
 

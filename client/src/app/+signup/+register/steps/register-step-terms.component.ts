@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormGroup } from '@angular/forms'
-import { USER_TERMS_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
+import { REGISTER_REASON_VALIDATOR, REGISTER_TERMS_VALIDATOR } from '../shared'
 
 @Component({
   selector: 'my-register-step-terms',
@@ -10,7 +10,9 @@ import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 })
 export class RegisterStepTermsComponent extends FormReactive implements OnInit {
   @Input() hasCodeOfConduct = false
+  @Input() requiresApproval: boolean
   @Input() minimumAge = 16
+  @Input() instanceName: string
 
   @Output() formBuilt = new EventEmitter<FormGroup>()
   @Output() termsClick = new EventEmitter<void>()
@@ -28,7 +30,11 @@ export class RegisterStepTermsComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm({
-      terms: USER_TERMS_VALIDATOR
+      terms: REGISTER_TERMS_VALIDATOR,
+
+      registrationReason: this.requiresApproval
+        ? REGISTER_REASON_VALIDATOR
+        : null
     })
 
     setTimeout(() => this.formBuilt.emit(this.form))

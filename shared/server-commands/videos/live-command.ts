@@ -192,12 +192,20 @@ export class LiveCommand extends AbstractCommand {
     playlistNumber: number
     segment: number
     objectStorage: boolean
+    objectStorageBaseUrl?: string
   }) {
-    const { server, objectStorage, playlistNumber, segment, videoUUID } = options
+    const {
+      server,
+      objectStorage,
+      playlistNumber,
+      segment,
+      videoUUID,
+      objectStorageBaseUrl = ObjectStorageCommand.getMockPlaylistBaseUrl()
+    } = options
 
     const segmentName = `${playlistNumber}-00000${segment}.ts`
     const baseUrl = objectStorage
-      ? ObjectStorageCommand.getMockPlaylistBaseUrl() + 'hls'
+      ? join(objectStorageBaseUrl, 'hls')
       : server.url + '/static/streaming-playlists/hls'
 
     let error = true

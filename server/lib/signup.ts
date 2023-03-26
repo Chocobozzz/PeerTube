@@ -4,8 +4,21 @@ import { UserModel } from '../models/user/user'
 
 const isCidr = require('is-cidr')
 
-async function isSignupAllowed (): Promise<{ allowed: boolean, errorMessage?: string }> {
+export type SignupMode = 'direct-registration' | 'request-registration'
+
+async function isSignupAllowed (options: {
+  signupMode: SignupMode
+
+  ip: string // For plugins
+  body?: any
+}): Promise<{ allowed: boolean, errorMessage?: string }> {
+  const { signupMode } = options
+
   if (CONFIG.SIGNUP.ENABLED === false) {
+    return { allowed: false }
+  }
+
+  if (signupMode === 'direct-registration' && CONFIG.SIGNUP.REQUIRES_APPROVAL === true) {
     return { allowed: false }
   }
 

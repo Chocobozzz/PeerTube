@@ -210,6 +210,20 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
+  listMySubscriptionVideos (options: OverrideCommandOptions & VideosCommonQuery = {}) {
+    const { sort = '-createdAt' } = options
+    const path = '/api/v1/users/me/subscriptions/videos'
+
+    return this.getRequestBody<ResultList<Video>>({
+      ...options,
+
+      path,
+      query: { sort, ...this.buildListQuery(options) },
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
   // ---------------------------------------------------------------------------
 
   list (options: OverrideCommandOptions & VideosCommonQuery = {}) {

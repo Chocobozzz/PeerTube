@@ -3,7 +3,7 @@ import { MVideoChangeOwnershipFormattable, MVideoChangeOwnershipFull } from '@se
 import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '../../../shared/models/videos'
 import { AccountModel } from '../account/account'
-import { getSort } from '../utils'
+import { getSort } from '../shared'
 import { ScopeNames as VideoScopeNames, VideoModel } from './video'
 
 enum ScopeNames {

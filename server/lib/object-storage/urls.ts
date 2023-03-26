@@ -57,5 +57,7 @@ function getBaseUrl (bucketInfo: BucketInfo, baseUrl?: string) {
 
 const regex = new RegExp('https?://[^/]+')
 function replaceByBaseUrl (fileUrl: string, baseUrl: string) {
+  if (!fileUrl) return fileUrl
+
   return fileUrl.replace(regex, baseUrl)
 }

@@ -123,7 +123,7 @@ export class PeertubePlayerManager {
         self.addContextMenu(videojsOptionsBuilder, player, options.common)
 
         if (isMobile()) player.peertubeMobile()
-        if (options.common.enableHotkeys === true) player.peerTubeHotkeysPlugin()
+        if (options.common.enableHotkeys === true) player.peerTubeHotkeysPlugin({ isLive: options.common.isLive })
         if (options.common.controlBar === false) player.controlBar.addClass('control-bar-hidden')
 
         player.bezels()

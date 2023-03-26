@@ -43,8 +43,14 @@ import { ActorModel, unusedActorAttributesForAPI } from '../actor/actor'
 import { ActorFollowModel } from '../actor/actor-follow'
 import { ActorImageModel } from '../actor/actor-image'
 import { ServerModel } from '../server/server'
-import { setAsUpdated } from '../shared'
-import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
+import {
+  buildServerIdsFollowedBy,
+  buildTrigramSearchIndex,
+  createSimilarityAttribute,
+  getSort,
+  setAsUpdated,
+  throwIfNotValid
+} from '../shared'
 import { VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
 
@@ -803,8 +809,8 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
     return Object.assign(actor, videoChannel)
   }
 
-  toActivityPubObject (this: MChannelAP): ActivityPubActor {
-    const obj = this.Actor.toActivityPubObject(this.name)
+  async toActivityPubObject (this: MChannelAP): Promise<ActivityPubActor> {
+    const obj = await this.Actor.toActivityPubObject(this.name)
 
     return Object.assign(obj, {
       summary: this.description,
@@ -831,6 +837,6 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
   }
 
   setAsUpdated (transaction?: Transaction) {
-    return setAsUpdated('videoChannel', this.id, transaction)
+    return setAsUpdated({ sequelize: this.sequelize, table: 'videoChannel', id: this.id, transaction })
   }
 }

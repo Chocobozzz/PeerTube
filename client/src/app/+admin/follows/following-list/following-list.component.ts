@@ -12,7 +12,7 @@ import { prepareIcu } from '@app/helpers'
   templateUrl: './following-list.component.html',
   styleUrls: [ './following-list.component.scss' ]
 })
-export class FollowingListComponent extends RestTable implements OnInit {
+export class FollowingListComponent extends RestTable <ActorFollow> implements OnInit {
   @ViewChild('followModal') followModal: FollowModalComponent
 
   following: ActorFollow[] = []
@@ -22,8 +22,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
 
   searchFilters: AdvancedInputFilter[] = []
 
-  selectedFollows: ActorFollow[] = []
-  bulkFollowsActions: DropdownAction<ActorFollow[]>[] = []
+  bulkActions: DropdownAction<ActorFollow[]>[] = []
 
   constructor (
     private notifier: Notifier,
@@ -38,7 +37,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
 
     this.searchFilters = this.followService.buildFollowsListFilters()
 
-    this.bulkFollowsActions = [
+    this.bulkActions = [
       {
         label: $localize`Delete`,
         handler: follows => this.removeFollowing(follows)
@@ -58,17 +57,15 @@ export class FollowingListComponent extends RestTable implements OnInit {
     return follow.following.name === 'peertube'
   }
 
-  isInSelectionMode () {
-    return this.selectedFollows.length !== 0
-  }
-
   buildFollowingName (follow: ActorFollow) {
     return follow.following.name + '@' + follow.following.host
   }
 
   async removeFollowing (follows: ActorFollow[]) {
+    const icuParams = { count: follows.length, entryName: this.buildFollowingName(follows[0]) }
+
     const message = prepareIcu($localize`Do you really want to unfollow {count, plural, =1 {{entryName}?} other {{count} entries?}}`)(
-      { count: follows.length, entryName: this.buildFollowingName(follows[0]) },
+      icuParams,
       $localize`Do you really want to unfollow these entries?`
     )
 
@@ -80,7 +77,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
         next: () => {
           // eslint-disable-next-line max-len
           const message = prepareIcu($localize`You are not following {count, plural, =1 {{entryName} anymore.} other {these {count} entries anymore.}}`)(
-            { count: follows.length, entryName: this.buildFollowingName(follows[0]) },
+            icuParams,
             $localize`You are not following them anymore.`
           )
 
@@ -92,7 +89,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
       })
   }
 
-  protected reloadData () {
+  protected reloadDataInternal () {
     this.followService.getFollowing({ pagination: this.pagination, sort: this.sort, search: this.search })
                       .subscribe({
                         next: resultList => {

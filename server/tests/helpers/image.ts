@@ -32,7 +32,7 @@ describe('Image helpers', function () {
   const imageDestJPG = join(imageDestDir, 'test.jpg')
   const imageDestPNG = join(imageDestDir, 'test.png')
 
-  const thumbnailSize = { width: 223, height: 122 }
+  const thumbnailSize = { width: 280, height: 157 }
 
   it('Should skip processing if the source image is okay', async function () {
     const input = buildAbsoluteFixturePath('thumbnail.jpg')

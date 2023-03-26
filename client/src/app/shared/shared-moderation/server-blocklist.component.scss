@@ -24,7 +24,3 @@ a {
 .block-button {
   @include create-button;
 }
-
-.chip {
-  @include chip;
-}

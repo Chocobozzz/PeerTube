@@ -27,7 +27,7 @@ export class ApiCache {
   private readonly options: APICacheOptions
   private readonly timers: { [ id: string ]: NodeJS.Timeout } = {}
 
-  private index: { all: string[] } = { all: [] }
+  private readonly index: { all: string[] } = { all: [] }
 
   constructor (options: APICacheOptions) {
     this.options = {

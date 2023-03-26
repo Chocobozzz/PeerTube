@@ -1,4 +1,3 @@
-
 import { NgModule } from '@angular/core'
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap'
 import { SharedGlobalIconModule } from '../shared-icons'
@@ -7,7 +6,6 @@ import { FeatureBooleanComponent } from './feature-boolean.component'
 import { InstanceAboutAccordionComponent } from './instance-about-accordion.component'
 import { InstanceFeaturesTableComponent } from './instance-features-table.component'
 import { InstanceFollowService } from './instance-follow.service'
-import { InstanceStatisticsComponent } from './instance-statistics.component'
 import { InstanceService } from './instance.service'
 
 @NgModule({
@@ -20,15 +18,13 @@ import { InstanceService } from './instance.service'
   declarations: [
     FeatureBooleanComponent,
     InstanceAboutAccordionComponent,
-    InstanceFeaturesTableComponent,
-    InstanceStatisticsComponent
+    InstanceFeaturesTableComponent
   ],
 
   exports: [
     FeatureBooleanComponent,
     InstanceAboutAccordionComponent,
-    InstanceFeaturesTableComponent,
-    InstanceStatisticsComponent
+    InstanceFeaturesTableComponent
   ],
 
   providers: [

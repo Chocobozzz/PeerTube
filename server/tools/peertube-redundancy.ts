@@ -4,7 +4,7 @@ import { URL } from 'url'
 import validator from 'validator'
 import { forceNumber, uniqify } from '@shared/core-utils'
 import { HttpStatusCode, VideoRedundanciesTarget } from '@shared/models'
-import { assignToken, buildServer, getServerCredentials } from './cli'
+import { assignToken, buildServer, getServerCredentials } from './shared'
 
 import bytes = require('bytes')
 program

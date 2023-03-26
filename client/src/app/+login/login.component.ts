@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment'
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, Notifier, RedirectService, SessionStorageService, UserService } from '@app/core'
@@ -7,8 +8,8 @@ import { USER_OTP_TOKEN_VALIDATOR } from '@app/shared/form-validators/user-valid
 import { FormReactive, FormReactiveService, InputTextComponent } from '@app/shared/shared-forms'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 import { NgbAccordion, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
-import { PluginsManager } from '@root-helpers/plugins-manager'
-import { RegisteredExternalAuthConfig, ServerConfig } from '@shared/models'
+import { getExternalAuthHref } from '@shared/core-utils'
+import { RegisteredExternalAuthConfig, ServerConfig, ServerErrorCode } from '@shared/models'
 
 @Component({
   selector: 'my-login',
@@ -119,7 +120,7 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   }
 
   getAuthHref (auth: RegisteredExternalAuthConfig) {
-    return PluginsManager.getExternalAuthHref(auth)
+    return getExternalAuthHref(environment.apiUrl, auth)
   }
 
   login () {
@@ -196,6 +197,8 @@ The link will expire within 1 hour.`
   }
 
   private handleError (err: any) {
+    console.log(err)
+
     if (this.authService.isOTPMissingError(err)) {
       this.otpStep = true
 
@@ -207,8 +210,26 @@ The link will expire within 1 hour.`
       return
     }
 
-    if (err.message.indexOf('credentials are invalid') !== -1) this.error = $localize`Incorrect username or password.`
-    else if (err.message.indexOf('blocked') !== -1) this.error = $localize`Your account is blocked.`
-    else this.error = err.message
+    if (err.message.includes('credentials are invalid')) {
+      this.error = $localize`Incorrect username or password.`
+      return
+    }
+
+    if (err.message.includes('blocked')) {
+      this.error = $localize`Your account is blocked.`
+      return
+    }
+
+    if (err.body?.code === ServerErrorCode.ACCOUNT_WAITING_FOR_APPROVAL) {
+      this.error = $localize`This account is awaiting approval by moderators.`
+      return
+    }
+
+    if (err.body?.code === ServerErrorCode.ACCOUNT_APPROVAL_REJECTED) {
+      this.error = $localize`Registration approval has been rejected for this account.`
+      return
+    }
+
+    this.error = err.message
   }
 }

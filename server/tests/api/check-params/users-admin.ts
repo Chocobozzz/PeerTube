@@ -5,6 +5,7 @@ import { omit } from '@shared/core-utils'
 import { HttpStatusCode, UserAdminFlag, UserRole } from '@shared/models'
 import {
   cleanupTests,
+  ConfigCommand,
   createSingleServer,
   killallServers,
   makeGetRequest,
@@ -156,13 +157,7 @@ describe('Test users admin API validators', function () {
 
       await killallServers([ server ])
 
-      const config = {
-        smtp: {
-          hostname: '127.0.0.1',
-          port: emailPort
-        }
-      }
-      await server.run(config)
+      await server.run(ConfigCommand.getEmailOverrideConfig(emailPort))
 
       const fields = {
         ...baseCorrectParams,

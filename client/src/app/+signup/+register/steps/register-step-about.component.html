@@ -13,6 +13,10 @@
     <li i18n>Have access to your <strong>watch history</strong></li>
     <li *ngIf="!videoUploadDisabled" i18n>Create your channel to <strong>publish videos</strong></li>
   </ul>
+
+  <p *ngIf="requiresApproval" i18n>
+    Moderators of {{ instanceName }} will have to approve your registration request once you have finished to fill the form.
+  </p>
 </div>
 
 <div>

@@ -22,7 +22,7 @@ type UserForList = User & {
   templateUrl: './user-list.component.html',
   styleUrls: [ './user-list.component.scss' ]
 })
-export class UserListComponent extends RestTable implements OnInit {
+export class UserListComponent extends RestTable <User> implements OnInit {
   private static readonly LOCAL_STORAGE_SELECTED_COLUMNS_KEY = 'admin-user-list-selected-columns'
 
   @ViewChild('userBanModal', { static: true }) userBanModal: UserBanModalComponent
@@ -35,8 +35,7 @@ export class UserListComponent extends RestTable implements OnInit {
 
   highlightBannedUsers = false
 
-  selectedUsers: User[] = []
-  bulkUserActions: DropdownAction<User[]>[][] = []
+  bulkActions: DropdownAction<User[]>[][] = []
   columns: { id: string, label: string }[]
 
   inputFilters: AdvancedInputFilter[] = [
@@ -95,7 +94,7 @@ export class UserListComponent extends RestTable implements OnInit {
 
     this.initialize()
 
-    this.bulkUserActions = [
+    this.bulkActions = [
       [
         {
           label: $localize`Delete`,
@@ -249,7 +248,7 @@ export class UserListComponent extends RestTable implements OnInit {
     const res = await this.confirmService.confirm(message, $localize`Delete`)
     if (res === false) return
 
-    this.userAdminService.removeUser(users)
+    this.userAdminService.removeUsers(users)
       .subscribe({
         next: () => {
           this.notifier.success(
@@ -284,13 +283,7 @@ export class UserListComponent extends RestTable implements OnInit {
       })
   }
 
-  isInSelectionMode () {
-    return this.selectedUsers.length !== 0
-  }
-
-  protected reloadData () {
-    this.selectedUsers = []
-
+  protected reloadDataInternal () {
     this.userAdminService.getUsers({
       pagination: this.pagination,
       sort: this.sort,

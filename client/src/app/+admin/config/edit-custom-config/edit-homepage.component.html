@@ -17,7 +17,7 @@
 
           <my-markdown-textarea
             name="instanceCustomHomepageContent" formControlName="content"
-            [customMarkdownRenderer]="getCustomMarkdownRenderer()"
+            [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
             [formError]="formErrors['instanceCustomHomepage.content']"
           ></my-markdown-textarea>
 

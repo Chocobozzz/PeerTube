@@ -1,7 +1,7 @@
 <div class="dropdown-root" ngbDropdown [placement]="placement" [container]="container" *ngIf="areActionsDisplayed(actions, entry)">
   <button
     class="action-button" [ngClass]="{ small: buttonSize === 'small', grey: theme === 'grey', orange: theme === 'orange', 'button-styled': buttonStyled }"
-    ngbDropdownToggle role="button" aria-label="Open actions" i18n-aria-label
+    ngbDropdownToggle aria-label="Open actions" i18n-aria-label
   >
     <my-global-icon *ngIf="!label && buttonDirection === 'horizontal'" class="more-icon" iconName="more-horizontal"></my-global-icon>
     <my-global-icon *ngIf="!label && buttonDirection === 'vertical'" class="more-icon" iconName="more-vertical"></my-global-icon>
@@ -40,7 +40,7 @@
 
           <h6
             *ngIf="!action.linkBuilder && action.isHeader && areActionsDisplayed(actions, entry)" [ngClass]="{ 'with-icon': !!action.iconName }"
-            class="dropdown-header" tabindex="0" role="button" [title]="action.title || ''" (click)="action.handler(entry)" (keyup.enter)="action.handler(entry)"
+            class="dropdown-header" [title]="action.title || ''" (click)="action.handler(entry)" (keyup.enter)="action.handler(entry)"
           >
             <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
           </h6>

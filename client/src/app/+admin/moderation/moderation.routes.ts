@@ -4,6 +4,7 @@ import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } f
 import { VideoBlockListComponent } from '@app/+admin/moderation/video-block-list'
 import { UserRightGuard } from '@app/core'
 import { UserRight } from '@shared/models'
+import { RegistrationListComponent } from './registration-list'
 
 export const ModerationRoutes: Routes = [
   {
@@ -68,7 +69,19 @@ export const ModerationRoutes: Routes = [
         }
       },
 
-      // We move this component in admin overview pages
+      {
+        path: 'registrations/list',
+        component: RegistrationListComponent,
+        canActivate: [ UserRightGuard ],
+        data: {
+          userRight: UserRight.MANAGE_REGISTRATIONS,
+          meta: {
+            title: $localize`User registrations`
+          }
+        }
+      },
+
+      // We moved this component in admin overview pages
       {
         path: 'video-comments',
         redirectTo: 'video-comments/list',

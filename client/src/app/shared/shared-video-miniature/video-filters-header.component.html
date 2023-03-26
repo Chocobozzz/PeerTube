@@ -12,8 +12,8 @@
 
   <div class="first-row">
     <div class="active-filters">
-      <div
-        class="pastille filters-toggle" (click)="areFiltersCollapsed = !areFiltersCollapsed" role="button"
+      <button
+        class="pastille filters-toggle" (click)="areFiltersCollapsed = !areFiltersCollapsed"
         [attr.aria-expanded]="!areFiltersCollapsed" aria-controls="collapseBasic"
         [ngClass]="{ active: !areFiltersCollapsed }"
       >
@@ -21,7 +21,7 @@
         <ng-container i18n *ngIf="!areFiltersCollapsed">Hide filters</ng-container>
 
         <my-global-icon iconName="chevrons-up"></my-global-icon>
-      </div>
+      </button>
 
       <div
         *ngFor="let activeFilter of filters.getActiveFilters()" (click)="resetFilter(activeFilter.key, activeFilter.canRemove)"
@@ -56,7 +56,7 @@
 
   </div>
 
-  <div class="collapse-transition" [ngbCollapse]="areFiltersCollapsed">
+  <div [ngbCollapse]="areFiltersCollapsed" [animation]="true">
     <div class="filters">
       <div class="form-group">
         <label class="with-description" for="languageOneOf" i18n>Languages:</label>

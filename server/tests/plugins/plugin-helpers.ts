@@ -64,6 +64,18 @@ describe('Test plugin helpers', function () {
       await servers[0].servers.waitUntilLog(`server url is ${servers[0].url}`)
     })
 
+    it('Should have the correct listening config', async function () {
+      const res = await makeGetRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/server-listening-config',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(res.body.config).to.exist
+      expect(res.body.config.hostname).to.equal('::')
+      expect(res.body.config.port).to.equal(servers[0].port)
+    })
+
     it('Should have the correct config', async function () {
       const res = await makeGetRequest({
         url: servers[0].url,

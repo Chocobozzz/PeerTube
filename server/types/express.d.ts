@@ -1,4 +1,3 @@
-
 import { OutgoingHttpHeaders } from 'http'
 import { RegisterServerAuthExternalOptions } from '@server/types'
 import {
@@ -9,6 +8,7 @@ import {
   MActorUrl,
   MChannelBannerAccountDefault,
   MChannelSyncChannel,
+  MRegistration,
   MStreamingPlaylist,
   MUserAccountUrl,
   MVideoChangeOwnershipFull,
@@ -172,6 +172,7 @@ declare module 'express' {
       actorFull?: MActorFull
 
       user?: MUserDefault
+      userRegistration?: MRegistration
 
       server?: MServer
 

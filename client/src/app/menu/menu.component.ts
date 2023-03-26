@@ -1,8 +1,9 @@
 import { HotkeysService } from 'angular2-hotkeys'
 import * as debug from 'debug'
-import { switchMap } from 'rxjs/operators'
+import { forkJoin, Subscription } from 'rxjs'
+import { first, switchMap } from 'rxjs/operators'
 import { ViewportScroller } from '@angular/common'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import {
   AuthService,
@@ -21,7 +22,6 @@ import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
-import { PluginsManager } from '@root-helpers/plugins-manager'
 import { HTMLServerConfig, ServerConfig, UserRight, VideoConstant } from '@shared/models'
 
 const debugLogger = debug('peertube:menu:MenuComponent')
@@ -31,7 +31,7 @@ const debugLogger = debug('peertube:menu:MenuComponent')
   templateUrl: './menu.component.html',
   styleUrls: [ './menu.component.scss' ]
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
   @ViewChild('languageChooserModal', { static: true }) languageChooserModal: LanguageChooserComponent
   @ViewChild('quickSettingsModal', { static: true }) quickSettingsModal: QuickSettingsModalComponent
   @ViewChild('dropdown') dropdown: NgbDropdown
@@ -63,6 +63,11 @@ export class MenuComponent implements OnInit {
     [UserRight.MANAGE_CONFIGURATION]: '/admin/config'
   }
 
+  private languagesSub: Subscription
+  private modalSub: Subscription
+  private hotkeysSub: Subscription
+  private authSub: Subscription
+
   constructor (
     private viewportScroller: ViewportScroller,
     private authService: AuthService,
@@ -91,6 +96,10 @@ export class MenuComponent implements OnInit {
     return this.languageChooserModal.getCurrentLanguage()
   }
 
+  get requiresApproval () {
+    return this.serverConfig.signup.requiresApproval
+  }
+
   ngOnInit () {
     this.htmlServerConfig = this.serverService.getHTMLConfig()
     this.currentInterfaceLanguage = this.languageChooserModal.getCurrentLanguage()
@@ -99,44 +108,41 @@ export class MenuComponent implements OnInit {
     this.updateUserState()
     this.buildMenuSections()
 
-    this.authService.loginChangedSource.subscribe(
-      status => {
-        if (status === AuthStatus.LoggedIn) {
-          this.isLoggedIn = true
-        } else if (status === AuthStatus.LoggedOut) {
-          this.isLoggedIn = false
-        }
-
-        this.updateUserState()
-        this.buildMenuSections()
+    this.authSub = this.authService.loginChangedSource.subscribe(status => {
+      if (status === AuthStatus.LoggedIn) {
+        this.isLoggedIn = true
+      } else if (status === AuthStatus.LoggedOut) {
+        this.isLoggedIn = false
       }
-    )
 
-    this.hotkeysService.cheatSheetToggle
+      this.updateUserState()
+      this.buildMenuSections()
+    })
+
+    this.hotkeysSub = this.hotkeysService.cheatSheetToggle
       .subscribe(isOpen => this.helpVisible = isOpen)
 
-    this.serverService.getVideoLanguages()
-      .subscribe(languages => {
-        this.languages = languages
+    this.languagesSub = forkJoin([
+      this.serverService.getVideoLanguages(),
+      this.authService.userInformationLoaded.pipe(first())
+    ]).subscribe(([ languages ]) => {
+      this.languages = languages
 
-        this.authService.userInformationLoaded
-          .subscribe(() => this.buildUserLanguages())
-      })
+      this.buildUserLanguages()
+    })
 
     this.serverService.getConfig()
       .subscribe(config => this.serverConfig = config)
 
-    this.modalService.openQuickSettingsSubject
+    this.modalSub = this.modalService.openQuickSettingsSubject
       .subscribe(() => this.openQuickSettings())
   }
 
-  getExternalLoginHref () {
-    if (!this.serverConfig || this.serverConfig.client.menu.login.redirectOnSingleExternalAuth !== true) return undefined
-
-    const externalAuths = this.serverConfig.plugin.registeredExternalAuths
-    if (externalAuths.length !== 1) return undefined
-
-    return PluginsManager.getExternalAuthHref(externalAuths[0])
+  ngOnDestroy () {
+    if (this.modalSub) this.modalSub.unsubscribe()
+    if (this.languagesSub) this.languagesSub.unsubscribe()
+    if (this.hotkeysSub) this.hotkeysSub.unsubscribe()
+    if (this.authSub) this.authSub.unsubscribe()
   }
 
   isRegistrationAllowed () {

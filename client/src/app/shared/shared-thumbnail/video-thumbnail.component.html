@@ -1,8 +1,8 @@
-<a *ngIf="!videoHref" [routerLink]="getVideoRouterLink()" [queryParams]="queryParams" class="video-thumbnail">
+<a *ngIf="!videoHref" [routerLink]="getVideoRouterLink()" [queryParams]="queryParams" class="video-thumbnail" tabindex="-1">
   <ng-container *ngTemplateOutlet="aContent"></ng-container>
 </a>
 
-<a *ngIf="videoHref" [href]="videoHref" [target]="videoTarget" class="video-thumbnail">
+<a *ngIf="videoHref" [href]="videoHref" [target]="videoTarget" class="video-thumbnail" tabindex="-1">
   <ng-container *ngTemplateOutlet="aContent"></ng-container>
 </a>
 

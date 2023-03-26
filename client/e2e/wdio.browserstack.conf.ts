@@ -17,26 +17,25 @@ function buildMainOptions (sessionName: string) {
   }
 }
 
-function buildBStackDesktopOptions (sessionName: string, resolution?: string) {
+function buildBStackDesktopOptions (sessionName: string, resolution: string, os?: string) {
   return {
     'bstack:options': {
       ...buildMainOptions(sessionName),
 
+      os,
       resolution
     }
   }
 }
 
-function buildBStackMobileOptions (sessionName: string, deviceName: string, osVersion: string, appiumVersion?: string) {
+function buildBStackMobileOptions (sessionName: string, deviceName: string, osVersion: string) {
   return {
     'bstack:options': {
       ...buildMainOptions(sessionName),
 
       realMobile: true,
       osVersion,
-      deviceName,
-
-      appiumVersion
+      deviceName
     }
   }
 }
@@ -58,13 +57,13 @@ module.exports = {
       },
       {
         browserName: 'Firefox',
-        browserVersion: '68', // ESR
+        browserVersion: '78', // Very old ESR
 
-        ...buildBStackDesktopOptions('Firefox ESR Desktop', '1280x1024')
+        ...buildBStackDesktopOptions('Firefox ESR Desktop', '1280x1024', 'Windows')
       },
       {
         browserName: 'Safari',
-        browserVersion: '11.1',
+        browserVersion: '12.1',
 
         ...buildBStackDesktopOptions('Safari Desktop', '1280x1024')
       },
@@ -87,7 +86,7 @@ module.exports = {
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions('Safari iPhone', 'iPhone SE', '11')
+        ...buildBStackMobileOptions('Safari iPhone', 'iPhone 8 Plus', '12.4')
       },
       {
         browserName: 'Safari',

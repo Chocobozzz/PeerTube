@@ -9,6 +9,7 @@ import { logger, OAuthUserTokens, objectToUrlEncoded, peertubeLocalStorage } fro
 import { HttpStatusCode, MyUser as UserServerModel, OAuthClientLocal, User, UserLogin, UserRefreshToken } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest/rest-extractor.service'
+import { RedirectService } from '../routing'
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
 
@@ -44,6 +45,7 @@ export class AuthService {
   private refreshingTokenObservable: Observable<any>
 
   constructor (
+    private redirectService: RedirectService,
     private http: HttpClient,
     private notifier: Notifier,
     private hotkeysService: HotkeysService,
@@ -213,25 +215,26 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
 
     this.refreshingTokenObservable = this.http.post<UserRefreshToken>(AuthService.BASE_TOKEN_URL, body, { headers })
-                                         .pipe(
-                                           map(res => this.handleRefreshToken(res)),
-                                           tap(() => {
-                                             this.refreshingTokenObservable = null
-                                           }),
-                                           catchError(err => {
-                                             this.refreshingTokenObservable = null
+      .pipe(
+        map(res => this.handleRefreshToken(res)),
+        tap(() => {
+          this.refreshingTokenObservable = null
+        }),
+        catchError(err => {
+          this.refreshingTokenObservable = null
 
-                                             logger.error(err)
-                                             logger.info('Cannot refresh token -> logout...')
-                                             this.logout()
-                                             this.router.navigate([ '/login' ])
+          logger.error(err)
+          logger.info('Cannot refresh token -> logout...')
+          this.logout()
 
-                                             return observableThrowError(() => ({
-                                               error: $localize`You need to reconnect.`
-                                             }))
-                                           }),
-                                           share()
-                                         )
+          this.redirectService.redirectToLogin()
+
+          return observableThrowError(() => ({
+            error: $localize`You need to reconnect.`
+          }))
+        }),
+        share()
+      )
 
     return this.refreshingTokenObservable
   }

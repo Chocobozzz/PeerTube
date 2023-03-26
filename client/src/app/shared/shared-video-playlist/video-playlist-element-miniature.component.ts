@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { AuthService, Notifier, ServerService } from '@app/core'
-import { Video } from '@app/shared/shared-main'
+import { Video, VideoService } from '@app/shared/shared-main'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
 import { secondsToTime } from '@shared/core-utils'
 import { HTMLServerConfig, VideoPlaylistElementType, VideoPlaylistElementUpdate, VideoPrivacy } from '@shared/models'
@@ -44,11 +44,16 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     private serverService: ServerService,
     private notifier: Notifier,
     private videoPlaylistService: VideoPlaylistService,
+    private videoService: VideoService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit (): void {
     this.serverConfig = this.serverService.getHTMLConfig()
+  }
+
+  getVideoOwnerDisplayType (element: VideoPlaylistElement) {
+    return this.videoService.buildDefaultOwnerDisplayType(element.video)
   }
 
   isVideoPrivate () {

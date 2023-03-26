@@ -2,10 +2,10 @@
 
 import { expect } from 'chai'
 import { buildDigest } from '@server/helpers/peertube-crypto'
-import { HTTP_SIGNATURE } from '@server/initializers/constants'
+import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@server/initializers/constants'
 import { activityPubContextify } from '@server/lib/activitypub/context'
 import { buildGlobalHeaders, signAndContextify } from '@server/lib/activitypub/send'
-import { makeFollowRequest, makePOSTAPRequest } from '@server/tests/shared'
+import { makePOSTAPRequest } from '@server/tests/shared'
 import { buildAbsoluteFixturePath, wait } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
 import { cleanupTests, createMultipleServers, killallServers, PeerTubeServer } from '@shared/server-commands'
@@ -43,6 +43,32 @@ function getAnnounceWithoutContext (server: PeerTubeServer) {
   return result
 }
 
+async function makeFollowRequest (to: { url: string }, by: { url: string, privateKey }) {
+  const follow = {
+    type: 'Follow',
+    id: by.url + '/' + new Date().getTime(),
+    actor: by.url,
+    object: to.url
+  }
+
+  const body = await activityPubContextify(follow, 'Follow')
+
+  const httpSignature = {
+    algorithm: HTTP_SIGNATURE.ALGORITHM,
+    authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME,
+    keyId: by.url,
+    key: by.privateKey,
+    headers: HTTP_SIGNATURE.HEADERS_TO_SIGN
+  }
+  const headers = {
+    'digest': buildDigest(body),
+    'content-type': 'application/activity+json',
+    'accept': ACTIVITY_PUB.ACCEPT_HEADER
+  }
+
+  return makePOSTAPRequest(to.url + '/inbox', body, httpSignature, headers)
+}
+
 describe('Test ActivityPub security', function () {
   let servers: PeerTubeServer[]
   let url: string
@@ -77,7 +103,7 @@ describe('Test ActivityPub security', function () {
   describe('When checking HTTP signature', function () {
 
     it('Should fail with an invalid digest', async function () {
-      const body = activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
+      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
       const headers = {
         Digest: buildDigest({ hello: 'coucou' })
       }
@@ -91,7 +117,7 @@ describe('Test ActivityPub security', function () {
     })
 
     it('Should fail with an invalid date', async function () {
-      const body = activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
+      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
       const headers = buildGlobalHeaders(body)
       headers['date'] = 'Wed, 21 Oct 2015 07:28:00 GMT'
 
@@ -107,7 +133,7 @@ describe('Test ActivityPub security', function () {
       await setKeysOfServer(servers[0], servers[1], invalidKeys.publicKey, invalidKeys.privateKey)
       await setKeysOfServer(servers[1], servers[1], invalidKeys.publicKey, invalidKeys.privateKey)
 
-      const body = activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
+      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
       const headers = buildGlobalHeaders(body)
 
       try {
@@ -122,7 +148,7 @@ describe('Test ActivityPub security', function () {
       await setKeysOfServer(servers[0], servers[1], keys.publicKey, keys.privateKey)
       await setKeysOfServer(servers[1], servers[1], keys.publicKey, keys.privateKey)
 
-      const body = activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
+      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
       const headers = buildGlobalHeaders(body)
 
       const signatureOptions = baseHttpSignature()
@@ -145,7 +171,7 @@ describe('Test ActivityPub security', function () {
     })
 
     it('Should succeed with a valid HTTP signature draft 11 (without date but with (created))', async function () {
-      const body = activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
+      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
       const headers = buildGlobalHeaders(body)
 
       const signatureOptions = baseHttpSignature()
@@ -156,7 +182,7 @@ describe('Test ActivityPub security', function () {
     })
 
     it('Should succeed with a valid HTTP signature', async function () {
-      const body = activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
+      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
       const headers = buildGlobalHeaders(body)
 
       const { statusCode } = await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
@@ -175,7 +201,7 @@ describe('Test ActivityPub security', function () {
       await killallServers([ servers[1] ])
       await servers[1].run()
 
-      const body = activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
+      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
       const headers = buildGlobalHeaders(body)
 
       try {

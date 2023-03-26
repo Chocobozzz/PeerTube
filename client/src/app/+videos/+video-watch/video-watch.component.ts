@@ -91,6 +91,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private hotkeys: Hotkey[] = []
 
+  private static VIEW_VIDEO_INTERVAL_MS = 5000
+
   constructor (
     private elementRef: ElementRef,
     private route: ActivatedRoute,
@@ -132,8 +134,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.loadRouteParams()
     this.loadRouteQuery()
-
-    this.initHotkeys()
 
     this.theaterEnabled = getStoredTheater()
 
@@ -407,6 +407,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (res === false) return this.location.back()
     }
 
+    this.buildHotkeysHelp(video)
+
     this.buildPlayer({ urlOptions, loggedInOrAnonymousUser, forceAutoplay })
       .catch(err => logger.error('Cannot build the player', err))
 
@@ -613,16 +615,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       const byLocalStorage = getStoredVideoWatchHistory(video.uuid)
 
       if (byUrl) return timeToInt(urlOptions.startTime)
-      if (byHistory) return video.userHistory.currentTime
-      if (byLocalStorage) return byLocalStorage.duration
 
-      return 0
+      let startTime = 0
+      if (byHistory) startTime = video.userHistory.currentTime
+      if (byLocalStorage) startTime = byLocalStorage.duration
+
+      // If we are at the end of the video, reset the timer
+      if (video.duration - startTime <= 1) startTime = 0
+
+      return startTime
     }
 
-    let startTime = getStartTime()
-
-    // If we are at the end of the video, reset the timer
-    if (video.duration - startTime <= 1) startTime = 0
+    const startTime = getStartTime()
 
     const playerCaptions = videoCaptions.map(c => ({
       label: c.language.label,
@@ -679,6 +683,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         videoViewUrl: video.privacy.id !== VideoPrivacy.PRIVATE
           ? this.videoService.getVideoViewUrl(video.uuid)
           : null,
+        videoViewIntervalMs: VideoWatchComponent.VIEW_VIDEO_INTERVAL_MS,
         authorizationHeader: () => this.authService.getRequestHeaderValue(),
 
         serverUrl: environment.originServerUrl || window.location.origin,
@@ -787,32 +792,42 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.video.viewers = newViewers
   }
 
-  private initHotkeys () {
+  private buildHotkeysHelp (video: Video) {
+    if (this.hotkeys.length !== 0) {
+      this.hotkeysService.remove(this.hotkeys)
+    }
+
     this.hotkeys = [
       // These hotkeys are managed by the player
       new Hotkey('f', e => e, undefined, $localize`Enter/exit fullscreen`),
       new Hotkey('space', e => e, undefined, $localize`Play/Pause the video`),
       new Hotkey('m', e => e, undefined, $localize`Mute/unmute the video`),
 
-      new Hotkey('0-9', e => e, undefined, $localize`Skip to a percentage of the video: 0 is 0% and 9 is 90%`),
-
       new Hotkey('up', e => e, undefined, $localize`Increase the volume`),
       new Hotkey('down', e => e, undefined, $localize`Decrease the volume`),
-
-      new Hotkey('right', e => e, undefined, $localize`Seek the video forward`),
-      new Hotkey('left', e => e, undefined, $localize`Seek the video backward`),
-
-      new Hotkey('>', e => e, undefined, $localize`Increase playback rate`),
-      new Hotkey('<', e => e, undefined, $localize`Decrease playback rate`),
-
-      new Hotkey(',', e => e, undefined, $localize`Navigate in the video to the previous frame`),
-      new Hotkey('.', e => e, undefined, $localize`Navigate in the video to the next frame`),
 
       new Hotkey('t', e => {
         this.theaterEnabled = !this.theaterEnabled
         return false
       }, undefined, $localize`Toggle theater mode`)
     ]
+
+    if (!video.isLive) {
+      this.hotkeys = this.hotkeys.concat([
+        // These hotkeys are also managed by the player but only for VOD
+
+        new Hotkey('0-9', e => e, undefined, $localize`Skip to a percentage of the video: 0 is 0% and 9 is 90%`),
+
+        new Hotkey('right', e => e, undefined, $localize`Seek the video forward`),
+        new Hotkey('left', e => e, undefined, $localize`Seek the video backward`),
+
+        new Hotkey('>', e => e, undefined, $localize`Increase playback rate`),
+        new Hotkey('<', e => e, undefined, $localize`Decrease playback rate`),
+
+        new Hotkey(',', e => e, undefined, $localize`Navigate in the video to the previous frame`),
+        new Hotkey('.', e => e, undefined, $localize`Navigate in the video to the next frame`)
+      ])
+    }
 
     if (this.isUserLoggedIn()) {
       this.hotkeys = this.hotkeys.concat([

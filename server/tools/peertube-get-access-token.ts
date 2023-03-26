@@ -1,5 +1,5 @@
 import { program } from 'commander'
-import { assignToken, buildServer } from './cli'
+import { assignToken, buildServer } from './shared'
 
 program
   .option('-u, --url <url>', 'Server url')

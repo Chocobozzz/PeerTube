@@ -13,19 +13,19 @@ import {
 } from '@server/helpers/ffmpeg'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
-import { P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE } from '@server/initializers/constants'
+import { VIDEO_LIVE } from '@server/initializers/constants'
 import { clearCacheRoute } from '@server/middlewares/cache/cache'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MStreamingPlaylistVideo, MVideo, MVideoLiveSession, MVideoLiveVideo } from '@server/types/models'
+import { MVideo, MVideoLiveSession, MVideoLiveVideo } from '@server/types/models'
 import { pick, wait } from '@shared/core-utils'
-import { LiveVideoError, VideoState, VideoStorage, VideoStreamingPlaylistType } from '@shared/models'
+import { LiveVideoError, VideoState } from '@shared/models'
 import { federateVideoIfNeeded } from '../activitypub/videos'
 import { JobQueue } from '../job-queue'
-import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveReplayBaseDirectory } from '../paths'
+import { getLiveReplayBaseDirectory } from '../paths'
 import { PeerTubeSocket } from '../peertube-socket'
 import { Hooks } from '../plugins/hooks'
 import { LiveQuotaStore } from './live-quota-store'
@@ -256,13 +256,10 @@ class LiveManager {
       { allResolutions, ...lTags(sessionId, video.uuid) }
     )
 
-    const streamingPlaylist = await this.createLivePlaylist(video, allResolutions)
-
     return this.runMuxingSession({
       sessionId,
       videoLive,
 
-      streamingPlaylist,
       inputUrl,
       fps,
       bitrate,
@@ -276,7 +273,6 @@ class LiveManager {
     sessionId: string
     videoLive: MVideoLiveVideo
 
-    streamingPlaylist: MStreamingPlaylistVideo
     inputUrl: string
     fps: number
     bitrate: number
@@ -299,7 +295,7 @@ class LiveManager {
       videoLive,
       user,
 
-      ...pick(options, [ 'streamingPlaylist', 'inputUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio' ])
+      ...pick(options, [ 'inputUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio' ])
     })
 
     muxingSession.on('live-ready', () => this.publishAndFederateLive(videoLive, localLTags))
@@ -483,24 +479,6 @@ class LiveManager {
     }
 
     return resolutionsEnabled
-  }
-
-  private async createLivePlaylist (video: MVideo, allResolutions: number[]): Promise<MStreamingPlaylistVideo> {
-    const playlist = await VideoStreamingPlaylistModel.loadOrGenerate(video)
-
-    playlist.playlistFilename = generateHLSMasterPlaylistFilename(true)
-    playlist.segmentsSha256Filename = generateHlsSha256SegmentsFilename(true)
-
-    playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
-    playlist.type = VideoStreamingPlaylistType.HLS
-
-    playlist.assignP2PMediaLoaderInfoHashes(video, allResolutions)
-
-    playlist.storage = CONFIG.OBJECT_STORAGE.ENABLED
-      ? VideoStorage.OBJECT_STORAGE
-      : VideoStorage.FILE_SYSTEM
-
-    return playlist.save()
   }
 
   private saveStartingSession (videoLive: MVideoLiveVideo) {

@@ -7,6 +7,7 @@ import { ServerService } from '@app/core'
   styleUrls: [ './register-step-about.component.scss' ]
 })
 export class RegisterStepAboutComponent {
+  @Input() requiresApproval: boolean
   @Input() videoUploadDisabled: boolean
 
   constructor (private serverService: ServerService) {

@@ -4,6 +4,7 @@ export const I18N_LOCALES = {
   // Always first to avoid issues when using express acceptLanguages function when no accept language header is set
   'en-US': 'English',
 
+  // Keep it alphabetically sorted
   'ar': 'العربية',
   'ca-ES': 'Català',
   'cs-CZ': 'Čeština',
@@ -12,33 +13,36 @@ export const I18N_LOCALES = {
   'eo': 'Esperanto',
   'es-ES': 'Español',
   'eu-ES': 'Euskara',
-  'fi-FI': 'suomi',
+  'fa-IR': 'فارسی',
+  'fi-FI': 'Suomi',
   'fr-FR': 'Français',
   'gd': 'Gàidhlig',
-  'gl-ES': 'galego',
-  'hr': 'hrvatski',
-  'hu-HU': 'magyar',
-  'fa-IR': 'فارسی',
+  'gl-ES': 'Galego',
+  'hr': 'Hrvatski',
+  'hu-HU': 'Magyar',
+  'is': 'Íslenska',
   'it-IT': 'Italiano',
   'ja-JP': '日本語',
   'kab': 'Taqbaylit',
+  'nb-NO': 'Norsk bokmål',
   'nl-NL': 'Nederlands',
+  'nn': 'Norsk nynorsk',
   'oc': 'Occitan',
   'pl-PL': 'Polski',
   'pt-BR': 'Português (Brasil)',
   'pt-PT': 'Português (Portugal)',
-  'ru-RU': 'русский',
+  'ru-RU': 'Pусский',
   'sq': 'Shqip',
   'sv-SE': 'Svenska',
-  'nn': 'norsk nynorsk',
-  'nb-NO': 'norsk bokmål',
   'th-TH': 'ไทย',
-  'vi-VN': 'Tiếng Việt',
   'tok': 'Toki Pona',
+  'uk-UA': 'украї́нська мо́ва',
+  'vi-VN': 'Tiếng Việt',
   'zh-Hans-CN': '简体中文（中国）',
   'zh-Hant-TW': '繁體中文（台灣）'
 }
 
+// Keep it alphabetically sorted
 const I18N_LOCALE_ALIAS = {
   'ar-001': 'ar',
   'ca': 'ca-ES',
@@ -48,20 +52,21 @@ const I18N_LOCALE_ALIAS = {
   'en': 'en-US',
   'es': 'es-ES',
   'eu': 'eu-ES',
-  'fi': 'fi-FI',
-  'gl': 'gl-ES',
   'fa': 'fa-IR',
+  'fi': 'fi-FI',
   'fr': 'fr-FR',
+  'gl': 'gl-ES',
   'hu': 'hu-HU',
   'it': 'it-IT',
   'ja': 'ja-JP',
+  'nb': 'nb-NO',
   'nl': 'nl-NL',
   'pl': 'pl-PL',
   'pt': 'pt-BR',
-  'nb': 'nb-NO',
   'ru': 'ru-RU',
   'sv': 'sv-SE',
   'th': 'th-TH',
+  'uk': 'uk-UA',
   'vi': 'vi-VN',
   'zh-CN': 'zh-Hans-CN',
   'zh-Hans': 'zh-Hans-CN',
@@ -70,8 +75,7 @@ const I18N_LOCALE_ALIAS = {
   'zh': 'zh-Hans-CN'
 }
 
-export const POSSIBLE_LOCALES = Object.keys(I18N_LOCALES)
-                                      .concat(Object.keys(I18N_LOCALE_ALIAS))
+export const POSSIBLE_LOCALES = (Object.keys(I18N_LOCALES) as string[]).concat(Object.keys(I18N_LOCALE_ALIAS))
 
 export function getDefaultLocale () {
   return 'en-US'

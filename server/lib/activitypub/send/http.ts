@@ -52,9 +52,9 @@ function buildGlobalHeaders (body: any) {
   }
 }
 
-function signAndContextify <T> (byActor: MActor, data: T, contextType: ContextType | null) {
+async function signAndContextify <T> (byActor: MActor, data: T, contextType: ContextType | null) {
   const activity = contextType
-    ? activityPubContextify(data, contextType)
+    ? await activityPubContextify(data, contextType)
     : data
 
   return signJsonLDObject(byActor, activity)

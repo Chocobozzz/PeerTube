@@ -116,10 +116,10 @@ Be it as a user or an instance administrator, you can decide what your experienc
 
 <h3 align="right">Communities that help each other</h3>
 <p align="right">
-In addition to visitors using WebTorrent to share the load among them, instances can help each other by caching one another's videos. This way even small instances have a way to show content to a wider audience, as they will be shouldered by friend instances (more about that in our <a href="https://docs.joinpeertube.org/contribute-architecture?id=redundancy-between-instances">redundancy guide</a>).
+In addition to visitors using WebTorrent to share the load among them, instances can help each other by caching one another's videos. This way even small instances have a way to show content to a wider audience, as they will be shouldered by friend instances (more about that in our <a href="https://docs.joinpeertube.org/contribute/architecture#redundancy-between-instances">redundancy guide</a>).
 </p>
 <p align="right">
-Content creators can get help from their viewers in the simplest way possible: a support button showing a message linking to their donation accounts or really anything else. No more pay-per-view and advertisements that hurt visitors and <strike>incentivize</strike> alter creativity (more about that in our <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md">FAQ</a>).
+Content creators can get help from their viewers in the simplest way possible: a support button showing a message linking to their donation accounts or really anything else. No more pay-per-view and advertisements that hurt visitors and alter creativity (more about that in our <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md">FAQ</a>).
 </p>
 
 
@@ -147,7 +147,7 @@ Feel free to reach out if you have any questions or ideas! :speech_balloon:
 
 See the [production guide](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md), which is the recommended way to install or upgrade PeerTube. For hardware requirements, see [Should I have a big server to run PeerTube?](https://joinpeertube.org/faq#should-i-have-a-big-server-to-run-peertube) in the FAQ.
 
-See the [community packages](https://docs.joinpeertube.org/install-unofficial), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/docker.md)).
+See the [community packages](https://docs.joinpeertube.org/install/unofficial), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/docker.md)).
 
 :book: Documentation
 ----------------------------------------------------------------
@@ -156,27 +156,27 @@ If you have a question, please try to find the answer in the [FAQ](https://joinp
 
 ### User documentation
 
-See the [user documentation](https://docs.joinpeertube.org/use-setup-account).
+See the [user documentation](https://docs.joinpeertube.org/use/setup-account).
 
 ### Admin documentation
 
 See [how to create your own instance](https://github.com/Chocobozzz/PeerTube/blob/develop/README.md#package-create-your-own-instance).
 
-See the more general [admin documentation](https://docs.joinpeertube.org/admin-following-instances).
+See the more general [admin documentation](https://docs.joinpeertube.org/admin/following-instances).
 
 ### Tools documentation
 
-Learn how to import/upload videos from CLI or admin your PeerTube instance with the [tools documentation](https://docs.joinpeertube.org/maintain-tools).
+Learn how to import/upload videos from CLI or admin your PeerTube instance with the [tools documentation](https://docs.joinpeertube.org/maintain/tools).
 
 ### Technical documentation
 
-See the [architecture blueprint](https://docs.joinpeertube.org/contribute-architecture) for a more detailed explanation of the architectural choices.
+See the [architecture blueprint](https://docs.joinpeertube.org/contribute/architecture) for a more detailed explanation of the architectural choices.
 
 See our REST API documentation:
   * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/openapi.yaml)
-  * Spec explorer: [docs.joinpeertube.org/api-rest-reference.html](https://docs.joinpeertube.org/api-rest-reference.html)
+  * Spec explorer: [docs.joinpeertube.org/api-rest-reference.html](https://docs.joinpeertube.org/api/rest-reference.html)
 
-See our [ActivityPub documentation](https://docs.joinpeertube.org/api-activitypub).
+See our [ActivityPub documentation](https://docs.joinpeertube.org/api/activitypub).
 
 ## License
 
@@ -186,7 +186,7 @@ See our [ActivityPub documentation](https://docs.joinpeertube.org/api-activitypu
 
 ### Code
 
-Copyright (C) 2015-2022 PeerTube Contributors (see [CREDITS.md](CREDITS.md))
+Copyright (C) 2015-2023 PeerTube Contributors (see [CREDITS.md](/CREDITS.md))
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published

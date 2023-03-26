@@ -32,7 +32,7 @@ import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFil
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy'
 import { getServerActor } from '@server/models/application/application'
-import { ModelCache } from '@server/models/model-cache'
+import { ModelCache } from '@server/models/shared/model-cache'
 import { buildVideoEmbedPath, buildVideoWatchPath, pick } from '@shared/core-utils'
 import { ffprobePromise, getAudioStream, hasAudioStream, uuidToShort } from '@shared/extra-utils'
 import {
@@ -103,10 +103,9 @@ import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { ServerModel } from '../server/server'
 import { TrackerModel } from '../server/tracker'
 import { VideoTrackerModel } from '../server/video-tracker'
-import { setAsUpdated } from '../shared'
+import { buildTrigramSearchIndex, buildWhereIdOrUUID, getVideoSort, isOutdated, setAsUpdated, throwIfNotValid } from '../shared'
 import { UserModel } from '../user/user'
 import { UserVideoHistoryModel } from '../user/user-video-history'
-import { buildTrigramSearchIndex, buildWhereIdOrUUID, getVideoSort, isOutdated, throwIfNotValid } from '../utils'
 import { VideoViewModel } from '../view/video-view'
 import {
   videoFilesModelToFormattedJSON,
@@ -138,6 +137,7 @@ import { VideoShareModel } from './video-share'
 import { VideoSourceModel } from './video-source'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
+import { Hooks } from '@server/lib/plugins/hooks'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -1714,8 +1714,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return files
   }
 
-  toActivityPubObject (this: MVideoAP): VideoObject {
-    return videoModelToActivityPubObject(this)
+  toActivityPubObject (this: MVideoAP): Promise<VideoObject> {
+    return Hooks.wrapObject(
+      videoModelToActivityPubObject(this),
+      'filter:activity-pub.video.json-ld.build.result',
+      { video: this }
+    )
   }
 
   getTruncatedDescription () {
@@ -1871,7 +1875,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   setAsRefreshed (transaction?: Transaction) {
-    return setAsUpdated('video', this.id, transaction)
+    return setAsUpdated({ sequelize: this.sequelize, table: 'video', id: this.id, transaction })
   }
 
   // ---------------------------------------------------------------------------

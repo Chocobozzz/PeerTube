@@ -175,7 +175,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
     return Actor.IS_LOCAL(abuse.reporterAccount.host)
   }
 
-  protected reloadData () {
+  protected reloadDataInternal () {
     debugLogger('Loading data.')
 
     const options = {

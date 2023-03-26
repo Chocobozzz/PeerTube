@@ -56,7 +56,12 @@ try {
 app.set('trust proxy', CONFIG.TRUST_PROXY)
 
 app.use((_req, res, next) => {
+  // OpenTelemetry
   res.locals.requestStart = Date.now()
+
+  if (CONFIG.SECURITY.POWERED_BY_HEADER.ENABLED === true) {
+    res.setHeader('x-powered-by', 'PeerTube')
+  }
 
   return next()
 })
@@ -109,7 +114,6 @@ import {
   servicesRouter,
   objectStorageProxyRouter,
   pluginsRouter,
-  webfingerRouter,
   trackerRouter,
   createWebsocketTrackerServer,
   botsRouter,
@@ -231,7 +235,6 @@ app.use('/', pluginsRouter)
 
 app.use('/', activityPubRouter)
 app.use('/', feedsRouter)
-app.use('/', webfingerRouter)
 app.use('/', trackerRouter)
 app.use('/', botsRouter)
 
@@ -279,7 +282,7 @@ app.use((err, _req, res: express.Response, _next) => {
   })
 })
 
-const server = createWebsocketTrackerServer(app)
+const { server, trackerServer } = createWebsocketTrackerServer(app)
 
 // ----------- Run -----------
 
@@ -328,7 +331,8 @@ async function startApplication () {
   VideoChannelSyncLatestScheduler.Instance.enable()
   VideoViewsBufferScheduler.Instance.enable()
   GeoIPUpdateScheduler.Instance.enable()
-  OpenTelemetryMetrics.Instance.registerMetrics()
+
+  OpenTelemetryMetrics.Instance.registerMetrics({ trackerServer })
 
   PluginManager.Instance.init(server)
   // Before PeerTubeSocket init

@@ -56,6 +56,15 @@ export class InstanceFeaturesTableComponent implements OnInit {
     if (policy === 'display') return $localize`Displayed`
   }
 
+  buildRegistrationLabel () {
+    const config = this.serverConfig.signup
+
+    if (config.allowed !== true) return $localize`Disabled`
+    if (config.requiresApproval === true) return $localize`Requires approval by moderators`
+
+    return $localize`Enabled`
+  }
+
   getServerVersionAndCommit () {
     return this.serverService.getServerVersionAndCommit()
   }

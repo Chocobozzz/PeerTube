@@ -1,0 +1,9 @@
+extends ../common/greetings
+
+block title
+  | A new user wants to register
+
+block content
+  p User #{registration.username} wants to register on your PeerTube instance with the following reason:
+  blockquote(style='white-space: pre-wrap') #{registration.registrationReason}
+  p You can accept or reject the registration request in the #[a(href=`${WEBSERVER.URL}/admin/moderation/registrations/list`) administration].

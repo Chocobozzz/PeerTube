@@ -11,11 +11,11 @@ import { UserUpdate } from '@shared/models'
   styleUrls: [ './user-password.component.scss' ]
 })
 export class UserPasswordComponent extends FormReactive implements OnInit {
-  error: string
-  username: string
-  showPassword = false
-
   @Input() userId: number
+  @Input() username: string
+
+  error: string
+  showPassword = false
 
   constructor (
     protected formReactiveService: FormReactiveService,

@@ -104,7 +104,26 @@
     "@typescript-eslint/require-await": "error",
 
     // bugged but useful
-    "@typescript-eslint/restrict-plus-operands": "off"
+    "@typescript-eslint/restrict-plus-operands": "off",
+
+    // Requires strictNullChecks
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "@typescript-eslint/consistent-type-imports": "off",
+    "@typescript-eslint/consistent-indexed-object-style": "off",
+    "@typescript-eslint/no-confusing-void-expression": "off",
+    "@typescript-eslint/consistent-type-exports": "off",
+    "@typescript-eslint/key-spacing": "off",
+
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "types": {
+          "{}": false,
+          "Function": false
+        },
+        "extendDefaults": true
+      }
+    ]
   },
   "ignorePatterns": [
     "node_modules/"

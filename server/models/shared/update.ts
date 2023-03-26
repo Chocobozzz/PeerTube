@@ -1,9 +1,15 @@
-import { QueryTypes, Transaction } from 'sequelize'
-import { sequelizeTypescript } from '@server/initializers/database'
+import { QueryTypes, Sequelize, Transaction } from 'sequelize'
 
 // Sequelize always skip the update if we only update updatedAt field
-function setAsUpdated (table: string, id: number, transaction?: Transaction) {
-  return sequelizeTypescript.query(
+function setAsUpdated (options: {
+  sequelize: Sequelize
+  table: string
+  id: number
+  transaction?: Transaction
+}) {
+  const { sequelize, table, id, transaction } = options
+
+  return sequelize.query(
     `UPDATE "${table}" SET "updatedAt" = :updatedAt WHERE id = :id`,
     {
       replacements: { table, id, updatedAt: new Date() },

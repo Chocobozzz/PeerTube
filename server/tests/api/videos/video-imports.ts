@@ -41,7 +41,7 @@ async function checkVideosServer1 (server: PeerTubeServer, idHttp: string, idMag
   const videoTorrent = await server.videos.get({ id: idTorrent })
 
   for (const video of [ videoMagnet, videoTorrent ]) {
-    expect(video.category.label).to.equal('Misc')
+    expect(video.category.label).to.equal('Unknown')
     expect(video.licence.label).to.equal('Unknown')
     expect(video.language.label).to.equal('Unknown')
     expect(video.nsfw).to.be.false
@@ -67,6 +67,8 @@ async function checkVideoServer2 (server: PeerTubeServer, id: number | string) {
   expect(video.nsfw).to.be.false
   expect(video.description).to.equal('my super description')
   expect(video.tags).to.deep.equal([ 'supertag1', 'supertag2' ])
+
+  await testImage(server.url, 'thumbnail', video.thumbnailPath)
 
   expect(video.files).to.have.lengthOf(1)
 
@@ -254,18 +256,20 @@ describe('Test video imports', function () {
       it('Should import a video on server 2 with some fields', async function () {
         this.timeout(60_000)
 
-        const attributes = {
-          targetUrl: FIXTURE_URLS.youtube,
-          channelId: servers[1].store.channel.id,
-          privacy: VideoPrivacy.PUBLIC,
-          category: 10,
-          licence: 7,
-          language: 'en',
-          name: 'my super name',
-          description: 'my super description',
-          tags: [ 'supertag1', 'supertag2' ]
-        }
-        const { video } = await servers[1].imports.importVideo({ attributes })
+        const { video } = await servers[1].imports.importVideo({
+          attributes: {
+            targetUrl: FIXTURE_URLS.youtube,
+            channelId: servers[1].store.channel.id,
+            privacy: VideoPrivacy.PUBLIC,
+            category: 10,
+            licence: 7,
+            language: 'en',
+            name: 'my super name',
+            description: 'my super description',
+            tags: [ 'supertag1', 'supertag2' ],
+            thumbnailfile: 'thumbnail.jpg'
+          }
+        })
         expect(video.name).to.equal('my super name')
       })
 

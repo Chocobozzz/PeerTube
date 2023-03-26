@@ -18,10 +18,9 @@
     </tr>
 
     <tr>
-      <th i18n class="label" scope="row">User registration allowed</th>
-      <td>
-        <my-feature-boolean [value]="serverConfig.signup.allowed"></my-feature-boolean>
-      </td>
+      <th i18n class="label" scope="row">User registration</th>
+
+      <td class="value">{{ buildRegistrationLabel() }}</td>
     </tr>
 
     <tr>

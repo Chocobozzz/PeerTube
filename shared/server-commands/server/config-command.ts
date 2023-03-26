@@ -18,6 +18,33 @@ export class ConfigCommand extends AbstractCommand {
     }
   }
 
+  // ---------------------------------------------------------------------------
+
+  static getEmailOverrideConfig (emailPort: number) {
+    return {
+      smtp: {
+        hostname: '127.0.0.1',
+        port: emailPort
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+
+  enableSignup (requiresApproval: boolean, limit = -1) {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        signup: {
+          enabled: true,
+          requiresApproval,
+          limit
+        }
+      }
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   disableImports () {
     return this.setImportsEnabled(false)
   }
@@ -44,6 +71,16 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
+  // ---------------------------------------------------------------------------
+
+  enableChannelSync () {
+    return this.setChannelSyncEnabled(true)
+  }
+
+  disableChannelSync () {
+    return this.setChannelSyncEnabled(false)
+  }
+
   private setChannelSyncEnabled (enabled: boolean) {
     return this.updateExistingSubConfig({
       newConfig: {
@@ -56,13 +93,7 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
-  enableChannelSync () {
-    return this.setChannelSyncEnabled(true)
-  }
-
-  disableChannelSync () {
-    return this.setChannelSyncEnabled(false)
-  }
+  // ---------------------------------------------------------------------------
 
   enableLive (options: {
     allowReplay?: boolean
@@ -142,6 +173,8 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
+  // ---------------------------------------------------------------------------
+
   enableStudio () {
     return this.updateExistingSubConfig({
       newConfig: {
@@ -151,6 +184,8 @@ export class ConfigCommand extends AbstractCommand {
       }
     })
   }
+
+  // ---------------------------------------------------------------------------
 
   getConfig (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/config'
@@ -304,6 +339,7 @@ export class ConfigCommand extends AbstractCommand {
       signup: {
         enabled: false,
         limit: 5,
+        requiresApproval: true,
         requiresEmailVerification: false,
         minimumAge: 16
       },

@@ -3,6 +3,7 @@
 import { expect } from 'chai'
 import { checkPlaylistFilesWereRemoved, testImage } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
+import { uuidToShort } from '@shared/extra-utils'
 import {
   HttpStatusCode,
   VideoPlaylist,
@@ -23,7 +24,6 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
-import { uuidToShort } from '@shared/extra-utils'
 
 async function checkPlaylistElementType (
   servers: PeerTubeServer[],
@@ -114,7 +114,7 @@ describe('Test video playlists', function () {
     await waitJobs(servers)
   })
 
-  describe('Get default playlists', function () {
+  describe('Check playlists filters and privacies', function () {
 
     it('Should list video playlist privacies', async function () {
       const privacies = await commands[0].getPrivacies()
@@ -123,8 +123,20 @@ describe('Test video playlists', function () {
       expect(privacies[3]).to.equal('Private')
     })
 
-    it('Should list watch later playlist', async function () {
+    it('Should filter on playlist type', async function () {
+      this.timeout(30000)
+
       const token = servers[0].accessToken
+
+      await commands[0].create({
+        attributes: {
+          displayName: 'my super playlist',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          description: 'my super description',
+          thumbnailfile: 'thumbnail.jpg',
+          videoChannelId: servers[0].store.channel.id
+        }
+      })
 
       {
         const body = await commands[0].listByAccount({ token, handle: 'root', playlistType: VideoPlaylistType.WATCH_LATER })
@@ -136,13 +148,51 @@ describe('Test video playlists', function () {
         expect(playlist.displayName).to.equal('Watch later')
         expect(playlist.type.id).to.equal(VideoPlaylistType.WATCH_LATER)
         expect(playlist.type.label).to.equal('Watch later')
+        expect(playlist.privacy.id).to.equal(VideoPlaylistPrivacy.PRIVATE)
       }
 
       {
-        const body = await commands[0].listByAccount({ token, handle: 'root', playlistType: VideoPlaylistType.REGULAR })
+        const bodyList = await commands[0].list({ playlistType: VideoPlaylistType.WATCH_LATER })
+        const bodyChannel = await commands[0].listByChannel({ handle: 'root_channel', playlistType: VideoPlaylistType.WATCH_LATER })
 
-        expect(body.total).to.equal(0)
-        expect(body.data).to.have.lengthOf(0)
+        for (const body of [ bodyList, bodyChannel ]) {
+          expect(body.total).to.equal(0)
+          expect(body.data).to.have.lengthOf(0)
+        }
+      }
+
+      {
+        const bodyList = await commands[0].list({ playlistType: VideoPlaylistType.REGULAR })
+        const bodyChannel = await commands[0].listByChannel({ handle: 'root_channel', playlistType: VideoPlaylistType.REGULAR })
+
+        let playlist: VideoPlaylist = null
+        for (const body of [ bodyList, bodyChannel ]) {
+
+          expect(body.total).to.equal(1)
+          expect(body.data).to.have.lengthOf(1)
+
+          playlist = body.data[0]
+          expect(playlist.displayName).to.equal('my super playlist')
+          expect(playlist.privacy.id).to.equal(VideoPlaylistPrivacy.PUBLIC)
+          expect(playlist.type.id).to.equal(VideoPlaylistType.REGULAR)
+        }
+
+        await commands[0].update({
+          playlistId: playlist.id,
+          attributes: {
+            privacy: VideoPlaylistPrivacy.PRIVATE
+          }
+        })
+      }
+
+      {
+        const bodyList = await commands[0].list({ playlistType: VideoPlaylistType.REGULAR })
+        const bodyChannel = await commands[0].listByChannel({ handle: 'root_channel', playlistType: VideoPlaylistType.REGULAR })
+
+        for (const body of [ bodyList, bodyChannel ]) {
+          expect(body.total).to.equal(0)
+          expect(body.data).to.have.lengthOf(0)
+        }
       }
 
       {
@@ -752,19 +802,6 @@ describe('Test video playlists', function () {
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
       }
     })
-
-    it('Should hide the video if it is NSFW', async function () {
-      const body = await commands[0].listVideos({ token: userTokenServer1, playlistId: playlistServer1UUID2, query: { nsfw: 'false' } })
-      expect(body.total).to.equal(3)
-
-      const elements = body.data
-      const element = elements.find(e => e.position === 3)
-
-      expect(element).to.exist
-      expect(element.video).to.be.null
-      expect(element.type).to.equal(VideoPlaylistElementType.UNAVAILABLE)
-    })
-
   })
 
   describe('Managing playlist elements', function () {

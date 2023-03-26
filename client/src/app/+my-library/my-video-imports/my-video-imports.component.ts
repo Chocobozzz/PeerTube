@@ -90,7 +90,7 @@ export class MyVideoImportsComponent extends RestTable implements OnInit {
       })
   }
 
-  protected reloadData () {
+  protected reloadDataInternal () {
     this.videoImportService.getMyVideoImports(this.pagination, this.sort, this.search)
         .subscribe({
           next: resultList => {

@@ -1,7 +1,7 @@
 import CliTable3 from 'cli-table3'
 import { OptionValues, program } from 'commander'
 import { isUserUsernameValid } from '../helpers/custom-validators/users'
-import { assignToken, buildServer, getNetrc, getSettings, writeSettings } from './cli'
+import { assignToken, buildServer, getNetrc, getSettings, writeSettings } from './shared'
 
 import prompt = require('prompt')
 

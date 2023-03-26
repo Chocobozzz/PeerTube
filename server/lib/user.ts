@@ -10,7 +10,7 @@ import { sequelizeTypescript } from '../initializers/database'
 import { AccountModel } from '../models/account/account'
 import { UserNotificationSettingModel } from '../models/user/user-notification-setting'
 import { MAccountDefault, MChannelActor } from '../types/models'
-import { MUser, MUserDefault, MUserId } from '../types/models/user'
+import { MRegistration, MUser, MUserDefault, MUserId } from '../types/models/user'
 import { generateAndSaveActorKeys } from './activitypub/actors'
 import { getLocalAccountActivityPubUrl } from './activitypub/url'
 import { Emailer } from './emailer'
@@ -97,7 +97,7 @@ async function createUserAccountAndChannelAndPlaylist (parameters: {
     })
     userCreated.Account = accountCreated
 
-    const channelAttributes = await buildChannelAttributes(userCreated, t, channelNames)
+    const channelAttributes = await buildChannelAttributes({ user: userCreated, transaction: t, channelNames })
     const videoChannel = await createLocalVideoChannel(channelAttributes, accountCreated, t)
 
     const videoPlaylist = await createWatchLaterPlaylist(accountCreated, t)
@@ -160,15 +160,28 @@ async function createApplicationActor (applicationId: number) {
 // ---------------------------------------------------------------------------
 
 async function sendVerifyUserEmail (user: MUser, isPendingEmail = false) {
-  const verificationString = await Redis.Instance.setVerifyEmailVerificationString(user.id)
-  let url = WEBSERVER.URL + '/verify-account/email?userId=' + user.id + '&verificationString=' + verificationString
+  const verificationString = await Redis.Instance.setUserVerifyEmailVerificationString(user.id)
+  let verifyEmailUrl = `${WEBSERVER.URL}/verify-account/email?userId=${user.id}&verificationString=${verificationString}`
 
-  if (isPendingEmail) url += '&isPendingEmail=true'
+  if (isPendingEmail) verifyEmailUrl += '&isPendingEmail=true'
 
-  const email = isPendingEmail ? user.pendingEmail : user.email
+  const to = isPendingEmail
+    ? user.pendingEmail
+    : user.email
+
   const username = user.username
 
-  Emailer.Instance.addVerifyEmailJob(username, email, url)
+  Emailer.Instance.addVerifyEmailJob({ username, to, verifyEmailUrl, isRegistrationRequest: false })
+}
+
+async function sendVerifyRegistrationEmail (registration: MRegistration) {
+  const verificationString = await Redis.Instance.setRegistrationVerifyEmailVerificationString(registration.id)
+  const verifyEmailUrl = `${WEBSERVER.URL}/verify-account/email?registrationId=${registration.id}&verificationString=${verificationString}`
+
+  const to = registration.email
+  const username = registration.username
+
+  Emailer.Instance.addVerifyEmailJob({ username, to, verifyEmailUrl, isRegistrationRequest: true })
 }
 
 // ---------------------------------------------------------------------------
@@ -232,7 +245,10 @@ export {
   createApplicationActor,
   createUserAccountAndChannelAndPlaylist,
   createLocalAccountWithoutKeys,
+
   sendVerifyUserEmail,
+  sendVerifyRegistrationEmail,
+
   isAbleToUploadVideo,
   buildUser
 }
@@ -264,7 +280,13 @@ function createDefaultUserNotificationSettings (user: MUserId, t: Transaction | 
   return UserNotificationSettingModel.create(values, { transaction: t })
 }
 
-async function buildChannelAttributes (user: MUser, transaction?: Transaction, channelNames?: ChannelNames) {
+async function buildChannelAttributes (options: {
+  user: MUser
+  transaction?: Transaction
+  channelNames?: ChannelNames
+}) {
+  const { user, transaction, channelNames } = options
+
   if (channelNames) return channelNames
 
   const channelName = await findAvailableLocalActorName(user.username + '_channel', transaction)

@@ -2,8 +2,8 @@ import videojs from 'video.js'
 import { buildVideoLink, decorateVideoLink } from '@shared/core-utils'
 import { PeerTubeLinkButtonOptions } from '../../types'
 
-const Button = videojs.getComponent('Button')
-class PeerTubeLinkButton extends Button {
+const Component = videojs.getComponent('Component')
+class PeerTubeLinkButton extends Component {
 
   constructor (player: videojs.Player, options?: PeerTubeLinkButtonOptions) {
     super(player, options as any)
@@ -17,10 +17,6 @@ class PeerTubeLinkButton extends Button {
     this.el().setAttribute('href', this.buildLink())
   }
 
-  handleClick () {
-    this.player().pause()
-  }
-
   private buildElement () {
     const el = videojs.dom.createEl('a', {
       href: this.buildLink(),
@@ -31,6 +27,7 @@ class PeerTubeLinkButton extends Button {
     })
 
     el.addEventListener('mouseenter', () => this.updateHref())
+    el.addEventListener('click', () => this.player().pause())
 
     return el as HTMLButtonElement
   }

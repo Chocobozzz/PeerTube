@@ -62,3 +62,10 @@
   <span i18n class="attribute-label">Duration</span>
   <span class="attribute-value">{{ video.duration | myDurationFormatter }}</span>
 </div>
+
+<div class="attribute attribute-plugin" *ngFor="let metadata of pluginMetadata">
+  <span class="attribute-label">{{ metadata.label }}</span>
+
+  <span *ngIf="metadata.value" class="attribute-value">{{ metadata.value }}</span>
+  <span *ngIf="metadata.safeHTML" class="attribute-value" [innerHTML]="metadata.safeHTML"></span>
+</div>

@@ -1,29 +1,8 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.about-instance-title {
-  display: flex;
-  justify-content: space-between;
-
-  .title {
-    font-size: 20px;
-    font-weight: $font-semibold;
-  }
-
-  .contact-admin {
-    @include peertube-button-link;
-    @include orange-button;
-
-    height: fit-content;
-  }
-}
-
-.instance-badges {
-  margin-bottom: 20px;
-
-  .pt-badge {
-    @include margin-right(5px);
-  }
+.pt-badge {
+  @include margin-right(5px);
 }
 
 .section-title {
@@ -36,22 +15,13 @@
 
 .middle-title {
   @include in-content-small-title;
+  @include margin-bottom(1.5rem);
 
   margin-top: 0;
-  margin-bottom: 25px;
 }
 
 .block {
-  margin-bottom: 75px;
-}
-
-.short-description {
-  margin-top: 10px;
-}
-
-.short-description .dedicated-to-nsfw {
-  margin-top: 20px;
-  font-weight: $font-semibold;
+  @include margin-bottom(4.5rem);
 }
 
 .anchor-link {

@@ -71,7 +71,9 @@ export class ControlBarOptionsBuilder {
   private getSettingsButton () {
     const settingEntries: string[] = []
 
-    settingEntries.push('playbackRateMenuButton')
+    if (!this.options.isLive) {
+      settingEntries.push('playbackRateMenuButton')
+    }
 
     if (this.options.captions === true) settingEntries.push('captionsButton')
 

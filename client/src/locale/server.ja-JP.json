@@ -28,7 +28,7 @@
     "Unlisted": "未収載",
     "Private": "非公開",
     "Internal": "ローカルのみ",
-    "Published": "投稿済",
+    "Published": "公開済み",
     "To transcode": "トランスコード待機中",
     "To import": "インポート待機中",
     "Waiting for livestream": "ライブ配信待機中",
@@ -54,7 +54,6 @@
     "Playlist: {1}": "プレイリスト:{1}",
     "By {1}": "アップロード: {1}",
     "Unavailable video": "利用できない動画",
-    "Misc": "その他",
     "Unknown": "不明",
     "Afar": "アファール語",
     "Abkhazian": "アブハジア語",
@@ -65,6 +64,7 @@
     "Aragonese": "アラゴン語",
     "American Sign Language": "アメリカ手話",
     "Assamese": "アッサム語",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "アヴァル語",
     "Kotava": "コタヴァ語",
     "Aymara": "アイマラ語",
@@ -254,6 +254,7 @@
     "Toki Pona": "トキポナ",
     "Simplified Chinese": "簡体字中国語",
     "Traditional Chinese": "繁体字中国語",
+    "Misc": "その他",
     "Normal mode": "ノーマルモード",
     "Theater mode": "シアターモード"
 }

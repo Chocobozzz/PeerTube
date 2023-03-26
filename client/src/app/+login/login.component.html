@@ -13,7 +13,7 @@
       </h5>
 
       <p *ngIf="signupAllowed" i18n>
-        This instance allows registration. However, be careful to check the <a class="link-orange terms-anchor" (click)="onTermsClick($event, instanceInformation)" href='#'>Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance" fragment="terms">Terms</a> before creating an account.
+        This instance allows registration. However, be careful to check the <a class="link-orange terms-anchor d-inline" (click)="onTermsClick($event, instanceInformation)" href='#'>Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance" fragment="terms">Terms</a> before creating an account.
         You may also search for another instance to match your exact needs at: <a class="link-orange" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
       </p>
 
@@ -38,7 +38,7 @@
     <div class="wrapper">
       <div class="login-form-and-externals">
 
-        <form myPluginSelector pluginSelectorId="login-form" role="form" (ngSubmit)="login()" [formGroup]="form">
+        <form class="w-100 m-0" myPluginSelector pluginSelectorId="login-form" role="form" (ngSubmit)="login()" [formGroup]="form">
           <ng-container *ngIf="!otpStep">
             <div class="form-group">
               <div>
@@ -78,20 +78,20 @@
             ></my-input-text>
           </div>
 
-          <input type="submit" class="peertube-button orange-button" i18n-value value="Login" [disabled]="!form.valid">
+          <input type="submit" class="peertube-button orange-button w-100" i18n-value value="Login" [disabled]="!form.valid">
 
-          <div *ngIf="!otpStep" class="additional-links">
-            <a i18n role="button" class="link-orange" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">I forgot my password</a>
+          <div *ngIf="!otpStep" class="additional-links d-flex justify-content-center mt-4 mb-5">
+            <a i18n role="button" class="link-orange mx-3" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">I forgot my password</a>
 
             <ng-container *ngIf="signupAllowed">
               <span>·</span>
-              <a i18n routerLink="/signup" class="link-orange">Create an account</a>
+              <a i18n routerLink="/signup" class="link-orange mx-3">Create an account</a>
             </ng-container>
           </div>
         </form>
 
         <div class="external-login-blocks" *ngIf="getExternalLogins().length !== 0">
-          <div class="block-title" i18n>Or sign in with</div>
+          <div class="fw-semibold" i18n>Or sign in with</div>
 
           <div>
             <a class="external-login-block" *ngFor="let auth of getExternalLogins()" [href]="getAuthHref(auth)" role="button">
@@ -119,13 +119,13 @@
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hideForgotPasswordModal()"></my-global-icon>
   </div>
 
-  <div class="modal-body">
+  <div class="modal-body text-start">
 
     <div *ngIf="isEmailDisabled()" class="alert alert-danger" i18n>
       We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.
     </div>
 
-    <div *ngIf="!isEmailDisabled()" class="forgot-password-instructions" i18n>
+    <div *ngIf="!isEmailDisabled()" class="mb-4" i18n>
       Enter your email address and we will send you a link to reset your password.
     </div>
 
@@ -140,7 +140,7 @@
 
   <div class="modal-footer inputs">
     <input
-      type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
+      type="button" role="button" i18n-value value="Cancel" class="peertube-button d-none d-sm-block"
       (click)="hideForgotPasswordModal()" (key.enter)="hideForgotPasswordModal()"
     >
 

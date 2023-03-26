@@ -24,8 +24,8 @@
 
         <div class="w-100 d-flex flex-column">
           <my-link
-            [internalLink]="videoRouterLink" [href]="videoHref" [target]="videoTarget"
-            [title]="video.name"class="video-miniature-name" [ngClass]="{ 'blur-filter': isVideoBlur }" tabindex="-1"
+            [internalLink]="videoRouterLink" [href]="videoHref" [target]="videoTarget" [inheritParentCSS]="true"
+            [title]="video.name" class="video-miniature-name" className="ellipsis-multiline-2" [ngClass]="{ 'blur-filter': isVideoBlur }"
           >
             {{ video.name }}
           </my-link>
@@ -40,11 +40,9 @@
             </span>
           </span>
 
-          <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/c', video.byVideoChannel ]">
-            {{ authorAccount }}
-          </a>
-          <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerVideoChannel()" class="video-miniature-channel" [routerLink]="[ '/c', video.byVideoChannel ]">
-            {{ authorChannel }}
+          <a *ngIf="displayOptions.by" class="video-miniature-account" [routerLink]="[ '/c', video.byVideoChannel ]">
+            <ng-container *ngIf="displayOwnerAccount()">{{ authorAccount }}</ng-container>
+            <ng-container *ngIf="displayOwnerVideoChannel()">{{ authorChannel }}</ng-container>
           </a>
 
           <div class="video-info-privacy">
@@ -53,8 +51,8 @@
             <ng-container *ngIf="displayOptions.state">{{ getStateLabel(video) }}</ng-container>
           </div>
 
-          <div *ngIf="containedInPlaylists" class="video-contained-in-playlists">
-            <a *ngFor="let playlist of containedInPlaylists" class="chip rectangular bg-secondary text-light" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
+          <div *ngIf="containedInPlaylists" class="fs-6">
+            <a *ngFor="let playlist of containedInPlaylists" class="pt-badge badge-secondary" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
               {{ playlist.playlistDisplayName }}
             </a>
           </div>

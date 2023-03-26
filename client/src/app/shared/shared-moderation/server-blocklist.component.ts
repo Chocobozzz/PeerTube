@@ -75,7 +75,7 @@ export class GenericServerBlocklistComponent extends RestTable implements OnInit
     })
   }
 
-  protected reloadData () {
+  protected reloadDataInternal () {
     const operation = this.mode === BlocklistComponentType.Account
       ? this.blocklistService.getUserServerBlocklist({
         pagination: this.pagination,

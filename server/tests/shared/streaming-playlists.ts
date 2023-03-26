@@ -40,6 +40,8 @@ async function checkSegmentHash (options: {
   expect(sha256(segmentBody)).to.equal(shaBody[videoName][range])
 }
 
+// ---------------------------------------------------------------------------
+
 async function checkLiveSegmentHash (options: {
   server: PeerTubeServer
   baseUrlSegment: string
@@ -55,6 +57,8 @@ async function checkLiveSegmentHash (options: {
 
   expect(sha256(segmentBody)).to.equal(shaBody[segmentName])
 }
+
+// ---------------------------------------------------------------------------
 
 async function checkResolutionsInMasterPlaylist (options: {
   server: PeerTubeServer
@@ -210,7 +214,7 @@ async function checkVideoFileTokenReinjection (options: {
       ? i
       : `-${resolution}`
 
-    expect(text).to.contain(`${suffix}.m3u8?videoFileToken=${videoFileToken}`)
+    expect(text).to.contain(`${suffix}.m3u8?videoFileToken=${videoFileToken}&reinjectVideoFileToken=true`)
   }
 
   const resolutionPlaylists = extractResolutionPlaylistUrls(hls.playlistUrl, text)
@@ -224,6 +228,7 @@ async function checkVideoFileTokenReinjection (options: {
       : '.mp4'
 
     expect(text).to.contain(`${extension}?videoFileToken=${videoFileToken}`)
+    expect(text).not.to.contain(`reinjectVideoFileToken=true`)
   }
 }
 

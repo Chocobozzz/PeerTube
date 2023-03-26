@@ -4,7 +4,7 @@ import { getFFmpegVersion } from '@server/helpers/ffmpeg'
 import { uniqify } from '@shared/core-utils'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
-import { isProdInstance, parseSemVersion } from '../helpers/core-utils'
+import { isProdInstance, parseBytes, parseSemVersion } from '../helpers/core-utils'
 import { isArray } from '../helpers/custom-validators/misc'
 import { logger } from '../helpers/logger'
 import { ApplicationModel, getServerActor } from '../models/application/application'
@@ -116,6 +116,11 @@ function checkEmailConfig () {
       throw new Error('Emailer is disabled but you require signup email verification.')
     }
 
+    if (CONFIG.SIGNUP.ENABLED && CONFIG.SIGNUP.REQUIRES_APPROVAL) {
+      // eslint-disable-next-line max-len
+      logger.warn('Emailer is disabled but signup approval is enabled: PeerTube will not be able to send an email to the user upon acceptance/rejection of the registration request')
+    }
+
     if (CONFIG.CONTACT_FORM.ENABLED) {
       logger.warn('Emailer is disabled so the contact form will not work.')
     }
@@ -174,7 +179,8 @@ function checkRemoteRedundancyConfig () {
 function checkStorageConfig () {
   // Check storage directory locations
   if (isProdInstance()) {
-    const configStorage = config.get('storage')
+    const configStorage = config.get<{ [ name: string ]: string }>('storage')
+
     for (const key of Object.keys(configStorage)) {
       if (configStorage[key].startsWith('storage/')) {
         logger.warn(
@@ -245,7 +251,7 @@ function checkLiveConfig () {
 
     if (CONFIG.LIVE.RTMPS.ENABLED) {
       if (!CONFIG.LIVE.RTMPS.KEY_FILE) {
-        throw new Error('You must specify a key file to enabled RTMPS')
+        throw new Error('You must specify a key file to enable RTMPS')
       }
 
       if (!CONFIG.LIVE.RTMPS.CERT_FILE) {
@@ -279,12 +285,9 @@ function checkObjectStorageConfig () {
       )
     }
 
-    if (!CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PUBLIC) {
-      throw new Error('object_storage.upload_acl.public must be set')
-    }
-
-    if (!CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PRIVATE) {
-      throw new Error('object_storage.upload_acl.private must be set')
+    if (CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART > parseBytes('250MB')) {
+      // eslint-disable-next-line max-len
+      logger.warn(`Object storage max upload part seems to have a big value (${CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART} bytes). Consider using a lower one (like 100MB).`)
     }
   }
 }

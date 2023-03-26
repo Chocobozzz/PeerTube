@@ -14,7 +14,7 @@ import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { HTMLServerConfig, VideoExistInPlaylist, VideoPlaylistType, VideoPrivacy, VideoState } from '@shared/models'
 import { LinkType } from '../../../types/link.type'
 import { ActorAvatarSize } from '../shared-actor-image/actor-avatar.component'
-import { Video } from '../shared-main'
+import { Video, VideoService } from '../shared-main'
 import { VideoPlaylistService } from '../shared-video-playlist'
 import { VideoActionsDisplayType } from './video-actions-dropdown.component'
 
@@ -103,6 +103,7 @@ export class VideoMiniatureComponent implements OnInit {
     private serverService: ServerService,
     private authService: AuthService,
     private videoPlaylistService: VideoPlaylistService,
+    private videoService: VideoService,
     private cd: ChangeDetectorRef,
     @Inject(LOCALE_ID) private localeId: string
   ) {}
@@ -276,20 +277,7 @@ export class VideoMiniatureComponent implements OnInit {
       return
     }
 
-    const accountName = this.video.account.name
-
-    // If the video channel name is an UUID (not really displayable, we changed this behaviour in v1.0.0-beta.12)
-    // Or has not been customized (default created channel display name)
-    // -> Use the account name
-    if (
-      this.video.channel.displayName === `Default ${accountName} channel` ||
-      this.video.channel.displayName === `Main ${accountName} channel` ||
-      this.video.channel.name.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
-    ) {
-      this.ownerDisplayType = 'account'
-    } else {
-      this.ownerDisplayType = 'videoChannel'
-    }
+    this.ownerDisplayType = this.videoService.buildDefaultOwnerDisplayType(this.video)
   }
 
   private loadWatchLater () {

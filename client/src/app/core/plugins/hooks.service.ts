@@ -57,13 +57,13 @@ export class HooksService {
     })
   }
 
-  async wrapObject<T, U extends ClientFilterHookName> (result: T, scope: PluginClientScope, hookName: U) {
+  async wrapObject<T, U extends ClientFilterHookName> (result: T, scope: PluginClientScope, hookName: U, context?: any) {
     await this.pluginService.ensurePluginsAreLoaded(scope)
 
-    return this.wrapObjectWithoutScopeLoad(result, hookName)
+    return this.wrapObjectWithoutScopeLoad(result, hookName, context)
   }
 
-  private wrapObjectWithoutScopeLoad<T, U extends ClientFilterHookName> (result: T, hookName: U) {
-    return this.pluginService.runHook(hookName, result)
+  private wrapObjectWithoutScopeLoad<T, U extends ClientFilterHookName> (result: T, hookName: U, context?: any) {
+    return this.pluginService.runHook(hookName, result, context)
   }
 }

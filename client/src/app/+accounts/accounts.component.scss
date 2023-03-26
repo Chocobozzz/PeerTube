@@ -4,10 +4,8 @@
 @use '_miniature' as *;
 
 .root {
-  --myGlobalTopPadding: 60px;
-  --myImgMargin: 30px;
-  --myFontSize: 16px;
-  --myGreyFontSize: 16px;
+  --myFontSize: 1rem;
+  --myGreyFontSize: 1rem;
 }
 
 .section-label {
@@ -30,12 +28,6 @@
   }
 }
 
-my-user-moderation-dropdown {
-  margin: 0 10px;
-
-  height: fit-content;
-}
-
 .copy-button {
   @include margin-left(3px);
 
@@ -48,20 +40,19 @@ my-user-moderation-dropdown {
 
 .account-info {
   @include grid-videos-miniature-margins(false, 15px);
+  @include padding-top(3.75rem);
+  @include padding-bottom(3.75rem);
+  @include margin-bottom(3rem);
+  @include font-size(1rem);
 
-  display: grid;
   grid-template-columns: 1fr min-content;
   grid-template-rows: auto auto;
 
   background-color: pvar(--submenuBackgroundColor);
-  margin-bottom: 45px;
-  padding-top: var(--myGlobalTopPadding);
-  padding-bottom: var(--myGlobalTopPadding);
-  font-size: var(--myFontSize);
 }
 
 .account-avatar-row {
-  @include avatar-row-responsive(var(--myImgMargin), var(--myGreyFontSize));
+  @include avatar-row-responsive(2rem, var(--myGreyFontSize));
 }
 
 .actor-display-name {
@@ -76,8 +67,8 @@ my-user-moderation-dropdown {
 
 .show-more {
   @include show-more-description;
+  @include padding-bottom(3.75rem);
 
-  display: none;
   text-align: center;
 }
 
@@ -90,11 +81,11 @@ my-user-moderation-dropdown {
   justify-content: flex-end;
   align-content: flex-start;
 
-  > *:not(:last-child) {
-    margin-bottom: 15px;
+  >*:not(:last-child) {
+    @include margin-bottom(1rem);
   }
 
-  > a {
+  >a {
     white-space: nowrap;
   }
 }
@@ -104,24 +95,11 @@ my-user-moderation-dropdown {
 }
 
 @media screen and (max-width: $small-view) {
-  .root {
-    --myGlobalTopPadding: 45px;
-    --myChannelImgMargin: 15px;
-  }
-
-  .account-info {
-    display: block;
-    padding-bottom: 60px;
-  }
 
   .description:not(.expanded) {
     @include fade-text(30px, pvar(--submenuBackgroundColor));
 
     max-height: 70px;
-  }
-
-  .show-more {
-    display: block;
   }
 
   .buttons {
@@ -131,22 +109,12 @@ my-user-moderation-dropdown {
 
 @media screen and (max-width: $mobile-view) {
   .root {
-    --myGlobalTopPadding: 15px;
     --myFontSize: 14px;
     --myGreyFontSize: 13px;
-  }
-
-  .account-info {
-    display: block;
-    padding-bottom: 30px;
   }
 
   .links {
     margin: auto !important;
     width: min-content;
-  }
-
-  .show-more {
-    margin-bottom: 30px;
   }
 }

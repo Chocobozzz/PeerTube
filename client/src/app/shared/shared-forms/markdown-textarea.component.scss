@@ -23,7 +23,7 @@ $input-border-radius: 3px;
   }
 
   .nav-preview {
-    padding: 10px;
+    padding: 10px 0;
 
     border: 1px solid pvar(--inputBorderColor);
     border-top: 1px dashed pvar(--inputBorderColor);
@@ -38,14 +38,9 @@ $input-border-radius: 3px;
     border-bottom: 2px solid pvar(--mainColor);
 
     .maximize-button {
-      @include margin-left(15px);
-
       opacity: 0.6;
-      cursor: default;
 
-      &:not(.disabled) {
-        cursor: pointer;
-
+      &:not([disabled]) {
         &:hover,
         &:active {
           opacity: 1;
@@ -105,10 +100,6 @@ $input-border-radius: 3px;
 
       padding: 20px 0;
       width: 100% !important;
-
-      .maximize-button {
-        @include margin-right(15px);
-      }
     }
 
     textarea {

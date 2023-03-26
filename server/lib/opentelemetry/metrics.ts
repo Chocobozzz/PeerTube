@@ -7,6 +7,7 @@ import { CONFIG } from '@server/initializers/config'
 import { MVideoImmutable } from '@server/types/models'
 import { PlaybackMetricCreate } from '@shared/models'
 import {
+  BittorrentTrackerObserversBuilder,
   JobQueueObserversBuilder,
   LivesObserversBuilder,
   NodeJSObserversBuilder,
@@ -41,7 +42,7 @@ class OpenTelemetryMetrics {
     })
   }
 
-  registerMetrics () {
+  registerMetrics (options: { trackerServer: any }) {
     if (CONFIG.OPEN_TELEMETRY.METRICS.ENABLED !== true) return
 
     logger.info('Registering Open Telemetry metrics')
@@ -61,7 +62,9 @@ class OpenTelemetryMetrics {
 
     this.meter = metrics.getMeter('default')
 
-    this.buildRequestObserver()
+    if (CONFIG.OPEN_TELEMETRY.METRICS.HTTP_REQUEST_DURATION.ENABLED === true) {
+      this.buildRequestObserver()
+    }
 
     this.playbackMetrics = new PlaybackMetrics(this.meter)
     this.playbackMetrics.buildCounters()
@@ -80,6 +83,9 @@ class OpenTelemetryMetrics {
 
     const viewersObserversBuilder = new ViewersObserversBuilder(this.meter)
     viewersObserversBuilder.buildObservers()
+
+    const bittorrentTrackerObserversBuilder = new BittorrentTrackerObserversBuilder(this.meter, options.trackerServer)
+    bittorrentTrackerObserversBuilder.buildObservers()
   }
 
   observePlaybackMetric (video: MVideoImmutable, metrics: PlaybackMetricCreate) {

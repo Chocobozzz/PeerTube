@@ -1,8 +1,9 @@
 <h1 class="visually-hidden" i18n>Notifications</h1>
+
 <div class="header">
-  <a routerLink="/my-account/settings" fragment="notifications" i18n>
+  <a class="peertube-button-link grey-button" routerLink="/my-account/settings" fragment="notifications">
     <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
-    Notification preferences
+    <span i18n>Notification preferences</span>
   </a>
 
   <div class="peertube-select-container peertube-select-button ms-2 me-2">
@@ -13,7 +14,7 @@
     </select>
   </div>
 
-  <button class="btn ms-auto" [disabled]="!hasUnreadNotifications()" (click)="markAllAsRead()">
+  <button class="ms-auto peertube-button grey-button" [disabled]="!hasUnreadNotifications()" (click)="markAllAsRead()">
     <ng-container *ngIf="hasUnreadNotifications()">
       <my-global-icon iconName="tick" aria-hidden="true"></my-global-icon>
 

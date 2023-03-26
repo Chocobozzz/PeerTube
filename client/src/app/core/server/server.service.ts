@@ -40,7 +40,7 @@ export class ServerService {
 
   loadHTMLConfig () {
     try {
-      return this.loadHTMLConfigLocally()
+      this.loadHTMLConfigLocally()
     } catch (err) {
       // Expected in dev mode since we can't inject the config in the HTML
       if (environment.production !== false) {

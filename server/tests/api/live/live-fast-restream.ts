@@ -78,9 +78,15 @@ describe('Fast restream in live', function () {
       const video = await server.videos.get({ id: liveId })
       expect(video.streamingPlaylists).to.have.lengthOf(1)
 
-      await server.live.getSegmentFile({ videoUUID: liveId, segment: 0, playlistNumber: 0 })
-      await makeRawRequest({ url: video.streamingPlaylists[0].playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
-      await makeRawRequest({ url: video.streamingPlaylists[0].segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
+      try {
+        await server.live.getSegmentFile({ videoUUID: liveId, segment: 0, playlistNumber: 0 })
+        await makeRawRequest({ url: video.streamingPlaylists[0].playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url: video.streamingPlaylists[0].segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
+      } catch (err) {
+        // FIXME: try to debug error in CI "Unexpected end of JSON input"
+        console.error(err)
+        throw err
+      }
 
       await wait(100)
     }
@@ -88,6 +94,9 @@ describe('Fast restream in live', function () {
 
   async function runTest (replay: boolean) {
     const { ffmpegCommand, liveVideoUUID } = await fastRestreamWrapper({ replay })
+
+    // TODO: remove, we try to debug a test timeout failure here
+    console.log('Ensuring last live works')
 
     await ensureLastLiveWorks(liveVideoUUID)
 
@@ -129,7 +138,7 @@ describe('Fast restream in live', function () {
     await server.config.enableLive({ allowReplay: true, transcoding: true, resolutions: 'min' })
   })
 
-  it('Should correctly fast reastream in a permanent live with and without save replay', async function () {
+  it('Should correctly fast restream in a permanent live with and without save replay', async function () {
     this.timeout(480000)
 
     // A test can take a long time, so prefer to run them in parallel

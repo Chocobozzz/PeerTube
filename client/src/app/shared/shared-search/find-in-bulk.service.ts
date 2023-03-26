@@ -40,7 +40,7 @@ export class FindInBulkService {
 
     return this.getData({
       observableObject: this.getVideoInBulk,
-      finder: v => v.uuid === uuid,
+      finder: v => v.uuid === uuid || v.shortUUID === uuid,
       param: uuid
     })
   }

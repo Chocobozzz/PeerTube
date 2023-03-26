@@ -29,7 +29,7 @@
     "Private": "Yksityinen",
     "Internal": "Sisäinen",
     "Published": "Julkaistu",
-    "To transcode": "Transkoodauskeen",
+    "To transcode": "Transkoodaukseen",
     "To import": "Tuontiin",
     "Waiting for livestream": "Odotetaan livestriimiä",
     "Livestream ended": "Livestriimi päättyi",
@@ -54,7 +54,6 @@
     "Playlist: {1}": "Soittolista: {1}",
     "By {1}": "{1}",
     "Unavailable video": "Video ei saatavilla",
-    "Misc": "Muut",
     "Unknown": "Tuntematon",
     "Afar": "Afar",
     "Abkhazian": "Abhaasi",
@@ -65,6 +64,7 @@
     "Aragonese": "Aragonese",
     "American Sign Language": "Amerikkalainen viittomakieli",
     "Assamese": "Assamese",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "Avaric",
     "Kotava": "Kotava",
     "Aymara": "Aymara",
@@ -254,6 +254,7 @@
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Simplified Chinese",
     "Traditional Chinese": "Traditional Chinese",
+    "Misc": "Muut",
     "Normal mode": "Normaali tila",
     "Theater mode": "Teatteritila"
 }

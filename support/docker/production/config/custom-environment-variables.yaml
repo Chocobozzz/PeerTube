@@ -57,6 +57,15 @@ object_storage:
 
   region: "PEERTUBE_OBJECT_STORAGE_REGION"
 
+  upload_acl:
+    public: "PEERTUBE_OBJECT_STORAGE_UPLOAD_ACL_PUBLIC"
+    private: "PEERTUBE_OBJECT_STORAGE_UPLOAD_ACL_PRIVATE"
+
+  proxy:
+    proxify_private_files:
+      __name: "PEERTUBE_OBJECT_STORAGE_PROXY_PROXIFY_PRIVATE_FILES"
+      __format: "json"
+
   credentials:
     access_key_id: "PEERTUBE_OBJECT_STORAGE_CREDENTIALS_ACCESS_KEY_ID"
     secret_access_key: 'PEERTUBE_OBJECT_STORAGE_CREDENTIALS_SECRET_ACCESS_KEY'

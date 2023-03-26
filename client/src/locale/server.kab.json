@@ -54,7 +54,6 @@
     "Playlist: {1}": "Tabdert n tɣuri: {1}",
     "By {1}": "Sɣur {1}",
     "Unavailable video": "Ulac tavidyut-a",
-    "Misc": "Wayeḍ",
     "Unknown": "Arussin",
     "Afar": "Tafarit",
     "Abkhazian": "Tabxazit",
@@ -65,6 +64,7 @@
     "Aragonese": "Taṛagunit",
     "American Sign Language": "Tutlayt n yizamulen n Marikan",
     "Assamese": "Tasamizt",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "Tavarikt",
     "Kotava": "Kuṭava",
     "Aymara": "Aymara",
@@ -254,6 +254,7 @@
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Simplified Chinese",
     "Traditional Chinese": "Traditional Chinese",
+    "Misc": "Wayeḍ",
     "Normal mode": "Askan amagnu",
     "Theater mode": "Askar n umezgun"
 }

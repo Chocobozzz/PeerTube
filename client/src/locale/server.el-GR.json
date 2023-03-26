@@ -54,7 +54,6 @@
     "Playlist: {1}": "Λίστα αναπαραγωγής: {1}",
     "By {1}": "Από {1}",
     "Unavailable video": "Το βίντεο δεν υπάρχει",
-    "Misc": "Διάφορα",
     "Unknown": "Άγνωστο",
     "Afar": "Afar",
     "Abkhazian": "Abkhazian",
@@ -65,6 +64,7 @@
     "Aragonese": "Aragonese",
     "American Sign Language": "Αμερικανική νοηματική γλώσσα",
     "Assamese": "Assamese",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "Avaric",
     "Kotava": "Kotava",
     "Aymara": "Aymara",
@@ -254,6 +254,7 @@
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Simplified Chinese",
     "Traditional Chinese": "Traditional Chinese",
+    "Misc": "Διάφορα",
     "Normal mode": "Κανονική λειτουργία",
     "Theater mode": "Λειτουργία θεάτρου"
 }

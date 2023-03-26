@@ -1,0 +1,9 @@
+extends ../common/greetings
+
+block title
+  | Registration request of your account #{username} has rejected
+
+block content
+  p Your registration request has been rejected.
+  p Moderators sent you the following message:
+  blockquote(style='white-space: pre-wrap') #{moderationResponse}

@@ -45,6 +45,7 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
       .subscribe({
         next: () => {
           this.notifier.success($localize`Your password has been successfully reset!`)
+
           this.router.navigate([ '/login' ])
         },
 

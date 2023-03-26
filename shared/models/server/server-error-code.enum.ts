@@ -39,7 +39,13 @@ export const enum ServerErrorCode {
    */
   INCORRECT_FILES_IN_TORRENT = 'incorrect_files_in_torrent',
 
-  COMMENT_NOT_ASSOCIATED_TO_VIDEO = 'comment_not_associated_to_video'
+  COMMENT_NOT_ASSOCIATED_TO_VIDEO = 'comment_not_associated_to_video',
+
+  MISSING_TWO_FACTOR = 'missing_two_factor',
+  INVALID_TWO_FACTOR = 'invalid_two_factor',
+
+  ACCOUNT_WAITING_FOR_APPROVAL = 'account_waiting_for_approval',
+  ACCOUNT_APPROVAL_REJECTED = 'account_approval_rejected'
 }
 
 /**
@@ -70,5 +76,5 @@ export const enum OAuth2ErrorCode {
    *
    * @see https://github.com/oauthjs/node-oauth2-server/blob/master/lib/errors/invalid-token-error.js
    */
-  INVALID_TOKEN = 'invalid_token',
+  INVALID_TOKEN = 'invalid_token'
 }

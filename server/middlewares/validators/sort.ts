@@ -1,8 +1,40 @@
 import express from 'express'
 import { query } from 'express-validator'
-
 import { SORTABLE_COLUMNS } from '../../initializers/constants'
 import { areValidationErrors } from './shared'
+
+export const adminUsersSortValidator = checkSortFactory(SORTABLE_COLUMNS.ADMIN_USERS)
+export const accountsSortValidator = checkSortFactory(SORTABLE_COLUMNS.ACCOUNTS)
+export const jobsSortValidator = checkSortFactory(SORTABLE_COLUMNS.JOBS, [ 'jobs' ])
+export const abusesSortValidator = checkSortFactory(SORTABLE_COLUMNS.ABUSES)
+export const videosSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEOS)
+export const videoImportsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_IMPORTS)
+export const videosSearchSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEOS_SEARCH)
+export const videoChannelsSearchSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_CHANNELS_SEARCH)
+export const videoPlaylistsSearchSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_PLAYLISTS_SEARCH)
+export const videoCommentsValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_COMMENTS)
+export const videoCommentThreadsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_COMMENT_THREADS)
+export const videoRatesSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_RATES)
+export const blacklistSortValidator = checkSortFactory(SORTABLE_COLUMNS.BLACKLISTS)
+export const videoChannelsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_CHANNELS)
+export const instanceFollowersSortValidator = checkSortFactory(SORTABLE_COLUMNS.INSTANCE_FOLLOWERS)
+export const instanceFollowingSortValidator = checkSortFactory(SORTABLE_COLUMNS.INSTANCE_FOLLOWING)
+export const userSubscriptionsSortValidator = checkSortFactory(SORTABLE_COLUMNS.USER_SUBSCRIPTIONS)
+export const accountsBlocklistSortValidator = checkSortFactory(SORTABLE_COLUMNS.ACCOUNTS_BLOCKLIST)
+export const serversBlocklistSortValidator = checkSortFactory(SORTABLE_COLUMNS.SERVERS_BLOCKLIST)
+export const userNotificationsSortValidator = checkSortFactory(SORTABLE_COLUMNS.USER_NOTIFICATIONS)
+export const videoPlaylistsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_PLAYLISTS)
+export const pluginsSortValidator = checkSortFactory(SORTABLE_COLUMNS.PLUGINS)
+export const availablePluginsSortValidator = checkSortFactory(SORTABLE_COLUMNS.AVAILABLE_PLUGINS)
+export const videoRedundanciesSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_REDUNDANCIES)
+export const videoChannelSyncsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_CHANNEL_SYNCS)
+
+export const accountsFollowersSortValidator = checkSortFactory(SORTABLE_COLUMNS.ACCOUNT_FOLLOWERS)
+export const videoChannelsFollowersSortValidator = checkSortFactory(SORTABLE_COLUMNS.CHANNEL_FOLLOWERS)
+
+export const userRegistrationsSortValidator = checkSortFactory(SORTABLE_COLUMNS.USER_REGISTRATIONS)
+
+// ---------------------------------------------------------------------------
 
 function checkSortFactory (columns: string[], tags: string[] = []) {
   return checkSort(createSortableColumns(columns), tags)
@@ -26,65 +58,4 @@ function createSortableColumns (sortableColumns: string[]) {
   const sortableColumnDesc = sortableColumns.map(sortableColumn => '-' + sortableColumn)
 
   return sortableColumns.concat(sortableColumnDesc)
-}
-
-const adminUsersSortValidator = checkSortFactory(SORTABLE_COLUMNS.ADMIN_USERS)
-const accountsSortValidator = checkSortFactory(SORTABLE_COLUMNS.ACCOUNTS)
-const jobsSortValidator = checkSortFactory(SORTABLE_COLUMNS.JOBS, [ 'jobs' ])
-const abusesSortValidator = checkSortFactory(SORTABLE_COLUMNS.ABUSES)
-const videosSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEOS)
-const videoImportsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_IMPORTS)
-const videosSearchSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEOS_SEARCH)
-const videoChannelsSearchSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_CHANNELS_SEARCH)
-const videoPlaylistsSearchSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_PLAYLISTS_SEARCH)
-const videoCommentsValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_COMMENTS)
-const videoCommentThreadsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_COMMENT_THREADS)
-const videoRatesSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_RATES)
-const blacklistSortValidator = checkSortFactory(SORTABLE_COLUMNS.BLACKLISTS)
-const videoChannelsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_CHANNELS)
-const instanceFollowersSortValidator = checkSortFactory(SORTABLE_COLUMNS.INSTANCE_FOLLOWERS)
-const instanceFollowingSortValidator = checkSortFactory(SORTABLE_COLUMNS.INSTANCE_FOLLOWING)
-const userSubscriptionsSortValidator = checkSortFactory(SORTABLE_COLUMNS.USER_SUBSCRIPTIONS)
-const accountsBlocklistSortValidator = checkSortFactory(SORTABLE_COLUMNS.ACCOUNTS_BLOCKLIST)
-const serversBlocklistSortValidator = checkSortFactory(SORTABLE_COLUMNS.SERVERS_BLOCKLIST)
-const userNotificationsSortValidator = checkSortFactory(SORTABLE_COLUMNS.USER_NOTIFICATIONS)
-const videoPlaylistsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_PLAYLISTS)
-const pluginsSortValidator = checkSortFactory(SORTABLE_COLUMNS.PLUGINS)
-const availablePluginsSortValidator = checkSortFactory(SORTABLE_COLUMNS.AVAILABLE_PLUGINS)
-const videoRedundanciesSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_REDUNDANCIES)
-const videoChannelSyncsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_CHANNEL_SYNCS)
-
-const accountsFollowersSortValidator = checkSortFactory(SORTABLE_COLUMNS.ACCOUNT_FOLLOWERS)
-const videoChannelsFollowersSortValidator = checkSortFactory(SORTABLE_COLUMNS.CHANNEL_FOLLOWERS)
-
-// ---------------------------------------------------------------------------
-
-export {
-  adminUsersSortValidator,
-  abusesSortValidator,
-  videoChannelsSortValidator,
-  videoImportsSortValidator,
-  videoCommentsValidator,
-  videosSearchSortValidator,
-  videosSortValidator,
-  blacklistSortValidator,
-  accountsSortValidator,
-  instanceFollowersSortValidator,
-  instanceFollowingSortValidator,
-  jobsSortValidator,
-  videoCommentThreadsSortValidator,
-  videoRatesSortValidator,
-  userSubscriptionsSortValidator,
-  availablePluginsSortValidator,
-  videoChannelsSearchSortValidator,
-  accountsBlocklistSortValidator,
-  serversBlocklistSortValidator,
-  userNotificationsSortValidator,
-  videoPlaylistsSortValidator,
-  videoRedundanciesSortValidator,
-  videoPlaylistsSearchSortValidator,
-  accountsFollowersSortValidator,
-  videoChannelsFollowersSortValidator,
-  videoChannelSyncsSortValidator,
-  pluginsSortValidator
 }

@@ -149,6 +149,12 @@ const CONFIG = {
     HOSTNAME: config.get<string>('webserver.hostname'),
     PORT: config.get<number>('webserver.port')
   },
+  OAUTH2: {
+    TOKEN_LIFETIME: {
+      ACCESS_TOKEN: parseDurationToMs(config.get<string>('oauth2.token_lifetime.access_token')),
+      REFRESH_TOKEN: parseDurationToMs(config.get<string>('oauth2.token_lifetime.refresh_token'))
+    }
+  },
   RATES_LIMIT: {
     API: {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.api.window')),
@@ -188,6 +194,10 @@ const CONFIG = {
   OPEN_TELEMETRY: {
     METRICS: {
       ENABLED: config.get<boolean>('open_telemetry.metrics.enabled'),
+
+      HTTP_REQUEST_DURATION: {
+        ENABLED: config.get<boolean>('open_telemetry.metrics.http_request_duration.enabled')
+      },
 
       PROMETHEUS_EXPORTER: {
         HOSTNAME: config.get<string>('open_telemetry.metrics.prometheus_exporter.hostname'),
@@ -230,6 +240,9 @@ const CONFIG = {
   SECURITY: {
     FRAMEGUARD: {
       ENABLED: config.get<boolean>('security.frameguard.enabled')
+    },
+    POWERED_BY_HEADER: {
+      ENABLED: config.get<boolean>('security.powered_by_header.enabled')
     }
   },
   TRACKER: {
@@ -299,6 +312,7 @@ const CONFIG = {
   },
   SIGNUP: {
     get ENABLED () { return config.get<boolean>('signup.enabled') },
+    get REQUIRES_APPROVAL () { return config.get<boolean>('signup.requires_approval') },
     get LIMIT () { return config.get<number>('signup.limit') },
     get REQUIRES_EMAIL_VERIFICATION () { return config.get<boolean>('signup.requires_email_verification') },
     get MINIMUM_AGE () { return config.get<number>('signup.minimum_age') },

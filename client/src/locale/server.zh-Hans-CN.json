@@ -42,7 +42,7 @@
     "Failed": "失败",
     "Rejected": "已拒绝",
     "Cancelled": "已取消",
-    "Processing": "Processing",
+    "Processing": "处理中",
     "Regular": "正常",
     "Watch later": "稍后观看",
     "This video does not exist.": "此视频不存在。",
@@ -54,7 +54,6 @@
     "Playlist: {1}": "播放列表：{1}",
     "By {1}": "由 {1}",
     "Unavailable video": "不可用的视频",
-    "Misc": "杂项",
     "Unknown": "未知",
     "Afar": "阿法尔语",
     "Abkhazian": "阿布哈兹语",
@@ -65,6 +64,7 @@
     "Aragonese": "阿拉贡语",
     "American Sign Language": "美国手语",
     "Assamese": "阿萨姆语",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "阿瓦尔语",
     "Kotava": "科塔瓦语",
     "Aymara": "艾马拉语",
@@ -254,6 +254,7 @@
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Simplified Chinese",
     "Traditional Chinese": "Traditional Chinese",
+    "Misc": "杂项",
     "Normal mode": "一般模式",
     "Theater mode": "剧场模式"
 }

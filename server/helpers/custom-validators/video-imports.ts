@@ -22,10 +22,11 @@ function isVideoImportStateValid (value: any) {
   return exists(value) && VIDEO_IMPORT_STATES[value] !== undefined
 }
 
-const videoTorrentImportRegex = Object.keys(MIMETYPES.TORRENT.MIMETYPE_EXT)
-                                      .concat([ 'application/octet-stream' ]) // MacOS sends application/octet-stream
-                                      .map(m => `(${m})`)
-                                      .join('|')
+// MacOS sends application/octet-stream
+const videoTorrentImportRegex = [ ...Object.keys(MIMETYPES.TORRENT.MIMETYPE_EXT), 'application/octet-stream' ]
+  .map(m => `(${m})`)
+  .join('|')
+
 function isVideoImportTorrentFile (files: UploadFilesForCheck) {
   return isFileValid({
     files,

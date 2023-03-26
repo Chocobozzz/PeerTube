@@ -15,7 +15,7 @@ import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/vid
 import { VideoPlaylistReorder } from '../../../shared/models/videos/playlist/video-playlist-reorder.model'
 import { VideoPlaylistUpdate } from '../../../shared/models/videos/playlist/video-playlist-update.model'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
-import { buildNSFWFilter, createReqFiles } from '../../helpers/express-utils'
+import { createReqFiles } from '../../helpers/express-utils'
 import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
 import { CONFIG } from '../../initializers/config'
@@ -139,7 +139,7 @@ async function listVideoPlaylists (req: express.Request, res: express.Response) 
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    type: req.query.type
+    type: req.query.playlistType
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
@@ -210,7 +210,6 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
 
 async function updateVideoPlaylist (req: express.Request, res: express.Response) {
   const videoPlaylistInstance = res.locals.videoPlaylistFull
-  const videoPlaylistFieldsSave = videoPlaylistInstance.toJSON()
   const videoPlaylistInfoToUpdate = req.body as VideoPlaylistUpdate
 
   const wasPrivatePlaylist = videoPlaylistInstance.privacy === VideoPlaylistPrivacy.PRIVATE
@@ -275,10 +274,9 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
   } catch (err) {
     logger.debug('Cannot update the video playlist.', { err })
 
-    // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed
-    // So it will skip the SQL request, even if the last one was ROLLBACKed!
-    resetSequelizeInstance(videoPlaylistInstance, videoPlaylistFieldsSave)
+    // So we need to restore the previous fields
+    resetSequelizeInstance(videoPlaylistInstance)
 
     throw err
   }
@@ -474,10 +472,7 @@ async function getVideoPlaylistVideos (req: express.Request, res: express.Respon
     'filter:api.video-playlist.videos.list.result'
   )
 
-  const options = {
-    displayNSFW: buildNSFWFilter(res, req.query.nsfw),
-    accountId: user ? user.Account.id : undefined
-  }
+  const options = { accountId: user?.Account?.id }
   return res.json(getFormattedObjects(resultList.data, resultList.total, options))
 }
 

@@ -1,7 +1,6 @@
 import { concat, forkJoin, merge } from 'rxjs'
 import { Component, Input, OnChanges, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
-import { AuthService, Notifier } from '@app/core'
+import { AuthService, Notifier, RedirectService } from '@app/core'
 import { Account, VideoChannel, VideoService } from '@app/shared/shared-main'
 import { FeedFormat } from '@shared/models'
 import { UserSubscriptionService } from './user-subscription.service'
@@ -27,7 +26,7 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
 
   constructor (
     private authService: AuthService,
-    private router: Router,
+    private redirectService: RedirectService,
     private notifier: Notifier,
     private userSubscriptionService: UserSubscriptionService,
     private videoService: VideoService
@@ -152,7 +151,7 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
   }
 
   gotoLogin () {
-    this.router.navigate([ '/login' ])
+    this.redirectService.redirectToLogin()
   }
 
   subscribeStatus (subscribed: boolean) {

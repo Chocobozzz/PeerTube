@@ -6,6 +6,7 @@ import { randomInt, root } from '@shared/core-utils'
 import {
   AbuseState,
   JobType,
+  UserRegistrationState,
   VideoChannelSyncState,
   VideoImportState,
   VideoPrivacy,
@@ -25,7 +26,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 745
+const LAST_MIGRATION_VERSION = 755
 
 // ---------------------------------------------------------------------------
 
@@ -78,6 +79,8 @@ const SORTABLE_COLUMNS = {
   ACCOUNT_FOLLOWERS: [ 'createdAt' ],
   CHANNEL_FOLLOWERS: [ 'createdAt' ],
 
+  USER_REGISTRATIONS: [ 'createdAt', 'state' ],
+
   VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'trending', 'hot', 'best' ],
 
   // Don't forget to update peertube-search-index with the same values
@@ -99,11 +102,6 @@ const SORTABLE_COLUMNS = {
   AVAILABLE_PLUGINS: [ 'npmName', 'popularity' ],
 
   VIDEO_REDUNDANCIES: [ 'name' ]
-}
-
-const OAUTH_LIFETIME = {
-  ACCESS_TOKEN: 3600 * 24, // 1 day, for upload
-  REFRESH_TOKEN: 1209600 // 2 weeks
 }
 
 const ROUTE_CACHE_LIFETIME = {
@@ -214,10 +212,10 @@ const JOB_TTL: { [id in JobType]: number } = {
 }
 const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
   'videos-views-stats': {
-    cron: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
+    pattern: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
   },
   'activitypub-cleaner': {
-    cron: '30 5 * * ' + randomInt(0, 7) // 1 time per week (random day) at 5:30 AM
+    pattern: '30 5 * * ' + randomInt(0, 7) // 1 time per week (random day) at 5:30 AM
   }
 }
 const JOB_PRIORITY = {
@@ -294,6 +292,10 @@ const CONSTRAINTS_FIELDS = {
   },
   ABUSE_MESSAGES: {
     MESSAGE: { min: 2, max: 3000 } // Length
+  },
+  USER_REGISTRATIONS: {
+    REASON_MESSAGE: { min: 2, max: 3000 }, // Length
+    MODERATOR_MESSAGE: { min: 2, max: 3000 } // Length
   },
   VIDEO_BLACKLIST: {
     REASON: { min: 2, max: 300 } // Length
@@ -521,6 +523,12 @@ const ABUSE_STATES: { [ id in AbuseState ]: string } = {
   [AbuseState.ACCEPTED]: 'Accepted'
 }
 
+const USER_REGISTRATION_STATES: { [ id in UserRegistrationState ]: string } = {
+  [UserRegistrationState.PENDING]: 'Pending',
+  [UserRegistrationState.REJECTED]: 'Rejected',
+  [UserRegistrationState.ACCEPTED]: 'Accepted'
+}
+
 const VIDEO_PLAYLIST_PRIVACIES: { [ id in VideoPlaylistPrivacy ]: string } = {
   [VideoPlaylistPrivacy.PUBLIC]: 'Public',
   [VideoPlaylistPrivacy.UNLISTED]: 'Unlisted',
@@ -667,7 +675,7 @@ const USER_PASSWORD_CREATE_LIFETIME = 60000 * 60 * 24 * 7 // 7 days
 
 const TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME = 60000 * 10 // 10 minutes
 
-const USER_EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
+const EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
 
 const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
   DO_NOT_LIST: 'do_not_list',
@@ -1035,7 +1043,6 @@ export {
   JOB_ATTEMPTS,
   AP_CLEANER,
   LAST_MIGRATION_VERSION,
-  OAUTH_LIFETIME,
   CUSTOM_HTML_TAG_COMMENTS,
   STATS_TIMESERIE,
   BROADCAST_CONCURRENCY,
@@ -1077,13 +1084,14 @@ export {
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
   ABUSE_STATES,
+  USER_REGISTRATION_STATES,
   LRU_CACHE,
   REQUEST_TIMEOUTS,
   MAX_LOCAL_VIEWER_WATCH_SECTIONS,
   USER_PASSWORD_RESET_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,
   MEMOIZE_TTL,
-  USER_EMAIL_VERIFY_LIFETIME,
+  EMAIL_VERIFY_LIFETIME,
   OVERVIEWS,
   SCHEDULER_INTERVALS_MS,
   REPEAT_JOBS,

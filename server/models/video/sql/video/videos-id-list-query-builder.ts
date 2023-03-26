@@ -2,11 +2,12 @@ import { Sequelize, Transaction } from 'sequelize'
 import validator from 'validator'
 import { exists } from '@server/helpers/custom-validators/misc'
 import { WEBSERVER } from '@server/initializers/constants'
-import { buildDirectionAndField, createSafeIn, parseRowCountResult } from '@server/models/utils'
+import { buildSortDirectionAndField } from '@server/models/shared'
 import { MUserAccountId, MUserId } from '@server/types/models'
-import { VideoInclude, VideoPrivacy, VideoState } from '@shared/models'
-import { AbstractRunQuery } from '../../../shared/abstract-run-query'
 import { forceNumber } from '@shared/core-utils'
+import { VideoInclude, VideoPrivacy, VideoState } from '@shared/models'
+import { createSafeIn, parseRowCountResult } from '../../../shared'
+import { AbstractRunQuery } from '../../../shared/abstract-run-query'
 
 /**
  *
@@ -665,7 +666,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private buildOrder (value: string) {
-    const { direction, field } = buildDirectionAndField(value)
+    const { direction, field } = buildSortDirectionAndField(value)
     if (field.match(/^[a-zA-Z."]+$/) === null) throw new Error('Invalid sort column ' + field)
 
     if (field.toLowerCase() === 'random') return 'ORDER BY RANDOM()'

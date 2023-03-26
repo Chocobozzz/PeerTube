@@ -8,7 +8,7 @@ import { ServiceWorkerModule } from '@angular/service-worker'
 import localeOc from '@app/helpers/locales/oc'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
-import { CoreModule, PluginService, ServerService } from './core'
+import { CoreModule, PluginService, RedirectService, ServerService } from './core'
 import { EmptyComponent } from './empty.component'
 import { HeaderComponent, SearchTypeaheadComponent, SuggestionComponent } from './header'
 import { HighlightPipe } from './header/highlight.pipe'
@@ -28,13 +28,17 @@ import { SharedUserInterfaceSettingsModule } from './shared/shared-user-settings
 
 registerLocaleData(localeOc, 'oc')
 
-export function loadConfigFactory (server: ServerService, pluginService: PluginService) {
+export function loadConfigFactory (server: ServerService, pluginService: PluginService, redirectService: RedirectService) {
+  const initializeServices = () => {
+    redirectService.init()
+    pluginService.initializePlugins()
+  }
+
   return () => {
     const result = server.loadHTMLConfig()
+    if (result) return result.pipe(tap(() => initializeServices()))
 
-    if (result) return result.pipe(tap(() => pluginService.initializePlugins()))
-
-    return pluginService.initializePlugins()
+    initializeServices()
   }
 }
 
@@ -84,7 +88,7 @@ export function loadConfigFactory (server: ServerService, pluginService: PluginS
     {
       provide: APP_INITIALIZER,
       useFactory: loadConfigFactory,
-      deps: [ ServerService, PluginService ],
+      deps: [ ServerService, PluginService, RedirectService ],
       multi: true
     }
   ]

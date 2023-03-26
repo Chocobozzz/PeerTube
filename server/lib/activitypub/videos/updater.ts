@@ -3,6 +3,7 @@ import { resetSequelizeInstance, runInReadCommittedTransaction } from '@server/h
 import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger'
 import { Notifier } from '@server/lib/notifier'
 import { PeerTubeSocket } from '@server/lib/peertube-socket'
+import { Hooks } from '@server/lib/plugins/hooks'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { MActor, MChannelAccountLight, MChannelId, MVideoAccountLightBlacklistAllFiles, MVideoFullLight } from '@server/types/models'
@@ -12,8 +13,6 @@ import { APVideoAbstractBuilder, getVideoAttributesFromObject, updateVideoRates 
 export class APVideoUpdater extends APVideoAbstractBuilder {
   private readonly wasPrivateVideo: boolean
   private readonly wasUnlistedVideo: boolean
-
-  private readonly videoFieldsSave: any
 
   private readonly oldVideoChannel: MChannelAccountLight
 
@@ -29,8 +28,6 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     this.wasUnlistedVideo = this.video.privacy === VideoPrivacy.UNLISTED
 
     this.oldVideoChannel = this.video.VideoChannel
-
-    this.videoFieldsSave = this.video.toJSON()
 
     this.lTags = loggerTagsFactory('ap', 'video', 'update', video.uuid, video.url)
   }
@@ -84,6 +81,8 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
       if (videoUpdated.isLive) {
         PeerTubeSocket.Instance.sendVideoLiveNewState(videoUpdated)
       }
+
+      Hooks.runAction('action:activity-pub.remote-video.updated', { video: videoUpdated, videoAPObject: this.videoObject })
 
       logger.info('Remote video with uuid %s updated', this.videoObject.uuid, this.lTags())
 
@@ -156,8 +155,8 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
   }
 
   private catchUpdateError (err: Error) {
-    if (this.video !== undefined && this.videoFieldsSave !== undefined) {
-      resetSequelizeInstance(this.video, this.videoFieldsSave)
+    if (this.video !== undefined) {
+      resetSequelizeInstance(this.video)
     }
 
     // This is just a debug because we will retry the insert

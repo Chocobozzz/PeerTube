@@ -125,7 +125,8 @@ export class UserLocalStorageService {
     const localStorageKeys: { [ id in keyof UserUpdateMe ]: string } = {
       nsfwPolicy: UserLocalStorageKeys.NSFW_POLICY,
       p2pEnabled: UserLocalStorageKeys.P2P_ENABLED,
-      autoPlayNextVideo: UserLocalStorageKeys.AUTO_PLAY_VIDEO,
+      autoPlayVideo: UserLocalStorageKeys.AUTO_PLAY_VIDEO,
+      autoPlayNextVideo: UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO,
       autoPlayNextVideoPlaylist: UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST,
       theme: UserLocalStorageKeys.THEME,
       videoLanguages: UserLocalStorageKeys.VIDEO_LANGUAGES
@@ -167,6 +168,7 @@ export class UserLocalStorageService {
       UserLocalStorageKeys.NSFW_POLICY,
       UserLocalStorageKeys.P2P_ENABLED,
       UserLocalStorageKeys.AUTO_PLAY_VIDEO,
+      UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO,
       UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST,
       UserLocalStorageKeys.THEME,
       UserLocalStorageKeys.VIDEO_LANGUAGES

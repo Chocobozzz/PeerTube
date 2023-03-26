@@ -8,6 +8,14 @@ webserver:
 secrets:
   peertube: 'my super dev secret'
 
+rates_limit:
+  api:
+    window: 10 seconds
+    max: 500
+  signup:
+    window: 5 minutes
+    max: 200
+
 database:
   hostname: 'localhost'
   port: 5432

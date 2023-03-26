@@ -30,6 +30,7 @@ import {
   MUserNotifSettingChannelDefault,
   MUserWithNotificationSetting
 } from '@server/types/models'
+import { forceNumber } from '@shared/core-utils'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { hasUserRight, USER_ROLE_LABELS } from '../../../shared/core-utils/users'
 import { AbuseState, MyUser, UserRight, VideoPlaylistType } from '../../../shared/models'
@@ -63,14 +64,13 @@ import { ActorModel } from '../actor/actor'
 import { ActorFollowModel } from '../actor/actor-follow'
 import { ActorImageModel } from '../actor/actor-image'
 import { OAuthTokenModel } from '../oauth/oauth-token'
-import { getAdminUsersSort, throwIfNotValid } from '../utils'
+import { getAdminUsersSort, throwIfNotValid } from '../shared'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoImportModel } from '../video/video-import'
 import { VideoLiveModel } from '../video/video-live'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { UserNotificationSettingModel } from './user-notification-setting'
-import { forceNumber } from '@shared/core-utils'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',
@@ -446,16 +446,17 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   })
   OAuthTokens: OAuthTokenModel[]
 
+  // Used if we already set an encrypted password in user model
+  skipPasswordEncryption = false
+
   @BeforeCreate
   @BeforeUpdate
-  static cryptPasswordIfNeeded (instance: UserModel) {
-    if (instance.changed('password') && instance.password) {
-      return cryptPassword(instance.password)
-        .then(hash => {
-          instance.password = hash
-          return undefined
-        })
-    }
+  static async cryptPasswordIfNeeded (instance: UserModel) {
+    if (instance.skipPasswordEncryption) return
+    if (!instance.changed('password')) return
+    if (!instance.password) return
+
+    instance.password = await cryptPassword(instance.password)
   }
 
   @AfterUpdate
@@ -465,7 +466,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   }
 
   static countTotal () {
-    return this.count()
+    return UserModel.unscoped().count()
   }
 
   static listForAdminApi (parameters: {
@@ -785,12 +786,12 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
       `WHERE "account"."userId" = ${options.whereUserId} ${andWhere}`
 
     const webtorrentFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
-      'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
+      'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" AND "video"."isLive" IS FALSE ' +
       videoChannelJoin
 
     const hlsFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
       'INNER JOIN "videoStreamingPlaylist" ON "videoFile"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id ' +
-      'INNER JOIN "video" ON "videoStreamingPlaylist"."videoId" = "video"."id" ' +
+      'INNER JOIN "video" ON "videoStreamingPlaylist"."videoId" = "video"."id" AND "video"."isLive" IS FALSE ' +
       videoChannelJoin
 
     return 'SELECT COALESCE(SUM("size"), 0) AS "total" ' +

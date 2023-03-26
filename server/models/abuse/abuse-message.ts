@@ -5,7 +5,7 @@ import { MAbuseMessage, MAbuseMessageFormattable } from '@server/types/models'
 import { AbuseMessage } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account'
-import { getSort, throwIfNotValid } from '../utils'
+import { getSort, throwIfNotValid } from '../shared'
 import { AbuseModel } from './abuse'
 
 @Table({

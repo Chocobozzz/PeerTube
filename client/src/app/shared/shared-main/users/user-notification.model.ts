@@ -83,6 +83,11 @@ export class UserNotification implements UserNotificationServer {
     latestVersion: string
   }
 
+  registration?: {
+    id: number
+    username: string
+  }
+
   createdAt: string
   updatedAt: string
 
@@ -96,6 +101,8 @@ export class UserNotification implements UserNotificationServer {
   videoAutoBlacklistUrl?: string
 
   accountUrl?: string
+
+  registrationsUrl?: string
 
   videoImportIdentifier?: string
   videoImportUrl?: string
@@ -135,6 +142,7 @@ export class UserNotification implements UserNotificationServer {
 
       this.plugin = hash.plugin
       this.peertube = hash.peertube
+      this.registration = hash.registration
 
       this.createdAt = hash.createdAt
       this.updatedAt = hash.updatedAt
@@ -206,6 +214,10 @@ export class UserNotification implements UserNotificationServer {
 
         case UserNotificationType.NEW_USER_REGISTRATION:
           this.accountUrl = this.buildAccountUrl(this.account)
+          break
+
+        case UserNotificationType.NEW_USER_REGISTRATION_REQUEST:
+          this.registrationsUrl = '/admin/moderation/registrations/list'
           break
 
         case UserNotificationType.NEW_FOLLOW:

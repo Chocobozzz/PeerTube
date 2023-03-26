@@ -76,6 +76,12 @@ async function register ({
       return res.json({ serverConfig })
     })
 
+    router.get('/server-listening-config', async (req, res) => {
+      const config = await peertubeHelpers.config.getServerListeningConfig()
+
+      return res.json({ config })
+    })
+
     router.get('/static-route', async (req, res) => {
       const staticRoute = peertubeHelpers.plugin.getBaseStaticRoute()
 

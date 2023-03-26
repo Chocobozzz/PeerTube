@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { wait } from '@shared/core-utils'
-import { HttpStatusCode, UserRole } from '@shared/models'
+import { HttpStatusCode, UserAdminFlag, UserRole } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -51,6 +51,7 @@ describe('Test external auth plugins', function () {
 
   let kefkaAccessToken: string
   let kefkaRefreshToken: string
+  let kefkaId: number
 
   let externalAuthToken: string
 
@@ -156,6 +157,9 @@ describe('Test external auth plugins', function () {
       expect(body.account.displayName).to.equal('cyan')
       expect(body.email).to.equal('cyan@example.com')
       expect(body.role.id).to.equal(UserRole.USER)
+      expect(body.adminFlags).to.equal(UserAdminFlag.NONE)
+      expect(body.videoQuota).to.equal(5242880)
+      expect(body.videoQuotaDaily).to.equal(-1)
     }
   })
 
@@ -178,6 +182,11 @@ describe('Test external auth plugins', function () {
       expect(body.account.displayName).to.equal('Kefka Palazzo')
       expect(body.email).to.equal('kefka@example.com')
       expect(body.role.id).to.equal(UserRole.ADMINISTRATOR)
+      expect(body.adminFlags).to.equal(UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST)
+      expect(body.videoQuota).to.equal(42000)
+      expect(body.videoQuotaDaily).to.equal(42100)
+
+      kefkaId = body.id
     }
   })
 
@@ -238,6 +247,37 @@ describe('Test external auth plugins', function () {
     expect(body.account.displayName).to.equal('Cyan Garamonde')
     expect(body.account.description).to.equal('Retainer to the king of Doma')
     expect(body.role.id).to.equal(UserRole.USER)
+  })
+
+  it('Should login Kefka and update the profile', async function () {
+    {
+      await server.users.update({ userId: kefkaId, videoQuota: 43000, videoQuotaDaily: 43100 })
+      await server.users.updateMe({ token: kefkaAccessToken, displayName: 'kefka updated' })
+
+      const body = await server.users.getMyInfo({ token: kefkaAccessToken })
+      expect(body.username).to.equal('kefka')
+      expect(body.account.displayName).to.equal('kefka updated')
+      expect(body.videoQuota).to.equal(43000)
+      expect(body.videoQuotaDaily).to.equal(43100)
+    }
+
+    {
+      const res = await loginExternal({
+        server,
+        npmName: 'test-external-auth-one',
+        authName: 'external-auth-2',
+        username: 'kefka'
+      })
+
+      kefkaAccessToken = res.access_token
+      kefkaRefreshToken = res.refresh_token
+
+      const body = await server.users.getMyInfo({ token: kefkaAccessToken })
+      expect(body.username).to.equal('kefka')
+      expect(body.account.displayName).to.equal('Kefka Palazzo')
+      expect(body.videoQuota).to.equal(42000)
+      expect(body.videoQuotaDaily).to.equal(43100)
+    }
   })
 
   it('Should not update an external auth email', async function () {

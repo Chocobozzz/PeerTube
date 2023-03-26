@@ -1,9 +1,9 @@
 import { Sequelize } from 'sequelize'
 import validator from 'validator'
-import { createSafeIn } from '@server/models/utils'
 import { MUserAccountId } from '@server/types/models'
 import { ActorImageType } from '@shared/models'
 import { AbstractRunQuery } from '../../../../shared/abstract-run-query'
+import { createSafeIn } from '../../../../shared'
 import { VideoTableAttributes } from './video-table-attributes'
 
 /**

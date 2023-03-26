@@ -240,7 +240,15 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       this.schedulerInterval = setInterval(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
     })
 
-    this.hooks.runAction('action:video-edit.init', 'video-edit', { type: this.type })
+    const updateFormForPlugins = (values: any) => {
+      this.form.patchValue(values)
+      this.cd.detectChanges()
+    }
+    this.hooks.runAction('action:video-edit.init', 'video-edit', { type: this.type, updateForm: updateFormForPlugins })
+
+    this.form.valueChanges.subscribe(() => {
+      this.hooks.runAction('action:video-edit.form.updated', 'video-edit', { type: this.type, formValues: this.form.value })
+    })
   }
 
   ngOnDestroy () {
@@ -346,6 +354,9 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
     for (const setting of this.pluginFields) {
       await this.pluginService.translateSetting(setting.pluginInfo.plugin.npmName, setting.commonOptions)
+
+      // Not a form input, just a HTML tag
+      if (setting.commonOptions.type === 'html') continue
 
       const validator = async (control: AbstractControl) => {
         if (!setting.commonOptions.error) return null

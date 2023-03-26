@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit } from '@angular/core'
 import { GlobalIconName } from '@app/shared/shared-icons'
 
 @Component({
@@ -8,7 +8,7 @@ import { GlobalIconName } from '@app/shared/shared-icons'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ButtonComponent implements OnChanges {
+export class ButtonComponent implements OnInit, OnChanges {
   @Input() label = ''
   @Input() className = 'grey-button'
   @Input() icon: GlobalIconName = undefined
@@ -20,7 +20,15 @@ export class ButtonComponent implements OnChanges {
 
   classes: { [id: string]: boolean } = {}
 
+  ngOnInit () {
+    this.buildClasses()
+  }
+
   ngOnChanges () {
+    this.buildClasses()
+  }
+
+  private buildClasses () {
     this.classes = {
       [this.className]: true,
       disabled: this.disabled,

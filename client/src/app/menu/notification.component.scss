@@ -120,8 +120,12 @@
           }
         }
 
-        my-global-icon {
+        my-global-icon[iconName=cog] {
           width: 20px;
+        }
+
+        my-global-icon[iconName=tick] {
+          width: 26px;
         }
       }
 
@@ -130,7 +134,7 @@
         align-items: center;
         justify-content: center;
         font-weight: $font-semibold;
-        color: $fg-color;
+        color: pvar(--mainForegroundColor);
         padding: 7px 0;
         margin-top: auto;
         text-decoration: none;

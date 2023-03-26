@@ -1,38 +1,16 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-
 label {
+  @include font-size(18px);
+
   display: block;
-  font-size: 18px;
   margin-bottom: 5px;
 }
 
 input[type=text],
 input[type=email] {
   @include peertube-input-text(100%);
-}
-
-.modal-body {
-  text-align: start;
-
-  .forgot-password-instructions {
-    margin-bottom: 20px;
-  }
-}
-
-@media screen and (max-width: $small-view) {
-  .modal-body {
-    #forgot-password-email {
-      width: 100%;
-    }
-  }
-
-  .modal-footer .grey-button {
-    display: none;
-  }
 }
 
 .wrapper {
@@ -44,10 +22,6 @@ input[type=email] {
   > div {
     flex: 1 1;
   }
-
-  form {
-    width: 100%;
-  }
 }
 
 .wrapper,
@@ -56,45 +30,23 @@ input[type=email] {
 }
 
 .alert {
-  margin: 0 auto 30px;
+  @include margin(0, auto, 2rem);
 }
 
 .login-form-and-externals {
   @include margin-left(10px);
   @include margin-right(10px);
+  @include margin-bottom(2.5rem);
 
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   max-width: 450px;
-  margin-bottom: 40px;
-
-  form {
-    margin: 0;
-
-    input[type=submit] {
-      width: 100%;
-    }
-
-    .additional-links {
-      display: flex;
-      justify-content: center;
-      margin: 20px 0 30px;
-
-      .link-orange {
-        margin: 0 15px;
-      }
-    }
-  }
 }
 
 .external-login-blocks {
   min-width: 200px;
   text-align: center;
-
-  .block-title {
-    font-weight: $font-semibold;
-  }
 
   .external-login-block {
     @include disable-default-a-behaviour;
@@ -119,10 +71,10 @@ input[type=email] {
 .instance-information {
   @include margin-left(10px);
   @include margin-right(10px);
+  @include margin-bottom(2.5rem);
+  @include rfs (22rem, min-width);
 
   max-width: 600px;
-  min-width: 350px;
-  margin-bottom: 40px;
 }
 
 .terms-anchor {
@@ -133,45 +85,33 @@ input[type=email] {
   display: none;
 }
 
-@mixin column-reverse-display {
-  flex-direction: column-reverse;
+@include on-small-main-col {
+  .wrapper {
+    flex-direction: column-reverse;
 
-  .login-form-and-externals,
-  .instance-information {
-    @include margin-left(0);
-    @include margin-right(0);
+    .login-form-and-externals,
+    .instance-information {
+      @include margin-left(0);
+      @include margin-right(0);
 
-    width: 100%;
-    max-width: 450px;
-    min-width: unset;
-    align-self: center;
-  }
+      width: 100%;
+      max-width: 450px;
+      min-width: unset;
+      align-self: center;
+    }
 
-  .instance-information {
-    ::ng-deep .accordion {
+    .instance-information {
+      ::ng-deep .accordion {
+        display: none;
+      }
+    }
+
+    .terms-anchor {
       display: none;
     }
-  }
 
-  .terms-anchor {
-    display: none;
-  }
-
-  .terms-link {
-    display: inline;
-  }
-}
-
-@media screen and (max-width: breakpoint(md)) {
-  .wrapper {
-    @include column-reverse-display();
-  }
-}
-
-@media screen and (max-width: breakpoint(md) + $menu-width) {
-  :host-context(.main-col:not(.expanded)) {
-    .wrapper {
-      @include column-reverse-display();
+    .terms-link {
+      display: inline;
     }
   }
 }

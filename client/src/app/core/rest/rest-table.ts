@@ -7,7 +7,7 @@ import { RestPagination } from './rest-pagination'
 
 const debugLogger = debug('peertube:tables:RestTable')
 
-export abstract class RestTable {
+export abstract class RestTable <T = unknown> {
 
   abstract totalRecords: number
   abstract sort: SortMeta
@@ -16,6 +16,8 @@ export abstract class RestTable {
   rowsPerPageOptions = [ 10, 20, 50, 100 ]
   rowsPerPage = this.rowsPerPageOptions[0]
   expandedRows = {}
+
+  selectedRows: T[] = []
 
   search: string
 
@@ -75,7 +77,17 @@ export abstract class RestTable {
     this.reloadData()
   }
 
-  protected abstract reloadData (): void
+  isInSelectionMode () {
+    return this.selectedRows.length !== 0
+  }
+
+  protected abstract reloadDataInternal (): void
+
+  protected reloadData () {
+    this.selectedRows = []
+
+    this.reloadDataInternal()
+  }
 
   private getSortLocalStorageKey () {
     return 'rest-table-sort-' + this.getIdentifier()
