@@ -32,7 +32,7 @@ describe('Test plugin filter hooks', function () {
   let videoPlaylistUUID: string
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
