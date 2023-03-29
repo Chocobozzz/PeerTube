@@ -187,6 +187,8 @@ const videoLiveUpdateValidator = [
       })
     }
 
+    if (!checkLiveSettingsReplayConsistency({ res, body })) return
+
     if (res.locals.videoAll.state !== VideoState.WAITING_FOR_LIVE) {
       return res.fail({ message: 'Cannot update a live that has already started' })
     }
@@ -279,6 +281,46 @@ function hasValidLatencyMode (body: LiveVideoUpdate | LiveVideoCreate) {
     exists(body.latencyMode) &&
     body.latencyMode !== LiveVideoLatencyMode.DEFAULT
   ) return false
+
+  return true
+}
+
+function checkLiveSettingsReplayConsistency (options: {
+  res: express.Response
+  body: LiveVideoUpdate
+}) {
+  const { res, body } = options
+
+  // We now save replays of this live, so replay settings are mandatory
+  if (res.locals.videoLive.saveReplay !== true && body.saveReplay === true) {
+
+    if (!exists(body.replaySettings)) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Replay settings are missing now the live replay is saved'
+      })
+      return false
+    }
+
+    if (!exists(body.replaySettings.privacy)) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Privacy replay setting is missing now the live replay is saved'
+      })
+      return false
+    }
+  }
+
+  // Save replay was and is not enabled, so send an error the user if it specified replay settings
+  if ((!exists(body.saveReplay) && res.locals.videoLive.saveReplay === false) || body.saveReplay !== true) {
+    if (exists(body.replaySettings)) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Cannot save replay settings since live replay is not enabled'
+      })
+      return false
+    }
+  }
 
   return true
 }

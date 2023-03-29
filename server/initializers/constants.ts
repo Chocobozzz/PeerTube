@@ -26,7 +26,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 755
+const LAST_MIGRATION_VERSION = 760
 
 // ---------------------------------------------------------------------------
 

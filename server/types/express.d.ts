@@ -1,4 +1,5 @@
 import { OutgoingHttpHeaders } from 'http'
+import { Writable } from 'stream'
 import { RegisterServerAuthExternalOptions } from '@server/types'
 import {
   MAbuseMessage,
@@ -43,7 +44,6 @@ import {
   MVideoShareActor,
   MVideoThumbnail
 } from './models'
-import { Writable } from 'stream'
 import { MVideoSource } from './models/video/video-source'
 
 declare module 'express' {

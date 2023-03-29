@@ -16,7 +16,7 @@ import {
 } from '@server/middlewares/validators/videos/video-live'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
-import { MVideoDetails, MVideoFullLight } from '@server/types/models'
+import { MVideoDetails, MVideoFullLight, MVideoLive } from '@server/types/models'
 import { buildUUID, uuidToShort } from '@shared/extra-utils'
 import { HttpStatusCode, LiveVideoCreate, LiveVideoLatencyMode, LiveVideoUpdate, UserRight, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
@@ -106,27 +106,9 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
   const videoLive = res.locals.videoLive
 
-  if (exists(body.saveReplay)) videoLive.saveReplay = body.saveReplay
-
-  let replaySetting = await VideoLiveReplaySettingModel.load(videoLive.replaySettingId)
-
-  if (videoLive.saveReplay) {
-    if (exists(body.replaySettings)) {
-      if (replaySetting) {
-        replaySetting.privacy = body.replaySettings.privacy
-      } else {
-        replaySetting = new VideoLiveReplaySettingModel({
-          privacy: body.replaySettings.privacy
-        })
-        videoLive.replaySettingId = replaySetting.id
-      }
-      await replaySetting.save()
-    } else {
-      // erreur
-    }
-  } else {
-    if (videoLive.replaySettingId) await replaySetting.destroy()
-  }
+  const newReplaySettingModel = await updateReplaySettings(videoLive, body)
+  if (newReplaySettingModel) videoLive.replaySettingId = newReplaySettingModel.id
+  else videoLive.replaySettingId = null
 
   if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
   if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
@@ -136,6 +118,27 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
   await federateVideoIfNeeded(video, false)
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
+}
+
+async function updateReplaySettings (videoLive: MVideoLive, body: LiveVideoUpdate) {
+  if (exists(body.saveReplay)) videoLive.saveReplay = body.saveReplay
+
+  // The live replay is not saved anymore, destroy the old model if it existed
+  if (!videoLive.saveReplay) {
+    if (videoLive.replaySettingId) {
+      await VideoLiveReplaySettingModel.removeSettings(videoLive.replaySettingId)
+    }
+
+    return undefined
+  }
+
+  const settingModel = videoLive.replaySettingId
+    ? await VideoLiveReplaySettingModel.load(videoLive.replaySettingId)
+    : new VideoLiveReplaySettingModel()
+
+  if (exists(body.replaySettings.privacy)) settingModel.privacy = body.replaySettings.privacy
+
+  return settingModel.save()
 }
 
 async function addLiveVideo (req: express.Request, res: express.Response) {

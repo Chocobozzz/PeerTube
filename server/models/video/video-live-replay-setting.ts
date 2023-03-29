@@ -16,14 +16,21 @@ export class VideoLiveReplaySettingModel extends Model<VideoLiveReplaySettingMod
   @UpdatedAt
   updatedAt: Date
 
-  @AllowNull(true)
+  @AllowNull(false)
   @Is('VideoPrivacy', value => throwIfNotValid(value, isVideoPrivacyValid, 'privacy'))
   @Column
   privacy: VideoPrivacy
 
   static load (id: number, transaction?: Transaction): Promise<MLiveReplaySetting> {
     return VideoLiveReplaySettingModel.findOne({
-      where: { id }, transaction
+      where: { id },
+      transaction
+    })
+  }
+
+  static removeSettings (id: number) {
+    return VideoLiveReplaySettingModel.destroy({
+      where: { id }
     })
   }
 
