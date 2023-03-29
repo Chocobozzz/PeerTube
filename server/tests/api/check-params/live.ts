@@ -477,6 +477,33 @@ describe('Test video lives API validator', function () {
       await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
+    it('Should fail with save replay enabled but without replay settings', async function () {
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          live: {
+            enabled: true,
+            allowReplay: true
+          }
+        }
+      })
+
+      const fields = { saveReplay: true }
+
+      await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with save replay disabled and replay settings', async function () {
+      const fields = { saveReplay: false, replaySettings: { privacy: VideoPrivacy.INTERNAL } }
+
+      await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with only replay settings when save replay is disabled', async function () {
+      const fields = { replaySettings: { privacy: VideoPrivacy.INTERNAL } }
+
+      await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
     it('Should fail to set latency if the server does not allow it', async function () {
       const fields = { latencyMode: LiveVideoLatencyMode.HIGH_LATENCY }
 
@@ -487,6 +514,9 @@ describe('Test video lives API validator', function () {
       await command.update({ videoId: video.id, fields: { saveReplay: false } })
       await command.update({ videoId: video.uuid, fields: { saveReplay: false } })
       await command.update({ videoId: video.shortUUID, fields: { saveReplay: false } })
+
+      await command.update({ videoId: video.id, fields: { saveReplay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC } } })
+
     })
 
     it('Should fail to update replay status if replay is not allowed on the instance', async function () {
