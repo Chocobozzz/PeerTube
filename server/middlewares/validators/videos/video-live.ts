@@ -312,7 +312,7 @@ function checkLiveSettingsReplayConsistency (options: {
   }
 
   // Save replay was and is not enabled, so send an error the user if it specified replay settings
-  if ((!exists(body.saveReplay) && res.locals.videoLive.saveReplay === false) || body.saveReplay !== true) {
+  if ((!exists(body.saveReplay) && res.locals.videoLive.saveReplay === false) || body.saveReplay === false) {
     if (exists(body.replaySettings)) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
