@@ -24,19 +24,15 @@ describe('Test live constraints', function () {
   let userAccessToken: string
   let userChannelId: number
 
-  async function createLiveWrapper (options: {
-    replay: boolean
-    replaySettings?: { privacy: VideoPrivacy }
-    permanent: boolean
-  }) {
-    const { replay, replaySettings, permanent } = options
+  async function createLiveWrapper (options: { replay: boolean, permanent: boolean }) {
+    const { replay, permanent } = options
 
     const liveAttributes = {
       name: 'user live',
       channelId: userChannelId,
       privacy: VideoPrivacy.PUBLIC,
       saveReplay: replay,
-      replaySettings,
+      replaySettings: options.replay ? { privacy: VideoPrivacy.PUBLIC } : undefined,
       permanentLive: permanent
     }
 
@@ -109,7 +105,7 @@ describe('Test live constraints', function () {
     // Wait for user quota memoize cache invalidation
     await wait(5000)
 
-    const userVideoLiveoId = await createLiveWrapper({ replay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC }, permanent: false })
+    const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
     await waitUntilLiveReplacedByReplayOnAllServers(servers, userVideoLiveoId)
@@ -127,7 +123,7 @@ describe('Test live constraints', function () {
     // Wait for user quota memoize cache invalidation
     await wait(5000)
 
-    const userVideoLiveoId = await createLiveWrapper({ replay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC }, permanent: true })
+    const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: true })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
     await waitJobs(servers)
@@ -145,7 +141,7 @@ describe('Test live constraints', function () {
 
     await updateQuota({ total: -1, daily: 1 })
 
-    const userVideoLiveoId = await createLiveWrapper({ replay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC }, permanent: false })
+    const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
     await waitUntilLiveReplacedByReplayOnAllServers(servers, userVideoLiveoId)
@@ -165,14 +161,14 @@ describe('Test live constraints', function () {
 
     await updateQuota({ total: 10 * 1000 * 1000, daily: -1 })
 
-    const userVideoLiveoId = await createLiveWrapper({ replay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC }, permanent: false })
+    const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: false })
   })
 
   it('Should have the same quota in admin and as a user', async function () {
     this.timeout(120000)
 
-    const userVideoLiveoId = await createLiveWrapper({ replay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC }, permanent: false })
+    const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
     const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ token: userAccessToken, videoId: userVideoLiveoId })
 
     await servers[0].live.waitUntilPublished({ videoId: userVideoLiveoId })
@@ -210,7 +206,7 @@ describe('Test live constraints', function () {
       }
     })
 
-    const userVideoLiveoId = await createLiveWrapper({ replay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC }, permanent: false })
+    const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
     await waitUntilLiveReplacedByReplayOnAllServers(servers, userVideoLiveoId)

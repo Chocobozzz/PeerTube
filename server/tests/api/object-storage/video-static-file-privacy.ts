@@ -308,8 +308,7 @@ describe('Object storage for video static file privacy', function () {
         const { video, live } = await server.live.quickCreate({
           saveReplay: true,
           permanentLive: false,
-          privacy: VideoPrivacy.PRIVATE,
-          replaySettings: { privacy: VideoPrivacy.PRIVATE }
+          privacy: VideoPrivacy.PRIVATE
         })
         normalLiveId = video.uuid
         normalLive = live
@@ -319,8 +318,7 @@ describe('Object storage for video static file privacy', function () {
         const { video, live } = await server.live.quickCreate({
           saveReplay: true,
           permanentLive: true,
-          privacy: VideoPrivacy.PRIVATE,
-          replaySettings: { privacy: VideoPrivacy.PRIVATE }
+          privacy: VideoPrivacy.PRIVATE
         })
         permanentLiveId = video.uuid
         permanentLive = live

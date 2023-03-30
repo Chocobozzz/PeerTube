@@ -19,7 +19,7 @@ import { VideoModel } from '@server/models/video/video'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MVideo, MVideoLiveSession, MVideoLiveVideo, MVideoLiveVideoFormattable } from '@server/types/models'
+import { MVideo, MVideoLiveSession, MVideoLiveVideo, MVideoLiveVideoWithSetting } from '@server/types/models'
 import { pick, wait } from '@shared/core-utils'
 import { LiveVideoError, VideoState } from '@shared/models'
 import { federateVideoIfNeeded } from '../activitypub/videos'
@@ -272,7 +272,7 @@ class LiveManager {
 
   private async runMuxingSession (options: {
     sessionId: string
-    videoLive: MVideoLiveVideoFormattable
+    videoLive: MVideoLiveVideoWithSetting
 
     inputUrl: string
     fps: number
@@ -472,7 +472,7 @@ class LiveManager {
     return resolutionsEnabled
   }
 
-  private async saveStartingSession (videoLive: MVideoLiveVideoFormattable) {
+  private async saveStartingSession (videoLive: MVideoLiveVideoWithSetting) {
     const replaySettings = videoLive.saveReplay
       ? new VideoLiveReplaySettingModel({
         privacy: videoLive.ReplaySetting.privacy
@@ -484,17 +484,13 @@ class LiveManager {
         await replaySettings.save({ transaction: t })
       }
 
-      const liveSession = new VideoLiveSessionModel({
+      return VideoLiveSessionModel.create({
         startDate: new Date(),
         liveVideoId: videoLive.videoId,
         saveReplay: videoLive.saveReplay,
         replaySettingId: videoLive.saveReplay ? replaySettings.id : null,
         endingProcessed: false
-      })
-
-      await liveSession.save({ transaction: t })
-
-      return liveSession
+      }, { transaction: t })
     })
   }
 

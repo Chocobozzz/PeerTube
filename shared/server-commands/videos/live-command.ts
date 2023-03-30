@@ -118,11 +118,10 @@ export class LiveCommand extends AbstractCommand {
 
   async quickCreate (options: OverrideCommandOptions & {
     saveReplay: boolean
-    replaySettings?: { privacy: VideoPrivacy }
     permanentLive: boolean
     privacy?: VideoPrivacy
   }) {
-    const { saveReplay, replaySettings, permanentLive, privacy } = options
+    const { saveReplay, permanentLive, privacy } = options
 
     const { uuid } = await this.create({
       ...options,
@@ -131,7 +130,7 @@ export class LiveCommand extends AbstractCommand {
         name: 'live',
         permanentLive,
         saveReplay,
-        replaySettings,
+        replaySettings: { privacy },
         channelId: this.server.store.channel.id,
         privacy
       }

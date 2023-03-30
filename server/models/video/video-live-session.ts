@@ -1,5 +1,17 @@
 import { FindOptions } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import {
+  AllowNull,
+  BeforeDestroy,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  ForeignKey,
+  Model,
+  Scopes,
+  Table,
+  UpdatedAt
+} from 'sequelize-typescript'
 import { MVideoLiveSession, MVideoLiveSessionReplay } from '@server/types/models'
 import { uuidToShort } from '@shared/extra-utils'
 import { LiveVideoError, LiveVideoSession } from '@shared/models'
@@ -35,6 +47,10 @@ export enum ScopeNames {
     },
     {
       fields: [ 'liveVideoId' ]
+    },
+    {
+      fields: [ 'replaySettingId' ],
+      unique: true
     }
   ]
 })
@@ -105,6 +121,15 @@ export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiv
     onDelete: 'set null'
   })
   ReplaySetting: VideoLiveReplaySettingModel
+
+  @BeforeDestroy
+  static deleteReplaySetting (instance: VideoLiveSessionModel) {
+    return VideoLiveReplaySettingModel.destroy({
+      where: {
+        id: instance.replaySettingId
+      }
+    })
+  }
 
   static load (id: number): Promise<MVideoLiveSession> {
     return VideoLiveSessionModel.findOne({

@@ -34,7 +34,7 @@ export class VideoLiveReplaySettingModel extends Model<VideoLiveReplaySettingMod
     })
   }
 
-  toFormattedJSON (): { privacy: VideoPrivacy } {
+  toFormattedJSON () {
     return {
       privacy: this.privacy
     }

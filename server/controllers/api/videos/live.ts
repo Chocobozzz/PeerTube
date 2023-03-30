@@ -193,7 +193,6 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
       await replaySettings.save(sequelizeOptions)
 
       videoLive.replaySettingId = replaySettings.id
-
     }
 
     videoLive.videoId = videoCreated.id

@@ -13,7 +13,7 @@ import {
 } from 'sequelize-typescript'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
-import { MVideoLive, MVideoLiveVideoFormattable } from '@server/types/models'
+import { MVideoLive, MVideoLiveVideoWithSetting } from '@server/types/models'
 import { LiveVideo, LiveVideoLatencyMode, VideoState } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoModel } from './video'
@@ -43,6 +43,10 @@ import { VideoLiveReplaySettingModel } from './video-live-replay-setting'
   indexes: [
     {
       fields: [ 'videoId' ],
+      unique: true
+    },
+    {
+      fields: [ 'replaySettingId' ],
       unique: true
     }
   ]
@@ -130,7 +134,7 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
       ]
     }
 
-    return VideoLiveModel.findOne<MVideoLiveVideoFormattable>(query)
+    return VideoLiveModel.findOne<MVideoLiveVideoWithSetting>(query)
   }
 
   static loadByVideoId (videoId: number) {

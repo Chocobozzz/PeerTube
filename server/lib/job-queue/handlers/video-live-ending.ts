@@ -61,14 +61,13 @@ async function processVideoLiveEnding (job: Job) {
     return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
   }
 
-  return replaceLiveByReplay(
-    {
-      video,
-      liveSession,
-      live,
-      permanentLive,
-      replayDirectory: payload.replayDirectory
-    })
+  return replaceLiveByReplay({
+    video,
+    liveSession,
+    live,
+    permanentLive,
+    replayDirectory: payload.replayDirectory
+  })
 }
 
 // ---------------------------------------------------------------------------
