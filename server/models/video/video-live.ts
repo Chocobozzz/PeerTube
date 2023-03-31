@@ -1,6 +1,7 @@
+import { Transaction } from 'sequelize'
 import {
-  BeforeDestroy,
   AllowNull,
+  BeforeDestroy,
   BelongsTo,
   Column,
   CreatedAt,
@@ -100,11 +101,12 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
   ReplaySetting: VideoLiveReplaySettingModel
 
   @BeforeDestroy
-  static deleteReplaySetting (instance: VideoLiveModel) {
+  static deleteReplaySetting (instance: VideoLiveModel, options: { transaction: Transaction }) {
     return VideoLiveReplaySettingModel.destroy({
       where: {
         id: instance.replaySettingId
-      }
+      },
+      transaction: options.transaction
     })
   }
 
