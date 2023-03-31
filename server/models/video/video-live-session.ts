@@ -1,10 +1,23 @@
 import { FindOptions } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import {
+  AllowNull,
+  BeforeDestroy,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  ForeignKey,
+  Model,
+  Scopes,
+  Table,
+  UpdatedAt
+} from 'sequelize-typescript'
 import { MVideoLiveSession, MVideoLiveSessionReplay } from '@server/types/models'
 import { uuidToShort } from '@shared/extra-utils'
 import { LiveVideoError, LiveVideoSession } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoModel } from './video'
+import { VideoLiveReplaySettingModel } from './video-live-replay-setting'
 
 export enum ScopeNames {
   WITH_REPLAY = 'WITH_REPLAY'
@@ -16,6 +29,10 @@ export enum ScopeNames {
       {
         model: VideoModel.unscoped(),
         as: 'ReplayVideo',
+        required: false
+      },
+      {
+        model: VideoLiveReplaySettingModel,
         required: false
       }
     ]
@@ -30,6 +47,10 @@ export enum ScopeNames {
     },
     {
       fields: [ 'liveVideoId' ]
+    },
+    {
+      fields: [ 'replaySettingId' ],
+      unique: true
     }
   ]
 })
@@ -89,6 +110,27 @@ export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiv
   })
   LiveVideo: VideoModel
 
+  @ForeignKey(() => VideoLiveReplaySettingModel)
+  @Column
+  replaySettingId: number
+
+  @BelongsTo(() => VideoLiveReplaySettingModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'set null'
+  })
+  ReplaySetting: VideoLiveReplaySettingModel
+
+  @BeforeDestroy
+  static deleteReplaySetting (instance: VideoLiveSessionModel) {
+    return VideoLiveReplaySettingModel.destroy({
+      where: {
+        id: instance.replaySettingId
+      }
+    })
+  }
+
   static load (id: number): Promise<MVideoLiveSession> {
     return VideoLiveSessionModel.findOne({
       where: { id }
@@ -146,6 +188,10 @@ export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiv
       }
       : undefined
 
+    const replaySettings = this.replaySettingId
+      ? this.ReplaySetting.toFormattedJSON()
+      : undefined
+
     return {
       id: this.id,
       startDate: this.startDate.toISOString(),
@@ -154,6 +200,7 @@ export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiv
         : null,
       endingProcessed: this.endingProcessed,
       saveReplay: this.saveReplay,
+      replaySettings,
       replayVideo,
       error: this.error
     }

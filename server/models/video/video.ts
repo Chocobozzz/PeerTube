@@ -706,6 +706,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       name: 'videoId',
       allowNull: false
     },
+    hooks: true,
     onDelete: 'cascade'
   })
   VideoLive: VideoLiveModel

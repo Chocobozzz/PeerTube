@@ -23,6 +23,7 @@ describe('Fast restream in live', function () {
       privacy: VideoPrivacy.PUBLIC,
       name: 'my super live',
       saveReplay: options.replay,
+      replaySettings: options.replay ? { privacy: VideoPrivacy.PUBLIC } : undefined,
       permanentLive: options.permanent
     }
 

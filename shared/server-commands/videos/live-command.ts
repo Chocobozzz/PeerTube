@@ -130,6 +130,7 @@ export class LiveCommand extends AbstractCommand {
         name: 'live',
         permanentLive,
         saveReplay,
+        replaySettings: { privacy },
         channelId: this.server.store.channel.id,
         privacy
       }

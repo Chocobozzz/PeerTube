@@ -2446,7 +2446,7 @@ paths:
   /api/v1/videos/privacies:
     get:
       summary: List available video privacy policies
-      operationId: getPrivacyPolicies
+      operationId: getVideoPrivacyPolicies
       tags:
         - Video
       responses:
@@ -3087,6 +3087,8 @@ paths:
                   type: integer
                 saveReplay:
                   type: boolean
+                replaySettings:
+                  $ref: '#/components/schemas/LiveVideoReplaySettings'
                 permanentLive:
                   description: User can stream multiple times in a permanent live
                   type: boolean
@@ -6088,7 +6090,7 @@ components:
         - 1
         - 2
         - 3
-      description: Video playlist privacy policy (see [/video-playlists/privacies])
+      description: Video playlist privacy policy (see [/video-playlists/privacies](#operation/getPlaylistPrivacyPolicies))
     VideoPlaylistPrivacyConstant:
       properties:
         id:
@@ -6116,7 +6118,7 @@ components:
         - 2
         - 3
         - 4
-      description: privacy id of the video (see [/videos/privacies](#operation/getPrivacyPolicies))
+      description: privacy id of the video (see [/videos/privacies](#operation/getVideoPrivacyPolicies))
     VideoPrivacyConstant:
       properties:
         id:
@@ -6177,6 +6179,14 @@ components:
         - 2
         - 3
       description: 'The live latency mode (Default = `1`, High latency = `2`, Small Latency = `3`)'
+    
+    LiveVideoReplaySettings:
+      type: object
+      properties:
+        privacy:
+          # description: Video playlist privacy policy (see [../video-playlists/privacies])
+          $ref: '#/components/schemas/VideoPrivacySet'
+
 
     VideoStateConstant:
       properties:
@@ -8693,6 +8703,8 @@ components:
       properties:
         saveReplay:
           type: boolean
+        replaySettings:
+          $ref: '#/components/schemas/LiveVideoReplaySettings'
         permanentLive:
           description: User can stream multiple times in a permanent live
           type: boolean
@@ -8713,6 +8725,8 @@ components:
           description: RTMP stream key to use to stream into this live video. Included in the response if an appropriate token is provided
         saveReplay:
           type: boolean
+        replaySettings:
+          $ref: '#/components/schemas/LiveVideoReplaySettings'
         permanentLive:
           description: User can stream multiple times in a permanent live
           type: boolean

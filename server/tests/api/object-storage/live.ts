@@ -27,6 +27,7 @@ async function createLive (server: PeerTubeServer, permanent: boolean) {
     privacy: VideoPrivacy.PUBLIC,
     name: 'my super live',
     saveReplay: true,
+    replaySettings: { privacy: VideoPrivacy.PUBLIC },
     permanentLive: permanent
   }
 

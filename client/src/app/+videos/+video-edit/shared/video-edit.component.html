@@ -272,7 +272,7 @@
               </div>
             </div>
 
-            <div class="form-group" *ngIf="isSaveReplayEnabled()">
+            <div class="form-group" *ngIf="isSaveReplayAllowed()">
               <my-peertube-checkbox inputName="liveVideoSaveReplay" formControlName="saveReplay">
                 <ng-template ptTemplate="label">
                   <ng-container i18n>Automatically publish a replay when your live ends</ng-container>
@@ -282,6 +282,13 @@
                   <span i18n>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</span>
                 </ng-container>
               </my-peertube-checkbox>
+            </div>
+
+            <div class="form-group mx-4" *ngIf="isSaveReplayEnabled()">
+              <label i18n for="replayPrivacy">Privacy of the new replay</label>
+              <my-select-options
+                labelForId="replayPrivacy" [items]="videoPrivacies" [clearable]="false" formControlName="replayPrivacy"
+              ></my-select-options>
             </div>
 
             <div class="form-group" *ngIf="isLatencyModeEnabled()">

@@ -19,7 +19,7 @@ import { VideoModel } from '@server/models/video/video'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MVideo, MVideoLiveSession, MVideoLiveVideo } from '@server/types/models'
+import { MVideo, MVideoLiveSession, MVideoLiveVideo, MVideoLiveVideoWithSetting } from '@server/types/models'
 import { pick, wait } from '@shared/core-utils'
 import { LiveVideoError, VideoState } from '@shared/models'
 import { federateVideoIfNeeded } from '../activitypub/videos'
@@ -30,6 +30,8 @@ import { Hooks } from '../plugins/hooks'
 import { LiveQuotaStore } from './live-quota-store'
 import { cleanupAndDestroyPermanentLive } from './live-utils'
 import { MuxingSession } from './shared'
+import { sequelizeTypescript } from '@server/initializers/database'
+import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting'
 
 const NodeRtmpSession = require('node-media-server/src/node_rtmp_session')
 const context = require('node-media-server/src/node_core_ctx')
@@ -270,7 +272,7 @@ class LiveManager {
 
   private async runMuxingSession (options: {
     sessionId: string
-    videoLive: MVideoLiveVideo
+    videoLive: MVideoLiveVideoWithSetting
 
     inputUrl: string
     fps: number
@@ -470,15 +472,26 @@ class LiveManager {
     return resolutionsEnabled
   }
 
-  private saveStartingSession (videoLive: MVideoLiveVideo) {
-    const liveSession = new VideoLiveSessionModel({
-      startDate: new Date(),
-      liveVideoId: videoLive.videoId,
-      saveReplay: videoLive.saveReplay,
-      endingProcessed: false
-    })
+  private async saveStartingSession (videoLive: MVideoLiveVideoWithSetting) {
+    const replaySettings = videoLive.saveReplay
+      ? new VideoLiveReplaySettingModel({
+        privacy: videoLive.ReplaySetting.privacy
+      })
+      : null
 
-    return liveSession.save()
+    return sequelizeTypescript.transaction(async t => {
+      if (videoLive.saveReplay) {
+        await replaySettings.save({ transaction: t })
+      }
+
+      return VideoLiveSessionModel.create({
+        startDate: new Date(),
+        liveVideoId: videoLive.videoId,
+        saveReplay: videoLive.saveReplay,
+        replaySettingId: videoLive.saveReplay ? replaySettings.id : null,
+        endingProcessed: false
+      }, { transaction: t })
+    })
   }
 
   private async saveEndingSession (videoId: number, error: LiveVideoError | null) {

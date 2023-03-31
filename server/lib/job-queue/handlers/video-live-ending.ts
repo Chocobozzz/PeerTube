@@ -19,6 +19,7 @@ import { MVideo, MVideoLive, MVideoLiveSession, MVideoWithAllFiles } from '@serv
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { VideoPathManager } from '@server/lib/video-path-manager'
+import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting'
 
 const lTags = loggerTagsFactory('live', 'job')
 
@@ -60,7 +61,13 @@ async function processVideoLiveEnding (job: Job) {
     return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
   }
 
-  return replaceLiveByReplay({ video, liveSession, live, permanentLive, replayDirectory: payload.replayDirectory })
+  return replaceLiveByReplay({
+    video,
+    liveSession,
+    live,
+    permanentLive,
+    replayDirectory: payload.replayDirectory
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -79,6 +86,8 @@ async function saveReplayToExternalVideo (options: {
 }) {
   const { liveVideo, liveSession, publishedAt, replayDirectory } = options
 
+  const replaySettings = await VideoLiveReplaySettingModel.load(liveSession.replaySettingId)
+
   const replayVideo = new VideoModel({
     name: `${liveVideo.name} - ${new Date(publishedAt).toLocaleString()}`,
     isLive: false,
@@ -95,7 +104,7 @@ async function saveReplayToExternalVideo (options: {
     nsfw: liveVideo.nsfw,
     description: liveVideo.description,
     support: liveVideo.support,
-    privacy: liveVideo.privacy,
+    privacy: replaySettings.privacy,
     channelId: liveVideo.channelId
   }) as MVideoWithAllFiles
 
@@ -142,6 +151,7 @@ async function replaceLiveByReplay (options: {
 }) {
   const { video, liveSession, live, permanentLive, replayDirectory } = options
 
+  const replaySettings = await VideoLiveReplaySettingModel.load(liveSession.replaySettingId)
   const videoWithFiles = await VideoModel.loadFull(video.id)
   const hlsPlaylist = videoWithFiles.getHLSPlaylist()
 
@@ -150,6 +160,7 @@ async function replaceLiveByReplay (options: {
   await live.destroy()
 
   videoWithFiles.isLive = false
+  videoWithFiles.privacy = replaySettings.privacy
   videoWithFiles.waitTranscoding = true
   videoWithFiles.state = VideoState.TO_TRANSCODE
 
