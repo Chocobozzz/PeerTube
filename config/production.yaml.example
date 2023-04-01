@@ -760,7 +760,7 @@ search:
   search_index:
     enabled: false
     # URL of the search index, that should use the same search API and routes
-    # than PeerTube: https://docs.joinpeertube.org/api/rest-reference.html
+    # than PeerTube: https://docs.joinpeertube.org/api-rest-reference.html
     # You should deploy your own with https://framagit.org/framasoft/peertube/search-index,
     # and can use https://search.joinpeertube.org/ for tests, but keep in mind the latter is an unmoderated search index
     url: ''
