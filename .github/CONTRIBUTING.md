@@ -141,7 +141,7 @@ You can get a complete PeerTube development setup with Gitpod, a free one-click 
 To develop on the server-side:
 
 ```
-$ yarn dev:server
+$ npm run dev:server
 ```
 
 Then, the server will listen on `localhost:9000`. When server source files
@@ -157,7 +157,7 @@ More detailed documentation is available:
 To develop on the client side:
 
 ```
-$ yarn dev:client
+$ npm run dev:client
 ```
 
 The API will listen on `localhost:9000` and the frontend on `localhost:3000`.
@@ -175,7 +175,7 @@ File changes are automatically recompiled, injected in the web browser (no need 
 and the web server is automatically restarted.
 
 ```
-$ yarn dev
+$ npm run dev
 ```
 
 ### Embed
@@ -185,7 +185,7 @@ The generated files (HTML entrypoint and multiple JS and CSS files) are served b
 The following command will compile embed files and run the PeerTube server:
 
 ```
-$ yarn dev:embed
+$ npm run dev:embed
 ```
 
 ### RTL layout
@@ -193,7 +193,7 @@ $ yarn dev:embed
 To test RTL (right-to-left) layout using `ar` locale:
 
 ```
-$ yarn run dev -- --ar-locale
+$ npm run dev -- --ar-locale
 ```
 
 ### Testing
@@ -218,16 +218,16 @@ $ createdb -O peertube peertube_test{1,2,3}
 Build the application and flush the old tests data:
 
 ```
-$ yarn build
-$ yarn clean:server:test
+$ npm run build
+$ npm run clean:server:test
 ```
 
 To run 3 nodes:
 
 ```
-$ NODE_APP_INSTANCE=1 NODE_ENV=test yarn start
-$ NODE_APP_INSTANCE=2 NODE_ENV=test yarn start
-$ NODE_APP_INSTANCE=3 NODE_ENV=test yarn start
+$ NODE_APP_INSTANCE=1 NODE_ENV=test npm start
+$ NODE_APP_INSTANCE=2 NODE_ENV=test npm start
+$ NODE_APP_INSTANCE=3 NODE_ENV=test npm start
 ```
 
 Then you will get access to the three nodes at `http://127.0.0.1:900{1,2,3}`
