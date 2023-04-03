@@ -251,6 +251,11 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           isDefaultSearch: null
         }
       },
+      history: {
+        videos: {
+          enabled: null
+        }
+      },
 
       instanceCustomHomepage: {
         content: null

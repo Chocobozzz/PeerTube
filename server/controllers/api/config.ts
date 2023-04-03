@@ -330,6 +330,11 @@ function customConfig (): CustomConfig {
         disableLocalSearch: CONFIG.SEARCH.SEARCH_INDEX.DISABLE_LOCAL_SEARCH,
         isDefaultSearch: CONFIG.SEARCH.SEARCH_INDEX.IS_DEFAULT_SEARCH
       }
+    },
+    history: {
+      videos: {
+        enabled: CONFIG.HISTORY.VIDEOS.ENABLED
+      }
     }
   }
 }

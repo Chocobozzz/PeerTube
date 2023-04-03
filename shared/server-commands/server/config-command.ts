@@ -475,6 +475,11 @@ export class ConfigCommand extends AbstractCommand {
           disableLocalSearch: true,
           isDefaultSearch: true
         }
+      },
+      history: {
+        videos: {
+          enabled: true
+        }
       }
     }
 

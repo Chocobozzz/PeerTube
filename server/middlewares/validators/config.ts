@@ -104,6 +104,8 @@ const customConfigUpdateValidator = [
   body('search.searchIndex.disableLocalSearch').isBoolean(),
   body('search.searchIndex.isDefaultSearch').isBoolean(),
 
+  body('history.videos.enabled').isBoolean(),
+
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
     if (!checkInvalidConfigIfEmailDisabled(req.body, res)) return

@@ -49,6 +49,9 @@ function buildUser (options: {
     pluginAuth
   } = options
 
+  logger.error(videoQuota)
+  logger.error(CONFIG.HISTORY.VIDEOS.ENABLED)
+
   return new UserModel({
     username,
     password,
@@ -56,6 +59,8 @@ function buildUser (options: {
 
     nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
     p2pEnabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED,
+    videosHistoryEnabled: CONFIG.HISTORY.VIDEOS.ENABLED,
+
     autoPlayVideo: true,
 
     role,

@@ -229,4 +229,10 @@ export interface CustomConfig {
       isDefaultSearch: boolean
     }
   }
+
+  history: {
+    videos: {
+      enabled: boolean
+    }
+  }
 }

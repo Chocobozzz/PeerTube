@@ -217,6 +217,11 @@ describe('Test config API validators', function () {
         disableLocalSearch: true,
         isDefaultSearch: true
       }
+    },
+    history: {
+      videos: {
+        enabled: true
+      }
     }
   }
 

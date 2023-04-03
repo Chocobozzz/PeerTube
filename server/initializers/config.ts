@@ -252,6 +252,7 @@ const CONFIG = {
   },
   HISTORY: {
     VIDEOS: {
+      ENABLED: config.get<boolean>('history.videos.enabled'),
       MAX_AGE: parseDurationToMs(config.get('history.videos.max_age'))
     }
   },

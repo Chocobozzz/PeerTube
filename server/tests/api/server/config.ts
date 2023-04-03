@@ -423,6 +423,11 @@ const newCustomConfig: CustomConfig = {
       disableLocalSearch: true,
       isDefaultSearch: true
     }
+  },
+  history: {
+    videos: {
+      enabled: true
+    }
   }
 }
 
