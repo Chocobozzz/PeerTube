@@ -88,7 +88,7 @@ First, you should use a server or PC with at least 4GB of RAM. Less RAM may lead
 [the steps](/support/doc/dependencies.md)
 to install the dependencies.
 1) Install [parallel](https://www.gnu.org/software/parallel/) to be able to run tests.
-1) Fork the Github repository.
+1) Fork the GitHub repository.
 1) Run the following commands.
 ```
 $ git clone https://github.com/Chocobozzz/PeerTube
@@ -98,7 +98,7 @@ $ yarn install --pure-lockfile
 ```
 
 Note that development is done on the `develop` branch. If you want to hack on
-Peertube, you should switch to that branch. Also note that you have to repeat
+PeerTube, you should switch to that branch. Also note that you have to repeat
 the `yarn install --pure-lockfile` command.
 
 When you create a new branch you should also tell to use your repo for upload
@@ -125,8 +125,8 @@ $ sudo -u postgres psql -c "CREATE EXTENSION pg_trgm;" peertube_dev
 $ sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_dev
 ```
 
-Peertube also requires a running redis server, no special setup is needed for
-this.
+PeerTube also requires a running redis server, no special setup is needed for
+this (it's `sudo service redis-server start` on WSL 1 with Ubuntu).
 
 In dev mode, administrator username is **root** and password is **test**.
 
@@ -141,7 +141,7 @@ You can get a complete PeerTube development setup with Gitpod, a free one-click 
 To develop on the server-side:
 
 ```
-$ npm run dev:server
+$ yarn dev:server
 ```
 
 Then, the server will listen on `localhost:9000`. When server source files
@@ -157,7 +157,7 @@ More detailed documentation is available:
 To develop on the client side:
 
 ```
-$ npm run dev:client
+$ yarn dev:client
 ```
 
 The API will listen on `localhost:9000` and the frontend on `localhost:3000`.
@@ -175,7 +175,7 @@ File changes are automatically recompiled, injected in the web browser (no need 
 and the web server is automatically restarted.
 
 ```
-$ npm run dev
+$ yarn dev
 ```
 
 ### Embed
@@ -185,7 +185,7 @@ The generated files (HTML entrypoint and multiple JS and CSS files) are served b
 The following command will compile embed files and run the PeerTube server:
 
 ```
-$ npm run dev:embed
+$ yarn dev:embed
 ```
 
 ### RTL layout
@@ -193,7 +193,7 @@ $ npm run dev:embed
 To test RTL (right-to-left) layout using `ar` locale:
 
 ```
-$ npm run dev -- --ar-locale
+$ yarn run dev -- --ar-locale
 ```
 
 ### Testing
@@ -218,16 +218,16 @@ $ createdb -O peertube peertube_test{1,2,3}
 Build the application and flush the old tests data:
 
 ```
-$ npm run build
-$ npm run clean:server:test
+$ yarn build
+$ yarn clean:server:test
 ```
 
 To run 3 nodes:
 
 ```
-$ NODE_APP_INSTANCE=1 NODE_ENV=test npm start
-$ NODE_APP_INSTANCE=2 NODE_ENV=test npm start
-$ NODE_APP_INSTANCE=3 NODE_ENV=test npm start
+$ NODE_APP_INSTANCE=1 NODE_ENV=test yarn start
+$ NODE_APP_INSTANCE=2 NODE_ENV=test yarn start
+$ NODE_APP_INSTANCE=3 NODE_ENV=test yarn start
 ```
 
 Then you will get access to the three nodes at `http://127.0.0.1:900{1,2,3}`
@@ -278,7 +278,7 @@ You can see the list on the [dedicated documentation](/support/doc/development/l
 
 ### CI
 
-PeerTube uses Github actions to run tests every time a commit is pushed or a PR is opened.
+PeerTube uses GitHub actions to run tests every time a commit is pushed or a PR is opened.
 You can find more information about these tasks on the [dedicated documentation](/support/doc/development/ci.md).
 
 ### Monitoring
@@ -288,11 +288,11 @@ To do so, see the [dedicated documentation](/support/doc/development/monitoring.
 
 ### Test live stream
 
-To easily test a live on PeerTube:
+To easily test a live stream on PeerTube:
  * Enable live support in web admin configuration
  * Create a permanent live on the PeerTube instance
  * Get the **RTMP URL** and the **Live stream key**
- * Send the live to PeerTube using `ffmpeg` using a local video:
+ * Send the live stream to PeerTube using `ffmpeg` using a local video:
 
 ```
 ffmpeg -stream_loop -1 -re -i any-video.mp4 -c copy -f flv rtmp://{RTMP URL}/live/{STREAM KEY}

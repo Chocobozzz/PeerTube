@@ -7,7 +7,6 @@ In order to create an open and welcoming environment, we as contributors and mai
 * age
 * body size
 * disability
-* ethnicity
 * gender identity and expression
 * level of experience
 * education
@@ -63,7 +62,7 @@ We also reserve the right to temporarily or permanently ban any contributor for 
 
 ## Scope
 
-This code of conduct applies whenever you are representing the project or community. For example you may be:
+This code of conduct applies whenever you are representing the project or community. For example, you may be:
 
 * working in a project space online or in the public (i.e.: github.com, framacolibri.org, IRC)
 * using an official project email address
