@@ -126,7 +126,7 @@ $ sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_dev
 ```
 
 PeerTube also requires a running redis server, no special setup is needed for
-this (it's `sudo service redis-server start` on WSL 1 with Ubuntu).
+this.
 
 In dev mode, administrator username is **root** and password is **test**.
 
