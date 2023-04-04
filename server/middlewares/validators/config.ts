@@ -35,6 +35,7 @@ const customConfigUpdateValidator = [
   body('admin.email').isEmail(),
   body('contactForm.enabled').isBoolean(),
 
+  body('user.history.videos.enabled').isBoolean(),
   body('user.videoQuota').custom(isUserVideoQuotaValid),
   body('user.videoQuotaDaily').custom(isUserVideoQuotaDailyValid),
 
@@ -103,8 +104,6 @@ const customConfigUpdateValidator = [
   body('search.searchIndex.url').exists(),
   body('search.searchIndex.disableLocalSearch').isBoolean(),
   body('search.searchIndex.isDefaultSearch').isBoolean(),
-
-  body('history.videos.enabled').isBoolean(),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

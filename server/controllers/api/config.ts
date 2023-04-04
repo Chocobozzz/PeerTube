@@ -204,6 +204,11 @@ function customConfig (): CustomConfig {
       enabled: CONFIG.CONTACT_FORM.ENABLED
     },
     user: {
+      history: {
+        videos: {
+          enabled: CONFIG.USER.HISTORY.VIDEOS.ENABLED
+        }
+      },
       videoQuota: CONFIG.USER.VIDEO_QUOTA,
       videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
     },
@@ -329,11 +334,6 @@ function customConfig (): CustomConfig {
         url: CONFIG.SEARCH.SEARCH_INDEX.URL,
         disableLocalSearch: CONFIG.SEARCH.SEARCH_INDEX.DISABLE_LOCAL_SEARCH,
         isDefaultSearch: CONFIG.SEARCH.SEARCH_INDEX.IS_DEFAULT_SEARCH
-      }
-    },
-    history: {
-      videos: {
-        enabled: CONFIG.HISTORY.VIDEOS.ENABLED
       }
     }
   }

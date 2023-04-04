@@ -307,7 +307,6 @@ tracker:
 
 history:
   videos:
-    enabled: true
     # If you want to limit users videos history
     # -1 means there is no limitations
     # Other values could be '6 months' or '30 days' etc (PeerTube will periodically delete old entries from database)
@@ -418,7 +417,10 @@ signup:
       whitelist: []
       blacklist: []
 
-user:
+user:  
+  history:
+    videos:
+      enabled: true
   # Default value of maximum video bytes the user can upload (does not take into account transcoded files)
   # Byte format is supported ("1GB" etc)
   # -1 == unlimited

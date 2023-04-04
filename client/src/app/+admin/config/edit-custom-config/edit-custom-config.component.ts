@@ -165,6 +165,11 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         enabled: null
       },
       user: {
+        history: {
+          videos: {
+            enabled: null
+          }
+        },
         videoQuota: USER_VIDEO_QUOTA_VALIDATOR,
         videoQuotaDaily: USER_VIDEO_QUOTA_DAILY_VALIDATOR
       },
@@ -249,11 +254,6 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           url: SEARCH_INDEX_URL_VALIDATOR,
           disableLocalSearch: null,
           isDefaultSearch: null
-        }
-      },
-      history: {
-        videos: {
-          enabled: null
         }
       },
 

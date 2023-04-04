@@ -90,6 +90,11 @@ describe('Test config API validators', function () {
       enabled: false
     },
     user: {
+      history: {
+        videos: {
+          enabled: true
+        }
+      },
       videoQuota: 5242881,
       videoQuotaDaily: 318742
     },
@@ -216,11 +221,6 @@ describe('Test config API validators', function () {
         url: 'https://search.joinpeertube.org',
         disableLocalSearch: true,
         isDefaultSearch: true
-      }
-    },
-    history: {
-      videos: {
-        enabled: true
       }
     }
   }

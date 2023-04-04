@@ -350,6 +350,11 @@ export class ConfigCommand extends AbstractCommand {
         enabled: true
       },
       user: {
+        history: {
+          videos: {
+            enabled: true
+          }
+        },
         videoQuota: 5242881,
         videoQuotaDaily: 318742
       },
@@ -474,11 +479,6 @@ export class ConfigCommand extends AbstractCommand {
           url: 'https://search.joinpeertube.org',
           disableLocalSearch: true,
           isDefaultSearch: true
-        }
-      },
-      history: {
-        videos: {
-          enabled: true
         }
       }
     }

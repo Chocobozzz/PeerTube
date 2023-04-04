@@ -290,6 +290,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   p2pEnabled: boolean
 
   @AllowNull(false)
+  @Default(true)
   @Is('UserVideosHistoryEnabled', value => throwIfNotValid(value, isUserVideosHistoryEnabledValid, 'Videos history enabled'))
   @Column
   videosHistoryEnabled: boolean
