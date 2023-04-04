@@ -91,10 +91,10 @@ to install the dependencies.
 1) Fork the Github repository.
 1) Run the following commands.
 ```
-$ git clone https://github.com/Chocobozzz/PeerTube
-$ cd PeerTube
-$ git remote add me git@github.com:YOUR_GITHUB_USERNAME/PeerTube.git
-$ yarn install --pure-lockfile
+git clone https://github.com/Chocobozzz/PeerTube
+cd PeerTube
+git remote add me git@github.com:YOUR_GITHUB_USERNAME/PeerTube.git
+yarn install --pure-lockfile
 ```
 
 Note that development is done on the `develop` branch. If you want to hack on
@@ -104,7 +104,7 @@ the `yarn install --pure-lockfile` command.
 When you create a new branch you should also tell to use your repo for upload
 not default one. To do just do:
 ```
-$ git push --set-upstream me <your branch name>
+git push --set-upstream me <your branch name>
 ```
 
 Then, create a postgres database and user with the values set in the
@@ -121,8 +121,8 @@ Enter password for new role: peertube
 Then enable extensions PeerTube needs:
 
 ```
-$ sudo -u postgres psql -c "CREATE EXTENSION pg_trgm;" peertube_dev
-$ sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_dev
+sudo -u postgres psql -c "CREATE EXTENSION pg_trgm;" peertube_dev
+sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_dev
 ```
 
 Peertube also requires a running redis server, no special setup is needed for
@@ -141,7 +141,7 @@ You can get a complete PeerTube development setup with Gitpod, a free one-click 
 To develop on the server-side:
 
 ```
-$ npm run dev:server
+npm run dev:server
 ```
 
 Then, the server will listen on `localhost:9000`. When server source files
@@ -157,7 +157,7 @@ More detailed documentation is available:
 To develop on the client side:
 
 ```
-$ npm run dev:client
+npm run dev:client
 ```
 
 The API will listen on `localhost:9000` and the frontend on `localhost:3000`.
@@ -175,7 +175,7 @@ File changes are automatically recompiled, injected in the web browser (no need 
 and the web server is automatically restarted.
 
 ```
-$ npm run dev
+npm run dev
 ```
 
 ### Embed
@@ -185,7 +185,7 @@ The generated files (HTML entrypoint and multiple JS and CSS files) are served b
 The following command will compile embed files and run the PeerTube server:
 
 ```
-$ npm run dev:embed
+npm run dev:embed
 ```
 
 ### RTL layout
@@ -193,7 +193,7 @@ $ npm run dev:embed
 To test RTL (right-to-left) layout using `ar` locale:
 
 ```
-$ npm run dev -- --ar-locale
+npm run dev -- --ar-locale
 ```
 
 ### Testing
@@ -211,23 +211,23 @@ Create a PostgreSQL user **with the same name as your username** in order to avo
 Then, we can create the databases (if they don't already exist):
 
 ```
-$ sudo -u postgres createuser you_username --createdb --superuser
-$ createdb -O peertube peertube_test{1,2,3}
+sudo -u postgres createuser you_username --createdb --superuser
+createdb -O peertube peertube_test{1,2,3}
 ```
 
 Build the application and flush the old tests data:
 
 ```
-$ npm run build
-$ npm run clean:server:test
+npm run build
+npm run clean:server:test
 ```
 
 To run 3 nodes:
 
 ```
-$ NODE_APP_INSTANCE=1 NODE_ENV=test npm start
-$ NODE_APP_INSTANCE=2 NODE_ENV=test npm start
-$ NODE_APP_INSTANCE=3 NODE_ENV=test npm start
+NODE_APP_INSTANCE=1 NODE_ENV=test npm start
+NODE_APP_INSTANCE=2 NODE_ENV=test npm start
+NODE_APP_INSTANCE=3 NODE_ENV=test npm start
 ```
 
 Then you will get access to the three nodes at `http://127.0.0.1:900{1,2,3}`

@@ -40,16 +40,16 @@ Install the [PeerTube dependencies](/support/doc/dependencies.md) except Postgre
 Clone the PeerTube repo to get the latest version (even if you are on your PeerTube server):
 
 ```bash
-$ git clone https://github.com/Chocobozzz/PeerTube.git
-$ CLONE="$(pwd)/PeerTube"
-$ cd ${CLONE}
+git clone https://github.com/Chocobozzz/PeerTube.git
+CLONE="$(pwd)/PeerTube"
+cd ${CLONE}
 ```
 
 Install dependencies and build CLI tools:
 
 ```bash
-$ NOCLIENT=1 yarn install --pure-lockfile
-$ npm run setup:cli
+NOCLIENT=1 yarn install --pure-lockfile
+npm run setup:cli
 ```
 
 ### CLI wrapper
@@ -78,8 +78,8 @@ You can access it as `peertube` via an alias in your `.bashrc` like `alias peert
 The wrapper can keep track of instances you have an account on. We limit to one account per instance for now.
 
 ```bash
-$ peertube auth add -u 'PEERTUBE_URL' -U 'PEERTUBE_USER' --password 'PEERTUBE_PASSWORD'
-$ peertube auth list
+peertube auth add -u 'PEERTUBE_URL' -U 'PEERTUBE_USER' --password 'PEERTUBE_PASSWORD'
+peertube auth list
 ┌──────────────────────────────┬──────────────────────────────┐
 │ instance                     │ login                        │
 ├──────────────────────────────┼──────────────────────────────┤
@@ -90,16 +90,16 @@ $ peertube auth list
 You can now use that account to upload videos without feeding the same parameters again.
 
 ```bash
-$ peertube up <videoFile>
+peertube up <videoFile>
 ```
 
 To list, install, uninstall dynamically plugins/themes of an instance:
 
 ```bash
-$ peertube plugins list
-$ peertube plugins install --path /local/plugin/path
-$ peertube plugins install --npm-name peertube-plugin-myplugin
-$ peertube plugins uninstall --npm-name peertube-plugin-myplugin
+peertube plugins list
+peertube plugins install --path /local/plugin/path
+peertube plugins install --npm-name peertube-plugin-myplugin
+peertube plugins uninstall --npm-name peertube-plugin-myplugin
 ```
 
 #### peertube-import-videos.js
@@ -108,7 +108,7 @@ You can use this script to import videos from all [supported sites of youtube-dl
 Be sure you own the videos or have the author's authorization to do so.
 
 ```sh
-$ node dist/server/tools/peertube-import-videos.js \
+node dist/server/tools/peertube-import-videos.js \
     -u 'PEERTUBE_URL' \
     -U 'PEERTUBE_USER' \
     --password 'PEERTUBE_PASSWORD' \
@@ -152,8 +152,8 @@ You can use this script to import videos directly from the CLI.
 Videos will be publicly available after transcoding (you can see them before that in your account on the web interface).
 
 ```bash
-$ cd ${CLONE}
-$ node dist/server/tools/peertube-upload.js --help
+cd ${CLONE}
+node dist/server/tools/peertube-upload.js --help
 ```
 
 #### peertube-plugins.js
@@ -161,15 +161,15 @@ $ node dist/server/tools/peertube-upload.js --help
 Install/update/uninstall or list local or NPM PeerTube plugins:
 
 ```bash
-$ cd ${CLONE}
-$ node dist/server/tools/peertube-plugins.js --help
-$ node dist/server/tools/peertube-plugins.js list --help
-$ node dist/server/tools/peertube-plugins.js install --help
-$ node dist/server/tools/peertube-plugins.js update --help
-$ node dist/server/tools/peertube-plugins.js uninstall --help
+cd ${CLONE}
+node dist/server/tools/peertube-plugins.js --help
+node dist/server/tools/peertube-plugins.js list --help
+node dist/server/tools/peertube-plugins.js install --help
+node dist/server/tools/peertube-plugins.js update --help
+node dist/server/tools/peertube-plugins.js uninstall --help
 
-$ node dist/server/tools/peertube-plugins.js install --path /my/plugin/path
-$ node dist/server/tools/peertube-plugins.js install --npm-name peertube-theme-example
+node dist/server/tools/peertube-plugins.js install --path /my/plugin/path
+node dist/server/tools/peertube-plugins.js install --npm-name peertube-theme-example
 ```
 
 #### peertube-redundancy.js
@@ -179,25 +179,25 @@ Manage (list/add/remove) video redundancies:
 To list your videos that are duplicated by remote instances:
 
 ```bash
-$ node dist/server/tools/peertube.js redundancy list-remote-redundancies
+node dist/server/tools/peertube.js redundancy list-remote-redundancies
 ```
 
 To list remote videos that your instance duplicated:
 
 ```bash
-$ node dist/server/tools/peertube.js redundancy list-my-redundancies
+node dist/server/tools/peertube.js redundancy list-my-redundancies
 ```
 
 To duplicate a specific video in your redundancy system:
 
 ```bash
-$ node dist/server/tools/peertube.js redundancy add --video 823
+node dist/server/tools/peertube.js redundancy add --video 823
 ```
 
 To remove a video redundancy:
 
 ```bash
-$ node dist/server/tools/peertube.js redundancy remove --video 823
+node dist/server/tools/peertube.js redundancy remove --video 823
 ```
 
 ## Server tools
@@ -209,13 +209,13 @@ These scripts should be run on the server, in `peertube-latest` directory.
 To parse PeerTube last log file:
 
 ```bash
-$ # Basic installation
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run parse-log -- --level info
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run parse-log -- --level info
 
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run parse-log -- --level info
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run parse-log -- --level info
 ```
 
 `--level` is optional and could be `info`/`warn`/`error`
@@ -223,13 +223,13 @@ $ docker-compose exec -u peertube peertube npm run parse-log -- --level info
 You can also remove SQL or HTTP logs using `--not-tags` (PeerTube >= 3.2):
 
 ```bash
-$ # Basic installation
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run parse-log -- --level debug --not-tags http sql
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run parse-log -- --level debug --not-tags http sql
 
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run parse-log -- --level debug --not-tags http sql
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run parse-log -- --level debug --not-tags http sql
 ```
 
 ### regenerate-thumbnails.js
@@ -239,13 +239,13 @@ $ docker-compose exec -u peertube peertube npm run parse-log -- --level debug --
 Regenerating local video thumbnails could be useful because new PeerTube releases may increase thumbnail sizes:
 
 ```bash
-$ # Basic installation
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run regenerate-thumbnails
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run regenerate-thumbnails
 
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run regenerate-thumbnails
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run regenerate-thumbnails
 ```
 
 ### create-transcoding-job.js
@@ -255,25 +255,25 @@ You can use this script to force transcoding of an existing video. PeerTube need
 To generate transcoding jobs depending on the instance configuration:
 
 ```bash
-$ # Basic installation
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID]
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID]
 
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run create-transcoding-job -- -v [videoUUID]
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run create-transcoding-job -- -v [videoUUID]
 ```
 
 Or to transcode to a specific resolution:
 
 ```bash
-$ # Basic installation
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
 
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
 ```
 
 The resolution should be an integer (`1080`, `720`, `480`, etc.)
@@ -281,13 +281,13 @@ The resolution should be an integer (`1080`, `720`, `480`, etc.)
 To generate an HLS playlist for a video:
 
 ```bash
-$ # Basic installation
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- --generate-hls -v [videoUUID]
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- --generate-hls -v [videoUUID]
 
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run create-transcoding-job -- --generate-hls -v [videoUUID]
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run create-transcoding-job -- --generate-hls -v [videoUUID]
 ```
 
 ### create-import-video-file-job.js
@@ -296,13 +296,13 @@ You can use this script to import a video file to replace an already uploaded fi
 You can then create a transcoding job using `npm run create-transcoding-job` if you need to optimize your file or create an HLS version of it.
 
 ```bash
-$ # Basic installation
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
 
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
 ```
 
 ### create-move-video-storage-job.js
@@ -312,25 +312,25 @@ $ docker-compose exec -u peertube peertube npm run create-import-video-file-job 
 Use this script to move all video files or a specific video file to object storage.
 
 ```bash
-$ # Basic installation
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-object-storage -v [videoUUID]
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-object-storage -v [videoUUID]
 
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage -v [videoUUID]
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage -v [videoUUID]
 ```
 
 The script can also move all video files that are not already in object storage:
 
 ```bash
-$ # Basic installation
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-object-storage --all-videos
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-object-storage --all-videos
 
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage --all-videos
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage --all-videos
 ```
 
 
@@ -340,8 +340,8 @@ Some transcoded videos or shutdown at a bad time can leave some unused files on 
 Stop PeerTube and delete these files (a confirmation will be demanded first):
 
 ```bash
-$ cd /var/www/peertube/peertube-latest
-$ sudo systemctl stop peertube && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
+cd /var/www/peertube/peertube-latest
+sudo systemctl stop peertube && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
 ```
 
 
@@ -353,13 +353,13 @@ invalid torrent files and invalid URLs in your database. To fix this, you have
 to run the command below (keep in mind your follower instances will NOT update their URLs).
 
 ```bash
-$ # Basic installation
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run update-host
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run update-host
 
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run update-host
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run update-host
 ```
 
 ### reset-password.js
@@ -367,13 +367,13 @@ $ docker-compose exec -u peertube peertube npm run update-host
 To reset a user password from CLI, run:
 
 ```bash
-$ # Basic installation
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u target_username
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u target_username
 
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run reset-password -- -u target_username
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run reset-password -- -u target_username
 ```
 
 
@@ -385,32 +385,32 @@ If PeerTube is running, you need to restart it for the changes to take effect (w
 To install/update a plugin or a theme from the disk:
 
 ```bash
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:install -- --plugin-path /local/plugin/path
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:install -- --plugin-path /local/plugin/path
 
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run plugin:install -- --plugin-path /local/plugin/path
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run plugin:install -- --plugin-path /local/plugin/path
 ```
 
 From NPM:
 
 ```bash
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:install -- --npm-name peertube-plugin-myplugin
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:install -- --npm-name peertube-plugin-myplugin
 
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run plugin:install -- --npm-name peertube-plugin-myplugin
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run plugin:install -- --npm-name peertube-plugin-myplugin
 ```
 
 To uninstall a plugin or a theme:
 
 ```bash
-$ cd /var/www/peertube/peertube-latest
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
 
-$ # Docker installation
-$ cd /var/www/peertube-docker
-$ docker-compose exec -u peertube peertube npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
 ```

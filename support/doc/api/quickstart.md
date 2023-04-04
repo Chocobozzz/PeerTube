@@ -7,7 +7,7 @@
 Some endpoints need authentication. We use OAuth 2.0 so first fetch the client tokens:
 
 ```bash
-$ curl https://peertube.example.com/api/v1/oauth-clients/local
+curl https://peertube.example.com/api/v1/oauth-clients/local
 ```
 
 Response example:
@@ -24,7 +24,7 @@ Response example:
 Now you can fetch the user token:
 
 ```bash
-$ curl -X POST \
+curl -X POST \
  -d "client_id=v1ikx5hnfop4mdpnci8nsqh93c45rldf&client_secret=AjWiOapPltI6EnsWQwlFarRtLh4u8tDt&grant_type=password&response_type=code&username=your_user&password=your_password" \
   https://peertube.example.com/api/v1/users/token
 ```
@@ -43,14 +43,14 @@ Response example:
 Just use the `access_token` in the `Authorization` header:
 
 ```bash
-$ curl -H 'Authorization: Bearer 90286a0bdf0f7315d9d3fe8dabf9e1d2be9c97d0' https://peertube.example.com/api/v1/jobs/completed
+curl -H 'Authorization: Bearer 90286a0bdf0f7315d9d3fe8dabf9e1d2be9c97d0' https://peertube.example.com/api/v1/jobs/completed
 ```
 
 
 ## List videos
 
 ```bash
-$ curl https://peertube.example.com/api/v1/videos
+curl https://peertube.example.com/api/v1/videos
 ```
 
 ## Libraries

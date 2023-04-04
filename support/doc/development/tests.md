@@ -5,19 +5,19 @@
 Prepare PostgreSQL user so PeerTube can delete/create the test databases:
 
 ```bash
-$ sudo -u postgres createuser you_username --createdb --superuser
+sudo -u postgres createuser you_username --createdb --superuser
 ```
 
 Prepare databases:
 
 ```bash
-$ npm run clean:server:test
+npm run clean:server:test
 ```
 
 Build PeerTube:
 
 ```bash
-$ npm run build
+npm run build
 ```
 
 ## Server tests
@@ -27,20 +27,20 @@ $ npm run build
 Run docker containers needed by some test files:
 
 ```bash
-$ sudo docker run -p 9444:9000 chocobozzz/s3-ninja
-$ sudo docker run -p 10389:10389 chocobozzz/docker-test-openldap
+sudo docker run -p 9444:9000 chocobozzz/s3-ninja
+sudo docker run -p 10389:10389 chocobozzz/docker-test-openldap
 ```
 
 Ensure you also have these commands:
 
 ```bash
-$ exiftool --help
-$ parallel --help
+exiftool --help
+parallel --help
 ```
 
 Otherwise, install the packages. On Debian-based systems (like Debian, Ubuntu or Mint):
 ```bash
-$ sudo apt-get install parallel libimage-exiftool-perl
+sudo apt-get install parallel libimage-exiftool-perl
 ```
 
 ### Test
@@ -48,7 +48,7 @@ $ sudo apt-get install parallel libimage-exiftool-perl
 To run all test suites:
 
 ```bash
-$ npm run test # See scripts/test.sh to run a particular suite
+npm run test # See scripts/test.sh to run a particular suite
 ```
 
 Most of tests can be run using:
@@ -100,7 +100,7 @@ tail -f test1/logs/peertube.log | npm run parse-log -- --level debug --files -
 To run tests on local web browsers (comment web browsers you don't have in `client/e2e/wdio.local.conf.ts`):
 
 ```bash
-$ PEERTUBE2_E2E_PASSWORD=password npm run e2e:local
+PEERTUBE2_E2E_PASSWORD=password npm run e2e:local
 ```
 
 ### Browserstack tests
@@ -108,7 +108,7 @@ $ PEERTUBE2_E2E_PASSWORD=password npm run e2e:local
 To run tests on browser stack:
 
 ```bash
-$ BROWSERSTACK_USER=your_user BROWSERSTACK_KEY=your_key npm run e2e:browserstack
+BROWSERSTACK_USER=your_user BROWSERSTACK_KEY=your_key npm run e2e:browserstack
 ```
 
 ### Add E2E tests
@@ -116,6 +116,6 @@ $ BROWSERSTACK_USER=your_user BROWSERSTACK_KEY=your_key npm run e2e:browserstack
 To add E2E tests and quickly run tests using a local Chrome:
 
 ```bash
-$ cd client/e2e
-$ ../node_modules/.bin/wdio wdio.local-test.conf.ts # you can also add --mochaOpts.grep to only run tests you want
+cd client/e2e
+../node_modules/.bin/wdio wdio.local-test.conf.ts # you can also add --mochaOpts.grep to only run tests you want
 ```

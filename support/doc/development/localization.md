@@ -9,7 +9,7 @@ Will generate XLIFF base files for Angular (`angular.xlf`) and JSON files for th
 Then, it will merge new translation keys into localized Angular files (`angular.fr-FR.xlf` etc).
 
 ```
-$ npm run i18n:update
+npm run i18n:update
 ```
 
 

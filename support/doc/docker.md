@@ -97,7 +97,7 @@ docker-compose exec -u peertube peertube npm run reset-password -- -u root
 You can also grep your peertube container's logs for the default `root` password. You're going to want to run `docker-compose logs peertube | grep -A1 root` to search the log output for your new PeerTube's instance admin credentials which will look something like this.
 
 ```bash
-$ docker-compose logs peertube | grep -A1 root
+docker-compose logs peertube | grep -A1 root
 
 peertube_1  | [example.com:443] 2019-11-16 04:26:06.082 info: Username: root
 peertube_1  | [example.com:443] 2019-11-16 04:26:06.083 info: User password: abcdefghijklmnop
@@ -110,7 +110,7 @@ peertube_1  | [example.com:443] 2019-11-16 04:26:06.083 info: User password: abc
 Run `cat ./docker-volume/opendkim/keys/*/*.txt` to display your DKIM DNS TXT Record containing the public key to configure to your domain :
 
 ```bash
-$ cat ./docker-volume/opendkim/keys/*/*.txt
+cat ./docker-volume/opendkim/keys/*/*.txt
 
 peertube._domainkey.mydomain.tld.	IN	TXT	( "v=DKIM1; h=sha256; k=rsa; "
 	  "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0Dx7wLGPFVaxVQ4TGym/eF89aQ8oMxS9v5BCc26Hij91t2Ci8Fl12DHNVqZoIPGm+9tTIoDVDFEFrlPhMOZl8i4jU9pcFjjaIISaV2+qTa8uV1j3MyByogG8pu4o5Ill7zaySYFsYB++cHJ9pjbFSC42dddCYMfuVgrBsLNrvEi3dLDMjJF5l92Uu8YeswFe26PuHX3Avr261n"
@@ -132,20 +132,20 @@ See the production guide ["What now" section](https://docs.joinpeertube.org/inst
 Pull the latest images:
 
 ```shell
-$ cd /your/peertube/directory
-$ docker-compose pull
+cd /your/peertube/directory
+docker-compose pull
 ```
 
 Stop, delete the containers and internal volumes (to invalidate static client files shared by `peertube` and `webserver` containers):
 
 ```shell
-$ docker-compose down -v
+docker-compose down -v
 ```
 
 Rerun PeerTube:
 
 ```shell
-$ docker-compose up -d
+docker-compose up -d
 ```
 
 ## Build
@@ -153,9 +153,9 @@ $ docker-compose up -d
 ### Production
 
 ```shell
-$ git clone https://github.com/chocobozzz/PeerTube /tmp/peertube
-$ cd /tmp/peertube
-$ docker build . -f ./support/docker/production/Dockerfile.bullseye
+git clone https://github.com/chocobozzz/PeerTube /tmp/peertube
+cd /tmp/peertube
+docker build . -f ./support/docker/production/Dockerfile.bullseye
 ```
 
 ### Development
