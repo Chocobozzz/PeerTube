@@ -536,15 +536,11 @@ describe('Test users', function () {
   })
 
   describe('Server configuration', function () {
-    const user2 = { username: 'user_2', password: 'super password' }
-    const user3 = { username: 'user_3', password: 'super password' }
-
     let user2Token: string
     let user3Token: string
 
     it('Should create a new user with the default config', async function () {
-      await server.users.create({ ...user2 })
-      user2Token = await server.login.getAccessToken(user2)
+      user2Token = await server.users.generateUserAndToken('user2')
       const userMe = await server.users.getMyInfo({ token: user2Token })
 
       expect(userMe.videosHistoryEnabled).to.be.true
@@ -563,11 +559,10 @@ describe('Test users', function () {
         }
       })
 
-      await server.users.create({ ...user3 })
+      user3Token = await server.users.generateUserAndToken('user3')
     })
 
     it('Should have the new config in the new user information', async function () {
-      user3Token = await server.login.getAccessToken(user3)
       const userMe = await server.users.getMyInfo({ token: user3Token })
 
       expect(userMe.videosHistoryEnabled).to.be.false

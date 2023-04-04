@@ -410,6 +410,7 @@ signup:
 user:
   history:
     videos:
+      # Enable or disable video history by default for new users.
       enabled: true
   # Default value of maximum video bytes the user can upload (does not take into account transcoded files)
   # Byte format is supported ("1GB" etc)
