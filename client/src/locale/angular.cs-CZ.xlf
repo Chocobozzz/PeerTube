@@ -7403,7 +7403,7 @@
       </trans-unit>
       <trans-unit id="603966779971722604" datatype="html">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </source>
-        <target state="new"> I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </target>
+        <target state="translated">Je mi alespoň <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> let a souhlasím s <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Podmínkami <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> a se <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/> Zásadami chování<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> z <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-terms.component.html</context>
           <context context-type="linenumber">17,22</context>
@@ -8717,7 +8717,7 @@
       </trans-unit>
       <trans-unit id="3326945092799111194" datatype="html">
         <source>Moderation response cannot be more than 3000 characters long.</source>
-        <target state="new">Moderation response cannot be more than 3000 characters long.</target>
+        <target state="translated">Moderátorská odpověď nesmí být delší než 3000 znaků.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -8725,7 +8725,7 @@
       </trans-unit>
       <trans-unit id="7060967501175301883" datatype="html">
         <source>Registration requests</source>
-        <target state="new">Registration requests</target>
+        <target state="translated">Žádosti o registraci</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -9611,7 +9611,7 @@
       </trans-unit>
       <trans-unit id="4227831333725112678" datatype="html">
         <source>Verify email</source>
-        <target state="new">Verify email</target>
+        <target state="translated">Ověření e-mailu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -9872,7 +9872,7 @@
       </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html">
         <source>This account is awaiting approval by moderators.</source>
-        <target state="new">This account is awaiting approval by moderators.</target>
+        <target state="translated">Tento účet čeká na schválení moderátory.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">224</context>
@@ -9880,7 +9880,7 @@
       </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html">
         <source>Registration approval has been rejected for this account.</source>
-        <target state="new">Registration approval has been rejected for this account.</target>
+        <target state="translated">Schválení registrace bylo u tohoto účtu zamítnuto.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">229</context>
@@ -10055,7 +10055,7 @@
       </trans-unit>
       <trans-unit id="5378618511917875694" datatype="html">
         <source>User email has been verified</source>
-        <target state="new">User email has been verified</target>
+        <target state="translated">E-mail uživatele byl ověřen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">15</context>
@@ -10063,7 +10063,7 @@
       </trans-unit>
       <trans-unit id="2754481302921121772" datatype="html">
         <source>User email hasn't been verified</source>
-        <target state="new">User email hasn't been verified</target>
+        <target state="translated">E-mail uživatele nebyl ověřen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">18</context>
@@ -10624,7 +10624,7 @@
       </trans-unit>
       <trans-unit id="27494409477574248" datatype="html">
         <source>Registration reason is required.</source>
-        <target state="new">Registration reason is required.</target>
+        <target state="translated">Je vyžadován důvod registrace.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -10632,7 +10632,7 @@
       </trans-unit>
       <trans-unit id="7602123087076969338" datatype="html">
         <source>Registration reason must be at least 2 characters long.</source>
-        <target state="new">Registration reason must be at least 2 characters long.</target>
+        <target state="translated">Důvod registrace musí mít alespoň 2 znaky.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -10640,7 +10640,7 @@
       </trans-unit>
       <trans-unit id="2092241175249165802" datatype="html">
         <source>Registration reason cannot be more than 3000 characters long.</source>
-        <target state="new">Registration reason cannot be more than 3000 characters long.</target>
+        <target state="translated">Důvod registrace nesmí být delší než 3000 znaků.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -11483,7 +11483,7 @@
       </trans-unit>
       <trans-unit id="5769292297914455214" datatype="html">
         <source>Disabled</source>
-        <target state="new">Disabled</target>
+        <target state="translated">Vypnuto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">62</context>
@@ -11491,7 +11491,7 @@
       </trans-unit>
       <trans-unit id="2684349290932402590" datatype="html">
         <source>Requires approval by moderators</source>
-        <target state="new">Requires approval by moderators</target>
+        <target state="translated">Vyžaduje souhlas moderátorů</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -11499,7 +11499,7 @@
       </trans-unit>
       <trans-unit id="4816216590591222133" datatype="html">
         <source>Enabled</source>
-        <target state="new">Enabled</target>
+        <target state="translated">Zapnuto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -11958,7 +11958,7 @@
       </trans-unit>
       <trans-unit id="7793333806747606771" datatype="html">
         <source>Server is unavailable. Please retry later.</source>
-        <target state="new">Server is unavailable. Please retry later.</target>
+        <target state="translated">Server je nedostupný. Zkuste to prosím později.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">137</context>
@@ -12767,7 +12767,7 @@
       </trans-unit>
       <trans-unit id="3093549590814158078" datatype="html">
         <source>You need to be logged in to rate this video.</source>
-        <target state="new">You need to be logged in to rate this video.</target>
+        <target state="translated">Pro hodnocení tohoto videa musíte být přihlášeni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">85</context>
