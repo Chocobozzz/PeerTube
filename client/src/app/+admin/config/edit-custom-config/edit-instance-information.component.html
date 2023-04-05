@@ -126,6 +126,7 @@
 
           <my-markdown-textarea
             name="instanceTerms" formControlName="terms"
+            [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
             [formError]="formErrors['instance.terms']"
           ></my-markdown-textarea>
         </div>
@@ -135,6 +136,7 @@
 
           <my-markdown-textarea
             name="instanceCodeOfConduct" formControlName="codeOfConduct"
+            [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
             [formError]="formErrors['instance.codeOfConduct']"
           ></my-markdown-textarea>
         </div>
@@ -145,6 +147,7 @@
 
           <my-markdown-textarea
             name="instanceModerationInformation" formControlName="moderationInformation"
+            [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
             [formError]="formErrors['instance.moderationInformation']"
           ></my-markdown-textarea>
         </div>
@@ -165,6 +168,7 @@
 
           <my-markdown-textarea
             name="instanceAdministrator" formControlName="administrator"
+            [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
             [formError]="formErrors['instance.administrator']"
           ></my-markdown-textarea>
         </div>
@@ -175,6 +179,7 @@
 
           <my-markdown-textarea
             name="instanceCreationReason" formControlName="creationReason"
+            [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
             [formError]="formErrors['instance.creationReason']"
           ></my-markdown-textarea>
         </div>
@@ -185,6 +190,7 @@
 
           <my-markdown-textarea
             name="instanceMaintenanceLifetime" formControlName="maintenanceLifetime"
+            [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
             [formError]="formErrors['instance.maintenanceLifetime']"
           ></my-markdown-textarea>
         </div>
@@ -195,6 +201,7 @@
 
           <my-markdown-textarea
             name="instanceBusinessModel" formControlName="businessModel"
+            [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
             [formError]="formErrors['instance.businessModel']"
           ></my-markdown-textarea>
         </div>
@@ -215,6 +222,7 @@
 
           <my-markdown-textarea
             name="instanceHardwareInformation" formControlName="hardwareInformation"
+            [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
             [formError]="formErrors['instance.hardwareInformation']"
           ></my-markdown-textarea>
         </div>
