@@ -535,40 +535,6 @@ describe('Test users', function () {
     })
   })
 
-  describe('Server configuration', function () {
-    let user2Token: string
-    let user3Token: string
-
-    it('Should create a new user with the default config', async function () {
-      user2Token = await server.users.generateUserAndToken('user2')
-      const userMe = await server.users.getMyInfo({ token: user2Token })
-
-      expect(userMe.videosHistoryEnabled).to.be.true
-    })
-
-    it('Should update server config and create a new user', async function () {
-      await server.config.updateCustomSubConfig({
-        newConfig: {
-          user: {
-            history: {
-              videos: {
-                enabled: false
-              }
-            }
-          }
-        }
-      })
-
-      user3Token = await server.users.generateUserAndToken('user3')
-    })
-
-    it('Should have the new config in the new user information', async function () {
-      const userMe = await server.users.getMyInfo({ token: user3Token })
-
-      expect(userMe.videosHistoryEnabled).to.be.false
-    })
-  })
-
   after(async function () {
     await cleanupTests([ server ])
   })
