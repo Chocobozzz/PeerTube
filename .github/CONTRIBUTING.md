@@ -88,7 +88,7 @@ First, you should use a server or PC with at least 4GB of RAM. Less RAM may lead
 [the steps](/support/doc/dependencies.md)
 to install the dependencies.
 1) Install [parallel](https://www.gnu.org/software/parallel/) to be able to run tests.
-1) Fork the Github repository.
+1) Fork the GitHub repository.
 1) Run the following commands.
 ```
 git clone https://github.com/Chocobozzz/PeerTube
@@ -98,7 +98,7 @@ yarn install --pure-lockfile
 ```
 
 Note that development is done on the `develop` branch. If you want to hack on
-Peertube, you should switch to that branch. Also note that you have to repeat
+PeerTube, you should switch to that branch. Also note that you have to repeat
 the `yarn install --pure-lockfile` command.
 
 When you create a new branch you should also tell to use your repo for upload
@@ -125,7 +125,7 @@ sudo -u postgres psql -c "CREATE EXTENSION pg_trgm;" peertube_dev
 sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_dev
 ```
 
-Peertube also requires a running redis server, no special setup is needed for
+PeerTube also requires a running redis server, no special setup is needed for
 this.
 
 In dev mode, administrator username is **root** and password is **test**.
@@ -278,7 +278,7 @@ You can see the list on the [dedicated documentation](/support/doc/development/l
 
 ### CI
 
-PeerTube uses Github actions to run tests every time a commit is pushed or a PR is opened.
+PeerTube uses GitHub actions to run tests every time a commit is pushed or a PR is opened.
 You can find more information about these tasks on the [dedicated documentation](/support/doc/development/ci.md).
 
 ### Monitoring
@@ -288,11 +288,11 @@ To do so, see the [dedicated documentation](/support/doc/development/monitoring.
 
 ### Test live stream
 
-To easily test a live on PeerTube:
+To easily test a live stream on PeerTube:
  * Enable live support in web admin configuration
  * Create a permanent live on the PeerTube instance
  * Get the **RTMP URL** and the **Live stream key**
- * Send the live to PeerTube using `ffmpeg` using a local video:
+ * Send the live stream to PeerTube using `ffmpeg` using a local video:
 
 ```
 ffmpeg -stream_loop -1 -re -i any-video.mp4 -c copy -f flv rtmp://{RTMP URL}/live/{STREAM KEY}
