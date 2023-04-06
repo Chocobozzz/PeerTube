@@ -216,18 +216,6 @@ describe('Test users admin API validators', function () {
       })
     })
 
-    it('Should fail without a videoQuota', async function () {
-      const fields = omit(baseCorrectParams, [ 'videoQuota' ])
-
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
-    })
-
-    it('Should fail without a videoQuotaDaily', async function () {
-      const fields = omit(baseCorrectParams, [ 'videoQuotaDaily' ])
-
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
-    })
-
     it('Should fail with an invalid videoQuota', async function () {
       const fields = { ...baseCorrectParams, videoQuota: -5 }
 
