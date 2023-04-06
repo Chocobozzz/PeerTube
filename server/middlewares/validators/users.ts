@@ -65,8 +65,11 @@ const usersAddValidator = [
     .custom(isVideoChannelUsernameValid),
 
   body('videoQuota')
+    .optional()
     .custom(isUserVideoQuotaValid),
+
   body('videoQuotaDaily')
+    .optional()
     .custom(isUserVideoQuotaDailyValid),
 
   body('role')

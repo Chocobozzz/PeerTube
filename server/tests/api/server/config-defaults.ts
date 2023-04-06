@@ -240,9 +240,9 @@ describe('Test config defaults', function () {
 
       for (const user of [ user1, user2 ]) {
         expect(user.videosHistoryEnabled).to.be.true
+        expect(user.videoQuota).to.equal(-1)
+        expect(user.videoQuotaDaily).to.equal(-1)
       }
-      expect(user2.videoQuota).to.equal(-1)
-      expect(user2.videoQuotaDaily).to.equal(-1)
     })
 
     it('Should update config and create a user and register a user with the new default config', async function () {
@@ -275,9 +275,9 @@ describe('Test config defaults', function () {
 
       for (const user of [ user3, user4 ]) {
         expect(user.videosHistoryEnabled).to.be.false
+        expect(user.videoQuota).to.equal(5242881)
+        expect(user.videoQuotaDaily).to.equal(318742)
       }
-      expect(user4.videoQuota).to.equal(5242881)
-      expect(user4.videoQuotaDaily).to.equal(318742)
     })
 
   })
