@@ -2402,7 +2402,7 @@
       </trans-unit>
       <trans-unit id="8025853188527690631" datatype="html">
         <source>Registration reason</source>
-        <target state="new">Registration reason</target>
+        <target state="translated">Motif de l'inscription</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">40</context>
@@ -2410,7 +2410,7 @@
       </trans-unit>
       <trans-unit id="5767444971673380379" datatype="html">
         <source>Moderation response</source>
-        <target state="new">Moderation response</target>
+        <target state="translated">Réponse de la modération</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">42</context>
@@ -2426,7 +2426,7 @@
       </trans-unit>
       <trans-unit id="7009543831499017491" datatype="html">
         <source>Registration reason:</source>
-        <target state="new">Registration reason:</target>
+        <target state="translated">Motif de l'inscription :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">109</context>
@@ -2434,7 +2434,7 @@
       </trans-unit>
       <trans-unit id="5199584494687692924" datatype="html">
         <source>Moderation response:</source>
-        <target state="new">Moderation response:</target>
+        <target state="translated">Réponse de la modération:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">114</context>
@@ -2442,7 +2442,7 @@
       </trans-unit>
       <trans-unit id="7902116364830754147" datatype="html">
         <source>No registrations found matching current filters.</source>
-        <target state="new">No registrations found matching current filters.</target>
+        <target state="translated">Aucun enregistrement trouvé avec ces filtres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">127</context>
@@ -2450,7 +2450,7 @@
       </trans-unit>
       <trans-unit id="178076727880316864" datatype="html">
         <source>No registrations found.</source>
-        <target state="new">No registrations found.</target>
+        <target state="translated">Pas d'inscription trouvée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">128</context>
@@ -2458,7 +2458,7 @@
       </trans-unit>
       <trans-unit id="977007520755394668" datatype="html">
         <source>Accept this request</source>
-        <target state="new">Accept this request</target>
+        <target state="translated">Accepter cette demande</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -2466,7 +2466,7 @@
       </trans-unit>
       <trans-unit id="2571315112879096897" datatype="html">
         <source>Reject this request</source>
-        <target state="new">Reject this request</target>
+        <target state="translated">Rejeter cette demande</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -2474,7 +2474,7 @@
       </trans-unit>
       <trans-unit id="2518898597119712407" datatype="html">
         <source>Remove this request</source>
-        <target state="new">Remove this request</target>
+        <target state="translated">Supprimer cette demande</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -2482,7 +2482,7 @@
       </trans-unit>
       <trans-unit id="5778734409199071482" datatype="html">
         <source>Remove the request from the list. The user can register again.</source>
-        <target state="new">Remove the request from the list. The user can register again.</target>
+        <target state="translated">Supprimer cette demande de la liste. L'utilisateur pourra de nouveau s'enregistrer.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -2490,22 +2490,22 @@
       </trans-unit>
       <trans-unit id="6096602245926393232" datatype="html">
         <source>Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</source>
-        <target state="new">Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</target>
+        <target state="translated">Souhaitez-vous vraiment supprimer {count, plural, =1 {<x id="username"/> demandes d'enregistrement ?} other {<x id="count"/> demandes d'enregistrement ?}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="4208645815154433842" datatype="html">
         <source>Do you really want to delete these registration requests?</source>
-        <target state="new">Do you really want to delete these registration requests?</target>
+        <target state="translated">Souhaitez-vous vraiment supprimer ces demandes d'enregistrement ?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="9152096266184328708" datatype="html">
         <source>Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</source>
-        <target state="new">Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</target>
+        <target state="translated">Supprimer {count, plural, =1 {<x id="username"/> demande d'enregistrement} other {<x id="count"/> demandes d'enregistrement}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="7630293677014706754" datatype="html">
         <source>Registration requests removed</source>
-        <target state="new">Registration requests removed</target>
+        <target state="translated">Demandes d'enregistrement supprimées</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">138</context></context-group>
       </trans-unit>
       <trans-unit id="2806917038528218276" datatype="html">
@@ -2525,7 +2525,7 @@
       </trans-unit>
       <trans-unit id="5503656190856739184" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2023</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2023</target>
+        <target state="translated">Propulsé par PeerTube - Logiciel libre 2015-2023</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="3722967224215437913" datatype="html">
@@ -8764,7 +8764,7 @@
       </trans-unit>
       <trans-unit id="7060967501175301883" datatype="html">
         <source>Registration requests</source>
-        <target state="new">Registration requests</target>
+        <target state="translated">Demandes d'enregistrement</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">3</context>
