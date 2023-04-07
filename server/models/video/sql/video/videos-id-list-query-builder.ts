@@ -78,6 +78,8 @@ export type BuildVideosListQueryOptions = {
 
   transaction?: Transaction
   logging?: boolean
+
+  excludeAlreadyWatched?: boolean
 }
 
 export class VideosIdListQueryBuilder extends AbstractRunQuery {
@@ -258,6 +260,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     if (options.durationMax) {
       this.whereDurationMax(options.durationMax)
+    }
+
+    if (options.excludeAlreadyWatched) {
+      this.whereExcludeAlreadyWatched(options.user.id)
     }
 
     this.whereSearch(options.search)
@@ -596,6 +602,18 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private whereDurationMax (durationMax: number) {
     this.and.push('"video"."duration" <= :durationMax')
     this.replacements.durationMax = durationMax
+  }
+
+  private whereExcludeAlreadyWatched (userId: number) {
+    this.and.push(
+      'NOT EXISTS (' +
+      '  SELECT *' +
+      '  FROM "userVideoHistory"' +
+      '  WHERE "video"."id" = "userVideoHistory"."videoId"' +
+      '  AND "userVideoHistory"."userId" = :excludeAlreadyWatched' +
+      ')'
+    )
+    this.replacements.excludeAlreadyWatched = userId
   }
 
   private groupForTrending (trendingDays: number) {

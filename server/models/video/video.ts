@@ -1086,6 +1086,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     countVideos?: boolean
 
     search?: string
+
+    excludeAlreadyWatched?: boolean
   }) {
     VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
     VideoModel.throwIfPrivacyOneOfWithoutUser(options.privacyOneOf, options.user)
@@ -1124,7 +1126,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'historyOfUser',
         'hasHLSFiles',
         'hasWebtorrentFiles',
-        'search'
+        'search',
+        'excludeAlreadyWatched'
       ]),
 
       serverAccountIdForBlock: serverActor.Account.id,
@@ -1170,6 +1173,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     durationMin?: number // seconds
     durationMax?: number // seconds
     uuids?: string[]
+
+    excludeAlreadyWatched?: boolean
   }) {
     VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
     VideoModel.throwIfPrivacyOneOfWithoutUser(options.privacyOneOf, options.user)
@@ -1203,7 +1208,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'hasWebtorrentFiles',
         'uuids',
         'search',
-        'displayOnlyForFollower'
+        'displayOnlyForFollower',
+        'excludeAlreadyWatched'
       ]),
       serverAccountIdForBlock: serverActor.Account.id
     }

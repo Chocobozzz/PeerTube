@@ -24,7 +24,8 @@ function pickCommonVideoQuery (query: VideosCommonQueryAfterSanitize) {
     'skipCount',
     'hasHLSFiles',
     'hasWebtorrentFiles',
-    'search'
+    'search',
+    'excludeAlreadyWatched'
   ])
 }
 
@@ -41,7 +42,8 @@ function pickSearchVideoQuery (query: VideosSearchQueryAfterSanitize) {
       'originallyPublishedEndDate',
       'durationMin',
       'durationMax',
-      'uuids'
+      'uuids',
+      'excludeAlreadyWatched'
     ])
   }
 }

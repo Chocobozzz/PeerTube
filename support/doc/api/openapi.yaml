@@ -717,6 +717,7 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/videosSort'
+        - $ref: '#/components/parameters/excludeAlreadyWatched'
       responses:
         '200':
           description: successful operation
@@ -1835,6 +1836,7 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/videosSort'
+        - $ref: '#/components/parameters/excludeAlreadyWatched'
       responses:
         '200':
           description: successful operation
@@ -2378,6 +2380,7 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/videosSort'
+        - $ref: '#/components/parameters/excludeAlreadyWatched'
       responses:
         '200':
           description: successful operation
@@ -3799,6 +3802,7 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/videosSort'
+        - $ref: '#/components/parameters/excludeAlreadyWatched'
       responses:
         '200':
           description: successful operation
@@ -4742,6 +4746,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/searchTarget'
         - $ref: '#/components/parameters/videosSearchSort'
+        - $ref: '#/components/parameters/excludeAlreadyWatched'
         - name: startDate
           in: query
           description: Get videos that are published after this date
@@ -5872,6 +5877,12 @@ components:
       schema:
         $ref: '#/components/schemas/VideoPrivacySet'
       description: '**PeerTube >= 4.0** Display only videos in this specific privacy/privacies'
+    excludeAlreadyWatched:
+      name: excludeAlreadyWatched
+      in: query
+      description: Whether or not to exclude videos that are in the user's video history
+      schema:
+        type: boolean
     uuids:
       name: uuids
       in: query
