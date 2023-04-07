@@ -1,3 +1,8 @@
+# 
+# This file will be read by node-config
+# See https://github.com/node-config/node-config/wiki/Environment-Variables#custom-environment-variables
+# 
+
 webserver:
   hostname: "PEERTUBE_WEBSERVER_HOSTNAME"
   port:
@@ -19,6 +24,7 @@ database:
   port:
     __name: "PEERTUBE_DB_PORT"
     __format: "json"
+  name: "PEERTUBE_DB_NAME"
   suffix: "PEERTUBE_DB_SUFFIX"
   username: "PEERTUBE_DB_USERNAME"
   password: "PEERTUBE_DB_PASSWORD"
