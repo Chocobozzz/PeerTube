@@ -7894,8 +7894,6 @@ components:
         - username
         - password
         - email
-        - videoQuota
-        - videoQuotaDaily
         - role
     UpdateUser:
       properties:

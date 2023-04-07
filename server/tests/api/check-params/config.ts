@@ -90,6 +90,11 @@ describe('Test config API validators', function () {
       enabled: false
     },
     user: {
+      history: {
+        videos: {
+          enabled: true
+        }
+      },
       videoQuota: 5242881,
       videoQuotaDaily: 318742
     },

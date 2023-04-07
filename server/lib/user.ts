@@ -56,6 +56,8 @@ function buildUser (options: {
 
     nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
     p2pEnabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED,
+    videosHistoryEnabled: CONFIG.USER.HISTORY.VIDEOS.ENABLED,
+
     autoPlayVideo: true,
 
     role,

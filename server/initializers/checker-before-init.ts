@@ -24,7 +24,7 @@ function checkMissedConfig () {
     'open_telemetry.metrics.enabled', 'open_telemetry.metrics.prometheus_exporter.hostname',
     'open_telemetry.metrics.prometheus_exporter.port', 'open_telemetry.tracing.enabled', 'open_telemetry.tracing.jaeger_exporter.endpoint',
     'open_telemetry.metrics.http_request_duration.enabled',
-    'user.video_quota', 'user.video_quota_daily',
+    'user.history.videos.enabled', 'user.video_quota', 'user.video_quota_daily',
     'video_channels.max_per_user',
     'csp.enabled', 'csp.report_only', 'csp.report_uri',
     'security.frameguard.enabled', 'security.powered_by_header.enabled',

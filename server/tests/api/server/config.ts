@@ -56,6 +56,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.admin.email).to.equal('admin' + server.internalServerNumber + '@example.com')
   expect(data.contactForm.enabled).to.be.true
 
+  expect(data.user.history.videos.enabled).to.be.true
   expect(data.user.videoQuota).to.equal(5242880)
   expect(data.user.videoQuotaDaily).to.equal(-1)
 
@@ -164,6 +165,7 @@ function checkUpdatedConfig (data: CustomConfig) {
 
   expect(data.contactForm.enabled).to.be.false
 
+  expect(data.user.history.videos.enabled).to.be.false
   expect(data.user.videoQuota).to.equal(5242881)
   expect(data.user.videoQuotaDaily).to.equal(318742)
 
@@ -298,6 +300,11 @@ const newCustomConfig: CustomConfig = {
     enabled: false
   },
   user: {
+    history: {
+      videos: {
+        enabled: false
+      }
+    },
     videoQuota: 5242881,
     videoQuotaDaily: 318742
   },

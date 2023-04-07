@@ -204,6 +204,84 @@ describe('Test config defaults', function () {
     })
   })
 
+  describe('Default user attributes', function () {
+    it('Should create a user and register a user with the default config', async function () {
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          user: {
+            history: {
+              videos: {
+                enabled: true
+              }
+            },
+            videoQuota : -1,
+            videoQuotaDaily: -1
+          },
+          signup: {
+            enabled: true,
+            requiresApproval: false
+          }
+        }
+      })
+
+      const config = await server.config.getConfig()
+
+      expect(config.user.videoQuota).to.equal(-1)
+      expect(config.user.videoQuotaDaily).to.equal(-1)
+
+      const user1Token = await server.users.generateUserAndToken('user1')
+      const user1 = await server.users.getMyInfo({ token: user1Token })
+
+      const user = { displayName: 'super user 2', username: 'user2', password: 'super password' }
+      const channel = { name: 'my_user_2_channel', displayName: 'my channel' }
+      await server.registrations.register({ ...user, channel })
+      const user2Token = await server.login.getAccessToken(user)
+      const user2 = await server.users.getMyInfo({ token: user2Token })
+
+      for (const user of [ user1, user2 ]) {
+        expect(user.videosHistoryEnabled).to.be.true
+        expect(user.videoQuota).to.equal(-1)
+        expect(user.videoQuotaDaily).to.equal(-1)
+      }
+    })
+
+    it('Should update config and create a user and register a user with the new default config', async function () {
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          user: {
+            history: {
+              videos: {
+                enabled: false
+              }
+            },
+            videoQuota : 5242881,
+            videoQuotaDaily: 318742
+          },
+          signup: {
+            enabled: true,
+            requiresApproval: false
+          }
+        }
+      })
+
+      const user3Token = await server.users.generateUserAndToken('user3')
+      const user3 = await server.users.getMyInfo({ token: user3Token })
+
+      const user = { displayName: 'super user 4', username: 'user4', password: 'super password' }
+      const channel = { name: 'my_user_4_channel', displayName: 'my channel' }
+      await server.registrations.register({ ...user, channel })
+      const user4Token = await server.login.getAccessToken(user)
+      const user4 = await server.users.getMyInfo({ token: user4Token })
+
+      for (const user of [ user3, user4 ]) {
+        expect(user.videosHistoryEnabled).to.be.false
+        expect(user.videoQuota).to.equal(5242881)
+        expect(user.videoQuotaDaily).to.equal(318742)
+      }
+    })
+
+  })
+
   after(async function () {
     await cleanupTests([ server ])
   })
