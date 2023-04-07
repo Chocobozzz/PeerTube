@@ -8719,7 +8719,7 @@
       </trans-unit>
       <trans-unit id="5875055916985051770" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> registrations</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> registrations</target>
+        <target state="translated">全<x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/>件中、<x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> ～ <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/>件の登録を表示中</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">11</context>
