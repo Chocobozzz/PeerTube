@@ -3854,7 +3854,7 @@
       </trans-unit>
       <trans-unit id="1636606892066514698" datatype="html">
         <source>Disable two factor authentication</source>
-        <target state="new">Disable two factor authentication</target>
+        <target state="translated">غیرفعال کردن احراز هویت دوعاملی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">232</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">232</context></context-group>
       </trans-unit>
@@ -5702,7 +5702,7 @@
       </trans-unit>
       <trans-unit id="3892825090402620438" datatype="html">
         <source>Two-factor authentication</source>
-        <target state="new">Two-factor authentication</target>
+        <target state="translated">احراز هویت دوعاملی</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">67</context>
@@ -5715,7 +5715,7 @@
       </trans-unit>
       <trans-unit id="4309045590850686400" datatype="html">
         <source>Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</source>
-        <target state="new">Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</target>
+        <target state="translated">احراز هویت دوعاملی در هنگام لاگین، از طریق درخواست یک کد عددی از یک دستگاه دیگر (مثلا تلفن همراه) باعث افزودن یک لایه امنیتی به حساب کاربری شما میشود.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -5723,7 +5723,7 @@
       </trans-unit>
       <trans-unit id="2955617286542082394" datatype="html">
         <source>Enable two-factor authentication</source>
-        <target state="new">Enable two-factor authentication</target>
+        <target state="translated">فعال کردن احراز هویت دوعاملی</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">5</context>
@@ -5731,7 +5731,7 @@
       </trans-unit>
       <trans-unit id="2658424416565652268" datatype="html">
         <source>Disable two-factor authentication</source>
-        <target state="new">Disable two-factor authentication</target>
+        <target state="translated">غیرفعال کردن احراز هویت دوعاملی</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">9</context>
@@ -6522,17 +6522,17 @@
       </trans-unit>
       <trans-unit id="2121875025429043110" datatype="html">
         <source>You can select a part of the graph to zoom in</source>
-        <target state="new">You can select a part of the graph to zoom in</target>
+        <target state="translated">میتوانید قسمتی از نمودار را جهت بزرگنمایی انتخاب کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="3787205057553482493" datatype="html">
         <source>Reset zoom</source>
-        <target state="new">Reset zoom</target>
+        <target state="translated">حذف بزرگنمایی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="7849797693092882170" datatype="html">
         <source>Since the video publication</source>
-        <target state="new">Since the video publication</target>
+        <target state="translated">از زمان انتشار ویدئو</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -6540,28 +6540,28 @@
       </trans-unit>
       <trans-unit id="5864040054093006922" datatype="html">
         <source>Viewers</source>
-        <target state="new">Viewers</target>
+        <target state="translated">بازدیدکنندگان</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">88</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">500</context></context-group>
       </trans-unit>
       <trans-unit id="5691818894884119596" datatype="html">
         <source>Watch time</source>
-        <target state="new">Watch time</target>
+        <target state="translated">زمان مشاهده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="683980015107026060" datatype="html">
         <source>Retention</source>
-        <target state="new">Retention</target>
+        <target state="translated">ماندگاری بازدیدکننده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="2232536542109196600" datatype="html">
         <source>Viewers stats between <x id="PH" equiv-text="this.statsStartDate.toLocaleString()"/> and <x id="PH_1" equiv-text="this.statsEndDate.toLocaleString()"/></source>
-        <target state="new">Viewers stats between <x id="PH" equiv-text="this.statsStartDate.toLocaleString()"/> and <x id="PH_1" equiv-text="this.statsEndDate.toLocaleString()"/></target>
+        <target state="translated">آمار بازدیدکنندگان از <x id="PH" equiv-text="this.statsStartDate.toLocaleString()"/> تا <x id="PH_1" equiv-text="this.statsEndDate.toLocaleString()"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">153</context></context-group>
       </trans-unit>
       <trans-unit id="5697131528899933134" datatype="html">
         <source>Viewers stats</source>
-        <target state="new">Viewers stats</target>
+        <target state="translated">آمار بازدیدکنندگان</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">156</context></context-group>
       </trans-unit>
       <trans-unit id="8089238718524110373" datatype="html">
@@ -6574,7 +6574,7 @@
       </trans-unit>
       <trans-unit id="3249405667632600635" datatype="html">
         <source>Custom dates</source>
-        <target state="new">Custom dates</target>
+        <target state="translated">تاریخ موردنظر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">238</context></context-group>
       </trans-unit>
       <trans-unit id="5382746022482410588" datatype="html">
@@ -6584,7 +6584,7 @@
       </trans-unit>
       <trans-unit id="6782077395930235254" datatype="html">
         <source>Countries</source>
-        <target state="new">Countries</target>
+        <target state="translated">کشورها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">98</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">289</context></context-group>
       </trans-unit>
@@ -6595,27 +6595,27 @@
       </trans-unit>
       <trans-unit id="1155438117303179048" datatype="html">
         <source>Average watch time</source>
-        <target state="new">Average watch time</target>
+        <target state="translated">متوسط زمان مشاهده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">267</context></context-group>
       </trans-unit>
       <trans-unit id="3457644129579531516" datatype="html">
         <source>Total watch time</source>
-        <target state="new">Total watch time</target>
+        <target state="translated">کل زمان مشاهده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">271</context></context-group>
       </trans-unit>
       <trans-unit id="7988517647183541852" datatype="html">
         <source>Peak viewers</source>
-        <target state="new">Peak viewers</target>
+        <target state="translated">پیک بازدیدکنندگان</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">275</context></context-group>
       </trans-unit>
       <trans-unit id="8536543691393468142" datatype="html">
         <source>at <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></source>
-        <target state="new">at <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></target>
+        <target state="translated">در <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">278</context></context-group>
       </trans-unit>
       <trans-unit id="7299658893351817136" datatype="html">
         <source>Unique viewers</source>
-        <target state="new">Unique viewers</target>
+        <target state="translated">تعداد بازدیدکنندگان غیرتکراری</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">282</context>
@@ -7673,7 +7673,7 @@
       </trans-unit>
       <trans-unit id="3642770981085338761" datatype="html">
         <source>Followers of your instance</source>
-        <target state="translated">کاربران سایت شما</target>
+        <target state="translated">دنبال‌کنندگان سایت شما</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -9088,7 +9088,7 @@
       </trans-unit>
       <trans-unit id="5935212402338564229" datatype="html">
         <source>You or one of your channels has a new follower</source>
-        <target state="new">You or one of your channels has a new follower</target>
+        <target state="translated">شما یا یکی از کانال‌های شما یک دنبال‌کننده جدید دارد</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -9512,7 +9512,7 @@
       </trans-unit>
       <trans-unit id="4250548381153518208" datatype="html">
         <source>Change your email</source>
-        <target state="new">Change your email</target>
+        <target state="translated">تغییر آدرس پست الکترونیک شما</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">11</context>
@@ -9520,7 +9520,7 @@
       </trans-unit>
       <trans-unit id="3173210699559672958" datatype="html">
         <source>Your current email is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. It is never shown to the public. </source>
-        <target state="new"> Your current email is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. It is never shown to the public. </target>
+        <target state="translated">آدرس پست الکترونیک فعلی شما <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> است. این آدرس به همگان نشان داده نخواهد شد. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">13,16</context>
