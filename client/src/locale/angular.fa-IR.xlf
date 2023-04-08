@@ -1234,7 +1234,7 @@
       </trans-unit>
       <trans-unit id="3188014010833256853" datatype="html">
         <source>Enter your email address and we will send you a link to reset your password.</source>
-        <target state="translated">ایمیل‌تان را وارد کنید تا ما پیوندی برای بازنشانی گذرواژه را برای شما بفرستیم.</target>
+        <target state="translated">ایمیل‌تان را وارد کنید تا ما یک لینک برای بازنشانی گذرواژه برای شما بفرستیم.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
@@ -2860,7 +2860,7 @@
       </trans-unit>
       <trans-unit id="7430416142942514215" datatype="html">
         <source>Publish</source>
-        <target state="translated">انتشار</target>
+        <target state="translated">انتشار ویدئو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">107</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/header.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
@@ -5677,7 +5677,7 @@
       </trans-unit>
       <trans-unit id="1445676851449000175" datatype="html">
         <source>Update configuration</source>
-        <target state="translated">پیکربندی به روز رسانی</target>
+        <target state="translated">ذخیره پیکربندی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="5439158575454281141" datatype="html">
@@ -7311,7 +7311,7 @@
       </trans-unit>
       <trans-unit id="5659987171239176484" datatype="html">
         <source>Terms of <x id="PH" equiv-text="this.about.instance.name"/></source>
-        <target state="new">Terms of <x id="PH" equiv-text="this.about.instance.name"/></target>
+        <target state="translated">شرایط سایت <x id="PH" equiv-text="this.about.instance.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.ts</context>
           <context context-type="linenumber">73</context>
