@@ -1568,7 +1568,7 @@
       </trans-unit>
       <trans-unit id="7630362802781892981" datatype="html">
         <source>Interface</source>
-        <target state="translated">رابط</target>
+        <target state="translated">ظاهر سایت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1658,7 +1658,7 @@
       </trans-unit>
       <trans-unit id="7773271640656013365" datatype="html">
         <source>Interface:</source>
-        <target state="translated">رابط:</target>
+        <target state="translated">زبان سایت:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="1674139713929545659" datatype="html">
@@ -1731,7 +1731,7 @@
       </trans-unit>
       <trans-unit id="2689878465089314112" datatype="html">
         <source>Interface: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></source>
-        <target state="translated">رابط: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></target>
+        <target state="translated">زبان سایت: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">138</context></context-group>
       </trans-unit>
       <trans-unit id="667372110624203230" datatype="html">
@@ -4397,7 +4397,7 @@
       </trans-unit>
       <trans-unit id="4894835484717268716" datatype="html">
         <source>Installed</source>
-        <target state="translated">نصب شده است</target>
+        <target state="translated">نصب شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">35</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-navigation.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
@@ -5997,7 +5997,7 @@
       </trans-unit>
       <trans-unit id="7103588127254721505" datatype="html">
         <source>Theme</source>
-        <target state="translated">موضوع</target>
+        <target state="translated">قالب و تم</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">14</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
