@@ -8916,7 +8916,7 @@
       </trans-unit>
       <trans-unit id="1301767781765127363" datatype="html">
         <source>{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</source>
-        <target state="translated">تعداد {<x id="count"/> کاربر حذف شدند.</target>
+        <target state="translated">{count, plural, =1 {یک کاربر حذف شد.} other { کاربر حذف شدند.<x id="count"/>}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">255</context></context-group>
       </trans-unit>
       <trans-unit id="7166936623843420016" datatype="html">
@@ -12194,7 +12194,7 @@
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
-        <target state="translated">آیا از حذف این <x id="count"/> ویدئو اطمینان دارید؟</target>
+        <target state="translated">آیا از حذف این {count, plural, =1 {این ویدئو} other {ویدئو <x id="count"/> این}} اطمینان دارید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">222</context></context-group>
       </trans-unit>
       <trans-unit id="1950057220179636309" datatype="html">
