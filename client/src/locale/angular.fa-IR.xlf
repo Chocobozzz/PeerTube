@@ -747,7 +747,7 @@
       </trans-unit>
       <trans-unit id="80730865601179554">
         <source>Complete preview</source>
-        <target>تکمیل‌پیشنمایش</target>
+        <target state="translated">پیش‌نمایش کامل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
