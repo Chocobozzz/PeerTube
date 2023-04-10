@@ -1177,7 +1177,7 @@
       </trans-unit>
       <trans-unit id="1431416938026210429">
         <source>Password</source>
-        <target>گذرواژه</target>
+        <target state="translated">رمزعبور</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">117</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">117</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">60</context></context-group>
@@ -1188,12 +1188,12 @@
       </trans-unit>
       <trans-unit id="8715156686857791956" datatype="html">
         <source>Click here to reset your password</source>
-        <target state="translated">برای بازنشانی گذرواژه اینجا کلیک کنید</target>
+        <target state="translated">برای تنظیم مجدد رمزعبور اینجا کلیک کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="892063502898494584" datatype="html">
         <source>I forgot my password</source>
-        <target state="translated">گذرواژه‌ام را فراموش کرده‌ام</target>
+        <target state="translated">رمزعبور را فراموش کرده‌ام</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="2101170466365500913" datatype="html">
@@ -1224,7 +1224,7 @@
       </trans-unit>
       <trans-unit id="3238209155172574367">
         <source>Forgot your password</source>
-        <target>گذرواژه‌تان را فراموش کرده‌اید</target>
+        <target state="translated">رمزعبور را فراموش کرده‌اید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">117</context></context-group>
       </trans-unit>
       <trans-unit id="87327320394367488" datatype="html">
@@ -1234,12 +1234,12 @@
       </trans-unit>
       <trans-unit id="3188014010833256853" datatype="html">
         <source>Enter your email address and we will send you a link to reset your password.</source>
-        <target state="translated">ایمیل‌تان را وارد کنید تا ما یک لینک برای بازنشانی گذرواژه برای شما بفرستیم.</target>
+        <target state="translated">ایمیل‌تان را وارد کنید تا ما یک لینک برای تعیین رمزعبور برای شما بفرستیم.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
-        <target state="translated">یک ایمیل حاوی دستورالعمل بازنشانی گذرواژه به <x id="PH" equiv-text="this.forgotPasswordEmail"/> فرستاده خواهد شد. این پیوند تا یک ساعت دیگر منقضی می‌شود.</target>
+        <target state="translated">یک ایمیل حاوی دستورالعمل تعیین رمزعبور به <x id="PH" equiv-text="this.forgotPasswordEmail"/> فرستاده خواهد شد. این لینک تا یک ساعت دیگر منقضی می‌شود.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="4768749765465246664">
@@ -1286,17 +1286,17 @@
       </trans-unit>
       <trans-unit id="3782563238994348625">
         <source>Confirm password</source>
-        <target>تایید گذرواژه</target>
+        <target state="translated">تایید رمزعبور</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="2501430660070156325">
         <source>Confirmed password</source>
-        <target>گذرواژه تایید شد</target>
+        <target state="translated">رمزعبور تایید شد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8547184468496530386">
         <source>Reset my password</source>
-        <target>تغییر گذرواژه‌ام</target>
+        <target state="translated">تغییر رمزعبور</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context><context context-type="linenumber">2</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
@@ -1425,7 +1425,7 @@
       </trans-unit>
       <trans-unit id="199127249622290422" datatype="html">
         <source>Upload or import videos, parse logs, prune storage directories, reset user password...</source>
-        <target state="translated">آپلود یا وارد کردن ویدیوها، بررسی سوابق ورود و خروج ، بهینه سازی فهرست‌های ذخیره‌سازی، بازنشانی رمز عبور کاربر...</target>
+        <target state="translated">آپلود یا وارد کردن ویدیوها، بررسی سوابق ورود و خروج ، بهینه سازی فهرست‌های ذخیره‌سازی، تعیین رمز عبور کاربر...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="249453844439446209" datatype="html">
@@ -3829,7 +3829,7 @@
       </trans-unit>
       <trans-unit id="6667250632809964191" datatype="html">
         <source>Send a link to reset the password by email to the user</source>
-        <target state="translated">ارسال یک لینک برای بازنشانی رمز عبور از طریق ایمیل به کاربر</target>
+        <target state="translated">ارسال یک لینک برای تعیین رمز عبور از طریق ایمیل به کاربر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">221</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">221</context></context-group>
       </trans-unit>
@@ -3841,7 +3841,7 @@
       </trans-unit>
       <trans-unit id="3791201588898094481" datatype="html">
         <source>Manually set the user password</source>
-        <target state="translated">رمز عبور کاربر را تنظیم کنید</target>
+        <target state="translated">رمز عبور کاربر را بصورت دستی تنظیم کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">226</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">226</context></context-group>
       </trans-unit>
@@ -9312,7 +9312,7 @@
       </trans-unit>
       <trans-unit id="1636934520301910285" datatype="html">
         <source>Reset password</source>
-        <target state="translated">رمز عبور را بازنشانی کنید</target>
+        <target state="translated">تنظیم مجدد رمز عبور</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password-routing.module.ts</context>
           <context context-type="linenumber">11</context>
@@ -9842,7 +9842,7 @@
       </trans-unit>
       <trans-unit id="1266887509445371246" datatype="html">
         <source>Incorrect username or password.</source>
-        <target state="translated">نام کاربری یا گذرواژه اشتباه است.</target>
+        <target state="translated">نام کاربری یا رمزعبور اشتباه است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">214</context></context-group>
       </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html">
@@ -10554,7 +10554,7 @@
       </trans-unit>
       <trans-unit id="3392630942539073768" datatype="html">
         <source>The new password and the confirmed password do not correspond.</source>
-        <target state="translated">رمز عبور جدید و رمز عبور تایید شده مطابقت ندارد.</target>
+        <target state="translated">رمز عبور جدید و تایید آن مطابقت ندارند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="2027337371129904473" datatype="html">
@@ -12411,7 +12411,7 @@
       </trans-unit>
       <trans-unit id="435589893738610428" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> default theme (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> default theme (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> تم و قالب پیش‌فرض (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">8</context>
