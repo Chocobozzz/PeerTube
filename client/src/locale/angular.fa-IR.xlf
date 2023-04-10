@@ -366,7 +366,7 @@
       </trans-unit>
       <trans-unit id="8817917090143649804" datatype="html">
         <source>Account muted</source>
-        <target state="translated">حساب بی صدا شد</target>
+        <target state="translated">حساب‌کاربری ساکت شد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="1684597533616494551" datatype="html">
