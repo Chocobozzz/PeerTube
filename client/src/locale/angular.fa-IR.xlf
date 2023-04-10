@@ -317,7 +317,7 @@
       </trans-unit>
       <trans-unit id="1129056994812601216" datatype="html">
         <source>User <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.registrationsUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.registration.username }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> wants to register on your instance </source>
-        <target state="new"> User <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.registrationsUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.registration.username }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> wants to register on your instance </target>
+        <target state="translated">کاربر <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.registrationsUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.registration.username }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> تمایل به ثبت‌نام در سایت شما را دارد </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">221,223</context>
@@ -628,7 +628,7 @@
       </trans-unit>
       <trans-unit id="9164541937317586242" datatype="html">
         <source>Unblocked {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="new">Unblocked {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</target>
+        <target state="translated">تعداد <x id="count"/> ویدئو از بلوکه خارج شدند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">252</context></context-group>
       </trans-unit>
       <trans-unit id="2870417795706430145" datatype="html">
@@ -8911,12 +8911,12 @@
       </trans-unit>
       <trans-unit id="5643060985393782358" datatype="html">
         <source>It means the following usernames will be permanently deleted and cannot be recovered:</source>
-        <target state="new">It means the following usernames will be permanently deleted and cannot be recovered:</target>
+        <target state="translated">این حساب‌های کاربری بصورت دائمی حذف و غیرقابل بازگشت خواهند بود:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="1301767781765127363" datatype="html">
         <source>{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</source>
-        <target state="new">{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</target>
+        <target state="translated">تعداد {<x id="count"/> کاربر حذف شدند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">255</context></context-group>
       </trans-unit>
       <trans-unit id="7166936623843420016" datatype="html">
@@ -8926,7 +8926,7 @@
       </trans-unit>
       <trans-unit id="3104427236147521673" datatype="html">
         <source>{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</source>
-        <target state="new">{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</target>
+        <target state="translated">تعداد {<x id="count"/> آدرس ایمیل در وضعیت تایید‌شده قرار گرفت.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">273</context></context-group>
       </trans-unit>
       <trans-unit id="8360664597512051242" datatype="html">
@@ -9401,12 +9401,12 @@
       </trans-unit>
       <trans-unit id="696910741870112536" datatype="html">
         <source>{length, plural, =1 {Video has been deleted} other {<x id="length"/> videos have been deleted}}</source>
-        <target state="new">{length, plural, =1 {Video has been deleted} other {<x id="length"/> videos have been deleted}}</target>
+        <target state="translated">تعداد {<x id="count"/> ویدئو حذف شدند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">206</context></context-group>
       </trans-unit>
       <trans-unit id="3255171236149541417" datatype="html">
         <source><x id="PH" equiv-text="toDeleteVideosIds.length"/> have been deleted.</source>
-        <target state="new"><x id="PH" equiv-text="toDeleteVideosIds.length"/> have been deleted.</target>
+        <target state="translated"><x id="PH" equiv-text="toDeleteVideosIds.length"/> حذف شدند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">208</context></context-group>
       </trans-unit>
       <trans-unit id="2591467977473302125" datatype="html">
@@ -9431,7 +9431,7 @@
       </trans-unit>
       <trans-unit id="6389312883797462351" datatype="html">
         <source>Studio</source>
-        <target state="new">Studio</target>
+        <target state="translated">استودیو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/video-studio-routing.module.ts</context><context context-type="linenumber">17</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">347</context></context-group>
       </trans-unit>
@@ -9591,7 +9591,7 @@
       </trans-unit>
       <trans-unit id="4227831333725112678" datatype="html">
         <source>Verify email</source>
-        <target state="new">Verify email</target>
+        <target state="translated">تایید آدرس ایمیل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -9788,7 +9788,7 @@
       </trans-unit>
       <trans-unit id="8093156107152165809" datatype="html">
         <source>Show/hide this help menu</source>
-        <target state="new">Show/hide this help menu</target>
+        <target state="translated">نمایش/مخفی نمودن این منو</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/core.module.ts</context>
           <context context-type="linenumber">45</context>
@@ -9796,7 +9796,7 @@
       </trans-unit>
       <trans-unit id="3314265031897048047" datatype="html">
         <source>Hide this help menu</source>
-        <target state="new">Hide this help menu</target>
+        <target state="translated">مخفی نمودن این منو</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/core.module.ts</context>
           <context context-type="linenumber">46</context>
@@ -10035,7 +10035,7 @@
       </trans-unit>
       <trans-unit id="5378618511917875694" datatype="html">
         <source>User email has been verified</source>
-        <target state="new">User email has been verified</target>
+        <target state="translated">آدرس ایمیل کاربر تایید شد</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">15</context>
@@ -10043,7 +10043,7 @@
       </trans-unit>
       <trans-unit id="2754481302921121772" datatype="html">
         <source>User email hasn't been verified</source>
-        <target state="new">User email hasn't been verified</target>
+        <target state="translated">آدرس ایمیل کاربر تایید نشد</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">18</context>
@@ -10209,7 +10209,7 @@
       </trans-unit>
       <trans-unit id="2363389479062804726" datatype="html">
         <source>Two-factor code</source>
-        <target state="new">Two-factor code</target>
+        <target state="translated">کد احراز هویت دوعاملی</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">42</context>
@@ -10217,7 +10217,7 @@
       </trans-unit>
       <trans-unit id="336731433013115653" datatype="html">
         <source>Enter the code generated by your authenticator app to confirm</source>
-        <target state="new">Enter the code generated by your authenticator app to confirm</target>
+        <target state="translated">کد ایجاد شده توسط اپلیکیشن احراز هویت خود را جهت تایید وارد نمایید</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">43</context>
@@ -10225,7 +10225,7 @@
       </trans-unit>
       <trans-unit id="2026328843059071368" datatype="html">
         <source>Two factor authentication has been enabled.</source>
-        <target state="new">Two factor authentication has been enabled.</target>
+        <target state="translated">احراز هویت دوعاملی فعال شده است.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -10436,7 +10436,7 @@
       </trans-unit>
       <trans-unit id="3159508433607320799" datatype="html">
         <source>OTP token is required.</source>
-        <target state="new">OTP token is required.</target>
+        <target state="translated">توکن OTP الزامی است.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">69</context>
@@ -10603,7 +10603,7 @@
       </trans-unit>
       <trans-unit id="27494409477574248" datatype="html">
         <source>Registration reason is required.</source>
-        <target state="new">Registration reason is required.</target>
+        <target state="translated">علت ثبت‌نام الزامی است.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -10611,7 +10611,7 @@
       </trans-unit>
       <trans-unit id="7602123087076969338" datatype="html">
         <source>Registration reason must be at least 2 characters long.</source>
-        <target state="new">Registration reason must be at least 2 characters long.</target>
+        <target state="translated">علت ثبت‌نام بایستی حداقل دو کاراکتر باشد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -10619,7 +10619,7 @@
       </trans-unit>
       <trans-unit id="2092241175249165802" datatype="html">
         <source>Registration reason cannot be more than 3000 characters long.</source>
-        <target state="new">Registration reason cannot be more than 3000 characters long.</target>
+        <target state="translated">علت ثبت‌نام نبایستی بیش از 3000 کاراکتر باشد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -10770,7 +10770,7 @@
       </trans-unit>
       <trans-unit id="6122525173522570480" datatype="html">
         <source>Support text cannot be more than 1000 characters long.</source>
-        <target state="new">Support text cannot be more than 1000 characters long.</target>
+        <target state="translated">متن نبایستی بیش از 1000 کاراکتر باشد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">48</context>
@@ -11041,7 +11041,7 @@
       </trans-unit>
       <trans-unit id="8280589137189201687" datatype="html">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="new">You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</target>
+        <target state="translated">شما مجاز به انتخاب بیش از <x id="maxItems"/> مورد نمی‌باشید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -11462,7 +11462,7 @@
       </trans-unit>
       <trans-unit id="5769292297914455214" datatype="html">
         <source>Disabled</source>
-        <target state="new">Disabled</target>
+        <target state="translated">غیرفعال</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">62</context>
@@ -11478,7 +11478,7 @@
       </trans-unit>
       <trans-unit id="4816216590591222133" datatype="html">
         <source>Enabled</source>
-        <target state="new">Enabled</target>
+        <target state="translated">فعال</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -11486,17 +11486,17 @@
       </trans-unit>
       <trans-unit id="3911025298999036211" datatype="html">
         <source>~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</source>
-        <target state="new">~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</target>
+        <target state="translated">~ <x id="hours"/> ساعت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="8587199198938218660" datatype="html">
         <source>~ <x id="PH" equiv-text="hours"/> hours</source>
-        <target state="new">~ <x id="PH" equiv-text="hours"/> hours</target>
+        <target state="translated">~ <x id="PH" equiv-text="hours"/> ساعت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="2819927377059070056" datatype="html">
         <source>~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</source>
-        <target state="new">~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</target>
+        <target state="translated">~ <x id="minutes"/> دقیقه</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="189524047518780716" datatype="html">
@@ -11521,17 +11521,17 @@
       </trans-unit>
       <trans-unit id="1792453450803202450" datatype="html">
         <source>Accepted follows</source>
-        <target state="new">Accepted follows</target>
+        <target state="translated">فالوهای پذیرفته شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
       <trans-unit id="1745310805516417209" datatype="html">
         <source>Rejected follows</source>
-        <target state="new">Rejected follows</target>
+        <target state="translated">فالوهای پذیرفته نشده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="1810206793608630396" datatype="html">
         <source>Pending follows</source>
-        <target state="new">Pending follows</target>
+        <target state="translated">فاولوهای در انتظار</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
@@ -11619,7 +11619,7 @@
       </trans-unit>
       <trans-unit id="4350392487994839749" datatype="html">
         <source>If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</source>
-        <target state="new">If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</target>
+        <target state="translated">اگر این کاربر را حذف کنید امکان ایجاد کاربر جدید یا یک کانال با نام کاربری &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; را نخواهید داشت!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -11929,7 +11929,7 @@
       </trans-unit>
       <trans-unit id="7793333806747606771" datatype="html">
         <source>Server is unavailable. Please retry later.</source>
-        <target state="new">Server is unavailable. Please retry later.</target>
+        <target state="translated">سرور دردسترس نیست. لطفا مجددا سعی کنید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">137</context>
@@ -11937,7 +11937,7 @@
       </trans-unit>
       <trans-unit id="7436975022198908854" datatype="html">
         <source>Unknown server error</source>
-        <target state="new">Unknown server error</target>
+        <target state="translated">خطای ناشناخته سرور</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
@@ -12179,22 +12179,22 @@
       </trans-unit>
       <trans-unit id="8315587636588243636" datatype="html">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</source>
-        <target state="new">Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</target>
+        <target state="translated">آیا از حذف فایل <x id="PH" equiv-text="file.resolution.label"/> اطمینان دارید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">187</context></context-group>
       </trans-unit>
       <trans-unit id="6693349469471580292" datatype="html">
         <source>Delete file</source>
-        <target state="new">Delete file</target>
+        <target state="translated">حذف فایل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">188</context></context-group>
       </trans-unit>
       <trans-unit id="7016764388104297354" datatype="html">
         <source>File removed.</source>
-        <target state="new">File removed.</target>
+        <target state="translated">فایل حذف شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</target>
+        <target state="translated">آیا از حذف این <x id="count"/> ویدئو اطمینان دارید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">222</context></context-group>
       </trans-unit>
       <trans-unit id="1950057220179636309" datatype="html">
@@ -12334,7 +12334,7 @@
       </trans-unit>
       <trans-unit id="7657908235362559477" datatype="html">
         <source>Publication scheduled on <x id="PH" equiv-text="updateAt"/></source>
-        <target state="new">Publication scheduled on <x id="PH" equiv-text="updateAt"/></target>
+        <target state="translated">انتشار ویدئو برای تاریخ <x id="PH" equiv-text="updateAt"/> برنامه‌ریزی شده است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">183</context></context-group>
       </trans-unit>
       <trans-unit id="5093002376262354382" datatype="html">
@@ -12470,7 +12470,7 @@
       </trans-unit>
       <trans-unit id="1830802698757049943" datatype="html">
         <source>Publish <x id="PH" equiv-text="videoName"/></source>
-        <target state="new">Publish <x id="PH" equiv-text="videoName"/></target>
+        <target state="translated">انتشار <x id="PH" equiv-text="videoName"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="6932865105766151309" datatype="html">
@@ -12561,7 +12561,7 @@
       </trans-unit>
       <trans-unit id="723038562278401061" datatype="html">
         <source>Friendly Reminder:</source>
-        <target state="new">Friendly Reminder:</target>
+        <target state="translated">یادآوری دوستانه:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context>
           <context context-type="linenumber">4</context>
@@ -12736,7 +12736,7 @@
       </trans-unit>
       <trans-unit id="3093549590814158078" datatype="html">
         <source>You need to be logged in to rate this video.</source>
-        <target state="new">You need to be logged in to rate this video.</target>
+        <target state="translated">برای امتیازدهی به این ویدئو لازم است تا لاگین نمایید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">85</context>
