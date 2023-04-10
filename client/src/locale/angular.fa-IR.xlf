@@ -12411,7 +12411,7 @@
       </trans-unit>
       <trans-unit id="435589893738610428" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> default theme (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> تم و قالب پیش‌فرض (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</target>
+        <target state="translated">تم پیش‌فرض سایت <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">8</context>
