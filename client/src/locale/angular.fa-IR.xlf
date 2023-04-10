@@ -628,7 +628,7 @@
       </trans-unit>
       <trans-unit id="9164541937317586242" datatype="html">
         <source>Unblocked {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">تعداد <x id="count"/> ویدئو از بلوکه خارج شدند.</target>
+        <target state="translated">تعداد {count, plural, =1 {یک ویدئو} other {ویدئو <x id="count"/>}} از بلوکه خارج شدند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">252</context></context-group>
       </trans-unit>
       <trans-unit id="2870417795706430145" datatype="html">
@@ -1198,7 +1198,7 @@
       </trans-unit>
       <trans-unit id="2101170466365500913" datatype="html">
         <source>Logging into an account lets you publish content</source>
-        <target state="translated">وارد شدن به حساب ، به شما امکان انتشار محتوا می‌دهد.</target>
+        <target state="translated">وارد شدن به حساب کاربری ، به شما امکان انتشار محتوا می‌دهد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="6584143415159913044" datatype="html">
@@ -11041,7 +11041,7 @@
       </trans-unit>
       <trans-unit id="8280589137189201687" datatype="html">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="translated">شما مجاز به انتخاب بیش از <x id="maxItems"/> مورد نمی‌باشید.</target>
+        <target state="translated">شما مجاز به انتخاب بیش از {maxItems, plural, =1 {یک مورد} other { مورد<x id="maxItems"/>}} نمی‌باشید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -11486,7 +11486,7 @@
       </trans-unit>
       <trans-unit id="3911025298999036211" datatype="html">
         <source>~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</source>
-        <target state="translated">~ <x id="hours"/> ساعت</target>
+        <target state="translated">~ {hours, plural, =1 {یک ساعت} other { ساعت<x id="hours"/>}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="8587199198938218660" datatype="html">
@@ -11496,7 +11496,7 @@
       </trans-unit>
       <trans-unit id="2819927377059070056" datatype="html">
         <source>~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</source>
-        <target state="translated">~ <x id="minutes"/> دقیقه</target>
+        <target state="translated">~ {minutes, plural, =1 {یک دقیقه} other { دقیقه<x id="minutes"/>}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="189524047518780716" datatype="html">
