@@ -408,7 +408,13 @@ class ClientHtml {
   }
 
   private static async addAsyncPluginCSS (htmlStringPage: string) {
-    const globalCSSContent = await readFile(PLUGIN_GLOBAL_CSS_PATH)
+    let globalCSSContent
+    try {
+      globalCSSContent = await readFile(PLUGIN_GLOBAL_CSS_PATH)
+    } catch (err) {
+      logger.error('Global CSS file is not available (generation may still be in progress), ignoring it.', { err })
+      return htmlStringPage
+    }
     if (globalCSSContent.byteLength === 0) return htmlStringPage
 
     const fileHash = sha256(globalCSSContent)
