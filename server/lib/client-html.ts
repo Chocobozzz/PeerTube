@@ -495,7 +495,6 @@ class ClientHtml {
       schema['uploadDate'] = tags.embed.createdAt
 
       if (tags.embed.duration) schema['duration'] = tags.embed.duration
-      if (tags.embed.views) schema['iterationCount'] = tags.embed.views
 
       schema['thumbnailUrl'] = tags.image.url
       schema['contentUrl'] = tags.url
