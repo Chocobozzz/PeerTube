@@ -244,7 +244,7 @@
       </trans-unit>
       <trans-unit id="2020563642195933477" datatype="html">
         <source>The notification concerns a comment now unavailable</source>
-        <target state="translated">اعلان مربوط به ‍‍اظهار نظر هم اکنون در دسترس نیست</target>
+        <target state="translated">اعلان مربوط به ‍‍یک اظهارنظر هم اکنون در دسترس نیست</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">106</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
@@ -506,7 +506,7 @@
       </trans-unit>
       <trans-unit id="1781854282711822539" datatype="html">
         <source>Mute to also hide videos/comments</source>
-        <target state="translated">برای پنهان کردن ویدیوها/نظرات نیز نادیده گرفته شود</target>
+        <target state="translated">بی‌صدا نمودن و همچنین پنهان‌کردن ویدئوها/اظهارنظرها</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">27</context>
@@ -975,7 +975,7 @@
       </trans-unit>
       <trans-unit id="117954017715534854" datatype="html">
         <source>comments</source>
-        <target state="translated">نظرات</target>
+        <target state="translated">اظهارنظرها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
@@ -2733,7 +2733,7 @@
       </trans-unit>
       <trans-unit id="2200003513633568069" datatype="html">
         <source>Enable video comments</source>
-        <target state="translated">فعال نمودن ثبت نظرات برروی ویدئو</target>
+        <target state="translated">فعال نمودن ثبت اظهارنظر برروی ویدئو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">373</context></context-group>
       </trans-unit>
       <trans-unit id="8896564060463626070" datatype="html">
@@ -3021,7 +3021,7 @@
       </trans-unit>
       <trans-unit id="4619111912751495491" datatype="html">
         <source>Report this comment</source>
-        <target state="translated">گزارش این نظر</target>
+        <target state="translated">گزارش دادن این اظهارنظر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context><context context-type="linenumber">178</context></context-group>
       </trans-unit>
       <trans-unit id="7419704019640008953" datatype="html">
@@ -3396,7 +3396,7 @@
       </trans-unit>
       <trans-unit id="7494537777006082055" datatype="html">
         <source>No comments.</source>
-        <target state="translated">بدون نظر.</target>
+        <target state="translated">بدون اظهارنظر.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html">
@@ -3423,12 +3423,12 @@
       </trans-unit>
       <trans-unit id="1055254162789146714" datatype="html">
         <source>Comments are disabled.</source>
-        <target state="translated">ثبت نظرات غیر فعال شده اند.</target>
+        <target state="translated">اظهارنظرها غیرفعال شده اند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="5733075023444401902" datatype="html">
         <source>Add comment...</source>
-        <target state="translated">اضافه کردن نظر ...</target>
+        <target state="translated">افزودن اظهارنظر ...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="982956590420630883" datatype="html">
@@ -3478,7 +3478,7 @@
       </trans-unit>
       <trans-unit id="2263890353858735493" datatype="html">
         <source>You are one step away from commenting</source>
-        <target state="translated">شما یک قدم دور از نظر دادن هستید</target>
+        <target state="translated">شما یک مرحله از اظهارنظر دور هستید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="7508177761852352782" datatype="html">
@@ -3488,7 +3488,7 @@
       </trans-unit>
       <trans-unit id="2958389355547305739" datatype="html">
         <source>Login to comment</source>
-        <target state="translated">ورود به نظر</target>
+        <target state="translated">براي اظهارنظر بايد لاگين نماييد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="4817080330698362530" datatype="html">
@@ -3509,7 +3509,7 @@
       </trans-unit>
       <trans-unit id="2447932355167015019" datatype="html">
         <source>This comment has been deleted</source>
-        <target state="translated">این نظر حذف شده است</target>
+        <target state="translated">این اظهارنظر حذف شده است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
@@ -3524,7 +3524,7 @@
       </trans-unit>
       <trans-unit id="7651712714082200084" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the comment origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="translated">گزارش شما به ناظران ارسال خواهد شد  <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> و همچنین برای ارسال کننده نظر ارسال می گردد . (<x id="INTERPOLATION_1"/>) .<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
+        <target state="translated">گزارش شما به ناظران ارسال خواهد شد <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> و همچنین برای ارسال‌کننده اظهارنظر ارسال می گردد . (<x id="INTERPOLATION_1"/>) .<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">35</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
@@ -3591,7 +3591,7 @@
       </trans-unit>
       <trans-unit id="4266779970063047572" datatype="html">
         <source>Video/Comment/Account</source>
-        <target state="translated">ویدئو / نظر / حساب</target>
+        <target state="translated">ویدئو / اظهارنظر / حساب كاربري</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="8040881171107393560" datatype="html">
@@ -4037,7 +4037,7 @@
       </trans-unit>
       <trans-unit id="4043531994869127329" datatype="html">
         <source>See full comment</source>
-        <target state="translated">نظر کامل را ببینید</target>
+        <target state="translated">اظهارنظر کامل را ببینید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="3193976279273491157" datatype="html">
@@ -4057,32 +4057,32 @@
       </trans-unit>
       <trans-unit id="4691552465058437520" datatype="html">
         <source>Commented video</source>
-        <target state="translated">اظهار نظر ویدئو</target>
+        <target state="translated">ویدئوي مخاطب اظهارنظر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="7266085473379376028" datatype="html">
         <source>No comments found matching current filters.</source>
-        <target state="translated">مطابق فیلترهای فعلی هیچ نظری پیدا نشد.</target>
+        <target state="translated">مطابق فیلترهای فعلی هیچ اظهارنظری پیدا نشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="2398388496754671928" datatype="html">
         <source>No comments found.</source>
-        <target state="translated">هیچ نظری یافت نشد</target>
+        <target state="translated">هیچ اظهارنظری یافت نشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="4604870995665811499" datatype="html">
         <source>Local comments</source>
-        <target state="translated">نظرات محلی</target>
+        <target state="translated">اظهارنظرات محلی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="2721988499779041837" datatype="html">
         <source>Remote comments</source>
-        <target state="translated">نظرات کاربران راه دور</target>
+        <target state="translated">اظهارنظرات کاربران راه دور</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="7483158147658382515" datatype="html">
         <source>Comments on local videos</source>
-        <target state="translated">نظرات درباره ویدئوهای محلی</target>
+        <target state="translated">اظهارنظرات درباره ویدئوهای محلی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="1420624050293070194" datatype="html">
@@ -4160,17 +4160,17 @@
       </trans-unit>
       <trans-unit id="7075448128175750939" datatype="html">
         <source>Moderation comment</source>
-        <target state="translated">نظر سنجی</target>
+        <target state="translated">اظهارنظر مديريت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="7358611947192442969" datatype="html">
         <source>This comment can only be seen by you or the other moderators.</source>
-        <target state="translated">این نظر تنها می تواند توسط شما یا مدیران دیگر دیده شود.</target>
+        <target state="translated">این اظهارنظر تنها می‌تواند توسط شما یا ساير مدیران دیده شود.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="3981851640772035362" datatype="html">
         <source>Update this comment</source>
-        <target state="translated">به روز رسانی این نظر</target>
+        <target state="translated">به روز رسانی این اظهارنظر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="730589419287534524" datatype="html">
@@ -4202,7 +4202,7 @@
       </trans-unit>
       <trans-unit id="2662644497259948010" datatype="html">
         <source>Comment</source>
-        <target state="translated">اظهار نظر</target>
+        <target state="translated">اظهارنظر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">45</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.ts</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
@@ -4522,42 +4522,42 @@
       </trans-unit>
       <trans-unit id="8949443215142664126" datatype="html">
         <source>Delete this comment</source>
-        <target state="translated">حذف این نظر</target>
+        <target state="translated">حذف این اظهارنظر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="3327751240218085797" datatype="html">
         <source>Delete all comments of this account</source>
-        <target state="translated">حذف تمام نظرات این حساب کاربری</target>
+        <target state="translated">حذف تمام اظهارنظرات این حساب کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="2850960459131251840" datatype="html">
         <source>Comments are deleted after a few minutes</source>
-        <target state="translated">نظرات پس از چند دقیقه حذف می شوند</target>
+        <target state="translated">اظهارنظرات پس از چند دقیقه حذف می‌شوند</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="1271241007621398467" datatype="html">
         <source>{count, plural, =1 {1 comment deleted.} other {<x id="count"/> comments deleted.}}</source>
-        <target state="new">{count, plural, =1 {1 comment deleted.} other {<x id="count"/> comments deleted.}}</target>
+        <target state="translated">{count, plural, =1 {يك اظهارنظر حذف شد.} other { اظهارنظر حذف شدند.<x id="count"/>}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">149</context></context-group>
       </trans-unit>
       <trans-unit id="264978617337249011" datatype="html">
         <source><x id="PH" equiv-text="commentArgs.length"/> comment(s) deleted.</source>
-        <target state="translated">تعداد <x id="PH" equiv-text="commentArgs.length"/> نقطه‌نظرحذف شد.</target>
+        <target state="translated">تعداد <x id="PH" equiv-text="commentArgs.length"/> اظهارنظر حذف شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">151</context></context-group>
       </trans-unit>
       <trans-unit id="379090446060940062" datatype="html">
         <source>Do you really want to delete all comments of <x id="PH"/>?</source>
-        <target state="translated">آیا واقعا میخواهید تمام نظرات <x id="PH"/> را حذف کنید؟</target>
+        <target state="translated">آیا واقعا می‌خواهید تمام اظهارنظرات <x id="PH"/> را حذف کنید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">174</context></context-group>
       </trans-unit>
       <trans-unit id="4539246224625965241" datatype="html">
         <source>Comments of <x id="PH"/> will be deleted in a few minutes</source>
-        <target state="translated">نظرات <x id="PH"/> در چند دقیقه حذف خواهد شد</target>
+        <target state="translated">اظهارنظرات <x id="PH"/> در چند دقیقه حذف خواهند شد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">186</context></context-group>
       </trans-unit>
       <trans-unit id="3204306399736151644" datatype="html">
         <source>Comments list</source>
-        <target state="translated">لیست نظرات</target>
+        <target state="translated">لیست اظهارنظرات</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment.routes.ts</context>
           <context context-type="linenumber">24</context>
@@ -4565,17 +4565,17 @@
       </trans-unit>
       <trans-unit id="7427986413651551775" datatype="html">
         <source>Video comments</source>
-        <target state="translated">نظرات راجع به ویدئو</target>
+        <target state="translated">اظهارنظرات راجع به ویدئو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="289582790179344391" datatype="html">
         <source>This view also shows comments from muted accounts.</source>
-        <target state="translated">این دیدگاه همچنین نظرات را از حساب های خاموش نشان می دهد.</target>
+        <target state="translated">این صفحه همچنین اظهارنظرات از حساب‌های كاربري بي‌صدا را نشان می‌دهد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="4523382115569186450" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> comments</source>
-        <target state="translated">نمایش <x id="INTERPOLATION"/> به <x id="INTERPOLATION_1"/> از <x id="INTERPOLATION_2"/> نظرات</target>
+        <target state="translated">نمايش اظهارنظر <x id="INTERPOLATION"/> تا <x id="INTERPOLATION"/> از مجموع <x id="INTERPOLATION_2"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="6110554376228744887" datatype="html">
@@ -5027,7 +5027,7 @@
       </trans-unit>
       <trans-unit id="3807699453257291879" datatype="html">
         <source>Comments</source>
-        <target state="translated">نظرات</target>
+        <target state="translated">اظهارنظرات</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="8147229944654164397" datatype="html">
@@ -5062,7 +5062,7 @@
       </trans-unit>
       <trans-unit id="3094586852616580737" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {نظر} other {نظر} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {اظهارنظر} other {اظهارنظر} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">54</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
@@ -7795,7 +7795,7 @@
       </trans-unit>
       <trans-unit id="6245265026120479954" datatype="html">
         <source>Comment reported.</source>
-        <target state="translated">نظر گزارش شده است.</target>
+        <target state="translated">اظهارنظر گزارش شده است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/comment-report.component.ts</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="2127446333083057097" datatype="html">
@@ -8132,7 +8132,7 @@
       </trans-unit>
       <trans-unit id="2393853062458645999" datatype="html">
         <source>Comment updated.</source>
-        <target state="translated">نظر به روز شده</target>
+        <target state="translated">اظهارنظر به روز شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.ts</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="149121389669248117" datatype="html">
@@ -8249,7 +8249,7 @@
       </trans-unit>
       <trans-unit id="6282990098351939529" datatype="html">
         <source>Deleted comment</source>
-        <target state="translated">نظر پاک شده</target>
+        <target state="translated">اظهارنظر حذف شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">214</context></context-group>
       </trans-unit>
       <trans-unit id="9196775343330824083" datatype="html">
@@ -8828,7 +8828,7 @@
       </trans-unit>
       <trans-unit id="3767259920053407667" datatype="html">
         <source>Videos will be deleted, comments will be tombstoned.</source>
-        <target state="translated">فیلم ها حذف خواهند شد، نظرات Tombstoned خواهد بود.</target>
+        <target state="translated">ويدئوها حذف خواهند شد، اظهارنظرات مدفون ميشوند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">101</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">346</context></context-group>
       </trans-unit>
@@ -8840,13 +8840,13 @@
       </trans-unit>
       <trans-unit id="3855396975723886053" datatype="html">
         <source>User won't be able to login anymore, but videos and comments will be kept as is.</source>
-        <target state="translated">کاربر دیگر قادر به ورود به سیستم نیست، اما فیلم ها و نظرات به همان صورت نگه داشته خواهد شد.</target>
+        <target state="translated">کاربر دیگر قادر به ورود به سیستم نیست، اما فیلم‌ها و اظهارنظرات به همان صورت نگه داشته خواهد شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">107</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">352</context></context-group>
       </trans-unit>
       <trans-unit id="4451482225013335720" datatype="html">
         <source>Unban</source>
-        <target state="translated">غیر مسدود کردن</target>
+        <target state="translated">رفع ممنوعیت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">112</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">217</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">83</context></context-group>
@@ -8880,22 +8880,22 @@
       </trans-unit>
       <trans-unit id="7634059432691079352" datatype="html">
         <source>Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</source>
-        <target state="new">Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</target>
+        <target state="translated">آیا از رفع ممنوعیت {count, plural, =1 {یک کاربر} other { کاربر<x id="count"/>}} اطمینان دارید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">213</context></context-group>
       </trans-unit>
       <trans-unit id="4884272193574287483" datatype="html">
         <source>Do you really want to unban <x id="PH"/> users?</source>
-        <target state="translated">آیا واقعا میخواهید <x id="PH"/> کاربر را از حالت انسداد خارج کنید؟</target>
+        <target state="translated">آیا واقعا میخواهید <x id="PH"/> کاربر را رفع ممنوعیت نمایید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">215</context></context-group>
       </trans-unit>
       <trans-unit id="738031253894929036" datatype="html">
         <source>{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</source>
-        <target state="new">{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</target>
+        <target state="translated">{count, plural, =1 {یک کاربر رفع ممنوعیت شد.} other { کاربر رفع ممنوعیت شدند.<x id="count"/>}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">226</context></context-group>
       </trans-unit>
       <trans-unit id="8712248120167780385" datatype="html">
         <source><x id="PH"/> users unbanned. </source>
-        <target state="translated">کاربران<x id="PH"/>  آزاد شده اند. </target>
+        <target state="translated"><x id="PH"/> کاربر رفع ممنوعیت شدند. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">228</context></context-group>
       </trans-unit>
       <trans-unit id="5325873477837320044" datatype="html">
@@ -9010,7 +9010,7 @@
       </trans-unit>
       <trans-unit id="2740531699780274491" datatype="html">
         <source>This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</source>
-        <target state="translated">با این کار تمام داده‌های شما، از جمله کانال‌ها، ویدیوها، نظرات حذف می‌شود و نمی‌توانید کاربر دیگری در این سایت بانام کاربری  "<x id="PH" equiv-text="this.user.username"/>" ایجاد کنید.</target>
+        <target state="translated">با این کار تمام داده‌های شما، از جمله کانال‌ها، ویدئوها، اظهارنظرات حذف می‌شود و نمی‌توانید کاربر دیگری در این سایت بانام کاربری "<x id="PH" equiv-text="this.user.username"/>" ایجاد کنید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -9047,7 +9047,7 @@
       </trans-unit>
       <trans-unit id="4343589211916204486" datatype="html">
         <source>New comment on your video</source>
-        <target state="translated">نظر جدید در مورد ویدیوی شما</target>
+        <target state="translated">اظهارنظر جدید در مورد ویدئوی شما</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="7130088765428829942" datatype="html">
@@ -9093,7 +9093,7 @@
       </trans-unit>
       <trans-unit id="5315689532659759332" datatype="html">
         <source>Someone mentioned you in video comments</source>
-        <target state="translated">فردی از شما در نظرات راجع به ویدئو نام برد.</target>
+        <target state="translated">فردی در اظهارنظر راجع به ویدئو از شما نام برد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="2018794201569157817" datatype="html">
@@ -10672,17 +10672,17 @@
       </trans-unit>
       <trans-unit id="8779567454442277762" datatype="html">
         <source>Moderation comment is required.</source>
-        <target state="translated">دلیل اصلاح یا نظارتی مورد نیاز است.</target>
+        <target state="translated">اظهارنظر مديريت الزامي است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="8954765410376245909" datatype="html">
         <source>Moderation comment must be at least 2 characters long.</source>
-        <target state="translated">نظر اصلاحی یا نظارتی باید حداقل 2 کاراکتر داشته باشد.</target>
+        <target state="translated">اظهارنظر مديريت باید حداقل 2 کاراکتر داشته باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6316804467108244906" datatype="html">
         <source>Moderation comment cannot be more than 3000 characters long.</source>
-        <target state="translated">نظر اصلاحی یا نظارتی نمی تواند بیش از 3000 کاراکتر باشد.</target>
+        <target state="translated">اظهارنظر مديريت نمی‌تواند بیش از 3000 کاراکتر باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8835075531528610034" datatype="html">
@@ -10807,17 +10807,17 @@
       </trans-unit>
       <trans-unit id="4267638333776227701" datatype="html">
         <source>Comment is required.</source>
-        <target state="translated">نظر لازم است</target>
+        <target state="translated">اظهارنظر الزامي است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="71132671234491945" datatype="html">
         <source>Comment must be at least 2 characters long.</source>
-        <target state="translated">نظر باید حداقل 2 کاراکتر داشته باشد.</target>
+        <target state="translated">اظهارنظر باید حداقل 2 کاراکتر داشته باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="4148250392704331190" datatype="html">
         <source>Comment cannot be more than 3000 characters long.</source>
-        <target state="translated">نظر نمی تواند بیش از 3000 کاراکتر باشد.</target>
+        <target state="translated">اظهارنظر نمی‌تواند بیش از 3000 کاراکتر باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="6854100952145697527" datatype="html">
@@ -11609,12 +11609,12 @@
       </trans-unit>
       <trans-unit id="8269144351796756896" datatype="html">
         <source>Do you really want to unban <x id="PH"/>?</source>
-        <target state="translated">آیا واقعا میخواهید <x id="PH"/>رفع ممنوعیت کنید؟</target>
+        <target state="translated">آیا واقعا میخواهید <x id="PH"/> را رفع ممنوعیت نمایید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="1794219875546376069" datatype="html">
         <source>User <x id="PH"/> unbanned.</source>
-        <target state="translated">کاربر <x id="PH"/> رفع ممنوعیت شده است.</target>
+        <target state="translated">کاربر <x id="PH"/> رفع ممنوعیت شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="4350392487994839749" datatype="html">
@@ -11671,12 +11671,12 @@
       </trans-unit>
       <trans-unit id="2044813052587776285" datatype="html">
         <source>Add a message to communicate with the reporter</source>
-        <target state="translated">یک پیام برای برقراری ارتباط با گزارشگر اضافه کنید</target>
+        <target state="translated">افزودن یک پیام برای برقراری ارتباط با گزارشگر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="4117663541503607703" datatype="html">
         <source>Add a message to communicate with the moderation team</source>
-        <target state="translated">یک پیام برای برقراری ارتباط با تیم مدیریت اضافه کنید</target>
+        <target state="translated">افزودن یک پیام برای برقراری ارتباط با تیم مدیریت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="3085641638748358969" datatype="html">
@@ -11696,17 +11696,17 @@
       </trans-unit>
       <trans-unit id="8173437618471379044" datatype="html">
         <source>Are you sure you want to remove all the comments of this account?</source>
-        <target state="translated">آیا مطمئن هستید که می خواهید تمام نظرات این حساب را حذف کنید؟</target>
+        <target state="translated">آیا مطمئن هستید که می‌خواهید تمام اظهارنظرات این حساب كاربري را حذف کنید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
       <trans-unit id="6315346579373254461" datatype="html">
         <source>Delete account comments</source>
-        <target state="translated">حذف نظرات حساب</target>
+        <target state="translated">حذف اظهارنظرات حساب كاربري</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="8559170154828316298" datatype="html">
         <source>Will remove comments of this account (may take several minutes).</source>
-        <target state="translated">نظرات این حساب را حذف خواهد کرد (ممکن است چند دقیقه طول بکشد).</target>
+        <target state="translated">اظهارنظرات این حساب كاربري را حذف خواهد کرد (ممکن است چند دقیقه زمان نياز داشته باشد).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">251</context></context-group>
       </trans-unit>
       <trans-unit id="4268530178786707817" datatype="html">
@@ -11731,23 +11731,23 @@
       </trans-unit>
       <trans-unit id="7577876364431026966" datatype="html">
         <source>Unban user</source>
-        <target state="translated">لغو ممنوعیت کاربر</target>
+        <target state="translated">رفع ممنوعیت کاربر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">357</context></context-group>
       </trans-unit>
       <trans-unit id="3508163549683020253" datatype="html">
         <source>Allow the user to login and create videos/comments again</source>
-        <target state="translated">به کاربر اجازه دهید وارد سیستم شود و دوباره ویدیو/نظر ایجاد کند.</target>
+        <target state="translated">اجازه به کاربر جهت ورود به سيستم و ايجاد دوباره ویدئو/اظهارنظر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">358</context></context-group>
       </trans-unit>
       <trans-unit id="1888272455383898478" datatype="html">
         <source>Mute this account</source>
-        <target state="translated">این حساب را خاموش کنید.</target>
+        <target state="translated">بی‌صدا نمودن این حساب کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">296</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">374</context></context-group>
       </trans-unit>
       <trans-unit id="2365286519320230773" datatype="html">
         <source>Hide any content from that user from you.</source>
-        <target state="translated">محتوای  کاربر را نسبت به خود مخفی کنید.</target>
+        <target state="translated">پنهان نمودن هر محتوای از سمت آن کاربر نسبت به شما.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">297</context></context-group>
       </trans-unit>
       <trans-unit id="4043508901590508211" datatype="html">
@@ -11784,17 +11784,17 @@
       </trans-unit>
       <trans-unit id="3108200185023875257" datatype="html">
         <source>Remove comments from your videos</source>
-        <target state="translated">حذف نظرها از ویدئوهای شما</target>
+        <target state="translated">حذف اظهارنظرات از ویدئوهای شما</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">320</context></context-group>
       </trans-unit>
       <trans-unit id="4810478487244286994" datatype="html">
         <source>Remove comments made by this account on your videos.</source>
-        <target state="translated">حذف نظرات از این حساب کاربری بر ویدئوهای شما</target>
+        <target state="translated">حذف اظهارنظرها از این حساب کاربری درباره ویدئوهای شما.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">321</context></context-group>
       </trans-unit>
       <trans-unit id="2077144178298031252" datatype="html">
         <source>Hide any content from that user from you, your instance and its users.</source>
-        <target state="translated">هرگونه محتوایی از این کاربر بر سایت شما و استفاده کنندگان از آن را پنهان کنید.</target>
+        <target state="translated">پنهان نمودن هر محتوای از سمت آن کاربر نسبت به شما، سایت شما و کاربران آن.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">375</context></context-group>
       </trans-unit>
       <trans-unit id="7675070596643104983" datatype="html">
@@ -11804,7 +11804,7 @@
       </trans-unit>
       <trans-unit id="525915681688649453" datatype="html">
         <source>Hide any content from that instance from you, your instance and its users.</source>
-        <target state="translated">محتوای این کانال را از خود ، سایت تان و استفاده کنندگان از آن پنهان کنید.</target>
+        <target state="translated">پنهان نمودن هر محتوای از سمت آن سایت نسبت به شما، سایت شما و کاربران آن.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">393</context></context-group>
       </trans-unit>
       <trans-unit id="5325628963747139770" datatype="html">
@@ -11819,12 +11819,12 @@
       </trans-unit>
       <trans-unit id="3785095284194008197" datatype="html">
         <source>Remove comments from your instance</source>
-        <target state="translated">اظهارنظر ها را از سایت خود حذف کنید .</target>
+        <target state="translated">حذف اظهارنظرها از سایت شما</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">409</context></context-group>
       </trans-unit>
       <trans-unit id="4809327075591089709" datatype="html">
         <source>Remove comments made by this account from your instance.</source>
-        <target state="translated">اظهارنظرهای این حساب کاربری را از سایت خود حذف کنید .</target>
+        <target state="translated">حذف اظهارنظرهای این حساب کاربری از سایت شما.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">410</context></context-group>
       </trans-unit>
       <trans-unit id="6504240011224861621" datatype="html">
@@ -11914,12 +11914,12 @@
       </trans-unit>
       <trans-unit id="968295009933361070" datatype="html">
         <source>Too many attempts, please try again after <x id="PH"/> minutes.</source>
-        <target state="translated">تعداد تلاش بسیار زیاد است، لطفاً بعد از <x id="PH"/> دقیقه دوباره امتحان کنید.</target>
+        <target state="translated">تلاش زیادی انجام شد، لطفاً بعد از <x id="PH"/> دقیقه دوباره امتحان کنید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="4965472196059235310" datatype="html">
         <source>Too many attempts, please try again later.</source>
-        <target state="translated">تعداد تلاش ها بسیار زیاد است، لطفاً بعداً دوباره امتحان کنید.</target>
+        <target state="translated">تلاش زیادی انجام شد، لطفاً بعداً دوباره امتحان کنید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">129</context></context-group>
       </trans-unit>
       <trans-unit id="1693549688987384699" datatype="html">
@@ -12038,23 +12038,23 @@
       </trans-unit>
       <trans-unit id="2210418817778733727" datatype="html">
         <source>Actions for the comment</source>
-        <target state="translated">اقدامات برای نظر</target>
+        <target state="translated">اقدامات برای اين اظهارنظر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">400</context></context-group>
       </trans-unit>
       <trans-unit id="7978668497183230348" datatype="html">
         <source>Delete comment</source>
-        <target state="translated">حذف نظر</target>
+        <target state="translated">حذف اظهارنظر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">406</context></context-group>
       </trans-unit>
       <trans-unit id="6747218355168080191" datatype="html">
         <source>Do you really want to delete this comment?</source>
-        <target state="translated">آیا از حذف این نظر اطمینان دارید؟</target>
+        <target state="translated">آیا از حذف این اظهارنظر اطمینان دارید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">181</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">410</context></context-group>
       </trans-unit>
       <trans-unit id="7837272126865175984" datatype="html">
         <source>Comment deleted.</source>
-        <target state="translated">نظر حذف شد.</target>
+        <target state="translated">اظهارنظر حذف شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">418</context></context-group>
       </trans-unit>
       <trans-unit id="346270517625845962" datatype="html">
@@ -12100,7 +12100,7 @@
       </trans-unit>
       <trans-unit id="3622946684246476652">
         <source>Do you really want to delete this video?</source>
-        <target>میخواهید این ویدئو را پاک کنید؟</target>
+        <target state="translated">آیا واقعا می‌خواهید این ویدئو را پاک کنید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">94</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">375</context></context-group>
       </trans-unit>
@@ -12167,7 +12167,7 @@
       </trans-unit>
       <trans-unit id="5972374600810542430" datatype="html">
         <source>Delete HLS files</source>
-        <target state="translated">فایل های HLS را حذف کنید</target>
+        <target state="translated">حذف فایل‌های HLS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">108</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">403</context></context-group>
       </trans-unit>
@@ -12228,7 +12228,7 @@
       </trans-unit>
       <trans-unit id="60216491008745400" datatype="html">
         <source>Actions on comment</source>
-        <target state="translated">اقدامات در مورد نظر</target>
+        <target state="translated">اقدامات در مورد اظهارنظر</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context>
           <context context-type="linenumber">202</context>
@@ -12236,7 +12236,7 @@
       </trans-unit>
       <trans-unit id="992317512448454409" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {بدون نظر} =1 {یک نظر} other { نظر<x id="INTERPOLATION"/>}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {بدون اظهارنظر} =1 {یک اظهارنظر} other { اظهارنظر<x id="INTERPOLATION"/>}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="4903651219400691248" datatype="html">
@@ -12247,7 +12247,7 @@
       </trans-unit>
       <trans-unit id="4021487547497211597" datatype="html">
         <source>Open video actions</source>
-        <target state="translated">اقدامات ویدیویی را باز کنید</target>
+        <target state="translated">بازنمودن اقدامات ویدئویی</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.html</context>
           <context context-type="linenumber">4</context>
@@ -12304,7 +12304,7 @@
       </trans-unit>
       <trans-unit id="872792317034860453" datatype="html">
         <source>Comment:</source>
-        <target state="translated">نظر:</target>
+        <target state="translated">اظهارنظر:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="397679576231234820" datatype="html">
@@ -12324,7 +12324,7 @@
       </trans-unit>
       <trans-unit id="2137920566277687382" datatype="html">
         <source>Add a message</source>
-        <target state="translated">یک پیام اضافه کنید.</target>
+        <target state="translated">افزودن یک پیام</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="4058575476871566236" datatype="html">
@@ -12401,12 +12401,12 @@
       </trans-unit>
       <trans-unit id="1795705931707209785" datatype="html">
         <source>Add to watch later</source>
-        <target state="translated">اضافه کنید تا بعدا تماشا کنید</target>
+        <target state="translated">افزودن به لیست مشاهده در آینده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="8498940878158860248" datatype="html">
         <source>Remove from watch later</source>
-        <target state="translated">از  بعدا تماشا کنید،حذف شود.</target>
+        <target state="translated">حذف از لیست مشاهده در آینده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="435589893738610428" datatype="html">
@@ -12480,7 +12480,7 @@
       </trans-unit>
       <trans-unit id="8278735427925094503" datatype="html">
         <source>Upload <x id="PH"/> </source>
-        <target state="translated"><x id="PH"/> را آپلود کنید </target>
+        <target state="translated">بارگذاری <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="5981816353437801748">
@@ -12536,7 +12536,7 @@
       </trans-unit>
       <trans-unit id="5512208811126492983" datatype="html">
         <source>Report comment</source>
-        <target state="translated">گزارش نظر</target>
+        <target state="translated">گزارش كردن اظهارنظر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/comment-report.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="3691787517663044217" datatype="html">
@@ -12546,7 +12546,7 @@
       </trans-unit>
       <trans-unit id="7321800851971795962" datatype="html">
         <source>It is a remote comment, so the deletion will only be effective on your instance.</source>
-        <target state="translated">این یک نظر از راه دور است، بنابراین حذف فقط روی سایت شما موثر خواهد بود.</target>
+        <target state="translated">این یک اظهارنظر از راه دور است، بنابراین حذف آن فقط روی سایت شما تاثير خواهد داشت.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">186</context></context-group>
       </trans-unit>
       <trans-unit id="5964038603724691720" datatype="html">
@@ -12556,7 +12556,7 @@
       </trans-unit>
       <trans-unit id="7163633882758007711" datatype="html">
         <source>Do you really want to delete and re-draft this comment?</source>
-        <target state="translated">آیا واقعاً می خواهید این نظر را حذف و دوباره پیش نویس کنید؟</target>
+        <target state="translated">آیا واقعاً می خواهید این اظهارنظر را حذف و دوباره پیش‌نویس کنید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">215</context></context-group>
       </trans-unit>
       <trans-unit id="723038562278401061" datatype="html">
@@ -12579,7 +12579,7 @@
       </trans-unit>
       <trans-unit id="5870421136141540382" datatype="html">
         <source>Stop looping playlist videos</source>
-        <target state="translated">تکرار کردن  ویدیوهای لیست پخش را متوقف کنید</target>
+        <target state="translated">توقف تکرار ویدئوهای لیست‌پخش</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/playlist/video-watch-playlist.component.ts</context><context context-type="linenumber">243</context></context-group>
       </trans-unit>
       <trans-unit id="1599585307037758139" datatype="html">
@@ -12795,12 +12795,12 @@
       </trans-unit>
       <trans-unit id="7147755274837297932" datatype="html">
         <source>Exclude muted accounts</source>
-        <target state="translated">حساب های خاموش را حذف کنید</target>
+        <target state="translated">مستثنی نمودن حساب‌های بی‌صدا</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="8397092871503752085" datatype="html">
         <source>Exclude public videos</source>
-        <target state="translated">ویدیوهای عمومی را حذف کنید</target>
+        <target state="translated">مستثنی نمودن ویدئوهای عمومی</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">103</context>
@@ -12837,12 +12837,12 @@
       </trans-unit>
       <trans-unit id="8212906256415538361" datatype="html">
         <source>Upload a video</source>
-        <target state="translated">ویدیویی آپلود کنید</target>
+        <target state="translated">بارگذاری یک ویدئو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app-routing.module.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="7590784934397800835" datatype="html">
         <source>Edit a video</source>
-        <target state="translated">ویدیویی را ویرایش کنید</target>
+        <target state="translated">ویرایش یک ویدئو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app-routing.module.ts</context><context context-type="linenumber">112</context></context-group>
       </trans-unit>
     </body>
