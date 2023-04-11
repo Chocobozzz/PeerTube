@@ -5942,7 +5942,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4309045590850686400" datatype="html">
         <source>Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</source>
-        <target state="new">Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</target>
+        <target state="translated">Tofaktorautentisering legger til et ekstra lag med sikkerhet til kontoen din ved å kreve en numerisk kode fra en annen enhet (som oftest mobiltelefoner) når du logger på.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -5950,7 +5950,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2955617286542082394" datatype="html">
         <source>Enable two-factor authentication</source>
-        <target state="new">Enable two-factor authentication</target>
+        <target state="translated">Aktiver tofaktorautentisering</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">5</context>
@@ -5958,7 +5958,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2658424416565652268" datatype="html">
         <source>Disable two-factor authentication</source>
-        <target state="new">Disable two-factor authentication</target>
+        <target state="translated">Deaktiver tofaktorautentisering</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">9</context>
@@ -5966,7 +5966,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4561231095368496452" datatype="html">
         <source>Are you sure you want to disable two factor authentication of your account?</source>
-        <target state="new">Are you sure you want to disable two factor authentication of your account?</target>
+        <target state="translated">Er du sikker på at du vil deaktivere tofaktorautentisering av kontoen din?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -5974,7 +5974,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3757273554886026258" datatype="html">
         <source>Disable two factor</source>
-        <target state="new">Disable two factor</target>
+        <target state="translated">Deaktiver tofaktor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -5982,7 +5982,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7121657131608757909" datatype="html">
         <source>Two factor authentication disabled</source>
-        <target state="new">Two factor authentication disabled</target>
+        <target state="translated">Tofaktorautentisering deaktivert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">43</context>
@@ -5990,8 +5990,7 @@ color: red;
       </trans-unit>
       <trans-unit id="872237557319890340" datatype="html">
         <source>Two factor authentication is already enabled.</source>
-        <target state="new"> Two factor authentication is already enabled.
-</target>
+        <target state="translated">Tofaktorautentisering er allerede aktivert.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -5999,7 +5998,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4921687518561446633" datatype="html">
         <source>Your password</source>
-        <target state="new">Your password</target>
+        <target state="translated">Ditt passord</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">14</context>
@@ -6007,7 +6006,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2990026202987449106" datatype="html">
         <source>Confirm your password to enable two factor authentication</source>
-        <target state="new">Confirm your password to enable two factor authentication</target>
+        <target state="translated">Bekreft passordet ditt for å aktivere tofaktorautentisering</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">15</context>
@@ -6015,34 +6014,34 @@ color: red;
       </trans-unit>
       <trans-unit id="7752239348028675311" datatype="html">
         <source>DANGER ZONE</source>
-        <target state="new">DANGER ZONE</target>
+        <target state="translated">FARESONE</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">214</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">214</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
       <trans-unit id="4915431133669985304" datatype="html">
         <source>Profile</source>
-        <target state="new">Profile</target>
+        <target state="translated">Profil</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
       <trans-unit id="1963136290621768454" datatype="html">
         <source>Resolution</source>
-        <target state="new">Resolution</target>
+        <target state="translated">Oppløsning</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">253</context></context-group>
       </trans-unit>
       <trans-unit id="7814358426066520520" datatype="html">
         <source>Aspect ratio</source>
-        <target state="new">Aspect ratio</target>
+        <target state="translated">Størrelsesforhold</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">254</context></context-group>
       </trans-unit>
       <trans-unit id="44862519224794374" datatype="html">
         <source>Average frame rate</source>
-        <target state="new">Average frame rate</target>
+        <target state="translated">Gjennomsnittlig bildefrekvens</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">255</context></context-group>
       </trans-unit>
       <trans-unit id="5053683525387462246" datatype="html">
         <source>Pixel format</source>
-        <target state="new">Pixel format</target>
+        <target state="translated">Pikselformat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">256</context></context-group>
       </trans-unit>
       <trans-unit id="7858676566953242358" datatype="html">
