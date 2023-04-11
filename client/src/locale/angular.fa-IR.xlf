@@ -1560,7 +1560,7 @@
       </trans-unit>
       <trans-unit id="1420294365005204590" datatype="html">
         <source>These settings apply only to your session on this instance.</source>
-        <target state="translated">این تنظیمات فقط برای این بازدید شما در این کانال اعمال می شود.</target>
+        <target state="translated">این تنظیمات فقط برای جلسه بازدید شما از اين سايت اعمال می‌شود.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">8</context>
