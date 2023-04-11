@@ -3939,7 +3939,7 @@
       </trans-unit>
       <trans-unit id="746099155736913817" datatype="html">
         <source>Video blocks</source>
-        <target state="translated">بلوک های ویدئویی</target>
+        <target state="translated">بلوک‌های ویدئو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">117</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
@@ -4132,7 +4132,7 @@
       </trans-unit>
       <trans-unit id="5030329587275248535" datatype="html">
         <source>No blocked video found.</source>
-        <target state="translated">هیچ ویدئوی مسدود شده ای یافت نشد</target>
+        <target state="translated">هیچ ویدئوی مسدود شده ای یافت نشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="7755288609601798418" datatype="html">
@@ -4385,7 +4385,7 @@
       </trans-unit>
       <trans-unit id="602667807232759122" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> muted accounts</source>
-        <target state="translated">نمایش<x id="INTERPOLATION"/> تا<x id="INTERPOLATION_1"/> از<x id="INTERPOLATION_2"/> حسابهای خاموش شده</target>
+        <target state="translated">نمایش<x id="INTERPOLATION"/> تا<x id="INTERPOLATION_1"/> از<x id="INTERPOLATION_2"/> حساب‌های کاربری بی‌صدا</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">11</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
