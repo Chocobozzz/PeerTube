@@ -3939,7 +3939,7 @@
       </trans-unit>
       <trans-unit id="746099155736913817" datatype="html">
         <source>Video blocks</source>
-        <target state="translated">بلوک‌های ویدئو</target>
+        <target state="translated">ویدئوهای مسدود شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">117</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
@@ -4668,7 +4668,7 @@
       </trans-unit>
       <trans-unit id="8984988128489304664" datatype="html">
         <source>Filter logs by tags</source>
-        <target state="translated">فیلتر کردن سیاهههای مربوط به برچسب ها</target>
+        <target state="translated">فیلترکردن رویدادها توسط برچسب</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">31</context>
@@ -8056,7 +8056,7 @@
       </trans-unit>
       <trans-unit id="3069073855436209848" datatype="html">
         <source>Subscriptions of your instance</source>
-        <target state="translated">مشترکین سایت شما</target>
+        <target state="translated">اشتراکات سایت شما</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -8367,7 +8367,7 @@
       </trans-unit>
       <trans-unit id="4804785061014590286" datatype="html">
         <source>Logs</source>
-        <target state="translated">سیاهه ها (آمار بازدیدها)</target>
+        <target state="translated">ثبت رویدادها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">170</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/system.routes.ts</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
@@ -8553,12 +8553,12 @@
       </trans-unit>
       <trans-unit id="5076187961693950167" datatype="html">
         <source>Standard logs</source>
-        <target state="translated">آمار  استاندارد لاگ ها</target>
+        <target state="translated">ثبت رویدادهای استاندارد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="4737341634746310376" datatype="html">
         <source>Audit logs</source>
-        <target state="translated">حسابرسی لاگ ها</target>
+        <target state="translated">ثبت رویدادهای حسابرسی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="1886888801485703107" datatype="html">
@@ -8574,7 +8574,7 @@
       </trans-unit>
       <trans-unit id="7098180453085889026" datatype="html">
         <source>Blocked videos</source>
-        <target state="translated">فیلم های مسدود شده</target>
+        <target state="translated">فیلم‌های مسدود شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="2434590176499222618" datatype="html">
