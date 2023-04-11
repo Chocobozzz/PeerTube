@@ -1663,7 +1663,7 @@
       </trans-unit>
       <trans-unit id="1674139713929545659" datatype="html">
         <source>Videos:</source>
-        <target state="translated">ویدئو ها :</target>
+        <target state="translated">ویدئوها:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="9156407045661257130" datatype="html">
@@ -1673,7 +1673,7 @@
       </trans-unit>
       <trans-unit id="3430483831942247060" datatype="html">
         <source>Help share videos</source>
-        <target state="translated">به همرسانی ویدئو ها کمک کنید.</target>
+        <target state="translated">به همرسانی ویدئو ها کمک کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="7005745151564974365" datatype="html">
@@ -9819,7 +9819,7 @@
       </trans-unit>
       <trans-unit id="232050922346936574" datatype="html">
         <source>Trending</source>
-        <target state="translated">ویدئوهای داغ(Trending)</target>
+        <target state="translated">ویدئوهای داغ (Trending)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">205</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
@@ -9868,12 +9868,12 @@
       </trans-unit>
       <trans-unit id="7939914198003891823" datatype="html">
         <source>any language</source>
-        <target state="translated">هر زبانی</target>
+        <target state="translated">با هر زبان</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">282</context></context-group>
       </trans-unit>
       <trans-unit id="5633144232269377096" datatype="html">
         <source>hide</source>
-        <target state="translated">پنهان شدن</target>
+        <target state="translated">پنهان</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">317</context></context-group>
       </trans-unit>
       <trans-unit id="8603861867909474404" datatype="html">
