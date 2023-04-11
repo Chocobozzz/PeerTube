@@ -491,7 +491,8 @@ const commonVideosFiltersValidator = [
     .custom(exists),
   query('excludeAlreadyWatched')
     .optional()
-    .isBoolean(),
+    .customSanitizer(toBooleanOrNull)
+    .isBoolean().withMessage('Should be a valid excludeAlreadyWatched boolean'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -523,12 +524,10 @@ const commonVideosFiltersValidator = [
       }
     }
 
-    logger.error(!user)
-    logger.error(req.query.excludeAlreadyWatched)
     if (!user && exists(req.query.excludeAlreadyWatched)) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot use excludeAlreadyWatched parameter for unlogged users'
+        message: 'Cannot use excludeAlreadyWatched parameter when auth token is not provided'
       })
       return false
     }
