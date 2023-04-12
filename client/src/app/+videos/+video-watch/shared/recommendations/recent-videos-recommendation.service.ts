@@ -63,6 +63,9 @@ export class RecentVideosRecommendationService implements RecommendationService 
               searchTarget: 'local',
               nsfw: user.nsfwPolicy
                 ? this.videos.nsfwPolicyToParam(user.nsfwPolicy)
+                : undefined,
+              excludeAlreadyWatched: user.id
+                ? true
                 : undefined
             })
           }

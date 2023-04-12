@@ -78,6 +78,8 @@ export type BuildVideosListQueryOptions = {
 
   transaction?: Transaction
   logging?: boolean
+
+  excludeAlreadyWatched?: boolean
 }
 
 export class VideosIdListQueryBuilder extends AbstractRunQuery {
@@ -258,6 +260,14 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     if (options.durationMax) {
       this.whereDurationMax(options.durationMax)
+    }
+
+    if (options.excludeAlreadyWatched) {
+      if (exists(options.user.id)) {
+        this.whereExcludeAlreadyWatched(options.user.id)
+      } else {
+        throw new Error('Cannot use excludeAlreadyWatched parameter when auth token is not provided')
+      }
     }
 
     this.whereSearch(options.search)
@@ -596,6 +606,18 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private whereDurationMax (durationMax: number) {
     this.and.push('"video"."duration" <= :durationMax')
     this.replacements.durationMax = durationMax
+  }
+
+  private whereExcludeAlreadyWatched (userId: number) {
+    this.and.push(
+      'NOT EXISTS (' +
+      '  SELECT 1' +
+      '  FROM "userVideoHistory"' +
+      '  WHERE "video"."id" = "userVideoHistory"."videoId"' +
+      '  AND "userVideoHistory"."userId" = :excludeAlreadyWatchedUserId' +
+      ')'
+    )
+    this.replacements.excludeAlreadyWatchedUserId = userId
   }
 
   private groupForTrending (trendingDays: number) {

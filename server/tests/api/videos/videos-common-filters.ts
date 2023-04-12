@@ -162,13 +162,23 @@ describe('Test videos filter', function () {
       tagsAllOf?: string[]
       token?: string
       expectedStatus?: HttpStatusCode
+      excludeAlreadyWatched?: boolean
     }) {
       const res = await makeGetRequest({
         url: options.server.url,
         path: options.path,
         token: options.token ?? options.server.accessToken,
         query: {
-          ...pick(options, [ 'isLocal', 'include', 'category', 'tagsAllOf', 'hasWebtorrentFiles', 'hasHLSFiles', 'privacyOneOf' ]),
+          ...pick(options, [
+            'isLocal',
+            'include',
+            'category',
+            'tagsAllOf',
+            'hasWebtorrentFiles',
+            'hasHLSFiles',
+            'privacyOneOf',
+            'excludeAlreadyWatched'
+          ]),
 
           sort: 'createdAt'
         },
@@ -187,6 +197,7 @@ describe('Test videos filter', function () {
         token?: string
         expectedStatus?: HttpStatusCode
         skipSubscription?: boolean
+        excludeAlreadyWatched?: boolean
       }
     ) {
       const { skipSubscription = false } = options
@@ -523,6 +534,25 @@ describe('Test videos filter', function () {
           expect(hasHLS(videos)).to.be.false
           expect(hasBoth(videos)).to.be.true
         }
+      }
+    })
+
+    it('Should filter already watched videos by the user', async function () {
+      const { id } = await servers[0].videos.upload({ attributes: { name: 'video for history' } })
+
+      for (const path of paths) {
+        const videos = await listVideos({ server: servers[0], path, isLocal: true, excludeAlreadyWatched: true })
+        const foundVideo = videos.find(video => video.id === id)
+
+        expect(foundVideo).to.not.be.undefined
+      }
+      await servers[0].views.view({ id, token: servers[0].accessToken })
+
+      for (const path of paths) {
+        const videos = await listVideos({ server: servers[0], path, excludeAlreadyWatched: true })
+        const foundVideo = videos.find(video => video.id === id)
+
+        expect(foundVideo).to.be.undefined
       }
     })
   })

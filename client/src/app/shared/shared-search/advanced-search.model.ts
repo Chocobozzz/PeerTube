@@ -40,6 +40,8 @@ export class AdvancedSearch {
   searchTarget: SearchTargetType
   resultType: AdvancedSearchResultType
 
+  excludeAlreadyWatched?: boolean
+
   constructor (options?: {
     startDate?: string
     endDate?: string
@@ -62,6 +64,8 @@ export class AdvancedSearch {
     sort?: string
     searchTarget?: SearchTargetType
     resultType?: AdvancedSearchResultType
+
+    excludeAlreadyWatched?: boolean
   }) {
     if (!options) return
 
@@ -86,6 +90,8 @@ export class AdvancedSearch {
     this.searchTarget = options.searchTarget || undefined
 
     this.resultType = options.resultType || undefined
+
+    this.excludeAlreadyWatched = options.excludeAlreadyWatched || undefined
 
     if (!this.resultType && this.hasVideoFilter()) {
       this.resultType = 'videos'
@@ -138,7 +144,8 @@ export class AdvancedSearch {
       host: this.host,
       sort: this.sort,
       searchTarget: this.searchTarget,
-      resultType: this.resultType
+      resultType: this.resultType,
+      excludeAlreadyWatched: this.excludeAlreadyWatched
     }
   }
 
@@ -162,7 +169,8 @@ export class AdvancedSearch {
       host: this.host,
       isLive,
       sort: this.sort,
-      searchTarget: this.searchTarget
+      searchTarget: this.searchTarget,
+      excludeAlreadyWatched: this.excludeAlreadyWatched
     }
   }
 
