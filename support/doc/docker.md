@@ -1,7 +1,11 @@
 # Docker guide
 
 This guide requires [docker](https://www.docker.com/community-edition) and
-[docker-compose](https://docs.docker.com/compose/install/).
+[docker-compose V2](https://docs.docker.com/compose/install/).
+
+```shell
+docker compose version # Must be > 2.x.x
+```
 
 ## Install
 
@@ -10,7 +14,9 @@ name is definitive after your first PeerTube start.
 
 #### Go to your workdir
 
-_note_: the guide that follows assumes an empty workdir, but you can also clone the repository, use the master branch and `cd support/docker/production`.
+:::info
+The guide that follows assumes an empty workdir, but you can also clone the repository, use the master branch and `cd support/docker/production`.
+:::
 
 ```shell
 cd /your/peertube/directory
@@ -57,7 +63,8 @@ intuited from usage.
 
 #### Webserver
 
-*The docker compose file includes a configured web server. You can skip this part and comment the appropriate section in the docker compose if you use another webserver/proxy.*
+::: info
+The docker compose file includes a configured web server. You can skip this part and comment the appropriate section in the docker compose if you use another webserver/proxy.:::
 
 Install the template that the nginx container will use.
 The container will generate the configuration by replacing `${WEBSERVER_HOST}` and `${PEERTUBE_HOST}` using your docker compose env file.
@@ -127,7 +134,9 @@ See the production guide ["What now" section](https://docs.joinpeertube.org/inst
 
 ## Upgrade
 
-**Check the changelog (in particular the *IMPORTANT NOTES* section):** https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
+::: warning
+Check the changelog (in particular the *IMPORTANT NOTES* section):** https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
+:::
 
 Pull the latest images:
 
