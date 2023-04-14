@@ -112,6 +112,7 @@ button {
   @include disable-outline;
 
   background: unset;
+  color: pvar(--mainForegroundColor);
 }
 
 label {
