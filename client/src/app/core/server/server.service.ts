@@ -137,7 +137,7 @@ export class ServerService {
     return this.videoPlaylistPrivaciesObservable.pipe(first())
   }
 
-  getServerLocale () {
+  getServerLocale (): Observable<{ [ id: string ]: string }> {
     if (!this.localeObservable) {
       const completeLocale = isOnDevLocale() ? getDevLocale() : getCompleteLocale(this.localeId)
 
