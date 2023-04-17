@@ -1,6 +1,6 @@
 import { writeJSON } from 'fs-extra'
 import { join } from 'path'
-import { root } from '@shared/core-utils'
+import { root, USER_ROLE_LABELS } from '@shared/core-utils'
 import {
   buildLanguages,
   VIDEO_CATEGORIES,
@@ -78,6 +78,7 @@ Object.values(VIDEO_CATEGORIES)
   .concat(Object.values(VIDEO_IMPORT_STATES))
   .concat(Object.values(VIDEO_PLAYLIST_PRIVACIES))
   .concat(Object.values(VIDEO_PLAYLIST_TYPES))
+  .concat(Object.values(USER_ROLE_LABELS))
   .concat([
     'This video does not exist.',
     'We cannot fetch the video. Please try again later.',
