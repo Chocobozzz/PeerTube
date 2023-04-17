@@ -79,6 +79,10 @@ export class PluginManager implements ServerHook {
 
   registerWebSocketRouter () {
     this.server.on('upgrade', (request, socket, head) => {
+      // Check if it's a plugin websocket connection
+      // No need to destroy the stream when we abort the request
+      // Other handlers in PeerTube will catch this upgrade event too (socket.io, tracker etc)
+
       const url = request.url
 
       const matched = url.match(`/plugins/([^/]+)/([^/]+/)?ws(/.*)`)
@@ -95,7 +99,11 @@ export class PluginManager implements ServerHook {
       const wss = routes.find(r => r.route.startsWith(subRoute))
       if (!wss) return
 
-      wss.handler(request, socket, head)
+      try {
+        wss.handler(request, socket, head)
+      } catch (err) {
+        logger.error('Exception in plugin handler ' + npmName, { err })
+      }
     })
   }
 
