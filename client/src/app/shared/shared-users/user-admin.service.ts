@@ -65,7 +65,7 @@ export class UserAdminService {
             .pipe(map(translations => ({ data, translations })))
         }),
         map(({ data, translations }) => {
-          return this.restExtractor.applyToResultListData(data, this.formatUser.bind(this), [translations])
+          return this.restExtractor.applyToResultListData(data, this.formatUser.bind(this), [ translations ])
         }),
         catchError(err => this.restExtractor.handleError(err))
       )
