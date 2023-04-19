@@ -800,7 +800,7 @@
       </trans-unit>
       <trans-unit id="2955645766721124100" datatype="html">
         <source>Remove "<x id="PH" equiv-text="this.video.name"/>" files</source>
-        <target state="translated">حذف کردن "<x id="PH" equiv-text="this.video.name"/>" فایل</target>
+        <target state="translated">حذف <x id="PH" equiv-text="this.video.name"/> پرونده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">279</context></context-group>
       </trans-unit>
       <trans-unit id="7758350391886784213" datatype="html">
