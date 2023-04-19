@@ -633,7 +633,7 @@
       </trans-unit>
       <trans-unit id="2870417795706430145" datatype="html">
         <source>Unblocked <x id="PH" equiv-text="videos.length"/> videos.</source>
-        <target state="translated"><x id="PH" equiv-text="videos.length"/> ویدیو غیرمسدود شدند.</target>
+        <target state="translated"><x id="PH" equiv-text="videos.length"/> ویدئو غیرمسدود شدند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">254</context></context-group>
       </trans-unit>
       <trans-unit id="6228449077605046873" datatype="html">
