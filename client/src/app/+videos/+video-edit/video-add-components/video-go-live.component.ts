@@ -137,9 +137,14 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
     video.uuid = this.videoUUID
     video.shortUUID = this.videoShortUUID
 
+    const saveReplay = this.form.value.saveReplay
+    const replaySettings = saveReplay
+      ? { privacy: this.form.value.replayPrivacy }
+      : undefined
+
     const liveVideoUpdate: LiveVideoUpdate = {
-      saveReplay: this.form.value.saveReplay,
-      replaySettings: { privacy: this.form.value.replayPrivacy },
+      saveReplay,
+      replaySettings,
       latencyMode: this.form.value.latencyMode,
       permanentLive: this.form.value.permanentLive
     }

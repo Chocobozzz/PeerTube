@@ -127,9 +127,14 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
           switchMap(() => {
             if (!this.liveVideo) return of(undefined)
 
+            const saveReplay = !!this.form.value.saveReplay
+            const replaySettings = saveReplay
+              ? { privacy: this.form.value.replayPrivacy }
+              : undefined
+
             const liveVideoUpdate: LiveVideoUpdate = {
-              saveReplay: !!this.form.value.saveReplay,
-              replaySettings: { privacy: this.form.value.replayPrivacy },
+              saveReplay,
+              replaySettings,
               permanentLive: !!this.form.value.permanentLive,
               latencyMode: this.form.value.latencyMode
             }
