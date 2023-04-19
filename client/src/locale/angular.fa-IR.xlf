@@ -371,7 +371,7 @@
       </trans-unit>
       <trans-unit id="1684597533616494551" datatype="html">
         <source>Server muted</source>
-        <target state="translated">سرور بی صدا شد</target>
+        <target state="translated">کارساز ساکت شد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="5924559757556526785" datatype="html">
