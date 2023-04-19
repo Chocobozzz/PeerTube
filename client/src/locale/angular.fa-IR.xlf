@@ -1746,7 +1746,7 @@
       </trans-unit>
       <trans-unit id="780513172839038392" datatype="html">
         <source>jobs in parallel</source>
-        <target state="translated">فعالیت‌ها به صورت موازی</target>
+        <target state="translated">فعالیت‌ به صورت موازی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">282</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
@@ -5479,7 +5479,7 @@
       </trans-unit>
       <trans-unit id="5698272164915890247" datatype="html">
         <source>Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</source>
-        <target state="translated">به کاربران اجازه می دهد تا فیلم ها را با افزونه های اضافی از .MP4، .GV و .WEM آپلود کنند (مثلا: .avi، .mov، .mkv و غیره).</target>
+        <target state="translated">مجوز به کاربران براي آپلود فیلم‌ با پسوندهايی غير از mp4 ، ogv و webm (مانند avi ، mov ، mkv و ...).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="1823941382992046371" datatype="html">
@@ -5580,7 +5580,7 @@
       </trans-unit>
       <trans-unit id="5843661880070076970" datatype="html">
         <source>VIDEO STUDIO</source>
-        <target state="translated">استویوی ویدئو</target>
+        <target state="translated">استودیوی فيلم</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">200</context></context-group>
       </trans-unit>
       <trans-unit id="4078329985026583770" datatype="html">
@@ -5590,12 +5590,12 @@
       </trans-unit>
       <trans-unit id="252604800845369275" datatype="html">
         <source>Enable video studio</source>
-        <target state="translated">فعال کردن استودیوی ویدئو</target>
+        <target state="translated">فعال کردن استودیوی فيلم</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">212</context></context-group>
       </trans-unit>
       <trans-unit id="3313548535394806921" datatype="html">
         <source>⚠️ You need to enable transcoding first to enable video studio</source>
-        <target state="translated">⚠️ برای فعال نمودن ویدئو استودیو، ابتدا بایستی تغییر کدگذاری فعال شود</target>
+        <target state="translated">⚠️ برای فعال نمودن استودیوي فيلم، ابتدا بایستی تغییر کدگذاری فعال شود</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">215</context></context-group>
       </trans-unit>
       <trans-unit id="6879611446286948126" datatype="html">
@@ -7623,12 +7623,12 @@
       </trans-unit>
       <trans-unit id="8011855989482474311" datatype="html">
         <source>A &lt;code&gt;.mp4&lt;/code&gt; that keeps the original audio track, with no video</source>
-        <target state="translated">یک &lt;کد&gt;.mp4&lt;/کد&gt; که صرفا صدا را بدون تصویر نگه می دارد</target>
+        <target state="translated">يك فايل mp4 که صرفا صدا را بدون تصویر نگه می‌دارد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="7756250490108954499" datatype="html">
         <source>144p</source>
-        <target state="translated">144P</target>
+        <target state="translated">144p</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="3768852440495368591" datatype="html">
@@ -7643,7 +7643,7 @@
       </trans-unit>
       <trans-unit id="4039682741786530029" datatype="html">
         <source>480p</source>
-        <target state="translated">480 پیکسل</target>
+        <target state="translated">480p</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="5165245100010036661" datatype="html">
