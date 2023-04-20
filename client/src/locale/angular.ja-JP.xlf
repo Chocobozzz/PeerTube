@@ -5114,7 +5114,7 @@
       </trans-unit>
       <trans-unit id="1140716714758760841" datatype="html">
         <source>Automatically enable video history for new users</source>
-        <target state="translated">新規ユーザーに対して自動的に動画の履歴を有効にする</target>
+        <target state="translated">新規ユーザーに対して自動的に動画の再生履歴を有効にする</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">254</context>
