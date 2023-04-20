@@ -138,6 +138,7 @@
     "jsonld": "~8.1.0",
     "lodash": "^4.17.10",
     "lru-cache": "^7.13.0",
+    "m3u8-parser": "^6.0.0",
     "magnet-uri": "^6.1.0",
     "markdown-it": "^13.0.1",
     "markdown-it-emoji": "^2.0.0",
