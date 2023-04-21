@@ -540,7 +540,7 @@ export class PluginManager implements ServerHook {
 
   // ###################### CSS ######################
 
-  private async resetCSSGlobalFile () {
+  private resetCSSGlobalFile () {
     return outputFile(PLUGIN_GLOBAL_CSS_PATH, '')
   }
 
