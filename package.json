@@ -48,7 +48,6 @@
     "create-import-video-file-job": "node ./dist/scripts/create-import-video-file-job.js",
     "create-move-video-storage-job": "node ./dist/scripts/create-move-video-storage-job.js",
     "test": "bash ./scripts/test.sh",
-    "help": "bash ./scripts/help.sh",
     "generate-cli-doc": "bash ./scripts/generate-cli-doc.sh",
     "generate-types-package": "ts-node ./packages/types/generate-package.ts",
     "parse-log": "node ./dist/scripts/parse-log.js",
