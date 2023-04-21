@@ -104,14 +104,17 @@ elif [ "$1" = "api-5" ]; then
     npm run build:server
 
     transcodingFiles=$(findTestFiles ./dist/server/tests/api/transcoding)
+    runnersFiles=$(findTestFiles ./dist/server/tests/api/runners)
 
-    MOCHA_PARALLEL=true runTest "$1" $((2*$speedFactor)) $transcodingFiles
+    MOCHA_PARALLEL=true runTest "$1" $((2*$speedFactor)) $transcodingFiles $runnersFiles
 elif [ "$1" = "external-plugins" ]; then
     npm run build:server
+    npm run build:peertube-runner
 
     externalPluginsFiles=$(findTestFiles ./dist/server/tests/external-plugins)
+    peertubeRunnerFiles=$(findTestFiles ./dist/server/tests/peertube-runner)
 
-    runTest "$1" 1 $externalPluginsFiles
+    runTest "$1" 1 $externalPluginsFiles $peertubeRunnerFiles
 elif [ "$1" = "lint" ]; then
     npm run eslint -- --ext .ts "./server/**/*.ts" "shared/**/*.ts" "scripts/**/*.ts"
     npm run swagger-cli -- validate support/doc/api/openapi.yaml

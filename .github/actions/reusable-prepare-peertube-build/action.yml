@@ -29,3 +29,7 @@ runs:
     - name: Install dependencies
       shell: bash
       run: yarn install --frozen-lockfile
+
+    - name: Install peertube runner dependencies
+      shell: bash
+      run: cd packages/peertube-runner && yarn install --frozen-lockfile
