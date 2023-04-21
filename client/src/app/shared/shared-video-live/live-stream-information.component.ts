@@ -43,7 +43,9 @@ export class LiveStreamInformationComponent {
       [LiveVideoError.BLACKLISTED]: $localize`Live blacklisted`,
       [LiveVideoError.DURATION_EXCEEDED]: $localize`Max duration exceeded`,
       [LiveVideoError.FFMPEG_ERROR]: $localize`Server error`,
-      [LiveVideoError.QUOTA_EXCEEDED]: $localize`Quota exceeded`
+      [LiveVideoError.QUOTA_EXCEEDED]: $localize`Quota exceeded`,
+      [LiveVideoError.RUNNER_JOB_CANCEL]: $localize`Runner job cancelled`,
+      [LiveVideoError.RUNNER_JOB_ERROR]: $localize`Error in runner job`
     }
 
     return errors[session.error]

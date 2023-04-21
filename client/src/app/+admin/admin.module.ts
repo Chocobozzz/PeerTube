@@ -56,9 +56,17 @@ import {
   PluginShowInstalledComponent
 } from './plugins'
 import { SharedAdminModule } from './shared'
-import { JobService, LogsComponent, LogsService } from './system'
+import {
+  JobService,
+  LogsComponent,
+  LogsService,
+  RunnerJobListComponent,
+  RunnerListComponent,
+  RunnerRegistrationTokenListComponent,
+  RunnerService
+} from './system'
 import { DebugComponent, DebugService } from './system/debug'
-import { JobsComponent } from './system/jobs/jobs.component'
+import { JobsComponent } from './system/jobs'
 
 @NgModule({
   imports: [
@@ -125,7 +133,11 @@ import { JobsComponent } from './system/jobs/jobs.component'
     EditHomepageComponent,
 
     RegistrationListComponent,
-    ProcessRegistrationModalComponent
+    ProcessRegistrationModalComponent,
+
+    RunnerRegistrationTokenListComponent,
+    RunnerListComponent,
+    RunnerJobListComponent
   ],
 
   exports: [
@@ -140,7 +152,8 @@ import { JobsComponent } from './system/jobs/jobs.component'
     PluginApiService,
     EditConfigurationService,
     VideoAdminService,
-    AdminRegistrationService
+    AdminRegistrationService,
+    RunnerService
   ]
 })
 export class AdminModule { }
