@@ -158,14 +158,19 @@ export interface NewWebTorrentResolutionTranscodingPayload extends BaseTranscodi
 
 export interface MergeAudioTranscodingPayload extends BaseTranscodingPayload {
   type: 'merge-audio-to-webtorrent'
+
   resolution: VideoResolution
   fps: number
+
+  hasChildren: boolean
 }
 
 export interface OptimizeTranscodingPayload extends BaseTranscodingPayload {
   type: 'optimize-to-webtorrent'
 
   quickTranscode: boolean
+
+  hasChildren: boolean
 }
 
 export type VideoTranscodingPayload =

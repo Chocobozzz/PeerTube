@@ -14,6 +14,7 @@ import { buildFileMetadata } from '../video-file'
 import { VideoPathManager } from '../video-path-manager'
 import { buildFFmpegVOD } from './shared'
 import { computeResolutionsToTranscode } from './transcoding-resolutions'
+import { VideoModel } from '@server/models/video/video'
 
 // Optimize the original video file and replace it. The resolution is not changed.
 export async function optimizeOriginalVideofile (options: {
@@ -32,6 +33,7 @@ export async function optimizeOriginalVideofile (options: {
 
   try {
     await video.reload()
+    await inputVideoFile.reload()
 
     const fileWithVideoOrPlaylist = inputVideoFile.withVideoOrPlaylist(video)
 
@@ -88,16 +90,15 @@ export async function transcodeNewWebTorrentResolution (options: {
   fps: number
   job: Job
 }) {
-  const { video, resolution, fps, job } = options
+  const { video: videoArg, resolution, fps, job } = options
 
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
-  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(videoArg.uuid)
 
   try {
-    await video.reload()
-
+    const video = await VideoModel.loadFull(videoArg.uuid)
     const file = video.getMaxQualityFile().withVideoOrPlaylist(video)
 
     const result = await VideoPathManager.Instance.makeAvailableVideoFile(file, async videoInputPath => {
@@ -141,16 +142,15 @@ export async function mergeAudioVideofile (options: {
   fps: number
   job: Job
 }) {
-  const { video, resolution, fps, job } = options
+  const { video: videoArg, resolution, fps, job } = options
 
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
-  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(videoArg.uuid)
 
   try {
-    await video.reload()
-
+    const video = await VideoModel.loadFull(videoArg.uuid)
     const inputVideoFile = video.getMinQualityFile()
 
     const fileWithVideoOrPlaylist = inputVideoFile.withVideoOrPlaylist(video)

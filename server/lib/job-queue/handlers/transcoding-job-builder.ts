@@ -36,7 +36,7 @@ async function processTranscodingJobBuilder (job: Job) {
   for (const sequentialJobs of (payload.sequentialJobs || [])) {
     await JobQueue.Instance.createSequentialJobFlow(...sequentialJobs)
 
-    await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscode', sequentialJobs.length)
+    await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscode', sequentialJobs.filter(s => !!s).length)
   }
 }
 

@@ -76,9 +76,10 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
 
         nextTranscodingSequentialJobPayloads = [ ...nextTranscodingSequentialJobPayloads, ...lowerResolutionJobPayloads ]
 
+        const hasChildren = nextTranscodingSequentialJobPayloads.length !== 0
         mergeOrOptimizePayload = videoFile.isAudio()
-          ? this.buildMergeAudioPayload({ videoUUID: video.uuid, isNewVideo })
-          : this.buildOptimizePayload({ videoUUID: video.uuid, isNewVideo, quickTranscode })
+          ? this.buildMergeAudioPayload({ videoUUID: video.uuid, isNewVideo, hasChildren })
+          : this.buildOptimizePayload({ videoUUID: video.uuid, isNewVideo, quickTranscode, hasChildren })
       })
     } finally {
       mutexReleaser()
@@ -100,7 +101,9 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
 
     const mergeOrOptimizeJob = await this.buildTranscodingJob({ payload: mergeOrOptimizePayload, user })
 
-    return JobQueue.Instance.createSequentialJobFlow(...[ mergeOrOptimizeJob, transcodingJobBuilderJob ])
+    await JobQueue.Instance.createSequentialJobFlow(...[ mergeOrOptimizeJob, transcodingJobBuilderJob ])
+
+    await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingTranscode')
   }
 
   // ---------------------------------------------------------------------------
@@ -279,15 +282,17 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
   private buildMergeAudioPayload (options: {
     videoUUID: string
     isNewVideo: boolean
+    hasChildren: boolean
   }): MergeAudioTranscodingPayload {
-    const { videoUUID, isNewVideo } = options
+    const { videoUUID, isNewVideo, hasChildren } = options
 
     return {
       type: 'merge-audio-to-webtorrent',
       resolution: DEFAULT_AUDIO_RESOLUTION,
       fps: VIDEO_TRANSCODING_FPS.AUDIO_MERGE,
       videoUUID,
-      isNewVideo
+      isNewVideo,
+      hasChildren
     }
   }
 
@@ -295,13 +300,15 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
     videoUUID: string
     quickTranscode: boolean
     isNewVideo: boolean
+    hasChildren: boolean
   }): OptimizeTranscodingPayload {
-    const { videoUUID, quickTranscode, isNewVideo } = options
+    const { videoUUID, quickTranscode, isNewVideo, hasChildren } = options
 
     return {
       type: 'optimize-to-webtorrent',
       videoUUID,
       isNewVideo,
+      hasChildren,
       quickTranscode
     }
   }

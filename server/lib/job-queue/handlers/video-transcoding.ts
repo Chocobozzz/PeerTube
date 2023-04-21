@@ -81,7 +81,7 @@ async function handleWebTorrentMergeAudioJob (job: Job, payload: MergeAudioTrans
 
   logger.info('Merge audio transcoding job for %s ended.', video.uuid, lTags(video.uuid))
 
-  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: true, video })
+  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: !payload.hasChildren, video })
 }
 
 async function handleWebTorrentOptimizeJob (job: Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
@@ -91,8 +91,10 @@ async function handleWebTorrentOptimizeJob (job: Job, payload: OptimizeTranscodi
 
   logger.info('Optimize transcoding job for %s ended.', video.uuid, lTags(video.uuid))
 
-  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: true, video })
+  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: !payload.hasChildren, video })
 }
+
+// ---------------------------------------------------------------------------
 
 async function handleNewWebTorrentResolutionJob (job: Job, payload: NewWebTorrentResolutionTranscodingPayload, video: MVideoFullLight) {
   logger.info('Handling WebTorrent transcoding job for %s.', video.uuid, lTags(video.uuid))
@@ -104,19 +106,22 @@ async function handleNewWebTorrentResolutionJob (job: Job, payload: NewWebTorren
   await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: true, video })
 }
 
-async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, video: MVideoFullLight) {
-  logger.info('Handling HLS transcoding job for %s.', video.uuid, lTags(video.uuid))
+// ---------------------------------------------------------------------------
 
-  const videoFileInput = payload.copyCodecs
-    ? video.getWebTorrentFile(payload.resolution)
-    : video.getMaxQualityFile()
+async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg: MVideoFullLight) {
+  logger.info('Handling HLS transcoding job for %s.', videoArg.uuid, lTags(videoArg.uuid))
 
-  const videoOrStreamingPlaylist = videoFileInput.getVideoOrStreamingPlaylist()
-
-  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(videoArg.uuid)
+  let video: MVideoFullLight
 
   try {
-    await videoFileInput.getVideo().reload()
+    video = await VideoModel.loadFull(videoArg.uuid)
+
+    const videoFileInput = payload.copyCodecs
+      ? video.getWebTorrentFile(payload.resolution)
+      : video.getMaxQualityFile()
+
+    const videoOrStreamingPlaylist = videoFileInput.getVideoOrStreamingPlaylist()
 
     await VideoPathManager.Instance.makeAvailableVideoFile(videoFileInput.withVideoOrPlaylist(videoOrStreamingPlaylist), videoInputPath => {
       return generateHlsPlaylistResolution({
