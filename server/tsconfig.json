@@ -7,6 +7,7 @@
     { "path": "../shared" }
   ],
   "exclude": [
-    "tools/"
+    "tools/",
+    "tests/fixtures"
   ]
 }

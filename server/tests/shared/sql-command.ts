@@ -1,9 +1,13 @@
 import { QueryTypes, Sequelize } from 'sequelize'
 import { forceNumber } from '@shared/core-utils'
-import { AbstractCommand } from '../shared'
+import { PeerTubeServer } from '@shared/server-commands'
 
-export class SQLCommand extends AbstractCommand {
+export class SQLCommand {
   private sequelize: Sequelize
+
+  constructor (private readonly server: PeerTubeServer) {
+
+  }
 
   deleteAll (table: string) {
     const seq = this.getSequelize()

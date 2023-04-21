@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { expectStartWith, MockObjectStorageProxy, testVideoResolutions } from '@server/tests/shared'
+import { expectStartWith, MockObjectStorageProxy, SQLCommand, testLiveVideoResolutions } from '@server/tests/shared'
 import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, LiveVideoCreate, VideoPrivacy } from '@shared/models'
 import {
@@ -79,6 +79,7 @@ describe('Object storage for lives', function () {
   if (areMockObjectStorageTestsDisabled()) return
 
   let servers: PeerTubeServer[]
+  let sqlCommandServer1: SQLCommand
 
   before(async function () {
     this.timeout(120000)
@@ -92,6 +93,8 @@ describe('Object storage for lives', function () {
     await doubleFollow(servers[0], servers[1])
 
     await servers[0].config.enableTranscoding()
+
+    sqlCommandServer1 = new SQLCommand(servers[0])
   })
 
   describe('Without live transcoding', function () {
@@ -109,8 +112,9 @@ describe('Object storage for lives', function () {
       const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUID })
       await waitUntilLivePublishedOnAllServers(servers, videoUUID)
 
-      await testVideoResolutions({
+      await testLiveVideoResolutions({
         originServer: servers[0],
+        sqlCommand: sqlCommandServer1,
         servers,
         liveVideoId: videoUUID,
         resolutions: [ 720 ],
@@ -155,8 +159,9 @@ describe('Object storage for lives', function () {
         const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUIDNonPermanent })
         await waitUntilLivePublishedOnAllServers(servers, videoUUIDNonPermanent)
 
-        await testVideoResolutions({
+        await testLiveVideoResolutions({
           originServer: servers[0],
+          sqlCommand: sqlCommandServer1,
           servers,
           liveVideoId: videoUUIDNonPermanent,
           resolutions,
@@ -194,8 +199,9 @@ describe('Object storage for lives', function () {
         const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUIDPermanent })
         await waitUntilLivePublishedOnAllServers(servers, videoUUIDPermanent)
 
-        await testVideoResolutions({
+        await testLiveVideoResolutions({
           originServer: servers[0],
+          sqlCommand: sqlCommandServer1,
           servers,
           liveVideoId: videoUUIDPermanent,
           resolutions,
@@ -266,8 +272,9 @@ describe('Object storage for lives', function () {
       const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUIDPermanent })
       await waitUntilLivePublishedOnAllServers(servers, videoUUIDPermanent)
 
-      await testVideoResolutions({
+      await testLiveVideoResolutions({
         originServer: servers[0],
+        sqlCommand: sqlCommandServer1,
         servers,
         liveVideoId: videoUUIDPermanent,
         resolutions: [ 720 ],
@@ -281,6 +288,8 @@ describe('Object storage for lives', function () {
   })
 
   after(async function () {
+    await sqlCommandServer1.cleanup()
+
     await killallServers(servers)
   })
 })

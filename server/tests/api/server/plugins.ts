@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { pathExists, remove } from 'fs-extra'
 import { join } from 'path'
-import { testHelloWorldRegisteredSettings } from '@server/tests/shared'
+import { SQLCommand, testHelloWorldRegisteredSettings } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { HttpStatusCode, PluginType } from '@shared/models'
 import {
@@ -17,7 +17,8 @@ import {
 } from '@shared/server-commands'
 
 describe('Test plugins', function () {
-  let server: PeerTubeServer = null
+  let server: PeerTubeServer
+  let sqlCommand: SQLCommand
   let command: PluginsCommand
 
   before(async function () {
@@ -32,6 +33,8 @@ describe('Test plugins', function () {
     await setAccessTokensToServers([ server ])
 
     command = server.plugins
+
+    sqlCommand = new SQLCommand(server)
   })
 
   it('Should list and search available plugins and themes', async function () {
@@ -236,7 +239,7 @@ describe('Test plugins', function () {
 
     async function testUpdate (type: 'plugin' | 'theme', name: string) {
       // Fake update our plugin version
-      await server.sql.setPluginVersion(name, '0.0.1')
+      await sqlCommand.setPluginVersion(name, '0.0.1')
 
       // Fake update package.json
       const packageJSON = await command.getPackageJSON(`peertube-${type}-${name}`)
@@ -366,7 +369,7 @@ describe('Test plugins', function () {
     })
 
     const query = `UPDATE "application" SET "nodeABIVersion" = 1`
-    await server.sql.updateQuery(query)
+    await sqlCommand.updateQuery(query)
 
     const baseNativeModule = server.servers.buildDirectory(join('plugins', 'node_modules', 'a-native-example'))
 
@@ -401,6 +404,8 @@ describe('Test plugins', function () {
   })
 
   after(async function () {
+    await sqlCommand.cleanup()
+
     await cleanupTests([ server ])
   })
 })

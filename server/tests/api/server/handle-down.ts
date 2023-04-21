@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { completeVideoCheck } from '@server/tests/shared'
+import { completeVideoCheck, SQLCommand } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { HttpStatusCode, JobState, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import {
@@ -16,6 +16,8 @@ import {
 
 describe('Test handle downs', function () {
   let servers: PeerTubeServer[] = []
+  let sqlCommands: SQLCommand[]
+
   let threadIdServer1: number
   let threadIdServer2: number
   let commentIdServer1: number
@@ -88,6 +90,8 @@ describe('Test handle downs', function () {
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
+
+    sqlCommands = servers.map(s => new SQLCommand(s))
   })
 
   it('Should remove followers that are often down', async function () {
@@ -209,7 +213,7 @@ describe('Test handle downs', function () {
 
     // Check unlisted video
     const video = await servers[2].videos.get({ id: unlistedVideo.uuid })
-    await completeVideoCheck(servers[2], video, unlistedCheckAttributes)
+    await completeVideoCheck({ server: servers[2], originServer: servers[0], videoUUID: video.uuid, attributes: unlistedCheckAttributes })
   })
 
   it('Should send comments on a video to server 3, and automatically fetch the video', async function () {
@@ -292,7 +296,7 @@ describe('Test handle downs', function () {
     }
 
     await waitJobs(servers)
-    await servers[1].sql.setActorFollowScores(20)
+    await sqlCommands[1].setActorFollowScores(20)
 
     // Wait video expiration
     await wait(11000)
@@ -325,6 +329,10 @@ describe('Test handle downs', function () {
   })
 
   after(async function () {
+    for (const sqlCommand of sqlCommands) {
+      await sqlCommand.cleanup()
+    }
+
     await cleanupTests(servers)
   })
 })

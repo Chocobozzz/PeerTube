@@ -20,7 +20,7 @@ function createMultipleServers (totalServers: number, configOverride?: object, o
   return Promise.all(serverPromises)
 }
 
-async function killallServers (servers: PeerTubeServer[]) {
+function killallServers (servers: PeerTubeServer[]) {
   return Promise.all(servers.map(s => s.kill()))
 }
 

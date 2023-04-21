@@ -1,16 +1,17 @@
 
 import { expect } from 'chai'
 import { wait } from '@shared/core-utils'
-import { JobState, JobType } from '../../models'
+import { JobState, JobType, RunnerJobState } from '../../models'
 import { PeerTubeServer } from './server'
 
 async function waitJobs (
   serversArg: PeerTubeServer[] | PeerTubeServer,
   options: {
     skipDelayed?: boolean // default false
+    runnerJobs?: boolean // default false
   } = {}
 ) {
-  const { skipDelayed = false } = options
+  const { skipDelayed = false, runnerJobs = false } = options
 
   const pendingJobWait = process.env.NODE_PENDING_JOB_WAIT
     ? parseInt(process.env.NODE_PENDING_JOB_WAIT, 10)
@@ -33,7 +34,8 @@ async function waitJobs (
     // Check if each server has pending request
     for (const server of servers) {
       for (const state of states) {
-        const p = server.jobs.list({
+
+        const jobPromise = server.jobs.list({
           state,
           start: 0,
           count: 10,
@@ -46,17 +48,29 @@ async function waitJobs (
             }
           })
 
-        tasks.push(p)
+        tasks.push(jobPromise)
       }
 
-      const p = server.debug.getDebug()
+      const debugPromise = server.debug.getDebug()
         .then(obj => {
           if (obj.activityPubMessagesWaiting !== 0) {
             pendingRequests = true
           }
         })
+      tasks.push(debugPromise)
 
-      tasks.push(p)
+      if (runnerJobs) {
+        const runnerJobsPromise = server.runnerJobs.list({ count: 100 })
+          .then(({ data }) => {
+            for (const job of data) {
+              if (job.state.id !== RunnerJobState.COMPLETED) {
+                pendingRequests = true
+              }
+            }
+          })
+        tasks.push(runnerJobsPromise)
+      }
+
     }
 
     return tasks

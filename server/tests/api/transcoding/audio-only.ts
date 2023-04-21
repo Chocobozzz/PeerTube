@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { getAudioStream, getVideoStreamDimensionsInfo } from '@server/helpers/ffmpeg'
+import { getAudioStream, getVideoStreamDimensionsInfo } from '@shared/ffmpeg'
 import {
   cleanupTests,
   createMultipleServers,
