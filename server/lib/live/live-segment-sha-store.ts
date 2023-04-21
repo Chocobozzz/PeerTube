@@ -52,7 +52,10 @@ class LiveSegmentShaStore {
     logger.debug('Removing live sha segment %s.', segmentPath, lTags(this.videoUUID))
 
     if (!this.segmentsSha256.has(segmentName)) {
-      logger.warn('Unknown segment in files map for video %s and segment %s.', this.videoUUID, segmentPath, lTags(this.videoUUID))
+      logger.warn(
+        'Unknown segment in live segment hash store for video %s and segment %s.',
+        this.videoUUID, segmentPath, lTags(this.videoUUID)
+      )
       return
     }
 

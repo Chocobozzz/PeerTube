@@ -3,28 +3,20 @@ import { move } from 'fs-extra'
 import { basename } from 'path'
 import { getResumableUploadPath } from '@server/helpers/upload'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
-import { JobQueue } from '@server/lib/job-queue'
-import { generateWebTorrentVideoFilename } from '@server/lib/paths'
+import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-queue'
 import { Redis } from '@server/lib/redis'
 import { uploadx } from '@server/lib/uploadx'
-import {
-  buildLocalVideoFromReq,
-  buildMoveToObjectStorageJob,
-  buildOptimizeOrMergeAudioJob,
-  buildVideoThumbnailsFromReq,
-  setVideoTags
-} from '@server/lib/video'
+import { buildLocalVideoFromReq, buildMoveToObjectStorageJob, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
+import { buildNewFile } from '@server/lib/video-file'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { buildNextVideoState } from '@server/lib/video-state'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { VideoSourceModel } from '@server/models/video/video-source'
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models'
-import { getLowercaseExtension } from '@shared/core-utils'
-import { isAudioFile, uuidToShort } from '@shared/extra-utils'
-import { HttpStatusCode, VideoCreate, VideoResolution, VideoState } from '@shared/models'
+import { uuidToShort } from '@shared/extra-utils'
+import { HttpStatusCode, VideoCreate, VideoState } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { createReqFiles } from '../../../helpers/express-utils'
-import { buildFileMetadata, ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '../../../helpers/ffmpeg'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -41,7 +33,6 @@ import {
 } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
-import { VideoFileModel } from '../../../models/video/video-file'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -148,7 +139,7 @@ async function addVideo (options: {
   video.VideoChannel = videoChannel
   video.url = getLocalVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
-  const videoFile = await buildNewFile(videoPhysicalFile)
+  const videoFile = await buildNewFile({ path: videoPhysicalFile.path, mode: 'web-video' })
   const originalFilename = videoPhysicalFile.originalname
 
   // Move physical file
@@ -227,30 +218,8 @@ async function addVideo (options: {
   }
 }
 
-async function buildNewFile (videoPhysicalFile: express.VideoUploadFile) {
-  const videoFile = new VideoFileModel({
-    extname: getLowercaseExtension(videoPhysicalFile.filename),
-    size: videoPhysicalFile.size,
-    videoStreamingPlaylistId: null,
-    metadata: await buildFileMetadata(videoPhysicalFile.path)
-  })
-
-  const probe = await ffprobePromise(videoPhysicalFile.path)
-
-  if (await isAudioFile(videoPhysicalFile.path, probe)) {
-    videoFile.resolution = VideoResolution.H_NOVIDEO
-  } else {
-    videoFile.fps = await getVideoStreamFPS(videoPhysicalFile.path, probe)
-    videoFile.resolution = (await getVideoStreamDimensionsInfo(videoPhysicalFile.path, probe)).resolution
-  }
-
-  videoFile.filename = generateWebTorrentVideoFilename(videoFile.resolution, videoFile.extname)
-
-  return videoFile
-}
-
 async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVideoFile, user: MUserId) {
-  return JobQueue.Instance.createSequentialJobFlow(
+  const jobs: (CreateJobArgument & CreateJobOptions)[] = [
     {
       type: 'manage-video-torrent' as 'manage-video-torrent',
       payload: {
@@ -274,16 +243,26 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
         videoUUID: video.uuid,
         isNewVideo: true
       }
-    },
+    }
+  ]
 
-    video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE
-      ? await buildMoveToObjectStorageJob({ video, previousVideoState: undefined })
-      : undefined,
+  if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
+    jobs.push(await buildMoveToObjectStorageJob({ video, previousVideoState: undefined }))
+  }
 
-    video.state === VideoState.TO_TRANSCODE
-      ? await buildOptimizeOrMergeAudioJob({ video, videoFile, user })
-      : undefined
-  )
+  if (video.state === VideoState.TO_TRANSCODE) {
+    jobs.push({
+      type: 'transcoding-job-builder' as 'transcoding-job-builder',
+      payload: {
+        videoUUID: video.uuid,
+        optimizeJob: {
+          isNewVideo: true
+        }
+      }
+    })
+  }
+
+  return JobQueue.Instance.createSequentialJobFlow(...jobs)
 }
 
 async function deleteUploadResumableCache (req: express.Request, res: express.Response, next: express.NextFunction) {

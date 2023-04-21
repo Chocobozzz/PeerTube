@@ -2,7 +2,9 @@ import { ensureDir, readdir, remove } from 'fs-extra'
 import passwordGenerator from 'password-generator'
 import { join } from 'path'
 import { isTestOrDevInstance } from '@server/helpers/core-utils'
+import { generateRunnerRegistrationToken } from '@server/helpers/token-generator'
 import { getNodeABIVersion } from '@server/helpers/version'
+import { RunnerRegistrationTokenModel } from '@server/models/runner/runner-registration-token'
 import { UserRole } from '@shared/models'
 import { logger } from '../helpers/logger'
 import { buildUser, createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user'
@@ -22,7 +24,8 @@ async function installApplication () {
           return Promise.all([
             createApplicationIfNotExist(),
             createOAuthClientIfNotExist(),
-            createOAuthAdminIfNotExist()
+            createOAuthAdminIfNotExist(),
+            createRunnerRegistrationTokenIfNotExist()
           ])
         }),
 
@@ -182,4 +185,15 @@ async function createApplicationIfNotExist () {
   })
 
   return createApplicationActor(application.id)
+}
+
+async function createRunnerRegistrationTokenIfNotExist () {
+  const total = await RunnerRegistrationTokenModel.countTotal()
+  if (total !== 0) return undefined
+
+  const token = new RunnerRegistrationTokenModel({
+    registrationToken: generateRunnerRegistrationToken()
+  })
+
+  await token.save()
 }

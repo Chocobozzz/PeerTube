@@ -6,6 +6,7 @@ import { randomInt, root } from '@shared/core-utils'
 import {
   AbuseState,
   JobType,
+  RunnerJobState,
   UserRegistrationState,
   VideoChannelSyncState,
   VideoImportState,
@@ -26,7 +27,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 760
+const LAST_MIGRATION_VERSION = 765
 
 // ---------------------------------------------------------------------------
 
@@ -80,6 +81,10 @@ const SORTABLE_COLUMNS = {
   CHANNEL_FOLLOWERS: [ 'createdAt' ],
 
   USER_REGISTRATIONS: [ 'createdAt', 'state' ],
+
+  RUNNERS: [ 'createdAt' ],
+  RUNNER_REGISTRATION_TOKENS: [ 'createdAt' ],
+  RUNNER_JOBS: [ 'updatedAt', 'createdAt', 'priority', 'state', 'progress' ],
 
   VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'trending', 'hot', 'best' ],
 
@@ -139,6 +144,8 @@ const REMOTE_SCHEME = {
   WS: 'wss'
 }
 
+// ---------------------------------------------------------------------------
+
 const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-broadcast-parallel': 1,
@@ -160,6 +167,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-channel-import': 1,
   'after-video-channel-import': 1,
   'move-to-object-storage': 3,
+  'transcoding-job-builder': 1,
   'notify': 1,
   'federate-video': 1
 }
@@ -183,6 +191,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'move-to-object-storage': 1,
   'video-channel-import': 1,
   'after-video-channel-import': 1,
+  'transcoding-job-builder': 1,
   'notify': 5,
   'federate-video': 3
 }
@@ -207,6 +216,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'move-to-object-storage': 1000 * 60 * 60 * 3, // 3 hours
   'video-channel-import': 1000 * 60 * 60 * 4, // 4 hours
   'after-video-channel-import': 60000 * 5, // 5 minutes
+  'transcoding-job-builder': 60000, // 1 minute
   'notify': 60000 * 5, // 5 minutes
   'federate-video': 60000 * 5 // 5 minutes
 }
@@ -220,21 +230,6 @@ const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
 }
 const JOB_PRIORITY = {
   TRANSCODING: 100
-}
-
-const BROADCAST_CONCURRENCY = 30 // How many requests in parallel we do in activitypub-http-broadcast job
-const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
-
-const AP_CLEANER = {
-  CONCURRENCY: 10, // How many requests in parallel we do in activitypub-cleaner job
-  UNAVAILABLE_TRESHOLD: 3, // How many attempts we do before removing an unavailable remote resource
-  PERIOD: parseDurationToMs('1 week') // /!\ Has to be sync with REPEAT_JOBS
-}
-
-const REQUEST_TIMEOUTS = {
-  DEFAULT: 7000, // 7 seconds
-  FILE: 30000, // 30 seconds
-  REDUNDANCY: JOB_TTL['video-redundancy']
 }
 
 const JOB_REMOVAL_OPTIONS = {
@@ -256,7 +251,29 @@ const JOB_REMOVAL_OPTIONS = {
 
 const VIDEO_IMPORT_TIMEOUT = Math.floor(JOB_TTL['video-import'] * 0.9)
 
+const RUNNER_JOBS = {
+  MAX_FAILURES: 5
+}
+
+// ---------------------------------------------------------------------------
+
+const BROADCAST_CONCURRENCY = 30 // How many requests in parallel we do in activitypub-http-broadcast job
+const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
+
+const AP_CLEANER = {
+  CONCURRENCY: 10, // How many requests in parallel we do in activitypub-cleaner job
+  UNAVAILABLE_TRESHOLD: 3, // How many attempts we do before removing an unavailable remote resource
+  PERIOD: parseDurationToMs('1 week') // /!\ Has to be sync with REPEAT_JOBS
+}
+
+const REQUEST_TIMEOUTS = {
+  DEFAULT: 7000, // 7 seconds
+  FILE: 30000, // 30 seconds
+  REDUNDANCY: JOB_TTL['video-redundancy']
+}
+
 const SCHEDULER_INTERVALS_MS = {
+  RUNNER_JOB_WATCH_DOG: Math.min(CONFIG.REMOTE_RUNNERS.STALLED_JOBS.VOD, CONFIG.REMOTE_RUNNERS.STALLED_JOBS.LIVE),
   ACTOR_FOLLOW_SCORES: 60000 * 60, // 1 hour
   REMOVE_OLD_JOBS: 60000 * 60, // 1 hour
   UPDATE_VIDEOS: 60000, // 1 minute
@@ -410,6 +427,17 @@ const CONSTRAINTS_FIELDS = {
     CLIENT_STACK_TRACE: { min: 1, max: 15000 }, // Length
     CLIENT_META: { min: 1, max: 5000 }, // Length
     CLIENT_USER_AGENT: { min: 1, max: 200 } // Length
+  },
+  RUNNERS: {
+    TOKEN: { min: 1, max: 1000 }, // Length
+    NAME: { min: 1, max: 100 }, // Length
+    DESCRIPTION: { min: 1, max: 1000 } // Length
+  },
+  RUNNER_JOBS: {
+    TOKEN: { min: 1, max: 1000 }, // Length
+    REASON: { min: 1, max: 5000 }, // Length
+    ERROR_MESSAGE: { min: 1, max: 5000 }, // Length
+    PROGRESS: { min: 0, max: 100 } // Value
   }
 }
 
@@ -540,6 +568,17 @@ const VIDEO_PLAYLIST_TYPES: { [ id in VideoPlaylistType ]: string } = {
   [VideoPlaylistType.WATCH_LATER]: 'Watch later'
 }
 
+const RUNNER_JOB_STATES: { [ id in RunnerJobState ]: string } = {
+  [RunnerJobState.PROCESSING]: 'Processing',
+  [RunnerJobState.COMPLETED]: 'Completed',
+  [RunnerJobState.PENDING]: 'Pending',
+  [RunnerJobState.ERRORED]: 'Errored',
+  [RunnerJobState.WAITING_FOR_PARENT_JOB]: 'Waiting for parent job to finish',
+  [RunnerJobState.CANCELLED]: 'Cancelled',
+  [RunnerJobState.PARENT_ERRORED]: 'Parent job failed',
+  [RunnerJobState.PARENT_CANCELLED]: 'Parent job cancelled'
+}
+
 const MIMETYPES = {
   AUDIO: {
     MIMETYPE_EXT: {
@@ -593,6 +632,11 @@ const MIMETYPES = {
   TORRENT: {
     MIMETYPE_EXT: {
       'application/x-bittorrent': '.torrent'
+    }
+  },
+  M3U8: {
+    MIMETYPE_EXT: {
+      'application/vnd.apple.mpegurl': '.m3u8'
     }
   }
 }
@@ -1027,6 +1071,7 @@ export {
   SEARCH_INDEX,
   DIRECTORIES,
   RESUMABLE_UPLOAD_SESSION_LIFETIME,
+  RUNNER_JOB_STATES,
   P2P_MEDIA_LOADER_PEER_VERSION,
   ACTOR_IMAGES_SIZE,
   ACCEPT_HEADERS,
@@ -1085,6 +1130,7 @@ export {
   USER_REGISTRATION_STATES,
   LRU_CACHE,
   REQUEST_TIMEOUTS,
+  RUNNER_JOBS,
   MAX_LOCAL_VIEWER_WATCH_SECTIONS,
   USER_PASSWORD_RESET_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,

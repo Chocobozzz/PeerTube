@@ -304,6 +304,12 @@ const CONFIG = {
       COUNT: config.get<number>('feeds.comments.count')
     }
   },
+  REMOTE_RUNNERS: {
+    STALLED_JOBS: {
+      LIVE: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.live')),
+      VOD: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.vod'))
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },
@@ -359,6 +365,9 @@ const CONFIG = {
     },
     WEBTORRENT: {
       get ENABLED () { return config.get<boolean>('transcoding.webtorrent.enabled') }
+    },
+    REMOTE_RUNNERS: {
+      get ENABLED () { return config.get<boolean>('transcoding.remote_runners.enabled') }
     }
   },
   LIVE: {
@@ -406,6 +415,9 @@ const CONFIG = {
         get '1080p' () { return config.get<boolean>('live.transcoding.resolutions.1080p') },
         get '1440p' () { return config.get<boolean>('live.transcoding.resolutions.1440p') },
         get '2160p' () { return config.get<boolean>('live.transcoding.resolutions.2160p') }
+      },
+      REMOTE_RUNNERS: {
+        get ENABLED () { return config.get<boolean>('live.transcoding.remote_runners.enabled') }
       }
     }
   },

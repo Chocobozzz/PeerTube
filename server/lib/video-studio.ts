@@ -1,5 +1,5 @@
 import { MVideoFullLight } from '@server/types/models'
-import { getVideoStreamDuration } from '@shared/extra-utils'
+import { getVideoStreamDuration } from '@shared/ffmpeg'
 import { VideoStudioTask } from '@shared/models'
 
 function buildTaskFileFieldname (indice: number, fieldName = 'file') {

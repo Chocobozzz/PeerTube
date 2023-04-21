@@ -148,6 +148,10 @@ export interface ServerConfig {
 
     profile: string
     availableProfiles: string[]
+
+    remoteRunners: {
+      enabled: boolean
+    }
   }
 
   live: {
@@ -164,6 +168,10 @@ export interface ServerConfig {
 
     transcoding: {
       enabled: boolean
+
+      remoteRunners: {
+        enabled: boolean
+      }
 
       enabledResolutions: number[]
 
