@@ -3,7 +3,7 @@ import Jimp, { read as jimpRead } from 'jimp'
 import { join } from 'path'
 import { getLowercaseExtension } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
-import { convertWebPToJPG, generateThumbnailFromVideo, processGIF } from './ffmpeg/ffmpeg-images'
+import { convertWebPToJPG, generateThumbnailFromVideo, processGIF } from './ffmpeg'
 import { logger, loggerTagsFactory } from './logger'
 
 const lTags = loggerTagsFactory('image-utils')
@@ -30,7 +30,7 @@ async function processImage (options: {
 
   // Use FFmpeg to process GIF
   if (extension === '.gif') {
-    await processGIF(path, destination, newSize)
+    await processGIF({ path, destination, newSize })
   } else {
     await jimpProcessor(path, destination, newSize, extension)
   }
@@ -50,7 +50,7 @@ async function generateImageFromVideoFile (options: {
   const pendingImagePath = join(folder, pendingImageName)
 
   try {
-    await generateThumbnailFromVideo(fromPath, folder, imageName)
+    await generateThumbnailFromVideo({ fromPath, folder, imageName })
 
     const destination = join(folder, imageName)
     await processImage({ path: pendingImagePath, destination, newSize: size })
@@ -99,7 +99,7 @@ async function jimpProcessor (path: string, destination: string, newSize: { widt
     logger.debug('Cannot read %s with jimp. Try to convert the image using ffmpeg first.', path, { err })
 
     const newName = path + '.jpg'
-    await convertWebPToJPG(path, newName)
+    await convertWebPToJPG({ path, destination: newName })
     await rename(newName, path)
 
     sourceImage = await jimpRead(path)

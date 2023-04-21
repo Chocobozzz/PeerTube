@@ -3,10 +3,11 @@ import { flatten } from 'lodash'
 import PQueue from 'p-queue'
 import { basename, dirname, join } from 'path'
 import { MStreamingPlaylist, MStreamingPlaylistFilesVideo, MVideo } from '@server/types/models'
-import { uniqify } from '@shared/core-utils'
+import { uniqify, uuidRegex } from '@shared/core-utils'
 import { sha256 } from '@shared/extra-utils'
+import { getVideoStreamDimensionsInfo } from '@shared/ffmpeg'
 import { VideoStorage } from '@shared/models'
-import { getAudioStreamCodec, getVideoStreamCodec, getVideoStreamDimensionsInfo } from '../helpers/ffmpeg'
+import { getAudioStreamCodec, getVideoStreamCodec } from '../helpers/ffmpeg'
 import { logger } from '../helpers/logger'
 import { doRequest, doRequestAndSaveToFile } from '../helpers/requests'
 import { generateRandomString } from '../helpers/utils'
@@ -234,6 +235,16 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
 
 // ---------------------------------------------------------------------------
 
+async function renameVideoFileInPlaylist (playlistPath: string, newVideoFilename: string) {
+  const content = await readFile(playlistPath, 'utf8')
+
+  const newContent = content.replace(new RegExp(`${uuidRegex}-\\d+-fragmented.mp4`, 'g'), newVideoFilename)
+
+  await writeFile(playlistPath, newContent, 'utf8')
+}
+
+// ---------------------------------------------------------------------------
+
 function injectQueryToPlaylistUrls (content: string, queryString: string) {
   return content.replace(/\.(m3u8|ts|mp4)/gm, '.$1?' + queryString)
 }
@@ -247,7 +258,8 @@ export {
   downloadPlaylistSegments,
   updateStreamingPlaylistsInfohashesIfNeeded,
   updatePlaylistAfterFileChange,
-  injectQueryToPlaylistUrls
+  injectQueryToPlaylistUrls,
+  renameVideoFileInPlaylist
 }
 
 // ---------------------------------------------------------------------------

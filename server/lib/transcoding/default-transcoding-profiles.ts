@@ -1,15 +1,9 @@
 
 import { logger } from '@server/helpers/logger'
 import { getAverageBitrate, getMinLimitBitrate } from '@shared/core-utils'
-import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptionsBuilderParams, VideoResolution } from '../../../shared/models/videos'
-import {
-  buildStreamSuffix,
-  canDoQuickAudioTranscode,
-  ffprobePromise,
-  getAudioStream,
-  getMaxAudioBitrate,
-  resetSupportedEncoders
-} from '../../helpers/ffmpeg'
+import { buildStreamSuffix, FFmpegCommandWrapper, ffprobePromise, getAudioStream, getMaxAudioBitrate } from '@shared/ffmpeg'
+import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptionsBuilderParams, VideoResolution } from '@shared/models'
+import { canDoQuickAudioTranscode } from './transcoding-quick-transcode'
 
 /**
  *
@@ -184,14 +178,14 @@ class VideoTranscodingProfilesManager {
   addEncoderPriority (type: 'vod' | 'live', streamType: 'audio' | 'video', encoder: string, priority: number) {
     this.encodersPriorities[type][streamType].push({ name: encoder, priority })
 
-    resetSupportedEncoders()
+    FFmpegCommandWrapper.resetSupportedEncoders()
   }
 
   removeEncoderPriority (type: 'vod' | 'live', streamType: 'audio' | 'video', encoder: string, priority: number) {
     this.encodersPriorities[type][streamType] = this.encodersPriorities[type][streamType]
                                                     .filter(o => o.name !== encoder && o.priority !== priority)
 
-    resetSupportedEncoders()
+    FFmpegCommandWrapper.resetSupportedEncoders()
   }
 
   private getEncodersByPriority (type: 'vod' | 'live', streamType: 'audio' | 'video') {

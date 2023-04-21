@@ -147,12 +147,21 @@ export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiv
     return VideoLiveSessionModel.scope(ScopeNames.WITH_REPLAY).findOne(query)
   }
 
-  static findCurrentSessionOf (videoId: number) {
+  static findCurrentSessionOf (videoUUID: string) {
     return VideoLiveSessionModel.findOne({
       where: {
-        liveVideoId: videoId,
         endDate: null
       },
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          as: 'LiveVideo',
+          required: true,
+          where: {
+            uuid: videoUUID
+          }
+        }
+      ],
       order: [ [ 'startDate', 'DESC' ] ]
     })
   }

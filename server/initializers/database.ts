@@ -1,6 +1,9 @@
 import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
+import { RunnerModel } from '@server/models/runner/runner'
+import { RunnerJobModel } from '@server/models/runner/runner-job'
+import { RunnerRegistrationTokenModel } from '@server/models/runner/runner-registration-token'
 import { TrackerModel } from '@server/models/server/tracker'
 import { VideoTrackerModel } from '@server/models/server/video-tracker'
 import { UserModel } from '@server/models/user/user'
@@ -9,6 +12,7 @@ import { UserRegistrationModel } from '@server/models/user/user-registration'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
+import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 import { VideoSourceModel } from '@server/models/video/video-source'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer'
@@ -52,7 +56,6 @@ import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-pla
 import { VideoTagModel } from '../models/video/video-tag'
 import { VideoViewModel } from '../models/view/video-view'
 import { CONFIG } from './config'
-import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -159,7 +162,10 @@ async function initDatabaseModels (silent: boolean) {
     ActorCustomPageModel,
     VideoJobInfoModel,
     VideoChannelSyncModel,
-    UserRegistrationModel
+    UserRegistrationModel,
+    RunnerRegistrationTokenModel,
+    RunnerModel,
+    RunnerJobModel
   ])
 
   // Check extensions exist in the database

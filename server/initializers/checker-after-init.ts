@@ -1,7 +1,7 @@
 import config from 'config'
 import { URL } from 'url'
-import { getFFmpegVersion } from '@server/helpers/ffmpeg'
 import { uniqify } from '@shared/core-utils'
+import { getFFmpegVersion } from '@shared/ffmpeg'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
 import { isProdInstance, parseBytes, parseSemVersion } from '../helpers/core-utils'

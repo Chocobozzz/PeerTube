@@ -3,6 +3,7 @@ import { buildLogger } from '@server/helpers/logger'
 import { getResumableUploadPath } from '@server/helpers/upload'
 import { CONFIG } from '@server/initializers/config'
 import { LogLevel, Uploadx } from '@uploadx/core'
+import { extname } from 'path'
 
 const logger = buildLogger('uploadx')
 
@@ -26,7 +27,9 @@ const uploadx = new Uploadx({
     if (!res.locals.oauth) return undefined
 
     return res.locals.oauth.token.user.id + ''
-  }
+  },
+
+  filename: file => `${file.userId}-${file.id}${extname(file.metadata.filename)}`
 })
 
 export {

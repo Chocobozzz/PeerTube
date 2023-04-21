@@ -375,6 +375,12 @@ feeds:
     # Default number of comments displayed in feeds
     count: 20
 
+remote_runners:
+  # Consider jobs that are processed by a remote runner as stalled after this period of time without any update
+  stalled_jobs:
+    live: '30 seconds'
+    vod: '2 minutes'
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache
@@ -433,12 +439,18 @@ transcoding:
   # If a user uploads an audio file, PeerTube will create a video by merging the preview file and the audio file
   allow_audio_files: true
 
-  # Amount of threads used by ffmpeg for 1 transcoding job
+  # Enable remote runners to transcode your videos
+  # If enabled, your instance won't transcode the videos itself
+  # At least 1 remote runner must be configured to transcode your videos
+  remote_runners:
+    enabled: false
+
+  # Amount of threads used by ffmpeg for 1 local transcoding job
   threads: 1
-  # Amount of transcoding jobs to execute in parallel
+  # Amount of local transcoding jobs to execute in parallel
   concurrency: 1
 
-  # Choose the transcoding profile
+  # Choose the local transcoding profile
   # New profiles can be added by plugins
   # Available in core PeerTube: 'default'
   profile: 'default'
@@ -533,9 +545,17 @@ live:
   # Allow to transcode the live streaming in multiple live resolutions
   transcoding:
     enabled: true
+
+    # Enable remote runners to transcode your videos
+    # If enabled, your instance won't transcode the videos itself
+    # At least 1 remote runner must be configured to transcode your videos
+    remote_runners:
+      enabled: false
+
+    # Amount of threads used by ffmpeg per live when using local transcoding
     threads: 2
 
-    # Choose the transcoding profile
+    # Choose the local transcoding profile
     # New profiles can be added by plugins
     # Available in core PeerTube: 'default'
     profile: 'default'
@@ -754,7 +774,7 @@ search:
   search_index:
     enabled: false
     # URL of the search index, that should use the same search API and routes
-    # than PeerTube: https://docs.joinpeertube.org/api/rest-reference.html
+    # than PeerTube: https://docs.joinpeertube.org/api-rest-reference.html
     # You should deploy your own with https://framagit.org/framasoft/peertube/search-index,
     # and can use https://search.joinpeertube.org/ for tests, but keep in mind the latter is an unmoderated search index
     url: ''

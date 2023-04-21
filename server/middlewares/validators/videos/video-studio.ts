@@ -10,7 +10,7 @@ import {
 import { cleanUpReqFiles } from '@server/helpers/express-utils'
 import { CONFIG } from '@server/initializers/config'
 import { approximateIntroOutroAdditionalSize, getTaskFile } from '@server/lib/video-studio'
-import { isAudioFile } from '@shared/extra-utils'
+import { isAudioFile } from '@shared/ffmpeg'
 import { HttpStatusCode, UserRight, VideoState, VideoStudioCreateEdition, VideoStudioTask } from '@shared/models'
 import { areValidationErrors, checkUserCanManageVideo, checkUserQuota, doesVideoExist } from '../shared'
 

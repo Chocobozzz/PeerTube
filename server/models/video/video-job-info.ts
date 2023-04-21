@@ -1,5 +1,6 @@
 import { Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, IsInt, Model, Table, Unique, UpdatedAt } from 'sequelize-typescript'
+import { forceNumber } from '@shared/core-utils'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoModel } from './video'
 
@@ -59,32 +60,33 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
     return VideoJobInfoModel.findOne({ where, transaction })
   }
 
-  static async increaseOrCreate (videoUUID: string, column: VideoJobInfoColumnType): Promise<number> {
+  static async increaseOrCreate (videoUUID: string, column: VideoJobInfoColumnType, amountArg = 1): Promise<number> {
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
+    const amount = forceNumber(amountArg)
 
-    const [ { pendingMove } ] = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`
+    const [ result ] = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`
     INSERT INTO "videoJobInfo" ("videoId", "${column}", "createdAt", "updatedAt")
     SELECT
-      "video"."id" AS "videoId", 1, NOW(), NOW()
+      "video"."id" AS "videoId", ${amount}, NOW(), NOW()
     FROM
       "video"
     WHERE
       "video"."uuid" = $videoUUID
     ON CONFLICT ("videoId") DO UPDATE
     SET
-      "${column}" = "videoJobInfo"."${column}" + 1,
+      "${column}" = "videoJobInfo"."${column}" + ${amount},
       "updatedAt" = NOW()
     RETURNING
       "${column}"
     `, options)
 
-    return pendingMove
+    return result[column]
   }
 
   static async decrease (videoUUID: string, column: VideoJobInfoColumnType): Promise<number> {
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
 
-    const result = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`
+    const result = await VideoJobInfoModel.sequelize.query(`
     UPDATE
       "videoJobInfo"
     SET
@@ -99,7 +101,7 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
 
     if (result.length === 0) return undefined
 
-    return result[0].pendingMove
+    return result[0][column]
   }
 
   static async abortAllTasks (videoUUID: string, column: VideoJobInfoColumnType): Promise<void> {

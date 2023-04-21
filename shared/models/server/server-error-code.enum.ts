@@ -45,7 +45,10 @@ export const enum ServerErrorCode {
   INVALID_TWO_FACTOR = 'invalid_two_factor',
 
   ACCOUNT_WAITING_FOR_APPROVAL = 'account_waiting_for_approval',
-  ACCOUNT_APPROVAL_REJECTED = 'account_approval_rejected'
+  ACCOUNT_APPROVAL_REJECTED = 'account_approval_rejected',
+
+  RUNNER_JOB_NOT_IN_PROCESSING_STATE = 'runner_job_not_in_processing_state',
+  UNKNOWN_RUNNER_TOKEN = 'unknown_runner_token'
 }
 
 /**
