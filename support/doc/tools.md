@@ -15,7 +15,6 @@
 - [Server tools](#server-tools)
   - [parse-log](#parse-log)
   - [regenerate-thumbnails.js](#regenerate-thumbnailsjs)
-  - [create-transcoding-job.js](#create-transcoding-jobjs)
   - [create-import-video-file-job.js](#create-import-video-file-jobjs)
   - [create-move-video-storage-job.js](#create-move-video-storage-jobjs)
   - [prune-storage.js](#prune-storagejs)
@@ -248,52 +247,10 @@ cd /var/www/peertube-docker
 docker-compose exec -u peertube peertube npm run regenerate-thumbnails
 ```
 
-### create-transcoding-job.js
-
-You can use this script to force transcoding of an existing video. PeerTube needs to be running.
-
-To generate transcoding jobs depending on the instance configuration:
-
-```bash
-# Basic installation
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID]
-
-# Docker installation
-cd /var/www/peertube-docker
-docker-compose exec -u peertube peertube npm run create-transcoding-job -- -v [videoUUID]
-```
-
-Or to transcode to a specific resolution:
-
-```bash
-# Basic installation
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
-
-# Docker installation
-cd /var/www/peertube-docker
-docker-compose exec -u peertube peertube npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
-```
-
-The resolution should be an integer (`1080`, `720`, `480`, etc.)
-
-To generate an HLS playlist for a video:
-
-```bash
-# Basic installation
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- --generate-hls -v [videoUUID]
-
-# Docker installation
-cd /var/www/peertube-docker
-docker-compose exec -u peertube peertube npm run create-transcoding-job -- --generate-hls -v [videoUUID]
-```
-
 ### create-import-video-file-job.js
 
 You can use this script to import a video file to replace an already uploaded file or to add a new webtorrent resolution to a video. PeerTube needs to be running.
-You can then create a transcoding job using `npm run create-transcoding-job` if you need to optimize your file or create an HLS version of it.
+You can then create a transcoding job using the web interface if you need to optimize your file or create an HLS version of it.
 
 ```bash
 # Basic installation
