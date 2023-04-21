@@ -450,7 +450,7 @@
  * **Important** SQL migrations (in particular `0685-multiple-actor-images`) can take several minutes to complete
  * **Important** You must update your nginx configuration to support video web editor: https://docs.joinpeertube.org/install/any-os#nginx
  * REST API:
-   * `PUT /api/v1/videos/{id}/watching` is deprecated, use `POST /api/v1/videos/videos/{id}/views` instead: https://docs.joinpeertube.org/api/rest-reference.html#operation/addView
+   * `PUT /api/v1/videos/{id}/watching` is deprecated, use `POST /api/v1/videos/videos/{id}/views` instead: https://docs.joinpeertube.org/api-rest-reference.html#operation/addView
 
 ### Maintenance
 

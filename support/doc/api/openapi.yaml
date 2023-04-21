@@ -46,7 +46,7 @@ info:
 
     {
       "detail": "Video not found",
-      "docs": "https://docs.joinpeertube.org/api/rest-reference.html#operation/getVideo",
+      "docs": "https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo",
       "status": 404,
       "title": "Not Found",
       "type": "about:blank"
@@ -63,10 +63,10 @@ info:
 
     {
       "detail": "Cannot get this video regarding follow constraints",
-      "docs": "https://docs.joinpeertube.org/api/rest-reference.html#operation/getVideo",
+      "docs": "https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo",
       "status": 403,
       "title": "Forbidden",
-      "type": "https://docs.joinpeertube.org/api/rest-reference.html#section/Errors/does_not_respect_follow_constraints"
+      "type": "https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/does_not_respect_follow_constraints"
     }
     ```
 
@@ -84,7 +84,7 @@ info:
 
     {
       "detail": "Incorrect request parameters: id",
-      "docs": "https://docs.joinpeertube.org/api/rest-reference.html#operation/getVideo",
+      "docs": "https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo",
       "instance": "/api/v1/videos/9c9de5e8-0a1e-484a-b099-e80766180",
       "invalid-params": {
         "id": {
@@ -149,7 +149,7 @@ info:
 
     In addition, all routes serving ActivityPub are CORS-enabled for all origins.
 externalDocs:
-  url: https://docs.joinpeertube.org/api/rest-reference.html
+  url: https://docs.joinpeertube.org/api-rest-reference.html
 tags:
   - name: Register
     description: |
@@ -6000,7 +6000,7 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/VideoPlaylistTypeSet'
-        
+
   securitySchemes:
     OAuth2:
       description: |
@@ -6190,7 +6190,7 @@ components:
         - 2
         - 3
       description: 'The live latency mode (Default = `1`, High latency = `2`, Small Latency = `3`)'
-    
+
     LiveVideoReplaySettings:
       type: object
       properties:
