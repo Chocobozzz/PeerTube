@@ -1,10 +1,8 @@
 // Order of the tests we want to execute
 import './create-import-video-file-job'
-import './create-transcoding-job'
 import './create-move-video-storage-job'
 import './peertube'
 import './plugins'
-import './print-transcode-command'
 import './prune-storage'
 import './regenerate-thumbnails'
 import './reset-password'

@@ -6,6 +6,7 @@ import { join } from 'path'
 import { sha1 } from '@shared/extra-utils'
 import { LiveVideo, VideoStreamingPlaylistType } from '@shared/models'
 import { ObjectStorageCommand, PeerTubeServer } from '@shared/server-commands'
+import { SQLCommand } from './sql-command'
 import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist } from './streaming-playlists'
 
 async function checkLiveCleanup (options: {
@@ -36,8 +37,10 @@ async function checkLiveCleanup (options: {
 
 // ---------------------------------------------------------------------------
 
-async function testVideoResolutions (options: {
+async function testLiveVideoResolutions (options: {
+  sqlCommand: SQLCommand
   originServer: PeerTubeServer
+
   servers: PeerTubeServer[]
   liveVideoId: string
   resolutions: number[]
@@ -48,6 +51,7 @@ async function testVideoResolutions (options: {
 }) {
   const {
     originServer,
+    sqlCommand,
     servers,
     liveVideoId,
     resolutions,
@@ -116,7 +120,7 @@ async function testVideoResolutions (options: {
 
       if (originServer.internalServerNumber === server.internalServerNumber) {
         const infohash = sha1(`${2 + hlsPlaylist.playlistUrl}+V${i}`)
-        const dbInfohashes = await originServer.sql.getPlaylistInfohash(hlsPlaylist.id)
+        const dbInfohashes = await sqlCommand.getPlaylistInfohash(hlsPlaylist.id)
 
         expect(dbInfohashes).to.include(infohash)
       }
@@ -128,7 +132,7 @@ async function testVideoResolutions (options: {
 
 export {
   checkLiveCleanup,
-  testVideoResolutions
+  testLiveVideoResolutions
 }
 
 // ---------------------------------------------------------------------------

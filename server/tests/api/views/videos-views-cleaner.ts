@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
+import { SQLCommand } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import {
   cleanupTests,
@@ -14,6 +15,7 @@ import {
 
 describe('Test video views cleaner', function () {
   let servers: PeerTubeServer[]
+  let sqlCommands: SQLCommand[]
 
   let videoIdServer1: string
   let videoIdServer2: string
@@ -37,6 +39,8 @@ describe('Test video views cleaner', function () {
     await servers[1].views.simulateView({ id: videoIdServer2 })
 
     await waitJobs(servers)
+
+    sqlCommands = servers.map(s => new SQLCommand(s))
   })
 
   it('Should not clean old video views', async function () {
@@ -50,18 +54,14 @@ describe('Test video views cleaner', function () {
 
     // Should still have views
 
-    {
-      for (const server of servers) {
-        const total = await server.sql.countVideoViewsOf(videoIdServer1)
-        expect(total).to.equal(2, 'Server ' + server.serverNumber + ' does not have the correct amount of views')
-      }
+    for (let i = 0; i < servers.length; i++) {
+      const total = await sqlCommands[i].countVideoViewsOf(videoIdServer1)
+      expect(total).to.equal(2, 'Server ' + servers[i].serverNumber + ' does not have the correct amount of views')
     }
 
-    {
-      for (const server of servers) {
-        const total = await server.sql.countVideoViewsOf(videoIdServer2)
-        expect(total).to.equal(2, 'Server ' + server.serverNumber + ' does not have the correct amount of views')
-      }
+    for (let i = 0; i < servers.length; i++) {
+      const total = await sqlCommands[i].countVideoViewsOf(videoIdServer2)
+      expect(total).to.equal(2, 'Server ' + servers[i].serverNumber + ' does not have the correct amount of views')
     }
   })
 
@@ -76,23 +76,23 @@ describe('Test video views cleaner', function () {
 
     // Should still have views
 
-    {
-      for (const server of servers) {
-        const total = await server.sql.countVideoViewsOf(videoIdServer1)
-        expect(total).to.equal(2)
-      }
+    for (let i = 0; i < servers.length; i++) {
+      const total = await sqlCommands[i].countVideoViewsOf(videoIdServer1)
+      expect(total).to.equal(2)
     }
 
-    {
-      const totalServer1 = await servers[0].sql.countVideoViewsOf(videoIdServer2)
-      expect(totalServer1).to.equal(0)
+    const totalServer1 = await sqlCommands[0].countVideoViewsOf(videoIdServer2)
+    expect(totalServer1).to.equal(0)
 
-      const totalServer2 = await servers[1].sql.countVideoViewsOf(videoIdServer2)
-      expect(totalServer2).to.equal(2)
-    }
+    const totalServer2 = await sqlCommands[1].countVideoViewsOf(videoIdServer2)
+    expect(totalServer2).to.equal(2)
   })
 
   after(async function () {
+    for (const sqlCommand of sqlCommands) {
+      await sqlCommand.cleanup()
+    }
+
     await cleanupTests(servers)
   })
 })

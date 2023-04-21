@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
+import { SQLCommand } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { HttpStatusCode, OAuth2ErrorCode, PeerTubeProblemDocument } from '@shared/models'
 import { cleanupTests, createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
 describe('Test oauth', function () {
   let server: PeerTubeServer
+  let sqlCommand: SQLCommand
 
   before(async function () {
     this.timeout(30000)
@@ -20,6 +22,8 @@ describe('Test oauth', function () {
     })
 
     await setAccessTokensToServers([ server ])
+
+    sqlCommand = new SQLCommand(server)
   })
 
   describe('OAuth client', function () {
@@ -118,8 +122,8 @@ describe('Test oauth', function () {
     it('Should have an expired access token', async function () {
       this.timeout(60000)
 
-      await server.sql.setTokenField(server.accessToken, 'accessTokenExpiresAt', new Date().toISOString())
-      await server.sql.setTokenField(server.accessToken, 'refreshTokenExpiresAt', new Date().toISOString())
+      await sqlCommand.setTokenField(server.accessToken, 'accessTokenExpiresAt', new Date().toISOString())
+      await sqlCommand.setTokenField(server.accessToken, 'refreshTokenExpiresAt', new Date().toISOString())
 
       await killallServers([ server ])
       await server.run()
@@ -135,7 +139,7 @@ describe('Test oauth', function () {
       this.timeout(50000)
 
       const futureDate = new Date(new Date().getTime() + 1000 * 60).toISOString()
-      await server.sql.setTokenField(server.accessToken, 'refreshTokenExpiresAt', futureDate)
+      await sqlCommand.setTokenField(server.accessToken, 'refreshTokenExpiresAt', futureDate)
 
       await killallServers([ server ])
       await server.run()
@@ -187,6 +191,7 @@ describe('Test oauth', function () {
   })
 
   after(async function () {
+    await sqlCommand.cleanup()
     await cleanupTests([ server ])
   })
 })

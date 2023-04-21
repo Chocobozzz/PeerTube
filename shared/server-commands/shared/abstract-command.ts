@@ -33,6 +33,7 @@ interface InternalCommonCommandOptions extends OverrideCommandOptions {
   host?: string
   headers?: { [ name: string ]: string }
   requestType?: string
+  responseType?: string
   xForwardedFor?: string
 }
 
@@ -169,7 +170,7 @@ abstract class AbstractCommand {
   }
 
   protected buildCommonRequestOptions (options: InternalCommonCommandOptions) {
-    const { url, path, redirects, contentType, accept, range, host, headers, requestType, xForwardedFor } = options
+    const { url, path, redirects, contentType, accept, range, host, headers, requestType, xForwardedFor, responseType } = options
 
     return {
       url: url ?? this.server.url,
@@ -185,6 +186,7 @@ abstract class AbstractCommand {
       accept,
       headers,
       type: requestType,
+      responseType,
       xForwardedFor
     }
   }

@@ -3,7 +3,7 @@ import ffmpeg from 'fluent-ffmpeg'
 import { ensureDir, pathExists } from 'fs-extra'
 import { dirname } from 'path'
 import { buildAbsoluteFixturePath, getMaxBitrate } from '@shared/core-utils'
-import { getVideoStreamBitrate, getVideoStreamFPS, getVideoStreamDimensionsInfo } from '@shared/extra-utils'
+import { getVideoStreamBitrate, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@shared/ffmpeg'
 
 async function ensureHasTooBigBitrate (fixturePath: string) {
   const bitrate = await getVideoStreamBitrate(fixturePath)

@@ -7,7 +7,8 @@ import {
   checkNewPluginVersion,
   MockJoinPeerTubeVersions,
   MockSmtpServer,
-  prepareNotificationsTest
+  prepareNotificationsTest,
+  SQLCommand
 } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { PluginType, UserNotification, UserNotificationType } from '@shared/models'
@@ -15,6 +16,7 @@ import { cleanupTests, PeerTubeServer } from '@shared/server-commands'
 
 describe('Test admin notifications', function () {
   let server: PeerTubeServer
+  let sqlCommand: SQLCommand
   let userNotifications: UserNotification[] = []
   let adminNotifications: UserNotification[] = []
   let emails: object[] = []
@@ -58,6 +60,8 @@ describe('Test admin notifications', function () {
 
     await server.plugins.install({ npmName: 'peertube-plugin-hello-world' })
     await server.plugins.install({ npmName: 'peertube-theme-background-red' })
+
+    sqlCommand = new SQLCommand(server)
   })
 
   describe('Latest PeerTube version notification', function () {
@@ -116,8 +120,8 @@ describe('Test admin notifications', function () {
     it('Should send a notification to admins on new plugin version', async function () {
       this.timeout(30000)
 
-      await server.sql.setPluginVersion('hello-world', '0.0.1')
-      await server.sql.setPluginLatestVersion('hello-world', '0.0.1')
+      await sqlCommand.setPluginVersion('hello-world', '0.0.1')
+      await sqlCommand.setPluginLatestVersion('hello-world', '0.0.1')
       await wait(6000)
 
       await checkNewPluginVersion({ ...baseParams, pluginType: PluginType.PLUGIN, pluginName: 'hello-world', checkType: 'presence' })
@@ -138,8 +142,8 @@ describe('Test admin notifications', function () {
     it('Should send a new notification after a new plugin release', async function () {
       this.timeout(30000)
 
-      await server.sql.setPluginVersion('hello-world', '0.0.1')
-      await server.sql.setPluginLatestVersion('hello-world', '0.0.1')
+      await sqlCommand.setPluginVersion('hello-world', '0.0.1')
+      await sqlCommand.setPluginLatestVersion('hello-world', '0.0.1')
       await wait(6000)
 
       expect(adminNotifications.filter(n => n.type === UserNotificationType.NEW_PEERTUBE_VERSION)).to.have.lengthOf(2)
@@ -149,6 +153,7 @@ describe('Test admin notifications', function () {
   after(async function () {
     MockSmtpServer.Instance.kill()
 
+    await sqlCommand.cleanup()
     await cleanupTests([ server ])
   })
 })

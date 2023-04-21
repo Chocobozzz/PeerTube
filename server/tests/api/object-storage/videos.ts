@@ -6,12 +6,15 @@ import { stat } from 'fs-extra'
 import { merge } from 'lodash'
 import {
   checkTmpIsEmpty,
+  checkWebTorrentWorks,
   expectLogDoesNotContain,
   expectStartWith,
   generateHighBitrateVideo,
-  MockObjectStorageProxy
+  MockObjectStorageProxy,
+  SQLCommand
 } from '@server/tests/shared'
 import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
+import { sha1 } from '@shared/extra-utils'
 import { HttpStatusCode, VideoDetails } from '@shared/models'
 import {
   cleanupTests,
@@ -23,14 +26,13 @@ import {
   ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
-  waitJobs,
-  webtorrentAdd
+  waitJobs
 } from '@shared/server-commands'
-import { sha1 } from '@shared/extra-utils'
 
 async function checkFiles (options: {
   server: PeerTubeServer
   originServer: PeerTubeServer
+  originSQLCommand: SQLCommand
 
   video: VideoDetails
 
@@ -45,6 +47,7 @@ async function checkFiles (options: {
   const {
     server,
     originServer,
+    originSQLCommand,
     video,
     playlistBucket,
     webtorrentBucket,
@@ -104,7 +107,7 @@ async function checkFiles (options: {
 
       if (originServer.internalServerNumber === server.internalServerNumber) {
         const infohash = sha1(`${2 + hls.playlistUrl}+V${i}`)
-        const dbInfohashes = await originServer.sql.getPlaylistInfohash(hls.id)
+        const dbInfohashes = await originSQLCommand.getPlaylistInfohash(hls.id)
 
         expect(dbInfohashes).to.include(infohash)
       }
@@ -114,11 +117,7 @@ async function checkFiles (options: {
   }
 
   for (const file of allFiles) {
-    const torrent = await webtorrentAdd(file.magnetUri, true)
-
-    expect(torrent.files).to.be.an('array')
-    expect(torrent.files.length).to.equal(1)
-    expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+    await checkWebTorrentWorks(file.magnetUri)
 
     const res = await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
     expect(res.body).to.have.length.above(100)
@@ -145,6 +144,7 @@ function runTestSuite (options: {
   let baseMockUrl: string
 
   let servers: PeerTubeServer[]
+  let sqlCommands: SQLCommand[]
 
   let keptUrls: string[] = []
 
@@ -202,6 +202,8 @@ function runTestSuite (options: {
       const files = await server.videos.listFiles({ id: uuid })
       keptUrls = keptUrls.concat(files.map(f => f.fileUrl))
     }
+
+    sqlCommands = servers.map(s => new SQLCommand(s))
   })
 
   it('Should upload a video and move it to the object storage without transcoding', async function () {
@@ -214,7 +216,7 @@ function runTestSuite (options: {
 
     for (const server of servers) {
       const video = await server.videos.get({ id: uuid })
-      const files = await checkFiles({ ...options, server, originServer: servers[0], video, baseMockUrl })
+      const files = await checkFiles({ ...options, server, originServer: servers[0], originSQLCommand: sqlCommands[0], video, baseMockUrl })
 
       deletedUrls = deletedUrls.concat(files)
     }
@@ -230,7 +232,7 @@ function runTestSuite (options: {
 
     for (const server of servers) {
       const video = await server.videos.get({ id: uuid })
-      const files = await checkFiles({ ...options, server, originServer: servers[0], video, baseMockUrl })
+      const files = await checkFiles({ ...options, server, originServer: servers[0], originSQLCommand: sqlCommands[0], video, baseMockUrl })
 
       deletedUrls = deletedUrls.concat(files)
     }
@@ -273,6 +275,10 @@ function runTestSuite (options: {
 
   after(async function () {
     await mockObjectStorageProxy.terminate()
+
+    for (const sqlCommand of sqlCommands) {
+      await sqlCommand.cleanup()
+    }
 
     await cleanupTests(servers)
   })

@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { basename } from 'path'
 import { ACTOR_IMAGES_SIZE } from '@server/initializers/constants'
-import { testFileExistsOrNot, testImage } from '@server/tests/shared'
+import { SQLCommand, testFileExistsOrNot, testImage } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { ActorImageType, User, VideoChannel } from '@shared/models'
 import {
@@ -25,6 +25,8 @@ async function findChannel (server: PeerTubeServer, channelId: number) {
 
 describe('Test video channels', function () {
   let servers: PeerTubeServer[]
+  let sqlCommands: SQLCommand[]
+
   let userInfo: User
   let secondVideoChannelId: number
   let totoChannel: number
@@ -45,6 +47,8 @@ describe('Test video channels', function () {
     await setDefaultAccountAvatar(servers)
 
     await doubleFollow(servers[0], servers[1])
+
+    sqlCommands = servers.map(s => new SQLCommand(s))
   })
 
   it('Should have one video channel (created with root)', async () => {
@@ -278,7 +282,9 @@ describe('Test video channels', function () {
 
     await waitJobs(servers)
 
-    for (const server of servers) {
+    for (let i = 0; i < servers.length; i++) {
+      const server = servers[i]
+
       const videoChannel = await findChannel(server, secondVideoChannelId)
       const expectedSizes = ACTOR_IMAGES_SIZE[ActorImageType.AVATAR]
 
@@ -289,7 +295,7 @@ describe('Test video channels', function () {
         await testImage(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatarPaths[server.port], '.png')
         await testFileExistsOrNot(server, 'avatars', basename(avatarPaths[server.port]), true)
 
-        const row = await server.sql.getActorImage(basename(avatarPaths[server.port]))
+        const row = await sqlCommands[i].getActorImage(basename(avatarPaths[server.port]))
 
         expect(expectedSizes.some(({ height, width }) => row.height === height && row.width === width)).to.equal(true)
       }
@@ -309,14 +315,16 @@ describe('Test video channels', function () {
 
     await waitJobs(servers)
 
-    for (const server of servers) {
+    for (let i = 0; i < servers.length; i++) {
+      const server = servers[i]
+
       const videoChannel = await server.channels.get({ channelName: 'second_video_channel@' + servers[0].host })
 
       bannerPaths[server.port] = videoChannel.banners[0].path
       await testImage(server.url, 'banner-resized', bannerPaths[server.port])
       await testFileExistsOrNot(server, 'avatars', basename(bannerPaths[server.port]), true)
 
-      const row = await server.sql.getActorImage(basename(bannerPaths[server.port]))
+      const row = await sqlCommands[i].getActorImage(basename(bannerPaths[server.port]))
       expect(row.height).to.equal(ACTOR_IMAGES_SIZE[ActorImageType.BANNER][0].height)
       expect(row.width).to.equal(ACTOR_IMAGES_SIZE[ActorImageType.BANNER][0].width)
     }
@@ -546,6 +554,10 @@ describe('Test video channels', function () {
   })
 
   after(async function () {
+    for (const sqlCommand of sqlCommands) {
+      await sqlCommand.cleanup()
+    }
+
     await cleanupTests(servers)
   })
 })

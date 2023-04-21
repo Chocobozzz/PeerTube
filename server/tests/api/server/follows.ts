@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { completeVideoCheck, dateIsValid, expectAccountFollows, expectChannelsFollows, testCaptionFile } from '@server/tests/shared'
-import { VideoCreateResult, VideoPrivacy } from '@shared/models'
+import { Video, VideoPrivacy } from '@shared/models'
 import { cleanupTests, createMultipleServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/server-commands'
 
 describe('Test follows', function () {
@@ -357,7 +357,7 @@ describe('Test follows', function () {
   })
 
   describe('Should propagate data on a new server follow', function () {
-    let video4: VideoCreateResult
+    let video4: Video
 
     before(async function () {
       this.timeout(50000)
@@ -372,19 +372,19 @@ describe('Test follows', function () {
 
       await servers[2].videos.upload({ attributes: { name: 'server3-2' } })
       await servers[2].videos.upload({ attributes: { name: 'server3-3' } })
-      video4 = await servers[2].videos.upload({ attributes: video4Attributes })
+      const video4CreateResult = await servers[2].videos.upload({ attributes: video4Attributes })
       await servers[2].videos.upload({ attributes: { name: 'server3-5' } })
       await servers[2].videos.upload({ attributes: { name: 'server3-6' } })
 
       {
         const userAccessToken = await servers[2].users.generateUserAndToken('captain')
 
-        await servers[2].videos.rate({ id: video4.id, rating: 'like' })
-        await servers[2].videos.rate({ token: userAccessToken, id: video4.id, rating: 'dislike' })
+        await servers[2].videos.rate({ id: video4CreateResult.id, rating: 'like' })
+        await servers[2].videos.rate({ token: userAccessToken, id: video4CreateResult.id, rating: 'dislike' })
       }
 
       {
-        await servers[2].comments.createThread({ videoId: video4.id, text: 'my super first comment' })
+        await servers[2].comments.createThread({ videoId: video4CreateResult.id, text: 'my super first comment' })
 
         await servers[2].comments.addReplyToLastThread({ text: 'my super answer to thread 1' })
         await servers[2].comments.addReplyToLastReply({ text: 'my super answer to answer of thread 1' })
@@ -392,20 +392,20 @@ describe('Test follows', function () {
       }
 
       {
-        const { id: threadId } = await servers[2].comments.createThread({ videoId: video4.id, text: 'will be deleted' })
+        const { id: threadId } = await servers[2].comments.createThread({ videoId: video4CreateResult.id, text: 'will be deleted' })
         await servers[2].comments.addReplyToLastThread({ text: 'answer to deleted' })
 
         const { id: replyId } = await servers[2].comments.addReplyToLastThread({ text: 'will also be deleted' })
 
         await servers[2].comments.addReplyToLastReply({ text: 'my second answer to deleted' })
 
-        await servers[2].comments.delete({ videoId: video4.id, commentId: threadId })
-        await servers[2].comments.delete({ videoId: video4.id, commentId: replyId })
+        await servers[2].comments.delete({ videoId: video4CreateResult.id, commentId: threadId })
+        await servers[2].comments.delete({ videoId: video4CreateResult.id, commentId: replyId })
       }
 
       await servers[2].captions.add({
         language: 'ar',
-        videoId: video4.id,
+        videoId: video4CreateResult.id,
         fixture: 'subtitle-good2.vtt'
       })
 
@@ -479,7 +479,12 @@ describe('Test follows', function () {
           }
         ]
       }
-      await completeVideoCheck(servers[0], video4, checkAttributes)
+      await completeVideoCheck({
+        server: servers[0],
+        originServer: servers[2],
+        videoUUID: video4.uuid,
+        attributes: checkAttributes
+      })
     })
 
     it('Should have propagated comments', async function () {

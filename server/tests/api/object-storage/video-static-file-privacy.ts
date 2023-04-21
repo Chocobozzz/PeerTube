@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { basename } from 'path'
-import { checkVideoFileTokenReinjection, expectStartWith } from '@server/tests/shared'
+import { checkVideoFileTokenReinjection, expectStartWith, SQLCommand } from '@server/tests/shared'
 import { areScalewayObjectStorageTestsDisabled, getAllFiles, getHLS } from '@shared/core-utils'
 import { HttpStatusCode, LiveVideo, VideoDetails, VideoPrivacy } from '@shared/models'
 import {
@@ -30,6 +30,7 @@ describe('Object storage for video static file privacy', function () {
   if (areScalewayObjectStorageTestsDisabled()) return
 
   let server: PeerTubeServer
+  let sqlCommand: SQLCommand
   let userToken: string
 
   // ---------------------------------------------------------------------------
@@ -44,7 +45,7 @@ describe('Object storage for video static file privacy', function () {
     }
 
     for (const file of getAllFiles(video)) {
-      const internalFileUrl = await server.sql.getInternalFileUrl(file.id)
+      const internalFileUrl = await sqlCommand.getInternalFileUrl(file.id)
       expectStartWith(internalFileUrl, ObjectStorageCommand.getScalewayBaseUrl())
       await makeRawRequest({ url: internalFileUrl, token: server.accessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     }
@@ -99,6 +100,8 @@ describe('Object storage for video static file privacy', function () {
     await server.config.enableMinimumTranscoding()
 
     userToken = await server.users.generateUserAndToken('user1')
+
+    sqlCommand = new SQLCommand(server)
   })
 
   describe('VOD', function () {
@@ -439,6 +442,7 @@ describe('Object storage for video static file privacy', function () {
       await server.servers.waitUntilLog('Removed files of video ' + v.url)
     }
 
+    await sqlCommand.cleanup()
     await cleanupTests([ server ])
   })
 })

@@ -1,11 +1,37 @@
+import { expect } from 'chai'
 import { readFile } from 'fs-extra'
 import parseTorrent from 'parse-torrent'
 import { basename, join } from 'path'
 import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '@shared/models'
-import { PeerTubeServer } from '../server'
+import { PeerTubeServer } from '@shared/server-commands'
 
 let webtorrent: WebTorrent.Instance
+
+export async function checkWebTorrentWorks (magnetUri: string, pathMatch?: RegExp) {
+  const torrent = await webtorrentAdd(magnetUri, true)
+
+  expect(torrent.files).to.be.an('array')
+  expect(torrent.files.length).to.equal(1)
+  expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+
+  if (pathMatch) {
+    expect(torrent.files[0].path).match(pathMatch)
+  }
+}
+
+export async function parseTorrentVideo (server: PeerTubeServer, file: VideoFile) {
+  const torrentName = basename(file.torrentUrl)
+  const torrentPath = server.servers.buildDirectory(join('torrents', torrentName))
+
+  const data = await readFile(torrentPath)
+
+  return parseTorrent(data)
+}
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
 
 function webtorrentAdd (torrentId: string, refreshWebTorrent = false) {
   const WebTorrent = require('webtorrent')
@@ -29,18 +55,4 @@ function webtorrentAdd (torrentId: string, refreshWebTorrent = false) {
       console.error('Warning in webtorrent torrent', warn)
     })
   })
-}
-
-async function parseTorrentVideo (server: PeerTubeServer, file: VideoFile) {
-  const torrentName = basename(file.torrentUrl)
-  const torrentPath = server.servers.buildDirectory(join('torrents', torrentName))
-
-  const data = await readFile(torrentPath)
-
-  return parseTorrent(data)
-}
-
-export {
-  webtorrentAdd,
-  parseTorrentVideo
 }

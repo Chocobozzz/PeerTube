@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { canDoQuickTranscode } from '@server/helpers/ffmpeg'
-import { generateHighBitrateVideo, generateVideoWithFramerate } from '@server/tests/shared'
+import { canDoQuickTranscode } from '@server/lib/transcoding/transcoding-quick-transcode'
+import { checkWebTorrentWorks, generateHighBitrateVideo, generateVideoWithFramerate } from '@server/tests/shared'
 import { buildAbsoluteFixturePath, getAllFiles, getMaxBitrate, getMinLimitBitrate, omit } from '@shared/core-utils'
 import {
-  buildFileMetadata,
+  ffprobePromise,
   getAudioStream,
   getVideoStreamBitrate,
   getVideoStreamDimensionsInfo,
   getVideoStreamFPS,
   hasAudioStream
-} from '@shared/extra-utils'
-import { HttpStatusCode, VideoState } from '@shared/models'
+} from '@shared/ffmpeg'
+import { HttpStatusCode, VideoFileMetadata, VideoState } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -20,8 +20,7 @@ import {
   makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
-  waitJobs,
-  webtorrentAdd
+  waitJobs
 } from '@shared/server-commands'
 
 function updateConfigForTranscoding (server: PeerTubeServer) {
@@ -90,10 +89,7 @@ describe('Test video transcoding', function () {
         const magnetUri = videoDetails.files[0].magnetUri
         expect(magnetUri).to.match(/\.webm/)
 
-        const torrent = await webtorrentAdd(magnetUri, true)
-        expect(torrent.files).to.be.an('array')
-        expect(torrent.files.length).to.equal(1)
-        expect(torrent.files[0].path).match(/\.webm$/)
+        await checkWebTorrentWorks(magnetUri, /\.webm$/)
       }
     })
 
@@ -120,10 +116,7 @@ describe('Test video transcoding', function () {
         const magnetUri = videoDetails.files[0].magnetUri
         expect(magnetUri).to.match(/\.mp4/)
 
-        const torrent = await webtorrentAdd(magnetUri, true)
-        expect(torrent.files).to.be.an('array')
-        expect(torrent.files.length).to.equal(1)
-        expect(torrent.files[0].path).match(/\.mp4$/)
+        await checkWebTorrentWorks(magnetUri, /\.mp4$/)
       }
     })
 
@@ -639,7 +632,9 @@ describe('Test video transcoding', function () {
         const video = await servers[1].videos.get({ id: videoUUID })
         const file = video.files.find(f => f.resolution.id === 240)
         const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
-        const metadata = await buildFileMetadata(path)
+
+        const probe = await ffprobePromise(path)
+        const metadata = new VideoFileMetadata(probe)
 
         // expected format properties
         for (const p of [

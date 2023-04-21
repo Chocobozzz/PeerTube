@@ -261,7 +261,7 @@ describe('Test resumable upload', function () {
         pathUploadId: uploadId,
         token: server.accessToken,
         digestBuilder: () => 'sha=' + 'a'.repeat(40),
-        expectedStatus: 460
+        expectedStatus: 460 as any
       })
     })
 

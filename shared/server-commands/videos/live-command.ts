@@ -121,7 +121,7 @@ export class LiveCommand extends AbstractCommand {
     permanentLive: boolean
     privacy?: VideoPrivacy
   }) {
-    const { saveReplay, permanentLive, privacy } = options
+    const { saveReplay, permanentLive, privacy = VideoPrivacy.PUBLIC } = options
 
     const { uuid } = await this.create({
       ...options,

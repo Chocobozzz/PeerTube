@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { getAudioStream, getVideoStreamFPS, getVideoStream } from '@server/helpers/ffmpeg'
+import { getAudioStream, getVideoStream, getVideoStreamFPS } from '@shared/ffmpeg'
 import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,

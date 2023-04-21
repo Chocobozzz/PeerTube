@@ -13,7 +13,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
 
     withRetry?: boolean // default false
     currentRetry?: number
-  }) {
+  }): Promise<string> {
     const { videoFileToken, reinjectVideoFileToken, withRetry, currentRetry = 1 } = options
 
     try {
@@ -54,6 +54,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
       url: options.url,
       range: options.range,
       implicitToken: false,
+      responseType: 'application/octet-stream',
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
   }
@@ -65,6 +66,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
       ...options,
 
       url: options.url,
+      contentType: 'application/json',
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
