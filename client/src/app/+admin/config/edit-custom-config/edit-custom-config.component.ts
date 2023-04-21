@@ -190,6 +190,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         },
         webtorrent: {
           enabled: null
+        },
+        remoteRunners: {
+          enabled: null
         }
       },
       live: {
@@ -208,7 +211,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           threads: TRANSCODING_THREADS_VALIDATOR,
           profile: null,
           resolutions: {},
-          alwaysTranscodeOriginalResolution: null
+          alwaysTranscodeOriginalResolution: null,
+          remoteRunners: {
+            enabled: null
+          }
         }
       },
       videoStudio: {

@@ -110,6 +110,20 @@
             </my-peertube-checkbox>
           </div>
 
+          <div class="form-group" formGroupName="remoteRunners" [ngClass]="getDisabledLiveTranscodingClass()">
+            <my-peertube-checkbox
+              inputName="transcodingRemoteRunnersEnabled" formControlName="enabled"
+              i18n-labelText labelText="Enable remote runners"
+            >
+              <ng-container ngProjectAs="description">
+                <span i18n>
+                  Use <a routerLink="/admin/system/runners/runners-list">remote runners</a> to process live transcoding.
+                  Remote runners has to register on your instance first.
+                </span>
+              </ng-container>
+            </my-peertube-checkbox>
+          </div>
+
           <div class="form-group" [ngClass]="getDisabledLiveTranscodingClass()">
             <label i18n for="liveTranscodingThreads">Live resolutions to generate</label>
 
