@@ -648,12 +648,12 @@
       </trans-unit>
       <trans-unit id="653148876380254581" datatype="html">
         <source>Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</target>
+        <target state="translated">آیا از حذف فایل‌های تورنت تعداد {count, plural, =1 {یک} other {<x id="count"/>}} ویدئو اطمینان دارید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">276</context></context-group>
       </trans-unit>
       <trans-unit id="5442133371267277333" datatype="html">
         <source>Are you sure you want to delete WebTorrent files of <x id="PH" equiv-text="videos.length"/> videos?</source>
-        <target state="translated">آیا از حذف فایلهای WebTorrent مطمئن هستید <x id="PH" equiv-text="videos.length"/> ویدئو ها ?</target>
+        <target state="translated">آیا از حذف فایل‌های تورنت <x id="PH" equiv-text="videos.length"/> ویدئو اطمینان دارید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">278</context></context-group>
       </trans-unit>
       <trans-unit id="1571742433738679426" datatype="html">
@@ -752,7 +752,7 @@
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
         <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</source>
-        <target state="translated">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt;سازگار است که پشتیبانی می کند:</target>
+        <target state="translated">سازگار با &lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;زبان نشان‌گذاری&lt;/a&gt; که موارد زیر را پشتیبانی می‌نماید:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="146235964740293376" datatype="html">
@@ -1678,7 +1678,7 @@
       </trans-unit>
       <trans-unit id="7005745151564974365" datatype="html">
         <source>Keyboard shortcuts</source>
-        <target state="translated">کلید های میانبر صفحه کلید</target>
+        <target state="translated">کلیدهای میانبر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">71</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
@@ -2847,7 +2847,7 @@
       </trans-unit>
       <trans-unit id="2127094963121208963" datatype="html">
         <source>Total video quota</source>
-        <target state="translated">مجموع سهم ویدئو</target>
+        <target state="translated">جمع سهمیه ویدئو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">118</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-quota.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
@@ -3450,7 +3450,7 @@
       </trans-unit>
       <trans-unit id="5793595564950675122" datatype="html">
         <source>Markdown compatible that supports:</source>
-        <target state="translated">Markdown سازگار است که پشتیبانی می کند:</target>
+        <target state="translated">سازگار با زبان نشانه‌گذاری که موارد زیر را پشتیبانی می‌نماید:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8422216333877786919" datatype="html">
@@ -3555,7 +3555,7 @@
       </trans-unit>
       <trans-unit id="5302915360176176604" datatype="html">
         <source>SUBSCRIPTION FEED</source>
-        <target state="translated">خوراک اشتراک</target>
+        <target state="translated">فید اشتراک</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="2645809032917283525" datatype="html">
@@ -4606,7 +4606,7 @@
       </trans-unit>
       <trans-unit id="6170245880855918780" datatype="html">
         <source>Job state</source>
-        <target state="translated">وضعیت فعالیت ها</target>
+        <target state="translated">وضعیت فعالیت‌ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="2296681895307893686" datatype="html">
@@ -4722,7 +4722,7 @@
       </trans-unit>
       <trans-unit id="7794655859478571096" datatype="html">
         <source>Main instance categories</source>
-        <target state="translated">دسته های اصلی نمونه</target>
+        <target state="translated">دسته‌های اصلی سایت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="6588040559347368313" datatype="html">
@@ -4768,7 +4768,7 @@
       </trans-unit>
       <trans-unit id="399528956091640769" datatype="html">
         <source>MODERATION &amp; NSFW</source>
-        <target state="translated">مدرن و آمپر؛ nsfw</target>
+        <target state="translated">نظارت و NSFW</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="7030031694783481217" datatype="html">
@@ -4820,7 +4820,7 @@
       </trans-unit>
       <trans-unit id="3076079242537393946" datatype="html">
         <source>Moderation information</source>
-        <target state="translated">اطلاعات بررسی های انجام شده</target>
+        <target state="translated">اطلاعات مدیریت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">141</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">143</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">60</context></context-group>
@@ -4837,7 +4837,7 @@
       </trans-unit>
       <trans-unit id="3968335261686887328" datatype="html">
         <source>Who is behind the instance?</source>
-        <target state="translated">چه کسی پشت سر گذاشت؟</target>
+        <target state="translated">چه کسی حامی این سایت است؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">163</context></context-group>
       </trans-unit>
       <trans-unit id="7323194786468446482" datatype="html">
@@ -4862,7 +4862,7 @@
       </trans-unit>
       <trans-unit id="6722472563287778070" datatype="html">
         <source>It's important to know for users who want to register on your instance</source>
-        <target state="translated">مهم است که کاربران را بدانیم که می خواهند در نمونه خود ثبت نام کنند</target>
+        <target state="translated">این نکته برای کاربرانی که می‌خواهند در سایت شما ثبت‌نام کنند مهم است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">184</context></context-group>
       </trans-unit>
       <trans-unit id="8362291348781958428" datatype="html">
@@ -4882,7 +4882,7 @@
       </trans-unit>
       <trans-unit id="3447208665089679283" datatype="html">
         <source>What server/hardware does the instance run on?</source>
-        <target state="translated">چه سرور / سخت افزاری برای سایت بکارگیری می شود؟</target>
+        <target state="translated">سایت روی چه سرور/سخت افزاری راه‌اندازی شده است؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">213</context></context-group>
       </trans-unit>
       <trans-unit id="4739907951373047958" datatype="html">
@@ -6060,12 +6060,12 @@
       </trans-unit>
       <trans-unit id="3610344835750059476" datatype="html">
         <source>My ownership changes</source>
-        <target state="translated">مالکیت من تغییر می کند</target>
+        <target state="translated">تغییرات مالکیت من</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="7391040346436232576" datatype="html">
         <source>Initiator</source>
-        <target state="translated">آغازگر</target>
+        <target state="translated">شروع‌کننده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="3963749584812225989" datatype="html">
@@ -6075,7 +6075,7 @@
       </trans-unit>
       <trans-unit id="5611592591303869712" datatype="html">
         <source>Status</source>
-        <target state="translated">وضع</target>
+        <target state="translated">وضعیت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="5417361655914085905" datatype="html">
@@ -6086,7 +6086,7 @@
       </trans-unit>
       <trans-unit id="2000373220662583633" datatype="html">
         <source>No ownership change request found.</source>
-        <target state="translated">هیچ درخواست تغییر مالکیت یافت نشد.</target>
+        <target state="translated">درخواستی برای تغییر مالکیت یافت نشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="2091927708110728875" datatype="html">
@@ -6223,7 +6223,7 @@
       </trans-unit>
       <trans-unit id="9049939123029212539" datatype="html">
         <source>Synchronization created successfully.</source>
-        <target state="new">Synchronization created successfully.</target>
+        <target state="translated">همسان‌سازی با موفقیت ایجاد شد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -7274,7 +7274,7 @@
       </trans-unit>
       <trans-unit id="9082008222523034483" datatype="html">
         <source>Get help</source>
-        <target state="translated">کمک بگیر</target>
+        <target state="translated">راهنمایی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="4331636419103456800" datatype="html">
@@ -9475,7 +9475,7 @@
       </trans-unit>
       <trans-unit id="1498264516089100469" datatype="html">
         <source>My synchronizations</source>
-        <target state="new">My synchronizations</target>
+        <target state="translated">همسان‌سازی‌های من</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">11</context>
@@ -9555,7 +9555,7 @@
       </trans-unit>
       <trans-unit id="6328603643802633101" datatype="html">
         <source>Create new synchronization</source>
-        <target state="new">Create new synchronization</target>
+        <target state="translated">ایجاد همسان‌سازی جدید</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context>
           <context context-type="linenumber">153</context>
@@ -9823,7 +9823,7 @@
       </trans-unit>
       <trans-unit id="2206638022166154361" datatype="html">
         <source>Keyboard Shortcuts:</source>
-        <target state="translated">کلید های میانبر صفحه کلید:</target>
+        <target state="translated">کلیدهای میانبر:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/hotkeys/hotkeys.component.ts</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="3608407683173066091" datatype="html">
@@ -11678,13 +11678,13 @@
       </trans-unit>
       <trans-unit id="8150022485860412528" datatype="html">
         <source>Account <x id="PH"/> muted.</source>
-        <target state="translated">حساب <x id="PH"/> خاموش است.</target>
+        <target state="translated">حساب <x id="PH"/> مسکوت شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">135</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
       <trans-unit id="1598375456114200087" datatype="html">
         <source>Instance <x id="PH"/> muted. </source>
-        <target state="translated">سایت  <x id="PH"/> خاموش است. </target>
+        <target state="translated">سایت <x id="PH"/> مسکوت شد. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">68</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">163</context></context-group>
       </trans-unit>
@@ -11696,7 +11696,7 @@
       </trans-unit>
       <trans-unit id="1595779426198793580" datatype="html">
         <source>Mute server</source>
-        <target state="translated">سرور خاموش</target>
+        <target state="translated">مسکوت کردن سرور</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">322</context></context-group>
       </trans-unit>
       <trans-unit id="8014491157078444256" datatype="html">
@@ -11726,7 +11726,7 @@
       </trans-unit>
       <trans-unit id="4379430340167561220" datatype="html">
         <source>Instance <x id="PH"/> unmuted by the instance.</source>
-        <target state="translated">سایت <x id="PH"/> بوسیله این سایت از حالت خاموش خارج شد.</target>
+        <target state="translated">سایت <x id="PH"/> بوسیله این سایت از حالت مسکوت خارج شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">233</context></context-group>
       </trans-unit>
       <trans-unit id="8173437618471379044" datatype="html">
@@ -11798,18 +11798,18 @@
       </trans-unit>
       <trans-unit id="6198109035280957164" datatype="html">
         <source>Mute the instance</source>
-        <target state="translated">نادیده گرفتن محتوا/کانال</target>
+        <target state="translated">مسکوت کردن سایت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">308</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">392</context></context-group>
       </trans-unit>
       <trans-unit id="4537735378779630558" datatype="html">
         <source>Hide any content from that instance for you.</source>
-        <target state="translated">پنهان کردن هر گونه محتوا از این سایت برای شما.</target>
+        <target state="translated">پنهان‌کردن هرگونه محتوا از آن سایت برای شما.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">309</context></context-group>
       </trans-unit>
       <trans-unit id="6247487021683085858" datatype="html">
         <source>Unmute the instance</source>
-        <target state="translated">حذف نادیده گرفتن این سایت /محتوا</target>
+        <target state="translated">خارج‌کردن این سایت از حالت مسکوت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">314</context></context-group>
       </trans-unit>
       <trans-unit id="4024846984475742259" datatype="html">
@@ -11869,7 +11869,7 @@
       </trans-unit>
       <trans-unit id="8546847443058492245" datatype="html">
         <source>Block <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> videos</source>
-        <target state="translated">بلاک کردن <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> ویدئوها</target>
+        <target state="translated">بلاک کردن <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> ویدئو</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">4</context>
