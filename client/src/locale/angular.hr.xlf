@@ -2466,7 +2466,7 @@
       </trans-unit>
       <trans-unit id="2959657578684395250" datatype="html">
         <source>{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}</source>
-        <target state="translated">{count, plural, =1 {Zahtjev za praćenje poslan!} few {Zahtjeva za praćenje poslana!} other {Zahtjeva za praćenje poslani!}}</target>
+        <target state="translated">{count, plural, =1 {Zahtjev za praćenje je poslan!} other {Zahtjevi za praćenje su poslani!}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.ts</context>
           <context context-type="linenumber">65</context>
