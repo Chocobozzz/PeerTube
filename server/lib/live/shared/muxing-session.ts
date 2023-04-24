@@ -302,8 +302,8 @@ class MuxingSession extends EventEmitter {
     return Array.from(unavailableM3U8Segments)
   }
 
-  private async waitForUnavailableM3U8Segments (m3u8Path: string, m3u8SegmentPaths: string[], maxRetries = 30) {
-    const retrySleepMs = 100
+  private async waitForUnavailableM3U8Segments (m3u8Path: string, m3u8SegmentPaths: string[], maxRetries = 40) {
+    const retrySleepMs = 250
     let ackSleepMs = 0
     while (maxRetries) {
       const m3u8SegmentsUnavailable = this.getUnavailableM3U8Segments(m3u8SegmentPaths)
