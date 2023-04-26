@@ -1324,7 +1324,7 @@
       </trans-unit>
       <trans-unit id="3514732276382852116" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos</source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>نظر دادن<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> درمورد ویدئوها</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">11</context>
@@ -2399,7 +2399,7 @@
       </trans-unit>
       <trans-unit id="5767444971673380379" datatype="html">
         <source>Moderation response</source>
-        <target state="translated">پاسخ مدیریت</target>
+        <target state="translated">پاسخ واحد نظارت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">42</context>
@@ -2423,7 +2423,7 @@
       </trans-unit>
       <trans-unit id="5199584494687692924" datatype="html">
         <source>Moderation response:</source>
-        <target state="translated">پاسخ مدیریت:</target>
+        <target state="translated">پاسخ واحد نظارت:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">114</context>
@@ -3936,7 +3936,7 @@
       </trans-unit>
       <trans-unit id="2049290282534091182" datatype="html">
         <source>Moderation</source>
-        <target state="translated">سایر تنظیمات</target>
+        <target state="translated">واحد نظارت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">95</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">72</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">28</context></context-group>
@@ -4172,7 +4172,7 @@
       </trans-unit>
       <trans-unit id="7075448128175750939" datatype="html">
         <source>Moderation comment</source>
-        <target state="translated">اظهارنظر مديريت</target>
+        <target state="translated">اظهارنظر واحد نظارت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="7358611947192442969" datatype="html">
@@ -4348,7 +4348,7 @@
       </trans-unit>
       <trans-unit id="2959657578684395250" datatype="html">
         <source>{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}</source>
-        <target state="new">{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}</target>
+        <target state="translated">{count, plural, =1 {درخواست فالو ارسال شد!} other {درخواست‌های فالو ارسال شدند!}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -4768,7 +4768,7 @@
       </trans-unit>
       <trans-unit id="399528956091640769" datatype="html">
         <source>MODERATION &amp; NSFW</source>
-        <target state="translated">نظارت و NSFW</target>
+        <target state="translated">واحد نظارت و NSFW</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="7030031694783481217" datatype="html">
@@ -4820,7 +4820,7 @@
       </trans-unit>
       <trans-unit id="3076079242537393946" datatype="html">
         <source>Moderation information</source>
-        <target state="translated">اطلاعات مدیریت</target>
+        <target state="translated">اطلاعات واحد نظارت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">141</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">143</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">60</context></context-group>
@@ -5189,7 +5189,7 @@
       </trans-unit>
       <trans-unit id="5273935530181504015" datatype="html">
         <source>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</source>
-        <target state="translated">⚠️ این قابلیت به شدت بستگی به مدیریت سایت‌ها و سپس شاخص جستجوی انتخابی شما دارد.</target>
+        <target state="translated">⚠️ این قابلیت به شدت بستگی به واحد نظارت سایت‌ها و سپس شاخص جستجوی انتخابی شما دارد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">414</context></context-group>
       </trans-unit>
       <trans-unit id="1886227550697837417" datatype="html">
@@ -5249,7 +5249,7 @@
       </trans-unit>
       <trans-unit id="2092224316392295720" datatype="html">
         <source>⚠️ This functionality requires a lot of attention and extra moderation.</source>
-        <target state="translated">⚠️ این قابلیت نیاز به توجه و مدیریت بیشتری دارد.</target>
+        <target state="translated">⚠️ این قابلیت نیاز به توجه و نظارت بیشتری دارد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">165</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">501</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">514</context></context-group>
@@ -5337,7 +5337,7 @@
       </trans-unit>
       <trans-unit id="8894612824234881672" datatype="html">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="translated">⚠️ فعال کردن استریم پخش زنده نیاز به اعتماد شما به  کاربران و بررسی های اضافی دارد</target>
+        <target state="translated">⚠️ فعال کردن استریم پخش زنده نیاز به اعتماد شما به کاربران و نظارت‌های بیشتر دارد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="5205613575147327732" datatype="html">
@@ -5873,12 +5873,12 @@
       </trans-unit>
       <trans-unit id="762510264401369759" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Original Publication Date"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Original Publication Date"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">مرتب‌سازی براساس <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"تاریخ انتشار اولیه"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="4860917424154224190" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Name"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Name"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">مرتب‌سازی براساس <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"نام"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="8190023086228606960" datatype="html">
@@ -5898,7 +5898,7 @@
       </trans-unit>
       <trans-unit id="322705536187172989" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Global Views"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Global Views"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">مرتب‌سازی براساس <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"تعداد بازدید همگانی"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="2343321245279384373" datatype="html">
@@ -6147,7 +6147,7 @@
       </trans-unit>
       <trans-unit id="6587439290311664751" datatype="html">
         <source>Fully synchronize the channel</source>
-        <target state="new">Fully synchronize the channel</target>
+        <target state="translated">همسان‌سازی کامل کانال</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="2070181811140868440" datatype="html">
@@ -6157,12 +6157,12 @@
       </trans-unit>
       <trans-unit id="3997040276213089746" datatype="html">
         <source>Synchronization removed successfully for <x id="PH" equiv-text="videoChannelSync.channel.displayName"/>.</source>
-        <target state="new">Synchronization removed successfully for <x id="PH" equiv-text="videoChannelSync.channel.displayName"/>.</target>
+        <target state="translated">همسان‌سازی کانال <x id="PH" equiv-text="videoChannelSync.channel.displayName"/> باموفقیت حذف شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="2933174785300975212" datatype="html">
         <source>Full synchronization requested successfully for <x id="PH" equiv-text="videoChannelSync.channel.displayName"/>.</source>
-        <target state="new">Full synchronization requested successfully for <x id="PH" equiv-text="videoChannelSync.channel.displayName"/>.</target>
+        <target state="translated">درخواست همسان‌سازی کامل کانال <x id="PH" equiv-text="videoChannelSync.channel.displayName"/> باموفقیت ارسال شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="6985972846000785992" datatype="html">
@@ -6175,7 +6175,7 @@
       </trans-unit>
       <trans-unit id="5175196640561919257" datatype="html">
         <source>Remote channel URL</source>
-        <target state="new">Remote channel URL</target>
+        <target state="translated">لینک کانال راه‌دور</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">13</context>
@@ -6183,7 +6183,7 @@
       </trans-unit>
       <trans-unit id="4025171182231078987" datatype="html">
         <source>Example: https://youtube.com/channel/UC_fancy_channel</source>
-        <target state="new">Example: https://youtube.com/channel/UC_fancy_channel</target>
+        <target state="translated">بعنوان مثال: https://youtube.com/channel/UC_fancy_channel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">20</context>
@@ -6199,7 +6199,7 @@
       </trans-unit>
       <trans-unit id="8290237842846954767" datatype="html">
         <source>Options for existing videos on remote channel:</source>
-        <target state="new">Options for existing videos on remote channel:</target>
+        <target state="translated">گزینه‌ها برای ویدئوهای موجود در کانال راه‌دور:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">42</context>
@@ -6207,7 +6207,7 @@
       </trans-unit>
       <trans-unit id="1331848767706809293" datatype="html">
         <source>Import all and watch for new publications</source>
-        <target state="new">Import all and watch for new publications</target>
+        <target state="translated">وارد نمودن همه و انتظار برای انتشار ویدئوهای جدید</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">46</context>
@@ -6215,7 +6215,7 @@
       </trans-unit>
       <trans-unit id="1469193438847554223" datatype="html">
         <source>Only watch for new publications</source>
-        <target state="new">Only watch for new publications</target>
+        <target state="translated">فقط انتظار برای انتشار ویدئوهای جدید</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">51</context>
@@ -6405,7 +6405,7 @@
       </trans-unit>
       <trans-unit id="3343758569423394070" datatype="html">
         <source>No videos found for "<x id="PH" equiv-text="this.search"/>".</source>
-        <target state="new">No videos found for "<x id="PH" equiv-text="this.search"/>".</target>
+        <target state="translated">هیچ ویدئویی براساس "<x id="PH" equiv-text="this.search"/>" یافت نشد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">140</context>
@@ -8695,7 +8695,7 @@
       </trans-unit>
       <trans-unit id="5941489410560989457" datatype="html">
         <source>Moderation response is required.</source>
-        <target state="new">Moderation response is required.</target>
+        <target state="translated">پاسخ واحد نظارت الزامی است.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -8703,7 +8703,7 @@
       </trans-unit>
       <trans-unit id="1762427369052469243" datatype="html">
         <source>Moderation response must be at least 2 characters long.</source>
-        <target state="new">Moderation response must be at least 2 characters long.</target>
+        <target state="translated">پاسخ واحد نظارت حداقل باید دو کاراکتر داشته باشد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -8711,7 +8711,7 @@
       </trans-unit>
       <trans-unit id="3326945092799111194" datatype="html">
         <source>Moderation response cannot be more than 3000 characters long.</source>
-        <target state="new">Moderation response cannot be more than 3000 characters long.</target>
+        <target state="translated">پاسخ واحد نظارت نمیتواند بیش از 3000 کاراکتر داشته باشد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -9076,7 +9076,7 @@
       </trans-unit>
       <trans-unit id="5671547068905553663" datatype="html">
         <source>One of your video is blocked/unblocked</source>
-        <target state="translated">یکی از ویدیوهای شما مسدود شده / غیر مسدود شده</target>
+        <target state="translated">یکی از ویدئوهای شما مسدود/غیرمسدود شده است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="1158912204255103651" datatype="html">
@@ -9145,7 +9145,7 @@
       </trans-unit>
       <trans-unit id="988319118163514570" datatype="html">
         <source>Video studio edition has finished</source>
-        <target state="translated">ویرایش ویدئوی استدیویی به پایان رسید</target>
+        <target state="translated">ویرایش فیلم در استودیو به پایان رسید</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -9173,7 +9173,7 @@
       </trans-unit>
       <trans-unit id="6721822899525405039" datatype="html">
         <source>People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </source>
-        <target state="translated">دیگران می توانند شما را با استفاده از  @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> پیدا کنند . </target>
+        <target state="translated">دیگران می توانند شما را با استفاده از <x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/>@ پیدا کنند </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -10707,17 +10707,17 @@
       </trans-unit>
       <trans-unit id="8779567454442277762" datatype="html">
         <source>Moderation comment is required.</source>
-        <target state="translated">اظهارنظر مديريت الزامي است.</target>
+        <target state="translated">اظهارنظر واحد نظارت الزامي است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="8954765410376245909" datatype="html">
         <source>Moderation comment must be at least 2 characters long.</source>
-        <target state="translated">اظهارنظر مديريت باید حداقل 2 کاراکتر داشته باشد.</target>
+        <target state="translated">اظهارنظر واحد نظارت باید حداقل 2 کاراکتر داشته باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6316804467108244906" datatype="html">
         <source>Moderation comment cannot be more than 3000 characters long.</source>
-        <target state="translated">اظهارنظر مديريت نمی‌تواند بیش از 3000 کاراکتر باشد.</target>
+        <target state="translated">اظهارنظر واحد نظارت نمی‌تواند بیش از 3000 کاراکتر باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8835075531528610034" datatype="html">
@@ -11711,7 +11711,7 @@
       </trans-unit>
       <trans-unit id="4117663541503607703" datatype="html">
         <source>Add a message to communicate with the moderation team</source>
-        <target state="translated">افزودن یک پیام برای برقراری ارتباط با تیم مدیریت</target>
+        <target state="translated">افزودن یک پیام برای برقراری ارتباط با واحد نظارت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="3085641638748358969" datatype="html">
@@ -11746,7 +11746,7 @@
       </trans-unit>
       <trans-unit id="4268530178786707817" datatype="html">
         <source>My account moderation</source>
-        <target state="translated">نظارت حساب من</target>
+        <target state="translated">نظارت حساب کاربری من</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">291</context></context-group>
       </trans-unit>
       <trans-unit id="7187838764371214919" datatype="html">
@@ -11864,7 +11864,7 @@
       </trans-unit>
       <trans-unit id="6504240011224861621" datatype="html">
         <source>Instance moderation</source>
-        <target state="translated">نظارت بر سایت</target>
+        <target state="translated">نظارت سایت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">419</context></context-group>
       </trans-unit>
       <trans-unit id="8546847443058492245" datatype="html">
