@@ -130,6 +130,8 @@ describe('Test config API validators', function () {
     live: {
       enabled: true,
 
+      useObjectStorage: true,
+
       allowReplay: false,
       latencySetting: {
         enabled: false

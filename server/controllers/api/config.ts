@@ -243,6 +243,7 @@ function customConfig (): CustomConfig {
     },
     live: {
       enabled: CONFIG.LIVE.ENABLED,
+      useObjectStorage: CONFIG.LIVE.USE_OBJECT_STORAGE,
       allowReplay: CONFIG.LIVE.ALLOW_REPLAY,
       latencySetting: {
         enabled: CONFIG.LIVE.LATENCY_SETTING.ENABLED

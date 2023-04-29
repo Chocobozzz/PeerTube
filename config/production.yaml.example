@@ -485,6 +485,9 @@ transcoding:
 live:
   enabled: false
 
+  # Publish live streams via object storage/S3
+  use_object_storage: false
+
   # Limit lives duration
   # -1 == unlimited
   max_duration: -1 # For example: '5 hours'

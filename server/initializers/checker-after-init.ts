@@ -241,6 +241,11 @@ function checkSearchConfig () {
 
 function checkLiveConfig () {
   if (CONFIG.LIVE.ENABLED === true) {
+
+    if (CONFIG.LIVE.USE_OBJECT_STORAGE === true && !CONFIG.OBJECT_STORAGE.ENABLED) {
+      throw new Error('Live streaming cannot use object storage if object storage is not enabled.')
+    }
+
     if (CONFIG.LIVE.ALLOW_REPLAY === true && CONFIG.TRANSCODING.ENABLED === false) {
       throw new Error('Live allow replay cannot be enabled if transcoding is not enabled.')
     }

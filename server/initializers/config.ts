@@ -364,6 +364,8 @@ const CONFIG = {
   LIVE: {
     get ENABLED () { return config.get<boolean>('live.enabled') },
 
+    get USE_OBJECT_STORAGE () { return config.get<boolean>('live.use_object_storage') },
+
     get MAX_DURATION () { return parseDurationToMs(config.get<string>('live.max_duration')) },
     get MAX_INSTANCE_LIVES () { return config.get<number>('live.max_instance_lives') },
     get MAX_USER_LIVES () { return config.get<number>('live.max_user_lives') },
