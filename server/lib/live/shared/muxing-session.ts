@@ -488,7 +488,7 @@ class MuxingSession extends EventEmitter {
     playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
     playlist.type = VideoStreamingPlaylistType.HLS
 
-    playlist.storage = CONFIG.LIVE.USE_OBJECT_STORAGE
+    playlist.storage = CONFIG.OBJECT_STORAGE.ENABLED && CONFIG.LIVE.USE_OBJECT_STORAGE
       ? VideoStorage.OBJECT_STORAGE
       : VideoStorage.FILE_SYSTEM
 
@@ -500,7 +500,7 @@ class MuxingSession extends EventEmitter {
       videoUUID: this.videoLive.Video.uuid,
       sha256Path: join(this.outDirectory, this.streamingPlaylist.segmentsSha256Filename),
       streamingPlaylist: this.streamingPlaylist,
-      sendToObjectStorage: CONFIG.LIVE.USE_OBJECT_STORAGE
+      sendToObjectStorage: CONFIG.OBJECT_STORAGE && CONFIG.LIVE.USE_OBJECT_STORAGE
     })
   }
 }
