@@ -1061,7 +1061,7 @@
       </trans-unit>
       <trans-unit id="7256462927215762997" datatype="html">
         <source>Please describe the reason...</source>
-        <target state="translated">لطفا دلیل را تشریح کنید...</target>
+        <target state="translated">لطفا علت را توضیح دهید...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="9133713232258232158" datatype="html">
@@ -1106,7 +1106,7 @@
       </trans-unit>
       <trans-unit id="4195458579645833046" datatype="html">
         <source>Blocked <x id="PH" equiv-text="this.videos.length"/> videos.</source>
-        <target state="translated">مسدود شده<x id="PH" equiv-text="this.videos.length"/> ویدئو های.</target>
+        <target state="translated"><x id="PH" equiv-text="this.videos.length"/> ویدئو مسدود شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.ts</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="1191071088182425837" datatype="html">
@@ -1291,7 +1291,7 @@
       </trans-unit>
       <trans-unit id="2501430660070156325">
         <source>Confirmed password</source>
-        <target state="translated">رمزعبور تایید شد</target>
+        <target state="translated">رمزعبور تایید شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8547184468496530386">
@@ -1316,7 +1316,7 @@
       </trans-unit>
       <trans-unit id="4502972592942341883" datatype="html">
         <source>As you probably noticed: creating an account is not necessary to watch video on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </source>
-        <target state="new"> As you probably noticed: creating an account is not necessary to watch video on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </target>
+        <target state="translated">همانطور که احتمالا متوجه شدید: برای مشاهده ویدئو در سایت <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> الزامی به ایجاد حساب کاربری نیست. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> اما ایجاد حساب کاربری در سایت <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> موارد زیر را برای شما امکان‌پذیر می‌کند: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">4,8</context>
@@ -1340,7 +1340,7 @@
       </trans-unit>
       <trans-unit id="269413964682905563" datatype="html">
         <source>Have access to your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>watch history<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Have access to your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>watch history<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">به <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>تاریخچه مشاهده<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> خود دسترسی داشته باشید</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">13</context>
@@ -9163,7 +9163,7 @@
       </trans-unit>
       <trans-unit id="5095562193296630034" datatype="html">
         <source>Preferences saved</source>
-        <target state="translated">تنظیمات ذخیره شده</target>
+        <target state="translated">تنظیمات ذخیره شد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="4967231969832964676" datatype="html">
@@ -9407,7 +9407,7 @@
       </trans-unit>
       <trans-unit id="3058024914967508975">
         <source>My videos</source>
-        <target>ویديو‌های من</target>
+        <target state="translated">فیلم‌های من</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">79</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">92</context></context-group>
