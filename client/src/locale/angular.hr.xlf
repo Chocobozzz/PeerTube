@@ -980,7 +980,7 @@
       </trans-unit>
       <trans-unit id="2279905277031617076" datatype="html">
         <source>Number of video captions to keep in cache</source>
-        <target state="translated">Broj titlova za nagluhe koji se čuvaju u predmemoriji</target>
+        <target state="translated">Broj titlova videa koji se čuvaju u predmemoriji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">29</context>
@@ -988,7 +988,7 @@
       </trans-unit>
       <trans-unit id="6193666854590647323" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {titl za nagluhe u predmemoriji} few {titla za nagluhe u predmemoriji} other {titlova za nagluhe u predmemoriji}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {titl u predmemoriji} few {titla u predmemoriji} other {titlova u predmemoriji}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">36</context>
@@ -7507,7 +7507,7 @@
       </trans-unit>
       <trans-unit id="1909308046360229945" datatype="html">
         <source>Add caption</source>
-        <target state="translated">Dodaj titl za nagluhe</target>
+        <target state="translated">Dodaj titl</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">5</context>
@@ -7515,7 +7515,7 @@
       </trans-unit>
       <trans-unit id="753928283782809091" datatype="html">
         <source>Select the caption file</source>
-        <target state="translated">Odaberi datoteku titlova za nagluhe</target>
+        <target state="translated">Odaberi datoteku titlova</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">24</context>
@@ -7523,12 +7523,12 @@
       </trans-unit>
       <trans-unit id="4616828176080418150" datatype="html">
         <source>This will replace an existing caption!</source>
-        <target state="translated">Ovo će zamijeniti titlove za nagluhe!</target>
+        <target state="translated">Ovo će zamijeniti postojeći titl!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="2752121353049766867" datatype="html">
         <source>Add this caption</source>
-        <target state="translated">Dodaj ovaj titl za nagluhe</target>
+        <target state="translated">Dodaj ovaj titl</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">42</context>
@@ -7536,17 +7536,17 @@
       </trans-unit>
       <trans-unit id="480001148850006323" datatype="html">
         <source>Edit caption</source>
-        <target state="translated">Uredi titl za nagluhe</target>
+        <target state="translated">Uredi titl</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal-content/video-caption-edit-modal-content.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="6838559377527923778" datatype="html">
         <source>Caption</source>
-        <target state="translated">Titl za nagluhe</target>
+        <target state="translated">Titl</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal-content/video-caption-edit-modal-content.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="1989971680596153649" datatype="html">
         <source>Edit this caption</source>
-        <target state="translated">Uredi ovaj titl za nagluhe</target>
+        <target state="translated">Uredi ovaj titl</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal-content/video-caption-edit-modal-content.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="5984574397847510001" datatype="html">
@@ -7618,7 +7618,7 @@
       </trans-unit>
       <trans-unit id="2142169012597585513" datatype="html">
         <source>Add another caption</source>
-        <target state="translated">Dodaj jedan drugi titl za nagluhe</target>
+        <target state="translated">Dodaj jedan drugi titl</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">175</context></context-group>
       </trans-unit>
       <trans-unit id="4525569337497033381" datatype="html">
@@ -7663,7 +7663,7 @@
       </trans-unit>
       <trans-unit id="360396717319152766" datatype="html">
         <source>No captions for now.</source>
-        <target state="translated">Za sada nema titlova za nagluhe.</target>
+        <target state="translated">Za sada nema titlova.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">221</context></context-group>
       </trans-unit>
       <trans-unit id="8508836953540308271" datatype="html">
@@ -10119,7 +10119,7 @@
       </trans-unit>
       <trans-unit id="6941976540222684735" datatype="html">
         <source>Captions cache size is required.</source>
-        <target state="translated">Veličina predmemorije titlova za nagluhe se mora navesti.</target>
+        <target state="translated">Veličina predmemorije titlova se mora navesti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">37</context>
@@ -10127,7 +10127,7 @@
       </trans-unit>
       <trans-unit id="780869536819343075" datatype="html">
         <source>Captions cache size must be greater than 1.</source>
-        <target state="translated">Veličina predmemorije titlova za nagluhe mora biti veća od 1.</target>
+        <target state="translated">Veličina predmemorije titlova mora biti veća od 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">38</context>
@@ -10135,7 +10135,7 @@
       </trans-unit>
       <trans-unit id="2498218540197718478" datatype="html">
         <source>Captions cache size must be a number.</source>
-        <target state="translated">Veličina predmemorije titlova za nagluhe mora biti broj.</target>
+        <target state="translated">Veličina predmemorije titlova mora biti broj.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">39</context>
@@ -10574,7 +10574,7 @@
       </trans-unit>
       <trans-unit id="1099619384694370156" datatype="html">
         <source>Video caption language is required.</source>
-        <target state="translated">Jezik titlova za nagluhe se mora navesti.</target>
+        <target state="translated">Jezik titlova se mora navesti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -10582,7 +10582,7 @@
       </trans-unit>
       <trans-unit id="3438639650276868976" datatype="html">
         <source>Video caption file is required.</source>
-        <target state="translated">Datoteka titlova za nagluhe se mora navesti.</target>
+        <target state="translated">Datoteka titlova se mora navesti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -10590,7 +10590,7 @@
       </trans-unit>
       <trans-unit id="9145435275110757909" datatype="html">
         <source>Caption content is required.</source>
-        <target state="translated">Sadržaj titlova za nagluhe se mora navesti.</target>
+        <target state="translated">Sadržaj titlova se mora navesti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">21</context>
@@ -10946,7 +10946,7 @@
       </trans-unit>
       <trans-unit id="2602773901491715295" datatype="html">
         <source>Captions</source>
-        <target state="translated">Titlovi za nagluhe</target>
+        <target state="translated">Titlovi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">167</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">166</context></context-group>
@@ -12317,7 +12317,7 @@
       </trans-unit>
       <trans-unit id="5779804235244672536" datatype="html">
         <source>The above can only be seen in captions (please describe which).</source>
-        <target state="translated">Navedeno se može vidjeti samo u titlovima za nagluhe (opiši koje).</target>
+        <target state="translated">Navedeno se može vidjeti samo u titlovima (opiši koje).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
       <trans-unit id="7815838401315213887" datatype="html">
