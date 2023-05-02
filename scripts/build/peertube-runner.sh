@@ -10,4 +10,4 @@ rm -rf ./dist
 rm -rf ./dist
 mkdir ./dist
 
-./node_modules/.bin/esbuild ./peertube-runner.ts --bundle --platform=node --external:"./lib-cov/fluent-ffmpeg" --external:pg-hstore --outfile=dist/peertube-runner.js
+./node_modules/.bin/esbuild ./peertube-runner.ts --bundle --platform=node --target=node14 --external:"./lib-cov/fluent-ffmpeg" --external:pg-hstore --outfile=dist/peertube-runner.js

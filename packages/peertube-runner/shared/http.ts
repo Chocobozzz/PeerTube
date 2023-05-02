@@ -47,7 +47,7 @@ export function downloadFile (options: {
 
     request.on('error', err => {
       remove(destination)
-        .catch(err => console.error(err))
+        .catch(err => logger.error(err))
 
       return rej(err)
     })

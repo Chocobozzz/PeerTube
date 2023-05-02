@@ -204,8 +204,8 @@ export class ProcessLiveRTMPHLSTranscoding {
 
   // ---------------------------------------------------------------------------
 
-  private sendDeletedChunkUpdate (deletedChunk: string) {
-    if (this.ended) return
+  private sendDeletedChunkUpdate (deletedChunk: string): Promise<any> {
+    if (this.ended) return Promise.resolve()
 
     logger.debug(`Sending removed live chunk ${deletedChunk} update`)
 
@@ -230,8 +230,8 @@ export class ProcessLiveRTMPHLSTranscoding {
     return this.updateWithRetry(payload)
   }
 
-  private sendAddedChunkUpdate (addedChunk: string) {
-    if (this.ended) return
+  private sendAddedChunkUpdate (addedChunk: string): Promise<any> {
+    if (this.ended) return Promise.resolve()
 
     logger.debug(`Sending added live chunk ${addedChunk} update`)
 
@@ -257,7 +257,7 @@ export class ProcessLiveRTMPHLSTranscoding {
     return this.updateWithRetry(payload)
   }
 
-  private async updateWithRetry (payload: LiveRTMPHLSTranscodingUpdatePayload, currentTry = 1) {
+  private async updateWithRetry (payload: LiveRTMPHLSTranscodingUpdatePayload, currentTry = 1): Promise<any> {
     if (this.ended || this.errored) return
 
     try {

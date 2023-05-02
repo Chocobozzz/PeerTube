@@ -159,7 +159,7 @@ function unwrapBodyOrDecodeToJSON <T> (test: request.Test): Promise<T> {
       try {
         return JSON.parse(new TextDecoder().decode(res.body))
       } catch (err) {
-        console.error('Cannot decode JSON.', res.body instanceof Buffer ? res.body.toString() : res.body)
+        console.error('Cannot decode JSON.', { res, body: res.body instanceof Buffer ? res.body.toString() : res.body })
         throw err
       }
     }
@@ -168,7 +168,7 @@ function unwrapBodyOrDecodeToJSON <T> (test: request.Test): Promise<T> {
       try {
         return JSON.parse(res.text)
       } catch (err) {
-        console.error('Cannot decode json', res.text)
+        console.error('Cannot decode json', { res, text: res.text })
         throw err
       }
     }

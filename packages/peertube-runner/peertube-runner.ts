@@ -26,7 +26,7 @@ program.command('server')
     try {
       await RunnerServer.Instance.run()
     } catch (err) {
-      console.error('Cannot run PeerTube runner as server mode', err)
+      logger.error('Cannot run PeerTube runner as server mode', err)
       process.exit(-1)
     }
   })
@@ -41,7 +41,7 @@ program.command('register')
     try {
       await registerRunner(options)
     } catch (err) {
-      console.error('Cannot register this PeerTube runner.', err)
+      logger.error('Cannot register this PeerTube runner.', err)
       process.exit(-1)
     }
   })
@@ -53,7 +53,7 @@ program.command('unregister')
     try {
       await unregisterRunner(options)
     } catch (err) {
-      console.error('Cannot unregister this PeerTube runner.', err)
+      logger.error('Cannot unregister this PeerTube runner.', err)
       process.exit(-1)
     }
   })
@@ -64,7 +64,7 @@ program.command('list-registered')
     try {
       await listRegistered()
     } catch (err) {
-      console.error('Cannot list registered PeerTube instances.', err)
+      logger.error('Cannot list registered PeerTube instances.', err)
       process.exit(-1)
     }
   })

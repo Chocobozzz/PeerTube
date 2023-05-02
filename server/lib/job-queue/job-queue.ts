@@ -96,6 +96,7 @@ export type CreateJobArgument =
 export type CreateJobOptions = {
   delay?: number
   priority?: number
+  failParentOnFailure?: boolean
 }
 
 const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
@@ -363,7 +364,11 @@ class JobQueue {
       name: 'job',
       data: job.payload,
       queueName: job.type,
-      opts: this.buildJobOptions(job.type as JobType, pick(job, [ 'priority', 'delay' ]))
+      opts: {
+        failParentOnFailure: true,
+
+        ...this.buildJobOptions(job.type as JobType, pick(job, [ 'priority', 'delay', 'failParentOnFailure' ]))
+      }
     }
   }
 

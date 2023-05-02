@@ -21,6 +21,7 @@ import {
   RunnerJobVODWebVideoTranscodingPayload,
   RunnerJobVODWebVideoTranscodingPrivatePayload
 } from '@shared/models'
+import { throttle } from 'lodash'
 
 type CreateRunnerJobArg =
   {
@@ -47,6 +48,8 @@ type CreateRunnerJobArg =
 export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S extends RunnerJobSuccessPayload> {
 
   protected readonly lTags = loggerTagsFactory('runner')
+
+  static setJobAsUpdatedThrottled = throttle(setAsUpdated, 2000)
 
   // ---------------------------------------------------------------------------
 
@@ -102,16 +105,19 @@ export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S
 
     if (progress) runnerJob.progress = progress
 
+    if (!runnerJob.changed()) {
+      try {
+        await AbstractJobHandler.setJobAsUpdatedThrottled({ sequelize: sequelizeTypescript, table: 'runnerJob', id: runnerJob.id })
+      } catch (err) {
+        logger.warn('Cannot set remote job as updated', { err, ...this.lTags(runnerJob.id, runnerJob.type) })
+      }
+
+      return
+    }
+
     await retryTransactionWrapper(() => {
       return sequelizeTypescript.transaction(async transaction => {
-        if (runnerJob.changed()) {
-          return runnerJob.save({ transaction })
-        }
-
-        // Don't update the job too often
-        if (new Date().getTime() - runnerJob.updatedAt.getTime() > 2000) {
-          await setAsUpdated({ sequelize: sequelizeTypescript, table: 'runnerJob', id: runnerJob.id, transaction })
-        }
+        return runnerJob.save({ transaction })
       })
     })
   }
