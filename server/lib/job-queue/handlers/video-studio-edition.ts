@@ -95,7 +95,7 @@ async function processVideoStudioEdition (job: Job) {
 
   const user = await UserModel.loadByVideoId(video.id)
 
-  await createOptimizeOrMergeAudioJobs({ video, videoFile: newFile, isNewVideo: false, user })
+  await createOptimizeOrMergeAudioJobs({ video, videoFile: newFile, isNewVideo: false, user, videoFileAlreadyLocked: false })
 }
 
 // ---------------------------------------------------------------------------

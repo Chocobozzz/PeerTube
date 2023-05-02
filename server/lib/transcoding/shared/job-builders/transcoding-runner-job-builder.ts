@@ -26,10 +26,13 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
     videoFile: MVideoFile
     isNewVideo: boolean
     user: MUserId
+    videoFileAlreadyLocked: boolean
   }) {
-    const { video, videoFile, isNewVideo, user } = options
+    const { video, videoFile, isNewVideo, user, videoFileAlreadyLocked } = options
 
-    const mutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+    const mutexReleaser = videoFileAlreadyLocked
+      ? () => {}
+      : await VideoPathManager.Instance.lockFiles(video.uuid)
 
     try {
       await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), async videoFilePath => {

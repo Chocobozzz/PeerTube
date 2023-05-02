@@ -242,7 +242,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
         })
       })
 
-      await afterImportSuccess({ videoImport: videoImportUpdated, video, videoFile, user: videoImport.User })
+      await afterImportSuccess({ videoImport: videoImportUpdated, video, videoFile, user: videoImport.User, videoFileAlreadyLocked: true })
     } finally {
       videoFileLockReleaser()
     }
@@ -292,8 +292,9 @@ async function afterImportSuccess (options: {
   video: MVideoFullLight
   videoFile: MVideoFile
   user: MUserId
+  videoFileAlreadyLocked: boolean
 }) {
-  const { video, videoFile, videoImport, user } = options
+  const { video, videoFile, videoImport, user, videoFileAlreadyLocked } = options
 
   Notifier.Instance.notifyOnFinishedVideoImport({ videoImport: Object.assign(videoImport, { Video: video }), success: true })
 
@@ -313,7 +314,7 @@ async function afterImportSuccess (options: {
   }
 
   if (video.state === VideoState.TO_TRANSCODE) { // Create transcoding jobs?
-    await createOptimizeOrMergeAudioJobs({ video, videoFile, isNewVideo: true, user })
+    await createOptimizeOrMergeAudioJobs({ video, videoFile, isNewVideo: true, user, videoFileAlreadyLocked })
   }
 }
 
