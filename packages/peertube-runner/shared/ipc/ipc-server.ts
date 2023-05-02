@@ -27,7 +27,7 @@ export class IPCServer {
 
         this.sendReponse(res, { success: true, data })
       } catch (err) {
-        console.error('Cannot execute RPC call', err)
+        logger.error('Cannot execute RPC call', err)
         this.sendReponse(res, { success: false, error: err.message })
       }
     })
@@ -56,6 +56,6 @@ export class IPCServer {
     body: IPCReponse<T>
   ) {
     response(body)
-      .catch(err => console.error('Cannot send response after IPC request', err))
+      .catch(err => logger.error('Cannot send response after IPC request', err))
   }
 }

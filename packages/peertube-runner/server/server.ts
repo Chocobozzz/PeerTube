@@ -23,6 +23,8 @@ export class RunnerServer {
 
   private checkingAvailableJobs = false
 
+  private cleaningUp = false
+
   private readonly sockets = new Map<PeerTubeServer, Socket>()
 
   private constructor () {}
@@ -45,13 +47,17 @@ export class RunnerServer {
     try {
       await ipcServer.run(this)
     } catch (err) {
-      console.error('Cannot start local socket for IPC communication', err)
+      logger.error('Cannot start local socket for IPC communication', err)
       process.exit(-1)
     }
 
     // Cleanup on exit
     for (const code of [ 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'uncaughtException' ]) {
-      process.on(code, async () => {
+      process.on(code, async (err, origin) => {
+        if (code === 'uncaughtException') {
+          logger.error({ err, origin }, 'uncaughtException')
+        }
+
         await this.onExit()
       })
     }
@@ -244,6 +250,11 @@ export class RunnerServer {
   }
 
   private async onExit () {
+    if (this.cleaningUp) return
+    this.cleaningUp = true
+
+    logger.info('Cleaning up after program exit')
+
     try {
       for (const { server, job } of this.processingJobs) {
         await server.runnerJobs.abort({
@@ -256,7 +267,7 @@ export class RunnerServer {
 
       await this.cleanupTMP()
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       process.exit(-1)
     }
 

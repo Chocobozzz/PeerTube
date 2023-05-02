@@ -79,9 +79,7 @@ class MuxingSession extends EventEmitter {
   private streamingPlaylist: MStreamingPlaylistVideo
   private liveSegmentShaStore: LiveSegmentShaStore
 
-  private tsWatcher: FSWatcher
-  private masterWatcher: FSWatcher
-  private m3u8Watcher: FSWatcher
+  private filesWatcher: FSWatcher
 
   private masterPlaylistCreated = false
   private liveReady = false
@@ -149,6 +147,8 @@ class MuxingSession extends EventEmitter {
 
     await this.transcodingWrapper.run()
 
+    this.filesWatcher = watch(this.outDirectory, { depth: 0 })
+
     this.watchMasterFile()
     this.watchTSFiles()
     this.watchM3U8File()
@@ -168,9 +168,10 @@ class MuxingSession extends EventEmitter {
   }
 
   private watchMasterFile () {
-    this.masterWatcher = watch(this.outDirectory + '/' + this.streamingPlaylist.playlistFilename)
+    this.filesWatcher.on('add', async path => {
+      if (path !== join(this.outDirectory, this.streamingPlaylist.playlistFilename)) return
+      if (this.masterPlaylistCreated === true) return
 
-    this.masterWatcher.on('add', async () => {
       try {
         if (this.streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
           const url = await storeHLSFileFromFilename(this.streamingPlaylist, this.streamingPlaylist.playlistFilename)
@@ -188,19 +189,17 @@ class MuxingSession extends EventEmitter {
       this.masterPlaylistCreated = true
 
       logger.info('Master playlist file for %s has been created', this.videoUUID, this.lTags())
-
-      this.masterWatcher.close()
-        .catch(err => logger.error('Cannot close master watcher of %s.', this.outDirectory, { err, ...this.lTags() }))
     })
   }
 
   private watchM3U8File () {
-    this.m3u8Watcher = watch(this.outDirectory + '/*.m3u8')
-
     const sendQueues = new Map<string, PQueue>()
 
-    const onChangeOrAdd = async (m3u8Path: string) => {
+    const onChange = async (m3u8Path: string) => {
+      if (m3u8Path.endsWith('.m3u8') !== true) return
       if (this.streamingPlaylist.storage !== VideoStorage.OBJECT_STORAGE) return
+
+      logger.debug('Live change handler of M3U8 file %s.', m3u8Path, this.lTags())
 
       try {
         if (!sendQueues.has(m3u8Path)) {
@@ -214,18 +213,18 @@ class MuxingSession extends EventEmitter {
       }
     }
 
-    this.m3u8Watcher.on('change', onChangeOrAdd)
+    this.filesWatcher.on('change', onChange)
   }
 
   private watchTSFiles () {
     const startStreamDateTime = new Date().getTime()
 
-    this.tsWatcher = watch(this.outDirectory + '/*.ts')
-
     const playlistIdMatcher = /^([\d+])-/
 
     const addHandler = async (segmentPath: string) => {
-      logger.debug('Live add handler of %s.', segmentPath, this.lTags())
+      if (segmentPath.endsWith('.ts') !== true) return
+
+      logger.debug('Live add handler of TS file %s.', segmentPath, this.lTags())
 
       const playlistId = basename(segmentPath).match(playlistIdMatcher)[0]
 
@@ -252,6 +251,10 @@ class MuxingSession extends EventEmitter {
     }
 
     const deleteHandler = async (segmentPath: string) => {
+      if (segmentPath.endsWith('.ts') !== true) return
+
+      logger.debug('Live delete handler of TS file %s.', segmentPath, this.lTags())
+
       try {
         await this.liveSegmentShaStore.removeSegmentSha(segmentPath)
       } catch (err) {
@@ -267,8 +270,8 @@ class MuxingSession extends EventEmitter {
       }
     }
 
-    this.tsWatcher.on('add', p => addHandler(p))
-    this.tsWatcher.on('unlink', p => deleteHandler(p))
+    this.filesWatcher.on('add', p => addHandler(p))
+    this.filesWatcher.on('unlink', p => deleteHandler(p))
   }
 
   private async isQuotaExceeded (segmentPath: string) {
@@ -371,7 +374,8 @@ class MuxingSession extends EventEmitter {
     setTimeout(() => {
       // Wait latest segments generation, and close watchers
 
-      Promise.all([ this.tsWatcher.close(), this.masterWatcher.close(), this.m3u8Watcher.close() ])
+      const promise = this.filesWatcher?.close() || Promise.resolve()
+      promise
         .then(() => {
           // Process remaining segments hash
           for (const key of Object.keys(this.segmentsToProcessPerPlaylist)) {
