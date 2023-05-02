@@ -417,7 +417,7 @@ signup:
       whitelist: []
       blacklist: []
 
-user:  
+user:
   history:
     videos:
       # Enable or disable video history by default for new users.
