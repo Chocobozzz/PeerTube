@@ -1224,13 +1224,7 @@
       
       
       
-      <trans-unit id="2392488717875840729" datatype="html">
-        <source>User</source>
-        <target>Aseqdac</target>
-        
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-users/user-admin.service.ts</context><context context-type="linenumber">122</context></context-group></trans-unit>
+      
       <trans-unit id="3997350348765083892" datatype="html">
         <source>Username or email address</source>
         <target>Isem n useqdac neɣ tansa imayl</target>
@@ -2899,25 +2893,25 @@ The link will expire within 1 hour.</source>
         <source>Live published.</source>
         <target state="translated">Asuffeɣ srid.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">156</context></context-group></trans-unit><trans-unit id="8675588963276687921" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">161</context></context-group></trans-unit><trans-unit id="8675588963276687921" datatype="html">
         <source>Stream only once, replay will replace your live</source><target state="new">Stream only once, replay will replace your live</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">175</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">180</context></context-group></trans-unit>
       
       <trans-unit id="2360261543675520397" datatype="html">
         <source>Stream only once</source>
         <target state="new">Stream only once</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">178</context></context-group></trans-unit><trans-unit id="3384650899171037827" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">183</context></context-group></trans-unit><trans-unit id="3384650899171037827" datatype="html">
         <source>Stream multiple times, replays will be separate videos</source><target state="new">Stream multiple times, replays will be separate videos</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">183</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">188</context></context-group></trans-unit>
       
       <trans-unit id="58134197356653483" datatype="html">
         <source>Stream multiple times using the same URL</source>
         <target state="new">Stream multiple times using the same URL</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">186</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">191</context></context-group></trans-unit>
       <trans-unit id="8218579597782287078" datatype="html">
         <source>Go Live</source>
         <target state="translated">Ddu srid</target>
@@ -4736,7 +4730,13 @@ The link will expire within 1 hour.</source>
         <source>MODERATION &amp; NSFW</source>
         <target state="translated">ASEKTEM &amp; NSFW</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">79</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">79</context></context-group></trans-unit><trans-unit id="4423835119021329687" datatype="html">
+        <source> Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/users&quot;>"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> to build a moderation team. </source><target state="new"> Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/users&quot;>"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> to build a moderation team. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
+          <context context-type="linenumber">80,82</context>
+        </context-group>
+      </trans-unit>
       
       <trans-unit id="7030031694783481217" datatype="html">
         <source>This instance is dedicated to sensitive or NSFW content</source>
@@ -8972,11 +8972,8 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
       <trans-unit id="7699622144571229146" datatype="html">
         <source>Sort by</source>
         <target state="new">Sort by</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">26</context></context-group></trans-unit>
       <trans-unit id="3058024914967508975" datatype="html">
         <source>My videos</source>
         <target state="translated">Tividyutin-iw</target>
@@ -11374,16 +11371,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Ldi umuɣ ifettin n umulteɣ</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">40</context></context-group></trans-unit>
-      <trans-unit id="2149300564474427551" datatype="html">
-        <source>Administrator</source>
-        <target>Anedbal</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-users/user-admin.service.ts</context><context context-type="linenumber">123</context></context-group></trans-unit>
-      <trans-unit id="4968151111061046122" datatype="html">
-        <source>Moderator</source>
-        <target state="translated">Amaẓrag</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-users/user-admin.service.ts</context><context context-type="linenumber">124</context></context-group></trans-unit>
+      
+      
       <trans-unit id="2279527393438260622" datatype="html">
         <source>Search videos, playlists, channels…</source>
         <target state="new">Search videos, playlists, channels…</target>
@@ -11908,7 +11897,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Video updated.</source>
         <target state="translated">Tavidyut tettwaleqqem.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">150</context></context-group></trans-unit><trans-unit id="5609201297201028750" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">155</context></context-group></trans-unit><trans-unit id="5609201297201028750" datatype="html">
         <source>(extensions: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</source><target state="new">(extensions: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</target>
         
         
