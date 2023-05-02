@@ -10,6 +10,7 @@ export abstract class AbstractJobBuilder {
     videoFile: MVideoFile
     isNewVideo: boolean
     user: MUserId
+    videoFileAlreadyLocked: boolean
   }): Promise<any>
 
   abstract createTranscodingJobs (options: {

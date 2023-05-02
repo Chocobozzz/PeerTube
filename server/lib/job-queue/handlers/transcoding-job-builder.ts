@@ -23,7 +23,8 @@ async function processTranscodingJobBuilder (job: Job) {
 
       video,
       videoFile,
-      user
+      user,
+      videoFileAlreadyLocked: false
     })
   }
 
