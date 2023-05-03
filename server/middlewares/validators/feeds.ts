@@ -17,10 +17,10 @@ import {
 const feedsFormatValidator = [
   param('format')
     .optional()
-    .custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json, podcast)'),
+    .custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)'),
   query('format')
     .optional()
-    .custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json, podcast)'),
+    .custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -37,12 +37,22 @@ function setFeedFormatContentType (req: express.Request, res: express.Response, 
     acceptableContentTypes = [ 'application/atom+xml', 'application/xml', 'text/xml' ]
   } else if (format === 'json' || format === 'json1') {
     acceptableContentTypes = [ 'application/json' ]
-  } else if (format === 'rss' || format === 'rss2' || format === 'podcast') {
+  } else if (format === 'rss' || format === 'rss2') {
     acceptableContentTypes = [ 'application/rss+xml', 'application/xml', 'text/xml' ]
   } else {
     acceptableContentTypes = [ 'application/xml', 'text/xml' ]
   }
 
+  return feedContentTypeResponse(req, res, next, acceptableContentTypes)
+}
+
+function setFeedPodcastContentType (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const acceptableContentTypes = [ 'application/rss+xml', 'application/xml', 'text/xml' ]
+
+  return feedContentTypeResponse(req, res, next, acceptableContentTypes)
+}
+
+function feedContentTypeResponse(req: express.Request, res: express.Response, next: express.NextFunction, acceptableContentTypes: string[], ) {
   if (req.accepts(acceptableContentTypes)) {
     res.set('Content-Type', req.accepts(acceptableContentTypes) as string)
   } else {
@@ -77,6 +87,19 @@ const videoFeedsValidator = [
     if (req.query.videoChannelId && !await doesVideoChannelIdExist(req.query.videoChannelId, res)) return
     if (req.query.accountName && !await doesAccountNameWithHostExist(req.query.accountName, res)) return
     if (req.query.videoChannelName && !await doesVideoChannelNameWithHostExist(req.query.videoChannelName, res)) return
+
+    return next()
+  }
+]
+
+const videoFeedsPodcastValidator = [
+  query('videoChannelId')
+    .custom(isIdValid),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    if (req.query.videoChannelId && !await doesVideoChannelIdExist(req.query.videoChannelId, res)) return
 
     return next()
   }
@@ -126,7 +149,9 @@ const videoCommentsFeedsValidator = [
 export {
   feedsFormatValidator,
   setFeedFormatContentType,
+  setFeedPodcastContentType,
   videoFeedsValidator,
+  videoFeedsPodcastValidator,
   videoSubscriptionFeedsValidator,
   videoCommentsFeedsValidator
 }

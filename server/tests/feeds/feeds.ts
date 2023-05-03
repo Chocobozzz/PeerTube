@@ -108,17 +108,19 @@ describe('Test syndication feeds', () => {
 
   describe('All feed', function () {
 
-    it('Should be well formed XML (covers RSS 2.0, ATOM 1.0, and Podcast endpoints)', async function () {
+    it('Should be well formed XML (covers RSS 2.0 and ATOM 1.0 endpoints)', async function () {
       for (const feed of [ 'video-comments' as 'video-comments', 'videos' as 'videos' ]) {
         const rss = await servers[0].feed.getXML({ feed, ignoreCache: true })
         expect(rss).xml.to.be.valid()
 
         const atom = await servers[0].feed.getXML({ feed, format: 'atom', ignoreCache: true })
         expect(atom).xml.to.be.valid()
-
-        const podcast = await servers[0].feed.getXML({ feed, format: 'podcast', ignoreCache: true })
-        expect(podcast).xml.to.be.valid()
       }
+    })
+
+    it('Should be well formed XML (covers Podcast endpoint)', async function () {
+      const podcast = await servers[0].feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
+      expect(podcast).xml.to.be.valid()
     })
 
     it('Should be well formed JSON (covers JSON feed 1.0 endpoint)', async function () {
@@ -166,40 +168,26 @@ describe('Test syndication feeds', () => {
 
   describe('Videos feed', function () {
 
-    it('Should contain a valid enclosure (covers RSS 2.0 and Podcast endpoints)', async function () {
-      for (const server of servers) {
-        const rss = await server.feed.getXML({ feed: 'videos', ignoreCache: true })
-        expect(XMLValidator.validate(rss)).to.be.true
-
-        const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
-        const xmlDoc = parser.parse(rss)
-
-        const enclosure = xmlDoc.rss.channel.item[0].enclosure
-        expect(enclosure).to.exist
-
-        expect(enclosure['@_type']).to.equal('video/webm')
-        expect(enclosure['@_length']).to.equal(218910)
-        expect(enclosure['@_url']).to.contain('-720.webm')
-      }
-    })
-
-    it('Should contain a valid podacst:alternateEnclosure (covers Podcast endpoint)', async function () {
-      // Since podcast feeds should only work on the server the originate on,
+    it('Should contain a valid podcast:alternateEnclosure (covers Podcast endpoint)', async function () {
+      // Since podcast feeds should only work on the server they originate on,
       // only test the first server where the videos reside
       const server = servers[0]
-      const rss = await server.feed.getXML({ feed: 'videos', ignoreCache: true, format: 'podcast' })
+      //const channels = await servers[0].channels.listByAccount({ accountName: 'john' })
+      //const channel = channels.data[0]
+      const rss = await server.feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
       expect(XMLValidator.validate(rss)).to.be.true
 
       const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
       const xmlDoc = parser.parse(rss)
 
-      const enclosure = xmlDoc.rss.channel.item[0].enclosure
-      const alternateEnclosure = xmlDoc.rss.channel.item[0]['podcast:alternateEnclosure']
+      const enclosure = xmlDoc.rss.channel.item.enclosure
+      expect(enclosure).to.exist
+      const alternateEnclosure = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
       expect(alternateEnclosure).to.exist
 
       expect(alternateEnclosure['@_type']).to.equal('video/webm')
       expect(alternateEnclosure['@_length']).to.equal(218910)
-      expect(alternateEnclosure['@_language']).to.equal('zh')
+      expect(alternateEnclosure['@_lang']).to.equal('zh')
       expect(alternateEnclosure['@_title']).to.equal('720p')
       expect(alternateEnclosure['@_default']).to.equal(true)
 
@@ -207,11 +195,14 @@ describe('Test syndication feeds', () => {
       expect(alternateEnclosure['podcast:source'][0]['@_uri']).to.equal(enclosure['@_url'])
       expect(alternateEnclosure['podcast:source'][1]['@_uri']).to.contain('-720.torrent')
       expect(alternateEnclosure['podcast:source'][1]['@_contentType']).to.equal('application/x-bittorrent')
+      expect(alternateEnclosure['podcast:source'][2]['@_uri']).to.contain('magnet:?')
     })
 
-    it('Should contain a valid podacst:alternateEnclosure with HLS only (covers Podcast endpoint)', async function () {
+    it('Should contain a valid podcast:alternateEnclosure with HLS only (covers Podcast endpoint)', async function () {
       const server = serverHLSOnly
-      const rss = await server.feed.getXML({ feed: 'videos', ignoreCache: true, format: 'podcast' })
+      //const channels = await servers[0].channels.listByAccount({ accountName: 'john' })
+      //const channel = channels.data[0]
+      const rss = await server.feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
       expect(XMLValidator.validate(rss)).to.be.true
 
       const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -222,7 +213,7 @@ describe('Test syndication feeds', () => {
       expect(alternateEnclosure).to.exist
 
       expect(alternateEnclosure['@_type']).to.equal('application/x-mpegURL')
-      expect(alternateEnclosure['@_language']).to.equal('zh')
+      expect(alternateEnclosure['@_lang']).to.equal('zh')
       expect(alternateEnclosure['@_title']).to.equal('HLS')
       expect(alternateEnclosure['@_default']).to.equal(true)
 
@@ -230,26 +221,29 @@ describe('Test syndication feeds', () => {
       expect(alternateEnclosure['podcast:source']['@_uri']).to.equal(enclosure['@_url'])
     })
 
-    it('Should contain a valid podacst:socialInteract (covers Podcast endpoint)', async function () {
+    it('Should contain a valid podcast:socialInteract (covers Podcast endpoint)', async function () {
       const server = servers[0]
-      const rss = await server.feed.getXML({ feed: 'videos', ignoreCache: true, format: 'podcast' })
+      //const channels = await servers[0].channels.listByAccount({ accountName: 'john' })
+      //const channel = channels.data[0]
+      const rss = await server.feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
       expect(XMLValidator.validate(rss)).to.be.true
 
       const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
       const xmlDoc = parser.parse(rss)
 
-      for (const item of xmlDoc.rss.channel.item) {
-        const socialInteract = item['podcast:socialInteract']
-        expect(socialInteract).to.exist
-        expect(socialInteract['@_protocol']).to.equal('activitypub')
-        expect(socialInteract['@_uri']).to.exist
-        expect(socialInteract['@_accountUrl']).to.exist
-      }
+      const item = xmlDoc.rss.channel.item
+      const socialInteract = item['podcast:socialInteract']
+      expect(socialInteract).to.exist
+      expect(socialInteract['@_protocol']).to.equal('activitypub')
+      expect(socialInteract['@_uri']).to.exist
+      expect(socialInteract['@_accountUrl']).to.exist
     })
 
     it('Should contain a valid support custom tags for plugins (covers Podcast endpoint)', async function () {
       const server = servers[0]
-      const rss = await server.feed.getXML({ feed: 'videos', ignoreCache: true, format: 'podcast' })
+      //const channels = await servers[0].channels.listByAccount({ accountName: 'john' })
+      //const channel = channels.data[0]
+      const rss = await server.feed.getPodcastXML({ ignoreCache: true, channelId: userChannelId })
       expect(XMLValidator.validate(rss)).to.be.true
 
       const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -263,23 +257,22 @@ describe('Test syndication feeds', () => {
       const bizzBuzzItem = xmlDoc.rss.channel['biz:buzzItem']
       expect(bizzBuzzItem).to.exist
 
-      const nestedTag = bizzBuzzItem.nestedTag
+      let nestedTag = bizzBuzzItem.nestedTag
       expect(nestedTag).to.exist
       expect(nestedTag).to.equal('example nested tag')
 
-      for (const item of xmlDoc.rss.channel.item) {
-        const fizzTag = item.fizzTag
-        expect(fizzTag).to.exist
-        expect(fizzTag['@_bar']).to.equal('baz')
-        expect(fizzTag['#text']).to.equal(21)
+      const item = xmlDoc.rss.channel.item
+      const fizzTag = item.fizzTag
+      expect(fizzTag).to.exist
+      expect(fizzTag['@_bar']).to.equal('baz')
+      expect(fizzTag['#text']).to.equal(21)
 
-        const bizzBuzz = item['biz:buzz']
-        expect(bizzBuzz).to.exist
+      const bizzBuzz = item['biz:buzz']
+      expect(bizzBuzz).to.exist
 
-        const nestedTag = bizzBuzz.nestedTag
-        expect(nestedTag).to.exist
-        expect(nestedTag).to.equal('example nested tag')
-      }
+      nestedTag = bizzBuzz.nestedTag
+      expect(nestedTag).to.exist
+      expect(nestedTag).to.equal('example nested tag')
     })
 
     it('Should contain a valid \'attachments\' object (covers JSON feed 1.0 endpoint)', async function () {
@@ -381,7 +374,7 @@ describe('Test syndication feeds', () => {
       }
     })
 
-    it('Should contain a valid podacst:liveItem for live streams (covers Podcast endpoint)', async function () {
+    it('Should contain a valid podcast:liveItem for live streams (covers Podcast endpoint)', async function () {
       this.timeout(120000)
 
       const server = servers[0]
@@ -398,7 +391,7 @@ describe('Test syndication feeds', () => {
       const ffmpeg = await server.live.sendRTMPStreamInVideo({ videoId: liveId, copyCodecs: true, fixtureName: 'video_short.mp4' })
       await server.live.waitUntilPublished({ videoId: liveId })
 
-      const rss = await server.feed.getXML({ feed: 'videos', ignoreCache: true, format: 'podcast' })
+      const rss = await server.feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
       expect(XMLValidator.validate(rss)).to.be.true
 
       const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })

@@ -54,6 +54,7 @@ export type CommonVideoParams = {
 export class VideoService {
   static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
+  static PODCAST_FEEDS_URL = environment.apiUrl + '/feeds/podcast/videos.xml'
   static BASE_SUBSCRIPTION_FEEDS_URL = environment.apiUrl + '/feeds/subscriptions.'
 
   constructor (
@@ -218,8 +219,7 @@ export class VideoService {
       {
         format: FeedFormat.RSS,
         label: 'podcast rss 2.0',
-        url: base + FeedFormat.RSS.toLowerCase(),
-        params: new HttpParams({ fromObject: { format: 'podcast' } })
+        url: VideoService.PODCAST_FEEDS_URL
       },
       {
         format: FeedFormat.RSS,
@@ -241,9 +241,6 @@ export class VideoService {
     if (params && params.keys().length !== 0) {
       for (const feed of feeds) {
         feed.url += '?' + params.toString()
-        if (feed.params) {
-          feed.url += '&' + feed.params.toString()
-        }
       }
     }
 

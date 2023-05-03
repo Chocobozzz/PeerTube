@@ -118,7 +118,7 @@ describe('Test plugin action hooks', function () {
       await checkHook('action:api.live-video.created')
     })
 
-    it('Should run action:api.live-video.state.updated', async function () {
+    it('Should run action:live.video.state.updated', async function () {
       const attributes = {
         name: 'live',
         privacy: VideoPrivacy.PUBLIC,
@@ -130,13 +130,13 @@ describe('Test plugin action hooks', function () {
       await servers[0].live.waitUntilPublished({ videoId: liveVideoId })
       await waitJobs(servers)
 
-      await checkHook('action:api.live-video.state.updated', true, 1)
+      await checkHook('action:live.video.state.updated', true, 1)
 
       await stopFfmpeg(ffmpegCommand)
       await servers[0].live.waitUntilEnded({ videoId: liveVideoId })
       await waitJobs(servers)
 
-      await checkHook('action:api.live-video.state.updated', true, 2)
+      await checkHook('action:live.video.state.updated', true, 2)
     })
   })
 

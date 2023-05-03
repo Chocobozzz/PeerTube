@@ -367,7 +367,7 @@ class LiveManager {
       await wait(getLiveSegmentTime(live.latencyMode) * 1000 * VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION)
 
       // Clear cache for Podcast RSS feed when live stream starts
-      await clearCacheRoute(`/feeds/videos.xml?videoChannelId=${video.channelId}&format=podcast`)
+      await clearCacheRoute(`/feeds/podcast/videos.xml?videoChannelId=${video.channelId}`)
 
       try {
         await federateVideoIfNeeded(video, false)
@@ -377,7 +377,7 @@ class LiveManager {
 
       PeerTubeSocket.Instance.sendVideoLiveNewState(video)
 
-      Hooks.runAction('action:api.live-video.state.updated', { video })
+      Hooks.runAction('action:live.video.state.updated', { video })
     } catch (err) {
       logger.error('Cannot save/federate live video %d.', videoId, { err, ...localLTags })
     }
@@ -438,13 +438,13 @@ class LiveManager {
       await fullVideo.save()
 
       // Clear cache for Podcast RSS feed when live stream ends
-      await clearCacheRoute(`/feeds/videos.xml?videoChannelId=${fullVideo.channelId}&format=podcast`)
+      await clearCacheRoute(`/feeds/podcast/videos.xml?videoChannelId=${fullVideo.channelId}`)
 
       PeerTubeSocket.Instance.sendVideoLiveNewState(fullVideo)
 
       await federateVideoIfNeeded(fullVideo, false)
 
-      Hooks.runAction('action:api.live-video.state.updated', { video: fullVideo })
+      Hooks.runAction('action:live.video.state.updated', { video: fullVideo })
     } catch (err) {
       logger.error('Cannot save/federate new video state of live streaming of video %d.', videoId, { err, ...lTags(videoId + '') })
     }

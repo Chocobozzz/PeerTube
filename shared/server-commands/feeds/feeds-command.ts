@@ -1,5 +1,5 @@
 import { buildUUID } from '@shared/extra-utils'
-import { HttpStatusCode } from '@shared/models'
+import {HttpStatusCode} from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 type FeedType = 'videos' | 'video-comments' | 'subscriptions'
@@ -18,6 +18,28 @@ export class FeedCommand extends AbstractCommand {
 
     if (ignoreCache) query.v = buildUUID()
     if (format) query.format = format
+
+    return this.getRequestText({
+      ...options,
+
+      path,
+      query,
+      accept: 'application/xml',
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  getPodcastXML (options: OverrideCommandOptions & {
+    ignoreCache: boolean,
+    channelId: number
+  }) {
+    const { ignoreCache, channelId } = options
+    const path = `/feeds/podcast/videos.xml?videoChannelId=${channelId}`
+
+    const query: { [id: string]: string } = {}
+
+    if (ignoreCache) query.v = buildUUID()
 
     return this.getRequestText({
       ...options,

@@ -10,13 +10,10 @@ function isValidRSSFeed (value: string) {
     'rss',
     'rss2',
     'atom',
-    'atom1',
-    'podcast'
+    'atom1'
   ]
 
-  const isValid = feedExtensions.includes(value)
-
-  return isValid
+  return feedExtensions.includes(value)
 }
 
 // ---------------------------------------------------------------------------

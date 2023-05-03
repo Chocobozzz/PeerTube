@@ -1,6 +1,6 @@
 import Bluebird from 'bluebird'
 import { remove } from 'fs-extra'
-import { maxBy, minBy } from 'lodash'
+import { flatten, maxBy, minBy } from 'lodash'
 import { join } from 'path'
 import { FindOptions, Includeable, IncludeOptions, Op, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
@@ -1699,15 +1699,23 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   getFormattedVideoFilesJSON (includeMagnet = true): VideoFile[] {
+    return videoFilesModelToFormattedJSON(this, this.VideoFiles, { includeMagnet })
+  }
+
+  getFormattedVideoStreamingPlaylistsJSON (includeMagnet = true): VideoFile[] {
+    return flatten(this.VideoStreamingPlaylists.map(p => videoFilesModelToFormattedJSON(this, p.VideoFiles, { includeMagnet })))
+  }
+
+  getFormattedVideoFilesWithStreamingPlaylistsJSON (includeMagnet = true): VideoFile[] {
     let files: VideoFile[] = []
 
     if (Array.isArray(this.VideoFiles)) {
-      const result = videoFilesModelToFormattedJSON(this, this.VideoFiles, { includeMagnet })
+      const result = this.getFormattedVideoFilesJSON(includeMagnet)
       files = files.concat(result)
     }
 
-    for (const p of (this.VideoStreamingPlaylists || [])) {
-      const result = videoFilesModelToFormattedJSON(this, p.VideoFiles, { includeMagnet })
+    if (Array.isArray(this.VideoStreamingPlaylists)) {
+      const result = this.getFormattedVideoStreamingPlaylistsJSON(includeMagnet)
       files = files.concat(result)
     }
 

@@ -1,12 +1,29 @@
 async function register ({ registerHook, registerSetting, settingsManager, storageManager, peertubeHelpers }) {
   registerHook({
-    target: 'filter:api.feed.podcast.channel.custom-tags.result',
+    target: 'filter:feed.podcast.rss.create-custom-xmlns.result',
     handler: (result, params) => {
+      return result.concat([
+        {
+          name: "biz",
+          value: "https://example.com/biz-xmlns",
+        },
+      ])
+    }
+  })
+
+  registerHook({
+    target: 'filter:feed.podcast.channel.create-custom-tags.result',
+    handler: (result, params) => {
+      const { videoChannel } = params
       return result.concat([
         {
           name: "fooTag",
           attributes: { "bar": "baz" },
           value: "42",
+        },
+        {
+          name: "biz:videoChannel",
+          attributes: { "name": videoChannel.name, "id": videoChannel.id },
         },
         {
           name: "biz:buzzItem",
@@ -22,13 +39,18 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   })
 
   registerHook({
-    target: 'filter:api.feed.podcast.item.custom-tags.result',
+    target: 'filter:feed.podcast.video.create-custom-tags.result',
     handler: (result, params) => {
+      const { video, liveItem } = params
       return result.concat([
         {
           name: "fizzTag",
           attributes: { "bar": "baz" },
           value: "21",
+        },
+        {
+          name: "biz:video",
+          attributes: { "name": video.name, "id": video.id, "isLive": liveItem },
         },
         {
           name: "biz:buzz",
