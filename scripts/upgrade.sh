@@ -79,7 +79,7 @@ cp $PEERTUBE_PATH/peertube-latest/config/default.yaml $PEERTUBE_PATH/config/defa
 
 echo "Differences in configuration files..."
 cd $PEERTUBE_PATH/versions
-diff -u "$(ls --sort=t | head -2 | tail -1)/config/production.yaml.example" "$(ls --sort=t | head -1)/config/production.yaml.example"
+diff -u "$(ls -t | head -2 | tail -1)/config/production.yaml.example" "$(ls -t | head -1)/config/production.yaml.example"
 
 echo ""
 echo "==========================================="
