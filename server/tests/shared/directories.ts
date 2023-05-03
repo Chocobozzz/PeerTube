@@ -12,6 +12,10 @@ async function checkTmpIsEmpty (server: PeerTubeServer) {
   }
 }
 
+async function checkPersistentTmpIsEmpty (server: PeerTubeServer) {
+  await checkDirectoryIsEmpty(server, 'tmp-persistent')
+}
+
 async function checkDirectoryIsEmpty (server: PeerTubeServer, directory: string, exceptions: string[] = []) {
   const directoryPath = server.getDirectoryPath(directory)
 
@@ -26,5 +30,6 @@ async function checkDirectoryIsEmpty (server: PeerTubeServer, directory: string,
 
 export {
   checkTmpIsEmpty,
+  checkPersistentTmpIsEmpty,
   checkDirectoryIsEmpty
 }

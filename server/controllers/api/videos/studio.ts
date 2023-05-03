@@ -1,8 +1,12 @@
+import Bluebird from 'bluebird'
 import express from 'express'
+import { move } from 'fs-extra'
+import { basename, join } from 'path'
 import { createAnyReqFiles } from '@server/helpers/express-utils'
+import { CONFIG } from '@server/initializers/config'
 import { MIMETYPES } from '@server/initializers/constants'
 import { JobQueue } from '@server/lib/job-queue'
-import { buildTaskFileFieldname, getTaskFile } from '@server/lib/video-studio'
+import { buildTaskFileFieldname, getTaskFileFromReq } from '@server/lib/video-studio'
 import {
   HttpStatusCode,
   VideoState,
@@ -68,7 +72,7 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
 
   const payload = {
     videoUUID: video.uuid,
-    tasks: body.tasks.map((t, i) => buildTaskPayload(t, i, files))
+    tasks: await Bluebird.mapSeries(body.tasks, (t, i) => buildTaskPayload(t, i, files))
   }
 
   JobQueue.Instance.createJobAsync({ type: 'video-studio-edition', payload })
@@ -77,7 +81,11 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
 }
 
 const taskPayloadBuilders: {
-  [id in VideoStudioTask['name']]: (task: VideoStudioTask, indice?: number, files?: Express.Multer.File[]) => VideoStudioTaskPayload
+  [id in VideoStudioTask['name']]: (
+    task: VideoStudioTask,
+    indice?: number,
+    files?: Express.Multer.File[]
+  ) => Promise<VideoStudioTaskPayload>
 } = {
   'add-intro': buildIntroOutroTask,
   'add-outro': buildIntroOutroTask,
@@ -85,34 +93,46 @@ const taskPayloadBuilders: {
   'add-watermark': buildWatermarkTask
 }
 
-function buildTaskPayload (task: VideoStudioTask, indice: number, files: Express.Multer.File[]): VideoStudioTaskPayload {
+function buildTaskPayload (task: VideoStudioTask, indice: number, files: Express.Multer.File[]): Promise<VideoStudioTaskPayload> {
   return taskPayloadBuilders[task.name](task, indice, files)
 }
 
-function buildIntroOutroTask (task: VideoStudioTaskIntro | VideoStudioTaskOutro, indice: number, files: Express.Multer.File[]) {
+async function buildIntroOutroTask (task: VideoStudioTaskIntro | VideoStudioTaskOutro, indice: number, files: Express.Multer.File[]) {
+  const destination = await moveStudioFileToPersistentTMP(getTaskFileFromReq(files, indice).path)
+
   return {
     name: task.name,
     options: {
-      file: getTaskFile(files, indice).path
+      file: destination
     }
   }
 }
 
 function buildCutTask (task: VideoStudioTaskCut) {
-  return {
+  return Promise.resolve({
     name: task.name,
     options: {
       start: task.options.start,
       end: task.options.end
     }
-  }
+  })
 }
 
-function buildWatermarkTask (task: VideoStudioTaskWatermark, indice: number, files: Express.Multer.File[]) {
+async function buildWatermarkTask (task: VideoStudioTaskWatermark, indice: number, files: Express.Multer.File[]) {
+  const destination = await moveStudioFileToPersistentTMP(getTaskFileFromReq(files, indice).path)
+
   return {
     name: task.name,
     options: {
-      file: getTaskFile(files, indice).path
+      file: destination
     }
   }
+}
+
+async function moveStudioFileToPersistentTMP (file: string) {
+  const destination = join(CONFIG.STORAGE.TMP_PERSISTENT_DIR, basename(file))
+
+  await move(file, destination)
+
+  return destination
 }

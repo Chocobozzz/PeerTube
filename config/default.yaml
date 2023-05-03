@@ -120,6 +120,7 @@ defaults:
 # From the project root directory
 storage:
   tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
+  tmp_persistent: 'storage/tmp-persistent/' # As tmp but the directory is not cleaned up between PeerTube restarts
   bin: 'storage/bin/'
   avatars: 'storage/avatars/'
   videos: 'storage/videos/'

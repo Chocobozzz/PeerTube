@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { expectStartWith } from '@server/tests/shared'
+import { checkPersistentTmpIsEmpty, expectStartWith } from '@server/tests/shared'
 import { areMockObjectStorageTestsDisabled, getAllFiles } from '@shared/core-utils'
 import { VideoStudioTask } from '@shared/models'
 import {
@@ -353,6 +353,29 @@ describe('Test video studio', function () {
 
         await checkDuration(server, 9)
       }
+    })
+  })
+
+  describe('Server restart', function () {
+
+    it('Should still be able to run video edition after a server restart', async function () {
+      this.timeout(240_000)
+
+      await renewVideo()
+      await servers[0].videoStudio.createEditionTasks({ videoId: videoUUID, tasks: VideoStudioCommand.getComplexTask() })
+
+      await servers[0].kill()
+      await servers[0].run()
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        await checkDuration(server, 9)
+      }
+    })
+
+    it('Should have an empty persistent tmp directory', async function () {
+      await checkPersistentTmpIsEmpty(servers[0])
     })
   })
 
