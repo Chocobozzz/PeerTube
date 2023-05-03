@@ -12,7 +12,7 @@ import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { buildFileMetadata, removeHLSPlaylist, removeWebTorrentFile } from '@server/lib/video-file'
 import { VideoPathManager } from '@server/lib/video-path-manager'
-import { approximateIntroOutroAdditionalSize } from '@server/lib/video-studio'
+import { approximateIntroOutroAdditionalSize, safeCleanupStudioTMPFiles } from '@server/lib/video-studio'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
@@ -39,63 +39,73 @@ async function processVideoStudioEdition (job: Job) {
 
   logger.info('Process video studio edition of %s in job %s.', payload.videoUUID, job.id, lTags)
 
-  const video = await VideoModel.loadFull(payload.videoUUID)
+  try {
+    const video = await VideoModel.loadFull(payload.videoUUID)
 
-  // No video, maybe deleted?
-  if (!video) {
-    logger.info('Can\'t process job %d, video does not exist.', job.id, lTags)
-    return undefined
-  }
+    // No video, maybe deleted?
+    if (!video) {
+      logger.info('Can\'t process job %d, video does not exist.', job.id, lTags)
 
-  await checkUserQuotaOrThrow(video, payload)
-
-  const inputFile = video.getMaxQualityFile()
-
-  const editionResultPath = await VideoPathManager.Instance.makeAvailableVideoFile(inputFile, async originalFilePath => {
-    let tmpInputFilePath: string
-    let outputPath: string
-
-    for (const task of payload.tasks) {
-      const outputFilename = buildUUID() + inputFile.extname
-      outputPath = join(CONFIG.STORAGE.TMP_DIR, outputFilename)
-
-      await processTask({
-        inputPath: tmpInputFilePath ?? originalFilePath,
-        video,
-        outputPath,
-        task,
-        lTags
-      })
-
-      if (tmpInputFilePath) await remove(tmpInputFilePath)
-
-      // For the next iteration
-      tmpInputFilePath = outputPath
+      await safeCleanupStudioTMPFiles(payload)
+      return undefined
     }
 
-    return outputPath
-  })
+    await checkUserQuotaOrThrow(video, payload)
 
-  logger.info('Video edition ended for video %s.', video.uuid, lTags)
+    const inputFile = video.getMaxQualityFile()
 
-  const newFile = await buildNewFile(video, editionResultPath)
+    const editionResultPath = await VideoPathManager.Instance.makeAvailableVideoFile(inputFile, async originalFilePath => {
+      let tmpInputFilePath: string
+      let outputPath: string
 
-  const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newFile)
-  await move(editionResultPath, outputPath)
+      for (const task of payload.tasks) {
+        const outputFilename = buildUUID() + inputFile.extname
+        outputPath = join(CONFIG.STORAGE.TMP_DIR, outputFilename)
 
-  await createTorrentAndSetInfoHashFromPath(video, newFile, outputPath)
-  await removeAllFiles(video, newFile)
+        await processTask({
+          inputPath: tmpInputFilePath ?? originalFilePath,
+          video,
+          outputPath,
+          task,
+          lTags
+        })
 
-  await newFile.save()
+        if (tmpInputFilePath) await remove(tmpInputFilePath)
 
-  video.duration = await getVideoStreamDuration(outputPath)
-  await video.save()
+        // For the next iteration
+        tmpInputFilePath = outputPath
+      }
 
-  await federateVideoIfNeeded(video, false, undefined)
+      return outputPath
+    })
 
-  const user = await UserModel.loadByVideoId(video.id)
+    logger.info('Video edition ended for video %s.', video.uuid, lTags)
 
-  await createOptimizeOrMergeAudioJobs({ video, videoFile: newFile, isNewVideo: false, user, videoFileAlreadyLocked: false })
+    const newFile = await buildNewFile(video, editionResultPath)
+
+    const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newFile)
+    await move(editionResultPath, outputPath)
+
+    await safeCleanupStudioTMPFiles(payload)
+
+    await createTorrentAndSetInfoHashFromPath(video, newFile, outputPath)
+    await removeAllFiles(video, newFile)
+
+    await newFile.save()
+
+    video.duration = await getVideoStreamDuration(outputPath)
+    await video.save()
+
+    await federateVideoIfNeeded(video, false, undefined)
+
+    const user = await UserModel.loadByVideoId(video.id)
+
+    await createOptimizeOrMergeAudioJobs({ video, videoFile: newFile, isNewVideo: false, user, videoFileAlreadyLocked: false })
+  } catch (err) {
+    await safeCleanupStudioTMPFiles(payload)
+
+    throw err
+  }
 }
 
 // ---------------------------------------------------------------------------

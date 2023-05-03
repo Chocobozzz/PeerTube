@@ -364,6 +364,7 @@ export class PeerTubeServer {
       },
       storage: {
         tmp: this.getDirectoryPath('tmp') + '/',
+        tmp_persistent: this.getDirectoryPath('tmp-persistent') + '/',
         bin: this.getDirectoryPath('bin') + '/',
         avatars: this.getDirectoryPath('avatars') + '/',
         videos: this.getDirectoryPath('videos') + '/',

@@ -98,6 +98,7 @@ const CONFIG = {
 
   STORAGE: {
     TMP_DIR: buildPath(config.get<string>('storage.tmp')),
+    TMP_PERSISTENT_DIR: buildPath(config.get<string>('storage.tmp_persistent')),
     BIN_DIR: buildPath(config.get<string>('storage.bin')),
     ACTOR_IMAGES: buildPath(config.get<string>('storage.avatars')),
     LOG_DIR: buildPath(config.get<string>('storage.logs')),
