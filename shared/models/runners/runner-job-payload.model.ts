@@ -1,3 +1,5 @@
+import { VideoStudioTaskPayload } from '../server'
+
 export type RunnerJobVODPayload =
   RunnerJobVODWebVideoTranscodingPayload |
   RunnerJobVODHLSTranscodingPayload |
@@ -5,7 +7,8 @@ export type RunnerJobVODPayload =
 
 export type RunnerJobPayload =
   RunnerJobVODPayload |
-  RunnerJobLiveRTMPHLSTranscodingPayload
+  RunnerJobLiveRTMPHLSTranscodingPayload |
+  RunnerJobVideoEditionTranscodingPayload
 
 // ---------------------------------------------------------------------------
 
@@ -41,6 +44,14 @@ export interface RunnerJobVODAudioMergeTranscodingPayload {
     resolution: number
     fps: number
   }
+}
+
+export interface RunnerJobVideoEditionTranscodingPayload {
+  input: {
+    videoFileUrl: string
+  }
+
+  tasks: VideoStudioTaskPayload[]
 }
 
 // ---------------------------------------------------------------------------

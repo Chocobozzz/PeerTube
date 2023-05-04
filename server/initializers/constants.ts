@@ -229,7 +229,8 @@ const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
   }
 }
 const JOB_PRIORITY = {
-  TRANSCODING: 100
+  TRANSCODING: 100,
+  VIDEO_STUDIO: 150
 }
 
 const JOB_REMOVAL_OPTIONS = {

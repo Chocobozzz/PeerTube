@@ -91,6 +91,28 @@ export const successRunnerJobValidator = [
   }
 ]
 
+export const cancelRunnerJobValidator = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const runnerJob = res.locals.runnerJob
+
+    const allowedStates = new Set<RunnerJobState>([
+      RunnerJobState.PENDING,
+      RunnerJobState.PROCESSING,
+      RunnerJobState.WAITING_FOR_PARENT_JOB
+    ])
+
+    if (allowedStates.has(runnerJob.state) !== true) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Cannot cancel this job that is not in "pending", "processing" or "waiting for parent job" state',
+        tags
+      })
+    }
+
+    return next()
+  }
+]
+
 export const runnerJobGetValidator = [
   param('jobUUID').custom(isUUIDValid),
 

@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 import { expect } from 'chai'
-import { completeCheckHlsPlaylist, completeWebVideoFilesCheck, PeerTubeRunnerProcess } from '@server/tests/shared'
+import {
+  checkPeerTubeRunnerCacheIsEmpty,
+  completeCheckHlsPlaylist,
+  completeWebVideoFilesCheck,
+  PeerTubeRunnerProcess
+} from '@server/tests/shared'
 import { areMockObjectStorageTestsDisabled, getAllFiles, wait } from '@shared/core-utils'
 import { VideoPrivacy } from '@shared/models'
 import {
@@ -318,6 +323,13 @@ describe('Test VOD transcoding in peertube-runner program', function () {
       })
 
       runSuite({ webtorrentEnabled: true, hlsEnabled: true, objectStorage: true })
+    })
+  })
+
+  describe('Check cleanup', function () {
+
+    it('Should have an empty cache directory', async function () {
+      await checkPeerTubeRunnerCacheIsEmpty()
     })
   })
 

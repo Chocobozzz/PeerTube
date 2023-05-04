@@ -1,3 +1,5 @@
+import { VideoStudioTaskPayload } from '../server'
+
 export type RunnerJobVODPrivatePayload =
   RunnerJobVODWebVideoTranscodingPrivatePayload |
   RunnerJobVODAudioMergeTranscodingPrivatePayload |
@@ -5,7 +7,8 @@ export type RunnerJobVODPrivatePayload =
 
 export type RunnerJobPrivatePayload =
   RunnerJobVODPrivatePayload |
-  RunnerJobLiveRTMPHLSTranscodingPrivatePayload
+  RunnerJobLiveRTMPHLSTranscodingPrivatePayload |
+  RunnerJobVideoEditionTranscodingPrivatePayload
 
 // ---------------------------------------------------------------------------
 
@@ -31,4 +34,11 @@ export interface RunnerJobLiveRTMPHLSTranscodingPrivatePayload {
   videoUUID: string
   masterPlaylistName: string
   outputDirectory: string
+}
+
+// ---------------------------------------------------------------------------
+
+export interface RunnerJobVideoEditionTranscodingPrivatePayload {
+  videoUUID: string
+  originalTasks: VideoStudioTaskPayload[]
 }

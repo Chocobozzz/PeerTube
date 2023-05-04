@@ -64,7 +64,7 @@ export class VODAudioMergeTranscodingJobHandler extends AbstractVODTranscodingJo
 
   // ---------------------------------------------------------------------------
 
-  async specificComplete (options: {
+  protected async specificComplete (options: {
     runnerJob: MRunnerJob
     resultPayload: VODAudioMergeTranscodingSuccess
   }) {

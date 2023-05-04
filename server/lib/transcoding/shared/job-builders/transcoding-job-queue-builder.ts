@@ -16,6 +16,7 @@ import {
   OptimizeTranscodingPayload,
   VideoTranscodingPayload
 } from '@shared/models'
+import { getTranscodingJobPriority } from '../../transcoding-priority'
 import { canDoQuickTranscode } from '../../transcoding-quick-transcode'
 import { computeResolutionsToTranscode } from '../../transcoding-resolutions'
 import { AbstractJobBuilder } from './abstract-job-builder'
@@ -178,7 +179,7 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
 
     return {
       type: 'video-transcoding' as 'video-transcoding',
-      priority: await this.getTranscodingJobPriority({ user, fallback: undefined }),
+      priority: await getTranscodingJobPriority({ user, type: 'vod', fallback: undefined }),
       payload
     }
   }

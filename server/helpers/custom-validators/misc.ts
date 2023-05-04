@@ -15,8 +15,12 @@ function isSafePath (p: string) {
     })
 }
 
-function isSafeFilename (filename: string, extension: string) {
-  return typeof filename === 'string' && !!filename.match(new RegExp(`^[a-z0-9-]+\\.${extension}$`))
+function isSafeFilename (filename: string, extension?: string) {
+  const regex = extension
+    ? new RegExp(`^[a-z0-9-]+\\.${extension}$`)
+    : new RegExp(`^[a-z0-9-]+\\.[a-z0-9]{1,8}$`)
+
+  return typeof filename === 'string' && !!filename.match(regex)
 }
 
 function isSafePeerTubeFilenameWithoutExtension (filename: string) {

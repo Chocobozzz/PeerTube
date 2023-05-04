@@ -38,7 +38,7 @@ function checkMissedConfig () {
     'transcoding.resolutions.0p', 'transcoding.resolutions.144p', 'transcoding.resolutions.240p', 'transcoding.resolutions.360p',
     'transcoding.resolutions.480p', 'transcoding.resolutions.720p', 'transcoding.resolutions.1080p', 'transcoding.resolutions.1440p',
     'transcoding.resolutions.2160p', 'transcoding.always_transcode_original_resolution', 'transcoding.remote_runners.enabled',
-    'video_studio.enabled',
+    'video_studio.enabled', 'video_studio.remote_runners.enabled',
     'remote_runners.stalled_jobs.vod', 'remote_runners.stalled_jobs.live',
     'import.videos.http.enabled', 'import.videos.torrent.enabled', 'import.videos.concurrency', 'import.videos.timeout',
     'import.video_channel_synchronization.enabled', 'import.video_channel_synchronization.max_per_user',

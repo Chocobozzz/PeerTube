@@ -1,6 +1,17 @@
+import { basename } from 'path'
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
-import { HttpStatusCode, RunnerJob, RunnerJobState, RunnerJobSuccessPayload, RunnerJobUpdatePayload, VideoPrivacy } from '@shared/models'
+import {
+  HttpStatusCode,
+  isVideoStudioTaskIntro,
+  RunnerJob,
+  RunnerJobState,
+  RunnerJobSuccessPayload,
+  RunnerJobUpdatePayload,
+  RunnerJobVideoEditionTranscodingPayload,
+  VideoPrivacy,
+  VideoStudioTaskIntro
+} from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -10,6 +21,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
+  VideoStudioCommand,
   waitJobs
 } from '@shared/server-commands'
 
@@ -53,7 +65,10 @@ describe('Test managing runners', function () {
     registrationTokenId = data[0].id
 
     await server.config.enableTranscoding(true, true)
+    await server.config.enableStudio()
     await server.config.enableRemoteTranscoding()
+    await server.config.enableRemoteStudio()
+
     runnerToken = await server.runners.autoRegisterRunner()
     runnerToken2 = await server.runners.autoRegisterRunner()
 
@@ -249,6 +264,10 @@ describe('Test managing runners', function () {
         await server.runnerJobs.cancelByAdmin({ jobUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       })
 
+      it('Should fail with an already cancelled job', async function () {
+        await server.runnerJobs.cancelByAdmin({ jobUUID: cancelledJobUUID, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      })
+
       it('Should succeed with the correct params', async function () {
         await server.runnerJobs.cancelByAdmin({ jobUUID })
       })
@@ -296,9 +315,13 @@ describe('Test managing runners', function () {
 
     let pendingUUID: string
 
-    let liveAcceptedJob: RunnerJob & { jobToken: string }
+    let videoStudioUUID: string
+    let studioFile: string
 
-    async function fetchFiles (options: {
+    let liveAcceptedJob: RunnerJob & { jobToken: string }
+    let studioAcceptedJob: RunnerJob & { jobToken: string }
+
+    async function fetchVideoInputFiles (options: {
       jobUUID: string
       videoUUID: string
       runnerToken: string
@@ -313,6 +336,21 @@ describe('Test managing runners', function () {
       for (const path of paths) {
         await makePostBodyRequest({ url: server.url, path, fields: { runnerToken, jobToken }, expectedStatus })
       }
+    }
+
+    async function fetchStudioFiles (options: {
+      jobUUID: string
+      videoUUID: string
+      runnerToken: string
+      jobToken: string
+      studioFile?: string
+      expectedStatus: HttpStatusCode
+    }) {
+      const { jobUUID, expectedStatus, videoUUID, runnerToken, jobToken, studioFile } = options
+
+      const path = `/api/v1/runners/jobs/${jobUUID}/files/videos/${videoUUID}/studio/task-files/${studioFile}`
+
+      await makePostBodyRequest({ url: server.url, path, fields: { runnerToken, jobToken }, expectedStatus })
     }
 
     before(async function () {
@@ -353,6 +391,28 @@ describe('Test managing runners', function () {
       }
 
       {
+        await server.config.disableTranscoding()
+
+        const { uuid } = await server.videos.quickUpload({ name: 'video studio' })
+        videoStudioUUID = uuid
+
+        await server.config.enableTranscoding(true, true)
+        await server.config.enableStudio()
+
+        await server.videoStudio.createEditionTasks({
+          videoId: videoStudioUUID,
+          tasks: VideoStudioCommand.getComplexTask()
+        })
+
+        const { job } = await server.runnerJobs.autoAccept({ runnerToken, type: 'video-edition-transcoding' })
+        studioAcceptedJob = job
+
+        const tasks = (job.payload as RunnerJobVideoEditionTranscodingPayload).tasks
+        const fileUrl = (tasks.find(t => isVideoStudioTaskIntro(t)) as VideoStudioTaskIntro).options.file as string
+        studioFile = basename(fileUrl)
+      }
+
+      {
         await server.config.enableLive({
           allowReplay: false,
           resolutions: 'max',
@@ -381,8 +441,6 @@ describe('Test managing runners', function () {
         jobToken: string
         expectedStatus: HttpStatusCode
       }) {
-        await fetchFiles({ ...options, videoUUID })
-
         await server.runnerJobs.abort({ ...options, reason: 'reason' })
         await server.runnerJobs.update({ ...options })
         await server.runnerJobs.error({ ...options, message: 'message' })
@@ -390,39 +448,95 @@ describe('Test managing runners', function () {
       }
 
       it('Should fail with an invalid job uuid', async function () {
-        await testEndpoints({ jobUUID: 'a', runnerToken, jobToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+        const options = { jobUUID: 'a', runnerToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 }
+
+        await testEndpoints({ ...options, jobToken })
+        await fetchVideoInputFiles({ ...options, videoUUID, jobToken })
+        await fetchStudioFiles({ ...options, videoUUID, jobToken: studioAcceptedJob.jobToken, studioFile })
       })
 
       it('Should fail with an unknown job uuid', async function () {
-        const jobUUID = badUUID
-        await testEndpoints({ jobUUID, runnerToken, jobToken, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        const options = { jobUUID: badUUID, runnerToken, expectedStatus: HttpStatusCode.NOT_FOUND_404 }
+
+        await testEndpoints({ ...options, jobToken })
+        await fetchVideoInputFiles({ ...options, videoUUID, jobToken })
+        await fetchStudioFiles({ ...options, jobToken: studioAcceptedJob.jobToken, videoUUID, studioFile })
       })
 
       it('Should fail with an invalid runner token', async function () {
-        await testEndpoints({ jobUUID, runnerToken: '', jobToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+        const options = { runnerToken: '', expectedStatus: HttpStatusCode.BAD_REQUEST_400 }
+
+        await testEndpoints({ ...options, jobUUID, jobToken })
+        await fetchVideoInputFiles({ ...options, jobUUID, videoUUID, jobToken })
+        await fetchStudioFiles({
+          ...options,
+          jobToken: studioAcceptedJob.jobToken,
+          jobUUID: studioAcceptedJob.uuid,
+          videoUUID: videoStudioUUID,
+          studioFile
+        })
       })
 
       it('Should fail with an unknown runner token', async function () {
-        const runnerToken = badUUID
-        await testEndpoints({ jobUUID, runnerToken, jobToken, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        const options = { runnerToken: badUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 }
+
+        await testEndpoints({ ...options, jobUUID, jobToken })
+        await fetchVideoInputFiles({ ...options, jobUUID, videoUUID, jobToken })
+        await fetchStudioFiles({
+          ...options,
+          jobToken: studioAcceptedJob.jobToken,
+          jobUUID: studioAcceptedJob.uuid,
+          videoUUID: videoStudioUUID,
+          studioFile
+        })
       })
 
       it('Should fail with an invalid job token job uuid', async function () {
-        await testEndpoints({ jobUUID, runnerToken, jobToken: '', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+        const options = { runnerToken, jobToken: '', expectedStatus: HttpStatusCode.BAD_REQUEST_400 }
+
+        await testEndpoints({ ...options, jobUUID })
+        await fetchVideoInputFiles({ ...options, jobUUID, videoUUID })
+        await fetchStudioFiles({ ...options, jobUUID: studioAcceptedJob.uuid, videoUUID: videoStudioUUID, studioFile })
       })
 
       it('Should fail with an unknown job token job uuid', async function () {
-        const jobToken = badUUID
-        await testEndpoints({ jobUUID, runnerToken, jobToken, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        const options = { runnerToken, jobToken: badUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 }
+
+        await testEndpoints({ ...options, jobUUID })
+        await fetchVideoInputFiles({ ...options, jobUUID, videoUUID })
+        await fetchStudioFiles({ ...options, jobUUID: studioAcceptedJob.uuid, videoUUID: videoStudioUUID, studioFile })
       })
 
       it('Should fail with a runner token not associated to this job', async function () {
-        await testEndpoints({ jobUUID, runnerToken: runnerToken2, jobToken, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        const options = { runnerToken: runnerToken2, expectedStatus: HttpStatusCode.NOT_FOUND_404 }
+
+        await testEndpoints({ ...options, jobUUID, jobToken })
+        await fetchVideoInputFiles({ ...options, jobUUID, videoUUID, jobToken })
+        await fetchStudioFiles({
+          ...options,
+          jobToken: studioAcceptedJob.jobToken,
+          jobUUID: studioAcceptedJob.uuid,
+          videoUUID: videoStudioUUID,
+          studioFile
+        })
       })
 
       it('Should fail with a job uuid not associated to the job token', async function () {
-        await testEndpoints({ jobUUID: jobUUID2, runnerToken, jobToken, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
-        await testEndpoints({ jobUUID, runnerToken, jobToken: jobToken2, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        {
+          const options = { jobUUID: jobUUID2, runnerToken, expectedStatus: HttpStatusCode.NOT_FOUND_404 }
+
+          await testEndpoints({ ...options, jobToken })
+          await fetchVideoInputFiles({ ...options, jobToken, videoUUID })
+          await fetchStudioFiles({ ...options, jobToken: studioAcceptedJob.jobToken, videoUUID: videoStudioUUID, studioFile })
+        }
+
+        {
+          const options = { runnerToken, jobToken: jobToken2, expectedStatus: HttpStatusCode.NOT_FOUND_404 }
+
+          await testEndpoints({ ...options, jobUUID })
+          await fetchVideoInputFiles({ ...options, jobUUID, videoUUID })
+          await fetchStudioFiles({ ...options, jobUUID: studioAcceptedJob.uuid, videoUUID: videoStudioUUID, studioFile })
+        }
       })
     })
 
@@ -670,27 +784,82 @@ describe('Test managing runners', function () {
           })
         })
       })
+
+      describe('Video studio', function () {
+
+        it('Should fail with an invalid video edition transcoding payload', async function () {
+          await server.runnerJobs.success({
+            jobUUID: studioAcceptedJob.uuid,
+            jobToken: studioAcceptedJob.jobToken,
+            payload: { hello: 'video_short.mp4' } as any,
+            runnerToken,
+            expectedStatus: HttpStatusCode.BAD_REQUEST_400
+          })
+        })
+      })
     })
 
     describe('Job files', function () {
 
-      describe('Video files', function () {
+      describe('Check video param for common job file routes', function () {
+
+        async function fetchFiles (options: {
+          videoUUID?: string
+          expectedStatus: HttpStatusCode
+        }) {
+          await fetchVideoInputFiles({ videoUUID, ...options, jobToken, jobUUID, runnerToken })
+
+          await fetchStudioFiles({
+            videoUUID: videoStudioUUID,
+
+            ...options,
+
+            jobToken: studioAcceptedJob.jobToken,
+            jobUUID: studioAcceptedJob.uuid,
+            runnerToken,
+            studioFile
+          })
+        }
 
         it('Should fail with an invalid video id', async function () {
-          await fetchFiles({ videoUUID: 'a', jobUUID, runnerToken, jobToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+          await fetchFiles({
+            videoUUID: 'a',
+            expectedStatus: HttpStatusCode.BAD_REQUEST_400
+          })
         })
 
         it('Should fail with an unknown video id', async function () {
           const videoUUID = '910ec12a-d9e6-458b-a274-0abb655f9464'
-          await fetchFiles({ videoUUID, jobUUID, runnerToken, jobToken, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+
+          await fetchFiles({
+            videoUUID,
+            expectedStatus: HttpStatusCode.NOT_FOUND_404
+          })
         })
 
         it('Should fail with a video id not associated to this job', async function () {
-          await fetchFiles({ videoUUID: videoUUID2, jobUUID, runnerToken, jobToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+          await fetchFiles({
+            videoUUID: videoUUID2,
+            expectedStatus: HttpStatusCode.FORBIDDEN_403
+          })
         })
 
         it('Should succeed with the correct params', async function () {
-          await fetchFiles({ videoUUID, jobUUID, runnerToken, jobToken, expectedStatus: HttpStatusCode.OK_200 })
+          await fetchFiles({ expectedStatus: HttpStatusCode.OK_200 })
+        })
+      })
+
+      describe('Video edition tasks file routes', function () {
+
+        it('Should fail with an invalid studio filename', async function () {
+          await fetchStudioFiles({
+            videoUUID: videoStudioUUID,
+            jobUUID: studioAcceptedJob.uuid,
+            runnerToken,
+            jobToken: studioAcceptedJob.jobToken,
+            studioFile: 'toto',
+            expectedStatus: HttpStatusCode.BAD_REQUEST_400
+          })
         })
       })
     })

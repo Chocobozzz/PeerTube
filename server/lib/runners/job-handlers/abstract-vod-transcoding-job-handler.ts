@@ -4,19 +4,12 @@ import { logger } from '@server/helpers/logger'
 import { moveToFailedTranscodingState, moveToNextState } from '@server/lib/video-state'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { MRunnerJob } from '@server/types/models/runners'
-import {
-  LiveRTMPHLSTranscodingUpdatePayload,
-  RunnerJobSuccessPayload,
-  RunnerJobUpdatePayload,
-  RunnerJobVODPrivatePayload
-} from '@shared/models'
+import { RunnerJobSuccessPayload, RunnerJobUpdatePayload, RunnerJobVODPrivatePayload } from '@shared/models'
 import { AbstractJobHandler } from './abstract-job-handler'
 import { loadTranscodingRunnerVideo } from './shared'
 
 // eslint-disable-next-line max-len
 export abstract class AbstractVODTranscodingJobHandler <C, U extends RunnerJobUpdatePayload, S extends RunnerJobSuccessPayload> extends AbstractJobHandler<C, U, S> {
-
-  // ---------------------------------------------------------------------------
 
   protected isAbortSupported () {
     return true
@@ -24,7 +17,6 @@ export abstract class AbstractVODTranscodingJobHandler <C, U extends RunnerJobUp
 
   protected specificUpdate (_options: {
     runnerJob: MRunnerJob
-    updatePayload?: LiveRTMPHLSTranscodingUpdatePayload
   }) {
     // empty
   }

@@ -70,7 +70,7 @@ export class LiveRTMPHLSTranscodingJobHandler extends AbstractJobHandler<CreateO
 
   // ---------------------------------------------------------------------------
 
-  async specificUpdate (options: {
+  protected async specificUpdate (options: {
     runnerJob: MRunnerJob
     updatePayload: LiveRTMPHLSTranscodingUpdatePayload
   }) {

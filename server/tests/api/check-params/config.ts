@@ -162,7 +162,10 @@ describe('Test config API validators', function () {
       }
     },
     videoStudio: {
-      enabled: true
+      enabled: true,
+      remoteRunners: {
+        enabled: true
+      }
     },
     import: {
       videos: {

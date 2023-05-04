@@ -272,6 +272,8 @@ export class AdminComponent implements OnInit {
   private isRemoteRunnersEnabled () {
     const config = this.server.getHTMLConfig()
 
-    return config.transcoding.remoteRunners.enabled || config.live.transcoding.remoteRunners.enabled
+    return config.transcoding.remoteRunners.enabled ||
+      config.live.transcoding.remoteRunners.enabled ||
+      config.videoStudio.remoteRunners.enabled
   }
 }

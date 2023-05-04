@@ -218,7 +218,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         }
       },
       videoStudio: {
-        enabled: null
+        enabled: null,
+        remoteRunners: {
+          enabled: null
+        }
       },
       autoBlacklist: {
         videos: {

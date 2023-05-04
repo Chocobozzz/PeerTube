@@ -61,6 +61,10 @@ export class EditConfigurationService {
     return form.value['transcoding']['enabled'] === true
   }
 
+  isStudioEnabled (form: FormGroup) {
+    return form.value['videoStudio']['enabled'] === true
+  }
+
   isLiveEnabled (form: FormGroup) {
     return form.value['live']['enabled'] === true
   }

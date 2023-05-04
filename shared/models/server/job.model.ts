@@ -225,6 +225,10 @@ export type VideoStudioTaskWatermarkPayload = {
 
   options: {
     file: string
+
+    watermarkSizeRatio: number
+    horitonzalMarginRatio: number
+    verticalMarginRatio: number
   }
 }
 

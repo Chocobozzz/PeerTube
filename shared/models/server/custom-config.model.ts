@@ -165,6 +165,10 @@ export interface CustomConfig {
 
   videoStudio: {
     enabled: boolean
+
+    remoteRunners: {
+      enabled: boolean
+    }
   }
 
   import: {
