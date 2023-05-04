@@ -52,7 +52,12 @@ function setFeedPodcastContentType (req: express.Request, res: express.Response,
   return feedContentTypeResponse(req, res, next, acceptableContentTypes)
 }
 
-function feedContentTypeResponse(req: express.Request, res: express.Response, next: express.NextFunction, acceptableContentTypes: string[], ) {
+function feedContentTypeResponse (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+  acceptableContentTypes: string[]
+) {
   if (req.accepts(acceptableContentTypes)) {
     res.set('Content-Type', req.accepts(acceptableContentTypes) as string)
   } else {

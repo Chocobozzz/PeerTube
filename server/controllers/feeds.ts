@@ -178,7 +178,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     ...options
   })
 
-  await addVideosToFeed(feed, data)
+  addVideosToFeed(feed, data)
 
   // Now the feed generation is done, let's send it!
   return sendFeed(feed, req, res)
@@ -221,14 +221,13 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
     user: res.locals.user
   })
 
-  await addVideosToFeed(feed, data)
+  addVideosToFeed(feed, data)
 
   // Now the feed generation is done, let's send it!
   return sendFeed(feed, req, res)
 }
 
 async function generateVideoPodcastFeed (req: express.Request, res: express.Response) {
-  console.log("in generateVideoPodcastFeed")
   const start = 0
   const account = res.locals.account
   const videoChannel = res.locals.videoChannel
@@ -353,18 +352,18 @@ function initFeed (parameters: {
   })
 }
 
-async function generatePodcastItem(video: VideoModel, liveItem: boolean, media: ({
-  type: string;
-  length: number;
-  bitrate: number;
-  sources: { uri: string; contentType?: string }[];
-  title: string;
+async function generatePodcastItem (video: VideoModel, liveItem: boolean, media: ({
+  type: string
+  length: number
+  bitrate: number
+  sources: { uri: string, contentType?: string }[]
+  title: string
   language?: string
-} | { sources: { uri: string }[]; type: string; title: string })[]) {
+} | { sources: { uri: string }[], type: string, title: string })[]) {
   const customTags: CustomTag[] = await Hooks.wrapObject(
     [],
     'filter:feed.podcast.video.create-custom-tags.result',
-    {video, liveItem}
+    { video, liveItem }
   )
 
   const author = {
@@ -379,7 +378,7 @@ async function generatePodcastItem(video: VideoModel, liveItem: boolean, media: 
     link: WEBSERVER.URL + video.getWatchStaticPath(),
     description: mdToOneLinePlainText(video.getTruncatedDescription()),
     content: toSafeHtml(video.description),
-    ...(video.category && {category: [{name: getCategoryLabel(video.category)}]}),
+    ...(video.category && { category: [ { name: getCategoryLabel(video.category) } ] }),
     author: [
       author
     ],
@@ -395,7 +394,7 @@ async function generatePodcastItem(video: VideoModel, liveItem: boolean, media: 
     nsfw: video.nsfw,
     media,
     socialInteract: [
-      {uri: video.url, protocol: 'activitypub', accountUrl: video.VideoChannel.Account.getLocalUrl()}
+      { uri: video.url, protocol: 'activitypub', accountUrl: video.VideoChannel.Account.getLocalUrl() }
     ],
     thumbnails: [
       {
@@ -413,7 +412,7 @@ async function generatePodcastItem(video: VideoModel, liveItem: boolean, media: 
   }
 }
 
-async function addVideosToPodcastFeed(feed: Feed, videos: VideoModel[]) {
+async function addVideosToPodcastFeed (feed: Feed, videos: VideoModel[]) {
   // Generate feed specific to The Podcast Namespace
   for (const video of videos.filter(v => !v.isLive)) {
     const webTorrentVideos: {
@@ -429,11 +428,11 @@ async function addVideosToPodcastFeed(feed: Feed, videos: VideoModel[]) {
         ? MIMETYPES.AUDIO.EXT_MIMETYPE[extname(videoFile.fileUrl)]
         : MIMETYPES.VIDEO.EXT_MIMETYPE[extname(videoFile.fileUrl)]
       const sources = [
-        {uri: videoFile.fileUrl},
-        {uri: videoFile.torrentUrl, contentType: 'application/x-bittorrent'}
+        { uri: videoFile.fileUrl },
+        { uri: videoFile.torrentUrl, contentType: 'application/x-bittorrent' }
       ]
       if (videoFile.magnetUri) {
-        sources.push({uri: videoFile.magnetUri})
+        sources.push({ uri: videoFile.magnetUri })
       }
       const result = {
         type,
@@ -443,27 +442,27 @@ async function addVideosToPodcastFeed(feed: Feed, videos: VideoModel[]) {
         sources
       }
 
-      if (video.language) Object.assign(result, {language: video.language})
+      if (video.language) Object.assign(result, { language: video.language })
 
       return result
     })
 
-    const sortedWebTorrentVideos = orderBy(webTorrentVideos, ['bitrate'], ['desc'])
+    const sortedWebTorrentVideos = orderBy(webTorrentVideos, [ 'bitrate' ], [ 'desc' ])
 
     const streamingPlaylists = video.VideoStreamingPlaylists
       .filter((streamingPlaylist) => streamingPlaylist.type === VideoStreamingPlaylistType.HLS)
       .map(streamingPlaylist => ({
-          type: 'application/x-mpegURL',
-          title: 'HLS',
-          sources: [
-            {uri: streamingPlaylist.getMasterPlaylistUrl(video)}
-          ],
-          ...(video.language && {language: video.language})
+        type: 'application/x-mpegURL',
+        title: 'HLS',
+        sources: [
+          { uri: streamingPlaylist.getMasterPlaylistUrl(video) }
+        ],
+        ...(video.language && { language: video.language })
       }))
 
     // Order matters here, the first media URI will be the "default"
     // So webtorrent .mp4s are default if enabled
-    const media = [...sortedWebTorrentVideos, ...streamingPlaylists].filter(m => m)
+    const media = [ ...sortedWebTorrentVideos, ...streamingPlaylists ].filter(m => m)
 
     const videoCaptions = await VideoCaptionModel.listVideoCaptions(video.id)
 
@@ -482,7 +481,7 @@ async function addVideosToPodcastFeed(feed: Feed, videos: VideoModel[]) {
 
     const item = await generatePodcastItem(video, liveItem, media)
 
-    feed.addPodcastItem({...item, ...{ subTitle: captions }})
+    feed.addPodcastItem({ ...item, ...{ subTitle: captions } })
   }
 
   // Filter live videos that are pending or in progress
@@ -490,12 +489,12 @@ async function addVideosToPodcastFeed(feed: Feed, videos: VideoModel[]) {
     const media = video.VideoStreamingPlaylists
       .filter((streamingPlaylist) => streamingPlaylist.type === VideoStreamingPlaylistType.HLS)
       .map((streamingPlaylist, index) => ({
-          type: 'application/x-mpegURL',
-          title: `Live Stream ${index + 1}`,
-          sources: [
-            {uri: streamingPlaylist.getMasterPlaylistUrl(video)}
-          ],
-          ...(video.language && {language: video.language})
+        type: 'application/x-mpegURL',
+        title: `Live Stream ${index + 1}`,
+        sources: [
+          { uri: streamingPlaylist.getMasterPlaylistUrl(video) }
+        ],
+        ...(video.language && { language: video.language })
       }))
 
     let status: LiveItemStatus
@@ -516,11 +515,11 @@ async function addVideosToPodcastFeed(feed: Feed, videos: VideoModel[]) {
 
     const item = await generatePodcastItem(video, liveItem, media)
 
-    feed.addPodcastLiveItem({...item, ...{ isLive: true, status, start: video.updatedAt.toISOString() } })
+    feed.addPodcastLiveItem({ ...item, ...{ isLive: true, status, start: video.updatedAt.toISOString() } })
   }
 }
 
-async function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
+function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
   /**
    * Adding video items to the feed object, one at a time
    */

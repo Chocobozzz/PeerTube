@@ -31,7 +31,7 @@ export class FeedCommand extends AbstractCommand {
   }
 
   getPodcastXML (options: OverrideCommandOptions & {
-    ignoreCache: boolean,
+    ignoreCache: boolean
     channelId: number
   }) {
     const { ignoreCache, channelId } = options
