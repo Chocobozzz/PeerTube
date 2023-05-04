@@ -6,7 +6,7 @@ import {
   RunnerJobSuccessPayload,
   RunnerJobType,
   RunnerJobUpdatePayload,
-  VideoEditionTranscodingSuccess,
+  VideoStudioTranscodingSuccess,
   VODAudioMergeTranscodingSuccess,
   VODHLSTranscodingSuccess,
   VODWebVideoTranscodingSuccess
@@ -25,7 +25,7 @@ function isRunnerJobSuccessPayloadValid (value: RunnerJobSuccessPayload, type: R
     isRunnerJobVODHLSResultPayloadValid(value as VODHLSTranscodingSuccess, type, files) ||
     isRunnerJobVODAudioMergeResultPayloadValid(value as VODHLSTranscodingSuccess, type, files) ||
     isRunnerJobLiveRTMPHLSResultPayloadValid(value as LiveRTMPHLSTranscodingSuccess, type) ||
-    isRunnerJobVideoEditionResultPayloadValid(value as VideoEditionTranscodingSuccess, type, files)
+    isRunnerJobVideoStudioResultPayloadValid(value as VideoStudioTranscodingSuccess, type, files)
 }
 
 // ---------------------------------------------------------------------------
@@ -37,7 +37,7 @@ function isRunnerJobProgressValid (value: string) {
 function isRunnerJobUpdatePayloadValid (value: RunnerJobUpdatePayload, type: RunnerJobType, files: UploadFilesForCheck) {
   return isRunnerJobVODWebVideoUpdatePayloadValid(value, type, files) ||
     isRunnerJobVODHLSUpdatePayloadValid(value, type, files) ||
-    isRunnerJobVideoEditionUpdatePayloadValid(value, type, files) ||
+    isRunnerJobVideoStudioUpdatePayloadValid(value, type, files) ||
     isRunnerJobVODAudioMergeUpdatePayloadValid(value, type, files) ||
     isRunnerJobLiveRTMPHLSUpdatePayloadValid(value, type, files)
 }
@@ -105,12 +105,12 @@ function isRunnerJobLiveRTMPHLSResultPayloadValid (
   return type === 'live-rtmp-hls-transcoding' && (!value || (typeof value === 'object' && Object.keys(value).length === 0))
 }
 
-function isRunnerJobVideoEditionResultPayloadValid (
-  _value: VideoEditionTranscodingSuccess,
+function isRunnerJobVideoStudioResultPayloadValid (
+  _value: VideoStudioTranscodingSuccess,
   type: RunnerJobType,
   files: UploadFilesForCheck
 ) {
-  return type === 'video-edition-transcoding' &&
+  return type === 'video-studio-transcoding' &&
     isFileValid({ files, field: 'payload[videoFile]', mimeTypeRegex: null, maxSize: null })
 }
 
@@ -177,11 +177,11 @@ function isRunnerJobLiveRTMPHLSUpdatePayloadValid (
     )
 }
 
-function isRunnerJobVideoEditionUpdatePayloadValid (
+function isRunnerJobVideoStudioUpdatePayloadValid (
   value: RunnerJobUpdatePayload,
   type: RunnerJobType,
   _files: UploadFilesForCheck
 ) {
-  return type === 'video-edition-transcoding' &&
+  return type === 'video-studio-transcoding' &&
     (!value || (typeof value === 'object' && Object.keys(value).length === 0))
 }

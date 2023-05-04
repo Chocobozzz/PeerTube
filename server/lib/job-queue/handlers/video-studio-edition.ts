@@ -6,7 +6,7 @@ import { CONFIG } from '@server/initializers/config'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { VideoPathManager } from '@server/lib/video-path-manager'
-import { approximateIntroOutroAdditionalSize, onVideoEditionEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio'
+import { approximateIntroOutroAdditionalSize, onVideoStudioEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
 import { MVideo, MVideoFullLight } from '@server/types/models'
@@ -24,7 +24,7 @@ import {
 } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 
-const lTagsBase = loggerTagsFactory('video-edition')
+const lTagsBase = loggerTagsFactory('video-studio')
 
 async function processVideoStudioEdition (job: Job) {
   const payload = job.data as VideoStudioEditionPayload
@@ -74,7 +74,7 @@ async function processVideoStudioEdition (job: Job) {
 
     logger.info('Video edition ended for video %s.', video.uuid, lTags)
 
-    await onVideoEditionEnded({ video, editionResultPath, tasks: payload.tasks })
+    await onVideoStudioEnded({ video, editionResultPath, tasks: payload.tasks })
   } catch (err) {
     await safeCleanupStudioTMPFiles(payload.tasks)
 

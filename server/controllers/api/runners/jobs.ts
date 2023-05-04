@@ -42,7 +42,7 @@ import {
   RunnerJobUpdateBody,
   RunnerJobUpdatePayload,
   UserRight,
-  VideoEditionTranscodingSuccess,
+  VideoStudioTranscodingSuccess,
   VODAudioMergeTranscodingSuccess,
   VODHLSTranscodingSuccess,
   VODWebVideoTranscodingSuccess
@@ -300,7 +300,7 @@ const jobSuccessPayloadBuilders: {
     }
   },
 
-  'video-edition-transcoding': (payload: VideoEditionTranscodingSuccess, files) => {
+  'video-studio-transcoding': (payload: VideoStudioTranscodingSuccess, files) => {
     return {
       ...payload,
 

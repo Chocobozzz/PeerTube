@@ -9,13 +9,13 @@ import { getVideoStreamDuration } from '@shared/ffmpeg'
 import { VideoStudioEditionPayload, VideoStudioTask, VideoStudioTaskPayload } from '@shared/models'
 import { federateVideoIfNeeded } from './activitypub/videos'
 import { JobQueue } from './job-queue'
-import { VideoEditionTranscodingJobHandler } from './runners'
+import { VideoStudioTranscodingJobHandler } from './runners'
 import { createOptimizeOrMergeAudioJobs } from './transcoding/create-transcoding-job'
 import { getTranscodingJobPriority } from './transcoding/transcoding-priority'
 import { buildNewFile, removeHLSPlaylist, removeWebTorrentFile } from './video-file'
 import { VideoPathManager } from './video-path-manager'
 
-const lTags = loggerTagsFactory('video-edition')
+const lTags = loggerTagsFactory('video-studio')
 
 export function buildTaskFileFieldname (indice: number, fieldName = 'file') {
   return `tasks[${indice}][options][${fieldName}]`
@@ -78,14 +78,14 @@ export async function createVideoStudioJob (options: {
   const priority = await getTranscodingJobPriority({ user, type: 'studio', fallback: 0 })
 
   if (CONFIG.VIDEO_STUDIO.REMOTE_RUNNERS.ENABLED) {
-    await new VideoEditionTranscodingJobHandler().create({ video, tasks: payload.tasks, priority })
+    await new VideoStudioTranscodingJobHandler().create({ video, tasks: payload.tasks, priority })
     return
   }
 
   await JobQueue.Instance.createJob({ type: 'video-studio-edition', payload, priority })
 }
 
-export async function onVideoEditionEnded (options: {
+export async function onVideoStudioEnded (options: {
   editionResultPath: string
   tasks: VideoStudioTaskPayload[]
   video: MVideoFullLight

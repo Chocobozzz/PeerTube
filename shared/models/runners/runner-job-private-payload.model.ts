@@ -8,7 +8,7 @@ export type RunnerJobVODPrivatePayload =
 export type RunnerJobPrivatePayload =
   RunnerJobVODPrivatePayload |
   RunnerJobLiveRTMPHLSTranscodingPrivatePayload |
-  RunnerJobVideoEditionTranscodingPrivatePayload
+  RunnerJobVideoStudioTranscodingPrivatePayload
 
 // ---------------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ export interface RunnerJobLiveRTMPHLSTranscodingPrivatePayload {
 
 // ---------------------------------------------------------------------------
 
-export interface RunnerJobVideoEditionTranscodingPrivatePayload {
+export interface RunnerJobVideoStudioTranscodingPrivatePayload {
   videoUUID: string
   originalTasks: VideoStudioTaskPayload[]
 }

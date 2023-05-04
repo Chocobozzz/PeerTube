@@ -31,7 +31,7 @@ runnerJobFilesRouter.post('/jobs/:jobUUID/files/videos/:videoId/studio/task-file
   asyncMiddleware(jobOfRunnerGetValidator),
   asyncMiddleware(runnerJobGetVideoTranscodingFileValidator),
   runnerJobGetVideoStudioTaskFileValidator,
-  getVideoEditionTaskFile
+  getVideoStudioTaskFile
 )
 
 // ---------------------------------------------------------------------------
@@ -94,14 +94,14 @@ function getMaxQualityVideoPreview (req: express.Request, res: express.Response)
   return res.sendFile(file.getPath())
 }
 
-function getVideoEditionTaskFile (req: express.Request, res: express.Response) {
+function getVideoStudioTaskFile (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
   const video = res.locals.videoAll
   const filename = req.params.filename
 
   logger.info(
-    'Get video edition task file %s of video %s of job %s for runner %s', filename, video.uuid, runnerJob.uuid, runner.name,
+    'Get video studio task file %s of video %s of job %s for runner %s', filename, video.uuid, runnerJob.uuid, runner.name,
     lTags(runner.name, runnerJob.id, runnerJob.type)
   )
 

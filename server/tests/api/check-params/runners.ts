@@ -8,7 +8,7 @@ import {
   RunnerJobState,
   RunnerJobSuccessPayload,
   RunnerJobUpdatePayload,
-  RunnerJobVideoEditionTranscodingPayload,
+  RunnerJobStudioTranscodingPayload,
   VideoPrivacy,
   VideoStudioTaskIntro
 } from '@shared/models'
@@ -404,10 +404,10 @@ describe('Test managing runners', function () {
           tasks: VideoStudioCommand.getComplexTask()
         })
 
-        const { job } = await server.runnerJobs.autoAccept({ runnerToken, type: 'video-edition-transcoding' })
+        const { job } = await server.runnerJobs.autoAccept({ runnerToken, type: 'video-studio-transcoding' })
         studioAcceptedJob = job
 
-        const tasks = (job.payload as RunnerJobVideoEditionTranscodingPayload).tasks
+        const tasks = (job.payload as RunnerJobStudioTranscodingPayload).tasks
         const fileUrl = (tasks.find(t => isVideoStudioTaskIntro(t)) as VideoStudioTaskIntro).options.file as string
         studioFile = basename(fileUrl)
       }
@@ -787,7 +787,7 @@ describe('Test managing runners', function () {
 
       describe('Video studio', function () {
 
-        it('Should fail with an invalid video edition transcoding payload', async function () {
+        it('Should fail with an invalid video studio transcoding payload', async function () {
           await server.runnerJobs.success({
             jobUUID: studioAcceptedJob.uuid,
             jobToken: studioAcceptedJob.jobToken,
@@ -849,7 +849,7 @@ describe('Test managing runners', function () {
         })
       })
 
-      describe('Video edition tasks file routes', function () {
+      describe('Video studio tasks file routes', function () {
 
         it('Should fail with an invalid studio filename', async function () {
           await fetchStudioFiles({

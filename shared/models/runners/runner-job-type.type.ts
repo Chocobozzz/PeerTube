@@ -3,4 +3,4 @@ export type RunnerJobType =
   'vod-hls-transcoding' |
   'vod-audio-merge-transcoding' |
   'live-rtmp-hls-transcoding' |
-  'video-edition-transcoding'
+  'video-studio-transcoding'

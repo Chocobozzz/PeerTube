@@ -22,31 +22,34 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
 
   const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `output-${buildUUID()}.mp4`)
 
-  await ffmpegVod.transcode({
-    type: 'video',
+  try {
+    await ffmpegVod.transcode({
+      type: 'video',
 
-    inputPath,
+      inputPath,
 
-    outputPath,
+      outputPath,
 
-    inputFileMutexReleaser: () => {},
+      inputFileMutexReleaser: () => {},
 
-    resolution: payload.output.resolution,
-    fps: payload.output.fps
-  })
+      resolution: payload.output.resolution,
+      fps: payload.output.fps
+    })
 
-  const successBody: VODWebVideoTranscodingSuccess = {
-    videoFile: outputPath
+    const successBody: VODWebVideoTranscodingSuccess = {
+      videoFile: outputPath
+    }
+
+    await server.runnerJobs.success({
+      jobToken: job.jobToken,
+      jobUUID: job.uuid,
+      runnerToken,
+      payload: successBody
+    })
+  } finally {
+    await remove(inputPath)
+    await remove(outputPath)
   }
-
-  await server.runnerJobs.success({
-    jobToken: job.jobToken,
-    jobUUID: job.uuid,
-    runnerToken,
-    payload: successBody
-  })
-
-  await remove(outputPath)
 }
 
 export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVODHLSTranscodingPayload>) {
@@ -105,30 +108,34 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
 
   const ffmpegVod = buildFFmpegVOD({ job, server, runnerToken })
 
-  await ffmpegVod.transcode({
-    type: 'merge-audio',
+  try {
+    await ffmpegVod.transcode({
+      type: 'merge-audio',
 
-    audioPath,
-    inputPath,
+      audioPath,
+      inputPath,
 
-    outputPath,
+      outputPath,
 
-    inputFileMutexReleaser: () => {},
+      inputFileMutexReleaser: () => {},
 
-    resolution: payload.output.resolution,
-    fps: payload.output.fps
-  })
+      resolution: payload.output.resolution,
+      fps: payload.output.fps
+    })
 
-  const successBody: VODAudioMergeTranscodingSuccess = {
-    videoFile: outputPath
+    const successBody: VODAudioMergeTranscodingSuccess = {
+      videoFile: outputPath
+    }
+
+    await server.runnerJobs.success({
+      jobToken: job.jobToken,
+      jobUUID: job.uuid,
+      runnerToken,
+      payload: successBody
+    })
+  } finally {
+    await remove(audioPath)
+    await remove(inputPath)
+    await remove(outputPath)
   }
-
-  await server.runnerJobs.success({
-    jobToken: job.jobToken,
-    jobUUID: job.uuid,
-    runnerToken,
-    payload: successBody
-  })
-
-  await remove(outputPath)
 }
