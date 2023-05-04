@@ -218,11 +218,6 @@ export class VideoService {
     const feeds = [
       {
         format: FeedFormat.RSS,
-        label: 'podcast rss 2.0',
-        url: VideoService.PODCAST_FEEDS_URL
-      },
-      {
-        format: FeedFormat.RSS,
         label: 'media rss 2.0',
         url: base + FeedFormat.RSS.toLowerCase()
       },
@@ -272,7 +267,15 @@ export class VideoService {
     let params = this.restService.addRestGetParams(new HttpParams())
     params = params.set('videoChannelId', videoChannelId.toString())
 
-    return this.buildBaseFeedUrls(params)
+    const feedUrls = this.buildBaseFeedUrls(params)
+
+    feedUrls.push({
+      format: FeedFormat.RSS,
+      label: 'podcast rss 2.0',
+      url: VideoService.PODCAST_FEEDS_URL + `?videoChannelId=${videoChannelId}`
+    })
+
+    return feedUrls
   }
 
   getVideoSubscriptionFeedUrls (accountId: number, feedToken: string) {
