@@ -2,6 +2,7 @@ import { Directive, OnInit } from '@angular/core'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms'
+import { peertubeTranslate } from '@shared/core-utils'
 import { USER_ROLE_LABELS } from '@shared/core-utils/users'
 import { HTMLServerConfig, UserAdminFlag, UserRole } from '@shared/models'
 import { SelectOptionsItem } from '../../../../../types/select-options-item.model'
@@ -25,7 +26,7 @@ export abstract class UserEdit extends FormReactive implements OnInit {
   abstract isCreation (): boolean
   abstract getFormButtonTitle (): string
 
-  ngOnInit (): void {
+  ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
     this.buildRoles()
@@ -49,15 +50,18 @@ export abstract class UserEdit extends FormReactive implements OnInit {
   buildRoles () {
     const authUser = this.auth.getUser()
 
-    if (authUser.role.id === UserRole.ADMINISTRATOR) {
-      this.roles = Object.keys(USER_ROLE_LABELS)
-            .map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
-      return
-    }
+    this.serverService.getServerLocale()
+      .subscribe(translations => {
+        if (authUser.role.id === UserRole.ADMINISTRATOR) {
+          this.roles = Object.keys(USER_ROLE_LABELS)
+                .map(key => ({ value: key.toString(), label: peertubeTranslate(USER_ROLE_LABELS[key], translations) }))
+          return
+        }
 
-    this.roles = [
-      { value: UserRole.USER.toString(), label: USER_ROLE_LABELS[UserRole.USER] }
-    ]
+        this.roles = [
+          { value: UserRole.USER.toString(), label: peertubeTranslate(USER_ROLE_LABELS[UserRole.USER], translations) }
+        ]
+      })
   }
 
   displayDangerZone () {

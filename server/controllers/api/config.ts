@@ -204,6 +204,11 @@ function customConfig (): CustomConfig {
       enabled: CONFIG.CONTACT_FORM.ENABLED
     },
     user: {
+      history: {
+        videos: {
+          enabled: CONFIG.USER.HISTORY.VIDEOS.ENABLED
+        }
+      },
       videoQuota: CONFIG.USER.VIDEO_QUOTA,
       videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
     },

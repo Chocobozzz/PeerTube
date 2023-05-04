@@ -35,6 +35,7 @@ const customConfigUpdateValidator = [
   body('admin.email').isEmail(),
   body('contactForm.enabled').isBoolean(),
 
+  body('user.history.videos.enabled').isBoolean(),
   body('user.videoQuota').custom(isUserVideoQuotaValid),
   body('user.videoQuotaDaily').custom(isUserVideoQuotaDailyValid),
 

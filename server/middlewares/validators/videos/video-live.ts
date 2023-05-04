@@ -17,7 +17,7 @@ import {
   VideoState
 } from '@shared/models'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
-import { isVideoNameValid } from '../../../helpers/custom-validators/videos'
+import { isVideoNameValid, isVideoPrivacyValid } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
@@ -65,6 +65,11 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     .optional()
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid saveReplay boolean'),
+
+  body('replaySettings.privacy')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isVideoPrivacyValid),
 
   body('permanentLive')
     .optional()
@@ -153,6 +158,11 @@ const videoLiveUpdateValidator = [
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid saveReplay boolean'),
 
+  body('replaySettings.privacy')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isVideoPrivacyValid),
+
   body('latencyMode')
     .optional()
     .customSanitizer(toIntOrNull)
@@ -176,6 +186,8 @@ const videoLiveUpdateValidator = [
         message: 'Custom latency mode is not allowed by this instance'
       })
     }
+
+    if (!checkLiveSettingsReplayConsistency({ res, body })) return
 
     if (res.locals.videoAll.state !== VideoState.WAITING_FOR_LIVE) {
       return res.fail({ message: 'Cannot update a live that has already started' })
@@ -269,6 +281,46 @@ function hasValidLatencyMode (body: LiveVideoUpdate | LiveVideoCreate) {
     exists(body.latencyMode) &&
     body.latencyMode !== LiveVideoLatencyMode.DEFAULT
   ) return false
+
+  return true
+}
+
+function checkLiveSettingsReplayConsistency (options: {
+  res: express.Response
+  body: LiveVideoUpdate
+}) {
+  const { res, body } = options
+
+  // We now save replays of this live, so replay settings are mandatory
+  if (res.locals.videoLive.saveReplay !== true && body.saveReplay === true) {
+
+    if (!exists(body.replaySettings)) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Replay settings are missing now the live replay is saved'
+      })
+      return false
+    }
+
+    if (!exists(body.replaySettings.privacy)) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Privacy replay setting is missing now the live replay is saved'
+      })
+      return false
+    }
+  }
+
+  // Save replay was and is not enabled, so send an error the user if it specified replay settings
+  if ((!exists(body.saveReplay) && res.locals.videoLive.saveReplay === false) || body.saveReplay === false) {
+    if (exists(body.replaySettings)) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Cannot save replay settings since live replay is not enabled'
+      })
+      return false
+    }
+  }
 
   return true
 }

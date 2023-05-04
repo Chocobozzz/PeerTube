@@ -35,6 +35,8 @@ export interface VideosCommonQuery {
   skipCount?: boolean
 
   search?: string
+
+  excludeAlreadyWatched?: boolean
 }
 
 export interface VideosCommonQueryAfterSanitize extends VideosCommonQuery {

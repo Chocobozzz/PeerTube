@@ -9,6 +9,7 @@ import { Video, VideoCaptionEdit, VideoCaptionService, VideoDetails, VideoEdit, 
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
+import { pick, simpleObjectsDeepEqual } from '@shared/core-utils'
 import { LiveVideo, LiveVideoUpdate, VideoPrivacy } from '@shared/models'
 import { VideoSource } from '@shared/models/videos/video-source'
 import { hydrateFormFromVideo } from './shared/video-edit-utils'
@@ -67,6 +68,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     if (this.liveVideo) {
       this.form.patchValue({
         saveReplay: this.liveVideo.saveReplay,
+        replayPrivacy: this.liveVideo.replaySettings ? this.liveVideo.replaySettings.privacy : VideoPrivacy.PRIVATE,
         latencyMode: this.liveVideo.latencyMode,
         permanentLive: this.liveVideo.permanentLive
       })
@@ -125,15 +127,21 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
           switchMap(() => {
             if (!this.liveVideo) return of(undefined)
 
+            const saveReplay = !!this.form.value.saveReplay
+            const replaySettings = saveReplay
+              ? { privacy: this.form.value.replayPrivacy }
+              : undefined
+
             const liveVideoUpdate: LiveVideoUpdate = {
-              saveReplay: !!this.form.value.saveReplay,
+              saveReplay,
+              replaySettings,
               permanentLive: !!this.form.value.permanentLive,
               latencyMode: this.form.value.latencyMode
             }
 
             // Don't update live attributes if they did not change
-            const liveChanged = Object.keys(liveVideoUpdate)
-              .some(key => this.liveVideo[key] !== liveVideoUpdate[key])
+            const baseVideo = pick(this.liveVideo, Object.keys(liveVideoUpdate) as (keyof LiveVideoUpdate)[])
+            const liveChanged = !simpleObjectsDeepEqual(baseVideo, liveVideoUpdate)
             if (!liveChanged) return of(undefined)
 
             return this.liveVideoService.updateLive(this.videoEdit.id, liveVideoUpdate)

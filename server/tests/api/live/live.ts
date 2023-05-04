@@ -87,6 +87,7 @@ describe('Test live', function () {
         commentsEnabled: false,
         downloadEnabled: false,
         saveReplay: true,
+        replaySettings: { privacy: VideoPrivacy.PUBLIC },
         latencyMode: LiveVideoLatencyMode.SMALL_LATENCY,
         privacy: VideoPrivacy.PUBLIC,
         previewfile: 'video_short1-preview.webm.jpg',
@@ -128,6 +129,9 @@ describe('Test live', function () {
         if (server.url === servers[0].url) {
           expect(live.rtmpUrl).to.equal('rtmp://' + server.hostname + ':' + servers[0].rtmpPort + '/live')
           expect(live.streamKey).to.not.be.empty
+
+          expect(live.replaySettings).to.exist
+          expect(live.replaySettings.privacy).to.equal(VideoPrivacy.PUBLIC)
         } else {
           expect(live.rtmpUrl).to.not.exist
           expect(live.streamKey).to.not.exist
@@ -196,6 +200,7 @@ describe('Test live', function () {
         }
 
         expect(live.saveReplay).to.be.false
+        expect(live.replaySettings).to.not.exist
         expect(live.latencyMode).to.equal(LiveVideoLatencyMode.DEFAULT)
       }
     })
@@ -366,7 +371,10 @@ describe('Test live', function () {
         name: 'live video',
         channelId: servers[0].store.channel.id,
         privacy: VideoPrivacy.PUBLIC,
-        saveReplay
+        saveReplay,
+        replaySettings: saveReplay
+          ? { privacy: VideoPrivacy.PUBLIC }
+          : undefined
       }
 
       const { uuid } = await commands[0].create({ fields: liveAttributes })
@@ -670,6 +678,9 @@ describe('Test live', function () {
         channelId: servers[0].store.channel.id,
         privacy: VideoPrivacy.PUBLIC,
         saveReplay: options.saveReplay,
+        replaySettings: options.saveReplay
+          ? { privacy: VideoPrivacy.PUBLIC }
+          : undefined,
         permanentLive: options.permanent
       }
 

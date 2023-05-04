@@ -23,9 +23,8 @@ async function checkVideosServer1 (server: PeerTubeServer, idHttp: string, idMag
   const videoHttp = await server.videos.get({ id: idHttp })
 
   expect(videoHttp.name).to.equal('small video - youtube')
-  // FIXME: youtube-dl seems broken
-  // expect(videoHttp.category.label).to.equal('News & Politics')
-  // expect(videoHttp.licence.label).to.equal('Attribution')
+  expect(videoHttp.category.label).to.equal('News & Politics')
+  expect(videoHttp.licence.label).to.equal('Attribution')
   expect(videoHttp.language.label).to.equal('Unknown')
   expect(videoHttp.nsfw).to.be.false
   expect(videoHttp.description).to.equal('this is a super description')
@@ -460,7 +459,8 @@ describe('Test video imports', function () {
     })
   }
 
-  runSuite('youtube-dl')
+  // FIXME: youtube-dl seems broken
+  // runSuite('youtube-dl')
 
   runSuite('yt-dlp')
 

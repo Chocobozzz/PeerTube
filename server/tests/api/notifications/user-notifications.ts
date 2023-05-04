@@ -342,6 +342,7 @@ describe('Test user notifications', function () {
           privacy: VideoPrivacy.PUBLIC,
           channelId: servers[1].store.channel.id,
           saveReplay: true,
+          replaySettings: { privacy: VideoPrivacy.PUBLIC },
           permanentLive: false
         }
       })
@@ -367,6 +368,7 @@ describe('Test user notifications', function () {
           privacy: VideoPrivacy.PUBLIC,
           channelId: servers[1].store.channel.id,
           saveReplay: true,
+          replaySettings: { privacy: VideoPrivacy.PUBLIC },
           permanentLive: true
         }
       })

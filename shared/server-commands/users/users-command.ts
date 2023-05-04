@@ -165,8 +165,8 @@ export class UsersCommand extends AbstractCommand {
       username,
       adminFlags,
       password = 'password',
-      videoQuota = 42000000,
-      videoQuotaDaily = -1,
+      videoQuota,
+      videoQuotaDaily,
       role = UserRole.USER
     } = options
 

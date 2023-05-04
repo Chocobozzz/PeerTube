@@ -324,6 +324,11 @@ const CONFIG = {
     }
   },
   USER: {
+    HISTORY: {
+      VIDEOS: {
+        get ENABLED () { return config.get<boolean>('user.history.videos.enabled') }
+      }
+    },
     get VIDEO_QUOTA () { return parseBytes(config.get<number>('user.video_quota')) },
     get VIDEO_QUOTA_DAILY () { return parseBytes(config.get<number>('user.video_quota_daily')) }
   },

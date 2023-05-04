@@ -18,7 +18,10 @@ function apiFailMiddleware (req: express.Request, res: express.Response, next: e
     })
 
     res.status(status)
-    res.setHeader('Content-Type', 'application/problem+json')
+
+    if (!res.headersSent) {
+      res.setHeader('Content-Type', 'application/problem+json')
+    }
 
     const json = new ProblemDocument({
       status,

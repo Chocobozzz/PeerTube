@@ -110,6 +110,7 @@ function handleObjectStorageFailure (res: express.Response, err: Error) {
 
 function setS3Headers (res: express.Response, s3Response: GetObjectCommandOutput) {
   if (s3Response.$metadata.httpStatusCode === HttpStatusCode.PARTIAL_CONTENT_206) {
+    res.setHeader('Content-Range', s3Response.ContentRange)
     res.status(HttpStatusCode.PARTIAL_CONTENT_206)
   }
 }

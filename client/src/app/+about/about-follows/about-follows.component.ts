@@ -13,8 +13,8 @@ import { Actor } from '@shared/models/actors'
 export class AboutFollowsComponent implements OnInit {
   instanceName: string
 
-  followers: string[] = []
-  followings: string[] = []
+  followers: { name: string, url: string }[] = []
+  followings: { name: string, url: string }[] = []
 
   loadedAllFollowers = false
   loadedAllFollowings = false
@@ -130,10 +130,13 @@ export class AboutFollowsComponent implements OnInit {
   }
 
   private formatFollow (actor: Actor) {
-    // Instance follow, only display host
-    if (actor.name === 'peertube') return actor.host
+    return {
+      // Instance follow, only display host
+      name: actor.name === 'peertube'
+        ? actor.host
+        : actor.name + '@' + actor.host,
 
-    return actor.name + '@' + actor.host
+      url: actor.url
+    }
   }
-
 }

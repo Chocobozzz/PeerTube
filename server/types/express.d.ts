@@ -1,4 +1,5 @@
 import { OutgoingHttpHeaders } from 'http'
+import { Writable } from 'stream'
 import { RegisterServerAuthExternalOptions } from '@server/types'
 import {
   MAbuseMessage,
@@ -16,7 +17,7 @@ import {
   MVideoFormattableDetails,
   MVideoId,
   MVideoImmutable,
-  MVideoLive,
+  MVideoLiveFormattable,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary
 } from '@server/types/models'
@@ -43,7 +44,6 @@ import {
   MVideoShareActor,
   MVideoThumbnail
 } from './models'
-import { Writable } from 'stream'
 import { MVideoSource } from './models/video/video-source'
 
 declare module 'express' {
@@ -124,7 +124,7 @@ declare module 'express' {
       onlyVideo?: MVideoThumbnail
       videoId?: MVideoId
 
-      videoLive?: MVideoLive
+      videoLive?: MVideoLiveFormattable
       videoLiveSession?: MVideoLiveSession
 
       videoShare?: MVideoShareActor

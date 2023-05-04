@@ -418,6 +418,10 @@ signup:
       blacklist: []
 
 user:
+  history:
+    videos:
+      # Enable or disable video history by default for new users.
+      enabled: true
   # Default value of maximum video bytes the user can upload (does not take into account transcoded files)
   # Byte format is supported ("1GB" etc)
   # -1 == unlimited
@@ -760,7 +764,7 @@ search:
   search_index:
     enabled: false
     # URL of the search index, that should use the same search API and routes
-    # than PeerTube: https://docs.joinpeertube.org/api/rest-reference.html
+    # than PeerTube: https://docs.joinpeertube.org/api-rest-reference.html
     # You should deploy your own with https://framagit.org/framasoft/peertube/search-index,
     # and can use https://search.joinpeertube.org/ for tests, but keep in mind the latter is an unmoderated search index
     url: ''

@@ -24,10 +24,7 @@ describe('Test live constraints', function () {
   let userAccessToken: string
   let userChannelId: number
 
-  async function createLiveWrapper (options: {
-    replay: boolean
-    permanent: boolean
-  }) {
+  async function createLiveWrapper (options: { replay: boolean, permanent: boolean }) {
     const { replay, permanent } = options
 
     const liveAttributes = {
@@ -35,6 +32,7 @@ describe('Test live constraints', function () {
       channelId: userChannelId,
       privacy: VideoPrivacy.PUBLIC,
       saveReplay: replay,
+      replaySettings: options.replay ? { privacy: VideoPrivacy.PUBLIC } : undefined,
       permanentLive: permanent
     }
 

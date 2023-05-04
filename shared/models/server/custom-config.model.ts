@@ -97,6 +97,11 @@ export interface CustomConfig {
   }
 
   user: {
+    history: {
+      videos: {
+        enabled: boolean
+      }
+    }
     videoQuota: number
     videoQuotaDaily: number
   }
@@ -229,4 +234,5 @@ export interface CustomConfig {
       isDefaultSearch: boolean
     }
   }
+
 }

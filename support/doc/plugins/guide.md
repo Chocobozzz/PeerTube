@@ -947,13 +947,13 @@ Steps:
 If you develop a plugin, clone the `peertube-plugin-quickstart` repository:
 
 ```
-$ git clone https://framagit.org/framasoft/peertube/peertube-plugin-quickstart.git peertube-plugin-mysupername
+git clone https://framagit.org/framasoft/peertube/peertube-plugin-quickstart.git peertube-plugin-mysupername
 ```
 
 If you develop a theme, clone the `peertube-theme-quickstart` repository:
 
 ```
-$ git clone https://framagit.org/framasoft/peertube/peertube-theme-quickstart.git peertube-theme-mysupername
+git clone https://framagit.org/framasoft/peertube/peertube-theme-quickstart.git peertube-theme-mysupername
 ```
 
 ### Configure your repository
@@ -961,8 +961,8 @@ $ git clone https://framagit.org/framasoft/peertube/peertube-theme-quickstart.gi
 Set your repository URL:
 
 ```
-$ cd peertube-plugin-mysupername # or cd peertube-theme-mysupername
-$ git remote set-url origin https://your-git-repo
+cd peertube-plugin-mysupername # or cd peertube-theme-mysupername
+git remote set-url origin https://your-git-repo
 ```
 
 ### Update README
@@ -970,7 +970,7 @@ $ git remote set-url origin https://your-git-repo
 Update `README.md` file:
 
 ```
-$ $EDITOR README.md
+$EDITOR README.md
 ```
 
 ### Update package.json
@@ -1100,19 +1100,19 @@ If you added client scripts, you'll need to build them using webpack.
 Install webpack:
 
 ```
-$ npm install
+npm install
 ```
 
 Add/update your files in the `clientFiles` array of `webpack.config.js`:
 
 ```
-$ $EDITOR ./webpack.config.js
+$EDITOR ./webpack.config.js
 ```
 
 Build your client files:
 
 ```
-$ npm run build
+npm run build
 ```
 
 You built files are in the `dist/` directory. Check `package.json` to correctly point to them.
@@ -1129,31 +1129,31 @@ You'll need to have a local PeerTube instance:
  * Build PeerTube:
 
 ```
-$ npm run build
+npm run build
 ```
 
  * Build the CLI:
 
 ```
-$ npm run setup:cli
+npm run setup:cli
 ```
 
  * Run PeerTube (you can access to your instance on `localhost:9000`):
 
 ```
-$ NODE_ENV=dev npm start
+NODE_ENV=dev npm start
 ```
 
  * Register the instance via the CLI:
 
 ```
-$ node ./dist/server/tools/peertube.js auth add -u 'http://localhost:9000' -U 'root' --password 'test'
+node ./dist/server/tools/peertube.js auth add -u 'http://localhost:9000' -U 'root' --password 'test'
 ```
 
 Then, you can install or reinstall your local plugin/theme by running:
 
 ```
-$ node ./dist/server/tools/peertube.js plugins install --path /your/absolute/plugin-or-theme/path
+node ./dist/server/tools/peertube.js plugins install --path /your/absolute/plugin-or-theme/path
 ```
 
 ### Publish
@@ -1161,7 +1161,7 @@ $ node ./dist/server/tools/peertube.js plugins install --path /your/absolute/plu
 Go in your plugin/theme directory, and run:
 
 ```
-$ npm publish
+npm publish
 ```
 
 Every time you want to publish another version of your plugin/theme, just update the `version` key from the `package.json`
@@ -1179,7 +1179,7 @@ If for a particular reason you don't want to maintain your plugin/theme anymore
 you can deprecate it. The plugin index will automatically remove it preventing users to find/install it from the PeerTube admin interface:
 
 ```bash
-$ npm deprecate peertube-plugin-xxx@"> 0.0.0" "explain here why you deprecate your plugin/theme"
+npm deprecate peertube-plugin-xxx@"> 0.0.0" "explain here why you deprecate your plugin/theme"
 ```
 
 ## Plugin & Theme hooks/helpers API

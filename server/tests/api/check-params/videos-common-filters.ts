@@ -122,6 +122,8 @@ describe('Test video filters validators', function () {
       include?: VideoInclude
       privacyOneOf?: VideoPrivacy[]
       expectedStatus: HttpStatusCode
+      excludeAlreadyWatched?: boolean
+      unauthenticatedUser?: boolean
     }) {
       const paths = [
         '/api/v1/video-channels/root_channel/videos',
@@ -131,14 +133,19 @@ describe('Test video filters validators', function () {
       ]
 
       for (const path of paths) {
+        const token = options.unauthenticatedUser
+          ? undefined
+          : options.token || server.accessToken
+
         await makeGetRequest({
           url: server.url,
           path,
-          token: options.token || server.accessToken,
+          token,
           query: {
             isLocal: options.isLocal,
             privacyOneOf: options.privacyOneOf,
-            include: options.include
+            include: options.include,
+            excludeAlreadyWatched: options.excludeAlreadyWatched
           },
           expectedStatus: options.expectedStatus
         })
@@ -212,6 +219,14 @@ describe('Test video filters validators', function () {
           isLocal: true
         }
       })
+    })
+
+    it('Should fail when trying to exclude already watched videos for an unlogged user', async function () {
+      await testEndpoints({ excludeAlreadyWatched: true, unauthenticatedUser: true, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should succeed when trying to exclude already watched videos for a logged user', async function () {
+      await testEndpoints({ token: userAccessToken, excludeAlreadyWatched: true, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 

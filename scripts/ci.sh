@@ -56,6 +56,10 @@ elif [ "$1" = "client" ]; then
 
     MOCHA_PARALLEL=true runTest "$1" $((2*$speedFactor)) $feedsFiles $helperFiles $miscFiles $pluginFiles $libFiles
 elif [ "$1" = "cli-plugin" ]; then
+    # Simulate HTML
+    mkdir -p "./client/dist/en-US/"
+    cp "./client/src/index.html" "./client/dist/en-US/index.html"
+
     npm run build:server
     npm run setup:cli
 

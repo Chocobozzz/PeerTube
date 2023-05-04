@@ -32,7 +32,7 @@ describe('Test plugin filter hooks', function () {
   let videoPlaylistUUID: string
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
@@ -602,6 +602,27 @@ describe('Test plugin filter hooks', function () {
     it('Should run filter:html.embed.video-playlist.allowed.result', async function () {
       const res = await makeGetRequest({ url: servers[0].url, path: embedPlaylists[0].embedPath, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.text).to.equal('Diao Chan')
+    })
+  })
+
+  describe('Client HTML filters', function () {
+    let videoUUID: string
+
+    before(async function () {
+      this.timeout(60000)
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'html video' })
+      videoUUID = uuid
+    })
+
+    it('Should run filter:html.client.json-ld.result', async function () {
+      const res = await makeGetRequest({ url: servers[0].url, path: '/w/' + videoUUID, expectedStatus: HttpStatusCode.OK_200 })
+      expect(res.text).to.contain('"recordedAt":"http://example.com/recordedAt"')
+    })
+
+    it('Should not run filter:html.client.json-ld.result with an account', async function () {
+      const res = await makeGetRequest({ url: servers[0].url, path: '/a/root', expectedStatus: HttpStatusCode.OK_200 })
+      expect(res.text).not.to.contain('"recordedAt":"http://example.com/recordedAt"')
     })
   })
 

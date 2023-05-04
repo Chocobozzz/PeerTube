@@ -1,12 +1,12 @@
 import { SortMeta } from 'primeng/api'
 import { from, Observable } from 'rxjs'
-import { catchError, concatMap, map, toArray } from 'rxjs/operators'
+import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { RestExtractor, RestPagination, RestService, UserService } from '@app/core'
+import { RestExtractor, RestPagination, RestService, ServerService, UserService } from '@app/core'
 import { getBytes } from '@root-helpers/bytes'
-import { arrayify } from '@shared/core-utils'
-import { ResultList, User as UserServerModel, UserCreate, UserRole, UserUpdate } from '@shared/models'
+import { arrayify, peertubeTranslate } from '@shared/core-utils'
+import { ResultList, User as UserServerModel, UserCreate, UserUpdate } from '@shared/models'
 
 @Injectable()
 export class UserAdminService {
@@ -14,7 +14,8 @@ export class UserAdminService {
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
-    private restService: RestService
+    private restService: RestService,
+    private serverService: ServerService
   ) { }
 
   addUser (userCreate: UserCreate) {
@@ -58,10 +59,16 @@ export class UserAdminService {
     }
 
     return this.authHttp.get<ResultList<UserServerModel>>(UserService.BASE_USERS_URL, { params })
-               .pipe(
-                 map(res => this.restExtractor.applyToResultListData(res, this.formatUser.bind(this))),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+      .pipe(
+        switchMap(data => {
+          return this.serverService.getServerLocale()
+            .pipe(map(translations => ({ data, translations })))
+        }),
+        map(({ data, translations }) => {
+          return this.restExtractor.applyToResultListData(data, this.formatUser.bind(this), [ translations ])
+        }),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   removeUsers (usersArg: UserServerModel | UserServerModel[]) {
@@ -98,7 +105,7 @@ export class UserAdminService {
       )
   }
 
-  private formatUser (user: UserServerModel) {
+  private formatUser (user: UserServerModel, translations: { [ id: string ]: string } = {}) {
     let videoQuota
     if (user.videoQuota === -1) {
       videoQuota = '∞'
@@ -118,16 +125,10 @@ export class UserAdminService {
       videoQuotaUsedDaily = getBytes(user.videoQuotaUsedDaily || 0, 0) + ''
     }
 
-    const roleLabels: { [ id in UserRole ]: string } = {
-      [UserRole.USER]: $localize`User`,
-      [UserRole.ADMINISTRATOR]: $localize`Administrator`,
-      [UserRole.MODERATOR]: $localize`Moderator`
-    }
-
     return Object.assign(user, {
       role: {
         id: user.role.id,
-        label: roleLabels[user.role.id]
+        label: peertubeTranslate(user.role.label, translations)
       },
       videoQuota,
       videoQuotaUsed,

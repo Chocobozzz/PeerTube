@@ -364,13 +364,21 @@ describe('Test video static file privacy', function () {
       })
 
       {
-        const { video, live } = await server.live.quickCreate({ saveReplay: true, permanentLive: false, privacy: VideoPrivacy.PRIVATE })
+        const { video, live } = await server.live.quickCreate({
+          saveReplay: true,
+          permanentLive: false,
+          privacy: VideoPrivacy.PRIVATE
+        })
         normalLiveId = video.uuid
         normalLive = live
       }
 
       {
-        const { video, live } = await server.live.quickCreate({ saveReplay: true, permanentLive: true, privacy: VideoPrivacy.PRIVATE })
+        const { video, live } = await server.live.quickCreate({
+          saveReplay: true,
+          permanentLive: true,
+          privacy: VideoPrivacy.PRIVATE
+        })
         permanentLiveId = video.uuid
         permanentLive = live
       }

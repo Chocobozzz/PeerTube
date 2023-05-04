@@ -26,8 +26,12 @@ import {
   waitJobs,
   webtorrentAdd
 } from '@shared/server-commands'
+import { sha1 } from '@shared/extra-utils'
 
 async function checkFiles (options: {
+  server: PeerTubeServer
+  originServer: PeerTubeServer
+
   video: VideoDetails
 
   baseMockUrl?: string
@@ -39,6 +43,8 @@ async function checkFiles (options: {
   webtorrentPrefix?: string
 }) {
   const {
+    server,
+    originServer,
     video,
     playlistBucket,
     webtorrentBucket,
@@ -86,6 +92,7 @@ async function checkFiles (options: {
     const resSha = await makeRawRequest({ url: hls.segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
     expect(JSON.stringify(resSha.body)).to.not.throw
 
+    let i = 0
     for (const file of hls.files) {
       expectStartWith(file.fileUrl, start)
 
@@ -94,6 +101,15 @@ async function checkFiles (options: {
       expectStartWith(location, start)
 
       await makeRawRequest({ url: location, expectedStatus: HttpStatusCode.OK_200 })
+
+      if (originServer.internalServerNumber === server.internalServerNumber) {
+        const infohash = sha1(`${2 + hls.playlistUrl}+V${i}`)
+        const dbInfohashes = await originServer.sql.getPlaylistInfohash(hls.id)
+
+        expect(dbInfohashes).to.include(infohash)
+      }
+
+      i++
     }
   }
 
@@ -198,7 +214,7 @@ function runTestSuite (options: {
 
     for (const server of servers) {
       const video = await server.videos.get({ id: uuid })
-      const files = await checkFiles({ ...options, video, baseMockUrl })
+      const files = await checkFiles({ ...options, server, originServer: servers[0], video, baseMockUrl })
 
       deletedUrls = deletedUrls.concat(files)
     }
@@ -214,7 +230,7 @@ function runTestSuite (options: {
 
     for (const server of servers) {
       const video = await server.videos.get({ id: uuid })
-      const files = await checkFiles({ ...options, video, baseMockUrl })
+      const files = await checkFiles({ ...options, server, originServer: servers[0], video, baseMockUrl })
 
       deletedUrls = deletedUrls.concat(files)
     }

@@ -1,3 +1,4 @@
+import { VideoPrivacy } from '../video-privacy.enum'
 import { LiveVideoError } from './live-video-error.enum'
 
 export interface LiveVideoSession {
@@ -10,6 +11,8 @@ export interface LiveVideoSession {
 
   saveReplay: boolean
   endingProcessed: boolean
+
+  replaySettings?: { privacy: VideoPrivacy }
 
   replayVideo: {
     id: number

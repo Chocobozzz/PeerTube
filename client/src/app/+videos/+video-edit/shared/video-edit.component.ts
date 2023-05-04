@@ -165,7 +165,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       liveStreamKey: null,
       permanentLive: null,
       latencyMode: null,
-      saveReplay: null
+      saveReplay: null,
+      replayPrivacy: null
     }
 
     this.formValidatorService.updateFormGroup(
@@ -303,8 +304,12 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     modalRef.componentInstance.captionEdited.subscribe(this.onCaptionEdited.bind(this))
   }
 
-  isSaveReplayEnabled () {
+  isSaveReplayAllowed () {
     return this.serverConfig.live.allowReplay
+  }
+
+  isSaveReplayEnabled () {
+    return this.form.value['saveReplay'] === true
   }
 
   isPermanentLiveEnabled () {

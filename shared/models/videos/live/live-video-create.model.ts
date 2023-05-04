@@ -1,4 +1,5 @@
 import { VideoCreate } from '../video-create.model'
+import { VideoPrivacy } from '../video-privacy.enum'
 import { LiveVideoLatencyMode } from './live-video-latency-mode.enum'
 
 export interface LiveVideoCreate extends VideoCreate {
@@ -6,4 +7,5 @@ export interface LiveVideoCreate extends VideoCreate {
   latencyMode?: LiveVideoLatencyMode
 
   saveReplay?: boolean
+  replaySettings?: { privacy: VideoPrivacy }
 }

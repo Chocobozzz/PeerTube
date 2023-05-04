@@ -234,7 +234,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     if (!await doesVideoExist(req.params.id, res)) return cleanUpReqFiles(req)
 
     const video = getVideoWithAttributes(res)
-    if (req.body.privacy && video.isLive && video.state !== VideoState.WAITING_FOR_LIVE) {
+    if (video.isLive && video.privacy !== req.body.privacy && video.state !== VideoState.WAITING_FOR_LIVE) {
       return res.fail({ message: 'Cannot update privacy of a live that has already started' })
     }
 
@@ -489,6 +489,10 @@ const commonVideosFiltersValidator = [
   query('search')
     .optional()
     .custom(exists),
+  query('excludeAlreadyWatched')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .isBoolean().withMessage('Should be a valid excludeAlreadyWatched boolean'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -520,6 +524,13 @@ const commonVideosFiltersValidator = [
       }
     }
 
+    if (!user && exists(req.query.excludeAlreadyWatched)) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Cannot use excludeAlreadyWatched parameter when auth token is not provided'
+      })
+      return false
+    }
     return next()
   }
 ]
