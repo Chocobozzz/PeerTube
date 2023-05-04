@@ -1,12 +1,10 @@
 import Bluebird from 'bluebird'
 import express from 'express'
 import { move } from 'fs-extra'
-import { basename, join } from 'path'
+import { basename } from 'path'
 import { createAnyReqFiles } from '@server/helpers/express-utils'
-import { CONFIG } from '@server/initializers/config'
-import { MIMETYPES } from '@server/initializers/constants'
-import { JobQueue } from '@server/lib/job-queue'
-import { buildTaskFileFieldname, getTaskFileFromReq } from '@server/lib/video-studio'
+import { MIMETYPES, VIDEO_FILTERS } from '@server/initializers/constants'
+import { buildTaskFileFieldname, createVideoStudioJob, getStudioTaskFilePath, getTaskFileFromReq } from '@server/lib/video-studio'
 import {
   HttpStatusCode,
   VideoState,
@@ -75,7 +73,11 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
     tasks: await Bluebird.mapSeries(body.tasks, (t, i) => buildTaskPayload(t, i, files))
   }
 
-  JobQueue.Instance.createJobAsync({ type: 'video-studio-edition', payload })
+  await createVideoStudioJob({
+    user: res.locals.oauth.token.User,
+    payload,
+    video
+  })
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -124,13 +126,16 @@ async function buildWatermarkTask (task: VideoStudioTaskWatermark, indice: numbe
   return {
     name: task.name,
     options: {
-      file: destination
+      file: destination,
+      watermarkSizeRatio: VIDEO_FILTERS.WATERMARK.SIZE_RATIO,
+      horitonzalMarginRatio: VIDEO_FILTERS.WATERMARK.HORIZONTAL_MARGIN_RATIO,
+      verticalMarginRatio: VIDEO_FILTERS.WATERMARK.VERTICAL_MARGIN_RATIO
     }
   }
 }
 
 async function moveStudioFileToPersistentTMP (file: string) {
-  const destination = join(CONFIG.STORAGE.TMP_PERSISTENT_DIR, basename(file))
+  const destination = getStudioTaskFilePath(basename(file))
 
   await move(file, destination)
 

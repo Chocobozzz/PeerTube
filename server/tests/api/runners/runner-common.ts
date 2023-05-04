@@ -2,7 +2,15 @@
 
 import { expect } from 'chai'
 import { wait } from '@shared/core-utils'
-import { HttpStatusCode, Runner, RunnerJob, RunnerJobAdmin, RunnerJobState, RunnerRegistrationToken } from '@shared/models'
+import {
+  HttpStatusCode,
+  Runner,
+  RunnerJob,
+  RunnerJobAdmin,
+  RunnerJobState,
+  RunnerJobVODWebVideoTranscodingPayload,
+  RunnerRegistrationToken
+} from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -349,7 +357,7 @@ describe('Test runner common actions', function () {
         for (const job of availableJobs) {
           expect(job.uuid).to.exist
           expect(job.payload.input).to.exist
-          expect(job.payload.output).to.exist
+          expect((job.payload as RunnerJobVODWebVideoTranscodingPayload).output).to.exist
 
           expect((job as RunnerJobAdmin).privatePayload).to.not.exist
         }

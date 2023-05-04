@@ -8,6 +8,7 @@ import { ConfigManager } from '../shared'
 import { IPCServer } from '../shared/ipc'
 import { logger } from '../shared/logger'
 import { JobWithToken, processJob } from './process'
+import { isJobSupported } from './shared'
 
 type PeerTubeServer = PeerTubeServerCommand & {
   runnerToken: string
@@ -199,12 +200,14 @@ export class RunnerServer {
 
     const { availableJobs } = await server.runnerJobs.request({ runnerToken: server.runnerToken })
 
-    if (availableJobs.length === 0) {
+    const filtered = availableJobs.filter(j => isJobSupported(j))
+
+    if (filtered.length === 0) {
       logger.debug(`No job available on ${server.url} for runner ${server.runnerName}`)
       return undefined
     }
 
-    return availableJobs[0]
+    return filtered[0]
   }
 
   private async tryToExecuteJobAsync (server: PeerTubeServer, jobToAccept: { uuid: string }) {

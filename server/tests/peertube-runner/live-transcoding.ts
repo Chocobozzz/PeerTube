@@ -1,6 +1,12 @@
 import { expect } from 'chai'
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
-import { expectStartWith, PeerTubeRunnerProcess, SQLCommand, testLiveVideoResolutions } from '@server/tests/shared'
+import {
+  checkPeerTubeRunnerCacheIsEmpty,
+  expectStartWith,
+  PeerTubeRunnerProcess,
+  SQLCommand,
+  testLiveVideoResolutions
+} from '@server/tests/shared'
 import { areMockObjectStorageTestsDisabled, wait } from '@shared/core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import {
@@ -167,6 +173,13 @@ describe('Test Live transcoding in peertube-runner program', function () {
     })
 
     runSuite({ objectStorage: true })
+  })
+
+  describe('Check cleanup', function () {
+
+    it('Should have an empty cache directory', async function () {
+      await checkPeerTubeRunnerCacheIsEmpty()
+    })
   })
 
   after(async function () {

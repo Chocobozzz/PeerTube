@@ -1,6 +1,6 @@
-import { VideoPrivacy } from '../videos/video-privacy.enum'
 import { ClientScriptJSON } from '../plugins/plugin-package-json.model'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
+import { VideoPrivacy } from '../videos/video-privacy.enum'
 import { BroadcastMessageLevel } from './broadcast-message-level.type'
 
 export interface ServerConfigPlugin {
@@ -186,6 +186,10 @@ export interface ServerConfig {
 
   videoStudio: {
     enabled: boolean
+
+    remoteRunners: {
+      enabled: boolean
+    }
   }
 
   import: {

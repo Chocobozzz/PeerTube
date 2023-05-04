@@ -62,7 +62,7 @@ export class VODWebVideoTranscodingJobHandler extends AbstractVODTranscodingJobH
 
   // ---------------------------------------------------------------------------
 
-  async specificComplete (options: {
+  protected async specificComplete (options: {
     runnerJob: MRunnerJob
     resultPayload: VODWebVideoTranscodingSuccess
   }) {

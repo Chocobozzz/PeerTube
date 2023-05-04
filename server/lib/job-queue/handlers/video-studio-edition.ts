@@ -1,25 +1,18 @@
 import { Job } from 'bullmq'
-import { move, remove } from 'fs-extra'
+import { remove } from 'fs-extra'
 import { join } from 'path'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg'
-import { createTorrentAndSetInfoHashFromPath } from '@server/helpers/webtorrent'
 import { CONFIG } from '@server/initializers/config'
-import { VIDEO_FILTERS } from '@server/initializers/constants'
-import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
-import { generateWebTorrentVideoFilename } from '@server/lib/paths'
-import { createOptimizeOrMergeAudioJobs } from '@server/lib/transcoding/create-transcoding-job'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles'
 import { isAbleToUploadVideo } from '@server/lib/user'
-import { buildFileMetadata, removeHLSPlaylist, removeWebTorrentFile } from '@server/lib/video-file'
 import { VideoPathManager } from '@server/lib/video-path-manager'
-import { approximateIntroOutroAdditionalSize, safeCleanupStudioTMPFiles } from '@server/lib/video-studio'
+import { approximateIntroOutroAdditionalSize, onVideoEditionEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
-import { VideoFileModel } from '@server/models/video/video-file'
-import { MVideo, MVideoFile, MVideoFullLight, MVideoId, MVideoWithAllFiles } from '@server/types/models'
-import { getLowercaseExtension, pick } from '@shared/core-utils'
-import { buildUUID, getFileSize } from '@shared/extra-utils'
-import { FFmpegEdition, ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamDuration, getVideoStreamFPS } from '@shared/ffmpeg'
+import { MVideo, MVideoFullLight } from '@server/types/models'
+import { pick } from '@shared/core-utils'
+import { buildUUID } from '@shared/extra-utils'
+import { FFmpegEdition } from '@shared/ffmpeg'
 import {
   VideoStudioEditionPayload,
   VideoStudioTask,
@@ -46,7 +39,7 @@ async function processVideoStudioEdition (job: Job) {
     if (!video) {
       logger.info('Can\'t process job %d, video does not exist.', job.id, lTags)
 
-      await safeCleanupStudioTMPFiles(payload)
+      await safeCleanupStudioTMPFiles(payload.tasks)
       return undefined
     }
 
@@ -81,28 +74,9 @@ async function processVideoStudioEdition (job: Job) {
 
     logger.info('Video edition ended for video %s.', video.uuid, lTags)
 
-    const newFile = await buildNewFile(video, editionResultPath)
-
-    const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newFile)
-    await move(editionResultPath, outputPath)
-
-    await safeCleanupStudioTMPFiles(payload)
-
-    await createTorrentAndSetInfoHashFromPath(video, newFile, outputPath)
-    await removeAllFiles(video, newFile)
-
-    await newFile.save()
-
-    video.duration = await getVideoStreamDuration(outputPath)
-    await video.save()
-
-    await federateVideoIfNeeded(video, false, undefined)
-
-    const user = await UserModel.loadByVideoId(video.id)
-
-    await createOptimizeOrMergeAudioJobs({ video, videoFile: newFile, isNewVideo: false, user, videoFileAlreadyLocked: false })
+    await onVideoEditionEnded({ video, editionResultPath, tasks: payload.tasks })
   } catch (err) {
-    await safeCleanupStudioTMPFiles(payload)
+    await safeCleanupStudioTMPFiles(payload.tasks)
 
     throw err
   }
@@ -181,43 +155,14 @@ function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWater
     watermarkPath: task.options.file,
 
     videoFilters: {
-      watermarkSizeRatio: VIDEO_FILTERS.WATERMARK.SIZE_RATIO,
-      horitonzalMarginRatio: VIDEO_FILTERS.WATERMARK.HORIZONTAL_MARGIN_RATIO,
-      verticalMarginRatio: VIDEO_FILTERS.WATERMARK.VERTICAL_MARGIN_RATIO
+      watermarkSizeRatio: task.options.watermarkSizeRatio,
+      horitonzalMarginRatio: task.options.horitonzalMarginRatio,
+      verticalMarginRatio: task.options.verticalMarginRatio
     }
   })
 }
 
 // ---------------------------------------------------------------------------
-
-async function buildNewFile (video: MVideoId, path: string) {
-  const videoFile = new VideoFileModel({
-    extname: getLowercaseExtension(path),
-    size: await getFileSize(path),
-    metadata: await buildFileMetadata(path),
-    videoStreamingPlaylistId: null,
-    videoId: video.id
-  })
-
-  const probe = await ffprobePromise(path)
-
-  videoFile.fps = await getVideoStreamFPS(path, probe)
-  videoFile.resolution = (await getVideoStreamDimensionsInfo(path, probe)).resolution
-
-  videoFile.filename = generateWebTorrentVideoFilename(videoFile.resolution, videoFile.extname)
-
-  return videoFile
-}
-
-async function removeAllFiles (video: MVideoWithAllFiles, webTorrentFileException: MVideoFile) {
-  await removeHLSPlaylist(video)
-
-  for (const file of video.VideoFiles) {
-    if (file.id === webTorrentFileException.id) continue
-
-    await removeWebTorrentFile(video, file.id)
-  }
-}
 
 async function checkUserQuotaOrThrow (video: MVideoFullLight, payload: VideoStudioEditionPayload) {
   const user = await UserModel.loadByVideoId(video.id)

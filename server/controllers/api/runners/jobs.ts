@@ -17,6 +17,7 @@ import {
 import {
   abortRunnerJobValidator,
   acceptRunnerJobValidator,
+  cancelRunnerJobValidator,
   errorRunnerJobValidator,
   getRunnerFromTokenValidator,
   jobOfRunnerGetValidator,
@@ -41,6 +42,7 @@ import {
   RunnerJobUpdateBody,
   RunnerJobUpdatePayload,
   UserRight,
+  VideoEditionTranscodingSuccess,
   VODAudioMergeTranscodingSuccess,
   VODHLSTranscodingSuccess,
   VODWebVideoTranscodingSuccess
@@ -110,6 +112,7 @@ runnerJobsRouter.post('/jobs/:jobUUID/cancel',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_RUNNERS),
   asyncMiddleware(runnerJobGetValidator),
+  cancelRunnerJobValidator,
   asyncMiddleware(cancelRunnerJob)
 )
 
@@ -297,6 +300,14 @@ const jobSuccessPayloadBuilders: {
     }
   },
 
+  'video-edition-transcoding': (payload: VideoEditionTranscodingSuccess, files) => {
+    return {
+      ...payload,
+
+      videoFile: files['payload[videoFile]'][0].path
+    }
+  },
+
   'live-rtmp-hls-transcoding': () => ({})
 }
 
@@ -327,7 +338,7 @@ async function postRunnerJobSuccess (req: express.Request, res: express.Response
 async function cancelRunnerJob (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
 
-  logger.info('Cancelling job %s (%s)', runnerJob.type, lTags(runnerJob.uuid, runnerJob.type))
+  logger.info('Cancelling job %s (%s)', runnerJob.uuid, runnerJob.type, lTags(runnerJob.uuid, runnerJob.type))
 
   const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
   await new RunnerJobHandler().cancel({ runnerJob })

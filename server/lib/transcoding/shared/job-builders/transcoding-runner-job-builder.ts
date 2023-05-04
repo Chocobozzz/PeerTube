@@ -8,6 +8,7 @@ import { VideoPathManager } from '@server/lib/video-path-manager'
 import { MUserId, MVideoFile, MVideoFullLight, MVideoWithFileThumbnail } from '@server/types/models'
 import { MRunnerJob } from '@server/types/models/runners'
 import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS, hasAudioStream, isAudioFile } from '@shared/ffmpeg'
+import { getTranscodingJobPriority } from '../../transcoding-priority'
 import { computeResolutionsToTranscode } from '../../transcoding-resolutions'
 import { AbstractJobBuilder } from './abstract-job-builder'
 
@@ -49,7 +50,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
           : resolution
 
         const fps = computeOutputFPS({ inputFPS, resolution: maxResolution })
-        const priority = await this.getTranscodingJobPriority({ user, fallback: 0 })
+        const priority = await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
 
         const mainRunnerJob = videoFile.isAudio()
           ? await new VODAudioMergeTranscodingJobHandler().create({ video, resolution: maxResolution, fps, isNewVideo, priority })
@@ -63,7 +64,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
             fps,
             isNewVideo,
             dependsOnRunnerJob: mainRunnerJob,
-            priority: await this.getTranscodingJobPriority({ user, fallback: 0 })
+            priority: await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
           })
         }
 
@@ -96,7 +97,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
     const maxResolution = Math.max(...resolutions)
     const { fps: inputFPS } = await video.probeMaxQualityFile()
     const maxFPS = computeOutputFPS({ inputFPS, resolution: maxResolution })
-    const priority = await this.getTranscodingJobPriority({ user, fallback: 0 })
+    const priority = await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
 
     const childrenResolutions = resolutions.filter(r => r !== maxResolution)
 
@@ -121,7 +122,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
           isNewVideo,
           deleteWebVideoFiles: false,
           dependsOnRunnerJob,
-          priority: await this.getTranscodingJobPriority({ user, fallback: 0 })
+          priority: await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
         })
         continue
       }
@@ -133,7 +134,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
           fps,
           isNewVideo,
           dependsOnRunnerJob,
-          priority: await this.getTranscodingJobPriority({ user, fallback: 0 })
+          priority: await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
         })
         continue
       }
@@ -172,7 +173,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
           fps,
           isNewVideo,
           dependsOnRunnerJob: mainRunnerJob,
-          priority: await this.getTranscodingJobPriority({ user, fallback: 0 })
+          priority: await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
         })
       }
 
@@ -184,7 +185,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
           isNewVideo,
           deleteWebVideoFiles: false,
           dependsOnRunnerJob: mainRunnerJob,
-          priority: await this.getTranscodingJobPriority({ user, fallback: 0 })
+          priority: await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
         })
       }
     }

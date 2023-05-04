@@ -130,6 +130,22 @@ function checkBadSortPagination (url: string, path: string, token?: string, quer
   })
 }
 
+// ---------------------------------------------------------------------------
+
+async function checkVideoDuration (server: PeerTubeServer, videoUUID: string, duration: number) {
+  const video = await server.videos.get({ id: videoUUID })
+
+  expect(video.duration).to.be.approximately(duration, 1)
+
+  for (const file of video.files) {
+    const metadata = await server.videos.getFileMetadata({ url: file.metadataUrl })
+
+    for (const stream of metadata.streams) {
+      expect(Math.round(stream.duration)).to.be.approximately(duration, 1)
+    }
+  }
+}
+
 export {
   dateIsValid,
   testImageSize,
@@ -142,5 +158,6 @@ export {
   checkBadStartPagination,
   checkBadCountPagination,
   checkBadSortPagination,
+  checkVideoDuration,
   expectLogContain
 }

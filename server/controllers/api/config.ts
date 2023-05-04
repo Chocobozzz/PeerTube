@@ -274,7 +274,10 @@ function customConfig (): CustomConfig {
       }
     },
     videoStudio: {
-      enabled: CONFIG.VIDEO_STUDIO.ENABLED
+      enabled: CONFIG.VIDEO_STUDIO.ENABLED,
+      remoteRunners: {
+        enabled: CONFIG.VIDEO_STUDIO.REMOTE_RUNNERS.ENABLED
+      }
     },
     import: {
       videos: {

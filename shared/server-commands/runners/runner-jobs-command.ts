@@ -200,7 +200,7 @@ export class RunnerJobsCommand extends AbstractCommand {
     })
   }
 
-  getInputFile (options: OverrideCommandOptions & { url: string, jobToken: string, runnerToken: string }) {
+  getJobFile (options: OverrideCommandOptions & { url: string, jobToken: string, runnerToken: string }) {
     const { host, protocol, pathname } = new URL(options.url)
 
     return this.postBodyRequest({
@@ -249,8 +249,15 @@ export class RunnerJobsCommand extends AbstractCommand {
 
     const { data } = await this.list({ count: 100 })
 
+    const allowedStates = new Set<RunnerJobState>([
+      RunnerJobState.PENDING,
+      RunnerJobState.PROCESSING,
+      RunnerJobState.WAITING_FOR_PARENT_JOB
+    ])
+
     for (const job of data) {
       if (state && job.state.id !== state) continue
+      else if (allowedStates.has(job.state.id) !== true) continue
 
       await this.cancelByAdmin({ jobUUID: job.uuid })
     }

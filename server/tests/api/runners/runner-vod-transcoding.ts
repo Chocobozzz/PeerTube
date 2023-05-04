@@ -155,7 +155,7 @@ describe('Test runner VOD transcoding', function () {
       expect(job.payload.output.resolution).to.equal(720)
       expect(job.payload.output.fps).to.equal(25)
 
-      const { body } = await servers[0].runnerJobs.getInputFile({ url: job.payload.input.videoFileUrl, jobToken, runnerToken })
+      const { body } = await servers[0].runnerJobs.getJobFile({ url: job.payload.input.videoFileUrl, jobToken, runnerToken })
       const inputFile = await readFile(buildAbsoluteFixturePath('video_short.webm'))
 
       expect(body).to.deep.equal(inputFile)
@@ -200,7 +200,7 @@ describe('Test runner VOD transcoding', function () {
       const { job } = await servers[0].runnerJobs.accept<RunnerJobVODWebVideoTranscodingPayload>({ runnerToken, jobUUID })
       jobToken = job.jobToken
 
-      const { body } = await servers[0].runnerJobs.getInputFile({ url: job.payload.input.videoFileUrl, jobToken, runnerToken })
+      const { body } = await servers[0].runnerJobs.getJobFile({ url: job.payload.input.videoFileUrl, jobToken, runnerToken })
       const inputFile = await readFile(buildAbsoluteFixturePath('video_short.mp4'))
 
       expect(body).to.deep.equal(inputFile)
@@ -221,7 +221,7 @@ describe('Test runner VOD transcoding', function () {
         const { job } = await servers[0].runnerJobs.accept<RunnerJobVODWebVideoTranscodingPayload>({ runnerToken, jobUUID })
         jobToken = job.jobToken
 
-        const { body } = await servers[0].runnerJobs.getInputFile({ url: job.payload.input.videoFileUrl, jobToken, runnerToken })
+        const { body } = await servers[0].runnerJobs.getJobFile({ url: job.payload.input.videoFileUrl, jobToken, runnerToken })
         const inputFile = await readFile(buildAbsoluteFixturePath('video_short.mp4'))
         expect(body).to.deep.equal(inputFile)
 
@@ -293,7 +293,7 @@ describe('Test runner VOD transcoding', function () {
       const { job } = await servers[0].runnerJobs.accept<RunnerJobVODHLSTranscodingPayload>({ runnerToken, jobUUID })
       jobToken = job.jobToken
 
-      const { body } = await servers[0].runnerJobs.getInputFile({ url: job.payload.input.videoFileUrl, jobToken, runnerToken })
+      const { body } = await servers[0].runnerJobs.getJobFile({ url: job.payload.input.videoFileUrl, jobToken, runnerToken })
       const inputFile = await readFile(buildAbsoluteFixturePath('video_short.mp4'))
 
       expect(body).to.deep.equal(inputFile)
@@ -337,7 +337,7 @@ describe('Test runner VOD transcoding', function () {
         const { job } = await servers[0].runnerJobs.accept<RunnerJobVODHLSTranscodingPayload>({ runnerToken, jobUUID })
         jobToken = job.jobToken
 
-        const { body } = await servers[0].runnerJobs.getInputFile({ url: job.payload.input.videoFileUrl, jobToken, runnerToken })
+        const { body } = await servers[0].runnerJobs.getJobFile({ url: job.payload.input.videoFileUrl, jobToken, runnerToken })
         const inputFile = await readFile(buildAbsoluteFixturePath(maxQualityFile))
         expect(body).to.deep.equal(inputFile)
 
@@ -446,13 +446,13 @@ describe('Test runner VOD transcoding', function () {
       expect(job.payload.output.resolution).to.equal(480)
 
       {
-        const { body } = await servers[0].runnerJobs.getInputFile({ url: job.payload.input.audioFileUrl, jobToken, runnerToken })
+        const { body } = await servers[0].runnerJobs.getJobFile({ url: job.payload.input.audioFileUrl, jobToken, runnerToken })
         const inputFile = await readFile(buildAbsoluteFixturePath('sample.ogg'))
         expect(body).to.deep.equal(inputFile)
       }
 
       {
-        const { body } = await servers[0].runnerJobs.getInputFile({ url: job.payload.input.previewFileUrl, jobToken, runnerToken })
+        const { body } = await servers[0].runnerJobs.getJobFile({ url: job.payload.input.previewFileUrl, jobToken, runnerToken })
 
         const video = await servers[0].videos.get({ id: videoUUID })
         const { body: inputFile } = await makeGetRequest({
@@ -503,7 +503,7 @@ describe('Test runner VOD transcoding', function () {
       const { job } = await servers[0].runnerJobs.accept<RunnerJobVODHLSTranscodingPayload>({ runnerToken, jobUUID })
       jobToken = job.jobToken
 
-      const { body } = await servers[0].runnerJobs.getInputFile({ url: job.payload.input.videoFileUrl, jobToken, runnerToken })
+      const { body } = await servers[0].runnerJobs.getJobFile({ url: job.payload.input.videoFileUrl, jobToken, runnerToken })
       const inputFile = await readFile(buildAbsoluteFixturePath('video_short_480p.mp4'))
       expect(body).to.deep.equal(inputFile)
 

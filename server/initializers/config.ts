@@ -423,7 +423,10 @@ const CONFIG = {
     }
   },
   VIDEO_STUDIO: {
-    get ENABLED () { return config.get<boolean>('video_studio.enabled') }
+    get ENABLED () { return config.get<boolean>('video_studio.enabled') },
+    REMOTE_RUNNERS: {
+      get ENABLED () { return config.get<boolean>('video_studio.remote_runners.enabled') }
+    }
   },
   IMPORT: {
     VIDEOS: {

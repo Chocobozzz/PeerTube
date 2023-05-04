@@ -230,6 +230,20 @@
             </ng-container>
           </my-peertube-checkbox>
         </div>
+
+        <div class="form-group" formGroupName="remoteRunners" [ngClass]="getStudioDisabledClass()">
+          <my-peertube-checkbox
+            inputName="videoStudioRemoteRunnersEnabled" formControlName="enabled"
+            i18n-labelText labelText="Enable remote runners"
+          >
+            <ng-container ngProjectAs="description">
+              <span i18n>
+                Use <a routerLink="/admin/system/runners/runners-list">remote runners</a> to process studio transcoding tasks.
+                Remote runners has to register on your instance first.
+              </span>
+            </ng-container>
+          </my-peertube-checkbox>
+        </div>
       </ng-container>
     </div>
   </div>

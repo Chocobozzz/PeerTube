@@ -195,6 +195,18 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
+  enableRemoteStudio () {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        videoStudio: {
+          remoteRunners: {
+            enabled: true
+          }
+        }
+      }
+    })
+  }
+
   // ---------------------------------------------------------------------------
 
   enableStudio () {
@@ -442,7 +454,10 @@ export class ConfigCommand extends AbstractCommand {
         }
       },
       videoStudio: {
-        enabled: false
+        enabled: false,
+        remoteRunners: {
+          enabled: false
+        }
       },
       import: {
         videos: {

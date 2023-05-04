@@ -1,12 +1,14 @@
 import { logger } from 'packages/peertube-runner/shared/logger'
 import {
   RunnerJobLiveRTMPHLSTranscodingPayload,
+  RunnerJobVideoEditionTranscodingPayload,
   RunnerJobVODAudioMergeTranscodingPayload,
   RunnerJobVODHLSTranscodingPayload,
   RunnerJobVODWebVideoTranscodingPayload
 } from '@shared/models'
 import { processAudioMergeTranscoding, processHLSTranscoding, ProcessOptions, processWebVideoTranscoding } from './shared'
 import { ProcessLiveRTMPHLSTranscoding } from './shared/process-live'
+import { processStudioTranscoding } from './shared/process-studio'
 
 export async function processJob (options: ProcessOptions) {
   const { server, job } = options
@@ -21,6 +23,8 @@ export async function processJob (options: ProcessOptions) {
     await processHLSTranscoding(options as ProcessOptions<RunnerJobVODHLSTranscodingPayload>)
   } else if (job.type === 'live-rtmp-hls-transcoding') {
     await new ProcessLiveRTMPHLSTranscoding(options as ProcessOptions<RunnerJobLiveRTMPHLSTranscodingPayload>).process()
+  } else if (job.type === 'video-edition-transcoding') {
+    await processStudioTranscoding(options as ProcessOptions<RunnerJobVideoEditionTranscodingPayload>)
   } else {
     logger.error(`Unknown job ${job.type} to process`)
     return

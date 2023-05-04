@@ -62,33 +62,36 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
 
   const ffmpegVod = buildFFmpegVOD({ job, server, runnerToken })
 
-  await ffmpegVod.transcode({
-    type: 'hls',
-    copyCodecs: false,
-    inputPath,
-    hlsPlaylist: { videoFilename },
-    outputPath,
+  try {
+    await ffmpegVod.transcode({
+      type: 'hls',
+      copyCodecs: false,
+      inputPath,
+      hlsPlaylist: { videoFilename },
+      outputPath,
 
-    inputFileMutexReleaser: () => {},
+      inputFileMutexReleaser: () => {},
 
-    resolution: payload.output.resolution,
-    fps: payload.output.fps
-  })
+      resolution: payload.output.resolution,
+      fps: payload.output.fps
+    })
 
-  const successBody: VODHLSTranscodingSuccess = {
-    resolutionPlaylistFile: outputPath,
-    videoFile: videoPath
+    const successBody: VODHLSTranscodingSuccess = {
+      resolutionPlaylistFile: outputPath,
+      videoFile: videoPath
+    }
+
+    await server.runnerJobs.success({
+      jobToken: job.jobToken,
+      jobUUID: job.uuid,
+      runnerToken,
+      payload: successBody
+    })
+  } finally {
+    await remove(inputPath)
+    await remove(outputPath)
+    await remove(videoPath)
   }
-
-  await server.runnerJobs.success({
-    jobToken: job.jobToken,
-    jobUUID: job.uuid,
-    runnerToken,
-    payload: successBody
-  })
-
-  await remove(outputPath)
-  await remove(videoPath)
 }
 
 export async function processAudioMergeTranscoding (options: ProcessOptions<RunnerJobVODAudioMergeTranscodingPayload>) {

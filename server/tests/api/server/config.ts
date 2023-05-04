@@ -102,6 +102,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.live.transcoding.alwaysTranscodeOriginalResolution).to.be.true
 
   expect(data.videoStudio.enabled).to.be.false
+  expect(data.videoStudio.remoteRunners.enabled).to.be.false
 
   expect(data.import.videos.concurrency).to.equal(2)
   expect(data.import.videos.http.enabled).to.be.true
@@ -211,6 +212,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.live.transcoding.alwaysTranscodeOriginalResolution).to.be.false
 
   expect(data.videoStudio.enabled).to.be.true
+  expect(data.videoStudio.remoteRunners.enabled).to.be.true
 
   expect(data.import.videos.concurrency).to.equal(4)
   expect(data.import.videos.http.enabled).to.be.false
@@ -374,7 +376,10 @@ const newCustomConfig: CustomConfig = {
     }
   },
   videoStudio: {
-    enabled: true
+    enabled: true,
+    remoteRunners: {
+      enabled: true
+    }
   },
   import: {
     videos: {

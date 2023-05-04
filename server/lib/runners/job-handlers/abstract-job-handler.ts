@@ -1,3 +1,4 @@
+import { throttle } from 'lodash'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { RUNNER_JOBS } from '@server/initializers/constants'
@@ -14,6 +15,8 @@ import {
   RunnerJobSuccessPayload,
   RunnerJobType,
   RunnerJobUpdatePayload,
+  RunnerJobVideoEditionTranscodingPayload,
+  RunnerJobVideoEditionTranscodingPrivatePayload,
   RunnerJobVODAudioMergeTranscodingPayload,
   RunnerJobVODAudioMergeTranscodingPrivatePayload,
   RunnerJobVODHLSTranscodingPayload,
@@ -21,7 +24,6 @@ import {
   RunnerJobVODWebVideoTranscodingPayload,
   RunnerJobVODWebVideoTranscodingPrivatePayload
 } from '@shared/models'
-import { throttle } from 'lodash'
 
 type CreateRunnerJobArg =
   {
@@ -43,6 +45,11 @@ type CreateRunnerJobArg =
     type: Extract<RunnerJobType, 'live-rtmp-hls-transcoding'>
     payload: RunnerJobLiveRTMPHLSTranscodingPayload
     privatePayload: RunnerJobLiveRTMPHLSTranscodingPrivatePayload
+  } |
+  {
+    type: Extract<RunnerJobType, 'video-edition-transcoding'>
+    payload: RunnerJobVideoEditionTranscodingPayload
+    privatePayload: RunnerJobVideoEditionTranscodingPrivatePayload
   }
 
 export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S extends RunnerJobSuccessPayload> {
@@ -61,6 +68,8 @@ export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S
     dependsOnRunnerJob?: MRunnerJob
   }): Promise<MRunnerJob> {
     const { priority, dependsOnRunnerJob } = options
+
+    logger.debug('Creating runner job', { options, ...this.lTags(options.type) })
 
     const runnerJob = new RunnerJobModel({
       ...pick(options, [ 'type', 'payload', 'privatePayload' ]),

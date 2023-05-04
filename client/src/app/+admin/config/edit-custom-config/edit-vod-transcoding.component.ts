@@ -62,8 +62,16 @@ export class EditVODTranscodingComponent implements OnInit, OnChanges {
     return this.editConfigurationService.isTranscodingEnabled(this.form)
   }
 
+  isStudioEnabled () {
+    return this.editConfigurationService.isStudioEnabled(this.form)
+  }
+
   getTranscodingDisabledClass () {
     return { 'disabled-checkbox-extra': !this.isTranscodingEnabled() }
+  }
+
+  getStudioDisabledClass () {
+    return { 'disabled-checkbox-extra': !this.isStudioEnabled() }
   }
 
   getTotalTranscodingThreads () {

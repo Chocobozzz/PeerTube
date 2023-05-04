@@ -71,7 +71,7 @@ export class VODHLSTranscodingJobHandler extends AbstractVODTranscodingJobHandle
 
   // ---------------------------------------------------------------------------
 
-  async specificComplete (options: {
+  protected async specificComplete (options: {
     runnerJob: MRunnerJob
     resultPayload: VODHLSTranscodingSuccess
   }) {

@@ -62,6 +62,7 @@ const customConfigUpdateValidator = [
   body('transcoding.hls.enabled').isBoolean(),
 
   body('videoStudio.enabled').isBoolean(),
+  body('videoStudio.remoteRunners.enabled').isBoolean(),
 
   body('import.videos.concurrency').isInt({ min: 0 }),
   body('import.videos.http.enabled').isBoolean(),
