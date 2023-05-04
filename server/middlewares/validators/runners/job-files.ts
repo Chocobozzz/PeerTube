@@ -2,7 +2,7 @@ import express from 'express'
 import { param } from 'express-validator'
 import { basename } from 'path'
 import { isSafeFilename } from '@server/helpers/custom-validators/misc'
-import { hasVideoStudioTaskFile, HttpStatusCode, RunnerJobVideoEditionTranscodingPayload } from '@shared/models'
+import { hasVideoStudioTaskFile, HttpStatusCode, RunnerJobStudioTranscodingPayload } from '@shared/models'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
 
 const tags = [ 'runner' ]
@@ -37,7 +37,7 @@ export const runnerJobGetVideoStudioTaskFileValidator = [
 
     const filename = req.params.filename
 
-    const payload = res.locals.runnerJob.payload as RunnerJobVideoEditionTranscodingPayload
+    const payload = res.locals.runnerJob.payload as RunnerJobStudioTranscodingPayload
 
     const found = Array.isArray(payload?.tasks) && payload.tasks.some(t => {
       if (hasVideoStudioTaskFile(t)) {

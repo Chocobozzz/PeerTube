@@ -2,7 +2,7 @@ import {
   RunnerJobLiveRTMPHLSTranscodingPayload,
   RunnerJobPayload,
   RunnerJobType,
-  RunnerJobVideoEditionTranscodingPayload,
+  RunnerJobStudioTranscodingPayload,
   RunnerJobVODAudioMergeTranscodingPayload,
   RunnerJobVODHLSTranscodingPayload,
   RunnerJobVODWebVideoTranscodingPayload,
@@ -22,7 +22,7 @@ const supportedMatrix = {
   'live-rtmp-hls-transcoding': (_payload: RunnerJobLiveRTMPHLSTranscodingPayload) => {
     return true
   },
-  'video-edition-transcoding': (payload: RunnerJobVideoEditionTranscodingPayload) => {
+  'video-studio-transcoding': (payload: RunnerJobStudioTranscodingPayload) => {
     const tasks = payload?.tasks
     const supported = new Set<VideoStudioTaskPayload['name']>([ 'add-intro', 'add-outro', 'add-watermark', 'cut' ])
 

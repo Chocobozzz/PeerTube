@@ -12,7 +12,7 @@ export type RunnerJobSuccessPayload =
   VODHLSTranscodingSuccess |
   VODAudioMergeTranscodingSuccess |
   LiveRTMPHLSTranscodingSuccess |
-  VideoEditionTranscodingSuccess
+  VideoStudioTranscodingSuccess
 
 export interface VODWebVideoTranscodingSuccess {
   videoFile: Blob | string
@@ -31,7 +31,7 @@ export interface LiveRTMPHLSTranscodingSuccess {
 
 }
 
-export interface VideoEditionTranscodingSuccess {
+export interface VideoStudioTranscodingSuccess {
   videoFile: Blob | string
 }
 

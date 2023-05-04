@@ -1,13 +1,12 @@
+import { remove } from 'fs-extra'
 import { throttle } from 'lodash'
 import { ConfigManager, downloadFile, logger } from 'packages/peertube-runner/shared'
 import { join } from 'path'
 import { buildUUID } from '@shared/extra-utils'
-import { FFmpegEdition, FFmpegLive, FFmpegVOD } from '@shared/ffmpeg'
+import { FFmpegEdition, FFmpegLive, FFmpegVOD, getDefaultAvailableEncoders, getDefaultEncodersToTry } from '@shared/ffmpeg'
 import { RunnerJob, RunnerJobPayload } from '@shared/models'
 import { PeerTubeServer } from '@shared/server-commands'
 import { getTranscodingLogger } from './transcoding-logger'
-import { getAvailableEncoders, getEncodersToTry } from './transcoding-profiles'
-import { remove } from 'fs-extra'
 
 export type JobWithToken <T extends RunnerJobPayload = RunnerJobPayload> = RunnerJob<T> & { jobToken: string }
 
@@ -92,8 +91,8 @@ function getCommonFFmpegOptions () {
     tmpDirectory: ConfigManager.Instance.getTranscodingDirectory(),
     profile: 'default',
     availableEncoders: {
-      available: getAvailableEncoders(),
-      encodersToTry: getEncodersToTry()
+      available: getDefaultAvailableEncoders(),
+      encodersToTry: getDefaultEncodersToTry()
     },
     logger: getTranscodingLogger()
   }

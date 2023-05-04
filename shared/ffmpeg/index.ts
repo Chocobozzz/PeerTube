@@ -1,4 +1,5 @@
 export * from './ffmpeg-command-wrapper'
+export * from './ffmpeg-default-transcoding-profile'
 export * from './ffmpeg-edition'
 export * from './ffmpeg-images'
 export * from './ffmpeg-live'

@@ -1,11 +1,11 @@
 import { remove } from 'fs-extra'
 import { pick } from 'lodash'
 import { logger } from 'packages/peertube-runner/shared'
-import { extname, join } from 'path'
+import { join } from 'path'
 import { buildUUID } from '@shared/extra-utils'
 import {
-  RunnerJobVideoEditionTranscodingPayload,
-  VideoEditionTranscodingSuccess,
+  RunnerJobStudioTranscodingPayload,
+  VideoStudioTranscodingSuccess,
   VideoStudioTask,
   VideoStudioTaskCutPayload,
   VideoStudioTaskIntroPayload,
@@ -16,7 +16,7 @@ import {
 import { ConfigManager } from '../../../shared/config-manager'
 import { buildFFmpegEdition, downloadInputFile, JobWithToken, ProcessOptions } from './common'
 
-export async function processStudioTranscoding (options: ProcessOptions<RunnerJobVideoEditionTranscodingPayload>) {
+export async function processStudioTranscoding (options: ProcessOptions<RunnerJobStudioTranscodingPayload>) {
   const { server, job, runnerToken } = options
   const payload = job.payload
 
@@ -43,7 +43,7 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
       tmpInputFilePath = outputPath
     }
 
-    const successBody: VideoEditionTranscodingSuccess = {
+    const successBody: VideoStudioTranscodingSuccess = {
       videoFile: outputPath
     }
 
@@ -94,14 +94,18 @@ async function processAddIntroOutro (options: TaskProcessorOptions<VideoStudioTa
 
   const introOutroPath = await downloadInputFile({ url: task.options.file, runnerToken, job })
 
-  return buildFFmpegEdition().addIntroOutro({
-    ...pick(options, [ 'inputPath', 'outputPath' ]),
+  try {
+    await buildFFmpegEdition().addIntroOutro({
+      ...pick(options, [ 'inputPath', 'outputPath' ]),
 
-    introOutroPath,
-    type: task.name === 'add-intro'
-      ? 'intro'
-      : 'outro'
-  })
+      introOutroPath,
+      type: task.name === 'add-intro'
+        ? 'intro'
+        : 'outro'
+    })
+  } finally {
+    await remove(introOutroPath)
+  }
 }
 
 function processCut (options: TaskProcessorOptions<VideoStudioTaskCutPayload>) {
@@ -124,15 +128,19 @@ async function processAddWatermark (options: TaskProcessorOptions<VideoStudioTas
 
   const watermarkPath = await downloadInputFile({ url: task.options.file, runnerToken, job })
 
-  return buildFFmpegEdition().addWatermark({
-    ...pick(options, [ 'inputPath', 'outputPath' ]),
+  try {
+    await buildFFmpegEdition().addWatermark({
+      ...pick(options, [ 'inputPath', 'outputPath' ]),
 
-    watermarkPath,
+      watermarkPath,
 
-    videoFilters: {
-      watermarkSizeRatio: task.options.watermarkSizeRatio,
-      horitonzalMarginRatio: task.options.horitonzalMarginRatio,
-      verticalMarginRatio: task.options.verticalMarginRatio
-    }
-  })
+      videoFilters: {
+        watermarkSizeRatio: task.options.watermarkSizeRatio,
+        horitonzalMarginRatio: task.options.horitonzalMarginRatio,
+        verticalMarginRatio: task.options.verticalMarginRatio
+      }
+    })
+  } finally {
+    await remove(watermarkPath)
+  }
 }

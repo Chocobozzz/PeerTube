@@ -15,8 +15,8 @@ import {
   RunnerJobSuccessPayload,
   RunnerJobType,
   RunnerJobUpdatePayload,
-  RunnerJobVideoEditionTranscodingPayload,
-  RunnerJobVideoEditionTranscodingPrivatePayload,
+  RunnerJobStudioTranscodingPayload,
+  RunnerJobVideoStudioTranscodingPrivatePayload,
   RunnerJobVODAudioMergeTranscodingPayload,
   RunnerJobVODAudioMergeTranscodingPrivatePayload,
   RunnerJobVODHLSTranscodingPayload,
@@ -47,9 +47,9 @@ type CreateRunnerJobArg =
     privatePayload: RunnerJobLiveRTMPHLSTranscodingPrivatePayload
   } |
   {
-    type: Extract<RunnerJobType, 'video-edition-transcoding'>
-    payload: RunnerJobVideoEditionTranscodingPayload
-    privatePayload: RunnerJobVideoEditionTranscodingPrivatePayload
+    type: Extract<RunnerJobType, 'video-studio-transcoding'>
+    payload: RunnerJobStudioTranscodingPayload
+    privatePayload: RunnerJobVideoStudioTranscodingPrivatePayload
   }
 
 export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S extends RunnerJobSuccessPayload> {

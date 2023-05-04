@@ -57,7 +57,7 @@ const defaultLibFDKAACVODOptionsBuilder: EncoderOptionsBuilder = ({ streamNum })
   return { outputOptions: [ buildStreamSuffix('-q:a', streamNum), '5' ] }
 }
 
-export function getAvailableEncoders () {
+export function getDefaultAvailableEncoders () {
   return {
     vod: {
       libx264: {
@@ -81,7 +81,7 @@ export function getAvailableEncoders () {
   }
 }
 
-export function getEncodersToTry () {
+export function getDefaultEncodersToTry () {
   return {
     vod: {
       video: [ 'libx264' ],

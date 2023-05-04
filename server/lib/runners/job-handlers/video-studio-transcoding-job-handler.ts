@@ -1,7 +1,7 @@
 
 import { basename } from 'path'
 import { logger } from '@server/helpers/logger'
-import { onVideoEditionEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio'
+import { onVideoStudioEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio'
 import { MVideo } from '@server/types/models'
 import { MRunnerJob } from '@server/types/models/runners'
 import { buildUUID } from '@shared/extra-utils'
@@ -11,9 +11,9 @@ import {
   isVideoStudioTaskWatermark,
   RunnerJobState,
   RunnerJobUpdatePayload,
-  RunnerJobVideoEditionTranscodingPayload,
-  RunnerJobVideoEditionTranscodingPrivatePayload,
-  VideoEditionTranscodingSuccess,
+  RunnerJobStudioTranscodingPayload,
+  RunnerJobVideoStudioTranscodingPrivatePayload,
+  VideoStudioTranscodingSuccess,
   VideoState,
   VideoStudioTaskPayload
 } from '@shared/models'
@@ -28,13 +28,13 @@ type CreateOptions = {
 }
 
 // eslint-disable-next-line max-len
-export class VideoEditionTranscodingJobHandler extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, VideoEditionTranscodingSuccess> {
+export class VideoStudioTranscodingJobHandler extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, VideoStudioTranscodingSuccess> {
 
   async create (options: CreateOptions) {
     const { video, priority, tasks } = options
 
     const jobUUID = buildUUID()
-    const payload: RunnerJobVideoEditionTranscodingPayload = {
+    const payload: RunnerJobStudioTranscodingPayload = {
       input: {
         videoFileUrl: generateRunnerTranscodingVideoInputFileUrl(jobUUID, video.uuid)
       },
@@ -67,13 +67,13 @@ export class VideoEditionTranscodingJobHandler extends AbstractJobHandler<Create
       })
     }
 
-    const privatePayload: RunnerJobVideoEditionTranscodingPrivatePayload = {
+    const privatePayload: RunnerJobVideoStudioTranscodingPrivatePayload = {
       videoUUID: video.uuid,
       originalTasks: tasks
     }
 
     const job = await this.createRunnerJob({
-      type: 'video-edition-transcoding',
+      type: 'video-studio-transcoding',
       jobUUID,
       payload,
       privatePayload,
@@ -103,10 +103,10 @@ export class VideoEditionTranscodingJobHandler extends AbstractJobHandler<Create
 
   protected async specificComplete (options: {
     runnerJob: MRunnerJob
-    resultPayload: VideoEditionTranscodingSuccess
+    resultPayload: VideoStudioTranscodingSuccess
   }) {
     const { runnerJob, resultPayload } = options
-    const privatePayload = runnerJob.privatePayload as RunnerJobVideoEditionTranscodingPrivatePayload
+    const privatePayload = runnerJob.privatePayload as RunnerJobVideoStudioTranscodingPrivatePayload
 
     const video = await loadTranscodingRunnerVideo(runnerJob, this.lTags)
     if (!video) {
@@ -116,7 +116,7 @@ export class VideoEditionTranscodingJobHandler extends AbstractJobHandler<Create
 
     const videoFilePath = resultPayload.videoFile as string
 
-    await onVideoEditionEnded({ video, editionResultPath: videoFilePath, tasks: privatePayload.originalTasks })
+    await onVideoStudioEnded({ video, editionResultPath: videoFilePath, tasks: privatePayload.originalTasks })
 
     logger.info(
       'Runner video edition transcoding job %s for %s ended.',
@@ -146,7 +146,7 @@ export class VideoEditionTranscodingJobHandler extends AbstractJobHandler<Create
   }) {
     const { runnerJob } = options
 
-    const payload = runnerJob.privatePayload as RunnerJobVideoEditionTranscodingPrivatePayload
+    const payload = runnerJob.privatePayload as RunnerJobVideoStudioTranscodingPrivatePayload
     await safeCleanupStudioTMPFiles(payload.originalTasks)
 
     const video = await loadTranscodingRunnerVideo(options.runnerJob, this.lTags)

@@ -270,7 +270,7 @@ describe('Test video studio', function () {
     })
   })
 
-  describe('HLS only video edition', function () {
+  describe('HLS only studio edition', function () {
 
     before(async function () {
       // Disable webtorrent
@@ -300,7 +300,7 @@ describe('Test video studio', function () {
     })
   })
 
-  describe('Object storage video edition', function () {
+  describe('Object storage studio edition', function () {
     if (areMockObjectStorageTestsDisabled()) return
 
     before(async function () {

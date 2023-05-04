@@ -5,8 +5,8 @@ import { readFile } from 'fs-extra'
 import { checkPersistentTmpIsEmpty, checkVideoDuration } from '@server/tests/shared'
 import { buildAbsoluteFixturePath } from '@shared/core-utils'
 import {
-  RunnerJobVideoEditionTranscodingPayload,
-  VideoEditionTranscodingSuccess,
+  RunnerJobStudioTranscodingPayload,
+  VideoStudioTranscodingSuccess,
   VideoState,
   VideoStudioTask,
   VideoStudioTaskIntro
@@ -121,10 +121,10 @@ describe('Test runner video studio transcoding', function () {
       await checkVideoDuration(server, videoUUID, 5)
     }
 
-    const { job } = await servers[0].runnerJobs.accept<RunnerJobVideoEditionTranscodingPayload>({ runnerToken, jobUUID })
+    const { job } = await servers[0].runnerJobs.accept<RunnerJobStudioTranscodingPayload>({ runnerToken, jobUUID })
     const jobToken = job.jobToken
 
-    expect(job.type === 'video-edition-transcoding')
+    expect(job.type === 'video-studio-transcoding')
     expect(job.payload.input.videoFileUrl).to.exist
 
     // Check video input file
@@ -150,7 +150,7 @@ describe('Test runner video studio transcoding', function () {
       expect(body).to.deep.equal(inputFile)
     }
 
-    const payload: VideoEditionTranscodingSuccess = { videoFile: 'video_very_short_240p.mp4' }
+    const payload: VideoStudioTranscodingSuccess = { videoFile: 'video_very_short_240p.mp4' }
     await servers[0].runnerJobs.success({ runnerToken, jobUUID, jobToken, payload })
 
     await waitJobs(servers)
