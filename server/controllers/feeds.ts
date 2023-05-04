@@ -142,9 +142,19 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   const account = res.locals.account
   const videoChannel = res.locals.videoChannel
   const nsfw = buildNSFWFilter(res, req.query.nsfw)
-  const format = req.query.format || req.params.format || 'rss'
 
   const { name, description, imageUrl, accountImageUrl, link, accountLink } = await buildFeedMetadata({ videoChannel, account })
+
+  const feed = initFeed({
+    name,
+    description,
+    link,
+    isPodcast: false,
+    imageUrl,
+    author: { name, link: accountLink, imageUrl: accountImageUrl },
+    resourceType: 'videos',
+    queryString: new URL(WEBSERVER.URL + req.url).search
+  })
 
   const options = {
     accountId: account ? account.id : null,
@@ -161,8 +171,6 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
       orLocalVideos: true
     },
     nsfw,
-    // Prevent podcast feeds from listing videos in other instances
-    // helps prevent duplicates when they are indexed -- only the author should control them
     isLocal: req.query.isLocal,
     include: req.query.include | VideoInclude.FILES,
     hasFiles: true,
@@ -170,18 +178,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     ...options
   })
 
-  const feed = initFeed({
-    name,
-    description,
-    link,
-    isPodcast: false,
-    imageUrl,
-    author: { name, link: accountLink, imageUrl: accountImageUrl },
-    resourceType: 'videos',
-    queryString: new URL(WEBSERVER.URL + req.url).search
-  })
-
-  await addVideosToFeed(feed, data, format)
+  await addVideosToFeed(feed, data)
 
   // Now the feed generation is done, let's send it!
   return sendFeed(feed, req, res)
@@ -191,7 +188,6 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
   const start = 0
   const account = res.locals.account
   const nsfw = buildNSFWFilter(res, req.query.nsfw)
-  const format = req.query.format || req.params.format || 'rss'
 
   const { name, description, imageUrl, link } = await buildFeedMetadata({ account })
 
@@ -225,7 +221,7 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
     user: res.locals.user
   })
 
-  await addVideosToFeed(feed, data, format)
+  await addVideosToFeed(feed, data)
 
   // Now the feed generation is done, let's send it!
   return sendFeed(feed, req, res)
@@ -326,8 +322,8 @@ function initFeed (parameters: {
 }) {
   const webserverUrl = WEBSERVER.URL
   const {
-    name, description, link, imageUrl, isPodcast, locked, author, person, resourceType, queryString, medium, stunServers, trackers, customXMLNS,
-    customTags
+    name, description, link, imageUrl, isPodcast, locked, author, person, resourceType, queryString, medium,
+    stunServers, trackers, customXMLNS, customTags
   } = parameters
 
   return new Feed({
@@ -524,7 +520,7 @@ async function addVideosToPodcastFeed(feed: Feed, videos: VideoModel[]) {
   }
 }
 
-async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string) {
+async function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
   /**
    * Adding video items to the feed object, one at a time
    */
@@ -616,7 +612,7 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
 }
 
 function sendFeed (feed: Feed, req: express.Request, res: express.Response) {
-  const format = req.query.format || req.params.format
+  const format = req.params.format
 
   if (format === 'atom' || format === 'atom1') {
     return res.send(feed.atom1()).end()
@@ -628,10 +624,6 @@ function sendFeed (feed: Feed, req: express.Request, res: express.Response) {
 
   if (format === 'rss' || format === 'rss2') {
     return res.send(feed.rss2()).end()
-  }
-
-  if (format === 'podcast') {
-    return res.send(feed.podcast()).end()
   }
 
   // We're in the ambiguous '.xml' case and we look at the format query parameter

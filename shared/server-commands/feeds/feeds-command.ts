@@ -1,5 +1,5 @@
 import { buildUUID } from '@shared/extra-utils'
-import {HttpStatusCode} from '@shared/models'
+import { HttpStatusCode } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 type FeedType = 'videos' | 'video-comments' | 'subscriptions'

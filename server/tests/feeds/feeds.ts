@@ -172,8 +172,6 @@ describe('Test syndication feeds', () => {
       // Since podcast feeds should only work on the server they originate on,
       // only test the first server where the videos reside
       const server = servers[0]
-      //const channels = await servers[0].channels.listByAccount({ accountName: 'john' })
-      //const channel = channels.data[0]
       const rss = await server.feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
       expect(XMLValidator.validate(rss)).to.be.true
 
@@ -200,8 +198,6 @@ describe('Test syndication feeds', () => {
 
     it('Should contain a valid podcast:alternateEnclosure with HLS only (covers Podcast endpoint)', async function () {
       const server = serverHLSOnly
-      //const channels = await servers[0].channels.listByAccount({ accountName: 'john' })
-      //const channel = channels.data[0]
       const rss = await server.feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
       expect(XMLValidator.validate(rss)).to.be.true
 
@@ -223,8 +219,6 @@ describe('Test syndication feeds', () => {
 
     it('Should contain a valid podcast:socialInteract (covers Podcast endpoint)', async function () {
       const server = servers[0]
-      //const channels = await servers[0].channels.listByAccount({ accountName: 'john' })
-      //const channel = channels.data[0]
       const rss = await server.feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
       expect(XMLValidator.validate(rss)).to.be.true
 
@@ -241,8 +235,6 @@ describe('Test syndication feeds', () => {
 
     it('Should contain a valid support custom tags for plugins (covers Podcast endpoint)', async function () {
       const server = servers[0]
-      //const channels = await servers[0].channels.listByAccount({ accountName: 'john' })
-      //const channel = channels.data[0]
       const rss = await server.feed.getPodcastXML({ ignoreCache: true, channelId: userChannelId })
       expect(XMLValidator.validate(rss)).to.be.true
 
