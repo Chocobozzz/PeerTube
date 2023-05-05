@@ -300,6 +300,29 @@ describe('Test video studio', function () {
     })
   })
 
+  describe('Server restart', function () {
+
+    it('Should still be able to run video edition after a server restart', async function () {
+      this.timeout(240_000)
+
+      await renewVideo()
+      await servers[0].videoStudio.createEditionTasks({ videoId: videoUUID, tasks: VideoStudioCommand.getComplexTask() })
+
+      await servers[0].kill()
+      await servers[0].run()
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        await checkVideoDuration(server, videoUUID, 9)
+      }
+    })
+
+    it('Should have an empty persistent tmp directory', async function () {
+      await checkPersistentTmpIsEmpty(servers[0])
+    })
+  })
+
   describe('Object storage studio edition', function () {
     if (areMockObjectStorageTestsDisabled()) return
 
@@ -339,29 +362,6 @@ describe('Test video studio', function () {
 
         await checkVideoDuration(server, videoUUID, 9)
       }
-    })
-  })
-
-  describe('Server restart', function () {
-
-    it('Should still be able to run video edition after a server restart', async function () {
-      this.timeout(240_000)
-
-      await renewVideo()
-      await servers[0].videoStudio.createEditionTasks({ videoId: videoUUID, tasks: VideoStudioCommand.getComplexTask() })
-
-      await servers[0].kill()
-      await servers[0].run()
-
-      await waitJobs(servers)
-
-      for (const server of servers) {
-        await checkVideoDuration(server, videoUUID, 9)
-      }
-    })
-
-    it('Should have an empty persistent tmp directory', async function () {
-      await checkPersistentTmpIsEmpty(servers[0])
     })
   })
 
