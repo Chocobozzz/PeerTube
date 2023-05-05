@@ -410,7 +410,7 @@ export class PluginManager implements ServerHook {
     npmName: string
     unregister?: boolean // default true
   }) {
-    const { npmName, unregister } = options
+    const { npmName, unregister = true } = options
 
     logger.info('Uninstalling plugin %s.', npmName)
 
