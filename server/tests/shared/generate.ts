@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import ffmpeg from 'fluent-ffmpeg'
 import { ensureDir, pathExists } from 'fs-extra'
 import { dirname } from 'path'
-import { buildAbsoluteFixturePath, getMaxBitrate } from '@shared/core-utils'
+import { buildAbsoluteFixturePath, getMaxTheoreticalBitrate } from '@shared/core-utils'
 import { getVideoStreamBitrate, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@shared/ffmpeg'
 
 async function ensureHasTooBigBitrate (fixturePath: string) {
@@ -10,7 +10,7 @@ async function ensureHasTooBigBitrate (fixturePath: string) {
   const dataResolution = await getVideoStreamDimensionsInfo(fixturePath)
   const fps = await getVideoStreamFPS(fixturePath)
 
-  const maxBitrate = getMaxBitrate({ ...dataResolution, fps })
+  const maxBitrate = getMaxTheoreticalBitrate({ ...dataResolution, fps })
   expect(bitrate).to.be.above(maxBitrate)
 }
 

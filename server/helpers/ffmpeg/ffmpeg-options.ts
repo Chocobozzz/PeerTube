@@ -11,7 +11,7 @@ export function getFFmpegCommandWrapperOptions (type: CommandType, availableEnco
     availableEncoders,
     profile: getProfile(type),
 
-    niceness: FFMPEG_NICE[type],
+    niceness: FFMPEG_NICE[type.toUpperCase()],
     tmpDirectory: CONFIG.STORAGE.TMP_DIR,
     threads: getThreads(type),
 

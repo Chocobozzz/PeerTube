@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { canDoQuickTranscode } from '@server/lib/transcoding/transcoding-quick-transcode'
 import { checkWebTorrentWorks, generateHighBitrateVideo, generateVideoWithFramerate } from '@server/tests/shared'
-import { buildAbsoluteFixturePath, getAllFiles, getMaxBitrate, getMinLimitBitrate, omit } from '@shared/core-utils'
+import { buildAbsoluteFixturePath, getAllFiles, getMaxTheoreticalBitrate, getMinTheoreticalBitrate, omit } from '@shared/core-utils'
 import {
   ffprobePromise,
   getAudioStream,
@@ -564,7 +564,7 @@ describe('Test video transcoding', function () {
 
           expect(resolution).to.equal(resolution)
 
-          const maxBitrate = getMaxBitrate({ ...dataResolution, fps })
+          const maxBitrate = getMaxTheoreticalBitrate({ ...dataResolution, fps })
           expect(bitrate).to.be.below(maxBitrate)
         }
       }
@@ -611,7 +611,7 @@ describe('Test video transcoding', function () {
         const bitrate = await getVideoStreamBitrate(path)
 
         const inputBitrate = 60_000
-        const limit = getMinLimitBitrate({ fps: 10, ratio: 1, resolution: r })
+        const limit = getMinTheoreticalBitrate({ fps: 10, ratio: 1, resolution: r })
         let belowValue = Math.max(inputBitrate, limit)
         belowValue += belowValue * 0.20 // Apply 20% margin because bitrate control is not very precise
 
