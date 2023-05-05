@@ -107,6 +107,7 @@ export const serverFilterHookObject = {
   'filter:html.embed.video.allowed.result': true,
   'filter:html.embed.video-playlist.allowed.result': true,
 
+  // Peertube >= 5.2
   'filter:html.client.json-ld.result': true,
 
   'filter:job-queue.process.params': true,
