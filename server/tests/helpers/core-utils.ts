@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { snakeCase } from 'lodash'
 import validator from 'validator'
-import { getAverageBitrate, getMaxBitrate } from '@shared/core-utils'
+import { getAverageTheoreticalBitrate, getMaxTheoreticalBitrate } from '@shared/core-utils'
 import { VideoResolution } from '@shared/models'
 import { objectConverter, parseBytes, parseDurationToMs } from '../../helpers/core-utils'
 
@@ -128,7 +128,7 @@ describe('Bitrate', function () {
     ]
 
     for (const test of tests) {
-      expect(getMaxBitrate(test)).to.be.above(test.min * 1000).and.below(test.max * 1000)
+      expect(getMaxTheoreticalBitrate(test)).to.be.above(test.min * 1000).and.below(test.max * 1000)
     }
   })
 
@@ -144,7 +144,7 @@ describe('Bitrate', function () {
     ]
 
     for (const test of tests) {
-      expect(getAverageBitrate(test)).to.be.above(test.min * 1000).and.below(test.max * 1000)
+      expect(getAverageTheoreticalBitrate(test)).to.be.above(test.min * 1000).and.below(test.max * 1000)
     }
   })
 })

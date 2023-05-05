@@ -145,7 +145,7 @@ describe('Test Live transcoding in peertube-runner program', function () {
     const registrationToken = await servers[0].runnerRegistrationTokens.getFirstRegistrationToken()
 
     peertubeRunner = new PeerTubeRunnerProcess()
-    await peertubeRunner.runServer({ hideLogs: false })
+    await peertubeRunner.runServer()
     await peertubeRunner.registerPeerTubeInstance({ server: servers[0], registrationToken, runnerName: 'runner' })
   })
 
