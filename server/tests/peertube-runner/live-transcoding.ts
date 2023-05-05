@@ -183,8 +183,10 @@ describe('Test Live transcoding in peertube-runner program', function () {
   })
 
   after(async function () {
-    await peertubeRunner.unregisterPeerTubeInstance({ server: servers[0] })
-    peertubeRunner.kill()
+    if (peertubeRunner) {
+      await peertubeRunner.unregisterPeerTubeInstance({ server: servers[0] })
+      peertubeRunner.kill()
+    }
 
     await cleanupTests(servers)
   })

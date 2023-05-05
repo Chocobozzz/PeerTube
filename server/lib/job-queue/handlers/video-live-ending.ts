@@ -218,6 +218,7 @@ async function assignReplayFilesToVideo (options: {
 
   for (const concatenatedTsFile of concatenatedTsFiles) {
     const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+    await video.reload()
 
     const concatenatedTsFilePath = join(replayDirectory, concatenatedTsFile)
 

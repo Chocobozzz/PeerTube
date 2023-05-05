@@ -72,7 +72,6 @@ export async function onHLSVideoFileTranscoding (options: {
   const mutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {
-    // VOD transcoding is a long task, refresh video attributes
     await video.reload()
 
     const videoFilePath = VideoPathManager.Instance.getFSVideoFileOutputPath(playlist, videoFile)

@@ -21,8 +21,8 @@ function sendRTMPStream (options: {
     command.outputOption('-c copy')
   } else {
     command.outputOption('-c:v libx264')
-    command.outputOption('-g 50')
-    command.outputOption('-keyint_min 2')
+    command.outputOption('-g 120')
+    command.outputOption('-x264-params "no-scenecut=1"')
     command.outputOption('-r 60')
   }
 
