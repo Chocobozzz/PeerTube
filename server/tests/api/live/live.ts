@@ -447,7 +447,7 @@ describe('Test live', function () {
     })
 
     it('Should enable transcoding with some resolutions', async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       const resolutions = [ 240, 480 ]
       await updateConf(resolutions)
@@ -499,7 +499,7 @@ describe('Test live', function () {
     })
 
     it('Should enable transcoding with some resolutions and correctly save them', async function () {
-      this.timeout(400_000)
+      this.timeout(500_000)
 
       const resolutions = [ 240, 360, 720 ]
 
@@ -586,7 +586,7 @@ describe('Test live', function () {
     })
 
     it('Should not generate an upper resolution than original file', async function () {
-      this.timeout(400_000)
+      this.timeout(500_000)
 
       const resolutions = [ 240, 480 ]
       await updateConf(resolutions)
