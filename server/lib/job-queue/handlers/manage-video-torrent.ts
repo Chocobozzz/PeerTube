@@ -35,6 +35,9 @@ async function doCreateAction (payload: ManageVideoTorrentPayload & { action: 'c
   const fileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {
+    await video.reload()
+    await file.reload()
+
     await createTorrentAndSetInfoHash(video, file)
 
     // Refresh videoFile because the createTorrentAndSetInfoHash could be long

@@ -40,6 +40,9 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
       : await VideoPathManager.Instance.lockFiles(video.uuid)
 
     try {
+      await video.reload()
+      await videoFile.reload()
+
       await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), async videoFilePath => {
         const probe = await ffprobePromise(videoFilePath)
 
