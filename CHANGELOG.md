@@ -155,7 +155,9 @@
    * Classic installation: `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-5.0.js`
    * Docker installation: `cd /var/www/peertube-docker && docker-compose exec -u peertube peertube node dist/scripts/migrations/peertube-5.0.js`
  * Configuration changes (`config/production.yaml`):
-   * There is a new `secrets.peertube` configuration. You must fill it before running PeerTube v5: https://github.com/Chocobozzz/PeerTube/blob/v5.0.0/config/production.yaml.example#L14
+   * There is a new `secrets.peertube` configuration:
+     * Classic install: fill it before running PeerTube v5: https://github.com/Chocobozzz/PeerTube/blob/v5.0.0/config/production.yaml.example#L14
+     * Docker install: fill it using an env variable before running the containers: https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env#L27
    * `object_storage.upload_acl` is now a parent key that you must update: https://github.com/Chocobozzz/PeerTube/blob/v5.0.0/config/production.yaml.example#L153
  * You must update your nginx configuration:
    * We introduced a new `location` for plugin websocket routes: https://github.com/Chocobozzz/PeerTube/blob/v5.0.0/support/nginx/peertube#L135
