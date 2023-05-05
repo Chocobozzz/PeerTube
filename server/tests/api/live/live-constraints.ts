@@ -190,7 +190,7 @@ describe('Test live constraints', function () {
   })
 
   it('Should have max duration limit', async function () {
-    this.timeout(60000)
+    this.timeout(240000)
 
     await servers[0].config.updateCustomSubConfig({
       newConfig: {

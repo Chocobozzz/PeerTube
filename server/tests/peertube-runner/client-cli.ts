@@ -64,8 +64,8 @@ describe('Test peertube-runner program client CLI', function () {
   })
 
   after(async function () {
-    await cleanupTests([ server ])
-
     peertubeRunner.kill()
+
+    await cleanupTests([ server ])
   })
 })
