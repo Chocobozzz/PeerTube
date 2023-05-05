@@ -32,5 +32,10 @@ async function run () {
   await initDatabaseModels(true)
 
   const toInstall = options.npmName || options.pluginPath
-  await PluginManager.Instance.install(toInstall, options.pluginVersion, !!options.pluginPath)
+  await PluginManager.Instance.install({
+    toInstall,
+    version: options.pluginVersion,
+    fromDisk: !!options.pluginPath,
+    register: false
+  })
 }
