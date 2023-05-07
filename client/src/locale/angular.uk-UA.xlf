@@ -330,7 +330,7 @@
       </trans-unit>
       <trans-unit id="906167214730624194" datatype="html">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{views, plural, =0 {Немає переглядів} =1 {1 перегляд} few {<x id="views"/> перегляди} other {<x id="views"/> переглядів}}</target>
+        <target state="translated">{views, plural, =0 {Немає переглядів} =1 {1 перегляд} few {<x id="views"/> перегляди} many {<x id="views"/> переглядів} other {<x id="views"/> перегляд}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">22</context>
@@ -575,7 +575,7 @@
       </trans-unit>
       <trans-unit id="7688104409544625220" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 перегляд} other {<x id="INTERPOLATION"/> переглядів}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 перегляд} few {<x id="INTERPOLATION"/> перегляди} many {<x id="INTERPOLATION"/> переглядів} other {<x id="INTERPOLATION"/> перегляд}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="8562063050145802350" datatype="html">
@@ -2700,7 +2700,7 @@
       </trans-unit>
       <trans-unit id="668281328725856861" datatype="html">
         <source>Reduce latency to ~15s disabling P2P</source>
-        <target state="translated">Скоротити затримку до ~15с, вимкнувши P2P</target>
+        <target state="translated">Скоротити затримку до ~15 с, вимкнувши P2P</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="5607669932062416162" datatype="html">
@@ -4755,7 +4755,7 @@
       </trans-unit>
       <trans-unit id="8953934448427251062" datatype="html">
         <source>The <x id="START_LINK"/>sharing system<x id="CLOSE_LINK"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</source>
-        <target state="translated"><x id="START_LINK"/>Система обміну<x id="CLOSE_LINK"/> передбачає можливе надсилання деяких технічних даних про вашу систему (як-от IP-адреса) іншим однорівневим користувачам, що значно зменшує завантаження сервера.</target>
+        <target state="translated"><x id="START_LINK"/>Система обміну<x id="CLOSE_LINK"/> передбачає можливе надсилання деяких технічних даних про вашу систему (як-от IP-адреса) іншим одноранговим користувачам, що значно знижує завантаження сервера.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="34094919610906740" datatype="html">
@@ -5085,7 +5085,7 @@
       </trans-unit>
       <trans-unit id="407487463718398437" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {підписник} few {підписники} many {підписників} other {підписника} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {підписник} few {підписники} many {підписників} other {підписник} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
@@ -6365,7 +6365,7 @@
       </trans-unit>
       <trans-unit id="6500762313951857695" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Немає переглядів} =1 {1 перегляд} few {<x id="INTERPOLATION"/> перегляди} other {<x id="INTERPOLATION"/> переглядів}}</target>
+        <target state="translated">{views, plural, =0 {Немає переглядів} =1 {1 перегляд} few {<x id="INTERPOLATION"/> перегляди} many {<x id="INTERPOLATION"/> переглядів} other {<x id="INTERPOLATION"/> перегляд}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="9131836378905533756" datatype="html">
@@ -6868,7 +6868,7 @@
       </trans-unit>
       <trans-unit id="403587185492002456" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 підписник} few {<x id="INTERPOLATION"/> підписники} many {<x id="INTERPOLATION"/> підписників} other {<x id="INTERPOLATION"/> підписника}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 підписник} few {<x id="INTERPOLATION"/> підписники} many {<x id="INTERPOLATION"/> підписників} other {<x id="INTERPOLATION"/> підписник}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="3068011377000255023" datatype="html">
