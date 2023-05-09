@@ -184,7 +184,7 @@
       </trans-unit>
       <trans-unit id="3780281836273462589" datatype="html">
         <source><x id="INTERPOLATION"/> published a new video: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="INTERPOLATION"/> опублікував (-ла) нове відео: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="INTERPOLATION"/> публікує нове відео: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="3861380964267994829" datatype="html">
@@ -209,7 +209,7 @@
       </trans-unit>
       <trans-unit id="3487882822536102372" datatype="html">
         <source><x id="START_LINK"/>A new comment abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>Нова скарга на коментар<x id="CLOSE_LINK"/> до відео <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>Нову скаргу на коментар<x id="CLOSE_LINK"/> до відео створено <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="7885094785640544496" datatype="html">
@@ -219,7 +219,7 @@
       </trans-unit>
       <trans-unit id="2008776855594205860" datatype="html">
         <source><x id="START_LINK"/>A new abuse<x id="CLOSE_LINK"/> has been created </source>
-        <target state="translated"><x id="START_LINK"/>Нова скарга<x id="CLOSE_LINK"/> </target>
+        <target state="translated"><x id="START_LINK"/>Нова скарга<x id="CLOSE_LINK"/> створена </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="8816959058080937679" datatype="html">
@@ -234,7 +234,7 @@
       </trans-unit>
       <trans-unit id="420488506127153204" datatype="html">
         <source>The recently added video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_LINK_1"/>automatically blocked<x id="CLOSE_LINK"/></source>
-        <target state="translated">Недавно додане відео <x id="INTERPOLATION"/><x id="CLOSE_LINK"/><x id="CLOSE_LINK"/> було <x id="START_LINK_1"/>автоматично заблоковано<x id="CLOSE_LINK"/></target>
+        <target state="translated">Недавно додане відео <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> було <x id="START_LINK_1"/>автоматично заблоковано<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
       <trans-unit id="2740435661398285769" datatype="html">
@@ -255,22 +255,22 @@
       </trans-unit>
       <trans-unit id="7130219900907848048" datatype="html">
         <source><x id="START_LINK"/>Your video import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> succeeded </source>
-        <target state="translated"><x id="START_LINK"/>Імпортування вашого відео<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> завершено </target>
+        <target state="translated"><x id="START_LINK"/>Імпорт вашого відео<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> завершено </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="2099623308096969132" datatype="html">
         <source><x id="START_LINK"/>Your video import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> failed </source>
-        <target state="translated"><x id="START_LINK"/>Імпортувати відео<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> не вдалося </target>
+        <target state="translated">Не вдалося <x id="START_LINK"/>імпортувати відео<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">132</context></context-group>
       </trans-unit>
       <trans-unit id="3371351937331192777" datatype="html">
         <source>User <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> registered on your instance </source>
-        <target state="translated">Обліковий запис <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> зареєстровано на вашому сервері </target>
+        <target state="translated">Користувача <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> зареєстровано на вашому сервері </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="4404295482394146814" datatype="html">
         <source><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> is following <x id="START_TAG_NG_CONTAINER"/>your channel <x id="INTERPOLATION_1"/><x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>your account<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> слідкує за <x id="START_TAG_NG_CONTAINER"/>вашим каналом <x id="INTERPOLATION_1"/><x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>ваш обліковий запис<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated"><x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> слідкує за <x id="START_TAG_NG_CONTAINER"/>вашим каналом <x id="INTERPOLATION_1"/><x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>вашим обліковим записом<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="5504059606863599420" datatype="html">
@@ -338,7 +338,7 @@
       </trans-unit>
       <trans-unit id="4873265433447388314" datatype="html">
         <source>{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</source>
-        <target state="translated">{viewers, plural, =0 {Немає глядачів} =1 {1 глядач} few {<x id="viewers"/> глядачі} other {<x id="viewers"/> глядачів}}</target>
+        <target state="translated">{viewers, plural, =0 {Немає глядачів} =1 {1 глядач} few {<x id="viewers"/> глядачі} many {<x id="viewers"/> глядачів} other {<x id="viewers"/> глядач}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">23</context>
@@ -402,7 +402,7 @@
       </trans-unit>
       <trans-unit id="2816407313459209541" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="translated">Вашу скаргу буде надіслано модераторам <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> і також передано джерелу відео (<x id="INTERPOLATION_1"/>) <x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
+        <target state="translated">Вашу скаргу буде надіслано модераторам <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/>, а також переслано до оригінального відео (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="6990204431018013063" datatype="html">
@@ -486,12 +486,12 @@
       </trans-unit>
       <trans-unit id="6995024616159044376" datatype="html">
         <source>Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="translated">Ви досягли обмеження цього відео (розмір відео: <x id="PH" equiv-text="videoSizeBytes"/>, використано: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, обмеження: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
+        <target state="translated">Ви досягли квоти з цим відео (розмір відео: <x id="PH" equiv-text="videoSizeBytes"/>, використано: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, обмеження: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">345</context></context-group>
       </trans-unit>
       <trans-unit id="7873395933409147217" datatype="html">
         <source>Your daily video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
-        <target state="translated">Ви досягли денного обмеження цього відео (розмір відео: <x id="PH" equiv-text="videoSizeBytes"/>, використано: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, обмеження: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
+        <target state="translated">Ви досягли денної квоти з цим відео (розмір відео: <x id="PH" equiv-text="videoSizeBytes"/>, використано: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, квота: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">364</context></context-group>
       </trans-unit>
       <trans-unit id="5235042777215655908" datatype="html">
@@ -514,7 +514,7 @@
       </trans-unit>
       <trans-unit id="1080230904501320275" datatype="html">
         <source>{count, plural, =1 {1 user banned.} other {<x id="count"/> users banned.}}</source>
-        <target state="translated">{count, plural, =1 {1 користувач заблокований.} few {<x id="count"/> користувачі заблоковані.} other {<x id="count"/> користувачів заблоковані.}}</target>
+        <target state="translated">{count, plural, =1 {1 користувач заблокований.} few {<x id="count"/> користувачі заблоковані.} many {<x id="count"/> користувачів заблоковані.} other {<x id="count"/> користувач заблокований.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -580,7 +580,7 @@
       </trans-unit>
       <trans-unit id="8562063050145802350" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 глядач} few {<x id="INTERPOLATION"/> глядача} many {<x id="INTERPOLATION"/> глядачів} other {<x id="INTERPOLATION"/> глядачів}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 глядач} few {<x id="INTERPOLATION"/> глядача} many {<x id="INTERPOLATION"/> глядачів} other {<x id="INTERPOLATION"/> глядач}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">7</context>
