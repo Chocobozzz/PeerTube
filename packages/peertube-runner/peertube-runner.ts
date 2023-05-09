@@ -5,7 +5,10 @@ import { listRegistered, registerRunner, unregisterRunner } from './register'
 import { RunnerServer } from './server'
 import { ConfigManager, logger } from './shared'
 
+const packageJSON = require('./package.json')
+
 const program = new Command()
+  .version(packageJSON.version)
   .option(
     '--id <id>',
     'Runner server id, so you can run multiple PeerTube server runners with different configurations on the same machine',
