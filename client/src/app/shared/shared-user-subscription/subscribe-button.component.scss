@@ -79,6 +79,12 @@
       cursor: pointer;
     }
 
+    .dropdown-item {
+      @media screen and (max-width: $mobile-view) {
+        white-space: normal;
+      }
+    }
+
     .dropdown-item-neutral {
       cursor: default;
 
