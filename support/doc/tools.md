@@ -1,30 +1,8 @@
 # CLI tools guide
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
+[[toc]]
 
-- [Remote Tools](#remote-tools)
-  - [Dependencies](#dependencies)
-  - [Installation](#installation)
-  - [CLI wrapper](#cli-wrapper)
-    - [peertube-import-videos.js](#peertube-import-videosjs)
-    - [peertube-upload.js](#peertube-uploadjs)
-    - [peertube-plugins.js](#peertube-pluginsjs)
-    - [peertube-redundancy.js](#peertube-redundancyjs)
-- [Server tools](#server-tools)
-  - [parse-log](#parse-log)
-  - [regenerate-thumbnails.js](#regenerate-thumbnailsjs)
-  - [create-import-video-file-job.js](#create-import-video-file-jobjs)
-  - [create-move-video-storage-job.js](#create-move-video-storage-jobjs)
-  - [prune-storage.js](#prune-storagejs)
-  - [update-host.js](#update-hostjs)
-  - [reset-password.js](#reset-passwordjs)
-  - [plugin install/uninstall](#plugin-installuninstall)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-## Remote Tools
+## Remote PeerTube CLI
 
 You need at least 512MB RAM to run the script.
 Scripts can be launched directly from a PeerTube server, or from a separate server, even a desktop PC.
@@ -370,4 +348,60 @@ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production np
 # Docker installation
 cd /var/www/peertube-docker
 docker-compose exec -u peertube peertube npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
+```
+
+## PeerTube runner
+
+PeerTube >= 5.2 supports VOD or Live transcoding by a remote PeerTube runner.
+
+
+### Installation
+
+```bash
+sudo npm install -g @peertube/peertube-runner
+```
+
+### Configuration
+
+The runner uses env paths like `~/.config`, `~/.cache` and `~/.local/share` directories to store runner configuration or temporary files.
+
+Multiple PeerTube runners can run on the same OS by using the `--id` CLI option (each runner uses its own config/tmp directories):
+
+```bash
+peertube-runner [commands] --id instance-1
+peertube-runner [commands] --id instance-2
+peertube-runner [commands] --id instance-3
+```
+
+
+### Run the server
+
+Run the runner in server mode so it can run transcoding jobs of registered PeerTube instances:
+
+```bash
+peertube-runner server
+```
+
+### Register
+
+To register the runner on a new PeerTube instance so the runner can process its transcoding job:
+
+```bash
+peertube-runner register --url http://peertube.example.com --registration-token ptrrt-... --runner-name my-runner-name
+```
+
+The runner will then use a websocket connection with the PeerTube instance to be notified about new available transcoding jobs.
+
+### Unregister
+
+To unregister a PeerTube instance:
+
+```bash
+peertube-runner unregister --url http://peertube.example.com
+```
+
+### List registered instances
+
+```bash
+peertube-runner list-registered
 ```
