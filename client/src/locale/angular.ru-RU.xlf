@@ -1637,7 +1637,7 @@
       </trans-unit>
       <trans-unit id="1327409825122054374" datatype="html">
         <source>Runner job cancelled</source>
-        <target state="translated">Задание отменено</target>
+        <target state="translated">Задание участника отменено</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -1645,7 +1645,7 @@
       </trans-unit>
       <trans-unit id="2874360404134250412" datatype="html">
         <source>Error in runner job</source>
-        <target state="translated">Ошибка задания</target>
+        <target state="translated">Ошибка задания участника</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -4592,7 +4592,7 @@
       </trans-unit>
       <trans-unit id="2279400024471134535" datatype="html">
         <source>Remote runners</source>
-        <target state="translated">Удаленные задания</target>
+        <target state="translated">Удаленные участники</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">171</context>
@@ -4612,7 +4612,7 @@
       </trans-unit>
       <trans-unit id="7565129593705813435" datatype="html">
         <source>Runner jobs</source>
-        <target state="translated">Запущенные задания</target>
+        <target state="translated">Задания участника</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">177</context>
@@ -5541,7 +5541,7 @@
       </trans-unit>
       <trans-unit id="2987805184832710235" datatype="html">
         <source>Enable remote runners</source>
-        <target state="translated">Включить удаленные задания</target>
+        <target state="translated">Включить удаленных участников</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">116</context>
@@ -5557,7 +5557,7 @@
       </trans-unit>
       <trans-unit id="2134381456844896041" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </target>
+        <target state="translated">Использовать <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>удаленных участников<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> для обработки транскодирования в реальном времени. Удаленные участники должны сначала зарегистрироваться на вашем экземпляре. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">119,122</context>
@@ -5597,7 +5597,7 @@
       </trans-unit>
       <trans-unit id="8646250517331978259" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </target>
+        <target state="translated">Использовать <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>удаленных участников<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> для обработки транскодирования VOD. Удаленные участники должны сначала зарегистрироваться на вашем экземпляре. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">46,49</context>
@@ -5725,7 +5725,7 @@
       </trans-unit>
       <trans-unit id="5552130276182854923" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks. Remote runners has to register on your instance first. </target>
+        <target state="translated">Использовать <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>удаленных участников<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> для обработки задач студийного транскодирования. Удаленные участники должны сначала зарегистрироваться на вашем экземпляре. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">240,243</context>
@@ -8712,7 +8712,7 @@
       </trans-unit>
       <trans-unit id="1846918252088023498" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> runner jobs</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> runner jobs</target>
+        <target state="translated">Показать <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> в <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> из <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> заданий участника</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">18</context>
@@ -8720,7 +8720,7 @@
       </trans-unit>
       <trans-unit id="7716208024960184784" datatype="html">
         <source>UUID</source>
-        <target state="new">UUID</target>
+        <target state="translated">UUID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">25</context>
@@ -8728,7 +8728,7 @@
       </trans-unit>
       <trans-unit id="1421364405181899930" datatype="html">
         <source>Priority <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;priority&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></source>
-        <target state="new">Priority <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;priority&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></target>
+        <target state="translated">Приоритет <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;priority&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">28,29</context>
@@ -8736,7 +8736,7 @@
       </trans-unit>
       <trans-unit id="736603280382549123" datatype="html">
         <source>Progress <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;progress&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></source>
-        <target state="new">Progress <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;progress&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></target>
+        <target state="translated">Состояние <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;progress&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">29,30</context>
@@ -8744,7 +8744,7 @@
       </trans-unit>
       <trans-unit id="492731212914442494" datatype="html">
         <source>Runner</source>
-        <target state="new">Runner</target>
+        <target state="translated">Участник</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">30</context>
@@ -8752,7 +8752,7 @@
       </trans-unit>
       <trans-unit id="5944078821855011619" datatype="html">
         <source>Payload:</source>
-        <target state="new">Payload:</target>
+        <target state="translated">Полезная нагрузка:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">78</context>
@@ -8760,7 +8760,7 @@
       </trans-unit>
       <trans-unit id="1046771510013067927" datatype="html">
         <source>Private payload:</source>
-        <target state="new">Private payload:</target>
+        <target state="translated">Приватная полезная нагрузка:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">83</context>
@@ -8768,7 +8768,7 @@
       </trans-unit>
       <trans-unit id="6133673901299224277" datatype="html">
         <source>No runner jobs found.</source>
-        <target state="new">No runner jobs found.</target>
+        <target state="translated">Задания участника не найдены</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">96</context>
@@ -8776,7 +8776,7 @@
       </trans-unit>
       <trans-unit id="2785060445730155276" datatype="html">
         <source>Cancel this job</source>
-        <target state="new">Cancel this job</target>
+        <target state="translated">Отмените это задание</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -8784,7 +8784,7 @@
       </trans-unit>
       <trans-unit id="2008742768994660594" datatype="html">
         <source>Do you really want to cancel this job? Children won't be processed.</source>
-        <target state="new">Do you really want to cancel this job? Children won't be processed.</target>
+        <target state="translated">Вы действительно хотите отменить это задание?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -8792,7 +8792,7 @@
       </trans-unit>
       <trans-unit id="5200752682405061561" datatype="html">
         <source>Cancel job</source>
-        <target state="new">Cancel job</target>
+        <target state="translated">Отменить задание</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -8800,7 +8800,7 @@
       </trans-unit>
       <trans-unit id="2963470419255840283" datatype="html">
         <source>Job cancelled.</source>
-        <target state="new">Job cancelled.</target>
+        <target state="translated">Задание отменено.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -8808,7 +8808,7 @@
       </trans-unit>
       <trans-unit id="453899642867587306" datatype="html">
         <source>Runner registration tokens</source>
-        <target state="new">Runner registration tokens</target>
+        <target state="translated">Токен регистрации участника</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">9</context>
@@ -8820,7 +8820,7 @@
       </trans-unit>
       <trans-unit id="4506932151298514750" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> remote runners</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> remote runners</target>
+        <target state="translated">Показать <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> в <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> из <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> удаленных участников</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">18</context>
@@ -8828,7 +8828,7 @@
       </trans-unit>
       <trans-unit id="512712988274106243" datatype="html">
         <source>IP</source>
-        <target state="new">IP</target>
+        <target state="translated">IP</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">26,25</context>
@@ -8836,7 +8836,7 @@
       </trans-unit>
       <trans-unit id="251663748987415005" datatype="html">
         <source>Last contact</source>
-        <target state="new">Last contact</target>
+        <target state="translated">Последний контакт</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">26</context>
@@ -8844,7 +8844,7 @@
       </trans-unit>
       <trans-unit id="6329354273972175246" datatype="html">
         <source>No remote runners found.</source>
-        <target state="new">No remote runners found.</target>
+        <target state="translated">Удаленные участники не найдены.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">56</context>
@@ -12546,7 +12546,7 @@
       </trans-unit>
       <trans-unit id="8527948211896740910" datatype="html">
         <source>Do you really want to delete this runner? It won't be able to process jobs anymore.</source>
-        <target state="new">Do you really want to delete this runner? It won't be able to process jobs anymore.</target>
+        <target state="translated">Вы действительно хотите удалить этого участника? Он больше не сможет обрабатывать задания.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -12554,7 +12554,7 @@
       </trans-unit>
       <trans-unit id="1331591430867610406" datatype="html">
         <source>Remove <x id="PH" equiv-text="runner.name"/></source>
-        <target state="new">Remove <x id="PH" equiv-text="runner.name"/></target>
+        <target state="translated">Удалить <x id="PH" equiv-text="runner.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -12562,7 +12562,7 @@
       </trans-unit>
       <trans-unit id="7401875498720294519" datatype="html">
         <source>Runner removed.</source>
-        <target state="new">Runner removed.</target>
+        <target state="translated">Участник удален.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -12570,7 +12570,7 @@
       </trans-unit>
       <trans-unit id="3145038024759242903" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> registration tokens</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> registration tokens</target>
+        <target state="translated">Показать <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> в <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> из <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> токенов регистрации</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">20</context>
@@ -12578,7 +12578,7 @@
       </trans-unit>
       <trans-unit id="3039940756451018621" datatype="html">
         <source>Token</source>
-        <target state="new">Token</target>
+        <target state="translated">Токен</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">25</context>
@@ -12586,7 +12586,7 @@
       </trans-unit>
       <trans-unit id="5024831045497027714" datatype="html">
         <source>Associated runners</source>
-        <target state="new">Associated runners</target>
+        <target state="translated">Связанные участники</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">27</context>
@@ -12594,7 +12594,7 @@
       </trans-unit>
       <trans-unit id="2344549567732505963" datatype="html">
         <source>Generate token</source>
-        <target state="new">Generate token</target>
+        <target state="translated">Сгенерировать токен</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">34</context>
@@ -12602,7 +12602,7 @@
       </trans-unit>
       <trans-unit id="1952170121636976975" datatype="html">
         <source>No registration token found for remote runners.</source>
-        <target state="new">No registration token found for remote runners.</target>
+        <target state="translated">Не найден регистрационный токен для удаленных участников.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">60</context>
@@ -12610,7 +12610,7 @@
       </trans-unit>
       <trans-unit id="8244506587463177080" datatype="html">
         <source>Remove this token</source>
-        <target state="new">Remove this token</target>
+        <target state="translated">Удалите этот токен</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -12618,7 +12618,7 @@
       </trans-unit>
       <trans-unit id="1188547334387666210" datatype="html">
         <source>Registration token generated.</source>
-        <target state="new">Registration token generated.</target>
+        <target state="translated">Сгенерирован регистрационный токен.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -12626,7 +12626,7 @@
       </trans-unit>
       <trans-unit id="545462083274995239" datatype="html">
         <source>Do you really want to remove this registration token? All associated runners will also be removed.</source>
-        <target state="new">Do you really want to remove this registration token? All associated runners will also be removed.</target>
+        <target state="translated">Вы действительно хотите удалить этот регистрационный токен? Все связанные участники также будут удалены.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -12634,7 +12634,7 @@
       </trans-unit>
       <trans-unit id="4228223651959845668" datatype="html">
         <source>Remove registration token</source>
-        <target state="new">Remove registration token</target>
+        <target state="translated">Удалить регистрационный токен</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -12642,7 +12642,7 @@
       </trans-unit>
       <trans-unit id="3614410801173225581" datatype="html">
         <source>Registration token removed.</source>
-        <target state="new">Registration token removed.</target>
+        <target state="translated">Регистрационный токен удален.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -12650,7 +12650,7 @@
       </trans-unit>
       <trans-unit id="6713730474908011769" datatype="html">
         <source>List runner jobs</source>
-        <target state="new">List runner jobs</target>
+        <target state="translated">Список заданий участников</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">27</context>
@@ -12658,7 +12658,7 @@
       </trans-unit>
       <trans-unit id="890886250761175417" datatype="html">
         <source>List remote runners</source>
-        <target state="new">List remote runners</target>
+        <target state="translated">Список удаленных участников</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">37</context>
@@ -12666,7 +12666,7 @@
       </trans-unit>
       <trans-unit id="4255553856349508493" datatype="html">
         <source>List registration runner tokens</source>
-        <target state="new">List registration runner tokens</target>
+        <target state="translated">Список токенов зарегистрированных участников</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">47</context>
