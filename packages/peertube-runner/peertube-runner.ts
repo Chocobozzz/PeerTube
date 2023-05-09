@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Command, InvalidArgumentError } from '@commander-js/extra-typings'
 import { listRegistered, registerRunner, unregisterRunner } from './register'
 import { RunnerServer } from './server'
