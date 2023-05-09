@@ -6757,7 +6757,7 @@
       </trans-unit>
       <trans-unit id="3505845886770923767" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 добірка} few {<x id="INTERPOLATION"/> добірки} other {<x id="INTERPOLATION"/> добірок}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 добірка} few {<x id="INTERPOLATION"/> добірки} many {<x id="INTERPOLATION"/> добірок} other {<x id="INTERPOLATION"/> добірка}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context>
           <context context-type="linenumber">3</context>
@@ -7019,7 +7019,7 @@
       </trans-unit>
       <trans-unit id="6591746065516872491" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No subscribers} =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Немає підписників} =1 {1 підписник} few {<x id="INTERPOLATION"/> підписники} other {<x id="INTERPOLATION"/> підписників}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Немає підписників} =1 {1 підписник} few {<x id="INTERPOLATION"/> підписники} many {<x id="INTERPOLATION"/> підписників} other {<x id="INTERPOLATION"/> підписник}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">26</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">43</context></context-group>
@@ -7191,7 +7191,7 @@
       </trans-unit>
       <trans-unit id="135286612733607700" datatype="html">
         <source>It is free and open-source software, under <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Це вільне програмне забезпечення з відкритим кодом, доступне за <x id="START_LINK"/>ліцензієюAGPLv3<x id="CLOSE_LINK"/>. </target>
+        <target state="translated">Це вільне програмне забезпечення з відкритим кодом, доступне за <x id="START_LINK"/>ліцензією AGPLv3<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="7257048945916143687" datatype="html">
@@ -8097,7 +8097,7 @@
       </trans-unit>
       <trans-unit id="3145156821099755377" datatype="html">
         <source>Accepted {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">Погоджено {count, plural, =1 {запит на стеження від <x id="followerName"/>} few {<x id="count"/> запити на стеження} many {<x id="count"/> запитів на стеження} other {<x id="count"/> запитів на стеження}}</target>
+        <target state="translated">Погоджено {count, plural, =1 {запит на стеження від <x id="followerName"/>} few {<x id="count"/> запити на стеження} many {<x id="count"/> запитів на стеження} other {<x id="count"/> запит на стеження}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="7972984083338607724" datatype="html">
@@ -8107,7 +8107,7 @@
       </trans-unit>
       <trans-unit id="8823680466537853782" datatype="html">
         <source>Do you really want to reject {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
-        <target state="translated">Ви справді хочете відхилити {count, plural, =1 {запит на стеження від <x id="followerName"/>?} few {<x id="count"/> запити на стеження?} many {<x id="count"/> запитів на стеження?} other {<x id="count"/> запитів на стеження?}}</target>
+        <target state="translated">Ви справді хочете відхилити {count, plural, =1 {запит на стеження від <x id="followerName"/>?} few {<x id="count"/> запити на стеження?} many {<x id="count"/> запитів на стеження?} other {<x id="count"/> запит на стеження?}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="4955506044513787741" datatype="html">
@@ -8132,7 +8132,7 @@
       </trans-unit>
       <trans-unit id="4187075675930483010" datatype="html">
         <source>Do you really want to delete {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
-        <target state="translated">Ви справді хочете видалити {count, plural, =1 {запит на стеження від <x id="followerName"/>?} few {<x id="count"/> запити на стеження?} many {<x id="count"/> запитів на стеження?} other {<x id="count"/> запитів на стеження?}}</target>
+        <target state="translated">Ви справді хочете видалити {count, plural, =1 {запит на стеження від <x id="followerName"/>?} few {<x id="count"/> запити на стеження?} many {<x id="count"/> запитів на стеження?} other {<x id="count"/> запит на стеження?}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="320661315515678647" datatype="html">
@@ -8142,7 +8142,7 @@
       </trans-unit>
       <trans-unit id="805843790553313750" datatype="html">
         <source>Removed {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">Вилучено {count, plural, =1 {запит на стеження від <x id="followerName"/>} few {<x id="count"/> запити на стеження} many {<x id="count"/> запитів на стеження} other {<x id="count"/> запитів на стеження}}</target>
+        <target state="translated">Вилучено {count, plural, =1 {<x id="followerName"/> запит на стеження від <x id="followerName"/>} few {<x id="count"/> запити на стеження} many {<x id="count"/> запитів на стеження} other {<x id="count"/> запит на стеження}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="4586043076686454232" datatype="html">
@@ -8191,7 +8191,7 @@
       </trans-unit>
       <trans-unit id="1289115499993408300" datatype="html">
         <source>You are not following {count, plural, =1 {<x id="entryName"/> anymore.} other {these <x id="count"/> entries anymore.}}</source>
-        <target state="translated">Відтепер ви не слідкуєте за {count, plural, =1 {<x id="entryName"/>.} other {цими <x id="count"/> записами.}}</target>
+        <target state="translated">Відтепер ви не слідкуєте за {count, plural, =1 {<x id="entryName"/>.} few {цими <x id="count"/> записами.} many {цими <x id="count"/> записами.} other {цими <x id="count"/> записом.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="7233230413667661414" datatype="html">
@@ -8504,7 +8504,7 @@
       </trans-unit>
       <trans-unit id="2994182849694226596" datatype="html">
         <source>Install <x id="PH"/>?</source>
-        <target state="translated">Встановити <x id="PH"/>?</target>
+        <target state="translated">Установити <x id="PH"/>?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context><context context-type="linenumber">131</context></context-group>
       </trans-unit>
       <trans-unit id="6703720397495603345" datatype="html">
@@ -8748,7 +8748,7 @@
       </trans-unit>
       <trans-unit id="2785060445730155276" datatype="html">
         <source>Cancel this job</source>
-        <target state="new">Cancel this job</target>
+        <target state="translated">Скасувати це завдання</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -8764,7 +8764,7 @@
       </trans-unit>
       <trans-unit id="5200752682405061561" datatype="html">
         <source>Cancel job</source>
-        <target state="new">Cancel job</target>
+        <target state="translated">Скасувати завдання</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -8772,7 +8772,7 @@
       </trans-unit>
       <trans-unit id="2963470419255840283" datatype="html">
         <source>Job cancelled.</source>
-        <target state="new">Job cancelled.</target>
+        <target state="translated">Завдання скасовано.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -8995,7 +8995,7 @@
       </trans-unit>
       <trans-unit id="780323526182667308" datatype="html">
         <source>User <x id="PH"/> updated.</source>
-        <target state="translated">Користувача <x id="PH"/> онвлено.</target>
+        <target state="translated">Користувача <x id="PH"/> оновлено.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-update.component.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="1349763489797682899" datatype="html">
@@ -9151,7 +9151,7 @@
       </trans-unit>
       <trans-unit id="738031253894929036" datatype="html">
         <source>{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</source>
-        <target state="new">{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</target>
+        <target state="translated">{count, plural, =1 {1 користувача розблоковано.} few {<x id="count"/> користувача розблоковано.} many {<x id="count"/> користувачів розблоковано.} other {<x id="count"/> користувача розблоковано.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">226</context></context-group>
       </trans-unit>
       <trans-unit id="8712248120167780385" datatype="html">
@@ -9177,7 +9177,7 @@
       </trans-unit>
       <trans-unit id="1301767781765127363" datatype="html">
         <source>{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</source>
-        <target state="translated">{count, plural, =1 {1 користувач видалений.} few {<x id="count"/> користувачі видалені.} many {<x id="count"/> користувачів видалені.} other {<x id="count"/> користувачів видалені.}}</target>
+        <target state="translated">{count, plural, =1 {1 користувач видалений.} few {<x id="count"/> користувачі видалені.} many {<x id="count"/> користувачів видалені.} other {<x id="count"/> користувач видалений.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">255</context></context-group>
       </trans-unit>
       <trans-unit id="7166936623843420016" datatype="html">
@@ -9225,7 +9225,7 @@
       </trans-unit>
       <trans-unit id="3183245287221165928" datatype="html">
         <source>Ownership accepted</source>
-        <target state="new">Ownership accepted</target>
+        <target state="translated">Власність погоджено</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-accept-ownership/my-accept-ownership.component.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="6012072687166259654" datatype="html">
@@ -10044,7 +10044,7 @@
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="translated">Не вдалося отримати облікові дані клієнта OAuth: <x id="PH" equiv-text="err.text"/>. Переконайтесь, що ви правильно налаштували PeerTube (каталог config/), зокрема розділ «webserver».</target>
+        <target state="translated">Не вдалося отримати облікові дані клієнта OAuth: <x id="PH" equiv-text="err.message"/>. Переконайтесь, що ви правильно налаштували PeerTube (каталог config/), зокрема розділ «webserver».</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="375263728166936544" datatype="html">
@@ -10407,7 +10407,7 @@
       </trans-unit>
       <trans-unit id="8489397598480880903" datatype="html">
         <source>{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</source>
-        <target state="translated">{interval, plural, =1 {1 рік тому} few {<x id="interval"/> роки тому} many {<x id="interval"/> років тому} other {<x id="interval"/> років тому}}</target>
+        <target state="translated">{interval, plural, =1 {1 рік тому} few {<x id="interval"/> роки тому} many {<x id="interval"/> років тому} other {<x id="interval"/> рік тому}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">7</context>
@@ -10415,7 +10415,7 @@
       </trans-unit>
       <trans-unit id="599762045687999334" datatype="html">
         <source>{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</source>
-        <target state="translated">{interval, plural, =1 {1 місяць тому} few {<x id="interval"/> місяці тому} many {<x id="interval"/> місяців тому} other {<x id="interval"/> місяців тому}}</target>
+        <target state="translated">{interval, plural, =1 {1 місяць тому} few {<x id="interval"/> місяці тому} many {<x id="interval"/> місяців тому} other {<x id="interval"/> місяць тому}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">8</context>
@@ -10423,7 +10423,7 @@
       </trans-unit>
       <trans-unit id="4951459525104027759" datatype="html">
         <source>{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</source>
-        <target state="translated">{interval, plural, =1 {1 тиждень тому} few {<x id="interval"/> тижні тому} many {<x id="interval"/> тижнів тому} other {<x id="interval"/> тижнів тому}}</target>
+        <target state="translated">{interval, plural, =1 {1 тиждень тому} few {<x id="interval"/> тижні тому} many {<x id="interval"/> тижнів тому} other {<x id="interval"/> тиждень тому}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">9</context>
@@ -10431,7 +10431,7 @@
       </trans-unit>
       <trans-unit id="2471141982657856893" datatype="html">
         <source>{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</source>
-        <target state="translated">{interval, plural, =1 {1 день тому} few {<x id="interval"/> дні тому} many {<x id="interval"/> днів тому} other {<x id="interval"/> днів тому}}</target>
+        <target state="translated">{interval, plural, =1 {1 день тому} few {<x id="interval"/> дні тому} many {<x id="interval"/> днів тому} other {<x id="interval"/> день тому}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">10</context>
@@ -10447,7 +10447,7 @@
       </trans-unit>
       <trans-unit id="3613007385964514320" datatype="html">
         <source><x id="PH" equiv-text="interval"/> year(s) ago</source>
-        <target state="translated"><x id="PH" equiv-text="interval"/> рік(років) тому</target>
+        <target state="translated"><x id="PH" equiv-text="interval"/> років тому</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">19</context>
@@ -11323,7 +11323,7 @@
       </trans-unit>
       <trans-unit id="8280589137189201687" datatype="html">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="translated">Ви не можете вибрати більше ніж {maxItems, plural, =1 {1 елемент} few {<x id="maxItems"/> елемента} many {<x id="maxItems"/> елементів} other {<x id="maxItems"/> елементів}}</target>
+        <target state="translated">Ви не можете вибрати більше ніж {maxItems, plural, =1 {1 елемент} few {<x id="maxItems"/> елементи} many {<x id="maxItems"/> елементів} other {<x id="maxItems"/> елемент}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -11803,17 +11803,17 @@
       </trans-unit>
       <trans-unit id="1792453450803202450" datatype="html">
         <source>Accepted follows</source>
-        <target state="new">Accepted follows</target>
+        <target state="translated">Погоджені підписки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
       <trans-unit id="1745310805516417209" datatype="html">
         <source>Rejected follows</source>
-        <target state="new">Rejected follows</target>
+        <target state="translated">Відхилені підписки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="1810206793608630396" datatype="html">
         <source>Pending follows</source>
-        <target state="new">Pending follows</target>
+        <target state="translated">Черга підписок</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
@@ -11925,19 +11925,19 @@
       </trans-unit>
       <trans-unit id="8150022485860412528" datatype="html">
         <source>Account <x id="PH"/> muted.</source>
-        <target state="translated">Обліковий запис <x id="PH"/> вимкнено.</target>
+        <target state="translated">Обліковий запис <x id="PH"/> ігнорується.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">135</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
       <trans-unit id="1598375456114200087" datatype="html">
         <source>Instance <x id="PH"/> muted. </source>
-        <target state="translated">Сервер <x id="PH"/> вимкнено. </target>
+        <target state="translated">Сервер <x id="PH"/> ігнорується. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">68</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">163</context></context-group>
       </trans-unit>
       <trans-unit id="2558977494773636050" datatype="html">
         <source>Account <x id="PH"/> muted by the instance.</source>
-        <target state="translated">Обліковий запис <x id="PH"/> вимкнено сервером.</target>
+        <target state="translated">Обліковий запис <x id="PH"/> ігнорується сервером.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">434</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">191</context></context-group>
       </trans-unit>
@@ -11948,7 +11948,7 @@
       </trans-unit>
       <trans-unit id="8014491157078444256" datatype="html">
         <source>Server <x id="PH"/> muted by the instance.</source>
-        <target state="translated">Сервер <x id="PH"/> вимкнено сервером.</target>
+        <target state="translated">Сервер <x id="PH"/> ігнорується сервером.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">446</context></context-group>
       </trans-unit>
       <trans-unit id="2044813052587776285" datatype="html">
@@ -11968,7 +11968,7 @@
       </trans-unit>
       <trans-unit id="4991892477258601737" datatype="html">
         <source>Instance <x id="PH"/> muted by the instance.</source>
-        <target state="translated">Сервер <x id="PH"/> вимкнено сервером.</target>
+        <target state="translated">Сервер <x id="PH"/> ігнорується сервером.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">219</context></context-group>
       </trans-unit>
       <trans-unit id="4379430340167561220" datatype="html">
@@ -11993,7 +11993,7 @@
       </trans-unit>
       <trans-unit id="4268530178786707817" datatype="html">
         <source>My account moderation</source>
-        <target state="new">My account moderation</target>
+        <target state="translated">Модерація облікового запису</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">291</context></context-group>
       </trans-unit>
       <trans-unit id="7187838764371214919" datatype="html">
@@ -12179,7 +12179,7 @@
       </trans-unit>
       <trans-unit id="8700771664729810984" datatype="html">
         <source>The above can only be seen in thumbnails.</source>
-        <target state="new">The above can only be seen in thumbnails.</target>
+        <target state="translated">Вищезазначене можна побачити лише в мініатюрах.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="2602773901491715295" datatype="html">
@@ -12191,7 +12191,7 @@
       </trans-unit>
       <trans-unit id="5779804235244672536" datatype="html">
         <source>The above can only be seen in captions (please describe which).</source>
-        <target state="new">The above can only be seen in captions (please describe which).</target>
+        <target state="translated">Вищезазначене можна побачити лише в підписах (опишіть, в яких саме).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
       <trans-unit id="968295009933361070" datatype="html">
@@ -12394,7 +12394,7 @@
       </trans-unit>
       <trans-unit id="6599069899275412095" datatype="html">
         <source>Mute reporter</source>
-        <target state="new">Mute reporter</target>
+        <target state="translated">Ігнорувати скаржника</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">316</context></context-group>
       </trans-unit>
       <trans-unit id="3099741642167775297" datatype="html">
@@ -12509,7 +12509,7 @@
       </trans-unit>
       <trans-unit id="1331591430867610406" datatype="html">
         <source>Remove <x id="PH" equiv-text="runner.name"/></source>
-        <target state="new">Remove <x id="PH" equiv-text="runner.name"/></target>
+        <target state="translated">Вилучити <x id="PH" equiv-text="runner.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -12549,7 +12549,7 @@
       </trans-unit>
       <trans-unit id="2344549567732505963" datatype="html">
         <source>Generate token</source>
-        <target state="new">Generate token</target>
+        <target state="translated">Згенерувати токен</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">34</context>
@@ -12565,7 +12565,7 @@
       </trans-unit>
       <trans-unit id="8244506587463177080" datatype="html">
         <source>Remove this token</source>
-        <target state="new">Remove this token</target>
+        <target state="translated">Вилучити цей токен</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -12573,7 +12573,7 @@
       </trans-unit>
       <trans-unit id="1188547334387666210" datatype="html">
         <source>Registration token generated.</source>
-        <target state="new">Registration token generated.</target>
+        <target state="translated">Реєстраційний токен згенеровано.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -12589,7 +12589,7 @@
       </trans-unit>
       <trans-unit id="4228223651959845668" datatype="html">
         <source>Remove registration token</source>
-        <target state="new">Remove registration token</target>
+        <target state="translated">Вилучити реєстраційний токен</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -12597,7 +12597,7 @@
       </trans-unit>
       <trans-unit id="3614410801173225581" datatype="html">
         <source>Registration token removed.</source>
-        <target state="new">Registration token removed.</target>
+        <target state="translated">Реєстраційний токен вилучено.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -12642,7 +12642,7 @@
       </trans-unit>
       <trans-unit id="992317512448454409" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {коментарів} =1 {1 коментар} few {<x id="INTERPOLATION"/> коментарі} many {<x id="INTERPOLATION"/> коментарів} other {<x id="INTERPOLATION"/> коментаря}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {коментарів} =1 {1 коментар} few {<x id="INTERPOLATION"/> коментарі} many {<x id="INTERPOLATION"/> коментарів} other {<x id="INTERPOLATION"/> коментар}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="4903651219400691248" datatype="html">
@@ -12683,7 +12683,7 @@
       </trans-unit>
       <trans-unit id="3719503424625455635" datatype="html">
         <source>Mute server account</source>
-        <target state="new">Mute server account</target>
+        <target state="translated">Ігнорувати обліковий запис сервера</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">298</context></context-group>
       </trans-unit>
       <trans-unit id="7008439939460403347" datatype="html">
