@@ -638,12 +638,12 @@
       </trans-unit>
       <trans-unit id="6228449077605046873" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</source>
-        <target state="translated">Ви впевнені, що хочете видалити {count, plural, =1 {1 HLS стримінгова добірка} few {<x id="count"/> стримінгові добірки.} other {<x id="count"/> HLS стримінгових добірок}}?</target>
+        <target state="translated">Ви впевнені, що хочете видалити {count, plural, =1 {1 стримінгова добірка HLS} few {<x id="count"/> стримінгові добірки HLS} many {<x id="count"/> стримінгових добірок HLS} other {<x id="count"/> стримінгову добірку HLS}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">270</context></context-group>
       </trans-unit>
       <trans-unit id="9088099192924395359" datatype="html">
         <source>Are you sure you want to delete <x id="PH" equiv-text="videos.length"/> HLS streaming playlists?</source>
-        <target state="translated">Ви впевнені, що хочете видалити <x id="PH" equiv-text="videos.length"/> добірок трансляцій HLS?</target>
+        <target state="translated">Ви впевнені, що хочете видалити <x id="PH" equiv-text="videos.length"/> стримінгових добірок HLS?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">272</context></context-group>
       </trans-unit>
       <trans-unit id="653148876380254581" datatype="html">
@@ -850,7 +850,7 @@
       </trans-unit>
       <trans-unit id="5975923297757530070" datatype="html">
         <source><x id="START_TAG_DIV"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>can be redefined by the users<x id="CLOSE_TAG_DIV"/></source>
-        <target state="translated"><x id="START_TAG_DIV"/>Типові налаштування NSFW/вразливих відео<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>можуть змінюватися користувачами<x id="CLOSE_TAG_DIV"/></target>
+        <target state="translated"><x id="START_TAG_DIV"/>Типові налаштування NSFW/делікатних відео<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>можуть змінюватися користувачами<x id="CLOSE_TAG_DIV"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="5842305303142677924" datatype="html">
@@ -912,7 +912,7 @@
       </trans-unit>
       <trans-unit id="1502595455339510144">
         <source>Unlimited <x id="START_TAG_NG_CONTAINER"/>(<x id="INTERPOLATION"/> per day)<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated">Без обмежень <x id="START_TAG_NG_CONTAINER"/>(<x id="INTERPOLATION"/> на день)<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated">Без обмежень <x id="START_TAG_NG_CONTAINER"/> (<x id="INTERPOLATION"/> на день)<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="1071721880474488785" datatype="html">
@@ -1041,7 +1041,7 @@
       </trans-unit>
       <trans-unit id="8530934870279569179" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file was too large (max. size: <x id="PH_1" equiv-text="maxFileSize"/>)</source>
-        <target state="translated">Ваш <x id="PH" equiv-text="name"/> файл був занадто великим (Максимальний розмір:<x id="PH_1" equiv-text="maxFileSize"/>)</target>
+        <target state="translated">Ваш <x id="PH" equiv-text="name"/> файл був завеликим (максимальний розмір: <x id="PH_1" equiv-text="maxFileSize"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="7908493851025027368">
@@ -1053,7 +1053,7 @@
       </trans-unit>
       <trans-unit id="4526499522377118108" datatype="html">
         <source>Block video "<x id="INTERPOLATION"/>"</source>
-        <target state="translated">Заблокуват відео «<x id="INTERPOLATION"/>»</target>
+        <target state="translated">Заблокувати відео «<x id="INTERPOLATION"/>»</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="2992313729068029516" datatype="html">
@@ -1200,7 +1200,7 @@
       </trans-unit>
       <trans-unit id="6584143415159913044" datatype="html">
         <source>This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">На цьому сервері можна зареєструватися. Однак обов'язково прочитайте <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> перед створенням облікового запису. Ви також можете пошукати інший сервер, який задовольнить ваші потреби, на: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">На цьому сервері можна зареєструватися. Однак обов'язково прочитайте <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/> Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Умови<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> перед створенням облікового запису. Ви також можете пошукати інший сервер, який задовольнить ваші потреби, на: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">15,18</context>
