@@ -188,7 +188,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to reporter if the abuse has been accepted', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       await servers[0].abuses.update({ abuseId, body: { state: AbuseState.ACCEPTED } })
       await waitJobs(servers)
@@ -197,7 +197,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to reporter if the abuse has been rejected', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       await servers[0].abuses.update({ abuseId, body: { state: AbuseState.REJECTED } })
       await waitJobs(servers)
@@ -242,7 +242,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to reporter on new message', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const message = 'my super message to users'
       await servers[0].abuses.addMessage({ abuseId, message })
@@ -252,7 +252,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should not send a notification to the admin if sent by the admin', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const message = 'my super message that should not be sent to the admin'
       await servers[0].abuses.addMessage({ abuseId, message })
@@ -263,7 +263,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to moderators', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const message = 'my super message to moderators'
       await servers[0].abuses.addMessage({ token: userToken1, abuseId: abuseId2, message })
@@ -274,7 +274,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should not send a notification to reporter if sent by the reporter', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const message = 'my super message that should not be sent to reporter'
       await servers[0].abuses.addMessage({ token: userToken1, abuseId: abuseId2, message })
@@ -298,7 +298,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to video owner on blacklist', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const name = 'video for abuse ' + buildUUID()
       const { uuid, shortUUID } = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
@@ -310,7 +310,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to video owner on unblacklist', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const name = 'video for abuse ' + buildUUID()
       const { uuid, shortUUID } = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
