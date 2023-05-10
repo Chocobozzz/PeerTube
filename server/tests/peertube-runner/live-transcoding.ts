@@ -188,6 +188,8 @@ describe('Test Live transcoding in peertube-runner program', function () {
       peertubeRunner.kill()
     }
 
+    if (sqlCommandServer1) await sqlCommandServer1.cleanup()
+
     await cleanupTests(servers)
   })
 })
