@@ -203,8 +203,6 @@ export class VideoShareComponent {
   // ---------------------------------------------------------------------------
 
   async onUpdate () {
-    console.log('on update')
-
     if (this.playlist) {
       this.playlistUrl = await this.getPlaylistUrl()
       this.playlistEmbedUrl = await this.getPlaylistEmbedUrl()

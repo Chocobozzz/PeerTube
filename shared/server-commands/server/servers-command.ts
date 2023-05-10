@@ -44,7 +44,6 @@ export class ServersCommand extends AbstractCommand {
 
       await copy(origin, join('artifacts', destname))
     }
-    console.log(this.server.parallel)
 
     if (this.server.parallel) {
       const promise = saveGithubLogsIfNeeded()
