@@ -42,6 +42,15 @@ function storeHLSFileFromPath (playlist: MStreamingPlaylistVideo, path: string) 
   })
 }
 
+function storeHLSFileFromContent (playlist: MStreamingPlaylistVideo, path: string, content: string) {
+  return storeObject({
+    inputPath: path,
+    objectStorageKey: generateHLSObjectStorageKey(playlist, basename(path)),
+    bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
+    isPrivate: playlist.Video.hasPrivateStaticPath()
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 function storeWebTorrentFile (video: MVideo, file: MVideoFile) {
@@ -166,6 +175,7 @@ export {
   storeWebTorrentFile,
   storeHLSFileFromFilename,
   storeHLSFileFromPath,
+  storeHLSFileFromContent,
 
   updateWebTorrentFileACL,
   updateHLSFilesACL,

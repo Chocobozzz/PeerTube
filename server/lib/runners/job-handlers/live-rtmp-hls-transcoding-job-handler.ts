@@ -80,6 +80,7 @@ export class LiveRTMPHLSTranscodingJobHandler extends AbstractJobHandler<CreateO
     const outputDirectory = privatePayload.outputDirectory
     const videoUUID = privatePayload.videoUUID
 
+    // Always process the chunk first before moving m3u8 that references this chunk
     if (updatePayload.type === 'add-chunk') {
       await move(
         updatePayload.videoChunkFile as string,
