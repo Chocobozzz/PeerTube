@@ -8808,7 +8808,7 @@
       </trans-unit>
       <trans-unit id="453899642867587306" datatype="html">
         <source>Runner registration tokens</source>
-        <target state="translated">Токен регистрации участника</target>
+        <target state="translated">Токены регистрации участников</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">9</context>
