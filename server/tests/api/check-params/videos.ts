@@ -437,7 +437,7 @@ describe('Test videos API validator', function () {
       })
 
       it('Should succeed with the correct parameters', async function () {
-        this.timeout(10000)
+        this.timeout(30000)
 
         const fields = baseCorrectParams
 

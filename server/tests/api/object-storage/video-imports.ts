@@ -5,8 +5,8 @@ import { expectStartWith, FIXTURE_URLS } from '@server/tests/shared'
 import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import {
+  cleanupTests,
   createSingleServer,
-  killallServers,
   makeRawRequest,
   ObjectStorageCommand,
   PeerTubeServer,
@@ -103,6 +103,6 @@ describe('Object storage for video import', function () {
   })
 
   after(async function () {
-    await killallServers([ server ])
+    await cleanupTests([ server ])
   })
 })

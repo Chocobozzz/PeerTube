@@ -14,7 +14,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
     withRetry?: boolean // default false
     currentRetry?: number
   }): Promise<string> {
-    const { videoFileToken, reinjectVideoFileToken, withRetry, currentRetry = 1 } = options
+    const { videoFileToken, reinjectVideoFileToken, withRetry = false, currentRetry = 1 } = options
 
     try {
       const result = await unwrapTextOrDecode(this.getRawRequest({
@@ -51,7 +51,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
     withRetry?: boolean // default false
     currentRetry?: number
   }) {
-    const { withRetry, currentRetry = 1 } = options
+    const { withRetry = false, currentRetry = 1 } = options
 
     try {
       const result = await unwrapBody<Buffer>(this.getRawRequest({
@@ -85,7 +85,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
     withRetry?: boolean // default false
     currentRetry?: number
   }) {
-    const { withRetry, currentRetry = 1 } = options
+    const { withRetry = false, currentRetry = 1 } = options
 
     try {
       const result = await unwrapBodyOrDecodeToJSON<{ [ id: string ]: string }>(this.getRawRequest({

@@ -5,10 +5,10 @@ import { expectStartWith, MockObjectStorageProxy, SQLCommand, testLiveVideoResol
 import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, LiveVideoCreate, VideoPrivacy } from '@shared/models'
 import {
+  cleanupTests,
   createMultipleServers,
   doubleFollow,
   findExternalSavedVideo,
-  killallServers,
   makeRawRequest,
   ObjectStorageCommand,
   PeerTubeServer,
@@ -290,6 +290,6 @@ describe('Object storage for lives', function () {
   after(async function () {
     await sqlCommandServer1.cleanup()
 
-    await killallServers(servers)
+    await cleanupTests(servers)
   })
 })

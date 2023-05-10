@@ -389,7 +389,7 @@ describe('Object storage for videos', function () {
     })
 
     after(async function () {
-      await killallServers([ server ])
+      await cleanupTests([ server ])
     })
   })
 

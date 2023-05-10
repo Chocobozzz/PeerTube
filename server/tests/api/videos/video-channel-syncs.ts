@@ -5,9 +5,9 @@ import { FIXTURE_URLS, SQLCommand } from '@server/tests/shared'
 import { areHttpImportTestsDisabled } from '@shared/core-utils'
 import { VideoChannelSyncState, VideoInclude, VideoPrivacy } from '@shared/models'
 import {
+  cleanupTests,
   createMultipleServers,
   getServerImportConfig,
-  killallServers,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
@@ -309,7 +309,7 @@ describe('Test channel synchronizations', function () {
           await sqlCommand.cleanup()
         }
 
-        await killallServers(servers)
+        await cleanupTests(servers)
       })
     })
   }
