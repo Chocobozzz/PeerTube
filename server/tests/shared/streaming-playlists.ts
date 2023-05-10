@@ -51,12 +51,13 @@ async function checkLiveSegmentHash (options: {
   videoUUID: string
   segmentName: string
   hlsPlaylist: VideoStreamingPlaylist
+  withRetry?: boolean
 }) {
-  const { server, baseUrlSegment, videoUUID, segmentName, hlsPlaylist } = options
+  const { server, baseUrlSegment, videoUUID, segmentName, hlsPlaylist, withRetry = false } = options
   const command = server.streamingPlaylists
 
-  const segmentBody = await command.getFragmentedSegment({ url: `${baseUrlSegment}/${videoUUID}/${segmentName}` })
-  const shaBody = await command.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url })
+  const segmentBody = await command.getFragmentedSegment({ url: `${baseUrlSegment}/${videoUUID}/${segmentName}`, withRetry })
+  const shaBody = await command.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url, withRetry })
 
   expect(sha256(segmentBody)).to.equal(shaBody[segmentName])
 }

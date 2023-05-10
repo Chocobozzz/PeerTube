@@ -226,7 +226,7 @@ function runTests (objectStorage: boolean) {
         const resolutions = hlsPlaylist.files.map(f => f.resolution.id)
         await checkResolutionsInMasterPlaylist({ server: servers[0], playlistUrl: hlsPlaylist.playlistUrl, resolutions })
 
-        const shaBody = await servers[0].streamingPlaylists.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url })
+        const shaBody = await servers[0].streamingPlaylists.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url, withRetry: true })
         expect(Object.keys(shaBody)).to.have.lengthOf(5)
       }
     }

@@ -115,7 +115,8 @@ async function testLiveVideoResolutions (options: {
         baseUrlSegment: baseUrl,
         videoUUID: video.uuid,
         segmentName,
-        hlsPlaylist
+        hlsPlaylist,
+        withRetry: objectStorage // With object storage, the request may fail because of inconsistent data in S3
       })
 
       if (originServer.internalServerNumber === server.internalServerNumber) {
