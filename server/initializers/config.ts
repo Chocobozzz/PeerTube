@@ -8,7 +8,6 @@ import { buildPath, root } from '../../shared/core-utils'
 import { VideoPrivacy, VideosRedundancyStrategy } from '../../shared/models'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { parseBytes, parseDurationToMs } from '../helpers/core-utils'
-import { SentinelAddress } from 'ioredis'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
@@ -44,7 +43,7 @@ const CONFIG = {
     SENTINEL: {
       ENABLED: config.has('redis.sentinel.enabled') ? config.get<boolean>('redis.sentinel.enabled') : false,
       ENABLE_TLS: config.has('redis.sentinel.enable_tls') ? config.get<boolean>('redis.sentinel.enable_tls') : false,
-      SENTINELS: config.has('redis.sentinel.sentinels') ? config.get<Partial<SentinelAddress>[]>('redis.sentinel.sentinels') : [],
+      SENTINELS: config.has('redis.sentinel.sentinels') ? config.get<{ hostname: string, port: number }[]>('redis.sentinel.sentinels') : [],
       MASTER_NAME: config.has('redis.sentinel.master_name') ? config.get<string>('redis.sentinel.master_name') : null
     }
   },
