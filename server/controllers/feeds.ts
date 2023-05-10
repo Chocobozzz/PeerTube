@@ -1,10 +1,13 @@
 import express from 'express'
 import { isNull, orderBy } from 'lodash'
 import { extname, join } from 'path'
-import { Feed } from 'pfeed-podcast'
-import { CustomTag, CustomXMLNS, LiveItemStatus, Person } from 'pfeed-podcast/lib/typings'
+import { Feed } from '@peertube/feed'
+import { CustomTag, CustomXMLNS, LiveItemStatus, Person } from '@peertube/feed/lib/typings'
 import { mdToOneLinePlainText, toSafeHtml } from '@server/helpers/markdown'
+import { Hooks } from '@server/lib/plugins/hooks'
+import { cacheRouteFactory } from '@server/middlewares'
 import { getServerActor } from '@server/models/application/application'
+import { UserModel } from '@server/models/user/user'
 import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
 import { MAccountDefault, MChannelBannerAccountDefault, MUser, MVideoFullLight } from '@server/types/models'
 import { ActorImageType, VideoInclude, VideoResolution, VideoState, VideoStreamingPlaylistType } from '@shared/models'
@@ -18,17 +21,15 @@ import {
   setDefaultVideosSort,
   setFeedFormatContentType,
   setFeedPodcastContentType,
-  videoCommentsFeedsValidator, videoFeedsPodcastValidator,
+  videoCommentsFeedsValidator,
+  videoFeedsPodcastValidator,
   videoFeedsValidator,
   videosSortValidator,
   videoSubscriptionFeedsValidator
 } from '../middlewares'
-import { cacheRouteFactory } from '@server/middlewares'
 import { VideoModel } from '../models/video/video'
 import { VideoCaptionModel } from '../models/video/video-caption'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { UserModel } from '@server/models/user/user'
-import { Hooks } from '@server/lib/plugins/hooks'
 
 const feedsRouter = express.Router()
 

@@ -1836,10 +1836,10 @@
   resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-1.9.1.tgz#ad3367684a57879392513479e0a436cb2ac46dad"
   integrity sha512-oPQdbFDmZvjXk5ZDoBGXG8B4tSB/qW5vQunJWQMFUBp7Xe8O1ByPANueJ+Jzg58esEBegyyxZ7LRmfJr7kFcFg==
 
-"@peertube/feed@^5.0.1":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@peertube/feed/-/feed-5.0.2.tgz#d9ae7f38f1ccc75d353a5e24ad335a982bc4df74"
-  integrity sha512-5c8NkeIDx6J8lOzYiaTGipich/7hTO+CzZjIHFb1SY3+c14BvNJxrFb8b/9aZ8tekIYxKspqb8hg7WcVYg4NXA==
+"@peertube/feed@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@peertube/feed/-/feed-5.1.0.tgz#e2fec950459ebaa32ea35791c45177f8b6fa85e9"
+  integrity sha512-ggwIbjxh4oc1aAGYV7ZxtIpiEIGq3Rkg6FxvOSrk/EPZ76rExoIJCjKeSyd4zb/sGkyKldy+bGs1OUUVidWWTQ==
   dependencies:
     xml-js "^1.6.11"
 
@@ -7497,13 +7497,6 @@ peek-stream@^1.1.1:
     buffer-from "^1.0.0"
     duplexify "^3.5.0"
     through2 "^2.0.3"
-
-pfeed-podcast@^6.1.2:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/pfeed-podcast/-/pfeed-podcast-6.3.0.tgz#c2dcc6d094ded2b57c9c4a714d6adc20d2fa5fe4"
-  integrity sha512-VVl5nQDb6EBCG1IuzHF97IiidPT7Xg/ctt0TvpKDNkf3kOx9fnOCyfLaxleWAcaPJ0JrYLAwfnBBPbh8R0w/tw==
-  dependencies:
-    xml-js "^1.6.11"
 
 pg-connection-string@^2.5.0:
   version "2.5.0"
