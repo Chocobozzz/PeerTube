@@ -119,6 +119,8 @@ describe('Test plugin action hooks', function () {
     })
 
     it('Should run action:live.video.state.updated', async function () {
+      this.timeout(60000)
+
       const attributes = {
         name: 'live',
         privacy: VideoPrivacy.PUBLIC,

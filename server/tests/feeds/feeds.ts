@@ -27,13 +27,15 @@ const expect = chai.expect
 describe('Test syndication feeds', () => {
   let servers: PeerTubeServer[] = []
   let serverHLSOnly: PeerTubeServer
-  let command: PluginsCommand
+
   let userAccessToken: string
   let rootAccountId: number
   let rootChannelId: number
+
   let userAccountId: number
   let userChannelId: number
   let userFeedToken: string
+
   let liveId: string
 
   before(async function () {
@@ -97,13 +99,10 @@ describe('Test syndication feeds', () => {
 
     await serverHLSOnly.videos.upload({ attributes: { name: 'hls only video' } })
 
-    await waitJobs(servers)
-    await waitJobs([ serverHLSOnly ])
+    await waitJobs([ ...servers, serverHLSOnly ])
 
-    command = servers[0].plugins
-
-    await command.install({ path: PluginsCommand.getPluginTestPath() })
-    await command.install({ path: PluginsCommand.getPluginTestPath('-podcast-custom-tags') })
+    await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath() })
+    await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath('-podcast-custom-tags') })
   })
 
   describe('All feed', function () {
@@ -171,8 +170,7 @@ describe('Test syndication feeds', () => {
     it('Should contain a valid podcast:alternateEnclosure (covers Podcast endpoint)', async function () {
       // Since podcast feeds should only work on the server they originate on,
       // only test the first server where the videos reside
-      const server = servers[0]
-      const rss = await server.feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
+      const rss = await servers[0].feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
       expect(XMLValidator.validate(rss)).to.be.true
 
       const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -197,8 +195,7 @@ describe('Test syndication feeds', () => {
     })
 
     it('Should contain a valid podcast:alternateEnclosure with HLS only (covers Podcast endpoint)', async function () {
-      const server = serverHLSOnly
-      const rss = await server.feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
+      const rss = await serverHLSOnly.feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
       expect(XMLValidator.validate(rss)).to.be.true
 
       const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -218,8 +215,7 @@ describe('Test syndication feeds', () => {
     })
 
     it('Should contain a valid podcast:socialInteract (covers Podcast endpoint)', async function () {
-      const server = servers[0]
-      const rss = await server.feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
+      const rss = await servers[0].feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
       expect(XMLValidator.validate(rss)).to.be.true
 
       const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -234,8 +230,7 @@ describe('Test syndication feeds', () => {
     })
 
     it('Should contain a valid support custom tags for plugins (covers Podcast endpoint)', async function () {
-      const server = servers[0]
-      const rss = await server.feed.getPodcastXML({ ignoreCache: true, channelId: userChannelId })
+      const rss = await servers[0].feed.getPodcastXML({ ignoreCache: true, channelId: userChannelId })
       expect(XMLValidator.validate(rss)).to.be.true
 
       const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -369,9 +364,7 @@ describe('Test syndication feeds', () => {
     it('Should contain a valid podcast:liveItem for live streams (covers Podcast endpoint)', async function () {
       this.timeout(120000)
 
-      const server = servers[0]
-
-      const { uuid } = await server.live.create({
+      const { uuid } = await servers[0].live.create({
         fields: {
           name: 'live-0',
           privacy: VideoPrivacy.PUBLIC,
@@ -380,10 +373,10 @@ describe('Test syndication feeds', () => {
       })
       liveId = uuid
 
-      const ffmpeg = await server.live.sendRTMPStreamInVideo({ videoId: liveId, copyCodecs: true, fixtureName: 'video_short.mp4' })
-      await server.live.waitUntilPublished({ videoId: liveId })
+      const ffmpeg = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveId, copyCodecs: true, fixtureName: 'video_short.mp4' })
+      await servers[0].live.waitUntilPublished({ videoId: liveId })
 
-      const rss = await server.feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
+      const rss = await servers[0].feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
       expect(XMLValidator.validate(rss)).to.be.true
 
       const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
@@ -602,7 +595,7 @@ describe('Test syndication feeds', () => {
   })
 
   after(async function () {
-    await command.uninstall({ npmName: 'peertube-plugin-test-podcast-custom-tags' })
+    await servers[0].plugins.uninstall({ npmName: 'peertube-plugin-test-podcast-custom-tags' })
 
     await cleanupTests([ ...servers, serverHLSOnly ])
   })
