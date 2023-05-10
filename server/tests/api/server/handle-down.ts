@@ -16,7 +16,7 @@ import {
 
 describe('Test handle downs', function () {
   let servers: PeerTubeServer[] = []
-  let sqlCommands: SQLCommand[]
+  let sqlCommands: SQLCommand[] = []
 
   let threadIdServer1: number
   let threadIdServer2: number

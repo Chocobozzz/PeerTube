@@ -71,7 +71,7 @@ async function makeFollowRequest (to: { url: string }, by: { url: string, privat
 
 describe('Test ActivityPub security', function () {
   let servers: PeerTubeServer[]
-  let sqlCommands: SQLCommand[]
+  let sqlCommands: SQLCommand[] = []
 
   let url: string
 

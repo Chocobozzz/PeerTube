@@ -15,7 +15,7 @@ import {
 
 describe('Test video views cleaner', function () {
   let servers: PeerTubeServer[]
-  let sqlCommands: SQLCommand[]
+  let sqlCommands: SQLCommand[] = []
 
   let videoIdServer1: string
   let videoIdServer2: string

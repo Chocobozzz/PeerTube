@@ -33,7 +33,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
     } catch (err) {
       if (!withRetry || currentRetry > 5) throw err
 
-      await wait(100)
+      await wait(250)
 
       return this.get({
         ...options,
@@ -68,7 +68,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
     } catch (err) {
       if (!withRetry || currentRetry > 5) throw err
 
-      await wait(100)
+      await wait(250)
 
       return this.getFragmentedSegment({
         ...options,
@@ -101,7 +101,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
     } catch (err) {
       if (!withRetry || currentRetry > 5) throw err
 
-      await wait(100)
+      await wait(250)
 
       return this.getSegmentSha256({
         ...options,

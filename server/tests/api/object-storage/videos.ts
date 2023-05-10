@@ -144,7 +144,7 @@ function runTestSuite (options: {
   let baseMockUrl: string
 
   let servers: PeerTubeServer[]
-  let sqlCommands: SQLCommand[]
+  let sqlCommands: SQLCommand[] = []
 
   let keptUrls: string[] = []
 
