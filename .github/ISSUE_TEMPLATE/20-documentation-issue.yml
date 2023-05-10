@@ -15,4 +15,4 @@ body:
       description: |
         Are you up to submit a pull request? Chances are, only a small edit is required, so give it a try:
           * Click "Edit this page" if on https://docs.joinpeertube.org
-          * Edit https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/openapi.yaml if on https://docs.joinpeertube.org/api/rest-reference.html
+          * Edit https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/openapi.yaml if on https://docs.joinpeertube.org/api-rest-reference.html

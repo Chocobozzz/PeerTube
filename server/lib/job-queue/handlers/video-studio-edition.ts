@@ -1,31 +1,18 @@
 import { Job } from 'bullmq'
-import { move, remove } from 'fs-extra'
+import { remove } from 'fs-extra'
 import { join } from 'path'
-import { addIntroOutro, addWatermark, cutVideo } from '@server/helpers/ffmpeg'
-import { createTorrentAndSetInfoHashFromPath } from '@server/helpers/webtorrent'
+import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg'
 import { CONFIG } from '@server/initializers/config'
-import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
-import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles'
 import { isAbleToUploadVideo } from '@server/lib/user'
-import { buildOptimizeOrMergeAudioJob } from '@server/lib/video'
-import { removeHLSPlaylist, removeWebTorrentFile } from '@server/lib/video-file'
 import { VideoPathManager } from '@server/lib/video-path-manager'
-import { approximateIntroOutroAdditionalSize } from '@server/lib/video-studio'
+import { approximateIntroOutroAdditionalSize, onVideoStudioEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
-import { VideoFileModel } from '@server/models/video/video-file'
-import { MVideo, MVideoFile, MVideoFullLight, MVideoId, MVideoWithAllFiles } from '@server/types/models'
-import { getLowercaseExtension, pick } from '@shared/core-utils'
-import {
-  buildFileMetadata,
-  buildUUID,
-  ffprobePromise,
-  getFileSize,
-  getVideoStreamDimensionsInfo,
-  getVideoStreamDuration,
-  getVideoStreamFPS
-} from '@shared/extra-utils'
+import { MVideo, MVideoFullLight } from '@server/types/models'
+import { pick } from '@shared/core-utils'
+import { buildUUID } from '@shared/extra-utils'
+import { FFmpegEdition } from '@shared/ffmpeg'
 import {
   VideoStudioEditionPayload,
   VideoStudioTask,
@@ -36,9 +23,8 @@ import {
   VideoStudioTaskWatermarkPayload
 } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
-import { JobQueue } from '../job-queue'
 
-const lTagsBase = loggerTagsFactory('video-edition')
+const lTagsBase = loggerTagsFactory('video-studio')
 
 async function processVideoStudioEdition (job: Job) {
   const payload = job.data as VideoStudioEditionPayload
@@ -46,65 +32,54 @@ async function processVideoStudioEdition (job: Job) {
 
   logger.info('Process video studio edition of %s in job %s.', payload.videoUUID, job.id, lTags)
 
-  const video = await VideoModel.loadFull(payload.videoUUID)
+  try {
+    const video = await VideoModel.loadFull(payload.videoUUID)
 
-  // No video, maybe deleted?
-  if (!video) {
-    logger.info('Can\'t process job %d, video does not exist.', job.id, lTags)
-    return undefined
-  }
+    // No video, maybe deleted?
+    if (!video) {
+      logger.info('Can\'t process job %d, video does not exist.', job.id, lTags)
 
-  await checkUserQuotaOrThrow(video, payload)
-
-  const inputFile = video.getMaxQualityFile()
-
-  const editionResultPath = await VideoPathManager.Instance.makeAvailableVideoFile(inputFile, async originalFilePath => {
-    let tmpInputFilePath: string
-    let outputPath: string
-
-    for (const task of payload.tasks) {
-      const outputFilename = buildUUID() + inputFile.extname
-      outputPath = join(CONFIG.STORAGE.TMP_DIR, outputFilename)
-
-      await processTask({
-        inputPath: tmpInputFilePath ?? originalFilePath,
-        video,
-        outputPath,
-        task,
-        lTags
-      })
-
-      if (tmpInputFilePath) await remove(tmpInputFilePath)
-
-      // For the next iteration
-      tmpInputFilePath = outputPath
+      await safeCleanupStudioTMPFiles(payload.tasks)
+      return undefined
     }
 
-    return outputPath
-  })
+    await checkUserQuotaOrThrow(video, payload)
 
-  logger.info('Video edition ended for video %s.', video.uuid, lTags)
+    const inputFile = video.getMaxQualityFile()
 
-  const newFile = await buildNewFile(video, editionResultPath)
+    const editionResultPath = await VideoPathManager.Instance.makeAvailableVideoFile(inputFile, async originalFilePath => {
+      let tmpInputFilePath: string
+      let outputPath: string
 
-  const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newFile)
-  await move(editionResultPath, outputPath)
+      for (const task of payload.tasks) {
+        const outputFilename = buildUUID() + inputFile.extname
+        outputPath = join(CONFIG.STORAGE.TMP_DIR, outputFilename)
 
-  await createTorrentAndSetInfoHashFromPath(video, newFile, outputPath)
-  await removeAllFiles(video, newFile)
+        await processTask({
+          inputPath: tmpInputFilePath ?? originalFilePath,
+          video,
+          outputPath,
+          task,
+          lTags
+        })
 
-  await newFile.save()
+        if (tmpInputFilePath) await remove(tmpInputFilePath)
 
-  video.duration = await getVideoStreamDuration(outputPath)
-  await video.save()
+        // For the next iteration
+        tmpInputFilePath = outputPath
+      }
 
-  await federateVideoIfNeeded(video, false, undefined)
+      return outputPath
+    })
 
-  const user = await UserModel.loadByVideoId(video.id)
+    logger.info('Video edition ended for video %s.', video.uuid, lTags)
 
-  await JobQueue.Instance.createJob(
-    await buildOptimizeOrMergeAudioJob({ video, videoFile: newFile, user, isNewVideo: false })
-  )
+    await onVideoStudioEnded({ video, editionResultPath, tasks: payload.tasks })
+  } catch (err) {
+    await safeCleanupStudioTMPFiles(payload.tasks)
+
+    throw err
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -131,9 +106,9 @@ const taskProcessors: { [id in VideoStudioTask['name']]: (options: TaskProcessor
 }
 
 async function processTask (options: TaskProcessorOptions) {
-  const { video, task } = options
+  const { video, task, lTags } = options
 
-  logger.info('Processing %s task for video %s.', task.name, video.uuid, { task, ...options.lTags })
+  logger.info('Processing %s task for video %s.', task.name, video.uuid, { task, ...lTags })
 
   const processor = taskProcessors[options.task.name]
   if (!process) throw new Error('Unknown task ' + task.name)
@@ -142,76 +117,52 @@ async function processTask (options: TaskProcessorOptions) {
 }
 
 function processAddIntroOutro (options: TaskProcessorOptions<VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload>) {
-  const { task } = options
+  const { task, lTags } = options
 
-  return addIntroOutro({
+  logger.debug('Will add intro/outro to the video.', { options, ...lTags })
+
+  return buildFFmpegEdition().addIntroOutro({
     ...pick(options, [ 'inputPath', 'outputPath' ]),
 
     introOutroPath: task.options.file,
     type: task.name === 'add-intro'
       ? 'intro'
-      : 'outro',
-
-    availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
-    profile: CONFIG.TRANSCODING.PROFILE
+      : 'outro'
   })
 }
 
 function processCut (options: TaskProcessorOptions<VideoStudioTaskCutPayload>) {
-  const { task } = options
+  const { task, lTags } = options
 
-  return cutVideo({
+  logger.debug('Will cut the video.', { options, ...lTags })
+
+  return buildFFmpegEdition().cutVideo({
     ...pick(options, [ 'inputPath', 'outputPath' ]),
 
     start: task.options.start,
-    end: task.options.end,
-
-    availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
-    profile: CONFIG.TRANSCODING.PROFILE
+    end: task.options.end
   })
 }
 
 function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWatermarkPayload>) {
-  const { task } = options
+  const { task, lTags } = options
 
-  return addWatermark({
+  logger.debug('Will add watermark to the video.', { options, ...lTags })
+
+  return buildFFmpegEdition().addWatermark({
     ...pick(options, [ 'inputPath', 'outputPath' ]),
 
     watermarkPath: task.options.file,
 
-    availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
-    profile: CONFIG.TRANSCODING.PROFILE
+    videoFilters: {
+      watermarkSizeRatio: task.options.watermarkSizeRatio,
+      horitonzalMarginRatio: task.options.horitonzalMarginRatio,
+      verticalMarginRatio: task.options.verticalMarginRatio
+    }
   })
 }
 
-async function buildNewFile (video: MVideoId, path: string) {
-  const videoFile = new VideoFileModel({
-    extname: getLowercaseExtension(path),
-    size: await getFileSize(path),
-    metadata: await buildFileMetadata(path),
-    videoStreamingPlaylistId: null,
-    videoId: video.id
-  })
-
-  const probe = await ffprobePromise(path)
-
-  videoFile.fps = await getVideoStreamFPS(path, probe)
-  videoFile.resolution = (await getVideoStreamDimensionsInfo(path, probe)).resolution
-
-  videoFile.filename = generateWebTorrentVideoFilename(videoFile.resolution, videoFile.extname)
-
-  return videoFile
-}
-
-async function removeAllFiles (video: MVideoWithAllFiles, webTorrentFileException: MVideoFile) {
-  await removeHLSPlaylist(video)
-
-  for (const file of video.VideoFiles) {
-    if (file.id === webTorrentFileException.id) continue
-
-    await removeWebTorrentFile(video, file.id)
-  }
-}
+// ---------------------------------------------------------------------------
 
 async function checkUserQuotaOrThrow (video: MVideoFullLight, payload: VideoStudioEditionPayload) {
   const user = await UserModel.loadByVideoId(video.id)
@@ -222,4 +173,8 @@ async function checkUserQuotaOrThrow (video: MVideoFullLight, payload: VideoStud
   if (await isAbleToUploadVideo(user.id, additionalBytes) === false) {
     throw new Error('Quota exceeded for this user to edit the video')
   }
+}
+
+function buildFFmpegEdition () {
+  return new FFmpegEdition(getFFmpegCommandWrapperOptions('vod', VideoTranscodingProfilesManager.Instance.getAvailableEncoders()))
 }

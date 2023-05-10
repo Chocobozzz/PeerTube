@@ -278,7 +278,7 @@ describe('Test video blacklist API validators', function () {
     })
 
     it('Should fail with an invalid type', async function () {
-      await servers[0].blacklist.list({ type: 0, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await servers[0].blacklist.list({ type: 0 as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should succeed with the correct parameters', async function () {

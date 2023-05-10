@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { FIXTURE_URLS } from '@server/tests/shared'
+import { FIXTURE_URLS, SQLCommand } from '@server/tests/shared'
 import { areHttpImportTestsDisabled } from '@shared/core-utils'
 import { VideoChannelSyncState, VideoInclude, VideoPrivacy } from '@shared/models'
 import {
+  cleanupTests,
   createMultipleServers,
   getServerImportConfig,
-  killallServers,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
@@ -23,6 +23,7 @@ describe('Test channel synchronizations', function () {
 
     describe('Sync using ' + mode, function () {
       let servers: PeerTubeServer[]
+      let sqlCommands: SQLCommand[]
 
       let startTestDate: Date
 
@@ -36,7 +37,7 @@ describe('Test channel synchronizations', function () {
       }
 
       async function changeDateForSync (channelSyncId: number, newDate: string) {
-        await servers[0].sql.updateQuery(
+        await sqlCommands[0].updateQuery(
           `UPDATE "videoChannelSync" ` +
           `SET "createdAt"='${newDate}', "lastSyncAt"='${newDate}' ` +
           `WHERE id=${channelSyncId}`
@@ -82,6 +83,8 @@ describe('Test channel synchronizations', function () {
           const { videoChannels } = await servers[0].users.getMyInfo({ token: userInfo.accessToken })
           userInfo.channelId = videoChannels[0].id
         }
+
+        sqlCommands = servers.map(s => new SQLCommand(s))
       })
 
       it('Should fetch the latest channel videos of a remote channel', async function () {
@@ -302,7 +305,11 @@ describe('Test channel synchronizations', function () {
       })
 
       after(async function () {
-        await killallServers(servers)
+        for (const sqlCommand of sqlCommands) {
+          await sqlCommand.cleanup()
+        }
+
+        await cleanupTests(servers)
       })
     })
   }

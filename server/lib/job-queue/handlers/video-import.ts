@@ -7,15 +7,16 @@ import { isPostImportVideoAccepted } from '@server/lib/moderation'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
+import { createOptimizeOrMergeAudioJobs } from '@server/lib/transcoding/create-transcoding-job'
 import { isAbleToUploadVideo } from '@server/lib/user'
-import { buildMoveToObjectStorageJob, buildOptimizeOrMergeAudioJob } from '@server/lib/video'
+import { buildMoveToObjectStorageJob } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { buildNextVideoState } from '@server/lib/video-state'
 import { ThumbnailModel } from '@server/models/video/thumbnail'
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { MVideoImport, MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import'
 import { getLowercaseExtension } from '@shared/core-utils'
-import { isAudioFile } from '@shared/extra-utils'
+import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamDuration, getVideoStreamFPS, isAudioFile } from '@shared/ffmpeg'
 import {
   ThumbnailType,
   VideoImportPayload,
@@ -28,7 +29,6 @@ import {
   VideoResolution,
   VideoState
 } from '@shared/models'
-import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamDuration, getVideoStreamFPS } from '../../../helpers/ffmpeg'
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
@@ -137,7 +137,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
     const { resolution } = await isAudioFile(tempVideoPath, probe)
       ? { resolution: VideoResolution.H_NOVIDEO }
-      : await getVideoStreamDimensionsInfo(tempVideoPath)
+      : await getVideoStreamDimensionsInfo(tempVideoPath, probe)
 
     const fps = await getVideoStreamFPS(tempVideoPath, probe)
     const duration = await getVideoStreamDuration(tempVideoPath, probe)
@@ -242,7 +242,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
         })
       })
 
-      await afterImportSuccess({ videoImport: videoImportUpdated, video, videoFile, user: videoImport.User })
+      await afterImportSuccess({ videoImport: videoImportUpdated, video, videoFile, user: videoImport.User, videoFileAlreadyLocked: true })
     } finally {
       videoFileLockReleaser()
     }
@@ -292,8 +292,9 @@ async function afterImportSuccess (options: {
   video: MVideoFullLight
   videoFile: MVideoFile
   user: MUserId
+  videoFileAlreadyLocked: boolean
 }) {
-  const { video, videoFile, videoImport, user } = options
+  const { video, videoFile, videoImport, user, videoFileAlreadyLocked } = options
 
   Notifier.Instance.notifyOnFinishedVideoImport({ videoImport: Object.assign(videoImport, { Video: video }), success: true })
 
@@ -313,9 +314,7 @@ async function afterImportSuccess (options: {
   }
 
   if (video.state === VideoState.TO_TRANSCODE) { // Create transcoding jobs?
-    await JobQueue.Instance.createJob(
-      await buildOptimizeOrMergeAudioJob({ video, videoFile, user })
-    )
+    await createOptimizeOrMergeAudioJobs({ video, videoFile, isNewVideo: true, user, videoFileAlreadyLocked })
   }
 }
 

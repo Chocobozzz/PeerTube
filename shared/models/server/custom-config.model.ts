@@ -116,6 +116,10 @@ export interface CustomConfig {
     allowAdditionalExtensions: boolean
     allowAudioFiles: boolean
 
+    remoteRunners: {
+      enabled: boolean
+    }
+
     threads: number
     concurrency: number
 
@@ -149,6 +153,9 @@ export interface CustomConfig {
 
     transcoding: {
       enabled: boolean
+      remoteRunners: {
+        enabled: boolean
+      }
       threads: number
       profile: string
       resolutions: ConfigResolutions
@@ -158,6 +165,10 @@ export interface CustomConfig {
 
   videoStudio: {
     enabled: boolean
+
+    remoteRunners: {
+      enabled: boolean
+    }
   }
 
   import: {

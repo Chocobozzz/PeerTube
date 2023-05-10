@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { SQLCommand } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
 import {
@@ -15,6 +16,7 @@ import {
 
 describe('Test AP refresher', function () {
   let servers: PeerTubeServer[] = []
+  let sqlCommandServer2: SQLCommand
   let videoUUID1: string
   let videoUUID2: string
   let videoUUID3: string
@@ -61,6 +63,8 @@ describe('Test AP refresher', function () {
     }
 
     await doubleFollow(servers[0], servers[1])
+
+    sqlCommandServer2 = new SQLCommand(servers[1])
   })
 
   describe('Videos refresher', function () {
@@ -71,7 +75,7 @@ describe('Test AP refresher', function () {
       await wait(10000)
 
       // Change UUID so the remote server returns a 404
-      await servers[1].sql.setVideoField(videoUUID1, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174f')
+      await sqlCommandServer2.setVideoField(videoUUID1, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174f')
 
       await servers[0].videos.get({ id: videoUUID1 })
       await servers[0].videos.get({ id: videoUUID2 })
@@ -87,7 +91,7 @@ describe('Test AP refresher', function () {
 
       await killallServers([ servers[1] ])
 
-      await servers[1].sql.setVideoField(videoUUID3, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174e')
+      await sqlCommandServer2.setVideoField(videoUUID3, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174e')
 
       // Video will need a refresh
       await wait(10000)
@@ -113,7 +117,7 @@ describe('Test AP refresher', function () {
 
       // Change actor name so the remote server returns a 404
       const to = servers[1].url + '/accounts/user2'
-      await servers[1].sql.setActorField(to, 'preferredUsername', 'toto')
+      await sqlCommandServer2.setActorField(to, 'preferredUsername', 'toto')
 
       await command.get({ accountName: 'user1@' + servers[1].host })
       await command.get({ accountName: 'user2@' + servers[1].host })
@@ -133,7 +137,7 @@ describe('Test AP refresher', function () {
       await wait(10000)
 
       // Change UUID so the remote server returns a 404
-      await servers[1].sql.setPlaylistField(playlistUUID2, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b178e')
+      await sqlCommandServer2.setPlaylistField(playlistUUID2, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b178e')
 
       await servers[0].playlists.get({ playlistId: playlistUUID1 })
       await servers[0].playlists.get({ playlistId: playlistUUID2 })
@@ -147,6 +151,8 @@ describe('Test AP refresher', function () {
 
   after(async function () {
     this.timeout(10000)
+
+    await sqlCommandServer2.cleanup()
 
     await cleanupTests(servers)
   })

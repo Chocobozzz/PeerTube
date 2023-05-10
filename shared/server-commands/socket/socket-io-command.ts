@@ -12,4 +12,13 @@ export class SocketIOCommand extends AbstractCommand {
   getLiveNotificationSocket () {
     return io(this.server.url + '/live-videos')
   }
+
+  getRunnersSocket (options: {
+    runnerToken: string
+  }) {
+    return io(this.server.url + '/runners', {
+      reconnection: false,
+      auth: { runnerToken: options.runnerToken }
+    })
+  }
 }

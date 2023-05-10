@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { expectStartWith } from '@server/tests/shared'
+import { checkPersistentTmpIsEmpty, checkVideoDuration, expectStartWith } from '@server/tests/shared'
 import { areMockObjectStorageTestsDisabled, getAllFiles } from '@shared/core-utils'
 import { VideoStudioTask } from '@shared/models'
 import {
@@ -17,20 +17,6 @@ import {
 describe('Test video studio', function () {
   let servers: PeerTubeServer[] = []
   let videoUUID: string
-
-  async function checkDuration (server: PeerTubeServer, duration: number) {
-    const video = await server.videos.get({ id: videoUUID })
-
-    expect(video.duration).to.be.approximately(duration, 1)
-
-    for (const file of video.files) {
-      const metadata = await server.videos.getFileMetadata({ url: file.metadataUrl })
-
-      for (const stream of metadata.streams) {
-        expect(Math.round(stream.duration)).to.be.approximately(duration, 1)
-      }
-    }
-  }
 
   async function renewVideo (fixture = 'video_short.webm') {
     const video = await servers[0].videos.quickUpload({ name: 'video', fixture })
@@ -79,7 +65,7 @@ describe('Test video studio', function () {
       ])
 
       for (const server of servers) {
-        await checkDuration(server, 3)
+        await checkVideoDuration(server, videoUUID, 3)
 
         const video = await server.videos.get({ id: videoUUID })
         expect(new Date(video.publishedAt)).to.be.below(beforeTasks)
@@ -100,7 +86,7 @@ describe('Test video studio', function () {
       ])
 
       for (const server of servers) {
-        await checkDuration(server, 2)
+        await checkVideoDuration(server, videoUUID, 2)
       }
     })
 
@@ -119,7 +105,7 @@ describe('Test video studio', function () {
       ])
 
       for (const server of servers) {
-        await checkDuration(server, 4)
+        await checkVideoDuration(server, videoUUID, 4)
       }
     })
   })
@@ -140,7 +126,7 @@ describe('Test video studio', function () {
       ])
 
       for (const server of servers) {
-        await checkDuration(server, 10)
+        await checkVideoDuration(server, videoUUID, 10)
       }
     })
 
@@ -158,7 +144,7 @@ describe('Test video studio', function () {
       ])
 
       for (const server of servers) {
-        await checkDuration(server, 7)
+        await checkVideoDuration(server, videoUUID, 7)
       }
     })
 
@@ -183,7 +169,7 @@ describe('Test video studio', function () {
       ])
 
       for (const server of servers) {
-        await checkDuration(server, 12)
+        await checkVideoDuration(server, videoUUID, 12)
       }
     })
 
@@ -201,7 +187,7 @@ describe('Test video studio', function () {
       ])
 
       for (const server of servers) {
-        await checkDuration(server, 7)
+        await checkVideoDuration(server, videoUUID, 7)
       }
     })
 
@@ -219,7 +205,7 @@ describe('Test video studio', function () {
       ])
 
       for (const server of servers) {
-        await checkDuration(server, 10)
+        await checkVideoDuration(server, videoUUID, 10)
       }
     })
 
@@ -237,7 +223,7 @@ describe('Test video studio', function () {
       ])
 
       for (const server of servers) {
-        await checkDuration(server, 10)
+        await checkVideoDuration(server, videoUUID, 10)
       }
     })
   })
@@ -279,12 +265,12 @@ describe('Test video studio', function () {
       await createTasks(VideoStudioCommand.getComplexTask())
 
       for (const server of servers) {
-        await checkDuration(server, 9)
+        await checkVideoDuration(server, videoUUID, 9)
       }
     })
   })
 
-  describe('HLS only video edition', function () {
+  describe('HLS only studio edition', function () {
 
     before(async function () {
       // Disable webtorrent
@@ -309,12 +295,35 @@ describe('Test video studio', function () {
         const video = await server.videos.get({ id: videoUUID })
         expect(video.files).to.have.lengthOf(0)
 
-        await checkDuration(server, 9)
+        await checkVideoDuration(server, videoUUID, 9)
       }
     })
   })
 
-  describe('Object storage video edition', function () {
+  describe('Server restart', function () {
+
+    it('Should still be able to run video edition after a server restart', async function () {
+      this.timeout(240_000)
+
+      await renewVideo()
+      await servers[0].videoStudio.createEditionTasks({ videoId: videoUUID, tasks: VideoStudioCommand.getComplexTask() })
+
+      await servers[0].kill()
+      await servers[0].run()
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        await checkVideoDuration(server, videoUUID, 9)
+      }
+    })
+
+    it('Should have an empty persistent tmp directory', async function () {
+      await checkPersistentTmpIsEmpty(servers[0])
+    })
+  })
+
+  describe('Object storage studio edition', function () {
     if (areMockObjectStorageTestsDisabled()) return
 
     before(async function () {
@@ -351,7 +360,7 @@ describe('Test video studio', function () {
           expectStartWith(hlsFile.fileUrl, ObjectStorageCommand.getMockPlaylistBaseUrl())
         }
 
-        await checkDuration(server, 9)
+        await checkVideoDuration(server, videoUUID, 9)
       }
     })
   })

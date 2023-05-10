@@ -1,0 +1,101 @@
+<h1 class="d-flex justify-content-between">
+  <span class="text-nowrap me-2">
+    <my-global-icon iconName="globe" aria-hidden="true"></my-global-icon>
+    <span i18n>Runner jobs</span>
+  </span>
+
+  <a routerLink="/admin/system/runners/runners-list" class="peertube-button-link peertube-button-icon grey-button">
+    <my-global-icon iconName="codesandbox" aria-hidden="true"></my-global-icon>
+    <ng-container i18n>Remote runners</ng-container>
+  </a>
+</h1>
+
+<p-table
+  [value]="runnerJobs" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
+  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order"
+  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
+  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
+  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} runner jobs"
+  [expandedRowKeys]="expandedRows" dataKey="uuid"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 40px"></th>
+      <th style="width: 120px;"></th>
+      <th i18n>UUID</th>
+      <th i18n>Type</th>
+      <th i18n pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
+      <th style="width: 100px" i18n pSortableColumn="priority">Priority <p-sortIcon field="priority"></p-sortIcon></th>
+      <th style="width: 100px" i18n pSortableColumn="progress">Progress <p-sortIcon field="progress"></p-sortIcon></th>
+      <th i18n>Runner</th>
+      <th style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="caption">
+    <div class="caption">
+      <div class="ms-auto d-flex">
+        <my-advanced-input-filter class="me-2" (search)="onSearch($event)"></my-advanced-input-filter>
+
+        <my-button i18n-label label="Refresh" icon="refresh" (click)="reloadData()"></my-button>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-expanded="expanded" let-runnerJob>
+    <tr>
+      <td class="expand-cell" [pRowToggler]="runnerJob">
+        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
+      </td>
+
+      <td class="action-cell">
+        <my-action-dropdown
+          placement="bottom-right top-right left auto" container="body"
+          i18n-label label="Actions" [actions]="actions" [entry]="runnerJob"
+        ></my-action-dropdown>
+      </td>
+
+      <td>{{ runnerJob.uuid }}</td>
+      <td>{{ runnerJob.type }}</td>
+      <td>{{ runnerJob.state.label }}</td>
+      <td>{{ runnerJob.priority }}</td>
+      <td>{{ runnerJob.progress }}</td>
+      <td>{{ runnerJob.runner?.name }}</td>
+      <td>{{ runnerJob.createdAt | date: 'short'  }}</td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="rowexpansion" let-runnerJob>
+    <tr>
+      <td colspan="9">
+        <div class="mt-2 fs-7 font-monospace">
+          Parent job: {{ runnerJob.parent?.uuid || '-' }} <br />
+          Processed on {{ (runnerJob.startedAt || '-') }} <br />
+          Finished on {{ (runnerJob.finishedAt || '-') }} <br />
+        </div>
+
+        <div class="mt-2">
+          <strong i18n>Payload:</strong>
+          <pre>{{ runnerJob.payload }}</pre>
+        </div>
+
+        <div class="mt-2">
+          <strong i18n>Private payload:</strong>
+          <pre>{{ runnerJob.privatePayload }}</pre>
+        </div>
+
+        <pre *ngIf="runnerJob.error" class="text-danger" >{{ runnerJob.error }}</pre>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="9">
+        <div class="no-results">
+          <ng-container i18n>No runner jobs found.</ng-container>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

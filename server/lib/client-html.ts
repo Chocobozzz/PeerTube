@@ -1,5 +1,5 @@
 import express from 'express'
-import { readFile } from 'fs-extra'
+import { pathExists, readFile } from 'fs-extra'
 import { join } from 'path'
 import validator from 'validator'
 import { isTestOrDevInstance } from '@server/helpers/core-utils'
@@ -408,7 +408,20 @@ class ClientHtml {
   }
 
   private static async addAsyncPluginCSS (htmlStringPage: string) {
-    const globalCSSContent = await readFile(PLUGIN_GLOBAL_CSS_PATH)
+    if (!pathExists(PLUGIN_GLOBAL_CSS_PATH)) {
+      logger.info('Plugin Global CSS file is not available (generation may still be in progress), ignoring it.')
+      return htmlStringPage
+    }
+
+    let globalCSSContent: Buffer
+
+    try {
+      globalCSSContent = await readFile(PLUGIN_GLOBAL_CSS_PATH)
+    } catch (err) {
+      logger.error('Error retrieving the Plugin Global CSS file, ignoring it.', { err })
+      return htmlStringPage
+    }
+
     if (globalCSSContent.byteLength === 0) return htmlStringPage
 
     const fileHash = sha256(globalCSSContent)

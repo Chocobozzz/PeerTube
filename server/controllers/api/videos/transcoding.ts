@@ -1,10 +1,8 @@
-import Bluebird from 'bluebird'
 import express from 'express'
-import { computeResolutionsToTranscode } from '@server/helpers/ffmpeg'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
-import { JobQueue } from '@server/lib/job-queue'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { buildTranscodingJob } from '@server/lib/video'
+import { createTranscodingJobs } from '@server/lib/transcoding/create-transcoding-job'
+import { computeResolutionsToTranscode } from '@server/lib/transcoding/transcoding-resolutions'
 import { HttpStatusCode, UserRight, VideoState, VideoTranscodingCreate } from '@shared/models'
 import { asyncMiddleware, authenticate, createTranscodingValidator, ensureUserHasRight } from '../../../middlewares'
 
@@ -47,82 +45,13 @@ async function createTranscoding (req: express.Request, res: express.Response) {
   video.state = VideoState.TO_TRANSCODE
   await video.save()
 
-  const childrenResolutions = resolutions.filter(r => r !== maxResolution)
-
-  logger.info('Manually creating transcoding jobs for %s.', body.transcodingType, { childrenResolutions, maxResolution })
-
-  const children = await Bluebird.mapSeries(childrenResolutions, resolution => {
-    if (body.transcodingType === 'hls') {
-      return buildHLSJobOption({
-        videoUUID: video.uuid,
-        hasAudio,
-        resolution,
-        isMaxQuality: false
-      })
-    }
-
-    if (body.transcodingType === 'webtorrent') {
-      return buildWebTorrentJobOption({
-        videoUUID: video.uuid,
-        hasAudio,
-        resolution
-      })
-    }
+  await createTranscodingJobs({
+    video,
+    resolutions,
+    transcodingType: body.transcodingType,
+    isNewVideo: false,
+    user: null // Don't specify priority since these transcoding jobs are fired by the admin
   })
-
-  const parent = body.transcodingType === 'hls'
-    ? await buildHLSJobOption({
-      videoUUID: video.uuid,
-      hasAudio,
-      resolution: maxResolution,
-      isMaxQuality: false
-    })
-    : await buildWebTorrentJobOption({
-      videoUUID: video.uuid,
-      hasAudio,
-      resolution: maxResolution
-    })
-
-  // Porcess the last resolution after the other ones to prevent concurrency issue
-  // Because low resolutions use the biggest one as ffmpeg input
-  await JobQueue.Instance.createJobWithChildren(parent, children)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
-}
-
-function buildHLSJobOption (options: {
-  videoUUID: string
-  hasAudio: boolean
-  resolution: number
-  isMaxQuality: boolean
-}) {
-  const { videoUUID, hasAudio, resolution, isMaxQuality } = options
-
-  return buildTranscodingJob({
-    type: 'new-resolution-to-hls',
-    videoUUID,
-    resolution,
-    hasAudio,
-    copyCodecs: false,
-    isNewVideo: false,
-    autoDeleteWebTorrentIfNeeded: false,
-    isMaxQuality
-  })
-}
-
-function buildWebTorrentJobOption (options: {
-  videoUUID: string
-  hasAudio: boolean
-  resolution: number
-}) {
-  const { videoUUID, hasAudio, resolution } = options
-
-  return buildTranscodingJob({
-    type: 'new-resolution-to-webtorrent',
-    videoUUID,
-    isNewVideo: false,
-    resolution,
-    hasAudio,
-    createHLSIfNeeded: false
-  })
 }

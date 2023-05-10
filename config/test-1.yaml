@@ -10,6 +10,7 @@ database:
 # From the project root directory
 storage:
   tmp: 'test1/tmp/'
+  tmp_persistent: 'test1/tmp-persistent/'
   bin: 'test1/bin/'
   avatars: 'test1/avatars/'
   videos: 'test1/videos/'

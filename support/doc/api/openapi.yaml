@@ -46,7 +46,7 @@ info:
 
     {
       "detail": "Video not found",
-      "docs": "https://docs.joinpeertube.org/api/rest-reference.html#operation/getVideo",
+      "docs": "https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo",
       "status": 404,
       "title": "Not Found",
       "type": "about:blank"
@@ -63,10 +63,10 @@ info:
 
     {
       "detail": "Cannot get this video regarding follow constraints",
-      "docs": "https://docs.joinpeertube.org/api/rest-reference.html#operation/getVideo",
+      "docs": "https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo",
       "status": 403,
       "title": "Forbidden",
-      "type": "https://docs.joinpeertube.org/api/rest-reference.html#section/Errors/does_not_respect_follow_constraints"
+      "type": "https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/does_not_respect_follow_constraints"
     }
     ```
 
@@ -84,7 +84,7 @@ info:
 
     {
       "detail": "Incorrect request parameters: id",
-      "docs": "https://docs.joinpeertube.org/api/rest-reference.html#operation/getVideo",
+      "docs": "https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo",
       "instance": "/api/v1/videos/9c9de5e8-0a1e-484a-b099-e80766180",
       "invalid-params": {
         "id": {
@@ -149,7 +149,7 @@ info:
 
     In addition, all routes serving ActivityPub are CORS-enabled for all origins.
 externalDocs:
-  url: https://docs.joinpeertube.org/api/rest-reference.html
+  url: https://docs.joinpeertube.org/api-rest-reference.html
 tags:
   - name: Register
     description: |
@@ -274,7 +274,7 @@ tags:
     description: Operations on video files
   - name: Video Transcoding
     description: Video transcoding related operations
-  - name: Video stats
+  - name: Video Stats
     description: Video statistics
   - name: Video Feeds
     description: Server syndication feeds of videos
@@ -297,6 +297,9 @@ tags:
   - name: Stats
     description: |
       Statistics
+  - name: Runner Registration Token
+    description: |
+      Manage runner registration token
 
 x-tagGroups:
   - name: Static endpoints
@@ -353,6 +356,12 @@ x-tagGroups:
       - Stats
       - Logs
       - Job
+  - name: Remote Jobs
+    tags:
+      - Runner Registration Token
+      - Runner Jobs
+      - Runners
+
 paths:
   '/static/webseed/{filename}':
     get:
@@ -806,9 +815,15 @@ paths:
           content:
             'application/json':
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Account'
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Account'
 
   /api/v1/config:
     get:
@@ -5469,6 +5484,443 @@ paths:
         '204':
           description: successful operation
 
+  /api/v1/runners/registration-tokens/generate:
+    post:
+      summary: Generate registration token
+      description: Generate a new runner registration token
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Runner Registration Token
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/runners/registration-tokens/{registrationTokenId}:
+    delete:
+      summary: Remove registration token
+      description: Remove a registration token. Runners that used this token for their registration are automatically removed.
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Runner Registration Token
+      parameters:
+        - $ref: '#/components/parameters/registrationTokenId'
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/runners/registration-tokens:
+    get:
+      summary: List registration tokens
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Runner Registration Token
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/registrationTokenSort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RunnerRegistrationToken'
+
+  /api/v1/runners/register:
+    post:
+      summary: Register a new runner
+      description: API used by PeerTube runners
+      tags:
+        - Runners
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                registrationToken:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+              required:
+                - registrationToken
+                - name
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: Runner id
+                  runnerToken:
+                    type: string
+
+  /api/v1/runners/unregister:
+    post:
+      summary: Unregister a runner
+      description: API used by PeerTube runners
+      tags:
+        - Runners
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                runnerToken:
+                  type: string
+              required:
+                - runnerToken
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/runners/{runnerId}:
+    delete:
+      summary: Delete a runner
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Runners
+      parameters:
+        - $ref: '#/components/parameters/runnerId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                runnerToken:
+                  type: string
+              required:
+                - runnerToken
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/runners:
+    get:
+      summary: List runners
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Runners
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/runnerSort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Runner'
+
+
+  /api/v1/runners/jobs/request:
+    post:
+      summary: Request a new job
+      description: API used by PeerTube runners
+      tags:
+        - Runner Jobs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                runnerToken:
+                  type: string
+              required:
+                - runnerToken
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  availableJobs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        uuid:
+                          $ref: '#/components/schemas/UUIDv4'
+                        type:
+                          $ref: '#/components/schemas/RunnerJobType'
+                        payload:
+                          $ref: '#/components/schemas/RunnerJobPayload'
+
+  /api/v1/runners/jobs/{jobUUID}/accept:
+    post:
+      summary: Accept job
+      description: API used by PeerTube runners
+      tags:
+        - Runner Jobs
+      parameters:
+        - $ref: '#/components/parameters/jobUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                runnerToken:
+                  type: string
+              required:
+                - runnerToken
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job:
+                    allOf:
+                      - $ref: '#/components/schemas/RunnerJob'
+                      - type: object
+                        properties:
+                          jobToken:
+                            type: string
+
+  /api/v1/runners/jobs/{jobUUID}/abort:
+    post:
+      summary: Abort job
+      description: API used by PeerTube runners
+      tags:
+        - Runner Jobs
+      parameters:
+        - $ref: '#/components/parameters/jobUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                runnerToken:
+                  type: string
+                jobToken:
+                  type: string
+                reason:
+                  type: string
+                  description: Why the runner aborts this job
+              required:
+                - runnerToken
+                - jobToken
+                - reason
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/runners/jobs/{jobUUID}/update:
+    post:
+      summary: Update job
+      description: API used by PeerTube runners
+      tags:
+        - Runner Jobs
+      parameters:
+        - $ref: '#/components/parameters/jobUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                runnerToken:
+                  type: string
+                jobToken:
+                  type: string
+                progress:
+                  type: integer
+                  description: Update job progression percentage (optional)
+                payload:
+                  anyOf:
+                    - type: object
+                      description: Provide live transcoding chunks update
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                            - 'add-chunk'
+                            - 'remove-chunk'
+                        masterPlaylistFile:
+                          type: string
+                          format: binary
+                        resolutionPlaylistFile:
+                          type: string
+                          format: binary
+                        resolutionPlaylistFilename:
+                          type: string
+                        videoChunkFile:
+                          type: string
+                          format: binary
+                        videoChunkFilename:
+                          type: string
+              required:
+                - runnerToken
+                - jobToken
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/runners/jobs/{jobUUID}/error:
+    post:
+      summary: Post job error
+      description: API used by PeerTube runners
+      tags:
+        - Runner Jobs
+      parameters:
+        - $ref: '#/components/parameters/jobUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                runnerToken:
+                  type: string
+                jobToken:
+                  type: string
+                message:
+                  type: string
+                  description: Why the runner failed to process this job
+              required:
+                - runnerToken
+                - jobToken
+                - message
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/runners/jobs/{jobUUID}/success:
+    post:
+      summary: Post job success
+      description: API used by PeerTube runners
+      tags:
+        - Runner Jobs
+      parameters:
+        - $ref: '#/components/parameters/jobUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                runnerToken:
+                  type: string
+                jobToken:
+                  type: string
+                payload:
+                  anyOf:
+                    - type: object
+                      title: VOD web video transcoding
+                      properties:
+                        videoFile:
+                          type: string
+                          format: binary
+                    - type: object
+                      title: VOD HLS transcoding
+                      properties:
+                        videoFile:
+                          type: string
+                          format: binary
+                        resolutionPlaylistFile:
+                          type: string
+                          format: binary
+                    - type: object
+                      title: VOD audio merge transcoding
+                      properties:
+                        videoFile:
+                          type: string
+                          format: binary
+                    - type: object
+                      title: Live RTMP to HLS transcoding
+              required:
+                - runnerToken
+                - jobToken
+                - payload
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/runners/jobs/{jobUUID}/cancel:
+    get:
+      summary: Cancel a job
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Runner Jobs
+      parameters:
+        - $ref: '#/components/parameters/jobUUID'
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/runners/jobs:
+    get:
+      summary: List jobs
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Runner Jobs
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/runnerJobSort'
+        - $ref: '#/components/parameters/search'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RunnerJobAdmin'
+
 servers:
   - url: 'https://peertube2.cpy.re'
     description: Live Test Server (live data - latest nightly version)
@@ -5650,6 +6102,37 @@ components:
         type: string
         enum:
         - createdAt
+    registrationTokenSort:
+      name: sort
+      in: query
+      required: false
+      description: Sort registration tokens by criteria
+      schema:
+        type: string
+        enum:
+        - createdAt
+    runnerSort:
+      name: sort
+      in: query
+      required: false
+      description: Sort runners by criteria
+      schema:
+        type: string
+        enum:
+        - createdAt
+    runnerJobSort:
+      name: sort
+      in: query
+      required: false
+      description: Sort runner jobs by criteria
+      schema:
+        type: string
+        enum:
+        - updatedAt
+        - createdAt
+        - priority
+        - state
+        - progress
 
     name:
       name: name
@@ -6000,7 +6483,25 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/VideoPlaylistTypeSet'
-        
+    registrationTokenId:
+      name: registrationTokenId
+      in: path
+      required: true
+      schema:
+        type: integer
+    runnerId:
+      name: runnerId
+      in: path
+      required: true
+      schema:
+        type: integer
+    jobUUID:
+      name: jobUUID
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/UUIDv4'
+
   securitySchemes:
     OAuth2:
       description: |
@@ -6190,7 +6691,7 @@ components:
         - 2
         - 3
       description: 'The live latency mode (Default = `1`, High latency = `2`, Small Latency = `3`)'
-    
+
     LiveVideoReplaySettings:
       type: object
       properties:
@@ -8901,6 +9402,195 @@ components:
         - downloadedBytesHTTP
         - uploadedBytesP2P
         - videoId
+
+    RunnerRegistrationToken:
+      properties:
+        id:
+          type: integer
+        registrationToken:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        registeredRunnersCount:
+          type: integer
+
+    Runner:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        ip:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        lastContact:
+          type: string
+          format: date-time
+
+    RunnerJobType:
+      type: string
+      enum:
+        - vod-web-video-transcoding
+        - vod-hls-transcoding
+        - vod-audio-merge-transcoding
+        - live-rtmp-hls-transcoding
+
+    RunnerJobState:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+      description: >
+        The runner job state:
+          - `1` Pending
+          - `2` Processing
+          - `3` Completed
+          - `4` Errored
+          - `5` Waiting for a parent job
+          - `6` Cancelled
+          - `7` Parent had an error
+          - `8` Parent has been cancelled
+
+    RunnerJobStateConstant:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/RunnerJobState'
+        label:
+          type: string
+          example: 'Processing'
+
+    RunnerJobPayload:
+      anyOf:
+        - type: object
+          title: VOD web video transcoding
+          properties:
+            input:
+              type: object
+              properties:
+                videoFileUrl:
+                  type: string
+            output:
+              type: object
+              properties:
+                resolution:
+                  type: number
+                fps:
+                  type: number
+        - type: object
+          title: VOD HLS transcoding
+          properties:
+            input:
+              type: object
+              properties:
+                videoFileUrl:
+                  type: string
+            output:
+              type: object
+              properties:
+                resolution:
+                  type: number
+                fps:
+                  type: number
+        - type: object
+          title: VOD audio merge transcoding
+          properties:
+            input:
+              type: object
+              properties:
+                audioFileUrl:
+                  type: string
+                previewFileUrl:
+                  type: string
+            output:
+              type: object
+              properties:
+                resolution:
+                  type: number
+                fps:
+                  type: number
+
+    RunnerJob:
+      properties:
+        uuid:
+          $ref: '#/components/schemas/UUIDv4'
+        type:
+          $ref: '#/components/schemas/RunnerJobType'
+        state:
+          $ref: '#/components/schemas/RunnerJobStateConstant'
+        payload:
+          $ref: '#/components/schemas/RunnerJobPayload'
+        failures:
+          type: integer
+          description: Number of times a remote runner failed to process this job. After too many failures, the job in "error" state
+        error:
+          nullable: true
+          type: string
+          description: Error message if the job is errored
+        progress:
+          type: integer
+          description: Percentage progress
+        priority:
+          type: integer
+          description: Job priority (less has more priority)
+        updatedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        startedAt:
+          type: string
+          format: date-time
+        finishedAt:
+          type: string
+          format: date-time
+        parent:
+          nullable: true
+          description: If job has a parent job
+          type: object
+          properties:
+            type:
+              $ref: '#/components/schemas/RunnerJobType'
+            state:
+              $ref: '#/components/schemas/RunnerJobStateConstant'
+            uuid:
+              $ref: '#/components/schemas/UUIDv4'
+        runner:
+          nullable: true
+          description: If job is associated to a runner
+          properties:
+            id:
+              type: number
+            name:
+              type: string
+            description:
+              type: string
+
+    RunnerJobAdmin:
+      allOf:
+        - $ref: '#/components/schemas/RunnerJob'
+        - type: object
+          properties:
+            privatePayload:
+              type: object
 
   callbacks:
     searchIndex:

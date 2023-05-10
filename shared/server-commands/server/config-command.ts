@@ -5,8 +5,9 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared/abstract-comm
 
 export class ConfigCommand extends AbstractCommand {
 
-  static getCustomConfigResolutions (enabled: boolean) {
+  static getCustomConfigResolutions (enabled: boolean, with0p = false) {
     return {
+      '0p': enabled && with0p,
       '144p': enabled,
       '240p': enabled,
       '360p': enabled,
@@ -129,7 +130,8 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
-  enableTranscoding (webtorrent = true, hls = true) {
+  // TODO: convert args to object
+  enableTranscoding (webtorrent = true, hls = true, with0p = false) {
     return this.updateExistingSubConfig({
       newConfig: {
         transcoding: {
@@ -138,7 +140,7 @@ export class ConfigCommand extends AbstractCommand {
           allowAudioFiles: true,
           allowAdditionalExtensions: true,
 
-          resolutions: ConfigCommand.getCustomConfigResolutions(true),
+          resolutions: ConfigCommand.getCustomConfigResolutions(true, with0p),
 
           webtorrent: {
             enabled: webtorrent
@@ -151,6 +153,7 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
+  // TODO: convert args to object
   enableMinimumTranscoding (webtorrent = true, hls = true) {
     return this.updateExistingSubConfig({
       newConfig: {
@@ -167,6 +170,37 @@ export class ConfigCommand extends AbstractCommand {
           },
           hls: {
             enabled: hls
+          }
+        }
+      }
+    })
+  }
+
+  enableRemoteTranscoding () {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        transcoding: {
+          remoteRunners: {
+            enabled: true
+          }
+        },
+        live: {
+          transcoding: {
+            remoteRunners: {
+              enabled: true
+            }
+          }
+        }
+      }
+    })
+  }
+
+  enableRemoteStudio () {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        videoStudio: {
+          remoteRunners: {
+            enabled: true
           }
         }
       }
@@ -363,6 +397,9 @@ export class ConfigCommand extends AbstractCommand {
       },
       transcoding: {
         enabled: true,
+        remoteRunners: {
+          enabled: false
+        },
         allowAdditionalExtensions: true,
         allowAudioFiles: true,
         threads: 1,
@@ -398,6 +435,9 @@ export class ConfigCommand extends AbstractCommand {
         maxUserLives: 50,
         transcoding: {
           enabled: true,
+          remoteRunners: {
+            enabled: false
+          },
           threads: 4,
           profile: 'default',
           resolutions: {
@@ -414,7 +454,10 @@ export class ConfigCommand extends AbstractCommand {
         }
       },
       videoStudio: {
-        enabled: false
+        enabled: false,
+        remoteRunners: {
+          enabled: false
+        }
       },
       import: {
         videos: {

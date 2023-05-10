@@ -10,6 +10,7 @@ export type CommonRequestParams = {
   url: string
   path?: string
   contentType?: string
+  responseType?: string
   range?: string
   redirects?: number
   accept?: string
@@ -27,16 +28,23 @@ function makeRawRequest (options: {
   expectedStatus?: HttpStatusCode
   range?: string
   query?: { [ id: string ]: string }
+  method?: 'GET' | 'POST'
 }) {
   const { host, protocol, pathname } = new URL(options.url)
 
-  return makeGetRequest({
+  const reqOptions = {
     url: `${protocol}//${host}`,
     path: pathname,
     contentType: undefined,
 
     ...pick(options, [ 'expectedStatus', 'range', 'token', 'query' ])
-  })
+  }
+
+  if (options.method === 'POST') {
+    return makePostBodyRequest(reqOptions)
+  }
+
+  return makeGetRequest(reqOptions)
 }
 
 function makeGetRequest (options: CommonRequestParams & {
@@ -135,6 +143,8 @@ function decodeQueryString (path: string) {
   return decode(path.split('?')[1])
 }
 
+// ---------------------------------------------------------------------------
+
 function unwrapBody <T> (test: request.Test): Promise<T> {
   return test.then(res => res.body)
 }
@@ -149,7 +159,16 @@ function unwrapBodyOrDecodeToJSON <T> (test: request.Test): Promise<T> {
       try {
         return JSON.parse(new TextDecoder().decode(res.body))
       } catch (err) {
-        console.error('Cannot decode JSON.', res.body)
+        console.error('Cannot decode JSON.', { res, body: res.body instanceof Buffer ? res.body.toString() : res.body })
+        throw err
+      }
+    }
+
+    if (res.text) {
+      try {
+        return JSON.parse(res.text)
+      } catch (err) {
+        console.error('Cannot decode json', { res, text: res.text })
         throw err
       }
     }
@@ -184,6 +203,7 @@ export {
 
 function buildRequest (req: request.Test, options: CommonRequestParams) {
   if (options.contentType) req.set('Accept', options.contentType)
+  if (options.responseType) req.responseType(options.responseType)
   if (options.token) req.set('Authorization', 'Bearer ' + options.token)
   if (options.range) req.set('Range', options.range)
   if (options.accept) req.set('Accept', options.accept)
@@ -196,13 +216,18 @@ function buildRequest (req: request.Test, options: CommonRequestParams) {
     req.set(name, options.headers[name])
   })
 
-  return req.expect((res) => {
+  return req.expect(res => {
     if (options.expectedStatus && res.status !== options.expectedStatus) {
-      throw new Error(`Expected status ${options.expectedStatus}, got ${res.status}. ` +
+      const err = new Error(`Expected status ${options.expectedStatus}, got ${res.status}. ` +
         `\nThe server responded: "${res.body?.error ?? res.text}".\n` +
         'You may take a closer look at the logs. To see how to do so, check out this page: ' +
-        'https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/development/tests.md#debug-server-logs')
+        'https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/development/tests.md#debug-server-logs');
+
+      (err as any).res = res
+
+      throw err
     }
+
     return res
   })
 }

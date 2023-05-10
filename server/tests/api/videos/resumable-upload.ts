@@ -79,7 +79,7 @@ describe('Test resumable upload', function () {
   async function checkFileSize (uploadIdArg: string, expectedSize: number | null) {
     const uploadId = uploadIdArg.replace(/^upload_id=/, '')
 
-    const subPath = join('tmp', 'resumable-uploads', uploadId)
+    const subPath = join('tmp', 'resumable-uploads', `${rootId}-${uploadId}.mp4`)
     const filePath = server.servers.buildDirectory(subPath)
     const exists = await pathExists(filePath)
 
@@ -261,7 +261,7 @@ describe('Test resumable upload', function () {
         pathUploadId: uploadId,
         token: server.accessToken,
         digestBuilder: () => 'sha=' + 'a'.repeat(40),
-        expectedStatus: 460
+        expectedStatus: 460 as any
       })
     })
 

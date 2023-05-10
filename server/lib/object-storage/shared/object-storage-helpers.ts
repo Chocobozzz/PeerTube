@@ -59,6 +59,20 @@ async function storeObject (options: {
   return uploadToStorage({ objectStorageKey, content: fileStream, bucketInfo, isPrivate })
 }
 
+async function storeContent (options: {
+  content: string
+  inputPath: string
+  objectStorageKey: string
+  bucketInfo: BucketInfo
+  isPrivate: boolean
+}): Promise<string> {
+  const { content, objectStorageKey, bucketInfo, inputPath, isPrivate } = options
+
+  logger.debug('Uploading %s content to %s%s in bucket %s', inputPath, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
+
+  return uploadToStorage({ objectStorageKey, content, bucketInfo, isPrivate })
+}
+
 // ---------------------------------------------------------------------------
 
 async function updateObjectACL (options: {
@@ -206,6 +220,7 @@ export {
   buildKey,
 
   storeObject,
+  storeContent,
 
   removeObject,
   removeObjectByFullKey,
@@ -223,7 +238,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function uploadToStorage (options: {
-  content: ReadStream
+  content: ReadStream | string
   objectStorageKey: string
   bucketInfo: BucketInfo
   isPrivate: boolean

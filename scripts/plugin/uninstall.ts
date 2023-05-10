@@ -25,5 +25,5 @@ async function run () {
   await initDatabaseModels(true)
 
   const toUninstall = options.npmName
-  await PluginManager.Instance.uninstall(toUninstall)
+  await PluginManager.Instance.uninstall({ npmName: toUninstall, unregister: false })
 }

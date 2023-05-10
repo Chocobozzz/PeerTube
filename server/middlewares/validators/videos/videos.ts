@@ -7,6 +7,7 @@ import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express-handler'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
 import { arrayify, getAllPrivacies } from '@shared/core-utils'
+import { getVideoStreamDuration } from '@shared/ffmpeg'
 import { HttpStatusCode, ServerErrorCode, UserRight, VideoInclude, VideoState } from '@shared/models'
 import {
   exists,
@@ -37,7 +38,6 @@ import {
   isVideoSupportValid
 } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
-import { getVideoStreamDuration } from '../../../helpers/ffmpeg'
 import { logger } from '../../../helpers/logger'
 import { deleteFileAndCatch } from '../../../helpers/utils'
 import { getVideoWithAttributes } from '../../../helpers/video'

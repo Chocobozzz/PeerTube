@@ -63,6 +63,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.videoChannels.maxPerUser).to.equal(20)
 
   expect(data.transcoding.enabled).to.be.false
+  expect(data.transcoding.remoteRunners.enabled).to.be.false
   expect(data.transcoding.allowAdditionalExtensions).to.be.false
   expect(data.transcoding.allowAudioFiles).to.be.false
   expect(data.transcoding.threads).to.equal(2)
@@ -87,6 +88,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.live.maxInstanceLives).to.equal(20)
   expect(data.live.maxUserLives).to.equal(3)
   expect(data.live.transcoding.enabled).to.be.false
+  expect(data.live.transcoding.remoteRunners.enabled).to.be.false
   expect(data.live.transcoding.threads).to.equal(2)
   expect(data.live.transcoding.profile).to.equal('default')
   expect(data.live.transcoding.resolutions['144p']).to.be.false
@@ -100,6 +102,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.live.transcoding.alwaysTranscodeOriginalResolution).to.be.true
 
   expect(data.videoStudio.enabled).to.be.false
+  expect(data.videoStudio.remoteRunners.enabled).to.be.false
 
   expect(data.import.videos.concurrency).to.equal(2)
   expect(data.import.videos.http.enabled).to.be.true
@@ -172,6 +175,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.videoChannels.maxPerUser).to.equal(24)
 
   expect(data.transcoding.enabled).to.be.true
+  expect(data.transcoding.remoteRunners.enabled).to.be.true
   expect(data.transcoding.threads).to.equal(1)
   expect(data.transcoding.concurrency).to.equal(3)
   expect(data.transcoding.allowAdditionalExtensions).to.be.true
@@ -195,6 +199,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.live.maxInstanceLives).to.equal(-1)
   expect(data.live.maxUserLives).to.equal(10)
   expect(data.live.transcoding.enabled).to.be.true
+  expect(data.live.transcoding.remoteRunners.enabled).to.be.true
   expect(data.live.transcoding.threads).to.equal(4)
   expect(data.live.transcoding.profile).to.equal('live_profile')
   expect(data.live.transcoding.resolutions['144p']).to.be.true
@@ -207,6 +212,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.live.transcoding.alwaysTranscodeOriginalResolution).to.be.false
 
   expect(data.videoStudio.enabled).to.be.true
+  expect(data.videoStudio.remoteRunners.enabled).to.be.true
 
   expect(data.import.videos.concurrency).to.equal(4)
   expect(data.import.videos.http.enabled).to.be.false
@@ -313,6 +319,9 @@ const newCustomConfig: CustomConfig = {
   },
   transcoding: {
     enabled: true,
+    remoteRunners: {
+      enabled: true
+    },
     allowAdditionalExtensions: true,
     allowAudioFiles: true,
     threads: 1,
@@ -348,6 +357,9 @@ const newCustomConfig: CustomConfig = {
     maxUserLives: 10,
     transcoding: {
       enabled: true,
+      remoteRunners: {
+        enabled: true
+      },
       threads: 4,
       profile: 'live_profile',
       resolutions: {
@@ -364,7 +376,10 @@ const newCustomConfig: CustomConfig = {
     }
   },
   videoStudio: {
-    enabled: true
+    enabled: true,
+    remoteRunners: {
+      enabled: true
+    }
   },
   import: {
     videos: {

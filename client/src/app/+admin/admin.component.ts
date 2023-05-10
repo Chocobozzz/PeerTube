@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AuthService, ScreenService } from '@app/core'
+import { AuthService, ScreenService, ServerService } from '@app/core'
 import { ListOverflowItem } from '@app/shared/shared-main'
 import { TopMenuDropdownParam } from '@app/shared/shared-main/misc/top-menu-dropdown.component'
 import { UserRight } from '@shared/models'
@@ -14,7 +14,8 @@ export class AdminComponent implements OnInit {
 
   constructor (
     private auth: AuthService,
-    private screen: ScreenService
+    private screen: ScreenService,
+    private server: ServerService
   ) { }
 
   get isBroadcastMessageDisplayed () {
@@ -22,6 +23,14 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit () {
+    this.server.configReloaded.subscribe(() => this.buildMenu())
+
+    this.buildMenu()
+  }
+
+  private buildMenu () {
+    this.menuEntries = []
+
     this.buildOverviewItems()
     this.buildFederationItems()
     this.buildModerationItems()
@@ -157,9 +166,23 @@ export class AdminComponent implements OnInit {
       children: []
     }
 
+    if (this.isRemoteRunnersEnabled() && this.hasRunnersRight()) {
+      systemItems.children.push({
+        label: $localize`Remote runners`,
+        iconName: 'codesandbox',
+        routerLink: '/admin/system/runners/runners-list'
+      })
+
+      systemItems.children.push({
+        label: $localize`Runner jobs`,
+        iconName: 'globe',
+        routerLink: '/admin/system/runners/jobs-list'
+      })
+    }
+
     if (this.hasJobsRight()) {
       systemItems.children.push({
-        label: $localize`Jobs`,
+        label: $localize`Local jobs`,
         iconName: 'circle-tick',
         routerLink: '/admin/system/jobs'
       })
@@ -226,6 +249,10 @@ export class AdminComponent implements OnInit {
     return this.auth.getUser().hasRight(UserRight.MANAGE_JOBS)
   }
 
+  private hasRunnersRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_RUNNERS)
+  }
+
   private hasDebugRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_DEBUG)
   }
@@ -240,5 +267,13 @@ export class AdminComponent implements OnInit {
 
   private hasRegistrationsRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_REGISTRATIONS)
+  }
+
+  private isRemoteRunnersEnabled () {
+    const config = this.server.getHTMLConfig()
+
+    return config.transcoding.remoteRunners.enabled ||
+      config.live.transcoding.remoteRunners.enabled ||
+      config.videoStudio.remoteRunners.enabled
   }
 }

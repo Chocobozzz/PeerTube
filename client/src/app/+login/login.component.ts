@@ -197,8 +197,6 @@ The link will expire within 1 hour.`
   }
 
   private handleError (err: any) {
-    console.log(err)
-
     if (this.authService.isOTPMissingError(err)) {
       this.otpStep = true
 

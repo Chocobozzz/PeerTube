@@ -126,7 +126,8 @@
     ]
   },
   "ignorePatterns": [
-    "node_modules/"
+    "node_modules/",
+    "server/tests/fixtures"
   ],
   "parserOptions": {
     "EXPERIMENTAL_useSourceOfProjectReferenceRedirect": true,
@@ -135,7 +136,8 @@
       "./shared/tsconfig.json",
       "./scripts/tsconfig.json",
       "./server/tsconfig.json",
-      "./server/tools/tsconfig.json"
+      "./server/tools/tsconfig.json",
+      "./packages/peertube-runner/tsconfig.json"
     ]
   }
 }

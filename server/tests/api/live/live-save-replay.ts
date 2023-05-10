@@ -217,7 +217,7 @@ describe('Save replay setting', function () {
     })
 
     it('Should correctly terminate the stream on blacklist and delete the live', async function () {
-      this.timeout(40000)
+      this.timeout(60000)
 
       await publishLiveAndBlacklist({ permanent: false, replay: false })
 

@@ -244,7 +244,7 @@ To test emails with PeerTube:
 
 ### OpenAPI documentation
 
-The [REST API documentation](https://docs.joinpeertube.org/api/rest-reference.html) is generated from `support/doc/api/openapi.yaml` file.
+The [REST API documentation](https://docs.joinpeertube.org/api-rest-reference.html) is generated from `support/doc/api/openapi.yaml` file.
 To quickly get a preview of your changes, you can generate the documentation *on the fly* using the following command:
 
 ```

@@ -115,6 +115,15 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
       })
     }
 
+    if (body.saveReplay && !body.replaySettings?.privacy) {
+      cleanUpReqFiles(req)
+
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Live replay is enabled but privacy replay setting is missing'
+      })
+    }
+
     const user = res.locals.oauth.token.User
     if (!await doesVideoChannelOfAccountExist(body.channelId, user, res)) return cleanUpReqFiles(req)
 

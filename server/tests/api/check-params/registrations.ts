@@ -254,9 +254,22 @@ describe('Test registrations API validators', function () {
         })
       })
 
-      it('Should fail if the user is already awaiting registration approval', async function () {
+      it('Should fail if the username is already awaiting registration approval', async function () {
         await server.registrations.requestRegistration({
           username: 'user_request_2',
+          registrationReason: 'tt',
+          channel: {
+            displayName: 'my user request 42 channel',
+            name: 'user_request_42_channel'
+          },
+          expectedStatus: HttpStatusCode.CONFLICT_409
+        })
+      })
+
+      it('Should fail if the email is already awaiting registration approval', async function () {
+        await server.registrations.requestRegistration({
+          username: 'user42',
+          email: 'user_request_2@example.com',
           registrationReason: 'tt',
           channel: {
             displayName: 'my user request 42 channel',

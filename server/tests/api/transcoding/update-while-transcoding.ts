@@ -38,6 +38,7 @@ describe('Test update video privacy while transcoding', function () {
     })
 
     it('Should not have an error while quickly updating a private video to public after upload #2', async function () {
+      this.timeout(60000)
 
       {
         const attributes = {
@@ -56,6 +57,8 @@ describe('Test update video privacy while transcoding', function () {
     })
 
     it('Should not have an error while quickly updating a private video to public after upload #3', async function () {
+      this.timeout(60000)
+
       const attributes = {
         name: 'quick update 3',
         privacy: VideoPrivacy.PRIVATE

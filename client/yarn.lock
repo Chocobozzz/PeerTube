@@ -6169,10 +6169,10 @@ he@1.2.0, he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
-hls.js@1.3.3:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.3.3.tgz#834db077b5aa9d9b31d13e01c5dce4153b5e3214"
-  integrity sha512-4Efu6g90HfFGDuQrkquhDoRpA/4iVpSMcfK9zguJ2qXEUfo5VknZt6rziwwFPHmC2DU3crZ0NtPD0eUqOhFyqg==
+hls.js@1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.4.2.tgz#14c271d78daed1f5d2b7b58d7edd9bcdefc44928"
+  integrity sha512-+MPySxF0WVMj/uzj+LDtNFSU93X1+VbjLLixk2xah6Sf4LqU+qC02MjZVF/yvb1Cg9Gjor1g8K33K9b9etqJ/Q==
 
 hosted-git-info@^2.1.4:
   version "2.8.9"

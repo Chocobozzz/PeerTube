@@ -37,6 +37,20 @@
 
             <ng-container ngProjectAs="extra">
 
+              <div class="form-group" formGroupName="remoteRunners" [ngClass]="getTranscodingDisabledClass()">
+                <my-peertube-checkbox
+                  inputName="transcodingRemoteRunnersEnabled" formControlName="enabled"
+                  i18n-labelText labelText="Enable remote runners"
+                >
+                  <ng-container ngProjectAs="description">
+                    <span i18n>
+                      Use <a routerLink="/admin/system/runners/runners-list">remote runners</a> to process VOD transcoding.
+                      Remote runners has to register on your instance first.
+                    </span>
+                  </ng-container>
+                </my-peertube-checkbox>
+              </div>
+
               <div class="callout callout-light pt-2 pb-0">
                 <label i18n>Input formats</label>
 
@@ -213,6 +227,20 @@
           >
             <ng-container ngProjectAs="description" *ngIf="!isTranscodingEnabled()">
               <span i18n>⚠️ You need to enable transcoding first to enable video studio</span>
+            </ng-container>
+          </my-peertube-checkbox>
+        </div>
+
+        <div class="form-group" formGroupName="remoteRunners" [ngClass]="getStudioDisabledClass()">
+          <my-peertube-checkbox
+            inputName="videoStudioRemoteRunnersEnabled" formControlName="enabled"
+            i18n-labelText labelText="Enable remote runners"
+          >
+            <ng-container ngProjectAs="description">
+              <span i18n>
+                Use <a routerLink="/admin/system/runners/runners-list">remote runners</a> to process studio transcoding tasks.
+                Remote runners has to register on your instance first.
+              </span>
             </ng-container>
           </my-peertube-checkbox>
         </div>

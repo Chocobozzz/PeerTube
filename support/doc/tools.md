@@ -1,31 +1,8 @@
 # CLI tools guide
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
+[[toc]]
 
-- [Remote Tools](#remote-tools)
-  - [Dependencies](#dependencies)
-  - [Installation](#installation)
-  - [CLI wrapper](#cli-wrapper)
-    - [peertube-import-videos.js](#peertube-import-videosjs)
-    - [peertube-upload.js](#peertube-uploadjs)
-    - [peertube-plugins.js](#peertube-pluginsjs)
-    - [peertube-redundancy.js](#peertube-redundancyjs)
-- [Server tools](#server-tools)
-  - [parse-log](#parse-log)
-  - [regenerate-thumbnails.js](#regenerate-thumbnailsjs)
-  - [create-transcoding-job.js](#create-transcoding-jobjs)
-  - [create-import-video-file-job.js](#create-import-video-file-jobjs)
-  - [create-move-video-storage-job.js](#create-move-video-storage-jobjs)
-  - [prune-storage.js](#prune-storagejs)
-  - [update-host.js](#update-hostjs)
-  - [reset-password.js](#reset-passwordjs)
-  - [plugin install/uninstall](#plugin-installuninstall)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-## Remote Tools
+## Remote PeerTube CLI
 
 You need at least 512MB RAM to run the script.
 Scripts can be launched directly from a PeerTube server, or from a separate server, even a desktop PC.
@@ -248,52 +225,10 @@ cd /var/www/peertube-docker
 docker-compose exec -u peertube peertube npm run regenerate-thumbnails
 ```
 
-### create-transcoding-job.js
-
-You can use this script to force transcoding of an existing video. PeerTube needs to be running.
-
-To generate transcoding jobs depending on the instance configuration:
-
-```bash
-# Basic installation
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID]
-
-# Docker installation
-cd /var/www/peertube-docker
-docker-compose exec -u peertube peertube npm run create-transcoding-job -- -v [videoUUID]
-```
-
-Or to transcode to a specific resolution:
-
-```bash
-# Basic installation
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
-
-# Docker installation
-cd /var/www/peertube-docker
-docker-compose exec -u peertube peertube npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
-```
-
-The resolution should be an integer (`1080`, `720`, `480`, etc.)
-
-To generate an HLS playlist for a video:
-
-```bash
-# Basic installation
-cd /var/www/peertube/peertube-latest
-sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- --generate-hls -v [videoUUID]
-
-# Docker installation
-cd /var/www/peertube-docker
-docker-compose exec -u peertube peertube npm run create-transcoding-job -- --generate-hls -v [videoUUID]
-```
-
 ### create-import-video-file-job.js
 
 You can use this script to import a video file to replace an already uploaded file or to add a new webtorrent resolution to a video. PeerTube needs to be running.
-You can then create a transcoding job using `npm run create-transcoding-job` if you need to optimize your file or create an HLS version of it.
+You can then create a transcoding job using the web interface if you need to optimize your file or create an HLS version of it.
 
 ```bash
 # Basic installation
@@ -413,4 +348,60 @@ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production np
 # Docker installation
 cd /var/www/peertube-docker
 docker-compose exec -u peertube peertube npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
+```
+
+## PeerTube runner
+
+PeerTube >= 5.2 supports VOD or Live transcoding by a remote PeerTube runner.
+
+
+### Installation
+
+```bash
+sudo npm install -g @peertube/peertube-runner
+```
+
+### Configuration
+
+The runner uses env paths like `~/.config`, `~/.cache` and `~/.local/share` directories to store runner configuration or temporary files.
+
+Multiple PeerTube runners can run on the same OS by using the `--id` CLI option (each runner uses its own config/tmp directories):
+
+```bash
+peertube-runner [commands] --id instance-1
+peertube-runner [commands] --id instance-2
+peertube-runner [commands] --id instance-3
+```
+
+
+### Run the server
+
+Run the runner in server mode so it can run transcoding jobs of registered PeerTube instances:
+
+```bash
+peertube-runner server
+```
+
+### Register
+
+To register the runner on a new PeerTube instance so the runner can process its transcoding job:
+
+```bash
+peertube-runner register --url http://peertube.example.com --registration-token ptrrt-... --runner-name my-runner-name
+```
+
+The runner will then use a websocket connection with the PeerTube instance to be notified about new available transcoding jobs.
+
+### Unregister
+
+To unregister a PeerTube instance:
+
+```bash
+peertube-runner unregister --url http://peertube.example.com
+```
+
+### List registered instances
+
+```bash
+peertube-runner list-registered
 ```

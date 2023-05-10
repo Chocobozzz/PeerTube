@@ -11,7 +11,7 @@ import { HttpStatusCode } from '@shared/models'
 import { makeGetRequest, PeerTubeServer } from '@shared/server-commands'
 
 // Default interval -> 5 minutes
-function dateIsValid (dateString: string, interval = 300000) {
+function dateIsValid (dateString: string | Date, interval = 300000) {
   const dateToCheck = new Date(dateString)
   const now = new Date()
 
@@ -90,6 +90,8 @@ async function testFileExistsOrNot (server: PeerTubeServer, directory: string, f
   expect(await pathExists(join(base, filePath))).to.equal(exist)
 }
 
+// ---------------------------------------------------------------------------
+
 function checkBadStartPagination (url: string, path: string, token?: string, query = {}) {
   return makeGetRequest({
     url,
@@ -128,6 +130,22 @@ function checkBadSortPagination (url: string, path: string, token?: string, quer
   })
 }
 
+// ---------------------------------------------------------------------------
+
+async function checkVideoDuration (server: PeerTubeServer, videoUUID: string, duration: number) {
+  const video = await server.videos.get({ id: videoUUID })
+
+  expect(video.duration).to.be.approximately(duration, 1)
+
+  for (const file of video.files) {
+    const metadata = await server.videos.getFileMetadata({ url: file.metadataUrl })
+
+    for (const stream of metadata.streams) {
+      expect(Math.round(stream.duration)).to.be.approximately(duration, 1)
+    }
+  }
+}
+
 export {
   dateIsValid,
   testImageSize,
@@ -140,5 +158,6 @@ export {
   checkBadStartPagination,
   checkBadCountPagination,
   checkBadSortPagination,
+  checkVideoDuration,
   expectLogContain
 }

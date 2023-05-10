@@ -73,7 +73,7 @@ function runTests (objectStorage: boolean) {
   })
 
   it('Should run a import job on video 1 with a lower resolution', async function () {
-    const command = `npm run create-import-video-file-job -- -v ${video1ShortId} -i server/tests/fixtures/video_short-480.webm`
+    const command = `npm run create-import-video-file-job -- -v ${video1ShortId} -i server/tests/fixtures/video_short_480.webm`
     await servers[0].cli.execWithEnv(command)
 
     await waitJobs(servers)

@@ -8,9 +8,9 @@ import { CLICommand } from '../cli'
 import { CustomPagesCommand } from '../custom-pages'
 import { FeedCommand } from '../feeds'
 import { LogsCommand } from '../logs'
-import { SQLCommand } from '../miscs'
 import { AbusesCommand } from '../moderation'
 import { OverviewsCommand } from '../overviews'
+import { RunnerJobsCommand, RunnerRegistrationTokensCommand, RunnersCommand } from '../runners'
 import { SearchCommand } from '../search'
 import { SocketIOCommand } from '../socket'
 import {
@@ -136,7 +136,6 @@ export class PeerTubeServer {
   streamingPlaylists?: StreamingPlaylistsCommand
   channels?: ChannelsCommand
   comments?: CommentsCommand
-  sql?: SQLCommand
   notifications?: NotificationsCommand
   servers?: ServersCommand
   login?: LoginCommand
@@ -149,6 +148,10 @@ export class PeerTubeServer {
   twoFactor?: TwoFactorCommand
   videoToken?: VideoTokenCommand
   registrations?: RegistrationsCommand
+
+  runners?: RunnersCommand
+  runnerRegistrationTokens?: RunnerRegistrationTokensCommand
+  runnerJobs?: RunnerJobsCommand
 
   constructor (options: { serverNumber: number } | { url: string }) {
     if ((options as any).url) {
@@ -311,14 +314,14 @@ export class PeerTubeServer {
     })
   }
 
-  async kill () {
-    if (!this.app) return
-
-    await this.sql.cleanup()
+  kill () {
+    if (!this.app) return Promise.resolve()
 
     process.kill(-this.app.pid)
 
     this.app = null
+
+    return Promise.resolve()
   }
 
   private randomServer () {
@@ -361,6 +364,7 @@ export class PeerTubeServer {
       },
       storage: {
         tmp: this.getDirectoryPath('tmp') + '/',
+        tmp_persistent: this.getDirectoryPath('tmp-persistent') + '/',
         bin: this.getDirectoryPath('bin') + '/',
         avatars: this.getDirectoryPath('avatars') + '/',
         videos: this.getDirectoryPath('videos') + '/',
@@ -420,7 +424,6 @@ export class PeerTubeServer {
     this.streamingPlaylists = new StreamingPlaylistsCommand(this)
     this.channels = new ChannelsCommand(this)
     this.comments = new CommentsCommand(this)
-    this.sql = new SQLCommand(this)
     this.notifications = new NotificationsCommand(this)
     this.servers = new ServersCommand(this)
     this.login = new LoginCommand(this)
@@ -433,5 +436,9 @@ export class PeerTubeServer {
     this.twoFactor = new TwoFactorCommand(this)
     this.videoToken = new VideoTokenCommand(this)
     this.registrations = new RegistrationsCommand(this)
+
+    this.runners = new RunnersCommand(this)
+    this.runnerRegistrationTokens = new RunnerRegistrationTokensCommand(this)
+    this.runnerJobs = new RunnerJobsCommand(this)
   }
 }

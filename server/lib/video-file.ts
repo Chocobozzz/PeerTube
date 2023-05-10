@@ -1,6 +1,44 @@
+import { FfprobeData } from 'fluent-ffmpeg'
 import { logger } from '@server/helpers/logger'
+import { VideoFileModel } from '@server/models/video/video-file'
 import { MVideoWithAllFiles } from '@server/types/models'
+import { getLowercaseExtension } from '@shared/core-utils'
+import { getFileSize } from '@shared/extra-utils'
+import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS, isAudioFile } from '@shared/ffmpeg'
+import { VideoFileMetadata, VideoResolution } from '@shared/models'
 import { lTags } from './object-storage/shared'
+import { generateHLSVideoFilename, generateWebTorrentVideoFilename } from './paths'
+
+async function buildNewFile (options: {
+  path: string
+  mode: 'web-video' | 'hls'
+}) {
+  const { path, mode } = options
+
+  const probe = await ffprobePromise(path)
+  const size = await getFileSize(path)
+
+  const videoFile = new VideoFileModel({
+    extname: getLowercaseExtension(path),
+    size,
+    metadata: await buildFileMetadata(path, probe)
+  })
+
+  if (await isAudioFile(path, probe)) {
+    videoFile.resolution = VideoResolution.H_NOVIDEO
+  } else {
+    videoFile.fps = await getVideoStreamFPS(path, probe)
+    videoFile.resolution = (await getVideoStreamDimensionsInfo(path, probe)).resolution
+  }
+
+  videoFile.filename = mode === 'web-video'
+    ? generateWebTorrentVideoFilename(videoFile.resolution, videoFile.extname)
+    : generateHLSVideoFilename(videoFile.resolution)
+
+  return videoFile
+}
+
+// ---------------------------------------------------------------------------
 
 async function removeHLSPlaylist (video: MVideoWithAllFiles) {
   const hls = video.getHLSPlaylist()
@@ -61,9 +99,23 @@ async function removeWebTorrentFile (video: MVideoWithAllFiles, fileToDeleteId: 
   return video
 }
 
+// ---------------------------------------------------------------------------
+
+async function buildFileMetadata (path: string, existingProbe?: FfprobeData) {
+  const metadata = existingProbe || await ffprobePromise(path)
+
+  return new VideoFileMetadata(metadata)
+}
+
+// ---------------------------------------------------------------------------
+
 export {
+  buildNewFile,
+
   removeHLSPlaylist,
   removeHLSFile,
   removeAllWebTorrentFiles,
-  removeWebTorrentFile
+  removeWebTorrentFile,
+
+  buildFileMetadata
 }

@@ -35,3 +35,7 @@
 .peertube-radio-container {
   @include peertube-radio-container;
 }
+
+.peertube-button-icon {
+  @include button-with-icon(18px, 3px, -1px);
+}

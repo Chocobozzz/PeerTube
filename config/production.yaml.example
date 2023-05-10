@@ -63,8 +63,15 @@ database:
 redis:
   hostname: 'localhost'
   port: 6379
-  auth: null
+  auth: null # Used by both standalone and sentinel
   db: 0
+  sentinel:
+    enabled: false
+    enable_tls: false
+    master_name: ''
+    sentinels:
+      - hostname: ''
+        port: 26379
 
 # SMTP server to send emails
 smtp:
@@ -118,6 +125,7 @@ defaults:
 # From the project root directory
 storage:
   tmp: '/var/www/peertube/storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
+  tmp_persistent: '/var/www/peertube/storage/tmp-persistent/' # As tmp but the directory is not cleaned up between PeerTube restarts
   bin: '/var/www/peertube/storage/bin/'
   avatars: '/var/www/peertube/storage/avatars/'
   videos: '/var/www/peertube/storage/videos/'
@@ -373,6 +381,12 @@ feeds:
     # Default number of comments displayed in feeds
     count: 20
 
+remote_runners:
+  # Consider jobs that are processed by a remote runner as stalled after this period of time without any update
+  stalled_jobs:
+    live: '30 seconds'
+    vod: '2 minutes'
+
 ###############################################################################
 #
 # From this point, almost all following keys can be overridden by the web interface
@@ -443,12 +457,18 @@ transcoding:
   # If a user uploads an audio file, PeerTube will create a video by merging the preview file and the audio file
   allow_audio_files: true
 
-  # Amount of threads used by ffmpeg for 1 transcoding job
+  # Enable remote runners to transcode your videos
+  # If enabled, your instance won't transcode the videos itself
+  # At least 1 remote runner must be configured to transcode your videos
+  remote_runners:
+    enabled: false
+
+  # Amount of threads used by ffmpeg for 1 local transcoding job
   threads: 1
-  # Amount of transcoding jobs to execute in parallel
+  # Amount of local transcoding jobs to execute in parallel
   concurrency: 1
 
-  # Choose the transcoding profile
+  # Choose the local transcoding profile
   # New profiles can be added by plugins
   # Available in core PeerTube: 'default'
   profile: 'default'
@@ -543,9 +563,17 @@ live:
   # Allow to transcode the live streaming in multiple live resolutions
   transcoding:
     enabled: true
+
+    # Enable remote runners to transcode your videos
+    # If enabled, your instance won't transcode the videos itself
+    # At least 1 remote runner must be configured to transcode your videos
+    remote_runners:
+      enabled: false
+
+    # Amount of threads used by ffmpeg per live when using local transcoding
     threads: 2
 
-    # Choose the transcoding profile
+    # Choose the local transcoding profile
     # New profiles can be added by plugins
     # Available in core PeerTube: 'default'
     profile: 'default'
@@ -567,6 +595,13 @@ video_studio:
   # Enable video edition by users (cut, add intro/outro, add watermark etc)
   # If enabled, users can create transcoding tasks as they wish
   enabled: false
+
+
+  # Enable remote runners to transcode studio tasks
+  # If enabled, your instance won't transcode the videos itself
+  # At least 1 remote runner must be configured to transcode your videos
+  remote_runners:
+    enabled: false
 
 import:
   # Add ability for your users to import remote videos (from YouTube, torrent...)
@@ -607,7 +642,7 @@ import:
       # See https://docs.joinpeertube.org/maintain/configuration#security for more information
       enabled: false
 
-  # Add ability for your users to synchronize their channels with external channels, playlists, etc.
+  # Add ability for your users to synchronize their channels with external channels, playlists, etc
   video_channel_synchronization:
     enabled: false
 
@@ -768,9 +803,9 @@ search:
     # You should deploy your own with https://framagit.org/framasoft/peertube/search-index,
     # and can use https://search.joinpeertube.org/ for tests, but keep in mind the latter is an unmoderated search index
     url: ''
-    # You can disable local search, so users only use the search index
+    # You can disable local search in the client, so users only use the search index
     disable_local_search: false
-    # If you did not disable local search, you can decide to use the search index by default
+    # If you did not disable local search in the client, you can decide to use the search index by default
     is_default_search: false
 
 # PeerTube client/interface configuration

@@ -239,7 +239,7 @@ describe('Test video playlists API validator', function () {
     })
 
     it('Should fail with an incorrect privacy', async function () {
-      const params = getBase({ privacy: 45 })
+      const params = getBase({ privacy: 45 as any })
 
       await command.create(params)
       await command.update(getUpdate(params, playlist.shortUUID))

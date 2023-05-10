@@ -63,7 +63,7 @@ describe('VideoConstantManagerFactory', function () {
     it('Should be able to add a video licence constant', () => {
       const successfullyAdded = videoLicenceManager.addConstant(42, 'European Union Public Licence')
       expect(successfullyAdded).to.be.true
-      expect(videoLicenceManager.getConstantValue(42)).to.equal('European Union Public Licence')
+      expect(videoLicenceManager.getConstantValue(42 as any)).to.equal('European Union Public Licence')
     })
 
     it('Should be able to reset video licence constants', () => {
@@ -87,9 +87,9 @@ describe('VideoConstantManagerFactory', function () {
     })
 
     it('Should be able to add a video playlist privacy constant', () => {
-      const successfullyAdded = playlistPrivacyManager.addConstant(42, 'Friends only')
+      const successfullyAdded = playlistPrivacyManager.addConstant(42 as any, 'Friends only')
       expect(successfullyAdded).to.be.true
-      expect(playlistPrivacyManager.getConstantValue(42)).to.equal('Friends only')
+      expect(playlistPrivacyManager.getConstantValue(42 as any)).to.equal('Friends only')
     })
 
     it('Should be able to reset video playlist privacy constants', () => {
@@ -113,9 +113,9 @@ describe('VideoConstantManagerFactory', function () {
     })
 
     it('Should be able to add a video privacy constant', () => {
-      const successfullyAdded = videoPrivacyManager.addConstant(42, 'Friends only')
+      const successfullyAdded = videoPrivacyManager.addConstant(42 as any, 'Friends only')
       expect(successfullyAdded).to.be.true
-      expect(videoPrivacyManager.getConstantValue(42)).to.equal('Friends only')
+      expect(videoPrivacyManager.getConstantValue(42 as any)).to.equal('Friends only')
     })
 
     it('Should be able to reset video privacy constants', () => {

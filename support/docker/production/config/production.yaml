@@ -44,6 +44,7 @@ redis:
 # From the project root directory
 storage:
   tmp: '../data/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
+  tmp_persistent: '../data/tmp-persistent/' # As tmp but the directory is not cleaned up between PeerTube restarts
   bin: '../data/bin/'
   avatars: '../data/avatars/'
   videos: '../data/videos/'

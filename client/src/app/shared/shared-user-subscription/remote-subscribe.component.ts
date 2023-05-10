@@ -35,7 +35,9 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
   }
 
   formValidated () {
-    const address = this.form.value['text']
+    let address = this.form.value['text'] || ''
+    address = address.replace(/^@/, '')
+
     const [ username, hostname ] = address.split('@')
 
     const protocol = window.location.protocol

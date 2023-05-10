@@ -5,7 +5,7 @@ import { HttpStatusCode } from '@shared/models'
 
 function apiFailMiddleware (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.fail = options => {
-    const { status = HttpStatusCode.BAD_REQUEST_400, message, title, type, data, instance } = options
+    const { status = HttpStatusCode.BAD_REQUEST_400, message, title, type, data, instance, tags } = options
 
     const extension = new ProblemDocumentExtension({
       ...data,
@@ -31,11 +31,11 @@ function apiFailMiddleware (req: express.Request, res: express.Response, next: e
       detail: message,
 
       type: type
-        ? `https://docs.joinpeertube.org/api/rest-reference.html#section/Errors/${type}`
+        ? `https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/${type}`
         : undefined
     }, extension)
 
-    logger.debug('Bad HTTP request.', { json })
+    logger.debug('Bad HTTP request.', { json, tags })
 
     res.json(json)
   }

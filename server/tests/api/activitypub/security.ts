@@ -5,26 +5,26 @@ import { buildDigest } from '@server/helpers/peertube-crypto'
 import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@server/initializers/constants'
 import { activityPubContextify } from '@server/lib/activitypub/context'
 import { buildGlobalHeaders, signAndContextify } from '@server/lib/activitypub/send'
-import { makePOSTAPRequest } from '@server/tests/shared'
+import { makePOSTAPRequest, SQLCommand } from '@server/tests/shared'
 import { buildAbsoluteFixturePath, wait } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
 import { cleanupTests, createMultipleServers, killallServers, PeerTubeServer } from '@shared/server-commands'
 
-function setKeysOfServer (onServer: PeerTubeServer, ofServer: PeerTubeServer, publicKey: string, privateKey: string) {
-  const url = ofServer.url + '/accounts/peertube'
+function setKeysOfServer (onServer: SQLCommand, ofServerUrl: string, publicKey: string, privateKey: string) {
+  const url = ofServerUrl + '/accounts/peertube'
 
   return Promise.all([
-    onServer.sql.setActorField(url, 'publicKey', publicKey),
-    onServer.sql.setActorField(url, 'privateKey', privateKey)
+    onServer.setActorField(url, 'publicKey', publicKey),
+    onServer.setActorField(url, 'privateKey', privateKey)
   ])
 }
 
-function setUpdatedAtOfServer (onServer: PeerTubeServer, ofServer: PeerTubeServer, updatedAt: string) {
-  const url = ofServer.url + '/accounts/peertube'
+function setUpdatedAtOfServer (onServer: SQLCommand, ofServerUrl: string, updatedAt: string) {
+  const url = ofServerUrl + '/accounts/peertube'
 
   return Promise.all([
-    onServer.sql.setActorField(url, 'createdAt', updatedAt),
-    onServer.sql.setActorField(url, 'updatedAt', updatedAt)
+    onServer.setActorField(url, 'createdAt', updatedAt),
+    onServer.setActorField(url, 'updatedAt', updatedAt)
   ])
 }
 
@@ -71,6 +71,8 @@ async function makeFollowRequest (to: { url: string }, by: { url: string, privat
 
 describe('Test ActivityPub security', function () {
   let servers: PeerTubeServer[]
+  let sqlCommands: SQLCommand[]
+
   let url: string
 
   const keys = require(buildAbsoluteFixturePath('./ap-json/peertube/keys.json'))
@@ -90,10 +92,12 @@ describe('Test ActivityPub security', function () {
 
     servers = await createMultipleServers(3)
 
+    sqlCommands = servers.map(s => new SQLCommand(s))
+
     url = servers[0].url + '/inbox'
 
-    await setKeysOfServer(servers[0], servers[1], keys.publicKey, null)
-    await setKeysOfServer(servers[1], servers[1], keys.publicKey, keys.privateKey)
+    await setKeysOfServer(sqlCommands[0], servers[1].url, keys.publicKey, null)
+    await setKeysOfServer(sqlCommands[1], servers[1].url, keys.publicKey, keys.privateKey)
 
     const to = { url: servers[0].url + '/accounts/peertube' }
     const by = { url: servers[1].url + '/accounts/peertube', privateKey: keys.privateKey }
@@ -130,8 +134,8 @@ describe('Test ActivityPub security', function () {
     })
 
     it('Should fail with bad keys', async function () {
-      await setKeysOfServer(servers[0], servers[1], invalidKeys.publicKey, invalidKeys.privateKey)
-      await setKeysOfServer(servers[1], servers[1], invalidKeys.publicKey, invalidKeys.privateKey)
+      await setKeysOfServer(sqlCommands[0], servers[1].url, invalidKeys.publicKey, invalidKeys.privateKey)
+      await setKeysOfServer(sqlCommands[1], servers[1].url, invalidKeys.publicKey, invalidKeys.privateKey)
 
       const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
       const headers = buildGlobalHeaders(body)
@@ -145,8 +149,8 @@ describe('Test ActivityPub security', function () {
     })
 
     it('Should reject requests without appropriate signed headers', async function () {
-      await setKeysOfServer(servers[0], servers[1], keys.publicKey, keys.privateKey)
-      await setKeysOfServer(servers[1], servers[1], keys.publicKey, keys.privateKey)
+      await setKeysOfServer(sqlCommands[0], servers[1].url, keys.publicKey, keys.privateKey)
+      await setKeysOfServer(sqlCommands[1], servers[1].url, keys.publicKey, keys.privateKey)
 
       const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
       const headers = buildGlobalHeaders(body)
@@ -194,8 +198,8 @@ describe('Test ActivityPub security', function () {
 
       // Update keys of server 2 to invalid keys
       // Server 1 should refresh the actor and fail
-      await setKeysOfServer(servers[1], servers[1], invalidKeys.publicKey, invalidKeys.privateKey)
-      await setUpdatedAtOfServer(servers[0], servers[1], '2015-07-17 22:00:00+00')
+      await setKeysOfServer(sqlCommands[1], servers[1].url, invalidKeys.publicKey, invalidKeys.privateKey)
+      await setUpdatedAtOfServer(sqlCommands[0], servers[1].url, '2015-07-17 22:00:00+00')
 
       // Invalid peertube actor cache
       await killallServers([ servers[1] ])
@@ -218,9 +222,9 @@ describe('Test ActivityPub security', function () {
     before(async function () {
       this.timeout(10000)
 
-      await setKeysOfServer(servers[0], servers[1], keys.publicKey, keys.privateKey)
-      await setKeysOfServer(servers[1], servers[1], keys.publicKey, keys.privateKey)
-      await setKeysOfServer(servers[2], servers[2], keys.publicKey, keys.privateKey)
+      await setKeysOfServer(sqlCommands[0], servers[1].url, keys.publicKey, keys.privateKey)
+      await setKeysOfServer(sqlCommands[1], servers[1].url, keys.publicKey, keys.privateKey)
+      await setKeysOfServer(sqlCommands[2], servers[2].url, keys.publicKey, keys.privateKey)
 
       const to = { url: servers[0].url + '/accounts/peertube' }
       const by = { url: servers[2].url + '/accounts/peertube', privateKey: keys.privateKey }
@@ -230,8 +234,8 @@ describe('Test ActivityPub security', function () {
     it('Should fail with bad keys', async function () {
       this.timeout(10000)
 
-      await setKeysOfServer(servers[0], servers[2], invalidKeys.publicKey, invalidKeys.privateKey)
-      await setKeysOfServer(servers[2], servers[2], invalidKeys.publicKey, invalidKeys.privateKey)
+      await setKeysOfServer(sqlCommands[0], servers[2].url, invalidKeys.publicKey, invalidKeys.privateKey)
+      await setKeysOfServer(sqlCommands[2], servers[2].url, invalidKeys.publicKey, invalidKeys.privateKey)
 
       const body = getAnnounceWithoutContext(servers[1])
       body.actor = servers[2].url + '/accounts/peertube'
@@ -252,8 +256,8 @@ describe('Test ActivityPub security', function () {
     it('Should fail with an altered body', async function () {
       this.timeout(10000)
 
-      await setKeysOfServer(servers[0], servers[2], keys.publicKey, keys.privateKey)
-      await setKeysOfServer(servers[0], servers[2], keys.publicKey, keys.privateKey)
+      await setKeysOfServer(sqlCommands[0], servers[2].url, keys.publicKey, keys.privateKey)
+      await setKeysOfServer(sqlCommands[0], servers[2].url, keys.publicKey, keys.privateKey)
 
       const body = getAnnounceWithoutContext(servers[1])
       body.actor = servers[2].url + '/accounts/peertube'
@@ -296,7 +300,7 @@ describe('Test ActivityPub security', function () {
 
       // Update keys of server 3 to invalid keys
       // Server 1 should refresh the actor and fail
-      await setKeysOfServer(servers[2], servers[2], invalidKeys.publicKey, invalidKeys.privateKey)
+      await setKeysOfServer(sqlCommands[2], servers[2].url, invalidKeys.publicKey, invalidKeys.privateKey)
 
       const body = getAnnounceWithoutContext(servers[1])
       body.actor = servers[2].url + '/accounts/peertube'
@@ -316,7 +320,9 @@ describe('Test ActivityPub security', function () {
   })
 
   after(async function () {
-    this.timeout(10000)
+    for (const sql of sqlCommands) {
+      await sql.cleanup()
+    }
 
     await cleanupTests(servers)
   })

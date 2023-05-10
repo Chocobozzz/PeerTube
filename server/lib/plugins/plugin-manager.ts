@@ -325,7 +325,14 @@ export class PluginManager implements ServerHook {
 
   // ###################### Installation ######################
 
-  async install (toInstall: string, version?: string, fromDisk = false) {
+  async install (options: {
+    toInstall: string
+    version?: string
+    fromDisk?: boolean // default false
+    register?: boolean // default true
+  }) {
+    const { toInstall, version, fromDisk = false, register = true } = options
+
     let plugin: PluginModel
     let npmName: string
 
@@ -357,12 +364,14 @@ export class PluginManager implements ServerHook {
 
       logger.info('Successful installation of plugin %s.', toInstall)
 
-      await this.registerPluginOrTheme(plugin)
+      if (register) {
+        await this.registerPluginOrTheme(plugin)
+      }
     } catch (rootErr) {
       logger.error('Cannot install plugin %s, removing it...', toInstall, { err: rootErr })
 
       try {
-        await this.uninstall(npmName)
+        await this.uninstall({ npmName })
       } catch (err) {
         logger.error('Cannot uninstall plugin %s after failed installation.', toInstall, { err })
 
@@ -394,16 +403,23 @@ export class PluginManager implements ServerHook {
     // Unregister old hooks
     await this.unregister(npmName)
 
-    return this.install(toUpdate, version, fromDisk)
+    return this.install({ toInstall: toUpdate, version, fromDisk })
   }
 
-  async uninstall (npmName: string) {
+  async uninstall (options: {
+    npmName: string
+    unregister?: boolean // default true
+  }) {
+    const { npmName, unregister = true } = options
+
     logger.info('Uninstalling plugin %s.', npmName)
 
-    try {
-      await this.unregister(npmName)
-    } catch (err) {
-      logger.warn('Cannot unregister plugin %s.', npmName, { err })
+    if (unregister) {
+      try {
+        await this.unregister(npmName)
+      } catch (err) {
+        logger.warn('Cannot unregister plugin %s.', npmName, { err })
+      }
     }
 
     const plugin = await PluginModel.loadByNpmName(npmName)
