@@ -189,8 +189,10 @@ export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountV
               model: ActorModel.unscoped(),
               required: true,
               where: {
-                preferredUsername: accountName,
-                serverId: null
+                [Op.and]: [
+                  ActorModel.wherePreferredUsername(accountName),
+                  { serverId: null }
+                ]
               }
             }
           ]
