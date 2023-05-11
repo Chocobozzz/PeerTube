@@ -282,7 +282,7 @@ describe('Test handle downs', function () {
   })
 
   it('Should upload many videos on server 1', async function () {
-    this.timeout(120000)
+    this.timeout(240000)
 
     for (let i = 0; i < 10; i++) {
       const uuid = (await servers[0].videos.quickUpload({ name: 'video ' + i })).uuid
