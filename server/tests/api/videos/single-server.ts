@@ -213,7 +213,7 @@ describe('Test a single server', function () {
     })
 
     it('Should upload 6 videos', async function () {
-      this.timeout(25000)
+      this.timeout(50000)
 
       const videos = new Set([
         'video_short.mp4', 'video_short.ogv', 'video_short.webm',

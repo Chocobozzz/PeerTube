@@ -88,7 +88,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
 
       return videoUpdated
     } catch (err) {
-      this.catchUpdateError(err)
+      await this.catchUpdateError(err)
     }
   }
 
@@ -154,9 +154,9 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     videoUpdated.VideoLive = null
   }
 
-  private catchUpdateError (err: Error) {
+  private async catchUpdateError (err: Error) {
     if (this.video !== undefined) {
-      resetSequelizeInstance(this.video)
+      await resetSequelizeInstance(this.video)
     }
 
     // This is just a debug because we will retry the insert

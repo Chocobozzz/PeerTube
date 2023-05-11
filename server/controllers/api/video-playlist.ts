@@ -276,7 +276,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
     // If the transaction is retried, sequelize will think the object has not changed
     // So we need to restore the previous fields
-    resetSequelizeInstance(videoPlaylistInstance)
+    await resetSequelizeInstance(videoPlaylistInstance)
 
     throw err
   }

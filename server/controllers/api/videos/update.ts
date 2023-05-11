@@ -152,7 +152,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   } catch (err) {
     // If the transaction is retried, sequelize will think the object has not changed
     // So we need to restore the previous fields
-    resetSequelizeInstance(videoFromReq)
+    await resetSequelizeInstance(videoFromReq)
 
     throw err
   } finally {

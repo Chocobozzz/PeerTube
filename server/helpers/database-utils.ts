@@ -70,16 +70,8 @@ function transactionRetryer <T> (func: (err: any, data: T) => any) {
 
 // ---------------------------------------------------------------------------
 
-function updateInstanceWithAnother <M, T extends U, U extends Model<M>> (instanceToUpdate: T, baseInstance: U) {
-  const obj = baseInstance.toJSON()
-
-  for (const key of Object.keys(obj)) {
-    instanceToUpdate[key] = obj[key]
-  }
-}
-
 function resetSequelizeInstance <T> (instance: Model<T>) {
-  instance.set(instance.previous())
+  return instance.reload()
 }
 
 function filterNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): boolean }> (
@@ -113,7 +105,6 @@ export {
   resetSequelizeInstance,
   retryTransactionWrapper,
   transactionRetryer,
-  updateInstanceWithAnother,
   afterCommitIfTransaction,
   filterNonExistingModels,
   deleteAllModels,

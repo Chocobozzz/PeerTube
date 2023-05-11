@@ -2,11 +2,10 @@
 
 import { expect } from 'chai'
 import { wait } from '@shared/core-utils'
-import { HttpStatusCode, LiveVideoCreate, VideoPrivacy } from '@shared/models'
+import { LiveVideoCreate, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
-  makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -81,8 +80,8 @@ describe('Fast restream in live', function () {
 
       try {
         await server.live.getSegmentFile({ videoUUID: liveId, segment: 0, playlistNumber: 0 })
-        await makeRawRequest({ url: video.streamingPlaylists[0].playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
-        await makeRawRequest({ url: video.streamingPlaylists[0].segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
+        await server.streamingPlaylists.get({ url: video.streamingPlaylists[0].playlistUrl })
+        await server.streamingPlaylists.getSegmentSha256({ url: video.streamingPlaylists[0].segmentsSha256Url })
       } catch (err) {
         // FIXME: try to debug error in CI "Unexpected end of JSON input"
         console.error(err)
