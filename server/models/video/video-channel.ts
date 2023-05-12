@@ -702,7 +702,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
           required: true,
           where: {
             [Op.and]: [
-              ActorModel.wherePreferredUsername(name),
+              ActorModel.wherePreferredUsername(name, 'Actor.preferredUsername'),
               { serverId: null }
             ]
           },
@@ -728,7 +728,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
         {
           model: ActorModel,
           required: true,
-          where: ActorModel.wherePreferredUsername(name),
+          where: ActorModel.wherePreferredUsername(name, 'Actor.preferredUsername'),
           include: [
             {
               model: ServerModel,

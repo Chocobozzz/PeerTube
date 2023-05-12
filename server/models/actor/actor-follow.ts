@@ -311,7 +311,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
         if (t.host) {
           return {
             [Op.and]: [
-              ActorModel.wherePreferredUsername(t.name, '$preferredUsername$'),
+              ActorModel.wherePreferredUsername(t.name),
               { $host$: t.host }
             ]
           }
@@ -319,7 +319,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
 
         return {
           [Op.and]: [
-            ActorModel.wherePreferredUsername(t.name, '$preferredUsername$'),
+            ActorModel.wherePreferredUsername(t.name),
             { $serverId$: null }
           ]
         }

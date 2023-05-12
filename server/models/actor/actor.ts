@@ -381,7 +381,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       const query = {
         where: {
           [Op.and]: [
-            this.wherePreferredUsername(preferredUsername),
+            this.wherePreferredUsername(preferredUsername, '"ActorModel"."preferredUsername"'),
             {
               serverId: null
             }
@@ -431,7 +431,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
 
   static loadByNameAndHost (preferredUsername: string, host: string): Promise<MActorFull> {
     const query = {
-      where: this.wherePreferredUsername(preferredUsername),
+      where: this.wherePreferredUsername(preferredUsername, '"ActorModel"."preferredUsername"'),
       include: [
         {
           model: ServerModel,
