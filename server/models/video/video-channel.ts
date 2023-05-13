@@ -130,13 +130,16 @@ export type SummaryOptions = {
       for (const handle of options.handles || []) {
         const [ preferredUsername, host ] = handle.split('@')
 
+        const sanitizedPreferredUsername = VideoChannelModel.sequelize.escape(preferredUsername.toLowerCase())
+        const sanitizedHost = VideoChannelModel.sequelize.escape(host)
+
         if (!host || host === WEBSERVER.HOST) {
-          or.push(`("preferredUsername" = ${VideoChannelModel.sequelize.escape(preferredUsername)} AND "serverId" IS NULL)`)
+          or.push(`(LOWER("preferredUsername") = ${sanitizedPreferredUsername} AND "serverId" IS NULL)`)
         } else {
           or.push(
             `(` +
-              `"preferredUsername" = ${VideoChannelModel.sequelize.escape(preferredUsername)} ` +
-              `AND "host" = ${VideoChannelModel.sequelize.escape(host)}` +
+              `LOWER("preferredUsername") = ${sanitizedPreferredUsername} ` +
+              `AND "host" = ${sanitizedHost}` +
             `)`
           )
         }
@@ -698,8 +701,10 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
           model: ActorModel,
           required: true,
           where: {
-            preferredUsername: name,
-            serverId: null
+            [Op.and]: [
+              ActorModel.wherePreferredUsername(name, 'Actor.preferredUsername'),
+              { serverId: null }
+            ]
           },
           include: [
             {
@@ -723,9 +728,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
         {
           model: ActorModel,
           required: true,
-          where: {
-            preferredUsername: name
-          },
+          where: ActorModel.wherePreferredUsername(name, 'Actor.preferredUsername'),
           include: [
             {
               model: ServerModel,

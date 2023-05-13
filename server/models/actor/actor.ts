@@ -1,4 +1,4 @@
-import { literal, Op, QueryTypes, Transaction } from 'sequelize'
+import { col, fn, literal, Op, QueryTypes, Transaction, where } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -130,7 +130,8 @@ export const unusedActorAttributesForAPI: (keyof AttributesOnly<ActorModel>)[] =
       unique: true
     },
     {
-      fields: [ 'preferredUsername', 'serverId' ],
+      fields: [ fn('lower', col('preferredUsername')), 'serverId' ],
+      name: 'actor_preferred_username_lower_server_id',
       unique: true,
       where: {
         serverId: {
@@ -139,7 +140,8 @@ export const unusedActorAttributesForAPI: (keyof AttributesOnly<ActorModel>)[] =
       }
     },
     {
-      fields: [ 'preferredUsername' ],
+      fields: [ fn('lower', col('preferredUsername')) ],
+      name: 'actor_preferred_username_lower',
       unique: true,
       where: {
         serverId: null
@@ -327,6 +329,12 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
 
   // ---------------------------------------------------------------------------
 
+  static wherePreferredUsername (preferredUsername: string, colName = 'preferredUsername') {
+    return where(fn('lower', col(colName)), preferredUsername.toLowerCase())
+  }
+
+  // ---------------------------------------------------------------------------
+
   static async load (id: number): Promise<MActor> {
     const actorServer = await getServerActor()
     if (id === actorServer.id) return actorServer
@@ -372,8 +380,12 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     const fun = () => {
       const query = {
         where: {
-          preferredUsername,
-          serverId: null
+          [Op.and]: [
+            this.wherePreferredUsername(preferredUsername, '"ActorModel"."preferredUsername"'),
+            {
+              serverId: null
+            }
+          ]
         },
         transaction
       }
@@ -395,8 +407,12 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       const query = {
         attributes: [ 'url' ],
         where: {
-          preferredUsername,
-          serverId: null
+          [Op.and]: [
+            this.wherePreferredUsername(preferredUsername),
+            {
+              serverId: null
+            }
+          ]
         },
         transaction
       }
@@ -405,7 +421,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     }
 
     return ModelCache.Instance.doCache({
-      cacheType: 'local-actor-name',
+      cacheType: 'local-actor-url',
       key: preferredUsername,
       // The server actor never change, so we can easily cache it
       whitelist: () => preferredUsername === SERVER_ACTOR_NAME,
@@ -415,9 +431,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
 
   static loadByNameAndHost (preferredUsername: string, host: string): Promise<MActorFull> {
     const query = {
-      where: {
-        preferredUsername
-      },
+      where: this.wherePreferredUsername(preferredUsername, '"ActorModel"."preferredUsername"'),
       include: [
         {
           model: ServerModel,

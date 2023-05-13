@@ -213,6 +213,7 @@ export class LiveCommand extends AbstractCommand {
 
     while (error) {
       try {
+        // Check fragment exists
         await this.getRawRequest({
           ...options,
 
@@ -224,11 +225,15 @@ export class LiveCommand extends AbstractCommand {
         const video = await server.videos.get({ id: videoUUID })
         const hlsPlaylist = video.streamingPlaylists[0]
 
+        // Check SHA generation
         const shaBody = await server.streamingPlaylists.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url, withRetry: objectStorage })
-
         if (!shaBody[segmentName]) {
           throw new Error('Segment SHA does not exist')
         }
+
+        // Check fragment is in m3u8 playlist
+        const subPlaylist = await server.streamingPlaylists.get({ url: `${baseUrl}/${video.uuid}/${playlistNumber}.m3u8` })
+        if (!subPlaylist.includes(segmentName)) throw new Error('Fragment does not exist in playlist')
 
         error = false
       } catch {

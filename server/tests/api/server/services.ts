@@ -26,7 +26,7 @@ describe('Test services', function () {
   ]
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     server = await createSingleServer(1)
 

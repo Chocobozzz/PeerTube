@@ -23,7 +23,7 @@ describe('Test channel synchronizations', function () {
 
     describe('Sync using ' + mode, function () {
       let servers: PeerTubeServer[]
-      let sqlCommands: SQLCommand[]
+      let sqlCommands: SQLCommand[] = []
 
       let startTestDate: Date
 

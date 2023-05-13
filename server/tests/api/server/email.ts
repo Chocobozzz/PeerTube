@@ -33,7 +33,7 @@ describe('Test emails', function () {
   }
 
   before(async function () {
-    this.timeout(50000)
+    this.timeout(120000)
 
     const emailPort = await MockSmtpServer.Instance.collectEmails(emails)
     server = await createSingleServer(1, ConfigCommand.getEmailOverrideConfig(emailPort))

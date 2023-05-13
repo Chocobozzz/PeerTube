@@ -37,8 +37,8 @@ import { ActorImageModel } from '../actor/actor-image'
 import { ApplicationModel } from '../application/application'
 import { ServerModel } from '../server/server'
 import { ServerBlocklistModel } from '../server/server-blocklist'
-import { UserModel } from '../user/user'
 import { buildSQLAttributes, getSort, throwIfNotValid } from '../shared'
+import { UserModel } from '../user/user'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
@@ -296,9 +296,7 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
           {
             model: ActorModel,
             required: true,
-            where: {
-              preferredUsername: name
-            }
+            where: ActorModel.wherePreferredUsername(name)
           }
         ]
       }
@@ -321,9 +319,7 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
         {
           model: ActorModel,
           required: true,
-          where: {
-            preferredUsername: name
-          },
+          where: ActorModel.wherePreferredUsername(name),
           include: [
             {
               model: ServerModel,

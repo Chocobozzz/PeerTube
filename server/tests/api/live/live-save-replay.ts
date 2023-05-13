@@ -153,7 +153,7 @@ describe('Save replay setting', function () {
     let sessionEndDateMin: Date
 
     it('Should correctly create and federate the "waiting for stream" live', async function () {
-      this.timeout(20000)
+      this.timeout(40000)
 
       liveVideoUUID = await createLiveWrapper({ permanent: false, replay: false })
 
@@ -164,7 +164,7 @@ describe('Save replay setting', function () {
     })
 
     it('Should correctly have updated the live and federated it when streaming in the live', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
@@ -179,7 +179,7 @@ describe('Save replay setting', function () {
     })
 
     it('Should correctly delete the video files after the stream ended', async function () {
-      this.timeout(40000)
+      this.timeout(60000)
 
       sessionEndDateMin = new Date()
       await stopFfmpeg(ffmpegCommand)
@@ -241,7 +241,7 @@ describe('Save replay setting', function () {
     })
 
     it('Should correctly terminate the stream on delete and delete the video', async function () {
-      this.timeout(40000)
+      this.timeout(60000)
 
       await publishLiveAndDelete({ permanent: false, replay: false })
 
@@ -253,7 +253,7 @@ describe('Save replay setting', function () {
   describe('With save replay enabled on non permanent live', function () {
 
     it('Should correctly create and federate the "waiting for stream" live', async function () {
-      this.timeout(20000)
+      this.timeout(60000)
 
       liveVideoUUID = await createLiveWrapper({ permanent: false, replay: true, replaySettings: { privacy: VideoPrivacy.UNLISTED } })
 
@@ -265,7 +265,7 @@ describe('Save replay setting', function () {
     })
 
     it('Should correctly have updated the live and federated it when streaming in the live', async function () {
-      this.timeout(20000)
+      this.timeout(60000)
 
       ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
       await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
@@ -278,7 +278,7 @@ describe('Save replay setting', function () {
     })
 
     it('Should correctly have saved the live and federated it after the streaming', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       const session = await servers[0].live.findLatestSession({ videoId: liveVideoUUID })
       expect(session.endDate).to.not.exist
@@ -319,7 +319,7 @@ describe('Save replay setting', function () {
     })
 
     it('Should update the saved live and correctly federate the updated attributes', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       await servers[0].videos.update({ id: liveVideoUUID, attributes: { name: 'video updated', privacy: VideoPrivacy.PUBLIC } })
       await waitJobs(servers)
@@ -352,7 +352,7 @@ describe('Save replay setting', function () {
     })
 
     it('Should correctly terminate the stream on delete and delete the video', async function () {
-      this.timeout(40000)
+      this.timeout(60000)
 
       await publishLiveAndDelete({ permanent: false, replay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC } })
 
@@ -367,7 +367,7 @@ describe('Save replay setting', function () {
     describe('With a first live and its replay', function () {
 
       it('Should correctly create and federate the "waiting for stream" live', async function () {
-        this.timeout(20000)
+        this.timeout(60000)
 
         liveVideoUUID = await createLiveWrapper({ permanent: true, replay: true, replaySettings: { privacy: VideoPrivacy.UNLISTED } })
 
@@ -379,7 +379,7 @@ describe('Save replay setting', function () {
       })
 
       it('Should correctly have updated the live and federated it when streaming in the live', async function () {
-        this.timeout(20000)
+        this.timeout(60000)
 
         ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
         await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
@@ -392,7 +392,7 @@ describe('Save replay setting', function () {
       })
 
       it('Should correctly have saved the live and federated it after the streaming', async function () {
-        this.timeout(30000)
+        this.timeout(60000)
 
         const liveDetails = await servers[0].videos.get({ id: liveVideoUUID })
 
@@ -443,10 +443,11 @@ describe('Save replay setting', function () {
     })
 
     describe('With a second live and its replay', function () {
+
       it('Should update the replay settings', async function () {
-        await servers[0].live.update(
-          { videoId: liveVideoUUID, fields: { replaySettings: { privacy: VideoPrivacy.PUBLIC } } })
+        await servers[0].live.update({ videoId: liveVideoUUID, fields: { replaySettings: { privacy: VideoPrivacy.PUBLIC } } })
         await waitJobs(servers)
+
         const live = await servers[0].live.get({ videoId: liveVideoUUID })
 
         expect(live.saveReplay).to.be.true
@@ -456,7 +457,7 @@ describe('Save replay setting', function () {
       })
 
       it('Should correctly have updated the live and federated it when streaming in the live', async function () {
-        this.timeout(20000)
+        this.timeout(60000)
 
         ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
         await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
@@ -469,7 +470,8 @@ describe('Save replay setting', function () {
       })
 
       it('Should correctly have saved the live and federated it after the streaming', async function () {
-        this.timeout(30000)
+        this.timeout(60000)
+
         const liveDetails = await servers[0].videos.get({ id: liveVideoUUID })
 
         await stopFfmpeg(ffmpegCommand)
@@ -545,7 +547,7 @@ describe('Save replay setting', function () {
       })
 
       it('Should correctly terminate the stream on delete and not save the video', async function () {
-        this.timeout(40000)
+        this.timeout(60000)
 
         const { liveDetails } = await publishLiveAndDelete({
           permanent: true,

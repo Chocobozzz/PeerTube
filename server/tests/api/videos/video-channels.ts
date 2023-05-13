@@ -25,7 +25,7 @@ async function findChannel (server: PeerTubeServer, channelId: number) {
 
 describe('Test video channels', function () {
   let servers: PeerTubeServer[]
-  let sqlCommands: SQLCommand[]
+  let sqlCommands: SQLCommand[] = []
 
   let userInfo: User
   let secondVideoChannelId: number
