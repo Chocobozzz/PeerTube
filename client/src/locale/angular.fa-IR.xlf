@@ -4124,27 +4124,27 @@
       </trans-unit>
       <trans-unit id="1807029821872995706" datatype="html">
         <source>Unsolved reports</source>
-        <target state="translated">گزارش های حل نشده</target>
+        <target state="translated">گزارش‌های حل نشده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="2570256912317308673" datatype="html">
         <source>Accepted reports</source>
-        <target state="translated">گزارش های پذیرفته شده</target>
+        <target state="translated">گزارش‌های پذیرفته شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="4335414817109654558" datatype="html">
         <source>Refused reports</source>
-        <target state="translated">گزارش ها را رد کرد</target>
+        <target state="translated">گزارش‌های ردشده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="5604806676748121035" datatype="html">
         <source>Reports with blocked videos</source>
-        <target state="translated">گزارش ها با فیلم های مسدود شده</target>
+        <target state="translated">گزارش‌ها با فیلم‌های مسدودشده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="5105869928182826553" datatype="html">
         <source>Reports with deleted videos</source>
-        <target state="translated">گزارش ها با فیلم های حذف شده</target>
+        <target state="translated">گزارش‌ها با فیلم‌های حذف شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="4678289986918934018" datatype="html">
@@ -4179,7 +4179,7 @@
       </trans-unit>
       <trans-unit id="1868606282505332204" datatype="html">
         <source>Reports</source>
-        <target state="translated">گزارش ها</target>
+        <target state="translated">گزارش‌ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">118</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/abuse-list/abuse-list.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">35</context></context-group>
@@ -5012,7 +5012,7 @@
       </trans-unit>
       <trans-unit id="2138469194506455231" datatype="html">
         <source>⚠️ You don't have any external auth plugin enabled.</source>
-        <target state="translated">⚠️ شما هیچ پلاگین خارجی AUTH را فعال نکرده اید.</target>
+        <target state="translated">⚠️ شما هیچ پلاگین خارجی را برای احراز هویت فعال نکرده اید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="6608125149782412086" datatype="html">
@@ -5343,7 +5343,7 @@
       </trans-unit>
       <trans-unit id="3946988229617310200" datatype="html">
         <source>ADMINISTRATORS</source>
-        <target state="translated">مدیران سیستم</target>
+        <target state="translated">مدیر سیستم</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">543</context></context-group>
       </trans-unit>
       <trans-unit id="3171683206914962995" datatype="html">
@@ -5368,7 +5368,7 @@
       </trans-unit>
       <trans-unit id="3202133522706129143" datatype="html">
         <source>Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value.</source>
-        <target state="translated">ارائه حساب توییتر نشان دهنده نمونه خود را برای بهبود پیش نمایش لینک. اگر شما یک حساب توییتر ندارید، فقط مقدار پیش فرض را ترک کنید.</target>
+        <target state="translated">برای بهبود پیش‌نمایش لینک، حساب توییتر سایت خود را وارد نمایید. اگر حساب توییتر ندارید، مقدار پیش‌فرض را تغییر ندهید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">572</context></context-group>
       </trans-unit>
       <trans-unit id="4087837092261487511">
@@ -8349,7 +8349,7 @@
       </trans-unit>
       <trans-unit id="9196775343330824083" datatype="html">
         <source>Messages with reporter</source>
-        <target state="translated">پیام ها با گزارشگر</target>
+        <target state="translated">پیام‌ها با گزارشگر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">248</context></context-group>
       </trans-unit>
       <trans-unit id="8770468575924421391" datatype="html">
@@ -10256,7 +10256,7 @@
       </trans-unit>
       <trans-unit id="4580988005648117665" datatype="html">
         <source>Search</source>
-        <target state="translated">جستجو کردن</target>
+        <target state="translated">جستجو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-navigation.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-routing.module.ts</context><context context-type="linenumber">12</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.ts</context><context context-type="linenumber">257</context></context-group>
@@ -12689,7 +12689,7 @@
       </trans-unit>
       <trans-unit id="397679576231234820" datatype="html">
         <source>Messages with the reporter</source>
-        <target state="translated">پیام ها با گزارشگر</target>
+        <target state="translated">پیام‌ها با گزارشگر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="7417592908147948728" datatype="html">
@@ -12916,7 +12916,7 @@
       </trans-unit>
       <trans-unit id="5512208811126492983" datatype="html">
         <source>Report comment</source>
-        <target state="translated">گزارش كردن اظهارنظر</target>
+        <target state="translated">گزارش‌كردن اظهارنظر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/comment-report.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="3691787517663044217" datatype="html">
