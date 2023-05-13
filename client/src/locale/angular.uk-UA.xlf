@@ -8756,7 +8756,7 @@
       </trans-unit>
       <trans-unit id="2008742768994660594" datatype="html">
         <source>Do you really want to cancel this job? Children won't be processed.</source>
-        <target state="new">Do you really want to cancel this job? Children won't be processed.</target>
+        <target state="translated">Ви дійсно хочете скасувати це завдання? Підлеглі завдання не оброблятимуться.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -8977,7 +8977,7 @@
       </trans-unit>
       <trans-unit id="5875055916985051770" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> registrations</source>
-        <target state="translated">Показ <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> до <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> з <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> реєстрацій</target>
+        <target state="translated">Показ від <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> до <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> із <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> реєстрацій</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">11</context>
@@ -9089,7 +9089,7 @@
       </trans-unit>
       <trans-unit id="3767259920053407667" datatype="html">
         <source>Videos will be deleted, comments will be tombstoned.</source>
-        <target state="new">Videos will be deleted, comments will be tombstoned.</target>
+        <target state="translated">Відео будуть видалені, а коментарі заморожені.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">101</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">346</context></context-group>
       </trans-unit>
@@ -9974,7 +9974,7 @@
       </trans-unit>
       <trans-unit id="3858880927114551513" datatype="html">
         <source>The current video will be overwritten by this edited video and &lt;strong&gt;you won't be able to recover it&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</source>
-        <target state="new">The current video will be overwritten by this edited video and &lt;strong&gt;you won't be able to recover it&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</target>
+        <target state="translated">Поточне відео буде перезаписано цим відредагованим відео і &lt;strong&gt;ви не зможете його відновити&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="4876327655498234453" datatype="html">
@@ -11901,7 +11901,7 @@
       </trans-unit>
       <trans-unit id="4350392487994839749" datatype="html">
         <source>If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</source>
-        <target state="new">If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</target>
+        <target state="translated">Якщо ви вилучите цього користувача, ви не зможете створити іншого користувача або канал з іменем користувача &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt;!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -11958,7 +11958,7 @@
       </trans-unit>
       <trans-unit id="4117663541503607703" datatype="html">
         <source>Add a message to communicate with the moderation team</source>
-        <target state="new">Add a message to communicate with the moderation team</target>
+        <target state="translated">Додайте повідомлення, щоб зв'язатися з командою модераторів</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="3085641638748358969" datatype="html">
@@ -12525,7 +12525,7 @@
       </trans-unit>
       <trans-unit id="3145038024759242903" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> registration tokens</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> registration tokens</target>
+        <target state="translated">Показ від <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> до <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> із <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> токенів реєстрації</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">20</context>
@@ -12533,7 +12533,7 @@
       </trans-unit>
       <trans-unit id="3039940756451018621" datatype="html">
         <source>Token</source>
-        <target state="new">Token</target>
+        <target state="translated">Токен</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">25</context>
