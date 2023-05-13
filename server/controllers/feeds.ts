@@ -254,9 +254,7 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
     // Prevent podcast feeds from listing videos in other instances
     // helps prevent duplicates when they are indexed -- only the author should control them
     isLocal: true,
-    include: req.query.include | VideoInclude.FILES,
-    // TODO: include tags for future inclusion into the RSS feed
-    // include: VideoInclude.FILES | VideoInclude.TAGS,
+    include: VideoInclude.FILES,
     hasFiles: true,
     countVideos: false,
     ...options
