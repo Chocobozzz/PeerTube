@@ -15,7 +15,13 @@ import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
-import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosUpdateValidator } from '../../../middlewares'
+import {
+  asyncMiddleware,
+  asyncRetryTransactionMiddleware,
+  authenticate,
+  clearCacheRoute,
+  videosUpdateValidator
+} from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
@@ -140,6 +146,9 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
       return { videoInstanceUpdated, isNewVideo }
     })
+
+    // Clear cache for Podcast RSS feed when video is updated
+    await clearCacheRoute(`/feeds/podcast/videos.xml?videoChannelId=${videoInstanceUpdated.channelId}`)
 
     Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated, body: req.body, req, res })
 
