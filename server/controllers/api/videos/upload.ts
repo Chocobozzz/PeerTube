@@ -26,7 +26,7 @@ import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
-  authenticate,
+  authenticate, clearCacheRoute,
   videosAddLegacyValidator,
   videosAddResumableInitValidator,
   videosAddResumableValidator
@@ -206,6 +206,9 @@ async function addVideo (options: {
 
   addVideoJobsAfterUpload(videoCreated, videoFile, user)
     .catch(err => logger.error('Cannot build new video jobs of %s.', videoCreated.uuid, { err, ...lTags(videoCreated.uuid) }))
+
+  // Clear cache for Podcast RSS feed when video is uploaded
+  await clearCacheRoute(`/feeds/podcast/videos.xml?videoChannelId=${videoCreated.channelId}`)
 
   Hooks.runAction('action:api.video.uploaded', { video: videoCreated, req, res })
 
