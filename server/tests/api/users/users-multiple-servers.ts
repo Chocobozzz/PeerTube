@@ -148,8 +148,6 @@ describe('Test users with multiple servers', function () {
   })
 
   it('Should search through account videos', async function () {
-    this.timeout(10_000)
-
     const created = await servers[0].videos.upload({ token: userAccessToken, attributes: { name: 'Kami no chikara' } })
 
     await waitJobs(servers)
