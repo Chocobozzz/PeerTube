@@ -384,6 +384,9 @@ class LiveManager {
   }
 
   private onMuxingFFmpegEnd (videoUUID: string, sessionId: string) {
+    // Session already cleaned up
+    if (!this.videoSessions.has(videoUUID)) return
+
     this.videoSessions.delete(videoUUID)
 
     this.saveEndingSession(videoUUID, null)
