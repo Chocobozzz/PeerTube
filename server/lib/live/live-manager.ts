@@ -6,7 +6,6 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
 import { VIDEO_LIVE } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
-import { clearCacheRoute } from '@server/middlewares'
 import { RunnerJobModel } from '@server/models/runner/runner-job'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
@@ -27,6 +26,7 @@ import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolu
 import { LiveQuotaStore } from './live-quota-store'
 import { cleanupAndDestroyPermanentLive, getLiveSegmentTime } from './live-utils'
 import { MuxingSession } from './shared'
+import { clearPodcastFeedCache } from "@server/middlewares";
 
 const NodeRtmpSession = require('node-media-server/src/node_rtmp_session')
 const context = require('node-media-server/src/node_core_ctx')
@@ -373,7 +373,7 @@ class LiveManager {
       await wait(getLiveSegmentTime(live.latencyMode) * 1000 * VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION)
 
       // Clear cache for Podcast RSS feed when live stream starts
-      await clearCacheRoute(`/feeds/podcast/videos.xml?videoChannelId=${video.channelId}`)
+      await clearPodcastFeedCache(video.channelId)
 
       try {
         await federateVideoIfNeeded(video, false)
@@ -446,7 +446,7 @@ class LiveManager {
       await fullVideo.save()
 
       // Clear cache for Podcast RSS feed when live stream ends
-      await clearCacheRoute(`/feeds/podcast/videos.xml?videoChannelId=${fullVideo.channelId}`)
+      await clearPodcastFeedCache(fullVideo.channelId)
 
       PeerTubeSocket.Instance.sendVideoLiveNewState(fullVideo)
 

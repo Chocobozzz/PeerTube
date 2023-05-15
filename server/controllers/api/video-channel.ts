@@ -21,7 +21,8 @@ import { createLocalVideoChannel, federateAllVideosOfChannel } from '../../lib/v
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
-  authenticate, clearCacheRoute,
+  authenticate,
+  clearPodcastFeedCache,
   commonVideosFiltersValidator,
   ensureCanManageChannelOrAccount,
   optionalAuthenticate,
@@ -302,7 +303,7 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
       )
 
       // Clear cache for Podcast RSS feed when video channel is updated
-      await clearCacheRoute(`/feeds/podcast/videos.xml?videoChannelId=${videoChannelInstanceUpdated.id}`)
+      await clearPodcastFeedCache(videoChannelInstanceUpdated.id)
 
       Hooks.runAction('action:api.video-channel.updated', { videoChannel: videoChannelInstanceUpdated, req, res })
 

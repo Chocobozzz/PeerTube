@@ -19,7 +19,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  clearCacheRoute,
+  clearPodcastFeedCache,
   videosUpdateValidator
 } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
@@ -148,7 +148,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
     })
 
     // Clear cache for Podcast RSS feed when video is updated
-    await clearCacheRoute(`/feeds/podcast/videos.xml?videoChannelId=${videoInstanceUpdated.channelId}`)
+    await clearPodcastFeedCache(videoInstanceUpdated.channelId)
 
     Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated, body: req.body, req, res })
 

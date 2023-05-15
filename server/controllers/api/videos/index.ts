@@ -18,7 +18,8 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  checkVideoFollowConstraints, clearCacheRoute,
+  checkVideoFollowConstraints,
+  clearPodcastFeedCache,
   commonVideosFiltersValidator,
   optionalAuthenticate,
   paginationValidator,
@@ -212,7 +213,7 @@ async function removeVideo (req: express.Request, res: express.Response) {
   logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
 
   // Clear cache for Podcast RSS feed when video is uploaded
-  await clearCacheRoute(`/feeds/podcast/videos.xml?videoChannelId=${videoInstance.channelId}`)
+  await clearPodcastFeedCache(videoInstance.channelId)
 
   Hooks.runAction('action:api.video.deleted', { video: videoInstance, req, res })
 
