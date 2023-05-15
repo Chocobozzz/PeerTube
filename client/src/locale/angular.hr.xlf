@@ -2138,7 +2138,7 @@
       </trans-unit>
       <trans-unit id="7185278676178506632" datatype="html">
         <source>Transcoding jobs concurrency</source>
-        <target state="translated">Transkodiranje istovremenost poslova</target>
+        <target state="translated">Istovremeno transkodiranje poslova</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">182</context></context-group>
       </trans-unit>
       <trans-unit id="1969393594784140832" datatype="html">
@@ -3540,7 +3540,7 @@
       </trans-unit>
       <trans-unit id="4457061340457477073" datatype="html">
         <source>No <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> jobs found that are <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;badge&quot; [ngClass]=&quot;getJobStateClass(jobState)&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ jobState }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>.</source>
-        <target state="translated">Nijedna vrsta posla <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> koja je u stanju <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;badge&quot; [ngClass]=&quot;getJobStateClass(jobState)&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ jobState }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>.</target>
+        <target state="translated">Nijedna vrsta posla <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> nije pronađena koje je u stanju <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;badge&quot; [ngClass]=&quot;getJobStateClass(jobState)&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ jobState }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="6052766076365105714" datatype="html">
@@ -3624,7 +3624,7 @@
       </trans-unit>
       <trans-unit id="1846918252088023498" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> runner jobs</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> runner jobs</target>
+        <target state="translated">Prikazuje se <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> do <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> od <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> poslova pokretača</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">18</context>
@@ -3680,7 +3680,7 @@
       </trans-unit>
       <trans-unit id="6133673901299224277" datatype="html">
         <source>No runner jobs found.</source>
-        <target state="new">No runner jobs found.</target>
+        <target state="translated">Nije pronađen nijedan posao pokretača.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
           <context context-type="linenumber">96</context>
@@ -3688,7 +3688,7 @@
       </trans-unit>
       <trans-unit id="2785060445730155276" datatype="html">
         <source>Cancel this job</source>
-        <target state="new">Cancel this job</target>
+        <target state="translated">Prekini ovaj posao</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -3696,7 +3696,7 @@
       </trans-unit>
       <trans-unit id="2008742768994660594" datatype="html">
         <source>Do you really want to cancel this job? Children won't be processed.</source>
-        <target state="new">Do you really want to cancel this job? Children won't be processed.</target>
+        <target state="translated">Stvarno želiš prekinuti ovaj posao? Podređeni poslovi se neće obraditi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -3704,7 +3704,7 @@
       </trans-unit>
       <trans-unit id="5200752682405061561" datatype="html">
         <source>Cancel job</source>
-        <target state="new">Cancel job</target>
+        <target state="translated">Prekini posao</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -3712,7 +3712,7 @@
       </trans-unit>
       <trans-unit id="2963470419255840283" datatype="html">
         <source>Job cancelled.</source>
-        <target state="new">Job cancelled.</target>
+        <target state="translated">Posao je prekinut.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -8560,7 +8560,7 @@
       </trans-unit>
       <trans-unit id="8527948211896740910" datatype="html">
         <source>Do you really want to delete this runner? It won't be able to process jobs anymore.</source>
-        <target state="new">Do you really want to delete this runner? It won't be able to process jobs anymore.</target>
+        <target state="translated">Stvarno želiš izbrisati ovog pokretača? Više neće moći obrađivati poslove.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -8664,7 +8664,7 @@
       </trans-unit>
       <trans-unit id="6713730474908011769" datatype="html">
         <source>List runner jobs</source>
-        <target state="new">List runner jobs</target>
+        <target state="translated">Prikaži popis poslova pokretača</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">27</context>
@@ -13680,7 +13680,7 @@
       </trans-unit>
       <trans-unit id="1327409825122054374" datatype="html">
         <source>Runner job cancelled</source>
-        <target state="new">Runner job cancelled</target>
+        <target state="translated">Posao pokretača je prekinut</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -13688,7 +13688,7 @@
       </trans-unit>
       <trans-unit id="2874360404134250412" datatype="html">
         <source>Error in runner job</source>
-        <target state="new">Error in runner job</target>
+        <target state="translated">Greška u poslu pokretača</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -13888,7 +13888,7 @@
       </trans-unit>
       <trans-unit id="7054344823477412274" datatype="html">
         <source>Transcoding jobs created.</source>
-        <target state="translated">Poslovi transkodiranja stvoreni.</target>
+        <target state="translated">Poslovi transkodiranja su stvoreni.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">300</context></context-group>
       </trans-unit>
       <trans-unit id="2591467977473302125" datatype="html">
