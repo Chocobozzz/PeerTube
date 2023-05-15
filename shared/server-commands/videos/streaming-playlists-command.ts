@@ -31,7 +31,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
 
       return result
     } catch (err) {
-      if (!withRetry || currentRetry > 5) throw err
+      if (!withRetry || currentRetry > 10) throw err
 
       await wait(250)
 
@@ -66,7 +66,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
 
       return result
     } catch (err) {
-      if (!withRetry || currentRetry > 5) throw err
+      if (!withRetry || currentRetry > 10) throw err
 
       await wait(250)
 
@@ -99,7 +99,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
 
       return result
     } catch (err) {
-      if (!withRetry || currentRetry > 5) throw err
+      if (!withRetry || currentRetry > 10) throw err
 
       await wait(250)
 
