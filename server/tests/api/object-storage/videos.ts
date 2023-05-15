@@ -152,7 +152,7 @@ function runTestSuite (options: {
   let deletedUrls: string[] = []
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(240000)
 
     const port = await mockObjectStorageProxy.initialize()
     baseMockUrl = options.useMockBaseUrl

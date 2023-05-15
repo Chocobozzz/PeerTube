@@ -6,6 +6,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
 import { VIDEO_LIVE } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
+import { RunnerJobModel } from '@server/models/runner/runner-job'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
 import { VideoLiveModel } from '@server/models/video/video-live'
@@ -25,7 +26,6 @@ import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolu
 import { LiveQuotaStore } from './live-quota-store'
 import { cleanupAndDestroyPermanentLive, getLiveSegmentTime } from './live-utils'
 import { MuxingSession } from './shared'
-import { RunnerJobModel } from '@server/models/runner/runner-job'
 
 const NodeRtmpSession = require('node-media-server/src/node_rtmp_session')
 const context = require('node-media-server/src/node_core_ctx')
@@ -80,6 +80,9 @@ class LiveManager {
 
     events.on('donePublish', sessionId => {
       logger.info('Live session ended.', { sessionId, ...lTags(sessionId) })
+
+      // Force session aborting, so we kill ffmpeg even if it still has data to process (slow CPU)
+      setTimeout(() => this.abortSession(sessionId), 2000)
     })
 
     registerConfigChangedHandler(() => {

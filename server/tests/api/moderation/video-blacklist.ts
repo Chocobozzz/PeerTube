@@ -239,8 +239,6 @@ describe('Test video blacklist', function () {
     let video4UUID: string
 
     before(async function () {
-      this.timeout(10000)
-
       {
         const { uuid } = await servers[0].videos.upload({ attributes: { name: 'Video 3' } })
         video3UUID = uuid
@@ -254,8 +252,6 @@ describe('Test video blacklist', function () {
     })
 
     it('Should blacklist video 3 and keep it federated', async function () {
-      this.timeout(10000)
-
       await command.add({ videoId: video3UUID, reason: 'super reason', unfederate: false })
 
       await waitJobs(servers)
@@ -272,8 +268,6 @@ describe('Test video blacklist', function () {
     })
 
     it('Should unfederate the video', async function () {
-      this.timeout(10000)
-
       await command.add({ videoId: video4UUID, reason: 'super reason', unfederate: true })
 
       await waitJobs(servers)
@@ -285,8 +279,6 @@ describe('Test video blacklist', function () {
     })
 
     it('Should have the video unfederated even after an Update AP message', async function () {
-      this.timeout(10000)
-
       await servers[0].videos.update({ id: video4UUID, attributes: { description: 'super description' } })
 
       await waitJobs(servers)
@@ -309,8 +301,6 @@ describe('Test video blacklist', function () {
     })
 
     it('Should remove the video from blacklist and refederate the video', async function () {
-      this.timeout(10000)
-
       await command.remove({ videoId: video4UUID })
 
       await waitJobs(servers)
