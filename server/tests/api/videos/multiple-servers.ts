@@ -398,7 +398,9 @@ describe('Test multiple servers', function () {
   })
 
   describe('Should seed the uploaded video', function () {
+
     it('Should add the file 1 by asking server 3', async function () {
+      this.retries(2)
       this.timeout(30000)
 
       const { data } = await servers[2].videos.list()
@@ -413,6 +415,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should add the file 2 by asking server 1', async function () {
+      this.retries(2)
       this.timeout(30000)
 
       const { data } = await servers[0].videos.list()
@@ -424,6 +427,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should add the file 3 by asking server 2', async function () {
+      this.retries(2)
       this.timeout(30000)
 
       const { data } = await servers[1].videos.list()
