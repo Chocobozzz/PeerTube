@@ -11,8 +11,21 @@ export class IPCClient {
     await ensureDir(ConfigManager.Instance.getSocketDirectory())
 
     const socketPath = ConfigManager.Instance.getSocketPath()
+
     this.netIPC = new NetIPC({ path: socketPath })
-    await this.netIPC.connect()
+
+    try {
+      await this.netIPC.connect()
+    } catch (err) {
+      if (err.code === 'ECONNREFUSED') {
+        throw new Error(
+          'This runner is not currently running in server mode on this system. ' +
+          'Please run it using the `server` command first (in another terminal for example) and then retry your command.'
+        )
+      }
+
+      throw err
+    }
   }
 
   async askRegister (options: {
