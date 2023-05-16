@@ -55,8 +55,12 @@ const WEBSERVER = {
   WS: '',
   HOSTNAME: '',
   PORT: 0,
+
   RTMP_URL: '',
-  RTMPS_URL: ''
+  RTMPS_URL: '',
+
+  RTMP_BASE_LIVE_URL: '',
+  RTMPS_BASE_LIVE_URL: ''
 }
 
 // Sortable columns per schema
@@ -1244,8 +1248,11 @@ function updateWebserverUrls () {
   const rtmpHostname = CONFIG.LIVE.RTMP.PUBLIC_HOSTNAME || CONFIG.WEBSERVER.HOSTNAME
   const rtmpsHostname = CONFIG.LIVE.RTMPS.PUBLIC_HOSTNAME || CONFIG.WEBSERVER.HOSTNAME
 
-  WEBSERVER.RTMP_URL = 'rtmp://' + rtmpHostname + ':' + CONFIG.LIVE.RTMP.PORT + '/' + VIDEO_LIVE.RTMP.BASE_PATH
-  WEBSERVER.RTMPS_URL = 'rtmps://' + rtmpsHostname + ':' + CONFIG.LIVE.RTMPS.PORT + '/' + VIDEO_LIVE.RTMP.BASE_PATH
+  WEBSERVER.RTMP_URL = 'rtmp://' + rtmpHostname + ':' + CONFIG.LIVE.RTMP.PORT
+  WEBSERVER.RTMPS_URL = 'rtmps://' + rtmpsHostname + ':' + CONFIG.LIVE.RTMPS.PORT
+
+  WEBSERVER.RTMP_BASE_LIVE_URL = WEBSERVER.RTMP_URL + '/' + VIDEO_LIVE.RTMP.BASE_PATH
+  WEBSERVER.RTMPS_BASE_LIVE_URL = WEBSERVER.RTMPS_URL + '/' + VIDEO_LIVE.RTMP.BASE_PATH
 }
 
 function updateWebserverConfig () {

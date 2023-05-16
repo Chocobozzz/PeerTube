@@ -20,27 +20,32 @@ if [ ! -e "$PEERTUBE_PATH/versions" -o ! -e "$PEERTUBE_PATH/config/production.ya
   exit 1
 fi
 
-if [ -x "$(command -v awk)" ] && [ -x "$(command -v sed)" ] ; then
+if [ -x "$(command -v awk)" ] && [ -x "$(command -v sed)" ]; then
     REMAINING=$(df -k $PEERTUBE_PATH | awk '{ print $4}' | sed -n 2p)
     ONE_GB=$((1024 * 1024))
+
     if [ "$REMAINING" -lt "$ONE_GB" ]; then
-    echo "Error - not enough free space for upgrading"
-    echo ""
-    echo "Make sure you have at least 1 GB of free space in $PEERTUBE_PATH"
-    exit 1
+      echo "Error - not enough free space for upgrading"
+      echo ""
+      echo "Make sure you have at least 1 GB of free space in $PEERTUBE_PATH"
+      exit 1
     fi
 fi
 
 # Backup database
-if [ -x "$(command -v pg_dump)" ]
-then
+if [ -x "$(command -v pg_dump)" ]; then
+  mkdir -p $PEERTUBE_PATH/backup
+
   SQL_BACKUP_PATH="$PEERTUBE_PATH/backup/sql-peertube_prod-$(date +"%Y%m%d-%H%M").bak"
+
+  echo "Backing up PostgreSQL database in $SQL_BACKUP_PATH"
+
   DB_USER=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['username'])")
   DB_PASS=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['password'])")
   DB_HOST=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['hostname'])")
   DB_SUFFIX=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['suffix'])")
   DB_NAME=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['name'] || '')")
-  mkdir -p $PEERTUBE_PATH/backup
+
   PGPASSWORD=$DB_PASS pg_dump -U $DB_USER -h $DB_HOST -F c "${DB_NAME:-peertube${DB_SUFFIX}}" -f "$SQL_BACKUP_PATH"
 else
   echo "pg_dump not found. Cannot make a SQL backup!"
@@ -68,20 +73,35 @@ cd $PEERTUBE_PATH/versions
 unzip -o "peertube-${VERSION}.zip"
 rm -f "peertube-${VERSION}.zip"
 
+RELEASE_PAGE_URL="https://github.com/Chocobozzz/PeerTube/releases/tag/${VERSION}"
+LATEST_VERSION_DIRECTORY="$PEERTUBE_PATH/versions/peertube-${VERSION}"
+cd "$LATEST_VERSION_DIRECTORY"
+
 # Launch yarn to check if we have all required dependencies
-cd "$PEERTUBE_PATH/versions/peertube-${VERSION}"
 NOCLIENT=1 yarn install --production --pure-lockfile
 
 # Switch to latest code version
 rm -rf $PEERTUBE_PATH/peertube-latest
-ln -s "$PEERTUBE_PATH/versions/peertube-${VERSION}" $PEERTUBE_PATH/peertube-latest
+ln -s "$LATEST_VERSION_DIRECTORY" $PEERTUBE_PATH/peertube-latest
 cp $PEERTUBE_PATH/peertube-latest/config/default.yaml $PEERTUBE_PATH/config/default.yaml
 
-echo "Differences in configuration files..."
-cd $PEERTUBE_PATH/versions
-diff -u "$(ls -t | head -2 | tail -1)/config/production.yaml.example" "$(ls -t | head -1)/config/production.yaml.example"
+echo ""
+echo "=========================================================="
+echo ""
+
+if [ -x "$(command -v git)" ]; then
+  cd /var/www/peertube
+
+  git merge-file -p config/production.yaml "$LATEST_VERSION_DIRECTORY/config/production.yaml.example" "peertube-latest/config/production.yaml.example" | tee "config/production.yaml.new" > /dev/null
+  echo "/var/www/peertube/config/production.yaml.new generated"
+  echo "You can review it and replace your existing production.yaml configuration"
+else
+  echo "git command not found: unable to generate config/production.yaml.new configuration file based on your existing production.yaml configuration"
+fi
 
 echo ""
-echo "==========================================="
-echo "==   Don’t forget to restart PeerTube!   =="
-echo "==========================================="
+echo "=========================================================="
+echo ""
+echo "Please read the IMPORTANT NOTES on $RELEASE_PAGE_URL"
+echo ""
+echo "Then restart PeerTube!"

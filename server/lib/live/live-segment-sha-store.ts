@@ -1,11 +1,11 @@
-import { writeJson } from 'fs-extra'
+import { rename, writeJson } from 'fs-extra'
+import PQueue from 'p-queue'
 import { basename } from 'path'
 import { mapToJSON } from '@server/helpers/core-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { MStreamingPlaylistVideo } from '@server/types/models'
 import { buildSha256Segment } from '../hls'
 import { storeHLSFileFromPath } from '../object-storage'
-import PQueue from 'p-queue'
 
 const lTags = loggerTagsFactory('live')
 
@@ -14,7 +14,10 @@ class LiveSegmentShaStore {
   private readonly segmentsSha256 = new Map<string, string>()
 
   private readonly videoUUID: string
+
   private readonly sha256Path: string
+  private readonly sha256PathTMP: string
+
   private readonly streamingPlaylist: MStreamingPlaylistVideo
   private readonly sendToObjectStorage: boolean
   private readonly writeQueue = new PQueue({ concurrency: 1 })
@@ -26,7 +29,10 @@ class LiveSegmentShaStore {
     sendToObjectStorage: boolean
   }) {
     this.videoUUID = options.videoUUID
+
     this.sha256Path = options.sha256Path
+    this.sha256PathTMP = options.sha256Path + '.tmp'
+
     this.streamingPlaylist = options.streamingPlaylist
     this.sendToObjectStorage = options.sendToObjectStorage
   }
@@ -66,7 +72,9 @@ class LiveSegmentShaStore {
 
   private writeToDisk () {
     return this.writeQueue.add(async () => {
-      await writeJson(this.sha256Path, mapToJSON(this.segmentsSha256))
+      // Atomic write: use rename instead of move that is not atomic
+      await writeJson(this.sha256PathTMP, mapToJSON(this.segmentsSha256))
+      await rename(this.sha256PathTMP, this.sha256Path)
 
       if (this.sendToObjectStorage) {
         const url = await storeHLSFileFromPath(this.streamingPlaylist, this.sha256Path)

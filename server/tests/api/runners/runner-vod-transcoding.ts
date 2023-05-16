@@ -205,7 +205,7 @@ describe('Test runner VOD transcoding', function () {
 
       expect(body).to.deep.equal(inputFile)
 
-      const payload: VODWebVideoTranscodingSuccess = { videoFile: 'video_short_240p.mp4' }
+      const payload: VODWebVideoTranscodingSuccess = { videoFile: `video_short_${job.payload.output.resolution}p.mp4` }
       await servers[0].runnerJobs.success({ runnerToken, jobUUID, jobToken, payload })
     })
 

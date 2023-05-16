@@ -278,7 +278,7 @@ async function uploadToStorage (options: {
 
   logger.debug(
     'Completed %s%s in bucket %s',
-    bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags()
+    bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, { ...lTags(), reseponseMetadata: response.$metadata }
   )
 
   return getInternalUrl(bucketInfo, objectStorageKey)

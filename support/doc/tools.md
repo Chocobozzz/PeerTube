@@ -376,7 +376,7 @@ peertube-runner [commands] --id instance-3
 
 ### Run the server
 
-Run the runner in server mode so it can run transcoding jobs of registered PeerTube instances:
+You need to run the runner in server mode first so it can run transcoding jobs of registered PeerTube instances:
 
 ```bash
 peertube-runner server
@@ -384,7 +384,7 @@ peertube-runner server
 
 ### Register
 
-To register the runner on a new PeerTube instance so the runner can process its transcoding job:
+Then, you can register the runner on a new PeerTube instance so the runner can process its transcoding job:
 
 ```bash
 peertube-runner register --url http://peertube.example.com --registration-token ptrrt-... --runner-name my-runner-name

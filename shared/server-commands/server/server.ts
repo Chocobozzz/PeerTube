@@ -250,7 +250,7 @@ export class PeerTubeServer {
     const forkOptions = {
       silent: true,
       env,
-      detached: true,
+      detached: false,
       execArgv
     }
 
@@ -317,7 +317,7 @@ export class PeerTubeServer {
   kill () {
     if (!this.app) return Promise.resolve()
 
-    process.kill(-this.app.pid)
+    process.kill(this.app.pid)
 
     this.app = null
 

@@ -14,7 +14,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
     withRetry?: boolean // default false
     currentRetry?: number
   }): Promise<string> {
-    const { videoFileToken, reinjectVideoFileToken, withRetry = false, currentRetry = 1 } = options
+    const { videoFileToken, reinjectVideoFileToken, expectedStatus, withRetry = false, currentRetry = 1 } = options
 
     try {
       const result = await unwrapTextOrDecode(this.getRawRequest({
@@ -29,9 +29,14 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
         defaultExpectedStatus: HttpStatusCode.OK_200
       }))
 
+      // master.m3u8 could be empty
+      if (!result && (!expectedStatus || expectedStatus === HttpStatusCode.OK_200)) {
+        throw new Error('Empty result')
+      }
+
       return result
     } catch (err) {
-      if (!withRetry || currentRetry > 5) throw err
+      if (!withRetry || currentRetry > 10) throw err
 
       await wait(250)
 
@@ -66,7 +71,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
 
       return result
     } catch (err) {
-      if (!withRetry || currentRetry > 5) throw err
+      if (!withRetry || currentRetry > 10) throw err
 
       await wait(250)
 
@@ -99,7 +104,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
 
       return result
     } catch (err) {
-      if (!withRetry || currentRetry > 5) throw err
+      if (!withRetry || currentRetry > 10) throw err
 
       await wait(250)
 

@@ -15,7 +15,7 @@ export class FFmpegTranscodingWrapper extends AbstractTranscodingWrapper {
   async run () {
     this.ffmpegCommand = CONFIG.LIVE.TRANSCODING.ENABLED
       ? await this.buildFFmpegLive().getLiveTranscodingCommand({
-        inputUrl: this.inputUrl,
+        inputUrl: this.inputLocalUrl,
 
         outPath: this.outDirectory,
         masterPlaylistName: this.streamingPlaylist.playlistFilename,
@@ -31,7 +31,7 @@ export class FFmpegTranscodingWrapper extends AbstractTranscodingWrapper {
         hasAudio: this.hasAudio
       })
       : this.buildFFmpegLive().getLiveMuxingCommand({
-        inputUrl: this.inputUrl,
+        inputUrl: this.inputLocalUrl,
         outPath: this.outDirectory,
 
         masterPlaylistName: this.streamingPlaylist.playlistFilename,

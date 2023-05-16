@@ -4,7 +4,7 @@ import { AbstractTranscodingWrapper } from './abstract-transcoding-wrapper'
 export class RemoteTranscodingWrapper extends AbstractTranscodingWrapper {
   async run () {
     await new LiveRTMPHLSTranscodingJobHandler().create({
-      rtmpUrl: this.inputUrl,
+      rtmpUrl: this.inputPublicUrl,
       toTranscode: this.toTranscode,
       video: this.videoLive.Video,
       outputDirectory: this.outDirectory,
