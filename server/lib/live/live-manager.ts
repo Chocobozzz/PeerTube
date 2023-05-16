@@ -4,7 +4,7 @@ import { join } from 'path'
 import { createServer as createServerTLS, Server as ServerTLS } from 'tls'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
-import { VIDEO_LIVE } from '@server/initializers/constants'
+import { VIDEO_LIVE, WEBSERVER } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { RunnerJobModel } from '@server/models/runner/runner-job'
 import { UserModel } from '@server/models/user/user'
@@ -73,8 +73,10 @@ class LiveManager {
       }
 
       const session = this.getContext().sessions.get(sessionId)
+      const inputLocalUrl = session.inputOriginLocalUrl + streamPath
+      const inputPublicUrl = session.inputOriginPublicUrl + streamPath
 
-      this.handleSession(sessionId, session.inputOriginUrl + streamPath, splittedPath[2])
+      this.handleSession({ sessionId, inputPublicUrl, inputLocalUrl, streamKey: splittedPath[2] })
         .catch(err => logger.error('Cannot handle sessions.', { err, ...lTags(sessionId) }))
     })
 
@@ -110,7 +112,8 @@ class LiveManager {
       this.rtmpServer = createServer(socket => {
         const session = new NodeRtmpSession(config, socket)
 
-        session.inputOriginUrl = 'rtmp://127.0.0.1:' + CONFIG.LIVE.RTMP.PORT
+        session.inputOriginLocalUrl = 'rtmp://127.0.0.1:' + CONFIG.LIVE.RTMP.PORT
+        session.inputOriginPublicUrl = WEBSERVER.RTMP_URL
         session.run()
       })
 
@@ -133,7 +136,8 @@ class LiveManager {
       this.rtmpsServer = createServerTLS(serverOptions, socket => {
         const session = new NodeRtmpSession(config, socket)
 
-        session.inputOriginUrl = 'rtmps://127.0.0.1:' + CONFIG.LIVE.RTMPS.PORT
+        session.inputOriginLocalUrl = 'rtmps://127.0.0.1:' + CONFIG.LIVE.RTMPS.PORT
+        session.inputOriginPublicUrl = WEBSERVER.RTMPS_URL
         session.run()
       })
 
@@ -210,7 +214,14 @@ class LiveManager {
     }
   }
 
-  private async handleSession (sessionId: string, inputUrl: string, streamKey: string) {
+  private async handleSession (options: {
+    sessionId: string
+    inputLocalUrl: string
+    inputPublicUrl: string
+    streamKey: string
+  }) {
+    const { inputLocalUrl, inputPublicUrl, sessionId, streamKey } = options
+
     const videoLive = await VideoLiveModel.loadByStreamKey(streamKey)
     if (!videoLive) {
       logger.warn('Unknown live video with stream key %s.', streamKey, lTags(sessionId))
@@ -239,18 +250,18 @@ class LiveManager {
     this.videoSessions.set(video.uuid, sessionId)
 
     const now = Date.now()
-    const probe = await ffprobePromise(inputUrl)
+    const probe = await ffprobePromise(inputLocalUrl)
 
     const [ { resolution, ratio }, fps, bitrate, hasAudio ] = await Promise.all([
-      getVideoStreamDimensionsInfo(inputUrl, probe),
-      getVideoStreamFPS(inputUrl, probe),
-      getVideoStreamBitrate(inputUrl, probe),
-      hasAudioStream(inputUrl, probe)
+      getVideoStreamDimensionsInfo(inputLocalUrl, probe),
+      getVideoStreamFPS(inputLocalUrl, probe),
+      getVideoStreamBitrate(inputLocalUrl, probe),
+      hasAudioStream(inputLocalUrl, probe)
     ])
 
     logger.info(
       '%s probing took %d ms (bitrate: %d, fps: %d, resolution: %d)',
-      inputUrl, Date.now() - now, bitrate, fps, resolution, lTags(sessionId, video.uuid)
+      inputLocalUrl, Date.now() - now, bitrate, fps, resolution, lTags(sessionId, video.uuid)
     )
 
     const allResolutions = await Hooks.wrapObject(
@@ -268,7 +279,8 @@ class LiveManager {
       sessionId,
       videoLive,
 
-      inputUrl,
+      inputLocalUrl,
+      inputPublicUrl,
       fps,
       bitrate,
       ratio,
@@ -281,7 +293,9 @@ class LiveManager {
     sessionId: string
     videoLive: MVideoLiveVideoWithSetting
 
-    inputUrl: string
+    inputLocalUrl: string
+    inputPublicUrl: string
+
     fps: number
     bitrate: number
     ratio: number
@@ -303,7 +317,7 @@ class LiveManager {
       videoLive,
       user,
 
-      ...pick(options, [ 'inputUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio' ])
+      ...pick(options, [ 'inputLocalUrl', 'inputPublicUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio' ])
     })
 
     muxingSession.on('live-ready', () => this.publishAndFederateLive(videoLive, localLTags))

@@ -62,7 +62,10 @@ class MuxingSession extends EventEmitter {
   private readonly user: MUserId
   private readonly sessionId: string
   private readonly videoLive: MVideoLiveVideo
-  private readonly inputUrl: string
+
+  private readonly inputLocalUrl: string
+  private readonly inputPublicUrl: string
+
   private readonly fps: number
   private readonly allResolutions: number[]
 
@@ -107,7 +110,10 @@ class MuxingSession extends EventEmitter {
     user: MUserId
     sessionId: string
     videoLive: MVideoLiveVideo
-    inputUrl: string
+
+    inputLocalUrl: string
+    inputPublicUrl: string
+
     fps: number
     bitrate: number
     ratio: number
@@ -120,7 +126,10 @@ class MuxingSession extends EventEmitter {
     this.user = options.user
     this.sessionId = options.sessionId
     this.videoLive = options.videoLive
-    this.inputUrl = options.inputUrl
+
+    this.inputLocalUrl = options.inputLocalUrl
+    this.inputPublicUrl = options.inputPublicUrl
+
     this.fps = options.fps
 
     this.bitrate = options.bitrate
@@ -375,7 +384,7 @@ class MuxingSession extends EventEmitter {
   private onTranscodedEnded () {
     this.emit('transcoding-end', ({ videoUUID: this.videoUUID }))
 
-    logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', this.inputUrl, this.lTags())
+    logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', this.inputLocalUrl, this.lTags())
 
     setTimeout(() => {
       // Wait latest segments generation, and close watchers
@@ -468,7 +477,8 @@ class MuxingSession extends EventEmitter {
 
       lTags: this.lTags,
 
-      inputUrl: this.inputUrl,
+      inputLocalUrl: this.inputLocalUrl,
+      inputPublicUrl: this.inputPublicUrl,
 
       toTranscode: this.allResolutions.map(resolution => ({
         resolution,
