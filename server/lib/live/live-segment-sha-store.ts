@@ -1,4 +1,4 @@
-import { move, writeJson } from 'fs-extra'
+import { rename, writeJson } from 'fs-extra'
 import PQueue from 'p-queue'
 import { basename } from 'path'
 import { mapToJSON } from '@server/helpers/core-utils'
@@ -72,9 +72,9 @@ class LiveSegmentShaStore {
 
   private writeToDisk () {
     return this.writeQueue.add(async () => {
-      // Atomic write
+      // Atomic write: use rename instead of move that is not atomic
       await writeJson(this.sha256PathTMP, mapToJSON(this.segmentsSha256))
-      await move(this.sha256PathTMP, this.sha256Path, { overwrite: true })
+      await rename(this.sha256PathTMP, this.sha256Path)
 
       if (this.sendToObjectStorage) {
         const url = await storeHLSFileFromPath(this.streamingPlaylist, this.sha256Path)
