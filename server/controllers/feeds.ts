@@ -234,7 +234,7 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
   const videoChannel = res.locals.videoChannel
   const nsfw = buildNSFWFilter()
 
-  const { name, description, imageUrl, accountImageUrl, email, link, accountLink } = await buildFeedMetadata({ videoChannel })
+  const { name, userName, description, imageUrl, accountImageUrl, email, link, accountLink } = await buildFeedMetadata({ videoChannel })
 
   const options = {
     accountId: account ? account.id : null,
@@ -278,7 +278,7 @@ async function generateVideoPodcastFeed (req: express.Request, res: express.Resp
     isPodcast: true,
     imageUrl,
     ...(email && { locked: { isLocked: true, email } }), // Default to true because we have no way of offering a redirect yet
-    person: [ { name, href: accountLink, img: accountImageUrl } ],
+    person: [ { name: userName, href: accountLink, img: accountImageUrl } ],
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search,
     medium: 'video',
@@ -637,6 +637,7 @@ async function buildFeedMetadata (options: {
   let imageUrl = WEBSERVER.URL + '/client/assets/images/icons/icon-96x96.png'
   let accountImageUrl: string
   let name: string
+  let userName: string
   let description: string
   let email: string
   let link: string
@@ -658,6 +659,7 @@ async function buildFeedMetadata (options: {
     }
 
     user = await UserModel.loadById(videoChannel.Account.userId)
+    userName = videoChannel.Account.getDisplayName()
   } else if (account) {
     name = account.getDisplayName()
     description = account.description
@@ -686,5 +688,5 @@ async function buildFeedMetadata (options: {
     email = user.email
   }
 
-  return { name, description, imageUrl, accountImageUrl, email, link, accountLink }
+  return { name, userName, description, imageUrl, accountImageUrl, email, link, accountLink }
 }
