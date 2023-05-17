@@ -17,13 +17,15 @@ function cacheRoute (duration: string) {
 function cacheRouteFactory (options: APICacheOptions) {
   const instance = new ApiCache({ ...defaultOptions, ...options })
 
-  return instance.buildMiddleware.bind(instance)
+  return { instance, middleware: instance.buildMiddleware.bind(instance) }
 }
 
-async function clearCacheRoute (target: string) {
-  const instance = new ApiCache(defaultOptions)
+// ---------------------------------------------------------------------------
 
-  return instance.clearRoute(target)
+function buildPodcastGroupsCache (options: {
+  channelId: number
+}) {
+  return 'podcast-feed-' + options.channelId
 }
 
 // ---------------------------------------------------------------------------
@@ -31,5 +33,6 @@ async function clearCacheRoute (target: string) {
 export {
   cacheRoute,
   cacheRouteFactory,
-  clearCacheRoute
+
+  buildPodcastGroupsCache
 }

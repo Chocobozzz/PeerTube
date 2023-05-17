@@ -21,6 +21,7 @@ import {
   MActorDefaultLight,
   MActorFormattable,
   MActorHost,
+  MActorHostOnly,
   MActorLight,
   MActorSummary,
   MActorSummaryFormattable,
@@ -77,8 +78,12 @@ export type MChannelAccountLight =
   Use<'Account', MAccountLight>
 
 export type MChannelHost =
-  MChannelId &
+  MChannel &
   Use<'Actor', MActorHost>
+
+export type MChannelHostOnly =
+  MChannelId &
+  Use<'Actor', MActorHostOnly>
 
 // ############################################################################
 

@@ -4,5 +4,5 @@ export const enum VideoInclude {
   BLACKLISTED = 1 << 1,
   BLOCKED_OWNER = 1 << 2,
   FILES = 1 << 3,
-  TAGS = 1 << 4
+  CAPTIONS = 1 << 4
 }

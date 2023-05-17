@@ -11,7 +11,7 @@ import {
   isUserBlockedReasonValid,
   isUserDescriptionValid,
   isUserDisplayNameValid,
-  isUserIsEmailPublic,
+  isUserEmailPublicValid,
   isUserNoModal,
   isUserNSFWPolicyValid,
   isUserP2PEnabledValid,
@@ -214,9 +214,9 @@ const usersUpdateMeValidator = [
   body('password')
     .optional()
     .custom(isUserPasswordValid),
-  body('isEmailPublic')
+  body('emailPublic')
     .optional()
-    .custom(isUserIsEmailPublic),
+    .custom(isUserEmailPublicValid),
   body('email')
     .optional()
     .isEmail(),

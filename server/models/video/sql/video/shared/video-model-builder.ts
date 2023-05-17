@@ -109,10 +109,6 @@ export class VideoModelBuilder {
           this.setBlockedOwner(row, videoModel)
           this.setBlockedServer(row, videoModel)
         }
-
-        if (include & VideoInclude.TAGS) {
-          this.addTag(row, videoModel)
-        }
       }
     }
 

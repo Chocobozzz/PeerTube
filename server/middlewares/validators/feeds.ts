@@ -3,6 +3,7 @@ import { param, query } from 'express-validator'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isValidRSSFeed } from '../../helpers/custom-validators/feeds'
 import { exists, isIdOrUUIDValid, isIdValid, toCompleteUUID } from '../../helpers/custom-validators/misc'
+import { buildPodcastGroupsCache } from '../cache'
 import {
   areValidationErrors,
   checkCanSeeVideo,
@@ -70,6 +71,8 @@ function feedContentTypeResponse (
   return next()
 }
 
+// ---------------------------------------------------------------------------
+
 const videoFeedsValidator = [
   query('accountId')
     .optional()
@@ -97,6 +100,8 @@ const videoFeedsValidator = [
   }
 ]
 
+// ---------------------------------------------------------------------------
+
 const videoFeedsPodcastValidator = [
   query('videoChannelId')
     .custom(isIdValid),
@@ -109,6 +114,17 @@ const videoFeedsPodcastValidator = [
     return next()
   }
 ]
+
+const videoFeedsPodcastSetCacheKey = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (req.query.videoChannelId) {
+      res.locals.apicacheGroups = [ buildPodcastGroupsCache({ channelId: req.query.videoChannelId }) ]
+    }
+
+    return next()
+  }
+]
+// ---------------------------------------------------------------------------
 
 const videoSubscriptionFeedsValidator = [
   query('accountId')
@@ -158,5 +174,6 @@ export {
   videoFeedsValidator,
   videoFeedsPodcastValidator,
   videoSubscriptionFeedsValidator,
+  videoFeedsPodcastSetCacheKey,
   videoCommentsFeedsValidator
 }

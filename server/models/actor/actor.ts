@@ -46,8 +46,8 @@ import {
   MActorFormattable,
   MActorFull,
   MActorHost,
+  MActorHostOnly,
   MActorId,
-  MActorServer,
   MActorSummaryFormattable,
   MActorUrl,
   MActorWithInboxes
@@ -663,15 +663,15 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     return this.serverId === null
   }
 
-  getWebfingerUrl (this: MActorServer) {
+  getWebfingerUrl (this: MActorHost) {
     return 'acct:' + this.preferredUsername + '@' + this.getHost()
   }
 
-  getIdentifier () {
+  getIdentifier (this: MActorHost) {
     return this.Server ? `${this.preferredUsername}@${this.Server.host}` : this.preferredUsername
   }
 
-  getHost (this: MActorHost) {
+  getHost (this: MActorHostOnly) {
     return this.Server ? this.Server.host : WEBSERVER.HOST
   }
 

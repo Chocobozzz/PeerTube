@@ -80,7 +80,7 @@ function isUserAutoPlayNextVideoPlaylistValid (value: any) {
   return isBooleanValid(value)
 }
 
-function isUserIsEmailPublic (value: any) {
+function isUserEmailPublicValid (value: any) {
   return isBooleanValid(value)
 }
 
@@ -118,6 +118,6 @@ export {
   isUserAutoPlayNextVideoPlaylistValid,
   isUserDisplayNameValid,
   isUserDescriptionValid,
-  isUserIsEmailPublic,
+  isUserEmailPublicValid,
   isUserNoModal
 }

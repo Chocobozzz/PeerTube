@@ -27,7 +27,7 @@ import { AccountModel } from '../models/account/account'
 import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
-import { MAccountActor, MChannelActor, MVideo, MVideoPlaylist } from '../types/models'
+import { MAccountHost, MChannelHost, MVideo, MVideoPlaylist } from '../types/models'
 import { getActivityStreamDuration } from './activitypub/activity'
 import { getBiggestActorImage } from './actor-image'
 import { Hooks } from './plugins/hooks'
@@ -260,7 +260,7 @@ class ClientHtml {
   }
 
   private static async getAccountOrChannelHTMLPage (
-    loader: () => Promise<MAccountActor | MChannelActor>,
+    loader: () => Promise<MAccountHost | MChannelHost>,
     req: express.Request,
     res: express.Response
   ) {
@@ -280,7 +280,7 @@ class ClientHtml {
     let customHtml = ClientHtml.addTitleTag(html, entity.getDisplayName())
     customHtml = ClientHtml.addDescriptionTag(customHtml, description)
 
-    const url = entity.getLocalUrl()
+    const url = entity.getClientUrl()
     const originUrl = entity.Actor.url
     const siteName = CONFIG.INSTANCE.NAME
     const title = entity.getDisplayName()

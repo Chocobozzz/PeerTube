@@ -19,7 +19,6 @@ import {
   asyncRetryTransactionMiddleware,
   authenticate,
   checkVideoFollowConstraints,
-  clearPodcastFeedCache,
   commonVideosFiltersValidator,
   optionalAuthenticate,
   paginationValidator,
@@ -211,9 +210,6 @@ async function removeVideo (req: express.Request, res: express.Response) {
 
   auditLogger.delete(getAuditIdFromRes(res), new VideoAuditView(videoInstance.toFormattedDetailsJSON()))
   logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
-
-  // Clear cache for Podcast RSS feed when video is uploaded
-  await clearPodcastFeedCache(videoInstance.channelId)
 
   Hooks.runAction('action:api.video.deleted', { video: videoInstance, req, res })
 

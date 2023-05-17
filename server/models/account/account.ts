@@ -28,8 +28,9 @@ import {
   MAccountAP,
   MAccountDefault,
   MAccountFormattable,
+  MAccountHost,
   MAccountSummaryFormattable,
-  MChannelActor
+  MChannelHost
 } from '../../types/models'
 import { ActorModel } from '../actor/actor'
 import { ActorFollowModel } from '../actor/actor-follow'
@@ -410,10 +411,6 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
       .findAll(query)
   }
 
-  getClientUrl () {
-    return WEBSERVER.URL + '/accounts/' + this.Actor.getIdentifier()
-  }
-
   toFormattedJSON (this: MAccountFormattable): Account {
     return {
       ...this.Actor.toFormattedJSON(),
@@ -463,8 +460,9 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
     return this.name
   }
 
-  getLocalUrl (this: MAccountActor | MChannelActor) {
-    return WEBSERVER.URL + `/accounts/` + this.Actor.preferredUsername
+  // Avoid error when running this method on MAccount... | MChannel...
+  getClientUrl (this: MAccountHost | MChannelHost) {
+    return WEBSERVER.URL + '/a/' + this.Actor.getIdentifier()
   }
 
   isBlocked () {

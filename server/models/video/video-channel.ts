@@ -1,5 +1,8 @@
 import { FindOptions, Includeable, literal, Op, QueryTypes, ScopeOptions, Transaction, WhereOptions } from 'sequelize'
 import {
+  AfterCreate,
+  AfterDestroy,
+  AfterUpdate,
   AllowNull,
   BeforeDestroy,
   BelongsTo,
@@ -18,7 +21,8 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { CONFIG } from '@server/initializers/config'
-import { MAccountActor } from '@server/types/models'
+import { InternalEventEmitter } from '@server/lib/internal-event-emitter'
+import { MAccountHost } from '@server/types/models'
 import { forceNumber, pick } from '@shared/core-utils'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
@@ -36,6 +40,7 @@ import {
   MChannelAP,
   MChannelBannerAccountDefault,
   MChannelFormattable,
+  MChannelHost,
   MChannelSummaryFormattable
 } from '../../types/models/video'
 import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
@@ -415,6 +420,21 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
     hooks: true
   })
   VideoPlaylists: VideoPlaylistModel[]
+
+  @AfterCreate
+  static notifyCreate (channel: MChannel) {
+    InternalEventEmitter.Instance.emit('channel-created', { channel })
+  }
+
+  @AfterUpdate
+  static notifyUpdate (channel: MChannel) {
+    InternalEventEmitter.Instance.emit('channel-updated', { channel })
+  }
+
+  @AfterDestroy
+  static notifyDestroy (channel: MChannel) {
+    InternalEventEmitter.Instance.emit('channel-deleted', { channel })
+  }
 
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: VideoChannelModel, options) {
@@ -827,8 +847,9 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
     })
   }
 
-  getLocalUrl (this: MAccountActor | MChannelActor) {
-    return WEBSERVER.URL + `/video-channels/` + this.Actor.preferredUsername
+  // Avoid error when running this method on MAccount... | MChannel...
+  getClientUrl (this: MAccountHost | MChannelHost) {
+    return WEBSERVER.URL + '/c/' + this.Actor.getIdentifier()
   }
 
   getDisplayName () {

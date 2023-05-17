@@ -35,11 +35,12 @@ export class FeedCommand extends AbstractCommand {
     channelId: number
   }) {
     const { ignoreCache, channelId } = options
-    const path = `/feeds/podcast/videos.xml?videoChannelId=${channelId}`
+    const path = `/feeds/podcast/videos.xml`
 
     const query: { [id: string]: string } = {}
 
     if (ignoreCache) query.v = buildUUID()
+    if (channelId) query.videoChannelId = channelId + ''
 
     return this.getRequestText({
       ...options,

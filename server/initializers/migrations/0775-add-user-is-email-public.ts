@@ -1,17 +1,18 @@
 import * as Sequelize from 'sequelize'
-import { Migration } from '../../models/migrations'
 
 async function up (utils: {
   transaction: Sequelize.Transaction
   queryInterface: Sequelize.QueryInterface
   sequelize: Sequelize.Sequelize
 }): Promise<void> {
+
   const data = {
     type: Sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: false
-  } as Migration.Boolean
-  await utils.queryInterface.addColumn('user', 'isEmailPublic', data)
+  }
+
+  await utils.queryInterface.addColumn('user', 'emailPublic', data)
 }
 
 function down (options) {

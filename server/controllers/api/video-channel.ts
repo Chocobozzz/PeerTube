@@ -22,7 +22,6 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  clearPodcastFeedCache,
   commonVideosFiltersValidator,
   ensureCanManageChannelOrAccount,
   optionalAuthenticate,
@@ -301,9 +300,6 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
         new VideoChannelAuditView(videoChannelInstanceUpdated.toFormattedJSON()),
         oldVideoChannelAuditKeys
       )
-
-      // Clear cache for Podcast RSS feed when video channel is updated
-      await clearPodcastFeedCache(videoChannelInstanceUpdated.id)
 
       Hooks.runAction('action:api.video-channel.updated', { videoChannel: videoChannelInstanceUpdated, req, res })
 

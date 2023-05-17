@@ -68,7 +68,7 @@
   </div>
 
   <div class="col-12 col-lg-8 col-xl-9">
-    <my-account-two-factor-button [user]="user"  [userInformationLoaded]="userInformationLoaded"></my-account-two-factor-button>
+    <my-account-two-factor-button [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-two-factor-button>
   </div>
 </div>
 
@@ -78,6 +78,8 @@
   </div>
 
   <div class="col-12 col-lg-8 col-xl-9">
+    <my-account-email-preferences class="d-block mb-5" [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-email-preferences>
+
     <my-account-change-email></my-account-change-email>
   </div>
 </div>

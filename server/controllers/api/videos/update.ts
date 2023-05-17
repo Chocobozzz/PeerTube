@@ -2,10 +2,12 @@ import express from 'express'
 import { Transaction } from 'sequelize/types'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
 import { addVideoJobsAfterUpdate, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 import { setVideoPrivacy } from '@server/lib/video-privacy'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { FilteredModelAttributes } from '@server/types'
 import { MVideoFullLight } from '@server/types/models'
+import { forceNumber } from '@shared/core-utils'
 import { HttpStatusCode, VideoUpdate } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
@@ -15,17 +17,9 @@ import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
-import {
-  asyncMiddleware,
-  asyncRetryTransactionMiddleware,
-  authenticate,
-  clearPodcastFeedCache,
-  videosUpdateValidator
-} from '../../../middlewares'
+import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosUpdateValidator } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
-import { VideoPathManager } from '@server/lib/video-path-manager'
-import { forceNumber } from '@shared/core-utils'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -146,9 +140,6 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
       return { videoInstanceUpdated, isNewVideo }
     })
-
-    // Clear cache for Podcast RSS feed when video is updated
-    await clearPodcastFeedCache(videoInstanceUpdated.channelId)
 
     Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated, body: req.body, req, res })
 

@@ -27,7 +27,6 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  clearPodcastFeedCache,
   videosAddLegacyValidator,
   videosAddResumableInitValidator,
   videosAddResumableValidator
@@ -207,9 +206,6 @@ async function addVideo (options: {
 
   addVideoJobsAfterUpload(videoCreated, videoFile, user)
     .catch(err => logger.error('Cannot build new video jobs of %s.', videoCreated.uuid, { err, ...lTags(videoCreated.uuid) }))
-
-  // Clear cache for Podcast RSS feed when video is uploaded
-  await clearPodcastFeedCache(videoCreated.id)
 
   Hooks.runAction('action:api.video.uploaded', { video: videoCreated, req, res })
 

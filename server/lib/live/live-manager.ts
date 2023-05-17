@@ -6,7 +6,6 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
 import { VIDEO_LIVE, WEBSERVER } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
-import { clearPodcastFeedCache } from '@server/middlewares'
 import { RunnerJobModel } from '@server/models/runner/runner-job'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
@@ -389,9 +388,6 @@ class LiveManager {
 
       await wait(getLiveSegmentTime(live.latencyMode) * 1000 * VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION)
 
-      // Clear cache for Podcast RSS feed when live stream starts
-      await clearPodcastFeedCache(video.channelId)
-
       try {
         await federateVideoIfNeeded(video, false)
       } catch (err) {
@@ -464,9 +460,6 @@ class LiveManager {
         : VideoState.LIVE_ENDED
 
       await fullVideo.save()
-
-      // Clear cache for Podcast RSS feed when live stream ends
-      await clearPodcastFeedCache(fullVideo.channelId)
 
       PeerTubeSocket.Instance.sendVideoLiveNewState(fullVideo)
 

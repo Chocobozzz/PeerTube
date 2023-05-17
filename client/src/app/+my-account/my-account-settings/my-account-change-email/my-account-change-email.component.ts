@@ -1,10 +1,10 @@
 import { forkJoin } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
-import { AuthService, ServerService, UserService } from '@app/core'
+import { AuthService, Notifier, ServerService, UserService } from '@app/core'
 import { USER_EMAIL_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { HttpStatusCode, User, UserUpdateMe } from '@shared/models'
+import { HttpStatusCode, User } from '@shared/models'
 
 @Component({
   selector: 'my-account-change-email',
@@ -16,13 +16,12 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
   success: string = null
   user: User = null
 
-  emailPreferences = { isEmailPublic: false }
-
   constructor (
     protected formReactiveService: FormReactiveService,
     private authService: AuthService,
     private userService: UserService,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private notifier: Notifier
   ) {
     super()
   }
@@ -34,23 +33,6 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
     })
 
     this.user = this.authService.getUser()
-    this.emailPreferences.isEmailPublic = this.user.isEmailPublic
-  }
-
-  updateIsEmailPublic () {
-    console.log('model changed')
-    const details: UserUpdateMe = {
-      isEmailPublic: this.emailPreferences.isEmailPublic
-    }
-
-    this.userService.updateMyProfile(details)
-      .subscribe({
-        next: () => {
-          this.authService.refreshUserInformation()
-        },
-
-        error: err => console.log(err.message)
-      })
   }
 
   changeEmail () {

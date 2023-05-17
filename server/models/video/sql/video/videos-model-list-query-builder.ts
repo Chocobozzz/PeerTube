@@ -80,10 +80,6 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
     this.includeAccounts()
     this.includeThumbnails()
 
-    if (options.include & VideoInclude.TAGS) {
-      this.includeTags()
-    }
-
     if (options.user) {
       this.includeUserHistory(options.user.id)
     }

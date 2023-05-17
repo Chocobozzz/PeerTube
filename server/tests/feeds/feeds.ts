@@ -101,7 +101,6 @@ describe('Test syndication feeds', () => {
 
     await waitJobs([ ...servers, serverHLSOnly ])
 
-    await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath() })
     await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath('-podcast-custom-tags') })
   })
 
@@ -389,7 +388,7 @@ describe('Test syndication feeds', () => {
       const alternateEnclosure = liveItem['podcast:alternateEnclosure']
       expect(alternateEnclosure).to.exist
       expect(alternateEnclosure['@_type']).to.equal('application/x-mpegURL')
-      expect(alternateEnclosure['@_title']).to.equal('Live Stream 1')
+      expect(alternateEnclosure['@_title']).to.equal('HLS live stream')
       expect(alternateEnclosure['@_default']).to.equal(true)
 
       expect(alternateEnclosure['podcast:source']['@_uri']).to.contain('/master.m3u8')
