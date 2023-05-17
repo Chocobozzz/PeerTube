@@ -550,6 +550,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
                   model: ActorFollowModel.unscoped(),
                   required: true,
                   where: {
+                    state: 'accepted',
                     targetActorId: actorId
                   }
                 }
