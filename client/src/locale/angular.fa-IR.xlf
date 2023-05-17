@@ -7895,7 +7895,7 @@
       </trans-unit>
       <trans-unit id="2127446333083057097" datatype="html">
         <source>Domain is required.</source>
-        <target state="translated">دامنه مورد نیاز است.</target>
+        <target state="translated">دامنه الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context><context context-type="linenumber">92</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
@@ -10489,7 +10489,7 @@
       </trans-unit>
       <trans-unit id="7784486624424057376" datatype="html">
         <source>Instance name is required.</source>
-        <target state="translated">نام سایت مورد نیاز است.</target>
+        <target state="translated">نام سایت الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="3281212084219111058" datatype="html">
@@ -10499,12 +10499,12 @@
       </trans-unit>
       <trans-unit id="6033463036257195528" datatype="html">
         <source>Twitter username is required.</source>
-        <target state="translated">نام کاربری توییتر مورد نیاز است.</target>
+        <target state="translated">نام کاربری توییتر الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="8198703669620791633" datatype="html">
         <source>Previews cache size is required.</source>
-        <target state="translated">اندازه حافظه پنهان پیش نمایش  مورد نیاز است.</target>
+        <target state="translated">اندازه حافظه پنهان پیش نمایش الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="3971192070835972256" datatype="html">
@@ -10534,7 +10534,7 @@
       </trans-unit>
       <trans-unit id="818392297325723982" datatype="html">
         <source>Signup limit is required.</source>
-        <target state="translated">محدودیت ثبت نام لازم است.</target>
+        <target state="translated">محدودیت ثبت نام الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="5630311719329022718" datatype="html">
@@ -10552,7 +10552,7 @@
       </trans-unit>
       <trans-unit id="346485141381099383" datatype="html">
         <source>Signup minimum age is required.</source>
-        <target state="translated">حداقل سن ثبت نام لازم است.</target>
+        <target state="translated">حداقل سن ثبت نام الزامی است.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">55</context>
@@ -10576,7 +10576,7 @@
       </trans-unit>
       <trans-unit id="240096858386658337" datatype="html">
         <source>Admin email is required.</source>
-        <target state="translated">ایمیل مدیریت مورد نیاز است.</target>
+        <target state="translated">ایمیل مدیرسایت الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="4392533896009432078" datatype="html">
@@ -10586,7 +10586,7 @@
       </trans-unit>
       <trans-unit id="6172217783476989430" datatype="html">
         <source>Transcoding threads is required.</source>
-        <target state="translated">مسیرهای تغییر کد الزامی است.</target>
+        <target state="translated">تعداد مسیرهای تغییر کد الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="5320424292625586941" datatype="html">
@@ -10596,7 +10596,7 @@
       </trans-unit>
       <trans-unit id="8185661254949728718" datatype="html">
         <source>Max live duration is required.</source>
-        <target state="translated">حداکثر مدت زمان برای ویدئو های پخش زنده لازم است.</target>
+        <target state="translated">حداکثر مدت زمان برای ویدئوهای پخش زنده الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="8892863662898651766" datatype="html">
@@ -10606,7 +10606,7 @@
       </trans-unit>
       <trans-unit id="8196240396863235661" datatype="html">
         <source>Max instance lives is required.</source>
-        <target state="translated">حداکثر تعداد پخش زنده برای سایت مورد نیاز است.</target>
+        <target state="translated">حداکثر تعداد پخش زنده برای سایت الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="913683464711184925" datatype="html">
@@ -10616,7 +10616,7 @@
       </trans-unit>
       <trans-unit id="5614457087254770778" datatype="html">
         <source>Max user lives is required.</source>
-        <target state="translated">حداکثر ویدئو های پخش زنده کاربر مورد نیاز است.</target>
+        <target state="translated">حداکثر ویدئوهای پخش زنده کاربر الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="2779726697233311712" datatype="html">
@@ -10626,7 +10626,7 @@
       </trans-unit>
       <trans-unit id="351272950792130803" datatype="html">
         <source>Max video channels per user is required.</source>
-        <target state="translated">حداکثر کانال های ویدئویی برای هر کاربر مورد نیاز است.</target>
+        <target state="translated">حداکثر کانال‌های ویدئویی برای هر کاربر الزامی است.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">104</context>
@@ -10650,7 +10650,7 @@
       </trans-unit>
       <trans-unit id="5832601947705094130" datatype="html">
         <source>Concurrency is required.</source>
-        <target state="translated">همبستگی لازم است.</target>
+        <target state="translated">تعداد همزمانی الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="4751566092251132371" datatype="html">
@@ -10670,7 +10670,7 @@
       </trans-unit>
       <trans-unit id="8602814243662345124" datatype="html">
         <source>Email is required.</source>
-        <target state="translated">ایمیل مورد نیاز است.</target>
+        <target state="translated">ایمیل الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">7</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
@@ -10700,7 +10700,7 @@
       </trans-unit>
       <trans-unit id="4968369344159400023" datatype="html">
         <source>Your name is required.</source>
-        <target state="translated">نام شما مورد نیاز است.</target>
+        <target state="translated">نام شما الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="5799695548385507586" datatype="html">
@@ -10715,7 +10715,7 @@
       </trans-unit>
       <trans-unit id="3981804692726336204" datatype="html">
         <source>A subject is required.</source>
-        <target state="translated">یک موضوع مورد نیاز است.</target>
+        <target state="translated">موضوع پیام الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="7787099349830266861" datatype="html">
@@ -10730,7 +10730,7 @@
       </trans-unit>
       <trans-unit id="847704400962945123" datatype="html">
         <source>A message is required.</source>
-        <target state="translated">یک پیام مورد نیاز است.</target>
+        <target state="translated">متن پیام الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="3871842658394273178" datatype="html">
@@ -10745,20 +10745,20 @@
       </trans-unit>
       <trans-unit id="3868123820758341861" datatype="html">
         <source>Username is required.</source>
-        <target state="translated">نام کاربری لازم است.</target>
+        <target state="translated">نام کاربری الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context><context context-type="linenumber">9</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="3577237269587081090" datatype="html">
         <source>Password is required.</source>
-        <target state="translated">رمز عبور مورد نیاز است.</target>
+        <target state="translated">رمز عبور الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context><context context-type="linenumber">18</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">60</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="3152303769378345477" datatype="html">
         <source>Confirmation of the password is required.</source>
-        <target state="translated">تأیید رمز عبور مورد نیاز است.</target>
+        <target state="translated">تأیید رمز عبور الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/reset-password-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="4786141633412279939" datatype="html">
@@ -10778,7 +10778,7 @@
       </trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
         <source>Channel name is required.</source>
-        <target state="translated">نام کانال مورد نیاز است.</target>
+        <target state="translated">نام کانال الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="8178814467139959283" datatype="html">
@@ -10815,7 +10815,7 @@
       </trans-unit>
       <trans-unit id="2027337371129904473" datatype="html">
         <source>Video quota is required.</source>
-        <target state="translated">سهمیه ویدئو مورد نیاز است.</target>
+        <target state="translated">تعیین سهمیه ویدئو الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="267386529333143660" datatype="html">
@@ -10825,7 +10825,7 @@
       </trans-unit>
       <trans-unit id="1220179061234048936" datatype="html">
         <source>Daily upload limit is required.</source>
-        <target state="translated">محدودیت آپلود روزانه مورد نیاز است.</target>
+        <target state="translated">محدودیت آپلود روزانه الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="8959404382357999234" datatype="html">
@@ -10835,7 +10835,7 @@
       </trans-unit>
       <trans-unit id="4796798537475457493" datatype="html">
         <source>User role is required.</source>
-        <target state="translated">نقش کاربر مورد نیاز است.</target>
+        <target state="translated">تعیین نقش کاربر الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="2761226139624435788" datatype="html">
@@ -10859,7 +10859,7 @@
       </trans-unit>
       <trans-unit id="27494409477574248" datatype="html">
         <source>Registration reason is required.</source>
-        <target state="translated">علت ثبت‌نام الزامی است.</target>
+        <target state="translated">تعیین علت ثبت‌نام الزامی است.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -10893,7 +10893,7 @@
       </trans-unit>
       <trans-unit id="6632896893630378443" datatype="html">
         <source>Display name is required.</source>
-        <target state="translated">نام جهت نمایش مورد نیاز است.</target>
+        <target state="translated">نام جهت نمایش الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">157</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">12</context></context-group>
@@ -10913,7 +10913,7 @@
       </trans-unit>
       <trans-unit id="1000468652492651683" datatype="html">
         <source>Report reason is required.</source>
-        <target state="translated">دلیل گزارش مورد نیاز است.</target>
+        <target state="translated">علت گزارش الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="1109780973109145433" datatype="html">
@@ -10943,7 +10943,7 @@
       </trans-unit>
       <trans-unit id="8835075531528610034" datatype="html">
         <source>Abuse message is required.</source>
-        <target state="translated">پیام سوء استفاده مورد نیاز است.</target>
+        <target state="translated">پیام سوء استفاده الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="9034042966936514516" datatype="html">
@@ -10958,7 +10958,7 @@
       </trans-unit>
       <trans-unit id="6700357678556223012" datatype="html">
         <source>The channel is required.</source>
-        <target state="translated">کانال مورد نیاز است.</target>
+        <target state="translated">کانال الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="9191505323045740697" datatype="html">
@@ -10991,7 +10991,7 @@
       </trans-unit>
       <trans-unit id="7365924714339585574" datatype="html">
         <source>The username is required.</source>
-        <target state="translated">نام کاربری مورد نیاز است.</target>
+        <target state="translated">نام کاربری الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="3954099618513992825" datatype="html">
@@ -11001,7 +11001,7 @@
       </trans-unit>
       <trans-unit id="4444753420973870540" datatype="html">
         <source>Name is required.</source>
-        <target state="translated">نام مورد نیاز است.</target>
+        <target state="translated">نام الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="4006797705713167676" datatype="html">
@@ -11034,7 +11034,7 @@
       </trans-unit>
       <trans-unit id="6149476559621965756" datatype="html">
         <source>Remote channel url is required.</source>
-        <target state="new">Remote channel url is required.</target>
+        <target state="translated">لینک کانال در سایت راه‌دور الزامی است.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">59</context>
@@ -11083,12 +11083,12 @@
       </trans-unit>
       <trans-unit id="6198895122092095739" datatype="html">
         <source>Privacy is required.</source>
-        <target state="translated">حریم خصوصی مورد نیاز است.</target>
+        <target state="translated">حریم‌خصوصی الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="1276238402004616037" datatype="html">
         <source>The channel is required when the playlist is public.</source>
-        <target state="translated">کانال زمانی لازم است که لیست پخش عمومی باشد.</target>
+        <target state="translated">کانال زمانی الزامی است که لیست پخش عمومی باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="5226261760726752768" datatype="html">
@@ -11198,7 +11198,7 @@
       </trans-unit>
       <trans-unit id="5437132245714159662" datatype="html">
         <source>Video name is required.</source>
-        <target state="translated">نام ویدیو مورد نیاز است.</target>
+        <target state="translated">نام ویدئو الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="2807676084745266104" datatype="html">
@@ -11221,12 +11221,12 @@
       </trans-unit>
       <trans-unit id="9115337161597088460" datatype="html">
         <source>Video privacy is required.</source>
-        <target state="translated">حریم خصوصی ویدئو الزامی است.</target>
+        <target state="translated">حریم‌خصوصی ویدئو الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="7309902991450450996" datatype="html">
         <source>Video channel is required.</source>
-        <target state="translated">کانال ویدئویی مورد نیاز است.</target>
+        <target state="translated">کانال ویدئویی الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="3959376623771116873" datatype="html">
@@ -11271,7 +11271,7 @@
       </trans-unit>
       <trans-unit id="4246579596585402255" datatype="html">
         <source>A date is required to schedule video update.</source>
-        <target state="translated">یک تاریخ برای برنامه‌ریزی به‌روزرسانی ویدئو مورد نیاز است.</target>
+        <target state="translated">یک تاریخ برای به‌روزرسانی ویدئو الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="8728283516316752593" datatype="html">
