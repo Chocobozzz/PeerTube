@@ -204,32 +204,32 @@
       </trans-unit>
       <trans-unit id="506794214492992969" datatype="html">
         <source><x id="START_LINK"/>A new video abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>یک ویدیو مسدود شده<x id="CLOSE_LINK"/> ساخته شده در ویدیو <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>یک گزارش تخلف جدید<x id="CLOSE_LINK"/> در مورد ویدئوی <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> ایجاد شده است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="3487882822536102372" datatype="html">
         <source><x id="START_LINK"/>A new comment abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>نظر جدید مسدود شد<x id="CLOSE_LINK"/> که ساخته شده در ویدیو <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>یک گزارش تخلف جدید در اظهارنظر<x id="CLOSE_LINK"/> راجع به ویدئوی <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> ایجاد شده است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="7885094785640544496" datatype="html">
         <source><x id="START_LINK"/>A new account abuse<x id="CLOSE_LINK"/> has been created on account <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>حساب جدید مسدود شده<x id="CLOSE_LINK"/> ساخته شده در حساب <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>یک گزارش تخلف جدید در حساب‌کاربری<x id="CLOSE_LINK"/> درمورد حساب‌کاربری <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> ایجاد شده است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="2008776855594205860" datatype="html">
         <source><x id="START_LINK"/>A new abuse<x id="CLOSE_LINK"/> has been created </source>
-        <target state="translated"><x id="START_LINK"/>یک مسدود جدید<x id="CLOSE_LINK"/> ساخته شد </target>
+        <target state="translated"><x id="START_LINK"/>یک گزارش تخلف جدید<x id="CLOSE_LINK"/> ایجاد شده است </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="8816959058080937679" datatype="html">
         <source><x id="START_LINK"/>Your abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_TAG_NG_CONTAINER"/>accepted<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>rejected<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated"><x id="START_LINK"/>مسدود شدید <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> به خاطر <x id="START_TAG_NG_CONTAINER"/>تایید<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>رد<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated"><x id="START_LINK"/>تخلف گزارش‌شده از سمت شما<x id="INTERPOLATION"/><x id="CLOSE_LINK"/> <x id="START_TAG_NG_CONTAINER"/>پذیرفته شد<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>رد شد<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="6464941273929604379" datatype="html">
         <source><x id="START_LINK"/>Abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has a new message </source>
-        <target state="translated"><x id="START_LINK"/>مسدود<x id="INTERPOLATION"/><x id="CLOSE_LINK"/> یک پیام جدید </target>
+        <target state="translated"><x id="START_LINK"/>تخلف <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> یک پیام جدید دارد </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="420488506127153204" datatype="html">
@@ -4114,12 +4114,12 @@
       </trans-unit>
       <trans-unit id="1420624050293070194" datatype="html">
         <source>No abuses found matching current filters.</source>
-        <target state="translated">هیچ سوء استفاده از فیلترهای فعلی مطابقت نداشت.</target>
+        <target state="translated">هیچ تخلفی طبق فیلترهای فعلی یافت نشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="639328713281980021" datatype="html">
         <source>No abuses found.</source>
-        <target state="translated">هیچ سوء استفاده ای یافت نشد.</target>
+        <target state="translated">هیچ تخلفی یافت نشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">153</context></context-group>
       </trans-unit>
       <trans-unit id="1807029821872995706" datatype="html">
@@ -4202,13 +4202,13 @@
       </trans-unit>
       <trans-unit id="730589419287534524" datatype="html">
         <source>Reporter</source>
-        <target state="translated">خبرنگار</target>
+        <target state="translated">گزارش‌دهنده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">7</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="5026011498416291967" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></source>
-        <target state="new"> <x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></target>
+        <target state="translated"><x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =1 {یک گزارش} other { گزارش{{ abuse.countReportsForReporter }}}}"/>}}}}"/&gt;<x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">21,23</context>
@@ -4280,7 +4280,7 @@
       </trans-unit>
       <trans-unit id="1969144763032891922" datatype="html">
         <source>Internal note</source>
-        <target state="translated">توجه داخلی</target>
+        <target state="translated">یادداشت داخلی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="7418735164633152705" datatype="html">
@@ -8334,12 +8334,12 @@
       </trans-unit>
       <trans-unit id="1250415136605923486" datatype="html">
         <source>Do you really want to delete this abuse report?</source>
-        <target state="translated">آیا واقعا میخواهید این گزارش سوء استفاده را حذف کنید؟</target>
+        <target state="translated">آیا واقعا میخواهید این گزارش تخلف را حذف کنید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="3482559157143817408" datatype="html">
         <source>Abuse deleted.</source>
-        <target state="translated">سوء استفاده حذف شد.</target>
+        <target state="translated">تخلف حذف شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="6282990098351939529" datatype="html">
@@ -8518,7 +8518,7 @@
       </trans-unit>
       <trans-unit id="722088235348685072" datatype="html">
         <source>If this is not your correct public IP, please consider fixing it because:</source>
-        <target state="translated">اگر این IP عمومی صحیح شما نیست، لطفا آن را اصلاح کنید زیرا:</target>
+        <target state="translated">اگر این آدرس IP صحیح شما نیست، لطفا آن را اصلاح کنید زیرا:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">6</context>
@@ -8526,7 +8526,7 @@
       </trans-unit>
       <trans-unit id="8079826195972333513" datatype="html">
         <source>Views may not be counted correctly (reduced compared to what they should be)</source>
-        <target state="translated">دیدگاه ها ممکن است به درستی شمارش نشوند (در مقایسه با آنچه که باید باشد)</target>
+        <target state="translated">تعداد بازدید ویدئوها ممکن است به درستی شمارش نشود (کمتر از آنچه که باید باشد)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">8</context>
@@ -8534,7 +8534,7 @@
       </trans-unit>
       <trans-unit id="565435193934699740" datatype="html">
         <source>Anti brute force system could be overzealous</source>
-        <target state="translated">سیستم نیروی ضد خشونت می تواند بیش از حد باشد</target>
+        <target state="translated">تنظیمات سیستم ضد بروت فورس می‌تواند بیش از حد باشد</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">9</context>
@@ -8558,7 +8558,7 @@
       </trans-unit>
       <trans-unit id="1285026053775066761" datatype="html">
         <source>Check the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> configuration key</source>
-        <target state="translated">نشانی <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>برای تنظیمات<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> پراکسی بررسی کنید</target>
+        <target state="translated">تنظیمات <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>پراکسی مورد اطمینان<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> را بررسی نمایید</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">15</context>
@@ -8566,7 +8566,7 @@
       </trans-unit>
       <trans-unit id="7014275542536964627" datatype="html">
         <source>If you run PeerTube using Docker, check you run the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> (see <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>issue 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</source>
-        <target state="translated">اگر شما Peertube را با استفاده از Docker اجرا کنید، بررسی کنید که &lt;x id = "START_TAG_CODE" را اجرا کنید x-code "equiv-text =" &amp; lt؛ / code &amp; gt؛ "/&gt; با &lt;x id =" START_TAG_CODE "cTYPE =" x-code "equiv-text =" &amp; lt؛ code &amp; gt؛ "/&gt; network_mode:" میزبان "&lt; x id = "CLOSE_TAG_CODE" ctype = "x-code" equiv-text = "&amp; lt؛ / code &amp; gt؛" /&gt; (مشاهده &lt;x id = "START_LINK" CTYPE = "xa" equiv-text = "&amp; lt؛ a href = &amp; quot؛ https: //github.com/chocobozzz/peertube/issues/1643#issuecomment-464389666&amp;quot؛ &amp; gt؛ "/&gt; شماره 1643 &lt;x id =" close_link "ctype =" xa "equiv-text =" &amp; lt؛ / a &amp; gt ؛ "/&gt;)</target>
+        <target state="translated">اگر پیورتیوب را با استفاده از داکر اجرا می‌کنید، بررسی کنید که <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>پراکسی معکوس<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> را با <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/> network_mode: "host""<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> اجرا نمودید (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>مشکل 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> را ملاحظه نمایید)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">16,17</context>
@@ -9286,7 +9286,7 @@
       </trans-unit>
       <trans-unit id="7130088765428829942" datatype="html">
         <source>New abuse</source>
-        <target state="translated">استفاده ناصحیح جدید</target>
+        <target state="translated">تخلف جدید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="5618790697446401830" datatype="html">
@@ -9342,12 +9342,12 @@
       </trans-unit>
       <trans-unit id="900099988467638766" datatype="html">
         <source>An abuse report received a new message</source>
-        <target state="translated">یک گزارش استفاده ناصحیح، پیام جدید دریافت کرده است</target>
+        <target state="translated">یک گزارش تخلف، پیام جدید دریافت کرد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="2326816287669585542" datatype="html">
         <source>One of your abuse reports has been accepted or rejected by moderators</source>
-        <target state="translated">یکی از گزارش‌های شما درخصوص استفاده ناصحیح، توسط مدیریت پذیرفته یا رد شده است</target>
+        <target state="translated">یکی از گزارش‌های شما درخصوص تخلف، توسط مدیریت پذیرفته یا رد شده است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="2764971902180889905" datatype="html">
@@ -9735,7 +9735,7 @@
       </trans-unit>
       <trans-unit id="1991904494976135035" datatype="html">
         <source>My abuse reports</source>
-        <target state="translated">"گزارشات سوء استفاده" من ، گزارش می دهد</target>
+        <target state="translated">تخلفات گزارش‌شده توسط من</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="5603224609929994288" datatype="html">
@@ -10429,7 +10429,7 @@
       </trans-unit>
       <trans-unit id="6499699285816188400" datatype="html">
         <source>Abuse reports</source>
-        <target state="translated">گزارشات سوء استفاده</target>
+        <target state="translated">گزارشات تخلف</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="4930506384627295710" datatype="html">
@@ -10943,17 +10943,17 @@
       </trans-unit>
       <trans-unit id="8835075531528610034" datatype="html">
         <source>Abuse message is required.</source>
-        <target state="translated">پیام سوء استفاده الزامی است.</target>
+        <target state="translated">متن پیام تخلف الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="9034042966936514516" datatype="html">
         <source>Abuse message must be at least 2 characters long.</source>
-        <target state="translated">پیام سوء استفاده باید حداقل 2 کاراکتر داشته باشد.</target>
+        <target state="translated">پیام تخلف باید حداقل 2 کاراکتر داشته باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="7989186574443390119" datatype="html">
         <source>Abuse message cannot be more than 3000 characters long.</source>
-        <target state="translated">پیام سوء استفاده نمی تواند بیش از 3000 کاراکتر باشد.</target>
+        <target state="translated">پیام تخلف نمی‌تواند بیش از 3000 کاراکتر باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6700357678556223012" datatype="html">
