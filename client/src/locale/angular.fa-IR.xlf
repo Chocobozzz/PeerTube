@@ -11236,12 +11236,12 @@
       </trans-unit>
       <trans-unit id="725195891739570830" datatype="html">
         <source>Video description cannot be more than 10000 characters long.</source>
-        <target state="translated">شرح ویدئو نمی تواند بیش از 10000 حرف طول داشته باشد.</target>
+        <target state="translated">شرح ویدئو نمی‌تواند بیش از 10000 کاراکتر داشته باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="142488285332434408" datatype="html">
         <source>A tag should be more than 2 characters long.</source>
-        <target state="translated">برچسب باید بیش از 2 حرف طول داشته باشد.</target>
+        <target state="translated">برچسب باید بیش از 2 کاراکتر داشته باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="691846635236293620" datatype="html">
@@ -11266,7 +11266,7 @@
       </trans-unit>
       <trans-unit id="6655773021893755977" datatype="html">
         <source>Video support cannot be more than 1000 characters long.</source>
-        <target state="translated">پشتیبانی از ویدئو نمی تواند بیش از 1000 حرف طول داشته باشد.</target>
+        <target state="translated">پشتیبانی از ویدئو نمی‌تواند بیش از 1000 کاراکتر داشته باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="4246579596585402255" datatype="html">
