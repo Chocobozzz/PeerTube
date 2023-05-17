@@ -370,15 +370,17 @@ export class PluginManager implements ServerHook {
     } catch (rootErr) {
       logger.error('Cannot install plugin %s, removing it...', toInstall, { err: rootErr })
 
-      try {
-        await this.uninstall({ npmName })
-      } catch (err) {
-        logger.error('Cannot uninstall plugin %s after failed installation.', toInstall, { err })
-
+      if (npmName) {
         try {
-          await removeNpmPlugin(npmName)
+          await this.uninstall({ npmName })
         } catch (err) {
-          logger.error('Cannot remove plugin %s after failed installation.', toInstall, { err })
+          logger.error('Cannot uninstall plugin %s after failed installation.', toInstall, { err })
+
+          try {
+            await removeNpmPlugin(npmName)
+          } catch (err) {
+            logger.error('Cannot remove plugin %s after failed installation.', toInstall, { err })
+          }
         }
       }
 
