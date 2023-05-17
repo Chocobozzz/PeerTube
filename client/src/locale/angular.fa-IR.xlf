@@ -599,7 +599,7 @@
       </trans-unit>
       <trans-unit id="3252544997685163807" datatype="html">
         <source>Object storage</source>
-        <target state="new">Object storage</target>
+        <target state="translated">محل ذخیره‌سازی آبجکت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">89,91</context>
@@ -762,7 +762,7 @@
       </trans-unit>
       <trans-unit id="80975420989930934" datatype="html">
         <source>(extensions: <x id="PH" equiv-text="this.videoImageExtensions"/>, <x id="PH_1" equiv-text="this.maxSizeText"/>: <x id="PH_2" equiv-text="this.maxVideoImageSizeInBytes"/>)</source>
-        <target state="new">(extensions: <x id="PH" equiv-text="this.videoImageExtensions"/>, <x id="PH_1" equiv-text="this.maxSizeText"/>: <x id="PH_2" equiv-text="this.maxVideoImageSizeInBytes"/>)</target>
+        <target state="translated">(پسوندها: <x id="PH" equiv-text="this.videoImageExtensions"/> ، <x id="PH_1" equiv-text="this.maxSizeText"/>:<x id="PH_2" equiv-text="this.maxVideoImageSizeInBytes"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/preview-upload.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -1033,7 +1033,7 @@
       </trans-unit>
       <trans-unit id="732935381486595265" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</target>
+        <target state="translated">امکان انتقال فایل شما با نام <x id="PH" equiv-text="name"/> قبل از اینکه سرور پراکسی تایم اوت دهد وجود ندارد</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">35</context>
@@ -1359,7 +1359,7 @@
       </trans-unit>
       <trans-unit id="5767014923310516" datatype="html">
         <source>Do you use Mastodon, ActivityPub or a RSS feed aggregator?</source>
-        <target state="new">Do you use Mastodon, ActivityPub or a RSS feed aggregator?</target>
+        <target state="translated">آیا از Mastodon یا ActivityPub یا یک جمع‌آوری‌کننده RSS استفاده می‌کنید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="5853527794391720600" datatype="html">
@@ -2491,7 +2491,7 @@
       </trans-unit>
       <trans-unit id="6096602245926393232" datatype="html">
         <source>Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</source>
-        <target state="translated">آيا از حذف {count, plural, =1 {<x id="username"/>درخواست ثبت‌نام } other { درخواست ثبت‌نام<x id="count"/>تعداد }} اطمينان داريد؟</target>
+        <target state="translated">آيا از حذف {count, plural, =1 {<x id="username"/>درخواست ثبت‌نام؟ } other { درخواست ثبت‌نام؟<x id="count"/>تعداد }} اطمينان داريد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="4208645815154433842" datatype="html">
@@ -2501,7 +2501,7 @@
       </trans-unit>
       <trans-unit id="9152096266184328708" datatype="html">
         <source>Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</source>
-        <target state="translated">"/&gt;درخواست ثبت‌نام } other { درخواست ثبت‌نام<x id="count"/>تعداد }} حذف شد</target>
+        <target state="translated">حذف شد {count, plural, =1 {<x id="username"/> درخواست ثبت‌نام} other { درخواست ثبت‌نام<x id="count"/>}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="7630293677014706754" datatype="html">
@@ -5607,7 +5607,7 @@
       </trans-unit>
       <trans-unit id="7334484418359079994" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with plain WebTorrent:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;                             "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="translated">&lt;x id = "start_tag_strong" ctype = "x-strong" equiv-text = "&amp; lt؛ strong &amp; gt؛" /&gt; نیاز به ffmpeg &amp; gt؛ = 4.1 &lt;x id = "CLOSE_TAG_STRONG" ctype = "x-strong" equiv-text = "&amp; lt؛ / strong &amp; gt؛" /&gt; &lt;x id = "sTART_PARAGRAPH" ctype = "xp" equiv-text = "&amp; lt؛ P &amp; GT؛" /&gt; تولید لیست های پخش HLS و فایل های MP4 تکه تکه شده در نتیجه یک پخش بهتر از WebTorrent ساده است: &lt;x id = "close_paragraph" ctype = "xp" equiv-text = "&amp; lt؛ / p &amp; gt؛" /&gt; &lt;x id = "start_unordered_list" ctype = "x-ul" equiv-text = "&amp; lt؛ ul &amp; gt؛" / &gt; &lt;x id = "start_list_item" ctype = "x-li" equiv-text = "&amp; lt؛ li &amp; gt؛" /&gt; تغییر رزولوشن نرمتر است &lt;x id = "close_list_item" ctype = "x-li" equiv-text = " &amp; lt؛ / li &amp; gt؛ "/&gt; &lt;x id =" start_list_item "ctype =" x-li "equiv-text =" &amp; lt؛ li &amp; gt؛ "/&gt; پخش سریعتر به خصوص با فیلم های طولانی &lt;x id =" cuty_list_item "ctype =" X-Li "Equiv-text =" &amp; lt؛ / li &amp; gt؛ "/&gt; &lt;x id =" sstart_list_item "ctype =" x-li "equiv-text =" &amp; lt؛ li &amp; gt؛ "/&gt; پخش پایدار تر (اشکالات کمتر / loading infinite) &lt;x id = "close_list_item" ctype = "x-li" equiv-text = "&amp; lt؛ / li &amp; gt؛" /&gt; &lt;x id = "close_ unordered_list "ctype =" x-ul "equiv-text =" &amp; lt؛ / ul &amp; gt؛ "/&gt; &lt;x id =" Start_Paragraph "ctype =" xp "equiv-text =" &amp; lt؛ p &amp; gt؛ "/&gt; اگر شما همچنین فعال کنید پشتیبانی WebTorrent، آن را چند برابر فیلم ذخیره سازی توسط 2 &lt;x id = "close_paragraph" ctype = "xp" equiv-text = "&amp; lt؛ / p &amp; gt؛" /&gt;</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>نیازمند ffmpeg نسخه بالاتر از 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>ایجاد لیست‌های پخش HLS و فایل‌های MP4 منجر به پخش بهتر نسبت به وب‌تورنت: :<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;                             "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>تغییر رزولوشن یکنواخت‌تر انجام می‌شود<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>پخش سریعتر خصوصا در ویدئوهای طولانی<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>پخش با پایداری بیشتر)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>اگر پشتیبانی از وب‌تورنت را فعال کردید، فضای موردنیاز برای ذخیره ویدئوها را دو برابر می‌کند<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="6698240176427495644" datatype="html">
@@ -5762,7 +5762,7 @@
       </trans-unit>
       <trans-unit id="5464209657969421100" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated">کد CSS را به طور مستقيم بونسييد به آنتون مول: &lt;x id = "line_break" ctype = "lb" equiv-text = "&amp; lt؛ br / &amp; gt؛" /&gt; &lt;x id = "line_break" ctype = "lb" equiv-text = "&amp; lt؛ br / &amp; gt ؛ "/&gt; &lt;x id =" start_tag_pre "ctype =" x-pre "Equiv-text =" &amp; lt؛ پیش و GT؛ "/&gt; # uparashi CSS &lt;X شناسه =" الحاق "معادل متن =" {{{{{{{ '} "/&gt; راش: قرمز؛ &lt;x id = "interpolation_1" equiv-text = "{{{{{{{{{{{{{{{{{{{{{{{{{{{{« Close_Tag_PRE »CTYPE =" X-Pre "Equiv-text =" &amp; lt؛ / pre &amp; gt؛ " /&gt; پویین با &lt;x id = "start_emphasised_text" ctype = "x-em" equiv-text = "&amp; lt؛ em &amp; gt؛" /&gt; وزن های CSS &lt;x id = "close_emphasised_text" ctype = "x-em" equiv-text = "&amp; lt ؛ / EM &amp; GT؛ "/&gt; بروي لغو كبك. به آنتون مول: &lt;x id = "line_break" ctype = "lb" equiv-text = "&amp; lt؛ br / &amp; gt؛" /&gt; &lt;x id = "line_break" ctype = "lb" equiv-text = "&amp; lt؛ br / &amp; gt ؛ "/&gt; &lt;x id =" start_tag_pre "ctype =" x-pre "Equiv-text =" &amp; lt؛ پیش و GT؛ "/&gt; # سعیریسی CSS &lt;x id =" interpolation "متن تون = "{'{' {'{' {'{' {'{' {'{' {'{' {'}" /&gt; رنگ: قرم؛ &lt;x id = "interpolation_1" equiv-text = "{{{{{{{{{{{{{{{{{{{{{{{{{{{{« Close_Tag_PRE »CTYPE =" X-Pre "Equiv-text =" &amp; lt؛ / pre &amp; gt؛ " /&gt;</target>
+        <target state="translated">کد CSS را بصورت مستقیم بنویسید. مثال: :<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> عبارت <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> را قبل از آن قرار دهید تا بر استایل غلبه کند. مثال: <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="283725429207896837" datatype="html">
@@ -5780,7 +5780,7 @@
       </trans-unit>
       <trans-unit id="8167543029214637769" datatype="html">
         <source>There are errors in the form: <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;           "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let error of grabAllErrors()&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{ error }}"/> <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></source>
-        <target state="translated">اشتباهات در فرم وجود دارد: &lt;x id = "start_unordered_list" ctype = "x-ul" equiv-text = "&amp; lt؛ ul &amp; gt؛" /&gt; &lt;x id = "start_list_item" ctype = "x-li" equiv-text = "&amp; lt؛ li * ngfor = &amp; quot؛ اجازه دهید خطای Graballerrors () &amp; quot؛ &amp; gt؛" /&gt; &lt;x id = "interpolation" equiv-text = "{{error}}" /&gt; &lt;x id = "close_list_item" ctype = "x-li" equiv-text = "&amp; lt؛ / li &amp; gt؛" /&gt; &lt;x id = "close_unordered_list" ctype = "x-ul" equiv-text = "&amp; lt؛ / ul &amp; gt؛" /&gt;</target>
+        <target state="translated">اشتباهاتی در فرم وجود دارد: <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;           "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let error of grabAllErrors()&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{ خطا }}"/> <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="1445676851449000175" datatype="html">
@@ -6992,7 +6992,7 @@
       </trans-unit>
       <trans-unit id="6591746065516872491" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No subscribers} =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {بدون مشترک} =1 {یک مشترک} other { مشترک&lt;x id="INTERPOLATION"/ }}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {بدون مشترک} =1 {یک مشترک} other { مشترک<x id="INTERPOLATION"/>}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">26</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">43</context></context-group>
@@ -7254,7 +7254,7 @@
       </trans-unit>
       <trans-unit id="1120376809358109718" datatype="html">
         <source>Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information </source>
-        <target state="translated">همسالان وب به طور عمومی قابل دسترسی نیستند: از آنجا که ما از حمل و نقل وب استفاده می کنیم، پروتکل از ردیاب کلاسیک BitTorrent متفاوت است. هنگامی که شما در مرورگر وب هستید، یک سیگنال حاوی آدرس IP خود را به ردیاب ارسال می کنید که به طور تصادفی همسالان دیگر را انتخاب می کنند تا اطلاعات را به جلو منتقل کنند. &lt;x id = "START_LINK" CTYPE = "xa" equiv-text = "&amp; lt؛ href = &amp; quot؛ https: //github.com/yciabaud/weptorrent/blob/beps/bep_webrtc.rst&amp;quot؛ &amp; gt؛" /&gt; این سند &lt;x id = "close_link" ctype = "xa" equiv-text = "&amp; lt؛ / a &amp; gt؛" /&gt; برای اطلاعات بیشتر </target>
+        <target state="translated">سایت‌های هم‌رتبه بصورت عمومی در دسترس نیستند: زیرا ما از روش انتقال وب سوکت استفاده می‌کنیم که با ردیاب کلاسیک بیت تورنت متفاوت است. وقتی شما در یک مرورگر وب هستید، شما یک پیام حاوی آدرس IP خودتان را به ردیاب ارسال می‌کنید که بصورت تصادفی یکی از سایر سایت‌های هم‌رتبه را برای ارسال اطلاعات انتخاب می‌کند. جهت کسب اطلاعات بیشتر به <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>این مستند<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> مراجعه نمایید </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="7812408733559506009" datatype="html">
@@ -7533,7 +7533,7 @@
       </trans-unit>
       <trans-unit id="1926625386720791836" datatype="html">
         <source>Example: John Doe</source>
-        <target state="translated">Example: John Doe</target>
+        <target state="translated">مثال: John Doe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">17</context>
