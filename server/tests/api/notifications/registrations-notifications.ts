@@ -21,7 +21,7 @@ describe('Test registrations notifications', function () {
   let baseParams: CheckerBaseParams
 
   before(async function () {
-    this.timeout(50000)
+    this.timeout(120000)
 
     const res = await prepareNotificationsTest(1)
 

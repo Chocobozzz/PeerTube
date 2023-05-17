@@ -3,6 +3,7 @@ import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { MRunner } from '@server/types/models/runners'
+import { RUNNER_JOBS } from '@server/initializers/constants'
 
 const lTags = loggerTagsFactory('runner')
 
@@ -12,7 +13,7 @@ function updateLastRunnerContact (req: express.Request, runner: MRunner) {
   const now = new Date()
 
   // Don't update last runner contact too often
-  if (now.getTime() - runner.lastContact.getTime() < 30000) return
+  if (now.getTime() - runner.lastContact.getTime() < RUNNER_JOBS.LAST_CONTACT_UPDATE_INTERVAL) return
   if (updatingRunner.has(runner.id)) return
 
   updatingRunner.add(runner.id)

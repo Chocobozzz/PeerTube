@@ -33,7 +33,7 @@ describe('Test moderation notifications', function () {
   let emails: object[] = []
 
   before(async function () {
-    this.timeout(50000)
+    this.timeout(120000)
 
     const res = await prepareNotificationsTest(3)
     emails = res.emails

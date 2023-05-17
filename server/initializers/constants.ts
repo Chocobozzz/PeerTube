@@ -257,7 +257,8 @@ const JOB_REMOVAL_OPTIONS = {
 const VIDEO_IMPORT_TIMEOUT = Math.floor(JOB_TTL['video-import'] * 0.9)
 
 const RUNNER_JOBS = {
-  MAX_FAILURES: 5
+  MAX_FAILURES: 5,
+  LAST_CONTACT_UPDATE_INTERVAL: 30000
 }
 
 // ---------------------------------------------------------------------------
@@ -1034,6 +1035,8 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     VIDEO_LIVE.SEGMENT_TIME_SECONDS.DEFAULT_LATENCY = 2
     VIDEO_LIVE.SEGMENT_TIME_SECONDS.SMALL_LATENCY = 1
     VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION = 1
+
+    RUNNER_JOBS.LAST_CONTACT_UPDATE_INTERVAL = 2000
   }
 }
 
