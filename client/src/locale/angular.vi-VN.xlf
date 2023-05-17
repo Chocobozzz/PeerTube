@@ -1639,7 +1639,7 @@
       </trans-unit>
       <trans-unit id="1327409825122054374" datatype="html">
         <source>Runner job cancelled</source>
-        <target state="new">Runner job cancelled</target>
+        <target state="translated">Đã hủy xử lý từ xa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -1647,7 +1647,7 @@
       </trans-unit>
       <trans-unit id="2874360404134250412" datatype="html">
         <source>Error in runner job</source>
-        <target state="new">Error in runner job</target>
+        <target state="translated">Lỗi khi xử lý từ xa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -4560,7 +4560,7 @@
       </trans-unit>
       <trans-unit id="2279400024471134535" datatype="html">
         <source>Remote runners</source>
-        <target state="new">Remote runners</target>
+        <target state="translated">Người xử lý từ xa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">171</context>
@@ -4580,7 +4580,7 @@
       </trans-unit>
       <trans-unit id="7565129593705813435" datatype="html">
         <source>Runner jobs</source>
-        <target state="new">Runner jobs</target>
+        <target state="translated">Việc cần xử lý</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">177</context>
@@ -4592,7 +4592,7 @@
       </trans-unit>
       <trans-unit id="5902504074840207881" datatype="html">
         <source>Local jobs</source>
-        <target state="new">Local jobs</target>
+        <target state="translated">Công việc nội bộ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">185</context>
@@ -5509,7 +5509,7 @@
       </trans-unit>
       <trans-unit id="2987805184832710235" datatype="html">
         <source>Enable remote runners</source>
-        <target state="new">Enable remote runners</target>
+        <target state="translated">Bật xử lý từ xa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">116</context>
@@ -5525,7 +5525,7 @@
       </trans-unit>
       <trans-unit id="2134381456844896041" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </target>
+        <target state="translated">Dùng <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>xử lý từ xa<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> để xử lý chuyển mã trực tiếp. Người xử lý từ xa phải đăng ký trên máy chủ của bạn trước. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">119,122</context>
@@ -5565,7 +5565,7 @@
       </trans-unit>
       <trans-unit id="8646250517331978259" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </target>
+        <target state="translated">Dùng <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>xử lý từ xa<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> để xử lý chuyển mã VOD. Người xử lý từ xa phải đăng ký trên máy chủ của bạn trước. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">46,49</context>
