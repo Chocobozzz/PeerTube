@@ -1,4 +1,5 @@
 import express, { UploadFiles } from 'express'
+import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { createReqFiles } from '@server/helpers/express-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { generateRunnerJobToken } from '@server/helpers/token-generator'
@@ -161,14 +162,29 @@ async function acceptRunnerJob (req: express.Request, res: express.Response) {
   const runner = res.locals.runner
   const runnerJob = res.locals.runnerJob
 
-  runnerJob.state = RunnerJobState.PROCESSING
-  runnerJob.processingJobToken = generateRunnerJobToken()
-  runnerJob.startedAt = new Date()
-  runnerJob.runnerId = runner.id
+  const newRunnerJob = await retryTransactionWrapper(() => {
+    return sequelizeTypescript.transaction(async transaction => {
+      await runnerJob.reload({ transaction })
 
-  const newRunnerJob = await sequelizeTypescript.transaction(transaction => {
-    return runnerJob.save({ transaction })
+      if (runnerJob.state !== RunnerJobState.PENDING) {
+        res.fail({
+          message: 'This job is not in pending state anymore',
+          status: HttpStatusCode.CONFLICT_409
+        })
+
+        return undefined
+      }
+
+      runnerJob.state = RunnerJobState.PROCESSING
+      runnerJob.processingJobToken = generateRunnerJobToken()
+      runnerJob.startedAt = new Date()
+      runnerJob.runnerId = runner.id
+
+      return runnerJob.save({ transaction })
+    })
   })
+  if (!newRunnerJob) return
+
   newRunnerJob.Runner = runner as RunnerModel
 
   const result: AcceptRunnerJobResult = {
