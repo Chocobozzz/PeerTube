@@ -1,6 +1,7 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import { arrayify } from '@shared/core-utils'
+import { FollowState } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { areValidActorHandles, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
 import { WEBSERVER } from '../../initializers/constants'
@@ -48,26 +49,20 @@ const userSubscriptionGetValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
+    if (!await doesSubscriptionExist({ uri: req.params.uri, res, state: 'accepted' })) return
 
-    let [ name, host ] = req.params.uri.split('@')
-    if (host === WEBSERVER.HOST) host = null
+    return next()
+  }
+]
 
-    const user = res.locals.oauth.token.User
-    const subscription = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI({
-      actorId: user.Account.Actor.id,
-      targetName: name,
-      targetHost: host,
-      state: 'accepted'
-    })
+const userSubscriptionDeleteValidator = [
+  param('uri')
+    .custom(isValidActorHandle),
 
-    if (!subscription?.ActorFollowing.VideoChannel) {
-      return res.fail({
-        status: HttpStatusCode.NOT_FOUND_404,
-        message: `Subscription ${req.params.uri} not found.`
-      })
-    }
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+    if (!await doesSubscriptionExist({ uri: req.params.uri, res })) return
 
-    res.locals.subscription = subscription
     return next()
   }
 ]
@@ -78,5 +73,39 @@ export {
   areSubscriptionsExistValidator,
   userSubscriptionListValidator,
   userSubscriptionAddValidator,
-  userSubscriptionGetValidator
+  userSubscriptionGetValidator,
+  userSubscriptionDeleteValidator
+}
+
+// ---------------------------------------------------------------------------
+
+async function doesSubscriptionExist (options: {
+  uri: string
+  res: express.Response
+  state?: FollowState
+}) {
+  const { uri, res, state } = options
+
+  let [ name, host ] = uri.split('@')
+  if (host === WEBSERVER.HOST) host = null
+
+  const user = res.locals.oauth.token.User
+  const subscription = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI({
+    actorId: user.Account.Actor.id,
+    targetName: name,
+    targetHost: host,
+    state
+  })
+
+  if (!subscription?.ActorFollowing.VideoChannel) {
+    res.fail({
+      status: HttpStatusCode.NOT_FOUND_404,
+      message: `Subscription ${uri} not found.`
+    })
+    return false
+  }
+
+  res.locals.subscription = subscription
+
+  return true
 }
