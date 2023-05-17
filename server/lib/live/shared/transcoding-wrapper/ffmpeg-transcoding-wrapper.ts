@@ -10,6 +10,9 @@ import { AbstractTranscodingWrapper } from './abstract-transcoding-wrapper'
 
 export class FFmpegTranscodingWrapper extends AbstractTranscodingWrapper {
   private ffmpegCommand: FfmpegCommand
+
+  private aborted = false
+  private errored = false
   private ended = false
 
   async run () {
@@ -63,7 +66,12 @@ export class FFmpegTranscodingWrapper extends AbstractTranscodingWrapper {
   }
 
   abort () {
-    // Nothing to do, ffmpeg will automatically exit
+    if (this.ended || this.errored || this.aborted) return
+
+    this.ffmpegCommand.kill('SIGINT')
+
+    this.aborted = true
+    this.emit('end')
   }
 
   private onFFmpegError (options: {
@@ -76,14 +84,16 @@ export class FFmpegTranscodingWrapper extends AbstractTranscodingWrapper {
 
     // Don't care that we killed the ffmpeg process
     if (err?.message?.includes('Exiting normally')) return
+    if (this.ended || this.errored || this.aborted) return
 
     logger.error('FFmpeg transcoding error.', { err, stdout, stderr, ffmpegShellCommand, ...this.lTags() })
 
+    this.errored = true
     this.emit('error', { err })
   }
 
   private onFFmpegEnded () {
-    if (this.ended) return
+    if (this.ended || this.errored || this.aborted) return
 
     this.ended = true
     this.emit('end')
