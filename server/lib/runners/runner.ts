@@ -12,7 +12,7 @@ function updateLastRunnerContact (req: express.Request, runner: MRunner) {
   const now = new Date()
 
   // Don't update last runner contact too often
-  if (now.getTime() - runner.lastContact.getTime() < 2000) return
+  if (now.getTime() - runner.lastContact.getTime() < 30000) return
   if (updatingRunner.has(runner.id)) return
 
   updatingRunner.add(runner.id)
