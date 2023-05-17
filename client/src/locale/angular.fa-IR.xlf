@@ -991,7 +991,7 @@
       </trans-unit>
       <trans-unit id="8726138323871139597" datatype="html">
         <source>Following</source>
-        <target state="translated">در حال فالو</target>
+        <target state="translated">دنباله‌رو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">84</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/follows.routes.ts</context><context context-type="linenumber">26</context></context-group>
@@ -1010,7 +1010,7 @@
       </trans-unit>
       <trans-unit id="6751995972535426095" datatype="html">
         <source>following</source>
-        <target state="translated">در حال فالو</target>
+        <target state="translated">دنباله‌رو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="6994936570572804302" datatype="html">
@@ -3625,13 +3625,13 @@
       </trans-unit>
       <trans-unit id="5911214550882917183">
         <source>State</source>
-        <target state="translated">دولت</target>
+        <target state="translated">وضعیت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">48</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="2092225601747599163" datatype="html">
         <source>Created <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">ایجاد <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
+        <target state="translated">ایجاد‌شده در <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">39</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">43</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">50</context></context-group>
@@ -4265,7 +4265,7 @@
       </trans-unit>
       <trans-unit id="3301856295120048857" datatype="html">
         <source>State <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">حالت<x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
+        <target state="translated">وضعیت<x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">37</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context><context context-type="linenumber">41</context></context-group>
@@ -4657,7 +4657,7 @@
       </trans-unit>
       <trans-unit id="2719284837486030903" datatype="html">
         <source>Job type</source>
-        <target state="translated">نوع کار</target>
+        <target state="translated">نوع فعالیت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="6170245880855918780" datatype="html">
@@ -4667,7 +4667,7 @@
       </trans-unit>
       <trans-unit id="2296681895307893686" datatype="html">
         <source>any</source>
-        <target state="translated">هر چیزی</target>
+        <target state="translated">همه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">21</context>
@@ -4695,7 +4695,7 @@
       </trans-unit>
       <trans-unit id="3419681791450150574" datatype="html">
         <source>Progress</source>
-        <target state="translated">پیش رفتن</target>
+        <target state="translated">پیشرفت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">49</context>
@@ -4708,7 +4708,7 @@
       </trans-unit>
       <trans-unit id="2713421326605345655" datatype="html">
         <source>No <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> jobs found.</source>
-        <target state="translated">هیچ <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> کاری یافت نشد.</target>
+        <target state="translated">هیچ فعالیتی از نوع <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> یافت نشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="2384897339170501794" datatype="html">
@@ -4718,7 +4718,7 @@
       </trans-unit>
       <trans-unit id="4457061340457477073" datatype="html">
         <source>No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</source>
-        <target state="translated">نه <x id="START_TAG_CODE"/> <x id="INTERPOLATION"/> <x id="CLOSE_TAG_CODE"/> جابز پیدا شده است که <x id="START_TAG_SPAN"/> <x id="INTERPOLATION_1"/> <x id="CLOSE_TAG_SPAN"/>.</target>
+        <target state="translated">هیچ فعالیتی از نوع <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="INTERPOLATION"/> که وضعیت آن <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/> باشد یافت نشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="1102717806459547726" datatype="html">
@@ -5291,7 +5291,7 @@
       </trans-unit>
       <trans-unit id="836183323506117145" datatype="html">
         <source>FEDERATION</source>
-        <target state="translated">اتحادیه</target>
+        <target state="translated">سایت‌های متحد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">464</context></context-group>
       </trans-unit>
       <trans-unit id="252719899360434356" datatype="html">
@@ -6160,7 +6160,7 @@
       </trans-unit>
       <trans-unit id="3963749584812225989" datatype="html">
         <source>Created <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">ایجاد<x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
+        <target state="translated">ایجاد‌شده در<x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="5611592591303869712" datatype="html">
@@ -6725,7 +6725,7 @@
       </trans-unit>
       <trans-unit id="3030338154442300172" datatype="html">
         <source>Created <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}" xid="498463490165953744"/> </source>
-        <target state="translated">ایجاد شد<x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, =1 {1 لیست پخش} other {{{ pagination.totalItems }} لیستهای پخش}}"/> </target>
+        <target state="translated"><x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, =1 {یک لیست‌پخش} other { لیست‌پخش{{ pagination.totalItems }}}}"/> ایجاد شد </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="3505845886770923767" datatype="html">
@@ -8566,7 +8566,7 @@
       </trans-unit>
       <trans-unit id="7014275542536964627" datatype="html">
         <source>If you run PeerTube using Docker, check you run the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> (see <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>issue 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</source>
-        <target state="translated">اگر پیورتیوب را با استفاده از داکر اجرا می‌کنید، بررسی کنید که <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>پراکسی معکوس<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> را با <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/> network_mode: "host""<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> اجرا نمودید (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>مشکل 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> را ملاحظه نمایید)</target>
+        <target state="translated">اگر پیرتیوب را با استفاده از داکر اجرا می‌کنید، بررسی کنید که <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>پراکسی معکوس<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> را درحالت <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/> network_mode: host<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> اجرا نمودید (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>مشکل 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> را ملاحظه نمایید)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">16,17</context>
@@ -9057,7 +9057,7 @@
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
         <source>Federation</source>
-        <target state="translated">اتحادیه</target>
+        <target state="translated">سایت‌های متحد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="3767259920053407667" datatype="html">
@@ -9093,7 +9093,7 @@
       </trans-unit>
       <trans-unit id="4207916966377787111" datatype="html">
         <source>Created</source>
-        <target state="translated">ایجاد شده</target>
+        <target state="translated">ایجاد شده در</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="8140268298586972139" datatype="html">
@@ -9567,7 +9567,7 @@
       </trans-unit>
       <trans-unit id="5674286808255988565" datatype="html">
         <source>Create</source>
-        <target state="translated">ایجاد</target>
+        <target state="translated">ایجاد‌شده در</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">8</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">8</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-create.component.ts</context><context context-type="linenumber">107</context></context-group>
