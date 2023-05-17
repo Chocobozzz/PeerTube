@@ -1303,7 +1303,7 @@
       </trans-unit>
       <trans-unit id="1779569416352510488" datatype="html">
         <source>Why creating an account?</source>
-        <target state="translated">چرا یک حساب بسازم؟</target>
+        <target state="translated">چرا یک حساب کاربری ایجاد کنم؟</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">2</context>
@@ -1726,7 +1726,7 @@
       </trans-unit>
       <trans-unit id="2308975396733519902">
         <source>Create an account</source>
-        <target>ساخت حساب</target>
+        <target state="translated">ایجاد حساب کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">88</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/account/signup-label.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
@@ -2652,17 +2652,17 @@
       </trans-unit>
       <trans-unit id="1359533927353954373" datatype="html">
         <source>View account</source>
-        <target state="translated">مشاهده حساب</target>
+        <target state="translated">مشاهده حساب کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="3799746968259478616" datatype="html">
         <source>View account</source>
-        <target state="translated">مشاهده حساب</target>
+        <target state="translated">مشاهده حساب کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="6778225321073009261" datatype="html">
         <source>View owner account</source>
-        <target state="translated">مشاهده حساب مالک</target>
+        <target state="translated">مشاهده حساب کاربری مالک</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="8798391261676185924" datatype="html">
@@ -2672,12 +2672,12 @@
       </trans-unit>
       <trans-unit id="5121874940679887597" datatype="html">
         <source>Copy channel handle</source>
-        <target state="translated">کپی کانال کپی</target>
+        <target state="translated">کپی handle کانال</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="2486917589932345430" datatype="html">
         <source>OWNER ACCOUNT</source>
-        <target state="translated">حساب مالک</target>
+        <target state="translated">حساب کاربری مالک</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="1952020204339597057" datatype="html">
@@ -3926,7 +3926,7 @@
       </trans-unit>
       <trans-unit id="3111569165173971676" datatype="html">
         <source>Deleted account</source>
-        <target state="translated">حساب حذف شده</target>
+        <target state="translated">حساب کاربری حذف‌شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="242888077027281874" datatype="html">
@@ -4378,7 +4378,7 @@
       </trans-unit>
       <trans-unit id="4086606389696938932" datatype="html">
         <source>Account</source>
-        <target state="translated">حساب</target>
+        <target state="translated">حساب کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context><context context-type="linenumber">37</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">43</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">24</context></context-group>
@@ -4386,13 +4386,13 @@
       </trans-unit>
       <trans-unit id="8564972645418093229" datatype="html">
         <source>No account found matching current filters.</source>
-        <target state="translated">هیچ حساب کاربری تطبیق فیلترهای فعلی را یافت.</target>
+        <target state="translated">هیچ حساب کاربری طبق فیلترهای فعلی یافت نشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">54</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="3819155299647062711" datatype="html">
         <source>No account found.</source>
-        <target state="translated">هیچ حسابی یافت نشد.</target>
+        <target state="translated">هیچ حساب کاربری یافت نشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">55</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
@@ -5236,7 +5236,7 @@
       </trans-unit>
       <trans-unit id="3442084803796199253" datatype="html">
         <source>Allow users to do remote URI/handle search</source>
-        <target state="translated">اجازه به کاربران تا از راه‌دور جستجوی URI/handle انجام دهند</target>
+        <target state="translated">اجازه به کاربران برای جستجوی URI/handle در سایر سایت‌ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">386</context></context-group>
       </trans-unit>
       <trans-unit id="2258148539285928012" datatype="html">
@@ -5246,7 +5246,7 @@
       </trans-unit>
       <trans-unit id="7295422540935146771" datatype="html">
         <source>Allow anonymous to do remote URI/handle search</source>
-        <target state="translated">اجازه به کاربران ناشناس تا از راه‌دور جستجوی URI/handle انجام دهند</target>
+        <target state="translated">اجازه به کاربران ناشناس برای جستجوی URI/handle در سایر سایت‌ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">397</context></context-group>
       </trans-unit>
       <trans-unit id="7305237807882754643" datatype="html">
@@ -6170,7 +6170,7 @@
       </trans-unit>
       <trans-unit id="5417361655914085905" datatype="html">
         <source>Account page</source>
-        <target state="translated">صفحه حساب</target>
+        <target state="translated">صفحه حساب کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">69</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
@@ -6321,7 +6321,7 @@
       </trans-unit>
       <trans-unit id="4247400351982331798" datatype="html">
         <source>Account settings</source>
-        <target state="translated">تنظیمات حساب</target>
+        <target state="translated">تنظیمات حساب کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="5863226045830598109" datatype="html">
@@ -6440,7 +6440,7 @@
       </trans-unit>
       <trans-unit id="228548407872312756" datatype="html">
         <source>Owner account page</source>
-        <target state="translated">صفحه مالک حساب</target>
+        <target state="translated">صفحه حساب کاربری مالک</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4781078006040259916" datatype="html">
@@ -6896,7 +6896,7 @@
       </trans-unit>
       <trans-unit id="8661266239199665830" datatype="html">
         <source>Copy account handle</source>
-        <target state="translated">کپی حساب</target>
+        <target state="translated">کپی handle حساب‌کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="3061133792040537550" datatype="html">
@@ -6918,7 +6918,7 @@
       </trans-unit>
       <trans-unit id="1311667768861466464" datatype="html">
         <source>Search account videos</source>
-        <target state="translated">جستجوی فیلم‌های یک حساب کاربری</target>
+        <target state="translated">جستجو در فیلم‌های حساب کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="5512878593724620692" datatype="html">
@@ -6928,7 +6928,7 @@
       </trans-unit>
       <trans-unit id="3666829335406793239" datatype="html">
         <source>This account does not have channels.</source>
-        <target state="translated">این حساب کابری کانال ندارد.</target>
+        <target state="translated">این حساب کاربری هیچ کانالی ندارد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="403587185492002456" datatype="html">
@@ -7374,7 +7374,7 @@
       </trans-unit>
       <trans-unit id="220345070199640496" datatype="html">
         <source>PeerTube is creating your account...</source>
-        <target state="translated">Peertube در حال ایجاد حساب کاربری شما ...</target>
+        <target state="translated">پیرتیوب در حال ایجاد حساب کاربری شما ...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="7119544246688514254" datatype="html">
@@ -7604,12 +7604,12 @@
       </trans-unit>
       <trans-unit id="819067926858619041" datatype="html">
         <source>Account videos</source>
-        <target state="translated">فیلم‌های حساب کاربری</target>
+        <target state="translated">ویدئوهای حساب کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="4605517634011438234" datatype="html">
         <source>ACCOUNT</source>
-        <target state="translated">حساب</target>
+        <target state="translated">حساب‌کاربری</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">8</context>
@@ -7617,7 +7617,7 @@
       </trans-unit>
       <trans-unit id="6823616469362610020" datatype="html">
         <source>Account video channels</source>
-        <target state="translated">کانال‌های ویدئویی حساب کاربری</target>
+        <target state="translated">کانال‌های ویدئویی حساب‌کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="807777065817324789" datatype="html">
@@ -7682,7 +7682,7 @@
       </trans-unit>
       <trans-unit id="6250999352462648289" datatype="html">
         <source>Report this account</source>
-        <target state="translated">گزارش این حساب</target>
+        <target state="translated">گزارش‌کردن این حساب‌کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">196</context></context-group>
       </trans-unit>
       <trans-unit id="2614607010577950577" datatype="html">
@@ -7917,7 +7917,7 @@
       </trans-unit>
       <trans-unit id="5991533283446904296" datatype="html">
         <source>Hosts or handles are invalid.</source>
-        <target state="translated">میزبان‌ها نامعتبر هستند.</target>
+        <target state="translated">سرورها یا Handle ها نامعتبر هستند.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">102</context>
@@ -7925,7 +7925,7 @@
       </trans-unit>
       <trans-unit id="6759198394434886237" datatype="html">
         <source>Hosts or handles contain duplicates.</source>
-        <target state="translated">میزبان  شامل موارد تکراری است.</target>
+        <target state="translated">سرورها یا Handle ها شامل موارد تکراری هستند.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">103</context>
@@ -8132,7 +8132,7 @@
       </trans-unit>
       <trans-unit id="3596798855644241001" datatype="html">
         <source>1 host (without "http://"), account handle or channel handle per line</source>
-        <target state="translated">1 میزبان (بدون "http: //")، دسته حساب یا عنوان کانال در هر خط</target>
+        <target state="translated">در هر سطر یک سرور (بدون http://)، Handle حساب‌کاربری یا کانال</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">11</context>
@@ -8212,7 +8212,7 @@
       </trans-unit>
       <trans-unit id="8639315630141911544" datatype="html">
         <source>Account <x id="PH"/> unmuted by your instance.</source>
-        <target state="translated">حساب کاربری <x id="PH"/> در سایت شما غیر فعال شد.</target>
+        <target state="translated">حساب کاربری <x id="PH"/> توسط سایت شما غیرمسکوت شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="3371601176452094961" datatype="html">
@@ -8288,7 +8288,7 @@
       </trans-unit>
       <trans-unit id="5793550984155962433" datatype="html">
         <source>Actions for the flagged account</source>
-        <target state="translated">اقدامات برای حساب پرچمدار</target>
+        <target state="translated">اقدامات برای حساب کاربری مشخص‌شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">286</context></context-group>
       </trans-unit>
       <trans-unit id="1679841953757186358" datatype="html">
@@ -9170,7 +9170,7 @@
       </trans-unit>
       <trans-unit id="7390990800435887351" datatype="html">
         <source>Account <x id="PH"/> unmuted.</source>
-        <target state="translated">حساب کاربری <x id="PH"/> غیر مسکوت شد.</target>
+        <target state="translated">حساب‌کاربری <x id="PH"/> غیرمسکوت شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.ts</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">149</context></context-group>
       </trans-unit>
@@ -9230,13 +9230,13 @@
       </trans-unit>
       <trans-unit id="3122895472333547524" datatype="html">
         <source>Delete your account</source>
-        <target state="translated">حذف حساب کاربری خود</target>
+        <target state="translated">حذف حساب‌کاربری خود</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="577064441120663273" datatype="html">
         <source>Are you sure you want to delete your account?</source>
-        <target state="translated">آیا مطمئن هستید که می خواهید حساب خود را حذف کنید؟</target>
+        <target state="translated">آیا مطمئن هستید که می خواهید حساب‌کاربری خود را حذف کنید؟</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">22</context>
@@ -9260,12 +9260,12 @@
       </trans-unit>
       <trans-unit id="2520605306994744004" datatype="html">
         <source>Delete my account</source>
-        <target state="translated">حذف حساب کاربری من</target>
+        <target state="translated">حذف حساب‌کاربری من</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="3902597758945766483" datatype="html">
         <source>Your account is deleted.</source>
-        <target state="translated">حساب شما حذف شد.</target>
+        <target state="translated">حساب‌کاربری شما حذف شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="4776289814033837037" datatype="html">
@@ -9844,7 +9844,7 @@
       </trans-unit>
       <trans-unit id="1783173774503340906" datatype="html">
         <source>Subscribe to the account</source>
-        <target state="translated">اشتراک در حساب</target>
+        <target state="translated">مشترک‌شدن حساب‌کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">85</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">839</context></context-group>
       </trans-unit>
@@ -10087,12 +10087,12 @@
       </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html">
         <source>Your account is blocked.</source>
-        <target state="translated">حساب کاربری شما مسدود است.</target>
+        <target state="translated">حساب‌کاربری شما مسدود است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">219</context></context-group>
       </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html">
         <source>This account is awaiting approval by moderators.</source>
-        <target state="translated">این حساب کاربری در انتظار تایید مدیریت می‌باشد.</target>
+        <target state="translated">این حساب‌کاربری در انتظار تایید مدیریت می‌باشد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">224</context>
@@ -10100,7 +10100,7 @@
       </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html">
         <source>Registration approval has been rejected for this account.</source>
-        <target state="new">Registration approval has been rejected for this account.</target>
+        <target state="translated">ثبت‌نام این حساب‌کاربری موردتایید قرار نگرفت.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">229</context>
@@ -10682,12 +10682,12 @@
       </trans-unit>
       <trans-unit id="544279804045883862" datatype="html">
         <source>Handle is required.</source>
-        <target state="translated">دستگیره مورد نیاز است.</target>
+        <target state="translated">Handle الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="2805037637775107078" datatype="html">
         <source>Handle must be valid (eg. chocobozzz@example.com).</source>
-        <target state="translated">دستگیره باید معتبر باشد (به عنوان مثال chocobozzzz@example.com).</target>
+        <target state="translated">Handle باید معتبر باشد (به عنوان مثال chocobozzzz@example.com).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="3159508433607320799" datatype="html">
@@ -10996,7 +10996,7 @@
       </trans-unit>
       <trans-unit id="3954099618513992825" datatype="html">
         <source>You can only transfer ownership to a local account</source>
-        <target state="translated">شما فقط می توانید مالکیت را به یک حساب محلی انتقال دهید</target>
+        <target state="translated">شما فقط می توانید مالکیت را به یک حساب‌کاربری محلی انتقال دهید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="4444753420973870540" datatype="html">
@@ -11221,7 +11221,7 @@
       </trans-unit>
       <trans-unit id="9115337161597088460" datatype="html">
         <source>Video privacy is required.</source>
-        <target state="translated">حریم خصوصی ویدئو مورد نیاز است.</target>
+        <target state="translated">حریم خصوصی ویدئو الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="7309902991450450996" datatype="html">
@@ -11281,7 +11281,7 @@
       </trans-unit>
       <trans-unit id="5604677701754367707" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</source>
-        <target state="new">PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
+        <target state="translated">پیرتیوب امکان کارکردن با این نوع فایل را ندارد. پسوندهای مورد پذیرش <x id="PH" equiv-text="this.allowedExtensionsMessage"/> هستند.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -11799,7 +11799,7 @@
       </trans-unit>
       <trans-unit id="1209500590333005801" datatype="html">
         <source><x id="PH"/> (account page) </source>
-        <target state="translated"><x id="PH"/> (صفحه حساب) </target>
+        <target state="translated"><x id="PH"/> (صفحه حساب‌کاربری) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">21</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
@@ -11899,7 +11899,7 @@
       </trans-unit>
       <trans-unit id="8150022485860412528" datatype="html">
         <source>Account <x id="PH"/> muted.</source>
-        <target state="translated">حساب <x id="PH"/> مسکوت شد.</target>
+        <target state="translated">حساب‌کاربری <x id="PH"/> مسکوت شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">135</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
@@ -11937,7 +11937,7 @@
       </trans-unit>
       <trans-unit id="3085641638748358969" datatype="html">
         <source>Account <x id="PH"/> unmuted by the instance.</source>
-        <target state="translated">حساب کاربری <x id="PH"/> توسط این سایت از حالت مسکوت خارج شد.</target>
+        <target state="translated">حساب‌کاربری <x id="PH"/> توسط این سایت از حالت مسکوت خارج شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">205</context></context-group>
       </trans-unit>
       <trans-unit id="4991892477258601737" datatype="html">
@@ -11952,12 +11952,12 @@
       </trans-unit>
       <trans-unit id="8173437618471379044" datatype="html">
         <source>Are you sure you want to remove all the comments of this account?</source>
-        <target state="translated">آیا مطمئن هستید که می‌خواهید تمام اظهارنظرات این حساب كاربري را حذف کنید؟</target>
+        <target state="translated">آیا مطمئن هستید که می‌خواهید تمام اظهارنظرات این حساب‌كاربري را حذف کنید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
       <trans-unit id="6315346579373254461" datatype="html">
         <source>Delete account comments</source>
-        <target state="translated">حذف اظهارنظرات حساب كاربري</target>
+        <target state="translated">حذف اظهارنظرات حساب‌كاربري</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="8559170154828316298" datatype="html">
@@ -11997,7 +11997,7 @@
       </trans-unit>
       <trans-unit id="1888272455383898478" datatype="html">
         <source>Mute this account</source>
-        <target state="translated">مسكوت‌كردن این حساب کاربری</target>
+        <target state="translated">مسكوت‌كردن این حساب‌کاربری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">296</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">374</context></context-group>
       </trans-unit>
@@ -12045,7 +12045,7 @@
       </trans-unit>
       <trans-unit id="4810478487244286994" datatype="html">
         <source>Remove comments made by this account on your videos.</source>
-        <target state="translated">حذف اظهارنظرها از این حساب کاربری درباره ویدئوهای شما.</target>
+        <target state="translated">حذف اظهارنظرهای این حساب‌کاربری درباره ویدئوهای شما.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">321</context></context-group>
       </trans-unit>
       <trans-unit id="2077144178298031252" datatype="html">
@@ -12621,7 +12621,7 @@
       </trans-unit>
       <trans-unit id="4903651219400691248" datatype="html">
         <source>Mute account</source>
-        <target state="translated">مسكوت‌کردن حساب كاربري</target>
+        <target state="translated">مسكوت‌کردن حساب‌كاربري</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">292</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">417</context></context-group>
       </trans-unit>
@@ -12657,7 +12657,7 @@
       </trans-unit>
       <trans-unit id="3719503424625455635" datatype="html">
         <source>Mute server account</source>
-        <target state="translated">مسكوت‌کردن حساب سرور</target>
+        <target state="translated">مسكوت‌کردن سرور</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">298</context></context-group>
       </trans-unit>
       <trans-unit id="7008439939460403347" datatype="html">
