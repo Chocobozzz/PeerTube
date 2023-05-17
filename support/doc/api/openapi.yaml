@@ -433,7 +433,7 @@ paths:
     get:
       tags:
         - Video Feeds
-      summary: List comments on videos
+      summary: Comments on videos feeds
       operationId: getSyndicatedComments
       parameters:
         - name: format
@@ -476,7 +476,7 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        '200':
           description: successful operation
           headers:
             Cache-Control:
@@ -528,7 +528,7 @@ paths:
     get:
       tags:
         - Video Feeds
-      summary: List videos
+      summary: Common videos feeds
       operationId: getSyndicatedVideos
       parameters:
         - name: format
@@ -573,7 +573,7 @@ paths:
         - $ref: '#/components/parameters/hasHLSFiles'
         - $ref: '#/components/parameters/hasWebtorrentFiles'
       responses:
-        '204':
+        '200':
           description: successful operation
           headers:
             Cache-Control:
@@ -620,7 +620,7 @@ paths:
     get:
       tags:
         - Video Feeds
-      summary: List videos of subscriptions tied to a token
+      summary: Videos of subscriptions feeds
       operationId: getSyndicatedSubscriptionVideos
       parameters:
         - name: format
@@ -657,7 +657,7 @@ paths:
         - $ref: '#/components/parameters/hasHLSFiles'
         - $ref: '#/components/parameters/hasWebtorrentFiles'
       responses:
-        '204':
+        '200':
           description: successful operation
           headers:
             Cache-Control:
@@ -682,6 +682,30 @@ paths:
                 type: object
         '406':
           description: accept header unsupported
+
+  '/feeds/podcast/videos.xml':
+    get:
+      tags:
+        - Video Feeds
+      summary: Videos podcast feed
+      operationId: getVideosPodcastFeed
+      parameters:
+        - name: videoChannelId
+          in: query
+          description: 'Limit listing to a specific video channel'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                default: 'max-age=900' # 15 min cache
+        '404':
+          description: video channel not found
 
   '/api/v1/accounts/{name}':
     get:

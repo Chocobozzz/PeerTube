@@ -108,8 +108,7 @@ const videoFeedsPodcastValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-
-    if (req.query.videoChannelId && !await doesVideoChannelIdExist(req.query.videoChannelId, res)) return
+    if (!await doesVideoChannelIdExist(req.query.videoChannelId, res)) return
 
     return next()
   }
