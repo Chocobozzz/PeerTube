@@ -545,11 +545,16 @@ p-table {
   }
 
   th {
+    @include padding-left(15px);
+    @include padding-right(0px);
+
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+
     border: none !important;
     border-bottom: 1px solid !important;
     border-color: pvar(--submenuBackgroundColor) !important;
-    text-align: left !important;
-    padding: 5px 0 5px 15px !important;
+    text-align: start !important;
     font-weight: $font-semibold !important;
     color: pvar(--mainForegroundColor) !important;
 
