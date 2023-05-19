@@ -5,6 +5,7 @@ import { pathExists, readdir } from 'fs-extra'
 import { homedir } from 'os'
 import { join } from 'path'
 import { PeerTubeServer } from '@shared/server-commands'
+import { PeerTubeRunnerProcess } from './peertube-runner-process'
 
 export async function checkTmpIsEmpty (server: PeerTubeServer) {
   await checkDirectoryIsEmpty(server, 'tmp', [ 'plugins-global.css', 'hls', 'resumable-uploads' ])
@@ -30,8 +31,8 @@ export async function checkDirectoryIsEmpty (server: PeerTubeServer, directory: 
   expect(filtered).to.have.lengthOf(0)
 }
 
-export async function checkPeerTubeRunnerCacheIsEmpty () {
-  const directoryPath = join(homedir(), '.cache', 'peertube-runner-nodejs', 'test', 'transcoding')
+export async function checkPeerTubeRunnerCacheIsEmpty (runner: PeerTubeRunnerProcess) {
+  const directoryPath = join(homedir(), '.cache', 'peertube-runner-nodejs', runner.getId(), 'transcoding')
 
   const directoryExists = await pathExists(directoryPath)
   expect(directoryExists).to.be.true

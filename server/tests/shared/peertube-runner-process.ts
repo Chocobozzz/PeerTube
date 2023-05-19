@@ -80,11 +80,15 @@ export class PeerTubeRunnerProcess {
     this.app = null
   }
 
+  getId () {
+    return 'test-' + this.server.internalServerNumber
+  }
+
   private getRunnerPath () {
     return join(root(), 'packages', 'peertube-runner', 'dist', 'peertube-runner.js')
   }
 
   private buildIdArg () {
-    return [ '--id', 'test-' + this.server.internalServerNumber ]
+    return [ '--id', this.getId() ]
   }
 }

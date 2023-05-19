@@ -178,7 +178,7 @@ describe('Test Live transcoding in peertube-runner program', function () {
   describe('Check cleanup', function () {
 
     it('Should have an empty cache directory', async function () {
-      await checkPeerTubeRunnerCacheIsEmpty()
+      await checkPeerTubeRunnerCacheIsEmpty(peertubeRunner)
     })
   })
 

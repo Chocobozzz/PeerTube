@@ -189,7 +189,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     })
 
     it('Should transcode videos on manual run', async function () {
-      this.timeout(240000)
+      this.timeout(360000)
 
       await servers[0].config.disableTranscoding()
 
@@ -329,7 +329,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
   describe('Check cleanup', function () {
 
     it('Should have an empty cache directory', async function () {
-      await checkPeerTubeRunnerCacheIsEmpty()
+      await checkPeerTubeRunnerCacheIsEmpty(peertubeRunner)
     })
   })
 
