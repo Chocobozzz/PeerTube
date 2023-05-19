@@ -59,7 +59,11 @@
       <td>{{ runnerJob.type }}</td>
       <td>{{ runnerJob.state.label }}</td>
       <td>{{ runnerJob.priority }}</td>
-      <td>{{ runnerJob.progress }}</td>
+
+      <td>
+        <ng-container *ngIf="runnerJob.progress">{{ runnerJob.progress }}%</ng-container>
+      </td>
+
       <td>{{ runnerJob.runner?.name }}</td>
       <td>{{ runnerJob.createdAt }}</td>
     </tr>
