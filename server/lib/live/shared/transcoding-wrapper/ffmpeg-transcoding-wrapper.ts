@@ -45,8 +45,6 @@ export class FFmpegTranscodingWrapper extends AbstractTranscodingWrapper {
 
     logger.info('Running local live muxing/transcoding for %s.', this.videoUUID, this.lTags())
 
-    this.ffmpegCommand.run()
-
     let ffmpegShellCommand: string
     this.ffmpegCommand.on('start', cmdline => {
       ffmpegShellCommand = cmdline
