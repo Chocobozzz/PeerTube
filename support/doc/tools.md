@@ -373,6 +373,7 @@ peertube-runner [commands] --id instance-2
 peertube-runner [commands] --id instance-3
 ```
 
+You can change the runner configuration (ffmpeg threads, ffmpeg nice etc) by editing `~/.config/peertube-runner-nodejs/[id]/config.toml`.
 
 ### Run the server
 

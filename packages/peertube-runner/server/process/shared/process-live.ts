@@ -21,6 +21,9 @@ export class ProcessLiveRTMPHLSTranscoding {
   private readonly outputPath: string
   private readonly fsWatchers: FSWatcher[] = []
 
+  // Playlist name -> chunks
+  private readonly pendingChunksPerPlaylist = new Map<string, string[]>()
+
   private readonly playlistsCreated = new Set<string>()
   private allPlaylistsCreated = false
 
@@ -68,9 +71,19 @@ export class ProcessLiveRTMPHLSTranscoding {
           }
         })
 
-        tsWatcher.on('add', p => {
-          this.sendAddedChunkUpdate(p)
-            .catch(err => this.onUpdateError(err, rej))
+        tsWatcher.on('add', async p => {
+          try {
+            await this.sendPendingChunks()
+          } catch (err) {
+            this.onUpdateError(err, rej)
+          }
+
+          const playlistName = this.getPlaylistIdFromTS(p)
+
+          const pendingChunks = this.pendingChunksPerPlaylist.get(playlistName) || []
+          pendingChunks.push(p)
+
+          this.pendingChunksPerPlaylist.set(playlistName, pendingChunks)
         })
 
         tsWatcher.on('unlink', p => {
@@ -230,31 +243,38 @@ export class ProcessLiveRTMPHLSTranscoding {
     return this.updateWithRetry(payload)
   }
 
-  private sendAddedChunkUpdate (addedChunk: string): Promise<any> {
+  private async sendPendingChunks (): Promise<any> {
     if (this.ended) return Promise.resolve()
 
-    logger.debug(`Sending added live chunk ${addedChunk} update`)
+    for (const playlist of this.pendingChunksPerPlaylist.keys()) {
+      for (const chunk of this.pendingChunksPerPlaylist.get(playlist)) {
+        logger.debug(`Sending added live chunk ${chunk} update`)
 
-    const videoChunkFilename = basename(addedChunk)
+        const videoChunkFilename = basename(chunk)
 
-    let payload: LiveRTMPHLSTranscodingUpdatePayload = {
-      type: 'add-chunk',
-      videoChunkFilename,
-      videoChunkFile: addedChunk
-    }
+        let payload: LiveRTMPHLSTranscodingUpdatePayload = {
+          type: 'add-chunk',
+          videoChunkFilename,
+          videoChunkFile: chunk
+        }
 
-    if (this.allPlaylistsCreated) {
-      const playlistName = this.getPlaylistName(videoChunkFilename)
+        if (this.allPlaylistsCreated) {
+          const playlistName = this.getPlaylistName(videoChunkFilename)
 
-      payload = {
-        ...payload,
-        masterPlaylistFile: join(this.outputPath, 'master.m3u8'),
-        resolutionPlaylistFilename: playlistName,
-        resolutionPlaylistFile: join(this.outputPath, playlistName)
+          payload = {
+            ...payload,
+            masterPlaylistFile: join(this.outputPath, 'master.m3u8'),
+            resolutionPlaylistFilename: playlistName,
+            resolutionPlaylistFile: join(this.outputPath, playlistName)
+          }
+        }
+
+        this.updateWithRetry(payload)
+          .catch(err => logger.error({ err }, 'Cannot update with retry'))
       }
-    }
 
-    return this.updateWithRetry(payload)
+      this.pendingChunksPerPlaylist.set(playlist, [])
+    }
   }
 
   private async updateWithRetry (payload: LiveRTMPHLSTranscodingUpdatePayload, currentTry = 1): Promise<any> {
@@ -279,6 +299,12 @@ export class ProcessLiveRTMPHLSTranscoding {
 
   private getPlaylistName (videoChunkFilename: string) {
     return `${videoChunkFilename.split('-')[0]}.m3u8`
+  }
+
+  private getPlaylistIdFromTS (segmentPath: string) {
+    const playlistIdMatcher = /^([\d+])-/
+
+    return basename(segmentPath).match(playlistIdMatcher)[1]
   }
 
   // ---------------------------------------------------------------------------
