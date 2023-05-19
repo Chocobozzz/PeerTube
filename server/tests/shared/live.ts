@@ -142,7 +142,7 @@ async function checkSavedLiveCleanup (hlsPath: string, savedResolutions: number[
   const files = await readdir(hlsPath)
 
   // fragmented file and playlist per resolution + master playlist + segments sha256 json file
-  expect(files).to.have.lengthOf(savedResolutions.length * 2 + 2)
+  expect(files, `Directory content: ${files.join(', ')}`).to.have.lengthOf(savedResolutions.length * 2 + 2)
 
   for (const resolution of savedResolutions) {
     const fragmentedFile = files.find(f => f.endsWith(`-${resolution}-fragmented.mp4`))
