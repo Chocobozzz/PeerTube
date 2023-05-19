@@ -17,6 +17,7 @@ import {
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models'
+import { wait } from '@shared/core-utils'
 import { VideoStorage, VideoStreamingPlaylistType } from '@shared/models'
 import {
   generateHLSMasterPlaylistFilename,
@@ -184,14 +185,21 @@ class MuxingSession extends EventEmitter {
   }
 
   private watchMasterFile () {
-    const watcher = this.filesWatcher.on('change', async path => {
+    this.filesWatcher.on('add', async path => {
       if (path !== join(this.outDirectory, this.streamingPlaylist.playlistFilename)) return
       if (this.masterPlaylistCreated === true) return
 
       try {
-        const masterPlaylistContent = await readFile(path, 'utf8')
-        // Not generated yet
-        if (!masterPlaylistContent) return
+        let masterPlaylistContent: string
+
+        do {
+          masterPlaylistContent = await readFile(path, 'utf8')
+
+          if (!masterPlaylistContent) {
+            await wait(250)
+            logger.debug('Waiting for master playlist generation for ' + this.videoUUID, this.lTags())
+          }
+        } while (!masterPlaylistContent) // Not generated yet
 
         if (this.streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
           const url = await storeHLSFileFromFilename(this.streamingPlaylist, this.streamingPlaylist.playlistFilename)
@@ -209,9 +217,6 @@ class MuxingSession extends EventEmitter {
       this.masterPlaylistCreated = true
 
       logger.info('Master playlist file for %s has been created', this.videoUUID, this.lTags())
-
-      watcher.close()
-        .catch(err => logger.error('Cannot close watcher', { err }))
     })
   }
 
