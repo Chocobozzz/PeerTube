@@ -7,13 +7,17 @@ import { PeerTubeServer } from '@shared/server-commands'
 export class PeerTubeRunnerProcess {
   private app?: ChildProcess
 
+  constructor (private readonly server: PeerTubeServer) {
+
+  }
+
   runServer (options: {
     hideLogs?: boolean // default true
   } = {}) {
     const { hideLogs = true } = options
 
     return new Promise<void>((res, rej) => {
-      const args = [ 'server', '--verbose', '--id', 'test' ]
+      const args = [ 'server', '--verbose', ...this.buildIdArg() ]
 
       const forkOptions = {
         detached: false,
@@ -34,19 +38,18 @@ export class PeerTubeRunnerProcess {
   }
 
   registerPeerTubeInstance (options: {
-    server: PeerTubeServer
     registrationToken: string
     runnerName: string
     runnerDescription?: string
   }) {
-    const { server, registrationToken, runnerName, runnerDescription } = options
+    const { registrationToken, runnerName, runnerDescription } = options
 
     const args = [
       'register',
-      '--url', server.url,
+      '--url', this.server.url,
       '--registration-token', registrationToken,
       '--runner-name', runnerName,
-      '--id', 'test'
+      ...this.buildIdArg()
     ]
 
     if (runnerDescription) {
@@ -57,17 +60,13 @@ export class PeerTubeRunnerProcess {
     return execa.node(this.getRunnerPath(), args)
   }
 
-  unregisterPeerTubeInstance (options: {
-    server: PeerTubeServer
-  }) {
-    const { server } = options
-
-    const args = [ 'unregister', '--url', server.url, '--id', 'test' ]
+  unregisterPeerTubeInstance () {
+    const args = [ 'unregister', '--url', this.server.url, ...this.buildIdArg() ]
     return execa.node(this.getRunnerPath(), args)
   }
 
   async listRegisteredPeerTubeInstances () {
-    const args = [ 'list-registered', '--id', 'test' ]
+    const args = [ 'list-registered', ...this.buildIdArg() ]
     const { stdout } = await execa.node(this.getRunnerPath(), args)
 
     return stdout
@@ -83,5 +82,9 @@ export class PeerTubeRunnerProcess {
 
   private getRunnerPath () {
     return join(root(), 'packages', 'peertube-runner', 'dist', 'peertube-runner.js')
+  }
+
+  private buildIdArg () {
+    return [ '--id', 'test-' + this.server.internalServerNumber ]
   }
 }

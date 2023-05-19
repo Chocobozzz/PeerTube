@@ -74,9 +74,9 @@ describe('Test studio transcoding in peertube-runner program', function () {
 
     const registrationToken = await servers[0].runnerRegistrationTokens.getFirstRegistrationToken()
 
-    peertubeRunner = new PeerTubeRunnerProcess()
+    peertubeRunner = new PeerTubeRunnerProcess(servers[0])
     await peertubeRunner.runServer()
-    await peertubeRunner.registerPeerTubeInstance({ server: servers[0], registrationToken, runnerName: 'runner' })
+    await peertubeRunner.registerPeerTubeInstance({ registrationToken, runnerName: 'runner' })
   })
 
   describe('With videos on local filesystem storage', function () {
@@ -109,7 +109,7 @@ describe('Test studio transcoding in peertube-runner program', function () {
 
   after(async function () {
     if (peertubeRunner) {
-      await peertubeRunner.unregisterPeerTubeInstance({ server: servers[0] })
+      await peertubeRunner.unregisterPeerTubeInstance()
       peertubeRunner.kill()
     }
 

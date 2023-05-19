@@ -114,7 +114,8 @@ elif [ "$1" = "external-plugins" ]; then
     externalPluginsFiles=$(findTestFiles ./dist/server/tests/external-plugins)
     peertubeRunnerFiles=$(findTestFiles ./dist/server/tests/peertube-runner)
 
-    runTest "$1" 1 $externalPluginsFiles $peertubeRunnerFiles
+    runTest "$1" 1 $externalPluginsFiles
+    MOCHA_PARALLEL=true runTest "$1" $((2*$speedFactor)) $peertubeRunnerFiles
 elif [ "$1" = "lint" ]; then
     npm run eslint -- --ext .ts "./server/**/*.ts" "shared/**/*.ts" "scripts/**/*.ts"
     npm run swagger-cli -- validate support/doc/api/openapi.yaml

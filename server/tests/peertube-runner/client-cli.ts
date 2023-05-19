@@ -18,7 +18,7 @@ describe('Test peertube-runner program client CLI', function () {
 
     await server.config.enableRemoteTranscoding()
 
-    peertubeRunner = new PeerTubeRunnerProcess()
+    peertubeRunner = new PeerTubeRunnerProcess(server)
     await peertubeRunner.runServer()
   })
 
@@ -32,7 +32,6 @@ describe('Test peertube-runner program client CLI', function () {
     const registrationToken = await server.runnerRegistrationTokens.getFirstRegistrationToken()
 
     await peertubeRunner.registerPeerTubeInstance({
-      server,
       registrationToken,
       runnerName: 'my super runner',
       runnerDescription: 'super description'
@@ -54,7 +53,7 @@ describe('Test peertube-runner program client CLI', function () {
   })
 
   it('Should unregister the PeerTube instance', async function () {
-    await peertubeRunner.unregisterPeerTubeInstance({ server })
+    await peertubeRunner.unregisterPeerTubeInstance()
   })
 
   it('Should not have PeerTube instance listed', async function () {

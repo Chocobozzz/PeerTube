@@ -112,7 +112,7 @@ export class ConfigManager {
   // ---------------------------------------------------------------------------
 
   isTestInstance () {
-    return this.id === 'test'
+    return typeof this.id === 'string' && this.id.match(/^test-\d$/)
   }
 
   // ---------------------------------------------------------------------------
