@@ -1,5 +1,5 @@
 import { throttle } from 'lodash'
-import { retryTransactionWrapper, saveInTransactionWithRetries } from '@server/helpers/database-utils'
+import { saveInTransactionWithRetries } from '@server/helpers/database-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { RUNNER_JOBS } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
@@ -124,11 +124,7 @@ export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S
       return
     }
 
-    await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async transaction => {
-        return runnerJob.save({ transaction })
-      })
-    })
+    await saveInTransactionWithRetries(runnerJob)
   }
 
   // ---------------------------------------------------------------------------
@@ -184,11 +180,7 @@ export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S
 
     runnerJob.setToErrorOrCancel(cancelState)
 
-    await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async transaction => {
-        await runnerJob.save({ transaction })
-      })
-    })
+    await saveInTransactionWithRetries(runnerJob)
 
     const children = await RunnerJobModel.listChildrenOf(runnerJob)
     for (const child of children) {
@@ -219,11 +211,7 @@ export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S
 
     runnerJob.resetToPending()
 
-    await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async transaction => {
-        await runnerJob.save({ transaction })
-      })
-    })
+    await saveInTransactionWithRetries(runnerJob)
   }
 
   protected setAbortState (runnerJob: MRunnerJob) {
@@ -260,11 +248,7 @@ export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S
       runnerJob.resetToPending()
     }
 
-    await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async transaction => {
-        await runnerJob.save({ transaction })
-      })
-    })
+    await saveInTransactionWithRetries(runnerJob)
 
     if (runnerJob.state === errorState) {
       const children = await RunnerJobModel.listChildrenOf(runnerJob)
