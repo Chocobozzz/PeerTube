@@ -14,12 +14,15 @@
   [value]="runnerJobs" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order"
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
-  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
+  [(selection)]="selectedRows" [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} runner jobs"
   [expandedRowKeys]="expandedRows" dataKey="uuid"
 >
   <ng-template pTemplate="header">
     <tr>
+      <th style="width: 40px">
+        <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
+      </th>
       <th style="width: 40px"></th>
       <th style="width: 120px;"></th>
       <th i18n>UUID</th>
@@ -33,7 +36,16 @@
   </ng-template>
 
   <ng-template pTemplate="caption">
+
     <div class="caption">
+      <div class="left-buttons">
+        <my-action-dropdown
+          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
+          [actions]="bulkActions" [entry]="selectedRows"
+        >
+        </my-action-dropdown>
+      </div>
+
       <div class="ms-auto d-flex">
         <my-advanced-input-filter class="me-2" (search)="onSearch($event)"></my-advanced-input-filter>
 
@@ -43,7 +55,11 @@
   </ng-template>
 
   <ng-template pTemplate="body" let-expanded="expanded" let-runnerJob>
-    <tr>
+    <tr [pSelectableRow]="runnerJob">
+      <td class="checkbox-cell">
+        <p-tableCheckbox [value]="runnerJob" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
+      </td>
+
       <td class="expand-cell" [pRowToggler]="runnerJob">
         <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
       </td>

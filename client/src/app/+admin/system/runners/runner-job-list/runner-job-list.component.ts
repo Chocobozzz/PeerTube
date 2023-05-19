@@ -1,8 +1,9 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
+import { prepareIcu } from '@app/helpers'
 import { DropdownAction } from '@app/shared/shared-main'
-import { RunnerJob } from '@shared/models'
+import { RunnerJob, RunnerJobState } from '@shared/models'
 import { RunnerJobFormatted, RunnerService } from '../runner.service'
 
 @Component({
@@ -17,6 +18,7 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   actions: DropdownAction<RunnerJob>[][] = []
+  bulkActions: DropdownAction<RunnerJob[]>[][] = []
 
   constructor (
     private runnerService: RunnerService,
@@ -31,7 +33,18 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
       [
         {
           label: $localize`Cancel this job`,
-          handler: job => this.cancelJob(job)
+          handler: job => this.cancelJobs([ job ]),
+          isDisplayed: job => this.canCancelJob(job)
+        }
+      ]
+    ]
+
+    this.bulkActions = [
+      [
+        {
+          label: $localize`Cancel`,
+          handler: jobs => this.cancelJobs(jobs),
+          isDisplayed: jobs => jobs.every(j => this.canCancelJob(j))
         }
       ]
     ]
@@ -43,19 +56,20 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
     return 'RunnerJobListComponent'
   }
 
-  async cancelJob (job: RunnerJob) {
-    const res = await this.confirmService.confirm(
-      $localize`Do you really want to cancel this job? Children won't be processed.`,
-      $localize`Cancel job`
-    )
+  async cancelJobs (jobs: RunnerJob[]) {
+    const message = prepareIcu(
+      $localize`Do you really want to cancel {count, plural, =1 {this job} other {{count} jobs}}? Children jobs will also be cancelled.`
+    )({ count: jobs.length }, $localize`Do you really want to cancel these jobs? Children jobs will also be cancelled.`)
+
+    const res = await this.confirmService.confirm(message, $localize`Cancel`)
 
     if (res === false) return
 
-    this.runnerService.cancelJob(job)
+    this.runnerService.cancelJobs(jobs)
         .subscribe({
           next: () => {
             this.reloadData()
-            this.notifier.success($localize`Job cancelled.`)
+            this.notifier.success($localize`Job(s) cancelled.`)
           },
 
           error: err => this.notifier.error(err.message)
@@ -72,5 +86,11 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
 
         error: err => this.notifier.error(err.message)
       })
+  }
+
+  private canCancelJob (job: RunnerJob) {
+    return job.state.id === RunnerJobState.PENDING ||
+      job.state.id === RunnerJobState.PROCESSING ||
+      job.state.id === RunnerJobState.WAITING_FOR_PARENT_JOB
   }
 }

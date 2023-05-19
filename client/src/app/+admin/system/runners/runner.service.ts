@@ -1,10 +1,10 @@
 
 import { SortMeta } from 'primeng/api'
-import { catchError, forkJoin, map } from 'rxjs'
+import { catchError, concatMap, forkJoin, from, map, toArray } from 'rxjs'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService, ServerService } from '@app/core'
-import { peertubeTranslate } from '@shared/core-utils'
+import { arrayify, peertubeTranslate } from '@shared/core-utils'
 import { ResultList } from '@shared/models/common'
 import { Runner, RunnerJob, RunnerJobAdmin, RunnerRegistrationToken } from '@shared/models/runners'
 import { environment } from '../../../../environments/environment'
@@ -90,9 +90,15 @@ export class RunnerService {
     )
   }
 
-  cancelJob (job: RunnerJob) {
-    return this.authHttp.post(RunnerService.BASE_RUNNER_URL + '/jobs/' + job.uuid + '/cancel', {})
-      .pipe(catchError(res => this.restExtractor.handleError(res)))
+  cancelJobs (jobsArg: RunnerJob | RunnerJob[]) {
+    const jobs = arrayify(jobsArg)
+
+    return from(jobs)
+      .pipe(
+        concatMap(job => this.authHttp.post(RunnerService.BASE_RUNNER_URL + '/jobs/' + job.uuid + '/cancel', {})),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   // ---------------------------------------------------------------------------
