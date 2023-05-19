@@ -1,7 +1,7 @@
 import { ensureDir, readdir, remove } from 'fs-extra'
 import { join } from 'path'
 import { io, Socket } from 'socket.io-client'
-import { pick } from '@shared/core-utils'
+import { pick, wait } from '@shared/core-utils'
 import { PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
 import { PeerTubeServer as PeerTubeServerCommand } from '@shared/server-commands'
 import { ConfigManager } from '../shared'
@@ -206,6 +206,8 @@ export class RunnerServer {
     this.checkingAvailableJobs = false
 
     if (hadAvailableJob && this.canProcessMoreJobs()) {
+      await wait(2500)
+
       this.checkAvailableJobs()
         .catch(err => logger.error({ err }, 'Cannot check more available jobs'))
     }
