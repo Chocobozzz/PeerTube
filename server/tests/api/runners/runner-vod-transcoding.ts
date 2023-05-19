@@ -228,6 +228,8 @@ describe('Test runner VOD transcoding', function () {
         const payload: VODWebVideoTranscodingSuccess = { videoFile: `video_short_${resolution}p.mp4` }
         await servers[0].runnerJobs.success({ runnerToken, jobUUID, jobToken, payload })
       }
+
+      await waitJobs(servers)
     })
 
     it('Should have the video updated', async function () {

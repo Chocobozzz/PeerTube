@@ -331,7 +331,7 @@ describe('Test moderation notifications', function () {
     let config: any
     let baseParams: CheckerBaseParams
 
-    before(async () => {
+    before(async function () {
       baseParams = {
         server: servers[0],
         emails,
@@ -427,7 +427,7 @@ describe('Test moderation notifications', function () {
     let videoName: string
     let currentCustomConfig: CustomConfig
 
-    before(async () => {
+    before(async function () {
 
       adminBaseParamsServer1 = {
         server: servers[0],

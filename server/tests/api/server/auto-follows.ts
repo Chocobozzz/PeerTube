@@ -127,7 +127,7 @@ describe('Test auto follows', function () {
     const instanceIndexServer = new MockInstancesIndex()
     let port: number
 
-    before(async () => {
+    before(async function () {
       port = await instanceIndexServer.initialize()
     })
 

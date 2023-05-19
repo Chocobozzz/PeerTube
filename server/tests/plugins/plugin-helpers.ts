@@ -287,7 +287,7 @@ describe('Test plugin helpers', function () {
     let videoUUID: string
     let videoPath: string
 
-    before(async () => {
+    before(async function () {
       this.timeout(240000)
 
       await servers[0].config.enableTranscoding()
