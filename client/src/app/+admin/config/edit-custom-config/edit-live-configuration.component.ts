@@ -71,12 +71,20 @@ export class EditLiveConfigurationComponent implements OnInit, OnChanges {
     return this.editConfigurationService.isLiveEnabled(this.form)
   }
 
+  isRemoteRunnerLiveEnabled () {
+    return this.editConfigurationService.isRemoteRunnerLiveEnabled(this.form)
+  }
+
   getDisabledLiveClass () {
     return { 'disabled-checkbox-extra': !this.isLiveEnabled() }
   }
 
   getDisabledLiveTranscodingClass () {
     return { 'disabled-checkbox-extra': !this.isLiveEnabled() || !this.isLiveTranscodingEnabled() }
+  }
+
+  getDisabledLiveLocalTranscodingClass () {
+    return { 'disabled-checkbox-extra': !this.isLiveEnabled() || !this.isLiveTranscodingEnabled() || this.isRemoteRunnerLiveEnabled() }
   }
 
   isLiveTranscodingEnabled () {

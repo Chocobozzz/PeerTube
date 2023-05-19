@@ -110,10 +110,45 @@
             </my-peertube-checkbox>
           </div>
 
-          <div class="form-group" formGroupName="remoteRunners" [ngClass]="getDisabledLiveTranscodingClass()">
+          <div class="callout callout-light pt-2 mt-2 pb-0">
+            <label i18n>Output formats</label>
+
+            <div class="form-group" [ngClass]="getDisabledLiveTranscodingClass()">
+              <label i18n for="liveTranscodingThreads">Live resolutions to generate</label>
+
+              <div class="ms-2 mt-2 d-flex flex-column">
+
+                <ng-container formGroupName="resolutions">
+                  <div class="form-group" *ngFor="let resolution of liveResolutions">
+                    <my-peertube-checkbox
+                      [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
+                      labelText="{{resolution.label}}"
+                    >
+                      <ng-template *ngIf="resolution.description" ptTemplate="help">
+                        <div [innerHTML]="resolution.description"></div>
+                      </ng-template>
+                    </my-peertube-checkbox>
+                  </div>
+                </ng-container>
+
+                <div class="form-group">
+                  <my-peertube-checkbox
+                    inputName="transcodingAlwaysTranscodeOriginalResolution" formControlName="alwaysTranscodeOriginalResolution"
+                    i18n-labelText labelText="Also transcode original resolution"
+                  >
+                    <ng-container i18n ngProjectAs="description">
+                      Even if it's above your maximum enabled resolution
+                    </ng-container>
+                  </my-peertube-checkbox>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group mt-4" formGroupName="remoteRunners" [ngClass]="getDisabledLiveTranscodingClass()">
             <my-peertube-checkbox
               inputName="transcodingRemoteRunnersEnabled" formControlName="enabled"
-              i18n-labelText labelText="Enable remote runners"
+              i18n-labelText labelText="Enable remote runners for lives"
             >
               <ng-container ngProjectAs="description">
                 <span i18n>
@@ -124,38 +159,7 @@
             </my-peertube-checkbox>
           </div>
 
-          <div class="form-group" [ngClass]="getDisabledLiveTranscodingClass()">
-            <label i18n for="liveTranscodingThreads">Live resolutions to generate</label>
-
-            <div class="ms-2 mt-2 d-flex flex-column">
-
-              <ng-container formGroupName="resolutions">
-                <div class="form-group" *ngFor="let resolution of liveResolutions">
-                  <my-peertube-checkbox
-                    [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
-                    labelText="{{resolution.label}}"
-                  >
-                    <ng-template *ngIf="resolution.description" ptTemplate="help">
-                      <div [innerHTML]="resolution.description"></div>
-                    </ng-template>
-                  </my-peertube-checkbox>
-                </div>
-              </ng-container>
-
-              <div class="form-group">
-                <my-peertube-checkbox
-                  inputName="transcodingAlwaysTranscodeOriginalResolution" formControlName="alwaysTranscodeOriginalResolution"
-                  i18n-labelText labelText="Also transcode original resolution"
-                >
-                  <ng-container i18n ngProjectAs="description">
-                    Even if it's above your maximum enabled resolution
-                  </ng-container>
-                </my-peertube-checkbox>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group" [ngClass]="getDisabledLiveTranscodingClass()">
+          <div class="form-group" [ngClass]="getDisabledLiveLocalTranscodingClass()">
             <label i18n for="liveTranscodingThreads">Live transcoding threads</label>
 
             <span class="small muted ms-1">
@@ -177,7 +181,7 @@
             <div *ngIf="formErrors.live.transcoding.threads" class="form-error">{{ formErrors.live.transcoding.threads }}</div>
           </div>
 
-          <div class="form-group mt-4" [ngClass]="getDisabledLiveTranscodingClass()">
+          <div class="form-group mt-4" [ngClass]="getDisabledLiveLocalTranscodingClass()">
             <label i18n for="liveTranscodingProfile">Live transcoding profile</label>
             <span class="small muted ms-1" i18n>new live transcoding profiles can be added by PeerTube plugins</span>
 

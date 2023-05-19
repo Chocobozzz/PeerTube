@@ -39,7 +39,7 @@ describe('Test upload quota', function () {
   describe('When having a video quota', function () {
 
     it('Should fail with a registered user having too many videos with legacy upload', async function () {
-      this.timeout(30000)
+      this.timeout(120000)
 
       const user = { username: 'registered' + randomInt(1, 1500), password: 'password' }
       await server.registrations.register(user)

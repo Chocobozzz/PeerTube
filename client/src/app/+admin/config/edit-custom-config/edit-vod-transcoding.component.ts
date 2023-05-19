@@ -58,6 +58,10 @@ export class EditVODTranscodingComponent implements OnInit, OnChanges {
     return 'transcoding.resolutions.' + resolution
   }
 
+  isRemoteRunnerVODEnabled () {
+    return this.editConfigurationService.isRemoteRunnerVODEnabled(this.form)
+  }
+
   isTranscodingEnabled () {
     return this.editConfigurationService.isTranscodingEnabled(this.form)
   }
@@ -68,6 +72,10 @@ export class EditVODTranscodingComponent implements OnInit, OnChanges {
 
   getTranscodingDisabledClass () {
     return { 'disabled-checkbox-extra': !this.isTranscodingEnabled() }
+  }
+
+  getLocalTranscodingDisabledClass () {
+    return { 'disabled-checkbox-extra': !this.isTranscodingEnabled() || this.isRemoteRunnerVODEnabled() }
   }
 
   getStudioDisabledClass () {

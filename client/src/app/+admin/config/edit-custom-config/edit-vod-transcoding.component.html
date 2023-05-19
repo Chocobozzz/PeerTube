@@ -37,20 +37,6 @@
 
             <ng-container ngProjectAs="extra">
 
-              <div class="form-group" formGroupName="remoteRunners" [ngClass]="getTranscodingDisabledClass()">
-                <my-peertube-checkbox
-                  inputName="transcodingRemoteRunnersEnabled" formControlName="enabled"
-                  i18n-labelText labelText="Enable remote runners"
-                >
-                  <ng-container ngProjectAs="description">
-                    <span i18n>
-                      Use <a routerLink="/admin/system/runners/runners-list">remote runners</a> to process VOD transcoding.
-                      Remote runners has to register on your instance first.
-                    </span>
-                  </ng-container>
-                </my-peertube-checkbox>
-              </div>
-
               <div class="callout callout-light pt-2 pb-0">
                 <label i18n>Input formats</label>
 
@@ -155,7 +141,21 @@
           </my-peertube-checkbox>
         </div>
 
-        <div class="form-group mt-4" [ngClass]="getTranscodingDisabledClass()">
+        <div class="form-group mt-4" formGroupName="remoteRunners" [ngClass]="getTranscodingDisabledClass()">
+          <my-peertube-checkbox
+            inputName="transcodingRemoteRunnersEnabled" formControlName="enabled"
+            i18n-labelText labelText="Enable remote runners for VOD"
+          >
+            <ng-container ngProjectAs="description">
+              <span i18n>
+                Use <a routerLink="/admin/system/runners/runners-list">remote runners</a> to process VOD transcoding.
+                Remote runners has to register on your instance first.
+              </span>
+            </ng-container>
+          </my-peertube-checkbox>
+        </div>
+
+        <div class="form-group mt-4" [ngClass]="getLocalTranscodingDisabledClass()">
           <label i18n for="transcodingThreads">Transcoding threads</label>
 
           <span class="small muted ms-1">
@@ -178,7 +178,7 @@
           <div *ngIf="formErrors.transcoding.threads" class="form-error">{{ formErrors.transcoding.threads }}</div>
         </div>
 
-        <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
+        <div class="form-group" [ngClass]="getLocalTranscodingDisabledClass()">
           <label i18n for="transcodingConcurrency">Transcoding jobs concurrency</label>
           <span class="small muted ms-1" i18n>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</span>
 
@@ -190,7 +190,7 @@
           <div *ngIf="formErrors.transcoding.concurrency" class="form-error">{{ formErrors.transcoding.concurrency }}</div>
         </div>
 
-        <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
+        <div class="form-group" [ngClass]="getLocalTranscodingDisabledClass()">
           <label i18n for="transcodingProfile">Transcoding profile</label>
           <span class="small muted ms-1" i18n>new transcoding profiles can be added by PeerTube plugins</span>
 
@@ -234,7 +234,7 @@
         <div class="form-group" formGroupName="remoteRunners" [ngClass]="getStudioDisabledClass()">
           <my-peertube-checkbox
             inputName="videoStudioRemoteRunnersEnabled" formControlName="enabled"
-            i18n-labelText labelText="Enable remote runners"
+            i18n-labelText labelText="Enable remote runners for studio"
           >
             <ng-container ngProjectAs="description">
               <span i18n>
