@@ -17,7 +17,6 @@ import {
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models'
-import { wait } from '@shared/core-utils'
 import { VideoStorage, VideoStreamingPlaylistType } from '@shared/models'
 import {
   generateHLSMasterPlaylistFilename,
@@ -190,17 +189,6 @@ class MuxingSession extends EventEmitter {
       if (this.masterPlaylistCreated === true) return
 
       try {
-        let masterPlaylistContent: string
-
-        do {
-          masterPlaylistContent = await readFile(path, 'utf8')
-
-          if (!masterPlaylistContent) {
-            await wait(250)
-            logger.debug('Waiting for master playlist generation for ' + this.videoUUID, this.lTags())
-          }
-        } while (!masterPlaylistContent) // Not generated yet
-
         if (this.streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
           const url = await storeHLSFileFromFilename(this.streamingPlaylist, this.streamingPlaylist.playlistFilename)
 
