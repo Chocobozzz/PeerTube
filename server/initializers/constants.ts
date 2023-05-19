@@ -577,6 +577,7 @@ const VIDEO_PLAYLIST_TYPES: { [ id in VideoPlaylistType ]: string } = {
 const RUNNER_JOB_STATES: { [ id in RunnerJobState ]: string } = {
   [RunnerJobState.PROCESSING]: 'Processing',
   [RunnerJobState.COMPLETED]: 'Completed',
+  [RunnerJobState.COMPLETING]: 'Completing',
   [RunnerJobState.PENDING]: 'Pending',
   [RunnerJobState.ERRORED]: 'Errored',
   [RunnerJobState.WAITING_FOR_PARENT_JOB]: 'Waiting for parent job to finish',

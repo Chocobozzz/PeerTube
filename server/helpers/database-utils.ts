@@ -68,6 +68,14 @@ function transactionRetryer <T> (func: (err: any, data: T) => any) {
   })
 }
 
+function saveInTransactionWithRetries <T extends Pick<Model, 'save'>> (model: T) {
+  return retryTransactionWrapper(() => {
+    return sequelizeTypescript.transaction(async transaction => {
+      await model.save({ transaction })
+    })
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 function resetSequelizeInstance <T> (instance: Model<T>) {
@@ -105,6 +113,7 @@ export {
   resetSequelizeInstance,
   retryTransactionWrapper,
   transactionRetryer,
+  saveInTransactionWithRetries,
   afterCommitIfTransaction,
   filterNonExistingModels,
   deleteAllModels,

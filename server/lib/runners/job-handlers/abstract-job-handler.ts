@@ -1,5 +1,5 @@
 import { throttle } from 'lodash'
-import { retryTransactionWrapper } from '@server/helpers/database-utils'
+import { retryTransactionWrapper, saveInTransactionWithRetries } from '@server/helpers/database-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { RUNNER_JOBS } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
@@ -12,10 +12,10 @@ import {
   RunnerJobLiveRTMPHLSTranscodingPayload,
   RunnerJobLiveRTMPHLSTranscodingPrivatePayload,
   RunnerJobState,
+  RunnerJobStudioTranscodingPayload,
   RunnerJobSuccessPayload,
   RunnerJobType,
   RunnerJobUpdatePayload,
-  RunnerJobStudioTranscodingPayload,
   RunnerJobVideoStudioTranscodingPrivatePayload,
   RunnerJobVODAudioMergeTranscodingPayload,
   RunnerJobVODAudioMergeTranscodingPrivatePayload,
@@ -139,6 +139,9 @@ export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S
   }) {
     const { runnerJob } = options
 
+    runnerJob.state = RunnerJobState.COMPLETING
+    await saveInTransactionWithRetries(runnerJob)
+
     try {
       await this.specificComplete(options)
 
@@ -153,11 +156,7 @@ export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S
     runnerJob.progress = null
     runnerJob.finishedAt = new Date()
 
-    await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async transaction => {
-        await runnerJob.save({ transaction })
-      })
-    })
+    await saveInTransactionWithRetries(runnerJob)
 
     const [ affectedCount ] = await RunnerJobModel.updateDependantJobsOf(runnerJob)
 
