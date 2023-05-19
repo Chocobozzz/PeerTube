@@ -325,7 +325,7 @@ export class PeerTubeServer {
   }
 
   private randomServer () {
-    const low = 10
+    const low = 2500
     const high = 10000
 
     return randomInt(low, high)
