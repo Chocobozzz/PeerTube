@@ -12,7 +12,7 @@ class MockSmtpServer {
 
   collectEmails (emailsCollection: object[]) {
     return new Promise<number>((res, rej) => {
-      const port = parallelTests() ? randomInt(1000, 2000) : 1025
+      const port = parallelTests() ? randomInt(1025, 2000) : 1025
       this.emails = emailsCollection
 
       if (this.started) {
