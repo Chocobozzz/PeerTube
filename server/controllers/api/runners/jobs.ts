@@ -42,6 +42,7 @@ import {
   RunnerJobType,
   RunnerJobUpdateBody,
   RunnerJobUpdatePayload,
+  ServerErrorCode,
   UserRight,
   VideoStudioTranscodingSuccess,
   VODAudioMergeTranscodingSuccess,
@@ -168,6 +169,7 @@ async function acceptRunnerJob (req: express.Request, res: express.Response) {
 
       if (runnerJob.state !== RunnerJobState.PENDING) {
         res.fail({
+          type: ServerErrorCode.RUNNER_JOB_NOT_IN_PENDING_STATE,
           message: 'This job is not in pending state anymore',
           status: HttpStatusCode.CONFLICT_409
         })

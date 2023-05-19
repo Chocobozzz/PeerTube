@@ -31,7 +31,7 @@ describe('Open Telemetry', function () {
     it('Should enable open telemetry metrics', async function () {
       this.timeout(120000)
 
-      server = await createSingleServer(1, {
+      await server.run({
         open_telemetry: {
           metrics: {
             enabled: true
@@ -73,7 +73,7 @@ describe('Open Telemetry', function () {
     it('Should disable http request duration metrics', async function () {
       await server.kill()
 
-      server = await createSingleServer(1, {
+      await server.run({
         open_telemetry: {
           metrics: {
             enabled: true,
@@ -114,7 +114,7 @@ describe('Open Telemetry', function () {
     })
 
     it('Should enable open telemetry metrics', async function () {
-      server = await createSingleServer(1, {
+      await server.run({
         open_telemetry: {
           tracing: {
             enabled: true,
