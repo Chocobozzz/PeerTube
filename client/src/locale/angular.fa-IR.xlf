@@ -1689,7 +1689,7 @@
       </trans-unit>
       <trans-unit id="7005745151564974365" datatype="html">
         <source>Keyboard shortcuts</source>
-        <target state="translated">کلیدهای میانبر</target>
+        <target state="translated">کلیدهای میان‌بر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">71</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
@@ -3487,7 +3487,7 @@
       </trans-unit>
       <trans-unit id="7227611412155083002" datatype="html">
         <source>Emoji shortcuts</source>
-        <target state="translated">میانبرهای Emoji</target>
+        <target state="translated">میان‌برهای ایموجی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6608581312644027413" datatype="html">
@@ -7992,7 +7992,7 @@
       </trans-unit>
       <trans-unit id="8245180845645676506" datatype="html">
         <source>200GB</source>
-        <target state="translated">200GB</target>
+        <target state="translated">200 گیگابایت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -9567,7 +9567,7 @@
       </trans-unit>
       <trans-unit id="5674286808255988565" datatype="html">
         <source>Create</source>
-        <target state="translated">ایجاد‌شده در</target>
+        <target state="translated">ایجاد‌</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">8</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">8</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-create.component.ts</context><context context-type="linenumber">107</context></context-group>
@@ -10044,7 +10044,7 @@
       </trans-unit>
       <trans-unit id="2206638022166154361" datatype="html">
         <source>Keyboard Shortcuts:</source>
-        <target state="translated">کلیدهای میانبر:</target>
+        <target state="translated">کلیدهای میان‌بر:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/hotkeys/hotkeys.component.ts</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="3608407683173066091" datatype="html">
@@ -10307,8 +10307,7 @@
       </trans-unit>
       <trans-unit id="4202012170513622087" datatype="html">
         <source>The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Since transcoding is enabled, videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target state="new"> The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Since transcoding is enabled, videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
-</target>
+        <target state="translated">سهمیه ویدئو فقط حجم <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>اصلی<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ویدئو را منظور می‌کند. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>چون کدگذاری فعال شده است، حجم ویدئوها حداکثر می‌تواند حدود <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/> باشد. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">1,4</context>
@@ -10773,7 +10772,7 @@
       </trans-unit>
       <trans-unit id="5621067256208426608" datatype="html">
         <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="translated">نام کاربری بایداز حروف الفبا کوچک باشد؛ نقاط و برجسته ها مجاز هستند.</target>
+        <target state="translated">نام کاربری باید از حروف الفبای کوچک باشد؛ نقطه و خط زیرین مجاز هستند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
@@ -10793,7 +10792,7 @@
       </trans-unit>
       <trans-unit id="3419415520566928243" datatype="html">
         <source>Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</source>
-        <target state="translated">نام کانال باید حروف کوچک باشد و فقط می تواند تنها کاراکترهای عددی، نقاط و حروف زیر را داشته باشد.</target>
+        <target state="translated">نام کانال باید با حروف کوچک بوده و فقط می‌تواند شامل حروف، اعداد، نقطه و خط زیرین باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="525871656034789056" datatype="html">
@@ -11016,7 +11015,7 @@
       </trans-unit>
       <trans-unit id="7915656854942800659" datatype="html">
         <source>Name should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="translated">نام باید شامل الفبای کوچک باشد؛ نقاط و برجسته ها مجاز هستند.</target>
+        <target state="translated">نام باید شامل الفبای کوچک باشد؛ نقطه و خط زیرین مجاز هستند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="6880459830525364741" datatype="html">
