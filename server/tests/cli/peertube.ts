@@ -321,15 +321,11 @@ describe('Test CLI wrapper', function () {
     })
 
     after(async function () {
-      this.timeout(10000)
-
       await cleanupTests([ anotherServer ])
     })
   })
 
   after(async function () {
-    this.timeout(10000)
-
     await cleanupTests([ server ])
   })
 })

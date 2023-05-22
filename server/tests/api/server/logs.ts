@@ -114,8 +114,6 @@ describe('Test logs', function () {
     })
 
     it('Should log ping requests', async function () {
-      this.timeout(10000)
-
       const now = new Date()
 
       await server.servers.ping()

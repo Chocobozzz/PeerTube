@@ -189,8 +189,6 @@ describe('Test plugins', function () {
   })
 
   it('Should have watched settings changes', async function () {
-    this.timeout(10000)
-
     await server.servers.waitUntilLog('Settings changed!')
   })
 

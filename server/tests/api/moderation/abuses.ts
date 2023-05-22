@@ -124,8 +124,6 @@ describe('Test abuses', function () {
     })
 
     it('Should report abuse on a remote video', async function () {
-      this.timeout(10000)
-
       const reason = 'my super bad reason 2'
       const videoId = await servers[0].videos.getId({ uuid: servers[1].store.videoCreated.uuid })
       await commands[0].report({ videoId, reason })
@@ -197,8 +195,6 @@ describe('Test abuses', function () {
     })
 
     it('Should hide video abuses from blocked accounts', async function () {
-      this.timeout(10000)
-
       {
         const videoId = await servers[1].videos.getId({ uuid: servers[0].store.videoCreated.uuid })
         await commands[1].report({ videoId, reason: 'will mute this' })
@@ -250,8 +246,6 @@ describe('Test abuses', function () {
     })
 
     it('Should keep the video abuse when deleting the video', async function () {
-      this.timeout(10000)
-
       await servers[1].videos.remove({ id: abuseServer2.video.uuid })
 
       await waitJobs(servers)
@@ -268,8 +262,6 @@ describe('Test abuses', function () {
     })
 
     it('Should include counts of reports from reporter and reportee', async function () {
-      this.timeout(10000)
-
       // register a second user to have two reporters/reportees
       const user = { username: 'user2', password: 'password' }
       await servers[0].users.create({ ...user })
@@ -307,8 +299,6 @@ describe('Test abuses', function () {
     })
 
     it('Should list predefined reasons as well as timestamps for the reported video', async function () {
-      this.timeout(10000)
-
       const reason5 = 'my super bad reason 5'
       const predefinedReasons5: AbusePredefinedReasonsString[] = [ 'violentOrRepulsive', 'captions' ]
       const createRes = await commands[0].report({
@@ -331,8 +321,6 @@ describe('Test abuses', function () {
     })
 
     it('Should delete the video abuse', async function () {
-      this.timeout(10000)
-
       await commands[1].delete({ abuseId: abuseServer2.id })
 
       await waitJobs(servers)
@@ -351,8 +339,6 @@ describe('Test abuses', function () {
     })
 
     it('Should list and filter video abuses', async function () {
-      this.timeout(10000)
-
       async function list (query: Parameters<AbusesCommand['getAdminList']>[0]) {
         const body = await commands[0].getAdminList(query)
 
@@ -457,8 +443,6 @@ describe('Test abuses', function () {
     })
 
     it('Should report abuse on a remote comment', async function () {
-      this.timeout(10000)
-
       const comment = await getComment(servers[0], servers[1].store.videoCreated.uuid)
 
       const reason = 'it is a really bad comment'
@@ -525,8 +509,6 @@ describe('Test abuses', function () {
     })
 
     it('Should keep the comment abuse when deleting the comment', async function () {
-      this.timeout(10000)
-
       const commentServer2 = await getComment(servers[0], servers[1].store.videoCreated.uuid)
 
       await servers[0].comments.delete({ videoId: servers[1].store.videoCreated.uuid, commentId: commentServer2.id })
@@ -546,8 +528,6 @@ describe('Test abuses', function () {
     })
 
     it('Should delete the comment abuse', async function () {
-      this.timeout(10000)
-
       await commands[1].delete({ abuseId: abuseServer2.id })
 
       await waitJobs(servers)
@@ -645,8 +625,6 @@ describe('Test abuses', function () {
     })
 
     it('Should report abuse on a remote account', async function () {
-      this.timeout(10000)
-
       const account = await getAccountFromServer(servers[0], 'user_2', servers[1])
 
       const reason = 'it is a really bad account'
@@ -699,8 +677,6 @@ describe('Test abuses', function () {
     })
 
     it('Should keep the account abuse when deleting the account', async function () {
-      this.timeout(10000)
-
       const account = await getAccountFromServer(servers[1], 'user_2', servers[1])
       await servers[1].users.remove({ userId: account.userId })
 
@@ -715,8 +691,6 @@ describe('Test abuses', function () {
     })
 
     it('Should delete the account abuse', async function () {
-      this.timeout(10000)
-
       await commands[1].delete({ abuseId: abuseServer2.id })
 
       await waitJobs(servers)

@@ -66,8 +66,6 @@ describe('Test users with multiple servers', function () {
   })
 
   it('Should be able to update my display name', async function () {
-    this.timeout(10000)
-
     await servers[0].users.updateMe({ displayName: 'my super display name' })
 
     user = await servers[0].users.getMyInfo()

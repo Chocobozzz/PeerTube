@@ -60,8 +60,6 @@ describe('Test HLS videos', function () {
     })
 
     it('Should delete videos', async function () {
-      this.timeout(10000)
-
       for (const uuid of videoUUIDs) {
         await servers[0].videos.remove({ id: uuid })
       }

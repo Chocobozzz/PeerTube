@@ -290,8 +290,6 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should reject token of Kefka by the plugin hook', async function () {
-    this.timeout(10000)
-
     await wait(5000)
 
     await server.users.getMyInfo({ token: kefkaAccessToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })

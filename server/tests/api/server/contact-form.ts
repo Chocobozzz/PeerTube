@@ -31,8 +31,6 @@ describe('Test contact form', function () {
   })
 
   it('Should send a contact form', async function () {
-    this.timeout(10000)
-
     await command.send({
       fromEmail: 'toto@example.com',
       body: 'my super message',
@@ -61,8 +59,6 @@ describe('Test contact form', function () {
   })
 
   it('Should not be able to send another contact form because of the anti spam checker', async function () {
-    this.timeout(10000)
-
     await wait(1000)
 
     await command.send({

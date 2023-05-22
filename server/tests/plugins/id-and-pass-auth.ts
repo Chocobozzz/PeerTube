@@ -163,8 +163,6 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should reject token of laguna by the plugin hook', async function () {
-    this.timeout(10000)
-
     await wait(5000)
 
     await server.users.getMyInfo({ token: lagunaAccessToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })

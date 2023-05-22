@@ -32,8 +32,6 @@ describe('Test index search', function () {
   describe('Default search', async function () {
 
     it('Should make a local videos search by default', async function () {
-      this.timeout(10000)
-
       await server.config.updateCustomSubConfig({
         newConfig: {
           search: {

@@ -136,8 +136,6 @@ describe('Test a single server', function () {
     })
 
     it('Should upload the video', async function () {
-      this.timeout(10000)
-
       const attributes = {
         name: 'my super name',
         category: 2,

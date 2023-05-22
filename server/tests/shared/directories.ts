@@ -39,5 +39,5 @@ export async function checkPeerTubeRunnerCacheIsEmpty (runner: PeerTubeRunnerPro
 
   const files = await readdir(directoryPath)
 
-  expect(files).to.have.lengthOf(0)
+  expect(files, 'Directory content: ' + files.join(', ')).to.have.lengthOf(0)
 }

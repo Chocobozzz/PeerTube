@@ -466,8 +466,6 @@ describe('Test server plugins API validators', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      this.timeout(10000)
-
       const it = [
         { suffix: 'install', status: HttpStatusCode.OK_200 },
         { suffix: 'update', status: HttpStatusCode.OK_200 },

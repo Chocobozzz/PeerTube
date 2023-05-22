@@ -378,8 +378,6 @@ describe('Test video channels', function () {
   })
 
   it('Should list the second video channel videos', async function () {
-    this.timeout(10000)
-
     for (const server of servers) {
       const channelURI = 'second_video_channel@' + servers[0].host
       const { total, data } = await server.videos.listByChannel({ handle: channelURI })
@@ -392,16 +390,12 @@ describe('Test video channels', function () {
   })
 
   it('Should change the video channel of a video', async function () {
-    this.timeout(10000)
-
     await servers[0].videos.update({ id: videoUUID, attributes: { channelId: servers[0].store.channel.id } })
 
     await waitJobs(servers)
   })
 
   it('Should list the first video channel videos', async function () {
-    this.timeout(10000)
-
     for (const server of servers) {
       {
         const secondChannelURI = 'second_video_channel@' + servers[0].host
@@ -452,8 +446,6 @@ describe('Test video channels', function () {
   })
 
   it('Should report correct channel views per days', async function () {
-    this.timeout(10000)
-
     {
       const { data } = await servers[0].channels.listByAccount({ accountName, withStats: true })
 

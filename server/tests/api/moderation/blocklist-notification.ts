@@ -113,8 +113,6 @@ describe('Test blocklist notifications', function () {
     })
 
     it('Should block an account', async function () {
-      this.timeout(10000)
-
       await servers[0].blocklist.addToMyBlocklist({ token: userToken1, account: 'user3@' + servers[1].host })
       await waitJobs(servers)
     })
@@ -146,8 +144,6 @@ describe('Test blocklist notifications', function () {
     })
 
     it('Should block an account', async function () {
-      this.timeout(10000)
-
       await servers[0].blocklist.addToMyBlocklist({ token: userToken1, server: servers[1].host })
       await waitJobs(servers)
     })
@@ -186,8 +182,6 @@ describe('Test blocklist notifications', function () {
     })
 
     it('Should block an account', async function () {
-      this.timeout(10000)
-
       await servers[0].blocklist.addToServerBlocklist({ account: 'user3@' + servers[1].host })
       await waitJobs(servers)
     })
@@ -221,8 +215,6 @@ describe('Test blocklist notifications', function () {
     })
 
     it('Should block an account', async function () {
-      this.timeout(10000)
-
       await servers[0].blocklist.addToServerBlocklist({ server: servers[1].host })
       await waitJobs(servers)
     })

@@ -150,8 +150,6 @@ describe('Test AP refresher', function () {
   })
 
   after(async function () {
-    this.timeout(10000)
-
     await sqlCommandServer2.cleanup()
 
     await cleanupTests(servers)

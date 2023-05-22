@@ -220,8 +220,6 @@ describe('Test ActivityPub security', function () {
 
   describe('When checking Linked Data Signature', function () {
     before(async function () {
-      this.timeout(10000)
-
       await setKeysOfServer(sqlCommands[0], servers[1].url, keys.publicKey, keys.privateKey)
       await setKeysOfServer(sqlCommands[1], servers[1].url, keys.publicKey, keys.privateKey)
       await setKeysOfServer(sqlCommands[2], servers[2].url, keys.publicKey, keys.privateKey)
@@ -232,8 +230,6 @@ describe('Test ActivityPub security', function () {
     })
 
     it('Should fail with bad keys', async function () {
-      this.timeout(10000)
-
       await setKeysOfServer(sqlCommands[0], servers[2].url, invalidKeys.publicKey, invalidKeys.privateKey)
       await setKeysOfServer(sqlCommands[2], servers[2].url, invalidKeys.publicKey, invalidKeys.privateKey)
 
@@ -254,8 +250,6 @@ describe('Test ActivityPub security', function () {
     })
 
     it('Should fail with an altered body', async function () {
-      this.timeout(10000)
-
       await setKeysOfServer(sqlCommands[0], servers[2].url, keys.publicKey, keys.privateKey)
       await setKeysOfServer(sqlCommands[0], servers[2].url, keys.publicKey, keys.privateKey)
 
@@ -278,8 +272,6 @@ describe('Test ActivityPub security', function () {
     })
 
     it('Should succeed with a valid signature', async function () {
-      this.timeout(10000)
-
       const body = getAnnounceWithoutContext(servers[1])
       body.actor = servers[2].url + '/accounts/peertube'
 

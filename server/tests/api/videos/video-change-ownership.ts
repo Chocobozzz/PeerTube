@@ -130,14 +130,10 @@ describe('Test video change ownership - nominal', function () {
   })
 
   it('Should accept the same change ownership request without crashing', async function () {
-    this.timeout(10000)
-
     await command.create({ token: firstUserToken, videoId: servers[0].store.videoCreated.id, username: secondUser })
   })
 
   it('Should not create multiple change ownership requests while one is waiting', async function () {
-    this.timeout(10000)
-
     const body = await command.list({ token: secondUserToken })
 
     expect(body.total).to.equal(1)
@@ -146,14 +142,10 @@ describe('Test video change ownership - nominal', function () {
   })
 
   it('Should not be possible to refuse the change of ownership from first user', async function () {
-    this.timeout(10000)
-
     await command.refuse({ token: firstUserToken, ownershipId: lastRequestId, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
   })
 
   it('Should be possible to refuse the change of ownership from second user', async function () {
-    this.timeout(10000)
-
     await command.refuse({ token: secondUserToken, ownershipId: lastRequestId })
   })
 
@@ -184,8 +176,6 @@ describe('Test video change ownership - nominal', function () {
   })
 
   it('Should not be possible to accept the change of ownership from first user', async function () {
-    this.timeout(10000)
-
     await command.accept({
       token: firstUserToken,
       ownershipId: lastRequestId,
@@ -195,8 +185,6 @@ describe('Test video change ownership - nominal', function () {
   })
 
   it('Should be possible to accept the change of ownership from second user', async function () {
-    this.timeout(10000)
-
     await command.accept({ token: secondUserToken, ownershipId: lastRequestId, channelId: secondUserChannelId })
 
     await waitJobs(servers)
@@ -309,8 +297,6 @@ describe('Test video change ownership - quota too small', function () {
   })
 
   it('Should not be possible to accept the change of ownership from second user because of exceeded quota', async function () {
-    this.timeout(10000)
-
     const { videoChannels } = await server.users.getMyInfo({ token: secondUserToken })
     const channelId = videoChannels[0].id
 

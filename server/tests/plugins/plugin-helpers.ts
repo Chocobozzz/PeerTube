@@ -219,7 +219,6 @@ describe('Test plugin helpers', function () {
     })
 
     it('Should mute server 2', async function () {
-      this.timeout(10000)
       await postCommand(servers[0], 'blockServer', { hostToBlock: servers[1].host })
 
       const { data } = await servers[0].videos.list()
@@ -254,8 +253,6 @@ describe('Test plugin helpers', function () {
     })
 
     it('Should blacklist video', async function () {
-      this.timeout(10000)
-
       await postCommand(servers[0], 'blacklist', { videoUUID: videoUUIDServer1, unfederate: true })
 
       await waitJobs(servers)
@@ -269,8 +266,6 @@ describe('Test plugin helpers', function () {
     })
 
     it('Should unblacklist video', async function () {
-      this.timeout(10000)
-
       await postCommand(servers[0], 'unblacklist', { videoUUID: videoUUIDServer1 })
 
       await waitJobs(servers)

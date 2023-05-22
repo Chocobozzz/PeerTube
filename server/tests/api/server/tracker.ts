@@ -27,7 +27,6 @@ describe('Test tracker', function () {
   })
 
   it('Should succeed with the correct infohash', function (done) {
-    this.timeout(10000)
     const webtorrent = new WebTorrent()
 
     const torrent = webtorrent.add(goodMagnet)

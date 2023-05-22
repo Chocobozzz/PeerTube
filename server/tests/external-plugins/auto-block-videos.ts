@@ -71,8 +71,6 @@ describe('Official plugin auto-block videos', function () {
   })
 
   it('Should auto block a video', async function () {
-    this.timeout(10000)
-
     await check(servers[0], server2Videos[0].uuid, true)
 
     blocklistServer.replace({
@@ -98,8 +96,6 @@ describe('Official plugin auto-block videos', function () {
   })
 
   it('Should not block a local video', async function () {
-    this.timeout(10000)
-
     await check(servers[0], server1Videos[0].uuid, true)
 
     blocklistServer.replace({
@@ -116,8 +112,6 @@ describe('Official plugin auto-block videos', function () {
   })
 
   it('Should remove a video block', async function () {
-    this.timeout(10000)
-
     await check(servers[0], server2Videos[0].uuid, false)
 
     blocklistServer.replace({

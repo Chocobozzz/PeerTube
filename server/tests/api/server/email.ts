@@ -124,8 +124,6 @@ describe('Test emails', function () {
   describe('When creating a user without password', function () {
 
     it('Should send a create password email', async function () {
-      this.timeout(10000)
-
       await server.users.create({ username: 'create_password', password: '' })
 
       await waitJobs(server)
@@ -179,8 +177,6 @@ describe('Test emails', function () {
   describe('When creating an abuse', function () {
 
     it('Should send the notification email', async function () {
-      this.timeout(10000)
-
       const reason = 'my super bad reason'
       await server.abuses.report({ token: userAccessToken, videoId, reason })
 
@@ -200,8 +196,6 @@ describe('Test emails', function () {
   describe('When blocking/unblocking user', function () {
 
     it('Should send the notification email when blocking a user', async function () {
-      this.timeout(10000)
-
       const reason = 'my super bad reason'
       await server.users.banUser({ userId, reason })
 
@@ -219,8 +213,6 @@ describe('Test emails', function () {
     })
 
     it('Should send the notification email when unblocking a user', async function () {
-      this.timeout(10000)
-
       await server.users.unbanUser({ userId })
 
       await waitJobs(server)
@@ -238,8 +230,6 @@ describe('Test emails', function () {
 
   describe('When blacklisting a video', function () {
     it('Should send the notification email', async function () {
-      this.timeout(10000)
-
       const reason = 'my super reason'
       await server.blacklist.add({ videoId: videoUserUUID, reason })
 
@@ -257,8 +247,6 @@ describe('Test emails', function () {
     })
 
     it('Should send the notification email', async function () {
-      this.timeout(10000)
-
       await server.blacklist.remove({ videoId: videoUserUUID })
 
       await waitJobs(server)
@@ -282,8 +270,6 @@ describe('Test emails', function () {
   describe('When verifying a user email', function () {
 
     it('Should ask to send the verification email', async function () {
-      this.timeout(10000)
-
       await server.users.askSendVerifyEmail({ email: 'user_1@example.com' })
 
       await waitJobs(server)
@@ -337,8 +323,6 @@ describe('Test emails', function () {
     })
 
     it('Should ask to send the verification email', async function () {
-      this.timeout(10000)
-
       await server.registrations.askSendVerifyEmail({ email: 'request_1@example.com' })
 
       await waitJobs(server)
