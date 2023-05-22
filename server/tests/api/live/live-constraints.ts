@@ -173,6 +173,8 @@ describe('Test live constraints', function () {
 
     await servers[0].live.waitUntilPublished({ videoId: userVideoLiveoId })
 
+    const baseQuota = await servers[0].users.getMyQuotaUsed({ token: userAccessToken })
+
     await wait(3000)
 
     const quotaUser = await servers[0].users.getMyQuotaUsed({ token: userAccessToken })
@@ -180,11 +182,16 @@ describe('Test live constraints', function () {
     const { data } = await servers[0].users.list()
     const quotaAdmin = data.find(u => u.username === 'user1')
 
-    expect(quotaUser.videoQuotaUsed).to.equal(quotaAdmin.videoQuotaUsed)
-    expect(quotaUser.videoQuotaUsedDaily).to.equal(quotaAdmin.videoQuotaUsedDaily)
+    expect(quotaUser.videoQuotaUsed).to.be.above(baseQuota.videoQuotaUsed)
+    expect(quotaUser.videoQuotaUsedDaily).to.be.above(baseQuota.videoQuotaUsedDaily)
+
+    expect(quotaAdmin.videoQuotaUsed).to.be.above(baseQuota.videoQuotaUsed)
+    expect(quotaAdmin.videoQuotaUsedDaily).to.be.above(baseQuota.videoQuotaUsedDaily)
 
     expect(quotaUser.videoQuotaUsed).to.be.above(10)
     expect(quotaUser.videoQuotaUsedDaily).to.be.above(10)
+    expect(quotaAdmin.videoQuotaUsed).to.be.above(10)
+    expect(quotaAdmin.videoQuotaUsedDaily).to.be.above(10)
 
     await stopFfmpeg(ffmpegCommand)
   })

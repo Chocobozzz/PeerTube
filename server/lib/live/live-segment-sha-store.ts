@@ -72,6 +72,8 @@ class LiveSegmentShaStore {
 
   private writeToDisk () {
     return this.writeQueue.add(async () => {
+      logger.debug(`Writing segment sha JSON ${this.sha256Path} of ${this.videoUUID} on disk %s.`, lTags(this.videoUUID))
+
       // Atomic write: use rename instead of move that is not atomic
       await writeJson(this.sha256PathTMP, mapToJSON(this.segmentsSha256))
       await rename(this.sha256PathTMP, this.sha256Path)

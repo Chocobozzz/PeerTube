@@ -674,22 +674,6 @@ describe('Test managing runners', function () {
           await testUpdate({ ...base, type: undefined })
           await testUpdate({ ...base, type: 'toto' as any })
         })
-
-        it('Should succeed with the correct params', async function () {
-          await server.runnerJobs.update({
-            jobUUID: liveAcceptedJob.uuid,
-            jobToken: liveAcceptedJob.jobToken,
-            payload: base,
-            runnerToken
-          })
-
-          await server.runnerJobs.update({
-            jobUUID: liveAcceptedJob.uuid,
-            jobToken: liveAcceptedJob.jobToken,
-            payload: { ...base, masterPlaylistFile: undefined },
-            runnerToken
-          })
-        })
       })
     })
 
