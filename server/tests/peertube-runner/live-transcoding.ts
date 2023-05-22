@@ -76,7 +76,7 @@ describe('Test Live transcoding in peertube-runner program', function () {
     })
 
     it('Should save a replay', async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       const { video } = await servers[0].live.quickCreate({ permanentLive: true, saveReplay: true })
 

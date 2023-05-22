@@ -86,12 +86,6 @@ export class MenuComponent implements OnInit, OnDestroy {
     return this.screenService.isInMobileView()
   }
 
-  get dropdownContainer () {
-    if (this.isInMobileView) return null
-
-    return 'body' as 'body'
-  }
-
   get language () {
     return this.languageChooserModal.getCurrentLanguage()
   }

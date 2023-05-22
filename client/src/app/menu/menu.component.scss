@@ -114,7 +114,7 @@ my-notification {
         display: inherit !important;
       }
 
-      > .dropdown-toggle {
+      &.dropdown-toggle {
         max-width: 88% !important;
       }
     }
@@ -144,7 +144,7 @@ my-notification {
     /* fill space when on mobile */
     max-width: calc(100% - 80px);
 
-    .dropdown-toggle {
+    &.dropdown-toggle {
       max-width: 100%;
     }
 
@@ -171,7 +171,8 @@ my-notification {
   > .dropdown-toggle:first-child {
     display: flex;
     align-items: center;
-    padding: 5px 7px;
+    width: 100%;
+    padding: 5px 25px 5px 7px;
   }
 }
 

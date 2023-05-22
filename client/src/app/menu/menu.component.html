@@ -5,7 +5,7 @@
         <div>
           <div
             class="logged-in-more" ngbDropdown #dropdown="ngbDropdown" placement="bottom-left auto"
-            [container]="dropdownContainer" (openChange)="onDropdownOpenChange($event)" autoClose="outside"
+            container="body" (openChange)="onDropdownOpenChange($event)" autoClose="outside"
           >
             <button class="border-0 text-start" ngbDropdownToggle>
               <my-actor-avatar [actor]="user.account" actorType="account" size="34"></my-actor-avatar>
