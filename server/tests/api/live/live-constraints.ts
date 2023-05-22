@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { wait } from '@shared/core-utils'
-import { LiveVideoError, VideoPrivacy } from '@shared/models'
+import { LiveVideoError, UserVideoQuota, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   ConfigCommand,
@@ -172,12 +172,18 @@ describe('Test live constraints', function () {
     const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ token: userAccessToken, videoId: userVideoLiveoId })
 
     await servers[0].live.waitUntilPublished({ videoId: userVideoLiveoId })
+    // Wait previous live cleanups
+    await wait(3000)
 
     const baseQuota = await servers[0].users.getMyQuotaUsed({ token: userAccessToken })
 
-    await wait(3000)
+    let quotaUser: UserVideoQuota
 
-    const quotaUser = await servers[0].users.getMyQuotaUsed({ token: userAccessToken })
+    do {
+      await wait(500)
+
+      quotaUser = await servers[0].users.getMyQuotaUsed({ token: userAccessToken })
+    } while (quotaUser.videoQuotaUsed < baseQuota.videoQuotaUsed)
 
     const { data } = await servers[0].users.list()
     const quotaAdmin = data.find(u => u.username === 'user1')

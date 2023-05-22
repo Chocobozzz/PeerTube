@@ -313,7 +313,7 @@ class LiveManager {
     const liveSession = await this.saveStartingSession(videoLive)
 
     const user = await UserModel.loadByLiveId(videoLive.id)
-    LiveQuotaStore.Instance.addNewLive(user.id, videoLive.id)
+    LiveQuotaStore.Instance.addNewLive(user.id, sessionId)
 
     const muxingSession = new MuxingSession({
       context: this.getContext(),
@@ -359,7 +359,7 @@ class LiveManager {
     muxingSession.on('after-cleanup', ({ videoUUID }) => {
       this.muxingSessions.delete(sessionId)
 
-      LiveQuotaStore.Instance.removeLive(user.id, videoLive.id)
+      LiveQuotaStore.Instance.removeLive(user.id, sessionId)
 
       muxingSession.destroy()
 

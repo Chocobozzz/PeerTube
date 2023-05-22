@@ -271,7 +271,7 @@ class MuxingSession extends EventEmitter {
     try {
       const segmentStat = await stat(segmentPath)
 
-      LiveQuotaStore.Instance.addQuotaTo(this.user.id, this.videoLive.id, segmentStat.size)
+      LiveQuotaStore.Instance.addQuotaTo(this.user.id, this.sessionId, segmentStat.size)
 
       const canUpload = await this.isAbleToUploadVideoWithCache(this.user.id)
 
