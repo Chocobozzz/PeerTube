@@ -133,7 +133,7 @@ function buildVideosHelpers () {
 
       const thumbnails = video.Thumbnails.map(t => ({
         type: t.type,
-        url: t.getFileUrl(video),
+        url: t.getOriginFileUrl(video),
         path: t.getPath()
       }))
 

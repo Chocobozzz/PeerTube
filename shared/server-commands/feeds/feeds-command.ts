@@ -30,6 +30,29 @@ export class FeedCommand extends AbstractCommand {
     })
   }
 
+  getPodcastXML (options: OverrideCommandOptions & {
+    ignoreCache: boolean
+    channelId: number
+  }) {
+    const { ignoreCache, channelId } = options
+    const path = `/feeds/podcast/videos.xml`
+
+    const query: { [id: string]: string } = {}
+
+    if (ignoreCache) query.v = buildUUID()
+    if (channelId) query.videoChannelId = channelId + ''
+
+    return this.getRequestText({
+      ...options,
+
+      path,
+      query,
+      accept: 'application/xml',
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
   getJSON (options: OverrideCommandOptions & {
     feed: FeedType
     ignoreCache: boolean

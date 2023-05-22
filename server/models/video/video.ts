@@ -1,9 +1,11 @@
 import Bluebird from 'bluebird'
 import { remove } from 'fs-extra'
 import { maxBy, minBy } from 'lodash'
-import { join } from 'path'
 import { FindOptions, Includeable, IncludeOptions, Op, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
+  AfterCreate,
+  AfterDestroy,
+  AfterUpdate,
   AllowNull,
   BeforeDestroy,
   BelongsTo,
@@ -25,6 +27,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
+import { InternalEventEmitter } from '@server/lib/internal-event-emitter'
 import { LiveManager } from '@server/lib/live/live-manager'
 import { removeHLSFileObjectStorageByFilename, removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
 import { tracer } from '@server/lib/opentelemetry/tracing'
@@ -66,7 +69,7 @@ import {
 } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
-import { ACTIVITY_PUB, API_VERSION, CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
+import { ACTIVITY_PUB, API_VERSION, CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { sendDeleteVideo } from '../../lib/activitypub/send'
 import {
   MChannel,
@@ -740,8 +743,23 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   })
   VideoJobInfo: VideoJobInfoModel
 
+  @AfterCreate
+  static notifyCreate (video: MVideo) {
+    InternalEventEmitter.Instance.emit('video-created', { video })
+  }
+
+  @AfterUpdate
+  static notifyUpdate (video: MVideo) {
+    InternalEventEmitter.Instance.emit('video-updated', { video })
+  }
+
+  @AfterDestroy
+  static notifyDestroy (video: MVideo) {
+    InternalEventEmitter.Instance.emit('video-deleted', { video })
+  }
+
   @BeforeDestroy
-  static async sendDelete (instance: MVideoAccountLight, options) {
+  static async sendDelete (instance: MVideoAccountLight, options: { transaction: Transaction }) {
     if (!instance.isOwned()) return undefined
 
     // Lazy load channels
@@ -1686,15 +1704,14 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const thumbnail = this.getMiniature()
     if (!thumbnail) return null
 
-    return join(STATIC_PATHS.THUMBNAILS, thumbnail.filename)
+    return thumbnail.getLocalStaticPath()
   }
 
   getPreviewStaticPath () {
     const preview = this.getPreview()
     if (!preview) return null
 
-    // We use a local cache, so specify our cache endpoint instead of potential remote URL
-    return join(LAZY_STATIC_PATHS.PREVIEWS, preview.filename)
+    return preview.getLocalStaticPath()
   }
 
   toFormattedJSON (this: MVideoFormattable, options?: VideoFormattingJSONOptions): Video {
@@ -1705,17 +1722,29 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return videoModelToFormattedDetailsJSON(this)
   }
 
-  getFormattedVideoFilesJSON (includeMagnet = true): VideoFile[] {
+  getFormattedWebVideoFilesJSON (includeMagnet = true): VideoFile[] {
+    return videoFilesModelToFormattedJSON(this, this.VideoFiles, { includeMagnet })
+  }
+
+  getFormattedHLSVideoFilesJSON (includeMagnet = true): VideoFile[] {
+    let acc: VideoFile[] = []
+
+    for (const p of this.VideoStreamingPlaylists) {
+      acc = acc.concat(videoFilesModelToFormattedJSON(this, p.VideoFiles, { includeMagnet }))
+    }
+
+    return acc
+  }
+
+  getFormattedAllVideoFilesJSON (includeMagnet = true): VideoFile[] {
     let files: VideoFile[] = []
 
     if (Array.isArray(this.VideoFiles)) {
-      const result = videoFilesModelToFormattedJSON(this, this.VideoFiles, { includeMagnet })
-      files = files.concat(result)
+      files = files.concat(this.getFormattedWebVideoFilesJSON(includeMagnet))
     }
 
-    for (const p of (this.VideoStreamingPlaylists || [])) {
-      const result = videoFilesModelToFormattedJSON(this, p.VideoFiles, { includeMagnet })
-      files = files.concat(result)
+    if (Array.isArray(this.VideoStreamingPlaylists)) {
+      files = files.concat(this.getFormattedHLSVideoFilesJSON(includeMagnet))
     }
 
     return files

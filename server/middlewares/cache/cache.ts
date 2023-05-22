@@ -17,12 +17,22 @@ function cacheRoute (duration: string) {
 function cacheRouteFactory (options: APICacheOptions) {
   const instance = new ApiCache({ ...defaultOptions, ...options })
 
-  return instance.buildMiddleware.bind(instance)
+  return { instance, middleware: instance.buildMiddleware.bind(instance) }
+}
+
+// ---------------------------------------------------------------------------
+
+function buildPodcastGroupsCache (options: {
+  channelId: number
+}) {
+  return 'podcast-feed-' + options.channelId
 }
 
 // ---------------------------------------------------------------------------
 
 export {
   cacheRoute,
-  cacheRouteFactory
+  cacheRouteFactory,
+
+  buildPodcastGroupsCache
 }

@@ -27,7 +27,13 @@ export class ApiCache {
   private readonly options: APICacheOptions
   private readonly timers: { [ id: string ]: NodeJS.Timeout } = {}
 
-  private readonly index: { all: string[] } = { all: [] }
+  private readonly index = {
+    groups: [] as string[],
+    all: [] as string[]
+  }
+
+  // Cache keys per group
+  private groups: { [groupIndex: string]: string[] } = {}
 
   constructor (options: APICacheOptions) {
     this.options = {
@@ -43,7 +49,7 @@ export class ApiCache {
 
     return asyncMiddleware(
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        const key = Redis.Instance.getPrefix() + 'api-cache-' + req.originalUrl
+        const key = this.getCacheKey(req)
         const redis = Redis.Instance.getClient()
 
         if (!Redis.Instance.isConnected()) return this.makeResponseCacheable(res, next, key, duration)
@@ -62,6 +68,29 @@ export class ApiCache {
     )
   }
 
+  clearGroupSafe (group: string) {
+    const run = async () => {
+      const cacheKeys = this.groups[group]
+      if (!cacheKeys) return
+
+      for (const key of cacheKeys) {
+        try {
+          await this.clear(key)
+        } catch (err) {
+          logger.error('Cannot clear ' + key, { err })
+        }
+      }
+
+      delete this.groups[group]
+    }
+
+    void run()
+  }
+
+  private getCacheKey (req: express.Request) {
+    return Redis.Instance.getPrefix() + 'api-cache-' + req.originalUrl
+  }
+
   private shouldCacheResponse (response: express.Response) {
     if (!response) return false
     if (this.options.excludeStatus.includes(response.statusCode)) return false
@@ -69,8 +98,16 @@ export class ApiCache {
     return true
   }
 
-  private addIndexEntries (key: string) {
+  private addIndexEntries (key: string, res: express.Response) {
     this.index.all.unshift(key)
+
+    const groups = res.locals.apicacheGroups || []
+
+    for (const group of groups) {
+      if (!this.groups[group]) this.groups[group] = []
+
+      this.groups[group].push(key)
+    }
   }
 
   private filterBlacklistedHeaders (headers: OutgoingHttpHeaders) {
@@ -177,7 +214,7 @@ export class ApiCache {
         self.accumulateContent(res, content)
 
         if (res.locals.apicache.cacheable && res.locals.apicache.content) {
-          self.addIndexEntries(key)
+          self.addIndexEntries(key, res)
 
           const headers = res.locals.apicache.headers || res.getHeaders()
           const cacheObject = self.createCacheObject(

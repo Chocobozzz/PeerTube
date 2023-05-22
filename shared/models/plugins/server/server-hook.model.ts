@@ -122,7 +122,17 @@ export const serverFilterHookObject = {
 
   // Filter the result of video JSON LD builder
   // You may also need to use filter:activity-pub.activity.context.build.result to also update JSON LD context
-  'filter:activity-pub.video.json-ld.build.result': true
+  'filter:activity-pub.video.json-ld.build.result': true,
+
+  // Filter result to allow custom XMLNS definitions in podcast RSS feeds
+  // Peertube >= 5.2
+  'filter:feed.podcast.rss.create-custom-xmlns.result': true,
+
+  // Filter result to allow custom tags in podcast RSS feeds
+  // Peertube >= 5.2
+  'filter:feed.podcast.channel.create-custom-tags.result': true,
+  // Peertube >= 5.2
+  'filter:feed.podcast.video.create-custom-tags.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject
@@ -154,6 +164,9 @@ export const serverActionHookObject = {
 
   // Fired when a live video is created
   'action:api.live-video.created': true,
+  // Fired when a live video starts or ends
+  // Peertube >= 5.2
+  'action:live.video.state.updated': true,
 
   // Fired when a thread is created
   'action:api.video-thread.created': true,

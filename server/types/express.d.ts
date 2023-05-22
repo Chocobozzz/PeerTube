@@ -110,6 +110,8 @@ declare module 'express' {
     locals: {
       requestStart: number
 
+      apicacheGroups: string[]
+
       apicache: {
         content: string | Buffer
         write: Writable['write']

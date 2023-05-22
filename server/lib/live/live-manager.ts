@@ -399,6 +399,8 @@ class LiveManager {
       }
 
       PeerTubeSocket.Instance.sendVideoLiveNewState(video)
+
+      Hooks.runAction('action:live.video.state.updated', { video })
     } catch (err) {
       logger.error('Cannot save/federate live video %d.', videoId, { err, ...localLTags })
     }
@@ -466,6 +468,8 @@ class LiveManager {
       PeerTubeSocket.Instance.sendVideoLiveNewState(fullVideo)
 
       await federateVideoIfNeeded(fullVideo, false)
+
+      Hooks.runAction('action:live.video.state.updated', { video: fullVideo })
     } catch (err) {
       logger.error('Cannot save/federate new video state of live streaming of video %s.', videoUUID, { err, ...lTags(videoUUID) })
     }

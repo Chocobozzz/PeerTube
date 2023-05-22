@@ -29,7 +29,11 @@ export type MActorLight = Omit<MActor, 'privateKey' | 'privateKey'>
 
 // Some association attributes
 
-export type MActorHost = Use<'Server', MServerHost>
+export type MActorHostOnly = Use<'Server', MServerHost>
+export type MActorHost =
+  MActorLight &
+  Use<'Server', MServerHost>
+
 export type MActorRedundancyAllowedOpt = PickWithOpt<ActorModel, 'Server', MServerRedundancyAllowed>
 
 export type MActorDefaultLight =
@@ -68,8 +72,8 @@ export type MActorChannel =
 
 export type MActorDefaultAccountChannel = MActorDefault & MActorAccount & MActorChannel
 
-export type MActorServer =
-  MActor &
+export type MActorServerLight =
+  MActorLight &
   Use<'Server', MServer>
 
 // ############################################################################

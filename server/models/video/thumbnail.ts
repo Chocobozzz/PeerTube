@@ -164,12 +164,16 @@ export class ThumbnailModel extends Model<Partial<AttributesOnly<ThumbnailModel>
     return join(directory, filename)
   }
 
-  getFileUrl (video: MVideo) {
+  getOriginFileUrl (video: MVideo) {
     const staticPath = ThumbnailModel.types[this.type].staticPath + this.filename
 
     if (video.isOwned()) return WEBSERVER.URL + staticPath
 
     return this.fileUrl
+  }
+
+  getLocalStaticPath () {
+    return ThumbnailModel.types[this.type].staticPath + this.filename
   }
 
   getPath () {

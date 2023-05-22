@@ -9,7 +9,9 @@ import {
   PeerTubeServer,
   PluginsCommand,
   setAccessTokensToServers,
-  setDefaultVideoChannel
+  setDefaultVideoChannel,
+  stopFfmpeg,
+  waitJobs
 } from '@shared/server-commands'
 
 describe('Test plugin action hooks', function () {
@@ -17,8 +19,8 @@ describe('Test plugin action hooks', function () {
   let videoUUID: string
   let threadId: number
 
-  function checkHook (hook: ServerHookName, strictCount = true) {
-    return servers[0].servers.waitUntilLog('Run hook ' + hook, 1, strictCount)
+  function checkHook (hook: ServerHookName, strictCount = true, count = 1) {
+    return servers[0].servers.waitUntilLog('Run hook ' + hook, count, strictCount)
   }
 
   before(async function () {
@@ -114,6 +116,29 @@ describe('Test plugin action hooks', function () {
       await servers[0].live.create({ fields: attributes })
 
       await checkHook('action:api.live-video.created')
+    })
+
+    it('Should run action:live.video.state.updated', async function () {
+      this.timeout(60000)
+
+      const attributes = {
+        name: 'live',
+        privacy: VideoPrivacy.PUBLIC,
+        channelId: servers[0].store.channel.id
+      }
+
+      const { uuid: liveVideoId } = await servers[0].live.create({ fields: attributes })
+      const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoId })
+      await servers[0].live.waitUntilPublished({ videoId: liveVideoId })
+      await waitJobs(servers)
+
+      await checkHook('action:live.video.state.updated', true, 1)
+
+      await stopFfmpeg(ffmpegCommand)
+      await servers[0].live.waitUntilEnded({ videoId: liveVideoId })
+      await waitJobs(servers)
+
+      await checkHook('action:live.video.state.updated', true, 2)
     })
   })
 

@@ -11,6 +11,7 @@ import {
   makeGetRequest,
   makeRawRequest,
   PeerTubeServer,
+  PluginsCommand,
   setAccessTokensToServers,
   setDefaultChannelAvatar,
   stopFfmpeg,
@@ -26,12 +27,15 @@ const expect = chai.expect
 describe('Test syndication feeds', () => {
   let servers: PeerTubeServer[] = []
   let serverHLSOnly: PeerTubeServer
+
   let userAccessToken: string
   let rootAccountId: number
   let rootChannelId: number
+
   let userAccountId: number
   let userChannelId: number
   let userFeedToken: string
+
   let liveId: string
 
   before(async function () {
@@ -93,7 +97,11 @@ describe('Test syndication feeds', () => {
       await servers[0].comments.createThread({ videoId: id, text: 'comment on unlisted video' })
     }
 
-    await waitJobs(servers)
+    await serverHLSOnly.videos.upload({ attributes: { name: 'hls only video' } })
+
+    await waitJobs([ ...servers, serverHLSOnly ])
+
+    await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath('-podcast-custom-tags') })
   })
 
   describe('All feed', function () {
@@ -106,6 +114,11 @@ describe('Test syndication feeds', () => {
         const atom = await servers[0].feed.getXML({ feed, format: 'atom', ignoreCache: true })
         expect(atom).xml.to.be.valid()
       }
+    })
+
+    it('Should be well formed XML (covers Podcast endpoint)', async function () {
+      const podcast = await servers[0].feed.getPodcastXML({ ignoreCache: true, channelId: rootChannelId })
+      expect(podcast).xml.to.be.valid()
     })
 
     it('Should be well formed JSON (covers JSON feed 1.0 endpoint)', async function () {
@@ -153,168 +166,290 @@ describe('Test syndication feeds', () => {
 
   describe('Videos feed', function () {
 
-    it('Should contain a valid enclosure (covers RSS 2.0 endpoint)', async function () {
-      for (const server of servers) {
-        const rss = await server.feed.getXML({ feed: 'videos', ignoreCache: true })
+    describe('Podcast feed', function () {
+
+      it('Should contain a valid podcast:alternateEnclosure', async function () {
+        // Since podcast feeds should only work on the server they originate on,
+        // only test the first server where the videos reside
+        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
         expect(XMLValidator.validate(rss)).to.be.true
 
         const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
         const xmlDoc = parser.parse(rss)
 
-        const enclosure = xmlDoc.rss.channel.item[0].enclosure
+        const enclosure = xmlDoc.rss.channel.item.enclosure
         expect(enclosure).to.exist
+        const alternateEnclosure = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
+        expect(alternateEnclosure).to.exist
 
-        expect(enclosure['@_type']).to.equal('video/webm')
-        expect(enclosure['@_length']).to.equal(218910)
-        expect(enclosure['@_url']).to.contain('-720.webm')
-      }
+        expect(alternateEnclosure['@_type']).to.equal('video/webm')
+        expect(alternateEnclosure['@_length']).to.equal(218910)
+        expect(alternateEnclosure['@_lang']).to.equal('zh')
+        expect(alternateEnclosure['@_title']).to.equal('720p')
+        expect(alternateEnclosure['@_default']).to.equal(true)
+
+        expect(alternateEnclosure['podcast:source'][0]['@_uri']).to.contain('-720.webm')
+        expect(alternateEnclosure['podcast:source'][0]['@_uri']).to.equal(enclosure['@_url'])
+        expect(alternateEnclosure['podcast:source'][1]['@_uri']).to.contain('-720.torrent')
+        expect(alternateEnclosure['podcast:source'][1]['@_contentType']).to.equal('application/x-bittorrent')
+        expect(alternateEnclosure['podcast:source'][2]['@_uri']).to.contain('magnet:?')
+      })
+
+      it('Should contain a valid podcast:alternateEnclosure with HLS only', async function () {
+        const rss = await serverHLSOnly.feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
+        expect(XMLValidator.validate(rss)).to.be.true
+
+        const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+        const xmlDoc = parser.parse(rss)
+
+        const enclosure = xmlDoc.rss.channel.item.enclosure
+        const alternateEnclosure = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
+        expect(alternateEnclosure).to.exist
+
+        expect(alternateEnclosure['@_type']).to.equal('application/x-mpegURL')
+        expect(alternateEnclosure['@_lang']).to.equal('zh')
+        expect(alternateEnclosure['@_title']).to.equal('HLS')
+        expect(alternateEnclosure['@_default']).to.equal(true)
+
+        expect(alternateEnclosure['podcast:source']['@_uri']).to.contain('-master.m3u8')
+        expect(alternateEnclosure['podcast:source']['@_uri']).to.equal(enclosure['@_url'])
+      })
+
+      it('Should contain a valid podcast:socialInteract', async function () {
+        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
+        expect(XMLValidator.validate(rss)).to.be.true
+
+        const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+        const xmlDoc = parser.parse(rss)
+
+        const item = xmlDoc.rss.channel.item
+        const socialInteract = item['podcast:socialInteract']
+        expect(socialInteract).to.exist
+        expect(socialInteract['@_protocol']).to.equal('activitypub')
+        expect(socialInteract['@_uri']).to.exist
+        expect(socialInteract['@_accountUrl']).to.exist
+      })
+
+      it('Should contain a valid support custom tags for plugins', async function () {
+        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: userChannelId })
+        expect(XMLValidator.validate(rss)).to.be.true
+
+        const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+        const xmlDoc = parser.parse(rss)
+
+        const fooTag = xmlDoc.rss.channel.fooTag
+        expect(fooTag).to.exist
+        expect(fooTag['@_bar']).to.equal('baz')
+        expect(fooTag['#text']).to.equal(42)
+
+        const bizzBuzzItem = xmlDoc.rss.channel['biz:buzzItem']
+        expect(bizzBuzzItem).to.exist
+
+        let nestedTag = bizzBuzzItem.nestedTag
+        expect(nestedTag).to.exist
+        expect(nestedTag).to.equal('example nested tag')
+
+        const item = xmlDoc.rss.channel.item
+        const fizzTag = item.fizzTag
+        expect(fizzTag).to.exist
+        expect(fizzTag['@_bar']).to.equal('baz')
+        expect(fizzTag['#text']).to.equal(21)
+
+        const bizzBuzz = item['biz:buzz']
+        expect(bizzBuzz).to.exist
+
+        nestedTag = bizzBuzz.nestedTag
+        expect(nestedTag).to.exist
+        expect(nestedTag).to.equal('example nested tag')
+      })
+
+      it('Should contain a valid podcast:liveItem for live streams', async function () {
+        this.timeout(120000)
+
+        const { uuid } = await servers[0].live.create({
+          fields: {
+            name: 'live-0',
+            privacy: VideoPrivacy.PUBLIC,
+            channelId: rootChannelId,
+            permanentLive: false
+          }
+        })
+        liveId = uuid
+
+        const ffmpeg = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveId, copyCodecs: true, fixtureName: 'video_short.mp4' })
+        await servers[0].live.waitUntilPublished({ videoId: liveId })
+
+        const rss = await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: rootChannelId })
+        expect(XMLValidator.validate(rss)).to.be.true
+
+        const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+        const xmlDoc = parser.parse(rss)
+        const liveItem = xmlDoc.rss.channel['podcast:liveItem']
+        expect(liveItem.title).to.equal('live-0')
+        expect(liveItem['@_status']).to.equal('live')
+
+        const enclosure = liveItem.enclosure
+        const alternateEnclosure = liveItem['podcast:alternateEnclosure']
+        expect(alternateEnclosure).to.exist
+        expect(alternateEnclosure['@_type']).to.equal('application/x-mpegURL')
+        expect(alternateEnclosure['@_title']).to.equal('HLS live stream')
+        expect(alternateEnclosure['@_default']).to.equal(true)
+
+        expect(alternateEnclosure['podcast:source']['@_uri']).to.contain('/master.m3u8')
+        expect(alternateEnclosure['podcast:source']['@_uri']).to.equal(enclosure['@_url'])
+
+        await stopFfmpeg(ffmpeg)
+
+        await servers[0].live.waitUntilEnded({ videoId: liveId })
+
+        await waitJobs(servers)
+      })
     })
 
-    it('Should contain a valid \'attachments\' object (covers JSON feed 1.0 endpoint)', async function () {
-      for (const server of servers) {
-        const json = await server.feed.getJSON({ feed: 'videos', ignoreCache: true })
-        const jsonObj = JSON.parse(json)
-        expect(jsonObj.items.length).to.be.equal(2)
-        expect(jsonObj.items[0].attachments).to.exist
-        expect(jsonObj.items[0].attachments.length).to.be.eq(1)
-        expect(jsonObj.items[0].attachments[0].mime_type).to.be.eq('application/x-bittorrent')
-        expect(jsonObj.items[0].attachments[0].size_in_bytes).to.be.eq(218910)
-        expect(jsonObj.items[0].attachments[0].url).to.contain('720.torrent')
-      }
-    })
+    describe('JSON feed', function () {
 
-    it('Should filter by account', async function () {
-      {
-        const json = await servers[0].feed.getJSON({ feed: 'videos', query: { accountId: rootAccountId }, ignoreCache: true })
-        const jsonObj = JSON.parse(json)
-        expect(jsonObj.items.length).to.be.equal(1)
-        expect(jsonObj.items[0].title).to.equal('my super name for server 1')
-        expect(jsonObj.items[0].author.name).to.equal('Main root channel')
-      }
-
-      {
-        const json = await servers[0].feed.getJSON({ feed: 'videos', query: { accountId: userAccountId }, ignoreCache: true })
-        const jsonObj = JSON.parse(json)
-        expect(jsonObj.items.length).to.be.equal(1)
-        expect(jsonObj.items[0].title).to.equal('user video')
-        expect(jsonObj.items[0].author.name).to.equal('Main john channel')
-      }
-
-      for (const server of servers) {
-        {
-          const json = await server.feed.getJSON({ feed: 'videos', query: { accountName: 'root@' + servers[0].host }, ignoreCache: true })
+      it('Should contain a valid \'attachments\' object', async function () {
+        for (const server of servers) {
+          const json = await server.feed.getJSON({ feed: 'videos', ignoreCache: true })
           const jsonObj = JSON.parse(json)
-          expect(jsonObj.items.length).to.be.equal(1)
-          expect(jsonObj.items[0].title).to.equal('my super name for server 1')
-        }
-
-        {
-          const json = await server.feed.getJSON({ feed: 'videos', query: { accountName: 'john@' + servers[0].host }, ignoreCache: true })
-          const jsonObj = JSON.parse(json)
-          expect(jsonObj.items.length).to.be.equal(1)
-          expect(jsonObj.items[0].title).to.equal('user video')
-        }
-      }
-    })
-
-    it('Should filter by video channel', async function () {
-      {
-        const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelId }, ignoreCache: true })
-        const jsonObj = JSON.parse(json)
-        expect(jsonObj.items.length).to.be.equal(1)
-        expect(jsonObj.items[0].title).to.equal('my super name for server 1')
-        expect(jsonObj.items[0].author.name).to.equal('Main root channel')
-      }
-
-      {
-        const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: userChannelId }, ignoreCache: true })
-        const jsonObj = JSON.parse(json)
-        expect(jsonObj.items.length).to.be.equal(1)
-        expect(jsonObj.items[0].title).to.equal('user video')
-        expect(jsonObj.items[0].author.name).to.equal('Main john channel')
-      }
-
-      for (const server of servers) {
-        {
-          const query = { videoChannelName: 'root_channel@' + servers[0].host }
-          const json = await server.feed.getJSON({ feed: 'videos', query, ignoreCache: true })
-          const jsonObj = JSON.parse(json)
-          expect(jsonObj.items.length).to.be.equal(1)
-          expect(jsonObj.items[0].title).to.equal('my super name for server 1')
-        }
-
-        {
-          const query = { videoChannelName: 'john_channel@' + servers[0].host }
-          const json = await server.feed.getJSON({ feed: 'videos', query, ignoreCache: true })
-          const jsonObj = JSON.parse(json)
-          expect(jsonObj.items.length).to.be.equal(1)
-          expect(jsonObj.items[0].title).to.equal('user video')
-        }
-      }
-    })
-
-    it('Should correctly have videos feed with HLS only', async function () {
-      this.timeout(120000)
-
-      await serverHLSOnly.videos.upload({ attributes: { name: 'hls only video' } })
-
-      await waitJobs([ serverHLSOnly ])
-
-      const json = await serverHLSOnly.feed.getJSON({ feed: 'videos', ignoreCache: true })
-      const jsonObj = JSON.parse(json)
-      expect(jsonObj.items.length).to.be.equal(1)
-      expect(jsonObj.items[0].attachments).to.exist
-      expect(jsonObj.items[0].attachments.length).to.be.eq(4)
-
-      for (let i = 0; i < 4; i++) {
-        expect(jsonObj.items[0].attachments[i].mime_type).to.be.eq('application/x-bittorrent')
-        expect(jsonObj.items[0].attachments[i].size_in_bytes).to.be.greaterThan(0)
-        expect(jsonObj.items[0].attachments[i].url).to.exist
-      }
-    })
-
-    it('Should not display waiting live videos', async function () {
-      const { uuid } = await servers[0].live.create({
-        fields: {
-          name: 'live',
-          privacy: VideoPrivacy.PUBLIC,
-          channelId: rootChannelId
+          expect(jsonObj.items.length).to.be.equal(2)
+          expect(jsonObj.items[0].attachments).to.exist
+          expect(jsonObj.items[0].attachments.length).to.be.eq(1)
+          expect(jsonObj.items[0].attachments[0].mime_type).to.be.eq('application/x-bittorrent')
+          expect(jsonObj.items[0].attachments[0].size_in_bytes).to.be.eq(218910)
+          expect(jsonObj.items[0].attachments[0].url).to.contain('720.torrent')
         }
       })
-      liveId = uuid
 
-      const json = await servers[0].feed.getJSON({ feed: 'videos', ignoreCache: true })
+      it('Should filter by account', async function () {
+        {
+          const json = await servers[0].feed.getJSON({ feed: 'videos', query: { accountId: rootAccountId }, ignoreCache: true })
+          const jsonObj = JSON.parse(json)
+          expect(jsonObj.items.length).to.be.equal(1)
+          expect(jsonObj.items[0].title).to.equal('my super name for server 1')
+          expect(jsonObj.items[0].author.name).to.equal('Main root channel')
+        }
 
-      const jsonObj = JSON.parse(json)
-      expect(jsonObj.items.length).to.be.equal(2)
-      expect(jsonObj.items[0].title).to.equal('my super name for server 1')
-      expect(jsonObj.items[1].title).to.equal('user video')
-    })
+        {
+          const json = await servers[0].feed.getJSON({ feed: 'videos', query: { accountId: userAccountId }, ignoreCache: true })
+          const jsonObj = JSON.parse(json)
+          expect(jsonObj.items.length).to.be.equal(1)
+          expect(jsonObj.items[0].title).to.equal('user video')
+          expect(jsonObj.items[0].author.name).to.equal('Main john channel')
+        }
 
-    it('Should display published live videos', async function () {
-      this.timeout(120000)
+        for (const server of servers) {
+          {
+            const json = await server.feed.getJSON({ feed: 'videos', query: { accountName: 'root@' + servers[0].host }, ignoreCache: true })
+            const jsonObj = JSON.parse(json)
+            expect(jsonObj.items.length).to.be.equal(1)
+            expect(jsonObj.items[0].title).to.equal('my super name for server 1')
+          }
 
-      const ffmpeg = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveId, copyCodecs: true, fixtureName: 'video_short.mp4' })
-      await servers[0].live.waitUntilPublished({ videoId: liveId })
+          {
+            const json = await server.feed.getJSON({ feed: 'videos', query: { accountName: 'john@' + servers[0].host }, ignoreCache: true })
+            const jsonObj = JSON.parse(json)
+            expect(jsonObj.items.length).to.be.equal(1)
+            expect(jsonObj.items[0].title).to.equal('user video')
+          }
+        }
+      })
 
-      const json = await servers[0].feed.getJSON({ feed: 'videos', ignoreCache: true })
+      it('Should filter by video channel', async function () {
+        {
+          const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelId }, ignoreCache: true })
+          const jsonObj = JSON.parse(json)
+          expect(jsonObj.items.length).to.be.equal(1)
+          expect(jsonObj.items[0].title).to.equal('my super name for server 1')
+          expect(jsonObj.items[0].author.name).to.equal('Main root channel')
+        }
 
-      const jsonObj = JSON.parse(json)
-      expect(jsonObj.items.length).to.be.equal(3)
-      expect(jsonObj.items[0].title).to.equal('live')
-      expect(jsonObj.items[1].title).to.equal('my super name for server 1')
-      expect(jsonObj.items[2].title).to.equal('user video')
+        {
+          const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: userChannelId }, ignoreCache: true })
+          const jsonObj = JSON.parse(json)
+          expect(jsonObj.items.length).to.be.equal(1)
+          expect(jsonObj.items[0].title).to.equal('user video')
+          expect(jsonObj.items[0].author.name).to.equal('Main john channel')
+        }
 
-      await stopFfmpeg(ffmpeg)
-    })
+        for (const server of servers) {
+          {
+            const query = { videoChannelName: 'root_channel@' + servers[0].host }
+            const json = await server.feed.getJSON({ feed: 'videos', query, ignoreCache: true })
+            const jsonObj = JSON.parse(json)
+            expect(jsonObj.items.length).to.be.equal(1)
+            expect(jsonObj.items[0].title).to.equal('my super name for server 1')
+          }
 
-    it('Should have the channel avatar as feed icon', async function () {
-      const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelId }, ignoreCache: true })
+          {
+            const query = { videoChannelName: 'john_channel@' + servers[0].host }
+            const json = await server.feed.getJSON({ feed: 'videos', query, ignoreCache: true })
+            const jsonObj = JSON.parse(json)
+            expect(jsonObj.items.length).to.be.equal(1)
+            expect(jsonObj.items[0].title).to.equal('user video')
+          }
+        }
+      })
 
-      const jsonObj = JSON.parse(json)
-      const imageUrl = jsonObj.icon
-      expect(imageUrl).to.include('/lazy-static/avatars/')
-      await makeRawRequest({ url: imageUrl, expectedStatus: HttpStatusCode.OK_200 })
+      it('Should correctly have videos feed with HLS only', async function () {
+        this.timeout(120000)
+
+        const json = await serverHLSOnly.feed.getJSON({ feed: 'videos', ignoreCache: true })
+        const jsonObj = JSON.parse(json)
+        expect(jsonObj.items.length).to.be.equal(1)
+        expect(jsonObj.items[0].attachments).to.exist
+        expect(jsonObj.items[0].attachments.length).to.be.eq(4)
+
+        for (let i = 0; i < 4; i++) {
+          expect(jsonObj.items[0].attachments[i].mime_type).to.be.eq('application/x-bittorrent')
+          expect(jsonObj.items[0].attachments[i].size_in_bytes).to.be.greaterThan(0)
+          expect(jsonObj.items[0].attachments[i].url).to.exist
+        }
+      })
+
+      it('Should not display waiting live videos', async function () {
+        const { uuid } = await servers[0].live.create({
+          fields: {
+            name: 'live',
+            privacy: VideoPrivacy.PUBLIC,
+            channelId: rootChannelId
+          }
+        })
+        liveId = uuid
+
+        const json = await servers[0].feed.getJSON({ feed: 'videos', ignoreCache: true })
+
+        const jsonObj = JSON.parse(json)
+        expect(jsonObj.items.length).to.be.equal(2)
+        expect(jsonObj.items[0].title).to.equal('my super name for server 1')
+        expect(jsonObj.items[1].title).to.equal('user video')
+      })
+
+      it('Should display published live videos', async function () {
+        this.timeout(120000)
+
+        const ffmpeg = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveId, copyCodecs: true, fixtureName: 'video_short.mp4' })
+        await servers[0].live.waitUntilPublished({ videoId: liveId })
+
+        const json = await servers[0].feed.getJSON({ feed: 'videos', ignoreCache: true })
+
+        const jsonObj = JSON.parse(json)
+        expect(jsonObj.items.length).to.be.equal(3)
+        expect(jsonObj.items[0].title).to.equal('live')
+        expect(jsonObj.items[1].title).to.equal('my super name for server 1')
+        expect(jsonObj.items[2].title).to.equal('user video')
+
+        await stopFfmpeg(ffmpeg)
+      })
+
+      it('Should have the channel avatar as feed icon', async function () {
+        const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelId }, ignoreCache: true })
+
+        const jsonObj = JSON.parse(json)
+        const imageUrl = jsonObj.icon
+        expect(imageUrl).to.include('/lazy-static/avatars/')
+        await makeRawRequest({ url: imageUrl, expectedStatus: HttpStatusCode.OK_200 })
+      })
     })
   })
 
@@ -470,6 +605,8 @@ describe('Test syndication feeds', () => {
   })
 
   after(async function () {
+    await servers[0].plugins.uninstall({ npmName: 'peertube-plugin-test-podcast-custom-tags' })
+
     await cleanupTests([ ...servers, serverHLSOnly ])
   })
 })

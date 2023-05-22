@@ -27,7 +27,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 770
+const LAST_MIGRATION_VERSION = 775
 
 // ---------------------------------------------------------------------------
 
@@ -634,7 +634,8 @@ const MIMETYPES = {
       'text/vtt': '.vtt',
       'application/x-subrip': '.srt',
       'text/plain': '.srt'
-    }
+    },
+    EXT_MIMETYPE: null as { [ id: string ]: string }
   },
   TORRENT: {
     MIMETYPE_EXT: {
@@ -649,6 +650,7 @@ const MIMETYPES = {
 }
 MIMETYPES.AUDIO.EXT_MIMETYPE = invert(MIMETYPES.AUDIO.MIMETYPE_EXT)
 MIMETYPES.IMAGE.EXT_MIMETYPE = invert(MIMETYPES.IMAGE.MIMETYPE_EXT)
+MIMETYPES.VIDEO_CAPTIONS.EXT_MIMETYPE = invert(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT)
 
 const BINARY_CONTENT_TYPES = new Set([
   'binary/octet-stream',

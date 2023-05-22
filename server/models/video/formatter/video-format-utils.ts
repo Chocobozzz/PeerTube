@@ -459,7 +459,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
 
     icon: icons.map(i => ({
       type: 'Image',
-      url: i.getFileUrl(video),
+      url: i.getOriginFileUrl(video),
       mediaType: 'image/jpeg',
       width: i.width,
       height: i.height

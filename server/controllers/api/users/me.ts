@@ -212,7 +212,8 @@ async function updateMe (req: express.Request, res: express.Response) {
     'theme',
     'noInstanceConfigWarningModal',
     'noAccountSetupWarningModal',
-    'noWelcomeModal'
+    'noWelcomeModal',
+    'emailPublic'
   ]
 
   for (const key of keysToUpdate) {

@@ -54,6 +54,7 @@ export type CommonVideoParams = {
 export class VideoService {
   static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
+  static PODCAST_FEEDS_URL = environment.apiUrl + '/feeds/podcast/videos.xml'
   static BASE_SUBSCRIPTION_FEEDS_URL = environment.apiUrl + '/feeds/subscriptions.'
 
   constructor (
@@ -266,7 +267,15 @@ export class VideoService {
     let params = this.restService.addRestGetParams(new HttpParams())
     params = params.set('videoChannelId', videoChannelId.toString())
 
-    return this.buildBaseFeedUrls(params)
+    const feedUrls = this.buildBaseFeedUrls(params)
+
+    feedUrls.push({
+      format: FeedFormat.RSS,
+      label: 'podcast rss 2.0',
+      url: VideoService.PODCAST_FEEDS_URL + `?videoChannelId=${videoChannelId}`
+    })
+
+    return feedUrls
   }
 
   getVideoSubscriptionFeedUrls (accountId: number, feedToken: string) {

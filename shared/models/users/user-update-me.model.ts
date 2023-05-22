@@ -16,6 +16,7 @@ export interface UserUpdateMe {
   videoLanguages?: string[]
 
   email?: string
+  emailPublic?: boolean
   currentPassword?: string
   password?: string
 
