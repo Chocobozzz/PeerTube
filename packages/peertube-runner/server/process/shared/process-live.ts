@@ -248,6 +248,8 @@ export class ProcessLiveRTMPHLSTranscoding {
   private async sendPendingChunks (): Promise<any> {
     if (this.ended) return Promise.resolve()
 
+    const promises: Promise<any>[] = []
+
     for (const playlist of this.pendingChunksPerPlaylist.keys()) {
       for (const chunk of this.pendingChunksPerPlaylist.get(playlist)) {
         logger.debug(`Sending added live chunk ${chunk} update`)
@@ -271,12 +273,13 @@ export class ProcessLiveRTMPHLSTranscoding {
           }
         }
 
-        this.updateWithRetry(payload)
-          .catch(err => logger.error({ err }, 'Cannot update with retry'))
+        promises.push(this.updateWithRetry(payload))
       }
 
       this.pendingChunksPerPlaylist.set(playlist, [])
     }
+
+    await Promise.all(promises)
   }
 
   private async updateWithRetry (payload: LiveRTMPHLSTranscodingUpdatePayload, currentTry = 1): Promise<any> {
