@@ -76,6 +76,7 @@ export const updateRunnerJobValidator = [
 
         return res.fail({
           status: HttpStatusCode.BAD_REQUEST_400,
+          type: ServerErrorCode.RUNNER_JOB_NOT_IN_PROCESSING_STATE,
           message: 'Session of this live ended',
           tags
         })
