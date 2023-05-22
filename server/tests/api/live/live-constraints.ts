@@ -183,7 +183,7 @@ describe('Test live constraints', function () {
       await wait(500)
 
       quotaUser = await servers[0].users.getMyQuotaUsed({ token: userAccessToken })
-    } while (quotaUser.videoQuotaUsed < baseQuota.videoQuotaUsed)
+    } while (quotaUser.videoQuotaUsed <= baseQuota.videoQuotaUsed)
 
     const { data } = await servers[0].users.list()
     const quotaAdmin = data.find(u => u.username === 'user1')
