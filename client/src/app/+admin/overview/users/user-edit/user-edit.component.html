@@ -115,6 +115,7 @@
 
         <div class="form-group" *ngIf="isCreation()">
           <label i18n for="password">Password</label>
+
           <my-help *ngIf="isPasswordOptional()">
             <ng-template ptTemplate="customHtml">
               <ng-container i18n>
