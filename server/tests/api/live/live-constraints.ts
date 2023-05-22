@@ -197,7 +197,7 @@ describe('Test live constraints', function () {
         live: {
           enabled: true,
           allowReplay: true,
-          maxDuration: 1,
+          maxDuration: 3,
           transcoding: {
             enabled: true,
             resolutions: ConfigCommand.getCustomConfigResolutions(true)

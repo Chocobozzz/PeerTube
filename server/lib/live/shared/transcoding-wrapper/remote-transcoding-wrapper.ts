@@ -5,6 +5,7 @@ export class RemoteTranscodingWrapper extends AbstractTranscodingWrapper {
   async run () {
     await new LiveRTMPHLSTranscodingJobHandler().create({
       rtmpUrl: this.inputPublicUrl,
+      sessionId: this.sessionId,
       toTranscode: this.toTranscode,
       video: this.videoLive.Video,
       outputDirectory: this.outDirectory,

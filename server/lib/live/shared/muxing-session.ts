@@ -477,6 +477,7 @@ class MuxingSession extends EventEmitter {
 
       lTags: this.lTags,
 
+      sessionId: this.sessionId,
       inputLocalUrl: this.inputLocalUrl,
       inputPublicUrl: this.inputPublicUrl,
 

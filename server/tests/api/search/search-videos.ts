@@ -525,7 +525,7 @@ describe('Test videos search', function () {
   })
 
   it('Should search by live', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     {
       const newConfig = {

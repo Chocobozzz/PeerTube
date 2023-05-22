@@ -20,6 +20,7 @@ type CreateOptions = {
   video: MVideo
   playlist: MStreamingPlaylist
 
+  sessionId: string
   rtmpUrl: string
 
   toTranscode: {
@@ -37,7 +38,7 @@ type CreateOptions = {
 export class LiveRTMPHLSTranscodingJobHandler extends AbstractJobHandler<CreateOptions, LiveRTMPHLSTranscodingUpdatePayload, LiveRTMPHLSTranscodingSuccess> {
 
   async create (options: CreateOptions) {
-    const { video, rtmpUrl, toTranscode, playlist, segmentDuration, segmentListSize, outputDirectory } = options
+    const { video, rtmpUrl, toTranscode, playlist, segmentDuration, segmentListSize, outputDirectory, sessionId } = options
 
     const jobUUID = buildUUID()
     const payload: RunnerJobLiveRTMPHLSTranscodingPayload = {
@@ -54,6 +55,7 @@ export class LiveRTMPHLSTranscodingJobHandler extends AbstractJobHandler<CreateO
     const privatePayload: RunnerJobLiveRTMPHLSTranscodingPrivatePayload = {
       videoUUID: video.uuid,
       masterPlaylistName: playlist.playlistFilename,
+      sessionId,
       outputDirectory
     }
 

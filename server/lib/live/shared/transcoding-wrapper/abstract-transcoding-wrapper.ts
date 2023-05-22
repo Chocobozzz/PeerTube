@@ -25,6 +25,7 @@ interface AbstractTranscodingWrapperOptions {
 
   lTags: LoggerTagsFn
 
+  sessionId: string
   inputLocalUrl: string
   inputPublicUrl: string
 
@@ -52,6 +53,7 @@ abstract class AbstractTranscodingWrapper extends EventEmitter {
     fps: number
   }[]
 
+  protected readonly sessionId: string
   protected readonly inputLocalUrl: string
   protected readonly inputPublicUrl: string
 
@@ -80,6 +82,7 @@ abstract class AbstractTranscodingWrapper extends EventEmitter {
     this.videoUUID = options.videoLive.Video.uuid
     this.streamingPlaylist = options.streamingPlaylist
 
+    this.sessionId = options.sessionId
     this.inputLocalUrl = options.inputLocalUrl
     this.inputPublicUrl = options.inputPublicUrl
 

@@ -34,6 +34,7 @@ export interface RunnerJobLiveRTMPHLSTranscodingPrivatePayload {
   videoUUID: string
   masterPlaylistName: string
   outputDirectory: string
+  sessionId: string
 }
 
 // ---------------------------------------------------------------------------

@@ -34,6 +34,8 @@ export class ProcessLiveRTMPHLSTranscoding {
 
   constructor (private readonly options: ProcessOptions<RunnerJobLiveRTMPHLSTranscodingPayload>) {
     this.outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), buildUUID())
+
+    logger.debug(`Using ${this.outputPath} to process live rtmp hls transcoding job ${options.job.uuid}`)
   }
 
   process () {
@@ -289,6 +291,7 @@ export class ProcessLiveRTMPHLSTranscoding {
       })
     } catch (err) {
       if (currentTry >= 3) throw err
+      if ((err.res?.body as PeerTubeProblemDocument)?.code === ServerErrorCode.RUNNER_JOB_NOT_IN_PROCESSING_STATE) throw err
 
       logger.warn({ err }, 'Will retry update after error')
       await wait(250)
@@ -310,6 +313,8 @@ export class ProcessLiveRTMPHLSTranscoding {
   // ---------------------------------------------------------------------------
 
   private cleanup () {
+    logger.debug(`Cleaning up job ${this.options.job.uuid}`)
+
     for (const fsWatcher of this.fsWatchers) {
       fsWatcher.close()
         .catch(err => logger.error({ err }, 'Cannot close watcher'))

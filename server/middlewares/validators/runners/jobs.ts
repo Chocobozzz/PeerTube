@@ -11,8 +11,16 @@ import {
 } from '@server/helpers/custom-validators/runners/jobs'
 import { isRunnerTokenValid } from '@server/helpers/custom-validators/runners/runners'
 import { cleanUpReqFiles } from '@server/helpers/express-utils'
+import { LiveManager } from '@server/lib/live'
 import { RunnerJobModel } from '@server/models/runner/runner-job'
-import { HttpStatusCode, RunnerJobState, RunnerJobSuccessBody, RunnerJobUpdateBody, ServerErrorCode } from '@shared/models'
+import {
+  HttpStatusCode,
+  RunnerJobLiveRTMPHLSTranscodingPrivatePayload,
+  RunnerJobState,
+  RunnerJobSuccessBody,
+  RunnerJobUpdateBody,
+  ServerErrorCode
+} from '@shared/models'
 import { areValidationErrors } from '../shared'
 
 const tags = [ 'runner' ]
@@ -48,8 +56,9 @@ export const updateRunnerJobValidator = [
     if (areValidationErrors(req, res, { tags })) return cleanUpReqFiles(req)
 
     const body = req.body as RunnerJobUpdateBody
+    const job = res.locals.runnerJob
 
-    if (isRunnerJobUpdatePayloadValid(body.payload, res.locals.runnerJob.type, req.files) !== true) {
+    if (isRunnerJobUpdatePayloadValid(body.payload, job.type, req.files) !== true) {
       cleanUpReqFiles(req)
 
       return res.fail({
@@ -57,6 +66,20 @@ export const updateRunnerJobValidator = [
         message: 'Payload is invalid',
         tags
       })
+    }
+
+    if (res.locals.runnerJob.type === 'live-rtmp-hls-transcoding') {
+      const privatePayload = job.privatePayload as RunnerJobLiveRTMPHLSTranscodingPrivatePayload
+
+      if (!LiveManager.Instance.hasSession(privatePayload.sessionId)) {
+        cleanUpReqFiles(req)
+
+        return res.fail({
+          status: HttpStatusCode.BAD_REQUEST_400,
+          message: 'Session of this live ended',
+          tags
+        })
+      }
     }
 
     return next()

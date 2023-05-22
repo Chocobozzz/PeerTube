@@ -178,6 +178,10 @@ class LiveManager {
     return !!this.rtmpServer
   }
 
+  hasSession (sessionId: string) {
+    return this.getContext().sessions.has(sessionId)
+  }
+
   stopSessionOf (videoUUID: string, error: LiveVideoError | null) {
     const sessionId = this.videoSessions.get(videoUUID)
     if (!sessionId) {
