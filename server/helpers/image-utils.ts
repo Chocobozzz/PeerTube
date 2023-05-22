@@ -1,6 +1,7 @@
 import { copy, readFile, remove, rename } from 'fs-extra'
 import Jimp, { read as jimpRead } from 'jimp'
 import { join } from 'path'
+import { ColorActionName } from '@jimp/plugin-color'
 import { getLowercaseExtension } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
 import { convertWebPToJPG, generateThumbnailFromVideo, processGIF } from './ffmpeg'
@@ -131,7 +132,7 @@ async function autoResize (options: {
 
   if (sourceIsPortrait && !destIsPortraitOrSquare) {
     const baseImage = sourceImage.cloneQuiet().cover(newSize.width, newSize.height)
-                                              .color([ { apply: 'shade', params: [ 50 ] } ])
+                                              .color([ { apply: ColorActionName.SHADE, params: [ 50 ] } ])
 
     const topImage = sourceImage.cloneQuiet().contain(newSize.width, newSize.height)
 

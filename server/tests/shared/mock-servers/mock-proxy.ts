@@ -1,5 +1,5 @@
 import { createServer, Server } from 'http'
-import proxy from 'proxy'
+import { createProxy } from 'proxy'
 import { getPort, terminateServer } from './shared'
 
 class MockProxy {
@@ -7,7 +7,7 @@ class MockProxy {
 
   initialize () {
     return new Promise<number>(res => {
-      this.server = proxy(createServer())
+      this.server = createProxy(createServer())
       this.server.listen(0, () => res(getPort(this.server)))
     })
   }

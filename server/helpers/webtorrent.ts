@@ -1,7 +1,7 @@
 import { decode, encode } from 'bencode'
 import createTorrent from 'create-torrent'
 import { createWriteStream, ensureDir, pathExists, readFile, remove, writeFile } from 'fs-extra'
-import magnetUtil from 'magnet-uri'
+import { encode as magnetUriEncode } from 'magnet-uri'
 import parseTorrent from 'parse-torrent'
 import { dirname, join } from 'path'
 import { pipeline } from 'stream'
@@ -185,7 +185,7 @@ function generateMagnetUri (
     name: video.name
   }
 
-  return magnetUtil.encode(magnetHash)
+  return magnetUriEncode(magnetHash)
 }
 
 // ---------------------------------------------------------------------------

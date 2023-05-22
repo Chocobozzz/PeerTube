@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { readdir } from 'fs-extra'
-import magnetUtil from 'magnet-uri'
+import { decode as magnetUriDecode } from 'magnet-uri'
 import { basename, join } from 'path'
 import { checkSegmentHash, checkVideoFilesWereRemoved, saveVideoInServers } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
@@ -29,7 +29,7 @@ let servers: PeerTubeServer[] = []
 let video1Server2: VideoDetails
 
 async function checkMagnetWebseeds (file: VideoFile, baseWebseeds: string[], server: PeerTubeServer) {
-  const parsed = magnetUtil.decode(file.magnetUri)
+  const parsed = magnetUriDecode(file.magnetUri)
 
   for (const ws of baseWebseeds) {
     const found = parsed.urlList.find(url => url === `${ws}${basename(file.fileUrl)}`)
