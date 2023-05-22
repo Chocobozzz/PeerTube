@@ -56,6 +56,7 @@
     "Waiting for parent job to finish": "Waiting for parent job to finish",
     "Parent job failed": "Parent job failed",
     "Parent job cancelled": "Parent job cancelled",
+    "Completing": "Completing",
     "This video does not exist.": "Este vídeo no existe.",
     "We cannot fetch the video. Please try again later.": "No podemos obtener el vídeo. Por favor, inténtalo de nuevo más tarde.",
     "Sorry": "Lo sentimos",
