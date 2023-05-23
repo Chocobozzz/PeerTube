@@ -1,7 +1,7 @@
 import {
   ApplicationRef,
-  ComponentFactoryResolver,
   ComponentRef,
+  createComponent,
   EmbeddedViewRef,
   Injectable,
   Injector,
@@ -16,15 +16,17 @@ export class DynamicElementService {
 
   constructor (
     private injector: Injector,
-    private applicationRef: ApplicationRef,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private applicationRef: ApplicationRef
   ) { }
 
   createElement <T> (ofComponent: Type<T>) {
     const div = document.createElement('div')
 
-    const component = this.componentFactoryResolver.resolveComponentFactory(ofComponent)
-      .create(this.injector, [], div)
+    const component = createComponent(ofComponent, {
+      environmentInjector: this.applicationRef.injector,
+      elementInjector: this.injector,
+      hostElement: div
+    })
 
     return component
   }
