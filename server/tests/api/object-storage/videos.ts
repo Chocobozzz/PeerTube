@@ -145,6 +145,7 @@ function runTestSuite (options: {
 
   let servers: PeerTubeServer[]
   let sqlCommands: SQLCommand[] = []
+  const objectStorage = new ObjectStorageCommand()
 
   let keptUrls: string[] = []
 
@@ -159,8 +160,8 @@ function runTestSuite (options: {
       ? `http://127.0.0.1:${port}`
       : undefined
 
-    await ObjectStorageCommand.createMockBucket(options.playlistBucket)
-    await ObjectStorageCommand.createMockBucket(options.webtorrentBucket)
+    await objectStorage.createMockBucket(options.playlistBucket)
+    await objectStorage.createMockBucket(options.webtorrentBucket)
 
     const config = {
       object_storage: {
@@ -275,6 +276,7 @@ function runTestSuite (options: {
 
   after(async function () {
     await mockObjectStorageProxy.terminate()
+    await objectStorage.cleanupMock()
 
     for (const sqlCommand of sqlCommands) {
       await sqlCommand.cleanup()
@@ -287,26 +289,12 @@ function runTestSuite (options: {
 describe('Object storage for videos', function () {
   if (areMockObjectStorageTestsDisabled()) return
 
+  const objectStorage = new ObjectStorageCommand()
+
   describe('Test config', function () {
     let server: PeerTubeServer
 
-    const baseConfig = {
-      object_storage: {
-        enabled: true,
-        endpoint: 'http://' + ObjectStorageCommand.getMockEndpointHost(),
-        region: ObjectStorageCommand.getMockRegion(),
-
-        credentials: ObjectStorageCommand.getMockCredentialsConfig(),
-
-        streaming_playlists: {
-          bucket_name: ObjectStorageCommand.DEFAULT_PLAYLIST_MOCK_BUCKET
-        },
-
-        videos: {
-          bucket_name: ObjectStorageCommand.DEFAULT_WEBTORRENT_MOCK_BUCKET
-        }
-      }
-    }
+    const baseConfig = objectStorage.getDefaultMockConfig()
 
     const badCredentials = {
       access_key_id: 'AKIAIOSFODNN7EXAMPLE',
@@ -334,7 +322,7 @@ describe('Object storage for videos', function () {
     it('Should fail with bad credentials', async function () {
       this.timeout(60000)
 
-      await ObjectStorageCommand.prepareDefaultMockBuckets()
+      await objectStorage.prepareDefaultMockBuckets()
 
       const config = merge({}, baseConfig, {
         object_storage: {
@@ -358,7 +346,7 @@ describe('Object storage for videos', function () {
     it('Should succeed with credentials from env', async function () {
       this.timeout(60000)
 
-      await ObjectStorageCommand.prepareDefaultMockBuckets()
+      await objectStorage.prepareDefaultMockBuckets()
 
       const config = merge({}, baseConfig, {
         object_storage: {
@@ -385,25 +373,27 @@ describe('Object storage for videos', function () {
       await waitJobs([ server ], { skipDelayed: true })
       const video = await server.videos.get({ id: uuid })
 
-      expectStartWith(video.files[0].fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
+      expectStartWith(video.files[0].fileUrl, objectStorage.getMockWebVideosBaseUrl())
     })
 
     after(async function () {
+      await objectStorage.cleanupMock()
+
       await cleanupTests([ server ])
     })
   })
 
   describe('Test simple object storage', function () {
     runTestSuite({
-      playlistBucket: 'streaming-playlists',
-      webtorrentBucket: 'videos'
+      playlistBucket: objectStorage.getMockBucketName('streaming-playlists'),
+      webtorrentBucket: objectStorage.getMockBucketName('videos')
     })
   })
 
   describe('Test object storage with prefix', function () {
     runTestSuite({
-      playlistBucket: 'mybucket',
-      webtorrentBucket: 'mybucket',
+      playlistBucket: objectStorage.getMockBucketName('mybucket'),
+      webtorrentBucket: objectStorage.getMockBucketName('mybucket'),
 
       playlistPrefix: 'streaming-playlists_',
       webtorrentPrefix: 'webtorrent_'
@@ -412,8 +402,8 @@ describe('Object storage for videos', function () {
 
   describe('Test object storage with prefix and base URL', function () {
     runTestSuite({
-      playlistBucket: 'mybucket',
-      webtorrentBucket: 'mybucket',
+      playlistBucket: objectStorage.getMockBucketName('mybucket'),
+      webtorrentBucket: objectStorage.getMockBucketName('mybucket'),
 
       playlistPrefix: 'streaming-playlists/',
       webtorrentPrefix: 'webtorrent/',
@@ -440,8 +430,8 @@ describe('Object storage for videos', function () {
 
     runTestSuite({
       maxUploadPart,
-      playlistBucket: 'streaming-playlists',
-      webtorrentBucket: 'videos',
+      playlistBucket: objectStorage.getMockBucketName('streaming-playlists'),
+      webtorrentBucket: objectStorage.getMockBucketName('videos'),
       fixture
     })
   })

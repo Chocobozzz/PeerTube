@@ -48,7 +48,6 @@ import { DebugCommand } from './debug-command'
 import { FollowsCommand } from './follows-command'
 import { JobsCommand } from './jobs-command'
 import { MetricsCommand } from './metrics-command'
-import { ObjectStorageCommand } from './object-storage-command'
 import { PluginsCommand } from './plugins-command'
 import { RedundancyCommand } from './redundancy-command'
 import { ServersCommand } from './servers-command'
@@ -140,7 +139,6 @@ export class PeerTubeServer {
   servers?: ServersCommand
   login?: LoginCommand
   users?: UsersCommand
-  objectStorage?: ObjectStorageCommand
   videoStudio?: VideoStudioCommand
   videos?: VideosCommand
   videoStats?: VideoStatsCommand
@@ -429,7 +427,6 @@ export class PeerTubeServer {
     this.login = new LoginCommand(this)
     this.users = new UsersCommand(this)
     this.videos = new VideosCommand(this)
-    this.objectStorage = new ObjectStorageCommand(this)
     this.videoStudio = new VideoStudioCommand(this)
     this.videoStats = new VideoStatsCommand(this)
     this.views = new ViewsCommand(this)

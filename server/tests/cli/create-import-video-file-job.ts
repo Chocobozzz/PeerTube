@@ -25,25 +25,27 @@ function assertVideoProperties (video: VideoFile, resolution: number, extname: s
   if (size) expect(video.size).to.equal(size)
 }
 
-async function checkFiles (video: VideoDetails, objectStorage: boolean) {
+async function checkFiles (video: VideoDetails, objectStorage: ObjectStorageCommand) {
   for (const file of video.files) {
-    if (objectStorage) expectStartWith(file.fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
+    if (objectStorage) expectStartWith(file.fileUrl, objectStorage.getMockWebVideosBaseUrl())
 
     await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 }
 
-function runTests (objectStorage: boolean) {
+function runTests (enableObjectStorage: boolean) {
   let video1ShortId: string
   let video2UUID: string
 
   let servers: PeerTubeServer[] = []
 
+  const objectStorage = new ObjectStorageCommand()
+
   before(async function () {
     this.timeout(90000)
 
-    const config = objectStorage
-      ? ObjectStorageCommand.getDefaultMockConfig()
+    const config = enableObjectStorage
+      ? objectStorage.getDefaultMockConfig()
       : {}
 
     // Run server 2 to have transcoding enabled
@@ -52,7 +54,7 @@ function runTests (objectStorage: boolean) {
 
     await doubleFollow(servers[0], servers[1])
 
-    if (objectStorage) await ObjectStorageCommand.prepareDefaultMockBuckets()
+    if (enableObjectStorage) await objectStorage.prepareDefaultMockBuckets()
 
     // Upload two videos for our needs
     {
@@ -90,7 +92,7 @@ function runTests (objectStorage: boolean) {
       assertVideoProperties(originalVideo, 720, 'webm', 218910)
       assertVideoProperties(transcodedVideo, 480, 'webm', 69217)
 
-      await checkFiles(videoDetails, objectStorage)
+      await checkFiles(videoDetails, enableObjectStorage && objectStorage)
     }
   })
 
@@ -114,7 +116,7 @@ function runTests (objectStorage: boolean) {
       assertVideoProperties(transcodedVideo320, 360, 'mp4')
       assertVideoProperties(transcodedVideo240, 240, 'mp4')
 
-      await checkFiles(videoDetails, objectStorage)
+      await checkFiles(videoDetails, enableObjectStorage && objectStorage)
     }
   })
 
@@ -136,7 +138,7 @@ function runTests (objectStorage: boolean) {
       assertVideoProperties(video720, 720, 'webm', 942961)
       assertVideoProperties(video480, 480, 'webm', 69217)
 
-      await checkFiles(videoDetails, objectStorage)
+      await checkFiles(videoDetails, enableObjectStorage && objectStorage)
     }
   })
 
@@ -146,6 +148,8 @@ function runTests (objectStorage: boolean) {
   })
 
   after(async function () {
+    await objectStorage.cleanupMock()
+
     await cleanupTests(servers)
   })
 }

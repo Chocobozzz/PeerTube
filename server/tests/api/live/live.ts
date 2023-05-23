@@ -423,7 +423,6 @@ describe('Test live', function () {
         servers,
         liveVideoId,
         resolutions: [ 720 ],
-        objectStorage: false,
         transcoded: true
       })
 
@@ -459,7 +458,6 @@ describe('Test live', function () {
         servers,
         liveVideoId,
         resolutions: resolutions.concat([ 720 ]),
-        objectStorage: false,
         transcoded: true
       })
 
@@ -512,7 +510,6 @@ describe('Test live', function () {
         servers,
         liveVideoId,
         resolutions,
-        objectStorage: false,
         transcoded: true
       })
 
@@ -609,7 +606,6 @@ describe('Test live', function () {
         servers,
         liveVideoId,
         resolutions,
-        objectStorage: false,
         transcoded: true
       })
 
@@ -646,7 +642,6 @@ describe('Test live', function () {
         servers,
         liveVideoId,
         resolutions: [ 720 ],
-        objectStorage: false,
         transcoded: true
       })
 
@@ -720,8 +715,7 @@ describe('Test live', function () {
           server: servers[0],
           videoUUID,
           playlistNumber: 0,
-          segment: 2,
-          objectStorage: false
+          segment: 2
         })
       }
 

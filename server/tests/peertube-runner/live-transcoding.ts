@@ -31,8 +31,8 @@ describe('Test Live transcoding in peertube-runner program', function () {
   let sqlCommandServer1: SQLCommand
 
   function runSuite (options: {
-    objectStorage: boolean
-  }) {
+    objectStorage?: ObjectStorageCommand
+  } = {}) {
     const { objectStorage } = options
 
     it('Should enable transcoding without additional resolutions', async function () {
@@ -117,7 +117,7 @@ describe('Test Live transcoding in peertube-runner program', function () {
 
         for (const file of files) {
           if (objectStorage) {
-            expectStartWith(file.fileUrl, ObjectStorageCommand.getMockPlaylistBaseUrl())
+            expectStartWith(file.fileUrl, objectStorage.getMockPlaylistBaseUrl())
           }
 
           await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
@@ -155,24 +155,30 @@ describe('Test Live transcoding in peertube-runner program', function () {
       await servers[0].config.enableTranscoding(true, false, true)
     })
 
-    runSuite({ objectStorage: false })
+    runSuite()
   })
 
   describe('With lives on object storage', function () {
     if (areMockObjectStorageTestsDisabled()) return
 
+    const objectStorage = new ObjectStorageCommand()
+
     before(async function () {
-      await ObjectStorageCommand.prepareDefaultMockBuckets()
+      await objectStorage.prepareDefaultMockBuckets()
 
       await servers[0].kill()
 
-      await servers[0].run(ObjectStorageCommand.getDefaultMockConfig())
+      await servers[0].run(objectStorage.getDefaultMockConfig())
 
       // Wait for peertube runner socket reconnection
       await wait(1500)
     })
 
-    runSuite({ objectStorage: true })
+    runSuite({ objectStorage })
+
+    after(async function () {
+      await objectStorage.cleanupMock()
+    })
   })
 
   describe('Check cleanup', function () {

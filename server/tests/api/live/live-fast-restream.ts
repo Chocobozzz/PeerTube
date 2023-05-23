@@ -65,8 +65,7 @@ describe('Fast restream in live', function () {
       server,
       videoUUID: liveVideoUUID,
       segment: 1,
-      playlistNumber: 0,
-      objectStorage: false
+      playlistNumber: 0
     })
 
     return { ffmpegCommand, liveVideoUUID }

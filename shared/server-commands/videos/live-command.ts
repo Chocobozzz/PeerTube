@@ -192,7 +192,7 @@ export class LiveCommand extends AbstractCommand {
     videoUUID: string
     playlistNumber: number
     segment: number
-    objectStorage: boolean
+    objectStorage?: ObjectStorageCommand
     objectStorageBaseUrl?: string
   }) {
     const {
@@ -201,12 +201,12 @@ export class LiveCommand extends AbstractCommand {
       playlistNumber,
       segment,
       videoUUID,
-      objectStorageBaseUrl = ObjectStorageCommand.getMockPlaylistBaseUrl()
+      objectStorageBaseUrl
     } = options
 
     const segmentName = `${playlistNumber}-00000${segment}.ts`
     const baseUrl = objectStorage
-      ? join(objectStorageBaseUrl, 'hls')
+      ? join(objectStorageBaseUrl || objectStorage.getMockPlaylistBaseUrl(), 'hls')
       : server.url + '/static/streaming-playlists/hls'
 
     let error = true
@@ -226,7 +226,7 @@ export class LiveCommand extends AbstractCommand {
         const hlsPlaylist = video.streamingPlaylists[0]
 
         // Check SHA generation
-        const shaBody = await server.streamingPlaylists.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url, withRetry: objectStorage })
+        const shaBody = await server.streamingPlaylists.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url, withRetry: !!objectStorage })
         if (!shaBody[segmentName]) {
           throw new Error('Segment SHA does not exist')
         }
@@ -261,13 +261,13 @@ export class LiveCommand extends AbstractCommand {
     videoUUID: string
     playlistNumber: number
     segment: number
-    objectStorage?: boolean // default false
+    objectStorage?: ObjectStorageCommand
   }) {
-    const { playlistNumber, segment, videoUUID, objectStorage = false } = options
+    const { playlistNumber, segment, videoUUID, objectStorage } = options
 
     const segmentName = `${playlistNumber}-00000${segment}.ts`
     const baseUrl = objectStorage
-      ? ObjectStorageCommand.getMockPlaylistBaseUrl()
+      ? objectStorage.getMockPlaylistBaseUrl()
       : `${this.server.url}/static/streaming-playlists/hls`
 
     const url = `${baseUrl}/${videoUUID}/${segmentName}`
@@ -284,12 +284,12 @@ export class LiveCommand extends AbstractCommand {
   getPlaylistFile (options: OverrideCommandOptions & {
     videoUUID: string
     playlistName: string
-    objectStorage?: boolean // default false
+    objectStorage?: ObjectStorageCommand
   }) {
-    const { playlistName, videoUUID, objectStorage = false } = options
+    const { playlistName, videoUUID, objectStorage } = options
 
     const baseUrl = objectStorage
-      ? ObjectStorageCommand.getMockPlaylistBaseUrl()
+      ? objectStorage.getMockPlaylistBaseUrl()
       : `${this.server.url}/static/streaming-playlists/hls`
 
     const url = `${baseUrl}/${videoUUID}/${playlistName}`

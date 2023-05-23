@@ -135,17 +135,23 @@ describe('Test update video privacy while transcoding', function () {
   describe('With object storage enabled', function () {
     if (areMockObjectStorageTestsDisabled()) return
 
+    const objectStorage = new ObjectStorageCommand()
+
     before(async function () {
       this.timeout(120000)
 
-      const configOverride = ObjectStorageCommand.getDefaultMockConfig()
-      await ObjectStorageCommand.prepareDefaultMockBuckets()
+      const configOverride = objectStorage.getDefaultMockConfig()
+      await objectStorage.prepareDefaultMockBuckets()
 
       await servers[0].kill()
       await servers[0].run(configOverride)
     })
 
-    runTestSuite(true, ObjectStorageCommand.getMockPlaylistBaseUrl())
+    runTestSuite(true, objectStorage.getMockPlaylistBaseUrl())
+
+    after(async function () {
+      await objectStorage.cleanupMock()
+    })
   })
 
   after(async function () {

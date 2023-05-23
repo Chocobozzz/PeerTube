@@ -46,7 +46,7 @@ async function testLiveVideoResolutions (options: {
   resolutions: number[]
   transcoded: boolean
 
-  objectStorage: boolean
+  objectStorage?: ObjectStorageCommand
   objectStorageBaseUrl?: string
 }) {
   const {
@@ -57,7 +57,7 @@ async function testLiveVideoResolutions (options: {
     resolutions,
     transcoded,
     objectStorage,
-    objectStorageBaseUrl = ObjectStorageCommand.getMockPlaylistBaseUrl()
+    objectStorageBaseUrl = objectStorage?.getMockPlaylistBaseUrl()
   } = options
 
   for (const server of servers) {
@@ -76,7 +76,7 @@ async function testLiveVideoResolutions (options: {
       playlistUrl: hlsPlaylist.playlistUrl,
       resolutions,
       transcoded,
-      withRetry: objectStorage
+      withRetry: !!objectStorage
     })
 
     if (objectStorage) {
@@ -105,7 +105,7 @@ async function testLiveVideoResolutions (options: {
 
       const subPlaylist = await originServer.streamingPlaylists.get({
         url: `${baseUrl}/${video.uuid}/${i}.m3u8`,
-        withRetry: objectStorage // With object storage, the request may fail because of inconsistent data in S3
+        withRetry: !!objectStorage // With object storage, the request may fail because of inconsistent data in S3
       })
 
       expect(subPlaylist).to.contain(segmentName)
@@ -116,7 +116,7 @@ async function testLiveVideoResolutions (options: {
         videoUUID: video.uuid,
         segmentName,
         hlsPlaylist,
-        withRetry: objectStorage // With object storage, the request may fail because of inconsistent data in S3
+        withRetry: !!objectStorage // With object storage, the request may fail because of inconsistent data in S3
       })
 
       if (originServer.internalServerNumber === server.internalServerNumber) {

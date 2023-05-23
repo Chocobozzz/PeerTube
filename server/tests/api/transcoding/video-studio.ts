@@ -326,11 +326,13 @@ describe('Test video studio', function () {
   describe('Object storage studio edition', function () {
     if (areMockObjectStorageTestsDisabled()) return
 
+    const objectStorage = new ObjectStorageCommand()
+
     before(async function () {
-      await ObjectStorageCommand.prepareDefaultMockBuckets()
+      await objectStorage.prepareDefaultMockBuckets()
 
       await servers[0].kill()
-      await servers[0].run(ObjectStorageCommand.getDefaultMockConfig())
+      await servers[0].run(objectStorage.getDefaultMockConfig())
 
       await servers[0].config.enableMinimumTranscoding()
     })
@@ -353,15 +355,19 @@ describe('Test video studio', function () {
         }
 
         for (const webtorrentFile of video.files) {
-          expectStartWith(webtorrentFile.fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
+          expectStartWith(webtorrentFile.fileUrl, objectStorage.getMockWebVideosBaseUrl())
         }
 
         for (const hlsFile of video.streamingPlaylists[0].files) {
-          expectStartWith(hlsFile.fileUrl, ObjectStorageCommand.getMockPlaylistBaseUrl())
+          expectStartWith(hlsFile.fileUrl, objectStorage.getMockPlaylistBaseUrl())
         }
 
         await checkVideoDuration(server, videoUUID, 9)
       }
+    })
+
+    after(async function () {
+      await objectStorage.cleanupMock()
     })
   })
 

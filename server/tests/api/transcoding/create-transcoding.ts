@@ -17,9 +17,9 @@ import {
   waitJobs
 } from '@shared/server-commands'
 
-async function checkFilesInObjectStorage (video: VideoDetails) {
+async function checkFilesInObjectStorage (objectStorage: ObjectStorageCommand, video: VideoDetails) {
   for (const file of video.files) {
-    expectStartWith(file.fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
+    expectStartWith(file.fileUrl, objectStorage.getMockWebVideosBaseUrl())
     await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 
@@ -27,29 +27,30 @@ async function checkFilesInObjectStorage (video: VideoDetails) {
 
   const hlsPlaylist = video.streamingPlaylists[0]
   for (const file of hlsPlaylist.files) {
-    expectStartWith(file.fileUrl, ObjectStorageCommand.getMockPlaylistBaseUrl())
+    expectStartWith(file.fileUrl, objectStorage.getMockPlaylistBaseUrl())
     await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 
-  expectStartWith(hlsPlaylist.playlistUrl, ObjectStorageCommand.getMockPlaylistBaseUrl())
+  expectStartWith(hlsPlaylist.playlistUrl, objectStorage.getMockPlaylistBaseUrl())
   await makeRawRequest({ url: hlsPlaylist.playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
 
-  expectStartWith(hlsPlaylist.segmentsSha256Url, ObjectStorageCommand.getMockPlaylistBaseUrl())
+  expectStartWith(hlsPlaylist.segmentsSha256Url, objectStorage.getMockPlaylistBaseUrl())
   await makeRawRequest({ url: hlsPlaylist.segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
 }
 
-function runTests (objectStorage: boolean) {
+function runTests (enableObjectStorage: boolean) {
   let servers: PeerTubeServer[] = []
   let videoUUID: string
   let publishedAt: string
 
   let shouldBeDeleted: string[]
+  const objectStorage = new ObjectStorageCommand()
 
   before(async function () {
     this.timeout(120000)
 
-    const config = objectStorage
-      ? ObjectStorageCommand.getDefaultMockConfig()
+    const config = enableObjectStorage
+      ? objectStorage.getDefaultMockConfig()
       : {}
 
     // Run server 2 to have transcoding enabled
@@ -60,7 +61,7 @@ function runTests (objectStorage: boolean) {
 
     await doubleFollow(servers[0], servers[1])
 
-    if (objectStorage) await ObjectStorageCommand.prepareDefaultMockBuckets()
+    if (enableObjectStorage) await objectStorage.prepareDefaultMockBuckets()
 
     const { shortUUID } = await servers[0].videos.quickUpload({ name: 'video' })
     videoUUID = shortUUID
@@ -91,7 +92,7 @@ function runTests (objectStorage: boolean) {
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
       expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
 
-      if (objectStorage) await checkFilesInObjectStorage(videoDetails)
+      if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
     }
   })
 
@@ -112,7 +113,7 @@ function runTests (objectStorage: boolean) {
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
       expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
 
-      if (objectStorage) await checkFilesInObjectStorage(videoDetails)
+      if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
     }
   })
 
@@ -132,7 +133,7 @@ function runTests (objectStorage: boolean) {
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
       expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
 
-      if (objectStorage) await checkFilesInObjectStorage(videoDetails)
+      if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
     }
   })
 
@@ -151,7 +152,7 @@ function runTests (objectStorage: boolean) {
       expect(videoDetails.files).to.have.lengthOf(5)
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(0)
 
-      if (objectStorage) await checkFilesInObjectStorage(videoDetails)
+      if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
     }
   })
 
@@ -185,7 +186,7 @@ function runTests (objectStorage: boolean) {
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
       expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(1)
 
-      if (objectStorage) await checkFilesInObjectStorage(videoDetails)
+      if (enableObjectStorage) await checkFilesInObjectStorage(objectStorage, videoDetails)
 
       shouldBeDeleted = [
         videoDetails.streamingPlaylists[0].files[0].fileUrl,
@@ -219,8 +220,8 @@ function runTests (objectStorage: boolean) {
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
       expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(5)
 
-      if (objectStorage) {
-        await checkFilesInObjectStorage(videoDetails)
+      if (enableObjectStorage) {
+        await checkFilesInObjectStorage(objectStorage, videoDetails)
 
         const hlsPlaylist = videoDetails.streamingPlaylists[0]
         const resolutions = hlsPlaylist.files.map(f => f.resolution.id)
@@ -245,6 +246,8 @@ function runTests (objectStorage: boolean) {
   })
 
   after(async function () {
+    if (objectStorage) await objectStorage.cleanupMock()
+
     await cleanupTests(servers)
   })
 }

@@ -32,13 +32,14 @@ describe('Object storage for video import', function () {
   if (areMockObjectStorageTestsDisabled()) return
 
   let server: PeerTubeServer
+  const objectStorage = new ObjectStorageCommand()
 
   before(async function () {
     this.timeout(120000)
 
-    await ObjectStorageCommand.prepareDefaultMockBuckets()
+    await objectStorage.prepareDefaultMockBuckets()
 
-    server = await createSingleServer(1, ObjectStorageCommand.getDefaultMockConfig())
+    server = await createSingleServer(1, objectStorage.getDefaultMockConfig())
 
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
@@ -64,7 +65,7 @@ describe('Object storage for video import', function () {
       expect(video.streamingPlaylists).to.have.lengthOf(0)
 
       const fileUrl = video.files[0].fileUrl
-      expectStartWith(fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
+      expectStartWith(fileUrl, objectStorage.getMockWebVideosBaseUrl())
 
       await makeRawRequest({ url: fileUrl, expectedStatus: HttpStatusCode.OK_200 })
     })
@@ -89,13 +90,13 @@ describe('Object storage for video import', function () {
       expect(video.streamingPlaylists[0].files).to.have.lengthOf(5)
 
       for (const file of video.files) {
-        expectStartWith(file.fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
+        expectStartWith(file.fileUrl, objectStorage.getMockWebVideosBaseUrl())
 
         await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
       }
 
       for (const file of video.streamingPlaylists[0].files) {
-        expectStartWith(file.fileUrl, ObjectStorageCommand.getMockPlaylistBaseUrl())
+        expectStartWith(file.fileUrl, objectStorage.getMockPlaylistBaseUrl())
 
         await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
       }
@@ -103,6 +104,8 @@ describe('Object storage for video import', function () {
   })
 
   after(async function () {
+    await objectStorage.cleanupMock()
+
     await cleanupTests([ server ])
   })
 })

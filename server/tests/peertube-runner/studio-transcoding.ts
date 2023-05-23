@@ -19,8 +19,8 @@ describe('Test studio transcoding in peertube-runner program', function () {
   let peertubeRunner: PeerTubeRunnerProcess
 
   function runSuite (options: {
-    objectStorage: boolean
-  }) {
+    objectStorage?: ObjectStorageCommand
+  } = {}) {
     const { objectStorage } = options
 
     it('Should run a complex studio transcoding', async function () {
@@ -45,11 +45,11 @@ describe('Test studio transcoding in peertube-runner program', function () {
 
         if (objectStorage) {
           for (const webtorrentFile of video.files) {
-            expectStartWith(webtorrentFile.fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
+            expectStartWith(webtorrentFile.fileUrl, objectStorage.getMockWebVideosBaseUrl())
           }
 
           for (const hlsFile of video.streamingPlaylists[0].files) {
-            expectStartWith(hlsFile.fileUrl, ObjectStorageCommand.getMockPlaylistBaseUrl())
+            expectStartWith(hlsFile.fileUrl, objectStorage.getMockPlaylistBaseUrl())
           }
         }
 
@@ -80,24 +80,30 @@ describe('Test studio transcoding in peertube-runner program', function () {
   })
 
   describe('With videos on local filesystem storage', function () {
-    runSuite({ objectStorage: false })
+    runSuite()
   })
 
   describe('With videos on object storage', function () {
     if (areMockObjectStorageTestsDisabled()) return
 
+    const objectStorage = new ObjectStorageCommand()
+
     before(async function () {
-      await ObjectStorageCommand.prepareDefaultMockBuckets()
+      await objectStorage.prepareDefaultMockBuckets()
 
       await servers[0].kill()
 
-      await servers[0].run(ObjectStorageCommand.getDefaultMockConfig())
+      await servers[0].run(objectStorage.getDefaultMockConfig())
 
       // Wait for peertube runner socket reconnection
       await wait(1500)
     })
 
-    runSuite({ objectStorage: true })
+    runSuite({ objectStorage })
+
+    after(async function () {
+      await objectStorage.cleanupMock()
+    })
   })
 
   describe('Check cleanup', function () {

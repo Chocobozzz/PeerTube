@@ -26,16 +26,16 @@ describe('Test VOD transcoding in peertube-runner program', function () {
   function runSuite (options: {
     webtorrentEnabled: boolean
     hlsEnabled: boolean
-    objectStorage: boolean
+    objectStorage?: ObjectStorageCommand
   }) {
     const { webtorrentEnabled, hlsEnabled, objectStorage } = options
 
     const objectStorageBaseUrlWebTorrent = objectStorage
-      ? ObjectStorageCommand.getMockWebTorrentBaseUrl()
+      ? objectStorage.getMockWebVideosBaseUrl()
       : undefined
 
     const objectStorageBaseUrlHLS = objectStorage
-      ? ObjectStorageCommand.getMockPlaylistBaseUrl()
+      ? objectStorage.getMockPlaylistBaseUrl()
       : undefined
 
     it('Should upload a classic video mp4 and transcode it', async function () {
@@ -262,7 +262,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         await servers[0].config.enableTranscoding(true, false, true)
       })
 
-      runSuite({ webtorrentEnabled: true, hlsEnabled: false, objectStorage: false })
+      runSuite({ webtorrentEnabled: true, hlsEnabled: false })
     })
 
     describe('HLS videos only enabled', function () {
@@ -271,7 +271,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         await servers[0].config.enableTranscoding(false, true, true)
       })
 
-      runSuite({ webtorrentEnabled: false, hlsEnabled: true, objectStorage: false })
+      runSuite({ webtorrentEnabled: false, hlsEnabled: true })
     })
 
     describe('Web video & HLS enabled', function () {
@@ -280,19 +280,21 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         await servers[0].config.enableTranscoding(true, true, true)
       })
 
-      runSuite({ webtorrentEnabled: true, hlsEnabled: true, objectStorage: false })
+      runSuite({ webtorrentEnabled: true, hlsEnabled: true })
     })
   })
 
   describe('With videos on object storage', function () {
     if (areMockObjectStorageTestsDisabled()) return
 
+    const objectStorage = new ObjectStorageCommand()
+
     before(async function () {
-      await ObjectStorageCommand.prepareDefaultMockBuckets()
+      await objectStorage.prepareDefaultMockBuckets()
 
       await servers[0].kill()
 
-      await servers[0].run(ObjectStorageCommand.getDefaultMockConfig())
+      await servers[0].run(objectStorage.getDefaultMockConfig())
 
       // Wait for peertube runner socket reconnection
       await wait(1500)
@@ -304,7 +306,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         await servers[0].config.enableTranscoding(true, false, true)
       })
 
-      runSuite({ webtorrentEnabled: true, hlsEnabled: false, objectStorage: true })
+      runSuite({ webtorrentEnabled: true, hlsEnabled: false, objectStorage })
     })
 
     describe('HLS videos only enabled', function () {
@@ -313,7 +315,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         await servers[0].config.enableTranscoding(false, true, true)
       })
 
-      runSuite({ webtorrentEnabled: false, hlsEnabled: true, objectStorage: true })
+      runSuite({ webtorrentEnabled: false, hlsEnabled: true, objectStorage })
     })
 
     describe('Web video & HLS enabled', function () {
@@ -322,7 +324,11 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         await servers[0].config.enableTranscoding(true, true, true)
       })
 
-      runSuite({ webtorrentEnabled: true, hlsEnabled: true, objectStorage: true })
+      runSuite({ webtorrentEnabled: true, hlsEnabled: true, objectStorage })
+    })
+
+    after(async function () {
+      await objectStorage.cleanupMock()
     })
   })
 
