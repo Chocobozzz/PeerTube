@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination, checkUploadVideoParam } from '@server/tests/shared'
+import { root } from '@shared/core-utils'
 import { HttpStatusCode, PeerTubeProblemDocument, VideoCreateResult, VideoPassword, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
@@ -10,12 +11,14 @@ import {
   setAccessTokensToServers
 } from '@shared/server-commands'
 import { expect } from 'chai'
+import { join } from 'path'
 
 describe('Test video passwords validator', function () {
   let path: string
   let server: PeerTubeServer
   let userAccessToken = ''
   let video: VideoCreateResult
+  let channelId: number
   let publicVideo: VideoCreateResult
   let passwords: VideoPassword[]
   // ---------------------------------------------------------------
@@ -28,6 +31,12 @@ describe('Test video passwords validator', function () {
     await setAccessTokensToServers([ server ])
 
     userAccessToken = await server.users.generateUserAndToken('user1')
+
+    {
+      const body = await server.users.getMyInfo()
+      channelId = body.videoChannels[0].id
+    }
+
     {
       video = await server.videos.quickUpload({
         name: 'password protected video',
@@ -36,6 +45,123 @@ describe('Test video passwords validator', function () {
       })
     }
     path = '/api/v1/videos/' + video.uuid + '/passwords'
+  })
+
+  async function checkVideoPasswordParam (
+    server: PeerTubeServer,
+    token: string,
+    videoPasswords: string[],
+    expectedStatus = HttpStatusCode.OK_200,
+    mode: 'uploadLegacy' | 'uploadResumable' | 'import' | 'updateVideo' | 'updatePasswords'
+  ) {
+    const attaches = {
+      fixture: join(root(), 'server', 'tests', 'fixtures', 'video_short.webm')
+    }
+    const baseCorrectParams = {
+      name: 'my super name',
+      category: 5,
+      licence: 1,
+      language: 'pt',
+      nsfw: false,
+      commentsEnabled: true,
+      downloadEnabled: true,
+      waitTranscoding: true,
+      description: 'my super description',
+      support: 'my super support text',
+      tags: [ 'tag1', 'tag2' ],
+      privacy: VideoPrivacy.PASSWORD_PROTECTED,
+      channelId,
+      originallyPublishedAt: new Date().toISOString()
+    }
+    switch (mode) {
+      case 'uploadLegacy':
+        {
+          const fields = { ...baseCorrectParams, videoPasswords }
+          await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, expectedStatus, 'legacy')
+        }
+        break
+
+      case 'uploadResumable':
+        {
+          const fields = { ...baseCorrectParams, videoPasswords }
+          await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, expectedStatus, 'resumable')
+        }
+        break
+
+      case 'import':
+        break
+
+      case 'updateVideo':
+        {
+          const fields = { ...baseCorrectParams, videoPasswords }
+          await makePutBodyRequest({
+            url: server.url,
+            path: '/api/v1/videos/' + video.shortUUID,
+            token: server.accessToken,
+            fields,
+            expectedStatus
+          })
+        }
+        break
+
+      case 'updatePasswords':
+        {
+          const fields = { passwords: videoPasswords }
+          await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields, expectedStatus })
+        }
+        break
+    }
+  }
+
+  function runSuite (mode: 'uploadLegacy' | 'uploadResumable' | 'import' | 'updateVideo' | 'updatePasswords') {
+
+    it('Should fail with a password protected privacy without providing a password', async function () {
+      await checkVideoPasswordParam(server, server.accessToken, undefined, HttpStatusCode.BAD_REQUEST_400, mode)
+    })
+
+    it('Should fail with a password protected privacy and an empty password list', async function () {
+      const videoPasswords = []
+
+      await checkVideoPasswordParam(server, server.accessToken, videoPasswords, HttpStatusCode.BAD_REQUEST_400, mode)
+    })
+
+    it('Should fail with a password protected privacy and a too short password', async function () {
+      const videoPasswords = [ 'p' ]
+
+      await checkVideoPasswordParam(server, server.accessToken, videoPasswords, HttpStatusCode.BAD_REQUEST_400, mode)
+    })
+
+    it('Should fail with a password protected privacy and an empty password', async function () {
+      const videoPasswords = [ '' ]
+
+      await checkVideoPasswordParam(server, server.accessToken, videoPasswords, HttpStatusCode.BAD_REQUEST_400, mode)
+    })
+
+    it('Should fail with a password protected privacy and duplicated passwords', async function () {
+      const videoPasswords = [ 'password', 'password' ]
+
+      await checkVideoPasswordParam(server, server.accessToken, videoPasswords, HttpStatusCode.BAD_REQUEST_400, mode)
+    })
+
+    it('Should succeed with a password protected privacy and correct passwords', async function () {
+      const videoPasswords = [ 'password1', 'password2' ]
+      const expectedStatus = mode === 'updatePasswords' || mode === 'updateVideo'
+        ? HttpStatusCode.NO_CONTENT_204
+        : HttpStatusCode.OK_200
+
+      await checkVideoPasswordParam(server, server.accessToken, videoPasswords, expectedStatus, mode)
+    })
+  }
+
+  describe('When adding a video', function () {
+
+    describe('Resumable upload', function () {
+      runSuite('uploadResumable')
+    })
+
+    describe('Legacy upload', function () {
+      runSuite('uploadLegacy')
+    })
   })
 
   describe('When getting a password protected video', function () {
@@ -142,40 +268,12 @@ describe('Test video passwords validator', function () {
     })
   })
 
+  describe('When updating a video', function () {
+    runSuite('updateVideo')
+  })
+
   describe('When updating the password list of a video', function () {
-    const baseCorrectParams = {
-      passwords: [ 'new password 1', 'new password 2' ]
-    }
-
-    it('Should fail with nothing', async function () {
-      const fields = {}
-      await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
-    })
-
-    it('Should fail with an empty password list', async function () {
-      const fields = { passwords: [] }
-      await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
-    })
-
-    it('Should fail with an empty password', async function () {
-      const fields = { passwords: [ '' ] }
-      await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
-    })
-
-    it('Should fail with a too short password', async function () {
-      const fields = { passwords: [ 'p' ] }
-      await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
-    })
-
-    it('Should fail with duplicated passwords', async function () {
-      const fields = { passwords: [ 'password', 'password' ] }
-      await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
-    })
-
-    it('Should succeed with correct parameters', async function () {
-      const fields = baseCorrectParams
-      await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields, expectedStatus: HttpStatusCode.NO_CONTENT_204 })
-    })
+    runSuite('updatePasswords')
   })
 
   describe('When deleting a password', async function () {

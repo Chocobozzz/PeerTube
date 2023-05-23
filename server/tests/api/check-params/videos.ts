@@ -411,41 +411,6 @@ describe('Test videos API validator', function () {
         await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
       })
 
-      it('Should fail with a password protected privacy without providing a password', async function () {
-        const fields = { ...baseCorrectParams, privacy: VideoPrivacy.PASSWORD_PROTECTED }
-        const attaches = baseCorrectAttaches
-
-        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
-      })
-
-      it('Should fail with a password protected privacy and an empty password list', async function () {
-        const fields = { ...baseCorrectParams, privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords: [] }
-        const attaches = baseCorrectAttaches
-
-        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
-      })
-
-      it('Should fail with a password protected privacy and a too short password', async function () {
-        const fields = { ...baseCorrectParams, privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords: [ 'p' ] }
-        const attaches = baseCorrectAttaches
-
-        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
-      })
-
-      it('Should fail with a password protected privacy and an empty password', async function () {
-        const fields = { ...baseCorrectParams, privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords: [ '' ] }
-        const attaches = baseCorrectAttaches
-
-        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
-      })
-
-      it('Should fail with a password protected privacy and duplicated passwords', async function () {
-        const fields = { ...baseCorrectParams, privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords: [ 'password', 'password' ] }
-        const attaches = baseCorrectAttaches
-
-        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
-      })
-
       it('Should report the appropriate error', async function () {
         const fields = { ...baseCorrectParams, language: 'a'.repeat(15) }
         const attaches = baseCorrectAttaches
@@ -500,13 +465,6 @@ describe('Test videos API validator', function () {
 
           await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.OK_200, mode)
         }
-      })
-
-      it('Should succeed with a password protected privacy and correct passwords', async function () {
-        const fields = { ...baseCorrectParams, privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords: [ 'password1', 'password2' ] }
-        const attaches = baseCorrectAttaches
-
-        await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.OK_200, mode)
       })
     }
 
@@ -716,36 +674,6 @@ describe('Test videos API validator', function () {
 
     it('Should fail with a video of another server')
 
-    it('Should fail with a password protected privacy without providing a password', async function () {
-      const fields = { ...baseCorrectParams, privacy: VideoPrivacy.PASSWORD_PROTECTED }
-
-      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
-    })
-
-    it('Should fail with a password protected privacy and an empty password list', async function () {
-      const fields = { ...baseCorrectParams, privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords: [] }
-
-      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
-    })
-
-    it('Should fail with a password protected privacy and a too short password', async function () {
-      const fields = { ...baseCorrectParams, privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords: [ 'p' ] }
-
-      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
-    })
-
-    it('Should fail with a password protected privacy and an empty password', async function () {
-      const fields = { ...baseCorrectParams, privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords: [ '' ] }
-
-      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
-    })
-
-    it('Should fail with a password protected privacy and duplicated passwords', async function () {
-      const fields = { ...baseCorrectParams, privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords: [ 'password', 'password' ] }
-
-      await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
-    })
-
     it('Shoud report the appropriate error', async function () {
       const fields = { ...baseCorrectParams, licence: 125 }
 
@@ -762,18 +690,6 @@ describe('Test videos API validator', function () {
 
       expect(error.status).to.equal(HttpStatusCode.BAD_REQUEST_400)
       expect(error['invalid-params'].licence).to.exist
-    })
-
-    it('Should succeed with a password protected privacy and correct passwords', async function () {
-      const fields = { ...baseCorrectParams, privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords: [ 'password1', 'password2' ] }
-
-      await makePutBodyRequest({
-        url: server.url,
-        path: path + video.shortUUID,
-        token: server.accessToken,
-        fields,
-        expectedStatus: HttpStatusCode.NO_CONTENT_204
-      })
     })
 
     it('Should succeed with the correct parameters', async function () {
