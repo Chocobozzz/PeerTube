@@ -7,7 +7,7 @@ import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express-handler'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
 import { arrayify, getAllPrivacies } from '@shared/core-utils'
-import { HttpStatusCode, ServerErrorCode, UserRight, VideoInclude, VideoState } from '@shared/models'
+import { HttpStatusCode, ServerErrorCode, UserRight, VideoInclude, VideoPrivacy, VideoState } from '@shared/models'
 import {
   exists,
   isBooleanValid,
@@ -40,7 +40,7 @@ import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { getVideoStreamDuration } from '../../../helpers/ffmpeg'
 import { logger } from '../../../helpers/logger'
 import { deleteFileAndCatch } from '../../../helpers/utils'
-import { getVideoWithAttributes } from '../../../helpers/video'
+import { getVideoWithAttributes, isPasswordListValid } from '../../../helpers/video'
 import { CONFIG } from '../../../initializers/config'
 import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants'
 import { isLocalVideoAccepted } from '../../../lib/moderation'
@@ -70,6 +70,10 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
+  body('videoPasswords')
+    .optional()
+    .custom(isPasswordListValid)
+    .withMessage('Invalid password list. Please provide a non-empty list of strings of at least 2 characters with no duplicates.'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
@@ -81,6 +85,13 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
       return cleanUpReqFiles(req)
     }
 
+    if (req.body.privacy === VideoPrivacy.PASSWORD_PROTECTED && !exists(req.body.videoPasswords)) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Cannot upload a password protected video without providing a password'
+      })
+      return cleanUpReqFiles(req)
+    }
     try {
       if (!videoFile.duration) await addDurationToVideo(videoFile)
     } catch (err) {
@@ -174,6 +185,10 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
+  body('videoPasswords')
+    .optional()
+    .custom(isPasswordListValid)
+    .withMessage('Invalid password list. Please provide a non-empty list of strings of at least 2 characters with no duplicates.'),
 
   header('x-upload-content-length')
     .isNumeric()
@@ -205,6 +220,14 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     const files = { videofile: [ videoFileMetadata ] }
     if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFileMetadata.size, files })) return cleanup()
 
+    if (req.body.privacy === VideoPrivacy.PASSWORD_PROTECTED && !exists(req.body.videoPasswords)) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Cannot upload a password protected video without providing a password'
+      })
+      return cleanup()
+    }
+
     // multer required unsetting the Content-Type, now we can set it for node-uploadx
     req.headers['content-type'] = 'application/json; charset=utf-8'
     // place previewfile in metadata so that uploadx saves it in .META
@@ -227,11 +250,23 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     .optional()
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
+  body('videoPasswords')
+    .optional()
+    .custom(isPasswordListValid)
+    .withMessage('Invalid password list. Please provide a non-empty list of strings of at least 2 characters with no duplicates.'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
     if (areErrorsInScheduleUpdate(req, res)) return cleanUpReqFiles(req)
     if (!await doesVideoExist(req.params.id, res)) return cleanUpReqFiles(req)
+
+    if (req.body.privacy === VideoPrivacy.PASSWORD_PROTECTED && !exists(req.body.videoPasswords)) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Cannot upload a password protected video without providing a password'
+      })
+      return cleanUpReqFiles(req)
+    }
 
     const video = getVideoWithAttributes(res)
     if (req.body.privacy && video.isLive && video.state !== VideoState.WAITING_FOR_LIVE) {
@@ -280,6 +315,10 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
 const videosCustomGetValidator = (fetchType: 'for-api' | 'all' | 'only-video' | 'only-immutable-attributes') => {
   return [
     isValidVideoIdParam('id'),
+
+    header('video-password')
+      .optional()
+      .isString(),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       if (areValidationErrors(req, res)) return

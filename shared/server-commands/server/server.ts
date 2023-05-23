@@ -32,6 +32,7 @@ import {
   HistoryCommand,
   ImportsCommand,
   LiveCommand,
+  PasswordsCommand,
   PlaylistsCommand,
   ServicesCommand,
   StreamingPlaylistsCommand,
@@ -149,6 +150,7 @@ export class PeerTubeServer {
   twoFactor?: TwoFactorCommand
   videoToken?: VideoTokenCommand
   registrations?: RegistrationsCommand
+  videoPasswords?: PasswordsCommand
 
   constructor (options: { serverNumber: number } | { url: string }) {
     if ((options as any).url) {
@@ -433,5 +435,6 @@ export class PeerTubeServer {
     this.twoFactor = new TwoFactorCommand(this)
     this.videoToken = new VideoTokenCommand(this)
     this.registrations = new RegistrationsCommand(this)
+    this.videoPasswords = new PasswordsCommand(this)
   }
 }

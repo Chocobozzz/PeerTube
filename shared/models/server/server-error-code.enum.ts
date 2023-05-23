@@ -45,7 +45,9 @@ export const enum ServerErrorCode {
   INVALID_TWO_FACTOR = 'invalid_two_factor',
 
   ACCOUNT_WAITING_FOR_APPROVAL = 'account_waiting_for_approval',
-  ACCOUNT_APPROVAL_REJECTED = 'account_approval_rejected'
+  ACCOUNT_APPROVAL_REJECTED = 'account_approval_rejected',
+
+  PASSWORD_NOT_ASSOCIATED_TO_VIDEO = 'password_not_associated_to_video'
 }
 
 /**

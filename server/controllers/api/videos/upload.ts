@@ -21,7 +21,7 @@ import { VideoSourceModel } from '@server/models/video/video-source'
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { getLowercaseExtension } from '@shared/core-utils'
 import { isAudioFile, uuidToShort } from '@shared/extra-utils'
-import { HttpStatusCode, VideoCreate, VideoResolution, VideoState } from '@shared/models'
+import { HttpStatusCode, VideoCreate, VideoPrivacy, VideoResolution, VideoState } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { buildFileMetadata, ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '../../../helpers/ffmpeg'
@@ -42,6 +42,7 @@ import {
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
+import { VideoPasswordModel } from '@server/models/video/video-password'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -203,6 +204,10 @@ async function addVideo (options: {
       isNew: true,
       transaction: t
     })
+
+    if (videoInfo.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
+      await VideoPasswordModel.addPasswordsForApi(videoInfo.videoPasswords, video.id, t)
+    }
 
     auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid, lTags(videoCreated.uuid))

@@ -41,11 +41,27 @@ function getExtFromMimetype (mimeTypes: { [id: string]: string | string[] }, mim
   return value
 }
 
+function isPasswordListValid (passwords: string[]) {
+  if (!Array.isArray(passwords)) return false
+
+  if (passwords.length === 0) return false
+
+  if (new Set(passwords).size !== passwords.length) return false // Duplicates found in the array
+
+  for (const password of passwords) {
+    if (typeof password !== 'string') return false
+    if (password.length < 2) return false // Password length less than 2 is not valid
+  }
+
+  return true
+}
+
 export {
   getVideoWithAttributes,
   extractVideo,
   getExtFromMimetype,
   isStateForFederation,
   isPrivacyForFederation,
-  getPrivaciesForFederation
+  getPrivaciesForFederation,
+  isPasswordListValid
 }

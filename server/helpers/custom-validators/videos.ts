@@ -111,7 +111,13 @@ function isVideoPrivacyValid (value: number) {
 }
 
 function isScheduleVideoUpdatePrivacyValid (value: number) {
-  return value === VideoPrivacy.UNLISTED || value === VideoPrivacy.PUBLIC || value === VideoPrivacy.INTERNAL
+  const validPrivacyValues = [
+    VideoPrivacy.UNLISTED,
+    VideoPrivacy.PUBLIC,
+    VideoPrivacy.INTERNAL
+  ]
+
+  return validPrivacyValues.includes(value)
 }
 
 function isVideoOriginallyPublishedAtValid (value: string | null) {

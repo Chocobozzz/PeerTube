@@ -151,6 +151,23 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
+  getWithPassword (options: OverrideCommandOptions & {
+    id: number | string
+    password?: string
+  }) {
+    const path = '/api/v1/videos/' + options.id
+
+    return this.getRequestBody<VideoDetails>({
+      ...options,
+      headers:{
+        'video-password': options.password
+      },
+      path,
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
   getSource (options: OverrideCommandOptions & {
     id: number | string
   }) {
@@ -608,11 +625,13 @@ export class VideosCommand extends AbstractCommand {
     nsfw?: boolean
     privacy?: VideoPrivacy
     fixture?: string
+    videoPasswords?: string[]
   }) {
     const attributes: VideoEdit = { name: options.name }
     if (options.nsfw) attributes.nsfw = options.nsfw
     if (options.privacy) attributes.privacy = options.privacy
     if (options.fixture) attributes.fixture = options.fixture
+    if (options.videoPasswords) attributes.videoPasswords = options.videoPasswords
 
     return this.upload({ ...options, attributes })
   }

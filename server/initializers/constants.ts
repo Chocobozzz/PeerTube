@@ -71,6 +71,8 @@ const SORTABLE_COLUMNS = {
   VIDEO_COMMENT_THREADS: [ 'createdAt', 'totalReplies' ],
   VIDEO_COMMENTS: [ 'createdAt' ],
 
+  VIDEO_PASSWORDS: [ 'createdAt' ],
+
   VIDEO_RATES: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
 
@@ -486,7 +488,8 @@ const VIDEO_PRIVACIES: { [ id in VideoPrivacy ]: string } = {
   [VideoPrivacy.PUBLIC]: 'Public',
   [VideoPrivacy.UNLISTED]: 'Unlisted',
   [VideoPrivacy.PRIVATE]: 'Private',
-  [VideoPrivacy.INTERNAL]: 'Internal'
+  [VideoPrivacy.INTERNAL]: 'Internal',
+  [VideoPrivacy.PASSWORD_PROTECTED]: 'Password protected'
 }
 
 const VIDEO_STATES: { [ id in VideoState ]: string } = {

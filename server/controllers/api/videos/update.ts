@@ -6,7 +6,7 @@ import { setVideoPrivacy } from '@server/lib/video-privacy'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { FilteredModelAttributes } from '@server/types'
 import { MVideoFullLight } from '@server/types/models'
-import { HttpStatusCode, VideoUpdate } from '@shared/models'
+import { HttpStatusCode, VideoPrivacy, VideoUpdate } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
 import { createReqFiles } from '../../../helpers/express-utils'
@@ -20,6 +20,7 @@ import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-u
 import { VideoModel } from '../../../models/video/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { forceNumber } from '@shared/core-utils'
+import { VideoPasswordModel } from '@server/models/video/video-password'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -174,7 +175,16 @@ async function updateVideoPrivacy (options: {
   const isNewVideo = videoInstance.isNewVideo(videoInfoToUpdate.privacy)
 
   const newPrivacy = forceNumber(videoInfoToUpdate.privacy)
+
+  if (videoInstance.privacy === VideoPrivacy.PASSWORD_PROTECTED && newPrivacy !== VideoPrivacy.PASSWORD_PROTECTED) {
+    await VideoPasswordModel.deletePasswordsForApi(videoInstance.id, transaction)
+  }
+
   setVideoPrivacy(videoInstance, newPrivacy)
+
+  if (newPrivacy === VideoPrivacy.PASSWORD_PROTECTED) {
+    await VideoPasswordModel.addPasswordsForApi(videoInfoToUpdate.videoPasswords, videoInstance.id, transaction)
+  }
 
   // Unfederate the video if the new privacy is not compatible with federation
   if (hadPrivacyForFederation && !videoInstance.hasPrivacyForFederation()) {

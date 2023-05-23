@@ -53,6 +53,7 @@ import { VideoTagModel } from '../models/video/video-tag'
 import { VideoViewModel } from '../models/view/video-view'
 import { CONFIG } from './config'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting'
+import { VideoPasswordModel } from '@server/models/video/video-password'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -159,7 +160,8 @@ async function initDatabaseModels (silent: boolean) {
     ActorCustomPageModel,
     VideoJobInfoModel,
     VideoChannelSyncModel,
-    UserRegistrationModel
+    UserRegistrationModel,
+    VideoPasswordModel
   ])
 
   // Check extensions exist in the database

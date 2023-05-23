@@ -20,6 +20,7 @@ import {
   MVideoWithRights
 } from '@server/types/models'
 import { HttpStatusCode, ServerErrorCode, UserRight, VideoPrivacy } from '@shared/models'
+import { VideoPasswordModel } from '@server/models/video/video-password'
 
 async function doesVideoExist (id: number | string, res: Response, fetchType: VideoLoadType = 'all') {
   const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined
@@ -115,6 +116,10 @@ async function checkCanSeeVideo (options: {
     return checkCanSeeAuthVideo(req, res, video)
   }
 
+  if (video.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
+    return checkCanSeePasswordProtectedVideo({ req, res, video })
+  }
+
   if (video.privacy === VideoPrivacy.UNLISTED || video.privacy === VideoPrivacy.PUBLIC) {
     return true
   }
@@ -164,6 +169,46 @@ async function checkCanSeeAuthVideo (req: Request, res: Response, video: MVideoI
 
   // Should not happen
   return fail()
+}
+
+async function checkCanSeePasswordProtectedVideo (options: {
+  req: Request
+  res: Response
+  video: MVideo
+}) {
+  const { req, res, video } = options
+
+  const videoWithAccount = (video as MVideoAccountLight).VideoChannel?.Account?.userId
+    ? video as MVideoAccountLight
+    : await VideoModel.loadFull(video.id)
+
+  const user = res.locals.oauth?.token.User
+
+  if (user) {
+    const isOwnedByUser = videoWithAccount.VideoChannel.Account.userId === user.id
+
+    if (isOwnedByUser || user.hasRight(UserRight.SEE_ALL_VIDEOS)) return true
+  }
+
+  const videoPassword = req.header('video-password')
+
+  if (!videoPassword) {
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'Please provide a password to access this password protected video'
+    })
+
+    return false
+  }
+
+  if (await VideoPasswordModel.isACorrectPassword(video.id, videoPassword)) return true
+
+  res.fail({
+    status: HttpStatusCode.FORBIDDEN_403,
+    message: 'Incorrect video password. Access to the video is denied.'
+  })
+
+  return false
 }
 
 // ---------------------------------------------------------------------------

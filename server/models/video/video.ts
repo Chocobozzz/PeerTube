@@ -132,6 +132,7 @@ import { VideoFileModel } from './video-file'
 import { VideoImportModel } from './video-import'
 import { VideoJobInfoModel } from './video-job-info'
 import { VideoLiveModel } from './video-live'
+import { VideoPasswordModel } from './video-password'
 import { VideoPlaylistElementModel } from './video-playlist-element'
 import { VideoShareModel } from './video-share'
 import { VideoSourceModel } from './video-source'
@@ -739,6 +740,15 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     onDelete: 'cascade'
   })
   VideoJobInfo: VideoJobInfoModel
+
+  @HasMany(() => VideoPasswordModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  VideoPasswords: VideoPasswordModel[]
 
   @BeforeDestroy
   static async sendDelete (instance: MVideoAccountLight, options) {
@@ -1905,7 +1915,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     if (checkBlacklist && this.VideoBlacklist) return true
 
-    if (this.privacy !== VideoPrivacy.PUBLIC) {
+    if (this.privacy !== VideoPrivacy.PUBLIC && this.privacy !== VideoPrivacy.PASSWORD_PROTECTED) {
       throw new Error(`Unknown video privacy ${this.privacy} to know if the video requires auth`)
     }
 

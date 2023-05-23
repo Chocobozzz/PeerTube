@@ -46,6 +46,7 @@ import { transcodingRouter } from './transcoding'
 import { updateRouter } from './update'
 import { uploadRouter } from './upload'
 import { viewRouter } from './view'
+import { videoPasswordRouter } from './passwords'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -65,6 +66,7 @@ videosRouter.use('/', updateRouter)
 videosRouter.use('/', filesRouter)
 videosRouter.use('/', transcodingRouter)
 videosRouter.use('/', tokenRouter)
+videosRouter.use('/', videoPasswordRouter)
 
 videosRouter.get('/categories',
   openapiOperationDoc({ operationId: 'getCategories' }),
