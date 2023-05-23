@@ -1074,7 +1074,7 @@
       </trans-unit>
       <trans-unit id="7312374115603954471" datatype="html">
         <source>This will ask remote instances to delete local videos</source>
-        <target state="translated">این مورد از دیگر سایت های راه دور می خواهد که ویدئو های ذخیره شده در خود را ، حذف کنند</target>
+        <target state="translated">این گزینه از دیگر سایت‌های راه دور می خواهد که ویدئو های ذخیره شده در خود را ، حذف کنند</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">34</context>
@@ -4111,7 +4111,7 @@
       </trans-unit>
       <trans-unit id="7483158147658382515" datatype="html">
         <source>Comments on local videos</source>
-        <target state="translated">اظهارنظرات درباره ویدئوهای محلی</target>
+        <target state="translated">اظهارنظرات درباره ویدئوهای این سایت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="1420624050293070194" datatype="html">
@@ -9970,7 +9970,7 @@
       </trans-unit>
       <trans-unit id="2887122197778293919" datatype="html">
         <source>Go to the local videos page</source>
-        <target state="translated">برو به صفحه ویدئوهای محلی</target>
+        <target state="translated">برو به صفحه ویدئوهای این سایت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">312</context></context-group>
       </trans-unit>
       <trans-unit id="8009065619559214982" datatype="html">
@@ -13139,7 +13139,7 @@
       </trans-unit>
       <trans-unit id="8681933925782924101" datatype="html">
         <source>Local videos</source>
-        <target state="translated">ویدئوهای محلی</target>
+        <target state="translated">ویدئوهای این سایت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">89</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">193</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">151</context></context-group>
