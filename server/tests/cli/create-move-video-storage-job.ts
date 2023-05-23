@@ -117,6 +117,8 @@ describe('Test create move video storage job', function () {
   })
 
   after(async function () {
+    await objectStorage.cleanupMock()
+
     await cleanupTests(servers)
   })
 })
