@@ -310,7 +310,6 @@
       }
     }
   },
-  "defaultProject": "PeerTube",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "my",

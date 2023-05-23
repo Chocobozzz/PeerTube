@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core'
-import { CanActivate, CanDeactivate } from '@angular/router'
 import { MenuService } from '../menu'
 import { ScreenService } from '../wrappers'
 
-abstract class MenuGuard implements CanActivate, CanDeactivate<any> {
+abstract class MenuGuard {
   canDeactivate = this.canActivate
 
   constructor (protected menu: MenuService, protected screen: ScreenService, protected display: boolean) {

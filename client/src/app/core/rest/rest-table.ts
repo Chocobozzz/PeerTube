@@ -1,5 +1,6 @@
 import debug from 'debug'
-import { LazyLoadEvent, SortMeta } from 'primeng/api'
+import { SortMeta } from 'primeng/api'
+import { TableLazyLoadEvent } from 'primeng/table'
 import { ActivatedRoute, Router } from '@angular/router'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
@@ -46,12 +47,12 @@ export abstract class RestTable <T = unknown> {
     peertubeLocalStorage.setItem(this.getSortLocalStorageKey(), JSON.stringify(this.sort))
   }
 
-  loadLazy (event: LazyLoadEvent) {
+  loadLazy (event: TableLazyLoadEvent) {
     debugLogger('Load lazy %o.', event)
 
     this.sort = {
       order: event.sortOrder,
-      field: event.sortField
+      field: event.sortField as string
     }
 
     this.rowsPerPage = event.rows

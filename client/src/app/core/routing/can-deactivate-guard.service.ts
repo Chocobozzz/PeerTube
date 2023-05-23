@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs'
 import { Injectable } from '@angular/core'
-import { CanDeactivate } from '@angular/router'
 import { ConfirmService } from '@app/core/confirm'
 
 export type CanComponentDeactivateResult = { text?: string, canDeactivate: Observable<boolean> | boolean }
@@ -10,7 +9,7 @@ export interface CanComponentDeactivate {
 }
 
 @Injectable()
-export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
+export class CanDeactivateGuard {
 
   constructor (private confirmService: ConfirmService) { }
 
