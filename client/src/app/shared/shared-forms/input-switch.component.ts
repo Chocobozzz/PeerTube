@@ -20,6 +20,7 @@ export class InputSwitchComponent implements ControlValueAccessor {
   propagateChange = (_: any) => { /* empty */ }
 
   writeValue (checked: boolean) {
+    console.log(checked)
     this.checked = checked
   }
 
@@ -32,6 +33,7 @@ export class InputSwitchComponent implements ControlValueAccessor {
   }
 
   update () {
+    console.log(this.checked)
     this.checked = !this.checked
     this.propagateChange(this.checked)
   }
