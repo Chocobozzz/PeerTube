@@ -46,11 +46,11 @@ export class EditVODTranscodingComponent implements OnInit, OnChanges {
     const profiles = this.serverConfig.transcoding.availableProfiles
 
     return profiles.map(p => {
-      const description = p === 'default'
-        ? $localize`x264, targeting maximum device compatibility`
-        : ''
+      if (p === 'default') {
+        return { id: p, label: $localize`Default`, description: $localize`x264, targeting maximum device compatibility` }
+      }
 
-      return { id: p, label: p, description }
+      return { id: p, label: p }
     })
   }
 
