@@ -668,7 +668,7 @@
       </trans-unit>
       <trans-unit id="3514509630940272440" datatype="html">
         <source>Sensitive</source>
-        <target state="translated">حساس</target>
+        <target state="translated">محتواي حساس</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="7708270344948043036" datatype="html">
@@ -1679,7 +1679,7 @@
       </trans-unit>
       <trans-unit id="9156407045661257130" datatype="html">
         <source>Sensitive:</source>
-        <target state="translated">حساس:</target>
+        <target state="translated">محتواي حساس:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="3430483831942247060" datatype="html">
@@ -2722,7 +2722,7 @@
       </trans-unit>
       <trans-unit id="5607669932062416162" datatype="html">
         <source>Default</source>
-        <target state="translated">پیش فرض</target>
+        <target state="translated">پیش‌فرض</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="4299493457408757206" datatype="html">
@@ -3123,12 +3123,12 @@
       </trans-unit>
       <trans-unit id="2353402732767789211" datatype="html">
         <source>More customization</source>
-        <target state="translated">سفارشی سازی بیشتر</target>
+        <target state="translated">سفارشی‌سازی بیشتر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">291</context></context-group>
       </trans-unit>
       <trans-unit id="1284179134768564307" datatype="html">
         <source>Less customization</source>
-        <target state="translated">سفارشی سازی کمتر</target>
+        <target state="translated">سفارشی‌سازی کمتر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">299</context></context-group>
       </trans-unit>
       <trans-unit id="1290987288288099212" datatype="html">
@@ -3410,7 +3410,7 @@
       </trans-unit>
       <trans-unit id="6448160249466325288" datatype="html">
         <source>Most recent first (default)</source>
-        <target state="translated">آخرین نظر (پیش فرض)</target>
+        <target state="translated">آخرین نظر (پیش‌فرض)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="5179007899354903649" datatype="html">
@@ -4035,7 +4035,7 @@
       </trans-unit>
       <trans-unit id="7574091010118901399" datatype="html">
         <source>Sensitive</source>
-        <target state="translated">حساس</target>
+        <target state="translated">محتواي حساس</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="2478877938420291792" datatype="html">
@@ -5005,7 +5005,7 @@
       </trans-unit>
       <trans-unit id="5862227717871131052" datatype="html">
         <source>Prefer author display name in video miniature</source>
-        <target state="translated">ترجیح دادن نام نویسنده نام در ویدئو مینیاتوری</target>
+        <target state="translated">ارجحيت نام نمايشي نویسنده در ویدئوي مینیاتوری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="5444889468197427724" datatype="html">
@@ -5451,17 +5451,17 @@
       </trans-unit>
       <trans-unit id="5309195634424105927" datatype="html">
         <source>Live transcoding threads</source>
-        <target state="translated">مسیرهای تغییر کد پخش زنده</target>
+        <target state="translated">رشته(ترد)های تغییر کد پخش‌زنده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">163</context></context-group>
       </trans-unit>
       <trans-unit id="4240037618955024499" datatype="html">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
-        <target state="translated">حداکثر <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> مسير براي تغییر کد VOD استفاده خواهد شد. </target>
+        <target state="translated">حداکثر <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> رشته(ترد) براي تغییر کد VOD استفاده خواهد شد. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">166</context></context-group>
       </trans-unit>
       <trans-unit id="8489317904250057957" datatype="html">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
-        <target state="translated">حداقل <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> مسير براي تغییر کد VOD استفاده خواهد شد </target>
+        <target state="translated">حداقل <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> رشته(ترد) براي تغییر کد VOD استفاده خواهد شد </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="1417246074503129277" datatype="html">
@@ -5486,7 +5486,7 @@
       </trans-unit>
       <trans-unit id="5429376346987783852" datatype="html">
         <source>Even if it's above your maximum enabled resolution</source>
-        <target state="new"> Even if it's above your maximum enabled resolution </target>
+        <target state="translated">حتي اگر بيشتر از حداكثر رزولوشن فعال شما باشد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="3283660108004661843" datatype="html">
@@ -5571,7 +5571,7 @@
       </trans-unit>
       <trans-unit id="5867513506373651775" datatype="html">
         <source>The file will be merged in a still image video with the preview file on upload.</source>
-        <target state="translated">فایل در یک ویدیو تصویر ثابت با فایل پیش نمایش در آپلود ادغام خواهد شد.</target>
+        <target state="translated">هنگام آپلود، فایل در یک ویدیوي تصویر ثابت با فایل پیش‌نمایش ادغام خواهد شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="2036818807823848377" datatype="html">
@@ -5587,7 +5587,7 @@
       </trans-unit>
       <trans-unit id="8373385486403101567" datatype="html">
         <source>If you also enabled HLS support, it will multiply videos storage by 2</source>
-        <target state="translated">اگر شما همچنین پشتیبانی از HLS را فعال کرده اید، فیلم ها را با 2 بار افزایش می‌دهد</target>
+        <target state="translated">اگر شما پشتیبانی از HLS را هم فعال کرده‌اید، فضاي موردنياز براي ذخيره فیلم‌ها را دو برابر مي‌كند</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="3839590624406770455" datatype="html">
@@ -5612,7 +5612,7 @@
       </trans-unit>
       <trans-unit id="5431196295724512251" datatype="html">
         <source>The original file resolution will be the default target if no option is selected.</source>
-        <target state="translated">اگر هیچ گزینه ای انتخاب نشده باشد، رزولوشن اصلی فایل پیش فرض خواهد بود.</target>
+        <target state="translated">اگر هیچ گزینه ای انتخاب نشده باشد رزولوشن اصلی فایل، پیش‌فرض خواهد بود.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">120</context></context-group>
       </trans-unit>
       <trans-unit id="8056487097039524924" datatype="html">
@@ -5625,17 +5625,17 @@
       </trans-unit>
       <trans-unit id="1126867109775813762" datatype="html">
         <source>Transcoding threads</source>
-        <target state="translated">مسیرهای تغییر کد</target>
+        <target state="translated">رشته(ترد)های تغییر کد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">159</context></context-group>
       </trans-unit>
       <trans-unit id="7815122216882553289" datatype="html">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="translated">حداکثر <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> مسير براي تغییر کد پخش زنده استفاده خواهد شد </target>
+        <target state="translated">حداکثر <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> رشته(ترد) براي تغییر کد پخش زنده استفاده خواهد شد </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="8685484763568827375" datatype="html">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="translated">حداقل <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> مسير براي تغییر کد پخش زنده استفاده خواهد شد </target>
+        <target state="translated">حداقل <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> رشته(ترد) براي تغییر کد پخش زنده استفاده خواهد شد </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">166</context></context-group>
       </trans-unit>
       <trans-unit id="7185278676178506632" datatype="html">
@@ -5748,7 +5748,7 @@
       </trans-unit>
       <trans-unit id="2528135865630556778" datatype="html">
         <source>CUSTOMIZATIONS</source>
-        <target state="translated">سفارشی سازی</target>
+        <target state="translated">سفارشی‌سازی‌ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="1714039296068260295" datatype="html">
@@ -6682,7 +6682,7 @@
       </trans-unit>
       <trans-unit id="3249405667632600635" datatype="html">
         <source>Custom dates</source>
-        <target state="translated">تاریخ موردنظر</target>
+        <target state="translated">تاریخ دلخواه</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">238</context></context-group>
       </trans-unit>
       <trans-unit id="5382746022482410588" datatype="html">
@@ -7761,7 +7761,7 @@
       </trans-unit>
       <trans-unit id="5921284055608402352" datatype="html">
         <source>{value, plural, =1 {thread} other {threads}}</source>
-        <target state="new">{value, plural, =1 {thread} other {threads}}</target>
+        <target state="translated">{value, plural, =1 {رشته(ترد)} other {رشته(ترد)}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="3957742085471141221" datatype="html">
@@ -7804,7 +7804,7 @@
       </trans-unit>
       <trans-unit id="6659155428791414865" datatype="html">
         <source>x264, targeting maximum device compatibility</source>
-        <target state="translated">X264، هدف قرار دادن حداکثر سازگاری دستگاه</target>
+        <target state="translated">X264، بمنظور حداکثر سازگاری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context><context context-type="linenumber">55</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
@@ -7828,7 +7828,7 @@
       </trans-unit>
       <trans-unit id="1618463615802675111" datatype="html">
         <source>threads</source>
-        <target state="translated">موضوعات</target>
+        <target state="translated">رشته‌ها (تردها)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="709846045064893539" datatype="html">
@@ -7876,7 +7876,7 @@
       </trans-unit>
       <trans-unit id="6284468333579755406" datatype="html">
         <source>Edit custom configuration</source>
-        <target state="translated">ویرایش پیکربندی سفارشی</target>
+        <target state="translated">ویرایش پیکربندی دلخواه</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="6549061957433635758" datatype="html">
@@ -10561,12 +10561,12 @@
       </trans-unit>
       <trans-unit id="6172217783476989430" datatype="html">
         <source>Transcoding threads is required.</source>
-        <target state="translated">تعداد مسیرهای تغییر کد الزامی است.</target>
+        <target state="translated">تعداد رشته(ترد)‌هاي تغییر کد الزامی است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="5320424292625586941" datatype="html">
         <source>Transcoding threads must be greater or equal to 0.</source>
-        <target state="translated">مسیرهای تغییر کد بایستی بزرگتر یا مساوی صفر باشد.</target>
+        <target state="translated">تعداد رشته(ترد)های تغییر کد بایستی بزرگتر یا مساوی صفر باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="8185661254949728718" datatype="html">
@@ -11290,7 +11290,7 @@
       </trans-unit>
       <trans-unit id="4076995379551303829" datatype="html">
         <source>Custom value...</source>
-        <target state="translated">مقدار سفارشی ...</target>
+        <target state="translated">مقدار دلخواه ...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-custom-value.component.ts</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="4670312387769733978" datatype="html">
