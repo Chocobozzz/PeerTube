@@ -124,7 +124,7 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
     return '/my-library/video-channel-syncs/create'
   }
 
-  getSyncStateClass (stateId: number) {
+  getSyncStateClass (stateId: VideoChannelSyncState) {
     return [ 'pt-badge', MyVideoChannelSyncsComponent.STATE_CLASS_BY_ID[stateId] ]
   }
 

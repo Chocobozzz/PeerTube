@@ -339,7 +339,7 @@ class WebTorrentPlugin extends Plugin {
       if (err.message.indexOf('incorrect info hash') !== -1) {
         logger.error('Incorrect info hash detected, falling back to torrent file.')
         const newOptions = { forcePlay: true, seek: options.seek }
-        return this.addTorrent(this.torrent['xs'], previousVideoFile, newOptions, done)
+        return this.addTorrent((this.torrent as any)['xs'], previousVideoFile, newOptions, done)
       }
 
       // Remote instance is down
@@ -582,7 +582,7 @@ class WebTorrentPlugin extends Plugin {
   private stopTorrent (torrent: WebTorrent.Torrent) {
     torrent.pause()
     // Pause does not remove actual peers (in particular the webseed peer)
-    torrent.removePeer(torrent['ws'])
+    torrent.removePeer((torrent as any)['ws'])
   }
 
   private renderFileInFakeElement (file: WebTorrent.TorrentFile, delay: number) {

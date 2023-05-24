@@ -84,7 +84,7 @@ export class VideoFilters {
       if (specificKey && specificKey !== key) continue
 
       // FIXME: typings
-      this[key as any] = value
+      (this as any)[key] = value
     }
 
     this.buildActiveFilters()

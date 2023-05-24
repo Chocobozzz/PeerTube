@@ -1,6 +1,7 @@
 import { getAbsoluteAPIUrl } from '@app/helpers'
 import { VideoPrivacy, VideoScheduleUpdate, VideoUpdate } from '@shared/models'
 import { VideoDetails } from './video-details.model'
+import { objectKeysTyped } from '@shared/core-utils'
 
 export class VideoEdit implements VideoUpdate {
   static readonly SPECIAL_SCHEDULED_PRIVACY = -1
@@ -65,8 +66,9 @@ export class VideoEdit implements VideoUpdate {
   }
 
   patch (values: { [ id: string ]: any }) {
-    Object.keys(values).forEach((key) => {
-      this[key] = values[key]
+    objectKeysTyped(values).forEach(key => {
+      // FIXME: typings
+      (this as any)[key] = values[key]
     })
 
     // If schedule publication, the video is private and will be changed to public privacy

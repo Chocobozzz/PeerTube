@@ -2,6 +2,7 @@ import { finalize } from 'rxjs/operators'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
 import { FindInBulkService } from '@app/shared/shared-search'
+import { objectKeysTyped } from '@shared/core-utils'
 import { Video } from '../../shared-main'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { CustomMarkupComponent } from './shared'
@@ -47,7 +48,7 @@ export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnI
 
   ngOnInit () {
     if (this.onlyDisplayTitle) {
-      for (const key of Object.keys(this.displayOptions)) {
+      for (const key of objectKeysTyped(this.displayOptions)) {
         this.displayOptions[key] = false
       }
     }

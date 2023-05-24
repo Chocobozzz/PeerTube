@@ -10,6 +10,7 @@ import {
   SimpleChanges,
   Type
 } from '@angular/core'
+import { objectKeysTyped } from '@shared/core-utils'
 
 @Injectable()
 export class DynamicElementService {
@@ -41,12 +42,12 @@ export class DynamicElementService {
   setModel <T> (componentRef: ComponentRef<T>, attributes: Partial<T>) {
     const changes: SimpleChanges = {}
 
-    for (const key of Object.keys(attributes)) {
+    for (const key of objectKeysTyped(attributes)) {
       const previousValue = componentRef.instance[key]
       const newValue = attributes[key]
 
       componentRef.instance[key] = newValue
-      changes[key] = new SimpleChange(previousValue, newValue, previousValue === undefined)
+      changes[key as string] = new SimpleChange(previousValue, newValue, previousValue === undefined)
     }
 
     const component = componentRef.instance

@@ -233,4 +233,4 @@ export class PeerTubePlayer {
 }
 
 // put it on the window as well as the export
-(window['PeerTubePlayer'] as any) = PeerTubePlayer
+(window as any)['PeerTubePlayer'] = PeerTubePlayer

@@ -10,7 +10,6 @@
     "experimentalDecorators": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "suppressImplicitAnyIndexErrors": true,
     "alwaysStrict": true,
     "importHelpers": true,
     "allowSyntheticDefaultImports": true,

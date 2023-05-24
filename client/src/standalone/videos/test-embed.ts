@@ -22,9 +22,9 @@ window.addEventListener('load', async () => {
   mainElement.appendChild(iframe)
 
   logger.info('Document finished loading.')
-  const player = new PeerTubePlayer(document.querySelector('iframe'))
+  const player = new PeerTubePlayer(document.querySelector('iframe'));
 
-  window['player'] = player
+  (window as any)['player'] = player
 
   logger.info('Awaiting player ready...')
   await player.ready

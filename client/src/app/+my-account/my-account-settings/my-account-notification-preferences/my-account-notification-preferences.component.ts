@@ -141,11 +141,11 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   }
 
   private loadNotificationSettings () {
-    for (const key of Object.keys(this.user.notificationSettings)) {
+    for (const key of Object.keys(this.user.notificationSettings) as (keyof UserNotificationSetting)[]) {
       const value = this.user.notificationSettings[key]
-      this.emailNotifications[key] = value & UserNotificationSettingValue.EMAIL
+      this.emailNotifications[key] = !!(value & UserNotificationSettingValue.EMAIL)
 
-      this.webNotifications[key] = value & UserNotificationSettingValue.WEB
+      this.webNotifications[key] = !!(value & UserNotificationSettingValue.WEB)
     }
   }
 }

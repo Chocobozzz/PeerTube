@@ -171,15 +171,15 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
       .subscribe(result => {
         this.videosContainedInPlaylists = Object.keys(result).reduce((acc, videoId) => ({
           ...acc,
-          [videoId]: uniqBy(result[videoId], (p: VideoExistInPlaylist) => p.playlistId)
+          [videoId]: uniqBy(result[+videoId], (p: VideoExistInPlaylist) => p.playlistId)
         }), this.videosContainedInPlaylists)
       })
   }
 
   async deleteSelectedVideos () {
-    const toDeleteVideosIds = Object.keys(this.selection)
-                                    .filter(k => this.selection[k] === true)
-                                    .map(k => parseInt(k, 10))
+    const toDeleteVideosIds = Object.entries(this.selection)
+                                    .filter(([ _k, v ]) => v === true)
+                                    .map(([ k, _v ]) => parseInt(k, 10))
 
     const res = await this.confirmService.confirm(
       prepareIcu($localize`Do you really want to delete {length, plural, =1 {this video} other {{length} videos}}?`)(

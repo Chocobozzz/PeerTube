@@ -349,7 +349,7 @@ class Html5Hlsjs {
   }
 
   private _oneLevelObjClone (obj: { [ id: string ]: any }) {
-    const result = {}
+    const result: { [id: string]: any } = {}
     const objKeys = Object.keys(obj)
     for (let i = 0; i < objKeys.length; i++) {
       result[objKeys[i]] = obj[objKeys[i]]

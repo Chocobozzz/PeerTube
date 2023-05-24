@@ -193,7 +193,8 @@ export class ServerService {
   }
 
   private loadHTMLConfigLocally () {
-    const configString = window['PeerTubeServerConfig']
+    // FIXME: typings
+    const configString = (window as any)['PeerTubeServerConfig']
     if (!configString) {
       throw new Error('Could not find PeerTubeServerConfig in HTML')
     }

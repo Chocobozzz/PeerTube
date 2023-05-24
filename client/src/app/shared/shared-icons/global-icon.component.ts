@@ -112,7 +112,7 @@ export class GlobalIconComponent implements OnInit {
     }
   }
 
-  private getSVGContent (options: { name: string }) {
+  private getSVGContent (options: { name: GlobalIconName }) {
     return icons[options.name]
   }
 }

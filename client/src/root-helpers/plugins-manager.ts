@@ -317,7 +317,7 @@ async function dynamicImport (url: string) {
       const script = document.createElement('script')
 
       const destructor = () => {
-        delete window[vector]
+        delete window[vector as any]
         script.onerror = null
         script.onload = null
         script.remove()
@@ -333,7 +333,7 @@ async function dynamicImport (url: string) {
         destructor()
       }
       script.onload = () => {
-        resolve(window[vector])
+        resolve(window[vector as any])
         destructor()
       }
       const loader = `import * as m from "${url}"; window.${vector} = m;` // export Module

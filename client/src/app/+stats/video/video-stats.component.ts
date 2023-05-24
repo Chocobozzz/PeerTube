@@ -47,7 +47,7 @@ export class VideoStatsComponent implements OnInit {
   chartHeight = '300px'
   chartWidth: string = null
 
-  availableCharts: { id: string, label: string, zoomEnabled: boolean }[] = []
+  availableCharts: { id: ActiveGraphId, label: string, zoomEnabled: boolean }[] = []
   activeGraphId: ActiveGraphId = 'viewers'
 
   video: VideoDetails

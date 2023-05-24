@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { AsyncValidatorFn, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms'
+import { objectKeysTyped } from '@shared/core-utils'
 import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
 import { FormReactiveErrors, FormReactiveValidationMessages } from './form-reactive.service'
 
@@ -47,13 +48,14 @@ export class FormValidatorService {
     obj: BuildFormArgument,
     defaultValues: BuildFormDefaultValues = {}
   ) {
-    for (const name of Object.keys(obj)) {
+    for (const name of objectKeysTyped(obj)) {
       formErrors[name] = ''
 
       const field = obj[name]
       if (this.isRecursiveField(field)) {
         this.updateFormGroup(
-          form[name],
+          // FIXME: typings
+          (form as any)[name],
           formErrors[name] as FormReactiveErrors,
           validationMessages[name] as FormReactiveValidationMessages,
           obj[name] as BuildFormArgument,
@@ -67,7 +69,7 @@ export class FormValidatorService {
       const defaultValue = defaultValues[name] || ''
 
       form.addControl(
-        name,
+        name + '',
         new FormControl(defaultValue, field?.VALIDATORS as ValidatorFn[], field?.ASYNC_VALIDATORS as AsyncValidatorFn[])
       )
     }
@@ -75,7 +77,8 @@ export class FormValidatorService {
 
   updateTreeValidity (group: FormGroup | FormArray): void {
     for (const key of Object.keys(group.controls)) {
-      const abstractControl = group.controls[key] as FormControl
+      // FIXME: typings
+      const abstractControl = (group.controls as any)[key] as FormControl
 
       if (abstractControl instanceof FormGroup || abstractControl instanceof FormArray) {
         this.updateTreeValidity(abstractControl)

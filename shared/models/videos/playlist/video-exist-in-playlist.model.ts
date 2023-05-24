@@ -1,8 +1,8 @@
 export type VideosExistInPlaylists = {
-  [videoId: number ]: VideoExistInPlaylist[]
+  [videoId: number]: VideoExistInPlaylist[]
 }
 export type CachedVideosExistInPlaylists = {
-  [videoId: number ]: CachedVideoExistInPlaylist[]
+  [videoId: number]: CachedVideoExistInPlaylist[]
 }
 
 export type CachedVideoExistInPlaylist = {

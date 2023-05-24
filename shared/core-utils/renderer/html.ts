@@ -56,7 +56,7 @@ export function getCustomMarkupSanitizeOptions (additionalAllowedTags: string[] 
 export function escapeHTML (stringParam: string) {
   if (!stringParam) return ''
 
-  const entityMap = {
+  const entityMap: { [id: string ]: string } = {
     '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;',

@@ -263,8 +263,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       this.syndicationItems = this.videoCommentService.getVideoCommentsFeeds(this.video)
       this.loadMoreThreads()
 
-      if (this.activatedRoute.params['threadId']) {
-        this.processHighlightedThread(+this.activatedRoute.params['threadId'])
+      if (this.activatedRoute.snapshot.params['threadId']) {
+        this.processHighlightedThread(+this.activatedRoute.snapshot.params['threadId'])
       }
     }
   }

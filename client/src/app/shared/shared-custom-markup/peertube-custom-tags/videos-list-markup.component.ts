@@ -1,6 +1,7 @@
 import { finalize } from 'rxjs/operators'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
+import { objectKeysTyped } from '@shared/core-utils'
 import { VideoSortField } from '@shared/models'
 import { Video, VideoService } from '../../shared-main'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
@@ -66,7 +67,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
 
   ngOnInit () {
     if (this.onlyDisplayTitle) {
-      for (const key of Object.keys(this.displayOptions)) {
+      for (const key of objectKeysTyped(this.displayOptions)) {
         this.displayOptions[key] = false
       }
     }

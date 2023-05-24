@@ -21,7 +21,7 @@ function buildVideoOrPlaylistEmbed (options: {
     const wrapper = document.createElement('div')
 
     wrapper.style.position = 'relative'
-    wrapper.style['padding-top'] = '56.25%'
+    wrapper.style.paddingTop = '56.25%'
 
     iframe.style.position = 'absolute'
     iframe.style.inset = '0'

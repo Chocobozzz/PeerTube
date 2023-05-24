@@ -273,11 +273,11 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
     const defaultValues = {
       transcoding: {
-        resolutions: {}
+        resolutions: {} as { [id: string]: string }
       },
       live: {
         transcoding: {
-          resolutions: {}
+          resolutions: {} as { [id: string]: string }
         }
       }
     }
