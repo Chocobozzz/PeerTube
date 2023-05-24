@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot, Router } from '@angular/router'
 import { logger } from '@root-helpers/logger'
 import { ResultList } from '@shared/models'
 
-export abstract class AbstractLazyLoadResolver <T>  {
+export abstract class AbstractLazyLoadResolver <T> {
   protected router: Router
 
   resolve (route: ActivatedRouteSnapshot) {

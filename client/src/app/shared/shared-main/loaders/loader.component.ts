@@ -10,8 +10,8 @@ export class LoaderComponent {
 
   private readonly sizes = {
     sm: {
-      width: '1rem',
-      height: '1rem',
+      'width': '1rem',
+      'height': '1rem',
       'border-width': '0.15rem'
     },
     xl: {

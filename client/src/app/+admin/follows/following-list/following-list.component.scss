@@ -16,10 +16,6 @@ a {
   }
 }
 
-.follow-button {
-  @include create-button;
-}
-
 my-delete-button {
   max-width: 130px;
 }

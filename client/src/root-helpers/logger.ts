@@ -59,7 +59,7 @@ class Logger {
     if (!payload) return
 
     const headers = new Headers({
-      Accept: 'application/json',
+      'Accept': 'application/json',
       'Content-Type': 'application/json'
     })
 

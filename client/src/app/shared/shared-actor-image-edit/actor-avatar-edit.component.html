@@ -2,29 +2,29 @@
   <div class="position-relative me-3">
     <my-actor-avatar [actor]="actor" [actorType]="getActorType()" [previewImage]="preview" size="100"></my-actor-avatar>
 
-    <div *ngIf="editable && !hasAvatar()" class="actor-img-edit-button" [ngbTooltip]="avatarFormat" placement="right" container="body">
+    <div *ngIf="editable && !hasAvatar()" class="actor-img-edit-button button-focus-within" [ngbTooltip]="avatarFormat" placement="right" container="body">
       <my-global-icon iconName="upload"></my-global-icon>
       <label class="visually-hidden" for="avatarfile" i18n>Upload a new avatar</label>
       <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange(avatarfileInput)"/>
     </div>
 
     <div *ngIf="editable && hasAvatar()" ngbDropdown placement="right">
-      <div class="actor-img-edit-button" ngbDropdownToggle>
+      <button type="button" class="actor-img-edit-button" ngbDropdownToggle>
         <my-global-icon iconName="edit"></my-global-icon>
         <label class="visually-hidden" for="avatarMenu" i18n>Change your avatar</label>
-      </div>
+      </button>
 
       <div ngbDropdownMenu>
-        <div class="dropdown-item c-hand dropdown-file" [ngbTooltip]="avatarFormat">
+        <div class="dropdown-item dropdown-file button-focus-within" [ngbTooltip]="avatarFormat">
           <my-global-icon iconName="upload"></my-global-icon>
           <span for="avatarfile" i18n>Upload a new avatar</span>
           <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange(avatarfileInput)"/>
         </div>
 
-        <div class="dropdown-item c-hand" (click)="deleteAvatar()" (key.enter)="deleteAvatar()">
+        <button type="button" class="dropdown-item" (click)="deleteAvatar()" (key.enter)="deleteAvatar()">
           <my-global-icon iconName="delete"></my-global-icon>
           <span i18n>Remove avatar</span>
-        </div>
+        </button>
       </div>
 
     </div>

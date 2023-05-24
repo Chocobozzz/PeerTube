@@ -145,13 +145,13 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
     // Keep consistency with CSS
     const themes = {
       '0123456789abc': 'blue',
-      def: 'green',
-      ghi: 'purple',
-      jkl: 'gray',
-      mno: 'yellow',
-      pqr: 'orange',
-      stvu: 'red',
-      wxyz: 'dark-blue'
+      'def': 'green',
+      'ghi': 'purple',
+      'jkl': 'gray',
+      'mno': 'yellow',
+      'pqr': 'orange',
+      'stvu': 'red',
+      'wxyz': 'dark-blue'
     }
 
     const theme = Object.keys(themes)

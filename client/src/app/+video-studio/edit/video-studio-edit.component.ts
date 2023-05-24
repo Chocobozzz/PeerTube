@@ -43,7 +43,7 @@ export class VideoStudioEditComponent extends FormReactive implements OnInit {
     }
 
     this.buildForm({
-      cut: {
+      'cut': {
         start: null,
         end: null
       },

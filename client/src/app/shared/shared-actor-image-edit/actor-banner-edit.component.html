@@ -4,25 +4,25 @@
       <img *ngIf="hasBanner()" [src]="preview || actor.bannerUrl" alt="Banner" />
     </div>
 
-    <div *ngIf="!hasBanner()" class="actor-img-edit-button" [ngbTooltip]="bannerFormat" placement="right" container="body">
+    <div *ngIf="!hasBanner()" class="actor-img-edit-button button-focus-within" [ngbTooltip]="bannerFormat" placement="right" container="body">
       <ng-container *ngTemplateOutlet="uploadNewBanner"></ng-container>
     </div>
 
     <div *ngIf="hasBanner()" ngbDropdown placement="right">
-      <div class="actor-img-edit-button" ngbDropdownToggle>
+      <button type="button" class="actor-img-edit-button" ngbDropdownToggle>
         <my-global-icon iconName="edit"></my-global-icon>
         <label for="bannerMenu" i18n>Change your banner</label>
-      </div>
+      </button>
 
       <div ngbDropdownMenu>
-        <div class="dropdown-item c-hand dropdown-file" [ngbTooltip]="bannerFormat">
+        <div class="dropdown-item dropdown-file button-focus-within" [ngbTooltip]="bannerFormat">
           <ng-container *ngTemplateOutlet="uploadNewBanner"></ng-container>
         </div>
 
-        <div class="dropdown-item c-hand" (click)="deleteBanner()" (key.enter)="deleteBanner()">
+        <button type="button" class="dropdown-item" (click)="deleteBanner()">
           <my-global-icon iconName="delete"></my-global-icon>
           <span i18n>Remove banner</span>
-        </div>
+        </button>
       </div>
     </div>
   </div>

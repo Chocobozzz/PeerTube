@@ -16,9 +16,9 @@
           <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
         </a>
 
-        <a *ngIf="!action.routerLink && !action.href && action.click" class="ms-2" (click)="action.click($event)" (key.enter)="action.click($event)">
+        <button *ngIf="!action.routerLink && !action.href && action.click" class="ms-2 button-unstyle" (click)="action.click($event)" (key.enter)="action.click($event)">
           <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
-        </a>
+        </button>
 
         <a *ngIf="!action.routerLink && action.href && action.click" class="ms-2" (click)="action.click($event)" (key.enter)="action.click($event)" [href]="action.href">
           <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>

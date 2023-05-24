@@ -11,15 +11,15 @@
 
   <div *ngIf="displayWatchLaterPlaylist" class="video-thumbnail-actions-overlay">
     <ng-container *ngIf="inWatchLaterPlaylist !== true">
-      <div class="video-thumbnail-watch-later-overlay" placement="left" [ngbTooltip]="addToWatchLaterText" container="body" (click)="onWatchLaterClick($event)">
+      <button class="video-thumbnail-watch-later-overlay button-unstyle" placement="left" [ngbTooltip]="addToWatchLaterText" container="body" (click)="onWatchLaterClick($event)">
         <my-global-icon iconName="clock" [attr.aria-label]="addToWatchLaterText" role="button"></my-global-icon>
-      </div>
+      </button>
     </ng-container>
 
     <ng-container *ngIf="inWatchLaterPlaylist === true">
-      <div class="video-thumbnail-watch-later-overlay" placement="left" [ngbTooltip]="addedToWatchLaterText" container="body" (click)="onWatchLaterClick($event)">
+      <button class="video-thumbnail-watch-later-overlay button-unstyle" placement="left" [ngbTooltip]="addedToWatchLaterText" container="body" (click)="onWatchLaterClick($event)">
         <my-global-icon iconName="tick" [attr.aria-label]="addedToWatchLaterText" role="button"></my-global-icon>
-      </div>
+      </button>
     </ng-container>
   </div>
 

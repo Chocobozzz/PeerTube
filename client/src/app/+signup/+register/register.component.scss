@@ -44,7 +44,19 @@ my-instance-about-accordion {
     }
   }
 
-  button,
+  > button {
+    @include peertube-button-big;
+
+    &[cdkStepperNext] {
+      @include orange-button;
+    }
+
+    &[cdkStepperPrevious] {
+      @include grey-button;
+    }
+  }
+
+  > button,
   .skip-step {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -57,18 +69,6 @@ my-instance-about-accordion {
 
   .skip-step + button[cdkStepperNext] {
     @include margin-left(0);
-  }
-}
-
-button {
-  @include peertube-button-big;
-
-  &[cdkStepperNext] {
-    @include orange-button;
-  }
-
-  &[cdkStepperPrevious] {
-    @include grey-button;
   }
 }
 

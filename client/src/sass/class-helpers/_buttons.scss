@@ -39,3 +39,14 @@
 .peertube-button-icon {
   @include button-with-icon(18px, 3px, -1px);
 }
+
+.peertube-create-button {
+  @include peertube-button-link;
+  @include orange-button;
+  @include button-with-icon(20px, 5px, -1px);
+}
+
+.button-unstyle {
+  padding: 0;
+  border: 0;
+}

@@ -46,9 +46,9 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
 
     this.buildForm({
       'display-name': VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
-      description: VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
-      support: VIDEO_CHANNEL_SUPPORT_VALIDATOR,
-      bulkVideosSupportUpdate: null
+      'description': VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
+      'support': VIDEO_CHANNEL_SUPPORT_VALIDATOR,
+      'bulkVideosSupportUpdate': null
     })
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
@@ -65,8 +65,8 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
 
             this.form.patchValue({
               'display-name': videoChannelToUpdate.displayName,
-              description: videoChannelToUpdate.description,
-              support: videoChannelToUpdate.support
+              'description': videoChannelToUpdate.description,
+              'support': videoChannelToUpdate.support
             })
           },
 

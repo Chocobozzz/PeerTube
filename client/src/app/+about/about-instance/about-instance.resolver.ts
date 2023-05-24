@@ -16,7 +16,7 @@ export type ResolverData = {
 }
 
 @Injectable()
-export class AboutInstanceResolver  {
+export class AboutInstanceResolver {
 
   constructor (
     private instanceService: InstanceService,

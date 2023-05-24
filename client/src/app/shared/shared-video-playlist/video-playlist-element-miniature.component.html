@@ -59,10 +59,10 @@
 
     <div ngbDropdownMenu>
       <ng-container *ngIf="playlistElement.video">
-        <div class="dropdown-item" (click)="toggleDisplayTimestampsOptions($event, playlistElement)">
+        <button ngbDropdownItem (click)="toggleDisplayTimestampsOptions($event, playlistElement)">
           <my-global-icon iconName="edit" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Edit starts/stops at</ng-container>
-        </div>
+        </button>
 
         <div class="timestamp-options" *ngIf="displayTimestampOptions">
           <div>
@@ -97,10 +97,10 @@
         </div>
       </ng-container>
 
-      <span class="dropdown-item" (click)="removeFromPlaylist(playlistElement)">
+      <button ngbDropdownItem (click)="removeFromPlaylist(playlistElement)">
         <my-global-icon iconName="delete" aria-hidden="true"></my-global-icon>
         <ng-container i18n>Delete from {{ playlist?.displayName }}</ng-container>
-      </span>
+      </button>
     </div>
   </div>
 </div>

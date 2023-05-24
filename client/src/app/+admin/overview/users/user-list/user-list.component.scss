@@ -2,10 +2,6 @@
 @use '_mixins' as *;
 @use 'bootstrap/scss/functions' as *;
 
-.add-button {
-  @include create-button;
-}
-
 tr.banned > td {
   background-color: lighten($color: $red, $amount: 40) !important;
 }

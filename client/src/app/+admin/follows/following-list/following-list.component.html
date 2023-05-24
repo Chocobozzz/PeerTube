@@ -20,10 +20,10 @@
         >
         </my-action-dropdown>
 
-        <a *ngIf="!isInSelectionMode()" class="follow-button" (click)="openFollowModal()" (key.enter)="openFollowModal()">
+        <button *ngIf="!isInSelectionMode()" class="peertube-create-button" (click)="openFollowModal()">
           <my-global-icon iconName="following" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Follow</ng-container>
-        </a>
+        </button>
       </div>
 
       <div class="ms-auto">

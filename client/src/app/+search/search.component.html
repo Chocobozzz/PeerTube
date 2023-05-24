@@ -10,8 +10,8 @@
         <span *ngIf="currentSearch" i18n>for <span class="search-value">{{ currentSearch }}</span></span>
       </div>
 
-      <div
-        class="results-filter-button ms-auto" (click)="isSearchFilterCollapsed = !isSearchFilterCollapsed" role="button"
+      <button
+        class="results-filter-button button-unstyle ms-auto" (click)="isSearchFilterCollapsed = !isSearchFilterCollapsed"
         [attr.aria-expanded]="!isSearchFilterCollapsed" aria-controls="collapseBasic"
       >
         <span class="icon icon-filter"></span>
@@ -19,7 +19,7 @@
           Filters
           <span *ngIf="numberOfFilters() > 0" class="pt-badge badge-secondary">{{ numberOfFilters() }}</span>
         </ng-container>
-      </div>
+      </button>
     </div>
 
     <div class="results-filter" [ngbCollapse]="isSearchFilterCollapsed" [animation]="true">

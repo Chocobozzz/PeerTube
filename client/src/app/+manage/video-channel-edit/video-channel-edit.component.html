@@ -10,8 +10,6 @@
       </div>
 
       <div class="col-12 col-lg-8 col-xl-9">
-        <label i18n>Banner image of the channel</label>
-
         <my-actor-banner-edit
           *ngIf="videoChannel" [previewImage]="isCreation()" class="d-block mb-4"
           [actor]="videoChannel" (bannerChange)="onBannerChange($event)" (bannerDelete)="onBannerDelete()"

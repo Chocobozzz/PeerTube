@@ -55,7 +55,7 @@ export class ActionDropdownComponent<T> {
     return {}
   }
 
-  areActionsDisplayed (actions: Array<DropdownAction<T> | DropdownAction<T>[]>, entry: T): boolean {
+  areActionsDisplayed (actions: (DropdownAction<T> | DropdownAction<T>[])[], entry: T): boolean {
     return actions.some(a => {
       if (Array.isArray(a)) return this.areActionsDisplayed(a, entry)
 

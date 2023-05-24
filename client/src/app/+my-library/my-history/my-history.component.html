@@ -10,8 +10,8 @@
   </div>
 
   <div class="history-switch">
-    <my-input-switch [(ngModel)]="videosHistoryEnabled" (ngModelChange)="onVideosHistoryChange()"></my-input-switch>
-    <label i18n>Track watch history</label>
+    <my-input-switch inputName="track-watch-history" [(ngModel)]="videosHistoryEnabled" (ngModelChange)="onVideosHistoryChange()"></my-input-switch>
+    <label for="track-watch-history" i18n>Track watch history</label>
   </div>
 
   <button class="delete-history" (click)="clearAllHistory()" i18n>

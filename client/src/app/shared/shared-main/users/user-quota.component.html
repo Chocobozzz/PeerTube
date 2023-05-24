@@ -1,6 +1,7 @@
 <div class="user-quota mb-3">
   <div>
-    <label class="user-quota-title" tabindex="0" i18n>Total video quota</label>
+    <div class="mb-2 fw-bold" i18n>Total video quota</div>
+
     <div class="progress" tabindex="0" [ngbTooltip]="titleVideoQuota()">
       <div class="progress-bar" tabindex="0" role="progressbar" [style]="{ width: userVideoQuotaPercentage + '%' }"
         [attr.aria-valuenow]="userVideoQuotaUsed" aria-valuemin="0" [attr.aria-valuemax]="user.videoQuota"></div>
@@ -10,7 +11,8 @@
   </div>
 
   <div *ngIf="hasDailyQuota()" class="mt-3">
-    <label class="user-quota-title" tabindex="0" i18n>Daily video quota</label>
+    <div class="mb-2 fw-bold" i18n>Daily video quota</div>
+
     <div class="progress" tabindex="0" [ngbTooltip]="titleVideoQuotaDaily()">
       <div class="progress-bar" role="progressbar" [style]="{ width: userVideoQuotaDailyPercentage + '%' }"
         [attr.aria-valuenow]="userVideoQuotaUsedDaily" aria-valuemin="0" [attr.aria-valuemax]="user.videoQuotaDaily"></div>

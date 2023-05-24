@@ -5,7 +5,7 @@
         <div>
           <div
             class="logged-in-more" ngbDropdown #dropdown="ngbDropdown" placement="bottom-left auto"
-            container="body" (openChange)="onDropdownOpenChange($event)" autoClose="outside"
+            container="body" (openChange)="onDropdownOpenChange($event)"
           >
             <button class="border-0 text-start" ngbDropdownToggle>
               <my-actor-avatar [actor]="user.account" actorType="account" size="34"></my-actor-avatar>
@@ -33,21 +33,21 @@
 
               <button
                 myPluginSelector pluginSelectorId="menu-user-dropdown-language-item"
-                ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openLanguageChooser()"
+                ngbDropdownItem class="dropdown-item" (click)="openLanguageChooser()"
               >
                 <my-global-icon iconName="language" aria-hidden="true"></my-global-icon>
                 <span i18n>Interface:</span>
                 <span class="ms-auto muted">{{ currentInterfaceLanguage }}</span>
               </button>
 
-              <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-languages-subtitles"
+              <a ngbDropdownItem class="dropdown-item" routerLink="/my-account/settings" fragment="video-languages-subtitles"
                 #settingsLanguagesSubtitles (click)="onActiveLinkScrollToAnchor(settingsLanguagesSubtitles)">
                 <my-global-icon iconName="video-lang" aria-hidden="true"></my-global-icon>
                 <span i18n>Videos:</span>
                 <span class="ms-auto muted">{{ videoLanguages.join(', ') }}</span>
               </a>
 
-              <a ngbDropdownItem ngbDropdownToggle class="dropdown-item settings-sensitive" routerLink="/my-account/settings"
+              <a ngbDropdownItem class="dropdown-item settings-sensitive" routerLink="/my-account/settings"
                 fragment="video-sensitive-content-policy" #settingsSensitiveContentPolicy
                 (click)="onActiveLinkScrollToAnchor(settingsSensitiveContentPolicy)"
               >
@@ -57,7 +57,7 @@
                 <span class="ms-auto muted">{{ nsfwPolicy }}</span>
               </a>
 
-              <button ngbDropdownItem class="dropdown-item" (click)="toggleUseP2P()">
+              <button class="dropdown-item" (click)="toggleUseP2P()" (mousedown)="$event.stopPropagation()" ngbDropdownItem>
                 <my-global-icon iconName="p2p" aria-hidden="true"></my-global-icon>
                 <ng-container i18n>Help share videos</ng-container>
 
@@ -66,15 +66,15 @@
 
               <div class="dropdown-divider"></div>
 
-              <a *ngIf="!isInMobileView" ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openHotkeysCheatSheet()">
+              <button *ngIf="!isInMobileView" ngbDropdownItem class="dropdown-item" (click)="openHotkeysCheatSheet()">
                 <my-global-icon iconName="command" aria-hidden="true"></my-global-icon>
                 <ng-container i18n>Keyboard shortcuts</ng-container>
-              </a>
+              </button>
 
-              <a ngbDropdownItem ngbDropdownToggle (click)="logout($event)" class="dropdown-item" href="#">
+              <button ngbDropdownItem (click)="logout($event)" class="dropdown-item">
                 <my-global-icon iconName="sign-out" aria-hidden="true"></my-global-icon>
                 <ng-container i18n>Log out</ng-container>
-              </a>
+              </button>
             </div>
           </div>
 
@@ -121,10 +121,10 @@
 
     <div class="footer">
       <div class="footer-block">
-        <a *ngIf="!isLoggedIn" class="menu-link" (click)="openQuickSettings()">
+        <button *ngIf="!isLoggedIn" class="menu-link button-unstyle" (click)="openQuickSettings()">
           <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
           <ng-container i18n>My settings</ng-container>
-        </a>
+        </button>
 
         <a class="menu-link" routerLink="/about" routerLinkActive="active">
           <my-global-icon iconName="help" aria-hidden="true"></my-global-icon>
@@ -135,7 +135,7 @@
       <div class="footer-bottom">
 
         <div class="footer-links">
-          <span *ngIf="isLoggedIn === false" role="button" (click)="openLanguageChooser()" class="c-hand" i18n>Interface: {{ currentInterfaceLanguage }}</span>
+          <button *ngIf="isLoggedIn === false" (click)="openLanguageChooser()" class="button-unstyle" i18n>Interface: {{ currentInterfaceLanguage }}</button>
 
           <div>
             <a i18n routerLink="/about/instance">Contact</a>
@@ -143,7 +143,7 @@
             <a i18n href="https://joinpeertube.org/faq" i18n-title title="Frequently asked questions about PeerTube" target="_blank" rel="noopener noreferrer">FAQ</a>
             <a i18n routerLink="/about/instance" fragment="statistics">Stats</a>
             <a i18n href="https://docs.joinpeertube.org/api/rest-reference.html" i18n-title title="API documentation" target="_blank" rel="noopener noreferrer">API</a>
-            <a role="button" (click)="openHotkeysCheatSheet()" class="c-hand" i18n>Keyboard shortcuts</a>
+            <button (click)="openHotkeysCheatSheet()" class="button-unstyle" i18n>Keyboard shortcuts</button>
           </div>
         </div>
 

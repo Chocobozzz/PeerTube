@@ -2,9 +2,10 @@
   <header *ngIf="steps.length > 2">
     <div class="header-steps">
       <ng-container *ngFor="let step of steps; let i = index; let isLast = last;">
-        <div
-          class="step-info" [ngClass]="{ active: selectedIndex === i, completed: isCompleted(step), 'c-hand': isAccessible(step) }" [attr.aria-current]="selectedIndex === i"
-          (click)="onClick(i)"
+        <button
+          class="step-info button-unstyle" [ngClass]="{ active: selectedIndex === i, completed: isCompleted(step) }"
+          [disabled]="!isAccessible(step)"
+          [attr.aria-current]="selectedIndex === i" (click)="onClick(i)"
         >
           <div class="step-index">
             <span class="visually-hidden" i18n>Step</span> {{ i + 1 }}
@@ -15,7 +16,7 @@
           </div>
 
           <div class="step-label">{{ step.label }}</div>
-        </div>
+        </button>
 
         <!-- Do no display if this is the last child -->
         <div *ngIf="!isLast" class="connector"></div>

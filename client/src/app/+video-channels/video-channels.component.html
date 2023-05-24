@@ -91,12 +91,12 @@
       <div class="description-html" [innerHTML]="channelDescriptionHTML"></div>
     </div>
 
-    <div *ngIf="hasShowMoreDescription()" class="show-more" role="button"
+    <button *ngIf="hasShowMoreDescription()" class="show-more button-unstyle"
       (click)="channelDescriptionExpanded = !channelDescriptionExpanded"
       title="Show the complete description" i18n-title i18n
     >
       Show more...
-    </div>
+    </button>
 
     <div class="channel-buttons bottom">
       <ng-template *ngTemplateOutlet="buttonsTemplate"></ng-template>

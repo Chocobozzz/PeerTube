@@ -2,7 +2,7 @@
   <div class="label-description muted" i18n>
     Update
     <a routerLink="/my-account/settings" [fragment]="fragment">
-      <span (click)="onAccountSettingsClick($event)">your settings</span>
+      <button class="button-unstyle" (click)="onAccountSettingsClick($event)">your settings</button>
     </a
   ></div>
 </ng-template>
@@ -23,9 +23,9 @@
         <my-global-icon iconName="chevrons-up"></my-global-icon>
       </button>
 
-      <div
+      <button
         *ngFor="let activeFilter of filters.getActiveFilters()" (click)="resetFilter(activeFilter.key, activeFilter.canRemove)"
-        class="active-filter pastille" [ngClass]="{ 'can-remove': activeFilter.canRemove }" [title]="getFilterTitle(activeFilter.canRemove)"
+        class="active-filter pastille button-unstyle" [ngClass]="{ 'can-remove': activeFilter.canRemove }" [title]="getFilterTitle(activeFilter.canRemove)"
       >
         <span>
           {{ activeFilter.label }}
@@ -34,7 +34,7 @@
         </span>
 
         <my-global-icon *ngIf="activeFilter.canRemove" iconName="cross"></my-global-icon>
-      </div>
+      </button>
     </div>
 
     <ng-select

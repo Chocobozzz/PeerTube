@@ -29,7 +29,7 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
   ngOnInit () {
     this.buildForm({
       'new-email': USER_EMAIL_VALIDATOR,
-      password: USER_PASSWORD_VALIDATOR
+      'password': USER_PASSWORD_VALIDATOR
     })
 
     this.user = this.authService.getUser()

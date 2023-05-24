@@ -604,12 +604,6 @@
   margin-bottom: 10px;
 }
 
-@mixin create-button {
-  @include peertube-button-link;
-  @include orange-button;
-  @include button-with-icon(20px, 5px, -1px);
-}
-
 @mixin row-blocks ($column-responsive: true, $min-height: 130px, $separator: true) {
   display: flex;
   min-height: $min-height;

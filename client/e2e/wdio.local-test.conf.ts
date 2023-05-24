@@ -25,15 +25,15 @@ module.exports = {
 
     capabilities: [
       {
-        browserName: 'chrome',
-        acceptInsecureCerts: true,
+        'browserName': 'chrome',
+        'acceptInsecureCerts': true,
         'goog:chromeOptions': {
           args: [ '--disable-gpu', windowSizeArg ],
           prefs
         }
       },
       {
-        browserName: 'firefox',
+        'browserName': 'firefox',
         'moz:firefoxOptions': {
           binary: '/usr/bin/firefox-developer-edition',
           args: [ '--headless', windowSizeArg ],

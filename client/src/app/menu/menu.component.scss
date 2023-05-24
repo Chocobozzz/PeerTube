@@ -20,6 +20,7 @@ $footer-links-base-opacity: .8;
   word-break: break-word;
   transition: background-color .1s ease-in-out;
   line-height: $line-height-normal;
+  width: 100%;
 
   &.active {
     background-color: rgba(255, 255, 255, 0.15);
@@ -113,16 +114,13 @@ my-notification {
       .dropdown-toggle-indicator {
         display: inherit !important;
       }
-
-      &.dropdown-toggle {
-        max-width: 88% !important;
-      }
     }
   }
 
   @include margin-left(13px);
 
   flex: 1;
+  min-width: 1px;
   border-radius: 25px;
   transition: all .1s ease-in-out;
   cursor: pointer;
@@ -140,39 +138,30 @@ my-notification {
   /* smartphones and touchscreens */
   @media (hover: none) and (pointer: coarse) {
     @include display-hints($is-mobile: true);
+  }
 
-    /* fill space when on mobile */
-    max-width: calc(100% - 80px);
+  > .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 5px 7px;
 
-    &.dropdown-toggle {
-      max-width: 100%;
-    }
-
-    .logged-in-info {
-      max-width: calc(100% - 45px) !important;
+    &::after {
+      // Disable bootstrap toggle
+      border: 0;
     }
   }
 
   .dropdown-toggle-indicator {
     position: relative;
     display: none;
+    width: 17px;
 
     span {
       position: absolute;
       top: -8px;
       color: #808080;
     }
-  }
-
-  .dropdown-toggle::after {
-    border: 0;
-  }
-
-  > .dropdown-toggle:first-child {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 5px 25px 5px 7px;
   }
 }
 
@@ -181,9 +170,8 @@ my-actor-avatar {
 }
 
 .logged-in-info {
-  max-width: 105px;
-
-  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 1px;
 }
 
 .logged-in-display-name,
@@ -286,7 +274,8 @@ my-actor-avatar {
     margin-bottom: 25px;
   }
 
-  a {
+  a,
+  button {
     min-height: 40px;
   }
 }
@@ -306,7 +295,7 @@ my-actor-avatar {
   }
 
   a,
-  span[role=button] {
+  button {
     @include margin-right(8px);
     @include disable-default-a-behaviour;
 

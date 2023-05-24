@@ -72,11 +72,6 @@ header {
   align-items: center;
   width: $index-block-height;
   opacity: 0.5;
-  cursor: default;
-
-  &.c-hand {
-    cursor: pointer;
-  }
 
   &.active,
   &.completed {

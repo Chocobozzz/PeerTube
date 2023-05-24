@@ -85,8 +85,8 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
 
     // Avoid undefined errors when accessing form error properties
     this.buildForm({
-      username: LOGIN_USERNAME_VALIDATOR,
-      password: LOGIN_PASSWORD_VALIDATOR,
+      'username': LOGIN_USERNAME_VALIDATOR,
+      'password': LOGIN_PASSWORD_VALIDATOR,
       'otp-token': {
         VALIDATORS: [], // Will be set dynamically
         MESSAGES: USER_OTP_TOKEN_VALIDATOR.MESSAGES

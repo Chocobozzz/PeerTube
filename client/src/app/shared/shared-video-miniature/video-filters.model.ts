@@ -37,7 +37,7 @@ export class VideoFilters {
   private activeFilters: { key: string, canRemove: boolean, label: string, value?: string }[] = []
   private defaultNSFWPolicy: NSFWPolicyType
 
-  private onChangeCallbacks: Array<() => void> = []
+  private onChangeCallbacks: (() => void)[] = []
   private oldFormObjectString: string
 
   private readonly hiddenFields: string[] = []

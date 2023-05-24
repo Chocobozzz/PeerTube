@@ -99,7 +99,7 @@ export const VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR: BuildFormValidator = {
 
 function arrayTagLengthValidator (min = 2, max = 30): ValidatorFn {
   return (control: AbstractControl): ValidationErrors => {
-    const array = control.value as Array<string>
+    const array = control.value as string[]
 
     if (array.every(e => e.length >= min && e.length <= max)) {
       return null

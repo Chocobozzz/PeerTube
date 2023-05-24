@@ -14,7 +14,8 @@
     <ul [hidden]="!search || !areSuggestionsOpened" role="listbox" class="p-0 m-0">
       <li
         *ngFor="let result of results; let i = index" class="suggestion d-flex flex-justify-start flex-items-center p-0 f5"
-        role="option" aria-selected="true" (mouseenter)="onSuggestionHover(i)" (click)="onSuggestionClicked(result)"
+        role="option" aria-selected="true" tabindex="0"
+        (mouseenter)="onSuggestionHover(i)" (click)="onSuggestionClicked(result)" (keyup.enter)="onSuggestionClicked(result)"
       >
         <my-suggestion [result]="result" [highlight]="search"></my-suggestion>
       </li>
@@ -23,7 +24,7 @@
     <!-- suggestion help, not shown until one of the suggestions is selected and specific to that suggestion -->
     <div *ngIf="showSearchGlobalHelp()" id="typeahead-help" class="overflow-hidden">
       <div class="d-flex justify-content-between">
-        <label class="small-title" i18n>GLOBAL SEARCH</label>
+        <div class="small-title" i18n>GLOBAL SEARCH</div>
         <div class="advanced-search-status muted">
           <span *ngIf="serverConfig" class="me-1" i18n>using {{ serverConfig.search.searchIndex.url }}</span>
         </div>
@@ -35,7 +36,7 @@
     <div *ngIf="areInstructionsDisplayed()" id="typeahead-instructions" class="overflow-hidden">
       <span class="muted" i18n>Your query will be matched against video names or descriptions, channel names.</span>
       <div class="d-flex justify-content-between mt-3">
-        <label class="small-title" i18n>ADVANCED SEARCH</label>
+        <div class="small-title" i18n>ADVANCED SEARCH</div>
         <div class="advanced-search-status c-help">
           <span [ngClass]="canSearchAnyURI ? 'text-success' : 'muted'" i18n-title title="Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.">
             <span *ngIf="canSearchAnyURI()" class="me-1" i18n>any instance</span>

@@ -22,7 +22,7 @@
             </div>
 
             <div class="form-group">
-              <label i18n class="label-tags">Tags</label>
+              <label for="label-tags" i18n class="label-tags">Tags</label>
 
               <my-help>
                 <ng-template ptTemplate="customHtml">
@@ -170,10 +170,10 @@
         <div class="captions">
 
           <div class="captions-header">
-            <a (click)="openAddCaptionModal()" class="create-caption">
+            <button (click)="openAddCaptionModal()" class="peertube-create-button">
               <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
               <ng-container i18n>Add another caption</ng-container>
-            </a>
+            </button>
           </div>
 
           <div class="form-group" *ngFor="let videoCaption of videoCaptions">
@@ -187,8 +187,8 @@
 
                 <div i18n class="caption-entry-state">Already uploaded on {{ videoCaption.updatedAt | date }}	&#10004;</div>
 
-                <span i18n class="caption-entry-edit" (click)="openEditCaptionModal(videoCaption)">Edit</span>
-                <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Delete</span>
+                <button i18n class="caption-entry-edit" (click)="openEditCaptionModal(videoCaption)">Edit</button>
+                <button i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Delete</button>
               </ng-container>
 
               <ng-container *ngIf="videoCaption.action === 'CREATE'">
@@ -196,7 +196,7 @@
 
                 <div i18n class="caption-entry-state caption-entry-state-create">Will be created on update</div>
 
-                <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel create</span>
+                <button i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel create</button>
               </ng-container>
 
               <ng-container *ngIf="videoCaption.action === 'UPDATE'">
@@ -204,7 +204,7 @@
 
                 <div i18n class="caption-entry-state caption-entry-state-create">Will be edited on update</div>
 
-                <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel edition</span>
+                <button i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel edition</button>
               </ng-container>
 
               <ng-container *ngIf="videoCaption.action === 'REMOVE'">
@@ -212,7 +212,7 @@
 
                 <div i18n class="caption-entry-state caption-entry-state-delete">Will be deleted on update</div>
 
-                <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel deletion</span>
+                <button i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel deletion</button>
               </ng-container>
             </div>
           </div>

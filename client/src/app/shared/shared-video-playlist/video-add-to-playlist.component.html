@@ -14,20 +14,20 @@
       *ngFor="let playlist of videoPlaylists"
       class="playlist dropdown-item" [ngClass]="{ 'has-optional-row': playlist.optionalRowDisplayed }"
     >
-      <div class="primary-row" (click)="toggleMainPlaylist($event, playlist)">
+      <button class="primary-row button-unstyle" (click)="toggleMainPlaylist($event, playlist)">
         <my-peertube-checkbox
           [disabled]="isPresentMultipleTimes(playlist) || playlist.optionalRowDisplayed" [inputName]="getPrimaryInputName(playlist)"
           [ngModel]="isPrimaryCheckboxChecked(playlist)" [onPushWorkaround]="true"
         ></my-peertube-checkbox>
 
-        <label class="display-name">
+        <label [for]="getPrimaryInputName(playlist)" class="display-name">
           {{ playlist.displayName }}
         </label>
 
-        <div class="optional-row-icon" *ngIf="isPrimaryCheckboxChecked(playlist)" (click)="$event.stopPropagation(); toggleOptionalRow(playlist)">
+        <button class="optional-row-icon button-unstyle" *ngIf="isPrimaryCheckboxChecked(playlist)" (click)="$event.stopPropagation(); toggleOptionalRow(playlist)">
           <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
-        </div>
-      </div>
+        </button>
+      </button>
 
       <div class="optional-rows" *ngIf="playlist.optionalRowDisplayed">
         <div class="header-label" i18n>Start at</div>
@@ -58,11 +58,11 @@
     </div>
   </div>
 
-  <div class="new-playlist-button dropdown-item" (click)="openCreateBlock($event)" [hidden]="isNewPlaylistBlockOpened">
+  <button class="new-playlist-button dropdown-item" (click)="openCreateBlock($event)" [hidden]="isNewPlaylistBlockOpened">
     <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
 
     <span i18n>Create a private playlist</span>
-  </div>
+  </button>
 
   <form class="new-playlist-block dropdown-item" *ngIf="isNewPlaylistBlockOpened" (ngSubmit)="createPlaylist()" [formGroup]="form">
     <div class="form-group">

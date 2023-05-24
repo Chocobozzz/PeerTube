@@ -1,4 +1,4 @@
-const dictionary: Array<{ max: number, type: string }> = [
+const dictionary: { max: number, type: string }[] = [
   { max: 1024, type: 'B' },
   { max: 1048576, type: 'KB' },
   { max: 1073741824, type: 'MB' },

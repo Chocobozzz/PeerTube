@@ -23,7 +23,7 @@ class SettingsDialog extends Component {
       innerHTML: '',
       tabIndex: -1
     }, {
-      role: 'dialog',
+      'role': 'dialog',
       'aria-labelledby': dialogLabelId,
       'aria-describedby': dialogDescriptionId
     })

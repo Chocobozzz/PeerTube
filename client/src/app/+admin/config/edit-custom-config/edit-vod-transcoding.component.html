@@ -18,7 +18,7 @@
 
   <div class="row mt-4"> <!-- transcoding grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <div i18n class="inner-form-title">TRANSCODING</div>
+      <h2 i18n class="inner-form-title">TRANSCODING</h2>
       <div i18n class="inner-form-description">
         Process uploaded videos so that they are in a streamable form that any device can play. Though costly in
         resources, this is a critical part of PeerTube, so tread carefully.
@@ -38,7 +38,7 @@
             <ng-container ngProjectAs="extra">
 
               <div class="callout callout-light pt-2 pb-0">
-                <label i18n>Input formats</label>
+                <h3 class="callout-title" i18n>Input formats</h3>
 
                 <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
                   <my-peertube-checkbox
@@ -65,7 +65,7 @@
               </div>
 
               <div class="callout callout-light pt-2 mt-2 pb-0">
-                <label i18n>Output formats</label>
+                <h3 class="callout-title" i18n>Output formats</h3>
 
                 <ng-container formGroupName="webtorrent">
                   <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
@@ -108,7 +108,7 @@
                 </ng-container>
 
                 <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
-                  <label i18n>Resolutions to generate</label>
+                  <div class="mb-2 fw-bold" i18n>Resolutions to generate</div>
 
                   <div class="ms-2 d-flex flex-column">
                     <my-peertube-checkbox
@@ -211,7 +211,7 @@
 
   <div class="row mt-2"> <!-- video studio grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <div i18n class="inner-form-title">VIDEO STUDIO</div>
+      <h2 i18n class="inner-form-title">VIDEO STUDIO</h2>
       <div i18n class="inner-form-description">
         Allows your users to edit their video (cut, add intro/outro, add a watermark etc)
       </div>
