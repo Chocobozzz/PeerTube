@@ -181,6 +181,14 @@ my-actor-avatar {
   }
 }
 
+.contained-in-playlists {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 5px;
+  row-gap: 5px;
+  font-size: 1rem;
+}
+
 @include on-small-main-col {
   .video-miniature.display-as-row {
     --rowThumbnailWidth: #{$video-thumbnail-medium-width};

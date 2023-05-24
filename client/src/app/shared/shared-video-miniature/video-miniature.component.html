@@ -51,7 +51,7 @@
             <ng-container *ngIf="displayOptions.state">{{ getStateLabel(video) }}</ng-container>
           </div>
 
-          <div *ngIf="containedInPlaylists" class="fs-6">
+          <div *ngIf="containedInPlaylists" class="contained-in-playlists">
             <a *ngFor="let playlist of containedInPlaylists" class="pt-badge badge-secondary" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
               {{ playlist.playlistDisplayName }}
             </a>
