@@ -7,7 +7,7 @@ import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/
 import { USER_OTP_TOKEN_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormReactiveService, InputTextComponent } from '@app/shared/shared-forms'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
-import { NgbAccordion, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { NgbAccordionDirective, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { getExternalAuthHref } from '@shared/core-utils'
 import { RegisteredExternalAuthConfig, ServerConfig, ServerErrorCode } from '@shared/models'
 
@@ -23,7 +23,7 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   @ViewChild('forgotPasswordModal', { static: true }) forgotPasswordModal: ElementRef
   @ViewChild('otpTokenInput') otpTokenInput: InputTextComponent
 
-  accordion: NgbAccordion
+  accordion: NgbAccordionDirective
   error: string = null
   forgotPasswordEmail = ''
 
