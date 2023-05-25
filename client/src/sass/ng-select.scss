@@ -1,3 +1,6 @@
+@use 'sass:math';
+@use 'sass:color';
+
 @use '_variables' as *;
 @use '_mixins' as *;
 
@@ -9,7 +12,7 @@ $ng-select-border: $input-border-color;
 $ng-select-bg: pvar(--mainBackgroundColor);
 
 // Cannot use a CSS variable as the default them use darken on this variable
-$ng-select-selected: lighten($main-color, 40%);
+$ng-select-selected: color.adjust($main-color, $lightness: 40%);
 // $ng-select-selected-text: $ng-select-primary-text !default;
 
 $ng-select-marked: pvar(--mainColorLightest);
