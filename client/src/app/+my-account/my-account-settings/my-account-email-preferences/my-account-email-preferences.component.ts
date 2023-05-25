@@ -45,7 +45,7 @@ export class MyAccountEmailPreferencesComponent extends FormReactive implements 
           this.user.emailPublic = details.emailPublic
         },
 
-        error: err => console.log(err.message)
+        error: err => this.notifier.error(err.message)
       })
   }
 }
