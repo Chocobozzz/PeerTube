@@ -135,7 +135,7 @@
       </td>
 
       <td *ngIf="isSelected('pluginAuth')">
-        <ng-container *ngIf="user.pluginAuth">{{ user.pluginAuth }}</ng-container>
+        <span *ngIf="user.pluginAuth" [ngbTooltip]="user.pluginAuth">{{ user.pluginAuth }}</span>
       </td>
 
       <td *ngIf="isSelected('createdAt')" [title]="user.createdAt">{{ user.createdAt | date: 'short' }}</td>
