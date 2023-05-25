@@ -5,7 +5,7 @@
   "private": true,
   "licence": "AGPL-3.0",
   "engines": {
-    "node": ">=12.x",
+    "node": ">=16.x",
     "yarn": ">=1.x"
   },
   "bin": {

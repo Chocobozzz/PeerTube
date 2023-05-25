@@ -244,7 +244,7 @@ describe('Signup', () => {
 
     before(async () => {
       // FIXME: typings are wrong, get returns a promise
-      emailPort = await (browser.sharedStore.get(browser.config.baseUrl + '-emailPort') as unknown as Promise<number>)
+      emailPort = await (browser.sharedStore.get(browser.options.baseUrl + '-emailPort') as unknown as Promise<number>)
 
       await MockSMTPServer.Instance.collectEmails(emailPort, emails)
     })

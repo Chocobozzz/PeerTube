@@ -119,7 +119,6 @@ export const config = {
   },
 
   before: function () {
-    require('expect-webdriverio')
     require('./src/commands/upload')
   }
 } as Partial<WebdriverIO.Config>
