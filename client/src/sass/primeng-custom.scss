@@ -302,6 +302,9 @@ body .p-datepicker .p-datepicker-header .p-datepicker-title select:focus {
   outline-offset: 0;
   box-shadow: 0 0 0 0.2em pvar(--mainColorLightest);
 }
+body .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
+  @include margin-right(0.5rem);
+}
 body .p-datepicker table {
   font-size: 14px;
   margin: 0.857em 0 0 0;
@@ -748,57 +751,6 @@ p-table {
       .p-paginator-pages > .p-paginator-page:not(.p-highlight) {
         display: none;
       }
-    }
-  }
-}
-
-// PrimeNG calendar tweaks
-p-calendar .p-datepicker {
-  a {
-    @include disable-default-a-behaviour;
-  }
-
-  .p-datepicker-header {
-
-    .p-datepicker-year {
-      @include margin-left(5px);
-    }
-
-    .p-datepicker-next {
-      @include chevron-right-default;
-
-      color: #000 !important;
-      text-align: end;
-
-      .pi.pi-chevron-right {
-        display: none !important;
-      }
-    }
-
-    .p-datepicker-prev {
-      @include chevron-left-default;
-
-      color: #000 !important;
-      text-align: start;
-
-      .pi.pi-chevron-left {
-        display: none !important;
-      }
-    }
-  }
-
-  .p-timepicker {
-
-    .pi.pi-chevron-up {
-      @include chevron-up-default;
-
-      color: #000 !important;
-    }
-
-    .pi.pi-chevron-down {
-      @include chevron-down-default;
-
-      color: #000 !important;
     }
   }
 }
