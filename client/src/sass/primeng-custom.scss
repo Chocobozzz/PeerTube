@@ -816,31 +816,9 @@ p-tablecheckbox:hover div .p-checkbox-box {
 
   .p-checkbox-box {
     &.p-highlight {
-      border-color: pvar(--mainColor) !important;
+      color: pvar(--mainBackgroundColor) !important;
       background-color: pvar(--mainColor) !important;
-    }
-
-    .p-checkbox-icon {
-      position: relative;
-      overflow: visible !important;
-
-      &:after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: -2px;
-        width: 5px;
-        height: 12px;
-        opacity: 0;
-        transform: rotate(45deg) scale(0);
-        border-right: 2px solid pvar(--mainBackgroundColor);
-        border-bottom: 2px solid pvar(--mainBackgroundColor);
-      }
-
-      &.pi-check:after {
-        opacity: 1;
-        transform: rotate(45deg) scale(1);
-      }
+      border-color: pvar(--mainColor) !important;
     }
   }
 }
