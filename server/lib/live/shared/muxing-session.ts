@@ -8,12 +8,7 @@ import { computeOutputFPS } from '@server/helpers/ffmpeg'
 import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE } from '@server/initializers/constants'
-import {
-  removeHLSFileObjectStorageByPath,
-  storeHLSFileFromContent,
-  storeHLSFileFromFilename,
-  storeHLSFileFromPath
-} from '@server/lib/object-storage'
+import { removeHLSFileObjectStorageByPath, storeHLSFileFromContent, storeHLSFileFromPath } from '@server/lib/object-storage'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models'
@@ -190,7 +185,10 @@ class MuxingSession extends EventEmitter {
 
       try {
         if (this.streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
-          const url = await storeHLSFileFromFilename(this.streamingPlaylist, this.streamingPlaylist.playlistFilename)
+          const masterContent = await readFile(path, 'utf-8')
+          logger.debug('Uploading live master playlist on object storage for %s', this.videoUUID, { masterContent, ...this.lTags() })
+
+          const url = await storeHLSFileFromContent(this.streamingPlaylist, this.streamingPlaylist.playlistFilename, masterContent)
 
           this.streamingPlaylist.playlistUrl = url
         }
