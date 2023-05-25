@@ -24,7 +24,7 @@ export class MyAccountPage {
     const nsfw = $('#nsfwPolicy')
 
     await nsfw.waitForDisplayed()
-    await nsfw.scrollIntoView(false) // Avoid issues with fixed header on firefox
+    await nsfw.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
     await nsfw.waitForClickable()
 
     await nsfw.selectByAttribute('value', newValue)
@@ -36,7 +36,7 @@ export class MyAccountPage {
     const p2p = await getCheckbox('p2pEnabled')
 
     await p2p.waitForClickable()
-    await p2p.scrollIntoView(false) // Avoid issues with fixed header on firefox
+    await p2p.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
 
     await p2p.click()
 
@@ -47,7 +47,7 @@ export class MyAccountPage {
     const submit = $('my-user-video-settings input[type=submit]')
 
     await submit.waitForClickable()
-    await submit.scrollIntoView(false)
+    await submit.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
     await submit.click()
   }
 

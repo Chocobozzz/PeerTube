@@ -17,7 +17,7 @@ export class AdminConfigPage {
     const elem = $('#instanceDefaultNSFWPolicy')
 
     await elem.waitForDisplayed()
-    await elem.scrollIntoView(false) // Avoid issues with fixed header on firefox
+    await elem.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
     await elem.waitForClickable()
 
     return elem.selectByAttribute('value', newValue)
