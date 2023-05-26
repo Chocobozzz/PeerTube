@@ -7424,7 +7424,7 @@
       </trans-unit>
       <trans-unit id="4323994782717641395" datatype="html">
         <source>Go to the next step</source>
-        <target state="translated">Vaya al siguiente paso</target>
+        <target state="translated">Ir al siguiente paso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">46</context>
