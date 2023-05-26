@@ -47,6 +47,7 @@ export class IPCClient {
 
   async askUnregister (options: {
     url: string
+    runnerName: string
   }) {
     const req: IPCRequest = {
       type: 'unregister',

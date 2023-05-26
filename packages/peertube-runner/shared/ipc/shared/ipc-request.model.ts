@@ -11,5 +11,5 @@ export type IPCRequestRegister = {
   runnerDescription?: string
 }
 
-export type IPCRequestUnregister = { type: 'unregister', url: string }
+export type IPCRequestUnregister = { type: 'unregister', url: string, runnerName: string }
 export type IPCRequestListRegistered = { type: 'list-registered' }

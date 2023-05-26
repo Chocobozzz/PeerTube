@@ -40,7 +40,7 @@ export class IPCServer {
         return undefined
 
       case 'unregister':
-        await this.runnerServer.unregisterRunner({ url: req.url })
+        await this.runnerServer.unregisterRunner(pick(req, [ 'url', 'runnerName' ]))
         return undefined
 
       case 'list-registered':

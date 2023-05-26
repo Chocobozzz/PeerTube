@@ -53,7 +53,7 @@ describe('Test peertube-runner program client CLI', function () {
   })
 
   it('Should unregister the PeerTube instance', async function () {
-    await peertubeRunner.unregisterPeerTubeInstance()
+    await peertubeRunner.unregisterPeerTubeInstance({ runnerName: 'my super runner' })
   })
 
   it('Should not have PeerTube instance listed', async function () {

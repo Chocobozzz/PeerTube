@@ -398,7 +398,7 @@ The runner will then use a websocket connection with the PeerTube instance to be
 To unregister a PeerTube instance:
 
 ```bash
-peertube-runner unregister --url http://peertube.example.com
+peertube-runner unregister --url http://peertube.example.com --runner-name my-runner-name
 ```
 
 ### List registered instances

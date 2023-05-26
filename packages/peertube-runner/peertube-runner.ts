@@ -55,6 +55,7 @@ program.command('register')
 program.command('unregister')
   .description('Unregister the runner from PeerTube instance')
   .requiredOption('--url <url>', 'PeerTube instance URL', parseUrl)
+  .requiredOption('--runner-name <name>', 'Runner name')
   .action(async options => {
     try {
       await unregisterRunner(options)

@@ -60,8 +60,12 @@ export class PeerTubeRunnerProcess {
     return execa.node(this.getRunnerPath(), args)
   }
 
-  unregisterPeerTubeInstance () {
-    const args = [ 'unregister', '--url', this.server.url, ...this.buildIdArg() ]
+  unregisterPeerTubeInstance (options: {
+    runnerName: string
+  }) {
+    const { runnerName } = options
+
+    const args = [ 'unregister', '--url', this.server.url, '--runner-name', runnerName, ...this.buildIdArg() ]
     return execa.node(this.getRunnerPath(), args)
   }
 
