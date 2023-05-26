@@ -69,6 +69,8 @@ Some env variables can be defined to disable/enable some tests:
 
  * `DISABLE_HTTP_IMPORT_TESTS=true`: disable import tests (because of youtube that could rate limit your IP)
  * `ENABLE_OBJECT_STORAGE_TESTS=true`: enable object storage tests (needs `chocobozzz/s3-ninja` container first)
+ * `AKISMET_KEY`: specify an Akismet key to test akismet external PeerTube plugin
+ * `OBJECT_STORAGE_SCALEWAY_KEY_ID` and `OBJECT_STORAGE_SCALEWAY_ACCESS_KEY`: specify Scaleway API keys to test object storage ACL (not supported by our `chocobozzz/s3-ninja` container)
 
 
 ### Debug server logs
