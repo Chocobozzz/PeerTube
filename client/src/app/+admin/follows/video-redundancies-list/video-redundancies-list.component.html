@@ -57,7 +57,7 @@
 
   <ng-template pTemplate="rowexpansion" let-redundancy>
     <tr *ngIf="redundancy.redundancies.files.length !== 0">
-      <td class="expand-cell" [attr.colspan]="getColspan()">
+      <td class="expand-cell" myAutoColspan>
         <div *ngFor="let file of redundancy.redundancies.files" class="expansion-block">
           <my-video-redundancy-information [redundancyElement]="file"></my-video-redundancy-information>
         </div>
@@ -65,7 +65,7 @@
     </tr>
 
     <tr *ngIf="redundancy.redundancies.streamingPlaylists.length !== 0">
-      <td class="expand-cell" [attr.colspan]="getColspan()">
+      <td class="expand-cell" myAutoColspan>
         <div *ngFor="let playlist of redundancy.redundancies.streamingPlaylists">
           <my-video-redundancy-information [redundancyElement]="playlist"></my-video-redundancy-information>
         </div>
@@ -75,7 +75,7 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="6">
+      <td myAutoColspan>
         <div class="no-results">
           <ng-container *ngIf="isDisplayingRemoteVideos()" i18n>Your instance doesn't mirror any video.</ng-container>
           <ng-container *ngIf="!isDisplayingRemoteVideos()" i18n>Your instance has no mirrored videos.</ng-container>

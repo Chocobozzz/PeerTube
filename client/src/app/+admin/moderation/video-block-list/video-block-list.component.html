@@ -68,7 +68,7 @@
 
   <ng-template pTemplate="rowexpansion" let-videoBlock>
     <tr>
-      <td class="expand-cell" colspan="6">
+      <td class="expand-cell" myAutoColspan>
         <div class="d-flex moderation-expanded">
 
           <div class="left">
@@ -87,7 +87,7 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="6">
+      <td myAutoColspan>
         <div class="no-results">
           <ng-container *ngIf="search" i18n>No blocked video found matching current filters.</ng-container>
           <ng-container *ngIf="!search" i18n>No blocked video found.</ng-container>

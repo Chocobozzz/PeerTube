@@ -49,7 +49,7 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="3">
+      <td myAutoColspan>
         <div class="no-results">
           <ng-container *ngIf="search" i18n>No account found matching current filters.</ng-container>
           <ng-container *ngIf="!search" i18n>No account found.</ng-container>
