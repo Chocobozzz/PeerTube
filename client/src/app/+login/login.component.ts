@@ -7,7 +7,7 @@ import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/
 import { USER_OTP_TOKEN_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormReactiveService, InputTextComponent } from '@app/shared/shared-forms'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
-import { NgbAccordion, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { NgbAccordionDirective, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { getExternalAuthHref } from '@shared/core-utils'
 import { RegisteredExternalAuthConfig, ServerConfig, ServerErrorCode } from '@shared/models'
 
@@ -23,7 +23,7 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   @ViewChild('forgotPasswordModal', { static: true }) forgotPasswordModal: ElementRef
   @ViewChild('otpTokenInput') otpTokenInput: InputTextComponent
 
-  accordion: NgbAccordion
+  accordion: NgbAccordionDirective
   error: string = null
   forgotPasswordEmail = ''
 
@@ -85,8 +85,8 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
 
     // Avoid undefined errors when accessing form error properties
     this.buildForm({
-      username: LOGIN_USERNAME_VALIDATOR,
-      password: LOGIN_PASSWORD_VALIDATOR,
+      'username': LOGIN_USERNAME_VALIDATOR,
+      'password': LOGIN_PASSWORD_VALIDATOR,
       'otp-token': {
         VALIDATORS: [], // Will be set dynamically
         MESSAGES: USER_OTP_TOKEN_VALIDATOR.MESSAGES
@@ -197,8 +197,6 @@ The link will expire within 1 hour.`
   }
 
   private handleError (err: any) {
-    console.log(err)
-
     if (this.authService.isOTPMissingError(err)) {
       this.otpStep = true
 

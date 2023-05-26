@@ -50,7 +50,7 @@ export class SignupPage {
     await $('#password').setValue(options.password || 'password')
 
     // Fix weird bug on firefox that "cannot scroll into view" when using just `setValue`
-    await $('#email').scrollIntoView(false)
+    await $('#email').scrollIntoView({ block: 'center' })
     await $('#email').waitForClickable()
     await $('#email').setValue(options.email || `${options.username}@example.com`)
   }

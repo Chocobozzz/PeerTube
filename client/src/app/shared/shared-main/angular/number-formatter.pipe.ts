@@ -17,7 +17,7 @@ export class NumberFormatterPipe implements PipeTransform {
     return +f
   }
 
-  private dictionary: Array<{ max: number, type: string }> = [
+  private dictionary: { max: number, type: string }[] = [
     { max: 1000, type: '' },
     { max: 1000000, type: 'K' },
     { max: 1000000000, type: 'M' }

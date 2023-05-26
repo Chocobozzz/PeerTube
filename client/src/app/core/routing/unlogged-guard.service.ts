@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core'
-import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, RouterStateSnapshot } from '@angular/router'
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router'
 import { AuthService } from '../auth/auth.service'
 import { RedirectService } from './redirect.service'
 
 @Injectable()
-export class UnloggedGuard implements CanActivate, CanActivateChild {
+export class UnloggedGuard {
 
   constructor (
     private auth: AuthService,

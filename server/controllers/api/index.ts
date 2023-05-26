@@ -15,6 +15,7 @@ import { metricsRouter } from './metrics'
 import { oauthClientsRouter } from './oauth-clients'
 import { overviewsRouter } from './overviews'
 import { pluginRouter } from './plugins'
+import { runnersRouter } from './runners'
 import { searchRouter } from './search'
 import { serverRouter } from './server'
 import { usersRouter } from './users'
@@ -55,6 +56,7 @@ apiRouter.use('/overviews', overviewsRouter)
 apiRouter.use('/plugins', pluginRouter)
 apiRouter.use('/custom-pages', customPageRouter)
 apiRouter.use('/blocklist', blocklistRouter)
+apiRouter.use('/runners', runnersRouter)
 apiRouter.use('/ping', pong)
 apiRouter.use('/*', badRequest)
 

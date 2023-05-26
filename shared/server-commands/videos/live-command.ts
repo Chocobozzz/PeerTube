@@ -121,7 +121,7 @@ export class LiveCommand extends AbstractCommand {
     permanentLive: boolean
     privacy?: VideoPrivacy
   }) {
-    const { saveReplay, permanentLive, privacy } = options
+    const { saveReplay, permanentLive, privacy = VideoPrivacy.PUBLIC } = options
 
     const { uuid } = await this.create({
       ...options,
@@ -192,7 +192,7 @@ export class LiveCommand extends AbstractCommand {
     videoUUID: string
     playlistNumber: number
     segment: number
-    objectStorage: boolean
+    objectStorage?: ObjectStorageCommand
     objectStorageBaseUrl?: string
   }) {
     const {
@@ -201,18 +201,19 @@ export class LiveCommand extends AbstractCommand {
       playlistNumber,
       segment,
       videoUUID,
-      objectStorageBaseUrl = ObjectStorageCommand.getMockPlaylistBaseUrl()
+      objectStorageBaseUrl
     } = options
 
     const segmentName = `${playlistNumber}-00000${segment}.ts`
     const baseUrl = objectStorage
-      ? join(objectStorageBaseUrl, 'hls')
+      ? join(objectStorageBaseUrl || objectStorage.getMockPlaylistBaseUrl(), 'hls')
       : server.url + '/static/streaming-playlists/hls'
 
     let error = true
 
     while (error) {
       try {
+        // Check fragment exists
         await this.getRawRequest({
           ...options,
 
@@ -224,11 +225,15 @@ export class LiveCommand extends AbstractCommand {
         const video = await server.videos.get({ id: videoUUID })
         const hlsPlaylist = video.streamingPlaylists[0]
 
-        const shaBody = await server.streamingPlaylists.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url })
-
+        // Check SHA generation
+        const shaBody = await server.streamingPlaylists.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url, withRetry: !!objectStorage })
         if (!shaBody[segmentName]) {
           throw new Error('Segment SHA does not exist')
         }
+
+        // Check fragment is in m3u8 playlist
+        const subPlaylist = await server.streamingPlaylists.get({ url: `${baseUrl}/${video.uuid}/${playlistNumber}.m3u8` })
+        if (!subPlaylist.includes(segmentName)) throw new Error('Fragment does not exist in playlist')
 
         error = false
       } catch {
@@ -256,13 +261,13 @@ export class LiveCommand extends AbstractCommand {
     videoUUID: string
     playlistNumber: number
     segment: number
-    objectStorage?: boolean // default false
+    objectStorage?: ObjectStorageCommand
   }) {
-    const { playlistNumber, segment, videoUUID, objectStorage = false } = options
+    const { playlistNumber, segment, videoUUID, objectStorage } = options
 
     const segmentName = `${playlistNumber}-00000${segment}.ts`
     const baseUrl = objectStorage
-      ? ObjectStorageCommand.getMockPlaylistBaseUrl()
+      ? objectStorage.getMockPlaylistBaseUrl()
       : `${this.server.url}/static/streaming-playlists/hls`
 
     const url = `${baseUrl}/${videoUUID}/${segmentName}`
@@ -279,12 +284,12 @@ export class LiveCommand extends AbstractCommand {
   getPlaylistFile (options: OverrideCommandOptions & {
     videoUUID: string
     playlistName: string
-    objectStorage?: boolean // default false
+    objectStorage?: ObjectStorageCommand
   }) {
-    const { playlistName, videoUUID, objectStorage = false } = options
+    const { playlistName, videoUUID, objectStorage } = options
 
     const baseUrl = objectStorage
-      ? ObjectStorageCommand.getMockPlaylistBaseUrl()
+      ? objectStorage.getMockPlaylistBaseUrl()
       : `${this.server.url}/static/streaming-playlists/hls`
 
     const url = `${baseUrl}/${videoUUID}/${playlistName}`

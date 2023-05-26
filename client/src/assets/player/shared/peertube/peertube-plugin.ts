@@ -180,8 +180,10 @@ class PeerTubePlugin extends Plugin {
     })
 
     this.player.on('seeked', () => {
-      // Don't take into account small seek events
-      if (Math.abs(this.player.currentTime() - lastCurrentTime) < 3) return
+      const diff = Math.floor(this.player.currentTime()) - lastCurrentTime
+
+      // Don't take into account small forwards
+      if (diff > 0 && diff < 3) return
 
       lastViewEvent = 'seek'
     })

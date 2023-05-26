@@ -78,8 +78,6 @@ describe('Test video description', function () {
   })
 
   it('Should update with a short description', async function () {
-    this.timeout(10000)
-
     const attributes = {
       description: 'short description'
     }

@@ -1,7 +1,7 @@
 <a [href]="getVideoUrl()" class="table-video-link" [title]="video.name" target="_blank" rel="noopener noreferrer">
   <div class="table-video">
     <div class="table-video-image">
-      <img [src]="video.thumbnailPath">
+      <img [src]="video.thumbnailPath" alt="">
 
       <ng-content select="[image]"></ng-content>
     </div>

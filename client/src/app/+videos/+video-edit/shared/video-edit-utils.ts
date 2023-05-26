@@ -8,11 +8,11 @@ function hydrateFormFromVideo (formGroup: FormGroup, video: VideoEdit, thumbnail
 
   const objects = [
     {
-      url: 'thumbnailUrl',
+      url: 'thumbnailUrl' as 'thumbnailUrl',
       name: 'thumbnailfile'
     },
     {
-      url: 'previewUrl',
+      url: 'previewUrl' as 'previewUrl',
       name: 'previewfile'
     }
   ]

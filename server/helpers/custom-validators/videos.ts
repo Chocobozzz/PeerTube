@@ -1,5 +1,5 @@
 import { Response, Request, UploadFilesForCheck } from 'express'
-import magnetUtil from 'magnet-uri'
+import { decode as magnetUriDecode } from 'magnet-uri'
 import validator from 'validator'
 import { HttpStatusCode, VideoFilter, VideoInclude, VideoPrivacy, VideoRateType } from '@shared/models'
 import {
@@ -143,7 +143,7 @@ function isVideoFileSizeValid (value: string) {
 function isVideoMagnetUriValid (value: string) {
   if (!exists(value)) return false
 
-  const parsed = magnetUtil.decode(value)
+  const parsed = magnetUriDecode(value)
   return parsed && isVideoFileInfoHashValid(parsed.infoHash)
 }
 

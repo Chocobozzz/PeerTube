@@ -1,7 +1,6 @@
 import { forkJoin, Observable } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
-import { Resolve } from '@angular/router'
 import { ServerService } from '@app/core'
 import { CustomMarkupService } from '@app/shared/shared-custom-markup'
 import { AboutHTML, InstanceService } from '@app/shared/shared-instance'
@@ -17,7 +16,7 @@ export type ResolverData = {
 }
 
 @Injectable()
-export class AboutInstanceResolver implements Resolve<any> {
+export class AboutInstanceResolver {
 
   constructor (
     private instanceService: InstanceService,

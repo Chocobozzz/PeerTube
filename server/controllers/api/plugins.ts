@@ -150,7 +150,7 @@ async function installPlugin (req: express.Request, res: express.Response) {
     : undefined
 
   try {
-    const plugin = await PluginManager.Instance.install(toInstall, pluginVersion, fromDisk)
+    const plugin = await PluginManager.Instance.install({ toInstall, version: pluginVersion, fromDisk })
 
     return res.json(plugin.toFormattedJSON())
   } catch (err) {
@@ -177,7 +177,7 @@ async function updatePlugin (req: express.Request, res: express.Response) {
 async function uninstallPlugin (req: express.Request, res: express.Response) {
   const body: ManagePlugin = req.body
 
-  await PluginManager.Instance.uninstall(body.npmName)
+  await PluginManager.Instance.uninstall({ npmName: body.npmName })
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

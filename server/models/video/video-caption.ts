@@ -1,6 +1,6 @@
 import { remove } from 'fs-extra'
 import { join } from 'path'
-import { OrderItem, Transaction } from 'sequelize'
+import { Op, OrderItem, Transaction } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -164,6 +164,31 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
     }
 
     return VideoCaptionModel.scope(ScopeNames.WITH_VIDEO_UUID_AND_REMOTE).findAll(query)
+  }
+
+  static async listCaptionsOfMultipleVideos (videoIds: number[], transaction?: Transaction) {
+    const query = {
+      order: [ [ 'language', 'ASC' ] ] as OrderItem[],
+      where: {
+        videoId: {
+          [Op.in]: videoIds
+        }
+      },
+      transaction
+    }
+
+    const captions = await VideoCaptionModel.scope(ScopeNames.WITH_VIDEO_UUID_AND_REMOTE).findAll<MVideoCaptionVideo>(query)
+    const result: { [ id: number ]: MVideoCaptionVideo[] } = {}
+
+    for (const id of videoIds) {
+      result[id] = []
+    }
+
+    for (const caption of captions) {
+      result[caption.videoId].push(caption)
+    }
+
+    return result
   }
 
   static getLanguageLabel (language: string) {

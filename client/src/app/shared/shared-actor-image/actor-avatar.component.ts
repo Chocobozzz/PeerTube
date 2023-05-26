@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core'
 import { VideoChannel } from '../shared-main'
 import { Account } from '../shared-main/account/account.model'
+import { objectKeysTyped } from '@shared/core-utils'
 
 type ActorInput = {
   name: string
@@ -145,17 +146,17 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
     // Keep consistency with CSS
     const themes = {
       '0123456789abc': 'blue',
-      def: 'green',
-      ghi: 'purple',
-      jkl: 'gray',
-      mno: 'yellow',
-      pqr: 'orange',
-      stvu: 'red',
-      wxyz: 'dark-blue'
+      'def': 'green',
+      'ghi': 'purple',
+      'jkl': 'gray',
+      'mno': 'yellow',
+      'pqr': 'orange',
+      'stvu': 'red',
+      'wxyz': 'dark-blue'
     }
 
-    const theme = Object.keys(themes)
-                        .find(chars => chars.includes(initialLowercase))
+    const theme = objectKeysTyped(themes)
+      .find(chars => chars.includes(initialLowercase))
 
     return themes[theme] || 'blue'
   }

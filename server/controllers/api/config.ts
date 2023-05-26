@@ -217,6 +217,9 @@ function customConfig (): CustomConfig {
     },
     transcoding: {
       enabled: CONFIG.TRANSCODING.ENABLED,
+      remoteRunners: {
+        enabled: CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED
+      },
       allowAdditionalExtensions: CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS,
       allowAudioFiles: CONFIG.TRANSCODING.ALLOW_AUDIO_FILES,
       threads: CONFIG.TRANSCODING.THREADS,
@@ -252,6 +255,9 @@ function customConfig (): CustomConfig {
       maxUserLives: CONFIG.LIVE.MAX_USER_LIVES,
       transcoding: {
         enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
+        remoteRunners: {
+          enabled: CONFIG.LIVE.TRANSCODING.REMOTE_RUNNERS.ENABLED
+        },
         threads: CONFIG.LIVE.TRANSCODING.THREADS,
         profile: CONFIG.LIVE.TRANSCODING.PROFILE,
         resolutions: {
@@ -268,7 +274,10 @@ function customConfig (): CustomConfig {
       }
     },
     videoStudio: {
-      enabled: CONFIG.VIDEO_STUDIO.ENABLED
+      enabled: CONFIG.VIDEO_STUDIO.ENABLED,
+      remoteRunners: {
+        enabled: CONFIG.VIDEO_STUDIO.REMOTE_RUNNERS.ENABLED
+      }
     },
     import: {
       videos: {

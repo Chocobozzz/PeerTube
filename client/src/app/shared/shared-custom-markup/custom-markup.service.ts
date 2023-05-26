@@ -1,6 +1,7 @@
 import { firstValueFrom } from 'rxjs'
 import { ComponentRef, Injectable } from '@angular/core'
 import { MarkdownService } from '@app/core'
+import { logger } from '@root-helpers/logger'
 import {
   ButtonMarkupData,
   ChannelMiniatureMarkupData,
@@ -20,7 +21,6 @@ import {
   VideosListMarkupComponent
 } from './peertube-custom-tags'
 import { CustomMarkupComponent } from './peertube-custom-tags/shared'
-import { logger } from '@root-helpers/logger'
 
 type AngularBuilderFunction = (el: HTMLElement) => ComponentRef<CustomMarkupComponent>
 type HTMLBuilderFunction = (el: HTMLElement) => HTMLElement

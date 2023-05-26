@@ -439,8 +439,6 @@ describe('Test blocklist', function () {
       })
 
       it('Should hide its comments', async function () {
-        this.timeout(10000)
-
         const { id } = await commentsCommand[1].createThread({ token: userToken2, videoId: videoUUID1, text: 'hidden comment 2' })
 
         await waitJobs(servers)
@@ -767,8 +765,6 @@ describe('Test blocklist', function () {
       })
 
       it('Should hide its comments', async function () {
-        this.timeout(10000)
-
         const { id } = await commentsCommand[1].createThread({ token: userToken2, videoId: videoUUID1, text: 'hidden comment 2' })
 
         await waitJobs(servers)

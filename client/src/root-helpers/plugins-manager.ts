@@ -60,14 +60,14 @@ class PluginsManager {
   private loadingScopes: { [id in PluginClientScope]?: boolean } = {}
 
   private pluginsLoaded: { [ scope in PluginClientScope ]: ReplaySubject<boolean> } = {
-    common: new ReplaySubject<boolean>(1),
+    'common': new ReplaySubject<boolean>(1),
     'admin-plugin': new ReplaySubject<boolean>(1),
-    search: new ReplaySubject<boolean>(1),
+    'search': new ReplaySubject<boolean>(1),
     'video-watch': new ReplaySubject<boolean>(1),
-    signup: new ReplaySubject<boolean>(1),
-    login: new ReplaySubject<boolean>(1),
+    'signup': new ReplaySubject<boolean>(1),
+    'login': new ReplaySubject<boolean>(1),
     'video-edit': new ReplaySubject<boolean>(1),
-    embed: new ReplaySubject<boolean>(1),
+    'embed': new ReplaySubject<boolean>(1),
     'my-library': new ReplaySubject<boolean>(1),
     'video-channel': new ReplaySubject<boolean>(1)
   }
@@ -317,7 +317,7 @@ async function dynamicImport (url: string) {
       const script = document.createElement('script')
 
       const destructor = () => {
-        delete window[vector]
+        delete window[vector as any]
         script.onerror = null
         script.onload = null
         script.remove()
@@ -333,7 +333,7 @@ async function dynamicImport (url: string) {
         destructor()
       }
       script.onload = () => {
-        resolve(window[vector])
+        resolve(window[vector as any])
         destructor()
       }
       const loader = `import * as m from "${url}"; window.${vector} = m;` // export Module

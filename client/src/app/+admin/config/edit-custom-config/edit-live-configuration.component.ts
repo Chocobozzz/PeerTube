@@ -51,11 +51,11 @@ export class EditLiveConfigurationComponent implements OnInit, OnChanges {
     const profiles = this.serverConfig.live.transcoding.availableProfiles
 
     return profiles.map(p => {
-      const description = p === 'default'
-        ? $localize`x264, targeting maximum device compatibility`
-        : ''
+      if (p === 'default') {
+        return { id: p, label: $localize`Default`, description: $localize`x264, targeting maximum device compatibility` }
+      }
 
-      return { id: p, label: p, description }
+      return { id: p, label: p }
     })
   }
 
@@ -71,12 +71,20 @@ export class EditLiveConfigurationComponent implements OnInit, OnChanges {
     return this.editConfigurationService.isLiveEnabled(this.form)
   }
 
+  isRemoteRunnerLiveEnabled () {
+    return this.editConfigurationService.isRemoteRunnerLiveEnabled(this.form)
+  }
+
   getDisabledLiveClass () {
     return { 'disabled-checkbox-extra': !this.isLiveEnabled() }
   }
 
   getDisabledLiveTranscodingClass () {
     return { 'disabled-checkbox-extra': !this.isLiveEnabled() || !this.isLiveTranscodingEnabled() }
+  }
+
+  getDisabledLiveLocalTranscodingClass () {
+    return { 'disabled-checkbox-extra': !this.isLiveEnabled() || !this.isLiveTranscodingEnabled() || this.isRemoteRunnerLiveEnabled() }
   }
 
   isLiveTranscodingEnabled () {

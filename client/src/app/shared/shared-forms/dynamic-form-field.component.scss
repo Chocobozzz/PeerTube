@@ -4,6 +4,9 @@
 input:not([type=submit]) {
   @include peertube-input-text(340px);
 
+  max-width: 340px;
+  width: 100%;
+
   display: block;
 }
 

@@ -50,8 +50,6 @@ describe('Official plugin auto-mute', function () {
   })
 
   it('Should add a server blocklist', async function () {
-    this.timeout(10000)
-
     blocklistServer.replace({
       data: [
         {
@@ -67,8 +65,6 @@ describe('Official plugin auto-mute', function () {
   })
 
   it('Should remove a server blocklist', async function () {
-    this.timeout(10000)
-
     blocklistServer.replace({
       data: [
         {
@@ -85,8 +81,6 @@ describe('Official plugin auto-mute', function () {
   })
 
   it('Should add an account blocklist', async function () {
-    this.timeout(10000)
-
     blocklistServer.replace({
       data: [
         {
@@ -102,8 +96,6 @@ describe('Official plugin auto-mute', function () {
   })
 
   it('Should remove an account blocklist', async function () {
-    this.timeout(10000)
-
     blocklistServer.replace({
       data: [
         {

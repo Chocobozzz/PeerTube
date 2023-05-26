@@ -31,6 +31,7 @@ import {
   MoveObjectStoragePayload,
   NotifyPayload,
   RefreshPayload,
+  TranscodingJobBuilderPayload,
   VideoChannelImportPayload,
   VideoFileImportPayload,
   VideoImportPayload,
@@ -56,6 +57,7 @@ import { processFederateVideo } from './handlers/federate-video'
 import { processManageVideoTorrent } from './handlers/manage-video-torrent'
 import { onMoveToObjectStorageFailure, processMoveToObjectStorage } from './handlers/move-to-object-storage'
 import { processNotify } from './handlers/notify'
+import { processTranscodingJobBuilder } from './handlers/transcoding-job-builder'
 import { processVideoChannelImport } from './handlers/video-channel-import'
 import { processVideoFileImport } from './handlers/video-file-import'
 import { processVideoImport } from './handlers/video-import'
@@ -69,11 +71,12 @@ export type CreateJobArgument =
   { type: 'activitypub-http-broadcast-parallel', payload: ActivitypubHttpBroadcastPayload } |
   { type: 'activitypub-http-unicast', payload: ActivitypubHttpUnicastPayload } |
   { type: 'activitypub-http-fetcher', payload: ActivitypubHttpFetcherPayload } |
-  { type: 'activitypub-http-cleaner', payload: {} } |
+  { type: 'activitypub-cleaner', payload: {} } |
   { type: 'activitypub-follow', payload: ActivitypubFollowPayload } |
   { type: 'video-file-import', payload: VideoFileImportPayload } |
   { type: 'video-transcoding', payload: VideoTranscodingPayload } |
   { type: 'email', payload: EmailPayload } |
+  { type: 'transcoding-job-builder', payload: TranscodingJobBuilderPayload } |
   { type: 'video-import', payload: VideoImportPayload } |
   { type: 'activitypub-refresher', payload: RefreshPayload } |
   { type: 'videos-views-stats', payload: {} } |
@@ -93,31 +96,33 @@ export type CreateJobArgument =
 export type CreateJobOptions = {
   delay?: number
   priority?: number
+  failParentOnFailure?: boolean
 }
 
 const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
-  'activitypub-http-broadcast': processActivityPubHttpSequentialBroadcast,
-  'activitypub-http-broadcast-parallel': processActivityPubParallelHttpBroadcast,
-  'activitypub-http-unicast': processActivityPubHttpUnicast,
-  'activitypub-http-fetcher': processActivityPubHttpFetcher,
   'activitypub-cleaner': processActivityPubCleaner,
   'activitypub-follow': processActivityPubFollow,
-  'video-file-import': processVideoFileImport,
-  'video-transcoding': processVideoTranscoding,
-  'email': processEmail,
-  'video-import': processVideoImport,
-  'videos-views-stats': processVideosViewsStats,
+  'activitypub-http-broadcast-parallel': processActivityPubParallelHttpBroadcast,
+  'activitypub-http-broadcast': processActivityPubHttpSequentialBroadcast,
+  'activitypub-http-fetcher': processActivityPubHttpFetcher,
+  'activitypub-http-unicast': processActivityPubHttpUnicast,
   'activitypub-refresher': refreshAPObject,
-  'video-live-ending': processVideoLiveEnding,
   'actor-keys': processActorKeys,
-  'video-redundancy': processVideoRedundancy,
-  'move-to-object-storage': processMoveToObjectStorage,
-  'manage-video-torrent': processManageVideoTorrent,
-  'video-studio-edition': processVideoStudioEdition,
-  'video-channel-import': processVideoChannelImport,
   'after-video-channel-import': processAfterVideoChannelImport,
+  'email': processEmail,
+  'federate-video': processFederateVideo,
+  'transcoding-job-builder': processTranscodingJobBuilder,
+  'manage-video-torrent': processManageVideoTorrent,
+  'move-to-object-storage': processMoveToObjectStorage,
   'notify': processNotify,
-  'federate-video': processFederateVideo
+  'video-channel-import': processVideoChannelImport,
+  'video-file-import': processVideoFileImport,
+  'video-import': processVideoImport,
+  'video-live-ending': processVideoLiveEnding,
+  'video-redundancy': processVideoRedundancy,
+  'video-studio-edition': processVideoStudioEdition,
+  'video-transcoding': processVideoTranscoding,
+  'videos-views-stats': processVideosViewsStats
 }
 
 const errorHandlers: { [id in JobType]?: (job: Job, err: any) => Promise<any> } = {
@@ -125,28 +130,29 @@ const errorHandlers: { [id in JobType]?: (job: Job, err: any) => Promise<any> } 
 }
 
 const jobTypes: JobType[] = [
+  'activitypub-cleaner',
   'activitypub-follow',
-  'activitypub-http-broadcast',
   'activitypub-http-broadcast-parallel',
+  'activitypub-http-broadcast',
   'activitypub-http-fetcher',
   'activitypub-http-unicast',
-  'activitypub-cleaner',
+  'activitypub-refresher',
+  'actor-keys',
+  'after-video-channel-import',
   'email',
-  'video-transcoding',
+  'federate-video',
+  'transcoding-job-builder',
+  'manage-video-torrent',
+  'move-to-object-storage',
+  'notify',
+  'video-channel-import',
   'video-file-import',
   'video-import',
-  'videos-views-stats',
-  'activitypub-refresher',
-  'video-redundancy',
-  'actor-keys',
   'video-live-ending',
-  'move-to-object-storage',
-  'manage-video-torrent',
+  'video-redundancy',
   'video-studio-edition',
-  'video-channel-import',
-  'after-video-channel-import',
-  'notify',
-  'federate-video'
+  'video-transcoding',
+  'videos-views-stats'
 ]
 
 const silentFailure = new Set<JobType>([ 'activitypub-http-unicast' ])
@@ -358,7 +364,11 @@ class JobQueue {
       name: 'job',
       data: job.payload,
       queueName: job.type,
-      opts: this.buildJobOptions(job.type as JobType, pick(job, [ 'priority', 'delay' ]))
+      opts: {
+        failParentOnFailure: true,
+
+        ...this.buildJobOptions(job.type as JobType, pick(job, [ 'priority', 'delay', 'failParentOnFailure' ]))
+      }
     }
   }
 

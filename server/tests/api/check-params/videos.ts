@@ -421,9 +421,9 @@ describe('Test videos API validator', function () {
         const error = body as unknown as PeerTubeProblemDocument
 
         if (mode === 'legacy') {
-          expect(error.docs).to.equal('https://docs.joinpeertube.org/api/rest-reference.html#operation/uploadLegacy')
+          expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/uploadLegacy')
         } else {
-          expect(error.docs).to.equal('https://docs.joinpeertube.org/api/rest-reference.html#operation/uploadResumableInit')
+          expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/uploadResumableInit')
         }
 
         expect(error.type).to.equal('about:blank')
@@ -437,7 +437,7 @@ describe('Test videos API validator', function () {
       })
 
       it('Should succeed with the correct parameters', async function () {
-        this.timeout(15000)
+        this.timeout(30000)
 
         const fields = baseCorrectParams
 
@@ -680,7 +680,7 @@ describe('Test videos API validator', function () {
       const res = await makePutBodyRequest({ url: server.url, path: path + video.shortUUID, token: server.accessToken, fields })
       const error = res.body as PeerTubeProblemDocument
 
-      expect(error.docs).to.equal('https://docs.joinpeertube.org/api/rest-reference.html#operation/putVideo')
+      expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/putVideo')
 
       expect(error.type).to.equal('about:blank')
       expect(error.title).to.equal('Bad Request')
@@ -729,7 +729,7 @@ describe('Test videos API validator', function () {
       const body = await server.videos.get({ id: 'hi', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       const error = body as unknown as PeerTubeProblemDocument
 
-      expect(error.docs).to.equal('https://docs.joinpeertube.org/api/rest-reference.html#operation/getVideo')
+      expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo')
 
       expect(error.type).to.equal('about:blank')
       expect(error.title).to.equal('Bad Request')
@@ -835,7 +835,7 @@ describe('Test videos API validator', function () {
       const body = await server.videos.remove({ id: 'hello', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       const error = body as PeerTubeProblemDocument
 
-      expect(error.docs).to.equal('https://docs.joinpeertube.org/api/rest-reference.html#operation/delVideo')
+      expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/delVideo')
 
       expect(error.type).to.equal('about:blank')
       expect(error.title).to.equal('Bad Request')

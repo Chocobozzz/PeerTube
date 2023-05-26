@@ -99,7 +99,7 @@ async function areSubscriptionsExist (req: express.Request, res: express.Respons
     const obj = results.find(r => {
       const server = r.ActorFollowing.Server
 
-      return r.ActorFollowing.preferredUsername === sanitizedHandle.name &&
+      return r.ActorFollowing.preferredUsername.toLowerCase() === sanitizedHandle.name.toLowerCase() &&
         (
           (!server && !sanitizedHandle.host) ||
           (server.host === sanitizedHandle.host)

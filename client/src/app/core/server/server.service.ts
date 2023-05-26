@@ -137,7 +137,7 @@ export class ServerService {
     return this.videoPlaylistPrivaciesObservable.pipe(first())
   }
 
-  getServerLocale () {
+  getServerLocale (): Observable<{ [ id: string ]: string }> {
     if (!this.localeObservable) {
       const completeLocale = isOnDevLocale() ? getDevLocale() : getCompleteLocale(this.localeId)
 
@@ -193,7 +193,8 @@ export class ServerService {
   }
 
   private loadHTMLConfigLocally () {
-    const configString = window['PeerTubeServerConfig']
+    // FIXME: typings
+    const configString = (window as any)['PeerTubeServerConfig']
     if (!configString) {
       throw new Error('Could not find PeerTubeServerConfig in HTML')
     }

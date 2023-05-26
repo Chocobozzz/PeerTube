@@ -99,8 +99,6 @@ describe('Test video privacy', function () {
     })
 
     it('Should not be able to watch the private video with another user', async function () {
-      this.timeout(10000)
-
       const user = {
         username: 'hello',
         password: 'super password'
@@ -254,8 +252,6 @@ describe('Test video privacy', function () {
     })
 
     it('Should set these videos as private and internal', async function () {
-      this.timeout(10000)
-
       await servers[0].videos.update({ id: internalVideoId, attributes: { privacy: VideoPrivacy.PRIVATE } })
       await servers[0].videos.update({ id: privateVideoId, attributes: { privacy: VideoPrivacy.INTERNAL } })
 

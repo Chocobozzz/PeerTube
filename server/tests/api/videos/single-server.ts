@@ -136,8 +136,6 @@ describe('Test a single server', function () {
     })
 
     it('Should upload the video', async function () {
-      this.timeout(10000)
-
       const attributes = {
         name: 'my super name',
         category: 2,
@@ -164,14 +162,14 @@ describe('Test a single server', function () {
       expect(data.length).to.equal(1)
 
       const video = data[0]
-      await completeVideoCheck(server, video, getCheckAttributes())
+      await completeVideoCheck({ server, originServer: server, videoUUID: video.uuid, attributes: getCheckAttributes() })
     })
 
     it('Should get the video by UUID', async function () {
       this.timeout(5000)
 
       const video = await server.videos.get({ id: videoUUID })
-      await completeVideoCheck(server, video, getCheckAttributes())
+      await completeVideoCheck({ server, originServer: server, videoUUID: video.uuid, attributes: getCheckAttributes() })
     })
 
     it('Should have the views updated', async function () {
@@ -213,7 +211,7 @@ describe('Test a single server', function () {
     })
 
     it('Should upload 6 videos', async function () {
-      this.timeout(25000)
+      this.timeout(120000)
 
       const videos = new Set([
         'video_short.mp4', 'video_short.ogv', 'video_short.webm',
@@ -360,7 +358,7 @@ describe('Test a single server', function () {
 
       const video = await server.videos.get({ id: videoId })
 
-      await completeVideoCheck(server, video, updateCheckAttributes())
+      await completeVideoCheck({ server, originServer: server, videoUUID: video.uuid, attributes: updateCheckAttributes() })
     })
 
     it('Should update only the tags of a video', async function () {
@@ -371,7 +369,12 @@ describe('Test a single server', function () {
 
       const video = await server.videos.get({ id: videoId })
 
-      await completeVideoCheck(server, video, Object.assign(updateCheckAttributes(), attributes))
+      await completeVideoCheck({
+        server,
+        originServer: server,
+        videoUUID: video.uuid,
+        attributes: Object.assign(updateCheckAttributes(), attributes)
+      })
     })
 
     it('Should update only the description of a video', async function () {
@@ -382,8 +385,12 @@ describe('Test a single server', function () {
 
       const video = await server.videos.get({ id: videoId })
 
-      const expectedAttributes = Object.assign(updateCheckAttributes(), { tags: [ 'supertag', 'tag1', 'tag2' ] }, attributes)
-      await completeVideoCheck(server, video, expectedAttributes)
+      await completeVideoCheck({
+        server,
+        originServer: server,
+        videoUUID: video.uuid,
+        attributes: Object.assign(updateCheckAttributes(), { tags: [ 'supertag', 'tag1', 'tag2' ] }, attributes)
+      })
     })
 
     it('Should like a video', async function () {

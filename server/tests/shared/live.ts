@@ -6,6 +6,7 @@ import { join } from 'path'
 import { sha1 } from '@shared/extra-utils'
 import { LiveVideo, VideoStreamingPlaylistType } from '@shared/models'
 import { ObjectStorageCommand, PeerTubeServer } from '@shared/server-commands'
+import { SQLCommand } from './sql-command'
 import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist } from './streaming-playlists'
 
 async function checkLiveCleanup (options: {
@@ -36,24 +37,27 @@ async function checkLiveCleanup (options: {
 
 // ---------------------------------------------------------------------------
 
-async function testVideoResolutions (options: {
+async function testLiveVideoResolutions (options: {
+  sqlCommand: SQLCommand
   originServer: PeerTubeServer
+
   servers: PeerTubeServer[]
   liveVideoId: string
   resolutions: number[]
   transcoded: boolean
 
-  objectStorage: boolean
+  objectStorage?: ObjectStorageCommand
   objectStorageBaseUrl?: string
 }) {
   const {
     originServer,
+    sqlCommand,
     servers,
     liveVideoId,
     resolutions,
     transcoded,
     objectStorage,
-    objectStorageBaseUrl = ObjectStorageCommand.getMockPlaylistBaseUrl()
+    objectStorageBaseUrl = objectStorage?.getMockPlaylistBaseUrl()
   } = options
 
   for (const server of servers) {
@@ -72,7 +76,7 @@ async function testVideoResolutions (options: {
       playlistUrl: hlsPlaylist.playlistUrl,
       resolutions,
       transcoded,
-      withRetry: objectStorage
+      withRetry: !!objectStorage
     })
 
     if (objectStorage) {
@@ -101,7 +105,7 @@ async function testVideoResolutions (options: {
 
       const subPlaylist = await originServer.streamingPlaylists.get({
         url: `${baseUrl}/${video.uuid}/${i}.m3u8`,
-        withRetry: objectStorage // With object storage, the request may fail because of inconsistent data in S3
+        withRetry: !!objectStorage // With object storage, the request may fail because of inconsistent data in S3
       })
 
       expect(subPlaylist).to.contain(segmentName)
@@ -111,12 +115,13 @@ async function testVideoResolutions (options: {
         baseUrlSegment: baseUrl,
         videoUUID: video.uuid,
         segmentName,
-        hlsPlaylist
+        hlsPlaylist,
+        withRetry: !!objectStorage // With object storage, the request may fail because of inconsistent data in S3
       })
 
       if (originServer.internalServerNumber === server.internalServerNumber) {
         const infohash = sha1(`${2 + hlsPlaylist.playlistUrl}+V${i}`)
-        const dbInfohashes = await originServer.sql.getPlaylistInfohash(hlsPlaylist.id)
+        const dbInfohashes = await sqlCommand.getPlaylistInfohash(hlsPlaylist.id)
 
         expect(dbInfohashes).to.include(infohash)
       }
@@ -128,7 +133,7 @@ async function testVideoResolutions (options: {
 
 export {
   checkLiveCleanup,
-  testVideoResolutions
+  testLiveVideoResolutions
 }
 
 // ---------------------------------------------------------------------------
@@ -137,7 +142,7 @@ async function checkSavedLiveCleanup (hlsPath: string, savedResolutions: number[
   const files = await readdir(hlsPath)
 
   // fragmented file and playlist per resolution + master playlist + segments sha256 json file
-  expect(files).to.have.lengthOf(savedResolutions.length * 2 + 2)
+  expect(files, `Directory content: ${files.join(', ')}`).to.have.lengthOf(savedResolutions.length * 2 + 2)
 
   for (const resolution of savedResolutions) {
     const fragmentedFile = files.find(f => f.endsWith(`-${resolution}-fragmented.mp4`))

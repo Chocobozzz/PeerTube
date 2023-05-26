@@ -1,7 +1,11 @@
 # Docker guide
 
 This guide requires [docker](https://www.docker.com/community-edition) and
-[docker-compose](https://docs.docker.com/compose/install/).
+[docker-compose V2](https://docs.docker.com/compose/install/).
+
+```shell
+docker compose version # Must be > 2.x.x
+```
 
 ## Install
 
@@ -10,7 +14,9 @@ name is definitive after your first PeerTube start.
 
 #### Go to your workdir
 
-_note_: the guide that follows assumes an empty workdir, but you can also clone the repository, use the master branch and `cd support/docker/production`.
+:::info
+The guide that follows assumes an empty workdir, but you can also clone the repository, use the master branch and `cd support/docker/production`.
+:::
 
 ```shell
 cd /your/peertube/directory
@@ -57,7 +63,9 @@ intuited from usage.
 
 #### Webserver
 
-*The docker compose file includes a configured web server. You can skip this part and comment the appropriate section in the docker compose if you use another webserver/proxy.*
+::: info
+The docker compose file includes a configured web server. You can skip this part and comment the appropriate section in the docker compose if you use another webserver/proxy.
+:::
 
 Install the template that the nginx container will use.
 The container will generate the configuration by replacing `${WEBSERVER_HOST}` and `${PEERTUBE_HOST}` using your docker compose env file.
@@ -84,20 +92,20 @@ _note_: Newer versions of compose are called with `docker compose` instead of `d
 Run your containers:
 
 ```shell
-docker-compose up
+docker compose up
 ```
 
 #### Obtaining your automatically-generated admin credentials
 
 You can change the automatically created password for user root by running this command from peertube's root directory:
 ```shell
-docker-compose exec -u peertube peertube npm run reset-password -- -u root
+docker compose exec -u peertube peertube npm run reset-password -- -u root
 ```
 
 You can also grep your peertube container's logs for the default `root` password. You're going to want to run `docker-compose logs peertube | grep -A1 root` to search the log output for your new PeerTube's instance admin credentials which will look something like this.
 
 ```bash
-docker-compose logs peertube | grep -A1 root
+docker compose logs peertube | grep -A1 root
 
 peertube_1  | [example.com:443] 2019-11-16 04:26:06.082 info: Username: root
 peertube_1  | [example.com:443] 2019-11-16 04:26:06.083 info: User password: abcdefghijklmnop
@@ -127,25 +135,27 @@ See the production guide ["What now" section](https://docs.joinpeertube.org/inst
 
 ## Upgrade
 
-**Check the changelog (in particular the *IMPORTANT NOTES* section):** https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
+::: warning
+Check the changelog (in particular the *IMPORTANT NOTES* section):** https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
+:::
 
 Pull the latest images:
 
 ```shell
 cd /your/peertube/directory
-docker-compose pull
+docker compose pull
 ```
 
 Stop, delete the containers and internal volumes (to invalidate static client files shared by `peertube` and `webserver` containers):
 
 ```shell
-docker-compose down -v
+docker compose down -v
 ```
 
 Rerun PeerTube:
 
 ```shell
-docker-compose up -d
+docker compose up -d
 ```
 
 ## Build

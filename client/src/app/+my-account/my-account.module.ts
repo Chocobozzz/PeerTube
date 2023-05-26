@@ -22,6 +22,7 @@ import { MyAccountRoutingModule } from './my-account-routing.module'
 import { MyAccountChangeEmailComponent } from './my-account-settings/my-account-change-email'
 import { MyAccountChangePasswordComponent } from './my-account-settings/my-account-change-password/my-account-change-password.component'
 import { MyAccountDangerZoneComponent } from './my-account-settings/my-account-danger-zone'
+import { MyAccountEmailPreferencesComponent } from './my-account-settings/my-account-email-preferences'
 import { MyAccountNotificationPreferencesComponent } from './my-account-settings/my-account-notification-preferences'
 import { MyAccountProfileComponent } from './my-account-settings/my-account-profile/my-account-profile.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
@@ -65,7 +66,9 @@ import { MyAccountComponent } from './my-account.component'
     MyAccountAbusesListComponent,
     MyAccountServerBlocklistComponent,
     MyAccountNotificationsComponent,
-    MyAccountNotificationPreferencesComponent
+    MyAccountNotificationPreferencesComponent,
+
+    MyAccountEmailPreferencesComponent
   ],
 
   exports: [

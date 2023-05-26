@@ -159,11 +159,11 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
         streamKey: this.streamKey,
 
         rtmpUrl: CONFIG.LIVE.RTMP.ENABLED
-          ? WEBSERVER.RTMP_URL
+          ? WEBSERVER.RTMP_BASE_LIVE_URL
           : null,
 
         rtmpsUrl: CONFIG.LIVE.RTMPS.ENABLED
-          ? WEBSERVER.RTMPS_URL
+          ? WEBSERVER.RTMPS_BASE_LIVE_URL
           : null
       }
     }

@@ -1,8 +1,9 @@
 import { pathExists, readdir, remove } from 'fs-extra'
 import { basename, join } from 'path'
 import { logger } from '@server/helpers/logger'
+import { VIDEO_LIVE } from '@server/initializers/constants'
 import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo } from '@server/types/models'
-import { VideoStorage } from '@shared/models'
+import { LiveVideoLatencyMode, VideoStorage } from '@shared/models'
 import { listHLSFileKeysOf, removeHLSFileObjectStorageByFullKey, removeHLSObjectStorage } from '../object-storage'
 import { getLiveDirectory } from '../paths'
 
@@ -37,10 +38,19 @@ async function cleanupTMPLiveFiles (video: MVideo, streamingPlaylist: MStreaming
   await cleanupTMPLiveFilesFromFilesystem(video)
 }
 
+function getLiveSegmentTime (latencyMode: LiveVideoLatencyMode) {
+  if (latencyMode === LiveVideoLatencyMode.SMALL_LATENCY) {
+    return VIDEO_LIVE.SEGMENT_TIME_SECONDS.SMALL_LATENCY
+  }
+
+  return VIDEO_LIVE.SEGMENT_TIME_SECONDS.DEFAULT_LATENCY
+}
+
 export {
   cleanupAndDestroyPermanentLive,
   cleanupUnsavedNormalLive,
   cleanupTMPLiveFiles,
+  getLiveSegmentTime,
   buildConcatenatedName
 }
 

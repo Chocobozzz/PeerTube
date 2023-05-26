@@ -1,94 +1,7 @@
 
 import { logger } from '@server/helpers/logger'
-import { getAverageBitrate, getMinLimitBitrate } from '@shared/core-utils'
-import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptionsBuilderParams, VideoResolution } from '../../../shared/models/videos'
-import {
-  buildStreamSuffix,
-  canDoQuickAudioTranscode,
-  ffprobePromise,
-  getAudioStream,
-  getMaxAudioBitrate,
-  resetSupportedEncoders
-} from '../../helpers/ffmpeg'
-
-/**
- *
- * Available encoders and profiles for the transcoding jobs
- * These functions are used by ffmpeg-utils that will get the encoders and options depending on the chosen profile
- *
- * Resources:
- *  * https://slhck.info/video/2017/03/01/rate-control.html
- *  * https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
- */
-
-// ---------------------------------------------------------------------------
-// Default builders
-// ---------------------------------------------------------------------------
-
-const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOptionsBuilderParams) => {
-  const { fps, inputRatio, inputBitrate, resolution } = options
-
-  // TODO: remove in 4.2, fps is not optional anymore
-  if (!fps) return { outputOptions: [ ] }
-
-  const targetBitrate = getTargetBitrate({ inputBitrate, ratio: inputRatio, fps, resolution })
-
-  return {
-    outputOptions: [
-      ...getCommonOutputOptions(targetBitrate),
-
-      `-r ${fps}`
-    ]
-  }
-}
-
-const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOptionsBuilderParams) => {
-  const { streamNum, fps, inputBitrate, inputRatio, resolution } = options
-
-  const targetBitrate = getTargetBitrate({ inputBitrate, ratio: inputRatio, fps, resolution })
-
-  return {
-    outputOptions: [
-      ...getCommonOutputOptions(targetBitrate, streamNum),
-
-      `${buildStreamSuffix('-r:v', streamNum)} ${fps}`,
-      `${buildStreamSuffix('-b:v', streamNum)} ${targetBitrate}`
-    ]
-  }
-}
-
-const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNum, canCopyAudio }) => {
-  const probe = await ffprobePromise(input)
-
-  if (canCopyAudio && await canDoQuickAudioTranscode(input, probe)) {
-    logger.debug('Copy audio stream %s by AAC encoder.', input)
-    return { copy: true, outputOptions: [ ] }
-  }
-
-  const parsedAudio = await getAudioStream(input, probe)
-
-  // We try to reduce the ceiling bitrate by making rough matches of bitrates
-  // Of course this is far from perfect, but it might save some space in the end
-
-  const audioCodecName = parsedAudio.audioStream['codec_name']
-
-  const bitrate = getMaxAudioBitrate(audioCodecName, parsedAudio.bitrate)
-
-  logger.debug('Calculating audio bitrate of %s by AAC encoder.', input, { bitrate: parsedAudio.bitrate, audioCodecName })
-
-  // Force stereo as it causes some issues with HLS playback in Chrome
-  const base = [ '-channel_layout', 'stereo' ]
-
-  if (bitrate !== -1) {
-    return { outputOptions: base.concat([ buildStreamSuffix('-b:a', streamNum), bitrate + 'k' ]) }
-  }
-
-  return { outputOptions: base }
-}
-
-const defaultLibFDKAACVODOptionsBuilder: EncoderOptionsBuilder = ({ streamNum }) => {
-  return { outputOptions: [ buildStreamSuffix('-q:a', streamNum), '5' ] }
-}
+import { FFmpegCommandWrapper, getDefaultAvailableEncoders } from '@shared/ffmpeg'
+import { AvailableEncoders, EncoderOptionsBuilder } from '@shared/models'
 
 // ---------------------------------------------------------------------------
 // Profile manager to get and change default profiles
@@ -103,27 +16,7 @@ class VideoTranscodingProfilesManager {
     live: this.buildDefaultEncodersPriorities()
   }
 
-  private readonly availableEncoders = {
-    vod: {
-      libx264: {
-        default: defaultX264VODOptionsBuilder
-      },
-      aac: {
-        default: defaultAACOptionsBuilder
-      },
-      libfdk_aac: {
-        default: defaultLibFDKAACVODOptionsBuilder
-      }
-    },
-    live: {
-      libx264: {
-        default: defaultX264LiveOptionsBuilder
-      },
-      aac: {
-        default: defaultAACOptionsBuilder
-      }
-    }
-  }
+  private readonly availableEncoders = getDefaultAvailableEncoders()
 
   private availableProfiles = {
     vod: [] as string[],
@@ -184,14 +77,14 @@ class VideoTranscodingProfilesManager {
   addEncoderPriority (type: 'vod' | 'live', streamType: 'audio' | 'video', encoder: string, priority: number) {
     this.encodersPriorities[type][streamType].push({ name: encoder, priority })
 
-    resetSupportedEncoders()
+    FFmpegCommandWrapper.resetSupportedEncoders()
   }
 
   removeEncoderPriority (type: 'vod' | 'live', streamType: 'audio' | 'video', encoder: string, priority: number) {
     this.encodersPriorities[type][streamType] = this.encodersPriorities[type][streamType]
                                                     .filter(o => o.name !== encoder && o.priority !== priority)
 
-    resetSupportedEncoders()
+    FFmpegCommandWrapper.resetSupportedEncoders()
   }
 
   private getEncodersByPriority (type: 'vod' | 'live', streamType: 'audio' | 'video') {
@@ -247,42 +140,4 @@ class VideoTranscodingProfilesManager {
 
 export {
   VideoTranscodingProfilesManager
-}
-
-// ---------------------------------------------------------------------------
-
-function getTargetBitrate (options: {
-  inputBitrate: number
-  resolution: VideoResolution
-  ratio: number
-  fps: number
-}) {
-  const { inputBitrate, resolution, ratio, fps } = options
-
-  const capped = capBitrate(inputBitrate, getAverageBitrate({ resolution, fps, ratio }))
-  const limit = getMinLimitBitrate({ resolution, fps, ratio })
-
-  return Math.max(limit, capped)
-}
-
-function capBitrate (inputBitrate: number, targetBitrate: number) {
-  if (!inputBitrate) return targetBitrate
-
-  // Add 30% margin to input bitrate
-  const inputBitrateWithMargin = inputBitrate + (inputBitrate * 0.3)
-
-  return Math.min(targetBitrate, inputBitrateWithMargin)
-}
-
-function getCommonOutputOptions (targetBitrate: number, streamNum?: number) {
-  return [
-    `-preset veryfast`,
-    `${buildStreamSuffix('-maxrate:v', streamNum)} ${targetBitrate}`,
-    `${buildStreamSuffix('-bufsize:v', streamNum)} ${targetBitrate * 2}`,
-
-    // NOTE: b-strategy 1 - heuristic algorithm, 16 is optimal B-frames for it
-    `-b_strategy 1`,
-    // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
-    `-bf 16`
-  ]
 }

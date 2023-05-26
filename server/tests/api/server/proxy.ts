@@ -122,38 +122,44 @@ describe('Test proxy', function () {
   describe('Object storage', function () {
     if (areMockObjectStorageTestsDisabled()) return
 
+    const objectStorage = new ObjectStorageCommand()
+
     before(async function () {
       this.timeout(30000)
 
-      await ObjectStorageCommand.prepareDefaultMockBuckets()
+      await objectStorage.prepareDefaultMockBuckets()
     })
 
     it('Should succeed to upload to object storage with the appropriate proxy config', async function () {
       this.timeout(120000)
 
       await servers[0].kill()
-      await servers[0].run(ObjectStorageCommand.getDefaultMockConfig(), { env: goodEnv })
+      await servers[0].run(objectStorage.getDefaultMockConfig(), { env: goodEnv })
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
       await waitJobs(servers)
 
       const video = await servers[0].videos.get({ id: uuid })
 
-      expectStartWith(video.files[0].fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
+      expectStartWith(video.files[0].fileUrl, objectStorage.getMockWebVideosBaseUrl())
     })
 
     it('Should fail to upload to object storage with a wrong proxy config', async function () {
       this.timeout(120000)
 
       await servers[0].kill()
-      await servers[0].run(ObjectStorageCommand.getDefaultMockConfig(), { env: badEnv })
+      await servers[0].run(objectStorage.getDefaultMockConfig(), { env: badEnv })
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
       await waitJobs(servers, { skipDelayed: true })
 
       const video = await servers[0].videos.get({ id: uuid })
 
-      expectNotStartWith(video.files[0].fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
+      expectNotStartWith(video.files[0].fileUrl, objectStorage.getMockWebVideosBaseUrl())
+    })
+
+    after(async function () {
+      await objectStorage.cleanupMock()
     })
   })
 

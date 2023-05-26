@@ -50,29 +50,8 @@ a {
   transition: color 0.3s;
 
   &:hover {
-    color: #fff;
+    color: pvar(--mainBackgroundColor);
   }
-}
-
-.privacy-concerns-button {
-  @include margin-left(auto);
-
-  padding: 5px 8px 5px 7px;
-  border-radius: 3px;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  font-weight: $font-semibold;
-
-  &:hover {
-    background-color: #000;
-  }
-}
-
-.privacy-concerns-okay {
-  @include margin-left(10px);
-
-  background-color: pvar(--mainColor);
 }
 
 @media screen and (max-width: 1300px) {

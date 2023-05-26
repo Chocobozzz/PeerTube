@@ -40,7 +40,7 @@ const maxBitPerPixel: BitPerPixel = {
   [VideoResolution.H_4K]: 0.14
 }
 
-function getAverageBitrate (options: {
+function getAverageTheoreticalBitrate (options: {
   resolution: VideoResolution
   ratio: number
   fps: number
@@ -51,7 +51,7 @@ function getAverageBitrate (options: {
   return targetBitrate
 }
 
-function getMaxBitrate (options: {
+function getMaxTheoreticalBitrate (options: {
   resolution: VideoResolution
   ratio: number
   fps: number
@@ -62,7 +62,7 @@ function getMaxBitrate (options: {
   return targetBitrate
 }
 
-function getMinLimitBitrate (options: {
+function getMinTheoreticalBitrate (options: {
   resolution: VideoResolution
   ratio: number
   fps: number
@@ -76,9 +76,9 @@ function getMinLimitBitrate (options: {
 // ---------------------------------------------------------------------------
 
 export {
-  getAverageBitrate,
-  getMaxBitrate,
-  getMinLimitBitrate
+  getAverageTheoreticalBitrate,
+  getMaxTheoreticalBitrate,
+  getMinTheoreticalBitrate
 }
 
 // ---------------------------------------------------------------------------

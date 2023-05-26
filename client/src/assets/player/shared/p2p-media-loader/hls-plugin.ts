@@ -349,7 +349,7 @@ class Html5Hlsjs {
   }
 
   private _oneLevelObjClone (obj: { [ id: string ]: any }) {
-    const result = {}
+    const result: { [id: string]: any } = {}
     const objKeys = Object.keys(obj)
     for (let i = 0; i < objKeys.length; i++) {
       result[objKeys[i]] = obj[objKeys[i]]
@@ -403,7 +403,7 @@ class Html5Hlsjs {
       this._duration = this.isLive ? Infinity : data.details.totalduration
 
       // Increase network error recovery for lives since they can be broken (server restart, stream interruption etc)
-      if (this.isLive) this.maxNetworkErrorRecovery = 300
+      if (this.isLive) this.maxNetworkErrorRecovery = 30
     })
 
     this.hls.once(Hlsjs.Events.FRAG_LOADED, () => {

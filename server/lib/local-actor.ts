@@ -1,5 +1,5 @@
 import { remove } from 'fs-extra'
-import LRUCache from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 import { join } from 'path'
 import { Transaction } from 'sequelize/types'
 import { ActorModel } from '@server/models/actor/actor'

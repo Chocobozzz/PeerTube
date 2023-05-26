@@ -170,7 +170,7 @@ describe('Test comments notifications', function () {
     let baseParams: CheckerBaseParams
     const byAccountDisplayName = 'super root name'
 
-    before(async () => {
+    before(async function () {
       baseParams = {
         server: servers[0],
         emails,

@@ -1,0 +1,6 @@
+register
+server
+shared
+meta.json
+peertube-runner.ts
+tsconfig.json

@@ -8,7 +8,7 @@
 
   <div class="peertube-select-container peertube-select-button ms-2 me-2">
     <select [(ngModel)]="notificationSortType" (ngModelChange)="onChangeSortColumn()" class="form-control">
-      <option value="undefined" disabled>Sort by</option>
+      <option value="undefined" disabled i18n>Sort by</option>
       <option value="createdAt" i18n>Newest first</option>
       <option value="read" [disabled]="!hasUnreadNotifications()" i18n>Unread first</option>
     </select>

@@ -133,6 +133,7 @@ import { AutoFollowIndexInstances } from './server/lib/schedulers/auto-follow-in
 import { RemoveDanglingResumableUploadsScheduler } from './server/lib/schedulers/remove-dangling-resumable-uploads-scheduler'
 import { VideoViewsBufferScheduler } from './server/lib/schedulers/video-views-buffer-scheduler'
 import { GeoIPUpdateScheduler } from './server/lib/schedulers/geo-ip-update-scheduler'
+import { RunnerJobWatchDogScheduler } from './server/lib/schedulers/runner-job-watch-dog-scheduler'
 import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
 import { PeerTubeSocket } from './server/lib/peertube-socket'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
@@ -331,6 +332,7 @@ async function startApplication () {
   VideoChannelSyncLatestScheduler.Instance.enable()
   VideoViewsBufferScheduler.Instance.enable()
   GeoIPUpdateScheduler.Instance.enable()
+  RunnerJobWatchDogScheduler.Instance.enable()
 
   OpenTelemetryMetrics.Instance.registerMetrics({ trackerServer })
 

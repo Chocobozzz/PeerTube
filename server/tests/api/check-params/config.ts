@@ -103,6 +103,9 @@ describe('Test config API validators', function () {
     },
     transcoding: {
       enabled: true,
+      remoteRunners: {
+        enabled: true
+      },
       allowAdditionalExtensions: true,
       allowAudioFiles: true,
       concurrency: 1,
@@ -140,6 +143,9 @@ describe('Test config API validators', function () {
 
       transcoding: {
         enabled: true,
+        remoteRunners: {
+          enabled: true
+        },
         threads: 4,
         profile: 'live_profile',
         resolutions: {
@@ -156,7 +162,10 @@ describe('Test config API validators', function () {
       }
     },
     videoStudio: {
-      enabled: true
+      enabled: true,
+      remoteRunners: {
+        enabled: true
+      }
     },
     import: {
       videos: {

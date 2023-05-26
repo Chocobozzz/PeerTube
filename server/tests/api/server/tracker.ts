@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await,@typescript-eslint/no-floating-promises */
 
-import magnetUtil from 'magnet-uri'
+import { decode as magnetUriDecode, encode as magnetUriEncode } from 'magnet-uri'
 import WebTorrent from 'webtorrent'
 import { cleanupTests, createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
@@ -19,15 +19,14 @@ describe('Test tracker', function () {
       const video = await server.videos.get({ id: uuid })
       goodMagnet = video.files[0].magnetUri
 
-      const parsed = magnetUtil.decode(goodMagnet)
+      const parsed = magnetUriDecode(goodMagnet)
       parsed.infoHash = '010597bb88b1968a5693a4fa8267c592ca65f2e9'
 
-      badMagnet = magnetUtil.encode(parsed)
+      badMagnet = magnetUriEncode(parsed)
     }
   })
 
   it('Should succeed with the correct infohash', function (done) {
-    this.timeout(10000)
     const webtorrent = new WebTorrent()
 
     const torrent = webtorrent.add(goodMagnet)

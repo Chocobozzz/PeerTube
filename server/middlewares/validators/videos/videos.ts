@@ -7,6 +7,7 @@ import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express-handler'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
 import { arrayify, getAllPrivacies } from '@shared/core-utils'
+import { getVideoStreamDuration } from '@shared/ffmpeg'
 import { HttpStatusCode, ServerErrorCode, UserRight, VideoInclude, VideoState } from '@shared/models'
 import {
   exists,
@@ -39,7 +40,6 @@ import {
   isVideoSupportValid
 } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
-import { getVideoStreamDuration } from '../../../helpers/ffmpeg'
 import { logger } from '../../../helpers/logger'
 import { deleteFileAndCatch } from '../../../helpers/utils'
 import { getVideoWithAttributes } from '../../../helpers/video'
@@ -254,7 +254,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
 
     const video = getVideoWithAttributes(res)
-    if (req.body.privacy && video.isLive && video.state !== VideoState.WAITING_FOR_LIVE) {
+    if (video.isLive && video.privacy !== req.body.privacy && video.state !== VideoState.WAITING_FOR_LIVE) {
       return res.fail({ message: 'Cannot update privacy of a live that has already started' })
     }
 

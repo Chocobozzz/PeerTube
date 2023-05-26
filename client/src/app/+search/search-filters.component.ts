@@ -118,11 +118,11 @@ export class SearchFiltersComponent implements OnInit {
     this.onDurationOrPublishedUpdated()
   }
 
-  resetField (fieldName: string, value?: any) {
-    this.advancedSearch[fieldName] = value
+  resetField (fieldName: keyof AdvancedSearch, value?: any) {
+    (this.advancedSearch as any)[fieldName] = value
   }
 
-  resetLocalField (fieldName: string, value?: any) {
+  resetLocalField (fieldName: keyof SearchFiltersComponent, value?: any) {
     this[fieldName] = value
     this.onDurationOrPublishedUpdated()
   }

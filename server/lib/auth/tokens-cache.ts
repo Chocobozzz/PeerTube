@@ -1,4 +1,4 @@
-import LRUCache from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 import { MOAuthTokenUser } from '@server/types/models'
 import { LRU_CACHE } from '../../initializers/constants'
 

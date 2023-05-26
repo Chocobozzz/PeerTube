@@ -48,11 +48,15 @@
   border-radius: 0.25rem;
   position: relative;
 
-  >label {
+  > .callout-title {
     position: relative;
     top: -5px;
     left: -10px;
     color: #6c757d !important;
+    font-size: 1rem;
+    font-weight: $font-bold;
+    margin-bottom: 0.5rem;
+    line-height: inherit;
   }
 
   &:not(.callout-light) {

@@ -1,6 +1,6 @@
-import { VideoPrivacy } from '../videos/video-privacy.enum'
 import { ClientScriptJSON } from '../plugins/plugin-package-json.model'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
+import { VideoPrivacy } from '../videos/video-privacy.enum'
 import { BroadcastMessageLevel } from './broadcast-message-level.type'
 
 export interface ServerConfigPlugin {
@@ -148,6 +148,10 @@ export interface ServerConfig {
 
     profile: string
     availableProfiles: string[]
+
+    remoteRunners: {
+      enabled: boolean
+    }
   }
 
   live: {
@@ -165,6 +169,10 @@ export interface ServerConfig {
     transcoding: {
       enabled: boolean
 
+      remoteRunners: {
+        enabled: boolean
+      }
+
       enabledResolutions: number[]
 
       profile: string
@@ -178,6 +186,10 @@ export interface ServerConfig {
 
   videoStudio: {
     enabled: boolean
+
+    remoteRunners: {
+      enabled: boolean
+    }
   }
 
   import: {

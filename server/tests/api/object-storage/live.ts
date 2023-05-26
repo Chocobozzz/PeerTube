@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { expectStartWith, MockObjectStorageProxy, testVideoResolutions } from '@server/tests/shared'
+import { expectStartWith, MockObjectStorageProxy, SQLCommand, testLiveVideoResolutions } from '@server/tests/shared'
 import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, LiveVideoCreate, VideoPrivacy } from '@shared/models'
 import {
+  cleanupTests,
   createMultipleServers,
   doubleFollow,
   findExternalSavedVideo,
-  killallServers,
   makeRawRequest,
   ObjectStorageCommand,
   PeerTubeServer,
@@ -36,7 +36,14 @@ async function createLive (server: PeerTubeServer, permanent: boolean) {
   return uuid
 }
 
-async function checkFilesExist (servers: PeerTubeServer[], videoUUID: string, numberOfFiles: number) {
+async function checkFilesExist (options: {
+  servers: PeerTubeServer[]
+  videoUUID: string
+  numberOfFiles: number
+  objectStorage: ObjectStorageCommand
+}) {
+  const { servers, videoUUID, numberOfFiles, objectStorage } = options
+
   for (const server of servers) {
     const video = await server.videos.get({ id: videoUUID })
 
@@ -47,14 +54,21 @@ async function checkFilesExist (servers: PeerTubeServer[], videoUUID: string, nu
     expect(files).to.have.lengthOf(numberOfFiles)
 
     for (const file of files) {
-      expectStartWith(file.fileUrl, ObjectStorageCommand.getMockPlaylistBaseUrl())
+      expectStartWith(file.fileUrl, objectStorage.getMockPlaylistBaseUrl())
 
       await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
     }
   }
 }
 
-async function checkFilesCleanup (server: PeerTubeServer, videoUUID: string, resolutions: number[]) {
+async function checkFilesCleanup (options: {
+  server: PeerTubeServer
+  videoUUID: string
+  resolutions: number[]
+  objectStorage: ObjectStorageCommand
+}) {
+  const { server, videoUUID, resolutions, objectStorage } = options
+
   const resolutionFiles = resolutions.map((_value, i) => `${i}.m3u8`)
 
   for (const playlistName of [ 'master.m3u8' ].concat(resolutionFiles)) {
@@ -62,7 +76,7 @@ async function checkFilesCleanup (server: PeerTubeServer, videoUUID: string, res
       videoUUID,
       playlistName,
       expectedStatus: HttpStatusCode.NOT_FOUND_404,
-      objectStorage: true
+      objectStorage
     })
   }
 
@@ -70,7 +84,7 @@ async function checkFilesCleanup (server: PeerTubeServer, videoUUID: string, res
     videoUUID,
     playlistNumber: 0,
     segment: 0,
-    objectStorage: true,
+    objectStorage,
     expectedStatus: HttpStatusCode.NOT_FOUND_404
   })
 }
@@ -79,19 +93,22 @@ describe('Object storage for lives', function () {
   if (areMockObjectStorageTestsDisabled()) return
 
   let servers: PeerTubeServer[]
+  let sqlCommandServer1: SQLCommand
+  const objectStorage = new ObjectStorageCommand()
 
   before(async function () {
     this.timeout(120000)
 
-    await ObjectStorageCommand.prepareDefaultMockBuckets()
-
-    servers = await createMultipleServers(2, ObjectStorageCommand.getDefaultMockConfig())
+    await objectStorage.prepareDefaultMockBuckets()
+    servers = await createMultipleServers(2, objectStorage.getDefaultMockConfig())
 
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
     await doubleFollow(servers[0], servers[1])
 
     await servers[0].config.enableTranscoding()
+
+    sqlCommandServer1 = new SQLCommand(servers[0])
   })
 
   describe('Without live transcoding', function () {
@@ -109,13 +126,14 @@ describe('Object storage for lives', function () {
       const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUID })
       await waitUntilLivePublishedOnAllServers(servers, videoUUID)
 
-      await testVideoResolutions({
+      await testLiveVideoResolutions({
         originServer: servers[0],
+        sqlCommand: sqlCommandServer1,
         servers,
         liveVideoId: videoUUID,
         resolutions: [ 720 ],
         transcoded: false,
-        objectStorage: true
+        objectStorage
       })
 
       await stopFfmpeg(ffmpegCommand)
@@ -127,11 +145,11 @@ describe('Object storage for lives', function () {
       await waitUntilLiveReplacedByReplayOnAllServers(servers, videoUUID)
       await waitJobs(servers)
 
-      await checkFilesExist(servers, videoUUID, 1)
+      await checkFilesExist({ servers, videoUUID, numberOfFiles: 1, objectStorage })
     })
 
     it('Should have cleaned up live files from object storage', async function () {
-      await checkFilesCleanup(servers[0], videoUUID, [ 720 ])
+      await checkFilesCleanup({ server: servers[0], videoUUID, resolutions: [ 720 ], objectStorage })
     })
   })
 
@@ -155,13 +173,14 @@ describe('Object storage for lives', function () {
         const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUIDNonPermanent })
         await waitUntilLivePublishedOnAllServers(servers, videoUUIDNonPermanent)
 
-        await testVideoResolutions({
+        await testLiveVideoResolutions({
           originServer: servers[0],
+          sqlCommand: sqlCommandServer1,
           servers,
           liveVideoId: videoUUIDNonPermanent,
           resolutions,
           transcoded: true,
-          objectStorage: true
+          objectStorage
         })
 
         await stopFfmpeg(ffmpegCommand)
@@ -173,11 +192,11 @@ describe('Object storage for lives', function () {
         await waitUntilLiveReplacedByReplayOnAllServers(servers, videoUUIDNonPermanent)
         await waitJobs(servers)
 
-        await checkFilesExist(servers, videoUUIDNonPermanent, 5)
+        await checkFilesExist({ servers, videoUUID: videoUUIDNonPermanent, numberOfFiles: 5, objectStorage })
       })
 
       it('Should have cleaned up live files from object storage', async function () {
-        await checkFilesCleanup(servers[0], videoUUIDNonPermanent, resolutions)
+        await checkFilesCleanup({ server: servers[0], videoUUID: videoUUIDNonPermanent, resolutions, objectStorage })
       })
     })
 
@@ -194,13 +213,14 @@ describe('Object storage for lives', function () {
         const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUIDPermanent })
         await waitUntilLivePublishedOnAllServers(servers, videoUUIDPermanent)
 
-        await testVideoResolutions({
+        await testLiveVideoResolutions({
           originServer: servers[0],
+          sqlCommand: sqlCommandServer1,
           servers,
           liveVideoId: videoUUIDPermanent,
           resolutions,
           transcoded: true,
-          objectStorage: true
+          objectStorage
         })
 
         await stopFfmpeg(ffmpegCommand)
@@ -215,11 +235,11 @@ describe('Object storage for lives', function () {
         const videoLiveDetails = await servers[0].videos.get({ id: videoUUIDPermanent })
         const replay = await findExternalSavedVideo(servers[0], videoLiveDetails)
 
-        await checkFilesExist(servers, replay.uuid, 5)
+        await checkFilesExist({ servers, videoUUID: replay.uuid, numberOfFiles: 5, objectStorage })
       })
 
       it('Should have cleaned up live files from object storage', async function () {
-        await checkFilesCleanup(servers[0], videoUUIDPermanent, resolutions)
+        await checkFilesCleanup({ server: servers[0], videoUUID: videoUUIDPermanent, resolutions, objectStorage })
       })
     })
   })
@@ -232,9 +252,10 @@ describe('Object storage for lives', function () {
       this.timeout(120000)
 
       const port = await mockObjectStorageProxy.initialize()
-      baseMockUrl = `http://127.0.0.1:${port}/streaming-playlists`
+      const bucketName = objectStorage.getMockStreamingPlaylistsBucketName()
+      baseMockUrl = `http://127.0.0.1:${port}/${bucketName}`
 
-      await ObjectStorageCommand.createMockBucket('streaming-playlists')
+      await objectStorage.prepareDefaultMockBuckets()
 
       const config = {
         object_storage: {
@@ -245,7 +266,7 @@ describe('Object storage for lives', function () {
           credentials: ObjectStorageCommand.getMockCredentialsConfig(),
 
           streaming_playlists: {
-            bucket_name: 'streaming-playlists',
+            bucket_name: bucketName,
             prefix: '',
             base_url: baseMockUrl
           }
@@ -266,13 +287,14 @@ describe('Object storage for lives', function () {
       const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUIDPermanent })
       await waitUntilLivePublishedOnAllServers(servers, videoUUIDPermanent)
 
-      await testVideoResolutions({
+      await testLiveVideoResolutions({
         originServer: servers[0],
+        sqlCommand: sqlCommandServer1,
         servers,
         liveVideoId: videoUUIDPermanent,
         resolutions: [ 720 ],
         transcoded: true,
-        objectStorage: true,
+        objectStorage,
         objectStorageBaseUrl: baseMockUrl
       })
 
@@ -281,6 +303,9 @@ describe('Object storage for lives', function () {
   })
 
   after(async function () {
-    await killallServers(servers)
+    await sqlCommandServer1.cleanup()
+    await objectStorage.cleanupMock()
+
+    await cleanupTests(servers)
   })
 })

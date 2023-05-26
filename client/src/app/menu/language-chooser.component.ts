@@ -1,6 +1,7 @@
 import { Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core'
 import { getDevLocale, isOnDevLocale, sortBy } from '@app/helpers'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { objectKeysTyped } from '@shared/core-utils'
 import { getCompleteLocale, getShortLocale, I18N_LOCALES } from '@shared/core-utils/i18n'
 
 @Component({
@@ -17,8 +18,8 @@ export class LanguageChooserComponent {
     private modalService: NgbModal,
     @Inject(LOCALE_ID) private localeId: string
   ) {
-    const l = Object.keys(I18N_LOCALES)
-                    .map(k => ({ id: k, label: I18N_LOCALES[k], iso: getShortLocale(k) }))
+    const l = objectKeysTyped(I18N_LOCALES)
+      .map(k => ({ id: k, label: I18N_LOCALES[k], iso: getShortLocale(k) }))
 
     this.languages = sortBy(l, 'label')
   }
@@ -35,7 +36,7 @@ export class LanguageChooserComponent {
     const english = 'English'
     const locale = isOnDevLocale() ? getDevLocale() : getCompleteLocale(this.localeId)
 
-    if (locale) return I18N_LOCALES[locale] || english
+    if (locale) return I18N_LOCALES[locale as keyof typeof I18N_LOCALES] || english
     return english
   }
 }

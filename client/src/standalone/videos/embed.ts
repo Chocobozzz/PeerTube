@@ -52,7 +52,7 @@ export class PeerTubeEmbed {
     this.liveManager = new LiveManager(this.playerHTML)
 
     try {
-      this.config = JSON.parse(window['PeerTubeServerConfig'])
+      this.config = JSON.parse((window as any)['PeerTubeServerConfig'])
     } catch (err) {
       logger.error('Cannot parse HTML config.', err)
     }
@@ -254,9 +254,9 @@ export class PeerTubeEmbed {
       this.player.dispose()
       this.playerHTML.removePlayerElement()
       this.playerHTML.displayError('This video is not available because the remote instance is not responding.', translations)
-    })
+    });
 
-    window['videojsPlayer'] = this.player
+    (window as any)['videojsPlayer'] = this.player
 
     this.buildCSS()
     this.buildPlayerDock(video)

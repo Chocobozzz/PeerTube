@@ -126,11 +126,14 @@ class ServerConfigManager {
       serverVersion: PEERTUBE_VERSION,
       serverCommit: this.serverCommit,
       transcoding: {
+        remoteRunners: {
+          enabled: CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED
+        },
         hls: {
-          enabled: CONFIG.TRANSCODING.HLS.ENABLED
+          enabled: CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.HLS.ENABLED
         },
         webtorrent: {
-          enabled: CONFIG.TRANSCODING.WEBTORRENT.ENABLED
+          enabled: CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.WEBTORRENT.ENABLED
         },
         enabledResolutions: this.getEnabledResolutions('vod'),
         profile: CONFIG.TRANSCODING.PROFILE,
@@ -150,6 +153,9 @@ class ServerConfigManager {
 
         transcoding: {
           enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
+          remoteRunners: {
+            enabled: CONFIG.LIVE.TRANSCODING.ENABLED && CONFIG.LIVE.TRANSCODING.REMOTE_RUNNERS.ENABLED
+          },
           enabledResolutions: this.getEnabledResolutions('live'),
           profile: CONFIG.LIVE.TRANSCODING.PROFILE,
           availableProfiles: VideoTranscodingProfilesManager.Instance.getAvailableProfiles('live')
@@ -160,7 +166,10 @@ class ServerConfigManager {
         }
       },
       videoStudio: {
-        enabled: CONFIG.VIDEO_STUDIO.ENABLED
+        enabled: CONFIG.VIDEO_STUDIO.ENABLED,
+        remoteRunners: {
+          enabled: CONFIG.VIDEO_STUDIO.REMOTE_RUNNERS.ENABLED
+        }
       },
       import: {
         videos: {

@@ -64,7 +64,7 @@
           (timestampClicked)="handleTimestampClicked($event)"
           [redraftValue]="commentReplyRedraftValue"
         >
-          <div *ngIf="comment.totalReplies !== 0 && !threadComments[comment.id]" (click)="viewReplies(comment.id)" class="view-replies mb-2">
+          <button *ngIf="comment.totalReplies !== 0 && !threadComments[comment.id]" (click)="viewReplies(comment.id)" class="view-replies mb-2 button-unstyle">
             <span class="chevron-down"></span>
 
             <ng-container *ngIf="comment.totalRepliesFromVideoAuthor > 0; then hasAuthorComments; else noAuthorComments"></ng-container>
@@ -81,7 +81,7 @@
             <ng-template i18n #noAuthorComments>View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}</ng-template>
 
             <my-loader size="sm" class="ms-1" [loading]="threadLoading[comment.id]"></my-loader>
-          </div>
+          </button>
         </my-video-comment>
 
       </div>

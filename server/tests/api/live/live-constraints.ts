@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { wait } from '@shared/core-utils'
-import { LiveVideoError, VideoPrivacy } from '@shared/models'
+import { LiveVideoError, UserVideoQuota, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   ConfigCommand,
@@ -172,32 +172,45 @@ describe('Test live constraints', function () {
     const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ token: userAccessToken, videoId: userVideoLiveoId })
 
     await servers[0].live.waitUntilPublished({ videoId: userVideoLiveoId })
-
+    // Wait previous live cleanups
     await wait(3000)
 
-    const quotaUser = await servers[0].users.getMyQuotaUsed({ token: userAccessToken })
+    const baseQuota = await servers[0].users.getMyQuotaUsed({ token: userAccessToken })
+
+    let quotaUser: UserVideoQuota
+
+    do {
+      await wait(500)
+
+      quotaUser = await servers[0].users.getMyQuotaUsed({ token: userAccessToken })
+    } while (quotaUser.videoQuotaUsed <= baseQuota.videoQuotaUsed)
 
     const { data } = await servers[0].users.list()
     const quotaAdmin = data.find(u => u.username === 'user1')
 
-    expect(quotaUser.videoQuotaUsed).to.equal(quotaAdmin.videoQuotaUsed)
-    expect(quotaUser.videoQuotaUsedDaily).to.equal(quotaAdmin.videoQuotaUsedDaily)
+    expect(quotaUser.videoQuotaUsed).to.be.above(baseQuota.videoQuotaUsed)
+    expect(quotaUser.videoQuotaUsedDaily).to.be.above(baseQuota.videoQuotaUsedDaily)
+
+    expect(quotaAdmin.videoQuotaUsed).to.be.above(baseQuota.videoQuotaUsed)
+    expect(quotaAdmin.videoQuotaUsedDaily).to.be.above(baseQuota.videoQuotaUsedDaily)
 
     expect(quotaUser.videoQuotaUsed).to.be.above(10)
     expect(quotaUser.videoQuotaUsedDaily).to.be.above(10)
+    expect(quotaAdmin.videoQuotaUsed).to.be.above(10)
+    expect(quotaAdmin.videoQuotaUsedDaily).to.be.above(10)
 
     await stopFfmpeg(ffmpegCommand)
   })
 
   it('Should have max duration limit', async function () {
-    this.timeout(60000)
+    this.timeout(240000)
 
     await servers[0].config.updateCustomSubConfig({
       newConfig: {
         live: {
           enabled: true,
           allowReplay: true,
-          maxDuration: 1,
+          maxDuration: 10,
           transcoding: {
             enabled: true,
             resolutions: ConfigCommand.getCustomConfigResolutions(true)

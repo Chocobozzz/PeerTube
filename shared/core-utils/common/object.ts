@@ -23,8 +23,16 @@ function omit <O extends object, K extends keyof O> (object: O, keys: K[]): Excl
   return result
 }
 
+function objectKeysTyped <O extends object, K extends keyof O> (object: O): K[] {
+  return (Object.keys(object) as K[])
+}
+
 function getKeys <O extends object, K extends keyof O> (object: O, keys: K[]): K[] {
   return (Object.keys(object) as K[]).filter(k => keys.includes(k))
+}
+
+function hasKey <T extends object> (obj: T, k: keyof any): k is keyof T {
+  return k in obj
 }
 
 function sortObjectComparator (key: string, order: 'asc' | 'desc') {
@@ -45,10 +53,34 @@ function shallowCopy <T> (o: T): T {
   return Object.assign(Object.create(Object.getPrototypeOf(o)), o)
 }
 
+function simpleObjectsDeepEqual (a: any, b: any) {
+  if (a === b) return true
+
+  if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) {
+    return false
+  }
+
+  const keysA = Object.keys(a)
+  const keysB = Object.keys(b)
+
+  if (keysA.length !== keysB.length) return false
+
+  for (const key of keysA) {
+    if (!keysB.includes(key)) return false
+
+    if (!simpleObjectsDeepEqual(a[key], b[key])) return false
+  }
+
+  return true
+}
+
 export {
   pick,
   omit,
+  objectKeysTyped,
   getKeys,
+  hasKey,
   shallowCopy,
-  sortObjectComparator
+  sortObjectComparator,
+  simpleObjectsDeepEqual
 }

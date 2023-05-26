@@ -11,6 +11,7 @@ import { truncate } from 'lodash'
 import { pipeline } from 'stream'
 import { URL } from 'url'
 import { promisify } from 'util'
+import { promisify1, promisify2, promisify3 } from '@shared/core-utils'
 
 const objectConverter = (oldObject: any, keyConverter: (e: string) => string, valueConverter: (e: any) => any) => {
   if (!oldObject || typeof oldObject !== 'object') {
@@ -229,18 +230,6 @@ function execShell (command: string, options?: ExecOptions) {
 
 // ---------------------------------------------------------------------------
 
-function isOdd (num: number) {
-  return (num % 2) !== 0
-}
-
-function toEven (num: number) {
-  if (isOdd(num)) return num + 1
-
-  return num
-}
-
-// ---------------------------------------------------------------------------
-
 function generateRSAKeyPairPromise (size: number) {
   return new Promise<{ publicKey: string, privateKey: string }>((res, rej) => {
     const options: RSAKeyPairOptions<'pem', 'pem'> = {
@@ -286,40 +275,6 @@ function generateED25519KeyPairPromise () {
 
 // ---------------------------------------------------------------------------
 
-function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
-  return function promisified (): Promise<A> {
-    return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {
-      func.apply(null, [ (err: any, res: A) => err ? reject(err) : resolve(res) ])
-    })
-  }
-}
-
-// Thanks to https://gist.github.com/kumasento/617daa7e46f13ecdd9b2
-function promisify1<T, A> (func: (arg: T, cb: (err: any, result: A) => void) => void): (arg: T) => Promise<A> {
-  return function promisified (arg: T): Promise<A> {
-    return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {
-      func.apply(null, [ arg, (err: any, res: A) => err ? reject(err) : resolve(res) ])
-    })
-  }
-}
-
-function promisify2<T, U, A> (func: (arg1: T, arg2: U, cb: (err: any, result: A) => void) => void): (arg1: T, arg2: U) => Promise<A> {
-  return function promisified (arg1: T, arg2: U): Promise<A> {
-    return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {
-      func.apply(null, [ arg1, arg2, (err: any, res: A) => err ? reject(err) : resolve(res) ])
-    })
-  }
-}
-
-// eslint-disable-next-line max-len
-function promisify3<T, U, V, A> (func: (arg1: T, arg2: U, arg3: V, cb: (err: any, result: A) => void) => void): (arg1: T, arg2: U, arg3: V) => Promise<A> {
-  return function promisified (arg1: T, arg2: U, arg3: V): Promise<A> {
-    return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {
-      func.apply(null, [ arg1, arg2, arg3, (err: any, res: A) => err ? reject(err) : resolve(res) ])
-    })
-  }
-}
-
 const randomBytesPromise = promisify1<number, Buffer>(randomBytes)
 const scryptPromise = promisify3<string, string, number, Buffer>(scrypt)
 const execPromise2 = promisify2<string, any, string>(exec)
@@ -345,10 +300,6 @@ export {
   pageToStartAndCount,
   peertubeTruncate,
 
-  promisify0,
-  promisify1,
-  promisify2,
-
   scryptPromise,
 
   randomBytesPromise,
@@ -360,8 +311,5 @@ export {
   execPromise,
   pipelinePromise,
 
-  parseSemVersion,
-
-  isOdd,
-  toEven
+  parseSemVersion
 }

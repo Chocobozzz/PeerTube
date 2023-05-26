@@ -14,10 +14,10 @@
   <ng-template pTemplate="caption">
     <div class="caption">
       <div class="left-buttons">
-        <a class="block-button" (click)="addServersToBlock()" (key.enter)="addServersToBlock()">
+        <button class="peertube-create-button" (click)="addServersToBlock()" (key.enter)="addServersToBlock()">
           <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Mute domain</ng-container>
-        </a>
+        </button>
       </div>
 
       <div class="ms-auto">

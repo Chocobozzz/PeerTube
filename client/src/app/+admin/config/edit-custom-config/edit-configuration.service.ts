@@ -61,6 +61,18 @@ export class EditConfigurationService {
     return form.value['transcoding']['enabled'] === true
   }
 
+  isRemoteRunnerVODEnabled (form: FormGroup) {
+    return form.value['transcoding']['remoteRunners']['enabled'] === true
+  }
+
+  isRemoteRunnerLiveEnabled (form: FormGroup) {
+    return form.value['live']['transcoding']['remoteRunners']['enabled'] === true
+  }
+
+  isStudioEnabled (form: FormGroup) {
+    return form.value['videoStudio']['enabled'] === true
+  }
+
   isLiveEnabled (form: FormGroup) {
     return form.value['live']['enabled'] === true
   }

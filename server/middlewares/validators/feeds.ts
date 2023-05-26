@@ -3,6 +3,7 @@ import { param, query } from 'express-validator'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isValidRSSFeed } from '../../helpers/custom-validators/feeds'
 import { exists, isIdOrUUIDValid, isIdValid, toCompleteUUID } from '../../helpers/custom-validators/misc'
+import { buildPodcastGroupsCache } from '../cache'
 import {
   areValidationErrors,
   checkCanSeeVideo,
@@ -43,6 +44,21 @@ function setFeedFormatContentType (req: express.Request, res: express.Response, 
     acceptableContentTypes = [ 'application/xml', 'text/xml' ]
   }
 
+  return feedContentTypeResponse(req, res, next, acceptableContentTypes)
+}
+
+function setFeedPodcastContentType (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const acceptableContentTypes = [ 'application/rss+xml', 'application/xml', 'text/xml' ]
+
+  return feedContentTypeResponse(req, res, next, acceptableContentTypes)
+}
+
+function feedContentTypeResponse (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+  acceptableContentTypes: string[]
+) {
   if (req.accepts(acceptableContentTypes)) {
     res.set('Content-Type', req.accepts(acceptableContentTypes) as string)
   } else {
@@ -54,6 +70,8 @@ function setFeedFormatContentType (req: express.Request, res: express.Response, 
 
   return next()
 }
+
+// ---------------------------------------------------------------------------
 
 const videoFeedsValidator = [
   query('accountId')
@@ -81,6 +99,31 @@ const videoFeedsValidator = [
     return next()
   }
 ]
+
+// ---------------------------------------------------------------------------
+
+const videoFeedsPodcastValidator = [
+  query('videoChannelId')
+    .custom(isIdValid),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+    if (!await doesVideoChannelIdExist(req.query.videoChannelId, res)) return
+
+    return next()
+  }
+]
+
+const videoFeedsPodcastSetCacheKey = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (req.query.videoChannelId) {
+      res.locals.apicacheGroups = [ buildPodcastGroupsCache({ channelId: req.query.videoChannelId }) ]
+    }
+
+    return next()
+  }
+]
+// ---------------------------------------------------------------------------
 
 const videoSubscriptionFeedsValidator = [
   query('accountId')
@@ -126,7 +169,10 @@ const videoCommentsFeedsValidator = [
 export {
   feedsFormatValidator,
   setFeedFormatContentType,
+  setFeedPodcastContentType,
   videoFeedsValidator,
+  videoFeedsPodcastValidator,
   videoSubscriptionFeedsValidator,
+  videoFeedsPodcastSetCacheKey,
   videoCommentsFeedsValidator
 }

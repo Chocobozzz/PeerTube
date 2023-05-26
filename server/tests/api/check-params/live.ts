@@ -553,9 +553,15 @@ describe('Test video lives API validator', function () {
       const ffmpegCommand = sendRTMPStream({ rtmpBaseUrl: live.rtmpUrl, streamKey: live.streamKey })
 
       await command.waitUntilPublished({ videoId: video.id })
+
       await server.videos.update({
         id: video.id,
-        attributes: { privacy: VideoPrivacy.PUBLIC },
+        attributes: { privacy: VideoPrivacy.PUBLIC } // Same privacy, it's fine
+      })
+
+      await server.videos.update({
+        id: video.id,
+        attributes: { privacy: VideoPrivacy.UNLISTED },
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
 

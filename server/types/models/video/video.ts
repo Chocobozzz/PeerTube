@@ -13,7 +13,7 @@ import {
   MChannelAccountSummaryFormattable,
   MChannelActor,
   MChannelFormattable,
-  MChannelHost,
+  MChannelHostOnly,
   MChannelUserId
 } from './video-channels'
 import { MVideoFile, MVideoFileRedundanciesAll, MVideoFileRedundanciesOpt } from './video-file'
@@ -151,7 +151,7 @@ export type MVideoWithChannelActor =
 
 export type MVideoWithHost =
   MVideo &
-  Use<'VideoChannel', MChannelHost>
+  Use<'VideoChannel', MChannelHostOnly>
 
 export type MVideoFullLight =
   MVideo &

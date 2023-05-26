@@ -20,14 +20,14 @@ module.exports = {
 
     capabilities: [
       {
-        browserName: 'chrome',
+        'browserName': 'chrome',
         'goog:chromeOptions': {
           args: [ '--headless', '--disable-gpu', windowSizeArg ],
           prefs
         }
       },
       {
-        browserName: 'firefox',
+        'browserName': 'firefox',
         'moz:firefoxOptions': {
           binary: '/usr/bin/firefox-developer-edition',
           args: [ '--headless', windowSizeArg ],

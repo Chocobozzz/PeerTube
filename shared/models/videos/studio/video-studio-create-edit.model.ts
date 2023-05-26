@@ -40,3 +40,21 @@ export interface VideoStudioTaskWatermark {
     file: Blob | string
   }
 }
+
+// ---------------------------------------------------------------------------
+
+export function isVideoStudioTaskIntro (v: VideoStudioTask): v is VideoStudioTaskIntro {
+  return v.name === 'add-intro'
+}
+
+export function isVideoStudioTaskOutro (v: VideoStudioTask): v is VideoStudioTaskOutro {
+  return v.name === 'add-outro'
+}
+
+export function isVideoStudioTaskWatermark (v: VideoStudioTask): v is VideoStudioTaskWatermark {
+  return v.name === 'add-watermark'
+}
+
+export function hasVideoStudioTaskFile (v: VideoStudioTask): v is VideoStudioTaskIntro | VideoStudioTaskOutro | VideoStudioTaskWatermark {
+  return isVideoStudioTaskIntro(v) || isVideoStudioTaskOutro(v) || isVideoStudioTaskWatermark(v)
+}

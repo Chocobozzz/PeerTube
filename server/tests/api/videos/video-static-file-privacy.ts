@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { decode } from 'magnet-uri'
-import { checkVideoFileTokenReinjection, expectStartWith } from '@server/tests/shared'
+import { checkVideoFileTokenReinjection, expectStartWith, parseTorrentVideo } from '@server/tests/shared'
 import { getAllFiles, wait } from '@shared/core-utils'
 import { HttpStatusCode, LiveVideo, VideoDetails, VideoPrivacy } from '@shared/models'
 import {
@@ -10,7 +10,6 @@ import {
   createSingleServer,
   findExternalSavedVideo,
   makeRawRequest,
-  parseTorrentVideo,
   PeerTubeServer,
   sendRTMPStream,
   setAccessTokensToServers,

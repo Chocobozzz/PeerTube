@@ -1,6 +1,7 @@
 import videojs from 'video.js'
 import { PlaybackMetricCreate } from '../../../../../../shared/models'
 import { MetricsPluginOptions, PlayerMode, PlayerNetworkInfo } from '../../types'
+import { logger } from '@root-helpers/logger'
 
 const Plugin = videojs.getPlugin('plugin')
 
@@ -99,6 +100,7 @@ class MetricsPlugin extends Plugin {
       const headers = new Headers({ 'Content-type': 'application/json; charset=UTF-8' })
 
       return fetch(this.metricsUrl, { method: 'POST', body: JSON.stringify(body), headers })
+        .catch(err => logger.error('Cannot send metrics to the server.', err))
     }, this.CONSTANTS.METRICS_INTERVAL)
   }
 

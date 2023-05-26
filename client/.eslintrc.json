@@ -18,8 +18,7 @@
       },
       "extends": [
         "../.eslintrc.json",
-        "plugin:@angular-eslint/ng-cli-compat",
-        "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
+        "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
@@ -155,6 +154,10 @@
         "object-shorthand": [
           "error",
           "properties"
+        ],
+        "quote-props": [
+          "error",
+          "consistent-as-needed"
         ]
       }
     },
@@ -163,7 +166,8 @@
         "*.html"
       ],
       "extends": [
-        "plugin:@angular-eslint/template/recommended"
+        "plugin:@angular-eslint/template/recommended",
+        "plugin:@angular-eslint/template/accessibility"
       ],
       "rules": {}
     }

@@ -1,4 +1,4 @@
-import { mapValues, pick } from 'lodash-es'
+import { mapValues } from 'lodash-es'
 import { firstValueFrom } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core'
@@ -6,11 +6,12 @@ import { HooksService } from '@app/core'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { logger } from '@root-helpers/logger'
 import { videoRequiresAuth } from '@root-helpers/video'
+import { objectKeysTyped, pick } from '@shared/core-utils'
 import { VideoCaption, VideoFile, VideoPrivacy } from '@shared/models'
 import { BytesPipe, NumberFormatterPipe, VideoDetails, VideoFileTokenService, VideoService } from '../shared-main'
 
 type DownloadType = 'video' | 'subtitles'
-type FileMetadata = { [key: string]: { label: string, value: string } }
+type FileMetadata = { [key: string]: { label: string, value: string | number } }
 
 @Component({
   selector: 'my-video-download',
@@ -218,10 +219,10 @@ export class VideoDownloadComponent {
     const keyToTranslateFunction = {
       encoder: (value: string) => ({ label: $localize`Encoder`, value }),
       format_long_name: (value: string) => ({ label: $localize`Format name`, value }),
-      size: (value: number) => ({ label: $localize`Size`, value: this.bytesPipe.transform(value, 2) }),
-      bit_rate: (value: number) => ({
+      size: (value: number | string) => ({ label: $localize`Size`, value: this.bytesPipe.transform(+value, 2) }),
+      bit_rate: (value: number | string) => ({
         label: $localize`Bitrate`,
-        value: `${this.numbersPipe.transform(value)}bps`
+        value: `${this.numbersPipe.transform(+value)}bps`
       })
     }
 
@@ -230,8 +231,8 @@ export class VideoDownloadComponent {
     delete sanitizedFormat.tags
 
     return mapValues(
-      pick(sanitizedFormat, Object.keys(keyToTranslateFunction)),
-      (val, key) => keyToTranslateFunction[key](val)
+      pick(sanitizedFormat, objectKeysTyped(keyToTranslateFunction)),
+      (val: string, key: keyof typeof keyToTranslateFunction) => keyToTranslateFunction[key](val)
     )
   }
 
@@ -242,29 +243,29 @@ export class VideoDownloadComponent {
     let keyToTranslateFunction = {
       codec_long_name: (value: string) => ({ label: $localize`Codec`, value }),
       profile: (value: string) => ({ label: $localize`Profile`, value }),
-      bit_rate: (value: number) => ({
+      bit_rate: (value: number | string) => ({
         label: $localize`Bitrate`,
-        value: `${this.numbersPipe.transform(value)}bps`
+        value: `${this.numbersPipe.transform(+value)}bps`
       })
     }
 
     if (type === 'video') {
       keyToTranslateFunction = Object.assign(keyToTranslateFunction, {
-        width: (value: number) => ({ label: $localize`Resolution`, value: `${value}x${stream.height}` }),
+        width: (value: string | number) => ({ label: $localize`Resolution`, value: `${value}x${stream.height}` }),
         display_aspect_ratio: (value: string) => ({ label: $localize`Aspect ratio`, value }),
         avg_frame_rate: (value: string) => ({ label: $localize`Average frame rate`, value }),
         pix_fmt: (value: string) => ({ label: $localize`Pixel format`, value })
       })
     } else {
       keyToTranslateFunction = Object.assign(keyToTranslateFunction, {
-        sample_rate: (value: number) => ({ label: $localize`Sample rate`, value }),
-        channel_layout: (value: number) => ({ label: $localize`Channel Layout`, value })
+        sample_rate: (value: string | number) => ({ label: $localize`Sample rate`, value }),
+        channel_layout: (value: string | number) => ({ label: $localize`Channel Layout`, value })
       })
     }
 
     return mapValues(
       pick(stream, Object.keys(keyToTranslateFunction)),
-      (val, key) => keyToTranslateFunction[key](val)
+      (val: string, key: keyof typeof keyToTranslateFunction) => keyToTranslateFunction[key](val)
     )
   }
 

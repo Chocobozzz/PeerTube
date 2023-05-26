@@ -115,6 +115,7 @@
 
         <div class="form-group" *ngIf="isCreation()">
           <label i18n for="password">Password</label>
+
           <my-help *ngIf="isPasswordOptional()">
             <ng-template ptTemplate="customHtml">
               <ng-container i18n>
@@ -218,17 +219,17 @@
 
     <div class="danger-zone">
       <div class="form-group">
-        <label i18n>Send a link to reset the password by email to the user</label>
+        <div class="mb-1 fw-bold" i18n>Send a link to reset the password by email to the user</div>
         <button (click)="resetPassword()" i18n>Ask for new password</button>
       </div>
 
       <div class="form-group">
-        <label i18n>Manually set the user password</label>
+        <div class="mb-1 fw-bold" i18n>Manually set the user password</div>
         <my-user-password [userId]="user.id" [username]="user.username"></my-user-password>
       </div>
 
       <div *ngIf="user.twoFactorEnabled" class="form-group">
-        <label i18n>This user has two factor authentication enabled</label>
+        <div class="mb-1 fw-bold" i18n>This user has two factor authentication enabled</div>
         <button (click)="disableTwoFactorAuth()" i18n>Disable two factor authentication</button>
       </div>
     </div>

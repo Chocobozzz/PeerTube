@@ -1,25 +1,25 @@
 import { Job } from 'bullmq'
 import { readdir, remove } from 'fs-extra'
 import { join } from 'path'
-import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo } from '@server/helpers/ffmpeg'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { cleanupAndDestroyPermanentLive, cleanupTMPLiveFiles, cleanupUnsavedNormalLive } from '@server/lib/live'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveReplayBaseDirectory } from '@server/lib/paths'
 import { generateVideoMiniature } from '@server/lib/thumbnail'
-import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/transcoding'
+import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/hls-transcoding'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToNextState } from '@server/lib/video-state'
 import { VideoModel } from '@server/models/video/video'
 import { VideoBlacklistModel } from '@server/models/video/video-blacklist'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
+import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { MVideo, MVideoLive, MVideoLiveSession, MVideoWithAllFiles } from '@server/types/models'
+import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@shared/ffmpeg'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
-import { VideoPathManager } from '@server/lib/video-path-manager'
-import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting'
 
 const lTags = loggerTagsFactory('live', 'job')
 
@@ -218,12 +218,14 @@ async function assignReplayFilesToVideo (options: {
 
   for (const concatenatedTsFile of concatenatedTsFiles) {
     const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+    await video.reload()
 
     const concatenatedTsFilePath = join(replayDirectory, concatenatedTsFile)
 
     const probe = await ffprobePromise(concatenatedTsFilePath)
     const { audioStream } = await getAudioStream(concatenatedTsFilePath, probe)
     const { resolution } = await getVideoStreamDimensionsInfo(concatenatedTsFilePath, probe)
+    const fps = await getVideoStreamFPS(concatenatedTsFilePath, probe)
 
     try {
       await generateHlsPlaylistResolutionFromTS({
@@ -231,6 +233,7 @@ async function assignReplayFilesToVideo (options: {
         inputFileMutexReleaser,
         concatenatedTsFilePath,
         resolution,
+        fps,
         isAAC: audioStream?.codec_name === 'aac'
       })
     } catch (err) {

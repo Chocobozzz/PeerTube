@@ -39,6 +39,10 @@
   right: 5px;
 }
 
+.button-focus-within:focus-within {
+  box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
+}
+
 .dropdown-item {
   @include dropdown-with-icon-item;
 }

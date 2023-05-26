@@ -7,7 +7,7 @@
         [ngbTooltip]="autoPlayNextVideoTooltip" placement="bottom-right auto"
       >
         <span i18n>AUTOPLAY</span>
-        <my-input-switch  class="small" [(ngModel)]="autoPlayNextVideo" (ngModelChange)="switchAutoPlayNextVideo()"></my-input-switch>
+        <my-input-switch class="small" inputName="autoplay-next-video" [(ngModel)]="autoPlayNextVideo" (ngModelChange)="switchAutoPlayNextVideo()"></my-input-switch>
       </div>
     </div>
 

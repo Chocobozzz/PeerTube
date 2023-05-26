@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 @use 'bootstrap/scss/functions' as *;
 
 $primary-foreground-color: #fff;
@@ -18,7 +20,7 @@ $control-bar-button-width: 38px;
 
 $control-bar-total-height: $control-bar-height - $control-bar-slider-top;
 
-$slider-bg-color: lighten($primary-background-color, 33%);
+$slider-bg-color: color.adjust($primary-background-color, $lightness: 33%);
 
 $progress-margin: 10px;
 

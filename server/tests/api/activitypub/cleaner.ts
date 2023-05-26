@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
+import { SQLCommand } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import {
   cleanupTests,
@@ -13,6 +14,8 @@ import {
 
 describe('Test AP cleaner', function () {
   let servers: PeerTubeServer[] = []
+  const sqlCommands: SQLCommand[] = []
+
   let videoUUID1: string
   let videoUUID2: string
   let videoUUID3: string
@@ -56,6 +59,8 @@ describe('Test AP cleaner', function () {
         await server.videos.rate({ id: uuid, rating: 'like' })
         await server.comments.createThread({ videoId: uuid, text: 'comment' })
       }
+
+      sqlCommands.push(new SQLCommand(server))
     }
 
     await waitJobs(servers)
@@ -75,9 +80,9 @@ describe('Test AP cleaner', function () {
   it('Should destroy server 3 internal likes and correctly clean them', async function () {
     this.timeout(20000)
 
-    await servers[2].sql.deleteAll('accountVideoRate')
+    await sqlCommands[2].deleteAll('accountVideoRate')
     for (const uuid of videoUUIDs) {
-      await servers[2].sql.setVideoField(uuid, 'likes', '0')
+      await sqlCommands[2].setVideoField(uuid, 'likes', '0')
     }
 
     await wait(5000)
@@ -121,10 +126,10 @@ describe('Test AP cleaner', function () {
   it('Should destroy server 3 internal dislikes and correctly clean them', async function () {
     this.timeout(20000)
 
-    await servers[2].sql.deleteAll('accountVideoRate')
+    await sqlCommands[2].deleteAll('accountVideoRate')
 
     for (const uuid of videoUUIDs) {
-      await servers[2].sql.setVideoField(uuid, 'dislikes', '0')
+      await sqlCommands[2].setVideoField(uuid, 'dislikes', '0')
     }
 
     await wait(5000)
@@ -148,15 +153,15 @@ describe('Test AP cleaner', function () {
   it('Should destroy server 3 internal shares and correctly clean them', async function () {
     this.timeout(20000)
 
-    const preCount = await servers[0].sql.getVideoShareCount()
+    const preCount = await sqlCommands[0].getVideoShareCount()
     expect(preCount).to.equal(6)
 
-    await servers[2].sql.deleteAll('videoShare')
+    await sqlCommands[2].deleteAll('videoShare')
     await wait(5000)
     await waitJobs(servers)
 
     // Still 6 because we don't have remote shares on local videos
-    const postCount = await servers[0].sql.getVideoShareCount()
+    const postCount = await sqlCommands[0].getVideoShareCount()
     expect(postCount).to.equal(6)
   })
 
@@ -168,7 +173,7 @@ describe('Test AP cleaner', function () {
       expect(total).to.equal(3)
     }
 
-    await servers[2].sql.deleteAll('videoComment')
+    await sqlCommands[2].deleteAll('videoComment')
 
     await wait(5000)
     await waitJobs(servers)
@@ -185,7 +190,7 @@ describe('Test AP cleaner', function () {
     async function check (like: string, ofServerUrl: string, urlSuffix: string, remote: 'true' | 'false') {
       const query = `SELECT "videoId", "accountVideoRate".url FROM "accountVideoRate" ` +
         `INNER JOIN video ON "accountVideoRate"."videoId" = video.id AND remote IS ${remote} WHERE "accountVideoRate"."url" LIKE '${like}'`
-      const res = await servers[0].sql.selectQuery<{ url: string }>(query)
+      const res = await sqlCommands[0].selectQuery<{ url: string }>(query)
 
       for (const rate of res) {
         const matcher = new RegExp(`^${ofServerUrl}/accounts/root/dislikes/\\d+${urlSuffix}$`)
@@ -214,7 +219,7 @@ describe('Test AP cleaner', function () {
 
     {
       const query = `UPDATE "accountVideoRate" SET url = url || 'stan'`
-      await servers[1].sql.updateQuery(query)
+      await sqlCommands[1].updateQuery(query)
 
       await wait(5000)
       await waitJobs(servers)
@@ -231,7 +236,7 @@ describe('Test AP cleaner', function () {
       const query = `SELECT "videoId", "videoComment".url, uuid as "videoUUID" FROM "videoComment" ` +
         `INNER JOIN video ON "videoComment"."videoId" = video.id AND remote IS ${remote} WHERE "videoComment"."url" LIKE '${like}'`
 
-      const res = await servers[0].sql.selectQuery<{ url: string, videoUUID: string }>(query)
+      const res = await sqlCommands[0].selectQuery<{ url: string, videoUUID: string }>(query)
 
       for (const comment of res) {
         const matcher = new RegExp(`${ofServerUrl}/videos/watch/${comment.videoUUID}/comments/\\d+${urlSuffix}`)
@@ -257,7 +262,7 @@ describe('Test AP cleaner', function () {
 
     {
       const query = `UPDATE "videoComment" SET url = url || 'kyle'`
-      await servers[1].sql.updateQuery(query)
+      await sqlCommands[1].updateQuery(query)
 
       await wait(5000)
       await waitJobs(servers)
@@ -328,6 +333,10 @@ describe('Test AP cleaner', function () {
   })
 
   after(async function () {
+    for (const sql of sqlCommands) {
+      await sql.cleanup()
+    }
+
     await cleanupTests(servers)
   })
 })

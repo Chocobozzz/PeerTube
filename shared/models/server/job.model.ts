@@ -18,6 +18,7 @@ export type JobType =
   | 'after-video-channel-import'
   | 'email'
   | 'federate-video'
+  | 'transcoding-job-builder'
   | 'manage-video-torrent'
   | 'move-to-object-storage'
   | 'notify'
@@ -41,6 +42,10 @@ export interface Job {
   createdAt: Date | string
   finishedOn: Date | string
   processedOn: Date | string
+
+  parent?: {
+    id: string
+  }
 }
 
 export type ActivitypubHttpBroadcastPayload = {
@@ -139,30 +144,33 @@ interface BaseTranscodingPayload {
 export interface HLSTranscodingPayload extends BaseTranscodingPayload {
   type: 'new-resolution-to-hls'
   resolution: VideoResolution
+  fps: number
   copyCodecs: boolean
 
-  hasAudio: boolean
-
-  autoDeleteWebTorrentIfNeeded: boolean
-  isMaxQuality: boolean
+  deleteWebTorrentFiles: boolean
 }
 
 export interface NewWebTorrentResolutionTranscodingPayload extends BaseTranscodingPayload {
   type: 'new-resolution-to-webtorrent'
   resolution: VideoResolution
-
-  hasAudio: boolean
-  createHLSIfNeeded: boolean
+  fps: number
 }
 
 export interface MergeAudioTranscodingPayload extends BaseTranscodingPayload {
   type: 'merge-audio-to-webtorrent'
+
   resolution: VideoResolution
-  createHLSIfNeeded: true
+  fps: number
+
+  hasChildren: boolean
 }
 
 export interface OptimizeTranscodingPayload extends BaseTranscodingPayload {
   type: 'optimize-to-webtorrent'
+
+  quickTranscode: boolean
+
+  hasChildren: boolean
 }
 
 export type VideoTranscodingPayload =
@@ -217,6 +225,10 @@ export type VideoStudioTaskWatermarkPayload = {
 
   options: {
     file: string
+
+    watermarkSizeRatio: number
+    horitonzalMarginRatio: number
+    verticalMarginRatio: number
   }
 }
 
@@ -257,4 +269,28 @@ export type NotifyPayload =
 export interface FederateVideoPayload {
   videoUUID: string
   isNewVideo: boolean
+}
+
+// ---------------------------------------------------------------------------
+
+export interface TranscodingJobBuilderPayload {
+  videoUUID: string
+
+  optimizeJob?: {
+    isNewVideo: boolean
+  }
+
+  // Array of jobs to create
+  jobs?: {
+    type: 'video-transcoding'
+    payload: VideoTranscodingPayload
+    priority?: number
+  }[]
+
+  // Array of sequential jobs to create
+  sequentialJobs?: {
+    type: 'video-transcoding'
+    payload: VideoTranscodingPayload
+    priority?: number
+  }[][]
 }

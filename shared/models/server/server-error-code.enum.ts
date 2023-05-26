@@ -47,6 +47,10 @@ export const enum ServerErrorCode {
   ACCOUNT_WAITING_FOR_APPROVAL = 'account_waiting_for_approval',
   ACCOUNT_APPROVAL_REJECTED = 'account_approval_rejected',
 
+  RUNNER_JOB_NOT_IN_PROCESSING_STATE = 'runner_job_not_in_processing_state',
+  RUNNER_JOB_NOT_IN_PENDING_STATE = 'runner_job_not_in_pending_state',
+  UNKNOWN_RUNNER_TOKEN = 'unknown_runner_token',
+
   PASSWORD_NOT_ASSOCIATED_TO_VIDEO = 'password_not_associated_to_video'
 }
 

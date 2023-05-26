@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router'
+import { ActivatedRouteSnapshot, Router } from '@angular/router'
 import { logger } from '@root-helpers/logger'
 import { ResultList } from '@shared/models'
 
-export abstract class AbstractLazyLoadResolver <T> implements Resolve<any> {
+export abstract class AbstractLazyLoadResolver <T> {
   protected router: Router
 
   resolve (route: ActivatedRouteSnapshot) {

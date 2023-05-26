@@ -5,10 +5,6 @@ h1 {
   display: flex;
 }
 
-.create-button {
-  @include create-button;
-}
-
 input[type=text] {
   @include peertube-input-text(300px);
 }

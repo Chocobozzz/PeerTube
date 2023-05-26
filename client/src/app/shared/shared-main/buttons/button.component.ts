@@ -31,7 +31,7 @@ export class ButtonComponent implements OnInit, OnChanges {
   private buildClasses () {
     this.classes = {
       [this.className]: true,
-      disabled: this.disabled,
+      'disabled': this.disabled,
       'icon-only': !this.label,
       'has-icon': !!this.icon,
       'responsive-label': this.responsiveLabel

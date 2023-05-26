@@ -7,7 +7,7 @@ import {
   MActorDefaultAccountChannel,
   MActorDefaultChannelId,
   MActorFormattable,
-  MActorHost,
+  MActorHostOnly,
   MActorUsername
 } from './actor'
 
@@ -21,7 +21,7 @@ export type MActorFollow = Omit<ActorFollowModel, 'ActorFollower' | 'ActorFollow
 
 export type MActorFollowFollowingHost =
   MActorFollow &
-  Use<'ActorFollowing', MActorUsername & MActorHost>
+  Use<'ActorFollowing', MActorUsername & MActorHostOnly>
 
 // ############################################################################
 

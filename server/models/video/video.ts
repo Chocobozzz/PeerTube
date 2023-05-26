@@ -1,9 +1,11 @@
 import Bluebird from 'bluebird'
 import { remove } from 'fs-extra'
 import { maxBy, minBy } from 'lodash'
-import { join } from 'path'
 import { FindOptions, Includeable, IncludeOptions, Op, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
+  AfterCreate,
+  AfterDestroy,
+  AfterUpdate,
   AllowNull,
   BeforeDestroy,
   BelongsTo,
@@ -25,16 +27,19 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
+import { InternalEventEmitter } from '@server/lib/internal-event-emitter'
 import { LiveManager } from '@server/lib/live/live-manager'
 import { removeHLSFileObjectStorageByFilename, removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
 import { tracer } from '@server/lib/opentelemetry/tracing'
 import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths'
+import { Hooks } from '@server/lib/plugins/hooks'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/shared/model-cache'
 import { buildVideoEmbedPath, buildVideoWatchPath, pick } from '@shared/core-utils'
-import { ffprobePromise, getAudioStream, hasAudioStream, uuidToShort } from '@shared/extra-utils'
+import { uuidToShort } from '@shared/extra-utils'
+import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS, hasAudioStream } from '@shared/ffmpeg'
 import {
   ResultList,
   ThumbnailType,
@@ -62,10 +67,9 @@ import {
   isVideoStateValid,
   isVideoSupportValid
 } from '../../helpers/custom-validators/videos'
-import { getVideoStreamDimensionsInfo } from '../../helpers/ffmpeg'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
-import { ACTIVITY_PUB, API_VERSION, CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
+import { ACTIVITY_PUB, API_VERSION, CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { sendDeleteVideo } from '../../lib/activitypub/send'
 import {
   MChannel,
@@ -138,7 +142,6 @@ import { VideoShareModel } from './video-share'
 import { VideoSourceModel } from './video-source'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
-import { Hooks } from '@server/lib/plugins/hooks'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -741,6 +744,21 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   })
   VideoJobInfo: VideoJobInfoModel
 
+  @AfterCreate
+  static notifyCreate (video: MVideo) {
+    InternalEventEmitter.Instance.emit('video-created', { video })
+  }
+
+  @AfterUpdate
+  static notifyUpdate (video: MVideo) {
+    InternalEventEmitter.Instance.emit('video-updated', { video })
+  }
+
+  @AfterDestroy
+  static notifyDestroy (video: MVideo) {
+    InternalEventEmitter.Instance.emit('video-deleted', { video })
+  }
+
   @HasMany(() => VideoPasswordModel, {
     foreignKey: {
       name: 'videoId',
@@ -751,7 +769,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   VideoPasswords: VideoPasswordModel[]
 
   @BeforeDestroy
-  static async sendDelete (instance: MVideoAccountLight, options) {
+  static async sendDelete (instance: MVideoAccountLight, options: { transaction: Transaction }) {
     if (!instance.isOwned()) return undefined
 
     // Lazy load channels
@@ -808,7 +826,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     logger.info('Stopping live of video %s after video deletion.', instance.uuid)
 
-    LiveManager.Instance.stopSessionOf(instance.id, null)
+    LiveManager.Instance.stopSessionOf(instance.uuid, null)
   }
 
   @BeforeDestroy
@@ -1696,15 +1714,14 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const thumbnail = this.getMiniature()
     if (!thumbnail) return null
 
-    return join(STATIC_PATHS.THUMBNAILS, thumbnail.filename)
+    return thumbnail.getLocalStaticPath()
   }
 
   getPreviewStaticPath () {
     const preview = this.getPreview()
     if (!preview) return null
 
-    // We use a local cache, so specify our cache endpoint instead of potential remote URL
-    return join(LAZY_STATIC_PATHS.PREVIEWS, preview.filename)
+    return preview.getLocalStaticPath()
   }
 
   toFormattedJSON (this: MVideoFormattable, options?: VideoFormattingJSONOptions): Video {
@@ -1715,17 +1732,29 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return videoModelToFormattedDetailsJSON(this)
   }
 
-  getFormattedVideoFilesJSON (includeMagnet = true): VideoFile[] {
+  getFormattedWebVideoFilesJSON (includeMagnet = true): VideoFile[] {
+    return videoFilesModelToFormattedJSON(this, this.VideoFiles, { includeMagnet })
+  }
+
+  getFormattedHLSVideoFilesJSON (includeMagnet = true): VideoFile[] {
+    let acc: VideoFile[] = []
+
+    for (const p of this.VideoStreamingPlaylists) {
+      acc = acc.concat(videoFilesModelToFormattedJSON(this, p.VideoFiles, { includeMagnet }))
+    }
+
+    return acc
+  }
+
+  getFormattedAllVideoFilesJSON (includeMagnet = true): VideoFile[] {
     let files: VideoFile[] = []
 
     if (Array.isArray(this.VideoFiles)) {
-      const result = videoFilesModelToFormattedJSON(this, this.VideoFiles, { includeMagnet })
-      files = files.concat(result)
+      files = files.concat(this.getFormattedWebVideoFilesJSON(includeMagnet))
     }
 
-    for (const p of (this.VideoStreamingPlaylists || [])) {
-      const result = videoFilesModelToFormattedJSON(this, p.VideoFiles, { includeMagnet })
-      files = files.concat(result)
+    if (Array.isArray(this.VideoStreamingPlaylists)) {
+      files = files.concat(this.getFormattedHLSVideoFilesJSON(includeMagnet))
     }
 
     return files
@@ -1773,10 +1802,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
       const { audioStream } = await getAudioStream(originalFilePath, probe)
       const hasAudio = await hasAudioStream(originalFilePath, probe)
+      const fps = await getVideoStreamFPS(originalFilePath, probe)
 
       return {
         audioStream,
         hasAudio,
+        fps,
 
         ...await getVideoStreamDimensionsInfo(originalFilePath, probe)
       }

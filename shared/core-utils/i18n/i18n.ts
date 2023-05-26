@@ -103,9 +103,9 @@ export function is18nLocale (locale: string) {
 export function getCompleteLocale (locale: string) {
   if (!locale) return locale
 
-  if (I18N_LOCALE_ALIAS[locale]) return I18N_LOCALE_ALIAS[locale]
+  const found = (I18N_LOCALE_ALIAS as any)[locale] as string
 
-  return locale
+  return found || locale
 }
 
 export function getShortLocale (locale: string) {

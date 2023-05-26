@@ -2,14 +2,14 @@ import { UploadFiles } from 'express'
 import memoizee from 'memoizee'
 import { Transaction } from 'sequelize/types'
 import { CONFIG } from '@server/initializers/config'
-import { DEFAULT_AUDIO_RESOLUTION, JOB_PRIORITY, MEMOIZE_LENGTH, MEMOIZE_TTL } from '@server/initializers/constants'
+import { MEMOIZE_LENGTH, MEMOIZE_TTL } from '@server/initializers/constants'
 import { TagModel } from '@server/models/video/tag'
 import { VideoModel } from '@server/models/video/video'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { FilteredModelAttributes } from '@server/types'
-import { MThumbnail, MUserId, MVideoFile, MVideoFullLight, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
-import { ManageVideoTorrentPayload, ThumbnailType, VideoCreate, VideoPrivacy, VideoState, VideoTranscodingPayload } from '@shared/models'
-import { CreateJobArgument, CreateJobOptions, JobQueue } from './job-queue/job-queue'
+import { MThumbnail, MVideoFullLight, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
+import { ManageVideoTorrentPayload, ThumbnailType, VideoCreate, VideoPrivacy, VideoState } from '@shared/models'
+import { CreateJobArgument, JobQueue } from './job-queue/job-queue'
 import { updateVideoMiniatureFromExisting } from './thumbnail'
 import { moveFilesIfPrivacyChanged } from './video-privacy'
 
@@ -83,58 +83,6 @@ async function setVideoTags (options: {
 
   await video.$set('Tags', tagInstances, { transaction })
   video.Tags = tagInstances
-}
-
-// ---------------------------------------------------------------------------
-
-async function buildOptimizeOrMergeAudioJob (options: {
-  video: MVideoUUID
-  videoFile: MVideoFile
-  user: MUserId
-  isNewVideo?: boolean // Default true
-}) {
-  const { video, videoFile, user, isNewVideo } = options
-
-  let payload: VideoTranscodingPayload
-
-  if (videoFile.isAudio()) {
-    payload = {
-      type: 'merge-audio-to-webtorrent',
-      resolution: DEFAULT_AUDIO_RESOLUTION,
-      videoUUID: video.uuid,
-      createHLSIfNeeded: true,
-      isNewVideo
-    }
-  } else {
-    payload = {
-      type: 'optimize-to-webtorrent',
-      videoUUID: video.uuid,
-      isNewVideo
-    }
-  }
-
-  await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscode')
-
-  return {
-    type: 'video-transcoding' as 'video-transcoding',
-    priority: await getTranscodingJobPriority(user),
-    payload
-  }
-}
-
-async function buildTranscodingJob (payload: VideoTranscodingPayload, options: CreateJobOptions = {}) {
-  await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscode')
-
-  return { type: 'video-transcoding' as 'video-transcoding', payload, ...options }
-}
-
-async function getTranscodingJobPriority (user: MUserId) {
-  const now = new Date()
-  const lastWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7)
-
-  const videoUploadedByUser = await VideoModel.countVideosUploadedByUserSince(user.id, lastWeek)
-
-  return JOB_PRIORITY.TRANSCODING + videoUploadedByUser
 }
 
 // ---------------------------------------------------------------------------
@@ -235,10 +183,7 @@ export {
   buildLocalVideoFromReq,
   buildVideoThumbnailsFromReq,
   setVideoTags,
-  buildOptimizeOrMergeAudioJob,
-  buildTranscodingJob,
   buildMoveToObjectStorageJob,
-  getTranscodingJobPriority,
   addVideoJobsAfterUpdate,
   getCachedVideoDuration
 }

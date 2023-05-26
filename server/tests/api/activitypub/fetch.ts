@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
+import { SQLCommand } from '@server/tests/shared'
 import {
   cleanupTests,
   createMultipleServers,
@@ -12,6 +13,7 @@ import {
 
 describe('Test ActivityPub fetcher', function () {
   let servers: PeerTubeServer[]
+  let sqlCommandServer1: SQLCommand
 
   // ---------------------------------------------------------------
 
@@ -34,15 +36,17 @@ describe('Test ActivityPub fetcher', function () {
     const { uuid } = await servers[0].videos.upload({ attributes: { name: 'bad video root' } })
     await servers[0].videos.upload({ token: userAccessToken, attributes: { name: 'video user' } })
 
+    sqlCommandServer1 = new SQLCommand(servers[0])
+
     {
       const to = servers[0].url + '/accounts/user1'
       const value = servers[1].url + '/accounts/user1'
-      await servers[0].sql.setActorField(to, 'url', value)
+      await sqlCommandServer1.setActorField(to, 'url', value)
     }
 
     {
       const value = servers[2].url + '/videos/watch/' + uuid
-      await servers[0].sql.setVideoField(uuid, 'url', value)
+      await sqlCommandServer1.setVideoField(uuid, 'url', value)
     }
   })
 
@@ -72,6 +76,7 @@ describe('Test ActivityPub fetcher', function () {
   after(async function () {
     this.timeout(20000)
 
+    await sqlCommandServer1.cleanup()
     await cleanupTests(servers)
   })
 })

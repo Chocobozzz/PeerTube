@@ -484,7 +484,7 @@ describe('Test user notifications', function () {
     const myChannelName = 'super channel name'
     const myUserName = 'super user name'
 
-    before(async () => {
+    before(async function () {
       baseParams = {
         server: servers[0],
         emails,

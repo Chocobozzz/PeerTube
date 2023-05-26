@@ -120,12 +120,12 @@
         <my-global-icon *ngIf="isAbuseRejected(abuse)" [title]="abuse.state.label" iconName="cross"></my-global-icon>
       </td>
 
-      <td class="c-hand abuse-messages" (click)="openAbuseMessagesModal(abuse)">
-        <ng-container *ngIf="isLocalAbuse(abuse)">
+      <td class="abuse-messages">
+        <button class="button-unstyle" *ngIf="isLocalAbuse(abuse)" (click)="openAbuseMessagesModal(abuse)">
           {{ abuse.countMessages }}
 
           <my-global-icon iconName="message-circle"></my-global-icon>
-        </ng-container>
+        </button>
       </td>
 
       <td *ngIf="isAdminView()" class="internal-note" container="body" placement="left auto" [ngbTooltip]="abuse.moderationComment">

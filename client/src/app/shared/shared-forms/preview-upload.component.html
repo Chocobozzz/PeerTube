@@ -5,7 +5,7 @@
       icon="edit" (fileChanged)="onFileChanged($event)" [buttonTooltip]="getReactiveFileButtonTooltip()"
     ></my-reactive-file>
 
-    <img *ngIf="imageSrc" [ngStyle]="{ width: previewWidth, height: previewHeight }" [src]="imageSrc" class="preview" />
+    <img *ngIf="imageSrc" [ngStyle]="{ width: previewWidth, height: previewHeight }" [src]="imageSrc" class="preview" alt="Preview" i18n-alt />
     <div *ngIf="!imageSrc" [ngStyle]="{ width: previewWidth, height: previewHeight }" class="preview no-image"></div>
   </div>
 </div>

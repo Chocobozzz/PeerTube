@@ -1,4 +1,4 @@
-import LRUCache from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 import { LRU_CACHE } from '@server/initializers/constants'
 import { MUserAccountUrl } from '@server/types/models'
 import { pick } from '@shared/core-utils'

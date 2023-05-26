@@ -19,16 +19,17 @@ export async function processMoveToObjectStorage (job: Job) {
   const payload = job.data as MoveObjectStoragePayload
   logger.info('Moving video %s in job %s.', payload.videoUUID, job.id)
 
+  const fileMutexReleaser = await VideoPathManager.Instance.lockFiles(payload.videoUUID)
+
   const video = await VideoModel.loadWithFiles(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
     logger.info('Can\'t process job %d, video does not exist.', job.id, lTagsBase(payload.videoUUID))
+    fileMutexReleaser()
     return undefined
   }
 
   const lTags = lTagsBase(video.uuid, video.url)
-
-  const fileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {
     if (video.VideoFiles) {

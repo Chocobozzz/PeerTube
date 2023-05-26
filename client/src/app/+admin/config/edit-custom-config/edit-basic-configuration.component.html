@@ -1,7 +1,7 @@
 <ng-container [formGroup]="form">
   <div class="row mt-5"> <!-- appearance grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <div i18n class="inner-form-title">APPEARANCE</div>
+      <h2 i18n class="inner-form-title">APPEARANCE</h2>
       <div i18n class="inner-form-description">
         Use <a class="link-orange" routerLink="/admin/plugins">plugins & themes</a> for more involved changes, or add slight <a class="link-orange" routerLink="/admin/config/edit-custom" fragment="advanced-configuration">customizations</a>.
       </div>
@@ -91,7 +91,7 @@
 
   <div class="row mt-4"> <!-- broadcast grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <div i18n class="inner-form-title">BROADCAST MESSAGE</div>
+      <h2 i18n class="inner-form-title">BROADCAST MESSAGE</h2>
       <div i18n class="inner-form-description">
         Display a message on your instance
       </div>
@@ -120,9 +120,9 @@
 
           <div class="peertube-select-container">
             <select id="broadcastMessageLevel" formControlName="level" class="form-control">
-              <option value="info">info</option>
-              <option value="warning">warning</option>
-              <option value="error">error</option>
+              <option i18n value="info">info</option>
+              <option i18n value="warning">warning</option>
+              <option i18n value="error">error</option>
             </select>
           </div>
 
@@ -147,7 +147,7 @@
 
   <div class="row mt-4"> <!-- new users grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <div i18n class="inner-form-title">NEW USERS</div>
+      <h2 i18n class="inner-form-title">NEW USERS</h2>
       <div i18n class="inner-form-description">
         Manage <a class="link-orange" routerLink="/admin/users">users</a> to set their quota individually.
       </div>
@@ -264,7 +264,7 @@
 
   <div class="row mt-4"> <!-- videos grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <div i18n class="inner-form-title">VIDEOS</div>
+      <h2 i18n class="inner-form-title">VIDEOS</h2>
     </div>
 
     <div class="col-12 col-lg-8 col-xl-9">
@@ -350,7 +350,7 @@
 
   <div class="row mt-4"> <!-- video channels grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <div i18n class="inner-form-title">VIDEO CHANNELS</div>
+      <h2 i18n class="inner-form-title">VIDEO CHANNELS</h2>
     </div>
 
     <div class="col-12 col-lg-8 col-xl-9">
@@ -372,7 +372,7 @@
 
   <div class="row mt-4"> <!-- search grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <div i18n class="inner-form-title">SEARCH</div>
+      <h2 i18n class="inner-form-title">SEARCH</h2>
     </div>
 
     <div class="col-12 col-lg-8 col-xl-9">
@@ -461,7 +461,7 @@
 
   <div class="row mt-4"> <!-- federation grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <div i18n class="inner-form-title">FEDERATION</div>
+      <h2 i18n class="inner-form-title">FEDERATION</h2>
       <div i18n class="inner-form-description">
         Manage <a class="link-orange" routerLink="/admin/follows">relations</a> with other instances.
       </div>
@@ -540,7 +540,7 @@
 
   <div class="row mt-4"> <!-- administrators grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <div i18n class="inner-form-title">ADMINISTRATORS</div>
+      <h2 i18n class="inner-form-title">ADMINISTRATORS</h2>
     </div>
 
     <div class="col-12 col-lg-8 col-xl-9">
@@ -568,7 +568,7 @@
 
   <div class="row mt-4"> <!-- Twitter grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <div i18n class="inner-form-title">TWITTER</div>
+      <h2 i18n class="inner-form-title">TWITTER</h2>
       <div i18n class="inner-form-description">
         Provide the Twitter account representing your instance to improve link previews.
         If you don't have a Twitter account, just leave the default value.

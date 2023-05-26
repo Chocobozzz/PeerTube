@@ -4,7 +4,7 @@
 </ng-template>
 
 <button
-  [ngbPopover]="popContent" autoClose="outside" placement="bottom" container={this} popoverClass="popover-notifications"
+  [ngbPopover]="popContent" autoClose="outside" placement="bottom" container="body" popoverClass="popover-notifications"
   i18n-title title="View your notifications"
   class="border-0 text-start" [ngClass]="{ 'notification-inbox-popover': true, 'shown': opened, 'hidden': isInMobileView }"
   #popover="ngbPopover" (shown)="onPopoverShown()" (hidden)="onPopoverHidden()"

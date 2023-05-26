@@ -77,7 +77,7 @@ export class HelpComponent implements OnInit, OnChanges, AfterContentInit {
   }
 
   private createMarkdownList (rules: string[]) {
-    const rulesToText = {
+    const rulesToText: { [id: string]: string } = {
       emphasis: $localize`Emphasis`,
       link: $localize`Links`,
       newline: $localize`New lines`,

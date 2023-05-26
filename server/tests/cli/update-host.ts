@@ -7,11 +7,11 @@ import {
   createSingleServer,
   killallServers,
   makeActivityPubGetRequest,
-  parseTorrentVideo,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
+import { parseTorrentVideo } from '../shared'
 
 describe('Test update host scripts', function () {
   let server: PeerTubeServer

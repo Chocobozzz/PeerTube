@@ -13,8 +13,8 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
 
     withRetry?: boolean // default false
     currentRetry?: number
-  }) {
-    const { videoFileToken, reinjectVideoFileToken, withRetry, currentRetry = 1 } = options
+  }): Promise<string> {
+    const { videoFileToken, reinjectVideoFileToken, expectedStatus, withRetry = false, currentRetry = 1 } = options
 
     try {
       const result = await unwrapTextOrDecode(this.getRawRequest({
@@ -29,11 +29,16 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
         defaultExpectedStatus: HttpStatusCode.OK_200
       }))
 
+      // master.m3u8 could be empty
+      if (!result && (!expectedStatus || expectedStatus === HttpStatusCode.OK_200)) {
+        throw new Error('Empty result')
+      }
+
       return result
     } catch (err) {
-      if (!withRetry || currentRetry > 5) throw err
+      if (!withRetry || currentRetry > 10) throw err
 
-      await wait(100)
+      await wait(250)
 
       return this.get({
         ...options,
@@ -44,29 +49,71 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
     }
   }
 
-  getFragmentedSegment (options: OverrideCommandOptions & {
+  async getFragmentedSegment (options: OverrideCommandOptions & {
     url: string
     range?: string
-  }) {
-    return unwrapBody<Buffer>(this.getRawRequest({
-      ...options,
 
-      url: options.url,
-      range: options.range,
-      implicitToken: false,
-      defaultExpectedStatus: HttpStatusCode.OK_200
-    }))
+    withRetry?: boolean // default false
+    currentRetry?: number
+  }) {
+    const { withRetry = false, currentRetry = 1 } = options
+
+    try {
+      const result = await unwrapBody<Buffer>(this.getRawRequest({
+        ...options,
+
+        url: options.url,
+        range: options.range,
+        implicitToken: false,
+        responseType: 'application/octet-stream',
+        defaultExpectedStatus: HttpStatusCode.OK_200
+      }))
+
+      return result
+    } catch (err) {
+      if (!withRetry || currentRetry > 10) throw err
+
+      await wait(250)
+
+      return this.getFragmentedSegment({
+        ...options,
+
+        withRetry,
+        currentRetry: currentRetry + 1
+      })
+    }
   }
 
-  getSegmentSha256 (options: OverrideCommandOptions & {
+  async getSegmentSha256 (options: OverrideCommandOptions & {
     url: string
-  }) {
-    return unwrapBodyOrDecodeToJSON<{ [ id: string ]: string }>(this.getRawRequest({
-      ...options,
 
-      url: options.url,
-      implicitToken: false,
-      defaultExpectedStatus: HttpStatusCode.OK_200
-    }))
+    withRetry?: boolean // default false
+    currentRetry?: number
+  }) {
+    const { withRetry = false, currentRetry = 1 } = options
+
+    try {
+      const result = await unwrapBodyOrDecodeToJSON<{ [ id: string ]: string }>(this.getRawRequest({
+        ...options,
+
+        url: options.url,
+        contentType: 'application/json',
+        implicitToken: false,
+        defaultExpectedStatus: HttpStatusCode.OK_200
+      }))
+
+      return result
+    } catch (err) {
+      if (!withRetry || currentRetry > 10) throw err
+
+      await wait(250)
+
+      return this.getSegmentSha256({
+        ...options,
+
+        withRetry,
+        currentRetry: currentRetry + 1
+      })
+    }
   }
 }

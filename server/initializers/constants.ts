@@ -6,6 +6,7 @@ import { randomInt, root } from '@shared/core-utils'
 import {
   AbuseState,
   JobType,
+  RunnerJobState,
   UserRegistrationState,
   VideoChannelSyncState,
   VideoImportState,
@@ -26,7 +27,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 760
+const LAST_MIGRATION_VERSION = 775
 
 // ---------------------------------------------------------------------------
 
@@ -54,8 +55,12 @@ const WEBSERVER = {
   WS: '',
   HOSTNAME: '',
   PORT: 0,
+
   RTMP_URL: '',
-  RTMPS_URL: ''
+  RTMPS_URL: '',
+
+  RTMP_BASE_LIVE_URL: '',
+  RTMPS_BASE_LIVE_URL: ''
 }
 
 // Sortable columns per schema
@@ -82,6 +87,10 @@ const SORTABLE_COLUMNS = {
   CHANNEL_FOLLOWERS: [ 'createdAt' ],
 
   USER_REGISTRATIONS: [ 'createdAt', 'state' ],
+
+  RUNNERS: [ 'createdAt' ],
+  RUNNER_REGISTRATION_TOKENS: [ 'createdAt' ],
+  RUNNER_JOBS: [ 'updatedAt', 'createdAt', 'priority', 'state', 'progress' ],
 
   VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'trending', 'hot', 'best' ],
 
@@ -141,6 +150,8 @@ const REMOTE_SCHEME = {
   WS: 'wss'
 }
 
+// ---------------------------------------------------------------------------
+
 const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-broadcast-parallel': 1,
@@ -162,6 +173,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-channel-import': 1,
   'after-video-channel-import': 1,
   'move-to-object-storage': 3,
+  'transcoding-job-builder': 1,
   'notify': 1,
   'federate-video': 1
 }
@@ -185,6 +197,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'move-to-object-storage': 1,
   'video-channel-import': 1,
   'after-video-channel-import': 1,
+  'transcoding-job-builder': 1,
   'notify': 5,
   'federate-video': 3
 }
@@ -209,6 +222,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'move-to-object-storage': 1000 * 60 * 60 * 3, // 3 hours
   'video-channel-import': 1000 * 60 * 60 * 4, // 4 hours
   'after-video-channel-import': 60000 * 5, // 5 minutes
+  'transcoding-job-builder': 60000, // 1 minute
   'notify': 60000 * 5, // 5 minutes
   'federate-video': 60000 * 5 // 5 minutes
 }
@@ -221,22 +235,8 @@ const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
   }
 }
 const JOB_PRIORITY = {
-  TRANSCODING: 100
-}
-
-const BROADCAST_CONCURRENCY = 30 // How many requests in parallel we do in activitypub-http-broadcast job
-const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
-
-const AP_CLEANER = {
-  CONCURRENCY: 10, // How many requests in parallel we do in activitypub-cleaner job
-  UNAVAILABLE_TRESHOLD: 3, // How many attempts we do before removing an unavailable remote resource
-  PERIOD: parseDurationToMs('1 week') // /!\ Has to be sync with REPEAT_JOBS
-}
-
-const REQUEST_TIMEOUTS = {
-  DEFAULT: 7000, // 7 seconds
-  FILE: 30000, // 30 seconds
-  REDUNDANCY: JOB_TTL['video-redundancy']
+  TRANSCODING: 100,
+  VIDEO_STUDIO: 150
 }
 
 const JOB_REMOVAL_OPTIONS = {
@@ -258,7 +258,30 @@ const JOB_REMOVAL_OPTIONS = {
 
 const VIDEO_IMPORT_TIMEOUT = Math.floor(JOB_TTL['video-import'] * 0.9)
 
+const RUNNER_JOBS = {
+  MAX_FAILURES: 5,
+  LAST_CONTACT_UPDATE_INTERVAL: 30000
+}
+
+// ---------------------------------------------------------------------------
+
+const BROADCAST_CONCURRENCY = 30 // How many requests in parallel we do in activitypub-http-broadcast job
+const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
+
+const AP_CLEANER = {
+  CONCURRENCY: 10, // How many requests in parallel we do in activitypub-cleaner job
+  UNAVAILABLE_TRESHOLD: 3, // How many attempts we do before removing an unavailable remote resource
+  PERIOD: parseDurationToMs('1 week') // /!\ Has to be sync with REPEAT_JOBS
+}
+
+const REQUEST_TIMEOUTS = {
+  DEFAULT: 7000, // 7 seconds
+  FILE: 30000, // 30 seconds
+  REDUNDANCY: JOB_TTL['video-redundancy']
+}
+
 const SCHEDULER_INTERVALS_MS = {
+  RUNNER_JOB_WATCH_DOG: Math.min(CONFIG.REMOTE_RUNNERS.STALLED_JOBS.VOD, CONFIG.REMOTE_RUNNERS.STALLED_JOBS.LIVE),
   ACTOR_FOLLOW_SCORES: 60000 * 60, // 1 hour
   REMOVE_OLD_JOBS: 60000 * 60, // 1 hour
   UPDATE_VIDEOS: 60000, // 1 minute
@@ -412,6 +435,17 @@ const CONSTRAINTS_FIELDS = {
     CLIENT_STACK_TRACE: { min: 1, max: 15000 }, // Length
     CLIENT_META: { min: 1, max: 5000 }, // Length
     CLIENT_USER_AGENT: { min: 1, max: 200 } // Length
+  },
+  RUNNERS: {
+    TOKEN: { min: 1, max: 1000 }, // Length
+    NAME: { min: 1, max: 100 }, // Length
+    DESCRIPTION: { min: 1, max: 1000 } // Length
+  },
+  RUNNER_JOBS: {
+    TOKEN: { min: 1, max: 1000 }, // Length
+    REASON: { min: 1, max: 5000 }, // Length
+    ERROR_MESSAGE: { min: 1, max: 5000 }, // Length
+    PROGRESS: { min: 0, max: 100 } // Value
   }
 }
 
@@ -442,7 +476,7 @@ const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
   DISLIKE: 'dislike'
 }
 
-const FFMPEG_NICE: { [ id: string ]: number } = {
+const FFMPEG_NICE = {
   // parent process defaults to niceness = 0
   // reminder: lower = higher priority, max value is 19, lowest is -20
   LIVE: 5, // prioritize over VOD and THUMBNAIL
@@ -543,6 +577,18 @@ const VIDEO_PLAYLIST_TYPES: { [ id in VideoPlaylistType ]: string } = {
   [VideoPlaylistType.WATCH_LATER]: 'Watch later'
 }
 
+const RUNNER_JOB_STATES: { [ id in RunnerJobState ]: string } = {
+  [RunnerJobState.PROCESSING]: 'Processing',
+  [RunnerJobState.COMPLETED]: 'Completed',
+  [RunnerJobState.COMPLETING]: 'Completing',
+  [RunnerJobState.PENDING]: 'Pending',
+  [RunnerJobState.ERRORED]: 'Errored',
+  [RunnerJobState.WAITING_FOR_PARENT_JOB]: 'Waiting for parent job to finish',
+  [RunnerJobState.CANCELLED]: 'Cancelled',
+  [RunnerJobState.PARENT_ERRORED]: 'Parent job failed',
+  [RunnerJobState.PARENT_CANCELLED]: 'Parent job cancelled'
+}
+
 const MIMETYPES = {
   AUDIO: {
     MIMETYPE_EXT: {
@@ -591,16 +637,23 @@ const MIMETYPES = {
       'text/vtt': '.vtt',
       'application/x-subrip': '.srt',
       'text/plain': '.srt'
-    }
+    },
+    EXT_MIMETYPE: null as { [ id: string ]: string }
   },
   TORRENT: {
     MIMETYPE_EXT: {
       'application/x-bittorrent': '.torrent'
     }
+  },
+  M3U8: {
+    MIMETYPE_EXT: {
+      'application/vnd.apple.mpegurl': '.m3u8'
+    }
   }
 }
 MIMETYPES.AUDIO.EXT_MIMETYPE = invert(MIMETYPES.AUDIO.MIMETYPE_EXT)
 MIMETYPES.IMAGE.EXT_MIMETYPE = invert(MIMETYPES.IMAGE.MIMETYPE_EXT)
+MIMETYPES.VIDEO_CAPTIONS.EXT_MIMETYPE = invert(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT)
 
 const BINARY_CONTENT_TYPES = new Set([
   'binary/octet-stream',
@@ -988,6 +1041,8 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     VIDEO_LIVE.SEGMENT_TIME_SECONDS.DEFAULT_LATENCY = 2
     VIDEO_LIVE.SEGMENT_TIME_SECONDS.SMALL_LATENCY = 1
     VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION = 1
+
+    RUNNER_JOBS.LAST_CONTACT_UPDATE_INTERVAL = 2000
   }
 }
 
@@ -1030,6 +1085,7 @@ export {
   SEARCH_INDEX,
   DIRECTORIES,
   RESUMABLE_UPLOAD_SESSION_LIFETIME,
+  RUNNER_JOB_STATES,
   P2P_MEDIA_LOADER_PEER_VERSION,
   ACTOR_IMAGES_SIZE,
   ACCEPT_HEADERS,
@@ -1088,6 +1144,7 @@ export {
   USER_REGISTRATION_STATES,
   LRU_CACHE,
   REQUEST_TIMEOUTS,
+  RUNNER_JOBS,
   MAX_LOCAL_VIEWER_WATCH_SECTIONS,
   USER_PASSWORD_RESET_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,
@@ -1198,8 +1255,11 @@ function updateWebserverUrls () {
   const rtmpHostname = CONFIG.LIVE.RTMP.PUBLIC_HOSTNAME || CONFIG.WEBSERVER.HOSTNAME
   const rtmpsHostname = CONFIG.LIVE.RTMPS.PUBLIC_HOSTNAME || CONFIG.WEBSERVER.HOSTNAME
 
-  WEBSERVER.RTMP_URL = 'rtmp://' + rtmpHostname + ':' + CONFIG.LIVE.RTMP.PORT + '/' + VIDEO_LIVE.RTMP.BASE_PATH
-  WEBSERVER.RTMPS_URL = 'rtmps://' + rtmpsHostname + ':' + CONFIG.LIVE.RTMPS.PORT + '/' + VIDEO_LIVE.RTMP.BASE_PATH
+  WEBSERVER.RTMP_URL = 'rtmp://' + rtmpHostname + ':' + CONFIG.LIVE.RTMP.PORT
+  WEBSERVER.RTMPS_URL = 'rtmps://' + rtmpsHostname + ':' + CONFIG.LIVE.RTMPS.PORT
+
+  WEBSERVER.RTMP_BASE_LIVE_URL = WEBSERVER.RTMP_URL + '/' + VIDEO_LIVE.RTMP.BASE_PATH
+  WEBSERVER.RTMPS_BASE_LIVE_URL = WEBSERVER.RTMPS_URL + '/' + VIDEO_LIVE.RTMP.BASE_PATH
 }
 
 function updateWebserverConfig () {

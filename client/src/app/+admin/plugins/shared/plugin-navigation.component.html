@@ -5,7 +5,7 @@
   </div>
 
   <div class="btn-group select-button" role="group" i18n-aria-label aria-label="Navigate between plugins and themes">
-    <a [ngClass]="{ active: pluginType === 1 }" routerLink="." [queryParams]="{ pluginType: 1 }" queryParamsHandling="merge" class="">Plugins</a>
-    <a [ngClass]="{ active: pluginType === 2 }" routerLink="." [queryParams]="{ pluginType: 2 }" queryParamsHandling="merge" class="">Themes</a>
+    <a i18n [ngClass]="{ active: pluginType === 1 }" routerLink="." [queryParams]="{ pluginType: 1 }" queryParamsHandling="merge" class="">Plugins</a>
+    <a i18n [ngClass]="{ active: pluginType === 2 }" routerLink="." [queryParams]="{ pluginType: 2 }" queryParamsHandling="merge" class="">Themes</a>
   </div>
 </div>

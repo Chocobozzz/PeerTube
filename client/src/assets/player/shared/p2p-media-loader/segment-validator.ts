@@ -79,7 +79,7 @@ function fetchSha256Segments (options: {
   segmentsSha256Url: string
   authorizationHeader: () => string
   requiresAuth: boolean
-}) {
+}): Promise<SegmentsJSON> {
   const { serverUrl, segmentsSha256Url, requiresAuth, authorizationHeader } = options
 
   const headers = requiresAuth && isSameOrigin(serverUrl, segmentsSha256Url)

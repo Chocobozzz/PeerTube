@@ -40,7 +40,7 @@
 
           <h6
             *ngIf="!action.linkBuilder && action.isHeader && areActionsDisplayed(actions, entry)" [ngClass]="{ 'with-icon': !!action.iconName }"
-            class="dropdown-header" [title]="action.title || ''" (click)="action.handler(entry)" (keyup.enter)="action.handler(entry)"
+            class="dropdown-header" [title]="action.title || ''"
           >
             <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
           </h6>

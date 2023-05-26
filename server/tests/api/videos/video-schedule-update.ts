@@ -35,8 +35,6 @@ describe('Test video update scheduler', function () {
   })
 
   it('Should upload a video and schedule an update in 10 seconds', async function () {
-    this.timeout(10000)
-
     const attributes = {
       name: 'video 1',
       privacy: VideoPrivacy.PRIVATE,
@@ -89,8 +87,6 @@ describe('Test video update scheduler', function () {
   })
 
   it('Should upload a video without scheduling an update', async function () {
-    this.timeout(10000)
-
     const attributes = {
       name: 'video 2',
       privacy: VideoPrivacy.PRIVATE
@@ -103,8 +99,6 @@ describe('Test video update scheduler', function () {
   })
 
   it('Should update a video by scheduling an update', async function () {
-    this.timeout(10000)
-
     const attributes = {
       name: 'video 2 updated',
       scheduleUpdate: {

@@ -243,8 +243,10 @@ describe('Signup', () => {
     let emailPort: number
 
     before(async () => {
+      const key = browser.options.baseUrl + '-emailPort'
       // FIXME: typings are wrong, get returns a promise
-      emailPort = await (browser.sharedStore.get(browser.config.baseUrl + '-emailPort') as unknown as Promise<number>)
+      // FIXME: use * because the key is not properly escaped by the shared store when using get(key)
+      emailPort = (await (browser.sharedStore.get('*') as unknown as Promise<number>))[key]
 
       await MockSMTPServer.Instance.collectEmails(emailPort, emails)
     })

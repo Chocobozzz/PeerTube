@@ -94,8 +94,8 @@ export class LoginPage {
   }
 
   private getSuffix () {
-    return browser.config.baseUrl
-      ? browser.config.baseUrl.slice(-1)
+    return browser.options.baseUrl
+      ? browser.options.baseUrl.slice(-1)
       : '1'
   }
 }

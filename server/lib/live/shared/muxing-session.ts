@@ -1,15 +1,14 @@
 import { mapSeries } from 'bluebird'
 import { FSWatcher, watch } from 'chokidar'
-import { FfmpegCommand } from 'fluent-ffmpeg'
+import { EventEmitter } from 'events'
 import { appendFile, ensureDir, readFile, stat } from 'fs-extra'
 import PQueue from 'p-queue'
 import { basename, join } from 'path'
-import { EventEmitter } from 'stream'
-import { getLiveMuxingCommand, getLiveTranscodingCommand } from '@server/helpers/ffmpeg'
+import { computeOutputFPS } from '@server/helpers/ffmpeg'
 import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE } from '@server/initializers/constants'
-import { removeHLSFileObjectStorageByPath, storeHLSFileFromFilename, storeHLSFileFromPath } from '@server/lib/object-storage'
+import { removeHLSFileObjectStorageByPath, storeHLSFileFromContent, storeHLSFileFromPath } from '@server/lib/object-storage'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models'
@@ -20,24 +19,24 @@ import {
   getLiveDirectory,
   getLiveReplayBaseDirectory
 } from '../../paths'
-import { VideoTranscodingProfilesManager } from '../../transcoding/default-transcoding-profiles'
 import { isAbleToUploadVideo } from '../../user'
 import { LiveQuotaStore } from '../live-quota-store'
 import { LiveSegmentShaStore } from '../live-segment-sha-store'
-import { buildConcatenatedName } from '../live-utils'
+import { buildConcatenatedName, getLiveSegmentTime } from '../live-utils'
+import { AbstractTranscodingWrapper, FFmpegTranscodingWrapper, RemoteTranscodingWrapper } from './transcoding-wrapper'
 
 import memoizee = require('memoizee')
 interface MuxingSessionEvents {
-  'live-ready': (options: { videoId: number }) => void
+  'live-ready': (options: { videoUUID: string }) => void
 
-  'bad-socket-health': (options: { videoId: number }) => void
-  'duration-exceeded': (options: { videoId: number }) => void
-  'quota-exceeded': (options: { videoId: number }) => void
+  'bad-socket-health': (options: { videoUUID: string }) => void
+  'duration-exceeded': (options: { videoUUID: string }) => void
+  'quota-exceeded': (options: { videoUUID: string }) => void
 
-  'ffmpeg-end': (options: { videoId: number }) => void
-  'ffmpeg-error': (options: { videoId: number }) => void
+  'transcoding-end': (options: { videoUUID: string }) => void
+  'transcoding-error': (options: { videoUUID: string }) => void
 
-  'after-cleanup': (options: { videoId: number }) => void
+  'after-cleanup': (options: { videoUUID: string }) => void
 }
 
 declare interface MuxingSession {
@@ -52,13 +51,16 @@ declare interface MuxingSession {
 
 class MuxingSession extends EventEmitter {
 
-  private ffmpegCommand: FfmpegCommand
+  private transcodingWrapper: AbstractTranscodingWrapper
 
   private readonly context: any
   private readonly user: MUserId
   private readonly sessionId: string
   private readonly videoLive: MVideoLiveVideo
-  private readonly inputUrl: string
+
+  private readonly inputLocalUrl: string
+  private readonly inputPublicUrl: string
+
   private readonly fps: number
   private readonly allResolutions: number[]
 
@@ -67,7 +69,6 @@ class MuxingSession extends EventEmitter {
 
   private readonly hasAudio: boolean
 
-  private readonly videoId: number
   private readonly videoUUID: string
   private readonly saveReplay: boolean
 
@@ -76,14 +77,15 @@ class MuxingSession extends EventEmitter {
 
   private readonly lTags: LoggerTagsFn
 
+  // Path -> Queue
+  private readonly objectStorageSendQueues = new Map<string, PQueue>()
+
   private segmentsToProcessPerPlaylist: { [playlistId: string]: string[] } = {}
 
   private streamingPlaylist: MStreamingPlaylistVideo
   private liveSegmentShaStore: LiveSegmentShaStore
 
-  private tsWatcher: FSWatcher
-  private masterWatcher: FSWatcher
-  private m3u8Watcher: FSWatcher
+  private filesWatcher: FSWatcher
 
   private masterPlaylistCreated = false
   private liveReady = false
@@ -103,7 +105,10 @@ class MuxingSession extends EventEmitter {
     user: MUserId
     sessionId: string
     videoLive: MVideoLiveVideo
-    inputUrl: string
+
+    inputLocalUrl: string
+    inputPublicUrl: string
+
     fps: number
     bitrate: number
     ratio: number
@@ -116,7 +121,10 @@ class MuxingSession extends EventEmitter {
     this.user = options.user
     this.sessionId = options.sessionId
     this.videoLive = options.videoLive
-    this.inputUrl = options.inputUrl
+
+    this.inputLocalUrl = options.inputLocalUrl
+    this.inputPublicUrl = options.inputPublicUrl
+
     this.fps = options.fps
 
     this.bitrate = options.bitrate
@@ -126,7 +134,6 @@ class MuxingSession extends EventEmitter {
 
     this.allResolutions = options.allResolutions
 
-    this.videoId = this.videoLive.Video.id
     this.videoUUID = this.videoLive.Video.uuid
 
     this.saveReplay = this.videoLive.saveReplay
@@ -145,63 +152,24 @@ class MuxingSession extends EventEmitter {
 
     await this.prepareDirectories()
 
-    this.ffmpegCommand = CONFIG.LIVE.TRANSCODING.ENABLED
-      ? await getLiveTranscodingCommand({
-        inputUrl: this.inputUrl,
+    this.transcodingWrapper = this.buildTranscodingWrapper()
 
-        outPath: this.outDirectory,
-        masterPlaylistName: this.streamingPlaylist.playlistFilename,
+    this.transcodingWrapper.on('end', () => this.onTranscodedEnded())
+    this.transcodingWrapper.on('error', () => this.onTranscodingError())
 
-        latencyMode: this.videoLive.latencyMode,
+    await this.transcodingWrapper.run()
 
-        resolutions: this.allResolutions,
-        fps: this.fps,
-        bitrate: this.bitrate,
-        ratio: this.ratio,
-
-        hasAudio: this.hasAudio,
-
-        availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
-        profile: CONFIG.LIVE.TRANSCODING.PROFILE
-      })
-      : getLiveMuxingCommand({
-        inputUrl: this.inputUrl,
-        outPath: this.outDirectory,
-        masterPlaylistName: this.streamingPlaylist.playlistFilename,
-        latencyMode: this.videoLive.latencyMode
-      })
-
-    logger.info('Running live muxing/transcoding for %s.', this.videoUUID, this.lTags())
+    this.filesWatcher = watch(this.outDirectory, { depth: 0 })
 
     this.watchMasterFile()
     this.watchTSFiles()
-    this.watchM3U8File()
-
-    let ffmpegShellCommand: string
-    this.ffmpegCommand.on('start', cmdline => {
-      ffmpegShellCommand = cmdline
-
-      logger.debug('Running ffmpeg command for live', { ffmpegShellCommand, ...this.lTags() })
-    })
-
-    this.ffmpegCommand.on('error', (err, stdout, stderr) => {
-      this.onFFmpegError({ err, stdout, stderr, ffmpegShellCommand })
-    })
-
-    this.ffmpegCommand.on('end', () => {
-      this.emit('ffmpeg-end', ({ videoId: this.videoId }))
-
-      this.onFFmpegEnded()
-    })
-
-    this.ffmpegCommand.run()
   }
 
   abort () {
-    if (!this.ffmpegCommand) return
+    if (!this.transcodingWrapper) return
 
     this.aborted = true
-    this.ffmpegCommand.kill('SIGINT')
+    this.transcodingWrapper.abort()
   }
 
   destroy () {
@@ -210,55 +178,17 @@ class MuxingSession extends EventEmitter {
     this.hasClientSocketInBadHealthWithCache.clear()
   }
 
-  private onFFmpegError (options: {
-    err: any
-    stdout: string
-    stderr: string
-    ffmpegShellCommand: string
-  }) {
-    const { err, stdout, stderr, ffmpegShellCommand } = options
-
-    this.onFFmpegEnded()
-
-    // Don't care that we killed the ffmpeg process
-    if (err?.message?.includes('Exiting normally')) return
-
-    logger.error('Live transcoding error.', { err, stdout, stderr, ffmpegShellCommand, ...this.lTags() })
-
-    this.emit('ffmpeg-error', ({ videoId: this.videoId }))
-  }
-
-  private onFFmpegEnded () {
-    logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', this.inputUrl, this.lTags())
-
-    setTimeout(() => {
-      // Wait latest segments generation, and close watchers
-
-      Promise.all([ this.tsWatcher.close(), this.masterWatcher.close(), this.m3u8Watcher.close() ])
-        .then(() => {
-          // Process remaining segments hash
-          for (const key of Object.keys(this.segmentsToProcessPerPlaylist)) {
-            this.processSegments(this.segmentsToProcessPerPlaylist[key])
-          }
-        })
-        .catch(err => {
-          logger.error(
-            'Cannot close watchers of %s or process remaining hash segments.', this.outDirectory,
-            { err, ...this.lTags() }
-          )
-        })
-
-      this.emit('after-cleanup', { videoId: this.videoId })
-    }, 1000)
-  }
-
   private watchMasterFile () {
-    this.masterWatcher = watch(this.outDirectory + '/' + this.streamingPlaylist.playlistFilename)
+    this.filesWatcher.on('add', async path => {
+      if (path !== join(this.outDirectory, this.streamingPlaylist.playlistFilename)) return
+      if (this.masterPlaylistCreated === true) return
 
-    this.masterWatcher.on('add', async () => {
       try {
         if (this.streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
-          const url = await storeHLSFileFromFilename(this.streamingPlaylist, this.streamingPlaylist.playlistFilename)
+          const masterContent = await readFile(path, 'utf-8')
+          logger.debug('Uploading live master playlist on object storage for %s', this.videoUUID, { masterContent, ...this.lTags() })
+
+          const url = await storeHLSFileFromContent(this.streamingPlaylist, this.streamingPlaylist.playlistFilename, masterContent)
 
           this.streamingPlaylist.playlistUrl = url
         }
@@ -272,45 +202,19 @@ class MuxingSession extends EventEmitter {
 
       this.masterPlaylistCreated = true
 
-      this.masterWatcher.close()
-        .catch(err => logger.error('Cannot close master watcher of %s.', this.outDirectory, { err, ...this.lTags() }))
+      logger.info('Master playlist file for %s has been created', this.videoUUID, this.lTags())
     })
-  }
-
-  private watchM3U8File () {
-    this.m3u8Watcher = watch(this.outDirectory + '/*.m3u8')
-
-    const sendQueues = new Map<string, PQueue>()
-
-    const onChangeOrAdd = async (m3u8Path: string) => {
-      if (this.streamingPlaylist.storage !== VideoStorage.OBJECT_STORAGE) return
-
-      try {
-        if (!sendQueues.has(m3u8Path)) {
-          sendQueues.set(m3u8Path, new PQueue({ concurrency: 1 }))
-        }
-
-        const queue = sendQueues.get(m3u8Path)
-        await queue.add(() => storeHLSFileFromPath(this.streamingPlaylist, m3u8Path))
-      } catch (err) {
-        logger.error('Cannot store in object storage m3u8 file %s', m3u8Path, { err, ...this.lTags() })
-      }
-    }
-
-    this.m3u8Watcher.on('change', onChangeOrAdd)
   }
 
   private watchTSFiles () {
     const startStreamDateTime = new Date().getTime()
 
-    this.tsWatcher = watch(this.outDirectory + '/*.ts')
-
-    const playlistIdMatcher = /^([\d+])-/
-
     const addHandler = async (segmentPath: string) => {
-      logger.debug('Live add handler of %s.', segmentPath, this.lTags())
+      if (segmentPath.endsWith('.ts') !== true) return
 
-      const playlistId = basename(segmentPath).match(playlistIdMatcher)[0]
+      logger.debug('Live add handler of TS file %s.', segmentPath, this.lTags())
+
+      const playlistId = this.getPlaylistIdFromTS(segmentPath)
 
       const segmentsToProcess = this.segmentsToProcessPerPlaylist[playlistId] || []
       this.processSegments(segmentsToProcess)
@@ -318,23 +222,27 @@ class MuxingSession extends EventEmitter {
       this.segmentsToProcessPerPlaylist[playlistId] = [ segmentPath ]
 
       if (this.hasClientSocketInBadHealthWithCache(this.sessionId)) {
-        this.emit('bad-socket-health', { videoId: this.videoId })
+        this.emit('bad-socket-health', { videoUUID: this.videoUUID })
         return
       }
 
       // Duration constraint check
       if (this.isDurationConstraintValid(startStreamDateTime) !== true) {
-        this.emit('duration-exceeded', { videoId: this.videoId })
+        this.emit('duration-exceeded', { videoUUID: this.videoUUID })
         return
       }
 
       // Check user quota if the user enabled replay saving
       if (await this.isQuotaExceeded(segmentPath) === true) {
-        this.emit('quota-exceeded', { videoId: this.videoId })
+        this.emit('quota-exceeded', { videoUUID: this.videoUUID })
       }
     }
 
     const deleteHandler = async (segmentPath: string) => {
+      if (segmentPath.endsWith('.ts') !== true) return
+
+      logger.debug('Live delete handler of TS file %s.', segmentPath, this.lTags())
+
       try {
         await this.liveSegmentShaStore.removeSegmentSha(segmentPath)
       } catch (err) {
@@ -350,8 +258,8 @@ class MuxingSession extends EventEmitter {
       }
     }
 
-    this.tsWatcher.on('add', p => addHandler(p))
-    this.tsWatcher.on('unlink', p => deleteHandler(p))
+    this.filesWatcher.on('add', p => addHandler(p))
+    this.filesWatcher.on('unlink', p => deleteHandler(p))
   }
 
   private async isQuotaExceeded (segmentPath: string) {
@@ -361,7 +269,7 @@ class MuxingSession extends EventEmitter {
     try {
       const segmentStat = await stat(segmentPath)
 
-      LiveQuotaStore.Instance.addQuotaTo(this.user.id, this.videoLive.id, segmentStat.size)
+      LiveQuotaStore.Instance.addQuotaTo(this.user.id, this.sessionId, segmentStat.size)
 
       const canUpload = await this.isAbleToUploadVideoWithCache(this.user.id)
 
@@ -429,6 +337,8 @@ class MuxingSession extends EventEmitter {
     if (this.streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
       try {
         await storeHLSFileFromPath(this.streamingPlaylist, segmentPath)
+
+        await this.processM3U8ToObjectStorage(segmentPath)
       } catch (err) {
         logger.error('Cannot store TS segment %s in object storage', segmentPath, { err, ...this.lTags() })
       }
@@ -438,8 +348,62 @@ class MuxingSession extends EventEmitter {
     if (this.masterPlaylistCreated && !this.liveReady) {
       this.liveReady = true
 
-      this.emit('live-ready', { videoId: this.videoId })
+      this.emit('live-ready', { videoUUID: this.videoUUID })
     }
+  }
+
+  private async processM3U8ToObjectStorage (segmentPath: string) {
+    const m3u8Path = join(this.outDirectory, this.getPlaylistNameFromTS(segmentPath))
+
+    logger.debug('Process M3U8 file %s.', m3u8Path, this.lTags())
+
+    const segmentName = basename(segmentPath)
+
+    const playlistContent = await readFile(m3u8Path, 'utf-8')
+    // Remove new chunk references, that will be processed later
+    const filteredPlaylistContent = playlistContent.substring(0, playlistContent.lastIndexOf(segmentName) + segmentName.length) + '\n'
+
+    try {
+      if (!this.objectStorageSendQueues.has(m3u8Path)) {
+        this.objectStorageSendQueues.set(m3u8Path, new PQueue({ concurrency: 1 }))
+      }
+
+      const queue = this.objectStorageSendQueues.get(m3u8Path)
+      await queue.add(() => storeHLSFileFromContent(this.streamingPlaylist, m3u8Path, filteredPlaylistContent))
+    } catch (err) {
+      logger.error('Cannot store in object storage m3u8 file %s', m3u8Path, { err, ...this.lTags() })
+    }
+  }
+
+  private onTranscodingError () {
+    this.emit('transcoding-error', ({ videoUUID: this.videoUUID }))
+  }
+
+  private onTranscodedEnded () {
+    this.emit('transcoding-end', ({ videoUUID: this.videoUUID }))
+
+    logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', this.inputLocalUrl, this.lTags())
+
+    setTimeout(() => {
+      // Wait latest segments generation, and close watchers
+
+      const promise = this.filesWatcher?.close() || Promise.resolve()
+      promise
+        .then(() => {
+          // Process remaining segments hash
+          for (const key of Object.keys(this.segmentsToProcessPerPlaylist)) {
+            this.processSegments(this.segmentsToProcessPerPlaylist[key])
+          }
+        })
+        .catch(err => {
+          logger.error(
+            'Cannot close watchers of %s or process remaining hash segments.', this.outDirectory,
+            { err, ...this.lTags() }
+          )
+        })
+
+      this.emit('after-cleanup', { videoUUID: this.videoUUID })
+    }, 1000)
   }
 
   private hasClientSocketInBadHealth (sessionId: string) {
@@ -502,6 +466,48 @@ class MuxingSession extends EventEmitter {
       streamingPlaylist: this.streamingPlaylist,
       sendToObjectStorage: CONFIG.OBJECT_STORAGE.ENABLED
     })
+  }
+
+  private buildTranscodingWrapper () {
+    const options = {
+      streamingPlaylist: this.streamingPlaylist,
+      videoLive: this.videoLive,
+
+      lTags: this.lTags,
+
+      sessionId: this.sessionId,
+      inputLocalUrl: this.inputLocalUrl,
+      inputPublicUrl: this.inputPublicUrl,
+
+      toTranscode: this.allResolutions.map(resolution => ({
+        resolution,
+        fps: computeOutputFPS({ inputFPS: this.fps, resolution })
+      })),
+
+      fps: this.fps,
+      bitrate: this.bitrate,
+      ratio: this.ratio,
+      hasAudio: this.hasAudio,
+
+      segmentListSize: VIDEO_LIVE.SEGMENTS_LIST_SIZE,
+      segmentDuration: getLiveSegmentTime(this.videoLive.latencyMode),
+
+      outDirectory: this.outDirectory
+    }
+
+    return CONFIG.LIVE.TRANSCODING.ENABLED && CONFIG.LIVE.TRANSCODING.REMOTE_RUNNERS.ENABLED
+      ? new RemoteTranscodingWrapper(options)
+      : new FFmpegTranscodingWrapper(options)
+  }
+
+  private getPlaylistIdFromTS (segmentPath: string) {
+    const playlistIdMatcher = /^([\d+])-/
+
+    return basename(segmentPath).match(playlistIdMatcher)[1]
+  }
+
+  private getPlaylistNameFromTS (segmentPath: string) {
+    return `${this.getPlaylistIdFromTS(segmentPath)}.m3u8`
   }
 }
 

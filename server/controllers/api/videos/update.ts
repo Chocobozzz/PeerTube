@@ -6,6 +6,7 @@ import { setVideoPrivacy } from '@server/lib/video-privacy'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { FilteredModelAttributes } from '@server/types'
 import { MVideoFullLight } from '@server/types/models'
+import { forceNumber } from '@shared/core-utils'
 import { HttpStatusCode, VideoPrivacy, VideoUpdate } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
@@ -19,7 +20,6 @@ import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosU
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
-import { forceNumber } from '@shared/core-utils'
 import { VideoPasswordModel } from '@server/models/video/video-password'
 import { exists } from '@server/helpers/custom-validators/misc'
 
@@ -154,7 +154,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   } catch (err) {
     // If the transaction is retried, sequelize will think the object has not changed
     // So we need to restore the previous fields
-    resetSequelizeInstance(videoFromReq)
+    await resetSequelizeInstance(videoFromReq)
 
     throw err
   } finally {

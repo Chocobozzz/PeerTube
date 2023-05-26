@@ -24,8 +24,6 @@ class MockSMTPServer {
 
       this.maildev.on('new', email => {
         this.emails.push(email)
-
-        console.log('pushed email', email)
       })
 
       this.maildev.listen(err => {

@@ -38,10 +38,10 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
 
   ngOnInit () {
     this.buildForm({
-      name: VIDEO_CHANNEL_NAME_VALIDATOR,
+      'name': VIDEO_CHANNEL_NAME_VALIDATOR,
       'display-name': VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
-      description: VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
-      support: VIDEO_CHANNEL_SUPPORT_VALIDATOR
+      'description': VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
+      'support': VIDEO_CHANNEL_SUPPORT_VALIDATOR
     })
   }
 

@@ -111,9 +111,9 @@
         </div>
       </div>
 
-      <div
+      <button
         (click)="isAdvancedCustomizationCollapsed = !isAdvancedCustomizationCollapsed"
-        role="button" class="advanced-filters-button"
+        class="advanced-filters-button button-unstyle"
         [attr.aria-expanded]="!isAdvancedCustomizationCollapsed" aria-controls="collapseBasic"
       >
         <ng-container *ngIf="isAdvancedCustomizationCollapsed">
@@ -131,7 +131,7 @@
             Simple
           </ng-container>
         </ng-container>
-      </div>
+      </button>
     </ng-container>
   </div>
 

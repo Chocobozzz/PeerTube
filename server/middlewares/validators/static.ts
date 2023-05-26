@@ -1,6 +1,6 @@
 import express from 'express'
 import { query } from 'express-validator'
-import LRUCache from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 import { basename, dirname } from 'path'
 import { exists, isSafePeerTubeFilenameWithoutExtension, isUUIDValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc'
 import { logger } from '@server/helpers/logger'

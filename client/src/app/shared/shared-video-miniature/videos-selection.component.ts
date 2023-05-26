@@ -2,6 +2,7 @@ import { Observable, Subject } from 'rxjs'
 import { AfterContentInit, Component, ContentChildren, EventEmitter, Input, Output, QueryList, TemplateRef } from '@angular/core'
 import { ComponentPagination, Notifier, User } from '@app/core'
 import { logger } from '@root-helpers/logger'
+import { objectKeysTyped } from '@shared/core-utils'
 import { ResultList, VideosExistInPlaylists, VideoSortField } from '@shared/models'
 import { PeerTubeTemplateDirective, Video } from '../shared-main'
 import { MiniatureDisplayOptions } from './video-miniature.component'
@@ -93,7 +94,7 @@ export class VideosSelectionComponent implements AfterContentInit {
   }
 
   isInSelectionMode () {
-    return Object.keys(this._selection).some(k => this._selection[k] === true)
+    return objectKeysTyped(this._selection).some(k => this._selection[k] === true)
   }
 
   videoById (index: number, video: Video) {

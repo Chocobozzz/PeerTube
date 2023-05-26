@@ -1,7 +1,7 @@
 import { forkJoin } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
-import { AuthService, ServerService, UserService } from '@app/core'
+import { AuthService, Notifier, ServerService, UserService } from '@app/core'
 import { USER_EMAIL_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { HttpStatusCode, User } from '@shared/models'
@@ -20,7 +20,8 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
     protected formReactiveService: FormReactiveService,
     private authService: AuthService,
     private userService: UserService,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private notifier: Notifier
   ) {
     super()
   }
@@ -28,7 +29,7 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
   ngOnInit () {
     this.buildForm({
       'new-email': USER_EMAIL_VALIDATOR,
-      password: USER_PASSWORD_VALIDATOR
+      'password': USER_PASSWORD_VALIDATOR
     })
 
     this.user = this.authService.getUser()

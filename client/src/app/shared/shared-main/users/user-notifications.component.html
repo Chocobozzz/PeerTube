@@ -1,6 +1,7 @@
 <div *ngIf="componentPagination.totalItems === 0" class="no-notification" i18n>You don't have notifications.</div>
 
 <div class="notifications" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
+  <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events,@angular-eslint/template/interactive-supports-focus -->
   <div *ngFor="let notification of notifications" class="notification" [ngClass]="{ unread: !notification.read }" (click)="markAsRead(notification)">
 
     <ng-container [ngSwitch]="notification.type">

@@ -9,8 +9,8 @@ import {
 } from '@server/helpers/custom-validators/video-studio'
 import { cleanUpReqFiles } from '@server/helpers/express-utils'
 import { CONFIG } from '@server/initializers/config'
-import { approximateIntroOutroAdditionalSize, getTaskFile } from '@server/lib/video-studio'
-import { isAudioFile } from '@shared/extra-utils'
+import { approximateIntroOutroAdditionalSize, getTaskFileFromReq } from '@server/lib/video-studio'
+import { isAudioFile } from '@shared/ffmpeg'
 import { HttpStatusCode, UserRight, VideoState, VideoStudioCreateEdition, VideoStudioTask } from '@shared/models'
 import { areValidationErrors, checkUserCanManageVideo, checkUserQuota, doesVideoExist } from '../shared'
 
@@ -49,7 +49,7 @@ const videoStudioAddEditionValidator = [
       }
 
       if (task.name === 'add-intro' || task.name === 'add-outro') {
-        const filePath = getTaskFile(files, i).path
+        const filePath = getTaskFileFromReq(files, i).path
 
         // Our concat filter needs a video stream
         if (await isAudioFile(filePath)) {
@@ -79,7 +79,7 @@ const videoStudioAddEditionValidator = [
     if (!checkUserCanManageVideo(user, video, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
 
     // Try to make an approximation of bytes added by the intro/outro
-    const additionalBytes = await approximateIntroOutroAdditionalSize(video, body.tasks, i => getTaskFile(files, i).path)
+    const additionalBytes = await approximateIntroOutroAdditionalSize(video, body.tasks, i => getTaskFileFromReq(files, i).path)
     if (await checkUserQuota(user, additionalBytes, res) === false) return cleanUpReqFiles(req)
 
     return next()

@@ -1,5 +1,5 @@
 import { maxBy, minBy } from 'lodash'
-import magnetUtil from 'magnet-uri'
+import { decode as magnetUriDecode } from 'magnet-uri'
 import { basename } from 'path'
 import { isAPVideoFileUrlMetadataObject } from '@server/helpers/custom-validators/activitypub/videos'
 import { isVideoFileInfoHashValid } from '@server/helpers/custom-validators/videos'
@@ -62,7 +62,7 @@ function getFileAttributesFromUrl (
 
     if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.href)
 
-    const parsed = magnetUtil.decode(magnet.href)
+    const parsed = magnetUriDecode(magnet.href)
     if (!parsed || isVideoFileInfoHashValid(parsed.infoHash) === false) {
       throw new Error('Cannot parse magnet URI ' + magnet.href)
     }

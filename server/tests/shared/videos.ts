@@ -4,16 +4,106 @@ import { expect } from 'chai'
 import { pathExists, readdir } from 'fs-extra'
 import { basename, join } from 'path'
 import { loadLanguages, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '@server/initializers/constants'
-import { getLowercaseExtension, uuidRegex } from '@shared/core-utils'
-import { HttpStatusCode, VideoCaption, VideoDetails } from '@shared/models'
-import { makeRawRequest, PeerTubeServer, VideoEdit, waitJobs, webtorrentAdd } from '@shared/server-commands'
-import { dateIsValid, testImage } from './checks'
+import { getLowercaseExtension, pick, uuidRegex } from '@shared/core-utils'
+import { HttpStatusCode, VideoCaption, VideoDetails, VideoPrivacy, VideoResolution } from '@shared/models'
+import { makeRawRequest, PeerTubeServer, VideoEdit, waitJobs } from '@shared/server-commands'
+import { dateIsValid, expectStartWith, testImage } from './checks'
+import { checkWebTorrentWorks } from './webtorrent'
 
 loadLanguages()
 
-async function completeVideoCheck (
-  server: PeerTubeServer,
-  video: any,
+async function completeWebVideoFilesCheck (options: {
+  server: PeerTubeServer
+  originServer: PeerTubeServer
+  videoUUID: string
+  fixture: string
+  files: {
+    resolution: number
+    size?: number
+  }[]
+  objectStorageBaseUrl?: string
+}) {
+  const { originServer, server, videoUUID, files, fixture, objectStorageBaseUrl } = options
+  const video = await server.videos.getWithToken({ id: videoUUID })
+  const serverConfig = await originServer.config.getConfig()
+  const requiresAuth = video.privacy.id === VideoPrivacy.PRIVATE || video.privacy.id === VideoPrivacy.INTERNAL
+
+  const transcodingEnabled = serverConfig.transcoding.webtorrent.enabled
+
+  for (const attributeFile of files) {
+    const file = video.files.find(f => f.resolution.id === attributeFile.resolution)
+    expect(file, `resolution ${attributeFile.resolution} does not exist`).not.to.be.undefined
+
+    let extension = getLowercaseExtension(fixture)
+    // Transcoding enabled: extension will always be .mp4
+    if (transcodingEnabled) extension = '.mp4'
+
+    expect(file.id).to.exist
+    expect(file.magnetUri).to.have.lengthOf.above(2)
+
+    {
+      const privatePath = requiresAuth
+        ? 'private/'
+        : ''
+      const nameReg = `${uuidRegex}-${file.resolution.id}`
+
+      expect(file.torrentDownloadUrl).to.match(new RegExp(`${server.url}/download/torrents/${nameReg}.torrent`))
+      expect(file.torrentUrl).to.match(new RegExp(`${server.url}/lazy-static/torrents/${nameReg}.torrent`))
+
+      if (objectStorageBaseUrl && requiresAuth) {
+        expect(file.fileUrl).to.match(new RegExp(`${originServer.url}/object-storage-proxy/webseed/${privatePath}${nameReg}${extension}`))
+      } else if (objectStorageBaseUrl) {
+        expectStartWith(file.fileUrl, objectStorageBaseUrl)
+      } else {
+        expect(file.fileUrl).to.match(new RegExp(`${originServer.url}/static/webseed/${privatePath}${nameReg}${extension}`))
+      }
+
+      expect(file.fileDownloadUrl).to.match(new RegExp(`${originServer.url}/download/videos/${nameReg}${extension}`))
+    }
+
+    {
+      const token = requiresAuth
+        ? server.accessToken
+        : undefined
+
+      await Promise.all([
+        makeRawRequest({ url: file.torrentUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
+        makeRawRequest({ url: file.torrentDownloadUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
+        makeRawRequest({ url: file.metadataUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
+        makeRawRequest({ url: file.fileUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
+        makeRawRequest({
+          url: file.fileDownloadUrl,
+          token,
+          expectedStatus: objectStorageBaseUrl ? HttpStatusCode.FOUND_302 : HttpStatusCode.OK_200
+        })
+      ])
+    }
+
+    expect(file.resolution.id).to.equal(attributeFile.resolution)
+
+    if (file.resolution.id === VideoResolution.H_NOVIDEO) {
+      expect(file.resolution.label).to.equal('Audio')
+    } else {
+      expect(file.resolution.label).to.equal(attributeFile.resolution + 'p')
+    }
+
+    if (attributeFile.size) {
+      const minSize = attributeFile.size - ((10 * attributeFile.size) / 100)
+      const maxSize = attributeFile.size + ((10 * attributeFile.size) / 100)
+      expect(
+        file.size,
+        'File size for resolution ' + file.resolution.label + ' outside confidence interval (' + minSize + '> size <' + maxSize + ')'
+      ).to.be.above(minSize).and.below(maxSize)
+    }
+
+    await checkWebTorrentWorks(file.magnetUri)
+  }
+}
+
+async function completeVideoCheck (options: {
+  server: PeerTubeServer
+  originServer: PeerTubeServer
+  videoUUID: string
   attributes: {
     name: string
     category: number
@@ -50,12 +140,13 @@ async function completeVideoCheck (
     thumbnailfile?: string
     previewfile?: string
   }
-) {
+}) {
+  const { attributes, originServer, server, videoUUID } = options
+
+  const video = await server.videos.get({ id: videoUUID })
+
   if (!attributes.likes) attributes.likes = 0
   if (!attributes.dislikes) attributes.dislikes = 0
-
-  const host = new URL(server.url).host
-  const originHost = attributes.account.host
 
   expect(video.name).to.equal(attributes.name)
   expect(video.category.id).to.equal(attributes.category)
@@ -77,7 +168,7 @@ async function completeVideoCheck (
   expect(video.dislikes).to.equal(attributes.dislikes)
   expect(video.isLocal).to.equal(attributes.isLocal)
   expect(video.duration).to.equal(attributes.duration)
-  expect(video.url).to.contain(originHost)
+  expect(video.url).to.contain(originServer.host)
   expect(dateIsValid(video.createdAt)).to.be.true
   expect(dateIsValid(video.publishedAt)).to.be.true
   expect(dateIsValid(video.updatedAt)).to.be.true
@@ -92,67 +183,28 @@ async function completeVideoCheck (
     expect(video.originallyPublishedAt).to.be.null
   }
 
-  const videoDetails = await server.videos.get({ id: video.uuid })
-
-  expect(videoDetails.files).to.have.lengthOf(attributes.files.length)
-  expect(videoDetails.tags).to.deep.equal(attributes.tags)
-  expect(videoDetails.account.name).to.equal(attributes.account.name)
-  expect(videoDetails.account.host).to.equal(attributes.account.host)
+  expect(video.files).to.have.lengthOf(attributes.files.length)
+  expect(video.tags).to.deep.equal(attributes.tags)
+  expect(video.account.name).to.equal(attributes.account.name)
+  expect(video.account.host).to.equal(attributes.account.host)
   expect(video.channel.displayName).to.equal(attributes.channel.displayName)
   expect(video.channel.name).to.equal(attributes.channel.name)
-  expect(videoDetails.channel.host).to.equal(attributes.account.host)
-  expect(videoDetails.channel.isLocal).to.equal(attributes.channel.isLocal)
-  expect(dateIsValid(videoDetails.channel.createdAt.toString())).to.be.true
-  expect(dateIsValid(videoDetails.channel.updatedAt.toString())).to.be.true
-  expect(videoDetails.commentsEnabled).to.equal(attributes.commentsEnabled)
-  expect(videoDetails.downloadEnabled).to.equal(attributes.downloadEnabled)
+  expect(video.channel.host).to.equal(attributes.account.host)
+  expect(video.channel.isLocal).to.equal(attributes.channel.isLocal)
+  expect(dateIsValid(video.channel.createdAt.toString())).to.be.true
+  expect(dateIsValid(video.channel.updatedAt.toString())).to.be.true
+  expect(video.commentsEnabled).to.equal(attributes.commentsEnabled)
+  expect(video.downloadEnabled).to.equal(attributes.downloadEnabled)
 
-  for (const attributeFile of attributes.files) {
-    const file = videoDetails.files.find(f => f.resolution.id === attributeFile.resolution)
-    expect(file).not.to.be.undefined
-
-    let extension = getLowercaseExtension(attributes.fixture)
-    // Transcoding enabled: extension will always be .mp4
-    if (attributes.files.length > 1) extension = '.mp4'
-
-    expect(file.id).to.exist
-    expect(file.magnetUri).to.have.lengthOf.above(2)
-
-    expect(file.torrentDownloadUrl).to.match(new RegExp(`http://${host}/download/torrents/${uuidRegex}-${file.resolution.id}.torrent`))
-    expect(file.torrentUrl).to.match(new RegExp(`http://${host}/lazy-static/torrents/${uuidRegex}-${file.resolution.id}.torrent`))
-
-    expect(file.fileUrl).to.match(new RegExp(`http://${originHost}/static/webseed/${uuidRegex}-${file.resolution.id}${extension}`))
-    expect(file.fileDownloadUrl).to.match(new RegExp(`http://${originHost}/download/videos/${uuidRegex}-${file.resolution.id}${extension}`))
-
-    await Promise.all([
-      makeRawRequest({ url: file.torrentUrl, expectedStatus: HttpStatusCode.OK_200 }),
-      makeRawRequest({ url: file.torrentDownloadUrl, expectedStatus: HttpStatusCode.OK_200 }),
-      makeRawRequest({ url: file.metadataUrl, expectedStatus: HttpStatusCode.OK_200 })
-    ])
-
-    expect(file.resolution.id).to.equal(attributeFile.resolution)
-    expect(file.resolution.label).to.equal(attributeFile.resolution + 'p')
-
-    const minSize = attributeFile.size - ((10 * attributeFile.size) / 100)
-    const maxSize = attributeFile.size + ((10 * attributeFile.size) / 100)
-    expect(
-      file.size,
-      'File size for resolution ' + file.resolution.label + ' outside confidence interval (' + minSize + '> size <' + maxSize + ')'
-    ).to.be.above(minSize).and.below(maxSize)
-
-    const torrent = await webtorrentAdd(file.magnetUri, true)
-    expect(torrent.files).to.be.an('array')
-    expect(torrent.files.length).to.equal(1)
-    expect(torrent.files[0].path).to.exist.and.to.not.equal('')
-  }
-
-  expect(videoDetails.thumbnailPath).to.exist
-  await testImage(server.url, attributes.thumbnailfile || attributes.fixture, videoDetails.thumbnailPath)
+  expect(video.thumbnailPath).to.exist
+  await testImage(server.url, attributes.thumbnailfile || attributes.fixture, video.thumbnailPath)
 
   if (attributes.previewfile) {
-    expect(videoDetails.previewPath).to.exist
-    await testImage(server.url, attributes.previewfile, videoDetails.previewPath)
+    expect(video.previewPath).to.exist
+    await testImage(server.url, attributes.previewfile, video.previewPath)
   }
+
+  await completeWebVideoFilesCheck({ server, originServer, videoUUID: video.uuid, ...pick(attributes, [ 'fixture', 'files' ]) })
 }
 
 async function checkVideoFilesWereRemoved (options: {
@@ -245,6 +297,7 @@ async function uploadRandomVideoOnServers (
 
 export {
   completeVideoCheck,
+  completeWebVideoFilesCheck,
   checkUploadVideoParam,
   uploadRandomVideoOnServers,
   checkVideoFilesWereRemoved,

@@ -8,9 +8,9 @@ import { CLICommand } from '../cli'
 import { CustomPagesCommand } from '../custom-pages'
 import { FeedCommand } from '../feeds'
 import { LogsCommand } from '../logs'
-import { SQLCommand } from '../miscs'
 import { AbusesCommand } from '../moderation'
 import { OverviewsCommand } from '../overviews'
+import { RunnerJobsCommand, RunnerRegistrationTokensCommand, RunnersCommand } from '../runners'
 import { SearchCommand } from '../search'
 import { SocketIOCommand } from '../socket'
 import {
@@ -49,7 +49,6 @@ import { DebugCommand } from './debug-command'
 import { FollowsCommand } from './follows-command'
 import { JobsCommand } from './jobs-command'
 import { MetricsCommand } from './metrics-command'
-import { ObjectStorageCommand } from './object-storage-command'
 import { PluginsCommand } from './plugins-command'
 import { RedundancyCommand } from './redundancy-command'
 import { ServersCommand } from './servers-command'
@@ -137,12 +136,10 @@ export class PeerTubeServer {
   streamingPlaylists?: StreamingPlaylistsCommand
   channels?: ChannelsCommand
   comments?: CommentsCommand
-  sql?: SQLCommand
   notifications?: NotificationsCommand
   servers?: ServersCommand
   login?: LoginCommand
   users?: UsersCommand
-  objectStorage?: ObjectStorageCommand
   videoStudio?: VideoStudioCommand
   videos?: VideosCommand
   videoStats?: VideoStatsCommand
@@ -151,6 +148,10 @@ export class PeerTubeServer {
   videoToken?: VideoTokenCommand
   registrations?: RegistrationsCommand
   videoPasswords?: PasswordsCommand
+
+  runners?: RunnersCommand
+  runnerRegistrationTokens?: RunnerRegistrationTokensCommand
+  runnerJobs?: RunnerJobsCommand
 
   constructor (options: { serverNumber: number } | { url: string }) {
     if ((options as any).url) {
@@ -249,7 +250,7 @@ export class PeerTubeServer {
     const forkOptions = {
       silent: true,
       env,
-      detached: true,
+      detached: false,
       execArgv
     }
 
@@ -313,18 +314,18 @@ export class PeerTubeServer {
     })
   }
 
-  async kill () {
-    if (!this.app) return
+  kill () {
+    if (!this.app) return Promise.resolve()
 
-    await this.sql.cleanup()
-
-    process.kill(-this.app.pid)
+    process.kill(this.app.pid)
 
     this.app = null
+
+    return Promise.resolve()
   }
 
   private randomServer () {
-    const low = 10
+    const low = 2500
     const high = 10000
 
     return randomInt(low, high)
@@ -363,6 +364,7 @@ export class PeerTubeServer {
       },
       storage: {
         tmp: this.getDirectoryPath('tmp') + '/',
+        tmp_persistent: this.getDirectoryPath('tmp-persistent') + '/',
         bin: this.getDirectoryPath('bin') + '/',
         avatars: this.getDirectoryPath('avatars') + '/',
         videos: this.getDirectoryPath('videos') + '/',
@@ -422,19 +424,21 @@ export class PeerTubeServer {
     this.streamingPlaylists = new StreamingPlaylistsCommand(this)
     this.channels = new ChannelsCommand(this)
     this.comments = new CommentsCommand(this)
-    this.sql = new SQLCommand(this)
     this.notifications = new NotificationsCommand(this)
     this.servers = new ServersCommand(this)
     this.login = new LoginCommand(this)
     this.users = new UsersCommand(this)
     this.videos = new VideosCommand(this)
-    this.objectStorage = new ObjectStorageCommand(this)
     this.videoStudio = new VideoStudioCommand(this)
     this.videoStats = new VideoStatsCommand(this)
     this.views = new ViewsCommand(this)
     this.twoFactor = new TwoFactorCommand(this)
     this.videoToken = new VideoTokenCommand(this)
     this.registrations = new RegistrationsCommand(this)
+
+    this.runners = new RunnersCommand(this)
+    this.runnerRegistrationTokens = new RunnerRegistrationTokensCommand(this)
+    this.runnerJobs = new RunnerJobsCommand(this)
     this.videoPasswords = new PasswordsCommand(this)
   }
 }

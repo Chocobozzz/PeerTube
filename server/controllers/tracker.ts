@@ -1,7 +1,7 @@
 import { Server as TrackerServer } from 'bittorrent-tracker'
 import express from 'express'
 import { createServer } from 'http'
-import LRUCache from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 import proxyAddr from 'proxy-addr'
 import { WebSocketServer } from 'ws'
 import { logger } from '../helpers/logger'

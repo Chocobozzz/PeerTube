@@ -1,4 +1,5 @@
 import { Account } from '@app/shared/shared-main/account/account.model'
+import { objectKeysTyped } from '@shared/core-utils'
 import { hasUserRight } from '@shared/core-utils/users'
 import {
   ActorImage,
@@ -19,6 +20,7 @@ export class User implements UserServerModel {
   pendingEmail: string | null
 
   emailVerified: boolean
+  emailPublic: boolean
   nsfwPolicy: NSFWPolicyType
 
   adminFlags?: UserAdminFlag
@@ -129,8 +131,9 @@ export class User implements UserServerModel {
   }
 
   patch (obj: UserServerModel) {
-    for (const key of Object.keys(obj)) {
-      this[key] = obj[key]
+    for (const key of objectKeysTyped(obj)) {
+      // FIXME: typings
+      (this as any)[key] = obj[key]
     }
 
     if (obj.account !== undefined) {

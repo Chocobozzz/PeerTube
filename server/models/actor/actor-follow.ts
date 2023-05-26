@@ -37,8 +37,8 @@ import { logger } from '../../helpers/logger'
 import { ACTOR_FOLLOW_SCORE, CONSTRAINTS_FIELDS, FOLLOW_STATES, SERVER_ACTOR_NAME, SORTABLE_COLUMNS } from '../../initializers/constants'
 import { AccountModel } from '../account/account'
 import { ServerModel } from '../server/server'
-import { doesExist } from '../shared/query'
 import { buildSQLAttributes, createSafeIn, getSort, searchAttribute, throwIfNotValid } from '../shared'
+import { doesExist } from '../shared/query'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
 import { InstanceListFollowersQueryBuilder, ListFollowersOptions } from './sql/instance-list-followers-query-builder'
@@ -265,9 +265,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
       model: ActorModel,
       required: true,
       as: 'ActorFollowing',
-      where: {
-        preferredUsername: targetName
-      },
+      where: ActorModel.wherePreferredUsername(targetName),
       include: [
         {
           model: VideoChannelModel.unscoped(),
@@ -313,24 +311,16 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
         if (t.host) {
           return {
             [Op.and]: [
-              {
-                $preferredUsername$: t.name
-              },
-              {
-                $host$: t.host
-              }
+              ActorModel.wherePreferredUsername(t.name),
+              { $host$: t.host }
             ]
           }
         }
 
         return {
           [Op.and]: [
-            {
-              $preferredUsername$: t.name
-            },
-            {
-              $serverId$: null
-            }
+            ActorModel.wherePreferredUsername(t.name),
+            { $serverId$: null }
           ]
         }
       })

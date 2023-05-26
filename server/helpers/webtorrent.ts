@@ -1,7 +1,7 @@
 import { decode, encode } from 'bencode'
 import createTorrent from 'create-torrent'
 import { createWriteStream, ensureDir, pathExists, readFile, remove, writeFile } from 'fs-extra'
-import magnetUtil from 'magnet-uri'
+import { encode as magnetUriEncode } from 'magnet-uri'
 import parseTorrent from 'parse-torrent'
 import { dirname, join } from 'path'
 import { pipeline } from 'stream'
@@ -13,9 +13,9 @@ import { VideoPathManager } from '@server/lib/video-path-manager'
 import { MVideo } from '@server/types/models/video/video'
 import { MVideoFile, MVideoFileRedundanciesOpt } from '@server/types/models/video/video-file'
 import { MStreamingPlaylistVideo } from '@server/types/models/video/video-streaming-playlist'
+import { promisify2 } from '@shared/core-utils'
 import { sha1 } from '@shared/extra-utils'
 import { CONFIG } from '../initializers/config'
-import { promisify2 } from './core-utils'
 import { logger } from './logger'
 import { generateVideoImportTmpPath } from './utils'
 import { extractVideo } from './video'
@@ -185,7 +185,7 @@ function generateMagnetUri (
     name: video.name
   }
 
-  return magnetUtil.encode(magnetHash)
+  return magnetUriEncode(magnetHash)
 }
 
 // ---------------------------------------------------------------------------

@@ -104,7 +104,7 @@ export class PluginListInstalledComponent implements OnInit {
   }
 
   isUninstalling (plugin: PeerTubePlugin) {
-    return !!this.uninstall[this.getPluginKey(plugin)]
+    return !!this.uninstalling[this.getPluginKey(plugin)]
   }
 
   isTheme (plugin: PeerTubePlugin) {

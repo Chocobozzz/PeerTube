@@ -33,7 +33,7 @@
     </div>
 
     <div class="journal" *ngIf="latestLiveSessions.length !== 0">
-      <label i18n>Latest live sessions</label>
+      <div class="mb-2 fw-bold" i18n>Latest live sessions</div>
 
       <div class="journal-session" *ngFor="let session of latestLiveSessions">
         <span i18n class="pt-badge badge-success" *ngIf="!getErrorLabel(session)">Success</span>

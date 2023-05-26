@@ -1,4 +1,2 @@
-<div (click)="update()">
-  <input type="checkbox" [checked]="checked"/>
-  <label class="ms-auto">Toggle</label>
-</div>
+<input type="checkbox" [checked]="checked" [name]="inputName" [id]="inputName" (change)="update()" />
+<label [for]="inputName" class="ms-auto">Toggle</label>

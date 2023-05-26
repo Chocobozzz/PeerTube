@@ -1,5 +1,6 @@
 import { IConfig } from 'config'
-import { parseSemVersion, promisify0 } from '../helpers/core-utils'
+import { promisify0 } from '@shared/core-utils'
+import { parseSemVersion } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
 
 // Special behaviour for config because we can reload it
@@ -36,7 +37,9 @@ function checkMissedConfig () {
     'transcoding.profile', 'transcoding.concurrency',
     'transcoding.resolutions.0p', 'transcoding.resolutions.144p', 'transcoding.resolutions.240p', 'transcoding.resolutions.360p',
     'transcoding.resolutions.480p', 'transcoding.resolutions.720p', 'transcoding.resolutions.1080p', 'transcoding.resolutions.1440p',
-    'transcoding.resolutions.2160p', 'transcoding.always_transcode_original_resolution', 'video_studio.enabled',
+    'transcoding.resolutions.2160p', 'transcoding.always_transcode_original_resolution', 'transcoding.remote_runners.enabled',
+    'video_studio.enabled', 'video_studio.remote_runners.enabled',
+    'remote_runners.stalled_jobs.vod', 'remote_runners.stalled_jobs.live',
     'import.videos.http.enabled', 'import.videos.torrent.enabled', 'import.videos.concurrency', 'import.videos.timeout',
     'import.video_channel_synchronization.enabled', 'import.video_channel_synchronization.max_per_user',
     'import.video_channel_synchronization.check_interval', 'import.video_channel_synchronization.videos_limit_per_synchronization',
@@ -74,13 +77,15 @@ function checkMissedConfig () {
     'live.transcoding.enabled', 'live.transcoding.threads', 'live.transcoding.profile',
     'live.transcoding.resolutions.144p', 'live.transcoding.resolutions.240p', 'live.transcoding.resolutions.360p',
     'live.transcoding.resolutions.480p', 'live.transcoding.resolutions.720p', 'live.transcoding.resolutions.1080p',
-    'live.transcoding.resolutions.1440p', 'live.transcoding.resolutions.2160p', 'live.transcoding.always_transcode_original_resolution'
+    'live.transcoding.resolutions.1440p', 'live.transcoding.resolutions.2160p', 'live.transcoding.always_transcode_original_resolution',
+    'live.transcoding.remote_runners.enabled'
   ]
 
   const requiredAlternatives = [
     [ // set
       [ 'redis.hostname', 'redis.port' ], // alternative
-      [ 'redis.socket' ]
+      [ 'redis.socket' ],
+      [ 'redis.sentinel.master_name', 'redis.sentinel.sentinels[0].hostname', 'redis.sentinel.sentinels[0].port' ]
     ]
   ]
   const miss: string[] = []

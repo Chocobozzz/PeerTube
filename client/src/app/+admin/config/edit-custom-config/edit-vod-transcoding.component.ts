@@ -46,11 +46,11 @@ export class EditVODTranscodingComponent implements OnInit, OnChanges {
     const profiles = this.serverConfig.transcoding.availableProfiles
 
     return profiles.map(p => {
-      const description = p === 'default'
-        ? $localize`x264, targeting maximum device compatibility`
-        : ''
+      if (p === 'default') {
+        return { id: p, label: $localize`Default`, description: $localize`x264, targeting maximum device compatibility` }
+      }
 
-      return { id: p, label: p, description }
+      return { id: p, label: p }
     })
   }
 
@@ -58,12 +58,28 @@ export class EditVODTranscodingComponent implements OnInit, OnChanges {
     return 'transcoding.resolutions.' + resolution
   }
 
+  isRemoteRunnerVODEnabled () {
+    return this.editConfigurationService.isRemoteRunnerVODEnabled(this.form)
+  }
+
   isTranscodingEnabled () {
     return this.editConfigurationService.isTranscodingEnabled(this.form)
   }
 
+  isStudioEnabled () {
+    return this.editConfigurationService.isStudioEnabled(this.form)
+  }
+
   getTranscodingDisabledClass () {
     return { 'disabled-checkbox-extra': !this.isTranscodingEnabled() }
+  }
+
+  getLocalTranscodingDisabledClass () {
+    return { 'disabled-checkbox-extra': !this.isTranscodingEnabled() || this.isRemoteRunnerVODEnabled() }
+  }
+
+  getStudioDisabledClass () {
+    return { 'disabled-checkbox-extra': !this.isStudioEnabled() }
   }
 
   getTotalTranscodingThreads () {

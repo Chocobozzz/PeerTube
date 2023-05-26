@@ -4,7 +4,7 @@
     <div class="col-lg-4 col-md-6 col-xs-12">
       <div class="form-group">
         <div class="radio-label label-container">
-          <label i18n>Sort</label>
+          <label for="sort" i18n>Sort</label>
           <button i18n class="reset-button reset-button-small" (click)="resetField('sort', '-match')" *ngIf="advancedSearch.sort !== '-match'">
             Reset
           </button>
@@ -18,7 +18,7 @@
 
       <div class="form-group">
         <div class="radio-label label-container">
-          <label i18n>Display only</label>
+          <label for="isLive" i18n>Display only</label>
           <button i18n class="reset-button reset-button-small" (click)="resetField('isLive')" *ngIf="advancedSearch.isLive !== undefined">
             Reset
           </button>
@@ -37,7 +37,7 @@
 
       <div class="form-group">
         <div class="radio-label label-container">
-          <label i18n>Display sensitive content</label>
+          <label for="sensitiveContent" i18n>Display sensitive content</label>
           <button i18n class="reset-button reset-button-small" (click)="resetField('nsfw')" *ngIf="advancedSearch.nsfw !== undefined">
             Reset
           </button>
@@ -56,7 +56,7 @@
 
       <div class="form-group">
         <div class="radio-label label-container">
-          <label i18n>Published date</label>
+          <label for="publishedDateRange" i18n>Published date</label>
           <button i18n class="reset-button reset-button-small" (click)="resetLocalField('publishedDateRange')" *ngIf="publishedDateRange !== undefined">
             Reset
           </button>
@@ -105,7 +105,7 @@
     <div class="col-lg-4 col-md-6 col-xs-12">
       <div class="form-group">
         <div class="radio-label label-container">
-          <label i18n>Duration</label>
+          <label for="durationRange" i18n>Duration</label>
           <button i18n class="reset-button reset-button-small" (click)="resetLocalField('durationRange')" *ngIf="durationRange !== undefined">
             Reset
           </button>
@@ -184,7 +184,7 @@
 
       <div class="form-group">
         <div class="radio-label label-container">
-          <label i18n>Result types</label>
+          <label for="resultType" i18n>Result types</label>
           <button i18n class="reset-button reset-button-small" (click)="resetField('resultType')" *ngIf="advancedSearch.resultType !== undefined">
             Reset
           </button>
@@ -209,7 +209,7 @@
 
       <div class="form-group" *ngIf="isSearchTargetEnabled()">
         <div class="radio-label label-container">
-          <label i18n>Search target</label>
+          <label for="searchTarget" i18n>Search target</label>
         </div>
 
         <div class="peertube-radio-container">

@@ -1,34 +1,17 @@
-
+import { randomInt } from 'crypto'
 import { HttpStatusCode } from '@shared/models'
 import { makePostBodyRequest } from '../requests'
-import { AbstractCommand } from '../shared'
 
-export class ObjectStorageCommand extends AbstractCommand {
-  static readonly DEFAULT_PLAYLIST_MOCK_BUCKET = 'streaming-playlists'
-  static readonly DEFAULT_WEBTORRENT_MOCK_BUCKET = 'videos'
-
+export class ObjectStorageCommand {
   static readonly DEFAULT_SCALEWAY_BUCKET = 'peertube-ci-test'
+
+  private readonly bucketsCreated: string[] = []
+  private readonly seed: number
 
   // ---------------------------------------------------------------------------
 
-  static getDefaultMockConfig () {
-    return {
-      object_storage: {
-        enabled: true,
-        endpoint: 'http://' + this.getMockEndpointHost(),
-        region: this.getMockRegion(),
-
-        credentials: this.getMockCredentialsConfig(),
-
-        streaming_playlists: {
-          bucket_name: this.DEFAULT_PLAYLIST_MOCK_BUCKET
-        },
-
-        videos: {
-          bucket_name: this.DEFAULT_WEBTORRENT_MOCK_BUCKET
-        }
-      }
-    }
+  constructor () {
+    this.seed = randomInt(0, 10000)
   }
 
   static getMockCredentialsConfig () {
@@ -46,35 +29,79 @@ export class ObjectStorageCommand extends AbstractCommand {
     return 'us-east-1'
   }
 
-  static getMockWebTorrentBaseUrl () {
-    return `http://${this.DEFAULT_WEBTORRENT_MOCK_BUCKET}.${this.getMockEndpointHost()}/`
+  getDefaultMockConfig () {
+    return {
+      object_storage: {
+        enabled: true,
+        endpoint: 'http://' + ObjectStorageCommand.getMockEndpointHost(),
+        region: ObjectStorageCommand.getMockRegion(),
+
+        credentials: ObjectStorageCommand.getMockCredentialsConfig(),
+
+        streaming_playlists: {
+          bucket_name: this.getMockStreamingPlaylistsBucketName()
+        },
+
+        videos: {
+          bucket_name: this.getMockWebVideosBucketName()
+        }
+      }
+    }
   }
 
-  static getMockPlaylistBaseUrl () {
-    return `http://${this.DEFAULT_PLAYLIST_MOCK_BUCKET}.${this.getMockEndpointHost()}/`
+  getMockWebVideosBaseUrl () {
+    return `http://${this.getMockWebVideosBucketName()}.${ObjectStorageCommand.getMockEndpointHost()}/`
   }
 
-  static async prepareDefaultMockBuckets () {
-    await this.createMockBucket(this.DEFAULT_PLAYLIST_MOCK_BUCKET)
-    await this.createMockBucket(this.DEFAULT_WEBTORRENT_MOCK_BUCKET)
+  getMockPlaylistBaseUrl () {
+    return `http://${this.getMockStreamingPlaylistsBucketName()}.${ObjectStorageCommand.getMockEndpointHost()}/`
   }
 
-  static async createMockBucket (name: string) {
+  async prepareDefaultMockBuckets () {
+    await this.createMockBucket(this.getMockStreamingPlaylistsBucketName())
+    await this.createMockBucket(this.getMockWebVideosBucketName())
+  }
+
+  async createMockBucket (name: string) {
+    this.bucketsCreated.push(name)
+
+    await this.deleteMockBucket(name)
+
     await makePostBodyRequest({
-      url: this.getMockEndpointHost(),
-      path: '/ui/' + name + '?delete',
-      expectedStatus: HttpStatusCode.TEMPORARY_REDIRECT_307
-    })
-
-    await makePostBodyRequest({
-      url: this.getMockEndpointHost(),
+      url: ObjectStorageCommand.getMockEndpointHost(),
       path: '/ui/' + name + '?create',
       expectedStatus: HttpStatusCode.TEMPORARY_REDIRECT_307
     })
 
     await makePostBodyRequest({
-      url: this.getMockEndpointHost(),
+      url: ObjectStorageCommand.getMockEndpointHost(),
       path: '/ui/' + name + '?make-public',
+      expectedStatus: HttpStatusCode.TEMPORARY_REDIRECT_307
+    })
+  }
+
+  async cleanupMock () {
+    for (const name of this.bucketsCreated) {
+      await this.deleteMockBucket(name)
+    }
+  }
+
+  getMockStreamingPlaylistsBucketName (name = 'streaming-playlists') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockWebVideosBucketName (name = 'web-videos') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockBucketName (name: string) {
+    return `${this.seed}-${name}`
+  }
+
+  private async deleteMockBucket (name: string) {
+    await makePostBodyRequest({
+      url: ObjectStorageCommand.getMockEndpointHost(),
+      path: '/ui/' + name + '?delete',
       expectedStatus: HttpStatusCode.TEMPORARY_REDIRECT_307
     })
   }

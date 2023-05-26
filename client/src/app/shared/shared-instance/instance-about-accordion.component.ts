@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { HooksService, Notifier } from '@app/core'
-import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
+import { NgbAccordionDirective } from '@ng-bootstrap/ng-bootstrap'
 import { ClientFilterHookName, PluginClientScope } from '@shared/models/plugins'
 import { About } from '@shared/models/server'
 import { InstanceService } from './instance.service'
@@ -11,7 +11,7 @@ import { InstanceService } from './instance.service'
   styleUrls: [ './instance-about-accordion.component.scss' ]
 })
 export class InstanceAboutAccordionComponent implements OnInit {
-  @ViewChild('accordion', { static: true }) accordion: NgbAccordion
+  @ViewChild('accordion', { static: true }) accordion: NgbAccordionDirective
 
   @Output() init: EventEmitter<InstanceAboutAccordionComponent> = new EventEmitter<InstanceAboutAccordionComponent>()
 

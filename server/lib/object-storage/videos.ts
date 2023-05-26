@@ -13,6 +13,7 @@ import {
   removeObject,
   removeObjectByFullKey,
   removePrefix,
+  storeContent,
   storeObject,
   updateObjectACL,
   updatePrefixACL
@@ -35,6 +36,16 @@ function storeHLSFileFromFilename (playlist: MStreamingPlaylistVideo, filename: 
 
 function storeHLSFileFromPath (playlist: MStreamingPlaylistVideo, path: string) {
   return storeObject({
+    inputPath: path,
+    objectStorageKey: generateHLSObjectStorageKey(playlist, basename(path)),
+    bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
+    isPrivate: playlist.Video.hasPrivateStaticPath()
+  })
+}
+
+function storeHLSFileFromContent (playlist: MStreamingPlaylistVideo, path: string, content: string) {
+  return storeContent({
+    content,
     inputPath: path,
     objectStorageKey: generateHLSObjectStorageKey(playlist, basename(path)),
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
@@ -166,6 +177,7 @@ export {
   storeWebTorrentFile,
   storeHLSFileFromFilename,
   storeHLSFileFromPath,
+  storeHLSFileFromContent,
 
   updateWebTorrentFileACL,
   updateHLSFilesACL,

@@ -81,10 +81,12 @@
           <input type="submit" class="peertube-button orange-button w-100" i18n-value value="Login" [disabled]="!form.valid">
 
           <div *ngIf="!otpStep" class="additional-links d-flex justify-content-center mt-4 mb-5">
-            <a i18n role="button" class="link-orange mx-3" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">I forgot my password</a>
+            <button i18n class="button-unstyle link-orange mx-3" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">
+              I forgot my password
+            </button>
 
             <ng-container *ngIf="signupAllowed">
-              <span>·</span>
+              <span class="lh-1">·</span>
               <a i18n routerLink="/signup" class="link-orange mx-3">Create an account</a>
             </ng-container>
           </div>

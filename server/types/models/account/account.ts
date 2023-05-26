@@ -8,8 +8,8 @@ import {
   MActorDefault,
   MActorDefaultLight,
   MActorFormattable,
+  MActorHost,
   MActorId,
-  MActorServer,
   MActorSummary,
   MActorSummaryFormattable,
   MActorUrl
@@ -68,10 +68,9 @@ export type MAccountActor =
   MAccount &
   Use<'Actor', MActor>
 
-// Full actor with server
-export type MAccountServer =
+export type MAccountHost =
   MAccount &
-  Use<'Actor', MActorServer>
+  Use<'Actor', MActorHost>
 
 // ############################################################################
 

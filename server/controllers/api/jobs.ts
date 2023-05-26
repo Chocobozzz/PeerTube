@@ -93,6 +93,9 @@ async function formatJob (job: BullJob, state?: JobState): Promise<Job> {
     state: state || await job.getState(),
     type: job.queueName as JobType,
     data: job.data,
+    parent: job.parent
+      ? { id: job.parent.id }
+      : undefined,
     progress: job.progress as number,
     priority: job.opts.priority,
     error,

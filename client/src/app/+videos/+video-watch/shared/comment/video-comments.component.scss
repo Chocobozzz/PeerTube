@@ -24,15 +24,10 @@
     @include margin-left(5px);
 
     display: inline-block;
-    opacity: 0;
     transition: ease-in .2s opacity;
     width: 12px;
     position: relative;
     top: -3px;
-  }
-
-  &:hover my-feed {
-    opacity: 1;
   }
 }
 

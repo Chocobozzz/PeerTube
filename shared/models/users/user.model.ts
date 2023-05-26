@@ -13,6 +13,7 @@ export interface User {
   pendingEmail: string | null
 
   emailVerified: boolean
+  emailPublic: boolean
   nsfwPolicy: NSFWPolicyType
 
   adminFlags?: UserAdminFlag

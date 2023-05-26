@@ -68,6 +68,8 @@ body {
   --bs-dropdown-link-color: #{pvar(--mainForegroundColor)};
   --bs-dropdown-border-color: #{pvar(--inputBorderColor)};
 
+  text-align: start;
+
   .dropdown-header {
     @include padding-left(1rem);
   }

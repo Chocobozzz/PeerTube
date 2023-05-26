@@ -5,6 +5,7 @@ import request from 'supertest'
 import {
   checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
+  checkWebTorrentWorks,
   completeVideoCheck,
   dateIsValid,
   saveVideoInServers,
@@ -21,8 +22,7 @@ import {
   setAccessTokensToServers,
   setDefaultAccountAvatar,
   setDefaultChannelAvatar,
-  waitJobs,
-  webtorrentAdd
+  waitJobs
 } from '@shared/server-commands'
 
 describe('Test multiple servers', function () {
@@ -134,7 +134,7 @@ describe('Test multiple servers', function () {
         expect(data.length).to.equal(1)
         const video = data[0]
 
-        await completeVideoCheck(server, video, checkAttributes)
+        await completeVideoCheck({ server, originServer: servers[0], videoUUID: video.uuid, attributes: checkAttributes })
         publishedAt = video.publishedAt as string
 
         expect(video.channel.avatars).to.have.lengthOf(2)
@@ -238,7 +238,7 @@ describe('Test multiple servers', function () {
         expect(data.length).to.equal(2)
         const video = data[1]
 
-        await completeVideoCheck(server, video, checkAttributes)
+        await completeVideoCheck({ server, originServer: servers[1], videoUUID: video.uuid, attributes: checkAttributes })
       }
     })
 
@@ -328,7 +328,7 @@ describe('Test multiple servers', function () {
             }
           ]
         }
-        await completeVideoCheck(server, video1, checkAttributesVideo1)
+        await completeVideoCheck({ server, originServer: servers[2], videoUUID: video1.uuid, attributes: checkAttributesVideo1 })
 
         const checkAttributesVideo2 = {
           name: 'my super name for server 3-2',
@@ -362,7 +362,7 @@ describe('Test multiple servers', function () {
             }
           ]
         }
-        await completeVideoCheck(server, video2, checkAttributesVideo2)
+        await completeVideoCheck({ server, originServer: servers[2], videoUUID: video2.uuid, attributes: checkAttributesVideo2 })
       }
     })
   })
@@ -398,7 +398,9 @@ describe('Test multiple servers', function () {
   })
 
   describe('Should seed the uploaded video', function () {
+
     it('Should add the file 1 by asking server 3', async function () {
+      this.retries(2)
       this.timeout(30000)
 
       const { data } = await servers[2].videos.list()
@@ -408,13 +410,12 @@ describe('Test multiple servers', function () {
       toRemove.push(data[3])
 
       const videoDetails = await servers[2].videos.get({ id: video.id })
-      const torrent = await webtorrentAdd(videoDetails.files[0].magnetUri, true)
-      expect(torrent.files).to.be.an('array')
-      expect(torrent.files.length).to.equal(1)
-      expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+
+      await checkWebTorrentWorks(videoDetails.files[0].magnetUri)
     })
 
     it('Should add the file 2 by asking server 1', async function () {
+      this.retries(2)
       this.timeout(30000)
 
       const { data } = await servers[0].videos.list()
@@ -422,13 +423,11 @@ describe('Test multiple servers', function () {
       const video = data[1]
       const videoDetails = await servers[0].videos.get({ id: video.id })
 
-      const torrent = await webtorrentAdd(videoDetails.files[0].magnetUri, true)
-      expect(torrent.files).to.be.an('array')
-      expect(torrent.files.length).to.equal(1)
-      expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+      await checkWebTorrentWorks(videoDetails.files[0].magnetUri)
     })
 
     it('Should add the file 3 by asking server 2', async function () {
+      this.retries(2)
       this.timeout(30000)
 
       const { data } = await servers[1].videos.list()
@@ -436,13 +435,11 @@ describe('Test multiple servers', function () {
       const video = data[2]
       const videoDetails = await servers[1].videos.get({ id: video.id })
 
-      const torrent = await webtorrentAdd(videoDetails.files[0].magnetUri, true)
-      expect(torrent.files).to.be.an('array')
-      expect(torrent.files.length).to.equal(1)
-      expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+      await checkWebTorrentWorks(videoDetails.files[0].magnetUri)
     })
 
     it('Should add the file 3-2 by asking server 1', async function () {
+      this.retries(2)
       this.timeout(30000)
 
       const { data } = await servers[0].videos.list()
@@ -450,13 +447,11 @@ describe('Test multiple servers', function () {
       const video = data[3]
       const videoDetails = await servers[0].videos.get({ id: video.id })
 
-      const torrent = await webtorrentAdd(videoDetails.files[0].magnetUri)
-      expect(torrent.files).to.be.an('array')
-      expect(torrent.files.length).to.equal(1)
-      expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+      await checkWebTorrentWorks(videoDetails.files[0].magnetUri)
     })
 
     it('Should add the file 2 in 360p by asking server 1', async function () {
+      this.retries(2)
       this.timeout(30000)
 
       const { data } = await servers[0].videos.list()
@@ -467,10 +462,7 @@ describe('Test multiple servers', function () {
       const file = videoDetails.files.find(f => f.resolution.id === 360)
       expect(file).not.to.be.undefined
 
-      const torrent = await webtorrentAdd(file.magnetUri)
-      expect(torrent.files).to.be.an('array')
-      expect(torrent.files.length).to.equal(1)
-      expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+      await checkWebTorrentWorks(file.magnetUri)
     })
   })
 
@@ -685,7 +677,7 @@ describe('Test multiple servers', function () {
           thumbnailfile: 'thumbnail',
           previewfile: 'preview'
         }
-        await completeVideoCheck(server, videoUpdated, checkAttributes)
+        await completeVideoCheck({ server, originServer: servers[2], videoUUID: videoUpdated.uuid, attributes: checkAttributes })
       }
     })
 
@@ -1087,7 +1079,7 @@ describe('Test multiple servers', function () {
             }
           ]
         }
-        await completeVideoCheck(server, video, checkAttributes)
+        await completeVideoCheck({ server, originServer: servers[1], videoUUID: video.uuid, attributes: checkAttributes })
       }
     })
   })

@@ -45,6 +45,7 @@ import {
   MVideoShareActor,
   MVideoThumbnail
 } from './models'
+import { MRunner, MRunnerJobRunner, MRunnerRegistrationToken } from './models/runners'
 import { MVideoSource } from './models/video/video-source'
 
 declare module 'express' {
@@ -103,10 +104,14 @@ declare module 'express' {
       instance?: string
 
       data?: PeerTubeProblemDocumentData
+
+      tags?: string[]
     }) => void
 
     locals: {
       requestStart: number
+
+      apicacheGroups: string[]
 
       apicache: {
         content: string | Buffer
@@ -206,6 +211,9 @@ declare module 'express' {
 
       localViewerFull?: MLocalVideoViewerWithWatchSections
 
+      runner?: MRunner
+      runnerRegistrationToken?: MRunnerRegistrationToken
+      runnerJob?: MRunnerJobRunner
     }
   }
 }

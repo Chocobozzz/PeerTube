@@ -4,7 +4,8 @@ import { Injectable } from '@angular/core'
 import { AuthService, AuthStatus } from '@app/core/auth'
 import { getBoolOrDefault } from '@root-helpers/local-storage-utils'
 import { logger } from '@root-helpers/logger'
-import { UserLocalStorageKeys, OAuthUserTokens } from '@root-helpers/users'
+import { OAuthUserTokens, UserLocalStorageKeys } from '@root-helpers/users'
+import { objectKeysTyped } from '@shared/core-utils'
 import { UserRole, UserUpdateMe } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos'
 import { ServerService } from '../server'
@@ -122,7 +123,7 @@ export class UserLocalStorageService {
   }
 
   setUserInfo (profile: UserUpdateMe) {
-    const localStorageKeys: { [ id in keyof UserUpdateMe ]: string } = {
+    const localStorageKeys = {
       nsfwPolicy: UserLocalStorageKeys.NSFW_POLICY,
       p2pEnabled: UserLocalStorageKeys.P2P_ENABLED,
       autoPlayVideo: UserLocalStorageKeys.AUTO_PLAY_VIDEO,
@@ -132,7 +133,7 @@ export class UserLocalStorageService {
       videoLanguages: UserLocalStorageKeys.VIDEO_LANGUAGES
     }
 
-    const obj = Object.keys(localStorageKeys)
+    const obj: [ string, string | boolean | string[] ][] = objectKeysTyped(localStorageKeys)
       .filter(key => key in profile)
       .map(key => ([ localStorageKeys[key], profile[key] ]))
 

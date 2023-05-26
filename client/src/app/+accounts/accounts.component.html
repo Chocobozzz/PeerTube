@@ -48,12 +48,12 @@
       <div class="description-html" [innerHTML]="accountDescriptionHTML"></div>
     </div>
 
-    <div *ngIf="hasShowMoreDescription()" class="show-more d-md-none d-block" role="button"
+    <button *ngIf="hasShowMoreDescription()" class="show-more d-md-none d-block button-unstyle"
       (click)="accountDescriptionExpanded = !accountDescriptionExpanded"
       title="Show the complete description" i18n-title i18n
     >
       Show more...
-    </div>
+    </button>
 
     <div class="buttons">
       <a *ngIf="isManageable()" routerLink="/my-account" class="peertube-button-link orange-button" i18n>

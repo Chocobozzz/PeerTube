@@ -3,6 +3,7 @@ import { Subject } from 'rxjs'
 import { Component, Input, OnInit } from '@angular/core'
 import { Notifier, ServerService, User } from '@app/core'
 import { UserNotificationService } from '@app/shared/shared-main'
+import { objectKeysTyped } from '@shared/core-utils'
 import { UserNotificationSetting, UserNotificationSettingValue, UserRight } from '@shared/models'
 
 @Component({
@@ -141,11 +142,11 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   }
 
   private loadNotificationSettings () {
-    for (const key of Object.keys(this.user.notificationSettings)) {
+    for (const key of objectKeysTyped(this.user.notificationSettings)) {
       const value = this.user.notificationSettings[key]
-      this.emailNotifications[key] = value & UserNotificationSettingValue.EMAIL
+      this.emailNotifications[key] = !!(value & UserNotificationSettingValue.EMAIL)
 
-      this.webNotifications[key] = value & UserNotificationSettingValue.WEB
+      this.webNotifications[key] = !!(value & UserNotificationSettingValue.WEB)
     }
   }
 }

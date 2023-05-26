@@ -39,7 +39,13 @@ const CONFIG = {
     PORT: config.has('redis.port') ? config.get<number>('redis.port') : null,
     SOCKET: config.has('redis.socket') ? config.get<string>('redis.socket') : null,
     AUTH: config.has('redis.auth') ? config.get<string>('redis.auth') : null,
-    DB: config.has('redis.db') ? config.get<number>('redis.db') : null
+    DB: config.has('redis.db') ? config.get<number>('redis.db') : null,
+    SENTINEL: {
+      ENABLED: config.has('redis.sentinel.enabled') ? config.get<boolean>('redis.sentinel.enabled') : false,
+      ENABLE_TLS: config.has('redis.sentinel.enable_tls') ? config.get<boolean>('redis.sentinel.enable_tls') : false,
+      SENTINELS: config.has('redis.sentinel.sentinels') ? config.get<{ hostname: string, port: number }[]>('redis.sentinel.sentinels') : [],
+      MASTER_NAME: config.has('redis.sentinel.master_name') ? config.get<string>('redis.sentinel.master_name') : null
+    }
   },
   SMTP: {
     TRANSPORT: config.has('smtp.transport') ? config.get<string>('smtp.transport') : 'smtp',
@@ -98,6 +104,7 @@ const CONFIG = {
 
   STORAGE: {
     TMP_DIR: buildPath(config.get<string>('storage.tmp')),
+    TMP_PERSISTENT_DIR: buildPath(config.get<string>('storage.tmp_persistent')),
     BIN_DIR: buildPath(config.get<string>('storage.bin')),
     ACTOR_IMAGES: buildPath(config.get<string>('storage.avatars')),
     LOG_DIR: buildPath(config.get<string>('storage.logs')),
@@ -304,6 +311,12 @@ const CONFIG = {
       COUNT: config.get<number>('feeds.comments.count')
     }
   },
+  REMOTE_RUNNERS: {
+    STALLED_JOBS: {
+      LIVE: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.live')),
+      VOD: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.vod'))
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },
@@ -359,6 +372,9 @@ const CONFIG = {
     },
     WEBTORRENT: {
       get ENABLED () { return config.get<boolean>('transcoding.webtorrent.enabled') }
+    },
+    REMOTE_RUNNERS: {
+      get ENABLED () { return config.get<boolean>('transcoding.remote_runners.enabled') }
     }
   },
   LIVE: {
@@ -406,11 +422,17 @@ const CONFIG = {
         get '1080p' () { return config.get<boolean>('live.transcoding.resolutions.1080p') },
         get '1440p' () { return config.get<boolean>('live.transcoding.resolutions.1440p') },
         get '2160p' () { return config.get<boolean>('live.transcoding.resolutions.2160p') }
+      },
+      REMOTE_RUNNERS: {
+        get ENABLED () { return config.get<boolean>('live.transcoding.remote_runners.enabled') }
       }
     }
   },
   VIDEO_STUDIO: {
-    get ENABLED () { return config.get<boolean>('video_studio.enabled') }
+    get ENABLED () { return config.get<boolean>('video_studio.enabled') },
+    REMOTE_RUNNERS: {
+      get ENABLED () { return config.get<boolean>('video_studio.remote_runners.enabled') }
+    }
   },
   IMPORT: {
     VIDEOS: {

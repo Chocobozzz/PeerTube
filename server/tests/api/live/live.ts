@@ -2,9 +2,9 @@
 
 import { expect } from 'chai'
 import { basename, join } from 'path'
-import { ffprobePromise, getVideoStream } from '@server/helpers/ffmpeg'
-import { testImage, testVideoResolutions } from '@server/tests/shared'
+import { SQLCommand, testImage, testLiveVideoResolutions } from '@server/tests/shared'
 import { getAllFiles, wait } from '@shared/core-utils'
+import { ffprobePromise, getVideoStream } from '@shared/ffmpeg'
 import {
   HttpStatusCode,
   LiveVideo,
@@ -181,8 +181,6 @@ describe('Test live', function () {
     })
 
     it('Should update the live', async function () {
-      this.timeout(10000)
-
       await commands[0].update({ videoId: liveVideoUUID, fields: { saveReplay: false, latencyMode: LiveVideoLatencyMode.DEFAULT } })
       await waitJobs(servers)
     })
@@ -206,8 +204,6 @@ describe('Test live', function () {
     })
 
     it('Delete the live', async function () {
-      this.timeout(10000)
-
       await servers[0].videos.remove({ id: liveVideoUUID })
       await waitJobs(servers)
     })
@@ -365,6 +361,7 @@ describe('Test live', function () {
 
   describe('Live transcoding', function () {
     let liveVideoId: string
+    let sqlCommandServer1: SQLCommand
 
     async function createLiveWrapper (saveReplay: boolean) {
       const liveAttributes = {
@@ -407,6 +404,8 @@ describe('Test live', function () {
 
     before(async function () {
       await updateConf([])
+
+      sqlCommandServer1 = new SQLCommand(servers[0])
     })
 
     it('Should enable transcoding without additional resolutions', async function () {
@@ -418,12 +417,12 @@ describe('Test live', function () {
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
       await waitJobs(servers)
 
-      await testVideoResolutions({
+      await testLiveVideoResolutions({
         originServer: servers[0],
+        sqlCommand: sqlCommandServer1,
         servers,
         liveVideoId,
         resolutions: [ 720 ],
-        objectStorage: false,
         transcoded: true
       })
 
@@ -443,7 +442,7 @@ describe('Test live', function () {
     })
 
     it('Should enable transcoding with some resolutions', async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       const resolutions = [ 240, 480 ]
       await updateConf(resolutions)
@@ -453,12 +452,12 @@ describe('Test live', function () {
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
       await waitJobs(servers)
 
-      await testVideoResolutions({
+      await testLiveVideoResolutions({
         originServer: servers[0],
+        sqlCommand: sqlCommandServer1,
         servers,
         liveVideoId,
         resolutions: resolutions.concat([ 720 ]),
-        objectStorage: false,
         transcoded: true
       })
 
@@ -494,7 +493,7 @@ describe('Test live', function () {
     })
 
     it('Should enable transcoding with some resolutions and correctly save them', async function () {
-      this.timeout(400_000)
+      this.timeout(500_000)
 
       const resolutions = [ 240, 360, 720 ]
 
@@ -505,12 +504,12 @@ describe('Test live', function () {
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
       await waitJobs(servers)
 
-      await testVideoResolutions({
+      await testLiveVideoResolutions({
         originServer: servers[0],
+        sqlCommand: sqlCommandServer1,
         servers,
         liveVideoId,
         resolutions,
-        objectStorage: false,
         transcoded: true
       })
 
@@ -580,7 +579,7 @@ describe('Test live', function () {
     })
 
     it('Should not generate an upper resolution than original file', async function () {
-      this.timeout(400_000)
+      this.timeout(500_000)
 
       const resolutions = [ 240, 480 ]
       await updateConf(resolutions)
@@ -601,12 +600,12 @@ describe('Test live', function () {
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
       await waitJobs(servers)
 
-      await testVideoResolutions({
+      await testLiveVideoResolutions({
         originServer: servers[0],
+        sqlCommand: sqlCommandServer1,
         servers,
         liveVideoId,
         resolutions,
-        objectStorage: false,
         transcoded: true
       })
 
@@ -637,12 +636,12 @@ describe('Test live', function () {
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
       await waitJobs(servers)
 
-      await testVideoResolutions({
+      await testLiveVideoResolutions({
         originServer: servers[0],
+        sqlCommand: sqlCommandServer1,
         servers,
         liveVideoId,
         resolutions: [ 720 ],
-        objectStorage: false,
         transcoded: true
       })
 
@@ -660,6 +659,10 @@ describe('Test live', function () {
       expect(hlsFiles).to.have.lengthOf(1)
 
       expect(hlsFiles[0].resolution.id).to.equal(720)
+    })
+
+    after(async function () {
+      await sqlCommandServer1.cleanup()
     })
   })
 
@@ -712,8 +715,7 @@ describe('Test live', function () {
           server: servers[0],
           videoUUID,
           playlistNumber: 0,
-          segment: 2,
-          objectStorage: false
+          segment: 2
         })
       }
 

@@ -92,9 +92,9 @@
             <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
 
             <div class="skip-step">
-              <span class="underline-orange" role="button" (click)="skipChannelCreation()">
+              <button class="underline-orange button-unstyle" (click)="skipChannelCreation()">
                 <strong i18n>I don't want to create a channel</strong>
-              </span>
+              </button>
 
               <div class="skip-step-description" i18n>You will be able to create a channel later</div>
             </div>
@@ -120,7 +120,7 @@
             [requiresEmailVerification]="requiresEmailVerification" [requiresApproval]="requiresApproval" [instanceName]="instanceName"
           ></my-signup-success-before-email>
 
-          <div *ngIf="signupError" class="steps-button">
+          <div *ngIf="signupError" class="step-buttons">
             <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
           </div>
         </cdk-step>

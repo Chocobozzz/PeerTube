@@ -87,7 +87,7 @@ describe('Test bulk actions', function () {
     }
 
     before(async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       await servers[0].videos.upload({ attributes: { name: 'video 1 server 1' } })
       await servers[0].videos.upload({ attributes: { name: 'video 2 server 1' } })

@@ -1,15 +1,60 @@
+import { FfprobeData } from 'fluent-ffmpeg'
 import { logger } from '@server/helpers/logger'
+import { VideoFileModel } from '@server/models/video/video-file'
 import { MVideoWithAllFiles } from '@server/types/models'
+import { getLowercaseExtension } from '@shared/core-utils'
+import { getFileSize } from '@shared/extra-utils'
+import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS, isAudioFile } from '@shared/ffmpeg'
+import { VideoFileMetadata, VideoResolution } from '@shared/models'
 import { lTags } from './object-storage/shared'
+import { generateHLSVideoFilename, generateWebTorrentVideoFilename } from './paths'
+import { VideoPathManager } from './video-path-manager'
+
+async function buildNewFile (options: {
+  path: string
+  mode: 'web-video' | 'hls'
+}) {
+  const { path, mode } = options
+
+  const probe = await ffprobePromise(path)
+  const size = await getFileSize(path)
+
+  const videoFile = new VideoFileModel({
+    extname: getLowercaseExtension(path),
+    size,
+    metadata: await buildFileMetadata(path, probe)
+  })
+
+  if (await isAudioFile(path, probe)) {
+    videoFile.resolution = VideoResolution.H_NOVIDEO
+  } else {
+    videoFile.fps = await getVideoStreamFPS(path, probe)
+    videoFile.resolution = (await getVideoStreamDimensionsInfo(path, probe)).resolution
+  }
+
+  videoFile.filename = mode === 'web-video'
+    ? generateWebTorrentVideoFilename(videoFile.resolution, videoFile.extname)
+    : generateHLSVideoFilename(videoFile.resolution)
+
+  return videoFile
+}
+
+// ---------------------------------------------------------------------------
 
 async function removeHLSPlaylist (video: MVideoWithAllFiles) {
   const hls = video.getHLSPlaylist()
   if (!hls) return
 
-  await video.removeStreamingPlaylistFiles(hls)
-  await hls.destroy()
+  const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  video.VideoStreamingPlaylists = video.VideoStreamingPlaylists.filter(p => p.id !== hls.id)
+  try {
+    await video.removeStreamingPlaylistFiles(hls)
+    await hls.destroy()
+
+    video.VideoStreamingPlaylists = video.VideoStreamingPlaylists.filter(p => p.id !== hls.id)
+  } finally {
+    videoFileMutexReleaser()
+  }
 }
 
 async function removeHLSFile (video: MVideoWithAllFiles, fileToDeleteId: number) {
@@ -23,11 +68,17 @@ async function removeHLSFile (video: MVideoWithAllFiles, fileToDeleteId: number)
     return undefined
   }
 
-  const toDelete = files.find(f => f.id === fileToDeleteId)
-  await video.removeStreamingPlaylistVideoFile(video.getHLSPlaylist(), toDelete)
-  await toDelete.destroy()
+  const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  hls.VideoFiles = hls.VideoFiles.filter(f => f.id !== toDelete.id)
+  try {
+    const toDelete = files.find(f => f.id === fileToDeleteId)
+    await video.removeStreamingPlaylistVideoFile(video.getHLSPlaylist(), toDelete)
+    await toDelete.destroy()
+
+    hls.VideoFiles = hls.VideoFiles.filter(f => f.id !== toDelete.id)
+  } finally {
+    videoFileMutexReleaser()
+  }
 
   return hls
 }
@@ -35,12 +86,18 @@ async function removeHLSFile (video: MVideoWithAllFiles, fileToDeleteId: number)
 // ---------------------------------------------------------------------------
 
 async function removeAllWebTorrentFiles (video: MVideoWithAllFiles) {
-  for (const file of video.VideoFiles) {
-    await video.removeWebTorrentFile(file)
-    await file.destroy()
-  }
+  const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  video.VideoFiles = []
+  try {
+    for (const file of video.VideoFiles) {
+      await video.removeWebTorrentFile(file)
+      await file.destroy()
+    }
+
+    video.VideoFiles = []
+  } finally {
+    videoFileMutexReleaser()
+  }
 
   return video
 }
@@ -52,18 +109,37 @@ async function removeWebTorrentFile (video: MVideoWithAllFiles, fileToDeleteId: 
     return removeAllWebTorrentFiles(video)
   }
 
-  const toDelete = files.find(f => f.id === fileToDeleteId)
-  await video.removeWebTorrentFile(toDelete)
-  await toDelete.destroy()
+  const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+  try {
+    const toDelete = files.find(f => f.id === fileToDeleteId)
+    await video.removeWebTorrentFile(toDelete)
+    await toDelete.destroy()
 
-  video.VideoFiles = files.filter(f => f.id !== toDelete.id)
+    video.VideoFiles = files.filter(f => f.id !== toDelete.id)
+  } finally {
+    videoFileMutexReleaser()
+  }
 
   return video
 }
 
+// ---------------------------------------------------------------------------
+
+async function buildFileMetadata (path: string, existingProbe?: FfprobeData) {
+  const metadata = existingProbe || await ffprobePromise(path)
+
+  return new VideoFileMetadata(metadata)
+}
+
+// ---------------------------------------------------------------------------
+
 export {
+  buildNewFile,
+
   removeHLSPlaylist,
   removeHLSFile,
   removeAllWebTorrentFiles,
-  removeWebTorrentFile
+  removeWebTorrentFile,
+
+  buildFileMetadata
 }

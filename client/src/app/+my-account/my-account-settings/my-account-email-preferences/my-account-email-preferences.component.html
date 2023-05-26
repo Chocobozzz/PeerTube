@@ -1,0 +1,15 @@
+<form role="form" (ngSubmit)="updateEmailPublic()" [formGroup]="form">
+
+  <div class="form-group">
+    <my-peertube-checkbox
+      inputName="email-public" formControlName="email-public"
+      i18n-labelText labelText="Allow email to be publicly displayed"
+    >
+      <ng-container ngProjectAs="description">
+        <span i18n>Necessary to claim podcast RSS feeds.</span>
+      </ng-container>
+    </my-peertube-checkbox>
+  </div>
+
+  <input class="peertube-button orange-button" type="submit" i18n-value value="Save" [disabled]="!form.valid">
+</form>

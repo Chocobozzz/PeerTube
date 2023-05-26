@@ -4,7 +4,6 @@
     "scss/at-import-no-partial-leading-underscore": null,
     "color-hex-case": null,
     "color-hex-length": null,
-    "order/properties-alphabetical-order": null,
     "selector-pseudo-element-no-unknown": [
       true,
       {
@@ -24,7 +23,6 @@
     "rule-empty-line-before": null,
     "selector-max-id": null,
     "scss/at-function-pattern": null,
-    "function-parentheses-space-inside": "never-single-line",
     "property-no-vendor-prefix": [
       true,
       {

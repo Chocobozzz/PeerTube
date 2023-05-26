@@ -67,6 +67,8 @@
   }
 
   .optional-row-icon {
+    @include margin-left(5px);
+
     display: flex;
     align-items: center;
     font-size: 14px;
@@ -78,6 +80,10 @@
 
       width: 19px;
       height: 19px;
+    }
+
+    &:hover {
+      opacity: 0.8;
     }
   }
 }

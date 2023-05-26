@@ -28,8 +28,9 @@ import {
   MAccountAP,
   MAccountDefault,
   MAccountFormattable,
+  MAccountHost,
   MAccountSummaryFormattable,
-  MChannelActor
+  MChannelHost
 } from '../../types/models'
 import { ActorModel } from '../actor/actor'
 import { ActorFollowModel } from '../actor/actor-follow'
@@ -37,8 +38,8 @@ import { ActorImageModel } from '../actor/actor-image'
 import { ApplicationModel } from '../application/application'
 import { ServerModel } from '../server/server'
 import { ServerBlocklistModel } from '../server/server-blocklist'
-import { UserModel } from '../user/user'
 import { buildSQLAttributes, getSort, throwIfNotValid } from '../shared'
+import { UserModel } from '../user/user'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
@@ -296,9 +297,7 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
           {
             model: ActorModel,
             required: true,
-            where: {
-              preferredUsername: name
-            }
+            where: ActorModel.wherePreferredUsername(name)
           }
         ]
       }
@@ -321,9 +320,7 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
         {
           model: ActorModel,
           required: true,
-          where: {
-            preferredUsername: name
-          },
+          where: ActorModel.wherePreferredUsername(name),
           include: [
             {
               model: ServerModel,
@@ -414,10 +411,6 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
       .findAll(query)
   }
 
-  getClientUrl () {
-    return WEBSERVER.URL + '/accounts/' + this.Actor.getIdentifier()
-  }
-
   toFormattedJSON (this: MAccountFormattable): Account {
     return {
       ...this.Actor.toFormattedJSON(),
@@ -467,8 +460,9 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
     return this.name
   }
 
-  getLocalUrl (this: MAccountActor | MChannelActor) {
-    return WEBSERVER.URL + `/accounts/` + this.Actor.preferredUsername
+  // Avoid error when running this method on MAccount... | MChannel...
+  getClientUrl (this: MAccountHost | MChannelHost) {
+    return WEBSERVER.URL + '/a/' + this.Actor.getIdentifier()
   }
 
   isBlocked () {

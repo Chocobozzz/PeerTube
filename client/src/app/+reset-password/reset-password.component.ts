@@ -27,7 +27,7 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm({
-      password: USER_PASSWORD_VALIDATOR,
+      'password': USER_PASSWORD_VALIDATOR,
       'password-confirm': RESET_PASSWORD_CONFIRM_VALIDATOR
     })
 

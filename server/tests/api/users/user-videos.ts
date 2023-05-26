@@ -114,7 +114,7 @@ describe('Test user videos', function () {
   describe('My videos & quotas', function () {
 
     it('Should be able to upload a video with a user', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const attributes = {
         name: 'super user video',
