@@ -1,5 +1,63 @@
 # Changelog
 
+## v5.2.0 (not yet released)
+
+### IMPORTANT NOTES
+
+  * **Important** Remove NodeJS 14 support
+  * **Important** You must update your nginx configuration to support remote runners: https://github.com/Chocobozzz/PeerTube/blob/develop/support/nginx/peertube#L101
+  * Add `storage.tmp_persistent` directory in configuration file. **You must configure it in your production.yaml**: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L128
+  * PeerTube requires **Docker Compose >= v2** for Docker compose installation
+
+### Maintenance
+
+  * Remove `npm run create-transcoding-job` and `npm run print-transcode-command` unmaintained scripts
+  * Add Redis sentinel support [#5593](https://github.com/Chocobozzz/PeerTube/pull/5593)
+  * Improve upgrade script (used when you will upgrade from PeerTube 5.2 to its next version) for classic installation:
+    * Automatically generate a `config/production.yaml.new` file after the upgrade, which is the fusion between the new PeerTube configuration keys and your current `production.yaml`. After a review you can replace your old `config/production.yaml` with this new file so you don't have to add new keys manually
+    * Add `ls` option compatibility with FreeBSD [#5785](https://github.com/Chocobozzz/PeerTube/pull/5785)
+
+### Docker
+
+  * Make database name configurable using env variable [#5734](https://github.com/Chocobozzz/PeerTube/pull/5734)
+
+### Plugins/Themes/Embed API
+
+  * Add `filter:html.client.json-ld.result` hook
+
+### Features
+
+  * :tada: Implement remote transcoding for VOD videos, Live streams and Studio editions :tada: [#5769](https://github.com/Chocobozzz/PeerTube/pull/5769)
+    * If enabled, remote PeerTube runners can process these high CPU jobs
+    * Admin documentation: https://docs.joinpeertube.org/admin/remote-runners
+    * PeerTube runner CLI documentation: https://docs.joinpeertube.org/maintain/tools#peertube-runner
+    * Demonstration video: https://peertube2.cpy.re/w/oJwHHYwt4oKjKhLNh2diAY
+    * Architecture documentation: https://docs.joinpeertube.org/contribute/architecture#remote-vod-live-transcoding
+  * Add Podcast RSS feed support: [#5487](https://github.com/Chocobozzz/PeerTube/pull/5487)
+  * Add ability to set custom privacy for live replays [#5692](https://github.com/Chocobozzz/PeerTube/pull/5692)
+  * Render images of markdown fields in *About* page [#5732](https://github.com/Chocobozzz/PeerTube/pull/5732)
+  * Admin can disable user video history by default [#5728](https://github.com/Chocobozzz/PeerTube/pull/5728)
+  * Improve global accessibility
+
+### Bug fixes
+
+  * Fix live stream object storage sync resulting in broken playback on iOS after a few minutes
+  * Correctly proxify HTTP 206 content-range header from object storage [#5703](https://github.com/Chocobozzz/PeerTube/pull/5703)
+  * Filter out already watched videos from recommended videos [#5739](https://github.com/Chocobozzz/PeerTube/pull/5739)
+  * Prevent exception when HTTP headers are already sent
+  * Fix remote instance following/followers links in about page
+  * Prevent error when updating a running live stream if the privacy hasn't changed
+  * Prevent crash on plugin websocket error
+  * Don't call `register`/`unregister` plugin API when installing/uninstalling plugins using `script/plugin` scripts (offline mode)
+  * Fix error on missing plugin CSS file at PeerTube startup [#5746](https://github.com/Chocobozzz/PeerTube/pull/5746)
+  * Prevent "invalid end watch section" server log warnings
+  * Support remote subscribe with a handle starting with a `@` character
+  * Actor preferred username (account/channel handle) is now case insensitive
+  * Fix RTL layout inconsistencies
+  * Prevent user video notification when the subscription is still in *Pending* state
+  * Correctly remove *Pending* subscription
+
+
 ## v5.1.0
 
 ### IMPORTANT NOTES
