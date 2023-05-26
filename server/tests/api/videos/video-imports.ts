@@ -449,6 +449,16 @@ describe('Test video imports', function () {
             const video = await server.videos.get({ id: videoUUID })
 
             expect(video.name).to.equal('E2E tests')
+
+            const { data: captions } = await server.captions.list({ videoId: videoUUID })
+            expect(captions).to.have.lengthOf(1)
+            expect(captions[0].language.id).to.equal('fr')
+
+            const str = `WEBVTT FILE\r?\n\r?\n` +
+            `1\r?\n` +
+            `00:00:04.000 --> 00:00:09.000\r?\n` +
+            `January 1, 1994. The North American`
+            await testCaptionFile(server.url, captions[0].captionPath, new RegExp(str))
           }
         }
       })
