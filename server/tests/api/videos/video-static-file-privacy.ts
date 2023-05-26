@@ -37,8 +37,10 @@ describe('Test video static file privacy', function () {
 
     function runSuite () {
 
-      async function checkPrivateFiles (uuid: string) {
-        const video = await server.videos.getWithToken({ id: uuid })
+      async function checkPrivateFiles (uuid: string, videoPassword?: string) {
+        const video = videoPassword
+          ? await server.videos.getWithPassword({ id: uuid, password: videoPassword })
+          : await server.videos.getWithToken({ id: uuid })
 
         for (const file of video.files) {
           expect(file.fileDownloadUrl).to.not.include('/private/')
@@ -91,7 +93,7 @@ describe('Test video static file privacy', function () {
         }
       }
 
-      it('Should upload a private/internal video and have a private static path', async function () {
+      it('Should upload a private/internal/password protected video and have a private static path', async function () {
         this.timeout(120000)
 
         for (const privacy of [ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL ]) {
@@ -100,6 +102,16 @@ describe('Test video static file privacy', function () {
 
           await checkPrivateFiles(uuid)
         }
+
+        const videoPassword = 'my super password'
+        const { uuid } = await server.videos.quickUpload({
+          name: 'video',
+          privacy: VideoPrivacy.PASSWORD_PROTECTED,
+          videoPasswords: [ videoPassword ]
+        })
+        await waitJobs([ server ])
+
+        await checkPrivateFiles(uuid, videoPassword)
       })
 
       it('Should upload a public video and update it as private/internal to have a private static path', async function () {
@@ -186,10 +198,13 @@ describe('Test video static file privacy', function () {
       expectedStatus: HttpStatusCode
       token: string
       videoFileToken: string
+      videoPassword?: string
     }) {
-      const { id, expectedStatus, token, videoFileToken } = options
+      const { id, expectedStatus, token, videoFileToken, videoPassword } = options
 
-      const video = await server.videos.getWithToken({ id })
+      const video = videoPassword
+        ? await server.videos.getWithPassword({ id, password: videoPassword })
+        : await server.videos.getWithToken({ id })
 
       for (const file of getAllFiles(video)) {
         await makeRawRequest({ url: file.fileUrl, token, expectedStatus })
@@ -217,13 +232,33 @@ describe('Test video static file privacy', function () {
     it('Should not be able to access a private video files without OAuth token and file token', async function () {
       this.timeout(120000)
 
-      const { uuid } = await server.videos.quickUpload({ name: 'video', privacy: VideoPrivacy.INTERNAL })
+      const { uuid } = await server.videos.quickUpload({ name: 'video', privacy: VideoPrivacy.PRIVATE })
       await waitJobs([ server ])
 
       await checkVideoFiles({ id: uuid, expectedStatus: HttpStatusCode.FORBIDDEN_403, token: null, videoFileToken: null })
     })
 
-    it('Should not be able to access an internal video files without appropriate OAuth token and file token', async function () {
+    it('Should not be able to access an password video files without OAuth token and file token', async function () {
+      this.timeout(120000)
+      const videoPassword = 'my super password'
+
+      const { uuid } = await server.videos.quickUpload({
+        name: 'password protected video',
+        privacy: VideoPrivacy.PASSWORD_PROTECTED,
+        videoPasswords: [ videoPassword ]
+      })
+      await waitJobs([ server ])
+
+      await checkVideoFiles({
+        id: uuid,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403,
+        token: userToken,
+        videoFileToken: unrelatedFileToken,
+        videoPassword
+      })
+    })
+
+    it('Should not be able to access an private video files without appropriate OAuth token and file token', async function () {
       this.timeout(120000)
 
       const { uuid } = await server.videos.quickUpload({ name: 'video', privacy: VideoPrivacy.PRIVATE })
@@ -246,6 +281,23 @@ describe('Test video static file privacy', function () {
       await waitJobs([ server ])
 
       await checkVideoFiles({ id: uuid, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken, videoFileToken })
+    })
+
+    it('Should be able to access a password protected video files with appropriate OAuth token or file token', async function () {
+      this.timeout(120000)
+      const videoPassword = 'my super password'
+
+      const { uuid } = await server.videos.quickUpload({
+        name: 'video',
+        privacy: VideoPrivacy.PASSWORD_PROTECTED,
+        videoPasswords: [ videoPassword ]
+      })
+      const headers = { 'video-password': videoPassword }
+      const videoFileToken = await server.videoToken.getVideoFileToken({ token: null, videoId: uuid, headers })
+
+      await waitJobs([ server ])
+
+      await checkVideoFiles({ id: uuid, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken, videoFileToken, videoPassword })
     })
 
     it('Should reinject video file token', async function () {
@@ -297,11 +349,15 @@ describe('Test video static file privacy', function () {
 
     let unrelatedFileToken: string
 
-    async function checkLiveFiles (live: LiveVideo, liveId: string) {
+    async function checkLiveFiles (options: { live: LiveVideo, liveId: string, videoPassword?: string }) {
+      const { live, liveId, videoPassword } = options
       const ffmpegCommand = sendRTMPStream({ rtmpBaseUrl: live.rtmpUrl, streamKey: live.streamKey })
       await server.live.waitUntilPublished({ videoId: liveId })
 
-      const video = await server.videos.getWithToken({ id: liveId })
+      const video = videoPassword
+        ? await server.videos.getWithPassword({ id: liveId, password: videoPassword })
+        : await server.videos.getWithToken({ id: liveId })
+
       const fileToken = await server.videoToken.getVideoFileToken({ videoId: video.uuid })
 
       const hls = video.streamingPlaylists[0]
@@ -387,13 +443,13 @@ describe('Test video static file privacy', function () {
     it('Should create a private normal live and have a private static path', async function () {
       this.timeout(240000)
 
-      await checkLiveFiles(normalLive, normalLiveId)
+      await checkLiveFiles({ live: normalLive, liveId: normalLiveId })
     })
 
     it('Should create a private permanent live and have a private static path', async function () {
       this.timeout(240000)
 
-      await checkLiveFiles(permanentLive, permanentLiveId)
+      await checkLiveFiles({ live: permanentLive, liveId: permanentLiveId })
     })
 
     it('Should reinject video file token on permanent live', async function () {

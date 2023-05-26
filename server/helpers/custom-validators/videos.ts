@@ -1,7 +1,7 @@
-import { UploadFilesForCheck } from 'express'
+import { Response, Request, UploadFilesForCheck } from 'express'
 import magnetUtil from 'magnet-uri'
 import validator from 'validator'
-import { VideoFilter, VideoInclude, VideoPrivacy, VideoRateType } from '@shared/models'
+import { HttpStatusCode, VideoFilter, VideoInclude, VideoPrivacy, VideoRateType } from '@shared/models'
 import {
   CONSTRAINTS_FIELDS,
   MIMETYPES,
@@ -147,6 +147,36 @@ function isVideoMagnetUriValid (value: string) {
   return parsed && isVideoFileInfoHashValid(parsed.infoHash)
 }
 
+function isPasswordValid (password: string) {
+  return password.length >= 2
+}
+
+function isPasswordListValid (passwords: string[]) {
+  if (!Array.isArray(passwords)) return false
+
+  if (passwords.length === 0) return false
+
+  if (new Set(passwords).size !== passwords.length) return false // Duplicates found in the array
+
+  for (const password of passwords) {
+    if (typeof password !== 'string') return false
+    if (!isPasswordValid(password)) return false // Password length less than 2 is not valid
+  }
+
+  return true
+}
+
+function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
+  if (req.body.privacy === VideoPrivacy.PASSWORD_PROTECTED && !exists(req.body.videoPasswords)) {
+    res.fail({
+      status: HttpStatusCode.BAD_REQUEST_400,
+      message: 'Cannot upload a password protected video without providing a password'
+    })
+    return false
+  }
+  return true
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -174,5 +204,8 @@ export {
   isVideoFileSizeValid,
   isVideoImageValid,
   isVideoSupportValid,
-  isVideoFilterValid
+  isVideoFilterValid,
+  isPasswordValid,
+  isPasswordListValid,
+  isValidPasswordProtectedPrivacy
 }

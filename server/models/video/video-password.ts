@@ -1,10 +1,11 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, DefaultScope, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DefaultScope, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { VideoModel } from './video'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { ResultList, VideoPassword } from '@shared/models'
-import { getSort } from '../shared'
+import { getSort, throwIfNotValid } from '../shared'
 import { FindOptions, Transaction } from 'sequelize'
 import { MVideoPassword } from '@server/types/models'
+import { isPasswordValid } from '@server/helpers/custom-validators/videos'
 
 @DefaultScope(() => ({
   include: [
@@ -18,13 +19,15 @@ import { MVideoPassword } from '@server/types/models'
   tableName: 'videoPassword',
   indexes: [
     {
-      fields: [ 'videoId' ]
+      fields: [ 'videoId', 'password' ],
+      unique: true
     }
   ]
 })
 export class VideoPasswordModel extends Model<Partial<AttributesOnly<VideoPasswordModel>>> {
 
   @AllowNull(false)
+  @Is('VideoPassword', value => throwIfNotValid(value, isPasswordValid, 'videoPassword'))
   @Column
   password: string
 

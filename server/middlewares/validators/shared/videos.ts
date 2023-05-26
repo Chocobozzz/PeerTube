@@ -21,6 +21,7 @@ import {
 } from '@server/types/models'
 import { HttpStatusCode, ServerErrorCode, UserRight, VideoPrivacy } from '@shared/models'
 import { VideoPasswordModel } from '@server/models/video/video-password'
+import { exists } from '@server/helpers/custom-validators/misc'
 
 async function doesVideoExist (id: number | string, res: Response, fetchType: VideoLoadType = 'all') {
   const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined
@@ -113,7 +114,7 @@ async function checkCanSeeVideo (options: {
   const { req, res, video, paramId } = options
 
   if (video.requiresAuth({ urlParamId: paramId, checkBlacklist: true })) {
-    return checkCanSeeAuthVideo(req, res, video)
+    return checkCanSeeAuthVideo({ req, res, video })
   }
 
   if (video.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
@@ -127,7 +128,8 @@ async function checkCanSeeVideo (options: {
   throw new Error('Unknown video privacy when checking video right ' + video.url)
 }
 
-async function checkCanSeeAuthVideo (req: Request, res: Response, video: MVideoId | MVideoWithRights) {
+async function checkCanSeeAuthVideo (options: { req: Request, res: Response, video: MVideoId | MVideoWithRights }) {
+  const { req, res, video } = options
   const fail = () => {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
@@ -137,7 +139,7 @@ async function checkCanSeeAuthVideo (req: Request, res: Response, video: MVideoI
     return false
   }
 
-  await authenticatePromise(req, res)
+  await authenticatePromise({ req, res })
 
   const user = res.locals.oauth?.token.User
   if (!user) return fail()
@@ -153,16 +155,14 @@ async function checkCanSeeAuthVideo (req: Request, res: Response, video: MVideoI
     return true
   }
 
-  const isOwnedByUser = videoWithRights.VideoChannel.Account.userId === user.id
-
   if (videoWithRights.isBlacklisted()) {
-    if (isOwnedByUser || user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)) return true
+    if (canUserAccessVideo(user, videoWithRights, UserRight.MANAGE_VIDEO_BLACKLIST)) return true
 
     return fail()
   }
 
   if (privacy === VideoPrivacy.PRIVATE || privacy === VideoPrivacy.UNLISTED) {
-    if (isOwnedByUser || user.hasRight(UserRight.SEE_ALL_VIDEOS)) return true
+    if (canUserAccessVideo(user, videoWithRights, UserRight.SEE_ALL_VIDEOS)) return true
 
     return fail()
   }
@@ -175,6 +175,7 @@ async function checkCanSeePasswordProtectedVideo (options: {
   req: Request
   res: Response
   video: MVideo
+
 }) {
   const { req, res, video } = options
 
@@ -182,22 +183,20 @@ async function checkCanSeePasswordProtectedVideo (options: {
     ? video as MVideoAccountLight
     : await VideoModel.loadFull(video.id)
 
-  const user = res.locals.oauth?.token.User
-
-  if (user) {
-    const isOwnedByUser = videoWithAccount.VideoChannel.Account.userId === user.id
-
-    if (isOwnedByUser || user.hasRight(UserRight.SEE_ALL_VIDEOS)) return true
-  }
-
   const videoPassword = req.header('video-password')
+  if (!exists(videoPassword)) {
+    const errorMessage = 'Please provide a password to access this password protected video'
+    if (req.header('authorization')) {
+      await authenticatePromise({ req, res, errorMessage, errorStatus: HttpStatusCode.FORBIDDEN_403 })
+      const user = res.locals.oauth?.token.User
 
-  if (!videoPassword) {
+      if (canUserAccessVideo(user, videoWithAccount, UserRight.SEE_ALL_VIDEOS)) return true
+    }
+
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Please provide a password to access this password protected video'
+      message: errorMessage
     })
-
     return false
   }
 
@@ -209,6 +208,11 @@ async function checkCanSeePasswordProtectedVideo (options: {
   })
 
   return false
+}
+
+function canUserAccessVideo (user: MUser, video: MVideoWithRights | MVideoAccountLight, right: UserRight) {
+  const isOwnedByUser = video.VideoChannel.Account.userId === user.id
+  return isOwnedByUser || user.hasRight(right)
 }
 
 // ---------------------------------------------------------------------------

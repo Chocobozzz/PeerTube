@@ -18,6 +18,7 @@ rates_limit:
 
 database:
   hostname: 'localhost'
+  suffix: '_pwProtected'
   port: 5432
 
 redis:

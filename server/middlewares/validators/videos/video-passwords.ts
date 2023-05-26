@@ -10,9 +10,9 @@ import {
   doesVideoPasswordExist,
   isVideoPasswordDeletable
 } from '../shared'
-import { isPasswordListValid } from '@server/helpers/video'
 import { body, param } from 'express-validator'
 import { isIdValid } from '@server/helpers/custom-validators/misc'
+import { isPasswordListValid } from '@server/helpers/custom-validators/videos'
 
 const fetchType = 'only-video'
 

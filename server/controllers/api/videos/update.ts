@@ -21,6 +21,7 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { forceNumber } from '@shared/core-utils'
 import { VideoPasswordModel } from '@server/models/video/video-password'
+import { exists } from '@server/helpers/custom-validators/misc'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -182,7 +183,8 @@ async function updateVideoPrivacy (options: {
 
   setVideoPrivacy(videoInstance, newPrivacy)
 
-  if (newPrivacy === VideoPrivacy.PASSWORD_PROTECTED) {
+  if (newPrivacy === VideoPrivacy.PASSWORD_PROTECTED && exists(videoInfoToUpdate.videoPasswords)) {
+    await VideoPasswordModel.deletePasswordsForApi(videoInstance.id, transaction)
     await VideoPasswordModel.addPasswordsForApi(videoInfoToUpdate.videoPasswords, videoInstance.id, transaction)
   }
 

@@ -47,15 +47,21 @@ function authenticateSocket (socket: Socket, next: (err?: any) => void) {
     .catch(err => logger.error('Cannot get access token.', { err }))
 }
 
-function authenticatePromise (req: express.Request, res: express.Response) {
+function authenticatePromise (options: {
+  req: express.Request
+  res: express.Response
+  errorMessage?: string
+  errorStatus?: HttpStatusCode
+}) {
+  const { req, res, errorMessage = 'Not authenticated', errorStatus = HttpStatusCode.UNAUTHORIZED_401 } = options
   return new Promise<void>(resolve => {
     // Already authenticated? (or tried to)
     if (res.locals.oauth?.token.User) return resolve()
 
     if (res.locals.authenticated === false) {
       return res.fail({
-        status: HttpStatusCode.UNAUTHORIZED_401,
-        message: 'Not authenticated'
+        status: errorStatus,
+        message: errorMessage
       })
     }
 

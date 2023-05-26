@@ -6,6 +6,7 @@ import {
   cleanupTests,
   createSingleServer,
   makeGetRequest,
+  makePostBodyRequest,
   makePutBodyRequest,
   PeerTubeServer,
   setAccessTokensToServers
@@ -44,7 +45,7 @@ describe('Test video passwords validator', function () {
         videoPasswords: [ 'password1', 'password2' ]
       })
     }
-    path = '/api/v1/videos/' + video.uuid + '/passwords'
+    path = '/api/v1/videos/'
   })
 
   async function checkVideoPasswordParam (
@@ -96,7 +97,7 @@ describe('Test video passwords validator', function () {
           const fields = { ...baseCorrectParams, videoPasswords }
           await makePutBodyRequest({
             url: server.url,
-            path: '/api/v1/videos/' + video.shortUUID,
+            path: path + video.shortUUID,
             token: server.accessToken,
             fields,
             expectedStatus
@@ -107,7 +108,13 @@ describe('Test video passwords validator', function () {
       case 'updatePasswords':
         {
           const fields = { passwords: videoPasswords }
-          await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields, expectedStatus })
+          await makePutBodyRequest({
+            url: server.url,
+            path: path + video.uuid + '/passwords',
+            token: server.accessToken,
+            fields,
+            expectedStatus
+          })
         }
         break
     }
@@ -227,6 +234,14 @@ describe('Test video passwords validator', function () {
       })
     })
 
+    it('Should fail if an inccorect password containing the correct password is entered', async function () {
+      await server.videos.getWithPassword({
+        id: video.id,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403,
+        password: 'password11'
+      })
+    })
+
     it('Should succeed without providing a password for an authorised user', async function () {
       await server.videos.getWithToken({
         id: video.id,
@@ -252,19 +267,24 @@ describe('Test video passwords validator', function () {
 
   describe('When listing passwords', function () {
     it('Should fail with a bad start pagination', async function () {
-      await checkBadStartPagination(server.url, path, server.accessToken)
+      await checkBadStartPagination(server.url, path + video.uuid + '/passwords', server.accessToken)
     })
 
     it('Should fail with a bad count pagination', async function () {
-      await checkBadCountPagination(server.url, path, server.accessToken)
+      await checkBadCountPagination(server.url, path + video.uuid + '/passwords', server.accessToken)
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await checkBadSortPagination(server.url, path, server.accessToken)
+      await checkBadSortPagination(server.url, path + video.uuid + '/passwords', server.accessToken)
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path, token:server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+      await makeGetRequest({
+        url: server.url,
+        path: path + video.uuid + '/passwords',
+        token:server.accessToken,
+        expectedStatus: HttpStatusCode.OK_200
+      })
     })
   })
 
@@ -274,6 +294,126 @@ describe('Test video passwords validator', function () {
 
   describe('When updating the password list of a video', function () {
     runSuite('updatePasswords')
+  })
+
+  describe('When rating a video', function () {
+    it('Should fail without password', async function () {
+      const fields = {
+        rating: 'like'
+      }
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + video.uuid + '/rate',
+        token: userAccessToken,
+        fields,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should succeed without password for authorized user', async function () {
+      const fields = {
+        rating: 'like'
+      }
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + video.uuid + '/rate',
+        token: server.accessToken,
+        fields,
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+    })
+
+    it('Should succeed with any logged user with the correct password', async function () {
+      const fields = {
+        rating: 'like'
+      }
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + video.uuid + '/rate',
+        token: userAccessToken,
+        fields,
+        headers:{
+          'video-password': 'password1'
+        },
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+    })
+  })
+
+  describe('When comment a video', function () {
+    describe('Add a comment', function () {
+      it('Should fail without password', async function () {
+        const fields = { text: 'super comment' }
+
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + video.uuid + '/comment-threads',
+          token: userAccessToken,
+          fields,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+      })
+
+      it('Should succeed without password for authorized user', async function () {
+        const fields = { text: 'super comment' }
+
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + video.uuid + '/comment-threads',
+          token: server.accessToken,
+          fields,
+          expectedStatus: HttpStatusCode.OK_200
+        })
+      })
+
+      it('Should succeed with any logged user with the correct password', async function () {
+        const fields = { text: 'super comment' }
+
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + video.uuid + '/comment-threads',
+          token: server.accessToken,
+          fields,
+          headers:{
+            'video-password': 'password1'
+          },
+          expectedStatus: HttpStatusCode.OK_200
+        })
+      })
+    })
+  })
+
+  describe('When getting captions', function () {
+    it('Should fail without password', async function () {
+      await makeGetRequest({ url: server.url, path: path + video.shortUUID + '/captions', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+
+      await makeGetRequest({
+        url: server.url,
+        path: path + video.uuid + '/captions',
+        token: userAccessToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should succeed without password for authorized user', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: path + video.uuid + '/captions',
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    })
+
+    it('Should succeed with any user with the correct password', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: path + video.shortUUID + '/captions',
+        headers:{
+          'video-password': 'password1'
+        },
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    })
   })
 
   describe('When deleting a password', async function () {

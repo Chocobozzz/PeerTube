@@ -15,7 +15,7 @@ function setVideoPrivacy (video: MVideo, newPrivacy: VideoPrivacy) {
 }
 
 function isVideoInPrivateDirectory (privacy: VideoPrivacy) {
-  return privacy === VideoPrivacy.PRIVATE || privacy === VideoPrivacy.INTERNAL
+  return [ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL, VideoPrivacy.PASSWORD_PROTECTED ].includes(privacy)
 }
 
 function isVideoInPublicDirectory (privacy: VideoPrivacy) {

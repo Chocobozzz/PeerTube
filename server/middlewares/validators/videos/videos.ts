@@ -7,7 +7,7 @@ import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express-handler'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
 import { arrayify, getAllPrivacies } from '@shared/core-utils'
-import { HttpStatusCode, ServerErrorCode, UserRight, VideoInclude, VideoPrivacy, VideoState } from '@shared/models'
+import { HttpStatusCode, ServerErrorCode, UserRight, VideoInclude, VideoState } from '@shared/models'
 import {
   exists,
   isBooleanValid,
@@ -21,7 +21,9 @@ import {
 import { isBooleanBothQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
 import {
   areVideoTagsValid,
+  isPasswordListValid,
   isScheduleVideoUpdatePrivacyValid,
+  isValidPasswordProtectedPrivacy,
   isVideoCategoryValid,
   isVideoDescriptionValid,
   isVideoFileMimeTypeValid,
@@ -40,7 +42,7 @@ import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { getVideoStreamDuration } from '../../../helpers/ffmpeg'
 import { logger } from '../../../helpers/logger'
 import { deleteFileAndCatch } from '../../../helpers/utils'
-import { getVideoWithAttributes, isPasswordListValid } from '../../../helpers/video'
+import { getVideoWithAttributes } from '../../../helpers/video'
 import { CONFIG } from '../../../initializers/config'
 import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants'
 import { isLocalVideoAccepted } from '../../../lib/moderation'
@@ -85,13 +87,8 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
       return cleanUpReqFiles(req)
     }
 
-    if (req.body.privacy === VideoPrivacy.PASSWORD_PROTECTED && !exists(req.body.videoPasswords)) {
-      res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot upload a password protected video without providing a password'
-      })
-      return cleanUpReqFiles(req)
-    }
+    if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
+
     try {
       if (!videoFile.duration) await addDurationToVideo(videoFile)
     } catch (err) {
@@ -220,13 +217,7 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     const files = { videofile: [ videoFileMetadata ] }
     if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFileMetadata.size, files })) return cleanup()
 
-    if (req.body.privacy === VideoPrivacy.PASSWORD_PROTECTED && !exists(req.body.videoPasswords)) {
-      res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot upload a password protected video without providing a password'
-      })
-      return cleanup()
-    }
+    if (!isValidPasswordProtectedPrivacy(req, res)) return cleanup()
 
     // multer required unsetting the Content-Type, now we can set it for node-uploadx
     req.headers['content-type'] = 'application/json; charset=utf-8'
@@ -260,13 +251,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     if (areErrorsInScheduleUpdate(req, res)) return cleanUpReqFiles(req)
     if (!await doesVideoExist(req.params.id, res)) return cleanUpReqFiles(req)
 
-    if (req.body.privacy === VideoPrivacy.PASSWORD_PROTECTED && !exists(req.body.videoPasswords)) {
-      res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot upload a password protected video without providing a password'
-      })
-      return cleanUpReqFiles(req)
-    }
+    if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
 
     const video = getVideoWithAttributes(res)
     if (req.body.privacy && video.isLive && video.state !== VideoState.WAITING_FOR_LIVE) {

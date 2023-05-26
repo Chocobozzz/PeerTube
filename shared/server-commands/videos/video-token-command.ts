@@ -8,6 +8,7 @@ export class VideoTokenCommand extends AbstractCommand {
 
   create (options: OverrideCommandOptions & {
     videoId: number | string
+    headers?: { [ name: string ]: string }
   }) {
     const { videoId } = options
     const path = '/api/v1/videos/' + videoId + '/token'
@@ -23,6 +24,7 @@ export class VideoTokenCommand extends AbstractCommand {
 
   async getVideoFileToken (options: OverrideCommandOptions & {
     videoId: number | string
+    headers?: { [ name: string ]: string }
   }) {
     const { files } = await this.create(options)
 

@@ -297,6 +297,8 @@ tags:
   - name: Stats
     description: |
       Statistics
+  - name: Video Passwords
+    description: Operation on video passwords
 
 x-tagGroups:
   - name: Static endpoints
@@ -334,6 +336,7 @@ x-tagGroups:
       - Video Transcoding
       - Live Videos
       - Channels Sync
+      - Video Passwords
   - name: Search
     tags:
       - Search
@@ -2320,6 +2323,7 @@ paths:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/videoPassword'
       responses:
         '200':
           description: successful operation
@@ -2539,6 +2543,8 @@ paths:
                   format: date-time
                 scheduleUpdate:
                   $ref: '#/components/schemas/VideoScheduledUpdate'
+                videoPasswords:
+                  $ref: '#/components/schemas/AddVideoPasswords'
             encoding:
               thumbnailfile:
                 contentType: image/jpeg
@@ -2551,6 +2557,7 @@ paths:
         - Video
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/videoPassword'
       responses:
         '200':
           description: successful operation
@@ -2558,6 +2565,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoDetails'
+        '403':
+          description: provide a correct password to access this password protected video
     delete:
       summary: Delete a video
       operationId: delVideo
@@ -2579,6 +2588,7 @@ paths:
         - Video
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/videoPassword'
       responses:
         '200':
           description: successful operation
@@ -3228,6 +3238,7 @@ paths:
         - Live Videos
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/videoPassword'
       responses:
         '200':
           description: successful operation
@@ -3626,6 +3637,7 @@ paths:
         - Video Captions
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/videoPassword'
       responses:
         '200':
           description: successful operation
@@ -3688,6 +3700,70 @@ paths:
           description: successful operation
         '404':
           description: video or language or caption for that language not found
+
+  /api/v1/videos/{id}/passwords:
+    get:
+      summary: List video passwords
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Video Passwords
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '204':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoPasswordList'
+        '400':
+          description: video is not password protected
+    put:
+      summary: Update video passwords
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Video Passwords
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                passwords:
+                  $ref: '#/components/schemas/AddVideoPasswords' 
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: video is not password protected
+
+  /api/v1/videos/{id}/passwords/{passwordId}:
+    delete:
+      summary: Delete a video password
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Video Passwords
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/videoPasswordId'
+      responses:
+        '204':
+          description: successful operation
+        '403':
+          description: cannot delete the last password of the protected video
+        '400':
+          description: video is not password protected
 
   /api/v1/video-channels:
     get:
@@ -4515,6 +4591,7 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/commentsSort'
+        - $ref: '#/components/parameters/videoPassword'
       responses:
         '200':
           description: successful operation
@@ -4561,6 +4638,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/threadId'
+        - $ref: '#/components/parameters/videoPassword'
       responses:
         '200':
           description: successful operation
@@ -4579,6 +4657,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/commentId'
+        - $ref: '#/components/parameters/videoPassword'
       responses:
         '200':
           description: successful operation
@@ -4629,6 +4708,7 @@ paths:
         - Video Rates
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/videoPassword'
       requestBody:
         content:
           application/json:
@@ -6000,7 +6080,20 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/VideoPlaylistTypeSet'
-        
+    videoPasswordId:
+      name: videoPasswordId
+      in: path
+      required: true
+      description: The video password id
+      schema:
+        $ref: '#/components/schemas/id'
+    videoPassword:
+      name: video-password
+      description: Required on password protected video
+      in: header
+      required: false
+      schema:
+        type: string
   securitySchemes:
     OAuth2:
       description: |
@@ -7703,6 +7796,8 @@ components:
           description: Video preview file
           type: string
           format: binary
+        videoPasswords:
+          $ref: '#/components/schemas/AddVideoPasswords'
       required:
         - channelId
         - name
@@ -8902,6 +8997,29 @@ components:
         - uploadedBytesP2P
         - videoId
 
+    VideoPassword:
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        password:
+          type: string
+          minLength: 2
+        videoId: 
+          $ref: '#/components/schemas/id'
+    VideoPasswordList:
+      properties:
+        total:
+          type: integer
+          example: 1
+        data:
+          type: array
+          items:
+              $ref: '#/components/schemas/VideoPassword'
+    AddVideoPasswords:
+      type: array
+      items:
+        $ref: "#/components/schemas/VideoPassword/properties/password"
+      uniqueItems: true
   callbacks:
     searchIndex:
       'https://search.example.org/api/v1/search/videos':
