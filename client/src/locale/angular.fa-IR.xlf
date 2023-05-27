@@ -3461,7 +3461,7 @@
       </trans-unit>
       <trans-unit id="1055254162789146714" datatype="html">
         <source>Comments are disabled.</source>
-        <target state="translated">اظهارنظرها غیرفعال شده اند.</target>
+        <target state="translated">اظهارنظرها غیرفعال هستند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="5733075023444401902" datatype="html">
@@ -4718,7 +4718,7 @@
       </trans-unit>
       <trans-unit id="2384897339170501794" datatype="html">
         <source>No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</source>
-        <target state="translated">هیچ <x id="START_TAG_SPAN"/> <x id="INTERPOLATION"/> <x id="CLOSE_TAG_SPAN"/> فعالتی پیدا نشد.</target>
+        <target state="translated">هیچ <x id="START_TAG_SPAN"/> <x id="INTERPOLATION"/> <x id="CLOSE_TAG_SPAN"/> فعالیتی پیدا نشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="4457061340457477073" datatype="html">
@@ -7508,7 +7508,7 @@
       </trans-unit>
       <trans-unit id="1081343670550705648" datatype="html">
         <source>Video uploads are disabled on this instance, hence your account won't be able to upload videos.</source>
-        <target state="translated">بارگذاری ویدئو در این سایت غیرفعال است بنابراین شما امکان بارگذاری فایل را ندارید.</target>
+        <target state="translated">بارگذاری ویدئو در این سایت غیرفعال است بنابراین شما امکان بارگذاری ویدئو را ندارید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">1,3</context>
