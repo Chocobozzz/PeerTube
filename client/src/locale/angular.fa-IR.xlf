@@ -507,7 +507,7 @@
       </trans-unit>
       <trans-unit id="2330577642930707695" datatype="html">
         <source>Cancel</source>
-        <target state="translated">لغو</target>
+        <target state="translated">لغو‌کردن</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">47</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
@@ -1835,7 +1835,7 @@
       </trans-unit>
       <trans-unit id="3071761663064320665" datatype="html">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>Create<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your first channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>Create<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your first channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>ایجاد کردن<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>اولین کانال خودتان<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="3761381527105312450" datatype="html">
@@ -2786,7 +2786,7 @@
       </trans-unit>
       <trans-unit id="2375260419993138758" datatype="html">
         <source>URL</source>
-        <target state="translated">url</target>
+        <target state="translated">آدرس</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">6</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">113</context></context-group>
@@ -2803,7 +2803,7 @@
       </trans-unit>
       <trans-unit id="460353452916242022" datatype="html">
         <source>Sorry, but something went wrong</source>
-        <target state="translated">با عرض پوزش، اما چیزی اشتباه رفت</target>
+        <target state="translated">با عرض پوزش، اما یک مشکل پیش آمد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">43</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">51</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">48</context></context-group>
@@ -2811,7 +2811,7 @@
       </trans-unit>
       <trans-unit id="5359075917564707730" datatype="html">
         <source>Congratulations, the video behind <x id="INTERPOLATION"/> will be imported! You can already add information about this video. </source>
-        <target state="translated">تبریک عرض می کنیم ، ویدئو بارگذاری خواهد شد . <x id="INTERPOLATION"/> شما می توانید قبل از بارگذاری اطلاعات مرتبط با آن را اضافه نمایید . </target>
+        <target state="translated">تبریک عرض می کنیم ، ویدئو بارگذاری خواهد شد . <x id="INTERPOLATION"/> شما می‌توانید قبل از بارگذاری اطلاعات مرتبط با آن را اضافه نمایید . </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="6722765664648523978" datatype="html">
@@ -2822,7 +2822,7 @@
       </trans-unit>
       <trans-unit id="9172233176401579786" datatype="html">
         <source>Scheduled</source>
-        <target state="translated">برنامه ریزی شده</target>
+        <target state="translated">برنامه‌ریزی شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">233</context></context-group>
       </trans-unit>
       <trans-unit id="1435317307066082710" datatype="html">
@@ -2848,7 +2848,7 @@
       </trans-unit>
       <trans-unit id="6148369758871787018" datatype="html">
         <source>Video background image</source>
-        <target state="translated">تصویر پس زمینه ویدئو</target>
+        <target state="translated">تصویر پس‌زمینه ویدئو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="7099631707196015765" datatype="html">
@@ -2896,7 +2896,7 @@
       </trans-unit>
       <trans-unit id="6161604372916832458" datatype="html">
         <source>Upload on hold</source>
-        <target state="translated">آپلود در HOLD</target>
+        <target state="translated">آپلود درحالت توقف</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">181</context></context-group>
       </trans-unit>
       <trans-unit id="285180972645018518" datatype="html">
@@ -5548,7 +5548,7 @@
       </trans-unit>
       <trans-unit id="8646250517331978259" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </source>
-        <target state="translated">برای تغییرکد VOD از <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>اجراکننده‌های راه‌دور<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>  استفاده نمایید. این اجراکننده‌ها بایستی ابتدا برروی سایت شما ثبت شوند. </target>
+        <target state="translated">برای تغییرکد VOD از <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>اجراکننده‌های راه‌دور<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> استفاده نمایید. این اجراکننده‌ها بایستی ابتدا برروی سایت شما ثبت شوند. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="7452751710576287271" datatype="html">
@@ -6253,7 +6253,7 @@
       </trans-unit>
       <trans-unit id="2070181811140868440" datatype="html">
         <source>This fetches any missing videos on the local channel</source>
-        <target state="translated">باعث دریافت تمام ویدئوهایی که در کانال محلی وجود ندارد می‌گردد.</target>
+        <target state="translated">باعث دریافت تمام ویدئوهایی که در کانال محلی وجود ندارد می‌گردد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="3997040276213089746" datatype="html">
@@ -8731,7 +8731,7 @@
       </trans-unit>
       <trans-unit id="453899642867587306" datatype="html">
         <source>Runner registration tokens</source>
-        <target state="new">Runner registration tokens</target>
+        <target state="translated">توکن‌های ثبت‌نام اجراکننده</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">9</context>
@@ -8809,7 +8809,7 @@
       </trans-unit>
       <trans-unit id="2237982448344718491" datatype="html">
         <source>Registration email has not been verified. Email delivery has been disabled by default.</source>
-        <target state="new"> Registration email has not been verified. Email delivery has been disabled by default. </target>
+        <target state="translated">ایمیل ثبت‌نام تایید نشده است. ارسال ایمیل بصورت پیش‌فرض غیرفعال شده است.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -8817,7 +8817,7 @@
       </trans-unit>
       <trans-unit id="2884115244144130373" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registration will create the account and channel. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registration will create the account and channel. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>پذیرش<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> درخواست ثبت‌نام <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> موجب ایجادحساب‌کاربری و کانال خواهد شد. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -8825,7 +8825,7 @@
       </trans-unit>
       <trans-unit id="4287036840463640002" datatype="html">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created with the moderation response you'll write below. </source>
-        <target state="new"> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created with the moderation response you'll write below. </target>
+        <target state="translated">یک ایمیل برای <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> ارسال خواهد شد و با استفاده از پاسخ مدیریتی شما که در زیر خواهید نوشت، توضیح داده می‌شود که حساب‌کاربری ایشان ایجاد شده است. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">24,26</context>
@@ -8841,7 +8841,7 @@
       </trans-unit>
       <trans-unit id="908816482785584930" datatype="html">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. </source>
-        <target state="new"> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. </target>
+        <target state="translated">یک ایمیل به <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> ارسال خواهد شد و با استفاده از پاسخ مدیریتی شما که در زیر خواهید نوشت، به ایشان توضیح داده می‌شود که درخواست ثبت‌نام ایشان <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>رد شده است<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">34,36</context>
@@ -8849,7 +8849,7 @@
       </trans-unit>
       <trans-unit id="2693506849974732500" datatype="html">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been rejected. </source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been rejected. </target>
+        <target state="translated">ارسال ایمیل در این سایت فعال نیست بنابراین پیرتیوب امکان ارسال ایمیل به <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> برای ارائه توضیح درخصوص عدم پذیرش درخواست ثبت‌نام را ندارد. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">38,40</context>
@@ -8925,7 +8925,7 @@
       </trans-unit>
       <trans-unit id="5875055916985051770" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> registrations</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> registrations</target>
+        <target state="translated">نمایش <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> تا <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> از تعداد <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> ثبت‌نام</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">11</context>
@@ -9115,7 +9115,7 @@
       </trans-unit>
       <trans-unit id="5945924096465496818" datatype="html">
         <source>&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</source>
-        <target state="new">&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</target>
+        <target state="translated">&lt;p&gt; شما امکان ایجاد یک حساب‌کاربری یا کانال با نام استفاده شده توسط یک کاربر/کانال حذف شده را ندارید.&lt;/p&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
       <trans-unit id="5643060985393782358" datatype="html">
@@ -9245,7 +9245,7 @@
       </trans-unit>
       <trans-unit id="5215550763077484072" datatype="html">
         <source>Allow email to be publicly displayed</source>
-        <target state="new">Allow email to be publicly displayed</target>
+        <target state="translated">مجوز نمایش همگانی آدرس ایمیل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">6</context>
@@ -9253,7 +9253,7 @@
       </trans-unit>
       <trans-unit id="3472732945521632942" datatype="html">
         <source>Necessary to claim podcast RSS feeds.</source>
-        <target state="new">Necessary to claim podcast RSS feeds.</target>
+        <target state="translated">معرفی RSS فید پادکست الزامی است.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">9</context>
@@ -9543,7 +9543,7 @@
       </trans-unit>
       <trans-unit id="5674286808255988565" datatype="html">
         <source>Create</source>
-        <target state="translated">ایجاد‌</target>
+        <target state="translated">ایجاد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">8</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">8</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-create.component.ts</context><context context-type="linenumber">107</context></context-group>
@@ -9716,8 +9716,7 @@
       </trans-unit>
       <trans-unit id="5603224609929994288" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is awaiting email verification </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is awaiting email verification
-</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> در انتظار تایید آدرس ایمیل است </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">5,6</context>
@@ -9831,7 +9830,7 @@
       </trans-unit>
       <trans-unit id="1593265243494758679" datatype="html">
         <source>Studio for <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></source>
-        <target state="new">Studio for <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
+        <target state="translated">استودیو برای <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">2</context>
@@ -9934,7 +9933,7 @@
       </trans-unit>
       <trans-unit id="7934869554046374009" datatype="html">
         <source>Edition tasks created.</source>
-        <target state="new">Edition tasks created.</target>
+        <target state="translated">وظایف نسخه ایجاد شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="7709367721354853232" datatype="html">
@@ -10216,7 +10215,7 @@
       </trans-unit>
       <trans-unit id="6183000905044663854" datatype="html">
         <source>Search <x id="PH" equiv-text="this.currentSearch"/></source>
-        <target state="new">Search <x id="PH" equiv-text="this.currentSearch"/></target>
+        <target state="translated">جستجوی <x id="PH" equiv-text="this.currentSearch"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.ts</context><context context-type="linenumber">256</context></context-group>
       </trans-unit>
       <trans-unit id="8491751845906232809" datatype="html">
@@ -10426,7 +10425,7 @@
       </trans-unit>
       <trans-unit id="7990066577913542327" datatype="html">
         <source>If you can't scan the QR code and need to enter it manually, here is the plain-text secret:</source>
-        <target state="new"> If you can't scan the QR code and need to enter it manually, here is the plain-text secret: </target>
+        <target state="translated">اگر امکان اسکن کد QR را ندارید و نیاز به وارد کردن آن بصورت دستی دارید، رمز متنی آن عبارت است از:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">34,36</context>
@@ -11011,7 +11010,7 @@
       </trans-unit>
       <trans-unit id="7820654428820536159" datatype="html">
         <source>External channel URL must begin with "https://" or "http://"</source>
-        <target state="new">External channel URL must begin with "https://" or "http://"</target>
+        <target state="translated">آدرس کانال بیرونی بایستی با https:// یا http:// آغاز شود</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">60</context>
@@ -11019,7 +11018,7 @@
       </trans-unit>
       <trans-unit id="5090406837784732474" datatype="html">
         <source>External channel URL cannot be more than 1000 characters long</source>
-        <target state="new">External channel URL cannot be more than 1000 characters long</target>
+        <target state="translated">آدرس کانال بیرونی نبایستی بیش از 1000 کاراکتر باشد</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">61</context>
@@ -11127,7 +11126,7 @@
       </trans-unit>
       <trans-unit id="6445713766140892433" datatype="html">
         <source>Latest live sessions</source>
-        <target state="new">Latest live sessions</target>
+        <target state="translated">آخرین جلسات پخش‌زنده</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">36</context>
@@ -11135,7 +11134,7 @@
       </trans-unit>
       <trans-unit id="1018828582442463303" datatype="html">
         <source>Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></source>
-        <target state="new">Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></target>
+        <target state="translated">شروع‌شده در <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">42</context>
@@ -11143,7 +11142,7 @@
       </trans-unit>
       <trans-unit id="6765028278622459314" datatype="html">
         <source>Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></source>
-        <target state="new">Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
+        <target state="translated">پایان‌یافته در <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">43</context>
@@ -11151,7 +11150,7 @@
       </trans-unit>
       <trans-unit id="3424935624805832445" datatype="html">
         <source>Go to replay</source>
-        <target state="new">Go to replay</target>
+        <target state="translated">رفتن به پخش مجدد</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">44</context>
@@ -11159,7 +11158,7 @@
       </trans-unit>
       <trans-unit id="6989092358991683843" datatype="html">
         <source>Replay is being processed...</source>
-        <target state="new">Replay is being processed...</target>
+        <target state="translated">پخش مجدد درحال پردازش است...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">45</context>
@@ -11807,7 +11806,7 @@
       </trans-unit>
       <trans-unit id="2836537219160375057" datatype="html">
         <source>Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</source>
-        <target state="new">Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</target>
+        <target state="translated">مسدود کردن {count, plural, =1 {یک کاربر} other { کاربر<x id="count"/> }}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -12435,7 +12434,7 @@
       </trans-unit>
       <trans-unit id="8527948211896740910" datatype="html">
         <source>Do you really want to delete this runner? It won't be able to process jobs anymore.</source>
-        <target state="new">Do you really want to delete this runner? It won't be able to process jobs anymore.</target>
+        <target state="translated">آیا از حذف این اجراکننده مطمئن هستید؟ دیگر امکان پردازش فعالیت‌ها را نخواهد داشت.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -12443,7 +12442,7 @@
       </trans-unit>
       <trans-unit id="1331591430867610406" datatype="html">
         <source>Remove <x id="PH" equiv-text="runner.name"/></source>
-        <target state="new">Remove <x id="PH" equiv-text="runner.name"/></target>
+        <target state="translated">حذف <x id="PH" equiv-text="runner.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -12451,7 +12450,7 @@
       </trans-unit>
       <trans-unit id="7401875498720294519" datatype="html">
         <source>Runner removed.</source>
-        <target state="new">Runner removed.</target>
+        <target state="translated">اجراکننده حذف شد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -12459,7 +12458,7 @@
       </trans-unit>
       <trans-unit id="3145038024759242903" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> registration tokens</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> registration tokens</target>
+        <target state="translated">نمایش <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> تا <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> از تعداد <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> توکن ثبت‌نام</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">20</context>
@@ -12467,7 +12466,7 @@
       </trans-unit>
       <trans-unit id="3039940756451018621" datatype="html">
         <source>Token</source>
-        <target state="new">Token</target>
+        <target state="translated">توکن</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">25</context>
@@ -12475,7 +12474,7 @@
       </trans-unit>
       <trans-unit id="5024831045497027714" datatype="html">
         <source>Associated runners</source>
-        <target state="new">Associated runners</target>
+        <target state="translated">اجراکننده‌های مرتبط</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">27</context>
@@ -12483,7 +12482,7 @@
       </trans-unit>
       <trans-unit id="2344549567732505963" datatype="html">
         <source>Generate token</source>
-        <target state="new">Generate token</target>
+        <target state="translated">ایجاد توکن</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">34</context>
@@ -12491,7 +12490,7 @@
       </trans-unit>
       <trans-unit id="1952170121636976975" datatype="html">
         <source>No registration token found for remote runners.</source>
-        <target state="new">No registration token found for remote runners.</target>
+        <target state="translated">هیچ توکن ثبت‌نامی برای اجراکننده‌های راه دور یافت نشد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">60</context>
@@ -12499,7 +12498,7 @@
       </trans-unit>
       <trans-unit id="8244506587463177080" datatype="html">
         <source>Remove this token</source>
-        <target state="new">Remove this token</target>
+        <target state="translated">حدف این توکن</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -12507,7 +12506,7 @@
       </trans-unit>
       <trans-unit id="1188547334387666210" datatype="html">
         <source>Registration token generated.</source>
-        <target state="new">Registration token generated.</target>
+        <target state="translated">توکن ثبت‌نام ایجاد شد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -12515,7 +12514,7 @@
       </trans-unit>
       <trans-unit id="545462083274995239" datatype="html">
         <source>Do you really want to remove this registration token? All associated runners will also be removed.</source>
-        <target state="new">Do you really want to remove this registration token? All associated runners will also be removed.</target>
+        <target state="translated">آیا از حذف این توکن ثبت‌نام مطمئن هستید؟ تمام اجراکننده‌های مرتبط حذف خواهند شد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -12523,7 +12522,7 @@
       </trans-unit>
       <trans-unit id="4228223651959845668" datatype="html">
         <source>Remove registration token</source>
-        <target state="new">Remove registration token</target>
+        <target state="translated">حذف توکن ثبت‌نام</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -12531,7 +12530,7 @@
       </trans-unit>
       <trans-unit id="3614410801173225581" datatype="html">
         <source>Registration token removed.</source>
-        <target state="new">Registration token removed.</target>
+        <target state="translated">توکن ثبت‌نام حذف شد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -12539,7 +12538,7 @@
       </trans-unit>
       <trans-unit id="6713730474908011769" datatype="html">
         <source>List runner jobs</source>
-        <target state="new">List runner jobs</target>
+        <target state="translated">فهرست‌کردن فعالیت‌های اجراکننده</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">27</context>
@@ -12547,7 +12546,7 @@
       </trans-unit>
       <trans-unit id="890886250761175417" datatype="html">
         <source>List remote runners</source>
-        <target state="new">List remote runners</target>
+        <target state="translated">فهرست‌کردن اجراکننده‌های راه‌دور</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">37</context>
@@ -12555,7 +12554,7 @@
       </trans-unit>
       <trans-unit id="4255553856349508493" datatype="html">
         <source>List registration runner tokens</source>
-        <target state="new">List registration runner tokens</target>
+        <target state="translated">فهرست‌کردن توکن‌های ثبت‌نام اجراکننده</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">47</context>
