@@ -1,6 +1,6 @@
 # Changelog
 
-## v5.2.0 (not yet released)
+## v5.2.0-rc.1
 
 ### IMPORTANT NOTES
 
@@ -56,6 +56,7 @@
   * Fix RTL layout inconsistencies
   * Prevent user video notification when the subscription is still in *Pending* state
   * Correctly remove *Pending* subscription
+  * Fix PeerTube subtitles import
 
 
 ## v5.1.0
