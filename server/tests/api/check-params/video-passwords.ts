@@ -177,7 +177,7 @@ describe('Test video passwords validator', function () {
       const body = await server.videos.get({ id: video.id, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
       const error = body as unknown as PeerTubeProblemDocument
 
-      expect(error.docs).to.equal('https://docs.joinpeertube.org/api/rest-reference.html#operation/getVideo')
+      expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo')
 
       expect(error.type).to.equal('about:blank')
       expect(error.title).to.equal('Forbidden')
@@ -196,7 +196,7 @@ describe('Test video passwords validator', function () {
       })
       const error = body as unknown as PeerTubeProblemDocument
 
-      expect(error.docs).to.equal('https://docs.joinpeertube.org/api/rest-reference.html#operation/getVideo')
+      expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo')
 
       expect(error.type).to.equal('about:blank')
       expect(error.title).to.equal('Forbidden')
@@ -215,7 +215,7 @@ describe('Test video passwords validator', function () {
       })
       const error = body as unknown as PeerTubeProblemDocument
 
-      expect(error.docs).to.equal('https://docs.joinpeertube.org/api/rest-reference.html#operation/getVideo')
+      expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo')
 
       expect(error.type).to.equal('about:blank')
       expect(error.title).to.equal('Forbidden')
