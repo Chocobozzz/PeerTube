@@ -4046,13 +4046,13 @@ The link will expire within 1 hour.</source>
       <trans-unit id="4824046935922837124" datatype="html">
         <source>Used (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</source>
         <target state="translated">Utilisé (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">102</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">96</context></context-group></trans-unit>
       <trans-unit id="5874809640561431793" datatype="html">
         <source>Available (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</source>
         <target state="translated">Disponible (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">108</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">102</context></context-group></trans-unit>
       <trans-unit id="7574091010118901399">
         <source>Sensitive</source>
         <target>Sensible</target>
@@ -5961,9 +5961,7 @@ color: red;
         <target state="translated">Disposition des chaînes</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">262</context></context-group></trans-unit><trans-unit id="6875053727982162254" datatype="html">
-        <source> Update <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; [fragment]=&quot;fragment&quot;>"/><x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;button-unstyle&quot; (click)=&quot;onAccountSettingsClick($event)&quot;>"/>your settings<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button>"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a
-  >"/></source><target state="new"> Update <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; [fragment]=&quot;fragment&quot;>"/><x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;button-unstyle&quot; (click)=&quot;onAccountSettingsClick($event)&quot;>"/>your settings<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button>"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a
-  >"/></target>
+        <source> Update <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; [fragment]=&quot;fragment&quot;>"/><x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;button-unstyle&quot; (click)=&quot;onAccountSettingsClick($event)&quot;>"/>your settings<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button>"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a   >"/></source><target state="new"> Update <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; [fragment]=&quot;fragment&quot;>"/><x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;button-unstyle&quot; (click)=&quot;onAccountSettingsClick($event)&quot;>"/>your settings<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button>"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a   >"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">2,7</context>
@@ -8236,18 +8234,18 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
       <trans-unit id="5875705095657098468" datatype="html">
         <source>Do you really want to remove this video redundancy?</source>
         <target state="translated">Êtes-vous sûr de vouloir supprimer cette redondance de vidéo ?</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">152</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">146</context></context-group></trans-unit>
       <trans-unit id="9098272570113000349" datatype="html">
         <source>Remove redundancy</source>
         <target state="translated">Supprimer cette redondance</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">153</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">147</context></context-group></trans-unit>
       <trans-unit id="6537102123107780785" datatype="html">
         <source>Video redundancies removed!</source>
         <target state="translated">Redondance de vidéo supprimée !</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">159</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">153</context></context-group></trans-unit>
       <trans-unit id="8639315630141911544">
         <source>Account <x id="PH"/> unmuted by your instance.</source>
         <target>Compte <x id="PH"/> réactivé par votre instance.</target>
