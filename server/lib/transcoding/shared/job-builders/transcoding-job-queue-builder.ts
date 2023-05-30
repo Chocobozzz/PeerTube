@@ -18,7 +18,7 @@ import {
 } from '@shared/models'
 import { getTranscodingJobPriority } from '../../transcoding-priority'
 import { canDoQuickTranscode } from '../../transcoding-quick-transcode'
-import { computeResolutionsToTranscode } from '../../transcoding-resolutions'
+import { buildOriginalFileResolution, computeResolutionsToTranscode } from '../../transcoding-resolutions'
 import { AbstractJobBuilder } from './abstract-job-builder'
 
 export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
@@ -55,7 +55,7 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
 
         const maxResolution = await isAudioFile(videoFilePath, probe)
           ? DEFAULT_AUDIO_RESOLUTION
-          : resolution
+          : buildOriginalFileResolution(resolution)
 
         if (CONFIG.TRANSCODING.HLS.ENABLED === true) {
           nextTranscodingSequentialJobPayloads.push([
