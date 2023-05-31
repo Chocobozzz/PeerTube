@@ -33,6 +33,7 @@ export class Video implements VideoServerModel {
   licence: VideoConstant<number>
   language: VideoConstant<string>
   privacy: VideoConstant<VideoPrivacy>
+  videoPassword: string
 
   truncatedDescription: string
   description: string

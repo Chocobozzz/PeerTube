@@ -14,6 +14,7 @@ import {
   VIDEO_LICENCE_VALIDATOR,
   VIDEO_NAME_VALIDATOR,
   VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR,
+  VIDEO_PASSWORD_VALIDATOR,
   VIDEO_PRIVACY_VALIDATOR,
   VIDEO_SCHEDULE_PUBLICATION_AT_VALIDATOR,
   VIDEO_SUPPORT_VALIDATOR,
@@ -79,7 +80,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
 
-  videoPrivacies: VideoConstant<VideoPrivacy>[] = []
+  videoPrivacies: VideoConstant<VideoPrivacy | typeof VideoEdit.SPECIAL_SCHEDULED_PRIVACY > [] = []
   videoCategories: VideoConstant<number>[] = []
   videoLicences: VideoConstant<number>[] = []
   videoLanguages: VideoLanguages[] = []
@@ -104,6 +105,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   pluginDataFormGroup: FormGroup
 
   schedulePublicationEnabled = false
+  passwordProtectedEnabled = false
 
   calendarLocale: any = {}
   minScheduledDate = new Date()
@@ -148,6 +150,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     const obj: { [ id: string ]: BuildFormValidator } = {
       name: VIDEO_NAME_VALIDATOR,
       privacy: VIDEO_PRIVACY_VALIDATOR,
+      videoPassword: VIDEO_PASSWORD_VALIDATOR,
       channelId: VIDEO_CHANNEL_VALIDATOR,
       nsfw: null,
       commentsEnabled: null,
@@ -411,6 +414,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
         newPrivacyId => {
 
           this.schedulePublicationEnabled = newPrivacyId === this.SPECIAL_SCHEDULED_PRIVACY
+          this.passwordProtectedEnabled = newPrivacyId === VideoPrivacy.PASSWORD_PROTECTED
 
           // Value changed
           const scheduleControl = this.form.get('schedulePublicationAt')

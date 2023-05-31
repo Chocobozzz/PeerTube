@@ -120,6 +120,11 @@
               </div>
             </div>
 
+            <div *ngIf="passwordProtectedEnabled" class="form-group">
+              <label i18n for="videoPassword">Password</label>
+              <input type="text" id="videoPassword" class="form-control" formControlName="videoPassword"/>
+            </div>
+            
             <div *ngIf="schedulePublicationEnabled" class="form-group">
               <label i18n for="schedulePublicationAt">Schedule publication ({{ calendarTimezone }})</label>
               <p-calendar

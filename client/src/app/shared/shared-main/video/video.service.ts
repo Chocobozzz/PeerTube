@@ -99,6 +99,9 @@ export class VideoService {
       description,
       channelId: video.channelId,
       privacy: video.privacy,
+      videoPasswords: video.privacy === VideoPrivacy.PASSWORD_PROTECTED
+        ? [ video.videoPassword ]
+        : undefined,
       tags: video.tags,
       nsfw: video.nsfw,
       waitTranscoding: video.waitTranscoding,

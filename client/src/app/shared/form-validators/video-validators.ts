@@ -26,6 +26,13 @@ export const VIDEO_PRIVACY_VALIDATOR: BuildFormValidator = {
   }
 }
 
+export const VIDEO_PASSWORD_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [ Validators.minLength(2) ],
+  MESSAGES: {
+    minLength: $localize`A password should be at least 2 characters long.`
+  }
+}
+
 export const VIDEO_CATEGORY_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ ],
   MESSAGES: {}

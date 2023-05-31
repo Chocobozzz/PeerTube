@@ -18,6 +18,7 @@ export class VideoEdit implements VideoUpdate {
   waitTranscoding: boolean
   channelId: number
   privacy: VideoPrivacy
+  videoPassword?: string
   support: string
   thumbnailfile?: any
   previewfile?: any
@@ -48,6 +49,7 @@ export class VideoEdit implements VideoUpdate {
     this.waitTranscoding = video.waitTranscoding
     this.channelId = video.channel.id
     this.privacy = video.privacy.id
+    this.videoPassword = video.videoPassword
 
     this.support = video.support
 
@@ -112,6 +114,7 @@ export class VideoEdit implements VideoUpdate {
       waitTranscoding: this.waitTranscoding,
       channelId: this.channelId,
       privacy: this.privacy,
+      videoPassword: this.videoPassword,
       originallyPublishedAt: this.originallyPublishedAt
     }
 
