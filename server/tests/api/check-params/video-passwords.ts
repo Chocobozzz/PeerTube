@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination, checkUploadVideoParam } from '@server/tests/shared'
 import { root } from '@shared/core-utils'
-import { HttpStatusCode, PeerTubeProblemDocument, VideoCreateResult, VideoPassword, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, PeerTubeProblemDocument, ServerErrorCode, VideoCreateResult, VideoPassword, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -179,9 +179,7 @@ describe('Test video passwords validator', function () {
 
       expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo')
 
-      expect(error.type).to.equal('about:blank')
-      expect(error.title).to.equal('Forbidden')
-
+      expect(error.code).to.equal(ServerErrorCode.VIDEO_REQUIRES_PASSWORD)
       expect(error.detail).to.equal('Please provide a password to access this password protected video')
       expect(error.error).to.equal('Please provide a password to access this password protected video')
 
@@ -198,9 +196,7 @@ describe('Test video passwords validator', function () {
 
       expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo')
 
-      expect(error.type).to.equal('about:blank')
-      expect(error.title).to.equal('Forbidden')
-
+      expect(error.code).to.equal(ServerErrorCode.VIDEO_REQUIRES_PASSWORD)
       expect(error.detail).to.equal('Please provide a password to access this password protected video')
       expect(error.error).to.equal('Please provide a password to access this password protected video')
 
@@ -217,9 +213,7 @@ describe('Test video passwords validator', function () {
 
       expect(error.docs).to.equal('https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo')
 
-      expect(error.type).to.equal('about:blank')
-      expect(error.title).to.equal('Forbidden')
-
+      expect(error.code).to.equal(ServerErrorCode.INCORRECT_VIDEO_PASSWORD)
       expect(error.detail).to.equal('Incorrect video password. Access to the video is denied.')
       expect(error.error).to.equal('Incorrect video password. Access to the video is denied.')
 

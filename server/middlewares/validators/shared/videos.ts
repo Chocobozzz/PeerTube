@@ -186,8 +186,9 @@ async function checkCanSeePasswordProtectedVideo (options: {
   const videoPassword = req.header('video-password')
   if (!exists(videoPassword)) {
     const errorMessage = 'Please provide a password to access this password protected video'
+    const type = ServerErrorCode.VIDEO_REQUIRES_PASSWORD
     if (req.header('authorization')) {
-      await authenticatePromise({ req, res, errorMessage, errorStatus: HttpStatusCode.FORBIDDEN_403 })
+      await authenticatePromise({ req, res, errorMessage, errorStatus: HttpStatusCode.FORBIDDEN_403, type })
       const user = res.locals.oauth?.token.User
 
       if (canUserAccessVideo(user, videoWithAccount, UserRight.SEE_ALL_VIDEOS)) return true
@@ -195,6 +196,7 @@ async function checkCanSeePasswordProtectedVideo (options: {
 
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
+      type,
       message: errorMessage
     })
     return false
@@ -204,6 +206,7 @@ async function checkCanSeePasswordProtectedVideo (options: {
 
   res.fail({
     status: HttpStatusCode.FORBIDDEN_403,
+    type: ServerErrorCode.INCORRECT_VIDEO_PASSWORD,
     message: 'Incorrect video password. Access to the video is denied.'
   })
 

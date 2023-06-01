@@ -735,6 +735,15 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   })
   VideoCaptions: VideoCaptionModel[]
 
+  @HasMany(() => VideoPasswordModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  VideoPasswords: VideoPasswordModel[]
+
   @HasOne(() => VideoJobInfoModel, {
     foreignKey: {
       name: 'videoId',
@@ -758,15 +767,6 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   static notifyDestroy (video: MVideo) {
     InternalEventEmitter.Instance.emit('video-deleted', { video })
   }
-
-  @HasMany(() => VideoPasswordModel, {
-    foreignKey: {
-      name: 'videoId',
-      allowNull: false
-    },
-    onDelete: 'cascade'
-  })
-  VideoPasswords: VideoPasswordModel[]
 
   @BeforeDestroy
   static async sendDelete (instance: MVideoAccountLight, options: { transaction: Transaction }) {

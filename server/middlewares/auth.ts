@@ -5,6 +5,7 @@ import { RunnerModel } from '@server/models/runner/runner'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { logger } from '../helpers/logger'
 import { handleOAuthAuthenticate } from '../lib/auth/oauth'
+import { ServerErrorCode } from '@shared/models'
 
 function authenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
   handleOAuthAuthenticate(req, res)
@@ -53,8 +54,9 @@ function authenticatePromise (options: {
   res: express.Response
   errorMessage?: string
   errorStatus?: HttpStatusCode
+  type?: ServerErrorCode
 }) {
-  const { req, res, errorMessage = 'Not authenticated', errorStatus = HttpStatusCode.UNAUTHORIZED_401 } = options
+  const { req, res, errorMessage = 'Not authenticated', errorStatus = HttpStatusCode.UNAUTHORIZED_401, type } = options
   return new Promise<void>(resolve => {
     // Already authenticated? (or tried to)
     if (res.locals.oauth?.token.User) return resolve()
@@ -62,6 +64,7 @@ function authenticatePromise (options: {
     if (res.locals.authenticated === false) {
       return res.fail({
         status: errorStatus,
+        type,
         message: errorMessage
       })
     }
