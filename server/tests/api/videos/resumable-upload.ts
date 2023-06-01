@@ -254,6 +254,24 @@ describe('Test resumable upload', function () {
       expect(result2.headers['x-resumable-upload-cached']).to.not.exist
     })
 
+    it('Should not cache after video deletion', async function () {
+      const originalName = 'toto.mp4'
+      const lastModified = new Date().getTime()
+
+      const uploadId1 = await prepareUpload({ originalName, lastModified })
+      const result1 = await sendChunks({ pathUploadId: uploadId1 })
+      await server.videos.remove({ id: result1.body.video.uuid })
+
+      const uploadId2 = await prepareUpload({ originalName, lastModified })
+      const result2 = await sendChunks({ pathUploadId: uploadId2 })
+      expect(result1.body.video.uuid).to.not.equal(result2.body.video.uuid)
+
+      expect(result2.headers['x-resumable-upload-cached']).to.not.exist
+
+      await checkFileSize(uploadId1, null)
+      await checkFileSize(uploadId2, null)
+    })
+
     it('Should refuse an invalid digest', async function () {
       const uploadId = await prepareUpload({ token: server.accessToken })
 

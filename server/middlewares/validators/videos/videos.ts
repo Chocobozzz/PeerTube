@@ -132,11 +132,15 @@ const videosAddResumableValidator = [
         })
       }
 
-      if (isTestInstance()) {
-        res.setHeader('x-resumable-upload-cached', 'true')
-      }
+      const videoStillExists = await VideoModel.load(sessionResponse.video.id)
 
-      return res.json(sessionResponse)
+      if (videoStillExists) {
+        if (isTestInstance()) {
+          res.setHeader('x-resumable-upload-cached', 'true')
+        }
+
+        return res.json(sessionResponse)
+      }
     }
 
     await Redis.Instance.setUploadSession(uploadId)
