@@ -48,6 +48,7 @@ export class APVideoCreator extends APVideoAbstractBuilder {
         await this.setTrackers(videoCreated, t)
         await this.insertOrReplaceCaptions(videoCreated, t)
         await this.insertOrReplaceLive(videoCreated, t)
+        await this.insertOrReplaceStoryboard(videoCreated, t)
 
         // We added a video in this channel, set it as updated
         await channel.setAsUpdated(t)

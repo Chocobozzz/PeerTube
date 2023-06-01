@@ -56,4 +56,41 @@ export class FFmpegImage {
         .thumbnail(thumbnailOptions)
     })
   }
+
+  async generateStoryboardFromVideo (options: {
+    path: string
+    destination: string
+
+    sprites: {
+      size: {
+        width: number
+        height: number
+      }
+
+      count: {
+        width: number
+        height: number
+      }
+
+      duration: number
+    }
+  }) {
+    const { path, destination, sprites } = options
+
+    const command = this.commandWrapper.buildCommand(path)
+
+    const filter = [
+      `setpts=N/round(FRAME_RATE)/TB`,
+      `select='not(mod(t,${options.sprites.duration}))'`,
+      `scale=${sprites.size.width}:${sprites.size.height}`,
+      `tile=layout=${sprites.count.width}x${sprites.count.height}`
+    ].join(',')
+
+    command.outputOption('-filter_complex', filter)
+    command.outputOption('-frames:v', '1')
+    command.outputOption('-q:v', '2')
+    command.output(destination)
+
+    return this.commandWrapper.runCommand()
+  }
 }

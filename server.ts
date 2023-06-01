@@ -101,7 +101,7 @@ loadLanguages()
 import { installApplication } from './server/initializers/installer'
 import { Emailer } from './server/lib/emailer'
 import { JobQueue } from './server/lib/job-queue'
-import { VideosPreviewCache, VideosCaptionCache } from './server/lib/files-cache'
+import { VideosPreviewCache, VideosCaptionCache, VideosStoryboardCache } from './server/lib/files-cache'
 import {
   activityPubRouter,
   apiRouter,
@@ -316,6 +316,7 @@ async function startApplication () {
   VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE, FILES_CACHE.PREVIEWS.MAX_AGE)
   VideosCaptionCache.Instance.init(CONFIG.CACHE.VIDEO_CAPTIONS.SIZE, FILES_CACHE.VIDEO_CAPTIONS.MAX_AGE)
   VideosTorrentCache.Instance.init(CONFIG.CACHE.TORRENTS.SIZE, FILES_CACHE.TORRENTS.MAX_AGE)
+  VideosStoryboardCache.Instance.init(CONFIG.CACHE.STORYBOARDS.SIZE, FILES_CACHE.STORYBOARDS.MAX_AGE)
 
   // Enable Schedulers
   ActorFollowScheduler.Instance.enable()

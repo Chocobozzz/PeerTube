@@ -325,8 +325,8 @@ class Redis {
     const value = await this.getValue('resumable-upload-' + uploadId)
 
     return value
-      ? JSON.parse(value)
-      : ''
+      ? JSON.parse(value) as { video: { id: number, shortUUID: string, uuid: string } }
+      : undefined
   }
 
   deleteUploadSession (uploadId: string) {

@@ -306,6 +306,15 @@ async function afterImportSuccess (options: {
     Notifier.Instance.notifyOnNewVideoIfNeeded(video)
   }
 
+  // Generate the storyboard in the job queue, and don't forget to federate an update after
+  await JobQueue.Instance.createJob({
+    type: 'generate-video-storyboard' as 'generate-video-storyboard',
+    payload: {
+      videoUUID: video.uuid,
+      federate: true
+    }
+  })
+
   if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
     await JobQueue.Instance.createJob(
       await buildMoveToObjectStorageJob({ video, previousVideoState: VideoState.TO_IMPORT })

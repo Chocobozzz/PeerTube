@@ -112,6 +112,7 @@ const CONFIG = {
     STREAMING_PLAYLISTS_DIR: buildPath(config.get<string>('storage.streaming_playlists')),
     REDUNDANCY_DIR: buildPath(config.get<string>('storage.redundancy')),
     THUMBNAILS_DIR: buildPath(config.get<string>('storage.thumbnails')),
+    STORYBOARDS_DIR: buildPath(config.get<string>('storage.storyboards')),
     PREVIEWS_DIR: buildPath(config.get<string>('storage.previews')),
     CAPTIONS_DIR: buildPath(config.get<string>('storage.captions')),
     TORRENTS_DIR: buildPath(config.get<string>('storage.torrents')),
@@ -482,6 +483,9 @@ const CONFIG = {
     },
     TORRENTS: {
       get SIZE () { return config.get<number>('cache.torrents.size') }
+    },
+    STORYBOARDS: {
+      get SIZE () { return config.get<number>('cache.storyboards.size') }
     }
   },
   INSTANCE: {

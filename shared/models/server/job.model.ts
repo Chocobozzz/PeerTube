@@ -30,6 +30,7 @@ export type JobType =
   | 'video-studio-edition'
   | 'video-transcoding'
   | 'videos-views-stats'
+  | 'generate-video-storyboard'
 
 export interface Job {
   id: number | string
@@ -293,4 +294,11 @@ export interface TranscodingJobBuilderPayload {
     payload: VideoTranscodingPayload
     priority?: number
   }[][]
+}
+
+// ---------------------------------------------------------------------------
+
+export interface GenerateStoryboardPayload {
+  videoUUID: string
+  federate: boolean
 }

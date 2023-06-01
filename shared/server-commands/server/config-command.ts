@@ -159,6 +159,10 @@ export class ConfigCommand extends AbstractCommand {
       newConfig: {
         transcoding: {
           enabled: true,
+
+          allowAudioFiles: true,
+          allowAdditionalExtensions: true,
+
           resolutions: {
             ...ConfigCommand.getCustomConfigResolutions(false),
 
@@ -368,6 +372,9 @@ export class ConfigCommand extends AbstractCommand {
         },
         torrents: {
           size: 4
+        },
+        storyboards: {
+          size: 5
         }
       },
       signup: {

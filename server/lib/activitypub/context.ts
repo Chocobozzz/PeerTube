@@ -46,6 +46,19 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
 
     Infohash: 'pt:Infohash',
 
+    tileWidth: {
+      '@type': 'sc:Number',
+      '@id': 'pt:tileWidth'
+    },
+    tileHeight: {
+      '@type': 'sc:Number',
+      '@id': 'pt:tileHeight'
+    },
+    tileDuration: {
+      '@type': 'sc:Number',
+      '@id': 'pt:tileDuration'
+    },
+
     originallyPublishedAt: 'sc:datePublished',
     views: {
       '@type': 'sc:Number',

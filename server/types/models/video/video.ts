@@ -3,6 +3,7 @@ import { VideoModel } from '../../../models/video/video'
 import { MTrackerUrl } from '../server/tracker'
 import { MUserVideoHistoryTime } from '../user/user-video-history'
 import { MScheduleVideoUpdate } from './schedule-video-update'
+import { MStoryboard } from './storyboard'
 import { MTag } from './tag'
 import { MThumbnail } from './thumbnail'
 import { MVideoBlacklist, MVideoBlacklistLight, MVideoBlacklistUnfederated } from './video-blacklist'
@@ -32,7 +33,7 @@ type Use<K extends keyof VideoModel, M> = PickWith<VideoModel, K, M>
 export type MVideo =
   Omit<VideoModel, 'VideoChannel' | 'Tags' | 'Thumbnails' | 'VideoPlaylistElements' | 'VideoAbuses' |
   'VideoFiles' | 'VideoStreamingPlaylists' | 'VideoShares' | 'AccountVideoRates' | 'VideoComments' | 'VideoViews' | 'UserVideoHistories' |
-  'ScheduleVideoUpdate' | 'VideoBlacklist' | 'VideoImport' | 'VideoCaptions' | 'VideoLive' | 'Trackers' | 'VideoPasswords'>
+  'ScheduleVideoUpdate' | 'VideoBlacklist' | 'VideoImport' | 'VideoCaptions' | 'VideoLive' | 'Trackers' | 'VideoPasswords' | 'Storyboard'>
 
 // ############################################################################
 
@@ -173,9 +174,10 @@ export type MVideoAP =
   Use<'VideoBlacklist', MVideoBlacklistUnfederated> &
   Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
   Use<'Thumbnails', MThumbnail[]> &
-  Use<'VideoLive', MVideoLive>
+  Use<'VideoLive', MVideoLive> &
+  Use<'Storyboard', MStoryboard>
 
-export type MVideoAPWithoutCaption = Omit<MVideoAP, 'VideoCaptions'>
+export type MVideoAPLight = Omit<MVideoAP, 'VideoCaptions' | 'Storyboard'>
 
 export type MVideoDetails =
   MVideo &

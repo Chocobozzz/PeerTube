@@ -235,6 +235,15 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
     },
 
     {
+      type: 'generate-video-storyboard' as 'generate-video-storyboard',
+      payload: {
+        videoUUID: video.uuid,
+        // No need to federate, we process these jobs sequentially
+        federate: false
+      }
+    },
+
+    {
       type: 'notify',
       payload: {
         action: 'new-video',

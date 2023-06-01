@@ -33,6 +33,7 @@ import {
   LiveVideo,
   PeerTubeProblemDocument,
   ServerErrorCode,
+  Storyboard,
   VideoCaption,
   VideoPrivacy,
   VideoState
@@ -69,6 +70,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   videoCaptions: VideoCaption[] = []
   liveVideo: LiveVideo
   videoPassword: string
+  storyboards: Storyboard[] = []
 
   playlistPosition: number
   playlist: VideoPlaylist = null
@@ -285,9 +287,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     forkJoin([
       videoAndLiveObs,
       this.videoCaptionService.listCaptions(videoId, videoPassword),
+      this.videoService.getStoryboards(videoId),
       this.userService.getAnonymousOrLoggedUser()
     ]).subscribe({
-      next: ([ { video, live, videoFileToken }, captionsResult, loggedInOrAnonymousUser ]) => {
+      next: ([ { video, live, videoFileToken }, captionsResult, storyboards, loggedInOrAnonymousUser ]) => {
         const queryParams = this.route.snapshot.queryParams
 
         const urlOptions = {
@@ -309,6 +312,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           video,
           live,
           videoCaptions: captionsResult.data,
+          storyboards,
           videoFileToken,
           videoPassword,
           loggedInOrAnonymousUser,
@@ -414,6 +418,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     video: VideoDetails
     live: LiveVideo
     videoCaptions: VideoCaption[]
+    storyboards: Storyboard[]
     videoFileToken: string
     videoPassword: string
 
@@ -421,7 +426,17 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     loggedInOrAnonymousUser: User
     forceAutoplay: boolean
   }) {
-    const { video, live, videoCaptions, urlOptions, videoFileToken, videoPassword, loggedInOrAnonymousUser, forceAutoplay } = options
+    const {
+      video,
+      live,
+      videoCaptions,
+      storyboards,
+      urlOptions,
+      videoFileToken,
+      videoPassword,
+      loggedInOrAnonymousUser,
+      forceAutoplay
+    } = options
 
     this.subscribeToLiveEventsIfNeeded(this.video, video)
 
@@ -430,6 +445,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.liveVideo = live
     this.videoFileToken = videoFileToken
     this.videoPassword = videoPassword
+    this.storyboards = storyboards
 
     // Re init attributes
     this.playerPlaceholderImgSrc = undefined
@@ -485,6 +501,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const params = {
       video: this.video,
       videoCaptions: this.videoCaptions,
+      storyboards: this.storyboards,
       liveVideo: this.liveVideo,
       videoFileToken: this.videoFileToken,
       videoPassword: this.videoPassword,
@@ -636,6 +653,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     video: VideoDetails
     liveVideo: LiveVideo
     videoCaptions: VideoCaption[]
+    storyboards: Storyboard[]
 
     videoFileToken: string
     videoPassword: string
@@ -646,7 +664,17 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     forceAutoplay: boolean
     user?: AuthUser // Keep for plugins
   }) {
-    const { video, liveVideo, videoCaptions, videoFileToken, videoPassword, urlOptions, loggedInOrAnonymousUser, forceAutoplay } = params
+    const {
+      video,
+      liveVideo,
+      videoCaptions,
+      storyboards,
+      videoFileToken,
+      videoPassword,
+      urlOptions,
+      loggedInOrAnonymousUser,
+      forceAutoplay
+    } = params
 
     const getStartTime = () => {
       const byUrl = urlOptions.startTime !== undefined
@@ -672,6 +700,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       language: c.language.id,
       src: environment.apiUrl + c.captionPath
     }))
+
+    const storyboard = storyboards.length !== 0
+      ? {
+        url: environment.apiUrl + storyboards[0].storyboardPath,
+        height: storyboards[0].spriteHeight,
+        width: storyboards[0].spriteWidth,
+        interval: storyboards[0].spriteDuration
+      }
+      : undefined
 
     const liveOptions = video.isLive
       ? { latencyMode: liveVideo.latencyMode }
@@ -734,6 +771,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         videoPassword: () => videoPassword,
 
         videoCaptions: playerCaptions,
+        storyboard,
 
         videoShortUUID: video.shortUUID,
         videoUUID: video.uuid,
@@ -767,6 +805,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       else mode = 'webtorrent'
     }
 
+    // FIXME: remove, we don't support these old web browsers anymore
     // p2p-media-loader needs TextEncoder, fallback on WebTorrent if not available
     if (typeof TextEncoder === 'undefined') {
       mode = 'webtorrent'

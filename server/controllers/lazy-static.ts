@@ -5,7 +5,7 @@ import { MActorImage } from '@server/types/models'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { logger } from '../helpers/logger'
 import { ACTOR_IMAGES_SIZE, LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/constants'
-import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
+import { VideosCaptionCache, VideosPreviewCache, VideosStoryboardCache } from '../lib/files-cache'
 import { actorImagePathUnsafeCache, downloadActorImageFromWorker } from '../lib/local-actor'
 import { asyncMiddleware, handleStaticError } from '../middlewares'
 import { ActorImageModel } from '../models/actor/actor-image'
@@ -29,6 +29,12 @@ lazyStaticRouter.use(
 lazyStaticRouter.use(
   LAZY_STATIC_PATHS.PREVIEWS + ':filename',
   asyncMiddleware(getPreview),
+  handleStaticError
+)
+
+lazyStaticRouter.use(
+  LAZY_STATIC_PATHS.STORYBOARDS + ':filename',
+  asyncMiddleware(getStoryboard),
   handleStaticError
 )
 
@@ -121,6 +127,13 @@ function getActorImageSize (image: MActorImage): { width: number, height: number
 
 async function getPreview (req: express.Request, res: express.Response) {
   const result = await VideosPreviewCache.Instance.getFilePath(req.params.filename)
+  if (!result) return res.status(HttpStatusCode.NOT_FOUND_404).end()
+
+  return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE.LAZY_SERVER })
+}
+
+async function getStoryboard (req: express.Request, res: express.Response) {
+  const result = await VideosStoryboardCache.Instance.getFilePath(req.params.filename)
   if (!result) return res.status(HttpStatusCode.NOT_FOUND_404).end()
 
   return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE.LAZY_SERVER })

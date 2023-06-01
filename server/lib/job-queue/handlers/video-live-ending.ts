@@ -1,6 +1,8 @@
 import { Job } from 'bullmq'
 import { readdir, remove } from 'fs-extra'
 import { join } from 'path'
+import { peertubeTruncate } from '@server/helpers/core-utils'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { cleanupAndDestroyPermanentLive, cleanupTMPLiveFiles, cleanupUnsavedNormalLive } from '@server/lib/live'
@@ -20,8 +22,7 @@ import { MVideo, MVideoLive, MVideoLiveSession, MVideoWithAllFiles } from '@serv
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@shared/ffmpeg'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
-import { peertubeTruncate } from '@server/helpers/core-utils'
-import { CONSTRAINTS_FIELDS } from '@server/initializers/constants'
+import { JobQueue } from '../job-queue'
 
 const lTags = loggerTagsFactory('live', 'job')
 
@@ -147,6 +148,8 @@ async function saveReplayToExternalVideo (options: {
   }
 
   await moveToNextState({ video: replayVideo, isNewVideo: true })
+
+  await createStoryboardJob(replayVideo)
 }
 
 async function replaceLiveByReplay (options: {
@@ -186,6 +189,7 @@ async function replaceLiveByReplay (options: {
 
   await assignReplayFilesToVideo({ video: videoWithFiles, replayDirectory })
 
+  // FIXME: should not happen in this function
   if (permanentLive) { // Remove session replay
     await remove(replayDirectory)
   } else { // We won't stream again in this live, we can delete the base replay directory
@@ -213,6 +217,8 @@ async function replaceLiveByReplay (options: {
 
   // We consider this is a new video
   await moveToNextState({ video: videoWithFiles, isNewVideo: true })
+
+  await createStoryboardJob(videoWithFiles)
 }
 
 async function assignReplayFilesToVideo (options: {
@@ -276,4 +282,14 @@ async function cleanupLiveAndFederate (options: {
   } catch (err) {
     logger.warn('Cannot federate live after cleanup', { videoId: video.id, err })
   }
+}
+
+function createStoryboardJob (video: MVideo) {
+  return JobQueue.Instance.createJob({
+    type: 'generate-video-storyboard' as 'generate-video-storyboard',
+    payload: {
+      videoUUID: video.uuid,
+      federate: true
+    }
+  })
 }

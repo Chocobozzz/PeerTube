@@ -174,6 +174,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'after-video-channel-import': 1,
   'move-to-object-storage': 3,
   'transcoding-job-builder': 1,
+  'generate-video-storyboard': 1,
   'notify': 1,
   'federate-video': 1
 }
@@ -198,6 +199,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'video-channel-import': 1,
   'after-video-channel-import': 1,
   'transcoding-job-builder': 1,
+  'generate-video-storyboard': 1,
   'notify': 5,
   'federate-video': 3
 }
@@ -218,6 +220,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
+  'generate-video-storyboard': 1000 * 60 * 10, // 10 minutes
   'manage-video-torrent': 1000 * 3600 * 3, // 3 hours
   'move-to-object-storage': 1000 * 60 * 60 * 3, // 3 hours
   'video-channel-import': 1000 * 60 * 60 * 4, // 4 hours
@@ -766,7 +769,8 @@ const LAZY_STATIC_PATHS = {
   AVATARS: '/lazy-static/avatars/',
   PREVIEWS: '/lazy-static/previews/',
   VIDEO_CAPTIONS: '/lazy-static/video-captions/',
-  TORRENTS: '/lazy-static/torrents/'
+  TORRENTS: '/lazy-static/torrents/',
+  STORYBOARDS: '/lazy-static/storyboards/'
 }
 const OBJECT_STORAGE_PROXY_PATHS = {
   PRIVATE_WEBSEED: '/object-storage-proxy/webseed/private/',
@@ -813,6 +817,14 @@ const ACTOR_IMAGES_SIZE: { [key in ActorImageType]: { width: number, height: num
   ]
 }
 
+const STORYBOARD = {
+  SPRITE_SIZE: {
+    width: 192,
+    height: 108
+  },
+  SPRITES_MAX_EDGE_COUNT: 10
+}
+
 const EMBED_SIZE = {
   width: 560,
   height: 315
@@ -823,6 +835,10 @@ const FILES_CACHE = {
   PREVIEWS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'previews'),
     MAX_AGE: 1000 * 3600 * 3 // 3 hours
+  },
+  STORYBOARDS: {
+    DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'storyboards'),
+    MAX_AGE: 1000 * 3600 * 24 // 24 hours
   },
   VIDEO_CAPTIONS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'video-captions'),
@@ -1090,6 +1106,7 @@ export {
   RESUMABLE_UPLOAD_SESSION_LIFETIME,
   RUNNER_JOB_STATES,
   P2P_MEDIA_LOADER_PEER_VERSION,
+  STORYBOARD,
   ACTOR_IMAGES_SIZE,
   ACCEPT_HEADERS,
   BCRYPT_SALT_SIZE,

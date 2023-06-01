@@ -11,7 +11,7 @@ export type MVideoCaption = Omit<VideoCaptionModel, 'Video'>
 // ############################################################################
 
 export type MVideoCaptionLanguage = Pick<MVideoCaption, 'language'>
-export type MVideoCaptionLanguageUrl = Pick<MVideoCaption, 'language' | 'fileUrl' | 'getFileUrl'>
+export type MVideoCaptionLanguageUrl = Pick<MVideoCaption, 'language' | 'fileUrl' | 'filename' | 'getFileUrl' | 'getCaptionStaticPath'>
 
 export type MVideoCaptionVideo =
   MVideoCaption &

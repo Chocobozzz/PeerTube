@@ -3,6 +3,20 @@
 @use '_mixins' as *;
 @use './_player-variables' as *;
 
+// Like the time tooltip
+.video-js .vjs-progress-holder .vjs-storyboard-sprite-placeholder {
+  display: none;
+}
+
+.video-js .vjs-progress-control:hover .vjs-storyboard-sprite-placeholder,
+.video-js .vjs-progress-control:hover .vjs-progress-holder:focus .vjs-storyboard-sprite-placeholder {
+  display: block;
+
+  // Ensure that we maintain a font-size of ~10px.
+  font-size: 0.6em;
+  visibility: visible;
+}
+
 .video-js.vjs-peertube-skin .vjs-control-bar {
   z-index: 100;
 
@@ -79,6 +93,7 @@
           top: -0.3em;
         }
 
+        // Only used on mobile
         .vjs-time-tooltip {
           display: none;
         }

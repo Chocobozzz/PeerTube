@@ -19,6 +19,7 @@ storage:
   logs: 'test4/logs/'
   previews: 'test4/previews/'
   thumbnails: 'test4/thumbnails/'
+  storyboards: 'test4/storyboards/'
   torrents: 'test4/torrents/'
   captions: 'test4/captions/'
   cache: 'test4/cache/'

@@ -3668,6 +3668,27 @@ paths:
                     items:
                       $ref: '#/components/schemas/VideoBlacklist'
 
+  /api/v1/videos/{id}/storyboards:
+    get:
+      summary: List storyboards of a video
+      operationId: listVideoStoryboards
+      tags:
+        - Video
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  storyboards:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Storyboard'
+
   /api/v1/videos/{id}/captions:
     get:
       summary: List captions of a video
@@ -7509,6 +7530,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VideoCommentThreadTree'
+    Storyboard:
+      properties:
+        storyboardPath:
+          type: string
+        totalHeight:
+          type: integer
+        totalWidth:
+          type: integer
+        spriteHeight:
+          type: integer
+        spriteWidth:
+          type: integer
+        spriteDuration:
+          type: integer
     VideoCaption:
       properties:
         language:

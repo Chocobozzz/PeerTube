@@ -57,6 +57,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
       await Promise.all([
         runInReadCommittedTransaction(t => this.setTags(videoUpdated, t)),
         runInReadCommittedTransaction(t => this.setTrackers(videoUpdated, t)),
+        runInReadCommittedTransaction(t => this.setStoryboard(videoUpdated, t)),
         this.setOrDeleteLive(videoUpdated),
         this.setPreview(videoUpdated)
       ])
@@ -136,6 +137,10 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
 
   private async setCaptions (videoUpdated: MVideoFullLight, t: Transaction) {
     await this.insertOrReplaceCaptions(videoUpdated, t)
+  }
+
+  private async setStoryboard (videoUpdated: MVideoFullLight, t: Transaction) {
+    await this.insertOrReplaceStoryboard(videoUpdated, t)
   }
 
   private async setOrDeleteLive (videoUpdated: MVideoFullLight, transaction?: Transaction) {

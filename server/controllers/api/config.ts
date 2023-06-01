@@ -190,6 +190,9 @@ function customConfig (): CustomConfig {
       },
       torrents: {
         size: CONFIG.CACHE.TORRENTS.SIZE
+      },
+      storyboards: {
+        size: CONFIG.CACHE.STORYBOARDS.SIZE
       }
     },
     signup: {

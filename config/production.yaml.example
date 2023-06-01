@@ -134,6 +134,7 @@ storage:
   logs: '/var/www/peertube/storage/logs/'
   previews: '/var/www/peertube/storage/previews/'
   thumbnails: '/var/www/peertube/storage/thumbnails/'
+  storyboards: '/var/www/peertube/storage/storyboards/'
   torrents: '/var/www/peertube/storage/torrents/'
   captions: '/var/www/peertube/storage/captions/'
   cache: '/var/www/peertube/storage/cache/'
@@ -406,6 +407,8 @@ cache:
     size: 500 # Max number of video captions/subtitles you want to cache
   torrents:
     size: 500 # Max number of video torrents you want to cache
+  storyboards:
+    size: 500 # Max number of video storyboards you want to cache
 
 admin:
   # Used to generate the root user at first startup

@@ -5,6 +5,7 @@ import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager'
 import { uuidToShort } from '@shared/extra-utils'
 import {
+  ActivityPubStoryboard,
   ActivityTagObject,
   ActivityUrlObject,
   Video,
@@ -347,29 +348,17 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     name: t.name
   }))
 
-  let language
-  if (video.language) {
-    language = {
-      identifier: video.language,
-      name: getLanguageLabel(video.language)
-    }
-  }
+  const language = video.language
+    ? { identifier: video.language, name: getLanguageLabel(video.language) }
+    : undefined
 
-  let category
-  if (video.category) {
-    category = {
-      identifier: video.category + '',
-      name: getCategoryLabel(video.category)
-    }
-  }
+  const category = video.category
+    ? { identifier: video.category + '', name: getCategoryLabel(video.category) }
+    : undefined
 
-  let licence
-  if (video.licence) {
-    licence = {
-      identifier: video.licence + '',
-      name: getLicenceLabel(video.licence)
-    }
-  }
+  const licence = video.licence
+    ? { identifier: video.licence + '', name: getLicenceLabel(video.licence) }
+    : undefined
 
   const url: ActivityUrlObject[] = [
     // HTML url should be the first element in the array so Mastodon correctly displays the embed
@@ -465,6 +454,8 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       height: i.height
     })),
 
+    preview: buildPreviewAPAttribute(video),
+
     url,
 
     likes: getLocalVideoLikesActivityPubUrl(video),
@@ -540,4 +531,31 @@ function buildLiveAPAttributes (video: MVideoAP) {
     permanentLive: video.VideoLive.permanentLive,
     latencyMode: video.VideoLive.latencyMode
   }
+}
+
+function buildPreviewAPAttribute (video: MVideoAP): ActivityPubStoryboard[] {
+  if (!video.Storyboard) return undefined
+
+  const storyboard = video.Storyboard
+
+  return [
+    {
+      type: 'Image',
+      rel: [ 'storyboard' ],
+      url: [
+        {
+          mediaType: 'image/jpeg',
+
+          href: storyboard.getOriginFileUrl(video),
+
+          width: storyboard.totalWidth,
+          height: storyboard.totalHeight,
+
+          tileWidth: storyboard.spriteWidth,
+          tileHeight: storyboard.spriteHeight,
+          tileDuration: getActivityStreamDuration(storyboard.spriteDuration)
+        }
+      ]
+    }
+  ]
 }

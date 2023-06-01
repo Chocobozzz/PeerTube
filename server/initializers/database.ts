@@ -10,6 +10,7 @@ import { UserModel } from '@server/models/user/user'
 import { UserNotificationModel } from '@server/models/user/user-notification'
 import { UserRegistrationModel } from '@server/models/user/user-registration'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history'
+import { StoryboardModel } from '@server/models/video/storyboard'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting'
@@ -167,7 +168,8 @@ async function initDatabaseModels (silent: boolean) {
     VideoPasswordModel,
     RunnerRegistrationTokenModel,
     RunnerModel,
-    RunnerJobModel
+    RunnerJobModel,
+    StoryboardModel
   ])
 
   // Check extensions exist in the database

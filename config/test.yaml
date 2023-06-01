@@ -73,6 +73,8 @@ cache:
     size: 1
   torrents:
     size: 1
+  storyboards:
+    size: 1
 
 signup:
   enabled: true

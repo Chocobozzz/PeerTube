@@ -58,7 +58,7 @@ import {
 import { AttributesOnly } from '@shared/typescript-utils'
 import { peertubeTruncate } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { exists, isBooleanValid, isUUIDValid } from '../../helpers/custom-validators/misc'
+import { exists, isArray, isBooleanValid, isUUIDValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoDescriptionValid,
   isVideoDurationValid,
@@ -75,6 +75,7 @@ import {
   MChannel,
   MChannelAccountDefault,
   MChannelId,
+  MStoryboard,
   MStreamingPlaylist,
   MStreamingPlaylistFilesVideo,
   MUserAccountId,
@@ -83,6 +84,8 @@ import {
   MVideoAccountLight,
   MVideoAccountLightBlacklistAllFiles,
   MVideoAP,
+  MVideoAPLight,
+  MVideoCaptionLanguageUrl,
   MVideoDetails,
   MVideoFileVideo,
   MVideoFormattable,
@@ -126,6 +129,7 @@ import {
   VideosIdListQueryBuilder,
   VideosModelListQueryBuilder
 } from './sql/video'
+import { StoryboardModel } from './storyboard'
 import { TagModel } from './tag'
 import { ThumbnailModel } from './thumbnail'
 import { VideoBlacklistModel } from './video-blacklist'
@@ -753,6 +757,15 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   })
   VideoJobInfo: VideoJobInfoModel
 
+  @HasOne(() => StoryboardModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  Storyboard: StoryboardModel
+
   @AfterCreate
   static notifyCreate (video: MVideo) {
     InternalEventEmitter.Instance.emit('video-created', { video })
@@ -901,6 +914,10 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         {
           attributes: [ 'filename', 'language', 'fileUrl' ],
           model: VideoCaptionModel.unscoped(),
+          required: false
+        },
+        {
+          model: StoryboardModel.unscoped(),
           required: false
         },
         {
@@ -1766,6 +1783,32 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       'filter:activity-pub.video.json-ld.build.result',
       { video: this }
     )
+  }
+
+  async lightAPToFullAP (this: MVideoAPLight, transaction: Transaction): Promise<MVideoAP> {
+    const videoAP = this as MVideoAP
+
+    const getCaptions = () => {
+      if (isArray(videoAP.VideoCaptions)) return videoAP.VideoCaptions
+
+      return this.$get('VideoCaptions', {
+        attributes: [ 'filename', 'language', 'fileUrl' ],
+        transaction
+      }) as Promise<MVideoCaptionLanguageUrl[]>
+    }
+
+    const getStoryboard = () => {
+      if (videoAP.Storyboard) return videoAP.Storyboard
+
+      return this.$get('Storyboard', { transaction }) as Promise<MStoryboard>
+    }
+
+    const [ captions, storyboard ] = await Promise.all([ getCaptions(), getStoryboard() ])
+
+    return Object.assign(this, {
+      VideoCaptions: captions,
+      Storyboard: storyboard
+    })
   }
 
   getTruncatedDescription () {

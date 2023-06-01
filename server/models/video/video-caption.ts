@@ -15,7 +15,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { MVideo, MVideoCaption, MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/types/models'
+import { MVideo, MVideoCaption, MVideoCaptionFormattable, MVideoCaptionLanguageUrl, MVideoCaptionVideo } from '@server/types/models'
 import { buildUUID } from '@shared/extra-utils'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
@@ -225,7 +225,7 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
     }
   }
 
-  getCaptionStaticPath (this: MVideoCaption) {
+  getCaptionStaticPath (this: MVideoCaptionLanguageUrl) {
     return join(LAZY_STATIC_PATHS.VIDEO_CAPTIONS, this.filename)
   }
 
@@ -233,9 +233,7 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
     return remove(CONFIG.STORAGE.CAPTIONS_DIR + this.filename)
   }
 
-  getFileUrl (video: MVideo) {
-    if (!this.Video) this.Video = video as VideoModel
-
+  getFileUrl (this: MVideoCaptionLanguageUrl, video: MVideo) {
     if (video.isOwned()) return WEBSERVER.URL + this.getCaptionStaticPath()
 
     return this.fileUrl

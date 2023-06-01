@@ -9,8 +9,7 @@ import { Notifier } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
 import {
   ADMIN_EMAIL_VALIDATOR,
-  CACHE_CAPTIONS_SIZE_VALIDATOR,
-  CACHE_PREVIEWS_SIZE_VALIDATOR,
+  CACHE_SIZE_VALIDATOR,
   CONCURRENCY_VALIDATOR,
   INDEX_URL_VALIDATOR,
   INSTANCE_NAME_VALIDATOR,
@@ -120,13 +119,16 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       },
       cache: {
         previews: {
-          size: CACHE_PREVIEWS_SIZE_VALIDATOR
+          size: CACHE_SIZE_VALIDATOR
         },
         captions: {
-          size: CACHE_CAPTIONS_SIZE_VALIDATOR
+          size: CACHE_SIZE_VALIDATOR
         },
         torrents: {
-          size: CACHE_CAPTIONS_SIZE_VALIDATOR
+          size: CACHE_SIZE_VALIDATOR
+        },
+        storyboards: {
+          size: CACHE_SIZE_VALIDATOR
         }
       },
       signup: {

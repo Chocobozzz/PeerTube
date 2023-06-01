@@ -1,6 +1,6 @@
 import validator from 'validator'
 import { logger } from '@server/helpers/logger'
-import { ActivityTrackerUrlObject, ActivityVideoFileMetadataUrlObject } from '@shared/models'
+import { ActivityPubStoryboard, ActivityTrackerUrlObject, ActivityVideoFileMetadataUrlObject, VideoObject } from '@shared/models'
 import { LiveVideoLatencyMode, VideoState } from '../../../../shared/models/videos'
 import { ACTIVITY_PUB, CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { peertubeTruncate } from '../../core-utils'
@@ -46,6 +46,10 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
   }
   if (!setValidRemoteIcon(video)) {
     logger.debug('Video has invalid icons', { video })
+    return false
+  }
+  if (!setValidStoryboard(video)) {
+    logger.debug('Video has invalid preview (storyboard)', { video })
     return false
   }
 
@@ -200,4 +204,37 @@ function setRemoteVideoContent (video: any) {
   }
 
   return true
+}
+
+function setValidStoryboard (video: VideoObject) {
+  if (!video.preview) return true
+  if (!Array.isArray(video.preview)) return false
+
+  video.preview = video.preview.filter(p => isStorybordValid(p))
+
+  return true
+}
+
+function isStorybordValid (preview: ActivityPubStoryboard) {
+  if (!preview) return false
+
+  if (
+    preview.type !== 'Image' ||
+    !isArray(preview.rel) ||
+    !preview.rel.includes('storyboard')
+  ) {
+    return false
+  }
+
+  preview.url = preview.url.filter(u => {
+    return u.mediaType === 'image/jpeg' &&
+      isActivityPubUrlValid(u.href) &&
+      validator.isInt(u.width + '', { min: 0 }) &&
+      validator.isInt(u.height + '', { min: 0 }) &&
+      validator.isInt(u.tileWidth + '', { min: 0 }) &&
+      validator.isInt(u.tileHeight + '', { min: 0 }) &&
+      isActivityPubVideoDurationValid(u.tileDuration)
+  })
+
+  return preview.url.length !== 0
 }

@@ -25,6 +25,7 @@ const customConfigUpdateValidator = [
   body('cache.previews.size').isInt(),
   body('cache.captions.size').isInt(),
   body('cache.torrents.size').isInt(),
+  body('cache.storyboards.size').isInt(),
 
   body('signup.enabled').isBoolean(),
   body('signup.limit').isInt(),

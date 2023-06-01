@@ -33,6 +33,8 @@ async function waitJobs (
 
     // Check if each server has pending request
     for (const server of servers) {
+      if (process.env.DEBUG) console.log('Checking ' + server.url)
+
       for (const state of states) {
 
         const jobPromise = server.jobs.list({
@@ -45,6 +47,10 @@ async function waitJobs (
           .then(jobs => {
             if (jobs.length !== 0) {
               pendingRequests = true
+
+              if (process.env.DEBUG) {
+                console.log(jobs)
+              }
             }
           })
 
@@ -55,6 +61,10 @@ async function waitJobs (
         .then(obj => {
           if (obj.activityPubMessagesWaiting !== 0) {
             pendingRequests = true
+
+            if (process.env.DEBUG) {
+              console.log('AP messages waiting: ' + obj.activityPubMessagesWaiting)
+            }
           }
         })
       tasks.push(debugPromise)
@@ -65,12 +75,15 @@ async function waitJobs (
             for (const job of data) {
               if (job.state.id !== RunnerJobState.COMPLETED) {
                 pendingRequests = true
+
+                if (process.env.DEBUG) {
+                  console.log(job)
+                }
               }
             }
           })
         tasks.push(runnerJobsPromise)
       }
-
     }
 
     return tasks

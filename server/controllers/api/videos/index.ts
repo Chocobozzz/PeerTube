@@ -41,6 +41,7 @@ import { liveRouter } from './live'
 import { ownershipVideoRouter } from './ownership'
 import { rateVideoRouter } from './rate'
 import { statsRouter } from './stats'
+import { storyboardRouter } from './storyboard'
 import { studioRouter } from './studio'
 import { tokenRouter } from './token'
 import { transcodingRouter } from './transcoding'
@@ -70,6 +71,7 @@ videosRouter.use('/', filesRouter)
 videosRouter.use('/', transcodingRouter)
 videosRouter.use('/', tokenRouter)
 videosRouter.use('/', videoPasswordRouter)
+videosRouter.use('/', storyboardRouter)
 
 videosRouter.get('/categories',
   openapiOperationDoc({ operationId: 'getCategories' }),

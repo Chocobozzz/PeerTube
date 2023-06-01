@@ -15,6 +15,7 @@ export * from './channel-sync'
 
 export * from './nsfw-policy.type'
 
+export * from './storyboard.model'
 export * from './thumbnail.type'
 
 export * from './video-constant.model'

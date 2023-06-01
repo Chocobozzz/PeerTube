@@ -1,6 +1,6 @@
 import { maxBy, minBy } from 'lodash'
 import { decode as magnetUriDecode } from 'magnet-uri'
-import { basename } from 'path'
+import { basename, extname } from 'path'
 import { isAPVideoFileUrlMetadataObject } from '@server/helpers/custom-validators/activitypub/videos'
 import { isVideoFileInfoHashValid } from '@server/helpers/custom-validators/videos'
 import { logger } from '@server/helpers/logger'
@@ -25,6 +25,9 @@ import {
   VideoStreamingPlaylistType
 } from '@shared/models'
 import { getDurationFromActivityStream } from '../../activity'
+import { isArray } from '@server/helpers/custom-validators/misc'
+import { generateImageFilename } from '@server/helpers/image-utils'
+import { arrayify } from '@shared/core-utils'
 
 function getThumbnailFromIcons (videoObject: VideoObject) {
   let validIcons = videoObject.icon.filter(i => i.width > THUMBNAILS_SIZE.minWidth)
@@ -166,6 +169,26 @@ function getCaptionAttributesFromObject (video: MVideoId, videoObject: VideoObje
   }))
 }
 
+function getStoryboardAttributeFromObject (video: MVideoId, videoObject: VideoObject) {
+  if (!isArray(videoObject.preview)) return undefined
+
+  const storyboard = videoObject.preview.find(p => p.rel.includes('storyboard'))
+  if (!storyboard) return undefined
+
+  const url = arrayify(storyboard.url).find(u => u.mediaType === 'image/jpeg')
+
+  return {
+    filename: generateImageFilename(extname(url.href)),
+    totalHeight: url.height,
+    totalWidth: url.width,
+    spriteHeight: url.tileHeight,
+    spriteWidth: url.tileWidth,
+    spriteDuration: getDurationFromActivityStream(url.tileDuration),
+    fileUrl: url.href,
+    videoId: video.id
+  }
+}
+
 function getVideoAttributesFromObject (videoChannel: MChannelId, videoObject: VideoObject, to: string[] = []) {
   const privacy = to.includes(ACTIVITY_PUB.PUBLIC)
     ? VideoPrivacy.PUBLIC
@@ -228,6 +251,7 @@ export {
 
   getLiveAttributesFromObject,
   getCaptionAttributesFromObject,
+  getStoryboardAttributeFromObject,
 
   getVideoAttributesFromObject
 }

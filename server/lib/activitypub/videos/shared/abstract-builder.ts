@@ -3,6 +3,7 @@ import { deleteAllModels, filterNonExistingModels } from '@server/helpers/databa
 import { logger, LoggerTagsFn } from '@server/helpers/logger'
 import { updatePlaceholderThumbnail, updateVideoMiniatureFromUrl } from '@server/lib/thumbnail'
 import { setVideoTags } from '@server/lib/video'
+import { StoryboardModel } from '@server/models/video/storyboard'
 import { VideoCaptionModel } from '@server/models/video/video-caption'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
@@ -24,6 +25,7 @@ import {
   getFileAttributesFromUrl,
   getLiveAttributesFromObject,
   getPreviewFromIcons,
+  getStoryboardAttributeFromObject,
   getStreamingPlaylistAttributesFromObject,
   getTagsFromObject,
   getThumbnailFromIcons
@@ -105,6 +107,16 @@ export abstract class APVideoAbstractBuilder {
     for (const captionToCreate of captionsToCreate) {
       await captionToCreate.save({ transaction: t })
     }
+  }
+
+  protected async insertOrReplaceStoryboard (video: MVideoFullLight, t: Transaction) {
+    const existingStoryboard = await StoryboardModel.loadByVideo(video.id, t)
+    if (existingStoryboard) await existingStoryboard.destroy({ transaction: t })
+
+    const storyboardAttributes = getStoryboardAttributeFromObject(video, this.videoObject)
+    if (!storyboardAttributes) return
+
+    return StoryboardModel.create(storyboardAttributes, { transaction: t })
   }
 
   protected async insertOrReplaceLive (video: MVideoFullLight, transaction: Transaction) {
