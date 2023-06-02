@@ -51,7 +51,7 @@ async function generateImageFromVideoFile (options: {
   const pendingImagePath = join(folder, pendingImageName)
 
   try {
-    await generateThumbnailFromVideo({ fromPath, folder, imageName })
+    await generateThumbnailFromVideo({ fromPath, output: pendingImagePath })
 
     const destination = join(folder, imageName)
     await processImage({ path: pendingImagePath, destination, newSize: size })

@@ -1,4 +1,5 @@
 import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-command-wrapper'
+import { getVideoStreamDuration } from './ffprobe'
 
 export class FFmpegImage {
   private readonly commandWrapper: FFmpegCommandWrapper
@@ -36,25 +37,20 @@ export class FFmpegImage {
 
   async generateThumbnailFromVideo (options: {
     fromPath: string
-    folder: string
-    imageName: string
+    output: string
   }) {
-    const { fromPath, folder, imageName } = options
+    const { fromPath, output } = options
 
-    const pendingImageName = 'pending-' + imageName
+    let duration = await getVideoStreamDuration(fromPath)
+    if (isNaN(duration)) duration = 0
 
-    const thumbnailOptions = {
-      filename: pendingImageName,
-      count: 1,
-      folder
-    }
+    this.commandWrapper.buildCommand(fromPath)
+      .seekInput(duration / 2)
+      .videoFilter('thumbnail=500')
+      .outputOption('-frames:v 1')
+      .output(output)
 
-    return new Promise<string>((res, rej) => {
-      this.commandWrapper.buildCommand(fromPath)
-        .on('error', rej)
-        .on('end', () => res(imageName))
-        .thumbnail(thumbnailOptions)
-    })
+    return this.commandWrapper.runCommand()
   }
 
   async generateStoryboardFromVideo (options: {
