@@ -268,6 +268,35 @@ cd /var/www/peertube-docker
 docker-compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage --all-videos
 ```
 
+<!-- TODO: uncomment when PeerTube 6 is released
+### create-generate-storyboard-job
+
+**PeerTube >= 6.0**
+
+Use this script to generate storyboard of a specific video:
+
+```bash
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-generate-storyboard-job -- -v [videoUUID]
+
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run create-generate-storyboard-job -- -v [videoUUID]
+```
+
+The script can also generate all missing storyboards of local videos:
+
+```bash
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-generate-storyboard-job -- --all-videos
+
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run create-generate-storyboard-job -- --all-videos
+```
+-->
 
 ### prune-storage.js
 

@@ -49,6 +49,7 @@
     "regenerate-thumbnails": "node ./dist/scripts/regenerate-thumbnails.js",
     "create-import-video-file-job": "node ./dist/scripts/create-import-video-file-job.js",
     "create-move-video-storage-job": "node ./dist/scripts/create-move-video-storage-job.js",
+    "create-generate-storyboard-job": "node ./dist/scripts/create-generate-storyboard-job.js",
     "test": "bash ./scripts/test.sh",
     "generate-cli-doc": "bash ./scripts/generate-cli-doc.sh",
     "generate-types-package": "ts-node ./packages/types/generate-package.ts",

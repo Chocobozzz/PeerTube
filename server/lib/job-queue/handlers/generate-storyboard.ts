@@ -43,6 +43,11 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
     const destination = join(CONFIG.STORAGE.STORYBOARDS_DIR, filename)
 
     const totalSprites = buildTotalSprites(video)
+    if (totalSprites === 0) {
+      logger.info('Do not generate a storyboard of %s because the video is not long enough', payload.videoUUID, lTags)
+      return
+    }
+
     const spriteDuration = Math.round(video.duration / totalSprites)
 
     const spritesCount = findGridSize({

@@ -1,4 +1,5 @@
 import { program } from 'commander'
+import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
 import { CONFIG } from '@server/initializers/config'
 import { initDatabaseModels } from '@server/initializers/database'
 import { JobQueue } from '@server/lib/job-queue'
@@ -32,7 +33,10 @@ if (options['toObjectStorage'] && !CONFIG.OBJECT_STORAGE.ENABLED) {
 
 run()
   .then(() => process.exit(0))
-  .catch(err => console.error(err))
+  .catch(err => {
+    console.error(err)
+    process.exit(-1)
+  })
 
 async function run () {
   await initDatabaseModels(true)
@@ -42,7 +46,7 @@ async function run () {
   let ids: number[] = []
 
   if (options['video']) {
-    const video = await VideoModel.load(options['video'])
+    const video = await VideoModel.load(toCompleteUUID(options['video']))
 
     if (!video) {
       console.error('Unknown video ' + options['video'])
