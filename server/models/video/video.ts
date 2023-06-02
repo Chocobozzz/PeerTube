@@ -762,7 +762,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       name: 'videoId',
       allowNull: false
     },
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    hooks: true
   })
   Storyboard: StoryboardModel
 

@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
+import { readdir } from 'fs-extra'
+import { basename } from 'path'
 import { FIXTURE_URLS } from '@server/tests/shared'
 import { areHttpImportTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
@@ -48,6 +50,8 @@ async function checkStoryboard (options: {
 describe('Test video storyboard', function () {
   let servers: PeerTubeServer[]
 
+  let baseUUID: string
+
   before(async function () {
     this.timeout(120000)
 
@@ -63,6 +67,7 @@ describe('Test video storyboard', function () {
 
     // 5s video
     const { uuid } = await servers[0].videos.quickUpload({ name: 'upload', fixture: 'video_short.webm' })
+    baseUUID = uuid
     await waitJobs(servers)
 
     for (const server of servers) {
@@ -173,9 +178,29 @@ describe('Test video storyboard', function () {
     }
   })
 
-  it('Should generate a storyboard with different video durations', async function () {
+  it('Should cleanup storyboards on video deletion', async function () {
     this.timeout(60000)
 
+    const { storyboards } = await servers[0].storyboard.list({ id: baseUUID })
+    const storyboardName = basename(storyboards[0].storyboardPath)
+
+    const listFiles = () => {
+      const storyboardPath = servers[0].getDirectoryPath('storyboards')
+      return readdir(storyboardPath)
+    }
+
+    {
+      const storyboads = await listFiles()
+      expect(storyboads).to.include(storyboardName)
+    }
+
+    await servers[0].videos.remove({ id: baseUUID })
+    await waitJobs(servers)
+
+    {
+      const storyboads = await listFiles()
+      expect(storyboads).to.not.include(storyboardName)
+    }
   })
 
   after(async function () {
