@@ -141,8 +141,12 @@ async function generatePodcastItem (options: {
     href: account.getClientUrl()
   }
 
+  const attributes = getCommonVideoFeedAttributes(video)
+  const guid = liveItem ? `${video.uuid}_${video.publishedAt.toISOString()}` : attributes.link
+
   return {
-    ...getCommonVideoFeedAttributes(video),
+    guid,
+    ...attributes,
 
     trackers: video.getTrackerUrls(),
 
