@@ -122,7 +122,7 @@
 
             <div *ngIf="passwordProtectedEnabled" class="form-group">
               <label i18n for="videoPassword">Password</label>
-              <input type="text" id="videoPassword" class="form-control" formControlName="videoPassword"/>
+              <my-input-text formControlName="videoPassword" inputId="videoPassword" [withCopy]="true" [formError]="formErrors['videoPassword']"></my-input-text>
             </div>
             
             <div *ngIf="schedulePublicationEnabled" class="form-group">

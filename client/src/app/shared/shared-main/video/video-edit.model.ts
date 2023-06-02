@@ -49,7 +49,6 @@ export class VideoEdit implements VideoUpdate {
     this.waitTranscoding = video.waitTranscoding
     this.channelId = video.channel.id
     this.privacy = video.privacy.id
-    this.videoPassword = video.videoPassword
 
     this.support = video.support
 

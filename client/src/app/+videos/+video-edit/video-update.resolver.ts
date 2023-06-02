@@ -6,6 +6,7 @@ import { AuthService } from '@app/core'
 import { listUserChannelsForSelect } from '@app/helpers'
 import { VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
+import { VideoPrivacy } from '@shared/models/videos'
 
 @Injectable()
 export class VideoUpdateResolver {
@@ -21,11 +22,11 @@ export class VideoUpdateResolver {
     const uuid: string = route.params['uuid']
 
     return this.videoService.getVideo({ videoId: uuid })
-               .pipe(
-                 switchMap(video => forkJoin(this.buildVideoObservables(video))),
-                 map(([ video, videoSource, videoChannels, videoCaptions, liveVideo ]) =>
-                   ({ video, videoChannels, videoCaptions, videoSource, liveVideo }))
-               )
+                .pipe(
+                  switchMap(video => forkJoin(this.buildVideoObservables(video))),
+                  map(([ video, videoSource, videoChannels, videoCaptions, liveVideo, videoPassword ]) =>
+                    ({ video, videoChannels, videoCaptions, videoSource, liveVideo, videoPassword }))
+                )
   }
 
   private buildVideoObservables (video: VideoDetails) {
@@ -46,6 +47,10 @@ export class VideoUpdateResolver {
 
       video.isLive
         ? this.liveVideoService.getVideoLive(video.id)
+        : of(undefined),
+
+      video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
+        ? this.videoService.getVideoPasswords({ videoUUID: video.uuid })
         : of(undefined)
     ]
   }
