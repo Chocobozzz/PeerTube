@@ -1,4 +1,5 @@
 import express from 'express'
+import { maxBy } from 'lodash'
 import { extname } from 'path'
 import { Feed } from '@peertube/feed'
 import { CustomTag, CustomXMLNS, LiveItemStatus } from '@peertube/feed/lib/typings'
@@ -7,7 +8,7 @@ import { Hooks } from '@server/lib/plugins/hooks'
 import { buildPodcastGroupsCache, cacheRouteFactory, videoFeedsPodcastSetCacheKey } from '@server/middlewares'
 import { MVideo, MVideoCaptionVideo, MVideoFullLight } from '@server/types/models'
 import { sortObjectComparator } from '@shared/core-utils'
-import { ActorImageType, VideoFile, VideoInclude, VideoResolution, VideoState } from '@shared/models'
+import { VideoFile, VideoInclude, VideoResolution, VideoState } from '@shared/models'
 import { buildNSFWFilter } from '../../helpers/express-utils'
 import { MIMETYPES, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants'
 import { asyncMiddleware, setFeedPodcastContentType, videoFeedsPodcastValidator } from '../../middlewares'
@@ -141,6 +142,9 @@ async function generatePodcastItem (options: {
     href: account.getClientUrl()
   }
 
+  const avatar = maxBy(account.Actor.Avatars, 'width')
+  const img = avatar?.getStaticPath()
+
   return {
     ...getCommonVideoFeedAttributes(video),
 
@@ -151,9 +155,7 @@ async function generatePodcastItem (options: {
       {
         ...author,
 
-        img: account.Actor.hasImage(ActorImageType.AVATAR)
-          ? WEBSERVER.URL + account.Actor.Avatars[0].getStaticPath()
-          : undefined
+        img
       }
     ],
 
