@@ -34,10 +34,10 @@ class StoryboardPlugin extends Plugin {
 
     this.boundedHijackMouseTooltip = this.hijackMouseTooltip.bind(this)
 
+    this.init()
+
     this.player.ready(() => {
       player.addClass('vjs-storyboard')
-
-      this.init()
     })
   }
 
@@ -54,8 +54,8 @@ class StoryboardPlugin extends Plugin {
     this.spritePlaceholder = videojs.dom.createEl('div', { className: 'vjs-storyboard-sprite-placeholder' }) as HTMLElement
     this.seekBar?.el()?.appendChild(this.spritePlaceholder)
 
-    this.player.on([ 'ready', 'loadstart' ], evt => {
-      if (evt !== 'ready') {
+    this.player.on([ 'ready', 'loadstart' ], event => {
+      if (event.type !== 'ready') {
         const spriteSource = this.player.currentSources().find(source => {
           return Object.prototype.hasOwnProperty.call(source, 'storyboard')
         }) as any
