@@ -180,6 +180,7 @@ describe('Test syndication feeds', () => {
         const itemGuid = xmlDoc.rss.channel.item.guid
         expect(itemGuid).to.exist
         expect(itemGuid['@_isPermaLink']).to.equal(true)
+
         const enclosure = xmlDoc.rss.channel.item.enclosure
         expect(enclosure).to.exist
         const alternateEnclosure = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
@@ -204,6 +205,10 @@ describe('Test syndication feeds', () => {
 
         const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
         const xmlDoc = parser.parse(rss)
+
+        const itemGuid = xmlDoc.rss.channel.item.guid
+        expect(itemGuid).to.exist
+        expect(itemGuid['@_isPermaLink']).to.equal(true)
 
         const enclosure = xmlDoc.rss.channel.item.enclosure
         const alternateEnclosure = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
