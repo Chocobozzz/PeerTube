@@ -144,11 +144,11 @@ async function generatePodcastItem (options: {
 
   const attributes = getCommonVideoFeedAttributes(video)
   const guid = liveItem ? `${video.uuid}_${video.publishedAt.toISOString()}` : attributes.link
-  let img
+  let personImage
 
   if (account.Actor.hasImage(ActorImageType.AVATAR)) {
     const avatar = maxBy(account.Actor.Avatars, 'width')
-    img = WEBSERVER.URL + avatar.getStaticPath()
+    personImage = WEBSERVER.URL + avatar.getStaticPath()
   }
 
   return {
@@ -162,7 +162,7 @@ async function generatePodcastItem (options: {
       {
         ...author,
 
-        img
+        img: personImage
       }
     ],
 
