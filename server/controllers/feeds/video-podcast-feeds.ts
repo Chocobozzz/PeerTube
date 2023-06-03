@@ -8,7 +8,7 @@ import { Hooks } from '@server/lib/plugins/hooks'
 import { buildPodcastGroupsCache, cacheRouteFactory, videoFeedsPodcastSetCacheKey } from '@server/middlewares'
 import { MVideo, MVideoCaptionVideo, MVideoFullLight } from '@server/types/models'
 import { sortObjectComparator } from '@shared/core-utils'
-import { VideoFile, VideoInclude, VideoResolution, VideoState } from '@shared/models'
+import { ActorImageType, VideoFile, VideoInclude, VideoResolution, VideoState } from '@shared/models'
 import { buildNSFWFilter } from '../../helpers/express-utils'
 import { MIMETYPES, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants'
 import { asyncMiddleware, setFeedPodcastContentType, videoFeedsPodcastValidator } from '../../middlewares'
@@ -142,11 +142,18 @@ async function generatePodcastItem (options: {
     href: account.getClientUrl()
   }
 
-  const avatar = maxBy(account.Actor.Avatars, 'width')
-  const img = avatar?.getStaticPath()
+  const attributes = getCommonVideoFeedAttributes(video)
+  const guid = liveItem ? `${video.uuid}_${video.publishedAt.toISOString()}` : attributes.link
+  let img
+
+  if (account.Actor.hasImage(ActorImageType.AVATAR)) {
+    const avatar = maxBy(account.Actor.Avatars, 'width')
+    img = WEBSERVER.URL + avatar.getStaticPath()
+  }
 
   return {
-    ...getCommonVideoFeedAttributes(video),
+    guid,
+    ...attributes,
 
     trackers: video.getTrackerUrls(),
 
