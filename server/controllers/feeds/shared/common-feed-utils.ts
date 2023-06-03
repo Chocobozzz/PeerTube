@@ -1,5 +1,5 @@
 import express from 'express'
-import { maxBy } from "lodash"
+import { maxBy } from 'lodash'
 import { Feed } from '@peertube/feed'
 import { CustomTag, CustomXMLNS, Person } from '@peertube/feed/lib/typings'
 import { mdToOneLinePlainText } from '@server/helpers/markdown'
