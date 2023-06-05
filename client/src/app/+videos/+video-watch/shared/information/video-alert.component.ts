@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core'
+import { AuthUser } from '@app/core'
 import { VideoDetails } from '@app/shared/shared-main'
-import { VideoState } from '@shared/models'
+import { VideoPrivacy, VideoState } from '@shared/models'
 
 @Component({
   selector: 'my-video-alert',
@@ -8,6 +9,7 @@ import { VideoState } from '@shared/models'
   styleUrls: [ './video-alert.component.scss' ]
 })
 export class VideoAlertComponent {
+  @Input() user: AuthUser
   @Input() video: VideoDetails
   @Input() noPlaylistVideoFound: boolean
 
@@ -45,5 +47,9 @@ export class VideoAlertComponent {
 
   isLiveEnded () {
     return this.video?.state.id === VideoState.LIVE_ENDED
+  }
+
+  isVideoPasswordProtected () {
+    return this.video?.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
   }
 }
