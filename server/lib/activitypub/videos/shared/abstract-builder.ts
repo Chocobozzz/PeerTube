@@ -18,8 +18,7 @@ import {
   MVideoThumbnail
 } from '@server/types/models'
 import { ActivityTagObject, ThumbnailType, VideoObject, VideoStreamingPlaylistType } from '@shared/models'
-import { getOrCreateAPActor } from '../../actors'
-import { checkUrlsSameHost } from '../../url'
+import { findOwner, getOrCreateAPActor } from '../../actors'
 import {
   getCaptionAttributesFromObject,
   getFileAttributesFromUrl,
@@ -37,12 +36,8 @@ export abstract class APVideoAbstractBuilder {
   protected abstract lTags: LoggerTagsFn
 
   protected async getOrCreateVideoChannelFromVideoObject () {
-    const channel = this.videoObject.attributedTo.find(a => a.type === 'Group')
+    const channel = await findOwner(this.videoObject.id, this.videoObject.attributedTo, 'Group')
     if (!channel) throw new Error('Cannot find associated video channel to video ' + this.videoObject.url)
-
-    if (checkUrlsSameHost(channel.id, this.videoObject.id) !== true) {
-      throw new Error(`Video channel url ${channel.id} does not have the same host than video object id ${this.videoObject.id}`)
-    }
 
     return getOrCreateAPActor(channel.id, 'all')
   }

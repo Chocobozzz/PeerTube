@@ -1,4 +1,4 @@
-import { ActivityIconObject } from './common-objects'
+import { ActivityIconObject, ActivityPubAttributedTo } from './common-objects'
 
 export interface PlaylistObject {
   id: string
@@ -12,7 +12,7 @@ export interface PlaylistObject {
   uuid: string
 
   totalItems: number
-  attributedTo: string[]
+  attributedTo: ActivityPubAttributedTo[]
 
   icon?: ActivityIconObject
 

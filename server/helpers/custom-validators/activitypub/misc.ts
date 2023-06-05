@@ -51,7 +51,8 @@ function setValidAttributedTo (obj: any) {
   }
 
   obj.attributedTo = obj.attributedTo.filter(a => {
-    return (a.type === 'Group' || a.type === 'Person') && isActivityPubUrlValid(a.id)
+    return isActivityPubUrlValid(a) ||
+      ((a.type === 'Group' || a.type === 'Person') && isActivityPubUrlValid(a.id))
   })
 
   return true

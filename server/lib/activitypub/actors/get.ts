@@ -3,8 +3,9 @@ import { logger } from '@server/helpers/logger'
 import { JobQueue } from '@server/lib/job-queue'
 import { ActorLoadByUrlType, loadActorByUrl } from '@server/lib/model-loaders'
 import { MActor, MActorAccountChannelId, MActorAccountChannelIdActor, MActorAccountId, MActorFullActor } from '@server/types/models'
-import { ActivityPubActor } from '@shared/models'
-import { getAPId } from '../activity'
+import { arrayify } from '@shared/core-utils'
+import { ActivityPubActor, APObjectId } from '@shared/models'
+import { fetchAPObject, getAPId } from '../activity'
 import { checkUrlsSameHost } from '../url'
 import { refreshActorIfNeeded } from './refresh'
 import { APActorCreator, fetchRemoteActor } from './shared'
@@ -40,7 +41,7 @@ async function getOrCreateAPActor (
     const { actorObject } = await fetchRemoteActor(actorUrl)
     if (actorObject === undefined) throw new Error('Cannot fetch remote actor ' + actorUrl)
 
-    // actorUrl is just an alias/rediraction, so process object id instead
+    // actorUrl is just an alias/redirection, so process object id instead
     if (actorObject.id !== actorUrl) return getOrCreateAPActor(actorObject, 'all', recurseIfNeeded, updateCollections)
 
     // Create the attributed to actor
@@ -68,29 +69,48 @@ async function getOrCreateAPActor (
   return actorRefreshed
 }
 
-function getOrCreateAPOwner (actorObject: ActivityPubActor, actorUrl: string) {
-  const accountAttributedTo = actorObject.attributedTo.find(a => a.type === 'Person')
-  if (!accountAttributedTo) throw new Error('Cannot find account attributed to video channel ' + actorUrl)
-
-  if (checkUrlsSameHost(accountAttributedTo.id, actorUrl) !== true) {
-    throw new Error(`Account attributed to ${accountAttributedTo.id} does not have the same host than actor url ${actorUrl}`)
+async function getOrCreateAPOwner (actorObject: ActivityPubActor, actorUrl: string) {
+  const accountAttributedTo = await findOwner(actorUrl, actorObject.attributedTo, 'Person')
+  if (!accountAttributedTo) {
+    throw new Error(`Cannot find account attributed to video channel  ${actorUrl}`)
   }
 
   try {
     // Don't recurse another time
     const recurseIfNeeded = false
-    return getOrCreateAPActor(accountAttributedTo.id, 'all', recurseIfNeeded)
+    return getOrCreateAPActor(accountAttributedTo, 'all', recurseIfNeeded)
   } catch (err) {
     logger.error('Cannot get or create account attributed to video channel ' + actorUrl)
     throw new Error(err)
   }
 }
 
+async function findOwner (rootUrl: string, attributedTo: APObjectId[] | APObjectId, type: 'Person' | 'Group') {
+  for (const actorToCheck of arrayify(attributedTo)) {
+    const actorObject = await fetchAPObject<ActivityPubActor>(getAPId(actorToCheck))
+
+    if (!actorObject) {
+      logger.warn('Unknown attributed to actor %s for owner %s', actorToCheck, rootUrl)
+      continue
+    }
+
+    if (checkUrlsSameHost(actorObject.id, rootUrl) !== true) {
+      logger.warn(`Account attributed to ${actorObject.id} does not have the same host than owner actor url ${rootUrl}`)
+      continue
+    }
+
+    if (actorObject.type === type) return actorObject
+  }
+
+  return undefined
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   getOrCreateAPOwner,
-  getOrCreateAPActor
+  getOrCreateAPActor,
+  findOwner
 }
 
 // ---------------------------------------------------------------------------

@@ -77,7 +77,7 @@ async function setVideoChannel (playlistObject: PlaylistObject, playlistAttribut
     throw new Error('Not attributed to for playlist object ' + getAPId(playlistObject))
   }
 
-  const actor = await getOrCreateAPActor(playlistObject.attributedTo[0], 'all')
+  const actor = await getOrCreateAPActor(getAPId(playlistObject.attributedTo[0]), 'all')
 
   if (!actor.VideoChannel) {
     logger.warn('Playlist "attributedTo" %s is not a video channel.', playlistObject.id, { playlistObject, ...lTags(playlistObject.id) })

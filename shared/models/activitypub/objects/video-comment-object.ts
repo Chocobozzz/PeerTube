@@ -1,4 +1,4 @@
-import { ActivityTagObject } from './common-objects'
+import { ActivityPubAttributedTo, ActivityTagObject } from './common-objects'
 
 export interface VideoCommentObject {
   type: 'Note'
@@ -11,6 +11,6 @@ export interface VideoCommentObject {
   published: string
   updated: string
   url: string
-  attributedTo: string
+  attributedTo: ActivityPubAttributedTo
   tag: ActivityTagObject[]
 }
