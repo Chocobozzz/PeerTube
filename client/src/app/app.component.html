@@ -10,7 +10,7 @@
         <span class="icon icon-menu"></span>
       </span>
 
-      <a class="peertube-title c-hand" [routerLink]="getDefaultRoute()">
+      <a class="peertube-title c-hand" [routerLink]="getDefaultRoute()" [queryParams]="getDefaultRouteQuery()">
         <span class="icon icon-logo"></span>
         <span class="instance-name">{{ instanceName }}</span>
       </a>

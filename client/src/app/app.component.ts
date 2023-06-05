@@ -131,9 +131,17 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.pluginService.initializeCustomModal(this.customModal)
   }
 
+  // ---------------------------------------------------------------------------
+
   getDefaultRoute () {
-    return this.redirectService.getDefaultRoute()
+    return this.redirectService.getDefaultRoute().split('?')[0]
   }
+
+  getDefaultRouteQuery () {
+    return this.router.parseUrl(this.redirectService.getDefaultRoute()).queryParams
+  }
+
+  // ---------------------------------------------------------------------------
 
   getToggleTitle () {
     if (this.menu.isDisplayed()) return $localize`Close the left menu`
