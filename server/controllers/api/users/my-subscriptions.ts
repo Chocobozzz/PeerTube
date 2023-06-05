@@ -3,7 +3,7 @@ import express from 'express'
 import { handlesToNameAndHost } from '@server/helpers/actors'
 import { pickCommonVideoQuery } from '@server/helpers/query'
 import { sendUndoFollow } from '@server/lib/activitypub/send'
-import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
+import { Hooks } from '@server/lib/plugins/hooks'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { buildNSFWFilter, getCountVideos } from '../../../helpers/express-utils'
@@ -29,8 +29,8 @@ import {
   videosSortValidator
 } from '../../../middlewares/validators'
 import { ActorFollowModel } from '../../../models/actor/actor-follow'
+import { guessAdditionalAttributesFromQuery } from '../../../models/video/formatter'
 import { VideoModel } from '../../../models/video/video'
-import { Hooks } from '@server/lib/plugins/hooks'
 
 const mySubscriptionsRouter = express.Router()
 

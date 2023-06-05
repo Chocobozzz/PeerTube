@@ -114,13 +114,13 @@ import { buildTrigramSearchIndex, buildWhereIdOrUUID, getVideoSort, isOutdated, 
 import { UserModel } from '../user/user'
 import { UserVideoHistoryModel } from '../user/user-video-history'
 import { VideoViewModel } from '../view/video-view'
+import { videoModelToActivityPubObject } from './formatter/video-activity-pub-format'
 import {
   videoFilesModelToFormattedJSON,
   VideoFormattingJSONOptions,
-  videoModelToActivityPubObject,
   videoModelToFormattedDetailsJSON,
   videoModelToFormattedJSON
-} from './formatter/video-format-utils'
+} from './formatter/video-api-format'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import {
   BuildVideosListQueryOptions,

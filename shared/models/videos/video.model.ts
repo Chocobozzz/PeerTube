@@ -7,7 +7,7 @@ import { VideoScheduleUpdate } from './video-schedule-update.model'
 import { VideoState } from './video-state.enum'
 import { VideoStreamingPlaylist } from './video-streaming-playlist.model'
 
-export interface Video {
+export interface Video extends Partial<VideoAdditionalAttributes> {
   id: number
   uuid: string
   shortUUID: string
@@ -57,20 +57,22 @@ export interface Video {
   }
 
   pluginData?: any
+}
 
-  // Additional attributes dependending on the query
-  waitTranscoding?: boolean
-  state?: VideoConstant<VideoState>
-  scheduledUpdate?: VideoScheduleUpdate
+// Not included by default, needs query params
+export interface VideoAdditionalAttributes {
+  waitTranscoding: boolean
+  state: VideoConstant<VideoState>
+  scheduledUpdate: VideoScheduleUpdate
 
-  blacklisted?: boolean
-  blacklistedReason?: string
+  blacklisted: boolean
+  blacklistedReason: string
 
-  blockedOwner?: boolean
-  blockedServer?: boolean
+  blockedOwner: boolean
+  blockedServer: boolean
 
-  files?: VideoFile[]
-  streamingPlaylists?: VideoStreamingPlaylist[]
+  files: VideoFile[]
+  streamingPlaylists: VideoStreamingPlaylist[]
 }
 
 export interface VideoDetails extends Video {

@@ -3,7 +3,6 @@ import { pickCommonVideoQuery } from '@server/helpers/query'
 import { doJSONRequest } from '@server/helpers/requests'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { getServerActor } from '@server/models/application/application'
-import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
 import { MVideoAccountLight } from '@server/types/models'
 import { HttpStatusCode } from '../../../../shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
@@ -31,6 +30,7 @@ import {
   videosRemoveValidator,
   videosSortValidator
 } from '../../../middlewares'
+import { guessAdditionalAttributesFromQuery } from '../../../models/video/formatter'
 import { VideoModel } from '../../../models/video/video'
 import { blacklistRouter } from './blacklist'
 import { videoCaptionsRouter } from './captions'
