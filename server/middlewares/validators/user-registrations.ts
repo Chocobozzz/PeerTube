@@ -59,7 +59,7 @@ function ensureUserRegistrationAllowedFactory (signupMode: SignupMode) {
     if (allowedResult.allowed === false) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: allowedResult.errorMessage || 'User registration is not enabled, user limit is reached or registration requires approval.'
+        message: allowedResult.errorMessage || 'User registration is not allowed'
       })
     }
 
