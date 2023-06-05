@@ -3,7 +3,7 @@ import { AccountModel } from '@server/models/account/account'
 import { VideoModel } from '@server/models/video/video'
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { abusePredefinedReasonsMap } from '@shared/core-utils/abuse'
-import { AbuseObject, AbuseState, ActivityCreate, ActivityFlag } from '@shared/models'
+import { AbuseState, ActivityFlag } from '@shared/models'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -11,7 +11,7 @@ import { getAPId } from '../../../lib/activitypub/activity'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MAccountDefault, MActorSignature, MCommentOwnerVideo } from '../../../types/models'
 
-async function processFlagActivity (options: APProcessorOptions<ActivityCreate | ActivityFlag>) {
+async function processFlagActivity (options: APProcessorOptions<ActivityFlag>) {
   const { activity, byActor } = options
 
   return retryTransactionWrapper(processCreateAbuse, activity, byActor)
@@ -25,9 +25,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processCreateAbuse (activity: ActivityCreate | ActivityFlag, byActor: MActorSignature) {
-  const flag = activity.type === 'Flag' ? activity : (activity.object as AbuseObject)
-
+async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature) {
   const account = byActor.Account
   if (!account) throw new Error('Cannot create abuse with the non account actor ' + byActor.url)
 

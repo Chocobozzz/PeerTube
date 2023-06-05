@@ -1,14 +1,5 @@
 import { Transaction } from 'sequelize'
-import {
-  ActivityAnnounce,
-  ActivityAudience,
-  ActivityCreate,
-  ActivityDislike,
-  ActivityFollow,
-  ActivityLike,
-  ActivityUndo,
-  ContextType
-} from '@shared/models'
+import { ActivityAudience, ActivityDislike, ActivityLike, ActivityUndo, ActivityUndoObject, ContextType } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
 import {
@@ -128,12 +119,12 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function undoActivityData (
+function undoActivityData <T extends ActivityUndoObject> (
   url: string,
   byActor: MActorAudience,
-  object: ActivityFollow | ActivityLike | ActivityDislike | ActivityCreate | ActivityAnnounce,
+  object: T,
   audience?: ActivityAudience
-): ActivityUndo {
+): ActivityUndo<T> {
   if (!audience) audience = getAudience(byActor)
 
   return audiencify(
@@ -151,7 +142,7 @@ async function sendUndoVideoRelatedActivity (options: {
   byActor: MActor
   video: MVideoAccountLight
   url: string
-  activity: ActivityFollow | ActivityCreate | ActivityAnnounce
+  activity: ActivityUndoObject
   contextType: ContextType
   transaction: Transaction
 }) {

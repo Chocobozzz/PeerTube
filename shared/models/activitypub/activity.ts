@@ -1,20 +1,34 @@
 import { ActivityPubActor } from './activitypub-actor'
 import { ActivityPubSignature } from './activitypub-signature'
-import { ActivityFlagReasonObject, CacheFileObject, VideoObject, WatchActionObject } from './objects'
-import { AbuseObject } from './objects/abuse-object'
-import { DislikeObject } from './objects/dislike-object'
-import { APObject } from './objects/object.model'
-import { PlaylistObject } from './objects/playlist-object'
-import { VideoCommentObject } from './objects/video-comment-object'
+import {
+  ActivityFlagReasonObject,
+  ActivityObject,
+  APObjectId,
+  CacheFileObject,
+  PlaylistObject,
+  VideoCommentObject,
+  VideoObject,
+  WatchActionObject
+} from './objects'
+
+export type ActivityUpdateObject =
+  Extract<ActivityObject, VideoObject | CacheFileObject | PlaylistObject | ActivityPubActor | string> | ActivityPubActor
+
+// Cannot Extract from Activity because of circular reference
+export type ActivityUndoObject =
+  ActivityFollow | ActivityLike | ActivityDislike | ActivityCreate<CacheFileObject | string> | ActivityAnnounce
+
+export type ActivityCreateObject =
+  Extract<ActivityObject, VideoObject | CacheFileObject | WatchActionObject | VideoCommentObject | PlaylistObject | string>
 
 export type Activity =
-  ActivityCreate |
-  ActivityUpdate |
+  ActivityCreate<ActivityCreateObject> |
+  ActivityUpdate<ActivityUpdateObject> |
   ActivityDelete |
   ActivityFollow |
   ActivityAccept |
   ActivityAnnounce |
-  ActivityUndo |
+  ActivityUndo<ActivityUndoObject> |
   ActivityLike |
   ActivityReject |
   ActivityView |
@@ -50,19 +64,19 @@ export interface BaseActivity {
   signature?: ActivityPubSignature
 }
 
-export interface ActivityCreate extends BaseActivity {
+export interface ActivityCreate <T extends ActivityCreateObject> extends BaseActivity {
   type: 'Create'
-  object: VideoObject | AbuseObject | DislikeObject | VideoCommentObject | CacheFileObject | PlaylistObject | WatchActionObject
+  object: T
 }
 
-export interface ActivityUpdate extends BaseActivity {
+export interface ActivityUpdate <T extends ActivityUpdateObject> extends BaseActivity {
   type: 'Update'
-  object: VideoObject | ActivityPubActor | CacheFileObject | PlaylistObject
+  object: T
 }
 
 export interface ActivityDelete extends BaseActivity {
   type: 'Delete'
-  object: string | { id: string }
+  object: APObjectId
 }
 
 export interface ActivityFollow extends BaseActivity {
@@ -82,23 +96,23 @@ export interface ActivityReject extends BaseActivity {
 
 export interface ActivityAnnounce extends BaseActivity {
   type: 'Announce'
-  object: APObject
+  object: APObjectId
 }
 
-export interface ActivityUndo extends BaseActivity {
+export interface ActivityUndo <T extends ActivityUndoObject> extends BaseActivity {
   type: 'Undo'
-  object: ActivityFollow | ActivityLike | ActivityDislike | ActivityCreate | ActivityAnnounce
+  object: T
 }
 
 export interface ActivityLike extends BaseActivity {
   type: 'Like'
-  object: APObject
+  object: APObjectId
 }
 
 export interface ActivityView extends BaseActivity {
   type: 'View'
   actor: string
-  object: APObject
+  object: APObjectId
 
   // If sending a "viewer" event
   expires?: string
@@ -108,13 +122,13 @@ export interface ActivityDislike extends BaseActivity {
   id: string
   type: 'Dislike'
   actor: string
-  object: APObject
+  object: APObjectId
 }
 
 export interface ActivityFlag extends BaseActivity {
   type: 'Flag'
   content: string
-  object: APObject | APObject[]
+  object: APObjectId | APObjectId[]
   tag?: ActivityFlagReasonObject[]
   startAt?: number
   endAt?: number

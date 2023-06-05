@@ -4,6 +4,7 @@ import { activityPubCollectionPagination } from '@server/lib/activitypub/collect
 import { activityPubContextify } from '@server/lib/activitypub/context'
 import { getServerActor } from '@server/models/application/application'
 import { MAccountId, MActorId, MChannelId, MVideoId } from '@server/types/models'
+import { VideoCommentObject } from '@shared/models'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants'
@@ -353,7 +354,7 @@ async function videoCommentController (req: express.Request, res: express.Respon
     videoCommentObject = audiencify(videoCommentObject, audience)
 
     if (req.path.endsWith('/activity')) {
-      const data = buildCreateActivity(videoComment.url, videoComment.Account.Actor, videoCommentObject, audience)
+      const data = buildCreateActivity(videoComment.url, videoComment.Account.Actor, videoCommentObject as VideoCommentObject, audience)
       return activityPubResponse(activityPubContextify(data, 'Comment'), res)
     }
   }

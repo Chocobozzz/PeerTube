@@ -3,7 +3,7 @@ import { logger } from '@server/helpers/logger'
 import { JobQueue } from '@server/lib/job-queue'
 import { loadVideoByUrl, VideoLoadByUrlType } from '@server/lib/model-loaders'
 import { MVideoAccountLightBlacklistAllFiles, MVideoImmutable, MVideoThumbnail } from '@server/types/models'
-import { APObject } from '@shared/models'
+import { APObjectId } from '@shared/models'
 import { getAPId } from '../activity'
 import { refreshVideoIfNeeded } from './refresh'
 import { APVideoCreator, fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared'
@@ -15,21 +15,21 @@ type GetVideoResult <T> = Promise<{
 }>
 
 type GetVideoParamAll = {
-  videoObject: APObject
+  videoObject: APObjectId
   syncParam?: SyncParam
   fetchType?: 'all'
   allowRefresh?: boolean
 }
 
 type GetVideoParamImmutable = {
-  videoObject: APObject
+  videoObject: APObjectId
   syncParam?: SyncParam
   fetchType: 'only-immutable-attributes'
   allowRefresh: false
 }
 
 type GetVideoParamOther = {
-  videoObject: APObject
+  videoObject: APObjectId
   syncParam?: SyncParam
   fetchType?: 'all' | 'only-video'
   allowRefresh?: boolean

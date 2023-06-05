@@ -1,6 +1,6 @@
 import { Transaction } from 'sequelize'
 import { getServerActor } from '@server/models/application/application'
-import { ActivityAudience, ActivityUpdate, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+import { ActivityAudience, ActivityUpdate, ActivityUpdateObject, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
@@ -137,7 +137,12 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function buildUpdateActivity (url: string, byActor: MActorLight, object: any, audience?: ActivityAudience): ActivityUpdate {
+function buildUpdateActivity (
+  url: string,
+  byActor: MActorLight,
+  object: ActivityUpdateObject,
+  audience?: ActivityAudience
+): ActivityUpdate<ActivityUpdateObject> {
   if (!audience) audience = getAudience(byActor)
 
   return audiencify(

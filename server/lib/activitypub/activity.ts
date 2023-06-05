@@ -1,4 +1,5 @@
-import { ActivityType } from '@shared/models'
+import { doJSONRequest } from '@server/helpers/requests'
+import { APObjectId, ActivityObject, ActivityPubActor, ActivityType } from '@shared/models'
 
 function getAPId (object: string | { id: string }) {
   if (typeof object === 'string') return object
@@ -32,8 +33,19 @@ function buildAvailableActivities (): ActivityType[] {
   ]
 }
 
+async function fetchAPObject <T extends (ActivityObject | ActivityPubActor)> (object: APObjectId) {
+  if (typeof object === 'string') {
+    const { body } = await doJSONRequest<Exclude<T, string>>(object, { activityPub: true })
+
+    return body
+  }
+
+  return object as Exclude<T, string>
+}
+
 export {
   getAPId,
+  fetchAPObject,
   getActivityStreamDuration,
   buildAvailableActivities,
   getDurationFromActivityStream

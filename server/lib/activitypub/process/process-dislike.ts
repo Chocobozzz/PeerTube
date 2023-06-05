@@ -1,5 +1,5 @@
 import { VideoModel } from '@server/models/video/video'
-import { ActivityCreate, ActivityDislike, DislikeObject } from '@shared/models'
+import { ActivityDislike } from '@shared/models'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
@@ -7,7 +7,7 @@ import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
 import { federateVideoIfNeeded, getOrCreateAPVideo } from '../videos'
 
-async function processDislikeActivity (options: APProcessorOptions<ActivityCreate | ActivityDislike>) {
+async function processDislikeActivity (options: APProcessorOptions<ActivityDislike>) {
   const { activity, byActor } = options
   return retryTransactionWrapper(processDislike, activity, byActor)
 }
@@ -20,11 +20,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processDislike (activity: ActivityCreate | ActivityDislike, byActor: MActorSignature) {
-  const dislikeObject = activity.type === 'Dislike'
-    ? activity.object
-    : (activity.object as DislikeObject).object
-
+async function processDislike (activity: ActivityDislike, byActor: MActorSignature) {
+  const dislikeObject = activity.object
   const byAccount = byActor.Account
 
   if (!byAccount) throw new Error('Cannot create dislike with the non account actor ' + byActor.url)
