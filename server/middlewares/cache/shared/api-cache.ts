@@ -35,7 +35,11 @@ export class ApiCache {
   // Cache keys per group
   private groups: { [groupIndex: string]: string[] } = {}
 
+  private readonly seed: number
+
   constructor (options: APICacheOptions) {
+    this.seed = new Date().getTime()
+
     this.options = {
       headerBlacklist: [],
       excludeStatus: [],
@@ -88,7 +92,7 @@ export class ApiCache {
   }
 
   private getCacheKey (req: express.Request) {
-    return Redis.Instance.getPrefix() + 'api-cache-' + req.originalUrl
+    return Redis.Instance.getPrefix() + 'api-cache-' + this.seed + '-' + req.originalUrl
   }
 
   private shouldCacheResponse (response: express.Response) {
