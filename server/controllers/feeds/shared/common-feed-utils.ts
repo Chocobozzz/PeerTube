@@ -1,4 +1,5 @@
 import express from 'express'
+import { maxBy } from 'lodash'
 import { Feed } from '@peertube/feed'
 import { CustomTag, CustomXMLNS, Person } from '@peertube/feed/lib/typings'
 import { mdToOneLinePlainText } from '@server/helpers/markdown'
@@ -104,11 +105,13 @@ export async function buildFeedMetadata (options: {
     accountLink = videoChannel.Account.getClientUrl()
 
     if (videoChannel.Actor.hasImage(ActorImageType.AVATAR)) {
-      imageUrl = WEBSERVER.URL + videoChannel.Actor.Avatars[0].getStaticPath()
+      const videoChannelAvatar = maxBy(videoChannel.Actor.Avatars, 'width')
+      imageUrl = WEBSERVER.URL + videoChannelAvatar.getStaticPath()
     }
 
     if (videoChannel.Account.Actor.hasImage(ActorImageType.AVATAR)) {
-      accountImageUrl = WEBSERVER.URL + videoChannel.Account.Actor.Avatars[0].getStaticPath()
+      const accountAvatar = maxBy(videoChannel.Account.Actor.Avatars, 'width')
+      accountImageUrl = WEBSERVER.URL + accountAvatar.getStaticPath()
     }
 
     user = await UserModel.loadById(videoChannel.Account.userId)
@@ -120,7 +123,8 @@ export async function buildFeedMetadata (options: {
     accountLink = link
 
     if (account.Actor.hasImage(ActorImageType.AVATAR)) {
-      imageUrl = WEBSERVER.URL + account.Actor.Avatars[0].getStaticPath()
+      const accountAvatar = maxBy(account.Actor.Avatars, 'width')
+      imageUrl = WEBSERVER.URL + accountAvatar?.getStaticPath()
       accountImageUrl = imageUrl
     }
 
