@@ -1,5 +1,5 @@
 import { PeerTubeServerError } from '../../../types'
-import { HttpStatusCode, LiveVideo, VideoDetails, VideoToken } from '../../../../../shared/models'
+import { HttpStatusCode, LiveVideo, Storyboard, VideoDetails, VideoToken } from '../../../../../shared/models'
 import { logger } from '../../../root-helpers'
 import { AuthHTTP } from './auth-http'
 
@@ -36,8 +36,9 @@ export class VideoFetcher {
     }
 
     const captionsPromise = this.loadVideoCaptions({ videoId, videoPassword })
+    const storyboardsPromise = this.loadStoryboards(videoId)
 
-    return { captionsPromise, videoResponse }
+    return { captionsPromise, storyboardsPromise, videoResponse }
   }
 
   loadLive (video: VideoDetails) {
@@ -69,6 +70,14 @@ export class VideoFetcher {
 
   private getLiveUrl (videoId: string) {
     return window.location.origin + '/api/v1/videos/live/' + videoId
+  }
+
+  private loadStoryboards (videoUUID: string): Promise<Response> {
+    return this.http.fetch(this.getStoryboardsUrl(videoUUID), { optionalAuth: true })
+  }
+
+  private getStoryboardsUrl (videoId: string) {
+    return window.location.origin + '/api/v1/videos/' + videoId + '/storyboards'
   }
 
   private getVideoTokenUrl (id: string) {

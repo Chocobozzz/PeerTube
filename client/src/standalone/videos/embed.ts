@@ -1,6 +1,7 @@
 import './embed.scss'
 import '../../assets/player/shared/dock/peertube-dock-component'
 import '../../assets/player/shared/dock/peertube-dock-plugin'
+import { PeerTubeServerError } from 'src/types'
 import videojs from 'video.js'
 import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
 import {
@@ -27,7 +28,6 @@ import {
   VideoFetcher
 } from './shared'
 import { PlayerHTML } from './shared/player-html'
-import { PeerTubeServerError } from 'src/types'
 
 export class PeerTubeEmbed {
   player: videojs.Player
@@ -188,9 +188,13 @@ export class PeerTubeEmbed {
     const { uuid, autoplayFromPreviousVideo, forceAutoplay } = options
 
     try {
-      const { videoResponse, captionsPromise } = await this.videoFetcher.loadVideo({ videoId: uuid, videoPassword: this.videoPassword })
+      const {
+        videoResponse,
+        captionsPromise,
+        storyboardsPromise
+      } = await this.videoFetcher.loadVideo({ videoId: uuid, videoPassword: this.videoPassword })
 
-      return this.buildVideoPlayer({ videoResponse, captionsPromise, autoplayFromPreviousVideo, forceAutoplay })
+      return this.buildVideoPlayer({ videoResponse, captionsPromise, storyboardsPromise, autoplayFromPreviousVideo, forceAutoplay })
     } catch (err) {
 
       if (await this.handlePasswordError(err)) this.loadVideoAndBuildPlayer({ ...options })
@@ -200,11 +204,12 @@ export class PeerTubeEmbed {
 
   private async buildVideoPlayer (options: {
     videoResponse: Response
+    storyboardsPromise: Promise<Response>
     captionsPromise: Promise<Response>
     autoplayFromPreviousVideo: boolean
     forceAutoplay: boolean
   }) {
-    const { videoResponse, captionsPromise, autoplayFromPreviousVideo, forceAutoplay } = options
+    const { videoResponse, captionsPromise, storyboardsPromise, autoplayFromPreviousVideo, forceAutoplay } = options
 
     this.resetPlayerElement()
 
@@ -226,10 +231,17 @@ export class PeerTubeEmbed {
         return { live, video: videoInfo, videoFileToken }
       })
 
-    const [ { video, live, videoFileToken }, translations, captionsResponse, PeertubePlayerManagerModule ] = await Promise.all([
+    const [
+      { video, live, videoFileToken },
+      translations,
+      captionsResponse,
+      storyboardsResponse,
+      PeertubePlayerManagerModule
+    ] = await Promise.all([
       videoInfoPromise,
       this.translationsPromise,
       captionsPromise,
+      storyboardsPromise,
       this.PeertubePlayerManagerModulePromise
     ])
 
@@ -243,6 +255,8 @@ export class PeerTubeEmbed {
       autoplayFromPreviousVideo,
       translations,
       serverConfig: this.config,
+
+      storyboardsResponse,
 
       authorizationHeader: () => this.http.getHeaderTokenValue(),
       videoFileToken: () => videoFileToken,

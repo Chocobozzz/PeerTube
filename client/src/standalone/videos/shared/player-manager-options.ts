@@ -2,6 +2,7 @@ import { peertubeTranslate } from '../../../../../shared/core-utils/i18n'
 import {
   HTMLServerConfig,
   LiveVideo,
+  Storyboard,
   Video,
   VideoCaption,
   VideoDetails,
@@ -155,6 +156,9 @@ export class PlayerManagerOptions {
   async getPlayerOptions (options: {
     video: VideoDetails
     captionsResponse: Response
+
+    storyboardsResponse: Response
+
     live?: LiveVideo
 
     forceAutoplay: boolean
@@ -187,11 +191,15 @@ export class PlayerManagerOptions {
       forceAutoplay,
       playlistTracker,
       live,
+      storyboardsResponse,
       authorizationHeader,
       serverConfig
     } = options
 
-    const videoCaptions = await this.buildCaptions(captionsResponse, translations)
+    const [ videoCaptions, storyboard ] = await Promise.all([
+      this.buildCaptions(captionsResponse, translations),
+      this.buildStoryboard(storyboardsResponse)
+    ])
 
     const playerOptions: PeertubePlayerManagerOptions = {
       common: {
@@ -209,6 +217,8 @@ export class PlayerManagerOptions {
 
         captions: videoCaptions.length !== 0,
         subtitle: this.subtitle,
+
+        storyboard,
 
         startTime: playlistTracker
           ? playlistTracker.getCurrentElement().startTimestamp
@@ -283,6 +293,18 @@ export class PlayerManagerOptions {
       liveOptions: {
         latencyMode: live.latencyMode
       }
+    }
+  }
+
+  private async buildStoryboard (storyboardsResponse: Response) {
+    const { storyboards } = await storyboardsResponse.json() as { storyboards: Storyboard[] }
+    if (!storyboards || storyboards.length === 0) return undefined
+
+    return {
+      url: window.location.origin + storyboards[0].storyboardPath,
+      height: storyboards[0].spriteHeight,
+      width: storyboards[0].spriteWidth,
+      interval: storyboards[0].spriteDuration
     }
   }
 
