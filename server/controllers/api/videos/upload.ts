@@ -21,7 +21,7 @@ import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { Hooks } from '../../../lib/plugins/hooks'
-import { generateVideoMiniature } from '../../../lib/thumbnail'
+import { generateLocalVideoMiniature } from '../../../lib/thumbnail'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import {
   asyncMiddleware,
@@ -153,7 +153,7 @@ async function addVideo (options: {
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
     video,
     files,
-    fallback: type => generateVideoMiniature({ video, videoFile, type })
+    fallback: type => generateLocalVideoMiniature({ video, videoFile, type })
   })
 
   const { videoCreated } = await sequelizeTypescript.transaction(async t => {

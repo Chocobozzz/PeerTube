@@ -21,7 +21,7 @@ import { buildUUID, uuidToShort } from '@shared/extra-utils'
 import { HttpStatusCode, LiveVideoCreate, LiveVideoLatencyMode, LiveVideoUpdate, UserRight, VideoPrivacy, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { updateVideoMiniatureFromExisting } from '../../../lib/thumbnail'
+import { updateLocalVideoMiniatureFromExisting } from '../../../lib/thumbnail'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, optionalAuthenticate } from '../../../middlewares'
 import { VideoModel } from '../../../models/video/video'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting'
@@ -166,7 +166,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
     video,
     files: req.files,
     fallback: type => {
-      return updateVideoMiniatureFromExisting({
+      return updateLocalVideoMiniatureFromExisting({
         inputPath: ASSETS_PATH.DEFAULT_LIVE_BACKGROUND,
         video,
         type,

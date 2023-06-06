@@ -7,7 +7,7 @@ import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { cleanupAndDestroyPermanentLive, cleanupTMPLiveFiles, cleanupUnsavedNormalLive } from '@server/lib/live'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveReplayBaseDirectory } from '@server/lib/paths'
-import { generateVideoMiniature } from '@server/lib/thumbnail'
+import { generateLocalVideoMiniature } from '@server/lib/thumbnail'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/hls-transcoding'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToNextState } from '@server/lib/video-state'
@@ -143,7 +143,7 @@ async function saveReplayToExternalVideo (options: {
   await remove(replayDirectory)
 
   for (const type of [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ]) {
-    const image = await generateVideoMiniature({ video: replayVideo, videoFile: replayVideo.getMaxQualityFile(), type })
+    const image = await generateLocalVideoMiniature({ video: replayVideo, videoFile: replayVideo.getMaxQualityFile(), type })
     await replayVideo.addAndSaveThumbnail(image)
   }
 
@@ -198,7 +198,7 @@ async function replaceLiveByReplay (options: {
 
   // Regenerate the thumbnail & preview?
   if (videoWithFiles.getMiniature().automaticallyGenerated === true) {
-    const miniature = await generateVideoMiniature({
+    const miniature = await generateLocalVideoMiniature({
       video: videoWithFiles,
       videoFile: videoWithFiles.getMaxQualityFile(),
       type: ThumbnailType.MINIATURE
@@ -207,7 +207,7 @@ async function replaceLiveByReplay (options: {
   }
 
   if (videoWithFiles.getPreview().automaticallyGenerated === true) {
-    const preview = await generateVideoMiniature({
+    const preview = await generateLocalVideoMiniature({
       video: videoWithFiles,
       videoFile: videoWithFiles.getMaxQualityFile(),
       type: ThumbnailType.PREVIEW

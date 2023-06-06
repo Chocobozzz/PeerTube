@@ -3,11 +3,11 @@ import { logger } from '@server/helpers/logger'
 import { doRequestAndSaveToFile } from '@server/helpers/requests'
 import { StoryboardModel } from '@server/models/video/storyboard'
 import { FILES_CACHE } from '../../initializers/constants'
-import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
+import { AbstractSimpleFileCache } from './shared/abstract-simple-file-cache'
 
-class VideosStoryboardCache extends AbstractVideoStaticFileCache <string> {
+class VideoStoryboardsSimpleFileCache extends AbstractSimpleFileCache <string> {
 
-  private static instance: VideosStoryboardCache
+  private static instance: VideoStoryboardsSimpleFileCache
 
   private constructor () {
     super()
@@ -49,5 +49,5 @@ class VideosStoryboardCache extends AbstractVideoStaticFileCache <string> {
 }
 
 export {
-  VideosStoryboardCache
+  VideoStoryboardsSimpleFileCache
 }

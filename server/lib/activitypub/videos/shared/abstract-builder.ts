@@ -1,7 +1,7 @@
 import { CreationAttributes, Transaction } from 'sequelize/types'
 import { deleteAllModels, filterNonExistingModels } from '@server/helpers/database-utils'
 import { logger, LoggerTagsFn } from '@server/helpers/logger'
-import { updatePlaceholderThumbnail, updateVideoMiniatureFromUrl } from '@server/lib/thumbnail'
+import { updateRemoteThumbnail, updateVideoMiniatureFromUrl } from '@server/lib/thumbnail'
 import { setVideoTags } from '@server/lib/video'
 import { StoryboardModel } from '@server/models/video/storyboard'
 import { VideoCaptionModel } from '@server/models/video/video-caption'
@@ -55,15 +55,15 @@ export abstract class APVideoAbstractBuilder {
   }
 
   protected async setPreview (video: MVideoFullLight, t?: Transaction) {
-    // Don't fetch the preview that could be big, create a placeholder instead
     const previewIcon = getPreviewFromIcons(this.videoObject)
     if (!previewIcon) return
 
-    const previewModel = updatePlaceholderThumbnail({
+    const previewModel = updateRemoteThumbnail({
       fileUrl: previewIcon.url,
       video,
       type: ThumbnailType.PREVIEW,
-      size: previewIcon
+      size: previewIcon,
+      onDisk: false // Don't fetch the preview that could be big, create a placeholder instead
     })
 
     await video.addAndSaveThumbnail(previewModel, t)

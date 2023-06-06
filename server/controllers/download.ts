@@ -1,7 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 import { logger } from '@server/helpers/logger'
-import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
+import { VideoTorrentsSimpleFileCache } from '@server/lib/files-cache'
 import { generateHLSFilePresignedUrl, generateWebVideoPresignedUrl } from '@server/lib/object-storage'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { VideoPathManager } from '@server/lib/video-path-manager'
@@ -43,7 +43,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function downloadTorrent (req: express.Request, res: express.Response) {
-  const result = await VideosTorrentCache.Instance.getFilePath(req.params.filename)
+  const result = await VideoTorrentsSimpleFileCache.Instance.getFilePath(req.params.filename)
   if (!result) {
     return res.fail({
       status: HttpStatusCode.NOT_FOUND_404,

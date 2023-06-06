@@ -29,7 +29,7 @@ import {
 } from '@server/types/models'
 import { ThumbnailType, VideoImportCreate, VideoImportPayload, VideoImportState, VideoPrivacy, VideoState } from '@shared/models'
 import { getLocalVideoActivityPubUrl } from './activitypub/url'
-import { updateVideoMiniatureFromExisting, updateVideoMiniatureFromUrl } from './thumbnail'
+import { updateLocalVideoMiniatureFromExisting, updateVideoMiniatureFromUrl } from './thumbnail'
 import { VideoPasswordModel } from '@server/models/video/video-password'
 
 class YoutubeDlImportError extends Error {
@@ -256,7 +256,7 @@ async function forgeThumbnail ({ inputPath, video, downloadUrl, type }: {
   type: ThumbnailType
 }): Promise<MThumbnail> {
   if (inputPath) {
-    return updateVideoMiniatureFromExisting({
+    return updateLocalVideoMiniatureFromExisting({
       inputPath,
       video,
       type,

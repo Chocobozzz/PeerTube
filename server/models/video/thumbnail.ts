@@ -69,6 +69,10 @@ export class ThumbnailModel extends Model<Partial<AttributesOnly<ThumbnailModel>
   @Column
   automaticallyGenerated: boolean
 
+  @AllowNull(false)
+  @Column
+  onDisk: boolean
+
   @ForeignKey(() => VideoModel)
   @Column
   videoId: number
