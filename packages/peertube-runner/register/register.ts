@@ -16,6 +16,7 @@ export async function registerRunner (options: {
 
 export async function unregisterRunner (options: {
   url: string
+  runnerName: string
 }) {
   const client = new IPCClient()
   await client.run()

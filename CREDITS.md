@@ -6,38 +6,40 @@
  * Александр
  * T.S
  * Hồ Nhất Duy
+ * josé m
  * Berto Te
  * Filip Bengtsson
- * josé m
+ * Ihor Hordiichuk
  * Jeff Huang
  * Simon Brosdetzko
  * kontrollanten
- * Ihor Hordiichuk
  * Jiri Podhorecky
+ * Payman Moghadam
+ * Phongpanot
  * hecko
  * Laurent Ettouati
+ * Milo Ivir
  * kimsible
- * Phongpanot
  * Zet
  * GunChleoc
  * Clemens Schielicke
  * Racida S
  * Marcin Mikołajczak
- * Eivind Ødegård
- * Milo Ivir
  * Ewout van Mansom
+ * Eivind Ødegård
+ * Sveinn í Felli
  * Tirifto
  * Kim
+ * Armin
  * Hannes Ylä-Jääski
  * Mohamad Reza
  * Vodoyo Kamal
- * Armin
+ * Wicklow
+ * John Livingston
  * Kimsible
- * Sveinn í Felli
  * Besnik Bleta
  * Felix Ableitner
  * Frank Sträter
- * John Livingston
  * Quentin PAGÈS
  * Gérald Niel
  * Duy
@@ -46,8 +48,8 @@
  * Dingzhong Chen
  * Mark Van den Borre
  * x
- * Julien Maulny
  * Balázs Meskó
+ * Julien Maulny
  * Jorropo
  * Josh Morel
  * Manuel Viens
@@ -57,7 +59,6 @@
  * Florian CUNY
  * Francesc
  * Luca Calcaterra
- * Payman Moghadam
  * mando laress
  * Артём Котлубай
  * Cedric F
@@ -69,13 +70,14 @@
  * barzofarev2
  * jan Seli
  * lutangar
+ * 李奕寯
  * Martin Hoefler
  * Porrumentzio
  * Poslovitch
  * Xabi
  * buoyantair
- * 李奕寯
  * Balázs Úr
+ * Echo Kilo
  * Eric Guichaoua
  * Jan Keromnes
  * Luc Didry
@@ -86,11 +88,13 @@
  * Caroline Chuong
  * David Soh
  * Diazepan Medina
+ * Erik Guldberg
  * Jason Zhou
  * Loukas Stamellos
  * Ms Kimsible
  * Thomas Citharel
  * Benjamin Bouvier
+ * Blood Axe
  * Joe Bill
  * Kemal Oktay Aktoğan
  * Lucas Declercq
@@ -124,11 +128,13 @@
  * Florent Poinsaut
  * Frank Chang
  * Green-Star
+ * Ilia
  * Micah Elizabeth Scott
  * Ret Samys
  * SVNET Libre
  * Tomasz
  * Tony Simoes
+ * Vri
  * William Lahti
  * Wirebrass
  * Yury Bulka
@@ -141,6 +147,8 @@
  * Ajeje Brazorf
  * Andrey
  * Angristan
+ * Asier Iturralde Sarasola
+ * Benjamin Seitz
  * Bob Oob
  * Booteille
  * Chris Sakura 佐倉くりす on Youtube
@@ -153,6 +161,7 @@
  * Lukas
  * MahdiTurki
  * Martijn Dekker
+ * Mats Blomdahl
  * Maxime Louet
  * Mildred
  * Nikolay
@@ -173,11 +182,11 @@
  * Alberto Teira
  * Alex
  * Aliaksandr Hrankin
+ * Anael González Paz
  * Andréas Livet
  * Andrés Maldonado
  * Arco
  * Armin Kunkel
- * Asier Iturralde Sarasola
  * Asr128
  * Aurélien Bertron
  * Axel Viala
@@ -196,8 +205,10 @@
  * Jelle Besseling
  * Jocelyn Jaubert
  * Johan Fleury
+ * Jurij Podgoršek
  * Kiro
  * Leopere
+ * Linus
  * Lukas Winkler
  * M Z
  * Manuela Silva
@@ -239,7 +250,8 @@
  * David Luís Pereira Pires
  * David Marzal
  * EndoGai
- * Erik Guldberg
+ * Fatih Özsoy
+ * FediverseTV
  * Florent Fayolle
  * Florian
  * Frank de Lange
@@ -253,9 +265,10 @@
  * HybridGlucose
  * J C Worm
  * Jan Marsalek
+ * Joël Galeran
  * Julien Lemaire
- * Jurij Podgoršek
  * Lucas Teixeira
+ * Masood Masaeli
  * Millicent Billette
  * Mondo Xíbaro
  * Moritz Warning
@@ -273,7 +286,6 @@
  * The Cashew Trader
  * Toso Malero
  * Valvin
- * Wicklow
  * YiDai
  * Yogesh K S
  * ahmadsharifian
@@ -281,6 +293,8 @@
  * brucekomike
  * dingycle
  * framail
+ * imgradeone Yan
+ * kafbatur kafbatarsson
  * les
  * libertas
  * merty
@@ -302,15 +316,18 @@
  * Agron
  * Aitozl
  * Alberto Mardegan
+ * Alecks Gates
  * Alejandro Criado-Pérez
  * Aleksandr Sokolov
  * Alexander F. Rødseth
  * Ali Alim
  * Alperen Abak
+ * Alvar C.H. Freude
  * Aman Sharma
  * Andrews Góes Santos
  * Antoine Millet
  * Anton Latukha
+ * Apps
  * Armando Lüscher
  * Artem Prosvetov
  * Arthur Lutz
@@ -331,6 +348,8 @@
  * Claude
  * Clifford Garwood II
  * Clément Brizard
+ * DLP
+ * Daniel Dutra
  * David Dobryakov
  * DeeJayBro
  * Dimitri DI GUSTO
@@ -347,6 +366,7 @@
  * Ethan Corgatelli
  * Fabio Agreles Bezerra
  * Fernandez, ReK2
+ * Flavio F. M
  * Gabriel Scherer
  * Glandos
  * Grzesiek11
@@ -357,7 +377,6 @@
  * Hozan Şahin
  * ICabaleiro
  * Iker Garaialde
- * Ilia
  * Ismaël Bouya
  * Ivan Ip
  * Iván Cabaleiro
@@ -467,6 +486,7 @@
  * TrashMacNugget
  * Treacle
  * Tsuki
+ * Txopi
  * Unetelle Inconnue
  * Vagelis F
  * Varik Valefor
@@ -483,8 +503,10 @@
  * Zekovski
  * Zig-03
  * [ Bie ] Watcharapong Suriyawan
+ * adam iter
  * anmol26s
  * april
+ * ar9708
  * augier
  * big gamer
  * bikepunk
@@ -494,12 +516,12 @@
  * eduard pintilie
  * framabr
  * gillux
- * imgradeone Yan
  * jameskimmel
  * jomo
  * kukhariev
  * lambdacastix
  * libertysoft3
+ * lost_geographer
  * lsde
  * ltsallas
  * luz paz

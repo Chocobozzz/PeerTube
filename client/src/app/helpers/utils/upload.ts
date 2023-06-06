@@ -36,8 +36,12 @@ function buildMessage (name: string, err: Pick<HttpErrorResponse, 'message' | 's
   }
 
   if (err.status === HttpStatusCode.PAYLOAD_TOO_LARGE_413) {
-    const maxFileSize = err.headers?.get('X-File-Maximum-Size') || '8G'
-    return $localize`Your ${name} file was too large (max. size: ${maxFileSize})`
+    const maxFileSize = err.headers?.get('X-File-Maximum-Size')
+    let message = $localize`Your ${name} file was too large `
+
+    if (maxFileSize) message += $localize` (max. size: ${maxFileSize})`
+
+    return message
   }
 
   return err.message

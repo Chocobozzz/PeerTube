@@ -14,6 +14,7 @@ import {
   PluginsCommand,
   setAccessTokensToServers,
   setDefaultChannelAvatar,
+  setDefaultVideoChannel,
   stopFfmpeg,
   waitJobs
 } from '@shared/server-commands'
@@ -53,6 +54,7 @@ describe('Test syndication feeds', () => {
 
     await setAccessTokensToServers([ ...servers, serverHLSOnly ])
     await setDefaultChannelAvatar(servers[0])
+    await setDefaultVideoChannel(servers)
     await doubleFollow(servers[0], servers[1])
 
     await servers[0].config.enableLive({ allowReplay: false, transcoding: false })
@@ -137,28 +139,6 @@ describe('Test syndication feeds', () => {
       })
     })
 
-    it('Should serve the endpoint as a cached request', async function () {
-      const res = await makeGetRequest({
-        url: servers[0].url,
-        path: '/feeds/videos.xml',
-        accept: 'application/xml',
-        expectedStatus: HttpStatusCode.OK_200
-      })
-
-      expect(res.headers['x-api-cache-cached']).to.equal('true')
-    })
-
-    it('Should not serve the endpoint as a cached request', async function () {
-      const res = await makeGetRequest({
-        url: servers[0].url,
-        path: '/feeds/videos.xml?v=186',
-        accept: 'application/xml',
-        expectedStatus: HttpStatusCode.OK_200
-      })
-
-      expect(res.headers['x-api-cache-cached']).to.not.exist
-    })
-
     it('Should refuse to serve the endpoint without accept header', async function () {
       await makeGetRequest({ url: servers[0].url, path: '/feeds/videos.xml', expectedStatus: HttpStatusCode.NOT_ACCEPTABLE_406 })
     })
@@ -176,6 +156,10 @@ describe('Test syndication feeds', () => {
 
         const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
         const xmlDoc = parser.parse(rss)
+
+        const itemGuid = xmlDoc.rss.channel.item.guid
+        expect(itemGuid).to.exist
+        expect(itemGuid['@_isPermaLink']).to.equal(true)
 
         const enclosure = xmlDoc.rss.channel.item.enclosure
         expect(enclosure).to.exist
@@ -201,6 +185,10 @@ describe('Test syndication feeds', () => {
 
         const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
         const xmlDoc = parser.parse(rss)
+
+        const itemGuid = xmlDoc.rss.channel.item.guid
+        expect(itemGuid).to.exist
+        expect(itemGuid['@_isPermaLink']).to.equal(true)
 
         const enclosure = xmlDoc.rss.channel.item.enclosure
         const alternateEnclosure = xmlDoc.rss.channel.item['podcast:alternateEnclosure']
@@ -286,6 +274,8 @@ describe('Test syndication feeds', () => {
         const xmlDoc = parser.parse(rss)
         const liveItem = xmlDoc.rss.channel['podcast:liveItem']
         expect(liveItem.title).to.equal('live-0')
+        expect(liveItem.guid['@_isPermaLink']).to.equal(false)
+        expect(liveItem.guid['#text']).to.contain(`${uuid}_`)
         expect(liveItem['@_status']).to.equal('live')
 
         const enclosure = liveItem.enclosure
@@ -600,6 +590,92 @@ describe('Test syndication feeds', () => {
 
       const query = { accountId: userAccountId, token: userFeedToken }
       await servers[0].feed.getJSON({ feed: 'subscriptions', query, ignoreCache: true })
+    })
+
+  })
+
+  describe('Cache', function () {
+    const uuids: string[] = []
+
+    function doPodcastRequest () {
+      return makeGetRequest({
+        url: servers[0].url,
+        path: '/feeds/podcast/videos.xml',
+        query: { videoChannelId: servers[0].store.channel.id },
+        accept: 'application/xml',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    }
+
+    function doVideosRequest (query: { [id: string]: string } = {}) {
+      return makeGetRequest({
+        url: servers[0].url,
+        path: '/feeds/videos.xml',
+        query,
+        accept: 'application/xml',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    }
+
+    before(async function () {
+      {
+        const { uuid } = await servers[0].videos.quickUpload({ name: 'cache 1' })
+        uuids.push(uuid)
+      }
+
+      {
+        const { uuid } = await servers[0].videos.quickUpload({ name: 'cache 2' })
+        uuids.push(uuid)
+      }
+    })
+
+    it('Should serve the videos endpoint as a cached request', async function () {
+      await doVideosRequest()
+
+      const res = await doVideosRequest()
+
+      expect(res.headers['x-api-cache-cached']).to.equal('true')
+    })
+
+    it('Should not serve the videos endpoint as a cached request', async function () {
+      const res = await doVideosRequest({ v: '186' })
+
+      expect(res.headers['x-api-cache-cached']).to.not.exist
+    })
+
+    it('Should invalidate the podcast feed cache after video deletion', async function () {
+      await doPodcastRequest()
+
+      {
+        const res = await doPodcastRequest()
+        expect(res.headers['x-api-cache-cached']).to.exist
+      }
+
+      await servers[0].videos.remove({ id: uuids[0] })
+
+      {
+        const res = await doPodcastRequest()
+        expect(res.headers['x-api-cache-cached']).to.not.exist
+      }
+    })
+
+    it('Should invalidate the podcast feed cache after video deletion, even after server restart', async function () {
+      this.timeout(120000)
+
+      await doPodcastRequest()
+
+      {
+        const res = await doPodcastRequest()
+        expect(res.headers['x-api-cache-cached']).to.exist
+      }
+
+      await servers[0].kill()
+      await servers[0].run()
+
+      await servers[0].videos.remove({ id: uuids[1] })
+
+      const res = await doPodcastRequest()
+      expect(res.headers['x-api-cache-cached']).to.not.exist
     })
 
   })

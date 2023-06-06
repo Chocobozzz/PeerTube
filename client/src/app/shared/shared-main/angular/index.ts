@@ -1,3 +1,4 @@
+export * from './auto-colspan.directive'
 export * from './autofocus.directive'
 export * from './bytes.pipe'
 export * from './defer-loading.directive'

@@ -18,6 +18,7 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { AccountService, SignupLabelComponent } from './account'
 import {
+  AutoColspanDirective,
   AutofocusDirective,
   BytesPipe,
   DeferLoadingDirective,
@@ -89,6 +90,7 @@ import { VideoChannelService } from './video-channel'
     DurationFormatterPipe,
     AutofocusDirective,
     DeferLoadingDirective,
+    AutoColspanDirective,
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
@@ -150,6 +152,7 @@ import { VideoChannelService } from './video-channel'
     DurationFormatterPipe,
     AutofocusDirective,
     DeferLoadingDirective,
+    AutoColspanDirective,
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,

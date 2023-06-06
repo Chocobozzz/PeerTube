@@ -4,7 +4,7 @@ import { logger } from '@server/helpers/logger'
 import { moveToFailedTranscodingState, moveToNextState } from '@server/lib/video-state'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { MRunnerJob } from '@server/types/models/runners'
-import { RunnerJobSuccessPayload, RunnerJobUpdatePayload, RunnerJobVODPrivatePayload } from '@shared/models'
+import { RunnerJobState, RunnerJobSuccessPayload, RunnerJobUpdatePayload, RunnerJobVODPrivatePayload } from '@shared/models'
 import { AbstractJobHandler } from './abstract-job-handler'
 import { loadTranscodingRunnerVideo } from './shared'
 
@@ -29,7 +29,10 @@ export abstract class AbstractVODTranscodingJobHandler <C, U extends RunnerJobUp
 
   protected async specificError (options: {
     runnerJob: MRunnerJob
+    nextState: RunnerJobState
   }) {
+    if (options.nextState !== RunnerJobState.ERRORED) return
+
     const video = await loadTranscodingRunnerVideo(options.runnerJob, this.lTags)
     if (!video) return
 

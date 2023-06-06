@@ -98,10 +98,12 @@ describe('Test runner VOD transcoding', function () {
       const { availableJobs } = await servers[0].runnerJobs.request({ runnerToken })
       const jobUUID = availableJobs[0].uuid
 
-      const { job } = await servers[0].runnerJobs.accept({ runnerToken, jobUUID })
-      const jobToken = job.jobToken
+      for (let i = 0; i < 5; i++) {
+        const { job } = await servers[0].runnerJobs.accept({ runnerToken, jobUUID })
+        const jobToken = job.jobToken
 
-      await servers[0].runnerJobs.error({ runnerToken, jobUUID, jobToken, message: 'Error' })
+        await servers[0].runnerJobs.error({ runnerToken, jobUUID, jobToken, message: 'Error' })
+      }
 
       const video = await servers[0].videos.get({ id: uuid })
       expect(video.state.id).to.equal(VideoState.TRANSCODING_FAILED)

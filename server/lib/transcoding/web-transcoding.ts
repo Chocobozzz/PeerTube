@@ -3,8 +3,8 @@ import { copyFile, move, remove, stat } from 'fs-extra'
 import { basename, join } from 'path'
 import { computeOutputFPS } from '@server/helpers/ffmpeg'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
+import { VideoModel } from '@server/models/video/video'
 import { MVideoFile, MVideoFullLight } from '@server/types/models'
-import { toEven } from '@shared/core-utils'
 import { ffprobePromise, getVideoStreamDuration, getVideoStreamFPS, TranscodeVODOptionsType } from '@shared/ffmpeg'
 import { VideoResolution, VideoStorage } from '@shared/models'
 import { CONFIG } from '../../initializers/config'
@@ -13,8 +13,7 @@ import { generateWebTorrentVideoFilename } from '../paths'
 import { buildFileMetadata } from '../video-file'
 import { VideoPathManager } from '../video-path-manager'
 import { buildFFmpegVOD } from './shared'
-import { computeResolutionsToTranscode } from './transcoding-resolutions'
-import { VideoModel } from '@server/models/video/video'
+import { buildOriginalFileResolution } from './transcoding-resolutions'
 
 // Optimize the original video file and replace it. The resolution is not changed.
 export async function optimizeOriginalVideofile (options: {
@@ -247,27 +246,4 @@ export async function onWebTorrentVideoFileTranscoding (options: {
   } finally {
     mutexReleaser()
   }
-}
-
-// ---------------------------------------------------------------------------
-
-function buildOriginalFileResolution (inputResolution: number) {
-  if (CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION === true) {
-    return toEven(inputResolution)
-  }
-
-  const resolutions = computeResolutionsToTranscode({
-    input: inputResolution,
-    type: 'vod',
-    includeInput: false,
-    strictLower: false,
-    // We don't really care about the audio resolution in this context
-    hasAudio: true
-  })
-
-  if (resolutions.length === 0) {
-    return toEven(inputResolution)
-  }
-
-  return Math.max(...resolutions)
 }

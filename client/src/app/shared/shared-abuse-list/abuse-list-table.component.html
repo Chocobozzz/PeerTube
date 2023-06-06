@@ -136,10 +136,10 @@
 
   <ng-template pTemplate="rowexpansion" let-abuse>
       <tr>
-        <td *ngIf="isAdminView()" class="expand-cell" colspan="8">
+        <td *ngIf="isAdminView()" class="expand-cell" myAutoColspan>
           <my-abuse-details [abuse]="abuse" [isAdminView]="true"></my-abuse-details>
         </td>
-        <td *ngIf="!isAdminView()" class="expand-cell" colspan="6">
+        <td *ngIf="!isAdminView()" class="expand-cell" myAutoColspan>
           <my-abuse-details [abuse]="abuse" [isAdminView]="false"></my-abuse-details>
         </td>
       </tr>
@@ -147,7 +147,7 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="6">
+      <td myAutoColspan>
         <div class="no-results">
           <ng-container *ngIf="search" i18n>No abuses found matching current filters.</ng-container>
           <ng-container *ngIf="!search" i18n>No abuses found.</ng-container>

@@ -15,11 +15,11 @@ async function isSignupAllowed (options: {
   const { signupMode } = options
 
   if (CONFIG.SIGNUP.ENABLED === false) {
-    return { allowed: false }
+    return { allowed: false, errorMessage: 'User registration is not allowed' }
   }
 
   if (signupMode === 'direct-registration' && CONFIG.SIGNUP.REQUIRES_APPROVAL === true) {
-    return { allowed: false }
+    return { allowed: false, errorMessage: 'User registration requires approval' }
   }
 
   // No limit and signup is enabled
@@ -29,7 +29,7 @@ async function isSignupAllowed (options: {
 
   const totalUsers = await UserModel.countTotal()
 
-  return { allowed: totalUsers < CONFIG.SIGNUP.LIMIT }
+  return { allowed: totalUsers < CONFIG.SIGNUP.LIMIT, errorMessage: 'User limit is reached on this instance' }
 }
 
 function isSignupAllowedForCurrentIP (ip: string) {

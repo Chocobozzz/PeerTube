@@ -265,7 +265,7 @@ async function forgeThumbnail ({ inputPath, video, downloadUrl, type }: {
     try {
       return await updateVideoMiniatureFromUrl({ downloadUrl, video, type })
     } catch (err) {
-      logger.warn('Cannot process thumbnail %s from youtubedl.', downloadUrl, { err })
+      logger.warn('Cannot process thumbnail %s from youtube-dl.', downloadUrl, { err })
     }
   }
   return null
@@ -275,10 +275,11 @@ async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: 
   try {
     const subtitles = await youtubeDL.getSubtitles()
 
-    logger.info('Will create %s subtitles from youtube import %s.', subtitles.length, targetUrl)
+    logger.info('Found %s subtitles candidates from youtube-dl import %s.', subtitles.length, targetUrl)
 
     for (const subtitle of subtitles) {
       if (!await isVTTFileValid(subtitle.path)) {
+        logger.info('%s is not a valid youtube-dl subtitle, skipping', subtitle.path)
         await remove(subtitle.path)
         continue
       }
@@ -295,6 +296,8 @@ async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: 
       await sequelizeTypescript.transaction(async t => {
         await VideoCaptionModel.insertOrReplaceLanguage(videoCaption, t)
       })
+
+      logger.info('Added %s youtube-dl subtitle', subtitle.path)
     }
   } catch (err) {
     logger.warn('Cannot get video subtitles.', { err })

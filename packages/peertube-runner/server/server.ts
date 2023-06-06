@@ -121,27 +121,28 @@ export class RunnerServer {
 
   async unregisterRunner (options: {
     url: string
+    runnerName: string
   }) {
-    const { url } = options
+    const { url, runnerName } = options
 
-    const server = this.servers.find(s => s.url === url)
+    const server = this.servers.find(s => s.url === url && s.runnerName === runnerName)
     if (!server) {
-      logger.error(`Unknown server ${url} to unregister`)
+      logger.error(`Unknown server ${url} - ${runnerName} to unregister`)
       return
     }
 
-    logger.info(`Unregistering runner ${server.runnerName} on ${url}...`)
+    logger.info(`Unregistering runner ${runnerName} on ${url}...`)
 
     try {
       await server.runners.unregister({ runnerToken: server.runnerToken })
     } catch (err) {
-      logger.error({ err }, `Cannot unregister runner ${server.runnerName} on ${url}`)
+      logger.error({ err }, `Cannot unregister runner ${runnerName} on ${url}`)
     }
 
     this.unloadServer(server)
     await this.saveRegisteredInstancesInConf()
 
-    logger.info(`Unregistered runner ${server.runnerName} on ${server.url}`)
+    logger.info(`Unregistered runner ${runnerName} on ${url}`)
   }
 
   private unloadServer (server: PeerTubeServer) {
@@ -195,7 +196,7 @@ export class RunnerServer {
         if (code === ServerErrorCode.UNKNOWN_RUNNER_TOKEN) {
           logger.error({ err }, `Unregistering ${server.url} as the runner token ${server.runnerToken} is invalid`)
 
-          await this.unregisterRunner({ url: server.url })
+          await this.unregisterRunner({ url: server.url, runnerName: server.runnerName })
           return
         }
 

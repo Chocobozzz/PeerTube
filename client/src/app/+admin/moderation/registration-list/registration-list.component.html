@@ -102,7 +102,7 @@
 
   <ng-template pTemplate="rowexpansion" let-registration>
     <tr>
-      <td colspan="9">
+      <td myAutoColspan>
         <div class="moderation-expanded">
           <div class="left">
             <div class="d-flex">
@@ -122,7 +122,7 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="9">
+      <td myAutoColspan>
         <div class="no-results">
           <ng-container *ngIf="search" i18n>No registrations found matching current filters.</ng-container>
           <ng-container *ngIf="!search" i18n>No registrations found.</ng-container>

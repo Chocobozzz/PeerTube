@@ -115,7 +115,7 @@ describe('Test studio transcoding in peertube-runner program', function () {
 
   after(async function () {
     if (peertubeRunner) {
-      await peertubeRunner.unregisterPeerTubeInstance()
+      await peertubeRunner.unregisterPeerTubeInstance({ runnerName: 'runner' })
       peertubeRunner.kill()
     }
 

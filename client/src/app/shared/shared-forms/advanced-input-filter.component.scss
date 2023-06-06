@@ -30,3 +30,9 @@ my-global-icon {
     height: 0;
   }
 }
+
+div[role=menu] {
+  max-height: 50vh;
+  min-height: 200px;
+  overflow: auto;
+}

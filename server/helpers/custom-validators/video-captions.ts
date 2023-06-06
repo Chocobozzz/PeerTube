@@ -2,6 +2,7 @@ import { UploadFilesForCheck } from 'express'
 import { readFile } from 'fs-extra'
 import { getFileSize } from '@shared/extra-utils'
 import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_LANGUAGES } from '../../initializers/constants'
+import { logger } from '../logger'
 import { exists, isFileValid } from './misc'
 
 function isVideoCaptionLanguageValid (value: any) {
@@ -24,12 +25,13 @@ function isVideoCaptionFile (files: UploadFilesForCheck, field: string) {
 
 async function isVTTFileValid (filePath: string) {
   const size = await getFileSize(filePath)
+  const content = await readFile(filePath, 'utf8')
+
+  logger.debug('Checking VTT file %s', filePath, { size, content })
 
   if (size > CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max) return false
 
-  const content = await readFile(filePath, 'utf8')
-
-  return content?.startsWith('WEBVTT\n')
+  return content?.startsWith('WEBVTT')
 }
 
 // ---------------------------------------------------------------------------

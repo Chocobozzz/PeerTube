@@ -72,7 +72,7 @@
 
   <ng-template pTemplate="rowexpansion" let-videoImport>
     <tr class="video-import-error" *ngIf="videoImport.error">
-      <td colspan="6">
+      <td myAutoColspan>
         <pre>{{ videoImport.error }}</pre>
       </td>
     </tr>

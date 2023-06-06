@@ -100,7 +100,7 @@
 
   <ng-template pTemplate="rowexpansion" let-video>
     <tr>
-      <td class="video-info expand-cell" colspan="7">
+      <td class="video-info expand-cell" myAutoColspan>
         <div>
           <div *ngIf="isWebTorrent(video)">
             WebTorrent:

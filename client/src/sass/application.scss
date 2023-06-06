@@ -2,6 +2,7 @@
 @use 'sass:color';
 
 @use '_variables' as *;
+@use '_bootstrap-variables' as *;
 @use '_mixins' as *;
 @use '_icons' as *;
 
@@ -223,7 +224,7 @@ my-global-icon[iconName=external-link] {
   }
 }
 
-@media screen and (max-width: #{breakpoint(lg)}) {
+@media screen and (max-width: #{breakpoint(xl)}) {
   .main-col {
     --videosHorizontalMarginContent: #{pvar(--horizontalMarginContent)};
   }

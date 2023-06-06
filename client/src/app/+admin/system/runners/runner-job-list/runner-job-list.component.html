@@ -87,7 +87,7 @@
 
   <ng-template pTemplate="rowexpansion" let-runnerJob>
     <tr>
-      <td colspan="9">
+      <td myAutoColspan>
         <div class="mt-2 fs-7 font-monospace">
           Parent job: {{ runnerJob.parent?.uuid || '-' }} <br />
           Processed on {{ (runnerJob.startedAt || '-') }} <br />
@@ -111,7 +111,7 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="9">
+      <td myAutoColspan>
         <div class="no-results">
           <ng-container i18n>No runner jobs found.</ng-container>
         </div>
