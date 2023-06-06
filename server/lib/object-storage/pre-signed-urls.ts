@@ -4,8 +4,9 @@ import { CONFIG } from '@server/initializers/config'
 import { MStreamingPlaylistVideo, MVideoFile } from '@server/types/models'
 import { generateHLSObjectStorageKey, generateWebTorrentObjectStorageKey } from './keys'
 import { buildKey, getClient } from './shared'
+import { getHLSPublicFileUrl, getWebTorrentPublicFileUrl } from './urls'
 
-export function generateWebVideoPresignedUrl (options: {
+export async function generateWebVideoPresignedUrl (options: {
   file: MVideoFile
   downloadFilename: string
 }) {
@@ -19,10 +20,12 @@ export function generateWebVideoPresignedUrl (options: {
     ResponseContentDisposition: `attachment; filename=${downloadFilename}`
   })
 
-  return getSignedUrl(getClient(), command, { expiresIn: 3600 * 24 })
+  const url = await getSignedUrl(getClient(), command, { expiresIn: 3600 * 24 })
+
+  return getWebTorrentPublicFileUrl(url)
 }
 
-export function generateHLSFilePresignedUrl (options: {
+export async function generateHLSFilePresignedUrl (options: {
   streamingPlaylist: MStreamingPlaylistVideo
   file: MVideoFile
   downloadFilename: string
@@ -37,5 +40,7 @@ export function generateHLSFilePresignedUrl (options: {
     ResponseContentDisposition: `attachment; filename=${downloadFilename}`
   })
 
-  return getSignedUrl(getClient(), command, { expiresIn: 3600 * 24 })
+  const url = await getSignedUrl(getClient(), command, { expiresIn: 3600 * 24 })
+
+  return getHLSPublicFileUrl(url)
 }
