@@ -21,75 +21,81 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
 
   logger.info('Processing generate storyboard of %s in job %s.', payload.videoUUID, job.id, lTags)
 
-  const video = await VideoModel.loadFull(payload.videoUUID)
-  if (!video) {
-    logger.info('Video %s does not exist anymore, skipping storyboard generation.', payload.videoUUID, lTags)
-    return
-  }
+  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(payload.videoUUID)
 
-  const inputFile = video.getMaxQualityFile()
-
-  await VideoPathManager.Instance.makeAvailableVideoFile(inputFile, async videoPath => {
-    const isAudio = await isAudioFile(videoPath)
-
-    if (isAudio) {
-      logger.info('Do not generate a storyboard of %s since the video does not have a video stream', payload.videoUUID, lTags)
+  try {
+    const video = await VideoModel.loadFull(payload.videoUUID)
+    if (!video) {
+      logger.info('Video %s does not exist anymore, skipping storyboard generation.', payload.videoUUID, lTags)
       return
     }
 
-    const ffmpeg = new FFmpegImage(getFFmpegCommandWrapperOptions('thumbnail'))
+    const inputFile = video.getMaxQualityFile()
 
-    const filename = generateImageFilename()
-    const destination = join(CONFIG.STORAGE.STORYBOARDS_DIR, filename)
+    await VideoPathManager.Instance.makeAvailableVideoFile(inputFile, async videoPath => {
+      const isAudio = await isAudioFile(videoPath)
 
-    const totalSprites = buildTotalSprites(video)
-    if (totalSprites === 0) {
-      logger.info('Do not generate a storyboard of %s because the video is not long enough', payload.videoUUID, lTags)
-      return
-    }
-
-    const spriteDuration = Math.round(video.duration / totalSprites)
-
-    const spritesCount = findGridSize({
-      toFind: totalSprites,
-      maxEdgeCount: STORYBOARD.SPRITES_MAX_EDGE_COUNT
-    })
-
-    logger.debug(
-      'Generating storyboard from video of %s to %s', video.uuid, destination,
-      { ...lTags, spritesCount, spriteDuration, videoDuration: video.duration }
-    )
-
-    await ffmpeg.generateStoryboardFromVideo({
-      destination,
-      path: videoPath,
-      sprites: {
-        size: STORYBOARD.SPRITE_SIZE,
-        count: spritesCount,
-        duration: spriteDuration
+      if (isAudio) {
+        logger.info('Do not generate a storyboard of %s since the video does not have a video stream', payload.videoUUID, lTags)
+        return
       }
+
+      const ffmpeg = new FFmpegImage(getFFmpegCommandWrapperOptions('thumbnail'))
+
+      const filename = generateImageFilename()
+      const destination = join(CONFIG.STORAGE.STORYBOARDS_DIR, filename)
+
+      const totalSprites = buildTotalSprites(video)
+      if (totalSprites === 0) {
+        logger.info('Do not generate a storyboard of %s because the video is not long enough', payload.videoUUID, lTags)
+        return
+      }
+
+      const spriteDuration = Math.round(video.duration / totalSprites)
+
+      const spritesCount = findGridSize({
+        toFind: totalSprites,
+        maxEdgeCount: STORYBOARD.SPRITES_MAX_EDGE_COUNT
+      })
+
+      logger.debug(
+        'Generating storyboard from video of %s to %s', video.uuid, destination,
+        { ...lTags, spritesCount, spriteDuration, videoDuration: video.duration }
+      )
+
+      await ffmpeg.generateStoryboardFromVideo({
+        destination,
+        path: videoPath,
+        sprites: {
+          size: STORYBOARD.SPRITE_SIZE,
+          count: spritesCount,
+          duration: spriteDuration
+        }
+      })
+
+      const imageSize = await getImageSize(destination)
+
+      const existing = await StoryboardModel.loadByVideo(video.id)
+      if (existing) await existing.destroy()
+
+      await StoryboardModel.create({
+        filename,
+        totalHeight: imageSize.height,
+        totalWidth: imageSize.width,
+        spriteHeight: STORYBOARD.SPRITE_SIZE.height,
+        spriteWidth: STORYBOARD.SPRITE_SIZE.width,
+        spriteDuration,
+        videoId: video.id
+      })
+
+      logger.info('Storyboard generation %s ended for video %s.', destination, video.uuid, lTags)
     })
 
-    const imageSize = await getImageSize(destination)
-
-    const existing = await StoryboardModel.loadByVideo(video.id)
-    if (existing) await existing.destroy()
-
-    await StoryboardModel.create({
-      filename,
-      totalHeight: imageSize.height,
-      totalWidth: imageSize.width,
-      spriteHeight: STORYBOARD.SPRITE_SIZE.height,
-      spriteWidth: STORYBOARD.SPRITE_SIZE.width,
-      spriteDuration,
-      videoId: video.id
-    })
-
-    logger.info('Storyboard generation %s ended for video %s.', destination, video.uuid, lTags)
-  })
-
-  if (payload.federate) {
-    await federateVideoIfNeeded(video, false)
+    if (payload.federate) {
+      await federateVideoIfNeeded(video, false)
+    }
+  } finally {
+    inputFileMutexReleaser()
   }
 }
 
