@@ -3,7 +3,7 @@ import { finalize } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
-import { prepareIcu } from '@app/helpers'
+import { formatICU } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { VideoBlockComponent, VideoBlockService } from '@app/shared/shared-moderation'
@@ -219,9 +219,9 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
   }
 
   private async removeVideos (videos: Video[]) {
-    const message = prepareIcu($localize`Are you sure you want to delete {count, plural, =1 {this video} other {these {count} videos}}?`)(
-      { count: videos.length },
-      $localize`Are you sure you want to delete these ${videos.length} videos?`
+    const message = formatICU(
+      $localize`Are you sure you want to delete {count, plural, =1 {this video} other {these {count} videos}}?`,
+      { count: videos.length }
     )
 
     const res = await this.confirmService.confirm(message, $localize`Delete`)
@@ -231,9 +231,9 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
       .subscribe({
         next: () => {
           this.notifier.success(
-            prepareIcu($localize`Deleted {count, plural, =1 {1 video} other {{count} videos}}.`)(
-              { count: videos.length },
-              $localize`Deleted ${videos.length} videos.`
+            formatICU(
+              $localize`Deleted {count, plural, =1 {1 video} other {{count} videos}}.`,
+              { count: videos.length }
             )
           )
 
@@ -249,9 +249,9 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
       .subscribe({
         next: () => {
           this.notifier.success(
-            prepareIcu($localize`Unblocked {count, plural, =1 {1 video} other {{count} videos}}.`)(
-              { count: videos.length },
-              $localize`Unblocked ${videos.length} videos.`
+            formatICU(
+              $localize`Unblocked {count, plural, =1 {1 video} other {{count} videos}}.`,
+              { count: videos.length }
             )
           )
 
@@ -267,15 +267,15 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
 
     if (type === 'hls') {
       // eslint-disable-next-line max-len
-      message = prepareIcu($localize`Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {{count} HLS streaming playlists}}?`)(
-        { count: videos.length },
-        $localize`Are you sure you want to delete ${videos.length} HLS streaming playlists?`
+      message = formatICU(
+        $localize`Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {{count} HLS streaming playlists}}?`,
+        { count: videos.length }
       )
     } else {
       // eslint-disable-next-line max-len
-      message = prepareIcu($localize`Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {{count} videos}}?`)(
-        { count: videos.length },
-        $localize`Are you sure you want to delete WebTorrent files of ${videos.length} videos?`
+      message = formatICU(
+        $localize`Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {{count} videos}}?`,
+        { count: videos.length }
       )
     }
 

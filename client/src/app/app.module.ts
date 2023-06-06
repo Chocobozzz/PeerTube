@@ -12,13 +12,14 @@ import { CoreModule, PluginService, RedirectService, ServerService } from './cor
 import { EmptyComponent } from './empty.component'
 import { HeaderComponent, SearchTypeaheadComponent, SuggestionComponent } from './header'
 import { HighlightPipe } from './header/highlight.pipe'
+import { polyfillICU } from './helpers'
 import { LanguageChooserComponent, MenuComponent, NotificationComponent } from './menu'
+import { AccountSetupWarningModalComponent } from './modal/account-setup-warning-modal.component'
+import { AdminWelcomeModalComponent } from './modal/admin-welcome-modal.component'
 import { ConfirmComponent } from './modal/confirm.component'
 import { CustomModalComponent } from './modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from './modal/instance-config-warning-modal.component'
 import { QuickSettingsModalComponent } from './modal/quick-settings-modal.component'
-import { AdminWelcomeModalComponent } from './modal/admin-welcome-modal.component'
-import { AccountSetupWarningModalComponent } from './modal/account-setup-warning-modal.component'
 import { SharedActorImageModule } from './shared/shared-actor-image/shared-actor-image.module'
 import { SharedFormModule } from './shared/shared-forms'
 import { SharedGlobalIconModule } from './shared/shared-icons'
@@ -89,6 +90,11 @@ export function loadConfigFactory (server: ServerService, pluginService: PluginS
       provide: APP_INITIALIZER,
       useFactory: loadConfigFactory,
       deps: [ ServerService, PluginService, RedirectService ],
+      multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => polyfillICU,
       multi: true
     }
   ]

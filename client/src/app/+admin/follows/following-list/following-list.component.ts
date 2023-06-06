@@ -6,7 +6,7 @@ import { InstanceFollowService } from '@app/shared/shared-instance'
 import { ActorFollow } from '@shared/models'
 import { FollowModalComponent } from './follow-modal.component'
 import { DropdownAction } from '@app/shared/shared-main'
-import { prepareIcu } from '@app/helpers'
+import { formatICU } from '@app/helpers'
 
 @Component({
   templateUrl: './following-list.component.html',
@@ -64,9 +64,9 @@ export class FollowingListComponent extends RestTable <ActorFollow> implements O
   async removeFollowing (follows: ActorFollow[]) {
     const icuParams = { count: follows.length, entryName: this.buildFollowingName(follows[0]) }
 
-    const message = prepareIcu($localize`Do you really want to unfollow {count, plural, =1 {{entryName}?} other {{count} entries?}}`)(
-      icuParams,
-      $localize`Do you really want to unfollow these entries?`
+    const message = formatICU(
+      $localize`Do you really want to unfollow {count, plural, =1 {{entryName}?} other {{count} entries?}}`,
+      icuParams
     )
 
     const res = await this.confirmService.confirm(message, $localize`Unfollow`)
@@ -76,9 +76,9 @@ export class FollowingListComponent extends RestTable <ActorFollow> implements O
       .subscribe({
         next: () => {
           // eslint-disable-next-line max-len
-          const message = prepareIcu($localize`You are not following {count, plural, =1 {{entryName} anymore.} other {these {count} entries anymore.}}`)(
-            icuParams,
-            $localize`You are not following them anymore.`
+          const message = formatICU(
+            $localize`You are not following {count, plural, =1 {{entryName} anymore.} other {these {count} entries anymore.}}`,
+            icuParams
           )
 
           this.notifier.success(message)

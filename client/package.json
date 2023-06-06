@@ -47,6 +47,8 @@
     "@angular/service-worker": "^16.0.2",
     "@babel/core": "^7.18.5",
     "@babel/preset-env": "^7.18.2",
+    "@formatjs/intl-locale": "^3.3.1",
+    "@formatjs/intl-pluralrules": "^5.2.2",
     "@ng-bootstrap/ng-bootstrap": "^14.0.1",
     "@ng-select/ng-select": "^10.0.3",
     "@ngx-loading-bar/core": "^6.0.0",

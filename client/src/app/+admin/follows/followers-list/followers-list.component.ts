@@ -1,7 +1,7 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
-import { prepareIcu } from '@app/helpers'
+import { formatICU } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { InstanceFollowService } from '@app/shared/shared-instance'
 import { DropdownAction } from '@app/shared/shared-main'
@@ -63,9 +63,9 @@ export class FollowersListComponent extends RestTable <ActorFollow> implements O
       .subscribe({
         next: () => {
           // eslint-disable-next-line max-len
-          const message = prepareIcu($localize`Accepted {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`)(
-            { count: follows.length, followerName: this.buildFollowerName(follows[0]) },
-            $localize`Follow requests accepted`
+          const message = formatICU(
+            $localize`Accepted {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
+            { count: follows.length, followerName: this.buildFollowerName(follows[0]) }
           )
           this.notifier.success(message)
 
@@ -78,9 +78,9 @@ export class FollowersListComponent extends RestTable <ActorFollow> implements O
 
   async rejectFollower (follows: ActorFollow[]) {
     // eslint-disable-next-line max-len
-    const message = prepareIcu($localize`Do you really want to reject {count, plural, =1 {{followerName} follow request?} other {{count} follow requests?}}`)(
-      { count: follows.length, followerName: this.buildFollowerName(follows[0]) },
-      $localize`Do you really want to reject these follow requests?`
+    const message = formatICU(
+      $localize`Do you really want to reject {count, plural, =1 {{followerName} follow request?} other {{count} follow requests?}}`,
+      { count: follows.length, followerName: this.buildFollowerName(follows[0]) }
     )
 
     const res = await this.confirmService.confirm(message, $localize`Reject`)
@@ -90,9 +90,9 @@ export class FollowersListComponent extends RestTable <ActorFollow> implements O
         .subscribe({
           next: () => {
             // eslint-disable-next-line max-len
-            const message = prepareIcu($localize`Rejected {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`)(
-              { count: follows.length, followerName: this.buildFollowerName(follows[0]) },
-              $localize`Follow requests rejected`
+            const message = formatICU(
+              $localize`Rejected {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
+              { count: follows.length, followerName: this.buildFollowerName(follows[0]) }
             )
             this.notifier.success(message)
 
@@ -110,9 +110,9 @@ export class FollowersListComponent extends RestTable <ActorFollow> implements O
     message += '<br /><br />'
 
     // eslint-disable-next-line max-len
-    message += prepareIcu($localize`Do you really want to delete {count, plural, =1 {{followerName} follow request?} other {{count} follow requests?}}`)(
-      icuParams,
-      $localize`Do you really want to delete these follow requests?`
+    message += formatICU(
+      $localize`Do you really want to delete {count, plural, =1 {{followerName} follow request?} other {{count} follow requests?}}`,
+      icuParams
     )
 
     const res = await this.confirmService.confirm(message, $localize`Delete`)
@@ -122,9 +122,9 @@ export class FollowersListComponent extends RestTable <ActorFollow> implements O
         .subscribe({
           next: () => {
             // eslint-disable-next-line max-len
-            const message = prepareIcu($localize`Removed {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`)(
-              icuParams,
-              $localize`Follow requests removed`
+            const message = formatICU(
+              $localize`Removed {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`,
+              icuParams
             )
 
             this.notifier.success(message)
