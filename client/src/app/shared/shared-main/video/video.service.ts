@@ -70,11 +70,14 @@ export class VideoService {
     return `${VideoService.BASE_VIDEO_URL}/${uuid}/views`
   }
 
-  getVideo (options: { videoId: string }): Observable<VideoDetails> {
-    return this.serverService.getServerLocale()
-               .pipe(
+  getVideo (options: { videoId: string, videoPassword?: string }): Observable<VideoDetails> {
+    const headers = options.videoPassword
+      ? new HttpHeaders().set('video-password', options.videoPassword)
+      : undefined
+
+    return this.serverService.getServerLocale().pipe(
       switchMap(translations => {
-                   return this.authHttp.get<VideoDetailsServerModel>(`${VideoService.BASE_VIDEO_URL}/${options.videoId}`)
+        return this.authHttp.get<VideoDetailsServerModel>(`${VideoService.BASE_VIDEO_URL}/${options.videoId}`, { headers })
           .pipe(map(videoHash => ({ videoHash, translations })))
       }),
       map(({ videoHash, translations }) => new VideoDetails(videoHash, translations)),
@@ -357,16 +360,16 @@ export class VideoService {
                )
   }
 
-  setVideoLike (id: string) {
-    return this.setVideoRate(id, 'like')
+  setVideoLike (id: string, videoPassword: string) {
+    return this.setVideoRate(id, 'like', videoPassword)
   }
 
-  setVideoDislike (id: string) {
-    return this.setVideoRate(id, 'dislike')
+  setVideoDislike (id: string, videoPassword: string) {
+    return this.setVideoRate(id, 'dislike', videoPassword)
   }
 
-  unsetVideoLike (id: string) {
-    return this.setVideoRate(id, 'none')
+  unsetVideoLike (id: string, videoPassword: string) {
+    return this.setVideoRate(id, 'none', videoPassword)
   }
 
   getUserVideoRating (id: string) {
@@ -504,14 +507,17 @@ export class VideoService {
     }
   }
 
-  private setVideoRate (id: string, rateType: UserVideoRateType) {
+  private setVideoRate (id: string, rateType: UserVideoRateType, videoPassword?: string) {
     const url = `${VideoService.BASE_VIDEO_URL}/${id}/rate`
     const body: UserVideoRateUpdate = {
       rating: rateType
     }
+    const headers = videoPassword
+      ? new HttpHeaders().set('video-password', videoPassword)
+      : undefined
 
     return this.authHttp
-               .put(url, body)
+               .put(url, body, { headers })
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 

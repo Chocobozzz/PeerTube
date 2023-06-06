@@ -25,7 +25,7 @@ import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { logger } from '@root-helpers/logger'
-import { isP2PEnabled, videoRequiresAuth } from '@root-helpers/video'
+import { isP2PEnabled, videoRequiresAuth, videoRequiresFileToken } from '@root-helpers/video'
 import { timeToInt } from '@shared/core-utils'
 import {
   HTMLServerConfig,
@@ -68,6 +68,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   video: VideoDetails = null
   videoCaptions: VideoCaption[] = []
   liveVideo: LiveVideo
+  videoPassword: string
 
   playlistPosition: number
   playlist: VideoPlaylist = null
@@ -243,8 +244,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private loadVideo (options: {
     videoId: string
     forceAutoplay: boolean
+    videoPassword?: string
   }) {
-    const { videoId, forceAutoplay } = options
+    const { videoId, forceAutoplay, videoPassword } = options
+
+    if (videoPassword) this.videoPassword = videoPassword
 
     if (this.isSameElement(this.video, videoId)) return
 
@@ -254,7 +258,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     const videoObs = this.hooks.wrapObsFun(
       this.videoService.getVideo.bind(this.videoService),
-      { videoId },
+      { videoId, videoPassword: this.videoPassword },
       'video-watch',
       'filter:api.video-watch.video.get.params',
       'filter:api.video-watch.video.get.result'
@@ -269,16 +273,16 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       }),
 
       switchMap(({ video, live }) => {
-        if (!videoRequiresAuth(video)) return of({ video, live, videoFileToken: undefined })
+        if (!videoRequiresFileToken(video)) return of({ video, live, videoFileToken: undefined })
 
-        return this.videoFileTokenService.getVideoFileToken(video.uuid)
+        return this.videoFileTokenService.getVideoFileToken(video.uuid, videoPassword)
           .pipe(map(({ token }) => ({ video, live, videoFileToken: token })))
       })
     )
 
     forkJoin([
       videoAndLiveObs,
-      this.videoCaptionService.listCaptions(videoId),
+      this.videoCaptionService.listCaptions(videoId, this.videoPassword),
       this.userService.getAnonymousOrLoggedUser()
     ]).subscribe({
       next: ([ { video, live, videoFileToken }, captionsResult, loggedInOrAnonymousUser ]) => {
@@ -307,10 +311,31 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           loggedInOrAnonymousUser,
           urlOptions,
           forceAutoplay
-        }).catch(err => this.handleGlobalError(err))
+        }).catch(err => {
+          this.handleGlobalError(err)
+        })
       },
-
-      error: err => this.handleRequestError(err)
+      error: err => {
+        if (err.status === HttpStatusCode.FORBIDDEN_403) {
+          let isIncorrectPassword: boolean
+          if (err.body.code === ServerErrorCode.VIDEO_REQUIRES_PASSWORD) {
+            isIncorrectPassword = false
+          } else if (err.body.code === ServerErrorCode.INCORRECT_VIDEO_PASSWORD) {
+            this.videoPassword = undefined
+            isIncorrectPassword = true
+          }
+          this.confirmService.confirmWithPassword({
+            message: $localize`You need a password to watch this video`,
+            title: $localize`This video is password protected`,
+            hasError: isIncorrectPassword
+          }).then(({ confirmed, password }) => {
+            if (confirmed === false) return this.location.back()
+            this.loadVideo({ ...options, videoPassword: password })
+          })
+        } else {
+          this.handleRequestError(err)
+        }
+      }
     })
   }
 
@@ -450,6 +475,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       videoCaptions: this.videoCaptions,
       liveVideo: this.liveVideo,
       videoFileToken: this.videoFileToken,
+      videoPassword: this.videoPassword,
       urlOptions,
       loggedInOrAnonymousUser,
       forceAutoplay,
@@ -600,6 +626,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     videoCaptions: VideoCaption[]
 
     videoFileToken: string
+    videoPassword: string
 
     urlOptions: CustomizationOptions & { playerMode: PlayerMode }
 
@@ -607,7 +634,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     forceAutoplay: boolean
     user?: AuthUser // Keep for plugins
   }) {
-    const { video, liveVideo, videoCaptions, videoFileToken, urlOptions, loggedInOrAnonymousUser, forceAutoplay } = params
+    const { video, liveVideo, videoCaptions, videoFileToken, videoPassword, urlOptions, loggedInOrAnonymousUser, forceAutoplay } = params
 
     const getStartTime = () => {
       const byUrl = urlOptions.startTime !== undefined
@@ -689,7 +716,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         serverUrl: environment.originServerUrl || window.location.origin,
 
         videoFileToken: () => videoFileToken,
-        requiresAuth: videoRequiresAuth(video),
+        requiresAuth: videoRequiresAuth(video, videoPassword),
+        requiresPassword: !video.canAccessVideoWithoutPassword(this.user) && video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED,
+        videoPassword: () => videoPassword,
 
         videoCaptions: playerCaptions,
 

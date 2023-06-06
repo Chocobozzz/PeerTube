@@ -18,6 +18,7 @@ export class ActionButtonsComponent implements OnInit, OnChanges {
   @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
 
   @Input() video: VideoDetails
+  @Input() videoPassword: string
   @Input() videoCaptions: VideoCaption[]
   @Input() playlist: VideoPlaylist
 

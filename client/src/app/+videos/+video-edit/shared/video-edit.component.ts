@@ -169,7 +169,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       permanentLive: null,
       latencyMode: null,
       saveReplay: null,
-      replayPrivacy: null
+      replayPrivacy: VIDEO_PRIVACY_VALIDATOR
     }
 
     this.formValidatorService.updateFormGroup(

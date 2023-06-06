@@ -1,7 +1,7 @@
 import { SortMeta } from 'primeng/api'
 import { from, Observable } from 'rxjs'
 import { catchError, concatMap, map, toArray } from 'rxjs/operators'
-import { HttpClient, HttpParams } from '@angular/common/http'
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestPagination, RestService } from '@app/core'
 import { objectLineFeedToHtml } from '@app/helpers'
@@ -31,22 +31,28 @@ export class VideoCommentService {
     private restService: RestService
   ) {}
 
-  addCommentThread (videoId: string, comment: VideoCommentCreate) {
+  addCommentThread (videoId: string, comment: VideoCommentCreate, videoPassword?: string) {
+    const headers = videoPassword
+      ? new HttpHeaders().set('video-password', videoPassword)
+      : undefined
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comment-threads'
     const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
-    return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment)
+    return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment, { headers })
                .pipe(
                  map(data => this.extractVideoComment(data.comment)),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }
 
-  addCommentReply (videoId: string, inReplyToCommentId: number, comment: VideoCommentCreate) {
+  addCommentReply (videoId: string, inReplyToCommentId: number, comment: VideoCommentCreate, videoPassword?: string) {
+    const headers = videoPassword
+      ? new HttpHeaders().set('video-password', videoPassword)
+      : undefined
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comments/' + inReplyToCommentId
     const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
-    return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment)
+    return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment, { headers })
                .pipe(
                  map(data => this.extractVideoComment(data.comment)),
                  catchError(err => this.restExtractor.handleError(err))
@@ -76,10 +82,15 @@ export class VideoCommentService {
 
   getVideoCommentThreads (parameters: {
     videoId: string
+    videoPassword: string
     componentPagination: ComponentPaginationLight
     sort: string
   }): Observable<ThreadsResultList<VideoComment>> {
-    const { videoId, componentPagination, sort } = parameters
+    const { videoId, videoPassword, componentPagination, sort } = parameters
+
+    const headers = videoPassword
+      ? new HttpHeaders().set('video-password', videoPassword)
+      : undefined
 
     const pagination = this.restService.componentToRestPagination(componentPagination)
 
@@ -87,7 +98,7 @@ export class VideoCommentService {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comment-threads'
-    return this.authHttp.get<ThreadsResultList<VideoComment>>(url, { params })
+    return this.authHttp.get<ThreadsResultList<VideoComment>>(url, { params, headers })
                .pipe(
                  map(result => this.extractVideoComments(result)),
                  catchError(err => this.restExtractor.handleError(err))
@@ -97,12 +108,16 @@ export class VideoCommentService {
   getVideoThreadComments (parameters: {
     videoId: string
     threadId: number
+    videoPassword?: string
   }): Observable<VideoCommentThreadTree> {
-    const { videoId, threadId } = parameters
+    const { videoId, threadId, videoPassword } = parameters
     const url = `${VideoCommentService.BASE_VIDEO_URL + videoId}/comment-threads/${threadId}`
+    const headers = videoPassword
+      ? new HttpHeaders().set('video-password', videoPassword)
+      : undefined
 
     return this.authHttp
-               .get<VideoCommentThreadTreeServerModel>(url)
+               .get<VideoCommentThreadTreeServerModel>(url, { headers })
                .pipe(
                  map(tree => this.extractVideoCommentTree(tree)),
                  catchError(err => this.restExtractor.handleError(err))

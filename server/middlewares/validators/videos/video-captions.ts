@@ -1,5 +1,5 @@
 import express from 'express'
-import { body, param } from 'express-validator'
+import { body, header, param } from 'express-validator'
 import { UserRight } from '@shared/models'
 import { isVideoCaptionFile, isVideoCaptionLanguageValid } from '../../../helpers/custom-validators/video-captions'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
@@ -61,6 +61,10 @@ const deleteVideoCaptionValidator = [
 
 const listVideoCaptionsValidator = [
   isValidVideoIdParam('videoId'),
+
+  header('video-password')
+    .optional()
+    .isString(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

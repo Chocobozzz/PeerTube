@@ -85,6 +85,8 @@ export interface CommonOptions extends CustomizationOptions {
   serverUrl: string
   requiresAuth: boolean
   videoFileToken: () => string
+  requiresPassword: boolean
+  videoPassword: () => string
 
   errorNotifier: (message: string) => void
 }

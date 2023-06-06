@@ -88,17 +88,22 @@ export class HLSOptionsBuilder {
         httpFailedSegmentTimeout: 1000,
 
         xhrSetup: (xhr, url) => {
-          if (!this.options.common.requiresAuth) return
+          if (!this.options.common.requiresAuth && !this.options.common.requiresPassword) return
           if (!isSameOrigin(this.options.common.serverUrl, url)) return
-
-          xhr.setRequestHeader('Authorization', this.options.common.authorizationHeader())
+          if (this.options.common.requiresPassword) {
+            xhr.setRequestHeader('video-password', this.options.common.videoPassword())
+          } else {
+            xhr.setRequestHeader('Authorization', this.options.common.authorizationHeader())
+          }
         },
 
         segmentValidator: segmentValidatorFactory({
           segmentsSha256Url: this.options.p2pMediaLoader.segmentsSha256Url,
           authorizationHeader: this.options.common.authorizationHeader,
           requiresAuth: this.options.common.requiresAuth,
-          serverUrl: this.options.common.serverUrl
+          serverUrl: this.options.common.serverUrl,
+          requiresPassword: this.options.common.requiresPassword,
+          videoPassword: this.options.common.videoPassword
         }),
 
         segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager),

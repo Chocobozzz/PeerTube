@@ -1,5 +1,5 @@
 import express from 'express'
-import { query } from 'express-validator'
+import { header, query } from 'express-validator'
 import { LRUCache } from 'lru-cache'
 import { basename, dirname } from 'path'
 import { exists, isSafePeerTubeFilenameWithoutExtension, isUUIDValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc'
@@ -24,6 +24,10 @@ const staticFileTokenBypass = new LRUCache<string, LRUValue>({
 
 const ensureCanAccessVideoPrivateWebTorrentFiles = [
   query('videoFileToken').optional().custom(exists),
+
+  header('video-password')
+  .optional()
+  .isString(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -72,6 +76,10 @@ const ensureCanAccessPrivateVideoHLSFiles = [
   query('playlistName')
     .optional()
     .customSanitizer(isSafePeerTubeFilenameWithoutExtension),
+
+  header('video-password')
+    .optional()
+    .isString(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -167,11 +175,15 @@ async function isHLSAllowed (req: express.Request, res: express.Response, videoU
 }
 
 function extractTokenOrDie (req: express.Request, res: express.Response) {
-  const token = res.locals.oauth?.token.accessToken || req.query.videoFileToken
+  const videoPassword = req.header('video-password')
+  let token: string
+
+  if (exists(videoPassword)) token = videoPassword
+  else token = res.locals.oauth?.token.accessToken || req.query.videoFileToken
 
   if (!token) {
     return res.fail({
-      message: 'Bearer token is missing in headers or video file token is missing in URL query parameters',
+      message: 'Bearer token or video password is missing in headers or video file token is missing in URL query parameters',
       status: HttpStatusCode.FORBIDDEN_403
     })
   }

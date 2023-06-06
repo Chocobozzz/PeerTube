@@ -14,10 +14,19 @@ function segmentValidatorFactory (options: {
   segmentsSha256Url: string
   authorizationHeader: () => string
   requiresAuth: boolean
+  requiresPassword: boolean
+  videoPassword: () => string
 }) {
-  const { serverUrl, segmentsSha256Url, authorizationHeader, requiresAuth } = options
+  const { serverUrl, segmentsSha256Url, authorizationHeader, requiresAuth, requiresPassword, videoPassword } = options
 
-  let segmentsJSON = fetchSha256Segments({ serverUrl, segmentsSha256Url, authorizationHeader, requiresAuth })
+  let segmentsJSON = fetchSha256Segments({
+    serverUrl,
+    segmentsSha256Url,
+    authorizationHeader,
+    requiresAuth,
+    requiresPassword,
+    videoPassword
+  })
   const regex = /bytes=(\d+)-(\d+)/
 
   return async function segmentValidator (segment: Segment, _method: string, _peerId: string, retry = 1) {
@@ -34,7 +43,14 @@ function segmentValidatorFactory (options: {
 
       await wait(500)
 
-      segmentsJSON = fetchSha256Segments({ serverUrl, segmentsSha256Url, authorizationHeader, requiresAuth })
+      segmentsJSON = fetchSha256Segments({
+        serverUrl,
+        segmentsSha256Url,
+        authorizationHeader,
+        requiresAuth,
+        requiresPassword,
+        videoPassword
+      })
       await segmentValidator(segment, _method, _peerId, retry + 1)
 
       return
@@ -79,12 +95,16 @@ function fetchSha256Segments (options: {
   segmentsSha256Url: string
   authorizationHeader: () => string
   requiresAuth: boolean
+  requiresPassword: boolean
+  videoPassword: () => string
 }): Promise<SegmentsJSON> {
-  const { serverUrl, segmentsSha256Url, requiresAuth, authorizationHeader } = options
+  const { serverUrl, segmentsSha256Url, requiresAuth, authorizationHeader, requiresPassword, videoPassword } = options
 
   const headers = requiresAuth && isSameOrigin(serverUrl, segmentsSha256Url)
     ? { Authorization: authorizationHeader() }
-    : {}
+    : requiresPassword
+      ? { 'video-password': videoPassword() }
+      : {}
 
   return fetch(segmentsSha256Url, { headers })
     .then(res => res.json() as Promise<SegmentsJSON>)

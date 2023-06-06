@@ -228,7 +228,7 @@ async function checkCanAccessVideoStaticFiles (options: {
 }) {
   const { video, req, res } = options
 
-  if (res.locals.oauth?.token.User) {
+  if (res.locals.oauth?.token.User || video.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
     return checkCanSeeVideo(options)
   }
 

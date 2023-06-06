@@ -1,6 +1,6 @@
 import { Observable, of } from 'rxjs'
 import { catchError, map, switchMap } from 'rxjs/operators'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, ServerService } from '@app/core'
 import { objectToFormData, sortBy } from '@app/helpers'
@@ -18,8 +18,12 @@ export class VideoCaptionService {
     private restExtractor: RestExtractor
   ) {}
 
-  listCaptions (videoId: string): Observable<ResultList<VideoCaption>> {
-    return this.authHttp.get<ResultList<VideoCaption>>(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions`)
+  listCaptions (videoId: string, videoPassword?: string): Observable<ResultList<VideoCaption>> {
+    const headers = videoPassword
+      ? new HttpHeaders().set('video-password', videoPassword)
+      : undefined
+
+    return this.authHttp.get<ResultList<VideoCaption>>(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions`, { headers })
                .pipe(
                  switchMap(captionsResult => {
                    return this.serverService.getServerLocale()

@@ -62,6 +62,7 @@
         *ngIf="!comment.isDeleted && inReplyToCommentId === comment.id"
         [user]="user"
         [video]="video"
+        [videoPassword]="videoPassword"
         [parentComment]="comment"
         [parentComments]="newParentComments"
         [focusOnInit]="true"
@@ -75,6 +76,7 @@
           <my-video-comment
             [comment]="commentChild.comment"
             [video]="video"
+            [videoPassword]="videoPassword"
             [inReplyToCommentId]="inReplyToCommentId"
             [commentTree]="commentChild"
             [parentComments]="newParentComments"

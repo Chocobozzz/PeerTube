@@ -1,5 +1,5 @@
 import express from 'express'
-import { body, param, query } from 'express-validator'
+import { body, header, param, query } from 'express-validator'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { VideoRateType } from '../../../../shared/models/videos'
 import { isAccountNameValid } from '../../../helpers/custom-validators/accounts'
@@ -14,6 +14,9 @@ const videoUpdateRateValidator = [
 
   body('rating')
     .custom(isVideoRatingTypeValid),
+  header('video-password')
+    .optional()
+    .isString(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

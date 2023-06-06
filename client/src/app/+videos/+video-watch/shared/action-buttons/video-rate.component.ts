@@ -12,6 +12,7 @@ import { UserVideoRateType } from '@shared/models'
 })
 export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
   @Input() video: VideoDetails
+  @Input() videoPassword: string
   @Input() isUserLoggedIn: boolean
 
   @Output() userRatingLoaded = new EventEmitter<UserVideoRateType>()
@@ -103,13 +104,13 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private setRating (nextRating: UserVideoRateType) {
-    const ratingMethods: { [id in UserVideoRateType]: (id: string) => Observable<any> } = {
+    const ratingMethods: { [id in UserVideoRateType]: (id: string, videoPassword: string) => Observable<any> } = {
       like: this.videoService.setVideoLike,
       dislike: this.videoService.setVideoDislike,
       none: this.videoService.unsetVideoLike
     }
 
-    ratingMethods[nextRating].call(this.videoService, this.video.uuid)
+    ratingMethods[nextRating].call(this.videoService, this.video.uuid, this.videoPassword)
           .subscribe({
             next: () => {
               // Update the video like attribute
