@@ -241,7 +241,7 @@ describe('Test video studio', function () {
         {
           name: 'add-watermark',
           options: {
-            file: 'thumbnail.png'
+            file: 'custom-thumbnail.png'
           }
         }
       ])

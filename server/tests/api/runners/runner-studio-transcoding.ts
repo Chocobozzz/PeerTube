@@ -104,7 +104,7 @@ describe('Test runner video studio transcoding', function () {
       {
         name: 'add-watermark' as 'add-watermark',
         options: {
-          file: 'thumbnail.png'
+          file: 'custom-thumbnail.png'
         }
       },
       {

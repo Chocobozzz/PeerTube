@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { checkVideoFilesWereRemoved, completeVideoCheck, testImage } from '@server/tests/shared'
+import { checkVideoFilesWereRemoved, completeVideoCheck, testImageGeneratedByFFmpeg } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { Video, VideoPrivacy } from '@shared/models'
 import {
@@ -260,7 +260,7 @@ describe('Test a single server', function () {
 
       for (const video of data) {
         const videoName = video.name.replace(' name', '')
-        await testImage(server.url, videoName, video.thumbnailPath)
+        await testImageGeneratedByFFmpeg(server.url, videoName, video.thumbnailPath)
       }
     })
 

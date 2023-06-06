@@ -752,7 +752,7 @@ describe('Test managing runners', function () {
         })
 
         it('Should fail with an invalid vod audio merge payload', async function () {
-          const attributes = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
+          const attributes = { name: 'audio_with_preview', previewfile: 'custom-preview.jpg', fixture: 'sample.ogg' }
           await server.videos.upload({ attributes, mode: 'legacy' })
 
           await waitJobs([ server ])

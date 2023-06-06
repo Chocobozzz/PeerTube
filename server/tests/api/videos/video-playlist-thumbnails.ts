@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { testImage } from '@server/tests/shared'
+import { testImageGeneratedByFFmpeg } from '@server/tests/shared'
 import { VideoPlaylistPrivacy } from '@shared/models'
 import {
   cleanupTests,
@@ -83,7 +83,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
-      await testImage(server.url, 'thumbnail-playlist', p.thumbnailPath)
+      await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', p.thumbnailPath)
     }
   })
 
@@ -95,7 +95,7 @@ describe('Playlist thumbnail', function () {
         displayName: 'playlist with thumbnail',
         privacy: VideoPlaylistPrivacy.PUBLIC,
         videoChannelId: servers[1].store.channel.id,
-        thumbnailfile: 'thumbnail.jpg'
+        thumbnailfile: 'custom-thumbnail.jpg'
       }
     })
     playlistWithThumbnailId = created.id
@@ -110,7 +110,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
-      await testImage(server.url, 'thumbnail', p.thumbnailPath)
+      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailPath)
     }
   })
 
@@ -135,7 +135,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
-      await testImage(server.url, 'thumbnail-playlist', p.thumbnailPath)
+      await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', p.thumbnailPath)
     }
   })
 
@@ -160,7 +160,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
-      await testImage(server.url, 'thumbnail', p.thumbnailPath)
+      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailPath)
     }
   })
 
@@ -176,7 +176,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithoutThumbnail(server)
-      await testImage(server.url, 'thumbnail-playlist', p.thumbnailPath)
+      await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', p.thumbnailPath)
     }
   })
 
@@ -192,7 +192,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
-      await testImage(server.url, 'thumbnail', p.thumbnailPath)
+      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailPath)
     }
   })
 
@@ -224,7 +224,7 @@ describe('Playlist thumbnail', function () {
 
     for (const server of servers) {
       const p = await getPlaylistWithThumbnail(server)
-      await testImage(server.url, 'thumbnail', p.thumbnailPath)
+      await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', p.thumbnailPath)
     }
   })
 

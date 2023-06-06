@@ -384,7 +384,7 @@ describe('Test videos API validator', function () {
       it('Should fail with a big thumbnail file', async function () {
         const fields = baseCorrectParams
         const attaches = {
-          thumbnailfile: join(root(), 'server', 'tests', 'fixtures', 'preview-big.png'),
+          thumbnailfile: join(root(), 'server', 'tests', 'fixtures', 'custom-preview-big.png'),
           fixture: join(root(), 'server', 'tests', 'fixtures', 'video_short.mp4')
         }
 
@@ -404,7 +404,7 @@ describe('Test videos API validator', function () {
       it('Should fail with a big preview file', async function () {
         const fields = baseCorrectParams
         const attaches = {
-          previewfile: join(root(), 'server', 'tests', 'fixtures', 'preview-big.png'),
+          previewfile: join(root(), 'server', 'tests', 'fixtures', 'custom-preview-big.png'),
           fixture: join(root(), 'server', 'tests', 'fixtures', 'video_short.mp4')
         }
 
@@ -615,7 +615,7 @@ describe('Test videos API validator', function () {
     it('Should fail with a big thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        thumbnailfile: join(root(), 'server', 'tests', 'fixtures', 'preview-big.png')
+        thumbnailfile: join(root(), 'server', 'tests', 'fixtures', 'custom-preview-big.png')
       }
 
       await makeUploadRequest({
@@ -647,7 +647,7 @@ describe('Test videos API validator', function () {
     it('Should fail with a big preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        previewfile: join(root(), 'server', 'tests', 'fixtures', 'preview-big.png')
+        previewfile: join(root(), 'server', 'tests', 'fixtures', 'custom-preview-big.png')
       }
 
       await makeUploadRequest({

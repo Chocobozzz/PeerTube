@@ -85,7 +85,7 @@ describe('Test prune storage scripts', function () {
           displayName: 'playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
           videoChannelId: server.store.channel.id,
-          thumbnailfile: 'thumbnail.jpg'
+          thumbnailfile: 'custom-thumbnail.jpg'
         }
       })
     }

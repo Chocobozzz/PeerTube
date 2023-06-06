@@ -223,10 +223,12 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
 
     if (!isValidPasswordProtectedPrivacy(req, res)) return cleanup()
 
-    // multer required unsetting the Content-Type, now we can set it for node-uploadx
+    // Multer required unsetting the Content-Type, now we can set it for node-uploadx
     req.headers['content-type'] = 'application/json; charset=utf-8'
-    // place previewfile in metadata so that uploadx saves it in .META
+
+    // Place thumbnail/previewfile in metadata so that uploadx saves it in .META
     if (req.files?.['previewfile']) req.body.previewfile = req.files['previewfile']
+    if (req.files?.['thumbnailfile']) req.body.thumbnailfile = req.files['thumbnailfile']
 
     return next()
   }

@@ -7,7 +7,7 @@ import { loadLanguages, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO
 import { getLowercaseExtension, pick, uuidRegex } from '@shared/core-utils'
 import { HttpStatusCode, VideoCaption, VideoDetails, VideoPrivacy, VideoResolution } from '@shared/models'
 import { makeRawRequest, PeerTubeServer, VideoEdit, waitJobs } from '@shared/server-commands'
-import { dateIsValid, expectStartWith, testImage } from './checks'
+import { dateIsValid, expectStartWith, testImageGeneratedByFFmpeg } from './checks'
 import { checkWebTorrentWorks } from './webtorrent'
 
 loadLanguages()
@@ -197,11 +197,11 @@ async function completeVideoCheck (options: {
   expect(video.downloadEnabled).to.equal(attributes.downloadEnabled)
 
   expect(video.thumbnailPath).to.exist
-  await testImage(server.url, attributes.thumbnailfile || attributes.fixture, video.thumbnailPath)
+  await testImageGeneratedByFFmpeg(server.url, attributes.thumbnailfile || attributes.fixture, video.thumbnailPath)
 
   if (attributes.previewfile) {
     expect(video.previewPath).to.exist
-    await testImage(server.url, attributes.previewfile, video.previewPath)
+    await testImageGeneratedByFFmpeg(server.url, attributes.previewfile, video.previewPath)
   }
 
   await completeWebVideoFilesCheck({ server, originServer, videoUUID: video.uuid, ...pick(attributes, [ 'fixture', 'files' ]) })

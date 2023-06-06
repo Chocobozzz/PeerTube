@@ -196,7 +196,7 @@ describe('Test video playlists API validator', function () {
         attributes: {
           displayName: 'display name',
           privacy: VideoPlaylistPrivacy.UNLISTED,
-          thumbnailfile: 'thumbnail.jpg',
+          thumbnailfile: 'custom-thumbnail.jpg',
           videoChannelId: server.store.channel.id,
 
           ...attributes
@@ -260,7 +260,7 @@ describe('Test video playlists API validator', function () {
     })
 
     it('Should fail with a thumbnail file too big', async function () {
-      const params = getBase({ thumbnailfile: 'preview-big.png' })
+      const params = getBase({ thumbnailfile: 'custom-preview-big.png' })
 
       await command.create(params)
       await command.update(getUpdate(params, playlist.shortUUID))

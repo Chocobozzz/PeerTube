@@ -424,7 +424,7 @@ describe('Test runner VOD transcoding', function () {
 
       await servers[0].config.enableTranscoding(true, true)
 
-      const attributes = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
+      const attributes = { name: 'audio_with_preview', previewfile: 'custom-preview.jpg', fixture: 'sample.ogg' }
       const { uuid } = await servers[0].videos.upload({ attributes, mode: 'legacy' })
       videoUUID = uuid
 

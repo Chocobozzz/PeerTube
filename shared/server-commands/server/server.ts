@@ -237,7 +237,7 @@ export class PeerTubeServer {
     }
 
     // Share the environment
-    const env = Object.create(process.env)
+    const env = { ...process.env }
     env['NODE_ENV'] = 'test'
     env['NODE_APP_INSTANCE'] = this.internalServerNumber.toString()
     env['NODE_CONFIG'] = JSON.stringify(configOverride)
