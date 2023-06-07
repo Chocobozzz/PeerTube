@@ -149,7 +149,7 @@ describe('Object storage for video static file privacy', function () {
     it('Should upload a password protected video and have appropriate object storage ACL', async function () {
       this.timeout(120000)
 
-      const correctPassword = 'my super password'
+      correctPassword = 'my super password'
       {
         const { uuid } = await server.videos.quickUpload({
           name: 'video',
@@ -224,7 +224,7 @@ describe('Object storage for video static file privacy', function () {
       await makeRawRequest({ url: goodUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
     })
 
-    it('Should correctly check OAuth or video file token', async function () {
+    it('Should correctly check OAuth, video file token of private video', async function () {
       this.timeout(60000)
 
       const badVideoFileToken = await server.videoToken.getVideoFileToken({ token: userToken, videoId: userPrivateVideoUUID })
@@ -239,6 +239,29 @@ describe('Object storage for video static file privacy', function () {
 
         await makeRawRequest({ url, query: { videoFileToken: badVideoFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         await makeRawRequest({ url, query: { videoFileToken: goodVideoFileToken }, expectedStatus: HttpStatusCode.OK_200 })
+
+      }
+    })
+
+    it('Should correctly check OAuth, video file token or video password of password protected video', async function () {
+      this.timeout(60000)
+
+      const headers = { 'video-password': correctPassword }
+      const badVideoFileToken = await server.videoToken.getVideoFileToken({ token: userToken, videoId: userPrivateVideoUUID })
+      const goodVideoFileToken = await server.videoToken.getVideoFileToken({ videoId: passwordProtectedVideoUUID, headers })
+
+      const { webTorrentFile, hlsFile } = await getSampleFileUrls(passwordProtectedVideoUUID)
+
+      for (const url of [ hlsFile, webTorrentFile ]) {
+        await makeRawRequest({ url, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await makeRawRequest({ url, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await makeRawRequest({ url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+
+        await makeRawRequest({ url, query: { videoFileToken: badVideoFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await makeRawRequest({ url, query: { videoFileToken: goodVideoFileToken }, expectedStatus: HttpStatusCode.OK_200 })
+
+        await makeRawRequest({ url, headers: { 'video-password': 'incorrectPassword' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await makeRawRequest({ url, headers, expectedStatus: HttpStatusCode.OK_200 })
       }
     })
 
@@ -306,10 +329,15 @@ describe('Object storage for video static file privacy', function () {
 
         await makeRawRequest({ url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
         await makeRawRequest({ url, query: { videoFileToken: fileToken }, expectedStatus: HttpStatusCode.OK_200 })
-
+        if (videoPassword) {
+          await makeRawRequest({ url, headers: { 'video-password': videoPassword }, expectedStatus: HttpStatusCode.OK_200 })
+        }
         await makeRawRequest({ url, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         await makeRawRequest({ url, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         await makeRawRequest({ url, query: { videoFileToken: unrelatedFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        if (videoPassword) {
+          await makeRawRequest({ url, headers: { 'video-password': 'incorrectPassword' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        }
       }
 
       await stopFfmpeg(ffmpegCommand)

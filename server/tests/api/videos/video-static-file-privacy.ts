@@ -198,8 +198,9 @@ describe('Test video static file privacy', function () {
       token: string
       videoFileToken: string
       videoPassword?: string
+      addPasswordInHeaders?: boolean
     }) {
-      const { id, expectedStatus, token, videoFileToken, videoPassword } = options
+      const { id, expectedStatus, token, videoFileToken, videoPassword, addPasswordInHeaders = true } = options
 
       const video = videoPassword
         ? await server.videos.getWithPassword({ id, password: videoPassword })
@@ -211,6 +212,12 @@ describe('Test video static file privacy', function () {
 
         await makeRawRequest({ url: file.fileUrl, query: { videoFileToken }, expectedStatus })
         await makeRawRequest({ url: file.fileDownloadUrl, query: { videoFileToken }, expectedStatus })
+
+        if (videoPassword) {
+          const headers = { 'video-password': addPasswordInHeaders ? videoPassword : 'incorrectPassword' }
+          await makeRawRequest({ url: file.fileUrl, headers, expectedStatus })
+          await makeRawRequest({ url: file.fileDownloadUrl, headers, expectedStatus })
+        }
       }
 
       const hls = video.streamingPlaylists[0]
@@ -219,6 +226,12 @@ describe('Test video static file privacy', function () {
 
       await makeRawRequest({ url: hls.playlistUrl, query: { videoFileToken }, expectedStatus })
       await makeRawRequest({ url: hls.segmentsSha256Url, query: { videoFileToken }, expectedStatus })
+
+      if (videoPassword) {
+        const headers = { 'video-password': addPasswordInHeaders ? videoPassword : 'incorrectPassword' }
+        await makeRawRequest({ url: hls.playlistUrl, headers, expectedStatus })
+        await makeRawRequest({ url: hls.segmentsSha256Url, headers, expectedStatus })
+      }
     }
 
     before(async function () {
@@ -237,7 +250,7 @@ describe('Test video static file privacy', function () {
       await checkVideoFiles({ id: uuid, expectedStatus: HttpStatusCode.FORBIDDEN_403, token: null, videoFileToken: null })
     })
 
-    it('Should not be able to access an password video files without OAuth token and file token', async function () {
+    it('Should not be able to access an password video files without OAuth token, file token and password', async function () {
       this.timeout(120000)
       const videoPassword = 'my super password'
 
@@ -253,7 +266,8 @@ describe('Test video static file privacy', function () {
         expectedStatus: HttpStatusCode.FORBIDDEN_403,
         token: userToken,
         videoFileToken: unrelatedFileToken,
-        videoPassword
+        videoPassword,
+        addPasswordInHeaders: false
       })
     })
 
@@ -370,6 +384,12 @@ describe('Test video static file privacy', function () {
         await makeRawRequest({ url, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         await makeRawRequest({ url, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         await makeRawRequest({ url, query: { videoFileToken: unrelatedFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+
+        if (videoPassword) {
+          await makeRawRequest({ url, headers: { 'video-password': videoPassword }, expectedStatus: HttpStatusCode.OK_200 })
+          await makeRawRequest({ url, headers: { 'video-password': 'incorrectPassword' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        }
+
       }
 
       await stopFfmpeg(ffmpegCommand)
