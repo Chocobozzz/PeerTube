@@ -60,38 +60,6 @@ function updatePlaylistMiniatureFromUrl (options: {
   return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl, onDisk: true })
 }
 
-function updateVideoMiniatureFromUrl (options: {
-  downloadUrl: string
-  video: MVideoThumbnail
-  type: ThumbnailType
-  size?: ImageSize
-}) {
-  const { downloadUrl, video, type, size } = options
-  const { filename: updatedFilename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
-
-  // Only save the file URL if it is a remote video
-  const fileUrl = video.isOwned()
-    ? null
-    : downloadUrl
-
-  const thumbnailUrlChanged = hasThumbnailUrlChanged(existingThumbnail, downloadUrl, video)
-
-  // Do not change the thumbnail filename if the file did not change
-  const filename = thumbnailUrlChanged
-    ? updatedFilename
-    : existingThumbnail.filename
-
-  const thumbnailCreator = () => {
-    if (thumbnailUrlChanged) {
-      return downloadImageFromWorker({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
-    }
-
-    return Promise.resolve()
-  }
-
-  return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl, onDisk: true })
-}
-
 function updateLocalVideoMiniatureFromExisting (options: {
   inputPath: string
   video: MVideoThumbnail
@@ -157,6 +125,40 @@ function generateLocalVideoMiniature (options: {
   })
 }
 
+// ---------------------------------------------------------------------------
+
+function updateVideoMiniatureFromUrl (options: {
+  downloadUrl: string
+  video: MVideoThumbnail
+  type: ThumbnailType
+  size?: ImageSize
+}) {
+  const { downloadUrl, video, type, size } = options
+  const { filename: updatedFilename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
+
+  // Only save the file URL if it is a remote video
+  const fileUrl = video.isOwned()
+    ? null
+    : downloadUrl
+
+  const thumbnailUrlChanged = hasThumbnailUrlChanged(existingThumbnail, downloadUrl, video)
+
+  // Do not change the thumbnail filename if the file did not change
+  const filename = thumbnailUrlChanged
+    ? updatedFilename
+    : existingThumbnail.filename
+
+  const thumbnailCreator = () => {
+    if (thumbnailUrlChanged) {
+      return downloadImageFromWorker({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
+    }
+
+    return Promise.resolve()
+  }
+
+  return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl, onDisk: true })
+}
+
 function updateRemoteThumbnail (options: {
   fileUrl: string
   video: MVideoThumbnail
@@ -167,12 +169,10 @@ function updateRemoteThumbnail (options: {
   const { fileUrl, video, type, size, onDisk } = options
   const { filename: generatedFilename, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
 
-  const thumbnailUrlChanged = hasThumbnailUrlChanged(existingThumbnail, fileUrl, video)
-
   const thumbnail = existingThumbnail || new ThumbnailModel()
 
   // Do not change the thumbnail filename if the file did not change
-  if (thumbnailUrlChanged) {
+  if (hasThumbnailUrlChanged(existingThumbnail, fileUrl, video)) {
     thumbnail.filename = generatedFilename
   }
 

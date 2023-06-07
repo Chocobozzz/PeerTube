@@ -119,7 +119,7 @@ describe('Test video imports', function () {
           expect(video.name).to.equal('small video - youtube')
 
           {
-            expect(video.thumbnailPath).to.match(new RegExp(`^/static/thumbnails/.+.jpg$`))
+            expect(video.thumbnailPath).to.match(new RegExp(`^/lazy-static/thumbnails/.+.jpg$`))
             expect(video.previewPath).to.match(new RegExp(`^/lazy-static/previews/.+.jpg$`))
 
             const suffix = mode === 'yt-dlp'

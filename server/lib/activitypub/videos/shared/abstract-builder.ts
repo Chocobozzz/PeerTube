@@ -1,7 +1,7 @@
 import { CreationAttributes, Transaction } from 'sequelize/types'
 import { deleteAllModels, filterNonExistingModels } from '@server/helpers/database-utils'
 import { logger, LoggerTagsFn } from '@server/helpers/logger'
-import { updateRemoteThumbnail, updateVideoMiniatureFromUrl } from '@server/lib/thumbnail'
+import { updateRemoteThumbnail } from '@server/lib/thumbnail'
 import { setVideoTags } from '@server/lib/video'
 import { StoryboardModel } from '@server/models/video/storyboard'
 import { VideoCaptionModel } from '@server/models/video/video-caption'
@@ -11,7 +11,6 @@ import { VideoStreamingPlaylistModel } from '@server/models/video/video-streamin
 import {
   MStreamingPlaylistFiles,
   MStreamingPlaylistFilesVideo,
-  MThumbnail,
   MVideoCaption,
   MVideoFile,
   MVideoFullLight,
@@ -42,16 +41,22 @@ export abstract class APVideoAbstractBuilder {
     return getOrCreateAPActor(channel.id, 'all')
   }
 
-  protected tryToGenerateThumbnail (video: MVideoThumbnail): Promise<MThumbnail> {
-    return updateVideoMiniatureFromUrl({
-      downloadUrl: getThumbnailFromIcons(this.videoObject).url,
-      video,
-      type: ThumbnailType.MINIATURE
-    }).catch(err => {
-      logger.warn('Cannot generate thumbnail of %s.', this.videoObject.id, { err, ...this.lTags() })
-
+  protected async setThumbnail (video: MVideoThumbnail, t?: Transaction) {
+    const miniatureIcon = getThumbnailFromIcons(this.videoObject)
+    if (!miniatureIcon) {
+      logger.warn('Cannot find thumbnail in video object', { object: this.videoObject })
       return undefined
+    }
+
+    const miniatureModel = updateRemoteThumbnail({
+      fileUrl: miniatureIcon.url,
+      video,
+      type: ThumbnailType.MINIATURE,
+      size: miniatureIcon,
+      onDisk: false // Lazy download remote thumbnails
     })
+
+    await video.addAndSaveThumbnail(miniatureModel, t)
   }
 
   protected async setPreview (video: MVideoFullLight, t?: Transaction) {

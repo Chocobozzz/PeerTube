@@ -41,7 +41,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     try {
       const channelActor = await this.getOrCreateVideoChannelFromVideoObject()
 
-      const thumbnailModel = await this.tryToGenerateThumbnail(this.video)
+      const thumbnailModel = await this.setThumbnail(this.video)
 
       this.checkChannelUpdateOrThrow(channelActor)
 
@@ -58,8 +58,13 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
         runInReadCommittedTransaction(t => this.setTags(videoUpdated, t)),
         runInReadCommittedTransaction(t => this.setTrackers(videoUpdated, t)),
         runInReadCommittedTransaction(t => this.setStoryboard(videoUpdated, t)),
-        this.setOrDeleteLive(videoUpdated),
-        this.setPreview(videoUpdated)
+        runInReadCommittedTransaction(t => {
+          return Promise.all([
+            this.setPreview(videoUpdated, t),
+            this.setThumbnail(videoUpdated, t)
+          ])
+        }),
+        this.setOrDeleteLive(videoUpdated)
       ])
 
       await runInReadCommittedTransaction(t => this.setCaptions(videoUpdated, t))

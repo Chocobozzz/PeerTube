@@ -262,13 +262,16 @@ async function forgeThumbnail ({ inputPath, video, downloadUrl, type }: {
       type,
       automaticallyGenerated: false
     })
-  } else if (downloadUrl) {
+  }
+
+  if (downloadUrl) {
     try {
       return await updateVideoMiniatureFromUrl({ downloadUrl, video, type })
     } catch (err) {
       logger.warn('Cannot process thumbnail %s from youtube-dl.', downloadUrl, { err })
     }
   }
+
   return null
 }
 

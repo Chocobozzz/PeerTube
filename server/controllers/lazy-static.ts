@@ -6,6 +6,7 @@ import { FILES_CACHE, LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/
 import {
   AvatarPermanentFileCache,
   VideoCaptionsSimpleFileCache,
+  VideoMiniaturePermanentFileCache,
   VideoPreviewsSimpleFileCache,
   VideoStoryboardsSimpleFileCache,
   VideoTorrentsSimpleFileCache
@@ -36,6 +37,12 @@ lazyStaticRouter.use(
 lazyStaticRouter.use(
   LAZY_STATIC_PATHS.BANNERS + ':filename',
   asyncMiddleware(getActorImage),
+  handleStaticError
+)
+
+lazyStaticRouter.use(
+  LAZY_STATIC_PATHS.THUMBNAILS + ':filename',
+  asyncMiddleware(getThumbnail),
   handleStaticError
 )
 
@@ -72,7 +79,6 @@ export {
 }
 
 // ---------------------------------------------------------------------------
-
 const avatarPermanentFileCache = new AvatarPermanentFileCache()
 
 function getActorImage (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -80,6 +86,17 @@ function getActorImage (req: express.Request, res: express.Response, next: expre
 
   return avatarPermanentFileCache.lazyServe({ filename, res, next })
 }
+
+// ---------------------------------------------------------------------------
+const videoMiniaturePermanentFileCache = new VideoMiniaturePermanentFileCache()
+
+function getThumbnail (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const filename = req.params.filename
+
+  return videoMiniaturePermanentFileCache.lazyServe({ filename, res, next })
+}
+
+// ---------------------------------------------------------------------------
 
 async function getPreview (req: express.Request, res: express.Response) {
   const result = await VideoPreviewsSimpleFileCache.Instance.getFilePath(req.params.filename)

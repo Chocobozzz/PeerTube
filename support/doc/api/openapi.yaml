@@ -7129,7 +7129,7 @@ components:
           maxLength: 120
         thumbnailPath:
           type: string
-          example: /static/thumbnails/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
+          example: /lazy-static/thumbnails/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
         previewPath:
           type: string
           example: /lazy-static/previews/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg

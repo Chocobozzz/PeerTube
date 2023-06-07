@@ -21,7 +21,7 @@ import { AttributesOnly } from '@shared/typescript-utils'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
-import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
+import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
 import { VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
 
@@ -110,7 +110,7 @@ export class ThumbnailModel extends Model<Partial<AttributesOnly<ThumbnailModel>
     [ThumbnailType.MINIATURE]: {
       label: 'miniature',
       directory: CONFIG.STORAGE.THUMBNAILS_DIR,
-      staticPath: STATIC_PATHS.THUMBNAILS
+      staticPath: LAZY_STATIC_PATHS.THUMBNAILS
     },
     [ThumbnailType.PREVIEW]: {
       label: 'preview',
@@ -200,5 +200,9 @@ export class ThumbnailModel extends Model<Partial<AttributesOnly<ThumbnailModel>
       .catch(err => logger.error('Cannot remove previous thumbnail file %s.', previousPath, { err }))
 
     this.previousThumbnailFilename = undefined
+  }
+
+  isOwned () {
+    return !this.fileUrl
   }
 }

@@ -747,6 +747,7 @@ const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
 
 // Express static paths (router)
 const STATIC_PATHS = {
+  // TODO: deprecated in v6, to remove
   THUMBNAILS: '/static/thumbnails/',
 
   WEBSEED: '/static/webseed/',
@@ -765,6 +766,7 @@ const STATIC_DOWNLOAD_PATHS = {
   HLS_VIDEOS: '/download/streaming-playlists/hls/videos/'
 }
 const LAZY_STATIC_PATHS = {
+  THUMBNAILS: '/lazy-static/thumbnails/',
   BANNERS: '/lazy-static/banners/',
   AVATARS: '/lazy-static/avatars/',
   PREVIEWS: '/lazy-static/previews/',

@@ -32,7 +32,7 @@ import {
 import {
   ACTIVITY_PUB,
   CONSTRAINTS_FIELDS,
-  STATIC_PATHS,
+  LAZY_STATIC_PATHS,
   THUMBNAILS_SIZE,
   VIDEO_PLAYLIST_PRIVACIES,
   VIDEO_PLAYLIST_TYPES,
@@ -592,13 +592,13 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
   getThumbnailUrl () {
     if (!this.hasThumbnail()) return null
 
-    return WEBSERVER.URL + STATIC_PATHS.THUMBNAILS + this.Thumbnail.filename
+    return WEBSERVER.URL + LAZY_STATIC_PATHS.THUMBNAILS + this.Thumbnail.filename
   }
 
   getThumbnailStaticPath () {
     if (!this.hasThumbnail()) return null
 
-    return join(STATIC_PATHS.THUMBNAILS, this.Thumbnail.filename)
+    return join(LAZY_STATIC_PATHS.THUMBNAILS, this.Thumbnail.filename)
   }
 
   getWatchStaticPath () {
