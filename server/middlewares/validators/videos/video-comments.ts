@@ -1,5 +1,5 @@
 import express from 'express'
-import { body, header, param, query } from 'express-validator'
+import { body, param, query } from 'express-validator'
 import { MUserAccountUrl } from '@server/types/models'
 import { HttpStatusCode, UserRight } from '@shared/models'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
@@ -14,7 +14,8 @@ import {
   doesVideoCommentExist,
   doesVideoCommentThreadExist,
   doesVideoExist,
-  isValidVideoIdParam
+  isValidVideoIdParam,
+  isValidVideoPasswordHeader
 } from '../shared'
 
 const listVideoCommentsValidator = [
@@ -51,9 +52,7 @@ const listVideoCommentsValidator = [
 
 const listVideoCommentThreadsValidator = [
   isValidVideoIdParam('videoId'),
-  header('video-password')
-    .optional()
-    .isString(),
+  isValidVideoPasswordHeader(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -70,9 +69,7 @@ const listVideoThreadCommentsValidator = [
 
   param('threadId')
     .custom(isIdValid),
-  header('video-password')
-    .optional()
-    .isString(),
+  isValidVideoPasswordHeader(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -90,9 +87,7 @@ const addVideoCommentThreadValidator = [
 
   body('text')
     .custom(isValidVideoCommentText),
-  header('video-password')
-    .optional()
-    .isString(),
+  isValidVideoPasswordHeader(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -111,9 +106,7 @@ const addVideoCommentReplyValidator = [
   isValidVideoIdParam('videoId'),
 
   param('commentId').custom(isIdValid),
-  header('video-password')
-    .optional()
-    .isString(),
+  isValidVideoPasswordHeader(),
 
   body('text').custom(isValidVideoCommentText),
 

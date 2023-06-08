@@ -52,9 +52,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     const { video, videoChannels, videoCaptions, videoSource, liveVideo, videoPassword } = videoData
 
     this.videoDetails = video
-    this.videoEdit = new VideoEdit(this.videoDetails)
-
-    if (videoPassword) this.videoEdit.videoPassword = videoPassword.password
+    this.videoEdit = new VideoEdit(this.videoDetails, videoPassword)
 
     this.userVideoChannels = videoChannels
     this.videoCaptions = videoCaptions

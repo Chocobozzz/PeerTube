@@ -83,7 +83,7 @@ export interface CommonOptions extends CustomizationOptions {
   videoShortUUID: string
 
   serverUrl: string
-  requiresAuth: boolean
+  requiresUserAuth: boolean
   videoFileToken: () => string
   requiresPassword: boolean
   videoPassword: () => string

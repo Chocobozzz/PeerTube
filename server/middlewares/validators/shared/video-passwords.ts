@@ -1,9 +1,15 @@
 import express from 'express'
 import { MVideo, MVideoId, MVideoPassword } from '@server/types/models'
-import { HttpStatusCode, ServerErrorCode, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import { forceNumber } from '@shared/core-utils'
 import { VideoPasswordModel } from '@server/models/video/video-password'
-import { logger } from '@server/helpers/logger'
+import { header } from 'express-validator'
+
+function isValidVideoPasswordHeader () {
+  return header('x-peertube-video-password')
+    .optional()
+    .isString()
+}
 
 function isVideoPasswordProtected (video: MVideo, res: express.Response) {
   if (video.privacy !== VideoPrivacy.PASSWORD_PROTECTED) {
@@ -19,7 +25,7 @@ function isVideoPasswordProtected (video: MVideo, res: express.Response) {
 
 async function doesVideoPasswordExist (idArg: number | string, video: MVideoId, res: express.Response) {
   const id = forceNumber(idArg)
-  const videoPassword = await VideoPasswordModel.loadById(id)
+  const videoPassword = await VideoPasswordModel.loadByIdAndVideo({ id, videoId: video.id })
 
   if (!videoPassword) {
     res.fail({
@@ -29,15 +35,8 @@ async function doesVideoPasswordExist (idArg: number | string, video: MVideoId, 
     return false
   }
 
-  if (videoPassword.videoId !== video.id) {
-    res.fail({
-      type: ServerErrorCode.PASSWORD_NOT_ASSOCIATED_TO_VIDEO,
-      message: 'Video password is not associated to this video.'
-    })
-    return false
-  }
   res.locals.videoPassword = videoPassword
-  logger.error(JSON.stringify(res.locals.videoPassword) + '\n\n\n\n hello 1')
+
   return true
 }
 
@@ -46,17 +45,17 @@ async function isVideoPasswordDeletable (password: MVideoPassword, video: MVideo
 
   if (passwords.length <= 1) {
     res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
+      status: HttpStatusCode.BAD_REQUEST_400,
       message: 'Cannot delete the last password of the protected video'
     })
     return false
   }
 
-  logger.error(JSON.stringify(res.locals.videoPassword) + '\n\n\n\n hello 2')
   return true
 }
 
 export {
+  isValidVideoPasswordHeader,
   isVideoPasswordProtected,
   doesVideoPasswordExist,
   isVideoPasswordDeletable

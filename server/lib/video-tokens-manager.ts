@@ -32,7 +32,7 @@ class VideoTokensManager {
     return { token, expires }
   }
 
-  createForPasswordprotectedVideo (options: {
+  createForPasswordProtectedVideo (options: {
     videoUUID: string
   }) {
     const token = buildUUID()

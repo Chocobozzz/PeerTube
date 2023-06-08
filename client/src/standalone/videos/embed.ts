@@ -6,7 +6,7 @@ import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
 import { HTMLServerConfig, ResultList, VideoDetails, VideoPlaylist, VideoPlaylistElement, VideoState } from '../../../../shared/models'
 import { PeertubePlayerManager } from '../../assets/player'
 import { TranslationsManager } from '../../assets/player/translations-manager'
-import { getParamString, logger, videoRequiresAuth } from '../../root-helpers'
+import { getParamString, logger, videoRequiresUserAuth } from '../../root-helpers'
 import { PeerTubeEmbedApi } from './embed-api'
 import {
   AuthHTTP,
@@ -205,7 +205,7 @@ export class PeerTubeEmbed {
           ? await this.videoFetcher.loadLive(videoInfo)
           : undefined
 
-        const videoFileToken = videoRequiresAuth(videoInfo)
+        const videoFileToken = videoRequiresUserAuth(videoInfo)
           ? await this.videoFetcher.loadVideoToken(videoInfo)
           : undefined
 

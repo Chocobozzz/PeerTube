@@ -12,16 +12,14 @@ import {
 } from '../shared'
 import { body, param } from 'express-validator'
 import { isIdValid } from '@server/helpers/custom-validators/misc'
-import { isPasswordListValid } from '@server/helpers/custom-validators/videos'
-
-const fetchType = 'only-video'
 
 const listVideoPasswordValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, fetchType)) return
+
+    if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
     if (!isVideoPasswordProtected(res.locals.onlyVideo, res)) return
 
     return next()
@@ -29,14 +27,14 @@ const listVideoPasswordValidator = [
 ]
 
 const updateVideoPasswordListValidator = [
-  body('passwords')
-    .custom(isPasswordListValid)
-    .withMessage('Invalid password list. Please provide a non-empty list of strings of at least 2 characters with no duplicates.'),
+  body('passwords'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, fetchType)) return
+
+    if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
     if (!isVideoPasswordProtected(res.locals.onlyVideo, res)) return
+
     return next()
   }
 ]
@@ -49,7 +47,8 @@ const removeVideoPasswordValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, fetchType)) return
+
+    if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
     if (!isVideoPasswordProtected(res.locals.onlyVideo, res)) return
     if (!await doesVideoPasswordExist(req.params.passwordId, res.locals.onlyVideo, res)) return
     if (!await isVideoPasswordDeletable(res.locals.videoPassword, res.locals.onlyVideo, res)) return
@@ -75,12 +74,12 @@ function checkUserCanDeleteVideoPasswords (user: MUserAccountUrl, video: MVideoF
   const userAccount = user.Account
 
   if (
-    user.hasRight(UserRight.MANAGE_VIDEO_FILES) === false && // Not a moderator
+    user.hasRight(UserRight.UPDATE_ANY_VIDEO) === false && // Not a moderator
     video.VideoChannel.accountId !== userAccount.id // Not the video owner
   ) {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot remove video passwords of another user'
+      message: 'Cannot remove passwords of another user\'s video'
     })
     return false
   }

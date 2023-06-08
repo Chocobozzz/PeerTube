@@ -6,6 +6,7 @@ import { getSort, throwIfNotValid } from '../shared'
 import { FindOptions, Transaction } from 'sequelize'
 import { MVideoPassword } from '@server/types/models'
 import { isPasswordValid } from '@server/helpers/custom-validators/videos'
+import { pick } from '@shared/core-utils'
 
 @DefaultScope(() => ({
   include: [
@@ -53,27 +54,27 @@ export class VideoPasswordModel extends Model<Partial<AttributesOnly<VideoPasswo
     const query: FindOptions = {
       where: {
         videoId
-      }
+      },
+      transaction: t
     }
 
-    if (t !== undefined) query.transaction = t
-
-    return await VideoPasswordModel.findAll(query)
+    return VideoPasswordModel.findAll(query)
   }
 
-  static async loadById (id: number, t?: Transaction): Promise<MVideoPassword> {
+  static async loadByIdAndVideo (options: { id: number, videoId: number, t?: Transaction }): Promise<MVideoPassword> {
+    const { id, videoId, t } = options
     const query: FindOptions = {
       where: {
-        id
-      }
+        id,
+        videoId
+      },
+      transaction: t
     }
-
-    if (t !== undefined) query.transaction = t
 
     return VideoPasswordModel.findOne(query)
   }
 
-  static async listPasswordsForApi (options: {
+  static async listPasswords (options: {
     start: number
     count: number
     sort: string
@@ -91,43 +92,35 @@ export class VideoPasswordModel extends Model<Partial<AttributesOnly<VideoPasswo
     return { total, data }
   }
 
-  static async addPasswordsForApi (passwords: string[], videoId: number, transaction?: Transaction): Promise<void> {
-    const options = transaction ? { transaction } : {}
-
+  static async addPasswords (passwords: string[], videoId: number, transaction?: Transaction): Promise<void> {
     for (const password of passwords) {
       await VideoPasswordModel.create({
         password,
         videoId
-      }, options)
+      }, { transaction })
     }
   }
 
-  static async deletePasswordsForApi (videoId: number, transaction?: Transaction): Promise<number> {
-    const options = transaction ? { transaction } : {}
-
-    const deletedRows = await VideoPasswordModel.destroy({
+  static async deleteAllPasswords (videoId: number, transaction?: Transaction) {
+    await VideoPasswordModel.destroy({
       where: { videoId },
-      ...options
+      transaction
     })
-
-    return deletedRows
   }
 
-  static async deletePasswordForApi (passwordId: number, transaction?: Transaction) {
-    const options = transaction ? { transaction } : {}
-
-    return await VideoPasswordModel.destroy({
+  static async deletePassword (passwordId: number, transaction?: Transaction) {
+    await VideoPasswordModel.destroy({
       where: { id: passwordId },
-      ...options
+      transaction
     })
   }
 
-  static async isACorrectPassword (videoId: number, password: string) {
-    const query: FindOptions = {
-      where: {
-        videoId,
-        password
-      }
+  static async isACorrectPassword (options: {
+    videoId: number
+    password: string
+  }) {
+    const query = {
+      where: pick(options, [ 'videoId', 'password' ])
     }
 
     return await VideoPasswordModel.count(query) === 1
@@ -137,7 +130,9 @@ export class VideoPasswordModel extends Model<Partial<AttributesOnly<VideoPasswo
     return {
       id: this.id,
       password: this.password,
-      videoId: this.videoId
+      videoId: this.videoId,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
     }
   }
 }

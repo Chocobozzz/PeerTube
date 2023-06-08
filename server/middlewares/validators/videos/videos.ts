@@ -22,7 +22,6 @@ import {
 import { isBooleanBothQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
 import {
   areVideoTagsValid,
-  isPasswordListValid,
   isScheduleVideoUpdatePrivacyValid,
   isValidPasswordProtectedPrivacy,
   isVideoCategoryValid,
@@ -57,7 +56,8 @@ import {
   doesVideoChannelOfAccountExist,
   doesVideoExist,
   doesVideoFileOfVideoExist,
-  isValidVideoIdParam
+  isValidVideoIdParam,
+  isValidVideoPasswordHeader
 } from '../shared'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
@@ -73,9 +73,7 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
   body('videoPasswords')
-    .optional()
-    .custom(isPasswordListValid)
-    .withMessage('Invalid password list. Please provide a non-empty list of strings of at least 2 characters with no duplicates.'),
+    .optional(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
@@ -183,9 +181,7 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
   body('videoPasswords')
-    .optional()
-    .custom(isPasswordListValid)
-    .withMessage('Invalid password list. Please provide a non-empty list of strings of at least 2 characters with no duplicates.'),
+    .optional(),
 
   header('x-upload-content-length')
     .isNumeric()
@@ -242,9 +238,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
   body('videoPasswords')
-    .optional()
-    .custom(isPasswordListValid)
-    .withMessage('Invalid password list. Please provide a non-empty list of strings of at least 2 characters with no duplicates.'),
+    .optional(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
@@ -301,9 +295,7 @@ const videosCustomGetValidator = (fetchType: 'for-api' | 'all' | 'only-video' | 
   return [
     isValidVideoIdParam('id'),
 
-    header('video-password')
-      .optional()
-      .isString(),
+    isValidVideoPasswordHeader(),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       if (areValidationErrors(req, res)) return

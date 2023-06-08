@@ -2362,7 +2362,7 @@ paths:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
-        - $ref: '#/components/parameters/videoPassword'
+        - $ref: '#/components/parameters/videoPasswordHeader'
       responses:
         '200':
           description: successful operation
@@ -2596,7 +2596,7 @@ paths:
         - Video
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
-        - $ref: '#/components/parameters/videoPassword'
+        - $ref: '#/components/parameters/videoPasswordHeader'
       responses:
         '200':
           description: successful operation
@@ -2627,7 +2627,7 @@ paths:
         - Video
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
-        - $ref: '#/components/parameters/videoPassword'
+        - $ref: '#/components/parameters/videoPasswordHeader'
       responses:
         '200':
           description: successful operation
@@ -3277,7 +3277,7 @@ paths:
         - Live Videos
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
-        - $ref: '#/components/parameters/videoPassword'
+        - $ref: '#/components/parameters/videoPasswordHeader'
       responses:
         '200':
           description: successful operation
@@ -3676,7 +3676,7 @@ paths:
         - Video Captions
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
-        - $ref: '#/components/parameters/videoPassword'
+        - $ref: '#/components/parameters/videoPasswordHeader'
       responses:
         '200':
           description: successful operation
@@ -3785,7 +3785,7 @@ paths:
         '400':
           description: video is not password protected
 
-  /api/v1/videos/{id}/passwords/{passwordId}:
+  /api/v1/videos/{id}/passwords/{videoPasswordId}:
     delete:
       summary: Delete a video password
       security:
@@ -4630,7 +4630,7 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/commentsSort'
-        - $ref: '#/components/parameters/videoPassword'
+        - $ref: '#/components/parameters/videoPasswordHeader'
       responses:
         '200':
           description: successful operation
@@ -4677,7 +4677,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/threadId'
-        - $ref: '#/components/parameters/videoPassword'
+        - $ref: '#/components/parameters/videoPasswordHeader'
       responses:
         '200':
           description: successful operation
@@ -4696,7 +4696,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/commentId'
-        - $ref: '#/components/parameters/videoPassword'
+        - $ref: '#/components/parameters/videoPasswordHeader'
       responses:
         '200':
           description: successful operation
@@ -4747,7 +4747,7 @@ paths:
         - Video Rates
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
-        - $ref: '#/components/parameters/videoPassword'
+        - $ref: '#/components/parameters/videoPasswordHeader'
       requestBody:
         content:
           application/json:
@@ -6612,8 +6612,8 @@ components:
       description: The video password id
       schema:
         $ref: '#/components/schemas/id'
-    videoPassword:
-      name: video-password
+    videoPasswordHeader:
+      name: x-peertube-video-password
       description: Required on password protected video
       in: header
       required: false

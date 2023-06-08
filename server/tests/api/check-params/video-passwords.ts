@@ -327,7 +327,7 @@ describe('Test video passwords validator', function () {
         token: userAccessToken,
         fields,
         headers:{
-          'video-password': 'password1'
+          'x-peertube-video-password': 'password1'
         },
         expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
@@ -369,7 +369,7 @@ describe('Test video passwords validator', function () {
           token: server.accessToken,
           fields,
           headers:{
-            'video-password': 'password1'
+            'x-peertube-video-password': 'password1'
           },
           expectedStatus: HttpStatusCode.OK_200
         })
@@ -403,7 +403,7 @@ describe('Test video passwords validator', function () {
         url: server.url,
         path: path + video.shortUUID + '/captions',
         headers:{
-          'video-password': 'password1'
+          'x-peertube-video-password': 'password1'
         },
         expectedStatus: HttpStatusCode.OK_200
       })
@@ -418,7 +418,7 @@ describe('Test video passwords validator', function () {
 
     it('Should fail for non password protected video', async function () {
       publicVideo = await server.videos.quickUpload({ name: 'public video' })
-      passwords = (await server.videoPasswords.listVideoPasswords({ videoId: video.id })).data
+      passwords = (await server.videoPasswords.list({ videoId: video.id })).data
       await server.videoPasswords.remove({ id: passwords[0].id, videoId: publicVideo.id, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 

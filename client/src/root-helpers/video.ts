@@ -41,7 +41,7 @@ function isP2PEnabled (video: Video, config: HTMLServerConfig, userP2PEnabled: b
   return userP2PEnabled
 }
 
-function videoRequiresAuth (video: Video, videoPassword?: string) {
+function videoRequiresUserAuth (video: Video, videoPassword?: string) {
   return new Set([ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL ]).has(video.privacy.id) ||
     (video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED && !videoPassword)
 
@@ -54,7 +54,7 @@ function videoRequiresFileToken (video: Video, videoPassword?: string) {
 export {
   buildVideoOrPlaylistEmbed,
   isP2PEnabled,
-  videoRequiresAuth,
+  videoRequiresUserAuth,
   videoRequiresFileToken
 }
 

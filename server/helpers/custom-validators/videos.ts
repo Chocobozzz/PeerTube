@@ -111,13 +111,7 @@ function isVideoPrivacyValid (value: number) {
 }
 
 function isScheduleVideoUpdatePrivacyValid (value: number) {
-  const validPrivacyValues = [
-    VideoPrivacy.UNLISTED,
-    VideoPrivacy.PUBLIC,
-    VideoPrivacy.INTERNAL
-  ]
-
-  return validPrivacyValues.includes(value)
+  return value === VideoPrivacy.UNLISTED || value === VideoPrivacy.PUBLIC || value === VideoPrivacy.INTERNAL
 }
 
 function isVideoOriginallyPublishedAtValid (value: string | null) {
@@ -148,32 +142,48 @@ function isVideoMagnetUriValid (value: string) {
 }
 
 function isPasswordValid (password: string) {
-  return password.length >= 2
-}
-
-function isPasswordListValid (passwords: string[]) {
-  if (!Array.isArray(passwords)) return false
-
-  if (passwords.length === 0) return false
-
-  if (new Set(passwords).size !== passwords.length) return false // Duplicates found in the array
-
-  for (const password of passwords) {
-    if (typeof password !== 'string') return false
-    if (!isPasswordValid(password)) return false // Password length less than 2 is not valid
-  }
-
-  return true
+  return password.length >= 2 && password.length < 100
 }
 
 function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
-  if (req.body.privacy === VideoPrivacy.PASSWORD_PROTECTED && !exists(req.body.videoPasswords)) {
+  const fail = (message: string) => {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
-      message: 'Cannot upload a password protected video without providing a password'
+      message
     })
     return false
   }
+
+  if (req.body.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
+    if (!exists(req.body.videoPasswords)) {
+      return fail('Video passwords are missing.')
+    }
+
+    const passwords = req.body.videoPasswords
+
+    if (!Array.isArray(passwords)) {
+      return fail('Video passwords should be an array.')
+    }
+
+    if (passwords.length === 0) {
+      return fail('At least one video password is required.')
+    }
+
+    if (new Set(passwords).size !== passwords.length) {
+      return fail('Duplicate video passwords are not allowed.')
+    }
+
+    for (const password of passwords) {
+      if (typeof password !== 'string') {
+        return fail('Video password should be a string.')
+      }
+
+      if (!isPasswordValid(password)) {
+        return fail('Invalid video password. Password length should be at least 2 characters and no more than 100 characters.')
+      }
+    }
+  }
+
   return true
 }
 
@@ -206,6 +216,5 @@ export {
   isVideoSupportValid,
   isVideoFilterValid,
   isPasswordValid,
-  isPasswordListValid,
   isValidPasswordProtectedPrivacy
 }

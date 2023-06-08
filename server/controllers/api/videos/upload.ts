@@ -197,7 +197,7 @@ async function addVideo (options: {
     })
 
     if (videoInfo.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
-      await VideoPasswordModel.addPasswordsForApi(videoInfo.videoPasswords, video.id, t)
+      await VideoPasswordModel.addPasswords(videoInfo.videoPasswords, video.id, t)
     }
 
     auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))

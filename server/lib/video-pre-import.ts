@@ -80,7 +80,7 @@ async function insertFromImportIntoDB (parameters: {
     if (previewModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
 
     if (videoCreated.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
-      await VideoPasswordModel.addPasswordsForApi(videoPasswords, video.id, t)
+      await VideoPasswordModel.addPasswords(videoPasswords, video.id, t)
     }
 
     await autoBlacklistVideoIfNeeded({

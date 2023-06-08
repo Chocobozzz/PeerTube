@@ -160,7 +160,7 @@ export class VideosCommand extends AbstractCommand {
     return this.getRequestBody<VideoDetails>({
       ...options,
       headers:{
-        'video-password': options.password
+        'x-peertube-video-password': options.password
       },
       path,
       implicitToken: false,

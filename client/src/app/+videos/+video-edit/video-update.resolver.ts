@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot } from '@angular/router'
 import { AuthService } from '@app/core'
 import { listUserChannelsForSelect } from '@app/helpers'
-import { VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
+import { VideoCaptionService, VideoDetails, VideoService, VideoPasswordService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { VideoPrivacy } from '@shared/models/videos'
 
@@ -14,7 +14,8 @@ export class VideoUpdateResolver {
     private videoService: VideoService,
     private liveVideoService: LiveVideoService,
     private authService: AuthService,
-    private videoCaptionService: VideoCaptionService
+    private videoCaptionService: VideoCaptionService,
+    private videoPasswordService: VideoPasswordService
   ) {
   }
 
@@ -50,7 +51,7 @@ export class VideoUpdateResolver {
         : of(undefined),
 
       video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
-        ? this.videoService.getVideoPasswords({ videoUUID: video.uuid })
+        ? this.videoPasswordService.getVideoPasswords({ videoUUID: video.uuid })
         : of(undefined)
     ]
   }

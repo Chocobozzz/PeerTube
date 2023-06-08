@@ -1,5 +1,5 @@
 import express from 'express'
-import { body, header, param, query } from 'express-validator'
+import { body, param, query } from 'express-validator'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { VideoRateType } from '../../../../shared/models/videos'
 import { isAccountNameValid } from '../../../helpers/custom-validators/accounts'
@@ -7,16 +7,14 @@ import { isIdValid } from '../../../helpers/custom-validators/misc'
 import { isRatingValid } from '../../../helpers/custom-validators/video-rates'
 import { isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { areValidationErrors, checkCanSeeVideo, doesVideoExist, isValidVideoIdParam } from '../shared'
+import { areValidationErrors, checkCanSeeVideo, doesVideoExist, isValidVideoIdParam, isValidVideoPasswordHeader } from '../shared'
 
 const videoUpdateRateValidator = [
   isValidVideoIdParam('id'),
 
   body('rating')
     .custom(isVideoRatingTypeValid),
-  header('video-password')
-    .optional()
-    .isString(),
+  isValidVideoPasswordHeader(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

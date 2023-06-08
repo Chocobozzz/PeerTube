@@ -1,10 +1,10 @@
 import { Observable, of } from 'rxjs'
 import { catchError, map, switchMap } from 'rxjs/operators'
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, ServerService } from '@app/core'
 import { objectToFormData, sortBy } from '@app/helpers'
-import { VideoService } from '@app/shared/shared-main/video'
+import { VideoPasswordService, VideoService } from '@app/shared/shared-main/video'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
 import { ResultList, VideoCaption } from '@shared/models'
 import { environment } from '../../../../environments/environment'
@@ -19,9 +19,7 @@ export class VideoCaptionService {
   ) {}
 
   listCaptions (videoId: string, videoPassword?: string): Observable<ResultList<VideoCaption>> {
-    const headers = videoPassword
-      ? new HttpHeaders().set('video-password', videoPassword)
-      : undefined
+    const headers = VideoPasswordService.getVideoPasswordHeader(videoPassword)
 
     return this.authHttp.get<ResultList<VideoCaption>>(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions`, { headers })
                .pipe(

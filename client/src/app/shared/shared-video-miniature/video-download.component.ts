@@ -7,7 +7,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { logger } from '@root-helpers/logger'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { objectKeysTyped, pick } from '@shared/core-utils'
-import { VideoCaption, VideoFile, VideoPrivacy } from '@shared/models'
+import { VideoCaption, VideoFile } from '@shared/models'
 import { BytesPipe, NumberFormatterPipe, VideoDetails, VideoFileTokenService, VideoService } from '../shared-main'
 
 type DownloadType = 'video' | 'subtitles'
@@ -91,8 +91,8 @@ export class VideoDownloadComponent {
       this.subtitleLanguageId = this.videoCaptions[0].language.id
     }
 
-    if (videoRequiresFileToken(this.video)) {
-      this.videoFileTokenService.getVideoFileToken(this.video.uuid, this.videoPassword)
+    if (this.isConfidentialVideo()) {
+      this.videoFileTokenService.getVideoFileToken({ videoUUID: this.video.uuid, videoPassword: this.videoPassword })
         .subscribe(({ token }) => this.videoFileToken = token)
     }
 
@@ -203,7 +203,8 @@ export class VideoDownloadComponent {
   }
 
   isConfidentialVideo () {
-    return new Set([ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL, VideoPrivacy.PASSWORD_PROTECTED ]).has(this.video.privacy.id)
+    return videoRequiresFileToken(this.video)
+
   }
 
   switchToType (type: DownloadType) {

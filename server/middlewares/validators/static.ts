@@ -1,5 +1,5 @@
 import express from 'express'
-import { header, query } from 'express-validator'
+import { query } from 'express-validator'
 import { LRUCache } from 'lru-cache'
 import { basename, dirname } from 'path'
 import { exists, isSafePeerTubeFilenameWithoutExtension, isUUIDValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc'
@@ -9,7 +9,7 @@ import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { MStreamingPlaylist, MVideoFile, MVideoThumbnail } from '@server/types/models'
 import { HttpStatusCode } from '@shared/models'
-import { areValidationErrors, checkCanAccessVideoStaticFiles } from './shared'
+import { areValidationErrors, checkCanAccessVideoStaticFiles, isValidVideoPasswordHeader } from './shared'
 
 type LRUValue = {
   allowed: boolean
@@ -25,9 +25,7 @@ const staticFileTokenBypass = new LRUCache<string, LRUValue>({
 const ensureCanAccessVideoPrivateWebTorrentFiles = [
   query('videoFileToken').optional().custom(exists),
 
-  header('video-password')
-  .optional()
-  .isString(),
+  isValidVideoPasswordHeader(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -77,9 +75,7 @@ const ensureCanAccessPrivateVideoHLSFiles = [
     .optional()
     .customSanitizer(isSafePeerTubeFilenameWithoutExtension),
 
-  header('video-password')
-    .optional()
-    .isString(),
+  isValidVideoPasswordHeader(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -175,15 +171,11 @@ async function isHLSAllowed (req: express.Request, res: express.Response, videoU
 }
 
 function extractTokenOrDie (req: express.Request, res: express.Response) {
-  const videoPassword = req.header('video-password')
-  let token: string
-
-  if (exists(videoPassword)) token = videoPassword
-  else token = res.locals.oauth?.token.accessToken || req.query.videoFileToken
+  const token = req.header('x-peertube-video-password') || req.query.videoFileToken || res.locals.oauth?.token.accessToken
 
   if (!token) {
     return res.fail({
-      message: 'Bearer token or video password is missing in headers or video file token is missing in URL query parameters',
+      message: 'Video password header, video file token query parameter and bearer token are all missing', //
       status: HttpStatusCode.FORBIDDEN_403
     })
   }

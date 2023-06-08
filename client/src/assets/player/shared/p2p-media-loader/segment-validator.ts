@@ -13,17 +13,17 @@ function segmentValidatorFactory (options: {
   serverUrl: string
   segmentsSha256Url: string
   authorizationHeader: () => string
-  requiresAuth: boolean
+  requiresUserAuth: boolean
   requiresPassword: boolean
   videoPassword: () => string
 }) {
-  const { serverUrl, segmentsSha256Url, authorizationHeader, requiresAuth, requiresPassword, videoPassword } = options
+  const { serverUrl, segmentsSha256Url, authorizationHeader, requiresUserAuth, requiresPassword, videoPassword } = options
 
   let segmentsJSON = fetchSha256Segments({
     serverUrl,
     segmentsSha256Url,
     authorizationHeader,
-    requiresAuth,
+    requiresUserAuth,
     requiresPassword,
     videoPassword
   })
@@ -47,7 +47,7 @@ function segmentValidatorFactory (options: {
         serverUrl,
         segmentsSha256Url,
         authorizationHeader,
-        requiresAuth,
+        requiresUserAuth,
         requiresPassword,
         videoPassword
       })
@@ -94,17 +94,17 @@ function fetchSha256Segments (options: {
   serverUrl: string
   segmentsSha256Url: string
   authorizationHeader: () => string
-  requiresAuth: boolean
+  requiresUserAuth: boolean
   requiresPassword: boolean
   videoPassword: () => string
 }): Promise<SegmentsJSON> {
-  const { serverUrl, segmentsSha256Url, requiresAuth, authorizationHeader, requiresPassword, videoPassword } = options
+  const { serverUrl, segmentsSha256Url, requiresUserAuth, authorizationHeader, requiresPassword, videoPassword } = options
 
-  const headers = requiresAuth && isSameOrigin(serverUrl, segmentsSha256Url)
-    ? { Authorization: authorizationHeader() }
-    : requiresPassword
-      ? { 'video-password': videoPassword() }
-      : {}
+  let headers = {}
+  if (isSameOrigin(serverUrl, segmentsSha256Url)) {
+    if (requiresUserAuth) headers = { Authorization: authorizationHeader() }
+    if (requiresPassword) headers = { 'x-peertube-video-password': videoPassword() }
+  }
 
   return fetch(segmentsSha256Url, { headers })
     .then(res => res.json() as Promise<SegmentsJSON>)

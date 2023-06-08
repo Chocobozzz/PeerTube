@@ -24,7 +24,6 @@ import {
   MStreamingPlaylistRedundanciesAll,
   MStreamingPlaylistRedundanciesOpt
 } from './video-streaming-playlist'
-import { MVideoPassword } from './video-password'
 
 type Use<K extends keyof VideoModel, M> = PickWith<VideoModel, K, M>
 
@@ -88,10 +87,6 @@ export type MVideoWithCaptions =
 export type MVideoWithStreamingPlaylist =
   MVideo &
   Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
-
-export type MVideoWithPasswords =
-  MVideo &
-  Use<'VideoPasswords', MVideoPassword[]>
 
 // ############################################################################
 

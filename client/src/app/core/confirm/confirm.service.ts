@@ -34,7 +34,12 @@ export class ConfirmService {
     return firstValueFrom(this.extractConfirmed(this.confirmResponse.asObservable()))
   }
 
-  confirmWithPassword (options: { message: string, title?: string, confirmButtonText?: string, hasError?: boolean }) {
+  confirmWithPassword (options: {
+    message: string
+    title?: string
+    confirmButtonText?: string
+    hasError?: boolean
+  }) {
     const { message, title = '', confirmButtonText, hasError = false } = options
     this.showConfirm.next({ type: 'confirm-password', title, message, confirmButtonText, hasError })
 

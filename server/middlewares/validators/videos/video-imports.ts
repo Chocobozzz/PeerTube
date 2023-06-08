@@ -10,7 +10,6 @@ import { VideoImportCreate } from '@shared/models/videos/import/video-import-cre
 import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { isVideoImportTargetUrlValid, isVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports'
 import {
-  isPasswordListValid,
   isValidPasswordProtectedPrivacy,
   isVideoMagnetUriValid,
   isVideoNameValid
@@ -44,9 +43,7 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
       `Should have a video name between ${CONSTRAINTS_FIELDS.VIDEOS.NAME.min} and ${CONSTRAINTS_FIELDS.VIDEOS.NAME.max} characters long`
     ),
   body('videoPasswords')
-    .optional()
-    .custom(isPasswordListValid)
-    .withMessage('Invalid password list. Please provide a non-empty list of strings of at least 2 characters with no duplicates.'),
+    .optional(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User

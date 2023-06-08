@@ -1928,7 +1928,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
   // ---------------------------------------------------------------------------
 
-  requiresAuth (options: {
+  requiresUserAuth (options: {
     urlParamId: string
     checkBlacklist: boolean
   }) {
@@ -1946,11 +1946,11 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     if (checkBlacklist && this.VideoBlacklist) return true
 
-    if (this.privacy !== VideoPrivacy.PUBLIC && this.privacy !== VideoPrivacy.PASSWORD_PROTECTED) {
-      throw new Error(`Unknown video privacy ${this.privacy} to know if the video requires auth`)
+    if (this.privacy === VideoPrivacy.PUBLIC || this.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
+      return false
     }
 
-    return false
+    throw new Error(`Unknown video privacy ${this.privacy} to know if the video requires auth`)
   }
 
   hasPrivateStaticPath () {

@@ -106,9 +106,11 @@
           Update video privacy
         </a>
       </div>
-      <div *ngIf="isPasswordProtectedVideo()" class="alert-private alert alert-warning">
-        <div i18n>This video is password protected, please note that recipients will require the corresponding password to access the content.</div>
+
+      <div i18n *ngIf="isPasswordProtectedVideo()" class="alert-private alert alert-warning">
+        This video is password protected, please note that recipients will require the corresponding password to access the content.
       </div>
+
       <div ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeVideoId">
 
         <ng-container ngbNavItem="url">

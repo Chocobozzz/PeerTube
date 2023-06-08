@@ -18,7 +18,7 @@ import {
   logger,
   peertubeLocalStorage,
   UserLocalStorageKeys,
-  videoRequiresAuth
+  videoRequiresUserAuth
 } from '../../../root-helpers'
 import { PeerTubePlugin } from './peertube-plugin'
 import { PlayerHTML } from './player-html'
@@ -242,9 +242,12 @@ export class PlayerManagerOptions {
         embedUrl: window.location.origin + video.embedPath,
         embedTitle: video.name,
 
-        requiresAuth: videoRequiresAuth(video),
+        requiresUserAuth: videoRequiresUserAuth(video),
         authorizationHeader,
         videoFileToken,
+
+        requiresPassword: videoRequiresUserAuth(video),
+        videoPassword: videoFileToken,
 
         errorNotifier: () => {
           // Empty, we don't have a notifier in the embed

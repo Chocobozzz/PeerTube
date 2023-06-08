@@ -1,7 +1,7 @@
 import { SortMeta } from 'primeng/api'
 import { from, Observable, of } from 'rxjs'
 import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
-import { HttpClient, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http'
+import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthService, ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
@@ -23,8 +23,7 @@ import {
   VideoPrivacy,
   VideoSortField,
   VideoTranscodingCreate,
-  VideoUpdate,
-  VideoPassword
+  VideoUpdate
 } from '@shared/models'
 import { VideoSource } from '@shared/models/videos/video-source'
 import { environment } from '../../../../environments/environment'
@@ -34,6 +33,7 @@ import { VideoChannel, VideoChannelService } from '../video-channel'
 import { VideoDetails } from './video-details.model'
 import { VideoEdit } from './video-edit.model'
 import { Video } from './video.model'
+import { VideoPasswordService } from './video-password.service'
 
 export type CommonVideoParams = {
   videoPagination?: ComponentPaginationLight
@@ -71,9 +71,7 @@ export class VideoService {
   }
 
   getVideo (options: { videoId: string, videoPassword?: string }): Observable<VideoDetails> {
-    const headers = options.videoPassword
-      ? new HttpHeaders().set('video-password', options.videoPassword)
-      : undefined
+    const headers = VideoPasswordService.getVideoPasswordHeader(options.videoPassword)
 
     return this.serverService.getServerLocale().pipe(
       switchMap(translations => {
@@ -512,20 +510,10 @@ export class VideoService {
     const body: UserVideoRateUpdate = {
       rating: rateType
     }
-    const headers = videoPassword
-      ? new HttpHeaders().set('video-password', videoPassword)
-      : undefined
+    const headers = VideoPasswordService.getVideoPasswordHeader(videoPassword)
 
     return this.authHttp
                .put(url, body, { headers })
                .pipe(catchError(err => this.restExtractor.handleError(err)))
-  }
-
-  getVideoPasswords (options: { videoUUID: string }) {
-    return this.authHttp.get<ResultList<VideoPassword>>(`${VideoService.BASE_VIDEO_URL}/${options.videoUUID}/passwords`, {})
-      .pipe(
-        switchMap(res => res.data),
-        catchError(err => this.restExtractor.handleError(err))
-      )
   }
 }

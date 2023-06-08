@@ -81,6 +81,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
 
   videoPrivacies: VideoConstant<VideoPrivacy | typeof VideoEdit.SPECIAL_SCHEDULED_PRIVACY > [] = []
+  replayPrivacies: VideoConstant<VideoPrivacy> [] = []
   videoCategories: VideoConstant<number>[] = []
   videoLicences: VideoConstant<number>[] = []
   videoLanguages: VideoLanguages[] = []
@@ -104,8 +105,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   pluginDataFormGroup: FormGroup
 
-  schedulePublicationEnabled = false
-  passwordProtectedEnabled = false
+  schedulePublicationSelected = false
+  passwordProtectionSelected = false
 
   calendarLocale: any = {}
   minScheduledDate = new Date()
@@ -169,7 +170,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       permanentLive: null,
       latencyMode: null,
       saveReplay: null,
-      replayPrivacy: VIDEO_PRIVACY_VALIDATOR
+      replayPrivacy: null
     }
 
     this.formValidatorService.updateFormGroup(
@@ -225,7 +226,9 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
     this.serverService.getVideoPrivacies()
       .subscribe(privacies => {
-        this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies).videoPrivacies
+        const videoPrivacies = this.videoService.explainedPrivacyLabels(privacies).videoPrivacies
+        this.videoPrivacies = videoPrivacies
+        this.replayPrivacies = videoPrivacies.filter((privacy) => privacy.id !== VideoPrivacy.PASSWORD_PROTECTED)
 
         // Can't schedule publication if private privacy is not available (could be deleted by a plugin)
         const hasPrivatePrivacy = this.videoPrivacies.some(p => p.id === VideoPrivacy.PRIVATE)
@@ -413,14 +416,13 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       .subscribe(
         newPrivacyId => {
 
-          this.schedulePublicationEnabled = newPrivacyId === this.SPECIAL_SCHEDULED_PRIVACY
-          this.passwordProtectedEnabled = newPrivacyId === VideoPrivacy.PASSWORD_PROTECTED
+          this.schedulePublicationSelected = newPrivacyId === this.SPECIAL_SCHEDULED_PRIVACY
 
           // Value changed
           const scheduleControl = this.form.get('schedulePublicationAt')
           const waitTranscodingControl = this.form.get('waitTranscoding')
 
-          if (this.schedulePublicationEnabled) {
+          if (this.schedulePublicationSelected) {
             scheduleControl.setValidators([ Validators.required ])
 
             waitTranscodingControl.disable()
@@ -440,6 +442,16 @@ export class VideoEditComponent implements OnInit, OnDestroy {
           waitTranscodingControl.updateValueAndValidity()
 
           this.firstPatchDone = true
+
+          this.passwordProtectionSelected = newPrivacyId === VideoPrivacy.PASSWORD_PROTECTED
+          const videoPasswordControl = this.form.get('videoPassword')
+
+          if (this.passwordProtectionSelected) {
+            videoPasswordControl.setValidators([ Validators.required ])
+          } else {
+            videoPasswordControl.clearValidators()
+          }
+          videoPasswordControl.updateValueAndValidity()
 
         }
       )

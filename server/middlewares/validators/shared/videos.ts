@@ -113,7 +113,7 @@ async function checkCanSeeVideo (options: {
 }) {
   const { req, res, video, paramId } = options
 
-  if (video.requiresAuth({ urlParamId: paramId, checkBlacklist: true })) {
+  if (video.requiresUserAuth({ urlParamId: paramId, checkBlacklist: true })) {
     return checkCanSeeAuthVideo({ req, res, video })
   }
 
@@ -128,8 +128,13 @@ async function checkCanSeeVideo (options: {
   throw new Error('Unknown video privacy when checking video right ' + video.url)
 }
 
-async function checkCanSeeAuthVideo (options: { req: Request, res: Response, video: MVideoId | MVideoWithRights }) {
+async function checkCanSeeAuthVideo (options: {
+  req: Request
+  res: Response
+  video: MVideoId | MVideoWithRights
+}) {
   const { req, res, video } = options
+
   const fail = () => {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
@@ -175,7 +180,6 @@ async function checkCanSeePasswordProtectedVideo (options: {
   req: Request
   res: Response
   video: MVideo
-
 }) {
   const { req, res, video } = options
 
@@ -183,12 +187,14 @@ async function checkCanSeePasswordProtectedVideo (options: {
     ? video as MVideoAccountLight
     : await VideoModel.loadFull(video.id)
 
-  const videoPassword = req.header('video-password')
+  const videoPassword = req.header('x-peertube-video-password')
+
   if (!exists(videoPassword)) {
     const errorMessage = 'Please provide a password to access this password protected video'
-    const type = ServerErrorCode.VIDEO_REQUIRES_PASSWORD
+    const errorType = ServerErrorCode.VIDEO_REQUIRES_PASSWORD
+
     if (req.header('authorization')) {
-      await authenticatePromise({ req, res, errorMessage, errorStatus: HttpStatusCode.FORBIDDEN_403, type })
+      await authenticatePromise({ req, res, errorMessage, errorStatus: HttpStatusCode.FORBIDDEN_403, type: errorType })
       const user = res.locals.oauth?.token.User
 
       if (canUserAccessVideo(user, videoWithAccount, UserRight.SEE_ALL_VIDEOS)) return true
@@ -196,13 +202,13 @@ async function checkCanSeePasswordProtectedVideo (options: {
 
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      type,
+      type: errorType,
       message: errorMessage
     })
     return false
   }
 
-  if (await VideoPasswordModel.isACorrectPassword(video.id, videoPassword)) return true
+  if (await VideoPasswordModel.isACorrectPassword({ videoId: video.id, password: videoPassword })) return true
 
   res.fail({
     status: HttpStatusCode.FORBIDDEN_403,
@@ -215,6 +221,7 @@ async function checkCanSeePasswordProtectedVideo (options: {
 
 function canUserAccessVideo (user: MUser, video: MVideoWithRights | MVideoAccountLight, right: UserRight) {
   const isOwnedByUser = video.VideoChannel.Account.userId === user.id
+
   return isOwnedByUser || user.hasRight(right)
 }
 
@@ -228,7 +235,7 @@ async function checkCanAccessVideoStaticFiles (options: {
 }) {
   const { video, req, res } = options
 
-  if (res.locals.oauth?.token.User || exists(req.header('video-password'))) {
+  if (res.locals.oauth?.token.User || exists(req.header('x-peertube-video-password'))) {
     return checkCanSeeVideo(options)
   }
 

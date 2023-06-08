@@ -176,16 +176,16 @@ async function updateVideoPrivacy (options: {
   const isNewVideo = videoInstance.isNewVideo(videoInfoToUpdate.privacy)
 
   const newPrivacy = forceNumber(videoInfoToUpdate.privacy)
-
-  if (videoInstance.privacy === VideoPrivacy.PASSWORD_PROTECTED && newPrivacy !== VideoPrivacy.PASSWORD_PROTECTED) {
-    await VideoPasswordModel.deletePasswordsForApi(videoInstance.id, transaction)
-  }
-
   setVideoPrivacy(videoInstance, newPrivacy)
 
+  // Delete passwords if video is not anymore password protected
+  if (videoInstance.privacy === VideoPrivacy.PASSWORD_PROTECTED && newPrivacy !== VideoPrivacy.PASSWORD_PROTECTED) {
+    await VideoPasswordModel.deleteAllPasswords(videoInstance.id, transaction)
+  }
+
   if (newPrivacy === VideoPrivacy.PASSWORD_PROTECTED && exists(videoInfoToUpdate.videoPasswords)) {
-    await VideoPasswordModel.deletePasswordsForApi(videoInstance.id, transaction)
-    await VideoPasswordModel.addPasswordsForApi(videoInfoToUpdate.videoPasswords, videoInstance.id, transaction)
+    await VideoPasswordModel.deleteAllPasswords(videoInstance.id, transaction)
+    await VideoPasswordModel.addPasswords(videoInfoToUpdate.videoPasswords, videoInstance.id, transaction)
   }
 
   // Unfederate the video if the new privacy is not compatible with federation

@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import {
   cleanupTests,
   createSingleServer,
-  PasswordsCommand,
+  VideoPasswordsCommand,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
@@ -19,7 +19,7 @@ describe('Test video passwords', function () {
   let userAccessTokenServer1: string
 
   let videoPasswords: string[] = []
-  let command: PasswordsCommand
+  let command: VideoPasswordsCommand
 
   before(async function () {
     this.timeout(30000)
@@ -43,7 +43,7 @@ describe('Test video passwords', function () {
   })
 
   it('Should list video passwords', async function () {
-    const body = await command.listVideoPasswords({ videoId: videoUUID })
+    const body = await command.list({ videoId: videoUUID })
 
     expect(body.total).to.equal(10)
     expect(body.data).to.be.an('array')
@@ -51,7 +51,7 @@ describe('Test video passwords', function () {
   })
 
   it('Should filter passwords on this video', async function () {
-    const body = await command.listVideoPasswords({ videoId: videoUUID, count: 5 })
+    const body = await command.list({ videoId: videoUUID, count: 5 })
 
     expect(body.total).to.equal(10)
     expect(body.data).to.be.an('array')
@@ -61,8 +61,8 @@ describe('Test video passwords', function () {
   it('Should update password for this video', async function () {
     videoPasswords = [ 'my super new password 1', 'my super new password 2' ]
 
-    await command.updateVideoPasswords({ videoId: videoUUID, passwords: videoPasswords })
-    const body = await command.listVideoPasswords({ videoId: videoUUID })
+    await command.updateAll({ videoId: videoUUID, passwords: videoPasswords })
+    const body = await command.list({ videoId: videoUUID })
     expect(body.total).to.equal(2)
     expect(body.data).to.be.an('array')
     expect(body.data).to.have.lengthOf(2)
@@ -71,9 +71,9 @@ describe('Test video passwords', function () {
   })
 
   it('Should delete one password', async function () {
-    let body = await command.listVideoPasswords({ videoId: videoUUID })
+    let body = await command.list({ videoId: videoUUID })
     await command.remove({ id: body.data[0].id, videoId: videoUUID })
-    body = await command.listVideoPasswords({ videoId: videoUUID })
+    body = await command.list({ videoId: videoUUID })
 
     expect(body.total).to.equal(1)
     expect(body.data).to.be.an('array')

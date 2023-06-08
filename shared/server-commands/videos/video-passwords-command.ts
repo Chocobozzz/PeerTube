@@ -1,8 +1,8 @@
 import { HttpStatusCode, ResultList, VideoPassword } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
-export class PasswordsCommand extends AbstractCommand {
+export class VideoPasswordsCommand extends AbstractCommand {
 
-  listVideoPasswords (options: OverrideCommandOptions & {
+  list (options: OverrideCommandOptions & {
     videoId: number | string
     start?: number
     count?: number
@@ -21,7 +21,7 @@ export class PasswordsCommand extends AbstractCommand {
     })
   }
 
-  updateVideoPasswords (options: OverrideCommandOptions & {
+  updateAll (options: OverrideCommandOptions & {
     videoId: number | string
     passwords: string[]
   }) {

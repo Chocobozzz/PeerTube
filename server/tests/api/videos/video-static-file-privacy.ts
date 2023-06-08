@@ -214,7 +214,7 @@ describe('Test video static file privacy', function () {
         await makeRawRequest({ url: file.fileDownloadUrl, query: { videoFileToken }, expectedStatus })
 
         if (videoPassword) {
-          const headers = { 'video-password': addPasswordInHeaders ? videoPassword : 'incorrectPassword' }
+          const headers = { 'x-peertube-video-password': addPasswordInHeaders ? videoPassword : 'incorrectPassword' }
           await makeRawRequest({ url: file.fileUrl, headers, expectedStatus })
           await makeRawRequest({ url: file.fileDownloadUrl, headers, expectedStatus })
         }
@@ -228,7 +228,7 @@ describe('Test video static file privacy', function () {
       await makeRawRequest({ url: hls.segmentsSha256Url, query: { videoFileToken }, expectedStatus })
 
       if (videoPassword) {
-        const headers = { 'video-password': addPasswordInHeaders ? videoPassword : 'incorrectPassword' }
+        const headers = { 'x-peertube-video-password': addPasswordInHeaders ? videoPassword : 'incorrectPassword' }
         await makeRawRequest({ url: hls.playlistUrl, headers, expectedStatus })
         await makeRawRequest({ url: hls.segmentsSha256Url, headers, expectedStatus })
       }
@@ -305,7 +305,7 @@ describe('Test video static file privacy', function () {
         privacy: VideoPrivacy.PASSWORD_PROTECTED,
         videoPasswords: [ videoPassword ]
       })
-      const headers = { 'video-password': videoPassword }
+      const headers = { 'x-peertube-video-password': videoPassword }
       const videoFileToken = await server.videoToken.getVideoFileToken({ token: null, videoId: uuid, headers })
 
       await waitJobs([ server ])
@@ -386,8 +386,8 @@ describe('Test video static file privacy', function () {
         await makeRawRequest({ url, query: { videoFileToken: unrelatedFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
 
         if (videoPassword) {
-          await makeRawRequest({ url, headers: { 'video-password': videoPassword }, expectedStatus: HttpStatusCode.OK_200 })
-          await makeRawRequest({ url, headers: { 'video-password': 'incorrectPassword' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+          await makeRawRequest({ url, headers: { 'x-peertube-video-password': videoPassword }, expectedStatus: HttpStatusCode.OK_200 })
+          await makeRawRequest({ url, headers: { 'x-peertube-video-password': 'incorrectPassword' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         }
 
       }

@@ -60,7 +60,7 @@ async function listVideoPasswords (req: express.Request, res: express.Response) 
     sort: req.query.sort
   }
 
-  const resultList = await VideoPasswordModel.listPasswordsForApi(options)
+  const resultList = await VideoPasswordModel.listPasswords(options)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -72,25 +72,21 @@ async function updateVideoPasswordList (req: express.Request, res: express.Respo
   const passwordArray = req.body.passwords as string[]
 
   await VideoPasswordModel.sequelize.transaction(async (t: Transaction) => {
-    await VideoPasswordModel.deletePasswordsForApi(videoId, t)
-    await VideoPasswordModel.addPasswordsForApi(passwordArray, videoId, t)
+    await VideoPasswordModel.deleteAllPasswords(videoId, t)
+    await VideoPasswordModel.addPasswords(passwordArray, videoId, t)
   })
 
   logger.info(`Video passwords for video with name ${videoInstance.name} and uuid ${videoInstance.uuid} have been updated`)
 
-  return res.type('json')
-  .status(HttpStatusCode.NO_CONTENT_204)
-  .end()
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function removeVideoPassword (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.onlyVideo
   const password = res.locals.videoPassword
 
-  await VideoPasswordModel.deletePasswordForApi(password.id)
+  await VideoPasswordModel.deletePassword(password.id)
   logger.info('Password with id %d of video named %s and uuid %s has been deleted.', password.id, videoInstance.name, videoInstance.uuid)
 
-  return res.type('json')
-  .status(HttpStatusCode.NO_CONTENT_204)
-  .end()
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

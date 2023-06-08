@@ -1,7 +1,7 @@
 import { SortMeta } from 'primeng/api'
 import { from, Observable } from 'rxjs'
 import { catchError, concatMap, map, toArray } from 'rxjs/operators'
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestPagination, RestService } from '@app/core'
 import { objectLineFeedToHtml } from '@app/helpers'
@@ -18,6 +18,7 @@ import {
 import { environment } from '../../../environments/environment'
 import { VideoCommentThreadTree } from './video-comment-thread-tree.model'
 import { VideoComment } from './video-comment.model'
+import { VideoPasswordService } from '../shared-main'
 
 @Injectable()
 export class VideoCommentService {
@@ -32,9 +33,7 @@ export class VideoCommentService {
   ) {}
 
   addCommentThread (videoId: string, comment: VideoCommentCreate, videoPassword?: string) {
-    const headers = videoPassword
-      ? new HttpHeaders().set('video-password', videoPassword)
-      : undefined
+    const headers = VideoPasswordService.getVideoPasswordHeader(videoPassword)
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comment-threads'
     const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
@@ -45,10 +44,9 @@ export class VideoCommentService {
                )
   }
 
-  addCommentReply (videoId: string, inReplyToCommentId: number, comment: VideoCommentCreate, videoPassword?: string) {
-    const headers = videoPassword
-      ? new HttpHeaders().set('video-password', videoPassword)
-      : undefined
+  addCommentReply (options: { videoId: string, inReplyToCommentId: number, comment: VideoCommentCreate, videoPassword?: string }) {
+    const { videoId, inReplyToCommentId, comment, videoPassword } = options
+    const headers = VideoPasswordService.getVideoPasswordHeader(videoPassword)
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comments/' + inReplyToCommentId
     const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
@@ -88,9 +86,7 @@ export class VideoCommentService {
   }): Observable<ThreadsResultList<VideoComment>> {
     const { videoId, videoPassword, componentPagination, sort } = parameters
 
-    const headers = videoPassword
-      ? new HttpHeaders().set('video-password', videoPassword)
-      : undefined
+    const headers = VideoPasswordService.getVideoPasswordHeader(videoPassword)
 
     const pagination = this.restService.componentToRestPagination(componentPagination)
 
@@ -112,9 +108,7 @@ export class VideoCommentService {
   }): Observable<VideoCommentThreadTree> {
     const { videoId, threadId, videoPassword } = parameters
     const url = `${VideoCommentService.BASE_VIDEO_URL + videoId}/comment-threads/${threadId}`
-    const headers = videoPassword
-      ? new HttpHeaders().set('video-password', videoPassword)
-      : undefined
+    const headers = VideoPasswordService.getVideoPasswordHeader(videoPassword)
 
     return this.authHttp
                .get<VideoCommentThreadTreeServerModel>(url, { headers })
