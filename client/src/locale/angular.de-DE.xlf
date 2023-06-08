@@ -699,7 +699,7 @@
       </trans-unit>
       <trans-unit id="7300340273184779103" datatype="html">
         <source>Email is now public</source>
-        <target state="new">Email is now public</target>
+        <target state="translated">E-Mail ist jetzt öffentlich</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -707,7 +707,7 @@
       </trans-unit>
       <trans-unit id="7474057965374731586" datatype="html">
         <source>Email is now private</source>
-        <target state="new">Email is now private</target>
+        <target state="translated">E-Mail ist jetzt privat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.ts</context>
           <context context-type="linenumber">43</context>
