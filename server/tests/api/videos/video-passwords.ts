@@ -29,7 +29,7 @@ describe('Test video passwords', function () {
     await setAccessTokensToServers([ server ])
 
     for (let i = 0; i < 10; i++) {
-      videoPasswords.push(`passsword ${i + 1}`)
+      videoPasswords.push(`password ${i + 1}`)
     }
     const { uuid } = await server.videos.upload({ attributes: { privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords } })
     videoUUID = uuid
@@ -53,11 +53,13 @@ describe('Test video passwords', function () {
   })
 
   it('Should filter passwords on this video', async function () {
-    const body = await command.list({ videoId: videoUUID, count: 5 })
+    const body = await command.list({ videoId: videoUUID, count: 2, start: 3, sort: 'createdAt' })
 
     expect(body.total).to.equal(10)
     expect(body.data).to.be.an('array')
-    expect(body.data).to.have.lengthOf(5)
+    expect(body.data).to.have.lengthOf(2)
+    expect(body.data[0].password).to.equal('password 4')
+    expect(body.data[1].password).to.equal('password 5')
   })
 
   it('Should update password for this video', async function () {
