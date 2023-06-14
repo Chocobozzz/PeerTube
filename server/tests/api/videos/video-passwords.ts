@@ -28,7 +28,9 @@ describe('Test video passwords', function () {
 
     await setAccessTokensToServers([ server ])
 
-    for (let i = 0; i < 10; i++) { videoPasswords.push(`passsword ${i + 1}`) }
+    for (let i = 0; i < 10; i++) {
+      videoPasswords.push(`passsword ${i + 1}`)
+    }
     const { uuid } = await server.videos.upload({ attributes: { privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords } })
     videoUUID = uuid
 
@@ -71,13 +73,20 @@ describe('Test video passwords', function () {
   })
 
   it('Should delete one password', async function () {
-    let body = await command.list({ videoId: videoUUID })
-    await command.remove({ id: body.data[0].id, videoId: videoUUID })
-    body = await command.list({ videoId: videoUUID })
+    {
+      const body = await command.list({ videoId: videoUUID })
+      expect(body.total).to.equal(2)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(2)
+      await command.remove({ id: body.data[0].id, videoId: videoUUID })
+    }
+    {
+      const body = await command.list({ videoId: videoUUID })
 
-    expect(body.total).to.equal(1)
-    expect(body.data).to.be.an('array')
-    expect(body.data).to.have.lengthOf(1)
+      expect(body.total).to.equal(1)
+      expect(body.data).to.be.an('array')
+      expect(body.data).to.have.lengthOf(1)
+    }
   })
 
   after(async function () {

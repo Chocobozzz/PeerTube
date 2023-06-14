@@ -101,25 +101,29 @@ abstract class AbstractCommand {
 
   protected putBodyRequest (options: InternalCommonCommandOptions & {
     fields?: { [ fieldName: string ]: any }
+    headers?: { [name: string]: string }
   }) {
-    const { fields } = options
+    const { fields, headers } = options
 
     return makePutBodyRequest({
       ...this.buildCommonRequestOptions(options),
 
-      fields
+      fields,
+      headers
     })
   }
 
   protected postBodyRequest (options: InternalCommonCommandOptions & {
     fields?: { [ fieldName: string ]: any }
+    headers?: { [name: string]: string }
   }) {
-    const { fields } = options
+    const { fields, headers } = options
 
     return makePostBodyRequest({
       ...this.buildCommonRequestOptions(options),
 
-      fields
+      fields,
+      headers
     })
   }
 
@@ -205,6 +209,12 @@ abstract class AbstractCommand {
     const { expectedStatus, defaultExpectedStatus } = options
 
     return expectedStatus !== undefined ? expectedStatus : defaultExpectedStatus
+  }
+
+  protected buildVideoPasswordHeader (videoPassword: string) {
+    return videoPassword !== undefined && videoPassword !== null
+      ? { 'x-peertube-video-password': videoPassword }
+      : undefined
   }
 }
 

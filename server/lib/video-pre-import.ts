@@ -214,7 +214,8 @@ async function buildYoutubeDLImport (options: {
       state: VideoImportState.PENDING,
       userId: user.id,
       videoChannelSyncId: channelSync?.id
-    }
+    },
+    videoPasswords: importDataOverride.videoPasswords
   })
 
   // Get video subtitles

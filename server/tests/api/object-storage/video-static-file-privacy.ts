@@ -248,7 +248,10 @@ describe('Object storage for video static file privacy', function () {
 
       const headers = { 'x-peertube-video-password': correctPassword }
       const badVideoFileToken = await server.videoToken.getVideoFileToken({ token: userToken, videoId: userPrivateVideoUUID })
-      const goodVideoFileToken = await server.videoToken.getVideoFileToken({ videoId: passwordProtectedVideoUUID, headers })
+      const goodVideoFileToken = await server.videoToken.getVideoFileToken({
+        videoId: passwordProtectedVideoUUID,
+        videoPassword: correctPassword
+      })
 
       const { webTorrentFile, hlsFile } = await getSampleFileUrls(passwordProtectedVideoUUID)
 
@@ -260,7 +263,11 @@ describe('Object storage for video static file privacy', function () {
         await makeRawRequest({ url, query: { videoFileToken: badVideoFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         await makeRawRequest({ url, query: { videoFileToken: goodVideoFileToken }, expectedStatus: HttpStatusCode.OK_200 })
 
-        await makeRawRequest({ url, headers: { 'x-peertube-video-password': 'incorrectPassword' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        await makeRawRequest({
+          url,
+          headers: { 'x-peertube-video-password': 'incorrectPassword' },
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
         await makeRawRequest({ url, headers, expectedStatus: HttpStatusCode.OK_200 })
       }
     })
@@ -316,7 +323,7 @@ describe('Object storage for video static file privacy', function () {
         : await server.videos.getWithToken({ id: liveId })
 
       const fileToken = videoPassword
-        ? await server.videoToken.getVideoFileToken({ token: null, videoId: video.uuid, headers: { 'x-peertube-video-password': videoPassword } })
+        ? await server.videoToken.getVideoFileToken({ token: null, videoId: video.uuid, videoPassword })
         : await server.videoToken.getVideoFileToken({ videoId: video.uuid })
 
       const hls = video.streamingPlaylists[0]
@@ -336,7 +343,11 @@ describe('Object storage for video static file privacy', function () {
         await makeRawRequest({ url, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         await makeRawRequest({ url, query: { videoFileToken: unrelatedFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         if (videoPassword) {
-          await makeRawRequest({ url, headers: { 'x-peertube-video-password': 'incorrectPassword' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+          await makeRawRequest({
+            url,
+            headers: { 'x-peertube-video-password': 'incorrectPassword' },
+            expectedStatus: HttpStatusCode.FORBIDDEN_403
+          })
         }
       }
 
@@ -345,7 +356,7 @@ describe('Object storage for video static file privacy', function () {
 
     async function checkReplay (replay: VideoDetails, videoPassword?: string) {
       const fileToken = videoPassword
-        ? await server.videoToken.getVideoFileToken({ token: null, videoId: replay.uuid, headers: { 'x-peertube-video-password': videoPassword } })
+        ? await server.videoToken.getVideoFileToken({ token: null, videoId: replay.uuid, videoPassword })
         : await server.videoToken.getVideoFileToken({ videoId: replay.uuid })
 
       const hls = replay.streamingPlaylists[0]

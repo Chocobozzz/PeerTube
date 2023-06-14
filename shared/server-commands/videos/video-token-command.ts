@@ -8,13 +8,14 @@ export class VideoTokenCommand extends AbstractCommand {
 
   create (options: OverrideCommandOptions & {
     videoId: number | string
-    headers?: { [ name: string ]: string }
+    videoPassword?: string
   }) {
-    const { videoId } = options
+    const { videoId, videoPassword } = options
     const path = '/api/v1/videos/' + videoId + '/token'
 
     return unwrapBody<VideoToken>(this.postBodyRequest({
       ...options,
+      headers: this.buildVideoPasswordHeader(videoPassword),
 
       path,
       implicitToken: true,
@@ -24,7 +25,7 @@ export class VideoTokenCommand extends AbstractCommand {
 
   async getVideoFileToken (options: OverrideCommandOptions & {
     videoId: number | string
-    headers?: { [ name: string ]: string }
+    videoPassword?: string
   }) {
     const { files } = await this.create(options)
 

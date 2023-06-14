@@ -154,12 +154,14 @@ function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
     return false
   }
 
-  if (req.body.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
-    if (!exists(req.body.videoPasswords)) {
+  const privacy = req.body.privacy || res.locals.onlyVideo.privacy
+
+  if (privacy === VideoPrivacy.PASSWORD_PROTECTED) {
+    if (!exists(req.body.videoPasswords) && !exists(req.body.passwords)) {
       return fail('Video passwords are missing.')
     }
 
-    const passwords = req.body.videoPasswords
+    const passwords = req.body.videoPasswords || req.body.passwords
 
     if (!Array.isArray(passwords)) {
       return fail('Video passwords should be an array.')

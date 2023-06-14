@@ -111,8 +111,9 @@ export class VideosCommand extends AbstractCommand {
   rate (options: OverrideCommandOptions & {
     id: number | string
     rating: UserVideoRateType
+    videoPassword?: string
   }) {
-    const { id, rating } = options
+    const { id, rating, videoPassword = null } = options
     const path = '/api/v1/videos/' + id + '/rate'
 
     return this.putBodyRequest({
@@ -120,6 +121,7 @@ export class VideosCommand extends AbstractCommand {
 
       path,
       fields: { rating },
+      headers: this.buildVideoPasswordHeader(videoPassword),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })

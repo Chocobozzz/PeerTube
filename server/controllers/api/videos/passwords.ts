@@ -34,7 +34,7 @@ videoPasswordRouter.get('/:videoId/passwords',
 
 videoPasswordRouter.put('/:videoId/passwords',
   authenticate,
-  updateVideoPasswordListValidator,
+  asyncMiddleware(updateVideoPasswordListValidator),
   asyncMiddleware(updateVideoPasswordList)
 )
 

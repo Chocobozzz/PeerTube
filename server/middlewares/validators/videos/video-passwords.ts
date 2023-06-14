@@ -12,6 +12,7 @@ import {
 } from '../shared'
 import { body, param } from 'express-validator'
 import { isIdValid } from '@server/helpers/custom-validators/misc'
+import { isValidPasswordProtectedPrivacy } from '@server/helpers/custom-validators/videos'
 
 const listVideoPasswordValidator = [
   isValidVideoIdParam('videoId'),
@@ -33,7 +34,7 @@ const updateVideoPasswordListValidator = [
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
-    if (!isVideoPasswordProtected(res.locals.onlyVideo, res)) return
+    if (!isValidPasswordProtectedPrivacy(req, res)) return
 
     return next()
   }

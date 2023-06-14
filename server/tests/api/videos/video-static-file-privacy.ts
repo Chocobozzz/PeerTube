@@ -305,8 +305,8 @@ describe('Test video static file privacy', function () {
         privacy: VideoPrivacy.PASSWORD_PROTECTED,
         videoPasswords: [ videoPassword ]
       })
-      const headers = { 'x-peertube-video-password': videoPassword }
-      const videoFileToken = await server.videoToken.getVideoFileToken({ token: null, videoId: uuid, headers })
+
+      const videoFileToken = await server.videoToken.getVideoFileToken({ token: null, videoId: uuid, videoPassword })
 
       await waitJobs([ server ])
 
@@ -387,7 +387,11 @@ describe('Test video static file privacy', function () {
 
         if (videoPassword) {
           await makeRawRequest({ url, headers: { 'x-peertube-video-password': videoPassword }, expectedStatus: HttpStatusCode.OK_200 })
-          await makeRawRequest({ url, headers: { 'x-peertube-video-password': 'incorrectPassword' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+          await makeRawRequest({
+            url,
+            headers: { 'x-peertube-video-password': 'incorrectPassword' },
+            expectedStatus: HttpStatusCode.FORBIDDEN_403
+          })
         }
 
       }
