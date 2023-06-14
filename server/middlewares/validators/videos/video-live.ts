@@ -17,7 +17,7 @@ import {
   VideoState
 } from '@shared/models'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
-import { isVideoNameValid, isVideoPrivacyValid } from '../../../helpers/custom-validators/videos'
+import { isValidPasswordProtectedPrivacy, isVideoNameValid, isVideoPrivacyValid } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
@@ -81,8 +81,13 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     .customSanitizer(toIntOrNull)
     .custom(isLiveLatencyModeValid),
 
+  body('videoPasswords')
+    .optional(),
+
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
+
+    if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
 
     if (CONFIG.LIVE.ENABLED !== true) {
       cleanUpReqFiles(req)

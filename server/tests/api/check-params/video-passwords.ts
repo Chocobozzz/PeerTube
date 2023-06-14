@@ -45,6 +45,18 @@ describe('Test video passwords validator', function () {
 
     await setAccessTokensToServers([ server ])
 
+    await server.config.updateCustomSubConfig({
+      newConfig: {
+        live: {
+          enabled: true,
+          latencySetting: {
+            enabled: false
+          },
+          allowReplay: false
+        }
+      }
+    })
+
     userAccessToken = await server.users.generateUserAndToken('user1')
 
     {
@@ -67,7 +79,7 @@ describe('Test video passwords validator', function () {
     token: string
     videoPasswords: string[]
     expectedStatus: HttpStatusCode
-    mode: 'uploadLegacy' | 'uploadResumable' | 'import' | 'updateVideo' | 'updatePasswords'
+    mode: 'uploadLegacy' | 'uploadResumable' | 'import' | 'updateVideo' | 'updatePasswords' | 'live'
   }) {
     const { server, token, videoPasswords, expectedStatus = HttpStatusCode.OK_200, mode } = options
     const attaches = {
@@ -125,9 +137,15 @@ describe('Test video passwords validator', function () {
         expectedStatus
       })
     }
+
+    if (mode === 'live') {
+      const fields = { ...baseCorrectParams, videoPasswords }
+
+      return server.live.create({ fields, expectedStatus })
+    }
   }
 
-  function runSuite (mode: 'uploadLegacy' | 'uploadResumable' | 'import' | 'updateVideo' | 'updatePasswords') {
+  function runSuite (mode: 'uploadLegacy' | 'uploadResumable' | 'import' | 'updateVideo' | 'updatePasswords' | 'live') {
 
     it('Should fail with a password protected privacy without providing a password', async function () {
       await checkVideoPasswordParam({
@@ -228,6 +246,10 @@ describe('Test video passwords validator', function () {
 
     describe('When updating the password list of a video', function () {
       runSuite('updatePasswords')
+    })
+
+    describe('When creating a live', function () {
+      runSuite('live')
     })
   })
 
