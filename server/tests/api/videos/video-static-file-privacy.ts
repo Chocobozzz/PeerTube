@@ -223,8 +223,8 @@ describe('Test video static file privacy', function () {
 
       if (videoPassword) {
         const headers = { 'x-peertube-video-password': videoPassword }
-        await makeRawRequest({ url: hls.playlistUrl, headers, expectedStatus })
-        await makeRawRequest({ url: hls.segmentsSha256Url, headers, expectedStatus })
+        await makeRawRequest({ url: hls.playlistUrl, token: null, headers, expectedStatus })
+        await makeRawRequest({ url: hls.segmentsSha256Url, token: null, headers, expectedStatus })
       }
     }
 
