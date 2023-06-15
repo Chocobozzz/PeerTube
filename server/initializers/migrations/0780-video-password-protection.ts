@@ -19,14 +19,6 @@ async function up (utils: {
 
     await utils.sequelize.query(query, { transaction : utils.transaction })
   }
-
-  {
-    const query = `
-      CREATE UNIQUE INDEX "video_password_video_id_password" ON "videoPassword" ("videoId", "password")
-    `
-
-    await utils.sequelize.query(query, { transaction : utils.transaction })
-  }
 }
 
 function down (options) {
