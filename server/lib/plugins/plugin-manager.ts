@@ -496,7 +496,7 @@ export class PluginManager implements ServerHook {
 
     // Delete cache if needed
     const modulePath = join(pluginPath, packageJSON.library)
-    decachePlugin(pluginPath, modulePath)
+    decachePlugin(modulePath)
     const library: PluginLibrary = require(modulePath)
 
     if (!isLibraryCodeValid(library)) {

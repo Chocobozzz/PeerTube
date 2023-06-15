@@ -3,16 +3,16 @@
 
 import { extname } from 'path'
 
-function decachePlugin (pluginPath: string, libraryPath: string) {
+function decachePlugin (libraryPath: string) {
   const moduleName = find(libraryPath)
 
   if (!moduleName) return
 
   searchCache(moduleName, function (mod) {
     delete require.cache[mod.id]
-  })
 
-  removeCachedPath(pluginPath)
+    removeCachedPath(mod.path)
+  })
 }
 
 function decacheModule (name: string) {
@@ -22,9 +22,9 @@ function decacheModule (name: string) {
 
   searchCache(moduleName, function (mod) {
     delete require.cache[mod.id]
-  })
 
-  removeCachedPath(moduleName)
+    removeCachedPath(mod.path)
+  })
 }
 
 // ---------------------------------------------------------------------------
