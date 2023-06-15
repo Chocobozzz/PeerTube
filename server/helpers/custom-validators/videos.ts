@@ -154,7 +154,9 @@ function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
     return false
   }
 
-  const privacy = req.body.privacy || res.locals.onlyVideo.privacy
+  let privacy = null
+  if (exists(req.body) && exists(req.body.privacy)) privacy = req.body.privacy
+  if (exists(res.locals.onlyVideo) && exists(res.locals.onlyVideo.privacy)) privacy = res.locals.onlyVideo.privacy
 
   if (privacy === VideoPrivacy.PASSWORD_PROTECTED) {
     if (!exists(req.body.videoPasswords) && !exists(req.body.passwords)) {

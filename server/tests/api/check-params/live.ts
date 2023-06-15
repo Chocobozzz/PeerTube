@@ -143,7 +143,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail with a bad privacy for replay settings', async function () {
-      const fields = { ...baseCorrectParams, replaySettings: { privacy: 5 } }
+      const fields = { ...baseCorrectParams, replaySettings: { privacy: 999 } }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })

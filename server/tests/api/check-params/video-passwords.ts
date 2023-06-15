@@ -53,6 +53,13 @@ describe('Test video passwords validator', function () {
             enabled: false
           },
           allowReplay: false
+        },
+        import: {
+          videos: {
+            http:{
+              enabled: true
+            }
+          }
         }
       }
     })
@@ -74,7 +81,7 @@ describe('Test video passwords validator', function () {
     path = '/api/v1/videos/'
   })
 
-  async function checkVideoPasswordParam (options: {
+  async function checkVideoPasswordOptions (options: {
     server: PeerTubeServer
     token: string
     videoPasswords: string[]
@@ -145,10 +152,10 @@ describe('Test video passwords validator', function () {
     }
   }
 
-  function runSuite (mode: 'uploadLegacy' | 'uploadResumable' | 'import' | 'updateVideo' | 'updatePasswords' | 'live') {
+  function validateVideoPasswordList (mode: 'uploadLegacy' | 'uploadResumable' | 'import' | 'updateVideo' | 'updatePasswords' | 'live') {
 
     it('Should fail with a password protected privacy without providing a password', async function () {
-      await checkVideoPasswordParam({
+      await checkVideoPasswordOptions({
         server,
         token: server.accessToken,
         videoPasswords: undefined,
@@ -160,7 +167,7 @@ describe('Test video passwords validator', function () {
     it('Should fail with a password protected privacy and an empty password list', async function () {
       const videoPasswords = []
 
-      await checkVideoPasswordParam({
+      await checkVideoPasswordOptions({
         server,
         token: server.accessToken,
         videoPasswords,
@@ -172,7 +179,7 @@ describe('Test video passwords validator', function () {
     it('Should fail with a password protected privacy and a too short password', async function () {
       const videoPasswords = [ 'p' ]
 
-      await checkVideoPasswordParam({
+      await checkVideoPasswordOptions({
         server,
         token: server.accessToken,
         videoPasswords,
@@ -184,7 +191,7 @@ describe('Test video passwords validator', function () {
     it('Should fail with a password protected privacy and a too long password', async function () {
       const videoPasswords = [ 'Very very very very very very very very very very very very very very very very very very long password' ]
 
-      await checkVideoPasswordParam({
+      await checkVideoPasswordOptions({
         server,
         token: server.accessToken,
         videoPasswords,
@@ -196,7 +203,7 @@ describe('Test video passwords validator', function () {
     it('Should fail with a password protected privacy and an empty password', async function () {
       const videoPasswords = [ '' ]
 
-      await checkVideoPasswordParam({
+      await checkVideoPasswordOptions({
         server,
         token: server.accessToken,
         videoPasswords,
@@ -208,7 +215,7 @@ describe('Test video passwords validator', function () {
     it('Should fail with a password protected privacy and duplicated passwords', async function () {
       const videoPasswords = [ 'password', 'password' ]
 
-      await checkVideoPasswordParam({
+      await checkVideoPasswordOptions({
         server,
         token: server.accessToken,
         videoPasswords,
@@ -223,37 +230,37 @@ describe('Test video passwords validator', function () {
         ? HttpStatusCode.NO_CONTENT_204
         : HttpStatusCode.OK_200
 
-      await checkVideoPasswordParam({ server, token: server.accessToken, videoPasswords, expectedStatus, mode })
+      await checkVideoPasswordOptions({ server, token: server.accessToken, videoPasswords, expectedStatus, mode })
     })
   }
 
   describe('When adding or updating a video', function () {
     describe('Resumable upload', function () {
-      runSuite('uploadResumable')
+      validateVideoPasswordList('uploadResumable')
     })
 
     describe('Legacy upload', function () {
-      runSuite('uploadLegacy')
+      validateVideoPasswordList('uploadLegacy')
     })
 
     describe('When importing a video', function () {
-      runSuite('import')
+      validateVideoPasswordList('import')
     })
 
     describe('When updating a video', function () {
-      runSuite('updateVideo')
+      validateVideoPasswordList('updateVideo')
     })
 
     describe('When updating the password list of a video', function () {
-      runSuite('updatePasswords')
+      validateVideoPasswordList('updatePasswords')
     })
 
     describe('When creating a live', function () {
-      runSuite('live')
+      validateVideoPasswordList('live')
     })
   })
 
-  async function checkVideoPasswordParam2 (options: {
+  async function checkVideoAccessOptions (options: {
     server: PeerTubeServer
     token?: string
     videoPassword?: string
@@ -370,12 +377,12 @@ describe('Test video passwords validator', function () {
     expect(error.status).to.equal(HttpStatusCode.FORBIDDEN_403)
   }
 
-  function runSuite2 (mode: 'get' | 'listCaptions' | 'createThread' | 'listThreads' | 'replyThread' | 'rate' | 'token') {
+  function validateVideoAccess (mode: 'get' | 'listCaptions' | 'createThread' | 'listThreads' | 'replyThread' | 'rate' | 'token') {
     const requiresUserAuth = [ 'createThread', 'replyThread', 'rate' ].includes(mode)
     let tokens: string[]
     if (!requiresUserAuth) {
       it('Should fail without providing a password for an unlogged user', async function () {
-        const body = await checkVideoPasswordParam2({ server, expectedStatus: HttpStatusCode.FORBIDDEN_403, mode })
+        const body = await checkVideoAccessOptions({ server, expectedStatus: HttpStatusCode.FORBIDDEN_403, mode })
         const error = body as unknown as PeerTubeProblemDocument
 
         checkVideoError(error, 'providePassword')
@@ -385,7 +392,7 @@ describe('Test video passwords validator', function () {
     it('Should fail without providing a password for an unauthorised user', async function () {
       const tmp = mode === 'get' ? 'getWithToken' : mode
 
-      const body = await checkVideoPasswordParam2({
+      const body = await checkVideoAccessOptions({
         server,
         token: userAccessToken,
         expectedStatus: HttpStatusCode.FORBIDDEN_403,
@@ -404,7 +411,7 @@ describe('Test video passwords validator', function () {
       if (!requiresUserAuth) tokens.push(null)
 
       for (const token of tokens) {
-        const body = await checkVideoPasswordParam2({
+        const body = await checkVideoAccessOptions({
           server,
           token,
           videoPassword: 'toto',
@@ -421,7 +428,7 @@ describe('Test video passwords validator', function () {
       const tmp = mode === 'get' ? 'getWithPassword' : mode
 
       for (const token of tokens) {
-        const body = await checkVideoPasswordParam2({
+        const body = await checkVideoAccessOptions({
           server,
           token,
           videoPassword: '',
@@ -438,7 +445,7 @@ describe('Test video passwords validator', function () {
       const tmp = mode === 'get' ? 'getWithPassword' : mode
 
       for (const token of tokens) {
-        const body = await checkVideoPasswordParam2({
+        const body = await checkVideoAccessOptions({
           server,
           token,
           videoPassword: 'password11',
@@ -455,7 +462,7 @@ describe('Test video passwords validator', function () {
       const tmp = mode === 'get' ? 'getWithToken' : mode
       const expectedStatus = mode === 'rate' ? HttpStatusCode.NO_CONTENT_204 : HttpStatusCode.OK_200
 
-      const body = await checkVideoPasswordParam2({ server, token: server.accessToken, expectedStatus, mode: tmp })
+      const body = await checkVideoAccessOptions({ server, token: server.accessToken, expectedStatus, mode: tmp })
       if (mode === 'createThread') {
         const res = body as any
         commentId = JSON.parse(res.text).comment.id
@@ -467,8 +474,8 @@ describe('Test video passwords validator', function () {
       const expectedStatus = mode === 'rate' ? HttpStatusCode.NO_CONTENT_204 : HttpStatusCode.OK_200
 
       for (const token of tokens) {
-        await checkVideoPasswordParam2({ server, videoPassword: 'password1', token, expectedStatus, mode: tmp })
-        await checkVideoPasswordParam2({ server, videoPassword: 'password2', token, expectedStatus, mode: tmp })
+        await checkVideoAccessOptions({ server, videoPassword: 'password1', token, expectedStatus, mode: tmp })
+        await checkVideoAccessOptions({ server, videoPassword: 'password2', token, expectedStatus, mode: tmp })
       }
     })
   }
@@ -476,31 +483,31 @@ describe('Test video passwords validator', function () {
   describe('When accessing with a password', function () {
 
     describe('For getting a password protected video', function () {
-      runSuite2('get')
+      validateVideoAccess('get')
     })
 
     describe('For rating a video', function () {
-      runSuite2('rate')
+      validateVideoAccess('rate')
     })
 
     describe('For creating a thread', function () {
-      runSuite2('createThread')
+      validateVideoAccess('createThread')
     })
 
     describe('For replying to a thread', function () {
-      runSuite2('replyThread')
+      validateVideoAccess('replyThread')
     })
 
     describe('For listing threads', function () {
-      runSuite2('listThreads')
+      validateVideoAccess('listThreads')
     })
 
     describe('For getting captions', function () {
-      runSuite2('listCaptions')
+      validateVideoAccess('listCaptions')
     })
 
     describe('For creatin video file token', function () {
-      runSuite2('token')
+      validateVideoAccess('token')
     })
   })
 
