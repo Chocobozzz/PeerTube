@@ -400,7 +400,7 @@ export class VideoService {
       [VideoPrivacy.UNLISTED]: $localize`Only shareable via a private link`,
       [VideoPrivacy.PUBLIC]: $localize`Anyone can see this video`,
       [VideoPrivacy.INTERNAL]: $localize`Only users of this instance can see this video`,
-      [VideoPrivacy.PASSWORD_PROTECTED]: $localize`Only users with the appropriate can see this video`
+      [VideoPrivacy.PASSWORD_PROTECTED]: $localize`Only users with the appropriate password can see this video`
     }
 
     const videoPrivacies = serverPrivacies.map(p => {
