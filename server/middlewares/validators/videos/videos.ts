@@ -2,6 +2,7 @@ import express from 'express'
 import { body, header, param, query, ValidationChain } from 'express-validator'
 import { isTestInstance } from '@server/helpers/core-utils'
 import { getResumableUploadPath } from '@server/helpers/upload'
+import { uploadx } from '@server/lib/uploadx'
 import { Redis } from '@server/lib/redis'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express-handler'
@@ -39,7 +40,6 @@ import {
 } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
-import { deleteFileAndCatch } from '../../../helpers/utils'
 import { getVideoWithAttributes } from '../../../helpers/video'
 import { CONFIG } from '../../../initializers/config'
 import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants'
@@ -107,7 +107,7 @@ const videosAddResumableValidator = [
     const user = res.locals.oauth.token.User
     const body: express.CustomUploadXFile<express.UploadXFileMetadata> = req.body
     const file = { ...body, duration: undefined, path: getResumableUploadPath(body.name), filename: body.metadata.filename }
-    const cleanup = () => deleteFileAndCatch(file.path)
+    const cleanup = () => uploadx.storage.delete(file).catch(err => logger.error('Cannot delete the file %s', file.name, { err }))
 
     const uploadId = req.query.upload_id
     const sessionExists = await Redis.Instance.doesUploadSessionExist(uploadId)
