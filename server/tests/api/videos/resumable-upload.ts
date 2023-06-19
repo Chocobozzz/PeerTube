@@ -93,10 +93,10 @@ describe('Test resumable upload', function () {
     expect((await stat(filePath)).size).to.equal(expectedSize)
   }
 
-  async function countResumableUploads () {
+  async function countResumableUploads (wait?: number) {
     const subPath = join('tmp', 'resumable-uploads')
     const filePath = server.servers.buildDirectory(subPath)
-
+    await new Promise(resolve => setTimeout(resolve, wait))
     const files = await readdir(filePath)
     return files.length
   }
@@ -134,7 +134,7 @@ describe('Test resumable upload', function () {
       const uploadId = await prepareUpload({ size: 8 * 1024 })
       await sendChunks({ pathUploadId: uploadId, size: 8 * 1024, expectedStatus: HttpStatusCode.UNPROCESSABLE_ENTITY_422 })
 
-      expect(await countResumableUploads()).to.equal(0)
+      expect(await countResumableUploads(2000)).to.equal(0)
     })
 
     it('Should not delete files after an unfinished upload', async function () {
