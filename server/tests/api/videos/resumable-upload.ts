@@ -122,14 +122,20 @@ describe('Test resumable upload', function () {
 
   describe('Directory cleaning', function () {
 
-    // FIXME: https://github.com/kukhariev/node-uploadx/pull/524/files#r852989382
-    // it('Should correctly delete files after an upload', async function () {
-    //   const uploadId = await prepareUpload()
-    //   await sendChunks({ pathUploadId: uploadId })
-    //   await server.videos.endResumableUpload({ pathUploadId: uploadId })
+    it('Should correctly delete files after an upload', async function () {
+      const uploadId = await prepareUpload()
+      await sendChunks({ pathUploadId: uploadId })
+      await server.videos.endResumableUpload({ pathUploadId: uploadId })
 
-    //   expect(await countResumableUploads()).to.equal(0)
-    // })
+      expect(await countResumableUploads()).to.equal(0)
+    })
+
+    it('Should correctly delete corrupt files', async function () {
+      const uploadId = await prepareUpload({ size: 8 * 1024 })
+      await sendChunks({ pathUploadId: uploadId, size: 8 * 1024, expectedStatus: HttpStatusCode.UNPROCESSABLE_ENTITY_422 })
+
+      expect(await countResumableUploads()).to.equal(0)
+    })
 
     it('Should not delete files after an unfinished upload', async function () {
       await prepareUpload()
