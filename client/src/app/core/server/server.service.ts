@@ -184,7 +184,9 @@ export class ServerService {
                                                                       }
                                                                     })
 
-                   if (sort === true) sortBy(hashToPopulate, 'label')
+                   if (sort === true) {
+                     hashToPopulate.sort((a, b) => a.label.localeCompare(b.label))
+                   }
 
                    return hashToPopulate
                  }),
