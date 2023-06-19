@@ -1,5 +1,4 @@
 import { remove } from 'fs-extra'
-import { throttle } from 'lodash'
 import { ConfigManager, downloadFile, logger } from 'packages/peertube-runner/shared'
 import { join } from 'path'
 import { buildUUID } from '@shared/extra-utils'
@@ -60,17 +59,26 @@ export function buildFFmpegVOD (options: {
     ? 500
     : 60000
 
-  const updateJobProgress = throttle((progress: number) => {
-    if (progress < 0 || progress > 100) progress = undefined
+  let progress: number
 
+  const interval = setInterval(() => {
     updateTranscodingProgress({ server, job, runnerToken, progress })
       .catch(err => logger.error({ err }, 'Cannot send job progress'))
-  }, updateInterval, { trailing: false })
+  }, updateInterval)
 
   return new FFmpegVOD({
     ...getCommonFFmpegOptions(),
 
-    updateJobProgress
+    onError: () => clearInterval(interval),
+    onEnd: () => clearInterval(interval),
+
+    updateJobProgress: arg => {
+      if (arg < 0 || arg > 100) {
+        progress = undefined
+      } else {
+        progress = arg
+      }
+    }
   })
 }
 

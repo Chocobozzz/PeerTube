@@ -21,6 +21,8 @@ export interface FFmpegCommandWrapperOptions {
   lTags?: { tags: string[] }
 
   updateJobProgress?: (progress?: number) => void
+  onEnd?: () => void
+  onError?: (err: Error) => void
 }
 
 export class FFmpegCommandWrapper {
@@ -37,6 +39,8 @@ export class FFmpegCommandWrapper {
   private readonly lTags: { tags: string[] }
 
   private readonly updateJobProgress: (progress?: number) => void
+  private readonly onEnd?: () => void
+  private readonly onError?: (err: Error) => void
 
   private command: FfmpegCommand
 
@@ -48,7 +52,11 @@ export class FFmpegCommandWrapper {
     this.threads = options.threads
     this.logger = options.logger
     this.lTags = options.lTags || { tags: [] }
+
     this.updateJobProgress = options.updateJobProgress
+
+    this.onEnd = options.onEnd
+    this.onError = options.onError
   }
 
   getAvailableEncoders () {
@@ -101,11 +109,15 @@ export class FFmpegCommandWrapper {
       this.command.on('error', (err, stdout, stderr) => {
         if (silent !== true) this.logger.error('Error in ffmpeg.', { stdout, stderr, shellCommand, ...this.lTags })
 
+        if (this.onError) this.onError(err)
+
         rej(err)
       })
 
       this.command.on('end', (stdout, stderr) => {
         this.logger.debug('FFmpeg command ended.', { stdout, stderr, shellCommand, ...this.lTags })
+
+        if (this.onEnd) this.onEnd()
 
         res()
       })
