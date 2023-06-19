@@ -45,5 +45,4 @@ export function buildRateLimiter (options: {
 
 function sendRateLimited (res: express.Response, options: RateLimitHandlerOptions) {
   return res.status(options.statusCode).send(options.message)
-
 }
