@@ -10,7 +10,7 @@ import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
 import { pick, simpleObjectsDeepEqual } from '@shared/core-utils'
-import { LiveVideo, LiveVideoUpdate, VideoPrivacy } from '@shared/models'
+import { LiveVideo, LiveVideoUpdate, VideoPrivacy, VideoState } from '@shared/models'
 import { VideoSource } from '@shared/models/videos/video-source'
 import { hydrateFormFromVideo } from './shared/video-edit-utils'
 
@@ -98,11 +98,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   }
 
   isWaitTranscodingHidden () {
-    if (this.videoDetails.getFiles().length > 1) { // Already transcoded
-      return true
-    }
-
-    return false
+    return this.videoDetails.state.id !== VideoState.TO_TRANSCODE
   }
 
   async update () {
