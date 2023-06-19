@@ -105,12 +105,14 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
       this.user = this.authService.getUser()
       this.userChannels = this.user.videoChannels
 
-      const channelFilters = this.userChannels.map(c => {
-        return {
-          value: 'channel:' + c.name,
-          label: c.displayName
-        }
-      })
+      const channelFilters = [ ...this.userChannels ]
+        .sort((a, b) => a.displayName.localeCompare(b.displayName))
+        .map(c => {
+          return {
+            value: 'channel:' + c.name,
+            label: c.displayName
+          }
+        })
 
       this.inputFilters = [
         {
