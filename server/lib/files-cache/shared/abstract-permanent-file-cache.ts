@@ -1,10 +1,11 @@
 import express from 'express'
 import { LRUCache } from 'lru-cache'
+import { Model } from 'sequelize'
 import { logger } from '@server/helpers/logger'
+import { CachePromise } from '@server/helpers/promise-cache'
 import { LRU_CACHE, STATIC_MAX_AGE } from '@server/initializers/constants'
 import { downloadImageFromWorker } from '@server/lib/worker/parent-process'
 import { HttpStatusCode } from '@shared/models'
-import { Model } from 'sequelize'
 
 type ImageModel = {
   fileUrl: string
@@ -41,20 +42,8 @@ export abstract class AbstractPermanentFileCache <M extends ImageModel> {
       return res.sendFile(this.filenameToPathUnsafeCache.get(filename), { maxAge: STATIC_MAX_AGE.SERVER })
     }
 
-    const image = await this.loadModel(filename)
+    const image = await this.lazyLoadIfNeeded(filename)
     if (!image) return res.status(HttpStatusCode.NOT_FOUND_404).end()
-
-    if (image.onDisk === false) {
-      if (!image.fileUrl) return res.status(HttpStatusCode.NOT_FOUND_404).end()
-
-      try {
-        await this.downloadRemoteFile(image)
-      } catch (err) {
-        logger.warn('Cannot process remote image %s.', image.fileUrl, { err })
-
-        return res.status(HttpStatusCode.NOT_FOUND_404).end()
-      }
-    }
 
     const path = image.getPath()
     this.filenameToPathUnsafeCache.set(filename, path)
@@ -64,6 +53,28 @@ export abstract class AbstractPermanentFileCache <M extends ImageModel> {
 
       this.onServeError({ err, image, next, filename })
     })
+  }
+
+  @CachePromise({
+    keyBuilder: filename => filename
+  })
+  private async lazyLoadIfNeeded (filename: string) {
+    const image = await this.loadModel(filename)
+    if (!image) return undefined
+
+    if (image.onDisk === false) {
+      if (!image.fileUrl) return undefined
+
+      try {
+        await this.downloadRemoteFile(image)
+      } catch (err) {
+        logger.warn('Cannot process remote image %s.', image.fileUrl, { err })
+
+        return undefined
+      }
+    }
+
+    return image
   }
 
   async downloadRemoteFile (image: M) {
