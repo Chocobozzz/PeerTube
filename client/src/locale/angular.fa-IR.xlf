@@ -3283,7 +3283,7 @@
       </trans-unit>
       <trans-unit id="5432070253720498105" datatype="html">
         <source>Subscribe to all channels</source>
-        <target state="translated">مشترک شدن در تمام کانال ها</target>
+        <target state="translated">مشترک شدن در تمام کانال‌ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="7542242186854344789" datatype="html">
@@ -6388,7 +6388,7 @@
       </trans-unit>
       <trans-unit id="5500467336262464724" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> subscribers </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{actor.followerscount}}"/> مشترک </target>
+        <target state="translated">مشترک<x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">25</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">55</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.html</context><context context-type="linenumber">36</context></context-group>
@@ -6942,7 +6942,7 @@
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
         <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
-        <target state="translated"><x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 ویدئو} other {{{ getTotalVideosOf(videoChannel) }} ویدئو}}"/> </target>
+        <target state="translated"><x id="ICU" xid="1730926218636655979" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {بدون ویدئو} =1 {یک ویدئو} other { ویدئو{{ getTotalVideosOf(videoChannel) }}}}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">28</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">38</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">42</context></context-group>
@@ -7004,7 +7004,7 @@
       </trans-unit>
       <trans-unit id="2705478076887104088" datatype="html">
         <source>SHOW THIS CHANNEL &gt;</source>
-        <target state="translated">نمایش این کانال و &gt;</target>
+        <target state="translated">نمایش این کانال &gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="4088311569349098646">
