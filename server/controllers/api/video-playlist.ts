@@ -497,7 +497,9 @@ async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbn
 
   // Ensure the file is on disk
   const videoMiniaturePermanentFileCache = new VideoMiniaturePermanentFileCache()
-  const inputPath = await videoMiniaturePermanentFileCache.downloadRemoteFile(videoMiniature)
+  const inputPath = videoMiniature.isOwned()
+    ? videoMiniature.getPath()
+    : await videoMiniaturePermanentFileCache.downloadRemoteFile(videoMiniature)
 
   const thumbnailModel = await updateLocalPlaylistMiniatureFromExisting({
     inputPath,
