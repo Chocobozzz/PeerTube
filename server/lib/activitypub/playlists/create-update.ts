@@ -4,7 +4,7 @@ import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CRAWL_REQUEST_CONCURRENCY } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
-import { updatePlaylistMiniatureFromUrl } from '@server/lib/thumbnail'
+import { updateRemotePlaylistMiniatureFromUrl } from '@server/lib/thumbnail'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element'
 import { FilteredModelAttributes } from '@server/types'
@@ -104,7 +104,7 @@ async function updatePlaylistThumbnail (playlistObject: PlaylistObject, playlist
     let thumbnailModel: MThumbnail
 
     try {
-      thumbnailModel = await updatePlaylistMiniatureFromUrl({ downloadUrl: playlistObject.icon.url, playlist })
+      thumbnailModel = await updateRemotePlaylistMiniatureFromUrl({ downloadUrl: playlistObject.icon.url, playlist })
       await playlist.setAndSaveThumbnail(thumbnailModel, undefined)
     } catch (err) {
       logger.warn('Cannot set thumbnail of %s.', playlistObject.id, { err, ...lTags(playlistObject.id, playlist.uuid, playlist.url) })

@@ -24,6 +24,8 @@ async function downloadImage (options: {
 
     throw err
   }
+
+  return destPath
 }
 
 module.exports = downloadImage

@@ -1,6 +1,6 @@
 import express from 'express'
-import { join } from 'path'
 import { scheduleRefreshIfNeeded } from '@server/lib/activitypub/playlists'
+import { VideoMiniaturePermanentFileCache } from '@server/lib/files-cache'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { getServerActor } from '@server/models/application/application'
 import { MVideoPlaylistFull, MVideoPlaylistThumbnail, MVideoThumbnail } from '@server/types/models'
@@ -18,7 +18,6 @@ import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { createReqFiles } from '../../helpers/express-utils'
 import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
-import { CONFIG } from '../../initializers/config'
 import { MIMETYPES, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constants'
 import { sequelizeTypescript } from '../../initializers/database'
 import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send'
@@ -496,7 +495,10 @@ async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbn
     return
   }
 
-  const inputPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, videoMiniature.filename)
+  // Ensure the file is on disk
+  const videoMiniaturePermanentFileCache = new VideoMiniaturePermanentFileCache()
+  const inputPath = await videoMiniaturePermanentFileCache.downloadRemoteFile(videoMiniature)
+
   const thumbnailModel = await updateLocalPlaylistMiniatureFromExisting({
     inputPath,
     playlist: videoPlaylist,

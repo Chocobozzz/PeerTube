@@ -66,10 +66,10 @@ export abstract class AbstractPermanentFileCache <M extends ImageModel> {
     })
   }
 
-  private async downloadRemoteFile (image: M) {
+  async downloadRemoteFile (image: M) {
     logger.info('Download remote image %s lazily.', image.fileUrl)
 
-    await this.downloadImage({
+    const destination = await this.downloadImage({
       filename: image.filename,
       fileUrl: image.fileUrl,
       size: this.getImageSize(image)
@@ -78,6 +78,8 @@ export abstract class AbstractPermanentFileCache <M extends ImageModel> {
     image.onDisk = true
     image.save()
       .catch(err => logger.error('Cannot save new image disk state.', { err }))
+
+    return destination
   }
 
   private onServeError (options: {

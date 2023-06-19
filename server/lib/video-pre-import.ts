@@ -29,7 +29,7 @@ import {
 } from '@server/types/models'
 import { ThumbnailType, VideoImportCreate, VideoImportPayload, VideoImportState, VideoPrivacy, VideoState } from '@shared/models'
 import { getLocalVideoActivityPubUrl } from './activitypub/url'
-import { updateLocalVideoMiniatureFromExisting, updateVideoMiniatureFromUrl } from './thumbnail'
+import { updateLocalVideoMiniatureFromExisting, updateLocalVideoMiniatureFromUrl } from './thumbnail'
 import { VideoPasswordModel } from '@server/models/video/video-password'
 
 class YoutubeDlImportError extends Error {
@@ -266,7 +266,7 @@ async function forgeThumbnail ({ inputPath, video, downloadUrl, type }: {
 
   if (downloadUrl) {
     try {
-      return await updateVideoMiniatureFromUrl({ downloadUrl, video, type })
+      return await updateLocalVideoMiniatureFromUrl({ downloadUrl, video, type })
     } catch (err) {
       logger.warn('Cannot process thumbnail %s from youtube-dl.', downloadUrl, { err })
     }

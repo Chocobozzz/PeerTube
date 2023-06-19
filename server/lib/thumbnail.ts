@@ -39,7 +39,7 @@ function updateLocalPlaylistMiniatureFromExisting (options: {
   })
 }
 
-function updatePlaylistMiniatureFromUrl (options: {
+function updateRemotePlaylistMiniatureFromUrl (options: {
   downloadUrl: string
   playlist: MVideoPlaylistThumbnail
   size?: ImageSize
@@ -127,7 +127,7 @@ function generateLocalVideoMiniature (options: {
 
 // ---------------------------------------------------------------------------
 
-function updateVideoMiniatureFromUrl (options: {
+function updateLocalVideoMiniatureFromUrl (options: {
   downloadUrl: string
   video: MVideoThumbnail
   type: ThumbnailType
@@ -159,7 +159,7 @@ function updateVideoMiniatureFromUrl (options: {
   return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl, onDisk: true })
 }
 
-function updateRemoteThumbnail (options: {
+function updateRemoteVideoThumbnail (options: {
   fileUrl: string
   video: MVideoThumbnail
   type: ThumbnailType
@@ -189,10 +189,10 @@ function updateRemoteThumbnail (options: {
 
 export {
   generateLocalVideoMiniature,
-  updateVideoMiniatureFromUrl,
+  updateLocalVideoMiniatureFromUrl,
   updateLocalVideoMiniatureFromExisting,
-  updateRemoteThumbnail,
-  updatePlaylistMiniatureFromUrl,
+  updateRemoteVideoThumbnail,
+  updateRemotePlaylistMiniatureFromUrl,
   updateLocalPlaylistMiniatureFromExisting
 }
 
