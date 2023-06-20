@@ -60,6 +60,7 @@ export class PlayerHTML {
     return new Promise((resolve) => {
 
       this.removePlaceholder()
+      this.wrapperElement.style.display = 'none'
 
       const translatedTitle = peertubeTranslate('Password required', translations)
       const translatedMessage = peertubeTranslate('If you’ve got it, enter it below.', translations)
@@ -103,6 +104,7 @@ export class PlayerHTML {
   removeVideoPasswordBlock () {
     const videoPasswordBlock = document.getElementById('video-password-block')
     videoPasswordBlock.style.display = 'none'
+    this.wrapperElement.style.display = 'block'
   }
 
   buildPlaceholder (video: VideoDetails) {
