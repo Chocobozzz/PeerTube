@@ -2,15 +2,17 @@ import express from 'express'
 import memoizee from 'memoizee'
 import { logger } from '@server/helpers/logger'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { getServerActor } from '@server/models/application/application'
 import { VideoModel } from '@server/models/video/video'
 import { CategoryOverview, ChannelOverview, TagOverview, VideosOverview } from '../../../shared/models/overviews'
 import { buildNSFWFilter } from '../../helpers/express-utils'
 import { MEMOIZE_TTL, OVERVIEWS } from '../../initializers/constants'
-import { asyncMiddleware, optionalAuthenticate, videosOverviewValidator } from '../../middlewares'
+import { apiRateLimiter, asyncMiddleware, optionalAuthenticate, videosOverviewValidator } from '../../middlewares'
 import { TagModel } from '../../models/video/tag'
-import { getServerActor } from '@server/models/application/application'
 
 const overviewsRouter = express.Router()
+
+overviewsRouter.use(apiRateLimiter)
 
 overviewsRouter.get('/videos',
   videosOverviewValidator,

@@ -2,6 +2,7 @@ import express from 'express'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { generateRunnerToken } from '@server/helpers/token-generator'
 import {
+  apiRateLimiter,
   asyncMiddleware,
   authenticate,
   ensureUserHasRight,
@@ -19,15 +20,18 @@ const lTags = loggerTagsFactory('api', 'runner')
 const manageRunnersRouter = express.Router()
 
 manageRunnersRouter.post('/register',
+  apiRateLimiter,
   asyncMiddleware(registerRunnerValidator),
   asyncMiddleware(registerRunner)
 )
 manageRunnersRouter.post('/unregister',
+  apiRateLimiter,
   asyncMiddleware(getRunnerFromTokenValidator),
   asyncMiddleware(unregisterRunner)
 )
 
 manageRunnersRouter.delete('/:runnerId',
+  apiRateLimiter,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_RUNNERS),
   asyncMiddleware(deleteRunnerValidator),
@@ -35,6 +39,7 @@ manageRunnersRouter.delete('/:runnerId',
 )
 
 manageRunnersRouter.get('/',
+  apiRateLimiter,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_RUNNERS),
   paginationValidator,

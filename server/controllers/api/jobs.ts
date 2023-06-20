@@ -4,6 +4,7 @@ import { HttpStatusCode, Job, JobState, JobType, ResultList, UserRight } from '@
 import { isArray } from '../../helpers/custom-validators/misc'
 import { JobQueue } from '../../lib/job-queue'
 import {
+  apiRateLimiter,
   asyncMiddleware,
   authenticate,
   ensureUserHasRight,
@@ -16,6 +17,8 @@ import {
 import { listJobsValidator } from '../../middlewares/validators/jobs'
 
 const jobsRouter = express.Router()
+
+jobsRouter.use(apiRateLimiter)
 
 jobsRouter.post('/pause',
   authenticate,

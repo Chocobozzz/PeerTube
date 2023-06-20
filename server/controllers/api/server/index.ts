@@ -1,4 +1,5 @@
 import express from 'express'
+import { apiRateLimiter } from '@server/middlewares'
 import { contactRouter } from './contact'
 import { debugRouter } from './debug'
 import { serverFollowsRouter } from './follows'
@@ -8,6 +9,8 @@ import { serverBlocklistRouter } from './server-blocklist'
 import { statsRouter } from './stats'
 
 const serverRouter = express.Router()
+
+serverRouter.use(apiRateLimiter)
 
 serverRouter.use('/', serverFollowsRouter)
 serverRouter.use('/', serverRedundancyRouter)

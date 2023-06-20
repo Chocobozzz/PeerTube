@@ -2,6 +2,7 @@ import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelSyncAuditView } from '@server/helpers/audit-logger'
 import { logger } from '@server/helpers/logger'
 import {
+  apiRateLimiter,
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
@@ -16,6 +17,8 @@ import { HttpStatusCode, VideoChannelSyncState } from '@shared/models'
 
 const videoChannelSyncRouter = express.Router()
 const auditLogger = auditLoggerFactory('channel-syncs')
+
+videoChannelSyncRouter.use(apiRateLimiter)
 
 videoChannelSyncRouter.post('/',
   authenticate,

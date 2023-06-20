@@ -7,6 +7,7 @@ import { MIMETYPES } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { getRunnerJobHandlerClass, updateLastRunnerContact } from '@server/lib/runners'
 import {
+  apiRateLimiter,
   asyncMiddleware,
   authenticate,
   ensureUserHasRight,
@@ -69,11 +70,13 @@ const runnerJobsRouter = express.Router()
 // ---------------------------------------------------------------------------
 
 runnerJobsRouter.post('/jobs/request',
+  apiRateLimiter,
   asyncMiddleware(getRunnerFromTokenValidator),
   asyncMiddleware(requestRunnerJob)
 )
 
 runnerJobsRouter.post('/jobs/:jobUUID/accept',
+  apiRateLimiter,
   asyncMiddleware(runnerJobGetValidator),
   acceptRunnerJobValidator,
   asyncMiddleware(getRunnerFromTokenValidator),
@@ -81,6 +84,7 @@ runnerJobsRouter.post('/jobs/:jobUUID/accept',
 )
 
 runnerJobsRouter.post('/jobs/:jobUUID/abort',
+  apiRateLimiter,
   asyncMiddleware(jobOfRunnerGetValidator),
   abortRunnerJobValidator,
   asyncMiddleware(abortRunnerJob)
@@ -88,6 +92,7 @@ runnerJobsRouter.post('/jobs/:jobUUID/abort',
 
 runnerJobsRouter.post('/jobs/:jobUUID/update',
   runnerJobUpdateVideoFiles,
+  apiRateLimiter, // Has to be after multer middleware to parse runner token
   asyncMiddleware(jobOfRunnerGetValidator),
   updateRunnerJobValidator,
   asyncMiddleware(updateRunnerJobController)
@@ -101,6 +106,7 @@ runnerJobsRouter.post('/jobs/:jobUUID/error',
 
 runnerJobsRouter.post('/jobs/:jobUUID/success',
   postRunnerJobSuccessVideoFiles,
+  apiRateLimiter, // Has to be after multer middleware to parse runner token
   asyncMiddleware(jobOfRunnerGetValidator),
   successRunnerJobValidator,
   asyncMiddleware(postRunnerJobSuccess)

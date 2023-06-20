@@ -1,6 +1,8 @@
 import express from 'express'
+import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { generateRunnerRegistrationToken } from '@server/helpers/token-generator'
 import {
+  apiRateLimiter,
   asyncMiddleware,
   authenticate,
   ensureUserHasRight,
@@ -12,19 +14,20 @@ import {
 import { deleteRegistrationTokenValidator } from '@server/middlewares/validators/runners'
 import { RunnerRegistrationTokenModel } from '@server/models/runner/runner-registration-token'
 import { HttpStatusCode, ListRunnerRegistrationTokensQuery, UserRight } from '@shared/models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger'
 
 const lTags = loggerTagsFactory('api', 'runner')
 
 const runnerRegistrationTokensRouter = express.Router()
 
 runnerRegistrationTokensRouter.post('/registration-tokens/generate',
+  apiRateLimiter,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_RUNNERS),
   asyncMiddleware(generateRegistrationToken)
 )
 
 runnerRegistrationTokensRouter.delete('/registration-tokens/:id',
+  apiRateLimiter,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_RUNNERS),
   asyncMiddleware(deleteRegistrationTokenValidator),
@@ -32,6 +35,7 @@ runnerRegistrationTokensRouter.delete('/registration-tokens/:id',
 )
 
 runnerRegistrationTokensRouter.get('/registration-tokens',
+  apiRateLimiter,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_RUNNERS),
   paginationValidator,

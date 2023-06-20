@@ -8,10 +8,12 @@ import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '..
 import { objectConverter } from '../../helpers/core-utils'
 import { CONFIG, reloadConfig } from '../../initializers/config'
 import { ClientHtml } from '../../lib/client-html'
-import { asyncMiddleware, authenticate, ensureUserHasRight, openapiOperationDoc } from '../../middlewares'
+import { apiRateLimiter, asyncMiddleware, authenticate, ensureUserHasRight, openapiOperationDoc } from '../../middlewares'
 import { customConfigUpdateValidator, ensureConfigIsEditable } from '../../middlewares/validators/config'
 
 const configRouter = express.Router()
+
+configRouter.use(apiRateLimiter)
 
 const auditLogger = auditLoggerFactory('config')
 

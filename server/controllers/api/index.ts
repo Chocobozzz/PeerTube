@@ -1,9 +1,8 @@
 import cors from 'cors'
 import express from 'express'
-import { buildRateLimiter } from '@server/middlewares'
+
 import { HttpStatusCode } from '../../../shared/models'
 import { badRequest } from '../../helpers/express-utils'
-import { CONFIG } from '../../initializers/config'
 import { abuseRouter } from './abuse'
 import { accountsRouter } from './accounts'
 import { blocklistRouter } from './blocklist'
@@ -32,12 +31,6 @@ apiRouter.use(cors({
   credentials: true
 }))
 
-const apiRateLimiter = buildRateLimiter({
-  windowMs: CONFIG.RATES_LIMIT.API.WINDOW_MS,
-  max: CONFIG.RATES_LIMIT.API.MAX
-})
-apiRouter.use(apiRateLimiter)
-
 apiRouter.use('/server', serverRouter)
 apiRouter.use('/abuses', abuseRouter)
 apiRouter.use('/bulk', bulkRouter)
@@ -57,6 +50,8 @@ apiRouter.use('/plugins', pluginRouter)
 apiRouter.use('/custom-pages', customPageRouter)
 apiRouter.use('/blocklist', blocklistRouter)
 apiRouter.use('/runners', runnersRouter)
+
+// apiRouter.use(apiRateLimiter)
 apiRouter.use('/ping', pong)
 apiRouter.use('/*', badRequest)
 

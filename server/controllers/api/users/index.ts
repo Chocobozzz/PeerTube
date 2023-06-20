@@ -15,6 +15,7 @@ import { Redis } from '../../../lib/redis'
 import { buildUser, createUserAccountAndChannelAndPlaylist } from '../../../lib/user'
 import {
   adminUsersSortValidator,
+  apiRateLimiter,
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
@@ -50,6 +51,9 @@ import { twoFactorRouter } from './two-factor'
 const auditLogger = auditLoggerFactory('users')
 
 const usersRouter = express.Router()
+
+usersRouter.use(apiRateLimiter)
+
 usersRouter.use('/', emailVerificationRouter)
 usersRouter.use('/', registrationsRouter)
 usersRouter.use('/', twoFactorRouter)

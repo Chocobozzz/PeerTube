@@ -25,6 +25,7 @@ import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlayli
 import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url'
 import { updatePlaylistMiniatureFromExisting } from '../../lib/thumbnail'
 import {
+  apiRateLimiter,
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
@@ -51,6 +52,8 @@ import { VideoPlaylistElementModel } from '../../models/video/video-playlist-ele
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
 const videoPlaylistRouter = express.Router()
+
+videoPlaylistRouter.use(apiRateLimiter)
 
 videoPlaylistRouter.get('/privacies', listVideoPlaylistPrivacies)
 
