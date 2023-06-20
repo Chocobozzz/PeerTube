@@ -162,6 +162,9 @@ export class PlayerManagerOptions {
     authorizationHeader: () => string
     videoFileToken: () => string
 
+    videoPassword: () => string
+    requiresPassword: boolean
+
     serverConfig: HTMLServerConfig
 
     autoplayFromPreviousVideo: boolean
@@ -178,6 +181,8 @@ export class PlayerManagerOptions {
       captionsResponse,
       autoplayFromPreviousVideo,
       videoFileToken,
+      videoPassword,
+      requiresPassword,
       translations,
       forceAutoplay,
       playlistTracker,
@@ -246,8 +251,8 @@ export class PlayerManagerOptions {
         authorizationHeader,
         videoFileToken,
 
-        requiresPassword: videoRequiresUserAuth(video),
-        videoPassword: videoFileToken,
+        requiresPassword,
+        videoPassword,
 
         errorNotifier: () => {
           // Empty, we don't have a notifier in the embed

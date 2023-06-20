@@ -282,7 +282,10 @@ export class Video implements VideoServerModel {
   }
 
   canAccessVideoWithoutPassword (user: AuthUser) {
-    return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.SEE_ALL_VIDEOS))
+    return this.privacy.id === VideoPrivacy.PASSWORD_PROTECTED &&
+      user &&
+      this.isLocal === true &&
+      (this.account.name === user.username || user.hasRight(UserRight.SEE_ALL_VIDEOS))
   }
 
   getExactNumberOfViews () {
