@@ -62,8 +62,8 @@ export class PlayerHTML {
       this.removePlaceholder()
       this.wrapperElement.style.display = 'none'
 
-      const translatedTitle = peertubeTranslate('Password required', translations)
-      const translatedMessage = peertubeTranslate('If you’ve got it, enter it below.', translations)
+      const translatedTitle = peertubeTranslate('This video is password protected', translations)
+      const translatedMessage = peertubeTranslate('You need a password to watch this video.', translations)
 
       document.title = translatedTitle
 
