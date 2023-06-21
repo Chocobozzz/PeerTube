@@ -1,10 +1,10 @@
 import express from 'express'
-import { maxBy } from 'lodash'
 import { Feed } from '@peertube/feed'
 import { CustomTag, CustomXMLNS, Person } from '@peertube/feed/lib/typings'
 import { mdToOneLinePlainText } from '@server/helpers/markdown'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
+import { getBiggestActorImage } from '@server/lib/actor-image'
 import { UserModel } from '@server/models/user/user'
 import { MAccountDefault, MChannelBannerAccountDefault, MUser, MVideoFullLight } from '@server/types/models'
 import { pick } from '@shared/core-utils'
@@ -105,12 +105,12 @@ export async function buildFeedMetadata (options: {
     accountLink = videoChannel.Account.getClientUrl()
 
     if (videoChannel.Actor.hasImage(ActorImageType.AVATAR)) {
-      const videoChannelAvatar = maxBy(videoChannel.Actor.Avatars, 'width')
+      const videoChannelAvatar = getBiggestActorImage(videoChannel.Actor.Avatars)
       imageUrl = WEBSERVER.URL + videoChannelAvatar.getStaticPath()
     }
 
     if (videoChannel.Account.Actor.hasImage(ActorImageType.AVATAR)) {
-      const accountAvatar = maxBy(videoChannel.Account.Actor.Avatars, 'width')
+      const accountAvatar = getBiggestActorImage(videoChannel.Account.Actor.Avatars)
       accountImageUrl = WEBSERVER.URL + accountAvatar.getStaticPath()
     }
 
@@ -123,7 +123,7 @@ export async function buildFeedMetadata (options: {
     accountLink = link
 
     if (account.Actor.hasImage(ActorImageType.AVATAR)) {
-      const accountAvatar = maxBy(account.Actor.Avatars, 'width')
+      const accountAvatar = getBiggestActorImage(account.Actor.Avatars)
       imageUrl = WEBSERVER.URL + accountAvatar?.getStaticPath()
       accountImageUrl = imageUrl
     }
