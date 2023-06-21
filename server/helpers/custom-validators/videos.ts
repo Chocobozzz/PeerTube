@@ -110,6 +110,10 @@ function isVideoPrivacyValid (value: number) {
   return VIDEO_PRIVACIES[value] !== undefined
 }
 
+function isVideoReplayPrivacyValid (value: number) {
+  return VIDEO_PRIVACIES[value] !== undefined && value !== VideoPrivacy.PASSWORD_PROTECTED
+}
+
 function isScheduleVideoUpdatePrivacyValid (value: number) {
   return value === VideoPrivacy.UNLISTED || value === VideoPrivacy.PUBLIC || value === VideoPrivacy.INTERNAL
 }
@@ -214,6 +218,7 @@ export {
   isVideoDurationValid,
   isVideoTagValid,
   isVideoPrivacyValid,
+  isVideoReplayPrivacyValid,
   isVideoFileResolutionValid,
   isVideoFileSizeValid,
   isVideoImageValid,
