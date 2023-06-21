@@ -1,6 +1,6 @@
 # Changelog
 
-## v5.2.0-rc.1
+## v5.2.0
 
 ### IMPORTANT NOTES
 
@@ -57,6 +57,11 @@
   * Prevent user video notification when the subscription is still in *Pending* state
   * Correctly remove *Pending* subscription
   * Fix PeerTube subtitles import
+  * Fix languages alphabetical order
+  * Fix registration notification error
+  * Correctly unload plugin paths
+  * Fix custom default route in instance logo link
+  * Fix video channels quick filter overflow
 
 
 ## v5.1.0
