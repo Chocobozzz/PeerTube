@@ -150,7 +150,7 @@ async function generatePodcastItem (options: {
   let personImage: string
 
   if (account.Actor.hasImage(ActorImageType.AVATAR)) {
-    const avatar = getBiggestActorImage(account.Actor.Avatars, 'width')
+    const avatar = getBiggestActorImage(account.Actor.Avatars)
     personImage = WEBSERVER.URL + avatar.getStaticPath()
   }
 
