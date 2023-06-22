@@ -35,49 +35,48 @@ export async function downloadInputFile (options: {
   return destination
 }
 
-export async function updateTranscodingProgress (options: {
+export function scheduleTranscodingProgress (options: {
   server: PeerTubeServer
   runnerToken: string
   job: JobWithToken
-  progress: number
+  progressGetter: () => number
 }) {
-  const { server, job, runnerToken, progress } = options
-
-  return server.runnerJobs.update({ jobToken: job.jobToken, jobUUID: job.uuid, runnerToken, progress })
-}
-
-// ---------------------------------------------------------------------------
-
-export function buildFFmpegVOD (options: {
-  server: PeerTubeServer
-  runnerToken: string
-  job: JobWithToken
-}) {
-  const { server, job, runnerToken } = options
+  const { job, server, progressGetter, runnerToken } = options
 
   const updateInterval = ConfigManager.Instance.isTestInstance()
     ? 500
     : 60000
 
-  let progress: number
+  const update = () => {
+    server.runnerJobs.update({ jobToken: job.jobToken, jobUUID: job.uuid, runnerToken, progress: progressGetter() })
+      .catch(err => logger.error({ err }, 'Cannot send job progress'))
+  }
 
   const interval = setInterval(() => {
-    updateTranscodingProgress({ server, job, runnerToken, progress })
-      .catch(err => logger.error({ err }, 'Cannot send job progress'))
+    update()
   }, updateInterval)
+
+  update()
+
+  return interval
+}
+
+// ---------------------------------------------------------------------------
+
+export function buildFFmpegVOD (options: {
+  onJobProgress: (progress: number) => void
+}) {
+  const { onJobProgress } = options
 
   return new FFmpegVOD({
     ...getCommonFFmpegOptions(),
 
-    onError: () => clearInterval(interval),
-    onEnd: () => clearInterval(interval),
-
     updateJobProgress: arg => {
-      if (arg < 0 || arg > 100) {
-        progress = undefined
-      } else {
-        progress = arg
-      }
+      const progress = arg < 0 || arg > 100
+        ? undefined
+        : arg
+
+      onJobProgress(progress)
     }
   })
 }
