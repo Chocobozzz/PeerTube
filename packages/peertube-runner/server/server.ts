@@ -1,7 +1,7 @@
 import { ensureDir, readdir, remove } from 'fs-extra'
 import { join } from 'path'
 import { io, Socket } from 'socket.io-client'
-import { pick, wait } from '@shared/core-utils'
+import { pick, shuffle, wait } from '@shared/core-utils'
 import { PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
 import { PeerTubeServer as PeerTubeServerCommand } from '@shared/server-commands'
 import { ConfigManager } from '../shared'
@@ -175,7 +175,7 @@ export class RunnerServer {
 
     let hadAvailableJob = false
 
-    for (const server of this.servers) {
+    for (const server of shuffle([ ...this.servers ])) {
       try {
         logger.info('Checking available jobs on ' + server.url)
 

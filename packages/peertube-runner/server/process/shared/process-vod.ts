@@ -1,4 +1,5 @@
 import { remove } from 'fs-extra'
+import { logger } from 'packages/peertube-runner/shared'
 import { join } from 'path'
 import { buildUUID } from '@shared/extra-utils'
 import {
@@ -16,7 +17,11 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
   const { server, job, runnerToken } = options
   const payload = job.payload
 
+  logger.info(`Downloading input file ${payload.input.videoFileUrl} for web video transcoding job ${job.jobToken}`)
+
   const inputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
+
+  logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running web video transcoding.`)
 
   const ffmpegVod = buildFFmpegVOD({ job, server, runnerToken })
 
@@ -56,7 +61,12 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
   const { server, job, runnerToken } = options
   const payload = job.payload
 
+  logger.info(`Downloading input file ${payload.input.videoFileUrl} for HLS transcoding job ${job.jobToken}`)
+
   const inputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
+
+  logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running HLS transcoding.`)
+
   const uuid = buildUUID()
 
   const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `${uuid}-${payload.output.resolution}.m3u8`)
@@ -101,8 +111,18 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
   const { server, job, runnerToken } = options
   const payload = job.payload
 
+  logger.info(
+    `Downloading input files ${payload.input.audioFileUrl} and ${payload.input.previewFileUrl} ` +
+    `for audio merge transcoding job ${job.jobToken}`
+  )
+
   const audioPath = await downloadInputFile({ url: payload.input.audioFileUrl, runnerToken, job })
   const inputPath = await downloadInputFile({ url: payload.input.previewFileUrl, runnerToken, job })
+
+  logger.info(
+    `Downloaded input files ${payload.input.audioFileUrl} and ${payload.input.previewFileUrl} ` +
+    `for job ${job.jobToken}. Running audio merge transcoding.`
+  )
 
   const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `output-${buildUUID()}.mp4`)
 

@@ -20,9 +20,13 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
   const { server, job, runnerToken } = options
   const payload = job.payload
 
+  logger.info(`Downloading input file ${payload.input.videoFileUrl} for job ${job.jobToken}`)
+
   let outputPath: string
   const inputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
   let tmpInputFilePath = inputPath
+
+  logger.info(`Input file ${payload.input.videoFileUrl} downloaded for job ${job.jobToken}. Running studio transcoding tasks.`)
 
   try {
     for (const task of payload.tasks) {
