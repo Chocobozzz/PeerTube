@@ -54,7 +54,7 @@ export class MyVideoChannelsComponent {
     const res = await this.confirmService.confirmWithExpectedInput(
       $localize`Do you really want to delete ${videoChannel.displayName}?
 It will delete ${videoChannel.videosCount} videos uploaded in this channel, and you will not be able to create another
-channel with the same name (${videoChannel.name})!`,
+channel or account with the same name (${videoChannel.name})!`,
 
       $localize`Please type the name of the video channel (${videoChannel.name}) to confirm`,
 
