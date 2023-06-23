@@ -71,7 +71,7 @@ export class VideoService {
   }
 
   getVideo (options: { videoId: string, videoPassword?: string }): Observable<VideoDetails> {
-    const headers = VideoPasswordService.getVideoPasswordHeader(options.videoPassword)
+    const headers = VideoPasswordService.buildVideoPasswordHeader(options.videoPassword)
 
     return this.serverService.getServerLocale().pipe(
       switchMap(translations => {
@@ -510,7 +510,7 @@ export class VideoService {
     const body: UserVideoRateUpdate = {
       rating: rateType
     }
-    const headers = VideoPasswordService.getVideoPasswordHeader(videoPassword)
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
 
     return this.authHttp
                .put(url, body, { headers })

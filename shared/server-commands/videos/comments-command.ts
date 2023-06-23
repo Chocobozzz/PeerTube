@@ -41,7 +41,7 @@ export class CommentsCommand extends AbstractCommand {
     count?: number
     sort?: string
   }) {
-    const { start, count, sort, videoId, videoPassword = null } = options
+    const { start, count, sort, videoId, videoPassword } = options
     const path = '/api/v1/videos/' + videoId + '/comment-threads'
 
     return this.getRequestBody<VideoCommentThreads>({
@@ -76,7 +76,7 @@ export class CommentsCommand extends AbstractCommand {
     text: string
     videoPassword?: string
   }) {
-    const { videoId, text, videoPassword = null } = options
+    const { videoId, text, videoPassword } = options
     const path = '/api/v1/videos/' + videoId + '/comment-threads'
 
     const body = await unwrapBody<{ comment: VideoComment }>(this.postBodyRequest({
@@ -101,7 +101,7 @@ export class CommentsCommand extends AbstractCommand {
     text: string
     videoPassword?: string
   }) {
-    const { videoId, toCommentId, text, videoPassword = null } = options
+    const { videoId, toCommentId, text, videoPassword } = options
     const path = '/api/v1/videos/' + videoId + '/comments/' + toCommentId
 
     const body = await unwrapBody<{ comment: VideoComment }>(this.postBodyRequest({

@@ -43,7 +43,9 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
       `Should have a video name between ${CONSTRAINTS_FIELDS.VIDEOS.NAME.min} and ${CONSTRAINTS_FIELDS.VIDEOS.NAME.max} characters long`
     ),
   body('videoPasswords')
-    .optional(),
+    .optional()
+    .isArray()
+    .withMessage('Video passwords should be an array.'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User

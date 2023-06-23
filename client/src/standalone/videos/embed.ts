@@ -27,6 +27,7 @@ import {
   VideoFetcher
 } from './shared'
 import { PlayerHTML } from './shared/player-html'
+import { CustomError } from 'src/types'
 
 export class PeerTubeEmbed {
   player: videojs.Player
@@ -191,21 +192,9 @@ export class PeerTubeEmbed {
 
       return this.buildVideoPlayer({ videoResponse, captionsPromise, autoplayFromPreviousVideo, forceAutoplay })
     } catch (err) {
-      let incorrectPassword = null
-      if (err.message === ServerErrorCode.VIDEO_REQUIRES_PASSWORD) incorrectPassword = false
-      else if (err.message === ServerErrorCode.INCORRECT_VIDEO_PASSWORD) incorrectPassword = true
 
-      if (incorrectPassword !== null) {
-        this.requiresPassword = true
-        this.videoPassword = await this.playerHTML.displayVideoPasswordBlock({
-          incorrectPassword,
-          translations: await this.translationsPromise
-        })
-
-        this.loadVideoAndBuildPlayer({ ...options })
-      } else {
-        this.playerHTML.displayError(err.message, await this.translationsPromise)
-      }
+      if (await this.handlePasswordError(err)) this.loadVideoAndBuildPlayer({ ...options })
+      else this.playerHTML.displayError(err.message, await this.translationsPromise)
     }
   }
 
@@ -427,6 +416,21 @@ export class PeerTubeEmbed {
     this.player.bigPlayButton.hide();
 
     (this.player.el() as HTMLElement).style.pointerEvents = 'none'
+  }
+
+  private async handlePasswordError (err: CustomError) {
+    let incorrectPassword: boolean = null
+    if (err.serverCode === ServerErrorCode.VIDEO_REQUIRES_PASSWORD) incorrectPassword = false
+    else if (err.serverCode === ServerErrorCode.INCORRECT_VIDEO_PASSWORD) incorrectPassword = true
+
+    if (incorrectPassword === null) return false
+
+    this.requiresPassword = true
+    this.videoPassword = await this.playerHTML.askVideoPassword({
+      incorrectPassword,
+      translations: await this.translationsPromise
+    })
+    return true
   }
 
 }

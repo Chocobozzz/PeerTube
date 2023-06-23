@@ -1,13 +1,14 @@
 import express from 'express'
 import { VideoTokensManager } from '@server/lib/video-tokens-manager'
 import { VideoPrivacy, VideoToken } from '@shared/models'
-import { asyncMiddleware, optionalAuthenticate, videosCustomGetValidator } from '../../../middlewares'
+import { asyncMiddleware, optionalAuthenticate, videoFileTokenValidator, videosCustomGetValidator } from '../../../middlewares'
 
 const tokenRouter = express.Router()
 
 tokenRouter.post('/:id/token',
   optionalAuthenticate,
   asyncMiddleware(videosCustomGetValidator('only-video')),
+  videoFileTokenValidator,
   generateToken
 )
 

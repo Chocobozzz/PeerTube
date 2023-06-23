@@ -36,7 +36,7 @@ export class CaptionsCommand extends AbstractCommand {
     videoId: string | number
     videoPassword?: string
   }) {
-    const { videoId, videoPassword = null } = options
+    const { videoId, videoPassword } = options
     const path = '/api/v1/videos/' + videoId + '/captions'
 
     return this.getRequestBody<ResultList<VideoCaption>>({

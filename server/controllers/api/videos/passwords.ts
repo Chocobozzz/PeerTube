@@ -17,9 +17,11 @@ import {
   videoPasswordsSortValidator
 } from '../../../middlewares/validators'
 import { VideoPasswordModel } from '@server/models/video/video-password'
-import { logger } from '@server/helpers/logger'
+import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { Transaction } from 'sequelize'
+import { getVideoWithAttributes } from '@server/helpers/video'
 
+const lTags = loggerTagsFactory('api', 'video')
 const videoPasswordRouter = express.Router()
 
 videoPasswordRouter.get('/:videoId/passwords',
@@ -54,7 +56,7 @@ export {
 
 async function listVideoPasswords (req: express.Request, res: express.Response) {
   const options = {
-    videoId: res.locals.onlyVideo.id,
+    videoId: res.locals.videoAll.id,
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort
@@ -66,7 +68,7 @@ async function listVideoPasswords (req: express.Request, res: express.Response) 
 }
 
 async function updateVideoPasswordList (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.onlyVideo
+  const videoInstance = getVideoWithAttributes(res)
   const videoId = videoInstance.id
 
   const passwordArray = req.body.passwords as string[]
@@ -76,17 +78,28 @@ async function updateVideoPasswordList (req: express.Request, res: express.Respo
     await VideoPasswordModel.addPasswords(passwordArray, videoId, t)
   })
 
-  logger.info(`Video passwords for video with name ${videoInstance.name} and uuid ${videoInstance.uuid} have been updated`)
+  logger.info(
+    `Video passwords for video with name %s and uuid %s have been updated`,
+    videoInstance.name,
+    videoInstance.uuid,
+    lTags(videoInstance.uuid)
+  )
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function removeVideoPassword (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.onlyVideo
+  const videoInstance = getVideoWithAttributes(res)
   const password = res.locals.videoPassword
 
   await VideoPasswordModel.deletePassword(password.id)
-  logger.info('Password with id %d of video named %s and uuid %s has been deleted.', password.id, videoInstance.name, videoInstance.uuid)
+  logger.info(
+    'Password with id %d of video named %s and uuid %s has been deleted.',
+    password.id,
+    videoInstance.name,
+    videoInstance.uuid,
+    lTags(videoInstance.uuid)
+  )
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

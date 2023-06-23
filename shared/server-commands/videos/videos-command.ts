@@ -113,7 +113,7 @@ export class VideosCommand extends AbstractCommand {
     rating: UserVideoRateType
     videoPassword?: string
   }) {
-    const { id, rating, videoPassword = null } = options
+    const { id, rating, videoPassword } = options
     const path = '/api/v1/videos/' + id + '/rate'
 
     return this.putBodyRequest({

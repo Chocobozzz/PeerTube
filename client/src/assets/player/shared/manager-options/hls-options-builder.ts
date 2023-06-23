@@ -88,8 +88,7 @@ export class HLSOptionsBuilder {
         httpFailedSegmentTimeout: 1000,
 
         xhrSetup: (xhr, url) => {
-          const requiresUserAuth = this.options.common.requiresUserAuth
-          const requiresPassword = this.options.common.requiresPassword
+          const { requiresUserAuth, requiresPassword } = this.options.common
 
           if (!(requiresUserAuth || requiresPassword)) return
 

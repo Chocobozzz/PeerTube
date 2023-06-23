@@ -146,7 +146,8 @@ function isVideoMagnetUriValid (value: string) {
 }
 
 function isPasswordValid (password: string) {
-  return password.length >= 2 && password.length < 100
+  return password.length >= CONSTRAINTS_FIELDS.VIDEO_PASSWORD.LENGTH.min &&
+    password.length < CONSTRAINTS_FIELDS.VIDEO_PASSWORD.LENGTH.max
 }
 
 function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
@@ -158,37 +159,27 @@ function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
     return false
   }
 
-  let privacy = null
-  if (exists(req.body) && exists(req.body.privacy)) privacy = req.body.privacy
-  if (exists(res.locals.onlyVideo) && exists(res.locals.onlyVideo.privacy)) privacy = res.locals.onlyVideo.privacy
+  let privacy: VideoPrivacy = null
+  if (exists(req.body?.privacy)) privacy = req.body.privacy
+  else if (exists(res.locals.videoAll.privacy)) privacy = res.locals.videoAll.privacy
 
-  if (privacy === VideoPrivacy.PASSWORD_PROTECTED) {
-    if (!exists(req.body.videoPasswords) && !exists(req.body.passwords)) {
-      return fail('Video passwords are missing.')
+  if (privacy !== VideoPrivacy.PASSWORD_PROTECTED) return true
+
+  if (!exists(req.body.videoPasswords) && !exists(req.body.passwords)) return fail('Video passwords are missing.')
+
+  const passwords = req.body.videoPasswords || req.body.passwords
+
+  if (passwords.length === 0) return fail('At least one video password is required.')
+
+  if (new Set(passwords).size !== passwords.length) return fail('Duplicate video passwords are not allowed.')
+
+  for (const password of passwords) {
+    if (typeof password !== 'string') {
+      return fail('Video password should be a string.')
     }
 
-    const passwords = req.body.videoPasswords || req.body.passwords
-
-    if (!Array.isArray(passwords)) {
-      return fail('Video passwords should be an array.')
-    }
-
-    if (passwords.length === 0) {
-      return fail('At least one video password is required.')
-    }
-
-    if (new Set(passwords).size !== passwords.length) {
-      return fail('Duplicate video passwords are not allowed.')
-    }
-
-    for (const password of passwords) {
-      if (typeof password !== 'string') {
-        return fail('Video password should be a string.')
-      }
-
-      if (!isPasswordValid(password)) {
-        return fail('Invalid video password. Password length should be at least 2 characters and no more than 100 characters.')
-      }
+    if (!isPasswordValid(password)) {
+      return fail('Invalid video password. Password length should be at least 2 characters and no more than 100 characters.')
     }
   }
 

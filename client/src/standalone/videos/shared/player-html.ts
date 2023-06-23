@@ -55,7 +55,7 @@ export class PlayerHTML {
     this.wrapperElement.style.display = 'none'
   }
 
-  async displayVideoPasswordBlock (options: { incorrectPassword: boolean, translations: Translations }): Promise<string> {
+  async askVideoPassword (options: { incorrectPassword: boolean, translations: Translations }): Promise<string> {
     const { incorrectPassword, translations } = options
     return new Promise((resolve) => {
 

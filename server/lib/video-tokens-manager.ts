@@ -23,9 +23,7 @@ class VideoTokensManager {
     user: MUserAccountUrl
     videoUUID: string
   }) {
-    const token = buildUUID()
-
-    const expires = new Date(new Date().getTime() + LRU_CACHE.VIDEO_TOKENS.TTL)
+    const { token, expires } = this.generateVideoToken()
 
     this.lruCache.set(token, pick(options, [ 'user', 'videoUUID' ]))
 
@@ -35,9 +33,7 @@ class VideoTokensManager {
   createForPasswordProtectedVideo (options: {
     videoUUID: string
   }) {
-    const token = buildUUID()
-
-    const expires = new Date(new Date().getTime() + LRU_CACHE.VIDEO_TOKENS.TTL)
+    const { token, expires } = this.generateVideoToken()
 
     this.lruCache.set(token, pick(options, [ 'videoUUID' ]))
 
@@ -65,6 +61,13 @@ class VideoTokensManager {
 
   static get Instance () {
     return this.instance || (this.instance = new this())
+  }
+
+  private generateVideoToken () {
+    const token = buildUUID()
+    const expires = new Date(new Date().getTime() + LRU_CACHE.VIDEO_TOKENS.TTL)
+
+    return { token, expires }
   }
 }
 

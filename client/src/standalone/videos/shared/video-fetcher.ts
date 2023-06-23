@@ -1,3 +1,4 @@
+import { CustomError } from '../../../types'
 import { HttpStatusCode, LiveVideo, VideoDetails, VideoToken } from '../../../../../shared/models'
 import { logger } from '../../../root-helpers'
 import { AuthHTTP } from './auth-http'
@@ -29,7 +30,7 @@ export class VideoFetcher {
       }
       if (videoResponse?.status === HttpStatusCode.FORBIDDEN_403) {
         const res = await videoResponse.json()
-        throw new Error(res.code)
+        throw new CustomError(res.message, res.code)
       }
       throw new Error('We cannot fetch the video. Please try again later.')
     }

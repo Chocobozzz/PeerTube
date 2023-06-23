@@ -54,9 +54,9 @@ function authenticatePromise (options: {
   res: express.Response
   errorMessage?: string
   errorStatus?: HttpStatusCode
-  type?: ServerErrorCode
+  errorType?: ServerErrorCode
 }) {
-  const { req, res, errorMessage = 'Not authenticated', errorStatus = HttpStatusCode.UNAUTHORIZED_401, type } = options
+  const { req, res, errorMessage = 'Not authenticated', errorStatus = HttpStatusCode.UNAUTHORIZED_401, errorType } = options
   return new Promise<void>(resolve => {
     // Already authenticated? (or tried to)
     if (res.locals.oauth?.token.User) return resolve()
@@ -64,7 +64,7 @@ function authenticatePromise (options: {
     if (res.locals.authenticated === false) {
       return res.fail({
         status: errorStatus,
-        type,
+        type: errorType,
         message: errorMessage
       })
     }

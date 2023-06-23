@@ -11,7 +11,7 @@ import { pick } from '@shared/core-utils'
 @DefaultScope(() => ({
   include: [
     {
-      model: VideoModel,
+      model: VideoModel.unscoped(),
       required: true
     }
   ]
@@ -50,7 +50,7 @@ export class VideoPasswordModel extends Model<Partial<AttributesOnly<VideoPasswo
   })
   Video: VideoModel
 
-  static async loadByVideoId (videoId: number, t?: Transaction): Promise<MVideoPassword[]> {
+  static async countByVideoId (videoId: number, t?: Transaction) {
     const query: FindOptions = {
       where: {
         videoId
@@ -58,7 +58,7 @@ export class VideoPasswordModel extends Model<Partial<AttributesOnly<VideoPasswo
       transaction: t
     }
 
-    return VideoPasswordModel.findAll(query)
+    return VideoPasswordModel.count(query)
   }
 
   static async loadByIdAndVideo (options: { id: number, videoId: number, t?: Transaction }): Promise<MVideoPassword> {
@@ -79,7 +79,7 @@ export class VideoPasswordModel extends Model<Partial<AttributesOnly<VideoPasswo
     count: number
     sort: string
     videoId: number
-  }): Promise<ResultList<VideoPasswordModel>> {
+  }): Promise<ResultList<MVideoPassword>> {
     const { start, count, sort, videoId } = options
 
     const { count: total, rows: data } = await VideoPasswordModel.findAndCountAll({
@@ -122,8 +122,7 @@ export class VideoPasswordModel extends Model<Partial<AttributesOnly<VideoPasswo
     const query = {
       where: pick(options, [ 'videoId', 'password' ])
     }
-
-    return await VideoPasswordModel.count(query) === 1
+    return VideoPasswordModel.findOne(query)
   }
 
   toFormattedJSON (): VideoPassword {

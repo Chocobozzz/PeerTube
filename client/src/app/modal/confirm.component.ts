@@ -21,7 +21,6 @@ export class ConfirmComponent implements OnInit {
   inputValue = ''
   confirmButtonText = ''
 
-  hasError = false
   errorMessage = ''
 
   isPasswordInput = false
@@ -45,10 +44,9 @@ export class ConfirmComponent implements OnInit {
         this.inputValue = ''
         this.confirmButtonText = ''
         this.isPasswordInput = false
-        this.hasError = false
         this.errorMessage = ''
 
-        const { type, title, message, confirmButtonText, hasError } = payload
+        const { type, title, message, confirmButtonText, errorMessage } = payload
 
         this.title = title
 
@@ -58,8 +56,7 @@ export class ConfirmComponent implements OnInit {
         } else if (type === 'confirm-password') {
           this.inputLabel = $localize`Confirm your password`
           this.isPasswordInput = true
-          this.hasError = hasError
-          this.errorMessage = $localize`Incorrect password, please enter a correct password`
+          this.errorMessage = errorMessage
         }
 
         this.confirmButtonText = confirmButtonText || $localize`Confirm`
@@ -85,6 +82,9 @@ export class ConfirmComponent implements OnInit {
     return this.expectedInputValue !== this.inputValue
   }
 
+  hasError () {
+    return this.errorMessage
+  }
   showModal () {
     this.inputValue = ''
 

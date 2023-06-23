@@ -1,9 +1,9 @@
 import express from 'express'
-import { MVideo, MVideoId, MVideoPassword } from '@server/types/models'
-import { HttpStatusCode, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, UserRight, VideoPrivacy } from '@shared/models'
 import { forceNumber } from '@shared/core-utils'
 import { VideoPasswordModel } from '@server/models/video/video-password'
 import { header } from 'express-validator'
+import { getVideoWithAttributes } from '@server/helpers/video'
 
 function isValidVideoPasswordHeader () {
   return header('x-peertube-video-password')
@@ -11,7 +11,8 @@ function isValidVideoPasswordHeader () {
     .isString()
 }
 
-function isVideoPasswordProtected (video: MVideo, res: express.Response) {
+function checkVideoIsPasswordProtected (res: express.Response) {
+  const video = getVideoWithAttributes(res)
   if (video.privacy !== VideoPrivacy.PASSWORD_PROTECTED) {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
@@ -23,7 +24,8 @@ function isVideoPasswordProtected (video: MVideo, res: express.Response) {
   return true
 }
 
-async function doesVideoPasswordExist (idArg: number | string, video: MVideoId, res: express.Response) {
+async function doesVideoPasswordExist (idArg: number | string, res: express.Response) {
+  const video = getVideoWithAttributes(res)
   const id = forceNumber(idArg)
   const videoPassword = await VideoPasswordModel.loadByIdAndVideo({ id, videoId: video.id })
 
@@ -40,10 +42,26 @@ async function doesVideoPasswordExist (idArg: number | string, video: MVideoId, 
   return true
 }
 
-async function isVideoPasswordDeletable (password: MVideoPassword, video: MVideoId, res: express.Response) {
-  const passwords = await VideoPasswordModel.loadByVideoId(video.id)
+async function isVideoPasswordDeletable (res: express.Response) {
+  const user = res.locals.oauth.token.User
+  const userAccount = user.Account
+  const video = res.locals.videoAll
 
-  if (passwords.length <= 1) {
+  // Check if the user who did the request is able to delete the video passwords
+  if (
+    user.hasRight(UserRight.UPDATE_ANY_VIDEO) === false && // Not a moderator
+    video.VideoChannel.accountId !== userAccount.id // Not the video owner
+  ) {
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'Cannot remove passwords of another user\'s video'
+    })
+    return false
+  }
+
+  const passwordCount = await VideoPasswordModel.countByVideoId(video.id)
+
+  if (passwordCount <= 1) {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
       message: 'Cannot delete the last password of the protected video'
@@ -56,7 +74,7 @@ async function isVideoPasswordDeletable (password: MVideoPassword, video: MVideo
 
 export {
   isValidVideoPasswordHeader,
-  isVideoPasswordProtected,
+  checkVideoIsPasswordProtected as isVideoPasswordProtected,
   doesVideoPasswordExist,
   isVideoPasswordDeletable
 }

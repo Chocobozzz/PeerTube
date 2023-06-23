@@ -73,7 +73,9 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
   body('videoPasswords')
-    .optional(),
+    .optional()
+    .isArray()
+    .withMessage('Video passwords should be an array.'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
@@ -181,7 +183,9 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
   body('videoPasswords')
-    .optional(),
+    .optional()
+    .isArray()
+    .withMessage('Video passwords should be an array.'),
 
   header('x-upload-content-length')
     .isNumeric()
@@ -238,7 +242,9 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
   body('videoPasswords')
-    .optional(),
+    .optional()
+    .isArray()
+    .withMessage('Video passwords should be an array.'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)

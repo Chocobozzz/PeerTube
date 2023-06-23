@@ -114,7 +114,7 @@ async function checkCanSeeVideo (options: {
   const { req, res, video, paramId } = options
 
   if (video.requiresUserAuth({ urlParamId: paramId, checkBlacklist: true })) {
-    return checkCanSeeAuthVideo({ req, res, video })
+    return checkCanSeeUserAuthVideo({ req, res, video })
   }
 
   if (video.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
@@ -128,7 +128,7 @@ async function checkCanSeeVideo (options: {
   throw new Error('Unknown video privacy when checking video right ' + video.url)
 }
 
-async function checkCanSeeAuthVideo (options: {
+async function checkCanSeeUserAuthVideo (options: {
   req: Request
   res: Response
   video: MVideoId | MVideoWithRights
@@ -149,9 +149,7 @@ async function checkCanSeeAuthVideo (options: {
   const user = res.locals.oauth?.token.User
   if (!user) return fail()
 
-  const videoWithRights = (video as MVideoWithRights).VideoChannel?.Account?.userId
-    ? video as MVideoWithRights
-    : await VideoModel.loadFull(video.id)
+  const videoWithRights = await getVideoWithRights(video as MVideoWithRights)
 
   const privacy = videoWithRights.privacy
 
@@ -183,9 +181,7 @@ async function checkCanSeePasswordProtectedVideo (options: {
 }) {
   const { req, res, video } = options
 
-  const videoWithAccount = (video as MVideoAccountLight).VideoChannel?.Account?.userId
-    ? video as MVideoAccountLight
-    : await VideoModel.loadFull(video.id)
+  const videoWithRights = await getVideoWithRights(video as MVideoWithRights)
 
   const videoPassword = req.header('x-peertube-video-password')
 
@@ -194,10 +190,10 @@ async function checkCanSeePasswordProtectedVideo (options: {
     const errorType = ServerErrorCode.VIDEO_REQUIRES_PASSWORD
 
     if (req.header('authorization')) {
-      await authenticatePromise({ req, res, errorMessage, errorStatus: HttpStatusCode.FORBIDDEN_403, type: errorType })
+      await authenticatePromise({ req, res, errorMessage, errorStatus: HttpStatusCode.FORBIDDEN_403, errorType })
       const user = res.locals.oauth?.token.User
 
-      if (canUserAccessVideo(user, videoWithAccount, UserRight.SEE_ALL_VIDEOS)) return true
+      if (canUserAccessVideo(user, videoWithRights, UserRight.SEE_ALL_VIDEOS)) return true
     }
 
     res.fail({
@@ -223,6 +219,12 @@ function canUserAccessVideo (user: MUser, video: MVideoWithRights | MVideoAccoun
   const isOwnedByUser = video.VideoChannel.Account.userId === user.id
 
   return isOwnedByUser || user.hasRight(right)
+}
+
+async function getVideoWithRights (video: MVideoWithRights): Promise<MVideoWithRights> {
+  return video.VideoChannel?.Account?.userId
+    ? video
+    : VideoModel.loadFull(video.id)
 }
 
 // ---------------------------------------------------------------------------

@@ -315,7 +315,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         })
       },
       error: async err => {
-        if (err.status === HttpStatusCode.FORBIDDEN_403) {
+        if (err.body.code === ServerErrorCode.VIDEO_REQUIRES_PASSWORD || err.body.code === ServerErrorCode.INCORRECT_VIDEO_PASSWORD) {
           const { confirmed, password } = await this.handleVideoPasswordError(err)
 
           if (confirmed === false) return this.location.back()
@@ -402,7 +402,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.confirmService.confirmWithPassword({
       message: $localize`You need a password to watch this video`,
       title: $localize`This video is password protected`,
-      hasError: isIncorrectPassword
+      errorMessage: isIncorrectPassword ? $localize`Incorrect password, please enter a correct password` : ''
     })
   }
 
@@ -725,7 +725,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         videoFileToken: () => videoFileToken,
         requiresUserAuth: videoRequiresUserAuth(video, videoPassword),
-        requiresPassword: video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED && !video.canAccessVideoWithoutPassword(this.user),
+        requiresPassword: video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED &&
+          !video.canAccessPasswordProtectedVideoWithoutPassword(this.user),
         videoPassword: () => videoPassword,
 
         videoCaptions: playerCaptions,

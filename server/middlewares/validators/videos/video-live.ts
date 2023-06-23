@@ -82,7 +82,9 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     .custom(isLiveLatencyModeValid),
 
   body('videoPasswords')
-    .optional(),
+    .optional()
+    .isArray()
+    .withMessage('Video passwords should be an array.'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)

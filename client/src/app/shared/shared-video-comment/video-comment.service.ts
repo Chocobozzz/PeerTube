@@ -33,7 +33,7 @@ export class VideoCommentService {
   ) {}
 
   addCommentThread (videoId: string, comment: VideoCommentCreate, videoPassword?: string) {
-    const headers = VideoPasswordService.getVideoPasswordHeader(videoPassword)
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comment-threads'
     const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
@@ -46,7 +46,7 @@ export class VideoCommentService {
 
   addCommentReply (options: { videoId: string, inReplyToCommentId: number, comment: VideoCommentCreate, videoPassword?: string }) {
     const { videoId, inReplyToCommentId, comment, videoPassword } = options
-    const headers = VideoPasswordService.getVideoPasswordHeader(videoPassword)
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comments/' + inReplyToCommentId
     const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
@@ -86,7 +86,7 @@ export class VideoCommentService {
   }): Observable<ThreadsResultList<VideoComment>> {
     const { videoId, videoPassword, componentPagination, sort } = parameters
 
-    const headers = VideoPasswordService.getVideoPasswordHeader(videoPassword)
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
 
     const pagination = this.restService.componentToRestPagination(componentPagination)
 
@@ -108,7 +108,7 @@ export class VideoCommentService {
   }): Observable<VideoCommentThreadTree> {
     const { videoId, threadId, videoPassword } = parameters
     const url = `${VideoCommentService.BASE_VIDEO_URL + videoId}/comment-threads/${threadId}`
-    const headers = VideoPasswordService.getVideoPasswordHeader(videoPassword)
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
 
     return this.authHttp
                .get<VideoCommentThreadTreeServerModel>(url, { headers })

@@ -27,7 +27,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 780
+const LAST_MIGRATION_VERSION = 785
 
 // ---------------------------------------------------------------------------
 
@@ -446,6 +446,9 @@ const CONSTRAINTS_FIELDS = {
     REASON: { min: 1, max: 5000 }, // Length
     ERROR_MESSAGE: { min: 1, max: 5000 }, // Length
     PROGRESS: { min: 0, max: 100 } // Value
+  },
+  VIDEO_PASSWORD: {
+    LENGTH: { min: 2, max: 100 }
   }
 }
 

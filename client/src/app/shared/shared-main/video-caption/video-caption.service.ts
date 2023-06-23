@@ -19,7 +19,7 @@ export class VideoCaptionService {
   ) {}
 
   listCaptions (videoId: string, videoPassword?: string): Observable<ResultList<VideoCaption>> {
-    const headers = VideoPasswordService.getVideoPasswordHeader(videoPassword)
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
 
     return this.authHttp.get<ResultList<VideoCaption>>(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions`, { headers })
                .pipe(
