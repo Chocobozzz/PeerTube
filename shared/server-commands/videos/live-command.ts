@@ -124,6 +124,10 @@ export class LiveCommand extends AbstractCommand {
   }) {
     const { saveReplay, permanentLive, privacy = VideoPrivacy.PUBLIC, videoPasswords } = options
 
+    const replaySettings = privacy === VideoPrivacy.PASSWORD_PROTECTED
+      ? { privacy: VideoPrivacy.PRIVATE }
+      : { privacy }
+
     const { uuid } = await this.create({
       ...options,
 
@@ -131,7 +135,7 @@ export class LiveCommand extends AbstractCommand {
         name: 'live',
         permanentLive,
         saveReplay,
-        replaySettings: { privacy },
+        replaySettings,
         channelId: this.server.store.channel.id,
         privacy,
         videoPasswords

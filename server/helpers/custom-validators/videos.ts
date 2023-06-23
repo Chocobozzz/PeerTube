@@ -13,6 +13,7 @@ import {
   VIDEO_STATES
 } from '../../initializers/constants'
 import { exists, isArray, isDateValid, isFileValid } from './misc'
+import { getVideoWithAttributes } from '@server/helpers/video'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 
@@ -159,9 +160,12 @@ function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
     return false
   }
 
-  let privacy: VideoPrivacy = null
+  let privacy: VideoPrivacy
+  const video = getVideoWithAttributes(res)
+
   if (exists(req.body?.privacy)) privacy = req.body.privacy
-  else if (exists(res.locals.videoAll.privacy)) privacy = res.locals.videoAll.privacy
+
+  else if (exists(video?.privacy)) privacy = video.privacy
 
   if (privacy !== VideoPrivacy.PASSWORD_PROTECTED) return true
 
