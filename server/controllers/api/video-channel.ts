@@ -19,6 +19,7 @@ import { JobQueue } from '../../lib/job-queue'
 import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '../../lib/local-actor'
 import { createLocalVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel'
 import {
+  apiRateLimiter,
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
@@ -56,6 +57,8 @@ const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_
 const reqBannerFile = createReqFiles([ 'bannerfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
 const videoChannelRouter = express.Router()
+
+videoChannelRouter.use(apiRateLimiter)
 
 videoChannelRouter.get('/',
   paginationValidator,

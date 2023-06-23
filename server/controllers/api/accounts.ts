@@ -9,6 +9,7 @@ import { getFormattedObjects } from '../../helpers/utils'
 import { JobQueue } from '../../lib/job-queue'
 import { Hooks } from '../../lib/plugins/hooks'
 import {
+  apiRateLimiter,
   asyncMiddleware,
   authenticate,
   commonVideosFiltersValidator,
@@ -40,6 +41,8 @@ import { VideoChannelModel } from '../../models/video/video-channel'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 
 const accountsRouter = express.Router()
+
+accountsRouter.use(apiRateLimiter)
 
 accountsRouter.get('/',
   paginationValidator,

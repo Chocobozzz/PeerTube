@@ -14,7 +14,6 @@ import {
 import {
   cleanupTests,
   createSingleServer,
-  makePostBodyRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -641,24 +640,47 @@ describe('Test runner common actions', function () {
         })
       })
 
-      it('Should rate limit an unknown runner', async function () {
-        const path = '/api/v1/ping'
-        const fields = { runnerToken: 'toto' }
+      it('Should rate limit an unknown runner, but not a registered one', async function () {
+        this.timeout(60000)
+
+        await server.videos.quickUpload({ name: 'video' })
+        await waitJobs([ server ])
+
+        const { job } = await server.runnerJobs.autoAccept({ runnerToken })
 
         for (let i = 0; i < 20; i++) {
           try {
-            await makePostBodyRequest({ url: server.url, path, fields, expectedStatus: HttpStatusCode.OK_200 })
+            await server.runnerJobs.request({ runnerToken })
+            await server.runnerJobs.update({ runnerToken, jobToken: job.jobToken, jobUUID: job.uuid })
           } catch {}
         }
 
-        await makePostBodyRequest({ url: server.url, path, fields, expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429 })
-      })
+        // Invalid
+        {
+          await server.runnerJobs.request({ runnerToken: 'toto', expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429 })
+          await server.runnerJobs.update({
+            runnerToken: 'toto',
+            jobToken: job.jobToken,
+            jobUUID: job.uuid,
+            expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429
+          })
+        }
 
-      it('Should not rate limit a registered runner', async function () {
-        const path = '/api/v1/ping'
+        // Not provided
+        {
+          await server.runnerJobs.request({ runnerToken: undefined, expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429 })
+          await server.runnerJobs.update({
+            runnerToken: undefined,
+            jobToken: job.jobToken,
+            jobUUID: job.uuid,
+            expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429
+          })
+        }
 
-        for (let i = 0; i < 20; i++) {
-          await makePostBodyRequest({ url: server.url, path, fields: { runnerToken }, expectedStatus: HttpStatusCode.OK_200 })
+        // Registered
+        {
+          await server.runnerJobs.request({ runnerToken })
+          await server.runnerJobs.update({ runnerToken, jobToken: job.jobToken, jobUUID: job.uuid })
         }
       })
     })

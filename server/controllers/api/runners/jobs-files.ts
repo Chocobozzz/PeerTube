@@ -3,7 +3,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { proxifyHLS, proxifyWebTorrentFile } from '@server/lib/object-storage'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { getStudioTaskFilePath } from '@server/lib/video-studio'
-import { asyncMiddleware } from '@server/middlewares'
+import { apiRateLimiter, asyncMiddleware } from '@server/middlewares'
 import { jobOfRunnerGetValidator } from '@server/middlewares/validators/runners'
 import {
   runnerJobGetVideoStudioTaskFileValidator,
@@ -16,18 +16,21 @@ const lTags = loggerTagsFactory('api', 'runner')
 const runnerJobFilesRouter = express.Router()
 
 runnerJobFilesRouter.post('/jobs/:jobUUID/files/videos/:videoId/max-quality',
+  apiRateLimiter,
   asyncMiddleware(jobOfRunnerGetValidator),
   asyncMiddleware(runnerJobGetVideoTranscodingFileValidator),
   asyncMiddleware(getMaxQualityVideoFile)
 )
 
 runnerJobFilesRouter.post('/jobs/:jobUUID/files/videos/:videoId/previews/max-quality',
+  apiRateLimiter,
   asyncMiddleware(jobOfRunnerGetValidator),
   asyncMiddleware(runnerJobGetVideoTranscodingFileValidator),
   getMaxQualityVideoPreview
 )
 
 runnerJobFilesRouter.post('/jobs/:jobUUID/files/videos/:videoId/studio/task-files/:filename',
+  apiRateLimiter,
   asyncMiddleware(jobOfRunnerGetValidator),
   asyncMiddleware(runnerJobGetVideoTranscodingFileValidator),
   runnerJobGetVideoStudioTaskFileValidator,

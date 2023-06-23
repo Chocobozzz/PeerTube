@@ -2,7 +2,7 @@ import { Observable, of, Subject } from 'rxjs'
 import { first, map, share, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
-import { getDevLocale, isOnDevLocale, sortBy } from '@app/helpers'
+import { getDevLocale, isOnDevLocale } from '@app/helpers'
 import { logger } from '@root-helpers/logger'
 import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@shared/core-utils/i18n'
 import { HTMLServerConfig, ServerConfig, ServerStats, VideoConstant } from '@shared/models'
@@ -184,7 +184,9 @@ export class ServerService {
                                                                       }
                                                                     })
 
-                   if (sort === true) sortBy(hashToPopulate, 'label')
+                   if (sort === true) {
+                     hashToPopulate.sort((a, b) => a.label.localeCompare(b.label))
+                   }
 
                    return hashToPopulate
                  }),

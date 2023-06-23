@@ -4,9 +4,11 @@ import { OAuthClientModel } from '@server/models/oauth/oauth-client'
 import { HttpStatusCode, OAuthClientLocal } from '@shared/models'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
-import { asyncMiddleware, openapiOperationDoc } from '../../middlewares'
+import { apiRateLimiter, asyncMiddleware, openapiOperationDoc } from '../../middlewares'
 
 const oauthClientsRouter = express.Router()
+
+oauthClientsRouter.use(apiRateLimiter)
 
 oauthClientsRouter.get('/local',
   openapiOperationDoc({ operationId: 'getOAuthClient' }),

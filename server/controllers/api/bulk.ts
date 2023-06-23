@@ -4,9 +4,11 @@ import { bulkRemoveCommentsOfValidator } from '@server/middlewares/validators/bu
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { HttpStatusCode } from '@shared/models'
 import { BulkRemoveCommentsOfBody } from '@shared/models/bulk/bulk-remove-comments-of-body.model'
-import { asyncMiddleware, authenticate } from '../../middlewares'
+import { apiRateLimiter, asyncMiddleware, authenticate } from '../../middlewares'
 
 const bulkRouter = express.Router()
+
+bulkRouter.use(apiRateLimiter)
 
 bulkRouter.post('/remove-comments-of',
   authenticate,

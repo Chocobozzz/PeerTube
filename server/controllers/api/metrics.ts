@@ -1,10 +1,12 @@
 import express from 'express'
+import { CONFIG } from '@server/initializers/config'
 import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics'
 import { HttpStatusCode, PlaybackMetricCreate } from '@shared/models'
-import { addPlaybackMetricValidator, asyncMiddleware } from '../../middlewares'
-import { CONFIG } from '@server/initializers/config'
+import { addPlaybackMetricValidator, apiRateLimiter, asyncMiddleware } from '../../middlewares'
 
 const metricsRouter = express.Router()
+
+metricsRouter.use(apiRateLimiter)
 
 metricsRouter.post('/playback',
   asyncMiddleware(addPlaybackMetricValidator),

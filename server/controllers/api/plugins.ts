@@ -4,6 +4,7 @@ import { getFormattedObjects } from '@server/helpers/utils'
 import { listAvailablePluginsFromIndex } from '@server/lib/plugins/plugin-index'
 import { PluginManager } from '@server/lib/plugins/plugin-manager'
 import {
+  apiRateLimiter,
   asyncMiddleware,
   authenticate,
   availablePluginsSortValidator,
@@ -34,6 +35,8 @@ import {
 } from '@shared/models'
 
 const pluginRouter = express.Router()
+
+pluginRouter.use(apiRateLimiter)
 
 pluginRouter.get('/available',
   openapiOperationDoc({ operationId: 'getAvailablePlugins' }),

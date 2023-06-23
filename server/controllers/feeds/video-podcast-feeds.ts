@@ -1,8 +1,8 @@
 import express from 'express'
-import { maxBy } from 'lodash'
 import { extname } from 'path'
 import { Feed } from '@peertube/feed'
 import { CustomTag, CustomXMLNS, LiveItemStatus } from '@peertube/feed/lib/typings'
+import { getBiggestActorImage } from '@server/lib/actor-image'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { buildPodcastGroupsCache, cacheRouteFactory, videoFeedsPodcastSetCacheKey } from '@server/middlewares'
@@ -150,7 +150,7 @@ async function generatePodcastItem (options: {
   let personImage: string
 
   if (account.Actor.hasImage(ActorImageType.AVATAR)) {
-    const avatar = maxBy(account.Actor.Avatars, 'width')
+    const avatar = getBiggestActorImage(account.Actor.Avatars)
     personImage = WEBSERVER.URL + avatar.getStaticPath()
   }
 

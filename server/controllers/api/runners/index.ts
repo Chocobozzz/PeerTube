@@ -6,6 +6,8 @@ import { runnerRegistrationTokensRouter } from './registration-tokens'
 
 const runnersRouter = express.Router()
 
+// No api route limiter here, they are defined in child routers
+
 runnersRouter.use('/', manageRunnersRouter)
 runnersRouter.use('/', runnerJobsRouter)
 runnersRouter.use('/', runnerJobFilesRouter)

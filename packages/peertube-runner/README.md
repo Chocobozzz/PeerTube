@@ -21,3 +21,9 @@ npm run build:peertube-runner
 ```bash
 node packages/peertube-runner/dist/peertube-runner.js --help
 ```
+
+## Publish on NPM
+
+```bash
+(cd packages/peertube-runner && npm version patch) && npm run build:peertube-runner && (cd packages/peertube-runner && npm publish --access=public)
+```

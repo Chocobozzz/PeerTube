@@ -16,6 +16,7 @@ import {
   abusesSortValidator,
   abuseUpdateValidator,
   addAbuseMessageValidator,
+  apiRateLimiter,
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
@@ -31,6 +32,8 @@ import {
 import { AccountModel } from '../../models/account/account'
 
 const abuseRouter = express.Router()
+
+abuseRouter.use(apiRateLimiter)
 
 abuseRouter.get('/',
   openapiOperationDoc({ operationId: 'getAbuses' }),

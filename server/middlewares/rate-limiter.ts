@@ -1,5 +1,6 @@
 import express from 'express'
 import RateLimit, { Options as RateLimitHandlerOptions } from 'express-rate-limit'
+import { CONFIG } from '@server/initializers/config'
 import { RunnerModel } from '@server/models/runner/runner'
 import { UserRole } from '@shared/models'
 import { optionalAuthenticate } from './auth'
@@ -39,11 +40,15 @@ export function buildRateLimiter (options: {
   })
 }
 
+export const apiRateLimiter = buildRateLimiter({
+  windowMs: CONFIG.RATES_LIMIT.API.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.API.MAX
+})
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
 
 function sendRateLimited (res: express.Response, options: RateLimitHandlerOptions) {
   return res.status(options.statusCode).send(options.message)
-
 }

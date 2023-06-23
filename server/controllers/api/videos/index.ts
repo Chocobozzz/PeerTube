@@ -15,6 +15,7 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { JobQueue } from '../../../lib/job-queue'
 import { Hooks } from '../../../lib/plugins/hooks'
 import {
+  apiRateLimiter,
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
@@ -50,6 +51,8 @@ import { videoPasswordRouter } from './passwords'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
+
+videosRouter.use(apiRateLimiter)
 
 videosRouter.use('/', blacklistRouter)
 videosRouter.use('/', statsRouter)

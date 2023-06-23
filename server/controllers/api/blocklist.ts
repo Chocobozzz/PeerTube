@@ -1,14 +1,16 @@
 import express from 'express'
 import { handleToNameAndHost } from '@server/helpers/actors'
+import { logger } from '@server/helpers/logger'
 import { AccountBlocklistModel } from '@server/models/account/account-blocklist'
 import { getServerActor } from '@server/models/application/application'
 import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
 import { MActorAccountId, MUserAccountId } from '@server/types/models'
 import { BlockStatus } from '@shared/models'
-import { asyncMiddleware, blocklistStatusValidator, optionalAuthenticate } from '../../middlewares'
-import { logger } from '@server/helpers/logger'
+import { apiRateLimiter, asyncMiddleware, blocklistStatusValidator, optionalAuthenticate } from '../../middlewares'
 
 const blocklistRouter = express.Router()
+
+blocklistRouter.use(apiRateLimiter)
 
 blocklistRouter.get('/status',
   optionalAuthenticate,
