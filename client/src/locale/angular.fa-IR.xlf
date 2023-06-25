@@ -6735,7 +6735,7 @@
       </trans-unit>
       <trans-unit id="3030338154442300172" datatype="html">
         <source>Created <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}" xid="498463490165953744"/> </source>
-        <target state="translated">ایجاد نموده است<x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, =1 {یک لیست‌پخش} other {{{ pagination.totalItems }} لیست‌پخش}}"/> </target>
+        <target state="translated"><x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, =1 {یک لیست‌پخش} other {{{ pagination.totalItems }} لیست‌پخش}}"/> ایجاد نموده است </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="3505845886770923767" datatype="html">
