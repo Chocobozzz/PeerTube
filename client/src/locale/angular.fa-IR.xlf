@@ -6735,7 +6735,7 @@
       </trans-unit>
       <trans-unit id="3030338154442300172" datatype="html">
         <source>Created <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}" xid="498463490165953744"/> </source>
-        <target state="translated"><x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, =1 {یک لیست‌پخش} other {{{ pagination.totalItems }} لیست‌پخش}}"/> ایجاد نموده است </target>
+        <target state="translated"><x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, =1 {یک لیست‌پخش} other {{{ pagination.totalItems }} لیست‌پخش}}"/> ایجاد کرده است </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="3505845886770923767" datatype="html">
@@ -6953,7 +6953,7 @@
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
         <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
-        <target state="translated"><x id="ICU" xid="1730926218636655979" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {بدون ویدئو} =1 {یک ویدئو} other {{{ getTotalVideosOf(videoChannel) }}ویدئو }}"/> </target>
+        <target state="translated"><x id="ICU" xid="1730926218636655979" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {بدون ویدئو} =1 {یک ویدئو} other {{{ getTotalVideosOf(videoChannel) }} ویدئو }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">28</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">38</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">42</context></context-group>
