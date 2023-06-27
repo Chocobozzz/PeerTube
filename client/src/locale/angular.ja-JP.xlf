@@ -1155,7 +1155,7 @@
       </trans-unit>
       <trans-unit id="1909492071130899005" datatype="html">
         <source>Sorry but there was an issue with the external login process. Please <x id="START_LINK"/>contact an administrator<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">申し訳ありませんが、外部認証ログインのプロセスで問題がありました。<x id="START_LINK"/>運営者に連絡<x id="CLOSE_LINK"/>してください。 </target>
+        <target state="translated">申し訳ありませんが、外部認証ログインのプロセスで問題がありました。<x id="START_LINK"/>管理者に連絡<x id="CLOSE_LINK"/>してください。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="5418570600695268383" datatype="html">
@@ -1255,7 +1255,7 @@
       </trans-unit>
       <trans-unit id="87327320394367488" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target state="translated">申し訳ありません。インスタンス運営者がPeerTubeのメールシステムの設定をしていないため、パスワードを復元することができません。</target>
+        <target state="translated">申し訳ありません。インスタンス管理者がPeerTubeのメールシステムの設定をしていないため、パスワードを復元することができません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="3188014010833256853" datatype="html">
@@ -1421,7 +1421,7 @@
       </trans-unit>
       <trans-unit id="5716290603546738313" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators allow you to publish up to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> of videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on their website. </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>の運営者は、このウェブサイトで<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/>までの動画<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>をアップロードする事を許可しています。 </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>の管理者は、このウェブサイトで<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/>までの動画<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>をアップロードする事を許可しています。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -1439,7 +1439,7 @@
       </trans-unit>
       <trans-unit id="1516969129397662377" datatype="html">
         <source>Welcome to PeerTube, dear administrator!</source>
-        <target state="translated">運営者の方ですね、PeerTubeへようこそ！</target>
+        <target state="translated">管理者の方ですね、PeerTubeへようこそ！</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="807030720531713957" datatype="html">
@@ -2014,7 +2014,7 @@
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target state="translated">メディアのサイズがサーバーに対して大きすぎます。サーバーのサイズ上限を上げたい場合は、インスタンス運営者に連絡を取って下さい。</target>
+        <target state="translated">メディアのサイズがサーバーに対して大きすぎます。サーバーのサイズ上限を上げたい場合は、インスタンス管理者に連絡を取って下さい。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="5131854469652959713" datatype="html">
@@ -5363,7 +5363,7 @@
       </trans-unit>
       <trans-unit id="3946988229617310200" datatype="html">
         <source>ADMINISTRATORS</source>
-        <target state="translated">運営者</target>
+        <target state="translated">管理者</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">543</context></context-group>
       </trans-unit>
       <trans-unit id="3171683206914962995">
@@ -7109,7 +7109,7 @@
       </trans-unit>
       <trans-unit id="1970848297295860531" datatype="html">
         <source>ADMINISTRATORS &amp; SUSTAINABILITY</source>
-        <target state="translated">運営者とインスタンスの持続可能性</target>
+        <target state="translated">管理者とインスタンスの持続可能性</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="6741838149332998818" datatype="html">
@@ -7370,7 +7370,7 @@
       </trans-unit>
       <trans-unit id="4807161697338135032" datatype="html">
         <source>Contact the administrator(s)<x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;modal-subtitle&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;modal-subtitle&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>の運営者に問い合わせる</target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;modal-subtitle&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>の管理者に問い合わせる</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -7432,7 +7432,7 @@
       </trans-unit>
       <trans-unit id="2573967459337636542" datatype="html">
         <source>Administrators &amp; Sustainability</source>
-        <target state="translated">運営者とインスタンスの持続可能性</target>
+        <target state="translated">管理者とインスタンスの持続可能性</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="8980375993935541237" datatype="html">
