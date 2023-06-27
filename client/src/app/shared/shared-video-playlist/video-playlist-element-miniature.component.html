@@ -21,7 +21,8 @@
             [attr.title]="playlistElement.video.name"
           >{{ playlistElement.video.name }}</a>
 
-          <span *ngIf="isVideoPrivate()" class="pt-badge badge-yellow">Private</span>
+          <span i18n *ngIf="isVideoPrivate()" class="pt-badge badge-yellow">Private</span>
+          <span i18n *ngIf="isVideoPasswordProtected()" class="pt-badge badge-yellow">Password protected</span>
         </div>
 
         <span class="video-miniature-created-at-views">

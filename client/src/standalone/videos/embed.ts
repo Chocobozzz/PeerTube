@@ -27,7 +27,7 @@ import {
   VideoFetcher
 } from './shared'
 import { PlayerHTML } from './shared/player-html'
-import { CustomError } from 'src/types'
+import { PeerTubeServerError } from 'src/types'
 
 export class PeerTubeEmbed {
   player: videojs.Player
@@ -418,7 +418,7 @@ export class PeerTubeEmbed {
     (this.player.el() as HTMLElement).style.pointerEvents = 'none'
   }
 
-  private async handlePasswordError (err: CustomError) {
+  private async handlePasswordError (err: PeerTubeServerError) {
     let incorrectPassword: boolean = null
     if (err.serverCode === ServerErrorCode.VIDEO_REQUIRES_PASSWORD) incorrectPassword = false
     else if (err.serverCode === ServerErrorCode.INCORRECT_VIDEO_PASSWORD) incorrectPassword = true

@@ -244,7 +244,7 @@ describe('Test video static file privacy', function () {
       await checkVideoFiles({ id: uuid, expectedStatus: HttpStatusCode.FORBIDDEN_403, token: null, videoFileToken: null })
     })
 
-    it('Should not be able to access an password video files without OAuth token, file token and password', async function () {
+    it('Should not be able to access password protected video files without OAuth token, file token and password', async function () {
       this.timeout(120000)
       const videoPassword = 'my super password'
 

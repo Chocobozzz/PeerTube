@@ -171,6 +171,10 @@ export class VideoMiniatureComponent implements OnInit {
     return this.video.privacy.id === VideoPrivacy.PRIVATE
   }
 
+  isPasswordProtectedVideo () {
+    return this.video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
+  }
+
   getStateLabel (video: Video) {
     if (!video.state) return ''
 

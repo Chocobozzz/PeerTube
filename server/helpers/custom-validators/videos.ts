@@ -164,7 +164,6 @@ function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
   const video = getVideoWithAttributes(res)
 
   if (exists(req.body?.privacy)) privacy = req.body.privacy
-
   else if (exists(video?.privacy)) privacy = video.privacy
 
   if (privacy !== VideoPrivacy.PASSWORD_PROTECTED) return true

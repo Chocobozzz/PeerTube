@@ -418,7 +418,13 @@ export class VideoService {
   }
 
   getHighestAvailablePrivacy (serverPrivacies: VideoConstant<VideoPrivacy>[]) {
-    const order = [ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL, VideoPrivacy.UNLISTED, VideoPrivacy.PUBLIC ]
+    // We do not add a password as this requires additional configuration.
+    const order = [
+      VideoPrivacy.PRIVATE,
+      VideoPrivacy.INTERNAL,
+      VideoPrivacy.UNLISTED,
+      VideoPrivacy.PUBLIC
+    ]
 
     for (const privacy of order) {
       if (serverPrivacies.find(p => p.id === privacy)) {

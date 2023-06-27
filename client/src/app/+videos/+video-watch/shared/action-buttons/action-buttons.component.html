@@ -20,7 +20,7 @@
 
     <div
       class="action-dropdown" ngbDropdown placement="top" role="button" autoClose="outside"
-       *ngIf="isUserLoggedIn" (openChange)="addContent.openChange($event)"
+       *ngIf="isVideoAddableToPlaylist()" (openChange)="addContent.openChange($event)"
        [ngbTooltip]="tooltipSaveToPlaylist"
        placement="bottom auto"
     >

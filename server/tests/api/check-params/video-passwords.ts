@@ -207,6 +207,30 @@ describe('Test video passwords validator', function () {
       })
     })
 
+    if (mode === 'updatePasswords') {
+      it('Should fail for an unauthenticated user', async function () {
+        const videoPasswords = [ 'password' ]
+        await checkVideoPasswordOptions({
+          server,
+          token: null,
+          videoPasswords,
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401,
+          mode
+        })
+      })
+
+      it('Should fail for an unauthorized user', async function () {
+        const videoPasswords = [ 'password' ]
+        await checkVideoPasswordOptions({
+          server,
+          token: userAccessToken,
+          videoPasswords,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403,
+          mode
+        })
+      })
+    }
+
     it('Should succeed with a password protected privacy and correct passwords', async function () {
       const videoPasswords = [ 'password1', 'password2' ]
       const expectedStatus = mode === 'updatePasswords' || mode === 'updateVideo'
@@ -462,7 +486,7 @@ describe('Test video passwords validator', function () {
     })
   }
 
-  describe('When accessing with a password', function () {
+  describe('When accessing password protected video', function () {
 
     describe('For getting a password protected video', function () {
       validateVideoAccess('get')

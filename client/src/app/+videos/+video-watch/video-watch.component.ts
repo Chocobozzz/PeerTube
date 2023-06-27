@@ -192,6 +192,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.authService.isLoggedIn()
   }
 
+  isUserOwner () {
+    return this.video.isLocal === true && this.video.account.name === this.user?.username
+  }
+
   isVideoBlur (video: Video) {
     return video.isVideoNSFWForUser(this.user, this.serverConfig)
   }
