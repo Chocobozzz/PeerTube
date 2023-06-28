@@ -1175,7 +1175,7 @@
       </trans-unit>
       <trans-unit id="1758058452376026925" datatype="html">
         <source>⚠️ Most email addresses do not include capital letters.</source>
-        <target state="translated">⚠️ بیشتر ایمیل‌ها فاقد حروف بزرگ هستند.</target>
+        <target state="translated">⚠️ اکثر آدرس‌های ایمیل‌ فاقد حروف بزرگ هستند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="6512825581399429064" datatype="html">
@@ -1212,7 +1212,7 @@
       </trans-unit>
       <trans-unit id="7736587919193927267" datatype="html">
         <source>I forgot my password</source>
-        <target state="translated">رمزعبورم را فراموش کردم</target>
+        <target state="translated">رمزعبور را فراموش کردم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">84,86</context>
@@ -1220,7 +1220,7 @@
       </trans-unit>
       <trans-unit id="2101170466365500913" datatype="html">
         <source>Logging into an account lets you publish content</source>
-        <target state="translated">وارد شدن به حساب کاربری ، به شما امکان انتشار محتوا می‌دهد</target>
+        <target state="translated">برای انتشار محتوا بایستی وارد حساب کاربری خود شوید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="6584143415159913044" datatype="html">
