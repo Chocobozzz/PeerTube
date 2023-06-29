@@ -75,6 +75,7 @@ $setting-transition-easing: ease-out;
       > .vjs-menu {
         flex: 1;
         min-width: 200px;
+        padding: 5px 0;
       }
 
       > .vjs-menu,
@@ -88,14 +89,6 @@ $setting-transition-easing: ease-out;
           &:hover {
             cursor: pointer;
             background-color: rgba(255, 255, 255, 0.2);
-          }
-
-          &:first-child {
-            margin-top: 5px;
-          }
-
-          &:last-child {
-            margin-bottom: 5px;
           }
 
           &.disabled {

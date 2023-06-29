@@ -36,10 +36,7 @@ module.exports = function () {
 
       fallback: {
         fs: [ path.resolve('src/shims/noop.ts') ],
-        http: [ path.resolve('src/shims/http.ts') ],
-        https: [ path.resolve('src/shims/https.ts') ],
         path: [ path.resolve('src/shims/path.ts') ],
-        stream: [ path.resolve('src/shims/stream.ts') ],
         crypto: [ path.resolve('src/shims/noop.ts') ]
       }
     },

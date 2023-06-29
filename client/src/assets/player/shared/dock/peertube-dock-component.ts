@@ -10,17 +10,20 @@ export type PeerTubeDockComponentOptions = {
 
 class PeerTubeDockComponent extends Component {
 
+  options_: videojs.ComponentOptions & PeerTubeDockComponentOptions
+
+  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+  constructor (player: videojs.Player, options: videojs.ComponentOptions & PeerTubeDockComponentOptions) {
+    super(player, options)
+  }
+
   createEl () {
-    const options = this.options_ as PeerTubeDockComponentOptions
+    const el = super.createEl('div', { className: 'peertube-dock' })
 
-    const el = super.createEl('div', {
-      className: 'peertube-dock'
-    })
-
-    if (options.avatarUrl) {
+    if (this.options_.avatarUrl) {
       const avatar = videojs.dom.createEl('img', {
         className: 'peertube-dock-avatar',
-        src: options.avatarUrl
+        src: this.options_.avatarUrl
       })
 
       el.appendChild(avatar)
@@ -30,27 +33,27 @@ class PeerTubeDockComponent extends Component {
       className: 'peertube-dock-title-description'
     })
 
-    if (options.title) {
+    if (this.options_.title) {
       const title = videojs.dom.createEl('div', {
         className: 'peertube-dock-title',
-        title: options.title,
-        innerHTML: options.title
+        title: this.options_.title,
+        innerHTML: this.options_.title
       })
 
       elWrapperTitleDescription.appendChild(title)
     }
 
-    if (options.description) {
+    if (this.options_.description) {
       const description = videojs.dom.createEl('div', {
         className: 'peertube-dock-description',
-        title: options.description,
-        innerHTML: options.description
+        title: this.options_.description,
+        innerHTML: this.options_.description
       })
 
       elWrapperTitleDescription.appendChild(description)
     }
 
-    if (options.title || options.description) {
+    if (this.options_.title || this.options_.description) {
       el.appendChild(elWrapperTitleDescription)
     }
 

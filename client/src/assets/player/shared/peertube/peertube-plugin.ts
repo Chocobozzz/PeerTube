@@ -1,7 +1,7 @@
 import debug from 'debug'
 import videojs from 'video.js'
 import { logger } from '@root-helpers/logger'
-import { isMobile } from '@root-helpers/web-browser'
+import { isIOS, isMobile } from '@root-helpers/web-browser'
 import { timeToInt } from '@shared/core-utils'
 import { VideoView, VideoViewEvent } from '@shared/models/videos'
 import {
@@ -13,7 +13,7 @@ import {
   saveVideoWatchHistory,
   saveVolumeInStore
 } from '../../peertube-player-local-storage'
-import { PeerTubePluginOptions, VideoJSCaption } from '../../types'
+import { PeerTubePluginOptions } from '../../types'
 import { SettingsButton } from '../settings/settings-menu-button'
 
 const debugLogger = debug('peertube:player:peertube')
@@ -21,43 +21,59 @@ const debugLogger = debug('peertube:player:peertube')
 const Plugin = videojs.getPlugin('plugin')
 
 class PeerTubePlugin extends Plugin {
-  private readonly videoViewUrl: string
+  private readonly videoViewUrl: () => string
   private readonly authorizationHeader: () => string
+  private readonly initialInactivityTimeout: number
 
-  private readonly videoUUID: string
-  private readonly startTime: number
+  private readonly hasAutoplay: () => videojs.Autoplay
 
-  private readonly videoViewIntervalMs: number
-
-  private videoCaptions: VideoJSCaption[]
-  private defaultSubtitle: string
+  private currentSubtitle: string
+  private currentPlaybackRate: number
 
   private videoViewInterval: any
 
   private menuOpened = false
   private mouseInControlBar = false
   private mouseInSettings = false
-  private readonly initialInactivityTimeout: number
 
-  constructor (player: videojs.Player, options?: PeerTubePluginOptions) {
+  private videoViewOnPlayHandler: (...args: any[]) => void
+  private videoViewOnSeekedHandler: (...args: any[]) => void
+  private videoViewOnEndedHandler: (...args: any[]) => void
+
+  private stopTimeHandler: (...args: any[]) => void
+
+  constructor (player: videojs.Player, private readonly options: PeerTubePluginOptions) {
     super(player)
 
     this.videoViewUrl = options.videoViewUrl
     this.authorizationHeader = options.authorizationHeader
-    this.videoUUID = options.videoUUID
-    this.startTime = timeToInt(options.startTime)
-    this.videoViewIntervalMs = options.videoViewIntervalMs
+    this.hasAutoplay = options.hasAutoplay
 
-    this.videoCaptions = options.videoCaptions
     this.initialInactivityTimeout = this.player.options_.inactivityTimeout
 
-    if (options.autoplay !== false) this.player.addClass('vjs-has-autoplay')
+    this.currentSubtitle = this.options.subtitle() || getStoredLastSubtitle()
+
+    this.initializePlayer()
+    this.initOnVideoChange()
+
+    this.deleteLegacyIndexedDB()
 
     this.player.on('autoplay-failure', () => {
+      debugLogger('Autoplay failed')
+
       this.player.removeClass('vjs-has-autoplay')
+
+      // Fix a bug on iOS where the big play button is not displayed when autoplay fails
+      if (isIOS()) this.player.hasStarted(false)
     })
 
-    this.player.ready(() => {
+    this.player.on('ratechange', () => {
+      this.currentPlaybackRate = this.player.playbackRate()
+
+      this.player.defaultPlaybackRate(this.currentPlaybackRate)
+    })
+
+    this.player.one('canplay', () => {
       const playerOptions = this.player.options_
 
       const volume = getStoredVolume()
@@ -65,27 +81,14 @@ class PeerTubePlugin extends Plugin {
 
       const muted = playerOptions.muted !== undefined ? playerOptions.muted : getStoredMute()
       if (muted !== undefined) this.player.muted(muted)
+    })
 
-      this.defaultSubtitle = options.subtitle || getStoredLastSubtitle()
+    this.player.ready(() => {
 
       this.player.on('volumechange', () => {
         saveVolumeInStore(this.player.volume())
         saveMuteInStore(this.player.muted())
       })
-
-      if (options.stopTime) {
-        const stopTime = timeToInt(options.stopTime)
-        const self = this
-
-        this.player.on('timeupdate', function onTimeUpdate () {
-          if (self.player.currentTime() > stopTime) {
-            self.player.pause()
-            self.player.trigger('stopped')
-
-            self.player.off('timeupdate', onTimeUpdate)
-          }
-        })
-      }
 
       this.player.textTracks().addEventListener('change', () => {
         const showing = this.player.textTracks().tracks_.find(t => {
@@ -94,23 +97,24 @@ class PeerTubePlugin extends Plugin {
 
         if (!showing) {
           saveLastSubtitle('off')
+          this.currentSubtitle = undefined
           return
         }
 
+        this.currentSubtitle = showing.language
         saveLastSubtitle(showing.language)
       })
 
-      this.player.on('sourcechange', () => this.initCaptions())
-
-      this.player.duration(options.videoDuration)
-
-      this.initializePlayer()
-      this.runUserViewing()
+      this.player.on('video-change', () => {
+        this.initOnVideoChange()
+      })
     })
   }
 
   dispose () {
     if (this.videoViewInterval) clearInterval(this.videoViewInterval)
+
+    super.dispose()
   }
 
   onMenuOpened () {
@@ -162,40 +166,70 @@ class PeerTubePlugin extends Plugin {
 
     this.initSmoothProgressBar()
 
-    this.initCaptions()
-
-    this.listenControlBarMouse()
+    this.player.ready(() => {
+      this.listenControlBarMouse()
+    })
 
     this.listenFullScreenChange()
+  }
+
+  private initOnVideoChange () {
+    if (this.hasAutoplay() !== false) this.player.addClass('vjs-has-autoplay')
+    else this.player.removeClass('vjs-has-autoplay')
+
+    if (this.currentPlaybackRate && this.currentPlaybackRate !== 1) {
+      debugLogger('Setting playback rate to ' + this.currentPlaybackRate)
+
+      this.player.playbackRate(this.currentPlaybackRate)
+    }
+
+    this.player.ready(() => {
+      this.initCaptions()
+      this.updateControlBar()
+    })
+
+    this.handleStartStopTime()
+    this.runUserViewing()
   }
 
   // ---------------------------------------------------------------------------
 
   private runUserViewing () {
-    let lastCurrentTime = this.startTime
+    const startTime = timeToInt(this.options.startTime())
+
+    let lastCurrentTime = startTime
     let lastViewEvent: VideoViewEvent
 
-    this.player.one('play', () => {
-      this.notifyUserIsWatching(this.startTime, lastViewEvent)
-    })
+    if (this.videoViewInterval) clearInterval(this.videoViewInterval)
+    if (this.videoViewOnPlayHandler) this.player.off('play', this.videoViewOnPlayHandler)
+    if (this.videoViewOnSeekedHandler) this.player.off('seeked', this.videoViewOnSeekedHandler)
+    if (this.videoViewOnEndedHandler) this.player.off('ended', this.videoViewOnEndedHandler)
 
-    this.player.on('seeked', () => {
+    this.videoViewOnPlayHandler = () => {
+      this.notifyUserIsWatching(startTime, lastViewEvent)
+    }
+
+    this.videoViewOnSeekedHandler = () => {
       const diff = Math.floor(this.player.currentTime()) - lastCurrentTime
 
       // Don't take into account small forwards
       if (diff > 0 && diff < 3) return
 
       lastViewEvent = 'seek'
-    })
+    }
 
-    this.player.one('ended', () => {
+    this.videoViewOnEndedHandler = () => {
       const currentTime = Math.floor(this.player.duration())
       lastCurrentTime = currentTime
 
       this.notifyUserIsWatching(currentTime, lastViewEvent)
 
       lastViewEvent = undefined
-    })
+    }
+
+    this.player.one('play', this.videoViewOnPlayHandler)
+    this.player.on('seeked', this.videoViewOnSeekedHandler)
+    this.player.one('ended', this.videoViewOnEndedHandler)
 
     this.videoViewInterval = setInterval(() => {
       const currentTime = Math.floor(this.player.currentTime())
@@ -209,13 +243,13 @@ class PeerTubePlugin extends Plugin {
         .catch(err => logger.error('Cannot notify user is watching.', err))
 
       lastViewEvent = undefined
-    }, this.videoViewIntervalMs)
+    }, this.options.videoViewIntervalMs)
   }
 
   private notifyUserIsWatching (currentTime: number, viewEvent: VideoViewEvent) {
     // Server won't save history, so save the video position in local storage
     if (!this.authorizationHeader()) {
-      saveVideoWatchHistory(this.videoUUID, currentTime)
+      saveVideoWatchHistory(this.options.videoUUID(), currentTime)
     }
 
     if (!this.videoViewUrl) return Promise.resolve(true)
@@ -225,7 +259,7 @@ class PeerTubePlugin extends Plugin {
     const headers = new Headers({ 'Content-type': 'application/json; charset=UTF-8' })
     if (this.authorizationHeader()) headers.set('Authorization', this.authorizationHeader())
 
-    return fetch(this.videoViewUrl, { method: 'POST', body: JSON.stringify(body), headers })
+    return fetch(this.videoViewUrl(), { method: 'POST', body: JSON.stringify(body), headers })
   }
 
   // ---------------------------------------------------------------------------
@@ -279,18 +313,89 @@ class PeerTubePlugin extends Plugin {
   }
 
   private initCaptions () {
-    for (const caption of this.videoCaptions) {
+    debugLogger('Init captions with current subtitle ' + this.currentSubtitle)
+
+    this.player.tech(true).clearTracks('text')
+
+    for (const caption of this.options.videoCaptions()) {
       this.player.addRemoteTextTrack({
         kind: 'captions',
         label: caption.label,
         language: caption.language,
         id: caption.language,
         src: caption.src,
-        default: this.defaultSubtitle === caption.language
-      }, false)
+        default: this.currentSubtitle === caption.language
+      }, true)
     }
 
-    this.player.trigger('captionsChanged')
+    this.player.trigger('captions-changed')
+  }
+
+  private updateControlBar () {
+    debugLogger('Updating control bar')
+
+    if (this.options.isLive()) {
+      this.getPlaybackRateButton().hide()
+
+      this.player.controlBar.getChild('progressControl').hide()
+      this.player.controlBar.getChild('currentTimeDisplay').hide()
+      this.player.controlBar.getChild('timeDivider').hide()
+      this.player.controlBar.getChild('durationDisplay').hide()
+
+      this.player.controlBar.getChild('peerTubeLiveDisplay').show()
+    } else {
+      this.getPlaybackRateButton().show()
+
+      this.player.controlBar.getChild('progressControl').show()
+      this.player.controlBar.getChild('currentTimeDisplay').show()
+      this.player.controlBar.getChild('timeDivider').show()
+      this.player.controlBar.getChild('durationDisplay').show()
+
+      this.player.controlBar.getChild('peerTubeLiveDisplay').hide()
+    }
+
+    if (this.options.videoCaptions().length === 0) {
+      this.getCaptionsButton().hide()
+    } else {
+      this.getCaptionsButton().show()
+    }
+  }
+
+  private handleStartStopTime () {
+    this.player.duration(this.options.videoDuration())
+
+    if (this.stopTimeHandler) {
+      this.player.off('timeupdate', this.stopTimeHandler)
+      this.stopTimeHandler = undefined
+    }
+
+    // Prefer canplaythrough instead of canplay because Chrome has issues with the second one
+    this.player.one('canplaythrough', () => {
+      if (this.options.startTime()) {
+        debugLogger('Start the video at ' + this.options.startTime())
+
+        this.player.currentTime(timeToInt(this.options.startTime()))
+      }
+
+      if (this.options.stopTime()) {
+        const stopTime = timeToInt(this.options.stopTime())
+
+        this.stopTimeHandler = () => {
+          if (this.player.currentTime() <= stopTime) return
+
+          debugLogger('Stopping the video at ' + this.options.stopTime())
+
+          // Time top stop
+          this.player.pause()
+          this.player.trigger('auto-stopped')
+
+          this.player.off('timeupdate', this.stopTimeHandler)
+          this.stopTimeHandler = undefined
+        }
+
+        this.player.on('timeupdate', this.stopTimeHandler)
+      }
+    })
   }
 
   // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657
@@ -312,6 +417,37 @@ class PeerTubePlugin extends Plugin {
       }
       this.player_.currentTime(newTime)
       this.update()
+    }
+  }
+
+  private getCaptionsButton () {
+    const settingsButton = this.player.controlBar.getDescendant([ 'settingsButton' ]) as SettingsButton
+
+    return settingsButton.menu.getChild('captionsButton') as videojs.CaptionsButton
+  }
+
+  private getPlaybackRateButton () {
+    const settingsButton = this.player.controlBar.getDescendant([ 'settingsButton' ]) as SettingsButton
+
+    return settingsButton.menu.getChild('playbackRateMenuButton')
+  }
+
+  // We don't use webtorrent anymore, so we can safely remove old chunks from IndexedDB
+  private deleteLegacyIndexedDB () {
+    try {
+      if (typeof window.indexedDB === 'undefined') return
+      if (!window.indexedDB) return
+      if (typeof window.indexedDB.databases !== 'function') return
+
+      window.indexedDB.databases()
+        .then(databases => {
+          for (const db of databases) {
+            window.indexedDB.deleteDatabase(db.name)
+          }
+        })
+    } catch (err) {
+      debugLogger('Cannot delete legacy indexed DB', err)
+      // Nothing to do
     }
   }
 }

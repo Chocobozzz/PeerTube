@@ -24,6 +24,8 @@ class StoryboardPlugin extends Plugin {
 
   private readonly boundedHijackMouseTooltip: typeof StoryboardPlugin.prototype.hijackMouseTooltip
 
+  private onReadyOrLoadstartHandler: (event: { type: 'ready' }) => void
+
   constructor (player: videojs.Player, options: videojs.ComponentOptions & StoryboardOptions) {
     super(player, options)
 
@@ -54,7 +56,7 @@ class StoryboardPlugin extends Plugin {
     this.spritePlaceholder = videojs.dom.createEl('div', { className: 'vjs-storyboard-sprite-placeholder' }) as HTMLElement
     this.seekBar?.el()?.appendChild(this.spritePlaceholder)
 
-    this.player.on([ 'ready', 'loadstart' ], event => {
+    this.onReadyOrLoadstartHandler = event => {
       if (event.type !== 'ready') {
         const spriteSource = this.player.currentSources().find(source => {
           return Object.prototype.hasOwnProperty.call(source, 'storyboard')
@@ -72,7 +74,18 @@ class StoryboardPlugin extends Plugin {
       this.cached = !!this.sprites[this.url]
 
       this.load()
-    })
+    }
+
+    this.player.on([ 'ready', 'loadstart' ], this.onReadyOrLoadstartHandler)
+  }
+
+  dispose () {
+    if (this.onReadyOrLoadstartHandler) this.player.off([ 'ready', 'loadstart' ], this.onReadyOrLoadstartHandler)
+    if (this.progress) this.progress.off([ 'mousemove', 'touchmove' ], this.boundedHijackMouseTooltip)
+
+    this.seekBar?.el()?.removeChild(this.spritePlaceholder)
+
+    super.dispose()
   }
 
   private load () {

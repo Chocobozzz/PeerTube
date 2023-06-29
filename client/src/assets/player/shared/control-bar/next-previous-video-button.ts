@@ -4,14 +4,18 @@ import { NextPreviousVideoButtonOptions } from '../../types'
 const Button = videojs.getComponent('Button')
 
 class NextPreviousVideoButton extends Button {
-  private readonly nextPreviousVideoButtonOptions: NextPreviousVideoButtonOptions
+  options_: NextPreviousVideoButtonOptions & videojs.ComponentOptions
 
-  constructor (player: videojs.Player, options?: NextPreviousVideoButtonOptions) {
-    super(player, options as any)
+  constructor (player: videojs.Player, options?: NextPreviousVideoButtonOptions & videojs.ComponentOptions) {
+    super(player, options)
 
-    this.nextPreviousVideoButtonOptions = options
+    this.player().on('video-change', () => {
+      this.updateDisabled()
+      this.updateShowing()
+    })
 
-    this.update()
+    this.updateDisabled()
+    this.updateShowing()
   }
 
   createEl () {
@@ -35,14 +39,19 @@ class NextPreviousVideoButton extends Button {
   }
 
   handleClick () {
-    this.nextPreviousVideoButtonOptions.handler()
+    this.options_.handler()
   }
 
-  update () {
-    const disabled = this.nextPreviousVideoButtonOptions.isDisabled()
+  updateDisabled () {
+    const disabled = this.options_.isDisabled()
 
     if (disabled) this.addClass('vjs-disabled')
     else this.removeClass('vjs-disabled')
+  }
+
+  updateShowing () {
+    if (this.options_.isDisplayed()) this.show()
+    else this.hide()
   }
 }
 

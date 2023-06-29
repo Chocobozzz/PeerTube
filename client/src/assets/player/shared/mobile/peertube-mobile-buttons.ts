@@ -2,22 +2,20 @@ import videojs from 'video.js'
 
 const Component = videojs.getComponent('Component')
 class PeerTubeMobileButtons extends Component {
+  private mainButton: HTMLDivElement
 
   private rewind: Element
   private forward: Element
   private rewindText: Element
   private forwardText: Element
 
+  private touchStartHandler: (e: TouchEvent) => void
+
   createEl () {
-    const container = super.createEl('div', {
-      className: 'vjs-mobile-buttons-overlay'
-    }) as HTMLDivElement
+    const container = super.createEl('div', { className: 'vjs-mobile-buttons-overlay' }) as HTMLDivElement
+    this.mainButton = super.createEl('div', { className: 'main-button' }) as HTMLDivElement
 
-    const mainButton = super.createEl('div', {
-      className: 'main-button'
-    }) as HTMLDivElement
-
-    mainButton.addEventListener('touchstart', e => {
+    this.touchStartHandler = e => {
       e.stopPropagation()
 
       if (this.player_.paused() || this.player_.ended()) {
@@ -26,7 +24,9 @@ class PeerTubeMobileButtons extends Component {
       }
 
       this.player_.pause()
-    })
+    }
+
+    this.mainButton.addEventListener('touchstart', this.touchStartHandler, { passive: true })
 
     this.rewind = super.createEl('div', { className: 'rewind-button vjs-hidden' })
     this.forward = super.createEl('div', { className: 'forward-button vjs-hidden' })
@@ -40,10 +40,16 @@ class PeerTubeMobileButtons extends Component {
     this.forwardText = this.forward.appendChild(super.createEl('div', { className: 'text' }))
 
     container.appendChild(this.rewind)
-    container.appendChild(mainButton)
+    container.appendChild(this.mainButton)
     container.appendChild(this.forward)
 
     return container
+  }
+
+  dispose () {
+    if (this.touchStartHandler) this.mainButton.removeEventListener('touchstart', this.touchStartHandler)
+
+    super.dispose()
   }
 
   displayFastSeek (amount: number) {

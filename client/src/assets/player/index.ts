@@ -1,2 +1,2 @@
-export * from './peertube-player-manager'
+export * from './peertube-player'
 export * from './types'

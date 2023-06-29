@@ -7,10 +7,6 @@ class StatsForNerdsPlugin extends Plugin {
   private statsCard: StatsCard
 
   constructor (player: videojs.Player, options: StatsCardOptions) {
-    const settings = {
-      ...options
-    }
-
     super(player)
 
     this.player.ready(() => {
@@ -19,7 +15,17 @@ class StatsForNerdsPlugin extends Plugin {
 
     this.statsCard = new StatsCard(player, options)
 
-    player.addChild(this.statsCard, settings)
+    // Copy options
+    player.addChild(this.statsCard)
+  }
+
+  dispose () {
+    if (this.statsCard) {
+      this.statsCard.dispose()
+      this.player.removeChild(this.statsCard)
+    }
+
+    super.dispose()
   }
 
   show () {

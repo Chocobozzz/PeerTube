@@ -14,6 +14,10 @@ type Metadata = {
   levels: Level[]
 }
 
+// ---------------------------------------------------------------------------
+// Source handler registration
+// ---------------------------------------------------------------------------
+
 type HookFn = (player: videojs.Player, hljs: Hlsjs) => void
 
 const registerSourceHandler = function (vjs: typeof videojs) {
@@ -25,9 +29,12 @@ const registerSourceHandler = function (vjs: typeof videojs) {
   const html5 = vjs.getTech('Html5')
 
   if (!html5) {
-    logger.error('No Hml5 tech found in videojs')
+    logger.error('No "Html5" tech found in videojs')
     return
   }
+
+  // Already registered
+  if ((html5 as any).canPlaySource({ type: 'application/x-mpegURL' })) return
 
   // FIXME: typings
   (html5 as any).registerSourceHandler({
@@ -56,32 +63,55 @@ const registerSourceHandler = function (vjs: typeof videojs) {
   (vjs as any).Html5Hlsjs = Html5Hlsjs
 }
 
-function hlsjsConfigHandler (this: videojs.Player, options: HlsjsConfigHandlerOptions) {
-  const player = this
+// ---------------------------------------------------------------------------
+// HLS options plugin
+// ---------------------------------------------------------------------------
 
-  if (!options) return
+const Plugin = videojs.getPlugin('plugin')
 
-  if (!player.srOptions_) {
-    player.srOptions_ = {}
+class HLSJSConfigHandler extends Plugin {
+
+  constructor (player: videojs.Player, options: HlsjsConfigHandlerOptions) {
+    super(player, options)
+
+    if (!options) return
+
+    if (!player.srOptions_) {
+      player.srOptions_ = {}
+    }
+
+    if (!player.srOptions_.hlsjsConfig) {
+      player.srOptions_.hlsjsConfig = options.hlsjsConfig
+    }
+
+    if (options.levelLabelHandler && !player.srOptions_.levelLabelHandler) {
+      player.srOptions_.levelLabelHandler = options.levelLabelHandler
+    }
+
+    registerSourceHandler(videojs)
   }
 
-  if (!player.srOptions_.hlsjsConfig) {
-    player.srOptions_.hlsjsConfig = options.hlsjsConfig
-  }
+  dispose () {
+    this.player.srOptions_ = undefined
 
-  if (options.levelLabelHandler && !player.srOptions_.levelLabelHandler) {
-    player.srOptions_.levelLabelHandler = options.levelLabelHandler
+    const tech = this.player.tech(true) as any
+    if (tech.hlsProvider) {
+      tech.hlsProvider.dispose()
+      tech.hlsProvider = undefined
+    }
+
+    super.dispose()
   }
 }
 
-const registerConfigPlugin = function (vjs: typeof videojs) {
-  // Used in Brightcove since we don't pass options directly there
-  const registerVjsPlugin = vjs.registerPlugin || vjs.plugin
-  registerVjsPlugin('hlsjs', hlsjsConfigHandler)
-}
+videojs.registerPlugin('hlsjs', HLSJSConfigHandler)
 
-class Html5Hlsjs {
-  private static readonly hooks: { [id: string]: HookFn[] } = {}
+// ---------------------------------------------------------------------------
+// HLS JS source handler
+// ---------------------------------------------------------------------------
+
+export class Html5Hlsjs {
+  private static hooks: { [id: string]: HookFn[] } = {}
 
   private readonly videoElement: HTMLVideoElement
   private readonly errorCounts: ErrorCounts = {}
@@ -101,8 +131,9 @@ class Html5Hlsjs {
   private dvrDuration: number = null
   private edgeMargin: number = null
 
-  private handlers: { [ id in 'play' ]: EventListener } = {
-    play: null
+  private handlers: { [ id in 'play' | 'error' ]: EventListener } = {
+    play: null,
+    error: null
   }
 
   constructor (vjs: typeof videojs, source: videojs.Tech.SourceObject, tech: videojs.Tech) {
@@ -115,7 +146,7 @@ class Html5Hlsjs {
     this.videoElement = tech.el() as HTMLVideoElement
     this.player = vjs((tech.options_ as any).playerId)
 
-    this.videoElement.addEventListener('error', event => {
+    this.handlers.error = event => {
       let errorTxt: string
       const mediaError = ((event.currentTarget || event.target) as HTMLVideoElement).error
 
@@ -143,7 +174,8 @@ class Html5Hlsjs {
       }
 
       logger.error(`MEDIA_ERROR: ${errorTxt}`)
-    })
+    }
+    this.videoElement.addEventListener('error', this.handlers.error)
 
     this.initialize()
   }
@@ -174,6 +206,7 @@ class Html5Hlsjs {
   // See comment for `initialize` method.
   dispose () {
     this.videoElement.removeEventListener('play', this.handlers.play)
+    this.videoElement.removeEventListener('error', this.handlers.error)
 
     // FIXME: https://github.com/video-dev/hls.js/issues/4092
     const untypedHLS = this.hls as any
@@ -198,6 +231,10 @@ class Html5Hlsjs {
     Html5Hlsjs.hooks[type].splice(index, 1)
 
     return true
+  }
+
+  static removeAllHooks () {
+    Html5Hlsjs.hooks = {}
   }
 
   private _executeHooksFor (type: string) {
@@ -421,7 +458,7 @@ class Html5Hlsjs {
         ? data.level
         : -1
 
-      this.player.peertubeResolutions().select({ id: resolutionId, autoResolutionChosenId, byEngine: true })
+      this.player.peertubeResolutions().select({ id: resolutionId, autoResolutionChosenId, fireCallback: false })
     })
 
     this.hls.attachMedia(this.videoElement)
@@ -432,10 +469,4 @@ class Html5Hlsjs {
   private initialize () {
     this._initHlsjs()
   }
-}
-
-export {
-  Html5Hlsjs,
-  registerSourceHandler,
-  registerConfigPlugin
 }

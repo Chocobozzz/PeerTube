@@ -84,7 +84,9 @@ body {
   }
 
   // Do not display poster when video is starting
-  &.vjs-has-autoplay:not(.vjs-has-started) {
+  // Or if we change resolution manually
+  &.vjs-has-autoplay:not(.vjs-has-started),
+  &.vjs-updating-resolution {
     .vjs-poster {
       opacity: 0;
       visibility: hidden;

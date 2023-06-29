@@ -1,6 +1,7 @@
 import videojs from 'video.js'
+import { UpNextPluginOptions } from '../../types'
 
-function getMainTemplate (options: any) {
+function getMainTemplate (options: EndCardOptions) {
   return `
     <div class="vjs-upnext-top">
       <span class="vjs-upnext-headtext">${options.headText}</span>
@@ -23,15 +24,10 @@ function getMainTemplate (options: any) {
   `
 }
 
-export interface EndCardOptions extends videojs.ComponentOptions {
-  next: () => void
-  getTitle: () => string
-  timeout: number
+export interface EndCardOptions extends videojs.ComponentOptions, UpNextPluginOptions {
   cancelText: string
   headText: string
   suspendedText: string
-  condition: () => boolean
-  suspended: () => boolean
 }
 
 const Component = videojs.getComponent('Component')
@@ -52,27 +48,43 @@ class EndCard extends Component {
   suspendedMessage: HTMLElement
   nextButton: HTMLElement
 
+  private onEndedHandler: () => void
+  private onPlayingHandler: () => void
+
   constructor (player: videojs.Player, options: EndCardOptions) {
     super(player, options)
 
     this.totalTicks = this.options_.timeout / this.interval
 
-    player.on('ended', (_: any) => {
-      if (!this.options_.condition()) return
+    this.onEndedHandler = () => {
+      if (!this.options_.isDisplayed()) return
 
       player.addClass('vjs-upnext--showing')
-      this.showCard((canceled: boolean) => {
+
+      this.showCard(canceled => {
         player.removeClass('vjs-upnext--showing')
+
         this.container.style.display = 'none'
+
         if (!canceled) {
           this.options_.next()
         }
       })
-    })
+    }
 
-    player.on('playing', () => {
+    this.onPlayingHandler = () => {
       this.upNextEvents.trigger('playing')
-    })
+    }
+
+    player.on([ 'auto-stopped', 'ended' ], this.onEndedHandler)
+    player.on('playing', this.onPlayingHandler)
+  }
+
+  dispose () {
+    if (this.onEndedHandler) this.player().off([ 'auto-stopped', 'ended' ], this.onEndedHandler)
+    if (this.onPlayingHandler) this.player().off('playing', this.onPlayingHandler)
+
+    super.dispose()
   }
 
   createEl () {
@@ -101,13 +113,17 @@ class EndCard extends Component {
     return container
   }
 
-  showCard (cb: (value: boolean) => void) {
+  showCard (cb: (canceled: boolean) => void) {
     let timeout: any
 
     this.autoplayRing.setAttribute('stroke-dasharray', `${this.dashOffsetStart}`)
     this.autoplayRing.setAttribute('stroke-dashoffset', `${-this.dashOffsetStart}`)
 
     this.title.innerHTML = this.options_.getTitle()
+
+    if (this.totalTicks === 0) {
+      return cb(false)
+    }
 
     this.upNextEvents.one('cancel', () => {
       clearTimeout(timeout)
@@ -134,7 +150,7 @@ class EndCard extends Component {
     }
 
     const update = () => {
-      if (this.options_.suspended()) {
+      if (this.options_.isSuspended()) {
         this.suspendedMessage.innerText = this.options_.suspendedText
         goToPercent(0)
         this.ticks = 0

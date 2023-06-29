@@ -152,12 +152,24 @@ export class VideoWatchPlaylistComponent {
     this.onPlaylistVideosNearOfBottom(position)
   }
 
+  // ---------------------------------------------------------------------------
+
   hasPreviousVideo () {
-    return !!this.findPlaylistVideo(this.currentPlaylistPosition - 1, 'previous')
+    return !!this.getPreviousVideo()
   }
 
+  getPreviousVideo () {
+    return this.findPlaylistVideo(this.currentPlaylistPosition - 1, 'previous')
+  }
+
+  // ---------------------------------------------------------------------------
+
   hasNextVideo () {
-    return !!this.findPlaylistVideo(this.currentPlaylistPosition + 1, 'next')
+    return !!this.getNextVideo()
+  }
+
+  getNextVideo () {
+    return this.findPlaylistVideo(this.currentPlaylistPosition + 1, 'next')
   }
 
   navigateToPreviousPlaylistVideo () {

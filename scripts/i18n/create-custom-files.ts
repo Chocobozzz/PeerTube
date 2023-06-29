@@ -72,7 +72,10 @@ const playerKeys = {
   'Next video': 'Next video',
   'This video is password protected': 'This video is password protected',
   'You need a password to watch this video.': 'You need a password to watch this video.',
-  'Incorrect password, please enter a correct password': 'Incorrect password, please enter a correct password'
+  'Incorrect password, please enter a correct password': 'Incorrect password, please enter a correct password',
+  'Cancel': 'Cancel',
+  'Up Next': 'Up Next',
+  'Autoplay is suspended': 'Autoplay is suspended'
 }
 Object.assign(playerKeys, videojs)
 

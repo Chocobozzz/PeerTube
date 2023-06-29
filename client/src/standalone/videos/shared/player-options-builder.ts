@@ -10,7 +10,7 @@ import {
   VideoState,
   VideoStreamingPlaylistType
 } from '../../../../../shared/models'
-import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode, VideoJSCaption } from '../../../assets/player'
+import { HLSOptions, PeerTubePlayerContructorOptions, PeerTubePlayerLoadOptions, PlayerMode, VideoJSCaption } from '../../../assets/player'
 import {
   getBoolOrDefault,
   getParamString,
@@ -27,7 +27,7 @@ import { PlaylistTracker } from './playlist-tracker'
 import { Translations } from './translations'
 import { VideoFetcher } from './video-fetcher'
 
-export class PlayerManagerOptions {
+export class PlayerOptionsBuilder {
   private autoplay: boolean
 
   private controls: boolean
@@ -141,10 +141,10 @@ export class PlayerManagerOptions {
 
       if (modeParam) {
         if (modeParam === 'p2p-media-loader') this.mode = 'p2p-media-loader'
-        else this.mode = 'webtorrent'
+        else this.mode = 'web-video'
       } else {
         if (Array.isArray(video.streamingPlaylists) && video.streamingPlaylists.length !== 0) this.mode = 'p2p-media-loader'
-        else this.mode = 'webtorrent'
+        else this.mode = 'web-video'
       }
     } catch (err) {
       logger.error('Cannot get params from URL.', err)
@@ -153,7 +153,47 @@ export class PlayerManagerOptions {
 
   // ---------------------------------------------------------------------------
 
-  async getPlayerOptions (options: {
+  getPlayerConstructorOptions (options: {
+    serverConfig: HTMLServerConfig
+    authorizationHeader: () => string
+  }): PeerTubePlayerContructorOptions {
+    const { serverConfig, authorizationHeader } = options
+
+    return {
+      controls: this.controls,
+      controlBar: this.controlBar,
+
+      muted: this.muted,
+      loop: this.loop,
+
+      playbackRate: this.playbackRate,
+
+      inactivityTimeout: 2500,
+      videoViewIntervalMs: 5000,
+      metricsUrl: window.location.origin + '/api/v1/metrics/playback',
+
+      authorizationHeader,
+
+      playerElement: () => this.playerHTML.getPlayerElement(),
+      enableHotkeys: true,
+
+      peertubeLink: () => this.peertubeLink,
+      instanceName: serverConfig.instance.name,
+
+      theaterButton: false,
+
+      serverUrl: window.location.origin,
+      language: navigator.language,
+
+      pluginsManager: this.peertubePlugin.getPluginsManager(),
+
+      errorNotifier: () => {
+        // Empty, we don't have a notifier in the embed
+      }
+    }
+  }
+
+  async getPlayerLoadOptions (options: {
     video: VideoDetails
     captionsResponse: Response
 
@@ -161,39 +201,35 @@ export class PlayerManagerOptions {
 
     live?: LiveVideo
 
+    alreadyPlayed: boolean
     forceAutoplay: boolean
 
-    authorizationHeader: () => string
     videoFileToken: () => string
 
     videoPassword: () => string
     requiresPassword: boolean
 
-    serverConfig: HTMLServerConfig
-
-    autoplayFromPreviousVideo: boolean
-
     translations: Translations
 
-    playlistTracker?: PlaylistTracker
-    playNextPlaylistVideo?: () => any
-    playPreviousPlaylistVideo?: () => any
-    onVideoUpdate?: (uuid: string) => any
-  }) {
+    playlist?: {
+      playlistTracker: PlaylistTracker
+      playNext: () => any
+      playPrevious: () => any
+      onVideoUpdate: (uuid: string) => any
+    }
+  }): Promise<PeerTubePlayerLoadOptions> {
     const {
       video,
       captionsResponse,
-      autoplayFromPreviousVideo,
       videoFileToken,
       videoPassword,
       requiresPassword,
       translations,
+      alreadyPlayed,
       forceAutoplay,
-      playlistTracker,
+      playlist,
       live,
-      storyboardsResponse,
-      authorizationHeader,
-      serverConfig
+      storyboardsResponse
     } = options
 
     const [ videoCaptions, storyboard ] = await Promise.all([
@@ -201,88 +237,56 @@ export class PlayerManagerOptions {
       this.buildStoryboard(storyboardsResponse)
     ])
 
-    const playerOptions: PeertubePlayerManagerOptions = {
-      common: {
-        // Autoplay in playlist mode
-        autoplay: autoplayFromPreviousVideo ? true : this.autoplay,
-        forceAutoplay,
+    return {
+      mode: this.mode,
 
-        controls: this.controls,
-        controlBar: this.controlBar,
+      autoplay: forceAutoplay || alreadyPlayed || this.autoplay,
+      forceAutoplay,
 
-        muted: this.muted,
-        loop: this.loop,
+      p2pEnabled: this.p2pEnabled,
 
-        p2pEnabled: this.p2pEnabled,
+      subtitle: this.subtitle,
 
-        captions: videoCaptions.length !== 0,
-        subtitle: this.subtitle,
+      storyboard,
 
-        storyboard,
+      startTime: playlist
+        ? playlist.playlistTracker.getCurrentElement().startTimestamp
+        : this.startTime,
+      stopTime: playlist
+        ? playlist.playlistTracker.getCurrentElement().stopTimestamp
+        : this.stopTime,
 
-        startTime: playlistTracker
-          ? playlistTracker.getCurrentElement().startTimestamp
-          : this.startTime,
-        stopTime: playlistTracker
-          ? playlistTracker.getCurrentElement().stopTimestamp
-          : this.stopTime,
+      videoCaptions,
+      videoViewUrl: this.videoFetcher.getVideoViewsUrl(video.uuid),
 
-        playbackRate: this.playbackRate,
+      videoShortUUID: video.shortUUID,
+      videoUUID: video.uuid,
 
-        videoCaptions,
-        inactivityTimeout: 2500,
-        videoViewUrl: this.videoFetcher.getVideoViewsUrl(video.uuid),
-        videoViewIntervalMs: 5000,
-        metricsUrl: window.location.origin + '/api/v1/metrics/playback',
+      duration: video.duration,
 
-        videoShortUUID: video.shortUUID,
-        videoUUID: video.uuid,
+      poster: window.location.origin + video.previewPath,
 
-        playerElement: this.playerHTML.getPlayerElement(),
-        onPlayerElementChange: (element: HTMLVideoElement) => {
-          this.playerHTML.setPlayerElement(element)
-        },
+      embedUrl: window.location.origin + video.embedPath,
+      embedTitle: video.name,
 
-        videoDuration: video.duration,
-        enableHotkeys: true,
+      requiresUserAuth: videoRequiresUserAuth(video),
+      videoFileToken,
 
-        peertubeLink: this.peertubeLink,
-        instanceName: serverConfig.instance.name,
+      requiresPassword,
+      videoPassword,
 
-        poster: window.location.origin + video.previewPath,
-        theaterButton: false,
+      ...this.buildLiveOptions(video, live),
 
-        serverUrl: window.location.origin,
-        language: navigator.language,
-        embedUrl: window.location.origin + video.embedPath,
-        embedTitle: video.name,
+      ...this.buildPlaylistOptions(playlist),
 
-        requiresUserAuth: videoRequiresUserAuth(video),
-        authorizationHeader,
-        videoFileToken,
+      dock: this.buildDockOptions(video),
 
-        requiresPassword,
-        videoPassword,
-
-        errorNotifier: () => {
-          // Empty, we don't have a notifier in the embed
-        },
-
-        ...this.buildLiveOptions(video, live),
-
-        ...this.buildPlaylistOptions(options)
-      },
-
-      webtorrent: {
+      webVideo: {
         videoFiles: video.files
       },
 
-      ...this.buildP2PMediaLoaderOptions(video),
-
-      pluginsManager: this.peertubePlugin.getPluginsManager()
+      hls: this.buildHLSOptions(video)
     }
-
-    return playerOptions
   }
 
   private buildLiveOptions (video: VideoDetails, live: LiveVideo) {
@@ -308,15 +312,27 @@ export class PlayerManagerOptions {
     }
   }
 
-  private buildPlaylistOptions (options: {
-    playlistTracker?: PlaylistTracker
-    playNextPlaylistVideo?: () => any
-    playPreviousPlaylistVideo?: () => any
-    onVideoUpdate?: (uuid: string) => any
+  private buildPlaylistOptions (options?: {
+    playlistTracker: PlaylistTracker
+    playNext: () => any
+    playPrevious: () => any
+    onVideoUpdate: (uuid: string) => any
   }) {
-    const { playlistTracker, playNextPlaylistVideo, playPreviousPlaylistVideo, onVideoUpdate } = options
+    if (!options) {
+      return {
+        nextVideo: {
+          enabled: false,
+          displayControlBarButton: false,
+          getVideoTitle: () => ''
+        },
+        previousVideo: {
+          enabled: false,
+          displayControlBarButton: false
+        }
+      }
+    }
 
-    if (!playlistTracker) return {}
+    const { playlistTracker, playNext, playPrevious, onVideoUpdate } = options
 
     return {
       playlist: {
@@ -332,27 +348,37 @@ export class PlayerManagerOptions {
         }
       },
 
-      nextVideo: () => playNextPlaylistVideo(),
-      hasNextVideo: () => playlistTracker.hasNextPlaylistElement(),
+      previousVideo: {
+        enabled: playlistTracker.hasPreviousPlaylistElement(),
+        handler: () => playPrevious(),
+        displayControlBarButton: true
+      },
 
-      previousVideo: () => playPreviousPlaylistVideo(),
-      hasPreviousVideo: () => playlistTracker.hasPreviousPlaylistElement()
+      nextVideo: {
+        enabled: playlistTracker.hasNextPlaylistElement(),
+        handler: () => playNext(),
+        getVideoTitle: () => playlistTracker.getNextPlaylistElement()?.video?.name,
+        displayControlBarButton: true
+      },
+
+      upnext: {
+        isEnabled: () => true,
+        isSuspended: () => false,
+        timeout: 0
+      }
     }
   }
 
-  private buildP2PMediaLoaderOptions (video: VideoDetails) {
-    if (this.mode !== 'p2p-media-loader') return {}
-
+  private buildHLSOptions (video: VideoDetails): HLSOptions {
     const hlsPlaylist = video.streamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
+    if (!hlsPlaylist) return undefined
 
     return {
-      p2pMediaLoader: {
-        playlistUrl: hlsPlaylist.playlistUrl,
-        segmentsSha256Url: hlsPlaylist.segmentsSha256Url,
-        redundancyBaseUrls: hlsPlaylist.redundancies.map(r => r.baseUrl),
-        trackerAnnounce: video.trackerUrls,
-        videoFiles: hlsPlaylist.files
-      } as P2PMediaLoaderOptions
+      playlistUrl: hlsPlaylist.playlistUrl,
+      segmentsSha256Url: hlsPlaylist.segmentsSha256Url,
+      redundancyBaseUrls: hlsPlaylist.redundancies.map(r => r.baseUrl),
+      trackerAnnounce: video.trackerUrls,
+      videoFiles: hlsPlaylist.files
     }
   }
 
@@ -370,6 +396,35 @@ export class PlayerManagerOptions {
     }
 
     return []
+  }
+
+  // ---------------------------------------------------------------------------
+
+  private buildDockOptions (videoInfo: VideoDetails) {
+    if (!this.hasControls()) return undefined
+
+    const title = this.hasTitle()
+      ? videoInfo.name
+      : undefined
+
+    const description = this.hasWarningTitle() && this.hasP2PEnabled()
+      ? '<span class="text">' + peertubeTranslate('Watching this video may reveal your IP address to others.') + '</span>'
+      : undefined
+
+    if (!title && !description) return
+
+    const availableAvatars = videoInfo.channel.avatars.filter(a => a.width < 50)
+    const avatar = availableAvatars.length !== 0
+      ? availableAvatars[0]
+      : undefined
+
+    return {
+      title,
+      description,
+      avatarUrl: title && avatar
+        ? avatar.path
+        : undefined
+    }
   }
 
   // ---------------------------------------------------------------------------

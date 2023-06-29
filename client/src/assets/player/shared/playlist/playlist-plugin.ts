@@ -8,16 +8,9 @@ const Plugin = videojs.getPlugin('plugin')
 class PlaylistPlugin extends Plugin {
   private playlistMenu: PlaylistMenu
   private playlistButton: PlaylistButton
-  private options: PlaylistPluginOptions
 
   constructor (player: videojs.Player, options?: PlaylistPluginOptions) {
     super(player, options)
-
-    this.options = options
-
-    this.player.ready(() => {
-      player.addClass('vjs-playlist')
-    })
 
     this.playlistMenu = new PlaylistMenu(player, options)
     this.playlistButton = new PlaylistButton(player, { ...options, playlistMenu: this.playlistMenu })
@@ -26,8 +19,16 @@ class PlaylistPlugin extends Plugin {
     player.addChild(this.playlistButton, options)
   }
 
-  updateSelected () {
-    this.playlistMenu.updateSelected(this.options.getCurrentPosition())
+  dispose () {
+    this.player.removeClass('vjs-playlist')
+
+    this.playlistMenu.dispose()
+    this.playlistButton.dispose()
+
+    this.player.removeChild(this.playlistMenu)
+    this.player.removeChild(this.playlistButton)
+
+    super.dispose()
   }
 }
 

@@ -31,6 +31,8 @@ class PeerTubeHotkeysPlugin extends Plugin {
 
   dispose () {
     document.removeEventListener('keydown', this.handleKeyFunction)
+
+    super.dispose()
   }
 
   private onKeyDown (event: KeyboardEvent) {

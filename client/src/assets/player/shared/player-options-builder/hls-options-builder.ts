@@ -3,49 +3,61 @@ import { HlsJsEngineSettings } from '@peertube/p2p-media-loader-hlsjs'
 import { logger } from '@root-helpers/logger'
 import { LiveVideoLatencyMode } from '@shared/models'
 import { getAverageBandwidthInStore } from '../../peertube-player-local-storage'
-import { P2PMediaLoader, P2PMediaLoaderPluginOptions } from '../../types'
-import { PeertubePlayerManagerOptions } from '../../types/manager-options'
+import { P2PMediaLoader, P2PMediaLoaderPluginOptions, PeerTubePlayerContructorOptions, PeerTubePlayerLoadOptions } from '../../types'
 import { getRtcConfig, isSameOrigin } from '../common'
 import { RedundancyUrlManager } from '../p2p-media-loader/redundancy-url-manager'
 import { segmentUrlBuilderFactory } from '../p2p-media-loader/segment-url-builder'
-import { segmentValidatorFactory } from '../p2p-media-loader/segment-validator'
+import { SegmentValidator } from '../p2p-media-loader/segment-validator'
+
+type ConstructorOptions =
+  Pick<PeerTubePlayerContructorOptions, 'pluginsManager' | 'serverUrl' | 'authorizationHeader'> &
+  Pick<PeerTubePlayerLoadOptions, 'videoPassword' | 'requiresUserAuth' | 'videoFileToken' | 'requiresPassword' |
+  'isLive' | 'liveOptions' | 'p2pEnabled' | 'hls'>
 
 export class HLSOptionsBuilder {
 
   constructor (
-    private options: PeertubePlayerManagerOptions,
+    private options: ConstructorOptions,
     private p2pMediaLoaderModule?: any
   ) {
 
   }
 
   async getPluginOptions () {
-    const commonOptions = this.options.common
-
-    const redundancyUrlManager = new RedundancyUrlManager(this.options.p2pMediaLoader.redundancyBaseUrls)
+    const redundancyUrlManager = new RedundancyUrlManager(this.options.hls.redundancyBaseUrls)
+    const segmentValidator = new SegmentValidator({
+      segmentsSha256Url: this.options.hls.segmentsSha256Url,
+      authorizationHeader: this.options.authorizationHeader,
+      requiresUserAuth: this.options.requiresUserAuth,
+      serverUrl: this.options.serverUrl,
+      requiresPassword: this.options.requiresPassword,
+      videoPassword: this.options.videoPassword
+    })
 
     const p2pMediaLoaderConfig = await this.options.pluginsManager.runHook(
       'filter:internal.player.p2p-media-loader.options.result',
-      this.getP2PMediaLoaderOptions(redundancyUrlManager)
+      this.getP2PMediaLoaderOptions({ redundancyUrlManager, segmentValidator })
     )
     const loader = new this.p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass() as P2PMediaLoader
 
     const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
-      requiresUserAuth: commonOptions.requiresUserAuth,
-      videoFileToken: commonOptions.videoFileToken,
+      requiresUserAuth: this.options.requiresUserAuth,
+      videoFileToken: this.options.videoFileToken,
 
       redundancyUrlManager,
       type: 'application/x-mpegURL',
-      startTime: commonOptions.startTime,
-      src: this.options.p2pMediaLoader.playlistUrl,
+      src: this.options.hls.playlistUrl,
+      segmentValidator,
       loader
     }
 
     const hlsjs = {
+      hlsjsConfig: this.getHLSJSOptions(loader),
+
       levelLabelHandler: (level: { height: number, width: number }) => {
         const resolution = Math.min(level.height || 0, level.width || 0)
 
-        const file = this.options.p2pMediaLoader.videoFiles.find(f => f.resolution.id === resolution)
+        const file = this.options.hls.videoFiles.find(f => f.resolution.id === resolution)
         // We don't have files for live videos
         if (!file) return level.height
 
@@ -56,26 +68,27 @@ export class HLSOptionsBuilder {
       }
     }
 
-    const html5 = {
-      hlsjsConfig: this.getHLSJSOptions(loader)
-    }
-
-    return { p2pMediaLoader, hlsjs, html5 }
+    return { p2pMediaLoader, hlsjs }
   }
 
   // ---------------------------------------------------------------------------
 
-  private getP2PMediaLoaderOptions (redundancyUrlManager: RedundancyUrlManager): HlsJsEngineSettings {
+  private getP2PMediaLoaderOptions (options: {
+    redundancyUrlManager: RedundancyUrlManager
+    segmentValidator: SegmentValidator
+  }): HlsJsEngineSettings {
+    const { redundancyUrlManager, segmentValidator } = options
+
     let consumeOnly = false
     if ((navigator as any)?.connection?.type === 'cellular') {
       logger.info('We are on a cellular connection: disabling seeding.')
       consumeOnly = true
     }
 
-    const trackerAnnounce = this.options.p2pMediaLoader.trackerAnnounce
-                                                 .filter(t => t.startsWith('ws'))
+    const trackerAnnounce = this.options.hls.trackerAnnounce
+      .filter(t => t.startsWith('ws'))
 
-    const specificLiveOrVODOptions = this.options.common.isLive
+    const specificLiveOrVODOptions = this.options.isLive
       ? this.getP2PMediaLoaderLiveOptions()
       : this.getP2PMediaLoaderVODOptions()
 
@@ -88,35 +101,28 @@ export class HLSOptionsBuilder {
         httpFailedSegmentTimeout: 1000,
 
         xhrSetup: (xhr, url) => {
-          const { requiresUserAuth, requiresPassword } = this.options.common
+          const { requiresUserAuth, requiresPassword } = this.options
 
           if (!(requiresUserAuth || requiresPassword)) return
 
-          if (!isSameOrigin(this.options.common.serverUrl, url)) return
+          if (!isSameOrigin(this.options.serverUrl, url)) return
 
-          if (requiresPassword) xhr.setRequestHeader('x-peertube-video-password', this.options.common.videoPassword())
+          if (requiresPassword) xhr.setRequestHeader('x-peertube-video-password', this.options.videoPassword())
 
-          else xhr.setRequestHeader('Authorization', this.options.common.authorizationHeader())
+          else xhr.setRequestHeader('Authorization', this.options.authorizationHeader())
         },
 
-        segmentValidator: segmentValidatorFactory({
-          segmentsSha256Url: this.options.p2pMediaLoader.segmentsSha256Url,
-          authorizationHeader: this.options.common.authorizationHeader,
-          requiresUserAuth: this.options.common.requiresUserAuth,
-          serverUrl: this.options.common.serverUrl,
-          requiresPassword: this.options.common.requiresPassword,
-          videoPassword: this.options.common.videoPassword
-        }),
+        segmentValidator: segmentValidator.validate.bind(segmentValidator),
 
         segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager),
 
-        useP2P: this.options.common.p2pEnabled,
+        useP2P: this.options.p2pEnabled,
         consumeOnly,
 
         ...specificLiveOrVODOptions
       },
       segments: {
-        swarmId: this.options.p2pMediaLoader.playlistUrl,
+        swarmId: this.options.hls.playlistUrl,
         forwardSegmentCount: specificLiveOrVODOptions.p2pDownloadMaxPriority ?? 20
       }
     }
@@ -127,7 +133,7 @@ export class HLSOptionsBuilder {
       requiredSegmentsPriority: 1
     }
 
-    const latencyMode = this.options.common.liveOptions.latencyMode
+    const latencyMode = this.options.liveOptions.latencyMode
 
     switch (latencyMode) {
       case LiveVideoLatencyMode.SMALL_LATENCY:
@@ -165,7 +171,7 @@ export class HLSOptionsBuilder {
   // ---------------------------------------------------------------------------
 
   private getHLSJSOptions (loader: P2PMediaLoader) {
-    const specificLiveOrVODOptions = this.options.common.isLive
+    const specificLiveOrVODOptions = this.options.isLive
       ? this.getHLSLiveOptions()
       : this.getHLSVODOptions()
 
@@ -193,7 +199,7 @@ export class HLSOptionsBuilder {
   }
 
   private getHLSLiveOptions () {
-    const latencyMode = this.options.common.liveOptions.latencyMode
+    const latencyMode = this.options.liveOptions.latencyMode
 
     switch (latencyMode) {
       case LiveVideoLatencyMode.SMALL_LATENCY:

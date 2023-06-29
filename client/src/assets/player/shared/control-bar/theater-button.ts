@@ -1,13 +1,18 @@
 import videojs from 'video.js'
 import { getStoredTheater, saveTheaterInStore } from '../../peertube-player-local-storage'
+import { TheaterButtonOptions } from '../../types'
 
 const Button = videojs.getComponent('Button')
 class TheaterButton extends Button {
 
   private static readonly THEATER_MODE_CLASS = 'vjs-theater-enabled'
 
-  constructor (player: videojs.Player, options: videojs.ComponentOptions) {
+  private theaterButtonOptions: TheaterButtonOptions
+
+  constructor (player: videojs.Player, options: TheaterButtonOptions & videojs.ComponentOptions) {
     super(player, options)
+
+    this.theaterButtonOptions = options
 
     const enabled = getStoredTheater()
     if (enabled === true) {
@@ -19,6 +24,9 @@ class TheaterButton extends Button {
     this.controlText('Theater mode')
 
     this.player().theaterEnabled = enabled
+
+    this.updateShowing()
+    this.player().on('video-change', () => this.updateShowing())
   }
 
   buildCSSClass () {
@@ -36,7 +44,7 @@ class TheaterButton extends Button {
 
     saveTheaterInStore(theaterEnabled)
 
-    this.player_.trigger('theaterChange', theaterEnabled)
+    this.player_.trigger('theater-change', theaterEnabled)
   }
 
   handleClick () {
@@ -47,6 +55,11 @@ class TheaterButton extends Button {
 
   private isTheaterEnabled () {
     return this.player_.hasClass(TheaterButton.THEATER_MODE_CLASS)
+  }
+
+  private updateShowing () {
+    if (this.theaterButtonOptions.isDisplayed()) this.show()
+    else this.hide()
   }
 }
 

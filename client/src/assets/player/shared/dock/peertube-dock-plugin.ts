@@ -10,14 +10,25 @@ export type PeerTubeDockPluginOptions = {
 }
 
 class PeerTubeDockPlugin extends Plugin {
+  private dockComponent: PeerTubeDockComponent
+
   constructor (player: videojs.Player, options: videojs.PlayerOptions & PeerTubeDockPluginOptions) {
     super(player, options)
 
-    this.player.addClass('peertube-dock')
-
-    this.player.ready(() => {
-      this.player.addChild('PeerTubeDockComponent', options) as PeerTubeDockComponent
+    player.ready(() => {
+      player.addClass('peertube-dock')
     })
+
+    this.dockComponent = new PeerTubeDockComponent(player, options)
+    player.addChild(this.dockComponent)
+  }
+
+  dispose () {
+    this.dockComponent?.dispose()
+    this.player.removeChild(this.dockComponent)
+    this.player.removeClass('peertube-dock')
+
+    super.dispose()
   }
 }
 

@@ -8,8 +8,15 @@ class PlaylistButton extends ClickableComponent {
   private playlistInfoElement: HTMLElement
   private wrapper: HTMLElement
 
-  constructor (player: videojs.Player, options?: PlaylistPluginOptions & { playlistMenu: PlaylistMenu }) {
-    super(player, options as any)
+  options_: PlaylistPluginOptions & { playlistMenu: PlaylistMenu } & videojs.ClickableComponentOptions
+
+  // FIXME: eslint -> it's not a useless constructor, we need to extend constructor options typings
+  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+  constructor (
+    player: videojs.Player,
+    options?: PlaylistPluginOptions & { playlistMenu: PlaylistMenu } & videojs.ClickableComponentOptions
+  ) {
+    super(player, options)
   }
 
   createEl () {
@@ -40,19 +47,14 @@ class PlaylistButton extends ClickableComponent {
   }
 
   update () {
-    const options = this.options_ as PlaylistPluginOptions
+    this.playlistInfoElement.innerHTML = this.options_.getCurrentPosition() + '/' + this.options_.playlist.videosLength
 
-    this.playlistInfoElement.innerHTML = options.getCurrentPosition() + '/' + options.playlist.videosLength
-    this.wrapper.title = this.player().localize('Playlist: {1}', [ options.playlist.displayName ])
+    this.wrapper.title = this.player().localize('Playlist: {1}', [ this.options_.playlist.displayName ])
   }
 
   handleClick () {
-    const playlistMenu = this.getPlaylistMenu()
+    const playlistMenu = this.options_.playlistMenu
     playlistMenu.open()
-  }
-
-  private getPlaylistMenu () {
-    return (this.options_ as any).playlistMenu as PlaylistMenu
   }
 }
 
