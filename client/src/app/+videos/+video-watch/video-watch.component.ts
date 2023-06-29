@@ -287,7 +287,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     forkJoin([
       videoAndLiveObs,
       this.videoCaptionService.listCaptions(videoId, videoPassword),
-      this.videoService.getStoryboards(videoId),
+      this.videoService.getStoryboards(videoId, videoPassword),
       this.userService.getAnonymousOrLoggedUser()
     ]).subscribe({
       next: ([ { video, live, videoFileToken }, captionsResult, storyboards, loggedInOrAnonymousUser ]) => {

@@ -347,9 +347,11 @@ export class VideoService {
 
   // ---------------------------------------------------------------------------
 
-  getStoryboards (videoId: string | number) {
+  getStoryboards (videoId: string | number, videoPassword: string) {
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
+
     return this.authHttp
-      .get<{ storyboards: Storyboard[] }>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/storyboards')
+      .get<{ storyboards: Storyboard[] }>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/storyboards', { headers })
       .pipe(
         map(({ storyboards }) => storyboards),
         catchError(err => {
