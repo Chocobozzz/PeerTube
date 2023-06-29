@@ -1,4 +1,4 @@
-import { getCheckbox, go } from '../utils'
+import { getCheckbox, go, selectCustomSelect } from '../utils'
 
 export class MyAccountPage {
 
@@ -115,6 +115,25 @@ export class MyAccountPage {
     url = url.replace(':3333', ':9001')
 
     return go(url)
+  }
+
+  async updatePlaylistPrivacy (playlistUUID: string, privacy: 'Public' | 'Private' | 'Unlisted') {
+    go('/my-library/video-playlists/update/' + playlistUUID)
+
+    await browser.waitUntil(async () => {
+      return (await $('form .video-playlist-title').getText() === 'PLAYLIST')
+    })
+
+    await selectCustomSelect('videoChannelId', 'Main root channel')
+    await selectCustomSelect('privacy', privacy)
+
+    const submit = await $('form input[type=submit]')
+    submit.waitForClickable()
+    await submit.click()
+
+    return browser.waitUntil(async () => {
+      return (await browser.getUrl()).includes('my-library/video-playlists')
+    })
   }
 
   // My account Videos

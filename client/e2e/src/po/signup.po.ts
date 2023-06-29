@@ -62,4 +62,26 @@ export class SignupPage {
     await $('#displayName').setValue(options.displayName || `${options.name} channel display name`)
     await $('#name').setValue(options.name)
   }
+
+  async fullSignup ({ accountInfo, channelInfo }: {
+    accountInfo: {
+      username: string
+      password?: string
+      displayName?: string
+      email?: string
+    }
+    channelInfo: {
+      name: string
+    }
+  }) {
+    await this.clickOnRegisterInMenu()
+    await this.validateStep()
+    await this.checkTerms()
+    await this.validateStep()
+    await this.fillAccountStep(accountInfo)
+    await this.validateStep()
+    await this.fillChannelStep(channelInfo)
+    await this.validateStep()
+    await this.getEndMessage()
+  }
 }

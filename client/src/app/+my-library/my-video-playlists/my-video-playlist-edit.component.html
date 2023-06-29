@@ -50,9 +50,9 @@
         <div class="form-group">
           <label i18n for="privacy">Privacy</label>
           <div class="peertube-select-container">
-            <select id="privacy" formControlName="privacy" class="form-control">
-              <option *ngFor="let privacy of videoPlaylistPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
-            </select>
+            <my-select-options
+            labelForId="privacy" [items]="videoPlaylistPrivacies" formControlName="privacy" [clearable]="false"
+          ></my-select-options>
           </div>
 
           <div *ngIf="formErrors.privacy" class="form-error">
