@@ -2016,7 +2016,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   getBandwidthBits (this: MVideo, videoFile: MVideoFile) {
-    if (!this.duration) throw new Error(`Cannot get bandwidth bits because video ${this.url} has duration of 0`)
+    if (!this.duration) return videoFile.size
 
     return Math.ceil((videoFile.size * 8) / this.duration)
   }

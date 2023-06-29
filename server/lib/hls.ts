@@ -8,7 +8,7 @@ import { sha256 } from '@shared/extra-utils'
 import { getVideoStreamDimensionsInfo } from '@shared/ffmpeg'
 import { VideoStorage } from '@shared/models'
 import { getAudioStreamCodec, getVideoStreamCodec } from '../helpers/ffmpeg'
-import { logger } from '../helpers/logger'
+import { logger, loggerTagsFactory } from '../helpers/logger'
 import { doRequest, doRequestAndSaveToFile } from '../helpers/requests'
 import { generateRandomString } from '../helpers/utils'
 import { CONFIG } from '../initializers/config'
@@ -19,6 +19,8 @@ import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-pla
 import { storeHLSFileFromFilename } from './object-storage'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getHlsResolutionPlaylistFilename } from './paths'
 import { VideoPathManager } from './video-path-manager'
+
+const lTags = loggerTagsFactory('hls')
 
 async function updateStreamingPlaylistsInfohashesIfNeeded () {
   const playlistsToUpdate = await VideoStreamingPlaylistModel.listByIncorrectPeerVersion()
@@ -48,7 +50,7 @@ async function updatePlaylistAfterFileChange (video: MVideo, playlist: MStreamin
 
     video.setHLSPlaylist(playlistWithFiles)
   } catch (err) {
-    logger.info('Cannot update playlist after file change. Maybe due to concurrent transcoding', { err })
+    logger.warn('Cannot update playlist after file change. Maybe due to concurrent transcoding', { err })
   }
 }
 
@@ -94,6 +96,8 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
 
     const masterPlaylistPath = VideoPathManager.Instance.getFSHLSOutputPath(video, playlist.playlistFilename)
     await writeFile(masterPlaylistPath, masterPlaylists.join('\n') + '\n')
+
+    logger.info('Updating %s master playlist file of video %s', masterPlaylistPath, video.uuid, lTags(video.uuid))
 
     if (playlist.storage === VideoStorage.OBJECT_STORAGE) {
       playlist.playlistUrl = await storeHLSFileFromFilename(playlist, playlist.playlistFilename)
