@@ -93,10 +93,10 @@ describe('Test resumable upload', function () {
     expect((await stat(filePath)).size).to.equal(expectedSize)
   }
 
-  async function countResumableUploads () {
+  async function countResumableUploads (wait?: number) {
     const subPath = join('tmp', 'resumable-uploads')
     const filePath = server.servers.buildDirectory(subPath)
-
+    await new Promise(resolve => setTimeout(resolve, wait))
     const files = await readdir(filePath)
     return files.length
   }
@@ -122,14 +122,20 @@ describe('Test resumable upload', function () {
 
   describe('Directory cleaning', function () {
 
-    // FIXME: https://github.com/kukhariev/node-uploadx/pull/524/files#r852989382
-    // it('Should correctly delete files after an upload', async function () {
-    //   const uploadId = await prepareUpload()
-    //   await sendChunks({ pathUploadId: uploadId })
-    //   await server.videos.endResumableUpload({ pathUploadId: uploadId })
+    it('Should correctly delete files after an upload', async function () {
+      const uploadId = await prepareUpload()
+      await sendChunks({ pathUploadId: uploadId })
+      await server.videos.endResumableUpload({ pathUploadId: uploadId })
 
-    //   expect(await countResumableUploads()).to.equal(0)
-    // })
+      expect(await countResumableUploads()).to.equal(0)
+    })
+
+    it('Should correctly delete corrupt files', async function () {
+      const uploadId = await prepareUpload({ size: 8 * 1024 })
+      await sendChunks({ pathUploadId: uploadId, size: 8 * 1024, expectedStatus: HttpStatusCode.UNPROCESSABLE_ENTITY_422 })
+
+      expect(await countResumableUploads(2000)).to.equal(0)
+    })
 
     it('Should not delete files after an unfinished upload', async function () {
       await prepareUpload()
