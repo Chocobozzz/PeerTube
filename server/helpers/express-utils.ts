@@ -1,7 +1,6 @@
 import express, { RequestHandler } from 'express'
 import multer, { diskStorage } from 'multer'
 import { getLowercaseExtension } from '@shared/core-utils'
-import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { CONFIG } from '../initializers/config'
 import { REMOTE_SCHEME } from '../initializers/constants'
 import { isArray } from './custom-validators/misc'
@@ -57,12 +56,6 @@ function getHostWithPort (host: string) {
   }
 
   return host
-}
-
-function badRequest (_req: express.Request, res: express.Response) {
-  return res.type('json')
-            .status(HttpStatusCode.BAD_REQUEST_400)
-            .end()
 }
 
 function createReqFiles (
@@ -126,7 +119,6 @@ export {
   getHostWithPort,
   createAnyReqFiles,
   isUserAbleToSearchRemoteURI,
-  badRequest,
   createReqFiles,
   cleanUpReqFiles,
   getCountVideos

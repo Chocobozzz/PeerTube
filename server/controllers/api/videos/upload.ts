@@ -63,13 +63,13 @@ uploadRouter.post('/upload-resumable',
   authenticate,
   reqVideoFileAddResumable,
   asyncMiddleware(videosAddResumableInitValidator),
-  uploadx.upload
+  (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitely tell to uploadx it's the end
 )
 
 uploadRouter.delete('/upload-resumable',
   authenticate,
   asyncMiddleware(deleteUploadResumableCache),
-  uploadx.upload
+  (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitely tell to uploadx it's the end
 )
 
 uploadRouter.put('/upload-resumable',

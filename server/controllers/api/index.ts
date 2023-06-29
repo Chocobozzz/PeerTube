@@ -1,8 +1,7 @@
 import cors from 'cors'
 import express from 'express'
-
+import { logger } from '@server/helpers/logger'
 import { HttpStatusCode } from '../../../shared/models'
-import { badRequest } from '../../helpers/express-utils'
 import { abuseRouter } from './abuse'
 import { accountsRouter } from './accounts'
 import { blocklistRouter } from './blocklist'
@@ -63,4 +62,12 @@ export { apiRouter }
 
 function pong (req: express.Request, res: express.Response) {
   return res.send('pong').status(HttpStatusCode.OK_200).end()
+}
+
+function badRequest (req: express.Request, res: express.Response) {
+  logger.debug(`API express handler not found: bad PeerTube request for ${req.method} - ${req.originalUrl}`)
+
+  return res.type('json')
+    .status(HttpStatusCode.BAD_REQUEST_400)
+    .end()
 }
