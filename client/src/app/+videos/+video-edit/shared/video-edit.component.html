@@ -120,7 +120,12 @@
               </div>
             </div>
 
-            <div *ngIf="schedulePublicationEnabled" class="form-group">
+            <div *ngIf="passwordProtectionSelected" class="form-group">
+              <label i18n for="videoPassword">Password</label>
+              <my-input-text formControlName="videoPassword" inputId="videoPassword" [withCopy]="true" [formError]="formErrors['videoPassword']"></my-input-text>
+            </div>
+            
+            <div *ngIf="schedulePublicationSelected" class="form-group">
               <label i18n for="schedulePublicationAt">Schedule publication ({{ calendarTimezone }})</label>
               <p-calendar
                 id="schedulePublicationAt" formControlName="schedulePublicationAt" [dateFormat]="calendarDateFormat"
@@ -287,7 +292,7 @@
             <div class="form-group mx-4" *ngIf="isSaveReplayEnabled()">
               <label i18n for="replayPrivacy">Privacy of the new replay</label>
               <my-select-options
-                labelForId="replayPrivacy" [items]="videoPrivacies" [clearable]="false" formControlName="replayPrivacy"
+                labelForId="replayPrivacy" [items]="replayPrivacies" [clearable]="false" formControlName="replayPrivacy"
               ></my-select-options>
             </div>
 

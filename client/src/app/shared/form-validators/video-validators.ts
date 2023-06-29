@@ -26,6 +26,15 @@ export const VIDEO_PRIVACY_VALIDATOR: BuildFormValidator = {
   }
 }
 
+export const VIDEO_PASSWORD_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [ Validators.minLength(2), Validators.maxLength(100) ], // Required is set dynamically
+  MESSAGES: {
+    minLength: $localize`A password should be at least 2 characters long.`,
+    maxLength: $localize`A password should be shorter than 100 characters long.`,
+    required: $localize`A password is required for password protected video.`
+  }
+}
+
 export const VIDEO_CATEGORY_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ ],
   MESSAGES: {}

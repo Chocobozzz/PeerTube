@@ -199,7 +199,11 @@
               "is-plain-object",
               "parse-srcset",
               "deepmerge",
-              "core-js/features/reflect"
+              "core-js/features/reflect",
+              "@formatjs/intl-locale/polyfill",
+              "@formatjs/intl-locale/should-polyfill",
+              "@formatjs/intl-pluralrules/polyfill-force",
+              "@formatjs/intl-pluralrules/should-polyfill"
             ],
             "scripts": [],
             "vendorChunk": true,

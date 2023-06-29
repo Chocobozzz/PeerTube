@@ -6,6 +6,31 @@
 /* Special mobile style */
 
 .video-js.vjs-peertube-skin.vjs-is-mobile {
+  // No hover means we can't display the storyboard/time tooltip on mouse hover
+  // Use the time tooltip in progress control instead
+  .vjs-mouse-display {
+    display: none !important;
+  }
+
+  .vjs-storyboard-sprite-placeholder {
+    display: none;
+  }
+
+  .vjs-progress-control .vjs-sliding {
+
+    .vjs-time-tooltip,
+    .vjs-storyboard-sprite-placeholder {
+      display: block !important;
+
+      visibility: visible !important;
+    }
+
+    .vjs-time-tooltip {
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+  }
+
   .vjs-control-bar {
     .vjs-progress-control .vjs-slider .vjs-play-progress {
       // Always display the circle on mobile

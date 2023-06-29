@@ -99,6 +99,13 @@ describe('Test syndication feeds', () => {
       await servers[0].comments.createThread({ videoId: id, text: 'comment on unlisted video' })
     }
 
+    {
+      const attributes = { name: 'password protected video', privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords: [ 'password' ] }
+      const { id } = await servers[0].videos.upload({ attributes })
+
+      await servers[0].comments.createThread({ videoId: id, text: 'comment on password protected video' })
+    }
+
     await serverHLSOnly.videos.upload({ attributes: { name: 'hls only video' } })
 
     await waitJobs([ ...servers, serverHLSOnly ])
@@ -445,7 +452,7 @@ describe('Test syndication feeds', () => {
 
   describe('Video comments feed', function () {
 
-    it('Should contain valid comments (covers JSON feed 1.0 endpoint) and not from unlisted videos', async function () {
+    it('Should contain valid comments (covers JSON feed 1.0 endpoint) and not from unlisted/password protected videos', async function () {
       for (const server of servers) {
         const json = await server.feed.getJSON({ feed: 'video-comments', ignoreCache: true })
 

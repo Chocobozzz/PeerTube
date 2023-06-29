@@ -36,11 +36,12 @@ export class CommentsCommand extends AbstractCommand {
 
   listThreads (options: OverrideCommandOptions & {
     videoId: number | string
+    videoPassword?: string
     start?: number
     count?: number
     sort?: string
   }) {
-    const { start, count, sort, videoId } = options
+    const { start, count, sort, videoId, videoPassword } = options
     const path = '/api/v1/videos/' + videoId + '/comment-threads'
 
     return this.getRequestBody<VideoCommentThreads>({
@@ -48,6 +49,7 @@ export class CommentsCommand extends AbstractCommand {
 
       path,
       query: { start, count, sort },
+      headers: this.buildVideoPasswordHeader(videoPassword),
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
@@ -72,8 +74,9 @@ export class CommentsCommand extends AbstractCommand {
   async createThread (options: OverrideCommandOptions & {
     videoId: number | string
     text: string
+    videoPassword?: string
   }) {
-    const { videoId, text } = options
+    const { videoId, text, videoPassword } = options
     const path = '/api/v1/videos/' + videoId + '/comment-threads'
 
     const body = await unwrapBody<{ comment: VideoComment }>(this.postBodyRequest({
@@ -81,6 +84,7 @@ export class CommentsCommand extends AbstractCommand {
 
       path,
       fields: { text },
+      headers: this.buildVideoPasswordHeader(videoPassword),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))
@@ -95,8 +99,9 @@ export class CommentsCommand extends AbstractCommand {
     videoId: number | string
     toCommentId: number
     text: string
+    videoPassword?: string
   }) {
-    const { videoId, toCommentId, text } = options
+    const { videoId, toCommentId, text, videoPassword } = options
     const path = '/api/v1/videos/' + videoId + '/comments/' + toCommentId
 
     const body = await unwrapBody<{ comment: VideoComment }>(this.postBodyRequest({
@@ -104,6 +109,7 @@ export class CommentsCommand extends AbstractCommand {
 
       path,
       fields: { text },
+      headers: this.buildVideoPasswordHeader(videoPassword),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))

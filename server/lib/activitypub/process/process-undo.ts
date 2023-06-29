@@ -1,6 +1,14 @@
 import { VideoModel } from '@server/models/video/video'
-import { ActivityAnnounce, ActivityFollow, ActivityLike, ActivityUndo, CacheFileObject } from '../../../../shared/models/activitypub'
-import { DislikeObject } from '../../../../shared/models/activitypub/objects'
+import {
+  ActivityAnnounce,
+  ActivityCreate,
+  ActivityDislike,
+  ActivityFollow,
+  ActivityLike,
+  ActivityUndo,
+  ActivityUndoObject,
+  CacheFileObject
+} from '../../../../shared/models/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -11,10 +19,11 @@ import { VideoRedundancyModel } from '../../../models/redundancy/video-redundanc
 import { VideoShareModel } from '../../../models/video/video-share'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
+import { fetchAPObject } from '../activity'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils'
 import { federateVideoIfNeeded, getOrCreateAPVideo } from '../videos'
 
-async function processUndoActivity (options: APProcessorOptions<ActivityUndo>) {
+async function processUndoActivity (options: APProcessorOptions<ActivityUndo<ActivityUndoObject>>) {
   const { activity, byActor } = options
   const activityToUndo = activity.object
 
@@ -23,8 +32,10 @@ async function processUndoActivity (options: APProcessorOptions<ActivityUndo>) {
   }
 
   if (activityToUndo.type === 'Create') {
-    if (activityToUndo.object.type === 'CacheFile') {
-      return retryTransactionWrapper(processUndoCacheFile, byActor, activity)
+    const objectToUndo = await fetchAPObject<CacheFileObject>(activityToUndo.object)
+
+    if (objectToUndo.type === 'CacheFile') {
+      return retryTransactionWrapper(processUndoCacheFile, byActor, activity, objectToUndo)
     }
   }
 
@@ -53,8 +64,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo) {
-  const likeActivity = activity.object as ActivityLike
+async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo<ActivityLike>) {
+  const likeActivity = activity.object
 
   const { video: onlyVideo } = await getOrCreateAPVideo({ videoObject: likeActivity.object })
   // We don't care about likes of remote videos
@@ -78,12 +89,10 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
   })
 }
 
-async function processUndoDislike (byActor: MActorSignature, activity: ActivityUndo) {
-  const dislike = activity.object.type === 'Dislike'
-    ? activity.object
-    : activity.object.object as DislikeObject
+async function processUndoDislike (byActor: MActorSignature, activity: ActivityUndo<ActivityDislike>) {
+  const dislikeActivity = activity.object
 
-  const { video: onlyVideo } = await getOrCreateAPVideo({ videoObject: dislike.object })
+  const { video: onlyVideo } = await getOrCreateAPVideo({ videoObject: dislikeActivity.object })
   // We don't care about likes of remote videos
   if (!onlyVideo.isOwned()) return
 
@@ -91,7 +100,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
     const video = await VideoModel.loadFull(onlyVideo.id, t)
-    const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, dislike.id, t)
+    const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, dislikeActivity.id, t)
     if (!rate || rate.type !== 'dislike') {
       logger.warn(`Unknown dislike by account %d for video %d.`, byActor.Account.id, video.id)
       return
@@ -107,9 +116,11 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
 
 // ---------------------------------------------------------------------------
 
-async function processUndoCacheFile (byActor: MActorSignature, activity: ActivityUndo) {
-  const cacheFileObject = activity.object.object as CacheFileObject
-
+async function processUndoCacheFile (
+  byActor: MActorSignature,
+  activity: ActivityUndo<ActivityCreate<CacheFileObject>>,
+  cacheFileObject: CacheFileObject
+) {
   const { video } = await getOrCreateAPVideo({ videoObject: cacheFileObject.object })
 
   return sequelizeTypescript.transaction(async t => {

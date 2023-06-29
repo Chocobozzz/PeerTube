@@ -1,4 +1,5 @@
 import { remove } from 'fs-extra'
+import { logger } from 'packages/peertube-runner/shared'
 import { join } from 'path'
 import { buildUUID } from '@shared/extra-utils'
 import {
@@ -10,19 +11,36 @@ import {
   VODWebVideoTranscodingSuccess
 } from '@shared/models'
 import { ConfigManager } from '../../../shared/config-manager'
-import { buildFFmpegVOD, downloadInputFile, ProcessOptions } from './common'
+import { buildFFmpegVOD, downloadInputFile, ProcessOptions, scheduleTranscodingProgress } from './common'
 
 export async function processWebVideoTranscoding (options: ProcessOptions<RunnerJobVODWebVideoTranscodingPayload>) {
   const { server, job, runnerToken } = options
+
   const payload = job.payload
 
-  const inputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
-
-  const ffmpegVod = buildFFmpegVOD({ job, server, runnerToken })
+  let ffmpegProgress: number
+  let inputPath: string
 
   const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `output-${buildUUID()}.mp4`)
 
+  const updateProgressInterval = scheduleTranscodingProgress({
+    job,
+    server,
+    runnerToken,
+    progressGetter: () => ffmpegProgress
+  })
+
   try {
+    logger.info(`Downloading input file ${payload.input.videoFileUrl} for web video transcoding job ${job.jobToken}`)
+
+    inputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
+
+    logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running web video transcoding.`)
+
+    const ffmpegVod = buildFFmpegVOD({
+      onJobProgress: progress => { ffmpegProgress = progress }
+    })
+
     await ffmpegVod.transcode({
       type: 'video',
 
@@ -47,8 +65,9 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
       payload: successBody
     })
   } finally {
-    await remove(inputPath)
-    await remove(outputPath)
+    if (inputPath) await remove(inputPath)
+    if (outputPath) await remove(outputPath)
+    if (updateProgressInterval) clearInterval(updateProgressInterval)
   }
 }
 
@@ -56,16 +75,32 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
   const { server, job, runnerToken } = options
   const payload = job.payload
 
-  const inputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
-  const uuid = buildUUID()
+  let ffmpegProgress: number
+  let inputPath: string
 
+  const uuid = buildUUID()
   const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `${uuid}-${payload.output.resolution}.m3u8`)
   const videoFilename = `${uuid}-${payload.output.resolution}-fragmented.mp4`
   const videoPath = join(join(ConfigManager.Instance.getTranscodingDirectory(), videoFilename))
 
-  const ffmpegVod = buildFFmpegVOD({ job, server, runnerToken })
+  const updateProgressInterval = scheduleTranscodingProgress({
+    job,
+    server,
+    runnerToken,
+    progressGetter: () => ffmpegProgress
+  })
 
   try {
+    logger.info(`Downloading input file ${payload.input.videoFileUrl} for HLS transcoding job ${job.jobToken}`)
+
+    inputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
+
+    logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running HLS transcoding.`)
+
+    const ffmpegVod = buildFFmpegVOD({
+      onJobProgress: progress => { ffmpegProgress = progress }
+    })
+
     await ffmpegVod.transcode({
       type: 'hls',
       copyCodecs: false,
@@ -91,9 +126,10 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
       payload: successBody
     })
   } finally {
-    await remove(inputPath)
-    await remove(outputPath)
-    await remove(videoPath)
+    if (inputPath) await remove(inputPath)
+    if (outputPath) await remove(outputPath)
+    if (videoPath) await remove(videoPath)
+    if (updateProgressInterval) clearInterval(updateProgressInterval)
   }
 }
 
@@ -101,14 +137,37 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
   const { server, job, runnerToken } = options
   const payload = job.payload
 
-  const audioPath = await downloadInputFile({ url: payload.input.audioFileUrl, runnerToken, job })
-  const inputPath = await downloadInputFile({ url: payload.input.previewFileUrl, runnerToken, job })
+  let ffmpegProgress: number
+  let audioPath: string
+  let inputPath: string
 
   const outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), `output-${buildUUID()}.mp4`)
 
-  const ffmpegVod = buildFFmpegVOD({ job, server, runnerToken })
+  const updateProgressInterval = scheduleTranscodingProgress({
+    job,
+    server,
+    runnerToken,
+    progressGetter: () => ffmpegProgress
+  })
 
   try {
+    logger.info(
+      `Downloading input files ${payload.input.audioFileUrl} and ${payload.input.previewFileUrl} ` +
+      `for audio merge transcoding job ${job.jobToken}`
+    )
+
+    audioPath = await downloadInputFile({ url: payload.input.audioFileUrl, runnerToken, job })
+    inputPath = await downloadInputFile({ url: payload.input.previewFileUrl, runnerToken, job })
+
+    logger.info(
+      `Downloaded input files ${payload.input.audioFileUrl} and ${payload.input.previewFileUrl} ` +
+      `for job ${job.jobToken}. Running audio merge transcoding.`
+    )
+
+    const ffmpegVod = buildFFmpegVOD({
+      onJobProgress: progress => { ffmpegProgress = progress }
+    })
+
     await ffmpegVod.transcode({
       type: 'merge-audio',
 
@@ -134,8 +193,9 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
       payload: successBody
     })
   } finally {
-    await remove(audioPath)
-    await remove(inputPath)
-    await remove(outputPath)
+    if (audioPath) await remove(audioPath)
+    if (inputPath) await remove(inputPath)
+    if (outputPath) await remove(outputPath)
+    if (updateProgressInterval) clearInterval(updateProgressInterval)
   }
 }

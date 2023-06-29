@@ -39,7 +39,7 @@ import { VideoFileModel } from '../../../models/video/video-file'
 import { VideoImportModel } from '../../../models/video/video-import'
 import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { Notifier } from '../../notifier'
-import { generateVideoMiniature } from '../../thumbnail'
+import { generateLocalVideoMiniature } from '../../thumbnail'
 import { JobQueue } from '../job-queue'
 
 async function processVideoImport (job: Job): Promise<VideoImportPreventExceptionResult> {
@@ -274,7 +274,7 @@ async function generateMiniature (videoImportWithFiles: MVideoImportDefaultFiles
     }
   }
 
-  const miniatureModel = await generateVideoMiniature({
+  const miniatureModel = await generateLocalVideoMiniature({
     video: videoImportWithFiles.Video,
     videoFile,
     type: thumbnailType
@@ -305,6 +305,15 @@ async function afterImportSuccess (options: {
   } else {
     Notifier.Instance.notifyOnNewVideoIfNeeded(video)
   }
+
+  // Generate the storyboard in the job queue, and don't forget to federate an update after
+  await JobQueue.Instance.createJob({
+    type: 'generate-video-storyboard' as 'generate-video-storyboard',
+    payload: {
+      videoUUID: video.uuid,
+      federate: true
+    }
+  })
 
   if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
     await JobQueue.Instance.createJob(

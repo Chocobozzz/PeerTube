@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { checkPlaylistFilesWereRemoved, testImage } from '@server/tests/shared'
+import { checkPlaylistFilesWereRemoved, testImageGeneratedByFFmpeg } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { uuidToShort } from '@shared/extra-utils'
 import {
@@ -133,7 +133,7 @@ describe('Test video playlists', function () {
           displayName: 'my super playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
           description: 'my super description',
-          thumbnailfile: 'thumbnail.jpg',
+          thumbnailfile: 'custom-thumbnail.jpg',
           videoChannelId: servers[0].store.channel.id
         }
       })
@@ -225,7 +225,7 @@ describe('Test video playlists', function () {
           displayName: 'my super playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
           description: 'my super description',
-          thumbnailfile: 'thumbnail.jpg',
+          thumbnailfile: 'custom-thumbnail.jpg',
           videoChannelId: servers[0].store.channel.id
         }
       })
@@ -286,7 +286,7 @@ describe('Test video playlists', function () {
           attributes: {
             displayName: 'playlist 3',
             privacy: VideoPlaylistPrivacy.PUBLIC,
-            thumbnailfile: 'thumbnail.jpg',
+            thumbnailfile: 'custom-thumbnail.jpg',
             videoChannelId: servers[1].store.channel.id
           }
         })
@@ -314,11 +314,11 @@ describe('Test video playlists', function () {
 
         const playlist2 = body.data.find(p => p.displayName === 'playlist 2')
         expect(playlist2).to.not.be.undefined
-        await testImage(server.url, 'thumbnail-playlist', playlist2.thumbnailPath)
+        await testImageGeneratedByFFmpeg(server.url, 'thumbnail-playlist', playlist2.thumbnailPath)
 
         const playlist3 = body.data.find(p => p.displayName === 'playlist 3')
         expect(playlist3).to.not.be.undefined
-        await testImage(server.url, 'thumbnail', playlist3.thumbnailPath)
+        await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', playlist3.thumbnailPath)
       }
 
       const body = await servers[2].playlists.list({ start: 0, count: 5 })
@@ -336,7 +336,7 @@ describe('Test video playlists', function () {
 
       const playlist2 = body.data.find(p => p.displayName === 'playlist 2')
       expect(playlist2).to.not.be.undefined
-      await testImage(servers[2].url, 'thumbnail-playlist', playlist2.thumbnailPath)
+      await testImageGeneratedByFFmpeg(servers[2].url, 'thumbnail-playlist', playlist2.thumbnailPath)
 
       expect(body.data.find(p => p.displayName === 'playlist 3')).to.not.be.undefined
     })
@@ -474,7 +474,7 @@ describe('Test video playlists', function () {
       await servers[1].playlists.get({ playlistId: unlistedPlaylist.id, expectedStatus: 404 })
     })
 
-    it('Should get unlisted plyaylist using uuid or shortUUID', async function () {
+    it('Should get unlisted playlist using uuid or shortUUID', async function () {
       await servers[1].playlists.get({ playlistId: unlistedPlaylist.uuid })
       await servers[1].playlists.get({ playlistId: unlistedPlaylist.shortUUID })
     })
@@ -502,7 +502,7 @@ describe('Test video playlists', function () {
           displayName: 'playlist 3 updated',
           description: 'description updated',
           privacy: VideoPlaylistPrivacy.UNLISTED,
-          thumbnailfile: 'thumbnail.jpg',
+          thumbnailfile: 'custom-thumbnail.jpg',
           videoChannelId: servers[1].store.channel.id
         },
         playlistId: playlistServer2Id2
@@ -686,7 +686,7 @@ describe('Test video playlists', function () {
       await waitJobs(servers)
     })
 
-    it('Should update the element type if the video is private', async function () {
+    it('Should update the element type if the video is private/password protected', async function () {
       this.timeout(20000)
 
       const name = 'video 89'
@@ -694,6 +694,19 @@ describe('Test video playlists', function () {
 
       {
         await servers[0].videos.update({ id: video1, attributes: { privacy: VideoPrivacy.PRIVATE } })
+        await waitJobs(servers)
+
+        await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
+        await checkPlaylistElementType(groupWithoutToken1, playlistServer1UUID2, VideoPlaylistElementType.PRIVATE, position, name, 3)
+        await checkPlaylistElementType(group1, playlistServer1UUID2, VideoPlaylistElementType.PRIVATE, position, name, 3)
+        await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.DELETED, position, name, 3)
+      }
+
+      {
+        await servers[0].videos.update({
+          id: video1,
+          attributes: { privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords: [ 'password' ] }
+        })
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)

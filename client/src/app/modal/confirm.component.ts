@@ -21,6 +21,8 @@ export class ConfirmComponent implements OnInit {
   inputValue = ''
   confirmButtonText = ''
 
+  errorMessage = ''
+
   isPasswordInput = false
 
   private openedModal: NgbModalRef
@@ -42,8 +44,9 @@ export class ConfirmComponent implements OnInit {
         this.inputValue = ''
         this.confirmButtonText = ''
         this.isPasswordInput = false
+        this.errorMessage = ''
 
-        const { type, title, message, confirmButtonText } = payload
+        const { type, title, message, confirmButtonText, errorMessage } = payload
 
         this.title = title
 
@@ -53,6 +56,7 @@ export class ConfirmComponent implements OnInit {
         } else if (type === 'confirm-password') {
           this.inputLabel = $localize`Confirm your password`
           this.isPasswordInput = true
+          this.errorMessage = errorMessage
         }
 
         this.confirmButtonText = confirmButtonText || $localize`Confirm`
@@ -78,6 +82,9 @@ export class ConfirmComponent implements OnInit {
     return this.expectedInputValue !== this.inputValue
   }
 
+  hasError () {
+    return this.errorMessage
+  }
   showModal () {
     this.inputValue = ''
 

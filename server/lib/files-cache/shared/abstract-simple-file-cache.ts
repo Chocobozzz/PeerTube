@@ -1,10 +1,10 @@
 import { remove } from 'fs-extra'
-import { logger } from '../../helpers/logger'
+import { logger } from '../../../helpers/logger'
 import memoizee from 'memoizee'
 
 type GetFilePathResult = { isOwned: boolean, path: string, downloadName?: string } | undefined
 
-export abstract class AbstractVideoStaticFileCache <T> {
+export abstract class AbstractSimpleFileCache <T> {
 
   getFilePath: (params: T) => Promise<GetFilePathResult>
 

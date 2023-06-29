@@ -9,6 +9,7 @@ import { ffprobePromise, getVideoStreamDuration, getVideoStreamFPS, TranscodeVOD
 import { VideoResolution, VideoStorage } from '@shared/models'
 import { CONFIG } from '../../initializers/config'
 import { VideoFileModel } from '../../models/video/video-file'
+import { JobQueue } from '../job-queue'
 import { generateWebTorrentVideoFilename } from '../paths'
 import { buildFileMetadata } from '../video-file'
 import { VideoPathManager } from '../video-path-manager'
@@ -198,7 +199,8 @@ export async function mergeAudioVideofile (options: {
       return onWebTorrentVideoFileTranscoding({
         video,
         videoFile: inputVideoFile,
-        videoOutputPath
+        videoOutputPath,
+        wasAudioFile: true
       })
     })
 
@@ -212,8 +214,9 @@ export async function onWebTorrentVideoFileTranscoding (options: {
   video: MVideoFullLight
   videoFile: MVideoFile
   videoOutputPath: string
+  wasAudioFile?: boolean // default false
 }) {
-  const { video, videoFile, videoOutputPath } = options
+  const { video, videoFile, videoOutputPath, wasAudioFile } = options
 
   const mutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
@@ -241,6 +244,17 @@ export async function onWebTorrentVideoFileTranscoding (options: {
 
     await VideoFileModel.customUpsert(videoFile, 'video', undefined)
     video.VideoFiles = await video.$get('VideoFiles')
+
+    if (wasAudioFile) {
+      await JobQueue.Instance.createJob({
+        type: 'generate-video-storyboard' as 'generate-video-storyboard',
+        payload: {
+          videoUUID: video.uuid,
+          // No need to federate, we process these jobs sequentially
+          federate: false
+        }
+      })
+    }
 
     return { video, videoFile }
   } finally {

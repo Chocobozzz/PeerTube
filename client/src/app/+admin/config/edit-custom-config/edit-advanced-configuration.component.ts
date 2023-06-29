@@ -10,7 +10,7 @@ export class EditAdvancedConfigurationComponent {
   @Input() form: FormGroup
   @Input() formErrors: any
 
-  getCacheSize (type: 'captions' | 'previews' | 'torrents') {
+  getCacheSize (type: 'captions' | 'previews' | 'torrents' | 'storyboards') {
     return this.form.value['cache'][type]['size']
   }
 }

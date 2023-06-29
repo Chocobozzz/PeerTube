@@ -34,14 +34,16 @@ export class CaptionsCommand extends AbstractCommand {
 
   list (options: OverrideCommandOptions & {
     videoId: string | number
+    videoPassword?: string
   }) {
-    const { videoId } = options
+    const { videoId, videoPassword } = options
     const path = '/api/v1/videos/' + videoId + '/captions'
 
     return this.getRequestBody<ResultList<VideoCaption>>({
       ...options,
 
       path,
+      headers: this.buildVideoPasswordHeader(videoPassword),
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

@@ -60,6 +60,7 @@ export class VideoTableAttributes {
         'height',
         'width',
         'fileUrl',
+        'onDisk',
         'automaticallyGenerated',
         'videoId',
         'videoPlaylistId',

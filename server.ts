@@ -21,7 +21,7 @@ import { checkMissedConfig, checkFFmpeg, checkNodeVersion } from './server/initi
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { CONFIG } from './server/initializers/config'
-import { API_VERSION, FILES_CACHE, WEBSERVER, loadLanguages } from './server/initializers/constants'
+import { API_VERSION, WEBSERVER, loadLanguages } from './server/initializers/constants'
 import { logger } from './server/helpers/logger'
 
 const missed = checkMissedConfig()
@@ -101,7 +101,6 @@ loadLanguages()
 import { installApplication } from './server/initializers/installer'
 import { Emailer } from './server/lib/emailer'
 import { JobQueue } from './server/lib/job-queue'
-import { VideosPreviewCache, VideosCaptionCache } from './server/lib/files-cache'
 import {
   activityPubRouter,
   apiRouter,
@@ -143,7 +142,6 @@ import { Hooks } from './server/lib/plugins/hooks'
 import { PluginManager } from './server/lib/plugins/plugin-manager'
 import { LiveManager } from './server/lib/live'
 import { HttpStatusCode } from './shared/models/http/http-error-codes'
-import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager'
 import { isTestOrDevInstance } from './server/helpers/core-utils'
@@ -311,11 +309,6 @@ async function startApplication () {
     JobQueue.Instance.init(),
     ServerConfigManager.Instance.init()
   ])
-
-  // Caches initializations
-  VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE, FILES_CACHE.PREVIEWS.MAX_AGE)
-  VideosCaptionCache.Instance.init(CONFIG.CACHE.VIDEO_CAPTIONS.SIZE, FILES_CACHE.VIDEO_CAPTIONS.MAX_AGE)
-  VideosTorrentCache.Instance.init(CONFIG.CACHE.TORRENTS.SIZE, FILES_CACHE.TORRENTS.MAX_AGE)
 
   // Enable Schedulers
   ActorFollowScheduler.Instance.enable()

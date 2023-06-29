@@ -52,6 +52,7 @@ import {
   VideoFileTokenService,
   VideoImportService,
   VideoOwnershipService,
+  VideoPasswordService,
   VideoResolver,
   VideoService
 } from './video'
@@ -209,6 +210,8 @@ import { VideoChannelService } from './video-channel'
     VideoCaptionService,
 
     VideoChannelService,
+
+    VideoPasswordService,
 
     CustomPageService,
 

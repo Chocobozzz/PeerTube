@@ -1,7 +1,7 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
-import { prepareIcu } from '@app/helpers'
+import { formatICU } from '@app/helpers'
 import { DropdownAction } from '@app/shared/shared-main'
 import { RunnerJob, RunnerJobState } from '@shared/models'
 import { RunnerJobFormatted, RunnerService } from '../runner.service'
@@ -57,9 +57,10 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
   }
 
   async cancelJobs (jobs: RunnerJob[]) {
-    const message = prepareIcu(
-      $localize`Do you really want to cancel {count, plural, =1 {this job} other {{count} jobs}}? Children jobs will also be cancelled.`
-    )({ count: jobs.length }, $localize`Do you really want to cancel these jobs? Children jobs will also be cancelled.`)
+    const message = formatICU(
+      $localize`Do you really want to cancel {count, plural, =1 {this job} other {{count} jobs}}? Children jobs will also be cancelled.`,
+      { count: jobs.length }
+    )
 
     const res = await this.confirmService.confirm(message, $localize`Cancel`)
 

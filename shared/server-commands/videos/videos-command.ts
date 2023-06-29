@@ -111,8 +111,9 @@ export class VideosCommand extends AbstractCommand {
   rate (options: OverrideCommandOptions & {
     id: number | string
     rating: UserVideoRateType
+    videoPassword?: string
   }) {
-    const { id, rating } = options
+    const { id, rating, videoPassword } = options
     const path = '/api/v1/videos/' + id + '/rate'
 
     return this.putBodyRequest({
@@ -120,6 +121,7 @@ export class VideosCommand extends AbstractCommand {
 
       path,
       fields: { rating },
+      headers: this.buildVideoPasswordHeader(videoPassword),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
@@ -148,6 +150,23 @@ export class VideosCommand extends AbstractCommand {
       ...options,
 
       token: this.buildCommonRequestToken({ ...options, implicitToken: true })
+    })
+  }
+
+  getWithPassword (options: OverrideCommandOptions & {
+    id: number | string
+    password?: string
+  }) {
+    const path = '/api/v1/videos/' + options.id
+
+    return this.getRequestBody<VideoDetails>({
+      ...options,
+      headers:{
+        'x-peertube-video-password': options.password
+      },
+      path,
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
 
@@ -608,11 +627,13 @@ export class VideosCommand extends AbstractCommand {
     nsfw?: boolean
     privacy?: VideoPrivacy
     fixture?: string
+    videoPasswords?: string[]
   }) {
     const attributes: VideoEdit = { name: options.name }
     if (options.nsfw) attributes.nsfw = options.nsfw
     if (options.privacy) attributes.privacy = options.privacy
     if (options.fixture) attributes.fixture = options.fixture
+    if (options.videoPasswords) attributes.videoPasswords = options.videoPasswords
 
     return this.upload({ ...options, attributes })
   }

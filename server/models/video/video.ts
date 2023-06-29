@@ -58,7 +58,7 @@ import {
 import { AttributesOnly } from '@shared/typescript-utils'
 import { peertubeTruncate } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { exists, isBooleanValid, isUUIDValid } from '../../helpers/custom-validators/misc'
+import { exists, isArray, isBooleanValid, isUUIDValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoDescriptionValid,
   isVideoDurationValid,
@@ -75,6 +75,7 @@ import {
   MChannel,
   MChannelAccountDefault,
   MChannelId,
+  MStoryboard,
   MStreamingPlaylist,
   MStreamingPlaylistFilesVideo,
   MUserAccountId,
@@ -83,6 +84,8 @@ import {
   MVideoAccountLight,
   MVideoAccountLightBlacklistAllFiles,
   MVideoAP,
+  MVideoAPLight,
+  MVideoCaptionLanguageUrl,
   MVideoDetails,
   MVideoFileVideo,
   MVideoFormattable,
@@ -111,13 +114,13 @@ import { buildTrigramSearchIndex, buildWhereIdOrUUID, getVideoSort, isOutdated, 
 import { UserModel } from '../user/user'
 import { UserVideoHistoryModel } from '../user/user-video-history'
 import { VideoViewModel } from '../view/video-view'
+import { videoModelToActivityPubObject } from './formatter/video-activity-pub-format'
 import {
   videoFilesModelToFormattedJSON,
   VideoFormattingJSONOptions,
-  videoModelToActivityPubObject,
   videoModelToFormattedDetailsJSON,
   videoModelToFormattedJSON
-} from './formatter/video-format-utils'
+} from './formatter/video-api-format'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import {
   BuildVideosListQueryOptions,
@@ -126,6 +129,7 @@ import {
   VideosIdListQueryBuilder,
   VideosModelListQueryBuilder
 } from './sql/video'
+import { StoryboardModel } from './storyboard'
 import { TagModel } from './tag'
 import { ThumbnailModel } from './thumbnail'
 import { VideoBlacklistModel } from './video-blacklist'
@@ -136,6 +140,7 @@ import { VideoFileModel } from './video-file'
 import { VideoImportModel } from './video-import'
 import { VideoJobInfoModel } from './video-job-info'
 import { VideoLiveModel } from './video-live'
+import { VideoPasswordModel } from './video-password'
 import { VideoPlaylistElementModel } from './video-playlist-element'
 import { VideoShareModel } from './video-share'
 import { VideoSourceModel } from './video-source'
@@ -734,6 +739,15 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   })
   VideoCaptions: VideoCaptionModel[]
 
+  @HasMany(() => VideoPasswordModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  VideoPasswords: VideoPasswordModel[]
+
   @HasOne(() => VideoJobInfoModel, {
     foreignKey: {
       name: 'videoId',
@@ -742,6 +756,16 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     onDelete: 'cascade'
   })
   VideoJobInfo: VideoJobInfoModel
+
+  @HasOne(() => StoryboardModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade',
+    hooks: true
+  })
+  Storyboard: StoryboardModel
 
   @AfterCreate
   static notifyCreate (video: MVideo) {
@@ -891,6 +915,10 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         {
           attributes: [ 'filename', 'language', 'fileUrl' ],
           model: VideoCaptionModel.unscoped(),
+          required: false
+        },
+        {
+          model: StoryboardModel.unscoped(),
           required: false
         },
         {
@@ -1758,6 +1786,32 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     )
   }
 
+  async lightAPToFullAP (this: MVideoAPLight, transaction: Transaction): Promise<MVideoAP> {
+    const videoAP = this as MVideoAP
+
+    const getCaptions = () => {
+      if (isArray(videoAP.VideoCaptions)) return videoAP.VideoCaptions
+
+      return this.$get('VideoCaptions', {
+        attributes: [ 'filename', 'language', 'fileUrl' ],
+        transaction
+      }) as Promise<MVideoCaptionLanguageUrl[]>
+    }
+
+    const getStoryboard = () => {
+      if (videoAP.Storyboard) return videoAP.Storyboard
+
+      return this.$get('Storyboard', { transaction }) as Promise<MStoryboard>
+    }
+
+    const [ captions, storyboard ] = await Promise.all([ getCaptions(), getStoryboard() ])
+
+    return Object.assign(this, {
+      VideoCaptions: captions,
+      Storyboard: storyboard
+    })
+  }
+
   getTruncatedDescription () {
     if (!this.description) return null
 
@@ -1918,7 +1972,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
   // ---------------------------------------------------------------------------
 
-  requiresAuth (options: {
+  requiresUserAuth (options: {
     urlParamId: string
     checkBlacklist: boolean
   }) {
@@ -1936,11 +1990,11 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     if (checkBlacklist && this.VideoBlacklist) return true
 
-    if (this.privacy !== VideoPrivacy.PUBLIC) {
-      throw new Error(`Unknown video privacy ${this.privacy} to know if the video requires auth`)
+    if (this.privacy === VideoPrivacy.PUBLIC || this.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
+      return false
     }
 
-    return false
+    throw new Error(`Unknown video privacy ${this.privacy} to know if the video requires auth`)
   }
 
   hasPrivateStaticPath () {

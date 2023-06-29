@@ -1,6 +1,6 @@
 import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
-import { durationToString, getAbsoluteAPIUrl, getAbsoluteEmbedUrl, prepareIcu } from '@app/helpers'
+import { durationToString, formatICU, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { buildVideoWatchPath, getAllFiles } from '@shared/core-utils'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
@@ -19,9 +19,6 @@ import {
 } from '@shared/models'
 
 export class Video implements VideoServerModel {
-  private static readonly viewsICU = prepareIcu($localize`{views, plural, =0 {No view} =1 {1 view} other {{views} views}}`)
-  private static readonly viewersICU = prepareIcu($localize`{viewers, plural, =0 {No viewers} =1 {1 viewer} other {{viewers} viewers}}`)
-
   byVideoChannel: string
   byAccount: string
 
@@ -281,11 +278,18 @@ export class Video implements VideoServerModel {
     return user && this.isLocal === false && user.hasRight(UserRight.MANAGE_VIDEOS_REDUNDANCIES)
   }
 
+  canAccessPasswordProtectedVideoWithoutPassword (user: AuthUser) {
+    return this.privacy.id === VideoPrivacy.PASSWORD_PROTECTED &&
+      user &&
+      this.isLocal === true &&
+      (this.account.name === user.username || user.hasRight(UserRight.SEE_ALL_VIDEOS))
+  }
+
   getExactNumberOfViews () {
     if (this.isLive) {
-      return Video.viewersICU({ viewers: this.viewers }, $localize`${this.viewers} viewer(s)`)
+      return formatICU($localize`{viewers, plural, =0 {No viewers} =1 {1 viewer} other {{viewers} viewers}}`, { viewers: this.viewers })
     }
 
-    return Video.viewsICU({ views: this.views }, $localize`{${this.views} view(s)}`)
+    return formatICU($localize`{views, plural, =0 {No view} =1 {1 view} other {{views} views}}`, { views: this.views })
   }
 }

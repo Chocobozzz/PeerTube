@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
-import { prepareIcu } from '@app/helpers'
+import { formatICU } from '@app/helpers'
 import { ServerConfig } from '@shared/models'
 
 @Component({
@@ -71,17 +71,17 @@ export class InstanceFeaturesTableComponent implements OnInit {
     const hours = Math.floor(seconds / 3600)
 
     if (hours !== 0) {
-      return prepareIcu($localize`~ {hours, plural, =1 {1 hour} other {{hours} hours}}`)(
-        { hours },
-        $localize`~ ${hours} hours`
+      return formatICU(
+        $localize`~ {hours, plural, =1 {1 hour} other {{hours} hours}}`,
+        { hours }
       )
     }
 
     const minutes = Math.floor(seconds % 3600 / 60)
 
-    return prepareIcu($localize`~ {minutes, plural, =1 {1 minute} other {{minutes} minutes}}`)(
-      { minutes },
-      $localize`~ ${minutes} minutes`
+    return formatICU(
+      $localize`~ {minutes, plural, =1 {1 minute} other {{minutes} minutes}}`,
+      { minutes }
     )
   }
 

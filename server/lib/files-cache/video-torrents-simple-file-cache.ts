@@ -6,11 +6,11 @@ import { MVideo, MVideoFile } from '@server/types/models'
 import { CONFIG } from '../../initializers/config'
 import { FILES_CACHE } from '../../initializers/constants'
 import { VideoModel } from '../../models/video/video'
-import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
+import { AbstractSimpleFileCache } from './shared/abstract-simple-file-cache'
 
-class VideosTorrentCache extends AbstractVideoStaticFileCache <string> {
+class VideoTorrentsSimpleFileCache extends AbstractSimpleFileCache <string> {
 
-  private static instance: VideosTorrentCache
+  private static instance: VideoTorrentsSimpleFileCache
 
   private constructor () {
     super()
@@ -66,5 +66,5 @@ class VideosTorrentCache extends AbstractVideoStaticFileCache <string> {
 }
 
 export {
-  VideosTorrentCache
+  VideoTorrentsSimpleFileCache
 }

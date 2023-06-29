@@ -1,5 +1,4 @@
 import { remove } from 'fs-extra'
-import { LRUCache } from 'lru-cache'
 import { join } from 'path'
 import { Transaction } from 'sequelize/types'
 import { ActorModel } from '@server/models/actor/actor'
@@ -8,14 +7,14 @@ import { buildUUID } from '@shared/extra-utils'
 import { ActivityPubActorType, ActorImageType } from '@shared/models'
 import { retryTransactionWrapper } from '../helpers/database-utils'
 import { CONFIG } from '../initializers/config'
-import { ACTOR_IMAGES_SIZE, LRU_CACHE, WEBSERVER } from '../initializers/constants'
+import { ACTOR_IMAGES_SIZE, WEBSERVER } from '../initializers/constants'
 import { sequelizeTypescript } from '../initializers/database'
 import { MAccountDefault, MActor, MChannelDefault } from '../types/models'
 import { deleteActorImages, updateActorImages } from './activitypub/actors'
 import { sendUpdateActor } from './activitypub/send'
-import { downloadImageFromWorker, processImageFromWorker } from './worker/parent-process'
+import { processImageFromWorker } from './worker/parent-process'
 
-function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string) {
+export function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string) {
   return new ActorModel({
     type,
     url,
@@ -32,7 +31,7 @@ function buildActorInstance (type: ActivityPubActorType, url: string, preferredU
   }) as MActor
 }
 
-async function updateLocalActorImageFiles (
+export async function updateLocalActorImageFiles (
   accountOrChannel: MAccountDefault | MChannelDefault,
   imagePhysicalFile: Express.Multer.File,
   type: ActorImageType
@@ -73,7 +72,7 @@ async function updateLocalActorImageFiles (
   }))
 }
 
-async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MChannelDefault, type: ActorImageType) {
+export async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MChannelDefault, type: ActorImageType) {
   return retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction(async t => {
       const updatedActor = await deleteActorImages(accountOrChannel.Actor, type, t)
@@ -88,7 +87,7 @@ async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MC
 
 // ---------------------------------------------------------------------------
 
-async function findAvailableLocalActorName (baseActorName: string, transaction?: Transaction) {
+export async function findAvailableLocalActorName (baseActorName: string, transaction?: Transaction) {
   let actor = await ActorModel.loadLocalByName(baseActorName, transaction)
   if (!actor) return baseActorName
 
@@ -100,35 +99,4 @@ async function findAvailableLocalActorName (baseActorName: string, transaction?:
   }
 
   throw new Error('Cannot find available actor local name (too much iterations).')
-}
-
-// ---------------------------------------------------------------------------
-
-function downloadActorImageFromWorker (options: {
-  fileUrl: string
-  filename: string
-  type: ActorImageType
-  size: typeof ACTOR_IMAGES_SIZE[ActorImageType][0]
-}) {
-  const downloaderOptions = {
-    url: options.fileUrl,
-    destDir: CONFIG.STORAGE.ACTOR_IMAGES,
-    destName: options.filename,
-    size: options.size
-  }
-
-  return downloadImageFromWorker(downloaderOptions)
-}
-
-// Unsafe so could returns paths that does not exist anymore
-const actorImagePathUnsafeCache = new LRUCache<string, string>({ max: LRU_CACHE.ACTOR_IMAGE_STATIC.MAX_SIZE })
-
-export {
-  actorImagePathUnsafeCache,
-  updateLocalActorImageFiles,
-  findAvailableLocalActorName,
-  downloadActorImageFromWorker,
-  deleteLocalActorImageFile,
-  downloadImageFromWorker,
-  buildActorInstance
 }

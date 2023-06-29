@@ -4,6 +4,7 @@ import { activityPubCollectionPagination } from '@server/lib/activitypub/collect
 import { activityPubContextify } from '@server/lib/activitypub/context'
 import { getServerActor } from '@server/models/application/application'
 import { MAccountId, MActorId, MChannelId, MVideoId } from '@server/types/models'
+import { VideoCommentObject } from '@shared/models'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants'
@@ -33,7 +34,6 @@ import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '
 import { AccountModel } from '../../models/account/account'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { ActorFollowModel } from '../../models/actor/actor-follow'
-import { VideoCaptionModel } from '../../models/video/video-caption'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { VideoShareModel } from '../../models/video/video-share'
@@ -242,14 +242,13 @@ async function videoController (req: express.Request, res: express.Response) {
   if (redirectIfNotOwned(video.url, res)) return
 
   // We need captions to render AP object
-  const captions = await VideoCaptionModel.listVideoCaptions(video.id)
-  const videoWithCaptions = Object.assign(video, { VideoCaptions: captions })
+  const videoAP = await video.lightAPToFullAP(undefined)
 
-  const audience = getAudience(videoWithCaptions.VideoChannel.Account.Actor, videoWithCaptions.privacy === VideoPrivacy.PUBLIC)
-  const videoObject = audiencify(await videoWithCaptions.toActivityPubObject(), audience)
+  const audience = getAudience(videoAP.VideoChannel.Account.Actor, videoAP.privacy === VideoPrivacy.PUBLIC)
+  const videoObject = audiencify(await videoAP.toActivityPubObject(), audience)
 
   if (req.path.endsWith('/activity')) {
-    const data = buildCreateActivity(videoWithCaptions.url, video.VideoChannel.Account.Actor, videoObject, audience)
+    const data = buildCreateActivity(videoAP.url, video.VideoChannel.Account.Actor, videoObject, audience)
     return activityPubResponse(activityPubContextify(data, 'Video'), res)
   }
 
@@ -355,7 +354,7 @@ async function videoCommentController (req: express.Request, res: express.Respon
     videoCommentObject = audiencify(videoCommentObject, audience)
 
     if (req.path.endsWith('/activity')) {
-      const data = buildCreateActivity(videoComment.url, videoComment.Account.Actor, videoCommentObject, audience)
+      const data = buildCreateActivity(videoComment.url, videoComment.Account.Actor, videoCommentObject as VideoCommentObject, audience)
       return activityPubResponse(activityPubContextify(data, 'Comment'), res)
     }
   }

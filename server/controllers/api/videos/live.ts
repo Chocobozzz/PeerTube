@@ -18,13 +18,14 @@ import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 import { MVideoDetails, MVideoFullLight, MVideoLive } from '@server/types/models'
 import { buildUUID, uuidToShort } from '@shared/extra-utils'
-import { HttpStatusCode, LiveVideoCreate, LiveVideoLatencyMode, LiveVideoUpdate, UserRight, VideoState } from '@shared/models'
+import { HttpStatusCode, LiveVideoCreate, LiveVideoLatencyMode, LiveVideoUpdate, UserRight, VideoPrivacy, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { updateVideoMiniatureFromExisting } from '../../../lib/thumbnail'
+import { updateLocalVideoMiniatureFromExisting } from '../../../lib/thumbnail'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, optionalAuthenticate } from '../../../middlewares'
 import { VideoModel } from '../../../models/video/video'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting'
+import { VideoPasswordModel } from '@server/models/video/video-password'
 
 const liveRouter = express.Router()
 
@@ -165,7 +166,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
     video,
     files: req.files,
     fallback: type => {
-      return updateVideoMiniatureFromExisting({
+      return updateLocalVideoMiniatureFromExisting({
         inputPath: ASSETS_PATH.DEFAULT_LIVE_BACKGROUND,
         video,
         type,
@@ -201,6 +202,10 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
     await setVideoTags({ video, tags: videoInfo.tags, transaction: t })
 
     await federateVideoIfNeeded(videoCreated, true, t)
+
+    if (videoInfo.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
+      await VideoPasswordModel.addPasswords(videoInfo.videoPasswords, video.id, t)
+    }
 
     logger.info('Video live %s with uuid %s created.', videoInfo.name, videoCreated.uuid)
 

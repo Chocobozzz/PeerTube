@@ -1,4 +1,5 @@
 import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
+import { truncate } from 'lodash'
 import { buildAbsoluteFixturePath, wait } from '@shared/core-utils'
 import { VideoDetails, VideoInclude, VideoPrivacy } from '@shared/models'
 import { PeerTubeServer } from '../server/server'
@@ -104,7 +105,13 @@ async function findExternalSavedVideo (server: PeerTubeServer, liveDetails: Vide
 
   const { data } = await server.videos.list({ token: server.accessToken, sort: '-publishedAt', include, privacyOneOf })
 
-  return data.find(v => v.name === liveDetails.name + ' - ' + new Date(liveDetails.publishedAt).toLocaleString())
+  const videoNameSuffix = ` - ${new Date(liveDetails.publishedAt).toLocaleString()}`
+  const truncatedVideoName = truncate(liveDetails.name, {
+    length: 120 - videoNameSuffix.length
+  })
+  const toFind = truncatedVideoName + videoNameSuffix
+
+  return data.find(v => v.name === toFind)
 }
 
 export {

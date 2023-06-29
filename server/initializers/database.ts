@@ -10,6 +10,7 @@ import { UserModel } from '@server/models/user/user'
 import { UserNotificationModel } from '@server/models/user/user-notification'
 import { UserRegistrationModel } from '@server/models/user/user-registration'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history'
+import { StoryboardModel } from '@server/models/video/storyboard'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting'
@@ -56,6 +57,7 @@ import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-pla
 import { VideoTagModel } from '../models/video/video-tag'
 import { VideoViewModel } from '../models/view/video-view'
 import { CONFIG } from './config'
+import { VideoPasswordModel } from '@server/models/video/video-password'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -163,9 +165,11 @@ async function initDatabaseModels (silent: boolean) {
     VideoJobInfoModel,
     VideoChannelSyncModel,
     UserRegistrationModel,
+    VideoPasswordModel,
     RunnerRegistrationTokenModel,
     RunnerModel,
-    RunnerJobModel
+    RunnerJobModel,
+    StoryboardModel
   ])
 
   // Check extensions exist in the database

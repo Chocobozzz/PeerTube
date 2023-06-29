@@ -5,6 +5,7 @@
   >
     <ng-container ngProjectAs="label-warning" *ngIf="displayOptions.privacyLabel && isUnlistedVideo()" i18n>Unlisted</ng-container>
     <ng-container ngProjectAs="label-danger" *ngIf="displayOptions.privacyLabel && isPrivateVideo()" i18n>Private</ng-container>
+    <ng-container ngProjectAs="label-danger" *ngIf="displayOptions.privacyLabel && isPasswordProtectedVideo()" i18n>Password protected</ng-container>
   </my-video-thumbnail>
 
   <div class="video-bottom">

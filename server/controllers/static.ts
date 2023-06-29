@@ -72,7 +72,7 @@ staticRouter.use(
   handleStaticError
 )
 
-// Thumbnails path for express
+// FIXME: deprecated in v6, to remove
 const thumbnailsPhysicalPath = CONFIG.STORAGE.THUMBNAILS_DIR
 staticRouter.use(
   STATIC_PATHS.THUMBNAILS,

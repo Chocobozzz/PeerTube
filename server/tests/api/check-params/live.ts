@@ -143,7 +143,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail with a bad privacy for replay settings', async function () {
-      const fields = { ...baseCorrectParams, replaySettings: { privacy: 5 } }
+      const fields = { ...baseCorrectParams, saveReplay: true, replaySettings: { privacy: 999 } }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -194,7 +194,7 @@ describe('Test video lives API validator', function () {
     it('Should fail with a big thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        thumbnailfile: buildAbsoluteFixturePath('preview-big.png')
+        thumbnailfile: buildAbsoluteFixturePath('custom-preview-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -212,7 +212,7 @@ describe('Test video lives API validator', function () {
     it('Should fail with a big preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        previewfile: buildAbsoluteFixturePath('preview-big.png')
+        previewfile: buildAbsoluteFixturePath('custom-preview-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -472,7 +472,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail with a bad privacy for replay settings', async function () {
-      const fields = { saveReplay: true, replaySettings: { privacy: 5 } }
+      const fields = { saveReplay: true, replaySettings: { privacy: 999 } }
 
       await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })

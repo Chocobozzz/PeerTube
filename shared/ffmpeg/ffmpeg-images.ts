@@ -1,4 +1,5 @@
 import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-command-wrapper'
+import { getVideoStreamDuration } from './ffprobe'
 
 export class FFmpegImage {
   private readonly commandWrapper: FFmpegCommandWrapper
@@ -36,24 +37,56 @@ export class FFmpegImage {
 
   async generateThumbnailFromVideo (options: {
     fromPath: string
-    folder: string
-    imageName: string
+    output: string
   }) {
-    const { fromPath, folder, imageName } = options
+    const { fromPath, output } = options
 
-    const pendingImageName = 'pending-' + imageName
+    let duration = await getVideoStreamDuration(fromPath)
+    if (isNaN(duration)) duration = 0
 
-    const thumbnailOptions = {
-      filename: pendingImageName,
-      count: 1,
-      folder
+    this.commandWrapper.buildCommand(fromPath)
+      .seekInput(duration / 2)
+      .videoFilter('thumbnail=500')
+      .outputOption('-frames:v 1')
+      .output(output)
+
+    return this.commandWrapper.runCommand()
+  }
+
+  async generateStoryboardFromVideo (options: {
+    path: string
+    destination: string
+
+    sprites: {
+      size: {
+        width: number
+        height: number
+      }
+
+      count: {
+        width: number
+        height: number
+      }
+
+      duration: number
     }
+  }) {
+    const { path, destination, sprites } = options
 
-    return new Promise<string>((res, rej) => {
-      this.commandWrapper.buildCommand(fromPath)
-        .on('error', rej)
-        .on('end', () => res(imageName))
-        .thumbnail(thumbnailOptions)
-    })
+    const command = this.commandWrapper.buildCommand(path)
+
+    const filter = [
+      `setpts=N/round(FRAME_RATE)/TB`,
+      `select='not(mod(t,${options.sprites.duration}))'`,
+      `scale=${sprites.size.width}:${sprites.size.height}`,
+      `tile=layout=${sprites.count.width}x${sprites.count.height}`
+    ].join(',')
+
+    command.outputOption('-filter_complex', filter)
+    command.outputOption('-frames:v', '1')
+    command.outputOption('-q:v', '2')
+    command.output(destination)
+
+    return this.commandWrapper.runCommand()
   }
 }

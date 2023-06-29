@@ -24,7 +24,7 @@ html,
 body {
   height: 100%;
   margin: 0;
-  background-color: #000;
+  background-color: #0f0f10;
 }
 
 #video-wrapper {
@@ -42,8 +42,10 @@ body {
   }
 }
 
-#error-block {
+#error-block,
+#video-password-block {
   display: none;
+  user-select: none;
 
   flex-direction: column;
   align-content: center;
@@ -84,6 +86,43 @@ body {
   position: absolute;
   bottom: 0;
   text-align: center;
+}
+
+#video-password-content {
+  @include margin(1rem, 0, 2rem);
+}
+
+#video-password-input,
+#video-password-submit {
+  line-height: 23px;
+  padding: 1rem;
+  margin: 1rem 0.5rem;
+  border: 0;
+  font-weight: 600;
+  border-radius: 3px!important;
+  font-size: 18px;
+  display: inline-block;
+}
+
+#video-password-submit {
+  color: #fff;
+  background-color: #f2690d;
+  cursor: pointer;
+}
+
+#video-password-submit:hover {
+  background-color: #f47825;
+}
+#video-password-error {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 2rem;
+  font-weight: bolder;
+}
+
+#video-password-block svg {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media screen and (max-width: 300px) {

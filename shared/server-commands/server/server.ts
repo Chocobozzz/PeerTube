@@ -32,8 +32,10 @@ import {
   HistoryCommand,
   ImportsCommand,
   LiveCommand,
+  VideoPasswordsCommand,
   PlaylistsCommand,
   ServicesCommand,
+  StoryboardCommand,
   StreamingPlaylistsCommand,
   VideosCommand,
   VideoStudioCommand,
@@ -146,6 +148,9 @@ export class PeerTubeServer {
   twoFactor?: TwoFactorCommand
   videoToken?: VideoTokenCommand
   registrations?: RegistrationsCommand
+  videoPasswords?: VideoPasswordsCommand
+
+  storyboard?: StoryboardCommand
 
   runners?: RunnersCommand
   runnerRegistrationTokens?: RunnerRegistrationTokensCommand
@@ -232,7 +237,7 @@ export class PeerTubeServer {
     }
 
     // Share the environment
-    const env = Object.create(process.env)
+    const env = { ...process.env }
     env['NODE_ENV'] = 'test'
     env['NODE_APP_INSTANCE'] = this.internalServerNumber.toString()
     env['NODE_CONFIG'] = JSON.stringify(configOverride)
@@ -371,6 +376,7 @@ export class PeerTubeServer {
         logs: this.getDirectoryPath('logs') + '/',
         previews: this.getDirectoryPath('previews') + '/',
         thumbnails: this.getDirectoryPath('thumbnails') + '/',
+        storyboards: this.getDirectoryPath('storyboards') + '/',
         torrents: this.getDirectoryPath('torrents') + '/',
         captions: this.getDirectoryPath('captions') + '/',
         cache: this.getDirectoryPath('cache') + '/',
@@ -434,8 +440,11 @@ export class PeerTubeServer {
     this.videoToken = new VideoTokenCommand(this)
     this.registrations = new RegistrationsCommand(this)
 
+    this.storyboard = new StoryboardCommand(this)
+
     this.runners = new RunnersCommand(this)
     this.runnerRegistrationTokens = new RunnerRegistrationTokensCommand(this)
     this.runnerJobs = new RunnerJobsCommand(this)
+    this.videoPasswords = new VideoPasswordsCommand(this)
   }
 }

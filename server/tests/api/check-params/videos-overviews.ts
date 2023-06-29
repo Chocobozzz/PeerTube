@@ -2,7 +2,7 @@
 
 import { cleanupTests, createSingleServer, PeerTubeServer } from '@shared/server-commands'
 
-describe('Test videos overview', function () {
+describe('Test videos overview API validator', function () {
   let server: PeerTubeServer
 
   // ---------------------------------------------------------------

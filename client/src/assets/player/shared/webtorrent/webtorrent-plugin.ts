@@ -59,7 +59,7 @@ class WebTorrentPlugin extends Plugin {
   private isAutoResolutionObservation = false
   private playerRefusedP2P = false
 
-  private requiresAuth: boolean
+  private requiresUserAuth: boolean
   private videoFileToken: () => string
 
   private torrentInfoInterval: any
@@ -86,7 +86,7 @@ class WebTorrentPlugin extends Plugin {
     this.savePlayerSrcFunction = this.player.src
     this.playerElement = options.playerElement
 
-    this.requiresAuth = options.requiresAuth
+    this.requiresUserAuth = options.requiresUserAuth
     this.videoFileToken = options.videoFileToken
 
     this.buildWebSeedUrls = options.buildWebSeedUrls
@@ -546,7 +546,7 @@ class WebTorrentPlugin extends Plugin {
 
     let httpUrl = this.currentVideoFile.fileUrl
 
-    if (this.requiresAuth && this.videoFileToken) {
+    if (this.videoFileToken) {
       httpUrl = addQueryParams(httpUrl, { videoFileToken: this.videoFileToken() })
     }
 

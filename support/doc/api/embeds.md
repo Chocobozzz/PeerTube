@@ -52,7 +52,7 @@ player.pause()
 ## Embed URL parameters
 
 You can customize PeerTube player by specifying URL query parameters.
-For example `https://my-instance.example.com/videos/embed/52a10666-3a18-4e73-93da-e8d3c12c305a??start=1s&stop=18s&loop=1&autoplay=1&muted=1&warningTitle=0&controlBar=0&peertubeLink=0&p2p=0`
+For example `https://my-instance.example.com/videos/embed/52a10666-3a18-4e73-93da-e8d3c12c305a?start=1s&stop=18s&loop=1&autoplay=1&muted=1&warningTitle=0&controlBar=0&peertubeLink=0&p2p=0`
 
 ### start
 
@@ -107,6 +107,10 @@ Try to automatically play the video.
 Most web browsers disable video autoplay if the user did not interact with the video. You can try to bypass this limitation by muting the video
 
 Value must be `0` or `1`.
+
+### playbackRate
+
+Force the default playback rate (`0.75`, `1.5` etc).
 
 ### title
 

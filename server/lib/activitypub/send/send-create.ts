@@ -1,6 +1,14 @@
 import { Transaction } from 'sequelize'
 import { getServerActor } from '@server/models/application/application'
-import { ActivityAudience, ActivityCreate, ContextType, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+import {
+  ActivityAudience,
+  ActivityCreate,
+  ActivityCreateObject,
+  ContextType,
+  VideoCommentObject,
+  VideoPlaylistPrivacy,
+  VideoPrivacy
+} from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import {
@@ -107,7 +115,7 @@ async function sendCreateVideoComment (comment: MCommentOwnerVideo, transaction:
 
   const byActor = comment.Account.Actor
   const threadParentComments = await VideoCommentModel.listThreadParentComments(comment, transaction)
-  const commentObject = comment.toActivityPubObject(threadParentComments)
+  const commentObject = comment.toActivityPubObject(threadParentComments) as VideoCommentObject
 
   const actorsInvolvedInComment = await getActorsInvolvedInVideo(comment.Video, transaction)
   // Add the actor that commented too
@@ -168,7 +176,12 @@ async function sendCreateVideoComment (comment: MCommentOwnerVideo, transaction:
   })
 }
 
-function buildCreateActivity (url: string, byActor: MActorLight, object: any, audience?: ActivityAudience): ActivityCreate {
+function buildCreateActivity <T extends ActivityCreateObject> (
+  url: string,
+  byActor: MActorLight,
+  object: T,
+  audience?: ActivityAudience
+): ActivityCreate<T> {
   if (!audience) audience = getAudience(byActor)
 
   return audiencify(
@@ -176,7 +189,9 @@ function buildCreateActivity (url: string, byActor: MActorLight, object: any, au
       type: 'Create' as 'Create',
       id: url + '/activity',
       actor: byActor.url,
-      object: audiencify(object, audience)
+      object: typeof object === 'string'
+        ? object
+        : audiencify(object, audience)
     },
     audience
   )

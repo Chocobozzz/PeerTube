@@ -2,6 +2,7 @@ import express from 'express'
 import { body, header, param, query, ValidationChain } from 'express-validator'
 import { isTestInstance } from '@server/helpers/core-utils'
 import { getResumableUploadPath } from '@server/helpers/upload'
+import { uploadx } from '@server/lib/uploadx'
 import { Redis } from '@server/lib/redis'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express-handler'
@@ -23,6 +24,7 @@ import { isBooleanBothQueryValid, isNumberArray, isStringArray } from '../../../
 import {
   areVideoTagsValid,
   isScheduleVideoUpdatePrivacyValid,
+  isValidPasswordProtectedPrivacy,
   isVideoCategoryValid,
   isVideoDescriptionValid,
   isVideoFileMimeTypeValid,
@@ -39,7 +41,6 @@ import {
 } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
-import { deleteFileAndCatch } from '../../../helpers/utils'
 import { getVideoWithAttributes } from '../../../helpers/video'
 import { CONFIG } from '../../../initializers/config'
 import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants'
@@ -55,7 +56,8 @@ import {
   doesVideoChannelOfAccountExist,
   doesVideoExist,
   doesVideoFileOfVideoExist,
-  isValidVideoIdParam
+  isValidVideoIdParam,
+  isValidVideoPasswordHeader
 } from '../shared'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
@@ -70,6 +72,10 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
+  body('videoPasswords')
+    .optional()
+    .isArray()
+    .withMessage('Video passwords should be an array.'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
@@ -80,6 +86,8 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
     if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files })) {
       return cleanUpReqFiles(req)
     }
+
+    if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
 
     try {
       if (!videoFile.duration) await addDurationToVideo(videoFile)
@@ -107,7 +115,7 @@ const videosAddResumableValidator = [
     const user = res.locals.oauth.token.User
     const body: express.CustomUploadXFile<express.UploadXFileMetadata> = req.body
     const file = { ...body, duration: undefined, path: getResumableUploadPath(body.name), filename: body.metadata.filename }
-    const cleanup = () => deleteFileAndCatch(file.path)
+    const cleanup = () => uploadx.storage.delete(file).catch(err => logger.error('Cannot delete the file %s', file.name, { err }))
 
     const uploadId = req.query.upload_id
     const sessionExists = await Redis.Instance.doesUploadSessionExist(uploadId)
@@ -124,11 +132,15 @@ const videosAddResumableValidator = [
         })
       }
 
-      if (isTestInstance()) {
-        res.setHeader('x-resumable-upload-cached', 'true')
-      }
+      const videoStillExists = await VideoModel.load(sessionResponse.video.id)
 
-      return res.json(sessionResponse)
+      if (videoStillExists) {
+        if (isTestInstance()) {
+          res.setHeader('x-resumable-upload-cached', 'true')
+        }
+
+        return res.json(sessionResponse)
+      }
     }
 
     await Redis.Instance.setUploadSession(uploadId)
@@ -174,6 +186,10 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
+  body('videoPasswords')
+    .optional()
+    .isArray()
+    .withMessage('Video passwords should be an array.'),
 
   header('x-upload-content-length')
     .isNumeric()
@@ -205,10 +221,14 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     const files = { videofile: [ videoFileMetadata ] }
     if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFileMetadata.size, files })) return cleanup()
 
-    // multer required unsetting the Content-Type, now we can set it for node-uploadx
+    if (!isValidPasswordProtectedPrivacy(req, res)) return cleanup()
+
+    // Multer required unsetting the Content-Type, now we can set it for node-uploadx
     req.headers['content-type'] = 'application/json; charset=utf-8'
-    // place previewfile in metadata so that uploadx saves it in .META
+
+    // Place thumbnail/previewfile in metadata so that uploadx saves it in .META
     if (req.files?.['previewfile']) req.body.previewfile = req.files['previewfile']
+    if (req.files?.['thumbnailfile']) req.body.thumbnailfile = req.files['thumbnailfile']
 
     return next()
   }
@@ -227,11 +247,17 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     .optional()
     .customSanitizer(toIntOrNull)
     .custom(isIdValid),
+  body('videoPasswords')
+    .optional()
+    .isArray()
+    .withMessage('Video passwords should be an array.'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
     if (areErrorsInScheduleUpdate(req, res)) return cleanUpReqFiles(req)
     if (!await doesVideoExist(req.params.id, res)) return cleanUpReqFiles(req)
+
+    if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
 
     const video = getVideoWithAttributes(res)
     if (video.isLive && video.privacy !== req.body.privacy && video.state !== VideoState.WAITING_FOR_LIVE) {
@@ -280,6 +306,8 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
 const videosCustomGetValidator = (fetchType: 'for-api' | 'all' | 'only-video' | 'only-immutable-attributes') => {
   return [
     isValidVideoIdParam('id'),
+
+    isValidVideoPasswordHeader(),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       if (areValidationErrors(req, res)) return

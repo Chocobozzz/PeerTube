@@ -78,6 +78,10 @@ export interface CustomConfig {
     torrents: {
       size: number
     }
+
+    storyboards: {
+      size: number
+    }
   }
 
   signup: {

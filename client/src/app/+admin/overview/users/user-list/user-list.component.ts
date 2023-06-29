@@ -2,7 +2,7 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, LocalStorageService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
-import { getAPIHost, prepareIcu } from '@app/helpers'
+import { formatICU, getAPIHost } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { Actor, DropdownAction } from '@app/shared/shared-main'
 import { AccountMutedStatus, BlocklistService, UserBanModalComponent, UserModerationDisplayType } from '@app/shared/shared-moderation'
@@ -210,9 +210,9 @@ export class UserListComponent extends RestTable <User> implements OnInit {
 
   async unbanUsers (users: User[]) {
     const res = await this.confirmService.confirm(
-      prepareIcu($localize`Do you really want to unban {count, plural, =1 {1 user} other {{count} users}}?`)(
-        { count: users.length },
-        $localize`Do you really want to unban ${users.length} users?`
+      formatICU(
+        $localize`Do you really want to unban {count, plural, =1 {1 user} other {{count} users}}?`,
+        { count: users.length }
       ),
       $localize`Unban`
     )
@@ -223,9 +223,9 @@ export class UserListComponent extends RestTable <User> implements OnInit {
         .subscribe({
           next: () => {
             this.notifier.success(
-              prepareIcu($localize`{count, plural, =1 {1 user unbanned.} other {{count} users unbanned.}}`)(
-                { count: users.length },
-                $localize`${users.length} users unbanned.`
+              formatICU(
+                $localize`{count, plural, =1 {1 user unbanned.} other {{count} users unbanned.}}`,
+                { count: users.length }
               )
             )
             this.reloadData()
@@ -252,9 +252,9 @@ export class UserListComponent extends RestTable <User> implements OnInit {
       .subscribe({
         next: () => {
           this.notifier.success(
-            prepareIcu($localize`{count, plural, =1 {1 user deleted.} other {{count} users deleted.}}`)(
-              { count: users.length },
-              $localize`${users.length} users deleted.`
+            formatICU(
+              $localize`{count, plural, =1 {1 user deleted.} other {{count} users deleted.}}`,
+              { count: users.length }
             )
           )
 
@@ -270,9 +270,9 @@ export class UserListComponent extends RestTable <User> implements OnInit {
       .subscribe({
         next: () => {
           this.notifier.success(
-            prepareIcu($localize`{count, plural, =1 {1 user email set as verified.} other {{count} user emails set as verified.}}`)(
-              { count: users.length },
-              $localize`${users.length} users email set as verified.`
+            formatICU(
+              $localize`{count, plural, =1 {1 user email set as verified.} other {{count} user emails set as verified.}}`,
+              { count: users.length }
             )
           )
 

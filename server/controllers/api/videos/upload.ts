@@ -14,14 +14,14 @@ import { openapiOperationDoc } from '@server/middlewares/doc'
 import { VideoSourceModel } from '@server/models/video/video-source'
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { uuidToShort } from '@shared/extra-utils'
-import { HttpStatusCode, VideoCreate, VideoState } from '@shared/models'
+import { HttpStatusCode, VideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { Hooks } from '../../../lib/plugins/hooks'
-import { generateVideoMiniature } from '../../../lib/thumbnail'
+import { generateLocalVideoMiniature } from '../../../lib/thumbnail'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import {
   asyncMiddleware,
@@ -33,6 +33,7 @@ import {
 } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
+import { VideoPasswordModel } from '@server/models/video/video-password'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -62,13 +63,13 @@ uploadRouter.post('/upload-resumable',
   authenticate,
   reqVideoFileAddResumable,
   asyncMiddleware(videosAddResumableInitValidator),
-  uploadx.upload
+  (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitely tell to uploadx it's the end
 )
 
 uploadRouter.delete('/upload-resumable',
   authenticate,
   asyncMiddleware(deleteUploadResumableCache),
-  uploadx.upload
+  (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitely tell to uploadx it's the end
 )
 
 uploadRouter.put('/upload-resumable',
@@ -110,7 +111,7 @@ async function addVideoLegacy (req: express.Request, res: express.Response) {
 async function addVideoResumable (req: express.Request, res: express.Response) {
   const videoPhysicalFile = res.locals.videoFileResumable
   const videoInfo = videoPhysicalFile.metadata
-  const files = { previewfile: videoInfo.previewfile }
+  const files = { previewfile: videoInfo.previewfile, thumbnailfile: videoInfo.thumbnailfile }
 
   const response = await addVideo({ req, res, videoPhysicalFile, videoInfo, files })
   await Redis.Instance.setUploadSession(req.query.upload_id, response)
@@ -152,7 +153,7 @@ async function addVideo (options: {
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
     video,
     files,
-    fallback: type => generateVideoMiniature({ video, videoFile, type })
+    fallback: type => generateLocalVideoMiniature({ video, videoFile, type })
   })
 
   const { videoCreated } = await sequelizeTypescript.transaction(async t => {
@@ -195,6 +196,10 @@ async function addVideo (options: {
       transaction: t
     })
 
+    if (videoInfo.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
+      await VideoPasswordModel.addPasswords(videoInfo.videoPasswords, video.id, t)
+    }
+
     auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid, lTags(videoCreated.uuid))
 
@@ -226,6 +231,15 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
         videoId: video.id,
         videoFileId: videoFile.id,
         action: 'create'
+      }
+    },
+
+    {
+      type: 'generate-video-storyboard' as 'generate-video-storyboard',
+      payload: {
+        videoUUID: video.uuid,
+        // No need to federate, we process these jobs sequentially
+        federate: false
       }
     },
 

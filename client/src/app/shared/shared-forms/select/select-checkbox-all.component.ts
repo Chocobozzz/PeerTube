@@ -1,7 +1,7 @@
 import { Component, forwardRef, Input } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Notifier } from '@app/core'
-import { prepareIcu } from '@app/helpers'
+import { formatICU } from '@app/helpers'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 import { ItemSelectCheckboxValue } from './select-checkbox.component'
 
@@ -80,9 +80,9 @@ export class SelectCheckboxAllComponent implements ControlValueAccessor {
 
     if (outputItems.length >= this.maxItems) {
       this.notifier.error(
-        prepareIcu($localize`You can't select more than {maxItems, plural, =1 {1 item} other {{maxItems} items}}`)(
-          { maxItems: this.maxItems },
-          $localize`You can't select more than ${this.maxItems} items`
+        formatICU(
+          $localize`You can't select more than {maxItems, plural, =1 {1 item} other {{maxItems} items}}`,
+          { maxItems: this.maxItems }
         )
       )
 

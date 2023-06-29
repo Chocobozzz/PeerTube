@@ -1,6 +1,6 @@
 import { PluginsManager } from '@root-helpers/plugins-manager'
 import { LiveVideoLatencyMode, VideoFile } from '@shared/models'
-import { PlaylistPluginOptions, VideoJSCaption } from './peertube-videojs-typings'
+import { PlaylistPluginOptions, VideoJSCaption, VideoJSStoryboard } from './peertube-videojs-typings'
 
 export type PlayerMode = 'webtorrent' | 'p2p-media-loader'
 
@@ -78,13 +78,16 @@ export interface CommonOptions extends CustomizationOptions {
   language?: string
 
   videoCaptions: VideoJSCaption[]
+  storyboard: VideoJSStoryboard
 
   videoUUID: string
   videoShortUUID: string
 
   serverUrl: string
-  requiresAuth: boolean
+  requiresUserAuth: boolean
   videoFileToken: () => string
+  requiresPassword: boolean
+  videoPassword: () => string
 
   errorNotifier: (message: string) => void
 }

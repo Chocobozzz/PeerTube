@@ -1,7 +1,7 @@
 <div class="video-actions-rates">
   <div class="video-actions justify-content-end">
     <my-video-rate
-      [video]="video" [isUserLoggedIn]="isUserLoggedIn"
+      [video]="video" [videoPassword]="videoPassword" [isUserLoggedIn]="isUserLoggedIn"
       (rateUpdated)="onRateUpdated($event)" (userRatingLoaded)="onRateUpdated($event)"
     ></my-video-rate>
 
@@ -20,7 +20,7 @@
 
     <div
       class="action-dropdown" ngbDropdown placement="top" role="button" autoClose="outside"
-       *ngIf="isUserLoggedIn" (openChange)="addContent.openChange($event)"
+       *ngIf="isVideoAddableToPlaylist()" (openChange)="addContent.openChange($event)"
        [ngbTooltip]="tooltipSaveToPlaylist"
        placement="bottom auto"
     >
@@ -43,7 +43,7 @@
         <span class="icon-text d-none d-sm-inline" i18n>DOWNLOAD</span>
       </button>
 
-      <my-video-download #videoDownloadModal></my-video-download>
+      <my-video-download #videoDownloadModal [videoPassword]="videoPassword"></my-video-download>
     </ng-container>
 
     <ng-container *ngIf="isUserLoggedIn">

@@ -22,21 +22,12 @@ export const SERVICES_TWITTER_USERNAME_VALIDATOR: BuildFormValidator = {
   }
 }
 
-export const CACHE_PREVIEWS_SIZE_VALIDATOR: BuildFormValidator = {
+export const CACHE_SIZE_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, Validators.min(1), Validators.pattern('[0-9]+') ],
   MESSAGES: {
-    required: $localize`Previews cache size is required.`,
-    min: $localize`Previews cache size must be greater than 1.`,
-    pattern: $localize`Previews cache size must be a number.`
-  }
-}
-
-export const CACHE_CAPTIONS_SIZE_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [ Validators.required, Validators.min(1), Validators.pattern('[0-9]+') ],
-  MESSAGES: {
-    required: $localize`Captions cache size is required.`,
-    min: $localize`Captions cache size must be greater than 1.`,
-    pattern: $localize`Captions cache size must be a number.`
+    required: $localize`Cache size is required.`,
+    min: $localize`Cache size must be greater than 1.`,
+    pattern: $localize`Cache size must be a number.`
   }
 }
 

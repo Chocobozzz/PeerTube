@@ -1,11 +1,12 @@
 import cors from 'cors'
 import express from 'express'
 import { logger } from '@server/helpers/logger'
-import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
+import { VideoTorrentsSimpleFileCache } from '@server/lib/files-cache'
+import { generateHLSFilePresignedUrl, generateWebVideoPresignedUrl } from '@server/lib/object-storage'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { VideoPathManager } from '@server/lib/video-path-manager'
-import { MStreamingPlaylist, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
-import { addQueryParams, forceNumber } from '@shared/core-utils'
+import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
+import { forceNumber } from '@shared/core-utils'
 import { HttpStatusCode, VideoStorage, VideoStreamingPlaylistType } from '@shared/models'
 import { STATIC_DOWNLOAD_PATHS } from '../initializers/constants'
 import { asyncMiddleware, optionalAuthenticate, videosDownloadValidator } from '../middlewares'
@@ -42,7 +43,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function downloadTorrent (req: express.Request, res: express.Response) {
-  const result = await VideosTorrentCache.Instance.getFilePath(req.params.filename)
+  const result = await VideoTorrentsSimpleFileCache.Instance.getFilePath(req.params.filename)
   if (!result) {
     return res.fail({
       status: HttpStatusCode.NOT_FOUND_404,
@@ -94,16 +95,16 @@ async function downloadVideoFile (req: express.Request, res: express.Response) {
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
+  // Express uses basename on filename parameter
+  const videoName = video.name.replace(/[/\\]/g, '_')
+  const downloadFilename = `${videoName}-${videoFile.resolution}p${videoFile.extname}`
+
   if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
-    return redirectToObjectStorage({ req, res, video, file: videoFile })
+    return redirectToObjectStorage({ req, res, video, file: videoFile, downloadFilename })
   }
 
   await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), path => {
-    // Express uses basename on filename parameter
-    const videoName = video.name.replace(/[/\\]/g, '_')
-    const filename = `${videoName}-${videoFile.resolution}p${videoFile.extname}`
-
-    return res.download(path, filename)
+    return res.download(path, downloadFilename)
   })
 }
 
@@ -136,14 +137,14 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
+  const downloadFilename = `${video.name}-${videoFile.resolution}p-${streamingPlaylist.getStringType()}${videoFile.extname}`
+
   if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
-    return redirectToObjectStorage({ req, res, video, file: videoFile })
+    return redirectToObjectStorage({ req, res, video, streamingPlaylist, file: videoFile, downloadFilename })
   }
 
   await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(streamingPlaylist), path => {
-    const filename = `${video.name}-${videoFile.resolution}p-${streamingPlaylist.getStringType()}${videoFile.extname}`
-
-    return res.download(path, filename)
+    return res.download(path, downloadFilename)
   })
 }
 
@@ -192,19 +193,21 @@ function checkAllowResult (res: express.Response, allowParameters: any, result?:
   return true
 }
 
-function redirectToObjectStorage (options: {
+async function redirectToObjectStorage (options: {
   req: express.Request
   res: express.Response
   video: MVideo
   file: MVideoFile
+  streamingPlaylist?: MStreamingPlaylistVideo
+  downloadFilename: string
 }) {
-  const { req, res, video, file } = options
+  const { res, video, streamingPlaylist, file, downloadFilename } = options
 
-  const baseUrl = file.getObjectStorageUrl(video)
+  const url = streamingPlaylist
+    ? await generateHLSFilePresignedUrl({ streamingPlaylist, file, downloadFilename })
+    : await generateWebVideoPresignedUrl({ file, downloadFilename })
 
-  const url = video.hasPrivateStaticPath() && req.query.videoFileToken
-    ? addQueryParams(baseUrl, { videoFileToken: req.query.videoFileToken })
-    : baseUrl
+  logger.debug('Generating pre-signed URL %s for video %s', url, video.uuid)
 
   return res.redirect(url)
 }

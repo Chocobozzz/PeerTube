@@ -11,6 +11,7 @@ import {
   FeedFormat,
   NSFWPolicyType,
   ResultList,
+  Storyboard,
   UserVideoRate,
   UserVideoRateType,
   UserVideoRateUpdate,
@@ -33,6 +34,7 @@ import { VideoChannel, VideoChannelService } from '../video-channel'
 import { VideoDetails } from './video-details.model'
 import { VideoEdit } from './video-edit.model'
 import { Video } from './video.model'
+import { VideoPasswordService } from './video-password.service'
 
 export type CommonVideoParams = {
   videoPagination?: ComponentPaginationLight
@@ -69,16 +71,17 @@ export class VideoService {
     return `${VideoService.BASE_VIDEO_URL}/${uuid}/views`
   }
 
-  getVideo (options: { videoId: string }): Observable<VideoDetails> {
-    return this.serverService.getServerLocale()
-               .pipe(
-                 switchMap(translations => {
-                   return this.authHttp.get<VideoDetailsServerModel>(`${VideoService.BASE_VIDEO_URL}/${options.videoId}`)
-                              .pipe(map(videoHash => ({ videoHash, translations })))
-                 }),
-                 map(({ videoHash, translations }) => new VideoDetails(videoHash, translations)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+  getVideo (options: { videoId: string, videoPassword?: string }): Observable<VideoDetails> {
+    const headers = VideoPasswordService.buildVideoPasswordHeader(options.videoPassword)
+
+    return this.serverService.getServerLocale().pipe(
+      switchMap(translations => {
+        return this.authHttp.get<VideoDetailsServerModel>(`${VideoService.BASE_VIDEO_URL}/${options.videoId}`, { headers })
+          .pipe(map(videoHash => ({ videoHash, translations })))
+      }),
+      map(({ videoHash, translations }) => new VideoDetails(videoHash, translations)),
+      catchError(err => this.restExtractor.handleError(err))
+    )
   }
 
   updateVideo (video: VideoEdit) {
@@ -99,6 +102,9 @@ export class VideoService {
       description,
       channelId: video.channelId,
       privacy: video.privacy,
+      videoPasswords: video.privacy === VideoPrivacy.PASSWORD_PROTECTED
+        ? [ video.videoPassword ]
+        : undefined,
       tags: video.tags,
       nsfw: video.nsfw,
       waitTranscoding: video.waitTranscoding,
@@ -339,6 +345,25 @@ export class VideoService {
                )
   }
 
+  // ---------------------------------------------------------------------------
+
+  getStoryboards (videoId: string | number) {
+    return this.authHttp
+      .get<{ storyboards: Storyboard[] }>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/storyboards')
+      .pipe(
+        map(({ storyboards }) => storyboards),
+        catchError(err => {
+          if (err.status === 404) {
+            return of([])
+          }
+
+          this.restExtractor.handleError(err)
+        })
+      )
+  }
+
+  // ---------------------------------------------------------------------------
+
   getSource (videoId: number) {
     return this.authHttp
                .get<{ source: VideoSource }>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/source')
@@ -353,17 +378,21 @@ export class VideoService {
                )
   }
 
-  setVideoLike (id: string) {
-    return this.setVideoRate(id, 'like')
+  // ---------------------------------------------------------------------------
+
+  setVideoLike (id: string, videoPassword: string) {
+    return this.setVideoRate(id, 'like', videoPassword)
   }
 
-  setVideoDislike (id: string) {
-    return this.setVideoRate(id, 'dislike')
+  setVideoDislike (id: string, videoPassword: string) {
+    return this.setVideoRate(id, 'dislike', videoPassword)
   }
 
-  unsetVideoLike (id: string) {
-    return this.setVideoRate(id, 'none')
+  unsetVideoLike (id: string, videoPassword: string) {
+    return this.setVideoRate(id, 'none', videoPassword)
   }
+
+  // ---------------------------------------------------------------------------
 
   getUserVideoRating (id: string) {
     const url = UserService.BASE_USERS_URL + 'me/videos/' + id + '/rating'
@@ -394,7 +423,8 @@ export class VideoService {
       [VideoPrivacy.PRIVATE]: $localize`Only I can see this video`,
       [VideoPrivacy.UNLISTED]: $localize`Only shareable via a private link`,
       [VideoPrivacy.PUBLIC]: $localize`Anyone can see this video`,
-      [VideoPrivacy.INTERNAL]: $localize`Only users of this instance can see this video`
+      [VideoPrivacy.INTERNAL]: $localize`Only users of this instance can see this video`,
+      [VideoPrivacy.PASSWORD_PROTECTED]: $localize`Only users with the appropriate password can see this video`
     }
 
     const videoPrivacies = serverPrivacies.map(p => {
@@ -412,7 +442,13 @@ export class VideoService {
   }
 
   getHighestAvailablePrivacy (serverPrivacies: VideoConstant<VideoPrivacy>[]) {
-    const order = [ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL, VideoPrivacy.UNLISTED, VideoPrivacy.PUBLIC ]
+    // We do not add a password as this requires additional configuration.
+    const order = [
+      VideoPrivacy.PRIVATE,
+      VideoPrivacy.INTERNAL,
+      VideoPrivacy.UNLISTED,
+      VideoPrivacy.PUBLIC
+    ]
 
     for (const privacy of order) {
       if (serverPrivacies.find(p => p.id === privacy)) {
@@ -499,14 +535,15 @@ export class VideoService {
     }
   }
 
-  private setVideoRate (id: string, rateType: UserVideoRateType) {
+  private setVideoRate (id: string, rateType: UserVideoRateType, videoPassword?: string) {
     const url = `${VideoService.BASE_VIDEO_URL}/${id}/rate`
     const body: UserVideoRateUpdate = {
       rating: rateType
     }
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
 
     return this.authHttp
-               .put(url, body)
+               .put(url, body, { headers })
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }

@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { basename, join } from 'path'
-import { SQLCommand, testImage, testLiveVideoResolutions } from '@server/tests/shared'
+import { SQLCommand, testImageGeneratedByFFmpeg, testLiveVideoResolutions } from '@server/tests/shared'
 import { getAllFiles, wait } from '@shared/core-utils'
 import { ffprobePromise, getVideoStream } from '@shared/ffmpeg'
 import {
@@ -121,8 +121,8 @@ describe('Test live', function () {
         expect(video.downloadEnabled).to.be.false
         expect(video.privacy.id).to.equal(VideoPrivacy.PUBLIC)
 
-        await testImage(server.url, 'video_short1-preview.webm', video.previewPath)
-        await testImage(server.url, 'video_short1.webm', video.thumbnailPath)
+        await testImageGeneratedByFFmpeg(server.url, 'video_short1-preview.webm', video.previewPath)
+        await testImageGeneratedByFFmpeg(server.url, 'video_short1.webm', video.thumbnailPath)
 
         const live = await server.live.get({ videoId: liveVideoUUID })
 

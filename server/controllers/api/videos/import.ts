@@ -14,7 +14,7 @@ import { getSecureTorrentName } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { JobQueue } from '../../../lib/job-queue/job-queue'
-import { updateVideoMiniatureFromExisting } from '../../../lib/thumbnail'
+import { updateLocalVideoMiniatureFromExisting } from '../../../lib/thumbnail'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -120,6 +120,7 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
     videoChannel: res.locals.videoChannel,
     tags: body.tags || undefined,
     user,
+    videoPasswords: body.videoPasswords,
     videoImportAttributes: {
       magnetUri,
       torrentName,
@@ -192,7 +193,7 @@ async function processThumbnail (req: express.Request, video: MVideoThumbnail) {
   if (thumbnailField) {
     const thumbnailPhysicalFile = thumbnailField[0]
 
-    return updateVideoMiniatureFromExisting({
+    return updateLocalVideoMiniatureFromExisting({
       inputPath: thumbnailPhysicalFile.path,
       video,
       type: ThumbnailType.MINIATURE,
@@ -208,7 +209,7 @@ async function processPreview (req: express.Request, video: MVideoThumbnail): Pr
   if (previewField) {
     const previewPhysicalFile = previewField[0]
 
-    return updateVideoMiniatureFromExisting({
+    return updateLocalVideoMiniatureFromExisting({
       inputPath: previewPhysicalFile.path,
       video,
       type: ThumbnailType.PREVIEW,

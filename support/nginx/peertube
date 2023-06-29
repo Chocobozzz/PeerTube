@@ -199,28 +199,6 @@ server {
     alias /var/www/peertube/peertube-latest/client/dist/$1;
   }
 
-  # Bypass PeerTube for performance reasons. Optional.
-  location ~ ^/static/(thumbnails|avatars)/ {
-    if ($request_method = 'OPTIONS') {
-      add_header Access-Control-Allow-Origin  '*';
-      add_header Access-Control-Allow-Methods 'GET, OPTIONS';
-      add_header Access-Control-Allow-Headers 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
-      add_header Access-Control-Max-Age       1728000; # Preflight request can be cached 20 days
-      add_header Content-Type                 'text/plain charset=UTF-8';
-      add_header Content-Length               0;
-      return 204;
-    }
-
-    add_header Access-Control-Allow-Origin    '*';
-    add_header Access-Control-Allow-Methods   'GET, OPTIONS';
-    add_header Access-Control-Allow-Headers   'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
-    add_header Cache-Control                  "public, max-age=7200"; # Cache response 2 hours
-
-    rewrite ^/static/(.*)$ /$1 break;
-
-    try_files $uri @api;
-  }
-
   location ~ ^(/static/(webseed|streaming-playlists)/private/)|^/download {
     # We can't rate limit a try_files directive, so we need to duplicate @api
 

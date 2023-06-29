@@ -5,26 +5,42 @@ import { join } from 'path'
 import { buildUUID } from '@shared/extra-utils'
 import {
   RunnerJobStudioTranscodingPayload,
-  VideoStudioTranscodingSuccess,
   VideoStudioTask,
   VideoStudioTaskCutPayload,
   VideoStudioTaskIntroPayload,
   VideoStudioTaskOutroPayload,
   VideoStudioTaskPayload,
-  VideoStudioTaskWatermarkPayload
+  VideoStudioTaskWatermarkPayload,
+  VideoStudioTranscodingSuccess
 } from '@shared/models'
 import { ConfigManager } from '../../../shared/config-manager'
-import { buildFFmpegEdition, downloadInputFile, JobWithToken, ProcessOptions } from './common'
+import { buildFFmpegEdition, downloadInputFile, JobWithToken, ProcessOptions, scheduleTranscodingProgress } from './common'
 
 export async function processStudioTranscoding (options: ProcessOptions<RunnerJobStudioTranscodingPayload>) {
   const { server, job, runnerToken } = options
   const payload = job.payload
 
+  let inputPath: string
   let outputPath: string
-  const inputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
-  let tmpInputFilePath = inputPath
+  let tmpInputFilePath: string
+
+  let tasksProgress = 0
+
+  const updateProgressInterval = scheduleTranscodingProgress({
+    job,
+    server,
+    runnerToken,
+    progressGetter: () => tasksProgress
+  })
 
   try {
+    logger.info(`Downloading input file ${payload.input.videoFileUrl} for job ${job.jobToken}`)
+
+    inputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
+    tmpInputFilePath = inputPath
+
+    logger.info(`Input file ${payload.input.videoFileUrl} downloaded for job ${job.jobToken}. Running studio transcoding tasks.`)
+
     for (const task of payload.tasks) {
       const outputFilename = 'output-edition-' + buildUUID() + '.mp4'
       outputPath = join(ConfigManager.Instance.getTranscodingDirectory(), outputFilename)
@@ -41,6 +57,8 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
 
       // For the next iteration
       tmpInputFilePath = outputPath
+
+      tasksProgress += Math.floor(100 / payload.tasks.length)
     }
 
     const successBody: VideoStudioTranscodingSuccess = {
@@ -54,8 +72,9 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
       payload: successBody
     })
   } finally {
-    await remove(tmpInputFilePath)
-    await remove(outputPath)
+    if (tmpInputFilePath) await remove(tmpInputFilePath)
+    if (outputPath) await remove(outputPath)
+    if (updateProgressInterval) clearInterval(updateProgressInterval)
   }
 }
 

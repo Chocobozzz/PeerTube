@@ -30,7 +30,7 @@ export class MyAccountTwoFactorButtonComponent implements OnInit {
   async disableTwoFactor () {
     const message = $localize`Are you sure you want to disable two factor authentication of your account?`
 
-    const { confirmed, password } = await this.confirmService.confirmWithPassword(message, $localize`Disable two factor`)
+    const { confirmed, password } = await this.confirmService.confirmWithPassword({ message, title: $localize`Disable two factor` })
     if (confirmed === false) return
 
     this.twoFactorService.disableTwoFactor({ userId: this.user.id, currentPassword: password })

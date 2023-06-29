@@ -49,7 +49,10 @@ export const enum ServerErrorCode {
 
   RUNNER_JOB_NOT_IN_PROCESSING_STATE = 'runner_job_not_in_processing_state',
   RUNNER_JOB_NOT_IN_PENDING_STATE = 'runner_job_not_in_pending_state',
-  UNKNOWN_RUNNER_TOKEN = 'unknown_runner_token'
+  UNKNOWN_RUNNER_TOKEN = 'unknown_runner_token',
+
+  VIDEO_REQUIRES_PASSWORD = 'video_requires_password',
+  INCORRECT_VIDEO_PASSWORD = 'incorrect_video_password'
 }
 
 /**

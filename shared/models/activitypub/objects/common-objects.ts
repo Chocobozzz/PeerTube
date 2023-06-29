@@ -114,10 +114,7 @@ export type ActivityUrlObject =
   | ActivityVideoFileMetadataUrlObject
   | ActivityTrackerUrlObject
 
-export interface ActivityPubAttributedTo {
-  type: 'Group' | 'Person'
-  id: string
-}
+export type ActivityPubAttributedTo = { type: 'Group' | 'Person', id: string } | string
 
 export interface ActivityTombstoneObject {
   '@context'?: any

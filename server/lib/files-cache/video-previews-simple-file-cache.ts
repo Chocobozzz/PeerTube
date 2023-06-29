@@ -1,15 +1,15 @@
 import { join } from 'path'
 import { FILES_CACHE } from '../../initializers/constants'
 import { VideoModel } from '../../models/video/video'
-import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
+import { AbstractSimpleFileCache } from './shared/abstract-simple-file-cache'
 import { doRequestAndSaveToFile } from '@server/helpers/requests'
 import { ThumbnailModel } from '@server/models/video/thumbnail'
 import { ThumbnailType } from '@shared/models'
 import { logger } from '@server/helpers/logger'
 
-class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
+class VideoPreviewsSimpleFileCache extends AbstractSimpleFileCache <string> {
 
-  private static instance: VideosPreviewCache
+  private static instance: VideoPreviewsSimpleFileCache
 
   private constructor () {
     super()
@@ -54,5 +54,5 @@ class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
 }
 
 export {
-  VideosPreviewCache
+  VideoPreviewsSimpleFileCache
 }

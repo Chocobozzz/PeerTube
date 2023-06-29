@@ -10,7 +10,7 @@ import { FilteredModelAttributes } from '@server/types'
 import { MThumbnail, MVideoFullLight, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
 import { ManageVideoTorrentPayload, ThumbnailType, VideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 import { CreateJobArgument, JobQueue } from './job-queue/job-queue'
-import { updateVideoMiniatureFromExisting } from './thumbnail'
+import { updateLocalVideoMiniatureFromExisting } from './thumbnail'
 import { moveFilesIfPrivacyChanged } from './video-privacy'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
@@ -55,7 +55,7 @@ async function buildVideoThumbnailsFromReq (options: {
     const fields = files?.[p.fieldName]
 
     if (fields) {
-      return updateVideoMiniatureFromExisting({
+      return updateLocalVideoMiniatureFromExisting({
         inputPath: fields[0].path,
         video,
         type: p.type,

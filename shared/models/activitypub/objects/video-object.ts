@@ -51,6 +51,22 @@ export interface VideoObject {
 
   attributedTo: ActivityPubAttributedTo[]
 
+  preview?: ActivityPubStoryboard[]
+
   to?: string[]
   cc?: string[]
+}
+
+export interface ActivityPubStoryboard {
+  type: 'Image'
+  rel: [ 'storyboard' ]
+  url: {
+    href: string
+    mediaType: string
+    width: number
+    height: number
+    tileWidth: number
+    tileHeight: number
+    tileDuration: string
+  }[]
 }

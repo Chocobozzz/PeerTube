@@ -1,6 +1,6 @@
 import express from 'express'
-import { join } from 'path'
 import { scheduleRefreshIfNeeded } from '@server/lib/activitypub/playlists'
+import { VideoMiniaturePermanentFileCache } from '@server/lib/files-cache'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { getServerActor } from '@server/models/application/application'
 import { MVideoPlaylistFull, MVideoPlaylistThumbnail, MVideoThumbnail } from '@server/types/models'
@@ -18,12 +18,11 @@ import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { createReqFiles } from '../../helpers/express-utils'
 import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
-import { CONFIG } from '../../initializers/config'
 import { MIMETYPES, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constants'
 import { sequelizeTypescript } from '../../initializers/database'
 import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send'
 import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url'
-import { updatePlaylistMiniatureFromExisting } from '../../lib/thumbnail'
+import { updateLocalPlaylistMiniatureFromExisting } from '../../lib/thumbnail'
 import {
   apiRateLimiter,
   asyncMiddleware,
@@ -178,7 +177,7 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await updatePlaylistMiniatureFromExisting({
+    ? await updateLocalPlaylistMiniatureFromExisting({
       inputPath: thumbnailField[0].path,
       playlist: videoPlaylist,
       automaticallyGenerated: false
@@ -220,7 +219,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await updatePlaylistMiniatureFromExisting({
+    ? await updateLocalPlaylistMiniatureFromExisting({
       inputPath: thumbnailField[0].path,
       playlist: videoPlaylistInstance,
       automaticallyGenerated: false
@@ -496,8 +495,13 @@ async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbn
     return
   }
 
-  const inputPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, videoMiniature.filename)
-  const thumbnailModel = await updatePlaylistMiniatureFromExisting({
+  // Ensure the file is on disk
+  const videoMiniaturePermanentFileCache = new VideoMiniaturePermanentFileCache()
+  const inputPath = videoMiniature.isOwned()
+    ? videoMiniature.getPath()
+    : await videoMiniaturePermanentFileCache.downloadRemoteFile(videoMiniature)
+
+  const thumbnailModel = await updateLocalPlaylistMiniatureFromExisting({
     inputPath,
     playlist: videoPlaylist,
     automaticallyGenerated: true,

@@ -60,6 +60,9 @@ describe('Test regenerate thumbnails script', function () {
 
       remoteVideo = await servers[0].videos.get({ id: videoUUID })
 
+      // Load remote thumbnail on disk
+      await makeGetRequest({ url: servers[0].url, path: remoteVideo.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
+
       thumbnailRemotePath = join(servers[0].servers.buildDirectory('thumbnails'), basename(remoteVideo.thumbnailPath))
     }
 

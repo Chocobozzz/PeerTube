@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
-import { prepareIcu } from '@app/helpers'
+import { formatICU } from '@app/helpers'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { Video } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -81,9 +81,9 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
     this.videoBlocklistService.blockVideo(options)
         .subscribe({
           next: () => {
-            const message = prepareIcu($localize`{count, plural, =1 {Blocked {videoName}.} other {Blocked {count} videos.}}`)(
-              { count: this.videos.length, videoName: this.getSingleVideo().name },
-              $localize`Blocked ${this.videos.length} videos.`
+            const message = formatICU(
+              $localize`{count, plural, =1 {Blocked {videoName}.} other {Blocked {count} videos.}}`,
+              { count: this.videos.length, videoName: this.getSingleVideo().name }
             )
 
             this.notifier.success(message)

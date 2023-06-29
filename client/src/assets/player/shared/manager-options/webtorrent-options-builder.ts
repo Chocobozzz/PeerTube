@@ -26,10 +26,10 @@ export class WebTorrentOptionsBuilder {
 
       videoFileToken: commonOptions.videoFileToken,
 
-      requiresAuth: commonOptions.requiresAuth,
+      requiresUserAuth: commonOptions.requiresUserAuth,
 
       buildWebSeedUrls: file => {
-        if (!commonOptions.requiresAuth) return []
+        if (!commonOptions.requiresUserAuth && !commonOptions.requiresPassword) return []
 
         return [ addQueryParams(file.fileUrl, { videoFileToken: commonOptions.videoFileToken() }) ]
       },

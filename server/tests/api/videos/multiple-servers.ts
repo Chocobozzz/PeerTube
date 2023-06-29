@@ -9,7 +9,7 @@ import {
   completeVideoCheck,
   dateIsValid,
   saveVideoInServers,
-  testImage
+  testImageGeneratedByFFmpeg
 } from '@server/tests/shared'
 import { buildAbsoluteFixturePath, wait } from '@shared/core-utils'
 import { HttpStatusCode, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
@@ -70,8 +70,9 @@ describe('Test multiple servers', function () {
   })
 
   describe('Should upload the video and propagate on each server', function () {
+
     it('Should upload the video on server 1 and propagate on each server', async function () {
-      this.timeout(25000)
+      this.timeout(60000)
 
       const attributes = {
         name: 'my super name for server 1',
@@ -175,8 +176,8 @@ describe('Test multiple servers', function () {
         support: 'my super support text for server 2',
         tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
         fixture: 'video_short2.webm',
-        thumbnailfile: 'thumbnail.jpg',
-        previewfile: 'preview.jpg'
+        thumbnailfile: 'custom-thumbnail.jpg',
+        previewfile: 'custom-preview.jpg'
       }
       await servers[1].videos.upload({ token: userAccessToken, attributes, mode: 'resumable' })
 
@@ -229,8 +230,8 @@ describe('Test multiple servers', function () {
               size: 750000
             }
           ],
-          thumbnailfile: 'thumbnail',
-          previewfile: 'preview'
+          thumbnailfile: 'custom-thumbnail',
+          previewfile: 'custom-preview'
         }
 
         const { data } = await server.videos.list()
@@ -619,9 +620,9 @@ describe('Test multiple servers', function () {
         description: 'my super description updated',
         support: 'my super support text updated',
         tags: [ 'tag_up_1', 'tag_up_2' ],
-        thumbnailfile: 'thumbnail.jpg',
+        thumbnailfile: 'custom-thumbnail.jpg',
         originallyPublishedAt: '2019-02-11T13:38:14.449Z',
-        previewfile: 'preview.jpg'
+        previewfile: 'custom-preview.jpg'
       }
 
       updatedAtMin = new Date()
@@ -674,8 +675,8 @@ describe('Test multiple servers', function () {
               size: 292677
             }
           ],
-          thumbnailfile: 'thumbnail',
-          previewfile: 'preview'
+          thumbnailfile: 'custom-thumbnail',
+          previewfile: 'custom-preview'
         }
         await completeVideoCheck({ server, originServer: servers[2], videoUUID: videoUpdated.uuid, attributes: checkAttributes })
       }
@@ -685,7 +686,7 @@ describe('Test multiple servers', function () {
       this.timeout(30000)
 
       const attributes = {
-        thumbnailfile: 'thumbnail.jpg'
+        thumbnailfile: 'custom-thumbnail.jpg'
       }
 
       updatedAtMin = new Date()
@@ -761,7 +762,7 @@ describe('Test multiple servers', function () {
       for (const server of servers) {
         const video = await server.videos.get({ id: videoUUID })
 
-        await testImage(server.url, 'video_short1-preview.webm', video.previewPath)
+        await testImageGeneratedByFFmpeg(server.url, 'video_short1-preview.webm', video.previewPath)
       }
     })
   })

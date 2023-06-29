@@ -20,6 +20,7 @@
   <ng-template [ngIf]="video.commentsEnabled === true">
     <my-video-comment-add
       [video]="video"
+      [videoPassword]="videoPassword"
       [user]="user"
       (commentCreated)="onCommentThreadCreated($event)"
       [textValue]="commentThreadRedraftValue"
@@ -34,6 +35,7 @@
           *ngIf="highlightedThread"
           [comment]="highlightedThread"
           [video]="video"
+          [videoPassword]="videoPassword"
           [inReplyToCommentId]="inReplyToCommentId"
           [commentTree]="threadComments[highlightedThread.id]"
           [highlightedComment]="true"
@@ -53,6 +55,7 @@
           *ngIf="!highlightedThread || comment.id !== highlightedThread.id"
           [comment]="comment"
           [video]="video"
+          [videoPassword]="videoPassword"
           [inReplyToCommentId]="inReplyToCommentId"
           [commentTree]="threadComments[comment.id]"
           [firstInThread]="i + 1 !== comments.length"

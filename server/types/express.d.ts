@@ -18,6 +18,7 @@ import {
   MVideoId,
   MVideoImmutable,
   MVideoLiveFormattable,
+  MVideoPassword,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary
 } from '@server/types/models'
@@ -164,6 +165,8 @@ declare module 'express' {
 
       videoCommentFull?: MCommentOwnerVideoReply
       videoCommentThread?: MComment
+
+      videoPassword?: MVideoPassword
 
       follow?: MActorFollowActorsDefault
       subscription?: MActorFollowActorsDefaultSubscription

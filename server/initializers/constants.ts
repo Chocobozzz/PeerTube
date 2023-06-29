@@ -27,7 +27,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 780
+const LAST_MIGRATION_VERSION = 785
 
 // ---------------------------------------------------------------------------
 
@@ -75,6 +75,8 @@ const SORTABLE_COLUMNS = {
 
   VIDEO_COMMENT_THREADS: [ 'createdAt', 'totalReplies' ],
   VIDEO_COMMENTS: [ 'createdAt' ],
+
+  VIDEO_PASSWORDS: [ 'createdAt' ],
 
   VIDEO_RATES: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
@@ -172,6 +174,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'after-video-channel-import': 1,
   'move-to-object-storage': 3,
   'transcoding-job-builder': 1,
+  'generate-video-storyboard': 1,
   'notify': 1,
   'federate-video': 1
 }
@@ -196,6 +199,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'video-channel-import': 1,
   'after-video-channel-import': 1,
   'transcoding-job-builder': 1,
+  'generate-video-storyboard': 1,
   'notify': 5,
   'federate-video': 3
 }
@@ -216,6 +220,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
+  'generate-video-storyboard': 1000 * 60 * 10, // 10 minutes
   'manage-video-torrent': 1000 * 3600 * 3, // 3 hours
   'move-to-object-storage': 1000 * 60 * 60 * 3, // 3 hours
   'video-channel-import': 1000 * 60 * 60 * 4, // 4 hours
@@ -444,6 +449,9 @@ const CONSTRAINTS_FIELDS = {
     REASON: { min: 1, max: 5000 }, // Length
     ERROR_MESSAGE: { min: 1, max: 5000 }, // Length
     PROGRESS: { min: 0, max: 100 } // Value
+  },
+  VIDEO_PASSWORD: {
+    LENGTH: { min: 2, max: 100 }
   }
 }
 
@@ -520,7 +528,8 @@ const VIDEO_PRIVACIES: { [ id in VideoPrivacy ]: string } = {
   [VideoPrivacy.PUBLIC]: 'Public',
   [VideoPrivacy.UNLISTED]: 'Unlisted',
   [VideoPrivacy.PRIVATE]: 'Private',
-  [VideoPrivacy.INTERNAL]: 'Internal'
+  [VideoPrivacy.INTERNAL]: 'Internal',
+  [VideoPrivacy.PASSWORD_PROTECTED]: 'Password protected'
 }
 
 const VIDEO_STATES: { [ id in VideoState ]: string } = {
@@ -738,6 +747,7 @@ const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
 
 // Express static paths (router)
 const STATIC_PATHS = {
+  // TODO: deprecated in v6, to remove
   THUMBNAILS: '/static/thumbnails/',
 
   WEBSEED: '/static/webseed/',
@@ -756,11 +766,13 @@ const STATIC_DOWNLOAD_PATHS = {
   HLS_VIDEOS: '/download/streaming-playlists/hls/videos/'
 }
 const LAZY_STATIC_PATHS = {
+  THUMBNAILS: '/lazy-static/thumbnails/',
   BANNERS: '/lazy-static/banners/',
   AVATARS: '/lazy-static/avatars/',
   PREVIEWS: '/lazy-static/previews/',
   VIDEO_CAPTIONS: '/lazy-static/video-captions/',
-  TORRENTS: '/lazy-static/torrents/'
+  TORRENTS: '/lazy-static/torrents/',
+  STORYBOARDS: '/lazy-static/storyboards/'
 }
 const OBJECT_STORAGE_PROXY_PATHS = {
   PRIVATE_WEBSEED: '/object-storage-proxy/webseed/private/',
@@ -807,6 +819,14 @@ const ACTOR_IMAGES_SIZE: { [key in ActorImageType]: { width: number, height: num
   ]
 }
 
+const STORYBOARD = {
+  SPRITE_SIZE: {
+    width: 192,
+    height: 108
+  },
+  SPRITES_MAX_EDGE_COUNT: 10
+}
+
 const EMBED_SIZE = {
   width: 560,
   height: 315
@@ -817,6 +837,10 @@ const FILES_CACHE = {
   PREVIEWS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'previews'),
     MAX_AGE: 1000 * 3600 * 3 // 3 hours
+  },
+  STORYBOARDS: {
+    DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'storyboards'),
+    MAX_AGE: 1000 * 3600 * 24 // 24 hours
   },
   VIDEO_CAPTIONS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'video-captions'),
@@ -832,8 +856,8 @@ const LRU_CACHE = {
   USER_TOKENS: {
     MAX_SIZE: 1000
   },
-  ACTOR_IMAGE_STATIC: {
-    MAX_SIZE: 500
+  FILENAME_TO_PATH_PERMANENT_FILE_CACHE: {
+    MAX_SIZE: 1000
   },
   STATIC_VIDEO_FILES_RIGHTS_CHECK: {
     MAX_SIZE: 5000,
@@ -1084,6 +1108,7 @@ export {
   RESUMABLE_UPLOAD_SESSION_LIFETIME,
   RUNNER_JOB_STATES,
   P2P_MEDIA_LOADER_PEER_VERSION,
+  STORYBOARD,
   ACTOR_IMAGES_SIZE,
   ACCEPT_HEADERS,
   BCRYPT_SALT_SIZE,

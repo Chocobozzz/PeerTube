@@ -6,6 +6,12 @@ import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { VideoPrivacy, VideoStorage } from '@shared/models'
 import { updateHLSFilesACL, updateWebTorrentFileACL } from './object-storage'
 
+const validPrivacySet = new Set([
+  VideoPrivacy.PRIVATE,
+  VideoPrivacy.INTERNAL,
+  VideoPrivacy.PASSWORD_PROTECTED
+])
+
 function setVideoPrivacy (video: MVideo, newPrivacy: VideoPrivacy) {
   if (video.privacy === VideoPrivacy.PRIVATE && newPrivacy !== VideoPrivacy.PRIVATE) {
     video.publishedAt = new Date()
@@ -14,8 +20,8 @@ function setVideoPrivacy (video: MVideo, newPrivacy: VideoPrivacy) {
   video.privacy = newPrivacy
 }
 
-function isVideoInPrivateDirectory (privacy: VideoPrivacy) {
-  return privacy === VideoPrivacy.PRIVATE || privacy === VideoPrivacy.INTERNAL
+function isVideoInPrivateDirectory (privacy) {
+  return validPrivacySet.has(privacy)
 }
 
 function isVideoInPublicDirectory (privacy: VideoPrivacy) {

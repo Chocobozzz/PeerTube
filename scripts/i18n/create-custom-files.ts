@@ -69,7 +69,10 @@ const playerKeys = {
   '{1} from servers · {2} from peers': '{1} from servers · {2} from peers',
   'Previous video': 'Previous video',
   'Video page (new window)': 'Video page (new window)',
-  'Next video': 'Next video'
+  'Next video': 'Next video',
+  'This video is password protected': 'This video is password protected',
+  'You need a password to watch this video.': 'You need a password to watch this video.',
+  'Incorrect password, please enter a correct password': 'Incorrect password, please enter a correct password'
 }
 Object.assign(playerKeys, videojs)
 

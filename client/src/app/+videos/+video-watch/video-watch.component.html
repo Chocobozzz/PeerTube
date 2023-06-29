@@ -19,7 +19,7 @@
     <my-plugin-placeholder pluginId="player-next"></my-plugin-placeholder>
   </div>
 
-  <my-video-alert [video]="video" [noPlaylistVideoFound]="noPlaylistVideoFound"></my-video-alert>
+  <my-video-alert [video]="video" [user]="user" [noPlaylistVideoFound]="noPlaylistVideoFound"></my-video-alert>
 
   <!-- Video information -->
   <div *ngIf="video" class="margin-content video-bottom">
@@ -51,8 +51,8 @@
               </div>
 
               <my-action-buttons
-                [video]="video" [isUserLoggedIn]="isUserLoggedIn()" [videoCaptions]="videoCaptions" [playlist]="playlist"
-                [currentTime]="getCurrentTime()" [currentPlaylistPosition]="getCurrentPlaylistPosition()"
+                [video]="video" [videoPassword]="videoPassword" [isUserLoggedIn]="isUserLoggedIn()" [isUserOwner]="isUserOwner()" [videoCaptions]="videoCaptions" 
+                [playlist]="playlist" [currentTime]="getCurrentTime()" [currentPlaylistPosition]="getCurrentPlaylistPosition()"
               ></my-action-buttons>
             </div>
           </div>
@@ -92,6 +92,7 @@
       <my-video-comments
         class="border-top"
         [video]="video"
+        [videoPassword]="videoPassword"
         [user]="user"
         (timestampClicked)="handleTimestampClicked($event)"
       ></my-video-comments>

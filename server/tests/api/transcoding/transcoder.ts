@@ -353,7 +353,7 @@ describe('Test video transcoding', function () {
       it('Should merge an audio file with the preview file', async function () {
         this.timeout(60_000)
 
-        const attributes = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
+        const attributes = { name: 'audio_with_preview', previewfile: 'custom-preview.jpg', fixture: 'sample.ogg' }
         await servers[1].videos.upload({ attributes, mode })
 
         await waitJobs(servers)
@@ -416,7 +416,7 @@ describe('Test video transcoding', function () {
           }
         })
 
-        const attributes = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
+        const attributes = { name: 'audio_with_preview', previewfile: 'custom-preview.jpg', fixture: 'sample.ogg' }
         const { id } = await servers[1].videos.upload({ attributes, mode })
 
         await waitJobs(servers)

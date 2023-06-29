@@ -6,6 +6,7 @@ import './shared/stats/stats-plugin'
 import './shared/bezels/bezels-plugin'
 import './shared/peertube/peertube-plugin'
 import './shared/resolutions/peertube-resolutions-plugin'
+import './shared/control-bar/storyboard-plugin'
 import './shared/control-bar/next-previous-video-button'
 import './shared/control-bar/p2p-info-button'
 import './shared/control-bar/peertube-link-button'
@@ -41,6 +42,12 @@ const CaptionsButton = videojs.getComponent('CaptionsButton') as any
 CaptionsButton.prototype.controlText_ = 'Subtitles/CC'
 // We just want to display 'Off' instead of 'captions off', keep a space so the variable == true (hacky I know)
 CaptionsButton.prototype.label_ = ' '
+
+// TODO: remove when https://github.com/videojs/video.js/pull/7598 is merged
+const PlayProgressBar = videojs.getComponent('PlayProgressBar') as any
+if (PlayProgressBar.prototype.options_.children.includes('timeTooltip') !== true) {
+  PlayProgressBar.prototype.options_.children.push('timeTooltip')
+}
 
 export class PeertubePlayerManager {
   private static playerElementClassName: string
@@ -134,6 +141,10 @@ export class PeertubePlayerManager {
           mode,
           p2pEnabled: options.common.p2pEnabled
         })
+
+        if (options.common.storyboard) {
+          player.storyboard(options.common.storyboard)
+        }
 
         player.on('p2pInfo', (_, data: PlayerNetworkInfo) => {
           if (data.source !== 'p2p-media-loader' || isNaN(data.bandwidthEstimate)) return

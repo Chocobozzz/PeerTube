@@ -5,6 +5,7 @@ import { RunnerModel } from '@server/models/runner/runner'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { logger } from '../helpers/logger'
 import { handleOAuthAuthenticate } from '../lib/auth/oauth'
+import { ServerErrorCode } from '@shared/models'
 
 function authenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
   handleOAuthAuthenticate(req, res)
@@ -48,15 +49,23 @@ function authenticateSocket (socket: Socket, next: (err?: any) => void) {
     .catch(err => logger.error('Cannot get access token.', { err }))
 }
 
-function authenticatePromise (req: express.Request, res: express.Response) {
+function authenticatePromise (options: {
+  req: express.Request
+  res: express.Response
+  errorMessage?: string
+  errorStatus?: HttpStatusCode
+  errorType?: ServerErrorCode
+}) {
+  const { req, res, errorMessage = 'Not authenticated', errorStatus = HttpStatusCode.UNAUTHORIZED_401, errorType } = options
   return new Promise<void>(resolve => {
     // Already authenticated? (or tried to)
     if (res.locals.oauth?.token.User) return resolve()
 
     if (res.locals.authenticated === false) {
       return res.fail({
-        status: HttpStatusCode.UNAUTHORIZED_401,
-        message: 'Not authenticated'
+        status: errorStatus,
+        type: errorType,
+        message: errorMessage
       })
     }
 

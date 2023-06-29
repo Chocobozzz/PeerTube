@@ -243,6 +243,10 @@ export class VideoShareComponent {
     return this.playlist.privacy.id === VideoPlaylistPrivacy.PRIVATE
   }
 
+  isPasswordProtectedVideo () {
+    return this.video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
+  }
+
   private getPlaylistOptions (baseUrl?: string) {
     return {
       baseUrl,

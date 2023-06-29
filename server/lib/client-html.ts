@@ -32,6 +32,7 @@ import { getActivityStreamDuration } from './activitypub/activity'
 import { getBiggestActorImage } from './actor-image'
 import { Hooks } from './plugins/hooks'
 import { ServerConfigManager } from './server-config-manager'
+import { isVideoInPrivateDirectory } from './video-privacy'
 
 type Tags = {
   ogType: string
@@ -106,7 +107,7 @@ class ClientHtml {
     ])
 
     // Let Angular application handle errors
-    if (!video || video.privacy === VideoPrivacy.PRIVATE || video.privacy === VideoPrivacy.INTERNAL || video.VideoBlacklist) {
+    if (!video || isVideoInPrivateDirectory(video.privacy) || video.VideoBlacklist) {
       res.status(HttpStatusCode.NOT_FOUND_404)
       return html
     }

@@ -1,14 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core'
-import { prepareIcu } from '@app/helpers'
+import { formatICU } from '@app/helpers'
 
 // Thanks: https://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site
 @Pipe({ name: 'myFromNow' })
 export class FromNowPipe implements PipeTransform {
-  private yearICU = prepareIcu($localize`{interval, plural, =1 {1 year ago} other {{interval} years ago}}`)
-  private monthICU = prepareIcu($localize`{interval, plural, =1 {1 month ago} other {{interval} months ago}}`)
-  private weekICU = prepareIcu($localize`{interval, plural, =1 {1 week ago} other {{interval} weeks ago}}`)
-  private dayICU = prepareIcu($localize`{interval, plural, =1 {1 day ago} other {{interval} days ago}}`)
-  private hourICU = prepareIcu($localize`{interval, plural, =1 {1 hour ago} other {{interval} hours ago}}`)
 
   transform (arg: number | Date | string) {
     const argDate = new Date(arg)
@@ -16,7 +11,7 @@ export class FromNowPipe implements PipeTransform {
 
     let interval = Math.floor(seconds / 31536000)
     if (interval >= 1) {
-      return this.yearICU({ interval }, $localize`${interval} year(s) ago`)
+      return formatICU($localize`{interval, plural, =1 {1 year ago} other {{interval} years ago}}`, { interval })
     }
 
     interval = Math.floor(seconds / 2419200)
@@ -25,7 +20,7 @@ export class FromNowPipe implements PipeTransform {
     if (interval >= 12) return $localize`1 year ago`
 
     if (interval >= 1) {
-      return this.monthICU({ interval }, $localize`${interval} month(s) ago`)
+      return formatICU($localize`{interval, plural, =1 {1 month ago} other {{interval} months ago}}`, { interval })
     }
 
     interval = Math.floor(seconds / 604800)
@@ -34,17 +29,17 @@ export class FromNowPipe implements PipeTransform {
     if (interval >= 4) return $localize`1 month ago`
 
     if (interval >= 1) {
-      return this.weekICU({ interval }, $localize`${interval} week(s) ago`)
+      return formatICU($localize`{interval, plural, =1 {1 week ago} other {{interval} weeks ago}}`, { interval })
     }
 
     interval = Math.floor(seconds / 86400)
     if (interval >= 1) {
-      return this.dayICU({ interval }, $localize`${interval} day(s) ago`)
+      return formatICU($localize`{interval, plural, =1 {1 day ago} other {{interval} days ago}}`, { interval })
     }
 
     interval = Math.floor(seconds / 3600)
     if (interval >= 1) {
-      return this.hourICU({ interval }, $localize`${interval} hour(s) ago`)
+      return formatICU($localize`{interval, plural, =1 {1 hour ago} other {{interval} hours ago}}`, { interval })
     }
 
     interval = Math.floor(seconds / 60)

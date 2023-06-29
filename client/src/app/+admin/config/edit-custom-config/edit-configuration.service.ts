@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { FormGroup } from '@angular/forms'
-import { prepareIcu } from '@app/helpers'
+import { formatICU } from '@app/helpers'
 
 export type ResolutionOption = {
   id: string
@@ -99,10 +99,7 @@ export class EditConfigurationService {
     return {
       value,
       atMost: noneOnAuto, // auto switches everything to a least estimation since ffmpeg will take as many threads as possible
-      unit: prepareIcu($localize`{value, plural, =1 {thread} other {threads}}`)(
-        { value },
-        $localize`threads`
-      )
+      unit: formatICU($localize`{value, plural, =1 {thread} other {threads}}`, { value })
     }
   }
 }

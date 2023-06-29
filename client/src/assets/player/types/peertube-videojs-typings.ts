@@ -49,6 +49,8 @@ declare module 'video.js' {
 
     stats (options?: StatsCardOptions): StatsForNerdsPlugin
 
+    storyboard (options: StoryboardOptions): void
+
     textTracks (): TextTrackList & {
       tracks_: (TextTrack & { id: string, label: string, src: string })[]
     }
@@ -89,6 +91,13 @@ type VideoJSCaption = {
   src: string
 }
 
+type VideoJSStoryboard = {
+  url: string
+  width: number
+  height: number
+  interval: number
+}
+
 type PeerTubePluginOptions = {
   mode: PlayerMode
 
@@ -116,6 +125,13 @@ type MetricsPluginOptions = {
   mode: PlayerMode
   metricsUrl: string
   videoUUID: string
+}
+
+type StoryboardOptions = {
+  url: string
+  width: number
+  height: number
+  interval: number
 }
 
 type PlaylistPluginOptions = {
@@ -155,7 +171,7 @@ type WebtorrentPluginOptions = {
 
   playerRefusedP2P: boolean
 
-  requiresAuth: boolean
+  requiresUserAuth: boolean
   videoFileToken: () => string
 
   buildWebSeedUrls: (file: VideoFile) => string[]
@@ -170,7 +186,7 @@ type P2PMediaLoaderPluginOptions = {
 
   loader: P2PMediaLoader
 
-  requiresAuth: boolean
+  requiresUserAuth: boolean
   videoFileToken: () => string
 }
 
@@ -238,6 +254,7 @@ type PlaylistItemOptions = {
 
 export {
   PlayerNetworkInfo,
+  VideoJSStoryboard,
   PlaylistItemOptions,
   NextPreviousVideoButtonOptions,
   ResolutionUpdateData,
@@ -251,6 +268,7 @@ export {
   PeerTubeResolution,
   VideoJSPluginOptions,
   LoadedQualityData,
+  StoryboardOptions,
   PeerTubeLinkButtonOptions,
   PeerTubeP2PInfoButtonOptions
 }

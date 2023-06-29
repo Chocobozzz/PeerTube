@@ -244,7 +244,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with a big thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        thumbnailfile: buildAbsoluteFixturePath('preview-big.png')
+        thumbnailfile: buildAbsoluteFixturePath('custom-preview-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -262,7 +262,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with a big preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        previewfile: buildAbsoluteFixturePath('preview-big.png')
+        previewfile: buildAbsoluteFixturePath('custom-preview-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })

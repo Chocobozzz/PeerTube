@@ -15,6 +15,7 @@ export * from './channel-sync'
 
 export * from './nsfw-policy.type'
 
+export * from './storyboard.model'
 export * from './thumbnail.type'
 
 export * from './video-constant.model'
@@ -39,3 +40,4 @@ export * from './video-update.model'
 export * from './video-view.model'
 export * from './video.model'
 export * from './video-create-result.model'
+export * from './video-password.model'

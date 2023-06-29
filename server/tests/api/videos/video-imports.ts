@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { pathExists, readdir, remove } from 'fs-extra'
 import { join } from 'path'
-import { FIXTURE_URLS, testCaptionFile, testImage } from '@server/tests/shared'
+import { FIXTURE_URLS, testCaptionFile, testImageGeneratedByFFmpeg } from '@server/tests/shared'
 import { areHttpImportTestsDisabled } from '@shared/core-utils'
 import { CustomConfig, HttpStatusCode, Video, VideoImportState, VideoPrivacy, VideoResolution, VideoState } from '@shared/models'
 import {
@@ -67,7 +67,7 @@ async function checkVideoServer2 (server: PeerTubeServer, id: number | string) {
   expect(video.description).to.equal('my super description')
   expect(video.tags).to.deep.equal([ 'supertag1', 'supertag2' ])
 
-  await testImage(server.url, 'thumbnail', video.thumbnailPath)
+  await testImageGeneratedByFFmpeg(server.url, 'custom-thumbnail', video.thumbnailPath)
 
   expect(video.files).to.have.lengthOf(1)
 
@@ -119,15 +119,15 @@ describe('Test video imports', function () {
           expect(video.name).to.equal('small video - youtube')
 
           {
-            expect(video.thumbnailPath).to.match(new RegExp(`^/static/thumbnails/.+.jpg$`))
+            expect(video.thumbnailPath).to.match(new RegExp(`^/lazy-static/thumbnails/.+.jpg$`))
             expect(video.previewPath).to.match(new RegExp(`^/lazy-static/previews/.+.jpg$`))
 
             const suffix = mode === 'yt-dlp'
               ? '_yt_dlp'
               : ''
 
-            await testImage(servers[0].url, 'video_import_thumbnail' + suffix, video.thumbnailPath)
-            await testImage(servers[0].url, 'video_import_preview' + suffix, video.previewPath)
+            await testImageGeneratedByFFmpeg(servers[0].url, 'video_import_thumbnail' + suffix, video.thumbnailPath)
+            await testImageGeneratedByFFmpeg(servers[0].url, 'video_import_preview' + suffix, video.previewPath)
           }
 
           const bodyCaptions = await servers[0].captions.list({ videoId: video.id })
@@ -266,7 +266,7 @@ describe('Test video imports', function () {
             name: 'my super name',
             description: 'my super description',
             tags: [ 'supertag1', 'supertag2' ],
-            thumbnailfile: 'thumbnail.jpg'
+            thumbnailfile: 'custom-thumbnail.jpg'
           }
         })
         expect(video.name).to.equal('my super name')

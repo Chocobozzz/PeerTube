@@ -93,10 +93,10 @@ describe('Test resumable upload', function () {
     expect((await stat(filePath)).size).to.equal(expectedSize)
   }
 
-  async function countResumableUploads () {
+  async function countResumableUploads (wait?: number) {
     const subPath = join('tmp', 'resumable-uploads')
     const filePath = server.servers.buildDirectory(subPath)
-
+    await new Promise(resolve => setTimeout(resolve, wait))
     const files = await readdir(filePath)
     return files.length
   }
@@ -122,14 +122,20 @@ describe('Test resumable upload', function () {
 
   describe('Directory cleaning', function () {
 
-    // FIXME: https://github.com/kukhariev/node-uploadx/pull/524/files#r852989382
-    // it('Should correctly delete files after an upload', async function () {
-    //   const uploadId = await prepareUpload()
-    //   await sendChunks({ pathUploadId: uploadId })
-    //   await server.videos.endResumableUpload({ pathUploadId: uploadId })
+    it('Should correctly delete files after an upload', async function () {
+      const uploadId = await prepareUpload()
+      await sendChunks({ pathUploadId: uploadId })
+      await server.videos.endResumableUpload({ pathUploadId: uploadId })
 
-    //   expect(await countResumableUploads()).to.equal(0)
-    // })
+      expect(await countResumableUploads()).to.equal(0)
+    })
+
+    it('Should correctly delete corrupt files', async function () {
+      const uploadId = await prepareUpload({ size: 8 * 1024 })
+      await sendChunks({ pathUploadId: uploadId, size: 8 * 1024, expectedStatus: HttpStatusCode.UNPROCESSABLE_ENTITY_422 })
+
+      expect(await countResumableUploads(2000)).to.equal(0)
+    })
 
     it('Should not delete files after an unfinished upload', async function () {
       await prepareUpload()
@@ -252,6 +258,24 @@ describe('Test resumable upload', function () {
 
       const result2 = await sendChunks({ pathUploadId: uploadId1 })
       expect(result2.headers['x-resumable-upload-cached']).to.not.exist
+    })
+
+    it('Should not cache after video deletion', async function () {
+      const originalName = 'toto.mp4'
+      const lastModified = new Date().getTime()
+
+      const uploadId1 = await prepareUpload({ originalName, lastModified })
+      const result1 = await sendChunks({ pathUploadId: uploadId1 })
+      await server.videos.remove({ id: result1.body.video.uuid })
+
+      const uploadId2 = await prepareUpload({ originalName, lastModified })
+      const result2 = await sendChunks({ pathUploadId: uploadId2 })
+      expect(result1.body.video.uuid).to.not.equal(result2.body.video.uuid)
+
+      expect(result2.headers['x-resumable-upload-cached']).to.not.exist
+
+      await checkFileSize(uploadId1, null)
+      await checkFileSize(uploadId2, null)
     })
 
     it('Should refuse an invalid digest', async function () {

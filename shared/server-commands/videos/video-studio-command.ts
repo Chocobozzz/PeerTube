@@ -25,7 +25,7 @@ export class VideoStudioCommand extends AbstractCommand {
       {
         name: 'add-watermark',
         options: {
-          file: 'thumbnail.png'
+          file: 'custom-thumbnail.png'
         }
       },
 

@@ -8,7 +8,6 @@ import { getOrCreateAPVideo } from '@server/lib/activitypub/videos'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search'
 import { getServerActor } from '@server/models/application/application'
-import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
 import { HttpStatusCode, ResultList, Video } from '@shared/models'
 import { VideosSearchQueryAfterSanitize } from '../../../../shared/models/search'
 import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils'
@@ -25,6 +24,7 @@ import {
   videosSearchSortValidator,
   videosSearchValidator
 } from '../../../middlewares'
+import { guessAdditionalAttributesFromQuery } from '../../../models/video/formatter'
 import { VideoModel } from '../../../models/video/video'
 import { MVideoAccountLightBlacklistAllFiles } from '../../../types/models'
 import { searchLocalUrl } from './shared'

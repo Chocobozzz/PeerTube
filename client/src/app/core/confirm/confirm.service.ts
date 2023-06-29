@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core'
 type ConfirmOptions = {
   title: string
   message: string
+  errorMessage?: string
 } & (
   {
     type: 'confirm'
@@ -12,6 +13,7 @@ type ConfirmOptions = {
   {
     type: 'confirm-password'
     confirmButtonText?: string
+    isIncorrectPassword?: boolean
   } |
   {
     type: 'confirm-expected-input'
@@ -32,8 +34,14 @@ export class ConfirmService {
     return firstValueFrom(this.extractConfirmed(this.confirmResponse.asObservable()))
   }
 
-  confirmWithPassword (message: string, title = '', confirmButtonText?: string) {
-    this.showConfirm.next({ type: 'confirm-password', title, message, confirmButtonText })
+  confirmWithPassword (options: {
+    message: string
+    title?: string
+    confirmButtonText?: string
+    errorMessage?: string
+  }) {
+    const { message, title = '', confirmButtonText, errorMessage } = options
+    this.showConfirm.next({ type: 'confirm-password', title, message, confirmButtonText, errorMessage })
 
     const obs = this.confirmResponse.asObservable()
       .pipe(map(({ confirmed, value }) => ({ confirmed, password: value })))

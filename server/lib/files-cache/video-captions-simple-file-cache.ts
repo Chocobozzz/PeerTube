@@ -5,11 +5,11 @@ import { CONFIG } from '../../initializers/config'
 import { FILES_CACHE } from '../../initializers/constants'
 import { VideoModel } from '../../models/video/video'
 import { VideoCaptionModel } from '../../models/video/video-caption'
-import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
+import { AbstractSimpleFileCache } from './shared/abstract-simple-file-cache'
 
-class VideosCaptionCache extends AbstractVideoStaticFileCache <string> {
+class VideoCaptionsSimpleFileCache extends AbstractSimpleFileCache <string> {
 
-  private static instance: VideosCaptionCache
+  private static instance: VideoCaptionsSimpleFileCache
 
   private constructor () {
     super()
@@ -23,7 +23,9 @@ class VideosCaptionCache extends AbstractVideoStaticFileCache <string> {
     const videoCaption = await VideoCaptionModel.loadWithVideoByFilename(filename)
     if (!videoCaption) return undefined
 
-    if (videoCaption.isOwned()) return { isOwned: true, path: join(CONFIG.STORAGE.CAPTIONS_DIR, videoCaption.filename) }
+    if (videoCaption.isOwned()) {
+      return { isOwned: true, path: join(CONFIG.STORAGE.CAPTIONS_DIR, videoCaption.filename) }
+    }
 
     return this.loadRemoteFile(filename)
   }
@@ -55,5 +57,5 @@ class VideosCaptionCache extends AbstractVideoStaticFileCache <string> {
 }
 
 export {
-  VideosCaptionCache
+  VideoCaptionsSimpleFileCache
 }

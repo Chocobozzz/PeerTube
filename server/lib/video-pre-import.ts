@@ -29,7 +29,8 @@ import {
 } from '@server/types/models'
 import { ThumbnailType, VideoImportCreate, VideoImportPayload, VideoImportState, VideoPrivacy, VideoState } from '@shared/models'
 import { getLocalVideoActivityPubUrl } from './activitypub/url'
-import { updateVideoMiniatureFromExisting, updateVideoMiniatureFromUrl } from './thumbnail'
+import { updateLocalVideoMiniatureFromExisting, updateLocalVideoMiniatureFromUrl } from './thumbnail'
+import { VideoPasswordModel } from '@server/models/video/video-password'
 
 class YoutubeDlImportError extends Error {
   code: YoutubeDlImportError.CODE
@@ -64,8 +65,9 @@ async function insertFromImportIntoDB (parameters: {
   tags: string[]
   videoImportAttributes: FilteredModelAttributes<VideoImportModel>
   user: MUser
+  videoPasswords?: string[]
 }): Promise<MVideoImportFormattable> {
-  const { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes, user } = parameters
+  const { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes, user, videoPasswords } = parameters
 
   const videoImport = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
@@ -76,6 +78,10 @@ async function insertFromImportIntoDB (parameters: {
 
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
     if (previewModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
+
+    if (videoCreated.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
+      await VideoPasswordModel.addPasswords(videoPasswords, video.id, t)
+    }
 
     await autoBlacklistVideoIfNeeded({
       video: videoCreated,
@@ -208,7 +214,8 @@ async function buildYoutubeDLImport (options: {
       state: VideoImportState.PENDING,
       userId: user.id,
       videoChannelSyncId: channelSync?.id
-    }
+    },
+    videoPasswords: importDataOverride.videoPasswords
   })
 
   // Get video subtitles
@@ -249,19 +256,22 @@ async function forgeThumbnail ({ inputPath, video, downloadUrl, type }: {
   type: ThumbnailType
 }): Promise<MThumbnail> {
   if (inputPath) {
-    return updateVideoMiniatureFromExisting({
+    return updateLocalVideoMiniatureFromExisting({
       inputPath,
       video,
       type,
       automaticallyGenerated: false
     })
-  } else if (downloadUrl) {
+  }
+
+  if (downloadUrl) {
     try {
-      return await updateVideoMiniatureFromUrl({ downloadUrl, video, type })
+      return await updateLocalVideoMiniatureFromUrl({ downloadUrl, video, type })
     } catch (err) {
       logger.warn('Cannot process thumbnail %s from youtube-dl.', downloadUrl, { err })
     }
   }
+
   return null
 }
 

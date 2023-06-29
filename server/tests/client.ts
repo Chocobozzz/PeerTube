@@ -56,6 +56,7 @@ describe('Test a client controllers', function () {
   let privateVideoId: string
   let internalVideoId: string
   let unlistedVideoId: string
+  let passwordProtectedVideoId: string
 
   let playlistIds: (string | number)[] = []
 
@@ -92,7 +93,12 @@ describe('Test a client controllers', function () {
     {
       ({ uuid: privateVideoId } = await servers[0].videos.quickUpload({ name: 'private', privacy: VideoPrivacy.PRIVATE }));
       ({ uuid: unlistedVideoId } = await servers[0].videos.quickUpload({ name: 'unlisted', privacy: VideoPrivacy.UNLISTED }));
-      ({ uuid: internalVideoId } = await servers[0].videos.quickUpload({ name: 'internal', privacy: VideoPrivacy.INTERNAL }))
+      ({ uuid: internalVideoId } = await servers[0].videos.quickUpload({ name: 'internal', privacy: VideoPrivacy.INTERNAL }));
+      ({ uuid: passwordProtectedVideoId } = await servers[0].videos.quickUpload({
+        name: 'password protected',
+        privacy: VideoPrivacy.PASSWORD_PROTECTED,
+        videoPasswords: [ 'password' ]
+      }))
     }
 
     // Playlist
@@ -502,9 +508,9 @@ describe('Test a client controllers', function () {
       }
     })
 
-    it('Should not display internal/private video', async function () {
+    it('Should not display internal/private/password protected video', async function () {
       for (const basePath of watchVideoBasePaths) {
-        for (const id of [ privateVideoId, internalVideoId ]) {
+        for (const id of [ privateVideoId, internalVideoId, passwordProtectedVideoId ]) {
           const res = await makeGetRequest({
             url: servers[0].url,
             path: basePath + id,
@@ -514,6 +520,7 @@ describe('Test a client controllers', function () {
 
           expect(res.text).to.not.contain('internal')
           expect(res.text).to.not.contain('private')
+          expect(res.text).to.not.contain('password protected')
         }
       }
     })

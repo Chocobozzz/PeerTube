@@ -25,6 +25,7 @@ import {
   DeleteResumableUploadMetaFilePayload,
   EmailPayload,
   FederateVideoPayload,
+  GenerateStoryboardPayload,
   JobState,
   JobType,
   ManageVideoTorrentPayload,
@@ -65,6 +66,7 @@ import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoStudioEdition } from './handlers/video-studio-edition'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViewsStats } from './handlers/video-views-stats'
+import { processGenerateStoryboard } from './handlers/generate-storyboard'
 
 export type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -91,7 +93,8 @@ export type CreateJobArgument =
   { type: 'after-video-channel-import', payload: AfterVideoChannelImportPayload } |
   { type: 'notify', payload: NotifyPayload } |
   { type: 'move-to-object-storage', payload: MoveObjectStoragePayload } |
-  { type: 'federate-video', payload: FederateVideoPayload }
+  { type: 'federate-video', payload: FederateVideoPayload } |
+  { type: 'generate-video-storyboard', payload: GenerateStoryboardPayload }
 
 export type CreateJobOptions = {
   delay?: number
@@ -122,7 +125,8 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'video-redundancy': processVideoRedundancy,
   'video-studio-edition': processVideoStudioEdition,
   'video-transcoding': processVideoTranscoding,
-  'videos-views-stats': processVideosViewsStats
+  'videos-views-stats': processVideosViewsStats,
+  'generate-video-storyboard': processGenerateStoryboard
 }
 
 const errorHandlers: { [id in JobType]?: (job: Job, err: any) => Promise<any> } = {
@@ -141,10 +145,11 @@ const jobTypes: JobType[] = [
   'after-video-channel-import',
   'email',
   'federate-video',
-  'transcoding-job-builder',
+  'generate-video-storyboard',
   'manage-video-torrent',
   'move-to-object-storage',
   'notify',
+  'transcoding-job-builder',
   'video-channel-import',
   'video-file-import',
   'video-import',

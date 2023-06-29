@@ -2,7 +2,7 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
-import { prepareIcu } from '@app/helpers'
+import { formatICU } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction } from '@app/shared/shared-main'
 import { UserRegistration, UserRegistrationState } from '@shared/models'
@@ -121,9 +121,9 @@ export class RegistrationListComponent extends RestTable <UserRegistration> impl
     const icuParams = { count: registrations.length, username: registrations[0].username }
 
     // eslint-disable-next-line max-len
-    const message = prepareIcu($localize`Do you really want to delete {count, plural, =1 {{username} registration request?} other {{count} registration requests?}}`)(
-      icuParams,
-      $localize`Do you really want to delete these registration requests?`
+    const message = formatICU(
+      $localize`Do you really want to delete {count, plural, =1 {{username} registration request?} other {{count} registration requests?}}`,
+      icuParams
     )
 
     const res = await this.confirmService.confirm(message, $localize`Delete`)
@@ -133,9 +133,9 @@ export class RegistrationListComponent extends RestTable <UserRegistration> impl
       .subscribe({
         next: () => {
           // eslint-disable-next-line max-len
-          const message = prepareIcu($localize`Removed {count, plural, =1 {{username} registration request} other {{count} registration requests}}`)(
-            icuParams,
-            $localize`Registration requests removed`
+          const message = formatICU(
+            $localize`Removed {count, plural, =1 {{username} registration request} other {{count} registration requests}}`,
+            icuParams
           )
 
           this.notifier.success(message)

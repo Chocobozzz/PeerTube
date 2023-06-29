@@ -1,6 +1,6 @@
 import { Transaction } from 'sequelize'
 import { getServerActor } from '@server/models/application/application'
-import { ActivityAudience, ActivityUpdate, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+import { ActivityAudience, ActivityUpdate, ActivityUpdateObject, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
@@ -10,8 +10,7 @@ import {
   MActor,
   MActorLight,
   MChannelDefault,
-  MVideoAP,
-  MVideoAPWithoutCaption,
+  MVideoAPLight,
   MVideoPlaylistFull,
   MVideoRedundancyVideo
 } from '../../../types/models'
@@ -20,21 +19,16 @@ import { getUpdateActivityPubUrl } from '../url'
 import { getActorsInvolvedInVideo } from './shared'
 import { broadcastToFollowers, sendVideoRelatedActivity } from './shared/send-utils'
 
-async function sendUpdateVideo (videoArg: MVideoAPWithoutCaption, transaction: Transaction, overriddenByActor?: MActor) {
-  const video = videoArg as MVideoAP
+async function sendUpdateVideo (videoArg: MVideoAPLight, transaction: Transaction, overriddenByActor?: MActor) {
+  if (!videoArg.hasPrivacyForFederation()) return undefined
 
-  if (!video.hasPrivacyForFederation()) return undefined
+  const video = await videoArg.lightAPToFullAP(transaction)
 
   logger.info('Creating job to update video %s.', video.url)
 
   const byActor = overriddenByActor || video.VideoChannel.Account.Actor
 
   const url = getUpdateActivityPubUrl(video.url, video.updatedAt.toISOString())
-
-  // Needed to build the AP object
-  if (!video.VideoCaptions) {
-    video.VideoCaptions = await video.$get('VideoCaptions', { transaction })
-  }
 
   const videoObject = await video.toActivityPubObject()
   const audience = getAudience(byActor, video.privacy === VideoPrivacy.PUBLIC)
@@ -143,7 +137,12 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function buildUpdateActivity (url: string, byActor: MActorLight, object: any, audience?: ActivityAudience): ActivityUpdate {
+function buildUpdateActivity (
+  url: string,
+  byActor: MActorLight,
+  object: ActivityUpdateObject,
+  audience?: ActivityAudience
+): ActivityUpdate<ActivityUpdateObject> {
   if (!audience) audience = getAudience(byActor)
 
   return audiencify(

@@ -7,13 +7,12 @@ import { ThumbnailModel } from '../models/video/thumbnail'
 import { MVideoFile, MVideoThumbnail, MVideoUUID } from '../types/models'
 import { MThumbnail } from '../types/models/video/thumbnail'
 import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist'
-import { downloadImageFromWorker } from './local-actor'
 import { VideoPathManager } from './video-path-manager'
-import { processImageFromWorker } from './worker/parent-process'
+import { downloadImageFromWorker, processImageFromWorker } from './worker/parent-process'
 
 type ImageSize = { height?: number, width?: number }
 
-function updatePlaylistMiniatureFromExisting (options: {
+function updateLocalPlaylistMiniatureFromExisting (options: {
   inputPath: string
   playlist: MVideoPlaylistThumbnail
   automaticallyGenerated: boolean
@@ -35,11 +34,12 @@ function updatePlaylistMiniatureFromExisting (options: {
     width,
     type,
     automaticallyGenerated,
+    onDisk: true,
     existingThumbnail
   })
 }
 
-function updatePlaylistMiniatureFromUrl (options: {
+function updateRemotePlaylistMiniatureFromUrl (options: {
   downloadUrl: string
   playlist: MVideoPlaylistThumbnail
   size?: ImageSize
@@ -57,42 +57,10 @@ function updatePlaylistMiniatureFromUrl (options: {
     return downloadImageFromWorker({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
   }
 
-  return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
+  return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl, onDisk: true })
 }
 
-function updateVideoMiniatureFromUrl (options: {
-  downloadUrl: string
-  video: MVideoThumbnail
-  type: ThumbnailType
-  size?: ImageSize
-}) {
-  const { downloadUrl, video, type, size } = options
-  const { filename: updatedFilename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
-
-  // Only save the file URL if it is a remote video
-  const fileUrl = video.isOwned()
-    ? null
-    : downloadUrl
-
-  const thumbnailUrlChanged = hasThumbnailUrlChanged(existingThumbnail, downloadUrl, video)
-
-  // Do not change the thumbnail filename if the file did not change
-  const filename = thumbnailUrlChanged
-    ? updatedFilename
-    : existingThumbnail.filename
-
-  const thumbnailCreator = () => {
-    if (thumbnailUrlChanged) {
-      return downloadImageFromWorker({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
-    }
-
-    return Promise.resolve()
-  }
-
-  return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
-}
-
-function updateVideoMiniatureFromExisting (options: {
+function updateLocalVideoMiniatureFromExisting (options: {
   inputPath: string
   video: MVideoThumbnail
   type: ThumbnailType
@@ -115,11 +83,12 @@ function updateVideoMiniatureFromExisting (options: {
     width,
     type,
     automaticallyGenerated,
-    existingThumbnail
+    existingThumbnail,
+    onDisk: true
   })
 }
 
-function generateVideoMiniature (options: {
+function generateLocalVideoMiniature (options: {
   video: MVideoThumbnail
   videoFile: MVideoFile
   type: ThumbnailType
@@ -150,34 +119,68 @@ function generateVideoMiniature (options: {
       width,
       type,
       automaticallyGenerated: true,
+      onDisk: true,
       existingThumbnail
     })
   })
 }
 
-function updatePlaceholderThumbnail (options: {
-  fileUrl: string
+// ---------------------------------------------------------------------------
+
+function updateLocalVideoMiniatureFromUrl (options: {
+  downloadUrl: string
   video: MVideoThumbnail
   type: ThumbnailType
-  size: ImageSize
+  size?: ImageSize
 }) {
-  const { fileUrl, video, type, size } = options
-  const { filename: updatedFilename, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
+  const { downloadUrl, video, type, size } = options
+  const { filename: updatedFilename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
 
-  const thumbnailUrlChanged = hasThumbnailUrlChanged(existingThumbnail, fileUrl, video)
+  // Only save the file URL if it is a remote video
+  const fileUrl = video.isOwned()
+    ? null
+    : downloadUrl
 
-  const thumbnail = existingThumbnail || new ThumbnailModel()
+  const thumbnailUrlChanged = hasThumbnailUrlChanged(existingThumbnail, downloadUrl, video)
 
   // Do not change the thumbnail filename if the file did not change
   const filename = thumbnailUrlChanged
     ? updatedFilename
     : existingThumbnail.filename
 
-  thumbnail.filename = filename
+  const thumbnailCreator = () => {
+    if (thumbnailUrlChanged) {
+      return downloadImageFromWorker({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
+    }
+
+    return Promise.resolve()
+  }
+
+  return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl, onDisk: true })
+}
+
+function updateRemoteVideoThumbnail (options: {
+  fileUrl: string
+  video: MVideoThumbnail
+  type: ThumbnailType
+  size: ImageSize
+  onDisk: boolean
+}) {
+  const { fileUrl, video, type, size, onDisk } = options
+  const { filename: generatedFilename, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
+
+  const thumbnail = existingThumbnail || new ThumbnailModel()
+
+  // Do not change the thumbnail filename if the file did not change
+  if (hasThumbnailUrlChanged(existingThumbnail, fileUrl, video)) {
+    thumbnail.filename = generatedFilename
+  }
+
   thumbnail.height = height
   thumbnail.width = width
   thumbnail.type = type
   thumbnail.fileUrl = fileUrl
+  thumbnail.onDisk = onDisk
 
   return thumbnail
 }
@@ -185,13 +188,17 @@ function updatePlaceholderThumbnail (options: {
 // ---------------------------------------------------------------------------
 
 export {
-  generateVideoMiniature,
-  updateVideoMiniatureFromUrl,
-  updateVideoMiniatureFromExisting,
-  updatePlaceholderThumbnail,
-  updatePlaylistMiniatureFromUrl,
-  updatePlaylistMiniatureFromExisting
+  generateLocalVideoMiniature,
+  updateLocalVideoMiniatureFromUrl,
+  updateLocalVideoMiniatureFromExisting,
+  updateRemoteVideoThumbnail,
+  updateRemotePlaylistMiniatureFromUrl,
+  updateLocalPlaylistMiniatureFromExisting
 }
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
 
 function hasThumbnailUrlChanged (existingThumbnail: MThumbnail, downloadUrl: string, video: MVideoUUID) {
   const existingUrl = existingThumbnail
@@ -258,6 +265,7 @@ async function updateThumbnailFromFunction (parameters: {
   height: number
   width: number
   type: ThumbnailType
+  onDisk: boolean
   automaticallyGenerated?: boolean
   fileUrl?: string
   existingThumbnail?: MThumbnail
@@ -269,6 +277,7 @@ async function updateThumbnailFromFunction (parameters: {
     height,
     type,
     existingThumbnail,
+    onDisk,
     automaticallyGenerated = null,
     fileUrl = null
   } = parameters
@@ -285,6 +294,7 @@ async function updateThumbnailFromFunction (parameters: {
   thumbnail.type = type
   thumbnail.fileUrl = fileUrl
   thumbnail.automaticallyGenerated = automaticallyGenerated
+  thumbnail.onDisk = onDisk
 
   if (oldFilename) thumbnail.previousThumbnailFilename = oldFilename
 

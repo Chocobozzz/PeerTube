@@ -2,6 +2,7 @@ import { peertubeTranslate } from '../../../../../shared/core-utils/i18n'
 import {
   HTMLServerConfig,
   LiveVideo,
+  Storyboard,
   Video,
   VideoCaption,
   VideoDetails,
@@ -18,7 +19,7 @@ import {
   logger,
   peertubeLocalStorage,
   UserLocalStorageKeys,
-  videoRequiresAuth
+  videoRequiresUserAuth
 } from '../../../root-helpers'
 import { PeerTubePlugin } from './peertube-plugin'
 import { PlayerHTML } from './player-html'
@@ -155,12 +156,18 @@ export class PlayerManagerOptions {
   async getPlayerOptions (options: {
     video: VideoDetails
     captionsResponse: Response
+
+    storyboardsResponse: Response
+
     live?: LiveVideo
 
     forceAutoplay: boolean
 
     authorizationHeader: () => string
     videoFileToken: () => string
+
+    videoPassword: () => string
+    requiresPassword: boolean
 
     serverConfig: HTMLServerConfig
 
@@ -178,15 +185,21 @@ export class PlayerManagerOptions {
       captionsResponse,
       autoplayFromPreviousVideo,
       videoFileToken,
+      videoPassword,
+      requiresPassword,
       translations,
       forceAutoplay,
       playlistTracker,
       live,
+      storyboardsResponse,
       authorizationHeader,
       serverConfig
     } = options
 
-    const videoCaptions = await this.buildCaptions(captionsResponse, translations)
+    const [ videoCaptions, storyboard ] = await Promise.all([
+      this.buildCaptions(captionsResponse, translations),
+      this.buildStoryboard(storyboardsResponse)
+    ])
 
     const playerOptions: PeertubePlayerManagerOptions = {
       common: {
@@ -204,6 +217,8 @@ export class PlayerManagerOptions {
 
         captions: videoCaptions.length !== 0,
         subtitle: this.subtitle,
+
+        storyboard,
 
         startTime: playlistTracker
           ? playlistTracker.getCurrentElement().startTimestamp
@@ -242,9 +257,12 @@ export class PlayerManagerOptions {
         embedUrl: window.location.origin + video.embedPath,
         embedTitle: video.name,
 
-        requiresAuth: videoRequiresAuth(video),
+        requiresUserAuth: videoRequiresUserAuth(video),
         authorizationHeader,
         videoFileToken,
+
+        requiresPassword,
+        videoPassword,
 
         errorNotifier: () => {
           // Empty, we don't have a notifier in the embed
@@ -275,6 +293,18 @@ export class PlayerManagerOptions {
       liveOptions: {
         latencyMode: live.latencyMode
       }
+    }
+  }
+
+  private async buildStoryboard (storyboardsResponse: Response) {
+    const { storyboards } = await storyboardsResponse.json() as { storyboards: Storyboard[] }
+    if (!storyboards || storyboards.length === 0) return undefined
+
+    return {
+      url: window.location.origin + storyboards[0].storyboardPath,
+      height: storyboards[0].spriteHeight,
+      width: storyboards[0].spriteWidth,
+      interval: storyboards[0].spriteDuration
     }
   }
 

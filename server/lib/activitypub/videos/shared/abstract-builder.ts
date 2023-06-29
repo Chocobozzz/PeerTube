@@ -1,8 +1,9 @@
 import { CreationAttributes, Transaction } from 'sequelize/types'
 import { deleteAllModels, filterNonExistingModels } from '@server/helpers/database-utils'
 import { logger, LoggerTagsFn } from '@server/helpers/logger'
-import { updatePlaceholderThumbnail, updateVideoMiniatureFromUrl } from '@server/lib/thumbnail'
+import { updateRemoteVideoThumbnail } from '@server/lib/thumbnail'
 import { setVideoTags } from '@server/lib/video'
+import { StoryboardModel } from '@server/models/video/storyboard'
 import { VideoCaptionModel } from '@server/models/video/video-caption'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
@@ -10,20 +11,19 @@ import { VideoStreamingPlaylistModel } from '@server/models/video/video-streamin
 import {
   MStreamingPlaylistFiles,
   MStreamingPlaylistFilesVideo,
-  MThumbnail,
   MVideoCaption,
   MVideoFile,
   MVideoFullLight,
   MVideoThumbnail
 } from '@server/types/models'
 import { ActivityTagObject, ThumbnailType, VideoObject, VideoStreamingPlaylistType } from '@shared/models'
-import { getOrCreateAPActor } from '../../actors'
-import { checkUrlsSameHost } from '../../url'
+import { findOwner, getOrCreateAPActor } from '../../actors'
 import {
   getCaptionAttributesFromObject,
   getFileAttributesFromUrl,
   getLiveAttributesFromObject,
   getPreviewFromIcons,
+  getStoryboardAttributeFromObject,
   getStreamingPlaylistAttributesFromObject,
   getTagsFromObject,
   getThumbnailFromIcons
@@ -35,38 +35,40 @@ export abstract class APVideoAbstractBuilder {
   protected abstract lTags: LoggerTagsFn
 
   protected async getOrCreateVideoChannelFromVideoObject () {
-    const channel = this.videoObject.attributedTo.find(a => a.type === 'Group')
+    const channel = await findOwner(this.videoObject.id, this.videoObject.attributedTo, 'Group')
     if (!channel) throw new Error('Cannot find associated video channel to video ' + this.videoObject.url)
-
-    if (checkUrlsSameHost(channel.id, this.videoObject.id) !== true) {
-      throw new Error(`Video channel url ${channel.id} does not have the same host than video object id ${this.videoObject.id}`)
-    }
 
     return getOrCreateAPActor(channel.id, 'all')
   }
 
-  protected tryToGenerateThumbnail (video: MVideoThumbnail): Promise<MThumbnail> {
-    return updateVideoMiniatureFromUrl({
-      downloadUrl: getThumbnailFromIcons(this.videoObject).url,
-      video,
-      type: ThumbnailType.MINIATURE
-    }).catch(err => {
-      logger.warn('Cannot generate thumbnail of %s.', this.videoObject.id, { err, ...this.lTags() })
-
+  protected async setThumbnail (video: MVideoThumbnail, t?: Transaction) {
+    const miniatureIcon = getThumbnailFromIcons(this.videoObject)
+    if (!miniatureIcon) {
+      logger.warn('Cannot find thumbnail in video object', { object: this.videoObject })
       return undefined
+    }
+
+    const miniatureModel = updateRemoteVideoThumbnail({
+      fileUrl: miniatureIcon.url,
+      video,
+      type: ThumbnailType.MINIATURE,
+      size: miniatureIcon,
+      onDisk: false // Lazy download remote thumbnails
     })
+
+    await video.addAndSaveThumbnail(miniatureModel, t)
   }
 
   protected async setPreview (video: MVideoFullLight, t?: Transaction) {
-    // Don't fetch the preview that could be big, create a placeholder instead
     const previewIcon = getPreviewFromIcons(this.videoObject)
     if (!previewIcon) return
 
-    const previewModel = updatePlaceholderThumbnail({
+    const previewModel = updateRemoteVideoThumbnail({
       fileUrl: previewIcon.url,
       video,
       type: ThumbnailType.PREVIEW,
-      size: previewIcon
+      size: previewIcon,
+      onDisk: false // Lazy download remote previews
     })
 
     await video.addAndSaveThumbnail(previewModel, t)
@@ -105,6 +107,16 @@ export abstract class APVideoAbstractBuilder {
     for (const captionToCreate of captionsToCreate) {
       await captionToCreate.save({ transaction: t })
     }
+  }
+
+  protected async insertOrReplaceStoryboard (video: MVideoFullLight, t: Transaction) {
+    const existingStoryboard = await StoryboardModel.loadByVideo(video.id, t)
+    if (existingStoryboard) await existingStoryboard.destroy({ transaction: t })
+
+    const storyboardAttributes = getStoryboardAttributeFromObject(video, this.videoObject)
+    if (!storyboardAttributes) return
+
+    return StoryboardModel.create(storyboardAttributes, { transaction: t })
   }
 
   protected async insertOrReplaceLive (video: MVideoFullLight, transaction: Transaction) {

@@ -12,10 +12,12 @@
     <div *ngIf="inputLabel" class="form-group mt-3">
       <label for="confirmInput">{{ inputLabel }}</label>
 
-      <input *ngIf="!isPasswordInput" type="text" id="confirmInput" name="confirmInput" [(ngModel)]="inputValue" />
+      <input *ngIf="!isPasswordInput" type="text" id="confirmInput" name="confirmInput" [(ngModel)]="inputValue" (keyup.enter)="confirm()" />
 
-      <my-input-text *ngIf="isPasswordInput" inputId="confirmInput" [(ngModel)]="inputValue"></my-input-text>
+      <my-input-text *ngIf="isPasswordInput" inputId="confirmInput" [(ngModel)]="inputValue" (keyup.enter)="confirm()"></my-input-text>
     </div>
+
+    <div *ngIf="hasError()" class="text-danger">{{ errorMessage }}</div>
   </div>
 
   <div class="modal-footer inputs">

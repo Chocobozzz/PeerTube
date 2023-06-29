@@ -38,7 +38,7 @@ describe('Save replay setting', function () {
     const attributes: LiveVideoCreate = {
       channelId: servers[0].store.channel.id,
       privacy: VideoPrivacy.PUBLIC,
-      name: 'my super live',
+      name: 'live'.repeat(30),
       saveReplay: options.replay,
       replaySettings: options.replaySettings,
       permanentLive: options.permanent

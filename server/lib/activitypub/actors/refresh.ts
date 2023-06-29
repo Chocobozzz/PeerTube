@@ -1,5 +1,5 @@
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
-import { PromiseCache } from '@server/helpers/promise-cache'
+import { CachePromiseFactory } from '@server/helpers/promise-cache'
 import { PeerTubeRequestError } from '@server/helpers/requests'
 import { ActorLoadByUrlType } from '@server/lib/model-loaders'
 import { ActorModel } from '@server/models/actor/actor'
@@ -16,7 +16,7 @@ type RefreshOptions <T> = {
   fetchedType: ActorLoadByUrlType
 }
 
-const promiseCache = new PromiseCache(doRefresh, (options: RefreshOptions<MActorFull | MActorAccountChannelId>) => options.actor.url)
+const promiseCache = new CachePromiseFactory(doRefresh, (options: RefreshOptions<MActorFull | MActorAccountChannelId>) => options.actor.url)
 
 function refreshActorIfNeeded <T extends MActorFull | MActorAccountChannelId> (options: RefreshOptions<T>): RefreshResult <T> {
   const actorArg = options.actor

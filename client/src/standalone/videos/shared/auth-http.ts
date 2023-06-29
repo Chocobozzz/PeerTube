@@ -18,10 +18,12 @@ export class AuthHTTP {
     if (this.userOAuthTokens) this.setHeadersFromTokens()
   }
 
-  fetch (url: string, { optionalAuth, method }: { optionalAuth: boolean, method?: string }) {
-    const refreshFetchOptions = optionalAuth
-      ? { headers: this.headers }
-      : {}
+  fetch (url: string, { optionalAuth, method }: { optionalAuth: boolean, method?: string }, videoPassword?: string) {
+    let refreshFetchOptions: { headers?: Headers } = {}
+
+    if (videoPassword) this.headers.set('x-peertube-video-password', videoPassword)
+
+    if (videoPassword || optionalAuth) refreshFetchOptions = { headers: this.headers }
 
     return this.refreshFetch(url.toString(), { ...refreshFetchOptions, method })
   }

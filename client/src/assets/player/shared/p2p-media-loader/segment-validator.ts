@@ -13,11 +13,20 @@ function segmentValidatorFactory (options: {
   serverUrl: string
   segmentsSha256Url: string
   authorizationHeader: () => string
-  requiresAuth: boolean
+  requiresUserAuth: boolean
+  requiresPassword: boolean
+  videoPassword: () => string
 }) {
-  const { serverUrl, segmentsSha256Url, authorizationHeader, requiresAuth } = options
+  const { serverUrl, segmentsSha256Url, authorizationHeader, requiresUserAuth, requiresPassword, videoPassword } = options
 
-  let segmentsJSON = fetchSha256Segments({ serverUrl, segmentsSha256Url, authorizationHeader, requiresAuth })
+  let segmentsJSON = fetchSha256Segments({
+    serverUrl,
+    segmentsSha256Url,
+    authorizationHeader,
+    requiresUserAuth,
+    requiresPassword,
+    videoPassword
+  })
   const regex = /bytes=(\d+)-(\d+)/
 
   return async function segmentValidator (segment: Segment, _method: string, _peerId: string, retry = 1) {
@@ -34,7 +43,14 @@ function segmentValidatorFactory (options: {
 
       await wait(500)
 
-      segmentsJSON = fetchSha256Segments({ serverUrl, segmentsSha256Url, authorizationHeader, requiresAuth })
+      segmentsJSON = fetchSha256Segments({
+        serverUrl,
+        segmentsSha256Url,
+        authorizationHeader,
+        requiresUserAuth,
+        requiresPassword,
+        videoPassword
+      })
       await segmentValidator(segment, _method, _peerId, retry + 1)
 
       return
@@ -78,13 +94,17 @@ function fetchSha256Segments (options: {
   serverUrl: string
   segmentsSha256Url: string
   authorizationHeader: () => string
-  requiresAuth: boolean
+  requiresUserAuth: boolean
+  requiresPassword: boolean
+  videoPassword: () => string
 }): Promise<SegmentsJSON> {
-  const { serverUrl, segmentsSha256Url, requiresAuth, authorizationHeader } = options
+  const { serverUrl, segmentsSha256Url, requiresUserAuth, authorizationHeader, requiresPassword, videoPassword } = options
 
-  const headers = requiresAuth && isSameOrigin(serverUrl, segmentsSha256Url)
-    ? { Authorization: authorizationHeader() }
-    : {}
+  let headers: { [ id: string ]: string } = {}
+  if (isSameOrigin(serverUrl, segmentsSha256Url)) {
+    if (requiresPassword) headers = { 'x-peertube-video-password': videoPassword() }
+    else if (requiresUserAuth) headers = { Authorization: authorizationHeader() }
+  }
 
   return fetch(segmentsSha256Url, { headers })
     .then(res => res.json() as Promise<SegmentsJSON>)

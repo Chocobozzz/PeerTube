@@ -29,6 +29,7 @@ import { VideoCommentCreate } from '@shared/models'
 export class VideoCommentAddComponent extends FormReactive implements OnChanges, OnInit {
   @Input() user: User
   @Input() video: Video
+  @Input() videoPassword: string
   @Input() parentComment?: VideoComment
   @Input() parentComments?: VideoComment[]
   @Input() focusOnInit = false
@@ -176,12 +177,17 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
 
   private addCommentReply (commentCreate: VideoCommentCreate) {
     return this.videoCommentService
-      .addCommentReply(this.video.uuid, this.parentComment.id, commentCreate)
+      .addCommentReply({
+        videoId: this.video.uuid,
+        inReplyToCommentId: this.parentComment.id,
+        comment: commentCreate,
+        videoPassword: this.videoPassword
+      })
   }
 
   private addCommentThread (commentCreate: VideoCommentCreate) {
     return this.videoCommentService
-      .addCommentThread(this.video.uuid, commentCreate)
+      .addCommentThread(this.video.uuid, commentCreate, this.videoPassword)
   }
 
   private initTextValue () {

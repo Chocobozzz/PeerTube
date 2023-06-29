@@ -1,6 +1,6 @@
 {
   "name": "@peertube/peertube-runner",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "dist/peertube-runner.js",
   "bin": "dist/peertube-runner.js",
   "license": "AGPL-3.0",

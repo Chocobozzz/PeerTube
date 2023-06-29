@@ -1,11 +1,13 @@
 import { Job } from 'bullmq'
 import { readdir, remove } from 'fs-extra'
 import { join } from 'path'
+import { peertubeTruncate } from '@server/helpers/core-utils'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { cleanupAndDestroyPermanentLive, cleanupTMPLiveFiles, cleanupUnsavedNormalLive } from '@server/lib/live'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveReplayBaseDirectory } from '@server/lib/paths'
-import { generateVideoMiniature } from '@server/lib/thumbnail'
+import { generateLocalVideoMiniature } from '@server/lib/thumbnail'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/hls-transcoding'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToNextState } from '@server/lib/video-state'
@@ -20,6 +22,7 @@ import { MVideo, MVideoLive, MVideoLiveSession, MVideoWithAllFiles } from '@serv
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@shared/ffmpeg'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
+import { JobQueue } from '../job-queue'
 
 const lTags = loggerTagsFactory('live', 'job')
 
@@ -88,8 +91,13 @@ async function saveReplayToExternalVideo (options: {
 
   const replaySettings = await VideoLiveReplaySettingModel.load(liveSession.replaySettingId)
 
+  const videoNameSuffix = ` - ${new Date(publishedAt).toLocaleString()}`
+  const truncatedVideoName = peertubeTruncate(liveVideo.name, {
+    length: CONSTRAINTS_FIELDS.VIDEOS.NAME.max - videoNameSuffix.length
+  })
+
   const replayVideo = new VideoModel({
-    name: `${liveVideo.name} - ${new Date(publishedAt).toLocaleString()}`,
+    name: truncatedVideoName + videoNameSuffix,
     isLive: false,
     state: VideoState.TO_TRANSCODE,
     duration: 0,
@@ -135,11 +143,13 @@ async function saveReplayToExternalVideo (options: {
   await remove(replayDirectory)
 
   for (const type of [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ]) {
-    const image = await generateVideoMiniature({ video: replayVideo, videoFile: replayVideo.getMaxQualityFile(), type })
+    const image = await generateLocalVideoMiniature({ video: replayVideo, videoFile: replayVideo.getMaxQualityFile(), type })
     await replayVideo.addAndSaveThumbnail(image)
   }
 
   await moveToNextState({ video: replayVideo, isNewVideo: true })
+
+  await createStoryboardJob(replayVideo)
 }
 
 async function replaceLiveByReplay (options: {
@@ -179,6 +189,7 @@ async function replaceLiveByReplay (options: {
 
   await assignReplayFilesToVideo({ video: videoWithFiles, replayDirectory })
 
+  // FIXME: should not happen in this function
   if (permanentLive) { // Remove session replay
     await remove(replayDirectory)
   } else { // We won't stream again in this live, we can delete the base replay directory
@@ -187,7 +198,7 @@ async function replaceLiveByReplay (options: {
 
   // Regenerate the thumbnail & preview?
   if (videoWithFiles.getMiniature().automaticallyGenerated === true) {
-    const miniature = await generateVideoMiniature({
+    const miniature = await generateLocalVideoMiniature({
       video: videoWithFiles,
       videoFile: videoWithFiles.getMaxQualityFile(),
       type: ThumbnailType.MINIATURE
@@ -196,7 +207,7 @@ async function replaceLiveByReplay (options: {
   }
 
   if (videoWithFiles.getPreview().automaticallyGenerated === true) {
-    const preview = await generateVideoMiniature({
+    const preview = await generateLocalVideoMiniature({
       video: videoWithFiles,
       videoFile: videoWithFiles.getMaxQualityFile(),
       type: ThumbnailType.PREVIEW
@@ -206,6 +217,8 @@ async function replaceLiveByReplay (options: {
 
   // We consider this is a new video
   await moveToNextState({ video: videoWithFiles, isNewVideo: true })
+
+  await createStoryboardJob(videoWithFiles)
 }
 
 async function assignReplayFilesToVideo (options: {
@@ -269,4 +282,14 @@ async function cleanupLiveAndFederate (options: {
   } catch (err) {
     logger.warn('Cannot federate live after cleanup', { videoId: video.id, err })
   }
+}
+
+function createStoryboardJob (video: MVideo) {
+  return JobQueue.Instance.createJob({
+    type: 'generate-video-storyboard' as 'generate-video-storyboard',
+    payload: {
+      videoUUID: video.uuid,
+      federate: true
+    }
+  })
 }

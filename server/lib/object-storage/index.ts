@@ -1,4 +1,5 @@
 export * from './keys'
 export * from './proxy'
+export * from './pre-signed-urls'
 export * from './urls'
 export * from './videos'
