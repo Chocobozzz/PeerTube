@@ -20,6 +20,8 @@ import { MVideo, MVideoLive, MVideoLiveSession, MVideoWithAllFiles } from '@serv
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@shared/ffmpeg'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
+import { peertubeTruncate } from '@server/helpers/core-utils'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants'
 
 const lTags = loggerTagsFactory('live', 'job')
 
@@ -88,8 +90,13 @@ async function saveReplayToExternalVideo (options: {
 
   const replaySettings = await VideoLiveReplaySettingModel.load(liveSession.replaySettingId)
 
+  const videoNameSuffix = ` - ${new Date(publishedAt).toLocaleString()}`
+  const truncatedVideoName = peertubeTruncate(liveVideo.name, {
+    length: CONSTRAINTS_FIELDS.VIDEOS.NAME.max - videoNameSuffix.length
+  })
+
   const replayVideo = new VideoModel({
-    name: `${liveVideo.name} - ${new Date(publishedAt).toLocaleString()}`,
+    name: truncatedVideoName + videoNameSuffix,
     isLive: false,
     state: VideoState.TO_TRANSCODE,
     duration: 0,
