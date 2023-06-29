@@ -32,7 +32,7 @@ type Use<K extends keyof VideoModel, M> = PickWith<VideoModel, K, M>
 export type MVideo =
   Omit<VideoModel, 'VideoChannel' | 'Tags' | 'Thumbnails' | 'VideoPlaylistElements' | 'VideoAbuses' |
   'VideoFiles' | 'VideoStreamingPlaylists' | 'VideoShares' | 'AccountVideoRates' | 'VideoComments' | 'VideoViews' | 'UserVideoHistories' |
-  'ScheduleVideoUpdate' | 'VideoBlacklist' | 'VideoImport' | 'VideoCaptions' | 'VideoLive' | 'Trackers'>
+  'ScheduleVideoUpdate' | 'VideoBlacklist' | 'VideoImport' | 'VideoCaptions' | 'VideoLive' | 'Trackers' | 'VideoPasswords'>
 
 // ############################################################################
 
@@ -46,7 +46,7 @@ export type MVideoFeed = Pick<MVideo, 'name' | 'uuid'>
 
 // ############################################################################
 
-// Video raw associations: schedules, video files, tags, thumbnails, captions, streaming playlists
+// Video raw associations: schedules, video files, tags, thumbnails, captions, streaming playlists, passwords
 
 // "With" to not confuse with the VideoFile model
 export type MVideoWithFile =

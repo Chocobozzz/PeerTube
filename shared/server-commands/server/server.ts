@@ -32,6 +32,7 @@ import {
   HistoryCommand,
   ImportsCommand,
   LiveCommand,
+  VideoPasswordsCommand,
   PlaylistsCommand,
   ServicesCommand,
   StreamingPlaylistsCommand,
@@ -146,6 +147,7 @@ export class PeerTubeServer {
   twoFactor?: TwoFactorCommand
   videoToken?: VideoTokenCommand
   registrations?: RegistrationsCommand
+  videoPasswords?: VideoPasswordsCommand
 
   runners?: RunnersCommand
   runnerRegistrationTokens?: RunnerRegistrationTokensCommand
@@ -437,5 +439,6 @@ export class PeerTubeServer {
     this.runners = new RunnersCommand(this)
     this.runnerRegistrationTokens = new RunnerRegistrationTokensCommand(this)
     this.runnerJobs = new RunnerJobsCommand(this)
+    this.videoPasswords = new VideoPasswordsCommand(this)
   }
 }

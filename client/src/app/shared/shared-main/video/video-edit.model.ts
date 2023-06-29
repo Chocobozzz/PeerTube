@@ -1,5 +1,5 @@
 import { getAbsoluteAPIUrl } from '@app/helpers'
-import { VideoPrivacy, VideoScheduleUpdate, VideoUpdate } from '@shared/models'
+import { VideoPassword, VideoPrivacy, VideoScheduleUpdate, VideoUpdate } from '@shared/models'
 import { VideoDetails } from './video-details.model'
 import { objectKeysTyped } from '@shared/core-utils'
 
@@ -18,6 +18,7 @@ export class VideoEdit implements VideoUpdate {
   waitTranscoding: boolean
   channelId: number
   privacy: VideoPrivacy
+  videoPassword?: string
   support: string
   thumbnailfile?: any
   previewfile?: any
@@ -32,7 +33,7 @@ export class VideoEdit implements VideoUpdate {
 
   pluginData?: any
 
-  constructor (video?: VideoDetails) {
+  constructor (video?: VideoDetails, videoPassword?: VideoPassword) {
     if (!video) return
 
     this.id = video.id
@@ -63,6 +64,8 @@ export class VideoEdit implements VideoUpdate {
       : null
 
     this.pluginData = video.pluginData
+
+    if (videoPassword) this.videoPassword = videoPassword.password
   }
 
   patch (values: { [ id: string ]: any }) {
@@ -112,6 +115,7 @@ export class VideoEdit implements VideoUpdate {
       waitTranscoding: this.waitTranscoding,
       channelId: this.channelId,
       privacy: this.privacy,
+      videoPassword: this.videoPassword,
       originallyPublishedAt: this.originallyPublishedAt
     }
 

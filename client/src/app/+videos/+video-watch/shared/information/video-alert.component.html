@@ -42,3 +42,7 @@
   <div class="blocked-label" i18n>This video is blocked.</div>
   {{ video.blacklistedReason }}
 </div>
+
+<div i18n class="alert alert-warning" *ngIf="video?.canAccessPasswordProtectedVideoWithoutPassword(user)">
+  This video is password protected.
+</div>

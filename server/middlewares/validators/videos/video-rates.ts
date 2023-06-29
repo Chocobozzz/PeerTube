@@ -7,13 +7,14 @@ import { isIdValid } from '../../../helpers/custom-validators/misc'
 import { isRatingValid } from '../../../helpers/custom-validators/video-rates'
 import { isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { areValidationErrors, checkCanSeeVideo, doesVideoExist, isValidVideoIdParam } from '../shared'
+import { areValidationErrors, checkCanSeeVideo, doesVideoExist, isValidVideoIdParam, isValidVideoPasswordHeader } from '../shared'
 
 const videoUpdateRateValidator = [
   isValidVideoIdParam('id'),
 
   body('rating')
     .custom(isVideoRatingTypeValid),
+  isValidVideoPasswordHeader(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

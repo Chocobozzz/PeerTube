@@ -336,7 +336,10 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
     // Internal video?
     if (video.privacy === VideoPrivacy.INTERNAL && accountId) return VideoPlaylistElementType.REGULAR
 
-    if (video.privacy === VideoPrivacy.PRIVATE || video.privacy === VideoPrivacy.INTERNAL) return VideoPlaylistElementType.PRIVATE
+    // Private, internal and password protected videos cannot be read without appropriate access (ownership, internal)
+    if (new Set([ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL, VideoPrivacy.PASSWORD_PROTECTED ]).has(video.privacy)) {
+      return VideoPlaylistElementType.PRIVATE
+    }
 
     if (video.isBlacklisted() || video.isBlocked()) return VideoPlaylistElementType.UNAVAILABLE
 

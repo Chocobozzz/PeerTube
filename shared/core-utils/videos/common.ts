@@ -3,7 +3,7 @@ import { VideoPrivacy } from '../../models/videos/video-privacy.enum'
 import { VideoDetails } from '../../models/videos/video.model'
 
 function getAllPrivacies () {
-  return [ VideoPrivacy.PUBLIC, VideoPrivacy.INTERNAL, VideoPrivacy.PRIVATE, VideoPrivacy.UNLISTED ]
+  return [ VideoPrivacy.PUBLIC, VideoPrivacy.INTERNAL, VideoPrivacy.PRIVATE, VideoPrivacy.UNLISTED, VideoPrivacy.PASSWORD_PROTECTED ]
 }
 
 function getAllFiles (video: Partial<Pick<VideoDetails, 'files' | 'streamingPlaylists'>>) {

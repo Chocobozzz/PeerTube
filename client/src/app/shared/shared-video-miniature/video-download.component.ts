@@ -1,13 +1,13 @@
 import { mapValues } from 'lodash-es'
 import { firstValueFrom } from 'rxjs'
 import { tap } from 'rxjs/operators'
-import { Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core'
+import { Component, ElementRef, Inject, Input, LOCALE_ID, ViewChild } from '@angular/core'
 import { HooksService } from '@app/core'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { logger } from '@root-helpers/logger'
-import { videoRequiresAuth } from '@root-helpers/video'
+import { videoRequiresFileToken } from '@root-helpers/video'
 import { objectKeysTyped, pick } from '@shared/core-utils'
-import { VideoCaption, VideoFile, VideoPrivacy } from '@shared/models'
+import { VideoCaption, VideoFile } from '@shared/models'
 import { BytesPipe, NumberFormatterPipe, VideoDetails, VideoFileTokenService, VideoService } from '../shared-main'
 
 type DownloadType = 'video' | 'subtitles'
@@ -20,6 +20,8 @@ type FileMetadata = { [key: string]: { label: string, value: string | number } }
 })
 export class VideoDownloadComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef
+
+  @Input() videoPassword: string
 
   downloadType: 'direct' | 'torrent' = 'direct'
 
@@ -89,8 +91,8 @@ export class VideoDownloadComponent {
       this.subtitleLanguageId = this.videoCaptions[0].language.id
     }
 
-    if (videoRequiresAuth(this.video)) {
-      this.videoFileTokenService.getVideoFileToken(this.video.uuid)
+    if (this.isConfidentialVideo()) {
+      this.videoFileTokenService.getVideoFileToken({ videoUUID: this.video.uuid, videoPassword: this.videoPassword })
         .subscribe(({ token }) => this.videoFileToken = token)
     }
 
@@ -201,7 +203,8 @@ export class VideoDownloadComponent {
   }
 
   isConfidentialVideo () {
-    return this.video.privacy.id === VideoPrivacy.PRIVATE || this.video.privacy.id === VideoPrivacy.INTERNAL
+    return videoRequiresFileToken(this.video)
+
   }
 
   switchToType (type: DownloadType) {

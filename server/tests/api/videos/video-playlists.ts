@@ -474,7 +474,7 @@ describe('Test video playlists', function () {
       await servers[1].playlists.get({ playlistId: unlistedPlaylist.id, expectedStatus: 404 })
     })
 
-    it('Should get unlisted plyaylist using uuid or shortUUID', async function () {
+    it('Should get unlisted playlist using uuid or shortUUID', async function () {
       await servers[1].playlists.get({ playlistId: unlistedPlaylist.uuid })
       await servers[1].playlists.get({ playlistId: unlistedPlaylist.shortUUID })
     })
@@ -686,7 +686,7 @@ describe('Test video playlists', function () {
       await waitJobs(servers)
     })
 
-    it('Should update the element type if the video is private', async function () {
+    it('Should update the element type if the video is private/password protected', async function () {
       this.timeout(20000)
 
       const name = 'video 89'
@@ -694,6 +694,19 @@ describe('Test video playlists', function () {
 
       {
         await servers[0].videos.update({ id: video1, attributes: { privacy: VideoPrivacy.PRIVATE } })
+        await waitJobs(servers)
+
+        await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
+        await checkPlaylistElementType(groupWithoutToken1, playlistServer1UUID2, VideoPlaylistElementType.PRIVATE, position, name, 3)
+        await checkPlaylistElementType(group1, playlistServer1UUID2, VideoPlaylistElementType.PRIVATE, position, name, 3)
+        await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.DELETED, position, name, 3)
+      }
+
+      {
+        await servers[0].videos.update({
+          id: video1,
+          attributes: { privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords: [ 'password' ] }
+        })
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)

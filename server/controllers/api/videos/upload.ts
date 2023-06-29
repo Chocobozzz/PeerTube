@@ -14,7 +14,7 @@ import { openapiOperationDoc } from '@server/middlewares/doc'
 import { VideoSourceModel } from '@server/models/video/video-source'
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { uuidToShort } from '@shared/extra-utils'
-import { HttpStatusCode, VideoCreate, VideoState } from '@shared/models'
+import { HttpStatusCode, VideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
@@ -33,6 +33,7 @@ import {
 } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
+import { VideoPasswordModel } from '@server/models/video/video-password'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -194,6 +195,10 @@ async function addVideo (options: {
       isNew: true,
       transaction: t
     })
+
+    if (videoInfo.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
+      await VideoPasswordModel.addPasswords(videoInfo.videoPasswords, video.id, t)
+    }
 
     auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid, lTags(videoCreated.uuid))

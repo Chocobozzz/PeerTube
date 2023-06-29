@@ -120,6 +120,7 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
     videoChannel: res.locals.videoChannel,
     tags: body.tags || undefined,
     user,
+    videoPasswords: body.videoPasswords,
     videoImportAttributes: {
       magnetUri,
       torrentName,

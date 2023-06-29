@@ -14,7 +14,8 @@ import {
   doesVideoCommentExist,
   doesVideoCommentThreadExist,
   doesVideoExist,
-  isValidVideoIdParam
+  isValidVideoIdParam,
+  isValidVideoPasswordHeader
 } from '../shared'
 
 const listVideoCommentsValidator = [
@@ -51,6 +52,7 @@ const listVideoCommentsValidator = [
 
 const listVideoCommentThreadsValidator = [
   isValidVideoIdParam('videoId'),
+  isValidVideoPasswordHeader(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -67,6 +69,7 @@ const listVideoThreadCommentsValidator = [
 
   param('threadId')
     .custom(isIdValid),
+  isValidVideoPasswordHeader(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -84,6 +87,7 @@ const addVideoCommentThreadValidator = [
 
   body('text')
     .custom(isValidVideoCommentText),
+  isValidVideoPasswordHeader(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -102,6 +106,7 @@ const addVideoCommentReplyValidator = [
   isValidVideoIdParam('videoId'),
 
   param('commentId').custom(isIdValid),
+  isValidVideoPasswordHeader(),
 
   body('text').custom(isValidVideoCommentText),
 

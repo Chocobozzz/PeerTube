@@ -2,13 +2,12 @@ import express from 'express'
 import { Transaction } from 'sequelize/types'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
 import { addVideoJobsAfterUpdate, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
-import { VideoPathManager } from '@server/lib/video-path-manager'
 import { setVideoPrivacy } from '@server/lib/video-privacy'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { FilteredModelAttributes } from '@server/types'
 import { MVideoFullLight } from '@server/types/models'
 import { forceNumber } from '@shared/core-utils'
-import { HttpStatusCode, VideoUpdate } from '@shared/models'
+import { HttpStatusCode, VideoPrivacy, VideoUpdate } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
 import { createReqFiles } from '../../../helpers/express-utils'
@@ -20,6 +19,9 @@ import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosUpdateValidator } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
+import { VideoPathManager } from '@server/lib/video-path-manager'
+import { VideoPasswordModel } from '@server/models/video/video-password'
+import { exists } from '@server/helpers/custom-validators/misc'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -175,6 +177,16 @@ async function updateVideoPrivacy (options: {
 
   const newPrivacy = forceNumber(videoInfoToUpdate.privacy)
   setVideoPrivacy(videoInstance, newPrivacy)
+
+  // Delete passwords if video is not anymore password protected
+  if (videoInstance.privacy === VideoPrivacy.PASSWORD_PROTECTED && newPrivacy !== VideoPrivacy.PASSWORD_PROTECTED) {
+    await VideoPasswordModel.deleteAllPasswords(videoInstance.id, transaction)
+  }
+
+  if (newPrivacy === VideoPrivacy.PASSWORD_PROTECTED && exists(videoInfoToUpdate.videoPasswords)) {
+    await VideoPasswordModel.deleteAllPasswords(videoInstance.id, transaction)
+    await VideoPasswordModel.addPasswords(videoInfoToUpdate.videoPasswords, videoInstance.id, transaction)
+  }
 
   // Unfederate the video if the new privacy is not compatible with federation
   if (hadPrivacyForFederation && !videoInstance.hasPrivacyForFederation()) {

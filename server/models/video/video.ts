@@ -136,6 +136,7 @@ import { VideoFileModel } from './video-file'
 import { VideoImportModel } from './video-import'
 import { VideoJobInfoModel } from './video-job-info'
 import { VideoLiveModel } from './video-live'
+import { VideoPasswordModel } from './video-password'
 import { VideoPlaylistElementModel } from './video-playlist-element'
 import { VideoShareModel } from './video-share'
 import { VideoSourceModel } from './video-source'
@@ -733,6 +734,15 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     ['separate' as any]: true
   })
   VideoCaptions: VideoCaptionModel[]
+
+  @HasMany(() => VideoPasswordModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  VideoPasswords: VideoPasswordModel[]
 
   @HasOne(() => VideoJobInfoModel, {
     foreignKey: {
@@ -1918,7 +1928,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
   // ---------------------------------------------------------------------------
 
-  requiresAuth (options: {
+  requiresUserAuth (options: {
     urlParamId: string
     checkBlacklist: boolean
   }) {
@@ -1936,11 +1946,11 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     if (checkBlacklist && this.VideoBlacklist) return true
 
-    if (this.privacy !== VideoPrivacy.PUBLIC) {
-      throw new Error(`Unknown video privacy ${this.privacy} to know if the video requires auth`)
+    if (this.privacy === VideoPrivacy.PUBLIC || this.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
+      return false
     }
 
-    return false
+    throw new Error(`Unknown video privacy ${this.privacy} to know if the video requires auth`)
   }
 
   hasPrivateStaticPath () {

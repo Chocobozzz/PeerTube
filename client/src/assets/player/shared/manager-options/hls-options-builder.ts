@@ -31,7 +31,7 @@ export class HLSOptionsBuilder {
     const loader = new this.p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass() as P2PMediaLoader
 
     const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
-      requiresAuth: commonOptions.requiresAuth,
+      requiresUserAuth: commonOptions.requiresUserAuth,
       videoFileToken: commonOptions.videoFileToken,
 
       redundancyUrlManager,
@@ -88,17 +88,24 @@ export class HLSOptionsBuilder {
         httpFailedSegmentTimeout: 1000,
 
         xhrSetup: (xhr, url) => {
-          if (!this.options.common.requiresAuth) return
+          const { requiresUserAuth, requiresPassword } = this.options.common
+
+          if (!(requiresUserAuth || requiresPassword)) return
+
           if (!isSameOrigin(this.options.common.serverUrl, url)) return
 
-          xhr.setRequestHeader('Authorization', this.options.common.authorizationHeader())
+          if (requiresPassword) xhr.setRequestHeader('x-peertube-video-password', this.options.common.videoPassword())
+
+          else xhr.setRequestHeader('Authorization', this.options.common.authorizationHeader())
         },
 
         segmentValidator: segmentValidatorFactory({
           segmentsSha256Url: this.options.p2pMediaLoader.segmentsSha256Url,
           authorizationHeader: this.options.common.authorizationHeader,
-          requiresAuth: this.options.common.requiresAuth,
-          serverUrl: this.options.common.serverUrl
+          requiresUserAuth: this.options.common.requiresUserAuth,
+          serverUrl: this.options.common.serverUrl,
+          requiresPassword: this.options.common.requiresPassword,
+          videoPassword: this.options.common.videoPassword
         }),
 
         segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager),

@@ -9,7 +9,11 @@ import { HttpStatusCode, UserRight, VideoImportState } from '@shared/models'
 import { VideoImportCreate } from '@shared/models/videos/import/video-import-create.model'
 import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { isVideoImportTargetUrlValid, isVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports'
-import { isVideoMagnetUriValid, isVideoNameValid } from '../../../helpers/custom-validators/videos'
+import {
+  isValidPasswordProtectedPrivacy,
+  isVideoMagnetUriValid,
+  isVideoNameValid
+} from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
@@ -38,12 +42,18 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     .custom(isVideoNameValid).withMessage(
       `Should have a video name between ${CONSTRAINTS_FIELDS.VIDEOS.NAME.min} and ${CONSTRAINTS_FIELDS.VIDEOS.NAME.max} characters long`
     ),
+  body('videoPasswords')
+    .optional()
+    .isArray()
+    .withMessage('Video passwords should be an array.'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
     const torrentFile = req.files?.['torrentfile'] ? req.files['torrentfile'][0] : undefined
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
+
+    if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
 
     if (CONFIG.IMPORT.VIDEOS.HTTP.ENABLED !== true && req.body.targetUrl) {
       cleanUpReqFiles(req)

@@ -19,6 +19,7 @@ export interface VideoUpdate {
   previewfile?: Blob
   scheduleUpdate?: VideoScheduleUpdate
   originallyPublishedAt?: Date | string
+  videoPasswords?: string[]
 
   pluginData?: any
 }

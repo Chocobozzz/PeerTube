@@ -18,7 +18,7 @@ import {
   logger,
   peertubeLocalStorage,
   UserLocalStorageKeys,
-  videoRequiresAuth
+  videoRequiresUserAuth
 } from '../../../root-helpers'
 import { PeerTubePlugin } from './peertube-plugin'
 import { PlayerHTML } from './player-html'
@@ -162,6 +162,9 @@ export class PlayerManagerOptions {
     authorizationHeader: () => string
     videoFileToken: () => string
 
+    videoPassword: () => string
+    requiresPassword: boolean
+
     serverConfig: HTMLServerConfig
 
     autoplayFromPreviousVideo: boolean
@@ -178,6 +181,8 @@ export class PlayerManagerOptions {
       captionsResponse,
       autoplayFromPreviousVideo,
       videoFileToken,
+      videoPassword,
+      requiresPassword,
       translations,
       forceAutoplay,
       playlistTracker,
@@ -242,9 +247,12 @@ export class PlayerManagerOptions {
         embedUrl: window.location.origin + video.embedPath,
         embedTitle: video.name,
 
-        requiresAuth: videoRequiresAuth(video),
+        requiresUserAuth: videoRequiresUserAuth(video),
         authorizationHeader,
         videoFileToken,
+
+        requiresPassword,
+        videoPassword,
 
         errorNotifier: () => {
           // Empty, we don't have a notifier in the embed

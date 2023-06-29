@@ -29,6 +29,7 @@ function makeRawRequest (options: {
   range?: string
   query?: { [ id: string ]: string }
   method?: 'GET' | 'POST'
+  headers?: { [ name: string ]: string }
 }) {
   const { host, protocol, pathname } = new URL(options.url)
 
@@ -37,7 +38,7 @@ function makeRawRequest (options: {
     path: pathname,
     contentType: undefined,
 
-    ...pick(options, [ 'expectedStatus', 'range', 'token', 'query' ])
+    ...pick(options, [ 'expectedStatus', 'range', 'token', 'query', 'headers' ])
   }
 
   if (options.method === 'POST') {
@@ -132,6 +133,7 @@ function makePutBodyRequest (options: {
   token?: string
   fields: { [ fieldName: string ]: any }
   expectedStatus?: HttpStatusCode
+  headers?: { [name: string]: string }
 }) {
   const req = request(options.url).put(options.path)
                                   .send(options.fields)

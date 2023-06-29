@@ -155,7 +155,7 @@ type WebtorrentPluginOptions = {
 
   playerRefusedP2P: boolean
 
-  requiresAuth: boolean
+  requiresUserAuth: boolean
   videoFileToken: () => string
 
   buildWebSeedUrls: (file: VideoFile) => string[]
@@ -170,7 +170,7 @@ type P2PMediaLoaderPluginOptions = {
 
   loader: P2PMediaLoader
 
-  requiresAuth: boolean
+  requiresUserAuth: boolean
   videoFileToken: () => string
 }
 

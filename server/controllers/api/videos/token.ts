@@ -1,13 +1,14 @@
 import express from 'express'
 import { VideoTokensManager } from '@server/lib/video-tokens-manager'
-import { VideoToken } from '@shared/models'
-import { asyncMiddleware, authenticate, videosCustomGetValidator } from '../../../middlewares'
+import { VideoPrivacy, VideoToken } from '@shared/models'
+import { asyncMiddleware, optionalAuthenticate, videoFileTokenValidator, videosCustomGetValidator } from '../../../middlewares'
 
 const tokenRouter = express.Router()
 
 tokenRouter.post('/:id/token',
-  authenticate,
+  optionalAuthenticate,
   asyncMiddleware(videosCustomGetValidator('only-video')),
+  videoFileTokenValidator,
   generateToken
 )
 
@@ -22,12 +23,11 @@ export {
 function generateToken (req: express.Request, res: express.Response) {
   const video = res.locals.onlyVideo
 
-  const { token, expires } = VideoTokensManager.Instance.create({ videoUUID: video.uuid, user: res.locals.oauth.token.User })
+  const files = video.privacy === VideoPrivacy.PASSWORD_PROTECTED
+    ? VideoTokensManager.Instance.createForPasswordProtectedVideo({ videoUUID: video.uuid })
+    : VideoTokensManager.Instance.createForAuthUser({ videoUUID: video.uuid, user: res.locals.oauth.token.User })
 
   return res.json({
-    files: {
-      token,
-      expires
-    }
+    files
   } as VideoToken)
 }

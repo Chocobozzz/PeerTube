@@ -10,7 +10,8 @@ import {
   checkUserCanManageVideo,
   doesVideoCaptionExist,
   doesVideoExist,
-  isValidVideoIdParam
+  isValidVideoIdParam,
+  isValidVideoPasswordHeader
 } from '../shared'
 
 const addVideoCaptionValidator = [
@@ -61,6 +62,8 @@ const deleteVideoCaptionValidator = [
 
 const listVideoCaptionsValidator = [
   isValidVideoIdParam('videoId'),
+
+  isValidVideoPasswordHeader(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

@@ -16,6 +16,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   @ViewChild('commentReportModal') commentReportModal: CommentReportComponent
 
   @Input() video: Video
+  @Input() videoPassword: string
   @Input() comment: VideoComment
   @Input() parentComments: VideoComment[] = []
   @Input() commentTree: VideoCommentThreadTree

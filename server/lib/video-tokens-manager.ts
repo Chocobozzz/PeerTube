@@ -12,22 +12,30 @@ class VideoTokensManager {
 
   private static instance: VideoTokensManager
 
-  private readonly lruCache = new LRUCache<string, { videoUUID: string, user: MUserAccountUrl }>({
+  private readonly lruCache = new LRUCache<string, { videoUUID: string, user?: MUserAccountUrl }>({
     max: LRU_CACHE.VIDEO_TOKENS.MAX_SIZE,
     ttl: LRU_CACHE.VIDEO_TOKENS.TTL
   })
 
   private constructor () {}
 
-  create (options: {
+  createForAuthUser (options: {
     user: MUserAccountUrl
     videoUUID: string
   }) {
-    const token = buildUUID()
-
-    const expires = new Date(new Date().getTime() + LRU_CACHE.VIDEO_TOKENS.TTL)
+    const { token, expires } = this.generateVideoToken()
 
     this.lruCache.set(token, pick(options, [ 'user', 'videoUUID' ]))
+
+    return { token, expires }
+  }
+
+  createForPasswordProtectedVideo (options: {
+    videoUUID: string
+  }) {
+    const { token, expires } = this.generateVideoToken()
+
+    this.lruCache.set(token, pick(options, [ 'videoUUID' ]))
 
     return { token, expires }
   }
@@ -53,6 +61,13 @@ class VideoTokensManager {
 
   static get Instance () {
     return this.instance || (this.instance = new this())
+  }
+
+  private generateVideoToken () {
+    const token = buildUUID()
+    const expires = new Date(new Date().getTime() + LRU_CACHE.VIDEO_TOKENS.TTL)
+
+    return { token, expires }
   }
 }
 

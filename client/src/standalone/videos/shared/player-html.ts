@@ -55,6 +55,58 @@ export class PlayerHTML {
     this.wrapperElement.style.display = 'none'
   }
 
+  async askVideoPassword (options: { incorrectPassword: boolean, translations: Translations }): Promise<string> {
+    const { incorrectPassword, translations } = options
+    return new Promise((resolve) => {
+
+      this.removePlaceholder()
+      this.wrapperElement.style.display = 'none'
+
+      const translatedTitle = peertubeTranslate('This video is password protected', translations)
+      const translatedMessage = peertubeTranslate('You need a password to watch this video.', translations)
+
+      document.title = translatedTitle
+
+      const videoPasswordBlock = document.getElementById('video-password-block')
+      videoPasswordBlock.style.display = 'flex'
+
+      const videoPasswordTitle = document.getElementById('video-password-title')
+      videoPasswordTitle.innerHTML = translatedTitle
+
+      const videoPasswordMessage = document.getElementById('video-password-content')
+      videoPasswordMessage.innerHTML = translatedMessage
+
+      if (incorrectPassword) {
+        const videoPasswordError = document.getElementById('video-password-error')
+        videoPasswordError.innerHTML = peertubeTranslate('Incorrect password, please enter a correct password', translations)
+        videoPasswordError.style.transform = 'scale(1.2)'
+
+        setTimeout(() => {
+          videoPasswordError.style.transform = 'scale(1)'
+        }, 500)
+      }
+
+      const videoPasswordSubmitButton = document.getElementById('video-password-submit')
+      videoPasswordSubmitButton.innerHTML = peertubeTranslate('Watch Video', translations)
+
+      const videoPasswordInput = document.getElementById('video-password-input') as HTMLInputElement
+      videoPasswordInput.placeholder = peertubeTranslate('Password', translations)
+
+      const videoPasswordForm = document.getElementById('video-password-form')
+      videoPasswordForm.addEventListener('submit', (event) => {
+        event.preventDefault()
+        const videoPassword = videoPasswordInput.value
+        resolve(videoPassword)
+      })
+    })
+  }
+
+  removeVideoPasswordBlock () {
+    const videoPasswordBlock = document.getElementById('video-password-block')
+    videoPasswordBlock.style.display = 'none'
+    this.wrapperElement.style.display = 'block'
+  }
+
   buildPlaceholder (video: VideoDetails) {
     const placeholder = this.getPlaceholderElement()
 

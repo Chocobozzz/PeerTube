@@ -151,7 +151,7 @@ export class VideoAdminService {
     }
 
     if (filters.excludePublic) {
-      privacyOneOf = [ VideoPrivacy.PRIVATE, VideoPrivacy.UNLISTED, VideoPrivacy.INTERNAL ]
+      privacyOneOf = [ VideoPrivacy.PRIVATE, VideoPrivacy.UNLISTED, VideoPrivacy.INTERNAL, VideoPrivacy.PASSWORD_PROTECTED ]
 
       filters.excludePublic = undefined
     }

@@ -60,6 +60,10 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     return this.playlistElement.video.privacy.id === VideoPrivacy.PRIVATE
   }
 
+  isVideoPasswordProtected () {
+    return this.playlistElement.video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
+  }
+
   isUnavailable (e: VideoPlaylistElement) {
     return e.type === VideoPlaylistElementType.UNAVAILABLE
   }

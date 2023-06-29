@@ -153,7 +153,7 @@ const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) => {
       }
 
       if (videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {
-        await authenticatePromise(req, res)
+        await authenticatePromise({ req, res })
 
         const user = res.locals.oauth ? res.locals.oauth.token.User : null
 

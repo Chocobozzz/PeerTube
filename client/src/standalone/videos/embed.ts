@@ -3,10 +3,18 @@ import '../../assets/player/shared/dock/peertube-dock-component'
 import '../../assets/player/shared/dock/peertube-dock-plugin'
 import videojs from 'video.js'
 import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
-import { HTMLServerConfig, ResultList, VideoDetails, VideoPlaylist, VideoPlaylistElement, VideoState } from '../../../../shared/models'
+import {
+  HTMLServerConfig,
+  ResultList,
+  ServerErrorCode,
+  VideoDetails,
+  VideoPlaylist,
+  VideoPlaylistElement,
+  VideoState
+} from '../../../../shared/models'
 import { PeertubePlayerManager } from '../../assets/player'
 import { TranslationsManager } from '../../assets/player/translations-manager'
-import { getParamString, logger, videoRequiresAuth } from '../../root-helpers'
+import { getParamString, logger, videoRequiresFileToken } from '../../root-helpers'
 import { PeerTubeEmbedApi } from './embed-api'
 import {
   AuthHTTP,
@@ -19,6 +27,7 @@ import {
   VideoFetcher
 } from './shared'
 import { PlayerHTML } from './shared/player-html'
+import { PeerTubeServerError } from 'src/types'
 
 export class PeerTubeEmbed {
   player: videojs.Player
@@ -38,6 +47,8 @@ export class PeerTubeEmbed {
   private readonly liveManager: LiveManager
 
   private playlistTracker: PlaylistTracker
+  private videoPassword: string
+  private requiresPassword: boolean
 
   constructor (videoWrapperId: string) {
     logger.registerServerSending(window.location.origin)
@@ -50,6 +61,7 @@ export class PeerTubeEmbed {
     this.playerHTML = new PlayerHTML(videoWrapperId)
     this.playerManagerOptions = new PlayerManagerOptions(this.playerHTML, this.videoFetcher, this.peertubePlugin)
     this.liveManager = new LiveManager(this.playerHTML)
+    this.requiresPassword = false
 
     try {
       this.config = JSON.parse((window as any)['PeerTubeServerConfig'])
@@ -176,11 +188,13 @@ export class PeerTubeEmbed {
     const { uuid, autoplayFromPreviousVideo, forceAutoplay } = options
 
     try {
-      const { videoResponse, captionsPromise } = await this.videoFetcher.loadVideo(uuid)
+      const { videoResponse, captionsPromise } = await this.videoFetcher.loadVideo({ videoId: uuid, videoPassword: this.videoPassword })
 
       return this.buildVideoPlayer({ videoResponse, captionsPromise, autoplayFromPreviousVideo, forceAutoplay })
     } catch (err) {
-      this.playerHTML.displayError(err.message, await this.translationsPromise)
+
+      if (await this.handlePasswordError(err)) this.loadVideoAndBuildPlayer({ ...options })
+      else this.playerHTML.displayError(err.message, await this.translationsPromise)
     }
   }
 
@@ -205,8 +219,8 @@ export class PeerTubeEmbed {
           ? await this.videoFetcher.loadLive(videoInfo)
           : undefined
 
-        const videoFileToken = videoRequiresAuth(videoInfo)
-          ? await this.videoFetcher.loadVideoToken(videoInfo)
+        const videoFileToken = videoRequiresFileToken(videoInfo)
+          ? await this.videoFetcher.loadVideoToken(videoInfo, this.videoPassword)
           : undefined
 
         return { live, video: videoInfo, videoFileToken }
@@ -232,6 +246,8 @@ export class PeerTubeEmbed {
 
       authorizationHeader: () => this.http.getHeaderTokenValue(),
       videoFileToken: () => videoFileToken,
+      videoPassword: () => this.videoPassword,
+      requiresPassword: this.requiresPassword,
 
       onVideoUpdate: (uuid: string) => this.loadVideoAndBuildPlayer({ uuid, autoplayFromPreviousVideo: true, forceAutoplay: false }),
 
@@ -263,6 +279,7 @@ export class PeerTubeEmbed {
     this.initializeApi()
 
     this.playerHTML.removePlaceholder()
+    if (this.videoPassword) this.playerHTML.removeVideoPasswordBlock()
 
     if (this.isPlaylistEmbed()) {
       await this.buildPlayerPlaylistUpnext()
@@ -399,6 +416,21 @@ export class PeerTubeEmbed {
     this.player.bigPlayButton.hide();
 
     (this.player.el() as HTMLElement).style.pointerEvents = 'none'
+  }
+
+  private async handlePasswordError (err: PeerTubeServerError) {
+    let incorrectPassword: boolean = null
+    if (err.serverCode === ServerErrorCode.VIDEO_REQUIRES_PASSWORD) incorrectPassword = false
+    else if (err.serverCode === ServerErrorCode.INCORRECT_VIDEO_PASSWORD) incorrectPassword = true
+
+    if (incorrectPassword === null) return false
+
+    this.requiresPassword = true
+    this.videoPassword = await this.playerHTML.askVideoPassword({
+      incorrectPassword,
+      translations: await this.translationsPromise
+    })
+    return true
   }
 
 }

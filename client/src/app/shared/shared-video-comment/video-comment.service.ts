@@ -18,6 +18,7 @@ import {
 import { environment } from '../../../environments/environment'
 import { VideoCommentThreadTree } from './video-comment-thread-tree.model'
 import { VideoComment } from './video-comment.model'
+import { VideoPasswordService } from '../shared-main'
 
 @Injectable()
 export class VideoCommentService {
@@ -31,22 +32,25 @@ export class VideoCommentService {
     private restService: RestService
   ) {}
 
-  addCommentThread (videoId: string, comment: VideoCommentCreate) {
+  addCommentThread (videoId: string, comment: VideoCommentCreate, videoPassword?: string) {
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comment-threads'
     const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
-    return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment)
+    return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment, { headers })
                .pipe(
                  map(data => this.extractVideoComment(data.comment)),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }
 
-  addCommentReply (videoId: string, inReplyToCommentId: number, comment: VideoCommentCreate) {
+  addCommentReply (options: { videoId: string, inReplyToCommentId: number, comment: VideoCommentCreate, videoPassword?: string }) {
+    const { videoId, inReplyToCommentId, comment, videoPassword } = options
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comments/' + inReplyToCommentId
     const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
-    return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment)
+    return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment, { headers })
                .pipe(
                  map(data => this.extractVideoComment(data.comment)),
                  catchError(err => this.restExtractor.handleError(err))
@@ -76,10 +80,13 @@ export class VideoCommentService {
 
   getVideoCommentThreads (parameters: {
     videoId: string
+    videoPassword: string
     componentPagination: ComponentPaginationLight
     sort: string
   }): Observable<ThreadsResultList<VideoComment>> {
-    const { videoId, componentPagination, sort } = parameters
+    const { videoId, videoPassword, componentPagination, sort } = parameters
+
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
 
     const pagination = this.restService.componentToRestPagination(componentPagination)
 
@@ -87,7 +94,7 @@ export class VideoCommentService {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comment-threads'
-    return this.authHttp.get<ThreadsResultList<VideoComment>>(url, { params })
+    return this.authHttp.get<ThreadsResultList<VideoComment>>(url, { params, headers })
                .pipe(
                  map(result => this.extractVideoComments(result)),
                  catchError(err => this.restExtractor.handleError(err))
@@ -97,12 +104,14 @@ export class VideoCommentService {
   getVideoThreadComments (parameters: {
     videoId: string
     threadId: number
+    videoPassword?: string
   }): Observable<VideoCommentThreadTree> {
-    const { videoId, threadId } = parameters
+    const { videoId, threadId, videoPassword } = parameters
     const url = `${VideoCommentService.BASE_VIDEO_URL + videoId}/comment-threads/${threadId}`
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
 
     return this.authHttp
-               .get<VideoCommentThreadTreeServerModel>(url)
+               .get<VideoCommentThreadTreeServerModel>(url, { headers })
                .pipe(
                  map(tree => this.extractVideoCommentTree(tree)),
                  catchError(err => this.restExtractor.handleError(err))

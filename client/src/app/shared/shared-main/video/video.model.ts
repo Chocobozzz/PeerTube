@@ -281,6 +281,13 @@ export class Video implements VideoServerModel {
     return user && this.isLocal === false && user.hasRight(UserRight.MANAGE_VIDEOS_REDUNDANCIES)
   }
 
+  canAccessPasswordProtectedVideoWithoutPassword (user: AuthUser) {
+    return this.privacy.id === VideoPrivacy.PASSWORD_PROTECTED &&
+      user &&
+      this.isLocal === true &&
+      (this.account.name === user.username || user.hasRight(UserRight.SEE_ALL_VIDEOS))
+  }
+
   getExactNumberOfViews () {
     if (this.isLive) {
       return Video.viewersICU({ viewers: this.viewers }, $localize`${this.viewers} viewer(s)`)

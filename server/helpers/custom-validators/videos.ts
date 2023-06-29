@@ -1,7 +1,7 @@
-import { UploadFilesForCheck } from 'express'
+import { Response, Request, UploadFilesForCheck } from 'express'
 import { decode as magnetUriDecode } from 'magnet-uri'
 import validator from 'validator'
-import { VideoFilter, VideoInclude, VideoPrivacy, VideoRateType } from '@shared/models'
+import { HttpStatusCode, VideoFilter, VideoInclude, VideoPrivacy, VideoRateType } from '@shared/models'
 import {
   CONSTRAINTS_FIELDS,
   MIMETYPES,
@@ -13,6 +13,7 @@ import {
   VIDEO_STATES
 } from '../../initializers/constants'
 import { exists, isArray, isDateValid, isFileValid } from './misc'
+import { getVideoWithAttributes } from '@server/helpers/video'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 
@@ -110,6 +111,10 @@ function isVideoPrivacyValid (value: number) {
   return VIDEO_PRIVACIES[value] !== undefined
 }
 
+function isVideoReplayPrivacyValid (value: number) {
+  return VIDEO_PRIVACIES[value] !== undefined && value !== VideoPrivacy.PASSWORD_PROTECTED
+}
+
 function isScheduleVideoUpdatePrivacyValid (value: number) {
   return value === VideoPrivacy.UNLISTED || value === VideoPrivacy.PUBLIC || value === VideoPrivacy.INTERNAL
 }
@@ -141,6 +146,49 @@ function isVideoMagnetUriValid (value: string) {
   return parsed && isVideoFileInfoHashValid(parsed.infoHash)
 }
 
+function isPasswordValid (password: string) {
+  return password.length >= CONSTRAINTS_FIELDS.VIDEO_PASSWORD.LENGTH.min &&
+    password.length < CONSTRAINTS_FIELDS.VIDEO_PASSWORD.LENGTH.max
+}
+
+function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
+  const fail = (message: string) => {
+    res.fail({
+      status: HttpStatusCode.BAD_REQUEST_400,
+      message
+    })
+    return false
+  }
+
+  let privacy: VideoPrivacy
+  const video = getVideoWithAttributes(res)
+
+  if (exists(req.body?.privacy)) privacy = req.body.privacy
+  else if (exists(video?.privacy)) privacy = video.privacy
+
+  if (privacy !== VideoPrivacy.PASSWORD_PROTECTED) return true
+
+  if (!exists(req.body.videoPasswords) && !exists(req.body.passwords)) return fail('Video passwords are missing.')
+
+  const passwords = req.body.videoPasswords || req.body.passwords
+
+  if (passwords.length === 0) return fail('At least one video password is required.')
+
+  if (new Set(passwords).size !== passwords.length) return fail('Duplicate video passwords are not allowed.')
+
+  for (const password of passwords) {
+    if (typeof password !== 'string') {
+      return fail('Video password should be a string.')
+    }
+
+    if (!isPasswordValid(password)) {
+      return fail('Invalid video password. Password length should be at least 2 characters and no more than 100 characters.')
+    }
+  }
+
+  return true
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -164,9 +212,12 @@ export {
   isVideoDurationValid,
   isVideoTagValid,
   isVideoPrivacyValid,
+  isVideoReplayPrivacyValid,
   isVideoFileResolutionValid,
   isVideoFileSizeValid,
   isVideoImageValid,
   isVideoSupportValid,
-  isVideoFilterValid
+  isVideoFilterValid,
+  isPasswordValid,
+  isValidPasswordProtectedPrivacy
 }
