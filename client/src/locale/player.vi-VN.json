@@ -43,7 +43,7 @@
     "Play in loop": "Phát lặp lại",
     "This live has not started yet.": "Buổi livestream chưa bắt đầu.",
     "This live has ended.": "Buổi livestream đã kết thúc.",
-    "The video failed to play, will try to fast forward.": "Video không phát được, sẽ cố gắng tua đi.",
+    "The video failed to play, will try to fast forward.": "Không thể phát video, sẽ cố gắng tua nhanh.",
     "{1} / {2} dropped of {3}": "{1} / {2} thất bại trong {3}",
     " (muted)": " (đã tắt tiếng)",
     "{1} from servers · {2} from peers": "{1} từ máy chủ · {2} từ peer",
