@@ -386,6 +386,15 @@ PeerTube >= 5.2 supports VOD or Live transcoding by a remote PeerTube runner.
 
 ### Installation
 
+Ensure you have `ffmpeg` and `ffprobe` installed on your system:
+
+```bash
+ffprobe -version # Should be >= 4.3
+ffmpeg -version # Should be >= 4.3
+```
+
+Then install the CLI:
+
 ```bash
 sudo npm install -g @peertube/peertube-runner
 ```
