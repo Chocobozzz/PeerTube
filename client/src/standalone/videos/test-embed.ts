@@ -1,6 +1,6 @@
 import './test-embed.scss'
-import { PeerTubeResolution, PlayerEventType } from '../player/definitions'
-import { PeerTubePlayer } from '../player/player'
+import { PeerTubeResolution, PlayerEventType } from '../embed-player-api/definitions'
+import { PeerTubePlayer } from '../embed-player-api/player'
 import { logger } from '../../root-helpers'
 
 window.addEventListener('load', async () => {

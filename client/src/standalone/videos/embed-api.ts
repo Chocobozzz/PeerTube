@@ -1,7 +1,7 @@
 import './embed.scss'
 import * as Channel from 'jschannel'
 import { logger } from '../../root-helpers'
-import { PeerTubeResolution, PeerTubeTextTrack } from '../player/definitions'
+import { PeerTubeResolution, PeerTubeTextTrack } from '../embed-player-api/definitions'
 import { PeerTubeEmbed } from './embed'
 
 /**
