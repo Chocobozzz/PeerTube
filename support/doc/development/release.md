@@ -28,9 +28,11 @@ NODE_APP_INSTANCE=6 NODE_ENV=test node dist/server --benchmark-startup
 
 ## @peertube/embed-api
 
+At the root of PeerTube:
+
 ```
-cd client/src/standalone/player
+cd client/src/standalone/embed-player-api
 npm version patch
-npm run build
-npm publish --access=public
+cd ../../../../
+npm run release-embed-api
 ```

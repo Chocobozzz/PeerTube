@@ -10,7 +10,7 @@ module.exports = function () {
   const configuration = {
     entry: {
       'video-embed': './src/standalone/videos/embed.ts',
-      'player': './src/standalone/player/player.ts',
+      'player': './src/standalone/embed-player-api/player.ts',
       'test-embed': './src/standalone/videos/test-embed.ts'
     },
 

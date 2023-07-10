@@ -5,7 +5,7 @@
 ### Build & Publish
 
 ```
-cd client/src/standalone/player/
+cd client/src/standalone/embed-player-api/
 npm run build
 npm publish --access=public
 ```

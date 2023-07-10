@@ -3,7 +3,7 @@
   "ignorePatterns": [
     "projects/**/*",
     "node_modules/",
-    "src/standalone/player/dist"
+    "src/standalone/embed-player-api/dist"
   ],
   "overrides": [
     {
