@@ -8,6 +8,11 @@ const Component = videojs.getComponent('Component')
 class PlaylistMenuItem extends Component {
   private element: VideoPlaylistElement
 
+  private clickHandler: () => void
+  private keyDownHandler: (event: KeyboardEvent) => void
+
+  options_: videojs.ComponentOptions & PlaylistItemOptions
+
   constructor (player: videojs.Player, options?: PlaylistItemOptions) {
     super(player, options as any)
 
@@ -15,19 +20,27 @@ class PlaylistMenuItem extends Component {
 
     this.element = options.element
 
-    this.on([ 'click', 'tap' ], () => this.switchPlaylistItem())
-    this.on('keydown', event => this.handleKeyDown(event))
+    this.clickHandler = () => this.switchPlaylistItem()
+    this.keyDownHandler = event => this.handleKeyDown(event)
+
+    this.on([ 'click', 'tap' ], this.clickHandler)
+    this.on('keydown', this.keyDownHandler)
+  }
+
+  dispose () {
+    this.off([ 'click', 'tap' ], this.clickHandler)
+    this.off('keydown', this.keyDownHandler)
+
+    super.dispose()
   }
 
   createEl () {
-    const options = this.options_ as PlaylistItemOptions
-
     const li = super.createEl('li', {
       className: 'vjs-playlist-menu-item',
       innerHTML: ''
     }) as HTMLElement
 
-    if (!options.element.video) {
+    if (!this.options_.element.video) {
       li.classList.add('vjs-disabled')
     }
 
@@ -37,14 +50,14 @@ class PlaylistMenuItem extends Component {
 
     const position = super.createEl('div', {
       className: 'item-position',
-      innerHTML: options.element.position
+      innerHTML: this.options_.element.position
     })
 
     positionBlock.appendChild(position)
     li.appendChild(positionBlock)
 
-    if (options.element.video) {
-      this.buildAvailableVideo(li, positionBlock, options)
+    if (this.options_.element.video) {
+      this.buildAvailableVideo(li, positionBlock, this.options_)
     } else {
       this.buildUnavailableVideo(li)
     }
@@ -125,9 +138,7 @@ class PlaylistMenuItem extends Component {
   }
 
   private switchPlaylistItem () {
-    const options = this.options_ as PlaylistItemOptions
-
-    options.onClicked()
+    this.options_.onClicked()
   }
 }
 

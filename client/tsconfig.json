@@ -61,17 +61,8 @@
       "fs": [
         "src/shims/noop.ts"
       ],
-      "http": [
-        "src/shims/http.ts"
-      ],
-      "https": [
-        "src/shims/https.ts"
-      ],
       "path": [
         "src/shims/path.ts"
-      ],
-      "stream": [
-        "src/shims/stream.ts"
       ],
       "crypto": [
         "src/shims/noop.ts"

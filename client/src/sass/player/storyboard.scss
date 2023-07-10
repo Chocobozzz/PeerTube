@@ -1,0 +1,26 @@
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use './_player-variables' as *;
+
+// Like the time tooltip
+.video-js .vjs-progress-holder .vjs-storyboard-sprite-placeholder {
+  display: none;
+}
+
+.video-js .vjs-progress-control:hover .vjs-storyboard-sprite-placeholder,
+.video-js .vjs-progress-control:hover .vjs-progress-holder:focus .vjs-storyboard-sprite-placeholder {
+  display: block;
+
+  // Ensure that we maintain a font-size of ~10px.
+  font-size: 0.6em;
+  visibility: visible;
+}
+
+.video-js.vjs-settings-dialog-opened {
+  .vjs-storyboard-sprite-placeholder,
+  .vjs-time-tooltip,
+  .vjs-mouse-display {
+    display: none !important;
+  }
+}

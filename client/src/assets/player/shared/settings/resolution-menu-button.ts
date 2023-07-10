@@ -11,12 +11,12 @@ class ResolutionMenuButton extends MenuButton {
 
     this.controlText('Quality')
 
-    player.peertubeResolutions().on('resolutionsAdded', () => this.buildQualities())
-    player.peertubeResolutions().on('resolutionRemoved', () => this.cleanupQualities())
+    player.peertubeResolutions().on('resolutions-added', () => this.update())
+    player.peertubeResolutions().on('resolutions-removed', () => this.update())
 
     // For parent
-    player.peertubeResolutions().on('resolutionChanged', () => {
-      setTimeout(() => this.trigger('labelUpdated'))
+    player.peertubeResolutions().on('resolutions-changed', () => {
+      setTimeout(() => this.trigger('label-updated'))
     })
   }
 
@@ -37,7 +37,34 @@ class ResolutionMenuButton extends MenuButton {
   }
 
   createMenu () {
-    return new Menu(this.player_)
+    const menu: videojs.Menu = new Menu(this.player_, { menuButton: this })
+    const resolutions = this.player().peertubeResolutions().getResolutions()
+
+    for (const r of resolutions) {
+      const label = r.label === '0p'
+        ? this.player().localize('Audio-only')
+        : r.label
+
+      const component = new ResolutionMenuItem(
+        this.player_,
+        {
+          id: r.id + '',
+          resolutionId: r.id,
+          label,
+          selected: r.selected
+        }
+      )
+
+      menu.addItem(component)
+    }
+
+    return menu
+  }
+
+  update () {
+    super.update()
+
+    this.trigger('menu-changed')
   }
 
   buildCSSClass () {
@@ -46,60 +73,6 @@ class ResolutionMenuButton extends MenuButton {
 
   buildWrapperCSSClass () {
     return 'vjs-resolution-control ' + super.buildWrapperCSSClass()
-  }
-
-  private addClickListener (component: any) {
-    component.on('click', () => {
-      const children = this.menu.children()
-
-      for (const child of children) {
-        if (component !== child) {
-          (child as videojs.MenuItem).selected(false)
-        }
-      }
-    })
-  }
-
-  private buildQualities () {
-    for (const d of this.player().peertubeResolutions().getResolutions()) {
-      const label = d.label === '0p'
-        ? this.player().localize('Audio-only')
-        : d.label
-
-      this.menu.addChild(new ResolutionMenuItem(
-        this.player_,
-        {
-          id: d.id + '',
-          resolutionId: d.id,
-          label,
-          selected: d.selected
-        })
-      )
-    }
-
-    for (const m of this.menu.children()) {
-      this.addClickListener(m)
-    }
-
-    this.trigger('menuChanged')
-  }
-
-  private cleanupQualities () {
-    const resolutions = this.player().peertubeResolutions().getResolutions()
-
-    this.menu.children().forEach((children: ResolutionMenuItem) => {
-      if (children.resolutionId === undefined) {
-        return
-      }
-
-      if (resolutions.find(r => r.id === children.resolutionId)) {
-        return
-      }
-
-      this.menu.removeChild(children)
-    })
-
-    this.trigger('menuChanged')
   }
 }
 

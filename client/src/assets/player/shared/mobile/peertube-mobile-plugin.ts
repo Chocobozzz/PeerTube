@@ -21,6 +21,15 @@ class PeerTubeMobilePlugin extends Plugin {
 
   private setCurrentTimeTimeout: ReturnType<typeof setTimeout>
 
+  private onPlayHandler: () => void
+  private onFullScreenChangeHandler: () => void
+  private onTouchStartHandler: (event: TouchEvent) => void
+  private onMobileButtonTouchStartHandler: (event: TouchEvent) => void
+  private sliderActiveHandler: () => void
+  private sliderInactiveHandler: () => void
+
+  private seekBar: videojs.Component
+
   constructor (player: videojs.Player, options: videojs.PlayerOptions) {
     super(player, options)
 
@@ -36,18 +45,38 @@ class PeerTubeMobilePlugin extends Plugin {
     (this.player.options_.userActions as any).click = false
     this.player.options_.userActions.doubleClick = false
 
-    this.player.one('play', () => {
-      this.initTouchStartEvents()
-    })
+    this.onPlayHandler = () => this.initTouchStartEvents()
+    this.player.one('play', this.onPlayHandler)
+
+    this.seekBar = this.player.getDescendant([ 'controlBar', 'progressControl', 'seekBar' ])
+
+    this.sliderActiveHandler = () => this.player.addClass('vjs-mobile-sliding')
+    this.sliderInactiveHandler = () => this.player.removeClass('vjs-mobile-sliding')
+
+    this.seekBar.on('slideractive', this.sliderActiveHandler)
+    this.seekBar.on('sliderinactive', this.sliderInactiveHandler)
+  }
+
+  dispose () {
+    if (this.onPlayHandler) this.player.off('play', this.onPlayHandler)
+    if (this.onFullScreenChangeHandler) this.player.off('fullscreenchange', this.onFullScreenChangeHandler)
+    if (this.onTouchStartHandler) this.player.off('touchstart', this.onFullScreenChangeHandler)
+    if (this.onMobileButtonTouchStartHandler) {
+      this.peerTubeMobileButtons?.el().removeEventListener('touchstart', this.onMobileButtonTouchStartHandler)
+    }
+
+    super.dispose()
   }
 
   private handleFullscreenRotation () {
-    this.player.on('fullscreenchange', () => {
+    this.onFullScreenChangeHandler = () => {
       if (!this.player.isFullscreen() || this.isPortraitVideo()) return
 
       screen.orientation.lock('landscape')
         .catch(err => logger.error('Cannot lock screen to landscape.', err))
-    })
+    }
+
+    this.player.on('fullscreenchange', this.onFullScreenChangeHandler)
   }
 
   private isPortraitVideo () {
@@ -80,19 +109,22 @@ class PeerTubeMobilePlugin extends Plugin {
       this.lastTapEvent = event
     }
 
-    this.player.on('touchstart', (event: TouchEvent) => {
+    this.onTouchStartHandler = event => {
       // Only enable user active on player touch, we listen event on peertube mobile buttons to disable it
       if (this.player.userActive()) return
 
       handleTouchStart(event)
-    })
+    }
+    this.player.on('touchstart', this.onTouchStartHandler)
 
-    this.peerTubeMobileButtons.el().addEventListener('touchstart', (event: TouchEvent) => {
+    this.onMobileButtonTouchStartHandler = event => {
       // Prevent mousemove/click events firing on the player, that conflict with our user active logic
       event.preventDefault()
 
       handleTouchStart(event)
-    }, { passive: false })
+    }
+
+    this.peerTubeMobileButtons.el().addEventListener('touchstart', this.onMobileButtonTouchStartHandler, { passive: false })
   }
 
   private onDoubleTap (event: TouchEvent) {

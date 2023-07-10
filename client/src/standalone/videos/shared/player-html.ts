@@ -1,5 +1,4 @@
 import { peertubeTranslate } from '../../../../../shared/core-utils/i18n'
-import { VideoDetails } from '../../../../../shared/models'
 import { logger } from '../../../root-helpers'
 import { Translations } from './translations'
 
@@ -59,7 +58,6 @@ export class PlayerHTML {
     const { incorrectPassword, translations } = options
     return new Promise((resolve) => {
 
-      this.removePlaceholder()
       this.wrapperElement.style.display = 'none'
 
       const translatedTitle = peertubeTranslate('This video is password protected', translations)
@@ -107,19 +105,6 @@ export class PlayerHTML {
     this.wrapperElement.style.display = 'block'
   }
 
-  buildPlaceholder (video: VideoDetails) {
-    const placeholder = this.getPlaceholderElement()
-
-    const url = window.location.origin + video.previewPath
-    placeholder.style.backgroundImage = `url("${url}")`
-    placeholder.style.display = 'block'
-  }
-
-  removePlaceholder () {
-    const placeholder = this.getPlaceholderElement()
-    placeholder.style.display = 'none'
-  }
-
   displayInformation (text: string, translations: Translations) {
     if (this.informationElement) this.removeInformation()
 
@@ -135,10 +120,6 @@ export class PlayerHTML {
 
     this.removeElement(this.informationElement)
     this.informationElement = undefined
-  }
-
-  private getPlaceholderElement () {
-    return document.getElementById('placeholder-preview')
   }
 
   private removeElement (element: HTMLElement) {

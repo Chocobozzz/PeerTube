@@ -3,37 +3,58 @@ import { buildVideoLink, decorateVideoLink } from '@shared/core-utils'
 import { PeerTubeLinkButtonOptions } from '../../types'
 
 const Component = videojs.getComponent('Component')
-class PeerTubeLinkButton extends Component {
 
-  constructor (player: videojs.Player, options?: PeerTubeLinkButtonOptions) {
-    super(player, options as any)
+class PeerTubeLinkButton extends Component {
+  private mouseEnterHandler: () => void
+  private clickHandler: () => void
+
+  options_: PeerTubeLinkButtonOptions & videojs.ComponentOptions
+
+  constructor (player: videojs.Player, options?: PeerTubeLinkButtonOptions & videojs.ComponentOptions) {
+    super(player, options)
+
+    this.updateShowing()
+    this.player().on('video-change', () => this.updateShowing())
+  }
+
+  dispose () {
+    if (this.el()) return
+
+    this.el().removeEventListener('mouseenter', this.mouseEnterHandler)
+    this.el().removeEventListener('click', this.clickHandler)
+
+    super.dispose()
   }
 
   createEl () {
-    return this.buildElement()
+    const el = videojs.dom.createEl('a', {
+      href: this.buildLink(),
+      innerHTML: this.options_.instanceName,
+      title: this.player().localize('Video page (new window)'),
+      className: 'vjs-peertube-link',
+      target: '_blank'
+    })
+
+    this.mouseEnterHandler = () => this.updateHref()
+    this.clickHandler = () => this.player().pause()
+
+    el.addEventListener('mouseenter', this.mouseEnterHandler)
+    el.addEventListener('click', this.clickHandler)
+
+    return el
+  }
+
+  updateShowing () {
+    if (this.options_.isDisplayed()) this.show()
+    else this.hide()
   }
 
   updateHref () {
     this.el().setAttribute('href', this.buildLink())
   }
 
-  private buildElement () {
-    const el = videojs.dom.createEl('a', {
-      href: this.buildLink(),
-      innerHTML: (this.options_ as PeerTubeLinkButtonOptions).instanceName,
-      title: this.player().localize('Video page (new window)'),
-      className: 'vjs-peertube-link',
-      target: '_blank'
-    })
-
-    el.addEventListener('mouseenter', () => this.updateHref())
-    el.addEventListener('click', () => this.player().pause())
-
-    return el as HTMLButtonElement
-  }
-
   private buildLink () {
-    const url = buildVideoLink({ shortUUID: (this.options_ as PeerTubeLinkButtonOptions).shortUUID })
+    const url = buildVideoLink({ shortUUID: this.options_.shortUUID() })
 
     return decorateVideoLink({ url, startTime: this.player().currentTime() })
   }

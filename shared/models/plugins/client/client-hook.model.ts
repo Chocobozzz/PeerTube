@@ -59,6 +59,10 @@ export const clientFilterHookObject = {
   'filter:internal.video-watch.player.build-options.params': true,
   'filter:internal.video-watch.player.build-options.result': true,
 
+  // Filter the options to load a new video in our player
+  'filter:internal.video-watch.player.load-options.params': true,
+  'filter:internal.video-watch.player.load-options.result': true,
+
   // Filter our SVG icons content
   'filter:internal.common.svg-icons.get-content.params': true,
   'filter:internal.common.svg-icons.get-content.result': true,

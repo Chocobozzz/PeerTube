@@ -34,6 +34,8 @@ function toBoolean (value: any) {
 
   if (value === 'true') return true
   if (value === 'false') return false
+  if (value === '1') return true
+  if (value === '0') return false
 
   return undefined
 }

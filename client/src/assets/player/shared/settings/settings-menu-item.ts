@@ -70,23 +70,34 @@ class SettingsMenuItem extends MenuItem {
         this.build()
 
         // Update on rate change
-        player.on('ratechange', this.submenuClickHandler)
+        if (subMenuName === 'PlaybackRateMenuButton') {
+          player.on('ratechange', this.submenuClickHandler)
+        }
 
         if (subMenuName === 'CaptionsButton') {
-          // Hack to regenerate captions on HTTP fallback
-          player.on('captionsChanged', () => {
+          player.on('captions-changed', () => {
+            // Wait menu component rebuild
             setTimeout(() => {
-              this.settingsSubMenuEl_.innerHTML = ''
-              this.settingsSubMenuEl_.appendChild(this.subMenu.menu.el())
-              this.update()
-              this.bindClickEvents()
-            }, 0)
+              this.rebuildAfterMenuChange()
+            }, 150)
+          })
+        }
+
+        if (subMenuName === 'ResolutionMenuButton') {
+          this.subMenu.on('menu-changed', () => {
+            this.rebuildAfterMenuChange()
           })
         }
 
         this.reset()
       }, 0)
     })
+  }
+
+  dispose () {
+    this.settingsSubMenuEl_.removeEventListener('transitionend', this.transitionEndHandler)
+
+    super.dispose()
   }
 
   eventHandlers () {
@@ -190,27 +201,6 @@ class SettingsMenuItem extends MenuItem {
     (button.el() as HTMLElement).innerHTML = this.player().localize(this.subMenu.controlText())
   }
 
-  /**
-   * Add/remove prefixed event listener for CSS Transition
-   *
-   * @method PrefixedEvent
-   */
-  PrefixedEvent (element: any, type: any, callback: any, action = 'addEvent') {
-    const prefix = [ 'webkit', 'moz', 'MS', 'o', '' ]
-
-    for (let p = 0; p < prefix.length; p++) {
-      if (!prefix[p]) {
-        type = type.toLowerCase()
-      }
-
-      if (action === 'addEvent') {
-        element.addEventListener(prefix[p] + type, callback, false)
-      } else if (action === 'removeEvent') {
-        element.removeEventListener(prefix[p] + type, callback, false)
-      }
-    }
-  }
-
   onTransitionEnd (event: any) {
     if (event.propertyName !== 'margin-right') {
       return
@@ -254,12 +244,7 @@ class SettingsMenuItem extends MenuItem {
   }
 
   build () {
-    this.subMenu.on('labelUpdated', () => {
-      this.update()
-    })
-    this.subMenu.on('menuChanged', () => {
-      this.bindClickEvents()
-      this.setSize()
+    this.subMenu.on('label-updated', () => {
       this.update()
     })
 
@@ -272,24 +257,11 @@ class SettingsMenuItem extends MenuItem {
     this.setSize()
     this.bindClickEvents()
 
-    // prefixed event listeners for CSS TransitionEnd
-    this.PrefixedEvent(
-      this.settingsSubMenuEl_,
-      'TransitionEnd',
-      this.transitionEndHandler,
-      'addEvent'
-    )
+    this.settingsSubMenuEl_.addEventListener('transitionend', this.transitionEndHandler, false)
   }
 
   update (event?: any) {
-    let target: HTMLElement = null
     const subMenu = this.subMenu.name()
-
-    if (event && event.type === 'tap') {
-      target = event.target
-    } else if (event) {
-      target = event.currentTarget
-    }
 
     // Playback rate menu button doesn't get a vjs-selected class
     // or sets options_['selected'] on the selected playback rate.
@@ -319,6 +291,13 @@ class SettingsMenuItem extends MenuItem {
           this.settingsSubMenuValueEl_.innerHTML = this.player().localize(subMenuItemUntyped.options_.label)
         }
       }
+    }
+
+    let target: HTMLElement = null
+    if (event && event.type === 'tap') {
+      target = event.target
+    } else if (event) {
+      target = event.currentTarget
     }
 
     if (target && !target.classList.contains('vjs-back-button')) {
@@ -367,6 +346,15 @@ class SettingsMenuItem extends MenuItem {
       videojs.dom.addClass(this.settingsSubMenuEl_, 'vjs-hidden')
       videojs.dom.removeClass(this.el(), 'open')
     }
+  }
+
+  private rebuildAfterMenuChange () {
+    this.settingsSubMenuEl_.innerHTML = ''
+    this.settingsSubMenuEl_.appendChild(this.subMenu.menu.el())
+    this.update()
+    this.createBackButton()
+    this.setSize()
+    this.bindClickEvents()
   }
 
 }

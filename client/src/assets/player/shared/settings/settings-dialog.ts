@@ -28,6 +28,18 @@ class SettingsDialog extends Component {
       'aria-describedby': dialogDescriptionId
     })
   }
+
+  show () {
+    this.player().addClass('vjs-settings-dialog-opened')
+
+    super.show()
+  }
+
+  hide () {
+    this.player().removeClass('vjs-settings-dialog-opened')
+
+    super.hide()
+  }
 }
 
 Component.registerComponent('SettingsDialog', SettingsDialog)

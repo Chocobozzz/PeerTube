@@ -6,26 +6,32 @@ import { PlaylistMenuItem } from './playlist-menu-item'
 const Component = videojs.getComponent('Component')
 
 class PlaylistMenu extends Component {
-  private menuItems: PlaylistMenuItem[]
+  private menuItems: PlaylistMenuItem[] = []
 
-  constructor (player: videojs.Player, options?: PlaylistPluginOptions) {
-    super(player, options as any)
+  private readonly userInactiveHandler: () => void
+  private readonly onMouseEnter: () => void
+  private readonly onMouseLeave: () => void
 
-    const self = this
+  private readonly onPlayerCick: (event: Event) => void
 
-    function userInactiveHandler () {
-      self.close()
+  options_: PlaylistPluginOptions & videojs.ComponentOptions
+
+  constructor (player: videojs.Player, options?: PlaylistPluginOptions & videojs.ComponentOptions) {
+    super(player, options)
+
+    this.userInactiveHandler = () => {
+      this.close()
     }
 
-    this.el().addEventListener('mouseenter', () => {
-      this.player().off('userinactive', userInactiveHandler)
-    })
+    this.onMouseEnter = () => {
+      this.player().off('userinactive', this.userInactiveHandler)
+    }
 
-    this.el().addEventListener('mouseleave', () => {
-      this.player().one('userinactive', userInactiveHandler)
-    })
+    this.onMouseLeave = () => {
+      this.player().one('userinactive', this.userInactiveHandler)
+    }
 
-    this.player().on('click', event => {
+    this.onPlayerCick = event => {
       let current = event.target as HTMLElement
 
       do {
@@ -40,13 +46,30 @@ class PlaylistMenu extends Component {
       } while (current)
 
       this.close()
-    })
+    }
+
+    this.el().addEventListener('mouseenter', this.onMouseEnter)
+    this.el().addEventListener('mouseleave', this.onMouseLeave)
+
+    this.player().on('click', this.onPlayerCick)
+  }
+
+  dispose () {
+    this.el().removeEventListener('mouseenter', this.onMouseEnter)
+    this.el().removeEventListener('mouseleave', this.onMouseLeave)
+
+    this.player().off('userinactive', this.userInactiveHandler)
+    this.player().off('click', this.onPlayerCick)
+
+    for (const item of this.menuItems) {
+      item.dispose()
+    }
+
+    super.dispose()
   }
 
   createEl () {
     this.menuItems = []
-
-    const options = this.getOptions()
 
     const menu = super.createEl('div', {
       className: 'vjs-playlist-menu',
@@ -61,11 +84,11 @@ class PlaylistMenu extends Component {
     const headerLeft = super.createEl('div')
 
     const leftTitle = super.createEl('div', {
-      innerHTML: options.playlist.displayName,
+      innerHTML: this.options_.playlist.displayName,
       className: 'title'
     })
 
-    const playlistChannel = options.playlist.videoChannel
+    const playlistChannel = this.options_.playlist.videoChannel
     const leftSubtitle = super.createEl('div', {
       innerHTML: playlistChannel
         ? this.player().localize('By {1}', [ playlistChannel.displayName ])
@@ -86,7 +109,7 @@ class PlaylistMenu extends Component {
 
     const list = super.createEl('ol')
 
-    for (const playlistElement of options.elements) {
+    for (const playlistElement of this.options_.elements) {
       const item = new PlaylistMenuItem(this.player(), {
         element: playlistElement,
         onClicked: () => this.onItemClicked(playlistElement)
@@ -100,13 +123,13 @@ class PlaylistMenu extends Component {
     menu.appendChild(header)
     menu.appendChild(list)
 
+    this.update()
+
     return menu
   }
 
   update () {
-    const options = this.getOptions()
-
-    this.updateSelected(options.getCurrentPosition())
+    this.updateSelected(this.options_.getCurrentPosition())
   }
 
   open () {
@@ -123,12 +146,8 @@ class PlaylistMenu extends Component {
     }
   }
 
-  private getOptions () {
-    return this.options_ as PlaylistPluginOptions
-  }
-
   private onItemClicked (element: VideoPlaylistElement) {
-    this.getOptions().onItemClicked(element)
+    this.options_.onItemClicked(element)
   }
 }
 

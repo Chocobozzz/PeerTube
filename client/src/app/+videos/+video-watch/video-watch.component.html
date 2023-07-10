@@ -8,7 +8,7 @@
     </div>
 
     <div id="videojs-wrapper">
-      <img class="placeholder-image" *ngIf="playerPlaceholderImgSrc" [src]="playerPlaceholderImgSrc" alt="Placeholder image" i18n-alt>
+      <video #playerElement class="video-js vjs-peertube-skin" playsinline="true"></video>
     </div>
 
     <my-video-watch-playlist
@@ -51,7 +51,7 @@
               </div>
 
               <my-action-buttons
-                [video]="video" [videoPassword]="videoPassword" [isUserLoggedIn]="isUserLoggedIn()" [isUserOwner]="isUserOwner()" [videoCaptions]="videoCaptions" 
+                [video]="video" [videoPassword]="videoPassword" [isUserLoggedIn]="isUserLoggedIn()" [isUserOwner]="isUserOwner()" [videoCaptions]="videoCaptions"
                 [playlist]="playlist" [currentTime]="getCurrentTime()" [currentPlaylistPosition]="getCurrentPlaylistPosition()"
               ></my-action-buttons>
             </div>

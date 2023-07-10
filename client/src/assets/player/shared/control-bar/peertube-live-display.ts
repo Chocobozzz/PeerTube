@@ -13,7 +13,6 @@ class PeerTubeLiveDisplay extends ClickableComponent {
 
     this.interval = this.setInterval(() => this.updateClass(), 1000)
 
-    this.show()
     this.updateSync(true)
   }
 
@@ -30,7 +29,7 @@ class PeerTubeLiveDisplay extends ClickableComponent {
 
   createEl () {
     const el = super.createEl('div', {
-      className: 'vjs-live-control vjs-control'
+      className: 'vjs-pt-live-control vjs-control'
     })
 
     this.contentEl_ = videojs.dom.createEl('div', {
@@ -83,10 +82,9 @@ class PeerTubeLiveDisplay extends ClickableComponent {
   }
 
   private getHLSJS () {
-    const p2pMediaLoader = this.player()?.p2pMediaLoader
-    if (!p2pMediaLoader) return undefined
+    if (!this.player()?.usingPlugin('p2pMediaLoader')) return
 
-    return p2pMediaLoader().getHLSJS()
+    return this.player().p2pMediaLoader().getHLSJS()
   }
 }
 

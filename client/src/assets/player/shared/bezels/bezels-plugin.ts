@@ -1,5 +1,5 @@
 import videojs from 'video.js'
-import './pause-bezel'
+import { PauseBezel } from './pause-bezel'
 
 const Plugin = videojs.getPlugin('plugin')
 
@@ -12,7 +12,7 @@ class BezelsPlugin extends Plugin {
       player.addClass('vjs-bezels')
     })
 
-    player.addChild('PauseBezel', options)
+    player.addChild(new PauseBezel(player, options))
   }
 }
 

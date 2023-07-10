@@ -1,26 +1,24 @@
 import videojs from 'video.js'
+import { UpNextPluginOptions } from '../../types'
 import { EndCardOptions } from './end-card'
 
 const Plugin = videojs.getPlugin('plugin')
 
 class UpNextPlugin extends Plugin {
 
-  constructor (player: videojs.Player, options: Partial<EndCardOptions> = {}) {
-    const settings = {
-      next: options.next,
-      getTitle: options.getTitle,
-      timeout: options.timeout || 5000,
-      cancelText: options.cancelText || 'Cancel',
-      headText: options.headText || 'Up Next',
-      suspendedText: options.suspendedText || 'Autoplay is suspended',
-      condition: options.condition,
-      suspended: options.suspended
-    }
-
+  constructor (player: videojs.Player, options: UpNextPluginOptions) {
     super(player)
 
-    // UpNext plugin can be called later, so ensure the player is not disposed
-    if (this.player.isDisposed()) return
+    const settings: EndCardOptions = {
+      next: options.next,
+      getTitle: options.getTitle,
+      timeout: options.timeout,
+      cancelText: player.localize('Cancel'),
+      headText: player.localize('Up Next'),
+      suspendedText: player.localize('Autoplay is suspended'),
+      isDisplayed: options.isDisplayed,
+      isSuspended: options.isSuspended
+    }
 
     this.player.ready(() => {
       player.addClass('vjs-upnext')

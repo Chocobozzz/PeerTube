@@ -241,7 +241,6 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   reloadVideos () {
-    console.log('reload')
     this.pagination.currentPage = 1
     this.loadMoreVideos(true)
   }
@@ -420,8 +419,9 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
           this.lastQueryLength = data.length
 
           if (reset) this.videos = []
+
           this.videos = this.videos.concat(data)
-          console.log('subscribe')
+
           if (this.groupByDate) this.buildGroupedDateLabels()
 
           this.onDataSubject.next(data)

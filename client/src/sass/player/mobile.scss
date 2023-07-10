@@ -170,7 +170,8 @@
     }
   }
 
-  &.vjs-scrubbing {
+  &.vjs-scrubbing,
+  &.vjs-mobile-sliding {
     .vjs-mobile-buttons-overlay {
       display: none;
     }

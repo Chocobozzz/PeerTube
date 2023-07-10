@@ -71,7 +71,7 @@ class SettingsButton extends Button {
     }
   }
 
-  onDisposeSettingsItem (event: any, name: string) {
+  onDisposeSettingsItem (_event: any, name: string) {
     if (name === undefined) {
       const children = this.menu.children()
 
@@ -103,6 +103,8 @@ class SettingsButton extends Button {
     if (this.isInIframe()) {
       window.removeEventListener('blur', this.documentClickHandler)
     }
+
+    super.dispose()
   }
 
   onAddSettingsItem (event: any, data: any) {
@@ -249,8 +251,8 @@ class SettingsButton extends Button {
   }
 
   resetChildren () {
-    for (const menuChild of this.menu.children()) {
-      (menuChild as SettingsMenuItem).reset()
+    for (const menuChild of this.menu.children() as SettingsMenuItem[]) {
+      menuChild.reset()
     }
   }
 
@@ -258,8 +260,8 @@ class SettingsButton extends Button {
    * Hide all the sub menus
    */
   hideChildren () {
-    for (const menuChild of this.menu.children()) {
-      (menuChild as SettingsMenuItem).hideSubMenu()
+    for (const menuChild of this.menu.children() as SettingsMenuItem[]) {
+      menuChild.hideSubMenu()
     }
   }
 

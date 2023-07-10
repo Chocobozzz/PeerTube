@@ -7,7 +7,7 @@ import { bytes } from '../common'
 interface StatsCardOptions extends videojs.ComponentOptions {
   videoUUID: string
   videoIsLive: boolean
-  mode: 'webtorrent' | 'p2p-media-loader'
+  mode: 'web-video' | 'p2p-media-loader'
   p2pEnabled: boolean
 }
 
@@ -34,7 +34,7 @@ class StatsCard extends Component {
 
   updateInterval: any
 
-  mode: 'webtorrent' | 'p2p-media-loader'
+  mode: 'web-video' | 'p2p-media-loader'
 
   metadataStore: any = {}
 
@@ -63,6 +63,9 @@ class StatsCard extends Component {
 
   private liveLatency: InfoElement
 
+  private onP2PInfoHandler: (_event: any, data: EventPlayerNetworkInfo) => void
+  private onHTTPInfoHandler: (_event: any, data: EventPlayerNetworkInfo) => void
+
   createEl () {
     this.containerEl = videojs.dom.createEl('div', {
       className: 'vjs-stats-content'
@@ -86,9 +89,7 @@ class StatsCard extends Component {
 
     this.populateInfoBlocks()
 
-    this.player_.on('p2pInfo', (event: any, data: EventPlayerNetworkInfo) => {
-      if (!data) return // HTTP fallback
-
+    this.onP2PInfoHandler = (_event, data) => {
       this.mode = data.source
 
       const p2pStats = data.p2p
@@ -105,9 +106,27 @@ class StatsCard extends Component {
         this.playerNetworkInfo.downloadedFromServer = bytes(httpStats.downloaded).join(' ')
         this.playerNetworkInfo.downloadedFromPeers = bytes(p2pStats.downloaded).join(' ')
       }
-    })
+    }
+
+    this.onHTTPInfoHandler = (_event, data) => {
+      this.mode = data.source
+
+      this.playerNetworkInfo.totalDownloaded = bytes(data.http.downloaded).join(' ')
+    }
+
+    this.player().on('p2p-info', this.onP2PInfoHandler)
+    this.player().on('http-info', this.onHTTPInfoHandler)
 
     return this.containerEl
+  }
+
+  dispose () {
+    if (this.updateInterval) clearInterval(this.updateInterval)
+
+    this.player().off('p2p-info', this.onP2PInfoHandler)
+    this.player().off('http-info', this.onHTTPInfoHandler)
+
+    super.dispose()
   }
 
   toggle () {
@@ -122,7 +141,7 @@ class StatsCard extends Component {
       try {
         const options = this.mode === 'p2p-media-loader'
           ? this.buildHLSOptions()
-          : await this.buildWebTorrentOptions() // Default
+          : await this.buildWebVideoOptions() // Default
 
         this.populateInfoValues(options)
       } catch (err) {
@@ -170,8 +189,8 @@ class StatsCard extends Component {
     }
   }
 
-  private async buildWebTorrentOptions () {
-    const videoFile = this.player_.webtorrent().getCurrentVideoFile()
+  private async buildWebVideoOptions () {
+    const videoFile = this.player_.webVideo().getCurrentVideoFile()
 
     if (!this.metadataStore[videoFile.fileUrl]) {
       this.metadataStore[videoFile.fileUrl] = await fetch(videoFile.metadataUrl).then(res => res.json())
@@ -194,7 +213,7 @@ class StatsCard extends Component {
 
     const resolution = videoFile?.resolution.label + videoFile?.fps
     const buffer = this.timeRangesToString(this.player_.buffered())
-    const progress = this.player_.webtorrent().getTorrent()?.progress
+    const progress = this.player_.bufferedPercent()
 
     return {
       playerNetworkInfo: this.playerNetworkInfo,
@@ -284,8 +303,10 @@ class StatsCard extends Component {
       ? `${(progress * 100).toFixed(1)}% (${(progress * duration).toFixed(1)}s)`
       : undefined
 
-    this.setInfoValue(this.playerMode, this.mode || 'HTTP')
-    this.setInfoValue(this.p2p, player.localize(this.options_.p2pEnabled ? 'enabled' : 'disabled'))
+    const p2pEnabled = this.options_.p2pEnabled && this.mode === 'p2p-media-loader'
+
+    this.setInfoValue(this.playerMode, this.mode)
+    this.setInfoValue(this.p2p, player.localize(p2pEnabled ? 'enabled' : 'disabled'))
     this.setInfoValue(this.uuid, this.options_.videoUUID)
 
     this.setInfoValue(this.viewport, frames)

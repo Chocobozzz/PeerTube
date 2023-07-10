@@ -1,7 +1,7 @@
 import './embed.scss'
 import * as Channel from 'jschannel'
 import { logger } from '../../root-helpers'
-import { PeerTubeResolution, PeerTubeTextTrack } from '../player/definitions'
+import { PeerTubeResolution, PeerTubeTextTrack } from '../embed-player-api/definitions'
 import { PeerTubeEmbed } from './embed'
 
 /**
@@ -72,15 +72,12 @@ export class PeerTubeEmbedApi {
   private setResolution (resolutionId: number) {
     logger.info(`Set resolution ${resolutionId}`)
 
-    if (this.isWebtorrent()) {
-      if (resolutionId === -1 && this.embed.player.webtorrent().isAutoResolutionPossible() === false) return
-
-      this.embed.player.webtorrent().changeQuality(resolutionId)
-
+    if (this.isWebVideo() && resolutionId === -1) {
+      logger.error('Auto resolution cannot be set in web video player mode')
       return
     }
 
-    this.embed.player.p2pMediaLoader().getHLSJS().currentLevel = resolutionId
+    this.embed.player.peertubeResolutions().select({ id: resolutionId, fireCallback: true })
   }
 
   private getCaptions (): PeerTubeTextTrack[] {
@@ -152,8 +149,8 @@ export class PeerTubeEmbedApi {
     // ---------------------------------------------------------------------------
 
     // PeerTube specific capabilities
-    this.embed.player.peertubeResolutions().on('resolutionsAdded', () => this.loadResolutions())
-    this.embed.player.peertubeResolutions().on('resolutionChanged', () => this.loadResolutions())
+    this.embed.player.peertubeResolutions().on('resolutions-added', () => this.loadResolutions())
+    this.embed.player.peertubeResolutions().on('resolutions-changed', () => this.loadResolutions())
 
     this.loadResolutions()
 
@@ -193,7 +190,7 @@ export class PeerTubeEmbedApi {
     })
   }
 
-  private isWebtorrent () {
-    return !!this.embed.player.webtorrent
+  private isWebVideo () {
+    return !!this.embed.player.webVideo
   }
 }
