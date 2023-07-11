@@ -133,7 +133,7 @@ export interface CustomConfig {
 
     alwaysTranscodeOriginalResolution: boolean
 
-    webtorrent: {
+    webVideos: {
       enabled: boolean
     }
 

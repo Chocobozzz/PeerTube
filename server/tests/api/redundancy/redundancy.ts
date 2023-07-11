@@ -60,7 +60,7 @@ async function createServers (strategy: VideoRedundancyStrategy | null, addition
 
   const config = {
     transcoding: {
-      webtorrent: {
+      web_videos: {
         enabled: withWebVideo
       },
       hls: {

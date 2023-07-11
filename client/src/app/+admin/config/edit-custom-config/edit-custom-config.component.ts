@@ -190,7 +190,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         hls: {
           enabled: null
         },
-        webtorrent: {
+        webVideos: {
           enabled: null
         },
         remoteRunners: {

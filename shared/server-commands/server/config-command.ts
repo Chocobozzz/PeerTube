@@ -142,7 +142,7 @@ export class ConfigCommand extends AbstractCommand {
 
           resolutions: ConfigCommand.getCustomConfigResolutions(true, with0p),
 
-          webtorrent: {
+          webVideos: {
             enabled: webVideo
           },
           hls: {
@@ -169,7 +169,7 @@ export class ConfigCommand extends AbstractCommand {
             '240p': true
           },
 
-          webtorrent: {
+          webVideos: {
             enabled: webVideo
           },
           hls: {
@@ -424,7 +424,7 @@ export class ConfigCommand extends AbstractCommand {
           '2160p': false
         },
         alwaysTranscodeOriginalResolution: true,
-        webtorrent: {
+        webVideos: {
           enabled: true
         },
         hls: {

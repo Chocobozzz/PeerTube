@@ -47,7 +47,7 @@ describe('Test syndication feeds', () => {
     serverHLSOnly = await createSingleServer(3, {
       transcoding: {
         enabled: true,
-        webtorrent: { enabled: false },
+        web_videos: { enabled: false },
         hls: { enabled: true }
       }
     })

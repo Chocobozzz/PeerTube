@@ -67,10 +67,10 @@
               <div class="callout callout-light pt-2 mt-2 pb-0">
                 <h3 class="callout-title" i18n>Output formats</h3>
 
-                <ng-container formGroupName="webtorrent">
+                <ng-container formGroupName="webVideos">
                   <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
                     <my-peertube-checkbox
-                      inputName="transcodingWebTorrentEnabled" formControlName="enabled"
+                      inputName="transcodingWebVideosEnabled" formControlName="enabled"
                       i18n-labelText labelText="Web Videos enabled"
                     >
                       <ng-template ptTemplate="help">

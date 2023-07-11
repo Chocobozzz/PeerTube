@@ -120,8 +120,8 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
           hls: {
             enabled: CONFIG.TRANSCODING.HLS.ENABLED
           },
-          webtorrent: {
-            enabled: CONFIG.TRANSCODING.WEBTORRENT.ENABLED
+          web_videos: {
+            enabled: CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED
           },
           enabledResolutions: ServerConfigManager.Instance.getEnabledResolutions('vod')
         },

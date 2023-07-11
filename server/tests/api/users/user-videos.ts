@@ -189,7 +189,7 @@ describe('Test user videos', function () {
 
       {
         const config = await server.config.getCustomConfig()
-        config.transcoding.webtorrent.enabled = false
+        config.transcoding.webVideos.enabled = false
         config.transcoding.hls.enabled = true
         config.transcoding.enabled = true
         await server.config.updateCustomSubConfig({ newConfig: config })

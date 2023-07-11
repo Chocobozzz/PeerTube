@@ -35,7 +35,7 @@ function updateConf (server: PeerTubeServer, vodProfile: string, liveProfile: st
         hls: {
           enabled: true
         },
-        webtorrent: {
+        webVideos: {
           enabled: true
         },
         resolutions: {

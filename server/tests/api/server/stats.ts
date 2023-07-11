@@ -194,7 +194,7 @@ describe('Test stats (excluding redundancy)', function () {
       newConfig: {
         transcoding: {
           enabled: true,
-          webtorrent: {
+          webVideos: {
             enabled: true
           },
           hls: {

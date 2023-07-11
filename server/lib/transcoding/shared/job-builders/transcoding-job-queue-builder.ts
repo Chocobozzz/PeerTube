@@ -60,7 +60,7 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
         if (CONFIG.TRANSCODING.HLS.ENABLED === true) {
           nextTranscodingSequentialJobPayloads.push([
             this.buildHLSJobPayload({
-              deleteWebVideoFiles: CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false,
+              deleteWebVideoFiles: CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED === false,
 
               // We had some issues with a web video quick transcoded while producing a HLS version of it
               copyCodecs: !quickTranscode,
@@ -208,7 +208,7 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
     for (const resolution of resolutionsEnabled) {
       const fps = computeOutputFPS({ inputFPS: inputVideoFPS, resolution })
 
-      if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED) {
+      if (CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED) {
         const payloads: (NewWebVideoResolutionTranscodingPayload | HLSTranscodingPayload)[] = [
           this.buildWebVideoJobPayload({
             videoUUID: video.uuid,

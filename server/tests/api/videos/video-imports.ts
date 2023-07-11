@@ -328,7 +328,7 @@ describe('Test video imports', function () {
               '1440p': false,
               '2160p': false
             },
-            webtorrent: { enabled: true },
+            webVideos: { enabled: true },
             hls: { enabled: false }
           }
         }

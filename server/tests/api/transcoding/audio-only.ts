@@ -37,7 +37,7 @@ describe('Test audio only video transcoding', function () {
         hls: {
           enabled: true
         },
-        webtorrent: {
+        web_videos: {
           enabled: true
         }
       }

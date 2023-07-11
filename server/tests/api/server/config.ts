@@ -79,7 +79,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.transcoding.resolutions['1440p']).to.be.true
   expect(data.transcoding.resolutions['2160p']).to.be.true
   expect(data.transcoding.alwaysTranscodeOriginalResolution).to.be.true
-  expect(data.transcoding.webtorrent.enabled).to.be.true
+  expect(data.transcoding.webVideos.enabled).to.be.true
   expect(data.transcoding.hls.enabled).to.be.true
 
   expect(data.live.enabled).to.be.false
@@ -192,7 +192,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.transcoding.resolutions['2160p']).to.be.false
   expect(data.transcoding.alwaysTranscodeOriginalResolution).to.be.false
   expect(data.transcoding.hls.enabled).to.be.false
-  expect(data.transcoding.webtorrent.enabled).to.be.true
+  expect(data.transcoding.webVideos.enabled).to.be.true
 
   expect(data.live.enabled).to.be.true
   expect(data.live.allowReplay).to.be.true
@@ -344,7 +344,7 @@ const newCustomConfig: CustomConfig = {
       '2160p': false
     },
     alwaysTranscodeOriginalResolution: false,
-    webtorrent: {
+    webVideos: {
       enabled: true
     },
     hls: {

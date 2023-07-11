@@ -59,7 +59,7 @@ const customConfigUpdateValidator = [
 
   body('transcoding.alwaysTranscodeOriginalResolution').isBoolean(),
 
-  body('transcoding.webtorrent.enabled').isBoolean(),
+  body('transcoding.webVideos.enabled').isBoolean(),
   body('transcoding.hls.enabled').isBoolean(),
 
   body('videoStudio.enabled').isBoolean(),
@@ -153,8 +153,8 @@ function checkInvalidConfigIfEmailDisabled (customConfig: CustomConfig, res: exp
 function checkInvalidTranscodingConfig (customConfig: CustomConfig, res: express.Response) {
   if (customConfig.transcoding.enabled === false) return true
 
-  if (customConfig.transcoding.webtorrent.enabled === false && customConfig.transcoding.hls.enabled === false) {
-    res.fail({ message: 'You need to enable at least webtorrent transcoding or hls transcoding' })
+  if (customConfig.transcoding.webVideos.enabled === false && customConfig.transcoding.hls.enabled === false) {
+    res.fail({ message: 'You need to enable at least web_videos transcoding or hls transcoding' })
     return false
   }
 

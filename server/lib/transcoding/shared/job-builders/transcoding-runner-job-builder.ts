@@ -62,7 +62,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
         if (CONFIG.TRANSCODING.HLS.ENABLED === true) {
           await new VODHLSTranscodingJobHandler().create({
             video,
-            deleteWebVideoFiles: CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false,
+            deleteWebVideoFiles: CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED === false,
             resolution: maxResolution,
             fps,
             isNewVideo,
@@ -169,7 +169,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
     for (const resolution of resolutionsEnabled) {
       const fps = computeOutputFPS({ inputFPS: inputVideoFPS, resolution })
 
-      if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED) {
+      if (CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED) {
         await new VODWebVideoTranscodingJobHandler().create({
           video,
           resolution,

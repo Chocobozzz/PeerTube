@@ -165,7 +165,7 @@ function runTests (enableObjectStorage: boolean) {
           enabled: true,
           resolutions: ConfigCommand.getCustomConfigResolutions(false),
 
-          webtorrent: {
+          webVideos: {
             enabled: true
           },
           hls: {
@@ -201,7 +201,7 @@ function runTests (enableObjectStorage: boolean) {
           enabled: true,
           resolutions: ConfigCommand.getCustomConfigResolutions(true),
 
-          webtorrent: {
+          webVideos: {
             enabled: true
           },
           hls: {

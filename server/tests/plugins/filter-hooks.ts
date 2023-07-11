@@ -493,7 +493,7 @@ describe('Test plugin filter hooks', function () {
       await servers[0].config.updateCustomSubConfig({
         newConfig: {
           transcoding: {
-            webtorrent: {
+            webVideos: {
               enabled: true
             },
             hls: {

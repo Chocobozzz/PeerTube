@@ -121,7 +121,7 @@ describe('Test update video privacy while transcoding', function () {
             hls: {
               enabled: true
             },
-            webtorrent: {
+            webVideos: {
               enabled: false
             }
           }

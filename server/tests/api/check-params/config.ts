@@ -126,7 +126,7 @@ describe('Test config API validators', function () {
         '2160p': false
       },
       alwaysTranscodeOriginalResolution: false,
-      webtorrent: {
+      webVideos: {
         enabled: true
       },
       hls: {
@@ -353,7 +353,7 @@ describe('Test config API validators', function () {
           hls: {
             enabled: false
           },
-          webtorrent: {
+          web_videos: {
             enabled: false
           }
         }

@@ -7768,7 +7768,7 @@ components:
               properties:
                 enabled:
                   type: boolean
-            webtorrent:
+            web_videos:
               type: object
               properties:
                 enabled:
@@ -8134,7 +8134,7 @@ components:
                   type: boolean
                 2160p:
                   type: boolean
-            webtorrent:
+            web_videos:
               type: object
               description: Web Video specific settings
               properties:

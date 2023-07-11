@@ -140,7 +140,7 @@ export interface ServerConfig {
       enabled: boolean
     }
 
-    webtorrent: {
+    web_videos: {
       enabled: boolean
     }
 

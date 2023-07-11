@@ -97,7 +97,7 @@ transcoding:
     1080p: true
     1440p: true
     2160p: true
-  webtorrent:
+  web_videos:
     enabled: true
   hls:
     enabled: true

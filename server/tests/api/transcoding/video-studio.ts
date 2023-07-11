@@ -277,7 +277,7 @@ describe('Test video studio', function () {
       await servers[0].config.updateExistingSubConfig({
         newConfig: {
           transcoding: {
-            webtorrent: {
+            webVideos: {
               enabled: false
             }
           }

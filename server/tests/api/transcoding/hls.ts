@@ -136,7 +136,7 @@ describe('Test HLS videos', function () {
             hls: {
               enabled: true
             },
-            webtorrent: {
+            webVideos: {
               enabled: false
             }
           }

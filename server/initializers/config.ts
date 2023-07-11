@@ -371,8 +371,8 @@ const CONFIG = {
     HLS: {
       get ENABLED () { return config.get<boolean>('transcoding.hls.enabled') }
     },
-    WEBTORRENT: {
-      get ENABLED () { return config.get<boolean>('transcoding.webtorrent.enabled') }
+    WEB_VIDEOS: {
+      get ENABLED () { return config.get<boolean>('transcoding.web_videos.enabled') }
     },
     REMOTE_RUNNERS: {
       get ENABLED () { return config.get<boolean>('transcoding.remote_runners.enabled') }
@@ -584,16 +584,6 @@ function isEmailEnabled () {
   return false
 }
 
-// ---------------------------------------------------------------------------
-
-export {
-  CONFIG,
-  registerConfigChangedHandler,
-  isEmailEnabled
-}
-
-// ---------------------------------------------------------------------------
-
 function getLocalConfigFilePath () {
   const localConfigDir = getLocalConfigDir()
 
@@ -603,6 +593,17 @@ function getLocalConfigFilePath () {
 
   return join(localConfigDir, filename + '.json')
 }
+
+// ---------------------------------------------------------------------------
+
+export {
+  CONFIG,
+  getLocalConfigFilePath,
+  registerConfigChangedHandler,
+  isEmailEnabled
+}
+
+// ---------------------------------------------------------------------------
 
 function getLocalConfigDir () {
   if (process.env.PEERTUBE_LOCAL_CONFIG) return process.env.PEERTUBE_LOCAL_CONFIG

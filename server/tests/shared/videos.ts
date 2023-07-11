@@ -28,7 +28,7 @@ async function completeWebVideoFilesCheck (options: {
   const serverConfig = await originServer.config.getConfig()
   const requiresAuth = video.privacy.id === VideoPrivacy.PRIVATE || video.privacy.id === VideoPrivacy.INTERNAL
 
-  const transcodingEnabled = serverConfig.transcoding.webtorrent.enabled
+  const transcodingEnabled = serverConfig.transcoding.web_videos.enabled
 
   for (const attributeFile of files) {
     const file = video.files.find(f => f.resolution.id === attributeFile.resolution)

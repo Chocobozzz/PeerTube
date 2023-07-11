@@ -132,8 +132,8 @@ class ServerConfigManager {
         hls: {
           enabled: CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.HLS.ENABLED
         },
-        webtorrent: {
-          enabled: CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.WEBTORRENT.ENABLED
+        web_videos: {
+          enabled: CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED
         },
         enabledResolutions: this.getEnabledResolutions('vod'),
         profile: CONFIG.TRANSCODING.PROFILE,
