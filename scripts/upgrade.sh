@@ -43,10 +43,11 @@ if [ -x "$(command -v pg_dump)" ]; then
   DB_USER=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['username'])")
   DB_PASS=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['password'])")
   DB_HOST=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['hostname'])")
+  DB_PORT=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['port'])")
   DB_SUFFIX=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['suffix'])")
   DB_NAME=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['name'] || '')")
 
-  PGPASSWORD=$DB_PASS pg_dump -U $DB_USER -h $DB_HOST -F c "${DB_NAME:-peertube${DB_SUFFIX}}" -f "$SQL_BACKUP_PATH"
+  PGPASSWORD=$DB_PASS pg_dump -U $DB_USER -p $DB_PORT -h $DB_HOST -F c "${DB_NAME:-peertube${DB_SUFFIX}}" -f "$SQL_BACKUP_PATH"
 else
   echo "pg_dump not found. Cannot make a SQL backup!"
 fi
