@@ -423,7 +423,7 @@ peertube-runner server
 
 ### Register
 
-Then, you can register the runner on a new PeerTube instance so the runner can process its transcoding job:
+Then, you can register the runner to process transcoding job of a remote PeerTube instance:
 
 ```bash
 peertube-runner register --url http://peertube.example.com --registration-token ptrrt-... --runner-name my-runner-name
