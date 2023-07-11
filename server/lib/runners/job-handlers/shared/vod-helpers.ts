@@ -2,7 +2,7 @@ import { move } from 'fs-extra'
 import { dirname, join } from 'path'
 import { logger, LoggerTagsFn } from '@server/helpers/logger'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding'
-import { onWebTorrentVideoFileTranscoding } from '@server/lib/transcoding/web-transcoding'
+import { onWebVideoFileTranscoding } from '@server/lib/transcoding/web-transcoding'
 import { buildNewFile } from '@server/lib/video-file'
 import { VideoModel } from '@server/models/video/video'
 import { MVideoFullLight } from '@server/types/models'
@@ -22,7 +22,7 @@ export async function onVODWebVideoOrAudioMergeTranscodingJob (options: {
   const newVideoFilePath = join(dirname(videoFilePath), videoFile.filename)
   await move(videoFilePath, newVideoFilePath)
 
-  await onWebTorrentVideoFileTranscoding({
+  await onWebVideoFileTranscoding({
     video,
     videoFile,
     videoOutputPath: newVideoFilePath

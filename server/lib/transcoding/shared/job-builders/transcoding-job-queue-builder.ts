@@ -12,7 +12,7 @@ import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS, hasAud
 import {
   HLSTranscodingPayload,
   MergeAudioTranscodingPayload,
-  NewWebTorrentResolutionTranscodingPayload,
+  NewWebVideoResolutionTranscodingPayload,
   OptimizeTranscodingPayload,
   VideoTranscodingPayload
 } from '@shared/models'
@@ -33,7 +33,7 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
     const { video, videoFile, isNewVideo, user, videoFileAlreadyLocked } = options
 
     let mergeOrOptimizePayload: MergeAudioTranscodingPayload | OptimizeTranscodingPayload
-    let nextTranscodingSequentialJobPayloads: (NewWebTorrentResolutionTranscodingPayload | HLSTranscodingPayload)[][] = []
+    let nextTranscodingSequentialJobPayloads: (NewWebVideoResolutionTranscodingPayload | HLSTranscodingPayload)[][] = []
 
     const mutexReleaser = videoFileAlreadyLocked
       ? () => {}
@@ -60,7 +60,7 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
         if (CONFIG.TRANSCODING.HLS.ENABLED === true) {
           nextTranscodingSequentialJobPayloads.push([
             this.buildHLSJobPayload({
-              deleteWebTorrentFiles: CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false,
+              deleteWebVideoFiles: CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false,
 
               // We had some issues with a web video quick transcoded while producing a HLS version of it
               copyCodecs: !quickTranscode,
@@ -116,7 +116,7 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
   // ---------------------------------------------------------------------------
 
   async createTranscodingJobs (options: {
-    transcodingType: 'hls' | 'webtorrent'
+    transcodingType: 'hls' | 'webtorrent' | 'web-video' // TODO: remove webtorrent in v7
     video: MVideoFullLight
     resolutions: number[]
     isNewVideo: boolean
@@ -138,8 +138,8 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
         return this.buildHLSJobPayload({ videoUUID: video.uuid, resolution, fps, isNewVideo })
       }
 
-      if (transcodingType === 'webtorrent') {
-        return this.buildWebTorrentJobPayload({ videoUUID: video.uuid, resolution, fps, isNewVideo })
+      if (transcodingType === 'webtorrent' || transcodingType === 'web-video') {
+        return this.buildWebVideoJobPayload({ videoUUID: video.uuid, resolution, fps, isNewVideo })
       }
 
       throw new Error('Unknown transcoding type')
@@ -149,7 +149,7 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
 
     const parent = transcodingType === 'hls'
       ? this.buildHLSJobPayload({ videoUUID: video.uuid, resolution: maxResolution, fps, isNewVideo })
-      : this.buildWebTorrentJobPayload({ videoUUID: video.uuid, resolution: maxResolution, fps, isNewVideo })
+      : this.buildWebVideoJobPayload({ videoUUID: video.uuid, resolution: maxResolution, fps, isNewVideo })
 
     // Process the last resolution after the other ones to prevent concurrency issue
     // Because low resolutions use the biggest one as ffmpeg input
@@ -160,8 +160,8 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
 
   private async createTranscodingJobsWithChildren (options: {
     videoUUID: string
-    parent: (HLSTranscodingPayload | NewWebTorrentResolutionTranscodingPayload)
-    children: (HLSTranscodingPayload | NewWebTorrentResolutionTranscodingPayload)[]
+    parent: (HLSTranscodingPayload | NewWebVideoResolutionTranscodingPayload)
+    children: (HLSTranscodingPayload | NewWebVideoResolutionTranscodingPayload)[]
     user: MUserId | null
   }) {
     const { videoUUID, parent, children, user } = options
@@ -203,14 +203,14 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
       options
     )
 
-    const sequentialPayloads: (NewWebTorrentResolutionTranscodingPayload | HLSTranscodingPayload)[][] = []
+    const sequentialPayloads: (NewWebVideoResolutionTranscodingPayload | HLSTranscodingPayload)[][] = []
 
     for (const resolution of resolutionsEnabled) {
       const fps = computeOutputFPS({ inputFPS: inputVideoFPS, resolution })
 
       if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED) {
-        const payloads: (NewWebTorrentResolutionTranscodingPayload | HLSTranscodingPayload)[] = [
-          this.buildWebTorrentJobPayload({
+        const payloads: (NewWebVideoResolutionTranscodingPayload | HLSTranscodingPayload)[] = [
+          this.buildWebVideoJobPayload({
             videoUUID: video.uuid,
             resolution,
             fps,
@@ -253,10 +253,10 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
     resolution: number
     fps: number
     isNewVideo: boolean
-    deleteWebTorrentFiles?: boolean // default false
+    deleteWebVideoFiles?: boolean // default false
     copyCodecs?: boolean // default false
   }): HLSTranscodingPayload {
-    const { videoUUID, resolution, fps, isNewVideo, deleteWebTorrentFiles = false, copyCodecs = false } = options
+    const { videoUUID, resolution, fps, isNewVideo, deleteWebVideoFiles = false, copyCodecs = false } = options
 
     return {
       type: 'new-resolution-to-hls',
@@ -265,20 +265,20 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
       fps,
       copyCodecs,
       isNewVideo,
-      deleteWebTorrentFiles
+      deleteWebVideoFiles
     }
   }
 
-  private buildWebTorrentJobPayload (options: {
+  private buildWebVideoJobPayload (options: {
     videoUUID: string
     resolution: number
     fps: number
     isNewVideo: boolean
-  }): NewWebTorrentResolutionTranscodingPayload {
+  }): NewWebVideoResolutionTranscodingPayload {
     const { videoUUID, resolution, fps, isNewVideo } = options
 
     return {
-      type: 'new-resolution-to-webtorrent',
+      type: 'new-resolution-to-web-video',
       videoUUID,
       isNewVideo,
       resolution,
@@ -294,7 +294,7 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
     const { videoUUID, isNewVideo, hasChildren } = options
 
     return {
-      type: 'merge-audio-to-webtorrent',
+      type: 'merge-audio-to-web-video',
       resolution: DEFAULT_AUDIO_RESOLUTION,
       fps: VIDEO_TRANSCODING_FPS.AUDIO_MERGE,
       videoUUID,
@@ -312,7 +312,7 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder {
     const { videoUUID, quickTranscode, isNewVideo, hasChildren } = options
 
     return {
-      type: 'optimize-to-webtorrent',
+      type: 'optimize-to-web-video',
       videoUUID,
       isNewVideo,
       hasChildren,

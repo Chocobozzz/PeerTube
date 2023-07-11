@@ -4,7 +4,7 @@ import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { YoutubeDLWrapper } from '@server/helpers/youtube-dl'
 import { CONFIG } from '@server/initializers/config'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'
-import { generateWebTorrentVideoFilename } from '@server/lib/paths'
+import { generateWebVideoFilename } from '@server/lib/paths'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { createOptimizeOrMergeAudioJobs } from '@server/lib/transcoding/create-transcoding-job'
@@ -148,7 +148,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
       extname: fileExt,
       resolution,
       size: stats.size,
-      filename: generateWebTorrentVideoFilename(resolution, fileExt),
+      filename: generateWebVideoFilename(resolution, fileExt),
       fps,
       videoId: videoImport.videoId
     }

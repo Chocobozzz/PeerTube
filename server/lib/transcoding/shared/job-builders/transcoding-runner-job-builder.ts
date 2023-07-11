@@ -89,7 +89,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
   // ---------------------------------------------------------------------------
 
   async createTranscodingJobs (options: {
-    transcodingType: 'hls' | 'webtorrent'
+    transcodingType: 'hls' | 'webtorrent' | 'web-video' // TODO: remove webtorrent in v7
     video: MVideoFullLight
     resolutions: number[]
     isNewVideo: boolean
@@ -130,7 +130,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
         continue
       }
 
-      if (transcodingType === 'webtorrent') {
+      if (transcodingType === 'webtorrent' || transcodingType === 'web-video') {
         await new VODWebVideoTranscodingJobHandler().create({
           video,
           resolution,

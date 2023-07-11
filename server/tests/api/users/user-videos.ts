@@ -184,7 +184,7 @@ describe('Test user videos', function () {
       }
     })
 
-    it('Should disable webtorrent, enable HLS, and update my quota', async function () {
+    it('Should disable web videos, enable HLS, and update my quota', async function () {
       this.timeout(160000)
 
       {

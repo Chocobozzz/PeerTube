@@ -1,5 +1,6 @@
 function isValidPlayerMode (value: any) {
-  return value === 'webtorrent' || value === 'p2p-media-loader'
+  // TODO: remove webtorrent in v7
+  return value === 'webtorrent' || value === 'web-video' || value === 'p2p-media-loader'
 }
 
 // ---------------------------------------------------------------------------

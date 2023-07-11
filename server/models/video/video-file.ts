@@ -26,8 +26,8 @@ import { buildRemoteVideoBaseUrl } from '@server/lib/activitypub/url'
 import {
   getHLSPrivateFileUrl,
   getHLSPublicFileUrl,
-  getWebTorrentPrivateFileUrl,
-  getWebTorrentPublicFileUrl
+  getWebVideoPrivateFileUrl,
+  getWebVideoPublicFileUrl
 } from '@server/lib/object-storage'
 import { getFSTorrentFilePath } from '@server/lib/paths'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy'
@@ -276,15 +276,15 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
 
   static async doesOwnedTorrentFileExist (filename: string) {
     const query = 'SELECT 1 FROM "videoFile" ' +
-                  'LEFT JOIN "video" "webtorrent" ON "webtorrent"."id" = "videoFile"."videoId" AND "webtorrent"."remote" IS FALSE ' +
+                  'LEFT JOIN "video" "webvideo" ON "webvideo"."id" = "videoFile"."videoId" AND "webvideo"."remote" IS FALSE ' +
                   'LEFT JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
                   'LEFT JOIN "video" "hlsVideo" ON "hlsVideo"."id" = "videoStreamingPlaylist"."videoId" AND "hlsVideo"."remote" IS FALSE ' +
-                  'WHERE "torrentFilename" = $filename AND ("hlsVideo"."id" IS NOT NULL OR "webtorrent"."id" IS NOT NULL) LIMIT 1'
+                  'WHERE "torrentFilename" = $filename AND ("hlsVideo"."id" IS NOT NULL OR "webvideo"."id" IS NOT NULL) LIMIT 1'
 
     return doesExist(this.sequelize, query, { filename })
   }
 
-  static async doesOwnedWebTorrentVideoFileExist (filename: string) {
+  static async doesOwnedWebVideoFileExist (filename: string) {
     const query = 'SELECT 1 FROM "videoFile" INNER JOIN "video" ON "video"."id" = "videoFile"."videoId" AND "video"."remote" IS FALSE ' +
                   `WHERE "filename" = $filename AND "storage" = ${VideoStorage.FILE_SYSTEM} LIMIT 1`
 
@@ -378,7 +378,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   }
 
   static getStats () {
-    const webtorrentFilesQuery: FindOptions = {
+    const webVideoFilesQuery: FindOptions = {
       include: [
         {
           attributes: [],
@@ -412,10 +412,10 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     }
 
     return Promise.all([
-      VideoFileModel.aggregate('size', 'SUM', webtorrentFilesQuery),
+      VideoFileModel.aggregate('size', 'SUM', webVideoFilesQuery),
       VideoFileModel.aggregate('size', 'SUM', hlsFilesQuery)
-    ]).then(([ webtorrentResult, hlsResult ]) => ({
-      totalLocalVideoFilesSize: parseAggregateResult(webtorrentResult) + parseAggregateResult(hlsResult)
+    ]).then(([ webVideoResult, hlsResult ]) => ({
+      totalLocalVideoFilesSize: parseAggregateResult(webVideoResult) + parseAggregateResult(hlsResult)
     }))
   }
 
@@ -433,7 +433,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
 
     const element = mode === 'streaming-playlist'
       ? await VideoFileModel.loadHLSFile({ ...baseFind, playlistId: videoFile.videoStreamingPlaylistId })
-      : await VideoFileModel.loadWebTorrentFile({ ...baseFind, videoId: videoFile.videoId })
+      : await VideoFileModel.loadWebVideoFile({ ...baseFind, videoId: videoFile.videoId })
 
     if (!element) return videoFile.save({ transaction })
 
@@ -444,7 +444,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     return element.save({ transaction })
   }
 
-  static async loadWebTorrentFile (options: {
+  static async loadWebVideoFile (options: {
     videoId: number
     fps: number
     resolution: number
@@ -523,7 +523,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
       return getHLSPrivateFileUrl(video, this.filename)
     }
 
-    return getWebTorrentPrivateFileUrl(this.filename)
+    return getWebVideoPrivateFileUrl(this.filename)
   }
 
   private getPublicObjectStorageUrl () {
@@ -531,7 +531,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
       return getHLSPublicFileUrl(this.fileUrl)
     }
 
-    return getWebTorrentPublicFileUrl(this.fileUrl)
+    return getWebVideoPublicFileUrl(this.fileUrl)
   }
 
   // ---------------------------------------------------------------------------
@@ -553,10 +553,10 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   getFileStaticPath (video: MVideo) {
     if (this.isHLS()) return this.getHLSFileStaticPath(video)
 
-    return this.getWebTorrentFileStaticPath(video)
+    return this.getWebVideoFileStaticPath(video)
   }
 
-  private getWebTorrentFileStaticPath (video: MVideo) {
+  private getWebVideoFileStaticPath (video: MVideo) {
     if (isVideoInPrivateDirectory(video.privacy)) {
       return join(STATIC_PATHS.PRIVATE_WEBSEED, this.filename)
     }

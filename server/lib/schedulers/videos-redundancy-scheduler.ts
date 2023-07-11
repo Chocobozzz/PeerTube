@@ -23,7 +23,7 @@ import { getLocalVideoCacheFileActivityPubUrl, getLocalVideoCacheStreamingPlayli
 import { getOrCreateAPVideo } from '../activitypub/videos'
 import { downloadPlaylistSegments } from '../hls'
 import { removeVideoRedundancy } from '../redundancy'
-import { generateHLSRedundancyUrl, generateWebTorrentRedundancyUrl } from '../video-urls'
+import { generateHLSRedundancyUrl, generateWebVideoRedundancyUrl } from '../video-urls'
 import { AbstractScheduler } from './abstract-scheduler'
 
 const lTags = loggerTagsFactory('redundancy')
@@ -244,7 +244,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const createdModel: MVideoRedundancyFileVideo = await VideoRedundancyModel.create({
       expiresOn,
       url: getLocalVideoCacheFileActivityPubUrl(file),
-      fileUrl: generateWebTorrentRedundancyUrl(file),
+      fileUrl: generateWebVideoRedundancyUrl(file),
       strategy,
       videoFileId: file.id,
       actorId: serverActor.id

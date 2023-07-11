@@ -7,7 +7,7 @@ import { getFileSize } from '@shared/extra-utils'
 import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS, isAudioFile } from '@shared/ffmpeg'
 import { VideoFileMetadata, VideoResolution } from '@shared/models'
 import { lTags } from './object-storage/shared'
-import { generateHLSVideoFilename, generateWebTorrentVideoFilename } from './paths'
+import { generateHLSVideoFilename, generateWebVideoFilename } from './paths'
 import { VideoPathManager } from './video-path-manager'
 
 async function buildNewFile (options: {
@@ -33,7 +33,7 @@ async function buildNewFile (options: {
   }
 
   videoFile.filename = mode === 'web-video'
-    ? generateWebTorrentVideoFilename(videoFile.resolution, videoFile.extname)
+    ? generateWebVideoFilename(videoFile.resolution, videoFile.extname)
     : generateHLSVideoFilename(videoFile.resolution)
 
   return videoFile
@@ -85,12 +85,12 @@ async function removeHLSFile (video: MVideoWithAllFiles, fileToDeleteId: number)
 
 // ---------------------------------------------------------------------------
 
-async function removeAllWebTorrentFiles (video: MVideoWithAllFiles) {
+async function removeAllWebVideoFiles (video: MVideoWithAllFiles) {
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {
     for (const file of video.VideoFiles) {
-      await video.removeWebTorrentFile(file)
+      await video.removeWebVideoFile(file)
       await file.destroy()
     }
 
@@ -102,17 +102,17 @@ async function removeAllWebTorrentFiles (video: MVideoWithAllFiles) {
   return video
 }
 
-async function removeWebTorrentFile (video: MVideoWithAllFiles, fileToDeleteId: number) {
+async function removeWebVideoFile (video: MVideoWithAllFiles, fileToDeleteId: number) {
   const files = video.VideoFiles
 
   if (files.length === 1) {
-    return removeAllWebTorrentFiles(video)
+    return removeAllWebVideoFiles(video)
   }
 
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
   try {
     const toDelete = files.find(f => f.id === fileToDeleteId)
-    await video.removeWebTorrentFile(toDelete)
+    await video.removeWebVideoFile(toDelete)
     await toDelete.destroy()
 
     video.VideoFiles = files.filter(f => f.id !== toDelete.id)
@@ -138,8 +138,8 @@ export {
 
   removeHLSPlaylist,
   removeHLSFile,
-  removeAllWebTorrentFiles,
-  removeWebTorrentFile,
+  removeAllWebVideoFiles,
+  removeWebVideoFile,
 
   buildFileMetadata
 }

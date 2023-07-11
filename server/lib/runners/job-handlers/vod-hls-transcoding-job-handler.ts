@@ -5,7 +5,7 @@ import { renameVideoFileInPlaylist } from '@server/lib/hls'
 import { getHlsResolutionPlaylistFilename } from '@server/lib/paths'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding'
 import { onHLSVideoFileTranscoding } from '@server/lib/transcoding/hls-transcoding'
-import { buildNewFile, removeAllWebTorrentFiles } from '@server/lib/video-file'
+import { buildNewFile, removeAllWebVideoFiles } from '@server/lib/video-file'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { MVideo } from '@server/types/models'
 import { MRunnerJob } from '@server/types/models/runners'
@@ -106,7 +106,7 @@ export class VODHLSTranscodingJobHandler extends AbstractVODTranscodingJobHandle
     if (privatePayload.deleteWebVideoFiles === true) {
       logger.info('Removing web video files of %s now we have a HLS version of it.', video.uuid, this.lTags(video.uuid))
 
-      await removeAllWebTorrentFiles(video)
+      await removeAllWebVideoFiles(video)
     }
 
     logger.info('Runner VOD HLS job %s for %s ended.', runnerJob.uuid, video.uuid, this.lTags(runnerJob.uuid, video.uuid))

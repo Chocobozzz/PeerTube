@@ -5,7 +5,7 @@ import { MVideo } from '@server/types/models'
 import { HttpStatusCode } from '@shared/models'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
 
-const videoFilesDeleteWebTorrentValidator = [
+const videoFilesDeleteWebVideoValidator = [
   isValidVideoIdParam('id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -16,17 +16,17 @@ const videoFilesDeleteWebTorrentValidator = [
 
     if (!checkLocalVideo(video, res)) return
 
-    if (!video.hasWebTorrentFiles()) {
+    if (!video.hasWebVideoFiles()) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'This video does not have WebTorrent files'
+        message: 'This video does not have Web Video files'
       })
     }
 
     if (!video.getHLSPlaylist()) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot delete WebTorrent files since this video does not have HLS playlist'
+        message: 'Cannot delete Web Video files since this video does not have HLS playlist'
       })
     }
 
@@ -34,7 +34,7 @@ const videoFilesDeleteWebTorrentValidator = [
   }
 ]
 
-const videoFilesDeleteWebTorrentFileValidator = [
+const videoFilesDeleteWebVideoFileValidator = [
   isValidVideoIdParam('id'),
 
   param('videoFileId')
@@ -52,14 +52,14 @@ const videoFilesDeleteWebTorrentFileValidator = [
     if (!files.find(f => f.id === +req.params.videoFileId)) {
       return res.fail({
         status: HttpStatusCode.NOT_FOUND_404,
-        message: 'This video does not have this WebTorrent file id'
+        message: 'This video does not have this Web Video file id'
       })
     }
 
     if (files.length === 1 && !video.getHLSPlaylist()) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot delete WebTorrent files since this video does not have HLS playlist'
+        message: 'Cannot delete Web Video files since this video does not have HLS playlist'
       })
     }
 
@@ -87,10 +87,10 @@ const videoFilesDeleteHLSValidator = [
       })
     }
 
-    if (!video.hasWebTorrentFiles()) {
+    if (!video.hasWebVideoFiles()) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot delete HLS playlist since this video does not have WebTorrent files'
+        message: 'Cannot delete HLS playlist since this video does not have Web Video files'
       })
     }
 
@@ -128,10 +128,10 @@ const videoFilesDeleteHLSFileValidator = [
     }
 
     // Last file to delete
-    if (hlsFiles.length === 1 && !video.hasWebTorrentFiles()) {
+    if (hlsFiles.length === 1 && !video.hasWebVideoFiles()) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Cannot delete last HLS playlist file since this video does not have WebTorrent files'
+        message: 'Cannot delete last HLS playlist file since this video does not have Web Video files'
       })
     }
 
@@ -140,8 +140,8 @@ const videoFilesDeleteHLSFileValidator = [
 ]
 
 export {
-  videoFilesDeleteWebTorrentValidator,
-  videoFilesDeleteWebTorrentFileValidator,
+  videoFilesDeleteWebVideoValidator,
+  videoFilesDeleteWebVideoFileValidator,
 
   videoFilesDeleteHLSValidator,
   videoFilesDeleteHLSFileValidator

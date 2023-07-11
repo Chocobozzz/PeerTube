@@ -48,10 +48,10 @@ describe('Test videos files', function () {
       await waitJobs(servers)
     })
 
-    it('Should delete webtorrent files', async function () {
+    it('Should delete web video files', async function () {
       this.timeout(30_000)
 
-      await servers[0].videos.removeAllWebTorrentFiles({ videoId: validId1 })
+      await servers[0].videos.removeAllWebVideoFiles({ videoId: validId1 })
 
       await waitJobs(servers)
 
@@ -80,15 +80,15 @@ describe('Test videos files', function () {
   })
 
   describe('When deleting a specific file', function () {
-    let webtorrentId: string
+    let webVideoId: string
     let hlsId: string
 
     before(async function () {
       this.timeout(120_000)
 
       {
-        const { uuid } = await servers[0].videos.quickUpload({ name: 'webtorrent' })
-        webtorrentId = uuid
+        const { uuid } = await servers[0].videos.quickUpload({ name: 'web-video' })
+        webVideoId = uuid
       }
 
       {
@@ -99,38 +99,38 @@ describe('Test videos files', function () {
       await waitJobs(servers)
     })
 
-    it('Shoulde delete a webtorrent file', async function () {
+    it('Shoulde delete a web video file', async function () {
       this.timeout(30_000)
 
-      const video = await servers[0].videos.get({ id: webtorrentId })
+      const video = await servers[0].videos.get({ id: webVideoId })
       const files = video.files
 
-      await servers[0].videos.removeWebTorrentFile({ videoId: webtorrentId, fileId: files[0].id })
+      await servers[0].videos.removeWebVideoFile({ videoId: webVideoId, fileId: files[0].id })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const video = await server.videos.get({ id: webtorrentId })
+        const video = await server.videos.get({ id: webVideoId })
 
         expect(video.files).to.have.lengthOf(files.length - 1)
         expect(video.files.find(f => f.id === files[0].id)).to.not.exist
       }
     })
 
-    it('Should delete all webtorrent files', async function () {
+    it('Should delete all web video files', async function () {
       this.timeout(30_000)
 
-      const video = await servers[0].videos.get({ id: webtorrentId })
+      const video = await servers[0].videos.get({ id: webVideoId })
       const files = video.files
 
       for (const file of files) {
-        await servers[0].videos.removeWebTorrentFile({ videoId: webtorrentId, fileId: file.id })
+        await servers[0].videos.removeWebVideoFile({ videoId: webVideoId, fileId: file.id })
       }
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        const video = await server.videos.get({ id: webtorrentId })
+        const video = await server.videos.get({ id: webVideoId })
 
         expect(video.files).to.have.lengthOf(0)
       }
@@ -182,16 +182,16 @@ describe('Test videos files', function () {
     it('Should not delete last file of a video', async function () {
       this.timeout(60_000)
 
-      const webtorrentOnly = await servers[0].videos.get({ id: hlsId })
-      const hlsOnly = await servers[0].videos.get({ id: webtorrentId })
+      const webVideoOnly = await servers[0].videos.get({ id: hlsId })
+      const hlsOnly = await servers[0].videos.get({ id: webVideoId })
 
       for (let i = 0; i < 4; i++) {
-        await servers[0].videos.removeWebTorrentFile({ videoId: webtorrentOnly.id, fileId: webtorrentOnly.files[i].id })
+        await servers[0].videos.removeWebVideoFile({ videoId: webVideoOnly.id, fileId: webVideoOnly.files[i].id })
         await servers[0].videos.removeHLSFile({ videoId: hlsOnly.id, fileId: hlsOnly.streamingPlaylists[0].files[i].id })
       }
 
       const expectedStatus = HttpStatusCode.BAD_REQUEST_400
-      await servers[0].videos.removeWebTorrentFile({ videoId: webtorrentOnly.id, fileId: webtorrentOnly.files[4].id, expectedStatus })
+      await servers[0].videos.removeWebVideoFile({ videoId: webVideoOnly.id, fileId: webVideoOnly.files[4].id, expectedStatus })
       await servers[0].videos.removeHLSFile({ videoId: hlsOnly.id, fileId: hlsOnly.streamingPlaylists[0].files[4].id, expectedStatus })
     })
   })

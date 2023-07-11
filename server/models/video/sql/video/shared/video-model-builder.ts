@@ -60,10 +60,10 @@ export class VideoModelBuilder {
   buildVideosFromRows (options: {
     rows: SQLRow[]
     include?: VideoInclude
-    rowsWebTorrentFiles?: SQLRow[]
+    rowsWebVideoFiles?: SQLRow[]
     rowsStreamingPlaylist?: SQLRow[]
   }) {
-    const { rows, rowsWebTorrentFiles, rowsStreamingPlaylist, include } = options
+    const { rows, rowsWebVideoFiles, rowsStreamingPlaylist, include } = options
 
     this.reinit()
 
@@ -85,8 +85,8 @@ export class VideoModelBuilder {
         this.addActorAvatar(row, 'VideoChannel.Account.Actor', accountActor)
       }
 
-      if (!rowsWebTorrentFiles) {
-        this.addWebTorrentFile(row, videoModel)
+      if (!rowsWebVideoFiles) {
+        this.addWebVideoFile(row, videoModel)
       }
 
       if (!rowsStreamingPlaylist) {
@@ -112,7 +112,7 @@ export class VideoModelBuilder {
       }
     }
 
-    this.grabSeparateWebTorrentFiles(rowsWebTorrentFiles)
+    this.grabSeparateWebVideoFiles(rowsWebVideoFiles)
     this.grabSeparateStreamingPlaylistFiles(rowsStreamingPlaylist)
 
     return this.videos
@@ -140,15 +140,15 @@ export class VideoModelBuilder {
     this.videos = []
   }
 
-  private grabSeparateWebTorrentFiles (rowsWebTorrentFiles?: SQLRow[]) {
-    if (!rowsWebTorrentFiles) return
+  private grabSeparateWebVideoFiles (rowsWebVideoFiles?: SQLRow[]) {
+    if (!rowsWebVideoFiles) return
 
-    for (const row of rowsWebTorrentFiles) {
+    for (const row of rowsWebVideoFiles) {
       const id = row['VideoFiles.id']
       if (!id) continue
 
       const videoModel = this.videosMemo[row.id]
-      this.addWebTorrentFile(row, videoModel)
+      this.addWebVideoFile(row, videoModel)
       this.addRedundancy(row, 'VideoFiles', this.videoFileMemo[id])
     }
   }
@@ -258,7 +258,7 @@ export class VideoModelBuilder {
     this.thumbnailsDone.add(id)
   }
 
-  private addWebTorrentFile (row: SQLRow, videoModel: VideoModel) {
+  private addWebVideoFile (row: SQLRow, videoModel: VideoModel) {
     const id = row['VideoFiles.id']
     if (!id || this.videoFileMemo[id]) return
 

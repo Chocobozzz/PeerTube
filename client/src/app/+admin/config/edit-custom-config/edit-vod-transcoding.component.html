@@ -71,7 +71,7 @@
                   <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
                     <my-peertube-checkbox
                       inputName="transcodingWebTorrentEnabled" formControlName="enabled"
-                      i18n-labelText labelText="WebTorrent enabled"
+                      i18n-labelText labelText="Web Videos enabled"
                     >
                       <ng-template ptTemplate="help">
                         <ng-container>
@@ -93,14 +93,14 @@
                         <ng-container i18n>
                           <strong>Requires ffmpeg >= 4.1</strong>
 
-                          <p>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with plain WebTorrent:</p>
+                          <p>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:</p>
                           <ul>
                             <li>Resolution change is smoother</li>
                             <li>Faster playback especially with long videos</li>
                             <li>More stable playback (less bugs/infinite loading)</li>
                           </ul>
 
-                          <p>If you also enabled WebTorrent support, it will multiply videos storage by 2</p>
+                          <p>If you also enabled Web Videos support, it will multiply videos storage by 2</p>
                         </ng-container>
                       </ng-template>
                     </my-peertube-checkbox>

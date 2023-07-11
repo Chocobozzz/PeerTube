@@ -201,7 +201,7 @@ object_storage:
     # Useful when you want to use a CDN/external proxy
     base_url: '' # Example: 'https://mirror.example.com'
 
-  # Same settings but for webtorrent videos
+  # Same settings but for web videos
   videos:
     bucket_name: 'videos'
     prefix: ''
@@ -480,18 +480,18 @@ transcoding:
   # Transcode and keep original resolution, even if it's above your maximum enabled resolution
   always_transcode_original_resolution: true
 
-  # Generate videos in a WebTorrent format (what we do since the first PeerTube release)
+  # Generate videos in a web compatible format
   # If you also enabled the hls format, it will multiply videos storage by 2
   # If disabled, breaks federation with PeerTube instances < 2.1
   webtorrent:
     enabled: false
 
   # /!\ Requires ffmpeg >= 4.1
-  # Generate HLS playlists and fragmented MP4 files. Better playback than with WebTorrent:
+  # Generate HLS playlists and fragmented MP4 files. Better playback than with Web Videos:
   #     * Resolution change is smoother
   #     * Faster playback in particular with long videos
   #     * More stable playback (less bugs/infinite loading)
-  # If you also enabled the webtorrent format, it will multiply videos storage by 2
+  # If you also enabled the web videos format, it will multiply videos storage by 2
   hls:
     enabled: true
 

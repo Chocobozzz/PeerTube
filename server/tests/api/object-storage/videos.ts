@@ -41,8 +41,8 @@ async function checkFiles (options: {
   playlistBucket: string
   playlistPrefix?: string
 
-  webtorrentBucket: string
-  webtorrentPrefix?: string
+  webVideoBucket: string
+  webVideoPrefix?: string
 }) {
   const {
     server,
@@ -50,20 +50,20 @@ async function checkFiles (options: {
     originSQLCommand,
     video,
     playlistBucket,
-    webtorrentBucket,
+    webVideoBucket,
     baseMockUrl,
     playlistPrefix,
-    webtorrentPrefix
+    webVideoPrefix
   } = options
 
   let allFiles = video.files
 
   for (const file of video.files) {
     const baseUrl = baseMockUrl
-      ? `${baseMockUrl}/${webtorrentBucket}/`
-      : `http://${webtorrentBucket}.${ObjectStorageCommand.getMockEndpointHost()}/`
+      ? `${baseMockUrl}/${webVideoBucket}/`
+      : `http://${webVideoBucket}.${ObjectStorageCommand.getMockEndpointHost()}/`
 
-    const prefix = webtorrentPrefix || ''
+    const prefix = webVideoPrefix || ''
     const start = baseUrl + prefix
 
     expectStartWith(file.fileUrl, start)
@@ -134,8 +134,8 @@ function runTestSuite (options: {
   playlistBucket: string
   playlistPrefix?: string
 
-  webtorrentBucket: string
-  webtorrentPrefix?: string
+  webVideoBucket: string
+  webVideoPrefix?: string
 
   useMockBaseUrl?: boolean
 }) {
@@ -161,7 +161,7 @@ function runTestSuite (options: {
       : undefined
 
     await objectStorage.createMockBucket(options.playlistBucket)
-    await objectStorage.createMockBucket(options.webtorrentBucket)
+    await objectStorage.createMockBucket(options.webVideoBucket)
 
     const config = {
       object_storage: {
@@ -182,10 +182,10 @@ function runTestSuite (options: {
         },
 
         videos: {
-          bucket_name: options.webtorrentBucket,
-          prefix: options.webtorrentPrefix,
+          bucket_name: options.webVideoBucket,
+          prefix: options.webVideoPrefix,
           base_url: baseMockUrl
-            ? `${baseMockUrl}/${options.webtorrentBucket}`
+            ? `${baseMockUrl}/${options.webVideoBucket}`
             : undefined
         }
       }
@@ -386,27 +386,27 @@ describe('Object storage for videos', function () {
   describe('Test simple object storage', function () {
     runTestSuite({
       playlistBucket: objectStorage.getMockBucketName('streaming-playlists'),
-      webtorrentBucket: objectStorage.getMockBucketName('videos')
+      webVideoBucket: objectStorage.getMockBucketName('videos')
     })
   })
 
   describe('Test object storage with prefix', function () {
     runTestSuite({
       playlistBucket: objectStorage.getMockBucketName('mybucket'),
-      webtorrentBucket: objectStorage.getMockBucketName('mybucket'),
+      webVideoBucket: objectStorage.getMockBucketName('mybucket'),
 
       playlistPrefix: 'streaming-playlists_',
-      webtorrentPrefix: 'webtorrent_'
+      webVideoPrefix: 'webvideo_'
     })
   })
 
   describe('Test object storage with prefix and base URL', function () {
     runTestSuite({
       playlistBucket: objectStorage.getMockBucketName('mybucket'),
-      webtorrentBucket: objectStorage.getMockBucketName('mybucket'),
+      webVideoBucket: objectStorage.getMockBucketName('mybucket'),
 
       playlistPrefix: 'streaming-playlists/',
-      webtorrentPrefix: 'webtorrent/',
+      webVideoPrefix: 'webvideo/',
 
       useMockBaseUrl: true
     })
@@ -431,7 +431,7 @@ describe('Object storage for videos', function () {
     runTestSuite({
       maxUploadPart,
       playlistBucket: objectStorage.getMockBucketName('streaming-playlists'),
-      webtorrentBucket: objectStorage.getMockBucketName('videos'),
+      webVideoBucket: objectStorage.getMockBucketName('videos'),
       fixture
     })
   })

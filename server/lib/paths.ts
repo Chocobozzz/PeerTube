@@ -8,7 +8,7 @@ import { isVideoInPrivateDirectory } from './video-privacy'
 
 // ################## Video file name ##################
 
-function generateWebTorrentVideoFilename (resolution: number, extname: string) {
+function generateWebVideoFilename (resolution: number, extname: string) {
   return buildUUID() + '-' + resolution + extname
 }
 
@@ -76,7 +76,7 @@ function getFSTorrentFilePath (videoFile: MVideoFile) {
 
 export {
   generateHLSVideoFilename,
-  generateWebTorrentVideoFilename,
+  generateWebVideoFilename,
 
   generateTorrentFileName,
   getFSTorrentFilePath,

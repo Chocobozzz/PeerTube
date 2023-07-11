@@ -38,6 +38,6 @@ export function isStreamingPlaylistFile (file: any): file is MVideoFileStreaming
   return !!file.videoStreamingPlaylistId
 }
 
-export function isWebtorrentFile (file: any): file is MVideoFileVideo {
+export function isWebVideoFile (file: any): file is MVideoFileVideo {
   return !!file.videoId
 }

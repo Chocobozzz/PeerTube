@@ -30,7 +30,9 @@ export interface VideosCommonQuery {
   tagsAllOf?: string[]
 
   hasHLSFiles?: boolean
-  hasWebtorrentFiles?: boolean
+
+  hasWebtorrentFiles?: boolean // TODO: remove in v7
+  hasWebVideoFiles?: boolean
 
   skipCount?: boolean
 

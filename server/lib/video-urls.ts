@@ -9,7 +9,7 @@ function generateHLSRedundancyUrl (video: MVideo, playlist: MStreamingPlaylist) 
   return WEBSERVER.URL + STATIC_PATHS.REDUNDANCY + playlist.getStringType() + '/' + video.uuid
 }
 
-function generateWebTorrentRedundancyUrl (file: MVideoFile) {
+function generateWebVideoRedundancyUrl (file: MVideoFile) {
   return WEBSERVER.URL + STATIC_PATHS.REDUNDANCY + file.filename
 }
 
@@ -26,6 +26,6 @@ function getLocalVideoFileMetadataUrl (video: MVideoUUID, videoFile: MVideoFile)
 export {
   getLocalVideoFileMetadataUrl,
 
-  generateWebTorrentRedundancyUrl,
+  generateWebVideoRedundancyUrl,
   generateHLSRedundancyUrl
 }

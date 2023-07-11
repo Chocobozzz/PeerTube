@@ -30,8 +30,6 @@ export class User implements UserServerModel {
   autoPlayNextVideoPlaylist: boolean
 
   p2pEnabled: boolean
-  // FIXME: deprecated in 4.1
-  webTorrentEnabled: never
 
   videosHistoryEnabled: boolean
   videoLanguages: string[]

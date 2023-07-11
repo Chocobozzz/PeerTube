@@ -686,10 +686,10 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  removeAllWebTorrentFiles (options: OverrideCommandOptions & {
+  removeAllWebVideoFiles (options: OverrideCommandOptions & {
     videoId: number | string
   }) {
-    const path = '/api/v1/videos/' + options.videoId + '/webtorrent'
+    const path = '/api/v1/videos/' + options.videoId + '/web-videos'
 
     return this.deleteRequest({
       ...options,
@@ -700,11 +700,11 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  removeWebTorrentFile (options: OverrideCommandOptions & {
+  removeWebVideoFile (options: OverrideCommandOptions & {
     videoId: number | string
     fileId: number
   }) {
-    const path = '/api/v1/videos/' + options.videoId + '/webtorrent/' + options.fileId
+    const path = '/api/v1/videos/' + options.videoId + '/web-videos/' + options.fileId
 
     return this.deleteRequest({
       ...options,
@@ -717,7 +717,7 @@ export class VideosCommand extends AbstractCommand {
 
   runTranscoding (options: OverrideCommandOptions & {
     videoId: number | string
-    transcodingType: 'hls' | 'webtorrent'
+    transcodingType: 'hls' | 'webtorrent' | 'web-video'
   }) {
     const path = '/api/v1/videos/' + options.videoId + '/transcoding'
 

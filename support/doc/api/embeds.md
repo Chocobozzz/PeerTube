@@ -146,7 +146,7 @@ Value must be a valid color (`red` or `rgba(100, 100, 100, 0.5)`).
 
 Force a specific player engine.
 
-Value must be a valid mode (`webtorrent` or `p2p-media-loader`).
+Value must be a valid mode (`web-video` or `p2p-media-loader`).
 
 ### api
 

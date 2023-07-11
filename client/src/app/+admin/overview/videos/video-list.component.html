@@ -83,8 +83,8 @@
       </td>
 
       <td>
-        <span *ngIf="isHLS(video)" class="pt-badge badge-blue">HLS</span>
-        <span *ngIf="isWebTorrent(video)" class="pt-badge badge-blue">WebTorrent ({{ video.files.length }})</span>
+        <span *ngIf="hasHLS(video)" class="pt-badge badge-blue">HLS</span>
+        <span *ngIf="hasWebVideos(video)" class="pt-badge badge-blue">Web Videos ({{ video.files.length }})</span>
         <span i18n *ngIf="video.isLive" class="pt-badge badge-blue">Live</span>
         <span i18n *ngIf="hasObjectStorage(video)" class="pt-badge badge-purple">Object storage</span>
 
@@ -102,8 +102,8 @@
     <tr>
       <td class="video-info expand-cell" myAutoColspan>
         <div>
-          <div *ngIf="isWebTorrent(video)">
-            WebTorrent:
+          <div *ngIf="hasWebVideos(video)">
+            Web Videos:
 
             <ul>
               <li *ngFor="let file of video.files">
@@ -112,13 +112,13 @@
                 <my-global-icon
                   *ngIf="canRemoveOneFile(video)"
                   i18n-ngbTooltip ngbTooltip="Delete this file" iconName="delete" role="button"
-                  (click)="removeVideoFile(video, file, 'webtorrent')"
+                  (click)="removeVideoFile(video, file, 'web-videos')"
                 ></my-global-icon>
               </li>
             </ul>
           </div>
 
-          <div *ngIf="isHLS(video)">
+          <div *ngIf="hasHLS(video)">
             HLS:
 
             <ul>

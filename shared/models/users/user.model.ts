@@ -22,8 +22,6 @@ export interface User {
   autoPlayNextVideo: boolean
   autoPlayNextVideoPlaylist: boolean
 
-  // @deprecated in favour of p2pEnabled
-  webTorrentEnabled: boolean
   p2pEnabled: boolean
 
   videosHistoryEnabled: boolean

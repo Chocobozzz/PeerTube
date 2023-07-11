@@ -24,13 +24,13 @@ describe('Test VOD transcoding in peertube-runner program', function () {
   let peertubeRunner: PeerTubeRunnerProcess
 
   function runSuite (options: {
-    webtorrentEnabled: boolean
+    webVideoEnabled: boolean
     hlsEnabled: boolean
     objectStorage?: ObjectStorageCommand
   }) {
-    const { webtorrentEnabled, hlsEnabled, objectStorage } = options
+    const { webVideoEnabled, hlsEnabled, objectStorage } = options
 
-    const objectStorageBaseUrlWebTorrent = objectStorage
+    const objectStorageBaseUrlWebVideo = objectStorage
       ? objectStorage.getMockWebVideosBaseUrl()
       : undefined
 
@@ -46,13 +46,13 @@ describe('Test VOD transcoding in peertube-runner program', function () {
       await waitJobs(servers, { runnerJobs: true })
 
       for (const server of servers) {
-        if (webtorrentEnabled) {
+        if (webVideoEnabled) {
           await completeWebVideoFilesCheck({
             server,
             originServer: servers[0],
             fixture: 'video_short.mp4',
             videoUUID: uuid,
-            objectStorageBaseUrl: objectStorageBaseUrlWebTorrent,
+            objectStorageBaseUrl: objectStorageBaseUrlWebVideo,
             files: [
               { resolution: 0 },
               { resolution: 144 },
@@ -66,7 +66,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
 
         if (hlsEnabled) {
           await completeCheckHlsPlaylist({
-            hlsOnly: !webtorrentEnabled,
+            hlsOnly: !webVideoEnabled,
             servers,
             videoUUID: uuid,
             objectStorageBaseUrl: objectStorageBaseUrlHLS,
@@ -84,13 +84,13 @@ describe('Test VOD transcoding in peertube-runner program', function () {
       await waitJobs(servers, { runnerJobs: true })
 
       for (const server of servers) {
-        if (webtorrentEnabled) {
+        if (webVideoEnabled) {
           await completeWebVideoFilesCheck({
             server,
             originServer: servers[0],
             fixture: 'video_short.webm',
             videoUUID: uuid,
-            objectStorageBaseUrl: objectStorageBaseUrlWebTorrent,
+            objectStorageBaseUrl: objectStorageBaseUrlWebVideo,
             files: [
               { resolution: 0 },
               { resolution: 144 },
@@ -104,7 +104,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
 
         if (hlsEnabled) {
           await completeCheckHlsPlaylist({
-            hlsOnly: !webtorrentEnabled,
+            hlsOnly: !webVideoEnabled,
             servers,
             videoUUID: uuid,
             objectStorageBaseUrl: objectStorageBaseUrlHLS,
@@ -123,13 +123,13 @@ describe('Test VOD transcoding in peertube-runner program', function () {
       await waitJobs(servers, { runnerJobs: true })
 
       for (const server of servers) {
-        if (webtorrentEnabled) {
+        if (webVideoEnabled) {
           await completeWebVideoFilesCheck({
             server,
             originServer: servers[0],
             fixture: 'sample.ogg',
             videoUUID: uuid,
-            objectStorageBaseUrl: objectStorageBaseUrlWebTorrent,
+            objectStorageBaseUrl: objectStorageBaseUrlWebVideo,
             files: [
               { resolution: 0 },
               { resolution: 144 },
@@ -142,7 +142,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
 
         if (hlsEnabled) {
           await completeCheckHlsPlaylist({
-            hlsOnly: !webtorrentEnabled,
+            hlsOnly: !webVideoEnabled,
             servers,
             videoUUID: uuid,
             objectStorageBaseUrl: objectStorageBaseUrlHLS,
@@ -159,13 +159,13 @@ describe('Test VOD transcoding in peertube-runner program', function () {
 
       await waitJobs(servers, { runnerJobs: true })
 
-      if (webtorrentEnabled) {
+      if (webVideoEnabled) {
         await completeWebVideoFilesCheck({
           server: servers[0],
           originServer: servers[0],
           fixture: 'video_short.mp4',
           videoUUID: uuid,
-          objectStorageBaseUrl: objectStorageBaseUrlWebTorrent,
+          objectStorageBaseUrl: objectStorageBaseUrlWebVideo,
           files: [
             { resolution: 0 },
             { resolution: 144 },
@@ -179,7 +179,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
 
       if (hlsEnabled) {
         await completeCheckHlsPlaylist({
-          hlsOnly: !webtorrentEnabled,
+          hlsOnly: !webVideoEnabled,
           servers: [ servers[0] ],
           videoUUID: uuid,
           objectStorageBaseUrl: objectStorageBaseUrlHLS,
@@ -203,7 +203,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
 
       await servers[0].config.enableTranscoding(true, true, true)
 
-      await servers[0].videos.runTranscoding({ transcodingType: 'webtorrent', videoId: uuid })
+      await servers[0].videos.runTranscoding({ transcodingType: 'web-video', videoId: uuid })
       await waitJobs(servers, { runnerJobs: true })
 
       await completeWebVideoFilesCheck({
@@ -211,7 +211,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         originServer: servers[0],
         fixture: 'video_short.mp4',
         videoUUID: uuid,
-        objectStorageBaseUrl: objectStorageBaseUrlWebTorrent,
+        objectStorageBaseUrl: objectStorageBaseUrlWebVideo,
         files: [
           { resolution: 0 },
           { resolution: 144 },
@@ -262,7 +262,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         await servers[0].config.enableTranscoding(true, false, true)
       })
 
-      runSuite({ webtorrentEnabled: true, hlsEnabled: false })
+      runSuite({ webVideoEnabled: true, hlsEnabled: false })
     })
 
     describe('HLS videos only enabled', function () {
@@ -271,7 +271,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         await servers[0].config.enableTranscoding(false, true, true)
       })
 
-      runSuite({ webtorrentEnabled: false, hlsEnabled: true })
+      runSuite({ webVideoEnabled: false, hlsEnabled: true })
     })
 
     describe('Web video & HLS enabled', function () {
@@ -280,7 +280,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         await servers[0].config.enableTranscoding(true, true, true)
       })
 
-      runSuite({ webtorrentEnabled: true, hlsEnabled: true })
+      runSuite({ webVideoEnabled: true, hlsEnabled: true })
     })
   })
 
@@ -306,7 +306,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         await servers[0].config.enableTranscoding(true, false, true)
       })
 
-      runSuite({ webtorrentEnabled: true, hlsEnabled: false, objectStorage })
+      runSuite({ webVideoEnabled: true, hlsEnabled: false, objectStorage })
     })
 
     describe('HLS videos only enabled', function () {
@@ -315,7 +315,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         await servers[0].config.enableTranscoding(false, true, true)
       })
 
-      runSuite({ webtorrentEnabled: false, hlsEnabled: true, objectStorage })
+      runSuite({ webVideoEnabled: false, hlsEnabled: true, objectStorage })
     })
 
     describe('Web video & HLS enabled', function () {
@@ -324,7 +324,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         await servers[0].config.enableTranscoding(true, true, true)
       })
 
-      runSuite({ webtorrentEnabled: true, hlsEnabled: true, objectStorage })
+      runSuite({ webVideoEnabled: true, hlsEnabled: true, objectStorage })
     })
 
     after(async function () {

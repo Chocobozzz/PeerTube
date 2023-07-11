@@ -4,7 +4,7 @@ import { logger } from '@server/helpers/logger'
 import { DIRECTORIES } from '@server/initializers/constants'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { VideoPrivacy, VideoStorage } from '@shared/models'
-import { updateHLSFilesACL, updateWebTorrentFileACL } from './object-storage'
+import { updateHLSFilesACL, updateWebVideoFileACL } from './object-storage'
 
 const validPrivacySet = new Set([
   VideoPrivacy.PRIVATE,
@@ -67,9 +67,9 @@ async function moveFiles (options: {
 
   for (const file of video.VideoFiles) {
     if (file.storage === VideoStorage.FILE_SYSTEM) {
-      await moveWebTorrentFileOnFS(type, video, file)
+      await moveWebVideoFileOnFS(type, video, file)
     } else {
-      await updateWebTorrentFileACL(video, file)
+      await updateWebVideoFileACL(video, file)
     }
   }
 
@@ -84,22 +84,22 @@ async function moveFiles (options: {
   }
 }
 
-async function moveWebTorrentFileOnFS (type: MoveType, video: MVideo, file: MVideoFile) {
-  const directories = getWebTorrentDirectories(type)
+async function moveWebVideoFileOnFS (type: MoveType, video: MVideo, file: MVideoFile) {
+  const directories = getWebVideoDirectories(type)
 
   const source = join(directories.old, file.filename)
   const destination = join(directories.new, file.filename)
 
   try {
-    logger.info('Moving WebTorrent files of %s after privacy change (%s -> %s).', video.uuid, source, destination)
+    logger.info('Moving web video files of %s after privacy change (%s -> %s).', video.uuid, source, destination)
 
     await move(source, destination)
   } catch (err) {
-    logger.error('Cannot move webtorrent file %s to %s after privacy change', source, destination, { err })
+    logger.error('Cannot move web video file %s to %s after privacy change', source, destination, { err })
   }
 }
 
-function getWebTorrentDirectories (moveType: MoveType) {
+function getWebVideoDirectories (moveType: MoveType) {
   if (moveType === 'private-to-public') {
     return { old: DIRECTORIES.VIDEOS.PRIVATE, new: DIRECTORIES.VIDEOS.PUBLIC }
   }

@@ -273,7 +273,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
         })
   }
 
-  async removeVideoFiles (video: Video, type: 'hls' | 'webtorrent') {
+  async removeVideoFiles (video: Video, type: 'hls' | 'web-videos') {
     const confirmMessage = $localize`Do you really want to remove "${this.video.name}" files?`
 
     const res = await this.confirmService.confirm(confirmMessage, $localize`Remove "${this.video.name}" files`)
@@ -290,7 +290,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
       })
   }
 
-  runTranscoding (video: Video, type: 'hls' | 'webtorrent') {
+  runTranscoding (video: Video, type: 'hls' | 'web-video') {
     this.videoService.runTranscoding([ video.id ], type)
       .subscribe({
         next: () => {
@@ -394,8 +394,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
           iconName: 'cog'
         },
         {
-          label: $localize`Run WebTorrent transcoding`,
-          handler: ({ video }) => this.runTranscoding(video, 'webtorrent'),
+          label: $localize`Run Web Video transcoding`,
+          handler: ({ video }) => this.runTranscoding(video, 'web-video'),
           isDisplayed: () => this.displayOptions.transcoding && this.canRunTranscoding(),
           iconName: 'cog'
         },
@@ -406,8 +406,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
           iconName: 'delete'
         },
         {
-          label: $localize`Delete WebTorrent files`,
-          handler: ({ video }) => this.removeVideoFiles(video, 'webtorrent'),
+          label: $localize`Delete Web Video files`,
+          handler: ({ video }) => this.removeVideoFiles(video, 'web-videos'),
           isDisplayed: () => this.displayOptions.removeFiles && this.canRemoveVideoFiles(),
           iconName: 'delete'
         }

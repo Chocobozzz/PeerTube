@@ -148,17 +148,17 @@ export interface HLSTranscodingPayload extends BaseTranscodingPayload {
   fps: number
   copyCodecs: boolean
 
-  deleteWebTorrentFiles: boolean
+  deleteWebVideoFiles: boolean
 }
 
-export interface NewWebTorrentResolutionTranscodingPayload extends BaseTranscodingPayload {
-  type: 'new-resolution-to-webtorrent'
+export interface NewWebVideoResolutionTranscodingPayload extends BaseTranscodingPayload {
+  type: 'new-resolution-to-web-video'
   resolution: VideoResolution
   fps: number
 }
 
 export interface MergeAudioTranscodingPayload extends BaseTranscodingPayload {
-  type: 'merge-audio-to-webtorrent'
+  type: 'merge-audio-to-web-video'
 
   resolution: VideoResolution
   fps: number
@@ -167,7 +167,7 @@ export interface MergeAudioTranscodingPayload extends BaseTranscodingPayload {
 }
 
 export interface OptimizeTranscodingPayload extends BaseTranscodingPayload {
-  type: 'optimize-to-webtorrent'
+  type: 'optimize-to-web-video'
 
   quickTranscode: boolean
 
@@ -176,7 +176,7 @@ export interface OptimizeTranscodingPayload extends BaseTranscodingPayload {
 
 export type VideoTranscodingPayload =
   HLSTranscodingPayload
-  | NewWebTorrentResolutionTranscodingPayload
+  | NewWebVideoResolutionTranscodingPayload
   | OptimizeTranscodingPayload
   | MergeAudioTranscodingPayload
 

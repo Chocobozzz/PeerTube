@@ -10,7 +10,7 @@ import { VideoResolution, VideoStorage } from '@shared/models'
 import { CONFIG } from '../../initializers/config'
 import { VideoFileModel } from '../../models/video/video-file'
 import { JobQueue } from '../job-queue'
-import { generateWebTorrentVideoFilename } from '../paths'
+import { generateWebVideoFilename } from '../paths'
 import { buildFileMetadata } from '../video-file'
 import { VideoPathManager } from '../video-path-manager'
 import { buildFFmpegVOD } from './shared'
@@ -63,10 +63,10 @@ export async function optimizeOriginalVideofile (options: {
       // Important to do this before getVideoFilename() to take in account the new filename
       inputVideoFile.resolution = resolution
       inputVideoFile.extname = newExtname
-      inputVideoFile.filename = generateWebTorrentVideoFilename(resolution, newExtname)
+      inputVideoFile.filename = generateWebVideoFilename(resolution, newExtname)
       inputVideoFile.storage = VideoStorage.FILE_SYSTEM
 
-      const { videoFile } = await onWebTorrentVideoFileTranscoding({
+      const { videoFile } = await onWebVideoFileTranscoding({
         video,
         videoFile: inputVideoFile,
         videoOutputPath
@@ -83,8 +83,8 @@ export async function optimizeOriginalVideofile (options: {
   }
 }
 
-// Transcode the original video file to a lower resolution compatible with WebTorrent
-export async function transcodeNewWebTorrentResolution (options: {
+// Transcode the original video file to a lower resolution compatible with web browsers
+export async function transcodeNewWebVideoResolution (options: {
   video: MVideoFullLight
   resolution: VideoResolution
   fps: number
@@ -105,7 +105,7 @@ export async function transcodeNewWebTorrentResolution (options: {
       const newVideoFile = new VideoFileModel({
         resolution,
         extname: newExtname,
-        filename: generateWebTorrentVideoFilename(resolution, newExtname),
+        filename: generateWebVideoFilename(resolution, newExtname),
         size: 0,
         videoId: video.id
       })
@@ -126,7 +126,7 @@ export async function transcodeNewWebTorrentResolution (options: {
 
       await buildFFmpegVOD(job).transcode(transcodeOptions)
 
-      return onWebTorrentVideoFileTranscoding({ video, videoFile: newVideoFile, videoOutputPath })
+      return onWebVideoFileTranscoding({ video, videoFile: newVideoFile, videoOutputPath })
     })
 
     return result
@@ -189,14 +189,14 @@ export async function mergeAudioVideofile (options: {
       // Important to do this before getVideoFilename() to take in account the new file extension
       inputVideoFile.extname = newExtname
       inputVideoFile.resolution = resolution
-      inputVideoFile.filename = generateWebTorrentVideoFilename(inputVideoFile.resolution, newExtname)
+      inputVideoFile.filename = generateWebVideoFilename(inputVideoFile.resolution, newExtname)
 
       // ffmpeg generated a new video file, so update the video duration
       // See https://trac.ffmpeg.org/ticket/5456
       video.duration = await getVideoStreamDuration(videoOutputPath)
       await video.save()
 
-      return onWebTorrentVideoFileTranscoding({
+      return onWebVideoFileTranscoding({
         video,
         videoFile: inputVideoFile,
         videoOutputPath,
@@ -210,7 +210,7 @@ export async function mergeAudioVideofile (options: {
   }
 }
 
-export async function onWebTorrentVideoFileTranscoding (options: {
+export async function onWebVideoFileTranscoding (options: {
   video: MVideoFullLight
   videoFile: MVideoFile
   videoOutputPath: string
@@ -239,8 +239,8 @@ export async function onWebTorrentVideoFileTranscoding (options: {
 
     await createTorrentAndSetInfoHash(video, videoFile)
 
-    const oldFile = await VideoFileModel.loadWebTorrentFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })
-    if (oldFile) await video.removeWebTorrentFile(oldFile)
+    const oldFile = await VideoFileModel.loadWebVideoFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })
+    if (oldFile) await video.removeWebVideoFile(oldFile)
 
     await VideoFileModel.customUpsert(videoFile, 'video', undefined)
     video.VideoFiles = await video.$get('VideoFiles')

@@ -215,22 +215,22 @@ async function checkVideoFilesWereRemoved (options: {
 }) {
   const { video, server, captions = [], onlyVideoFiles = false } = options
 
-  const webtorrentFiles = video.files || []
+  const webVideoFiles = video.files || []
   const hlsFiles = video.streamingPlaylists[0]?.files || []
 
   const thumbnailName = basename(video.thumbnailPath)
   const previewName = basename(video.previewPath)
 
-  const torrentNames = webtorrentFiles.concat(hlsFiles).map(f => basename(f.torrentUrl))
+  const torrentNames = webVideoFiles.concat(hlsFiles).map(f => basename(f.torrentUrl))
 
   const captionNames = captions.map(c => basename(c.captionPath))
 
-  const webtorrentFilenames = webtorrentFiles.map(f => basename(f.fileUrl))
+  const webVideoFilenames = webVideoFiles.map(f => basename(f.fileUrl))
   const hlsFilenames = hlsFiles.map(f => basename(f.fileUrl))
 
   let directories: { [ directory: string ]: string[] } = {
-    videos: webtorrentFilenames,
-    redundancy: webtorrentFilenames,
+    videos: webVideoFilenames,
+    redundancy: webVideoFilenames,
     [join('playlists', 'hls')]: hlsFilenames,
     [join('redundancy', 'hls')]: hlsFilenames
   }

@@ -14,7 +14,7 @@ import {
 describe('Test audio only video transcoding', function () {
   let servers: PeerTubeServer[] = []
   let videoUUID: string
-  let webtorrentAudioFileUrl: string
+  let webVideoAudioFileUrl: string
   let fragmentedAudioFileUrl: string
 
   before(async function () {
@@ -71,7 +71,7 @@ describe('Test audio only video transcoding', function () {
       }
 
       if (server.serverNumber === 1) {
-        webtorrentAudioFileUrl = video.files[2].fileUrl
+        webVideoAudioFileUrl = video.files[2].fileUrl
         fragmentedAudioFileUrl = video.streamingPlaylists[0].files[2].fileUrl
       }
     }
@@ -79,7 +79,7 @@ describe('Test audio only video transcoding', function () {
 
   it('0p transcoded video should not have video', async function () {
     const paths = [
-      servers[0].servers.buildWebTorrentFilePath(webtorrentAudioFileUrl),
+      servers[0].servers.buildWebVideoFilePath(webVideoAudioFileUrl),
       servers[0].servers.buildFragmentedFilePath(videoUUID, fragmentedAudioFileUrl)
     ]
 

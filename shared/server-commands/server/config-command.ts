@@ -131,7 +131,7 @@ export class ConfigCommand extends AbstractCommand {
   }
 
   // TODO: convert args to object
-  enableTranscoding (webtorrent = true, hls = true, with0p = false) {
+  enableTranscoding (webVideo = true, hls = true, with0p = false) {
     return this.updateExistingSubConfig({
       newConfig: {
         transcoding: {
@@ -143,7 +143,7 @@ export class ConfigCommand extends AbstractCommand {
           resolutions: ConfigCommand.getCustomConfigResolutions(true, with0p),
 
           webtorrent: {
-            enabled: webtorrent
+            enabled: webVideo
           },
           hls: {
             enabled: hls
@@ -154,7 +154,7 @@ export class ConfigCommand extends AbstractCommand {
   }
 
   // TODO: convert args to object
-  enableMinimumTranscoding (webtorrent = true, hls = true) {
+  enableMinimumTranscoding (webVideo = true, hls = true) {
     return this.updateExistingSubConfig({
       newConfig: {
         transcoding: {
@@ -170,7 +170,7 @@ export class ConfigCommand extends AbstractCommand {
           },
 
           webtorrent: {
-            enabled: webtorrent
+            enabled: webVideo
           },
           hls: {
             enabled: hls

@@ -1,8 +1,8 @@
 import { Job } from 'bullmq'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding'
 import { generateHlsPlaylistResolution } from '@server/lib/transcoding/hls-transcoding'
-import { mergeAudioVideofile, optimizeOriginalVideofile, transcodeNewWebTorrentResolution } from '@server/lib/transcoding/web-transcoding'
-import { removeAllWebTorrentFiles } from '@server/lib/video-file'
+import { mergeAudioVideofile, optimizeOriginalVideofile, transcodeNewWebVideoResolution } from '@server/lib/transcoding/web-transcoding'
+import { removeAllWebVideoFiles } from '@server/lib/video-file'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToFailedTranscodingState } from '@server/lib/video-state'
 import { UserModel } from '@server/models/user/user'
@@ -11,7 +11,7 @@ import { MUser, MUserId, MVideoFullLight } from '@server/types/models'
 import {
   HLSTranscodingPayload,
   MergeAudioTranscodingPayload,
-  NewWebTorrentResolutionTranscodingPayload,
+  NewWebVideoResolutionTranscodingPayload,
   OptimizeTranscodingPayload,
   VideoTranscodingPayload
 } from '@shared/models'
@@ -22,9 +22,9 @@ type HandlerFunction = (job: Job, payload: VideoTranscodingPayload, video: MVide
 
 const handlers: { [ id in VideoTranscodingPayload['type'] ]: HandlerFunction } = {
   'new-resolution-to-hls': handleHLSJob,
-  'new-resolution-to-webtorrent': handleNewWebTorrentResolutionJob,
-  'merge-audio-to-webtorrent': handleWebTorrentMergeAudioJob,
-  'optimize-to-webtorrent': handleWebTorrentOptimizeJob
+  'new-resolution-to-web-video': handleNewWebVideoResolutionJob,
+  'merge-audio-to-web-video': handleWebVideoMergeAudioJob,
+  'optimize-to-web-video': handleWebVideoOptimizeJob
 }
 
 const lTags = loggerTagsFactory('transcoding')
@@ -74,7 +74,7 @@ export {
 // Job handlers
 // ---------------------------------------------------------------------------
 
-async function handleWebTorrentMergeAudioJob (job: Job, payload: MergeAudioTranscodingPayload, video: MVideoFullLight, user: MUserId) {
+async function handleWebVideoMergeAudioJob (job: Job, payload: MergeAudioTranscodingPayload, video: MVideoFullLight, user: MUserId) {
   logger.info('Handling merge audio transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
   await mergeAudioVideofile({ video, resolution: payload.resolution, fps: payload.fps, job })
@@ -84,7 +84,7 @@ async function handleWebTorrentMergeAudioJob (job: Job, payload: MergeAudioTrans
   await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: !payload.hasChildren, video })
 }
 
-async function handleWebTorrentOptimizeJob (job: Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
+async function handleWebVideoOptimizeJob (job: Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
   logger.info('Handling optimize transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
   await optimizeOriginalVideofile({ video, inputVideoFile: video.getMaxQualityFile(), quickTranscode: payload.quickTranscode, job })
@@ -96,12 +96,12 @@ async function handleWebTorrentOptimizeJob (job: Job, payload: OptimizeTranscodi
 
 // ---------------------------------------------------------------------------
 
-async function handleNewWebTorrentResolutionJob (job: Job, payload: NewWebTorrentResolutionTranscodingPayload, video: MVideoFullLight) {
-  logger.info('Handling WebTorrent transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
+async function handleNewWebVideoResolutionJob (job: Job, payload: NewWebVideoResolutionTranscodingPayload, video: MVideoFullLight) {
+  logger.info('Handling Web Video transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
-  await transcodeNewWebTorrentResolution({ video, resolution: payload.resolution, fps: payload.fps, job })
+  await transcodeNewWebVideoResolution({ video, resolution: payload.resolution, fps: payload.fps, job })
 
-  logger.info('WebTorrent transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
+  logger.info('Web Video transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
   await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: true, video })
 }
@@ -118,7 +118,7 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg:
     video = await VideoModel.loadFull(videoArg.uuid)
 
     const videoFileInput = payload.copyCodecs
-      ? video.getWebTorrentFile(payload.resolution)
+      ? video.getWebVideoFile(payload.resolution)
       : video.getMaxQualityFile()
 
     const videoOrStreamingPlaylist = videoFileInput.getVideoOrStreamingPlaylist()
@@ -140,10 +140,10 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg:
 
   logger.info('HLS transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
-  if (payload.deleteWebTorrentFiles === true) {
-    logger.info('Removing WebTorrent files of %s now we have a HLS version of it.', video.uuid, lTags(video.uuid))
+  if (payload.deleteWebVideoFiles === true) {
+    logger.info('Removing Web Video files of %s now we have a HLS version of it.', video.uuid, lTags(video.uuid))
 
-    await removeAllWebTorrentFiles(video)
+    await removeAllWebVideoFiles(video)
   }
 
   await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: true, video })

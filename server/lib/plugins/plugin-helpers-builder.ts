@@ -104,7 +104,7 @@ function buildVideosHelpers () {
       const video = await VideoModel.loadFull(id)
       if (!video) return undefined
 
-      const webtorrentVideoFiles = (video.VideoFiles || []).map(f => ({
+      const webVideoFiles = (video.VideoFiles || []).map(f => ({
         path: f.storage === VideoStorage.FILE_SYSTEM
           ? VideoPathManager.Instance.getFSVideoFileOutputPath(video, f)
           : null,
@@ -138,8 +138,12 @@ function buildVideosHelpers () {
       }))
 
       return {
-        webtorrent: {
-          videoFiles: webtorrentVideoFiles
+        webtorrent: { // TODO: remove in v7
+          videoFiles: webVideoFiles
+        },
+
+        webVideo: {
+          videoFiles: webVideoFiles
         },
 
         hls: {

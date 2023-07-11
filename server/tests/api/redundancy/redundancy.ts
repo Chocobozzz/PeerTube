@@ -43,7 +43,7 @@ async function checkMagnetWebseeds (file: VideoFile, baseWebseeds: string[], ser
   }
 }
 
-async function createServers (strategy: VideoRedundancyStrategy | null, additionalParams: any = {}, withWebtorrent = true) {
+async function createServers (strategy: VideoRedundancyStrategy | null, additionalParams: any = {}, withWebVideo = true) {
   const strategies: any[] = []
 
   if (strategy !== null) {
@@ -61,7 +61,7 @@ async function createServers (strategy: VideoRedundancyStrategy | null, addition
   const config = {
     transcoding: {
       webtorrent: {
-        enabled: withWebtorrent
+        enabled: withWebVideo
       },
       hls: {
         enabled: true
@@ -100,7 +100,7 @@ async function createServers (strategy: VideoRedundancyStrategy | null, addition
 }
 
 async function ensureSameFilenames (videoUUID: string) {
-  let webtorrentFilenames: string[]
+  let webVideoFilenames: string[]
   let hlsFilenames: string[]
 
   for (const server of servers) {
@@ -108,17 +108,17 @@ async function ensureSameFilenames (videoUUID: string) {
 
     // Ensure we use the same filenames that the origin
 
-    const localWebtorrentFilenames = video.files.map(f => basename(f.fileUrl)).sort()
+    const localWebVideoFilenames = video.files.map(f => basename(f.fileUrl)).sort()
     const localHLSFilenames = video.streamingPlaylists[0].files.map(f => basename(f.fileUrl)).sort()
 
-    if (webtorrentFilenames) expect(webtorrentFilenames).to.deep.equal(localWebtorrentFilenames)
-    else webtorrentFilenames = localWebtorrentFilenames
+    if (webVideoFilenames) expect(webVideoFilenames).to.deep.equal(localWebVideoFilenames)
+    else webVideoFilenames = localWebVideoFilenames
 
     if (hlsFilenames) expect(hlsFilenames).to.deep.equal(localHLSFilenames)
     else hlsFilenames = localHLSFilenames
   }
 
-  return { webtorrentFilenames, hlsFilenames }
+  return { webVideoFilenames, hlsFilenames }
 }
 
 async function check1WebSeed (videoUUID?: string) {
@@ -156,7 +156,7 @@ async function check2Webseeds (videoUUID?: string) {
     }
   }
 
-  const { webtorrentFilenames } = await ensureSameFilenames(videoUUID)
+  const { webVideoFilenames } = await ensureSameFilenames(videoUUID)
 
   const directories = [
     servers[0].getDirectoryPath('redundancy'),
@@ -168,7 +168,7 @@ async function check2Webseeds (videoUUID?: string) {
     expect(files).to.have.length.at.least(4)
 
     // Ensure we files exist on disk
-    expect(files.find(f => webtorrentFilenames.includes(f))).to.exist
+    expect(files.find(f => webVideoFilenames.includes(f))).to.exist
   }
 }
 

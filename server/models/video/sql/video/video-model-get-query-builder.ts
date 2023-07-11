@@ -35,7 +35,7 @@ export type BuildVideoGetQueryOptions = {
 
 export class VideoModelGetQueryBuilder {
   videoQueryBuilder: VideosModelGetQuerySubBuilder
-  webtorrentFilesQueryBuilder: VideoFileQueryBuilder
+  webVideoFilesQueryBuilder: VideoFileQueryBuilder
   streamingPlaylistFilesQueryBuilder: VideoFileQueryBuilder
 
   private readonly videoModelBuilder: VideoModelBuilder
@@ -44,7 +44,7 @@ export class VideoModelGetQueryBuilder {
 
   constructor (protected readonly sequelize: Sequelize) {
     this.videoQueryBuilder = new VideosModelGetQuerySubBuilder(sequelize)
-    this.webtorrentFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
+    this.webVideoFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
     this.streamingPlaylistFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
 
     this.videoModelBuilder = new VideoModelBuilder('get', new VideoTableAttributes('get'))
@@ -57,11 +57,11 @@ export class VideoModelGetQueryBuilder {
       includeRedundancy: this.shouldIncludeRedundancies(options)
     }
 
-    const [ videoRows, webtorrentFilesRows, streamingPlaylistFilesRows ] = await Promise.all([
+    const [ videoRows, webVideoFilesRows, streamingPlaylistFilesRows ] = await Promise.all([
       this.videoQueryBuilder.queryVideos(options),
 
       VideoModelGetQueryBuilder.videoFilesInclude.has(options.type)
-        ? this.webtorrentFilesQueryBuilder.queryWebTorrentVideos(fileQueryOptions)
+        ? this.webVideoFilesQueryBuilder.queryWebVideos(fileQueryOptions)
         : Promise.resolve(undefined),
 
       VideoModelGetQueryBuilder.videoFilesInclude.has(options.type)
@@ -71,7 +71,7 @@ export class VideoModelGetQueryBuilder {
 
     const videos = this.videoModelBuilder.buildVideosFromRows({
       rows: videoRows,
-      rowsWebTorrentFiles: webtorrentFilesRows,
+      rowsWebVideoFiles: webVideoFilesRows,
       rowsStreamingPlaylist: streamingPlaylistFilesRows
     })
 
@@ -92,7 +92,7 @@ export class VideoModelGetQueryBuilder {
 export class VideosModelGetQuerySubBuilder extends AbstractVideoQueryBuilder {
   protected attributes: { [key: string]: string }
 
-  protected webtorrentFilesQuery: string
+  protected webVideoFilesQuery: string
   protected streamingPlaylistFilesQuery: string
 
   private static readonly trackersInclude = new Set<GetType>([ 'api' ])

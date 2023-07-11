@@ -5,8 +5,6 @@ export interface UserUpdateMe {
   description?: string
   nsfwPolicy?: NSFWPolicyType
 
-  // FIXME: deprecated in favour of p2pEnabled in 4.1
-  webTorrentEnabled?: boolean
   p2pEnabled?: boolean
 
   autoPlayVideo?: boolean

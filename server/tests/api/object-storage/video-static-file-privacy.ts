@@ -120,7 +120,7 @@ describe('Object storage for video static file privacy', function () {
       const video = await server.videos.getWithToken({ id: videoId })
 
       return {
-        webTorrentFile: video.files[0].fileUrl,
+        webVideoFile: video.files[0].fileUrl,
         hlsFile: getHLS(video).files[0].fileUrl
       }
     }
@@ -175,10 +175,10 @@ describe('Object storage for video static file privacy', function () {
     it('Should not get files without appropriate OAuth token', async function () {
       this.timeout(60000)
 
-      const { webTorrentFile, hlsFile } = await getSampleFileUrls(privateVideoUUID)
+      const { webVideoFile, hlsFile } = await getSampleFileUrls(privateVideoUUID)
 
-      await makeRawRequest({ url: webTorrentFile, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-      await makeRawRequest({ url: webTorrentFile, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: webVideoFile, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await makeRawRequest({ url: webVideoFile, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
 
       await makeRawRequest({ url: hlsFile, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
       await makeRawRequest({ url: hlsFile, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
@@ -187,18 +187,18 @@ describe('Object storage for video static file privacy', function () {
     it('Should not get files without appropriate password or appropriate OAuth token', async function () {
       this.timeout(60000)
 
-      const { webTorrentFile, hlsFile } = await getSampleFileUrls(passwordProtectedVideoUUID)
+      const { webVideoFile, hlsFile } = await getSampleFileUrls(passwordProtectedVideoUUID)
 
-      await makeRawRequest({ url: webTorrentFile, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await makeRawRequest({ url: webVideoFile, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
       await makeRawRequest({
-        url: webTorrentFile,
+        url: webVideoFile,
         token: null,
         headers: incorrectPasswordHeader,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
-      await makeRawRequest({ url: webTorrentFile, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: webVideoFile, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
       await makeRawRequest({
-        url: webTorrentFile,
+        url: webVideoFile,
         token: null,
         headers: correctPasswordHeader,
         expectedStatus: HttpStatusCode.OK_200
@@ -239,9 +239,9 @@ describe('Object storage for video static file privacy', function () {
       const badVideoFileToken = await server.videoToken.getVideoFileToken({ token: userToken, videoId: userPrivateVideoUUID })
       const goodVideoFileToken = await server.videoToken.getVideoFileToken({ videoId: privateVideoUUID })
 
-      const { webTorrentFile, hlsFile } = await getSampleFileUrls(privateVideoUUID)
+      const { webVideoFile, hlsFile } = await getSampleFileUrls(privateVideoUUID)
 
-      for (const url of [ webTorrentFile, hlsFile ]) {
+      for (const url of [ webVideoFile, hlsFile ]) {
         await makeRawRequest({ url, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         await makeRawRequest({ url, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         await makeRawRequest({ url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
@@ -261,9 +261,9 @@ describe('Object storage for video static file privacy', function () {
         videoPassword: correctPassword
       })
 
-      const { webTorrentFile, hlsFile } = await getSampleFileUrls(passwordProtectedVideoUUID)
+      const { webVideoFile, hlsFile } = await getSampleFileUrls(passwordProtectedVideoUUID)
 
-      for (const url of [ hlsFile, webTorrentFile ]) {
+      for (const url of [ hlsFile, webVideoFile ]) {
         await makeRawRequest({ url, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         await makeRawRequest({ url, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         await makeRawRequest({ url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
@@ -534,11 +534,11 @@ describe('Object storage for video static file privacy', function () {
 
     it('Should not be able to access object storage proxy', async function () {
       const privateVideo = await server.videos.getWithToken({ id: videoUUID })
-      const webtorrentFilename = extractFilenameFromUrl(privateVideo.files[0].fileUrl)
+      const webVideoFilename = extractFilenameFromUrl(privateVideo.files[0].fileUrl)
       const hlsFilename = extractFilenameFromUrl(getHLS(privateVideo).files[0].fileUrl)
 
       await makeRawRequest({
-        url: server.url + '/object-storage-proxy/webseed/private/' + webtorrentFilename,
+        url: server.url + '/object-storage-proxy/webseed/private/' + webVideoFilename,
         token: server.accessToken,
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })

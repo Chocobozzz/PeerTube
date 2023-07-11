@@ -213,17 +213,12 @@ async function updateMe (req: express.Request, res: express.Response) {
     'noInstanceConfigWarningModal',
     'noAccountSetupWarningModal',
     'noWelcomeModal',
-    'emailPublic'
+    'emailPublic',
+    'p2pEnabled'
   ]
 
   for (const key of keysToUpdate) {
     if (body[key] !== undefined) user.set(key, body[key])
-  }
-
-  if (body.p2pEnabled !== undefined) {
-    user.set('p2pEnabled', body.p2pEnabled)
-  } else if (body.webTorrentEnabled !== undefined) { // FIXME: deprecated in 4.1
-    user.set('p2pEnabled', body.webTorrentEnabled)
   }
 
   if (body.email !== undefined) {

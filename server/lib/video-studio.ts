@@ -12,7 +12,7 @@ import { JobQueue } from './job-queue'
 import { VideoStudioTranscodingJobHandler } from './runners'
 import { createOptimizeOrMergeAudioJobs } from './transcoding/create-transcoding-job'
 import { getTranscodingJobPriority } from './transcoding/transcoding-priority'
-import { buildNewFile, removeHLSPlaylist, removeWebTorrentFile } from './video-file'
+import { buildNewFile, removeHLSPlaylist, removeWebVideoFile } from './video-file'
 import { VideoPathManager } from './video-path-manager'
 
 const lTags = loggerTagsFactory('video-studio')
@@ -119,12 +119,12 @@ export async function onVideoStudioEnded (options: {
 // Private
 // ---------------------------------------------------------------------------
 
-async function removeAllFiles (video: MVideoWithAllFiles, webTorrentFileException: MVideoFile) {
+async function removeAllFiles (video: MVideoWithAllFiles, webVideoFileException: MVideoFile) {
   await removeHLSPlaylist(video)
 
   for (const file of video.VideoFiles) {
-    if (file.id === webTorrentFileException.id) continue
+    if (file.id === webVideoFileException.id) continue
 
-    await removeWebTorrentFile(video, file.id)
+    await removeWebVideoFile(video, file.id)
   }
 }

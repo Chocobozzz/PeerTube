@@ -252,7 +252,7 @@ export class Video implements VideoServerModel {
       user && user.hasRight(UserRight.MANAGE_VIDEO_FILES) &&
       this.state.id !== VideoState.TO_TRANSCODE &&
       this.hasHLS() &&
-      this.hasWebTorrent()
+      this.hasWebVideos()
   }
 
   canRunTranscoding (user: AuthUser) {
@@ -265,7 +265,7 @@ export class Video implements VideoServerModel {
     return this.streamingPlaylists?.some(p => p.type === VideoStreamingPlaylistType.HLS)
   }
 
-  hasWebTorrent () {
+  hasWebVideos () {
     return this.files && this.files.length !== 0
   }
 

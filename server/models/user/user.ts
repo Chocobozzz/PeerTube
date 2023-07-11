@@ -786,7 +786,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
       'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
       `WHERE "account"."userId" = ${options.whereUserId} ${andWhere}`
 
-    const webtorrentFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
+    const webVideoFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
       'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" AND "video"."isLive" IS FALSE ' +
       videoChannelJoin
 
@@ -797,7 +797,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
     return 'SELECT COALESCE(SUM("size"), 0) AS "total" ' +
       'FROM (' +
-        `SELECT MAX("t1"."size") AS "size" FROM (${webtorrentFiles} UNION ${hlsFiles}) t1 ` +
+        `SELECT MAX("t1"."size") AS "size" FROM (${webVideoFiles} UNION ${hlsFiles}) t1 ` +
         'GROUP BY "t1"."videoId"' +
       ') t2'
   }
@@ -890,8 +890,6 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
       nsfwPolicy: this.nsfwPolicy,
 
-      // FIXME: deprecated in 4.1
-      webTorrentEnabled: this.p2pEnabled,
       p2pEnabled: this.p2pEnabled,
 
       videosHistoryEnabled: this.videosHistoryEnabled,

@@ -9,12 +9,12 @@ function generateHLSObjectBaseStorageKey (playlist: MStreamingPlaylistVideo) {
   return join(playlist.getStringType(), playlist.Video.uuid)
 }
 
-function generateWebTorrentObjectStorageKey (filename: string) {
+function generateWebVideoObjectStorageKey (filename: string) {
   return filename
 }
 
 export {
   generateHLSObjectStorageKey,
   generateHLSObjectBaseStorageKey,
-  generateWebTorrentObjectStorageKey
+  generateWebVideoObjectStorageKey
 }

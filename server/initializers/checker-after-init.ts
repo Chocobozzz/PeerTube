@@ -199,7 +199,7 @@ function checkStorageConfig () {
 function checkTranscodingConfig () {
   if (CONFIG.TRANSCODING.ENABLED) {
     if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false && CONFIG.TRANSCODING.HLS.ENABLED === false) {
-      throw new Error('You need to enable at least WebTorrent transcoding or HLS transcoding.')
+      throw new Error('You need to enable at least Web Video transcoding or HLS transcoding.')
     }
 
     if (CONFIG.TRANSCODING.CONCURRENCY <= 0) {

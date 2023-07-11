@@ -1,3 +1,3 @@
 export interface VideoTranscodingCreate {
-  transcodingType: 'hls' | 'webtorrent'
+  transcodingType: 'hls' | 'webtorrent' | 'web-video' // TODO: remove webtorrent in v7
 }

@@ -302,11 +302,11 @@ describe('Test plugin helpers', function () {
 
       // Video files check
       {
-        expect(body.webtorrent.videoFiles).to.be.an('array')
+        expect(body.webVideo.videoFiles).to.be.an('array')
         expect(body.hls.videoFiles).to.be.an('array')
 
         for (const resolution of [ 144, 240, 360, 480, 720 ]) {
-          for (const files of [ body.webtorrent.videoFiles, body.hls.videoFiles ]) {
+          for (const files of [ body.webVideo.videoFiles, body.hls.videoFiles ]) {
             const file = files.find(f => f.resolution === resolution)
             expect(file).to.exist
 
@@ -318,7 +318,7 @@ describe('Test plugin helpers', function () {
           }
         }
 
-        videoPath = body.webtorrent.videoFiles[0].path
+        videoPath = body.webVideo.videoFiles[0].path
       }
 
       // Thumbnails check

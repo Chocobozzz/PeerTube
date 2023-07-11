@@ -345,7 +345,7 @@ describe('Test config API validators', function () {
       })
     })
 
-    it('Should fail with a disabled webtorrent & hls transcoding', async function () {
+    it('Should fail with a disabled web videos & hls transcoding', async function () {
       const newUpdateParams = {
         ...updateParams,
 

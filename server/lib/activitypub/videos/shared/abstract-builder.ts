@@ -126,7 +126,7 @@ export abstract class APVideoAbstractBuilder {
     video.VideoLive = videoLive
   }
 
-  protected async setWebTorrentFiles (video: MVideoFullLight, t: Transaction) {
+  protected async setWebVideoFiles (video: MVideoFullLight, t: Transaction) {
     const videoFileAttributes = getFileAttributesFromUrl(video, this.videoObject.url)
     const newVideoFiles = videoFileAttributes.map(a => new VideoFileModel(a))
 

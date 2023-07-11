@@ -7,19 +7,19 @@ import { StreamReplacer } from '@server/helpers/stream-replacer'
 import { MStreamingPlaylist, MVideo } from '@server/types/models'
 import { HttpStatusCode } from '@shared/models'
 import { injectQueryToPlaylistUrls } from '../hls'
-import { getHLSFileReadStream, getWebTorrentFileReadStream } from './videos'
+import { getHLSFileReadStream, getWebVideoFileReadStream } from './videos'
 
-export async function proxifyWebTorrentFile (options: {
+export async function proxifyWebVideoFile (options: {
   req: express.Request
   res: express.Response
   filename: string
 }) {
   const { req, res, filename } = options
 
-  logger.debug('Proxifying WebTorrent file %s from object storage.', filename)
+  logger.debug('Proxifying Web Video file %s from object storage.', filename)
 
   try {
-    const { response: s3Response, stream } = await getWebTorrentFileReadStream({
+    const { response: s3Response, stream } = await getWebVideoFileReadStream({
       filename,
       rangeHeader: req.header('range')
     })

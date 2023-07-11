@@ -60,7 +60,7 @@ describe('Test videos files', function () {
   })
 
   describe('Deleting files', function () {
-    let webtorrentId: string
+    let webVideoId: string
     let hlsId: string
     let remoteId: string
 
@@ -68,10 +68,10 @@ describe('Test videos files', function () {
     let validId2: string
 
     let hlsFileId: number
-    let webtorrentFileId: number
+    let webVideoFileId: number
 
     let remoteHLSFileId: number
-    let remoteWebtorrentFileId: number
+    let remoteWebVideoFileId: number
 
     before(async function () {
       this.timeout(300_000)
@@ -83,7 +83,7 @@ describe('Test videos files', function () {
         const video = await servers[1].videos.get({ id: uuid })
         remoteId = video.uuid
         remoteHLSFileId = video.streamingPlaylists[0].files[0].id
-        remoteWebtorrentFileId = video.files[0].id
+        remoteWebVideoFileId = video.files[0].id
       }
 
       {
@@ -96,7 +96,7 @@ describe('Test videos files', function () {
           const video = await servers[0].videos.get({ id: uuid })
           validId1 = video.uuid
           hlsFileId = video.streamingPlaylists[0].files[0].id
-          webtorrentFileId = video.files[0].id
+          webVideoFileId = video.files[0].id
         }
 
         {
@@ -117,8 +117,8 @@ describe('Test videos files', function () {
 
       {
         await servers[0].config.enableTranscoding(false, true)
-        const { uuid } = await servers[0].videos.quickUpload({ name: 'webtorrent' })
-        webtorrentId = uuid
+        const { uuid } = await servers[0].videos.quickUpload({ name: 'web-video' })
+        webVideoId = uuid
       }
 
       await waitJobs(servers)
@@ -128,27 +128,27 @@ describe('Test videos files', function () {
       const expectedStatus = HttpStatusCode.NOT_FOUND_404
 
       await servers[0].videos.removeHLSPlaylist({ videoId: 404, expectedStatus })
-      await servers[0].videos.removeAllWebTorrentFiles({ videoId: 404, expectedStatus })
+      await servers[0].videos.removeAllWebVideoFiles({ videoId: 404, expectedStatus })
 
       await servers[0].videos.removeHLSFile({ videoId: 404, fileId: hlsFileId, expectedStatus })
-      await servers[0].videos.removeWebTorrentFile({ videoId: 404, fileId: webtorrentFileId, expectedStatus })
+      await servers[0].videos.removeWebVideoFile({ videoId: 404, fileId: webVideoFileId, expectedStatus })
     })
 
     it('Should not delete unknown files', async function () {
       const expectedStatus = HttpStatusCode.NOT_FOUND_404
 
-      await servers[0].videos.removeHLSFile({ videoId: validId1, fileId: webtorrentFileId, expectedStatus })
-      await servers[0].videos.removeWebTorrentFile({ videoId: validId1, fileId: hlsFileId, expectedStatus })
+      await servers[0].videos.removeHLSFile({ videoId: validId1, fileId: webVideoFileId, expectedStatus })
+      await servers[0].videos.removeWebVideoFile({ videoId: validId1, fileId: hlsFileId, expectedStatus })
     })
 
     it('Should not delete files of a remote video', async function () {
       const expectedStatus = HttpStatusCode.BAD_REQUEST_400
 
       await servers[0].videos.removeHLSPlaylist({ videoId: remoteId, expectedStatus })
-      await servers[0].videos.removeAllWebTorrentFiles({ videoId: remoteId, expectedStatus })
+      await servers[0].videos.removeAllWebVideoFiles({ videoId: remoteId, expectedStatus })
 
       await servers[0].videos.removeHLSFile({ videoId: remoteId, fileId: remoteHLSFileId, expectedStatus })
-      await servers[0].videos.removeWebTorrentFile({ videoId: remoteId, fileId: remoteWebtorrentFileId, expectedStatus })
+      await servers[0].videos.removeWebVideoFile({ videoId: remoteId, fileId: remoteWebVideoFileId, expectedStatus })
     })
 
     it('Should not delete files by a non admin user', async function () {
@@ -157,35 +157,35 @@ describe('Test videos files', function () {
       await servers[0].videos.removeHLSPlaylist({ videoId: validId1, token: userToken, expectedStatus })
       await servers[0].videos.removeHLSPlaylist({ videoId: validId1, token: moderatorToken, expectedStatus })
 
-      await servers[0].videos.removeAllWebTorrentFiles({ videoId: validId1, token: userToken, expectedStatus })
-      await servers[0].videos.removeAllWebTorrentFiles({ videoId: validId1, token: moderatorToken, expectedStatus })
+      await servers[0].videos.removeAllWebVideoFiles({ videoId: validId1, token: userToken, expectedStatus })
+      await servers[0].videos.removeAllWebVideoFiles({ videoId: validId1, token: moderatorToken, expectedStatus })
 
       await servers[0].videos.removeHLSFile({ videoId: validId1, fileId: hlsFileId, token: userToken, expectedStatus })
       await servers[0].videos.removeHLSFile({ videoId: validId1, fileId: hlsFileId, token: moderatorToken, expectedStatus })
 
-      await servers[0].videos.removeWebTorrentFile({ videoId: validId1, fileId: webtorrentFileId, token: userToken, expectedStatus })
-      await servers[0].videos.removeWebTorrentFile({ videoId: validId1, fileId: webtorrentFileId, token: moderatorToken, expectedStatus })
+      await servers[0].videos.removeWebVideoFile({ videoId: validId1, fileId: webVideoFileId, token: userToken, expectedStatus })
+      await servers[0].videos.removeWebVideoFile({ videoId: validId1, fileId: webVideoFileId, token: moderatorToken, expectedStatus })
     })
 
     it('Should not delete files if the files are not available', async function () {
       await servers[0].videos.removeHLSPlaylist({ videoId: hlsId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
-      await servers[0].videos.removeAllWebTorrentFiles({ videoId: webtorrentId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await servers[0].videos.removeAllWebVideoFiles({ videoId: webVideoId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
 
       await servers[0].videos.removeHLSFile({ videoId: hlsId, fileId: 404, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
-      await servers[0].videos.removeWebTorrentFile({ videoId: webtorrentId, fileId: 404, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await servers[0].videos.removeWebVideoFile({ videoId: webVideoId, fileId: 404, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should not delete files if no both versions are available', async function () {
       await servers[0].videos.removeHLSPlaylist({ videoId: hlsId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
-      await servers[0].videos.removeAllWebTorrentFiles({ videoId: webtorrentId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await servers[0].videos.removeAllWebVideoFiles({ videoId: webVideoId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should delete files if both versions are available', async function () {
       await servers[0].videos.removeHLSFile({ videoId: validId1, fileId: hlsFileId })
-      await servers[0].videos.removeWebTorrentFile({ videoId: validId1, fileId: webtorrentFileId })
+      await servers[0].videos.removeWebVideoFile({ videoId: validId1, fileId: webVideoFileId })
 
       await servers[0].videos.removeHLSPlaylist({ videoId: validId1 })
-      await servers[0].videos.removeAllWebTorrentFiles({ videoId: validId2 })
+      await servers[0].videos.removeAllWebVideoFiles({ videoId: validId2 })
     })
   })
 

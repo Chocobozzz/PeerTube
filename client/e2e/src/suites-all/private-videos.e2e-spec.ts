@@ -31,8 +31,8 @@ describe('Private videos all workflow', () => {
     return loginPage.loginOnPeerTube2()
   })
 
-  it('Should play an internal webtorrent video', async () => {
-    await go(FIXTURE_URLS.INTERNAL_WEBTORRENT_VIDEO)
+  it('Should play an internal web video video', async () => {
+    await go(FIXTURE_URLS.INTERNAL_WEB_VIDEO)
 
     await videoWatchPage.waitWatchVideoName(internalVideoName)
     await checkCorrectlyPlay(playerPage)
@@ -52,8 +52,8 @@ describe('Private videos all workflow', () => {
     await checkCorrectlyPlay(playerPage)
   })
 
-  it('Should play an internal WebTorrent video in embed', async () => {
-    await go(FIXTURE_URLS.INTERNAL_EMBED_WEBTORRENT_VIDEO)
+  it('Should play an internal Web Video in embed', async () => {
+    await go(FIXTURE_URLS.INTERNAL_EMBED_WEB_VIDEO)
 
     await videoWatchPage.waitEmbedForDisplayed()
     await checkCorrectlyPlay(playerPage)

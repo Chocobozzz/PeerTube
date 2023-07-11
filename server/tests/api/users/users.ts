@@ -229,25 +229,13 @@ describe('Test users', function () {
     })
 
     it('Should be able to change the p2p attribute', async function () {
-      {
-        await server.users.updateMe({
-          token: userToken,
-          webTorrentEnabled: false
-        })
+      await server.users.updateMe({
+        token: userToken,
+        p2pEnabled: true
+      })
 
-        const user = await server.users.getMyInfo({ token: userToken })
-        expect(user.p2pEnabled).to.be.false
-      }
-
-      {
-        await server.users.updateMe({
-          token: userToken,
-          p2pEnabled: true
-        })
-
-        const user = await server.users.getMyInfo({ token: userToken })
-        expect(user.p2pEnabled).to.be.true
-      }
+      const user = await server.users.getMyInfo({ token: userToken })
+      expect(user.p2pEnabled).to.be.true
     })
 
     it('Should be able to change the email attribute', async function () {

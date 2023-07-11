@@ -8,7 +8,7 @@ import { DIRECTORIES } from '@server/initializers/constants'
 import { MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '@server/types/models'
 import { buildUUID } from '@shared/extra-utils'
 import { VideoStorage } from '@shared/models'
-import { makeHLSFileAvailable, makeWebTorrentFileAvailable } from './object-storage'
+import { makeHLSFileAvailable, makeWebVideoFileAvailable } from './object-storage'
 import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from './paths'
 import { isVideoInPrivateDirectory } from './video-privacy'
 
@@ -78,7 +78,7 @@ class VideoPathManager {
     }
 
     return this.makeAvailableFactory(
-      () => makeWebTorrentFileAvailable(videoFile.filename, destination),
+      () => makeWebVideoFileAvailable(videoFile.filename, destination),
       true,
       cb
     )

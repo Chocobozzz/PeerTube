@@ -89,7 +89,7 @@ describe('Videos all workflow', () => {
     let videoNameToExcept = videoName
 
     if (isMobileDevice() || isSafari()) {
-      await go(FIXTURE_URLS.WEBTORRENT_VIDEO)
+      await go(FIXTURE_URLS.WEB_VIDEO)
       videoNameToExcept = 'E2E tests'
     } else {
       await videoListPage.clickOnVideo(videoName)
@@ -176,7 +176,7 @@ describe('Videos all workflow', () => {
     await videoWatchPage.waitUntilVideoName(video2Name, 40 * 1000)
   })
 
-  it('Should watch the webtorrent playlist in the embed', async () => {
+  it('Should watch the WEB VIDEO playlist in the embed', async () => {
     if (isUploadUnsupported()) return
 
     const accessToken = await browser.execute(`return window.localStorage.getItem('access_token');`)

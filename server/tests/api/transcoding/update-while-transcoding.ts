@@ -96,7 +96,7 @@ describe('Test update video privacy while transcoding', function () {
     await doubleFollow(servers[0], servers[1])
   })
 
-  describe('With WebTorrent & HLS enabled', function () {
+  describe('With Web Video & HLS enabled', function () {
     runTestSuite(false)
   })
 

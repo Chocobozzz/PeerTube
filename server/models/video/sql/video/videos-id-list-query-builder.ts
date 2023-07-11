@@ -48,7 +48,9 @@ export type BuildVideosListQueryOptions = {
 
   hasFiles?: boolean
   hasHLSFiles?: boolean
-  hasWebtorrentFiles?: boolean
+
+  hasWebVideoFiles?: boolean
+  hasWebtorrentFiles?: boolean // TODO: Remove in v7
 
   accountId?: number
   videoChannelId?: number
@@ -175,7 +177,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     }
 
     if (exists(options.hasWebtorrentFiles)) {
-      this.whereWebTorrentFileExists(options.hasWebtorrentFiles)
+      this.whereWebVideoFileExists(options.hasWebtorrentFiles)
+    } else if (exists(options.hasWebVideoFiles)) {
+      this.whereWebVideoFileExists(options.hasWebVideoFiles)
     }
 
     if (exists(options.hasHLSFiles)) {
@@ -400,18 +404,18 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private whereFileExists () {
-    this.and.push(`(${this.buildWebTorrentFileExistsQuery(true)} OR ${this.buildHLSFileExistsQuery(true)})`)
+    this.and.push(`(${this.buildWebVideoFileExistsQuery(true)} OR ${this.buildHLSFileExistsQuery(true)})`)
   }
 
-  private whereWebTorrentFileExists (exists: boolean) {
-    this.and.push(this.buildWebTorrentFileExistsQuery(exists))
+  private whereWebVideoFileExists (exists: boolean) {
+    this.and.push(this.buildWebVideoFileExistsQuery(exists))
   }
 
   private whereHLSFileExists (exists: boolean) {
     this.and.push(this.buildHLSFileExistsQuery(exists))
   }
 
-  private buildWebTorrentFileExistsQuery (exists: boolean) {
+  private buildWebVideoFileExistsQuery (exists: boolean) {
     const prefix = exists ? '' : 'NOT '
 
     return prefix + 'EXISTS (SELECT 1 FROM "videoFile" WHERE "videoFile"."videoId" = "video"."id")'

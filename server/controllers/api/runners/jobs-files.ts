@@ -1,6 +1,6 @@
 import express from 'express'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
-import { proxifyHLS, proxifyWebTorrentFile } from '@server/lib/object-storage'
+import { proxifyHLS, proxifyWebVideoFile } from '@server/lib/object-storage'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { getStudioTaskFilePath } from '@server/lib/video-studio'
 import { apiRateLimiter, asyncMiddleware } from '@server/middlewares'
@@ -70,7 +70,7 @@ async function getMaxQualityVideoFile (req: express.Request, res: express.Respon
     }
 
     // Web video
-    return proxifyWebTorrentFile({
+    return proxifyWebVideoFile({
       req,
       res,
       filename: file.filename

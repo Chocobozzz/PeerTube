@@ -311,7 +311,7 @@ export class VideoService {
       )
   }
 
-  removeVideoFiles (videoIds: (number | string)[], type: 'hls' | 'webtorrent') {
+  removeVideoFiles (videoIds: (number | string)[], type: 'hls' | 'web-videos') {
     return from(videoIds)
       .pipe(
         concatMap(id => this.authHttp.delete(VideoService.BASE_VIDEO_URL + '/' + id + '/' + type)),
@@ -320,12 +320,12 @@ export class VideoService {
       )
   }
 
-  removeFile (videoId: number | string, fileId: number, type: 'hls' | 'webtorrent') {
+  removeFile (videoId: number | string, fileId: number, type: 'hls' | 'web-videos') {
     return this.authHttp.delete(VideoService.BASE_VIDEO_URL + '/' + videoId + '/' + type + '/' + fileId)
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  runTranscoding (videoIds: (number | string)[], type: 'hls' | 'webtorrent') {
+  runTranscoding (videoIds: (number | string)[], type: 'hls' | 'web-video') {
     const body: VideoTranscodingCreate = { transcodingType: type }
 
     return from(videoIds)

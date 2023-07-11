@@ -2,7 +2,8 @@ import express from 'express'
 import toInt from 'validator/lib/toInt'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
-import { removeAllWebTorrentFiles, removeHLSFile, removeHLSPlaylist, removeWebTorrentFile } from '@server/lib/video-file'
+import { updatePlaylistAfterFileChange } from '@server/lib/hls'
+import { removeAllWebVideoFiles, removeHLSFile, removeHLSPlaylist, removeWebVideoFile } from '@server/lib/video-file'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { HttpStatusCode, UserRight } from '@shared/models'
 import {
@@ -12,11 +13,10 @@ import {
   videoFileMetadataGetValidator,
   videoFilesDeleteHLSFileValidator,
   videoFilesDeleteHLSValidator,
-  videoFilesDeleteWebTorrentFileValidator,
-  videoFilesDeleteWebTorrentValidator,
+  videoFilesDeleteWebVideoFileValidator,
+  videoFilesDeleteWebVideoValidator,
   videosGetValidator
 } from '../../../middlewares'
-import { updatePlaylistAfterFileChange } from '@server/lib/hls'
 
 const lTags = loggerTagsFactory('api', 'video')
 const filesRouter = express.Router()
@@ -40,17 +40,19 @@ filesRouter.delete('/:id/hls/:videoFileId',
   asyncMiddleware(removeHLSFileController)
 )
 
-filesRouter.delete('/:id/webtorrent',
+filesRouter.delete(
+  [ '/:id/webtorrent', '/:id/web-videos' ], // TODO: remove webtorrent in V7
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_FILES),
-  asyncMiddleware(videoFilesDeleteWebTorrentValidator),
-  asyncMiddleware(removeAllWebTorrentFilesController)
+  asyncMiddleware(videoFilesDeleteWebVideoValidator),
+  asyncMiddleware(removeAllWebVideoFilesController)
 )
-filesRouter.delete('/:id/webtorrent/:videoFileId',
+filesRouter.delete(
+  [ '/:id/webtorrent/:videoFileId', '/:id/web-videos/:videoFileId' ], // TODO: remove webtorrent in V7
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_FILES),
-  asyncMiddleware(videoFilesDeleteWebTorrentFileValidator),
-  asyncMiddleware(removeWebTorrentFileController)
+  asyncMiddleware(videoFilesDeleteWebVideoFileValidator),
+  asyncMiddleware(removeWebVideoFileController)
 )
 
 // ---------------------------------------------------------------------------
@@ -96,24 +98,24 @@ async function removeHLSFileController (req: express.Request, res: express.Respo
 
 // ---------------------------------------------------------------------------
 
-async function removeAllWebTorrentFilesController (req: express.Request, res: express.Response) {
+async function removeAllWebVideoFilesController (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
 
-  logger.info('Deleting WebTorrent files of %s.', video.url, lTags(video.uuid))
+  logger.info('Deleting Web Video files of %s.', video.url, lTags(video.uuid))
 
-  await removeAllWebTorrentFiles(video)
+  await removeAllWebVideoFiles(video)
   await federateVideoIfNeeded(video, false, undefined)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
-async function removeWebTorrentFileController (req: express.Request, res: express.Response) {
+async function removeWebVideoFileController (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
 
   const videoFileId = +req.params.videoFileId
-  logger.info('Deleting WebTorrent file %d of %s.', videoFileId, video.url, lTags(video.uuid))
+  logger.info('Deleting Web Video file %d of %s.', videoFileId, video.url, lTags(video.uuid))
 
-  await removeWebTorrentFile(video, videoFileId)
+  await removeWebVideoFile(video, videoFileId)
   await federateVideoIfNeeded(video, false, undefined)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)

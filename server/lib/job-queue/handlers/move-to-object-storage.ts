@@ -4,7 +4,7 @@ import { join } from 'path'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { updateTorrentMetadata } from '@server/helpers/webtorrent'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants'
-import { storeHLSFileFromFilename, storeWebTorrentFile } from '@server/lib/object-storage'
+import { storeHLSFileFromFilename, storeWebVideoFile } from '@server/lib/object-storage'
 import { getHLSDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToFailedMoveToObjectStorageState, moveToNextState } from '@server/lib/video-state'
@@ -33,9 +33,9 @@ export async function processMoveToObjectStorage (job: Job) {
 
   try {
     if (video.VideoFiles) {
-      logger.debug('Moving %d webtorrent files for video %s.', video.VideoFiles.length, video.uuid, lTags)
+      logger.debug('Moving %d web video files for video %s.', video.VideoFiles.length, video.uuid, lTags)
 
-      await moveWebTorrentFiles(video)
+      await moveWebVideoFiles(video)
     }
 
     if (video.VideoStreamingPlaylists) {
@@ -75,11 +75,11 @@ export async function onMoveToObjectStorageFailure (job: Job, err: any) {
 
 // ---------------------------------------------------------------------------
 
-async function moveWebTorrentFiles (video: MVideoWithAllFiles) {
+async function moveWebVideoFiles (video: MVideoWithAllFiles) {
   for (const file of video.VideoFiles) {
     if (file.storage !== VideoStorage.FILE_SYSTEM) continue
 
-    const fileUrl = await storeWebTorrentFile(video, file)
+    const fileUrl = await storeWebVideoFile(video, file)
 
     const oldPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, file)
     await onFileMoved({ videoOrPlaylist: video, file, fileUrl, oldPath })

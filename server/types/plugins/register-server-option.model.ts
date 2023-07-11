@@ -41,7 +41,17 @@ export type PeerTubeHelpers = {
     ffprobe: (path: string) => Promise<any>
 
     getFiles: (id: number | string) => Promise<{
-      webtorrent: {
+      webtorrent: { // TODO: remove in v7
+        videoFiles: {
+          path: string // Could be null if using remote storage
+          url: string
+          resolution: number
+          size: number
+          fps: number
+        }[]
+      }
+
+      webVideo: {
         videoFiles: {
           path: string // Could be null if using remote storage
           url: string

@@ -111,7 +111,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     }
   }
 
-  protected includeWebtorrentFiles () {
+  protected includeWebVideoFiles () {
     this.addJoin('LEFT JOIN "videoFile" AS "VideoFiles" ON "VideoFiles"."videoId" = "video"."id"')
 
     this.attributes = {
@@ -263,7 +263,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     }
   }
 
-  protected includeWebTorrentRedundancies () {
+  protected includeWebVideoRedundancies () {
     this.addJoin(
       'LEFT OUTER JOIN "videoRedundancy" AS "VideoFiles->RedundancyVideos" ON ' +
         '"VideoFiles"."id" = "VideoFiles->RedundancyVideos"."videoFileId"'

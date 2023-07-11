@@ -29,7 +29,7 @@ import {
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter'
 import { LiveManager } from '@server/lib/live/live-manager'
-import { removeHLSFileObjectStorageByFilename, removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
+import { removeHLSFileObjectStorageByFilename, removeHLSObjectStorage, removeWebVideoObjectStorage } from '@server/lib/object-storage'
 import { tracer } from '@server/lib/opentelemetry/tracing'
 import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths'
 import { Hooks } from '@server/lib/plugins/hooks'
@@ -151,7 +151,7 @@ export enum ScopeNames {
   FOR_API = 'FOR_API',
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
-  WITH_WEBTORRENT_FILES = 'WITH_WEBTORRENT_FILES',
+  WITH_WEB_VIDEO_FILES = 'WITH_WEB_VIDEO_FILES',
   WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE',
   WITH_BLACKLISTED = 'WITH_BLACKLISTED',
   WITH_STREAMING_PLAYLISTS = 'WITH_STREAMING_PLAYLISTS',
@@ -290,7 +290,7 @@ export type ForAPIOptions = {
       }
     ]
   },
-  [ScopeNames.WITH_WEBTORRENT_FILES]: (withRedundancies = false) => {
+  [ScopeNames.WITH_WEB_VIDEO_FILES]: (withRedundancies = false) => {
     let subInclude: any[] = []
 
     if (withRedundancies === true) {
@@ -813,7 +813,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
       // Remove physical files and torrents
       instance.VideoFiles.forEach(file => {
-        tasks.push(instance.removeWebTorrentFile(file))
+        tasks.push(instance.removeWebVideoFile(file))
       })
 
       // Remove playlists file
@@ -1107,7 +1107,10 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     include?: VideoInclude
 
     hasFiles?: boolean // default false
-    hasWebtorrentFiles?: boolean
+
+    hasWebtorrentFiles?: boolean // TODO: remove in v7
+    hasWebVideoFiles?: boolean
+
     hasHLSFiles?: boolean
 
     categoryOneOf?: number[]
@@ -1172,6 +1175,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'historyOfUser',
         'hasHLSFiles',
         'hasWebtorrentFiles',
+        'hasWebVideoFiles',
         'search',
         'excludeAlreadyWatched'
       ]),
@@ -1205,7 +1209,9 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     user?: MUserAccountId
 
-    hasWebtorrentFiles?: boolean
+    hasWebtorrentFiles?: boolean // TODO: remove in v7
+    hasWebVideoFiles?: boolean
+
     hasHLSFiles?: boolean
 
     search?: string
@@ -1252,6 +1258,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'durationMax',
         'hasHLSFiles',
         'hasWebtorrentFiles',
+        'hasWebVideoFiles',
         'uuids',
         'search',
         'displayOnlyForFollower',
@@ -1676,7 +1683,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return this.getQualityFileBy(minBy)
   }
 
-  getWebTorrentFile<T extends MVideoWithFile> (this: T, resolution: number): MVideoFileVideo {
+  getWebVideoFile<T extends MVideoWithFile> (this: T, resolution: number): MVideoFileVideo {
     if (Array.isArray(this.VideoFiles) === false) return undefined
 
     const file = this.VideoFiles.find(f => f.resolution === resolution)
@@ -1685,7 +1692,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return Object.assign(file, { Video: this })
   }
 
-  hasWebTorrentFiles () {
+  hasWebVideoFiles () {
     return Array.isArray(this.VideoFiles) === true && this.VideoFiles.length !== 0
   }
 
@@ -1884,7 +1891,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
                                        .concat(toAdd)
   }
 
-  removeWebTorrentFile (videoFile: MVideoFile, isRedundancy = false) {
+  removeWebVideoFile (videoFile: MVideoFile, isRedundancy = false) {
     const filePath = isRedundancy
       ? VideoPathManager.Instance.getFSRedundancyVideoFilePath(this, videoFile)
       : VideoPathManager.Instance.getFSVideoFileOutputPath(this, videoFile)
@@ -1893,7 +1900,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     if (!isRedundancy) promises.push(videoFile.removeTorrent())
 
     if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
-      promises.push(removeWebTorrentObjectStorage(videoFile))
+      promises.push(removeWebVideoObjectStorage(videoFile))
     }
 
     return Promise.all(promises)

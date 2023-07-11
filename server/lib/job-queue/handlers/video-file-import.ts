@@ -3,7 +3,7 @@ import { copy, stat } from 'fs-extra'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { CONFIG } from '@server/initializers/config'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
-import { generateWebTorrentVideoFilename } from '@server/lib/paths'
+import { generateWebVideoFilename } from '@server/lib/paths'
 import { buildMoveToObjectStorageJob } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { VideoModel } from '@server/models/video/video'
@@ -56,7 +56,7 @@ async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
 
   if (currentVideoFile) {
     // Remove old file and old torrent
-    await video.removeWebTorrentFile(currentVideoFile)
+    await video.removeWebVideoFile(currentVideoFile)
     // Remove the old video file from the array
     video.VideoFiles = video.VideoFiles.filter(f => f !== currentVideoFile)
 
@@ -66,7 +66,7 @@ async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
   const newVideoFile = new VideoFileModel({
     resolution,
     extname: fileExt,
-    filename: generateWebTorrentVideoFilename(resolution, fileExt),
+    filename: generateWebVideoFilename(resolution, fileExt),
     storage: VideoStorage.FILE_SYSTEM,
     size,
     fps,

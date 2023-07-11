@@ -99,8 +99,8 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
           iconName: 'cog'
         },
         {
-          label: $localize`Run WebTorrent transcoding`,
-          handler: videos => this.runTranscoding(videos, 'webtorrent'),
+          label: $localize`Run Web Video transcoding`,
+          handler: videos => this.runTranscoding(videos, 'web-video'),
           isDisplayed: videos => videos.every(v => v.canRunTranscoding(this.authUser)),
           iconName: 'cog'
         },
@@ -111,8 +111,8 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
           iconName: 'delete'
         },
         {
-          label: $localize`Delete WebTorrent files`,
-          handler: videos => this.removeVideoFiles(videos, 'webtorrent'),
+          label: $localize`Delete Web Video files`,
+          handler: videos => this.removeVideoFiles(videos, 'web-videos'),
           isDisplayed: videos => videos.every(v => v.canRemoveFiles(this.authUser)),
           iconName: 'delete'
         }
@@ -150,14 +150,14 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
     return video.state.id === VideoState.TO_IMPORT
   }
 
-  isHLS (video: Video) {
+  hasHLS (video: Video) {
     const p = video.streamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
     if (!p) return false
 
     return p.files.length !== 0
   }
 
-  isWebTorrent (video: Video) {
+  hasWebVideos (video: Video) {
     return video.files.length !== 0
   }
 
@@ -176,14 +176,14 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
   getFilesSize (video: Video) {
     let files = video.files
 
-    if (this.isHLS(video)) {
+    if (this.hasHLS(video)) {
       files = files.concat(video.streamingPlaylists[0].files)
     }
 
     return files.reduce((p, f) => p += f.size, 0)
   }
 
-  async removeVideoFile (video: Video, file: VideoFile, type: 'hls' | 'webtorrent') {
+  async removeVideoFile (video: Video, file: VideoFile, type: 'hls' | 'web-videos') {
     const message = $localize`Are you sure you want to delete this ${file.resolution.label} file?`
     const res = await this.confirmService.confirm(message, $localize`Delete file`)
     if (res === false) return
@@ -262,7 +262,7 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
       })
   }
 
-  private async removeVideoFiles (videos: Video[], type: 'hls' | 'webtorrent') {
+  private async removeVideoFiles (videos: Video[], type: 'hls' | 'web-videos') {
     let message: string
 
     if (type === 'hls') {
@@ -274,7 +274,7 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
     } else {
       // eslint-disable-next-line max-len
       message = formatICU(
-        $localize`Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {{count} videos}}?`,
+        $localize`Are you sure you want to delete Web Video files of {count, plural, =1 {1 video} other {{count} videos}}?`,
         { count: videos.length }
       )
     }
@@ -293,7 +293,7 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
       })
   }
 
-  private runTranscoding (videos: Video[], type: 'hls' | 'webtorrent') {
+  private runTranscoding (videos: Video[], type: 'hls' | 'web-video') {
     this.videoService.runTranscoding(videos.map(v => v.id), type)
       .subscribe({
         next: () => {

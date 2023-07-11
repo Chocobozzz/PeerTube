@@ -251,7 +251,7 @@ describe('Test video transcoding', function () {
         expect(videoDetails.files).to.have.lengthOf(5)
 
         const file = videoDetails.files.find(f => f.resolution.id === 240)
-        const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
+        const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
         const probe = await getAudioStream(path)
 
         if (probe.audioStream) {
@@ -281,7 +281,7 @@ describe('Test video transcoding', function () {
         const videoDetails = await server.videos.get({ id: video.id })
 
         const file = videoDetails.files.find(f => f.resolution.id === 240)
-        const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
+        const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
 
         expect(await hasAudioStream(path)).to.be.false
       }
@@ -310,7 +310,7 @@ describe('Test video transcoding', function () {
         const fixtureVideoProbe = await getAudioStream(fixturePath)
 
         const file = videoDetails.files.find(f => f.resolution.id === 240)
-        const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
+        const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
 
         const videoProbe = await getAudioStream(path)
 
@@ -472,14 +472,14 @@ describe('Test video transcoding', function () {
 
         for (const resolution of [ 144, 240, 360, 480 ]) {
           const file = videoDetails.files.find(f => f.resolution.id === resolution)
-          const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
+          const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
           const fps = await getVideoStreamFPS(path)
 
           expect(fps).to.be.below(31)
         }
 
         const file = videoDetails.files.find(f => f.resolution.id === 720)
-        const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
+        const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
         const fps = await getVideoStreamFPS(path)
 
         expect(fps).to.be.above(58).and.below(62)
@@ -516,14 +516,14 @@ describe('Test video transcoding', function () {
 
         {
           const file = video.files.find(f => f.resolution.id === 240)
-          const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
+          const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
           const fps = await getVideoStreamFPS(path)
           expect(fps).to.be.equal(25)
         }
 
         {
           const file = video.files.find(f => f.resolution.id === 720)
-          const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
+          const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
           const fps = await getVideoStreamFPS(path)
           expect(fps).to.be.equal(59)
         }
@@ -556,7 +556,7 @@ describe('Test video transcoding', function () {
 
         for (const resolution of [ 240, 360, 480, 720, 1080 ]) {
           const file = video.files.find(f => f.resolution.id === resolution)
-          const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
+          const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
 
           const bitrate = await getVideoStreamBitrate(path)
           const fps = await getVideoStreamFPS(path)
@@ -607,7 +607,7 @@ describe('Test video transcoding', function () {
       for (const r of resolutions) {
         const file = video.files.find(f => f.resolution.id === r)
 
-        const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
+        const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
         const bitrate = await getVideoStreamBitrate(path)
 
         const inputBitrate = 60_000
@@ -631,7 +631,7 @@ describe('Test video transcoding', function () {
       {
         const video = await servers[1].videos.get({ id: videoUUID })
         const file = video.files.find(f => f.resolution.id === 240)
-        const path = servers[1].servers.buildWebTorrentFilePath(file.fileUrl)
+        const path = servers[1].servers.buildWebVideoFilePath(file.fileUrl)
 
         const probe = await ffprobePromise(path)
         const metadata = new VideoFileMetadata(probe)
@@ -704,14 +704,14 @@ describe('Test video transcoding', function () {
       expect(transcodingJobs).to.have.lengthOf(16)
 
       const hlsJobs = transcodingJobs.filter(j => j.data.type === 'new-resolution-to-hls')
-      const webtorrentJobs = transcodingJobs.filter(j => j.data.type === 'new-resolution-to-webtorrent')
-      const optimizeJobs = transcodingJobs.filter(j => j.data.type === 'optimize-to-webtorrent')
+      const webVideoJobs = transcodingJobs.filter(j => j.data.type === 'new-resolution-to-web-video')
+      const optimizeJobs = transcodingJobs.filter(j => j.data.type === 'optimize-to-web-video')
 
       expect(hlsJobs).to.have.lengthOf(8)
-      expect(webtorrentJobs).to.have.lengthOf(7)
+      expect(webVideoJobs).to.have.lengthOf(7)
       expect(optimizeJobs).to.have.lengthOf(1)
 
-      for (const j of optimizeJobs.concat(hlsJobs.concat(webtorrentJobs))) {
+      for (const j of optimizeJobs.concat(hlsJobs.concat(webVideoJobs))) {
         expect(j.priority).to.be.greaterThan(100)
         expect(j.priority).to.be.lessThan(150)
       }

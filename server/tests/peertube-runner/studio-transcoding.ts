@@ -44,8 +44,8 @@ describe('Test studio transcoding in peertube-runner program', function () {
         }
 
         if (objectStorage) {
-          for (const webtorrentFile of video.files) {
-            expectStartWith(webtorrentFile.fileUrl, objectStorage.getMockWebVideosBaseUrl())
+          for (const webVideoFile of video.files) {
+            expectStartWith(webVideoFile.fileUrl, objectStorage.getMockWebVideosBaseUrl())
           }
 
           for (const hlsFile of video.streamingPlaylists[0].files) {

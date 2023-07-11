@@ -49,21 +49,21 @@ describe('Test transcoding API validators', function () {
 
   it('Should not run transcoding of a unknown video', async function () {
     await servers[0].videos.runTranscoding({ videoId: 404, transcodingType: 'hls', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
-    await servers[0].videos.runTranscoding({ videoId: 404, transcodingType: 'webtorrent', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    await servers[0].videos.runTranscoding({ videoId: 404, transcodingType: 'web-video', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
   })
 
   it('Should not run transcoding of a remote video', async function () {
     const expectedStatus = HttpStatusCode.BAD_REQUEST_400
 
     await servers[0].videos.runTranscoding({ videoId: remoteId, transcodingType: 'hls', expectedStatus })
-    await servers[0].videos.runTranscoding({ videoId: remoteId, transcodingType: 'webtorrent', expectedStatus })
+    await servers[0].videos.runTranscoding({ videoId: remoteId, transcodingType: 'web-video', expectedStatus })
   })
 
   it('Should not run transcoding by a non admin user', async function () {
     const expectedStatus = HttpStatusCode.FORBIDDEN_403
 
     await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'hls', token: userToken, expectedStatus })
-    await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'webtorrent', token: moderatorToken, expectedStatus })
+    await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'web-video', token: moderatorToken, expectedStatus })
   })
 
   it('Should not run transcoding without transcoding type', async function () {
@@ -82,7 +82,7 @@ describe('Test transcoding API validators', function () {
     await servers[0].config.disableTranscoding()
 
     await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'hls', expectedStatus })
-    await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'webtorrent', expectedStatus })
+    await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'web-video', expectedStatus })
   })
 
   it('Should run transcoding', async function () {
@@ -93,15 +93,15 @@ describe('Test transcoding API validators', function () {
     await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'hls' })
     await waitJobs(servers)
 
-    await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'webtorrent' })
+    await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'web-video' })
     await waitJobs(servers)
   })
 
   it('Should not run transcoding on a video that is already being transcoded', async function () {
-    await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'webtorrent' })
+    await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'web-video' })
 
     const expectedStatus = HttpStatusCode.CONFLICT_409
-    await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'webtorrent', expectedStatus })
+    await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'web-video', expectedStatus })
   })
 
   after(async function () {

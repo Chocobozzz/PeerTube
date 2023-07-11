@@ -154,7 +154,7 @@ describe('Test videos filter', function () {
       server: PeerTubeServer
       path: string
       isLocal?: boolean
-      hasWebtorrentFiles?: boolean
+      hasWebVideoFiles?: boolean
       hasHLSFiles?: boolean
       include?: VideoInclude
       privacyOneOf?: VideoPrivacy[]
@@ -174,7 +174,7 @@ describe('Test videos filter', function () {
             'include',
             'category',
             'tagsAllOf',
-            'hasWebtorrentFiles',
+            'hasWebVideoFiles',
             'hasHLSFiles',
             'privacyOneOf',
             'excludeAlreadyWatched'
@@ -463,14 +463,14 @@ describe('Test videos filter', function () {
       }
     })
 
-    it('Should filter by HLS or WebTorrent files', async function () {
+    it('Should filter by HLS or Web Video files', async function () {
       this.timeout(360000)
 
       const finderFactory = (name: string) => (videos: Video[]) => videos.some(v => v.name === name)
 
       await servers[0].config.enableTranscoding(true, false)
-      await servers[0].videos.upload({ attributes: { name: 'webtorrent video' } })
-      const hasWebtorrent = finderFactory('webtorrent video')
+      await servers[0].videos.upload({ attributes: { name: 'web video video' } })
+      const hasWebVideo = finderFactory('web video video')
 
       await waitJobs(servers)
 
@@ -481,24 +481,24 @@ describe('Test videos filter', function () {
       await waitJobs(servers)
 
       await servers[0].config.enableTranscoding(true, true)
-      await servers[0].videos.upload({ attributes: { name: 'hls and webtorrent video' } })
-      const hasBoth = finderFactory('hls and webtorrent video')
+      await servers[0].videos.upload({ attributes: { name: 'hls and web video video' } })
+      const hasBoth = finderFactory('hls and web video video')
 
       await waitJobs(servers)
 
       for (const path of paths) {
         {
-          const videos = await listVideos({ server: servers[0], path, hasWebtorrentFiles: true })
+          const videos = await listVideos({ server: servers[0], path, hasWebVideoFiles: true })
 
-          expect(hasWebtorrent(videos)).to.be.true
+          expect(hasWebVideo(videos)).to.be.true
           expect(hasHLS(videos)).to.be.false
           expect(hasBoth(videos)).to.be.true
         }
 
         {
-          const videos = await listVideos({ server: servers[0], path, hasWebtorrentFiles: false })
+          const videos = await listVideos({ server: servers[0], path, hasWebVideoFiles: false })
 
-          expect(hasWebtorrent(videos)).to.be.false
+          expect(hasWebVideo(videos)).to.be.false
           expect(hasHLS(videos)).to.be.true
           expect(hasBoth(videos)).to.be.false
         }
@@ -506,7 +506,7 @@ describe('Test videos filter', function () {
         {
           const videos = await listVideos({ server: servers[0], path, hasHLSFiles: true })
 
-          expect(hasWebtorrent(videos)).to.be.false
+          expect(hasWebVideo(videos)).to.be.false
           expect(hasHLS(videos)).to.be.true
           expect(hasBoth(videos)).to.be.true
         }
@@ -514,23 +514,23 @@ describe('Test videos filter', function () {
         {
           const videos = await listVideos({ server: servers[0], path, hasHLSFiles: false })
 
-          expect(hasWebtorrent(videos)).to.be.true
+          expect(hasWebVideo(videos)).to.be.true
           expect(hasHLS(videos)).to.be.false
           expect(hasBoth(videos)).to.be.false
         }
 
         {
-          const videos = await listVideos({ server: servers[0], path, hasHLSFiles: false, hasWebtorrentFiles: false })
+          const videos = await listVideos({ server: servers[0], path, hasHLSFiles: false, hasWebVideoFiles: false })
 
-          expect(hasWebtorrent(videos)).to.be.false
+          expect(hasWebVideo(videos)).to.be.false
           expect(hasHLS(videos)).to.be.false
           expect(hasBoth(videos)).to.be.false
         }
 
         {
-          const videos = await listVideos({ server: servers[0], path, hasHLSFiles: true, hasWebtorrentFiles: true })
+          const videos = await listVideos({ server: servers[0], path, hasHLSFiles: true, hasWebVideoFiles: true })
 
-          expect(hasWebtorrent(videos)).to.be.false
+          expect(hasWebVideo(videos)).to.be.false
           expect(hasHLS(videos)).to.be.false
           expect(hasBoth(videos)).to.be.true
         }

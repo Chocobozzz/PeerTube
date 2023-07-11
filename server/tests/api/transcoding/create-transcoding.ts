@@ -96,12 +96,12 @@ function runTests (enableObjectStorage: boolean) {
     }
   })
 
-  it('Should generate WebTorrent', async function () {
+  it('Should generate Web Video', async function () {
     this.timeout(60000)
 
     await servers[0].videos.runTranscoding({
       videoId: videoUUID,
-      transcodingType: 'webtorrent'
+      transcodingType: 'web-video'
     })
 
     await waitJobs(servers)
@@ -117,13 +117,13 @@ function runTests (enableObjectStorage: boolean) {
     }
   })
 
-  it('Should generate WebTorrent from HLS only video', async function () {
+  it('Should generate Web Video from HLS only video', async function () {
     this.timeout(60000)
 
-    await servers[0].videos.removeAllWebTorrentFiles({ videoId: videoUUID })
+    await servers[0].videos.removeAllWebVideoFiles({ videoId: videoUUID })
     await waitJobs(servers)
 
-    await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'webtorrent' })
+    await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'web-video' })
     await waitJobs(servers)
 
     for (const server of servers) {
@@ -137,13 +137,13 @@ function runTests (enableObjectStorage: boolean) {
     }
   })
 
-  it('Should only generate WebTorrent', async function () {
+  it('Should only generate Web Video', async function () {
     this.timeout(60000)
 
     await servers[0].videos.removeHLSPlaylist({ videoId: videoUUID })
     await waitJobs(servers)
 
-    await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'webtorrent' })
+    await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'web-video' })
     await waitJobs(servers)
 
     for (const server of servers) {

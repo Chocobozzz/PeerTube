@@ -33,7 +33,7 @@ export class APVideoCreator extends APVideoAbstractBuilder {
 
       await this.setThumbnail(videoCreated, t)
       await this.setPreview(videoCreated, t)
-      await this.setWebTorrentFiles(videoCreated, t)
+      await this.setWebVideoFiles(videoCreated, t)
       await this.setStreamingPlaylists(videoCreated, t)
       await this.setTags(videoCreated, t)
       await this.setTrackers(videoCreated, t)

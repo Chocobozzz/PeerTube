@@ -83,7 +83,7 @@ export class VODAudioMergeTranscodingJobHandler extends AbstractVODTranscodingJo
 
     // We can remove the old audio file
     const oldAudioFile = video.VideoFiles[0]
-    await video.removeWebTorrentFile(oldAudioFile)
+    await video.removeWebVideoFile(oldAudioFile)
     await oldAudioFile.destroy()
     video.VideoFiles = []
 

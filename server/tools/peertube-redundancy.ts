@@ -65,19 +65,19 @@ async function listRedundanciesCLI (target: VideoRedundanciesTarget) {
   }) as any
 
   for (const redundancy of data) {
-    const webtorrentFiles = redundancy.redundancies.files
+    const webVideoFiles = redundancy.redundancies.files
     const streamingPlaylists = redundancy.redundancies.streamingPlaylists
 
     let totalSize = ''
     if (target === 'remote-videos') {
-      const tmp = webtorrentFiles.concat(streamingPlaylists)
+      const tmp = webVideoFiles.concat(streamingPlaylists)
                                  .reduce((a, b) => a + b.size, 0)
 
       totalSize = bytes(tmp)
     }
 
     const instances = uniqify(
-      webtorrentFiles.concat(streamingPlaylists)
+      webVideoFiles.concat(streamingPlaylists)
                      .map(r => r.fileUrl)
                      .map(u => new URL(u).host)
     )
@@ -86,7 +86,7 @@ async function listRedundanciesCLI (target: VideoRedundanciesTarget) {
       redundancy.id.toString(),
       redundancy.name,
       redundancy.url,
-      webtorrentFiles.length,
+      webVideoFiles.length,
       streamingPlaylists.length,
       instances.join('\n'),
       totalSize

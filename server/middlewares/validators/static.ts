@@ -22,7 +22,7 @@ const staticFileTokenBypass = new LRUCache<string, LRUValue>({
   ttl: LRU_CACHE.STATIC_VIDEO_FILES_RIGHTS_CHECK.TTL
 })
 
-const ensureCanAccessVideoPrivateWebTorrentFiles = [
+const ensureCanAccessVideoPrivateWebVideoFiles = [
   query('videoFileToken').optional().custom(exists),
 
   isValidVideoPasswordHeader(),
@@ -48,7 +48,7 @@ const ensureCanAccessVideoPrivateWebTorrentFiles = [
       return res.sendStatus(HttpStatusCode.FORBIDDEN_403)
     }
 
-    const result = await isWebTorrentAllowed(req, res)
+    const result = await isWebVideoAllowed(req, res)
 
     staticFileTokenBypass.set(cacheKey, result)
 
@@ -122,13 +122,13 @@ const ensureCanAccessPrivateVideoHLSFiles = [
 ]
 
 export {
-  ensureCanAccessVideoPrivateWebTorrentFiles,
+  ensureCanAccessVideoPrivateWebVideoFiles,
   ensureCanAccessPrivateVideoHLSFiles
 }
 
 // ---------------------------------------------------------------------------
 
-async function isWebTorrentAllowed (req: express.Request, res: express.Response) {
+async function isWebVideoAllowed (req: express.Request, res: express.Response) {
   const filename = basename(req.path)
 
   const file = await VideoFileModel.loadWithVideoByFilename(filename)

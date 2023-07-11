@@ -50,7 +50,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
       if (thumbnailModel) await videoUpdated.addAndSaveThumbnail(thumbnailModel)
 
       await runInReadCommittedTransaction(async t => {
-        await this.setWebTorrentFiles(videoUpdated, t)
+        await this.setWebVideoFiles(videoUpdated, t)
         await this.setStreamingPlaylists(videoUpdated, t)
       })
 

@@ -14,7 +14,7 @@ export type FileQueryOptions = {
 
 /**
  *
- * Fetch files (webtorrent and streaming playlist) according to a video
+ * Fetch files (web videos and streaming playlist) according to a video
  *
  */
 
@@ -25,8 +25,8 @@ export class VideoFileQueryBuilder extends AbstractVideoQueryBuilder {
     super(sequelize, 'get')
   }
 
-  queryWebTorrentVideos (options: FileQueryOptions) {
-    this.buildWebtorrentFilesQuery(options)
+  queryWebVideos (options: FileQueryOptions) {
+    this.buildWebVideoFilesQuery(options)
 
     return this.runQuery(options)
   }
@@ -37,15 +37,15 @@ export class VideoFileQueryBuilder extends AbstractVideoQueryBuilder {
     return this.runQuery(options)
   }
 
-  private buildWebtorrentFilesQuery (options: FileQueryOptions) {
+  private buildWebVideoFilesQuery (options: FileQueryOptions) {
     this.attributes = {
       '"video"."id"': ''
     }
 
-    this.includeWebtorrentFiles()
+    this.includeWebVideoFiles()
 
     if (options.includeRedundancy) {
-      this.includeWebTorrentRedundancies()
+      this.includeWebVideoRedundancies()
     }
 
     this.whereId(options)

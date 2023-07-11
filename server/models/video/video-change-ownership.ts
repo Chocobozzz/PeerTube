@@ -45,7 +45,7 @@ enum ScopeNames {
       {
         model: VideoModel.scope([
           VideoScopeNames.WITH_THUMBNAILS,
-          VideoScopeNames.WITH_WEBTORRENT_FILES,
+          VideoScopeNames.WITH_WEB_VIDEO_FILES,
           VideoScopeNames.WITH_STREAMING_PLAYLISTS,
           VideoScopeNames.WITH_ACCOUNT_DETAILS
         ]),

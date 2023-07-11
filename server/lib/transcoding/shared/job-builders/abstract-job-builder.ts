@@ -12,7 +12,7 @@ export abstract class AbstractJobBuilder {
   }): Promise<any>
 
   abstract createTranscodingJobs (options: {
-    transcodingType: 'hls' | 'webtorrent'
+    transcodingType: 'hls' | 'webtorrent' | 'web-video' // TODO: remove webtorrent in v7
     video: MVideoFullLight
     resolutions: number[]
     isNewVideo: boolean

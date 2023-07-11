@@ -9,7 +9,7 @@ function getInternalUrl (config: BucketInfo, keyWithoutPrefix: string) {
 
 // ---------------------------------------------------------------------------
 
-function getWebTorrentPublicFileUrl (fileUrl: string) {
+function getWebVideoPublicFileUrl (fileUrl: string) {
   const baseUrl = CONFIG.OBJECT_STORAGE.VIDEOS.BASE_URL
   if (!baseUrl) return fileUrl
 
@@ -29,7 +29,7 @@ function getHLSPrivateFileUrl (video: MVideoUUID, filename: string) {
   return WEBSERVER.URL + OBJECT_STORAGE_PROXY_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + video.uuid + `/${filename}`
 }
 
-function getWebTorrentPrivateFileUrl (filename: string) {
+function getWebVideoPrivateFileUrl (filename: string) {
   return WEBSERVER.URL + OBJECT_STORAGE_PROXY_PATHS.PRIVATE_WEBSEED + filename
 }
 
@@ -38,11 +38,11 @@ function getWebTorrentPrivateFileUrl (filename: string) {
 export {
   getInternalUrl,
 
-  getWebTorrentPublicFileUrl,
+  getWebVideoPublicFileUrl,
   getHLSPublicFileUrl,
 
   getHLSPrivateFileUrl,
-  getWebTorrentPrivateFileUrl,
+  getWebVideoPrivateFileUrl,
 
   replaceByBaseUrl
 }

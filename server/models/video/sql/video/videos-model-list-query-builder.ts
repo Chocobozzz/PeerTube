@@ -18,7 +18,7 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
   private innerQuery: string
   private innerSort: string
 
-  webtorrentFilesQueryBuilder: VideoFileQueryBuilder
+  webVideoFilesQueryBuilder: VideoFileQueryBuilder
   streamingPlaylistFilesQueryBuilder: VideoFileQueryBuilder
 
   private readonly videoModelBuilder: VideoModelBuilder
@@ -27,7 +27,7 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
     super(sequelize, 'list')
 
     this.videoModelBuilder = new VideoModelBuilder(this.mode, this.tables)
-    this.webtorrentFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
+    this.webVideoFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
     this.streamingPlaylistFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
   }
 
@@ -48,12 +48,12 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
           includeRedundancy: false
         }
 
-        const [ rowsWebTorrentFiles, rowsStreamingPlaylist ] = await Promise.all([
-          this.webtorrentFilesQueryBuilder.queryWebTorrentVideos(fileQueryOptions),
+        const [ rowsWebVideoFiles, rowsStreamingPlaylist ] = await Promise.all([
+          this.webVideoFilesQueryBuilder.queryWebVideos(fileQueryOptions),
           this.streamingPlaylistFilesQueryBuilder.queryStreamingPlaylistVideos(fileQueryOptions)
         ])
 
-        return this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include, rowsStreamingPlaylist, rowsWebTorrentFiles })
+        return this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include, rowsStreamingPlaylist, rowsWebVideoFiles })
       }
     }
 

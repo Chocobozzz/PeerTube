@@ -1,11 +1,11 @@
 import cors from 'cors'
 import express from 'express'
 import { OBJECT_STORAGE_PROXY_PATHS } from '@server/initializers/constants'
-import { proxifyHLS, proxifyWebTorrentFile } from '@server/lib/object-storage'
+import { proxifyHLS, proxifyWebVideoFile } from '@server/lib/object-storage'
 import {
   asyncMiddleware,
   ensureCanAccessPrivateVideoHLSFiles,
-  ensureCanAccessVideoPrivateWebTorrentFiles,
+  ensureCanAccessVideoPrivateWebVideoFiles,
   ensurePrivateObjectStorageProxyIsEnabled,
   optionalAuthenticate
 } from '@server/middlewares'
@@ -18,8 +18,8 @@ objectStorageProxyRouter.use(cors())
 objectStorageProxyRouter.get(OBJECT_STORAGE_PROXY_PATHS.PRIVATE_WEBSEED + ':filename',
   ensurePrivateObjectStorageProxyIsEnabled,
   optionalAuthenticate,
-  asyncMiddleware(ensureCanAccessVideoPrivateWebTorrentFiles),
-  asyncMiddleware(proxifyWebTorrentController)
+  asyncMiddleware(ensureCanAccessVideoPrivateWebVideoFiles),
+  asyncMiddleware(proxifyWebVideoController)
 )
 
 objectStorageProxyRouter.get(OBJECT_STORAGE_PROXY_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:filename',
@@ -35,10 +35,10 @@ export {
   objectStorageProxyRouter
 }
 
-function proxifyWebTorrentController (req: express.Request, res: express.Response) {
+function proxifyWebVideoController (req: express.Request, res: express.Response) {
   const filename = req.params.filename
 
-  return proxifyWebTorrentFile({ req, res, filename })
+  return proxifyWebVideoFile({ req, res, filename })
 }
 
 function proxifyHLSController (req: express.Request, res: express.Response) {
