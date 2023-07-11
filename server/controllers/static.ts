@@ -29,13 +29,13 @@ const privateWebVideoStaticMiddlewares = CONFIG.STATIC_FILES.PRIVATE_FILES_REQUI
   : []
 
 staticRouter.use(
-  STATIC_PATHS.PRIVATE_WEBSEED,
+  [ STATIC_PATHS.PRIVATE_WEB_VIDEOS, STATIC_PATHS.LEGACY_PRIVATE_WEB_VIDEOS ],
   ...privateWebVideoStaticMiddlewares,
   express.static(DIRECTORIES.VIDEOS.PRIVATE, { fallthrough: false }),
   handleStaticError
 )
 staticRouter.use(
-  STATIC_PATHS.WEBSEED,
+  [ STATIC_PATHS.WEB_VIDEOS, STATIC_PATHS.LEGACY_WEB_VIDEOS ],
   express.static(DIRECTORIES.VIDEOS.PUBLIC, { fallthrough: false }),
   handleStaticError
 )

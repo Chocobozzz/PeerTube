@@ -366,7 +366,7 @@ x-tagGroups:
       - Runners
 
 paths:
-  '/static/webseed/{filename}':
+  '/static/web-videos/{filename}':
     get:
       tags:
         - Static Video Files
@@ -378,11 +378,11 @@ paths:
           description: successful operation
         '404':
           description: not found
-  '/static/webseed/private/{filename}':
+  '/static/web-videos/private/{filename}':
     get:
       tags:
         - Static Video Files
-      summary: Get private Web Video video file
+      summary: Get private Web Video file
       parameters:
         - $ref: '#/components/parameters/staticFilename'
         - $ref: '#/components/parameters/videoFileToken'

@@ -558,10 +558,10 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
 
   private getWebVideoFileStaticPath (video: MVideo) {
     if (isVideoInPrivateDirectory(video.privacy)) {
-      return join(STATIC_PATHS.PRIVATE_WEBSEED, this.filename)
+      return join(STATIC_PATHS.PRIVATE_WEB_VIDEOS, this.filename)
     }
 
-    return join(STATIC_PATHS.WEBSEED, this.filename)
+    return join(STATIC_PATHS.WEB_VIDEOS, this.filename)
   }
 
   private getHLSFileStaticPath (video: MVideo) {

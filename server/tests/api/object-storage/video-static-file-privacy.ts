@@ -39,7 +39,7 @@ describe('Object storage for video static file privacy', function () {
     const video = await server.videos.getWithToken({ id: uuid })
 
     for (const file of video.files) {
-      expectStartWith(file.fileUrl, server.url + '/object-storage-proxy/webseed/private/')
+      expectStartWith(file.fileUrl, server.url + '/object-storage-proxy/web-videos/private/')
 
       await makeRawRequest({ url: file.fileUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
     }
@@ -538,7 +538,7 @@ describe('Object storage for video static file privacy', function () {
       const hlsFilename = extractFilenameFromUrl(getHLS(privateVideo).files[0].fileUrl)
 
       await makeRawRequest({
-        url: server.url + '/object-storage-proxy/webseed/private/' + webVideoFilename,
+        url: server.url + '/object-storage-proxy/web-videos/private/' + webVideoFilename,
         token: server.accessToken,
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })

@@ -30,7 +30,7 @@ function getHLSPrivateFileUrl (video: MVideoUUID, filename: string) {
 }
 
 function getWebVideoPrivateFileUrl (filename: string) {
-  return WEBSERVER.URL + OBJECT_STORAGE_PROXY_PATHS.PRIVATE_WEBSEED + filename
+  return WEBSERVER.URL + OBJECT_STORAGE_PROXY_PATHS.PRIVATE_WEB_VIDEOS + filename
 }
 
 // ---------------------------------------------------------------------------

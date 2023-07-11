@@ -750,8 +750,13 @@ const STATIC_PATHS = {
   // TODO: deprecated in v6, to remove
   THUMBNAILS: '/static/thumbnails/',
 
-  WEBSEED: '/static/webseed/',
-  PRIVATE_WEBSEED: '/static/webseed/private/',
+  // Need to keep this legacy path for previously generated torrents
+  LEGACY_WEB_VIDEOS: '/static/webseed/',
+  WEB_VIDEOS: '/static/web-videos/',
+
+  // Need to keep this legacy path for previously generated torrents
+  LEGACY_PRIVATE_WEB_VIDEOS: '/static/webseed/private/',
+  PRIVATE_WEB_VIDEOS: '/static/web-videos/private/',
 
   REDUNDANCY: '/static/redundancy/',
 
@@ -775,7 +780,9 @@ const LAZY_STATIC_PATHS = {
   STORYBOARDS: '/lazy-static/storyboards/'
 }
 const OBJECT_STORAGE_PROXY_PATHS = {
-  PRIVATE_WEBSEED: '/object-storage-proxy/webseed/private/',
+  // Need to keep this legacy path for previously generated torrents
+  LEGACY_PRIVATE_WEB_VIDEOS: '/object-storage-proxy/webseed/private/',
+  PRIVATE_WEB_VIDEOS: '/object-storage-proxy/web-videos/private/',
 
   STREAMING_PLAYLISTS: {
     PRIVATE_HLS: '/object-storage-proxy/streaming-playlists/hls/private/'

@@ -41,7 +41,7 @@ describe('Test video static file privacy', function () {
 
         for (const file of video.files) {
           expect(file.fileDownloadUrl).to.not.include('/private/')
-          expectStartWith(file.fileUrl, server.url + '/static/webseed/private/')
+          expectStartWith(file.fileUrl, server.url + '/static/web-videos/private/')
 
           const torrent = await parseTorrentVideo(server, file)
           expect(torrent.urlList).to.have.lengthOf(0)

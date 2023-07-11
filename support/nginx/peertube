@@ -199,7 +199,7 @@ server {
     alias /var/www/peertube/peertube-latest/client/dist/$1;
   }
 
-  location ~ ^(/static/(webseed|streaming-playlists)/private/)|^/download {
+  location ~ ^(/static/(webseed|web-videos|streaming-playlists)/private/)|^/download {
     # We can't rate limit a try_files directive, so we need to duplicate @api
 
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -212,16 +212,10 @@ server {
   }
 
   # Bypass PeerTube for performance reasons. Optional.
-  location ~ ^/static/(webseed|redundancy|streaming-playlists)/ {
+  location ~ ^/static/(webseed|web-videos|redundancy|streaming-playlists)/ {
     limit_rate_after            5M;
 
-    # Clients usually have 4 simultaneous webseed connections, so the real limit is 3MB/s per client
-    set $peertube_limit_rate    800k;
-
-    # Increase rate limit in HLS mode, because we don't have multiple simultaneous connections
-    if ($request_uri ~ -fragmented.mp4$) {
-      set $peertube_limit_rate  5M;
-    }
+    set $peertube_limit_rate  5M;
 
     # Use this line with nginx >= 1.17.0
     limit_rate $peertube_limit_rate;

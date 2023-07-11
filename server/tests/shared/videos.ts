@@ -51,11 +51,12 @@ async function completeWebVideoFilesCheck (options: {
       expect(file.torrentUrl).to.match(new RegExp(`${server.url}/lazy-static/torrents/${nameReg}.torrent`))
 
       if (objectStorageBaseUrl && requiresAuth) {
-        expect(file.fileUrl).to.match(new RegExp(`${originServer.url}/object-storage-proxy/webseed/${privatePath}${nameReg}${extension}`))
+        const regexp = new RegExp(`${originServer.url}/object-storage-proxy/web-videos/${privatePath}${nameReg}${extension}`)
+        expect(file.fileUrl).to.match(regexp)
       } else if (objectStorageBaseUrl) {
         expectStartWith(file.fileUrl, objectStorageBaseUrl)
       } else {
-        expect(file.fileUrl).to.match(new RegExp(`${originServer.url}/static/webseed/${privatePath}${nameReg}${extension}`))
+        expect(file.fileUrl).to.match(new RegExp(`${originServer.url}/static/web-videos/${privatePath}${nameReg}${extension}`))
       }
 
       expect(file.fileDownloadUrl).to.match(new RegExp(`${originServer.url}/download/videos/${nameReg}${extension}`))

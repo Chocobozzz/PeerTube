@@ -15,7 +15,8 @@ const objectStorageProxyRouter = express.Router()
 
 objectStorageProxyRouter.use(cors())
 
-objectStorageProxyRouter.get(OBJECT_STORAGE_PROXY_PATHS.PRIVATE_WEBSEED + ':filename',
+objectStorageProxyRouter.get(
+  [ OBJECT_STORAGE_PROXY_PATHS.PRIVATE_WEB_VIDEOS + ':filename', OBJECT_STORAGE_PROXY_PATHS.LEGACY_PRIVATE_WEB_VIDEOS + ':filename' ],
   ensurePrivateObjectStorageProxyIsEnabled,
   optionalAuthenticate,
   asyncMiddleware(ensureCanAccessVideoPrivateWebVideoFiles),
