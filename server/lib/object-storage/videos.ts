@@ -59,7 +59,7 @@ function storeWebVideoFile (video: MVideo, file: MVideoFile) {
   return storeObject({
     inputPath: VideoPathManager.Instance.getFSVideoFileOutputPath(video, file),
     objectStorageKey: generateWebVideoObjectStorageKey(file.filename),
-    bucketInfo: CONFIG.OBJECT_STORAGE.VIDEOS,
+    bucketInfo: CONFIG.OBJECT_STORAGE.WEB_VIDEOS,
     isPrivate: video.hasPrivateStaticPath()
   })
 }
@@ -69,7 +69,7 @@ function storeWebVideoFile (video: MVideo, file: MVideoFile) {
 async function updateWebVideoFileACL (video: MVideo, file: MVideoFile) {
   await updateObjectACL({
     objectStorageKey: generateWebVideoObjectStorageKey(file.filename),
-    bucketInfo: CONFIG.OBJECT_STORAGE.VIDEOS,
+    bucketInfo: CONFIG.OBJECT_STORAGE.WEB_VIDEOS,
     isPrivate: video.hasPrivateStaticPath()
   })
 }
@@ -103,7 +103,7 @@ function removeHLSFileObjectStorageByFullKey (key: string) {
 // ---------------------------------------------------------------------------
 
 function removeWebVideoObjectStorage (videoFile: MVideoFile) {
-  return removeObject(generateWebVideoObjectStorageKey(videoFile.filename), CONFIG.OBJECT_STORAGE.VIDEOS)
+  return removeObject(generateWebVideoObjectStorageKey(videoFile.filename), CONFIG.OBJECT_STORAGE.WEB_VIDEOS)
 }
 
 // ---------------------------------------------------------------------------
@@ -130,7 +130,7 @@ async function makeWebVideoFileAvailable (filename: string, destination: string)
   await makeAvailable({
     key,
     destination,
-    bucketInfo: CONFIG.OBJECT_STORAGE.VIDEOS
+    bucketInfo: CONFIG.OBJECT_STORAGE.WEB_VIDEOS
   })
 
   return destination
@@ -148,7 +148,7 @@ function getWebVideoFileReadStream (options: {
 
   return createObjectReadStream({
     key,
-    bucketInfo: CONFIG.OBJECT_STORAGE.VIDEOS,
+    bucketInfo: CONFIG.OBJECT_STORAGE.WEB_VIDEOS,
     rangeHeader
   })
 }

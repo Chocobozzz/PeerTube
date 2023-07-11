@@ -42,7 +42,7 @@ export class ObjectStorageCommand {
           bucket_name: this.getMockStreamingPlaylistsBucketName()
         },
 
-        videos: {
+        web_videos: {
           bucket_name: this.getMockWebVideosBucketName()
         }
       }
@@ -136,9 +136,9 @@ export class ObjectStorageCommand {
           prefix: `test:server-${serverNumber}-streaming-playlists:`
         },
 
-        videos: {
+        web_videos: {
           bucket_name: this.DEFAULT_SCALEWAY_BUCKET,
-          prefix: `test:server-${serverNumber}-videos:`
+          prefix: `test:server-${serverNumber}-web-videos:`
         }
       }
     }

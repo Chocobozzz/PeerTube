@@ -78,7 +78,7 @@ async function fillAvatarSizeIfNeeded (accountOrChannel: MAccountDefault | MChan
 
     console.log('Filling size of avatars of %s.', accountOrChannel.name)
 
-    const { width, height } = await getImageSize(join(CONFIG.STORAGE.ACTOR_IMAGES, avatar.filename))
+    const { width, height } = await getImageSize(join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, avatar.filename))
     avatar.width = width
     avatar.height = height
 
@@ -107,8 +107,8 @@ async function generateSmallerAvatar (actor: MActorDefault) {
   const sourceFilename = bigAvatar.filename
 
   const newImageName = buildUUID() + getLowercaseExtension(sourceFilename)
-  const source = join(CONFIG.STORAGE.ACTOR_IMAGES, sourceFilename)
-  const destination = join(CONFIG.STORAGE.ACTOR_IMAGES, newImageName)
+  const source = join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, sourceFilename)
+  const destination = join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, newImageName)
 
   await processImage({ path: source, destination, newSize: imageSize, keepOriginal: true })
 

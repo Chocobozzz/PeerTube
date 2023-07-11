@@ -370,7 +370,7 @@ export class PeerTubeServer {
         tmp_persistent: this.getDirectoryPath('tmp-persistent') + '/',
         bin: this.getDirectoryPath('bin') + '/',
         avatars: this.getDirectoryPath('avatars') + '/',
-        videos: this.getDirectoryPath('videos') + '/',
+        web_videos: this.getDirectoryPath('web-videos') + '/',
         streaming_playlists: this.getDirectoryPath('streaming-playlists') + '/',
         redundancy: this.getDirectoryPath('redundancy') + '/',
         logs: this.getDirectoryPath('logs') + '/',

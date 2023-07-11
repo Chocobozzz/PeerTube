@@ -78,7 +78,7 @@ export class ServersCommand extends AbstractCommand {
   }
 
   buildWebVideoFilePath (fileUrl: string) {
-    return this.buildDirectory(join('videos', basename(fileUrl)))
+    return this.buildDirectory(join('web-videos', basename(fileUrl)))
   }
 
   buildFragmentedFilePath (videoUUID: string, fileUrl: string) {

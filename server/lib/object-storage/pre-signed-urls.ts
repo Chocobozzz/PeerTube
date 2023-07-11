@@ -15,8 +15,8 @@ export async function generateWebVideoPresignedUrl (options: {
   const key = generateWebVideoObjectStorageKey(file.filename)
 
   const command = new GetObjectCommand({
-    Bucket: CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME,
-    Key: buildKey(key, CONFIG.OBJECT_STORAGE.VIDEOS),
+    Bucket: CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME,
+    Key: buildKey(key, CONFIG.OBJECT_STORAGE.WEB_VIDEOS),
     ResponseContentDisposition: `attachment; filename=${downloadFilename}`
   })
 

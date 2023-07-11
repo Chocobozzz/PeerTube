@@ -128,7 +128,7 @@ storage:
   tmp_persistent: '/var/www/peertube/storage/tmp-persistent/' # As tmp but the directory is not cleaned up between PeerTube restarts
   bin: '/var/www/peertube/storage/bin/'
   avatars: '/var/www/peertube/storage/avatars/'
-  videos: '/var/www/peertube/storage/videos/'
+  web_videos: '/var/www/peertube/storage/web-videos/'
   streaming_playlists: '/var/www/peertube/storage/streaming-playlists/'
   redundancy: '/var/www/peertube/storage/redundancy/'
   logs: '/var/www/peertube/storage/logs/'
@@ -200,8 +200,8 @@ object_storage:
     base_url: '' # Example: 'https://mirror.example.com'
 
   # Same settings but for web videos
-  videos:
-    bucket_name: 'videos'
+  web_videos:
+    bucket_name: 'web-videos'
     prefix: ''
     base_url: ''
 

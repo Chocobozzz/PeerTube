@@ -157,11 +157,11 @@ export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageMode
   }
 
   getPath () {
-    return join(CONFIG.STORAGE.ACTOR_IMAGES, this.filename)
+    return join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, this.filename)
   }
 
   removeImage () {
-    const imagePath = join(CONFIG.STORAGE.ACTOR_IMAGES, this.filename)
+    const imagePath = join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, this.filename)
     return remove(imagePath)
   }
 

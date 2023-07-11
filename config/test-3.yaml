@@ -13,7 +13,7 @@ storage:
   tmp_persistent: 'test3/tmp-persistent/'
   bin: 'test3/bin/'
   avatars: 'test3/avatars/'
-  videos: 'test3/videos/'
+  web_videos: 'test3/web-videos/'
   streaming_playlists: 'test3/streaming-playlists/'
   redundancy: 'test3/redundancy/'
   logs: 'test3/logs/'

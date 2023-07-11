@@ -181,7 +181,7 @@ function runTestSuite (options: {
             : undefined
         },
 
-        videos: {
+        web_videos: {
           bucket_name: options.webVideoBucket,
           prefix: options.webVideoPrefix,
           base_url: baseMockUrl
@@ -308,7 +308,7 @@ describe('Object storage for videos', function () {
             bucket_name: 'aaa'
           },
 
-          videos: {
+          web_videos: {
             bucket_name: 'aaa'
           }
         }
@@ -386,7 +386,7 @@ describe('Object storage for videos', function () {
   describe('Test simple object storage', function () {
     runTestSuite({
       playlistBucket: objectStorage.getMockBucketName('streaming-playlists'),
-      webVideoBucket: objectStorage.getMockBucketName('videos')
+      webVideoBucket: objectStorage.getMockBucketName('web-videos')
     })
   })
 
@@ -431,7 +431,7 @@ describe('Object storage for videos', function () {
     runTestSuite({
       maxUploadPart,
       playlistBucket: objectStorage.getMockBucketName('streaming-playlists'),
-      webVideoBucket: objectStorage.getMockBucketName('videos'),
+      webVideoBucket: objectStorage.getMockBucketName('web-videos'),
       fixture
     })
   })

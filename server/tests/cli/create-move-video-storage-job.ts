@@ -109,8 +109,8 @@ describe('Test create move video storage job', function () {
   })
 
   it('Should not have files on disk anymore', async function () {
-    await checkDirectoryIsEmpty(servers[0], 'videos', [ 'private' ])
-    await checkDirectoryIsEmpty(servers[0], join('videos', 'private'))
+    await checkDirectoryIsEmpty(servers[0], 'web-videos', [ 'private' ])
+    await checkDirectoryIsEmpty(servers[0], join('web-videos', 'private'))
 
     await checkDirectoryIsEmpty(servers[0], join('streaming-playlists', 'hls'), [ 'private' ])
     await checkDirectoryIsEmpty(servers[0], join('streaming-playlists', 'hls', 'private'))

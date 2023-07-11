@@ -50,7 +50,7 @@ async function run () {
     await pruneDirectory(CONFIG.STORAGE.PREVIEWS_DIR, doesThumbnailExist(true, ThumbnailType.PREVIEW)),
     await pruneDirectory(CONFIG.STORAGE.THUMBNAILS_DIR, doesThumbnailExist(false, ThumbnailType.MINIATURE)),
 
-    await pruneDirectory(CONFIG.STORAGE.ACTOR_IMAGES, doesActorImageExist)
+    await pruneDirectory(CONFIG.STORAGE.ACTOR_IMAGES_DIR, doesActorImageExist)
   )
 
   const tmpFiles = await readdir(CONFIG.STORAGE.TMP_DIR)

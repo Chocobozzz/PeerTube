@@ -10,7 +10,7 @@ function getInternalUrl (config: BucketInfo, keyWithoutPrefix: string) {
 // ---------------------------------------------------------------------------
 
 function getWebVideoPublicFileUrl (fileUrl: string) {
-  const baseUrl = CONFIG.OBJECT_STORAGE.VIDEOS.BASE_URL
+  const baseUrl = CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BASE_URL
   if (!baseUrl) return fileUrl
 
   return replaceByBaseUrl(fileUrl, baseUrl)

@@ -217,7 +217,7 @@ function checkStorageConfig () {
     }
   }
 
-  if (CONFIG.STORAGE.VIDEOS_DIR === CONFIG.STORAGE.REDUNDANCY_DIR) {
+  if (CONFIG.STORAGE.WEB_VIDEOS_DIR === CONFIG.STORAGE.REDUNDANCY_DIR) {
     logger.warn('Redundancy directory should be different than the videos folder.')
   }
 }
@@ -290,7 +290,7 @@ function checkLiveConfig () {
 function checkObjectStorageConfig () {
   if (CONFIG.OBJECT_STORAGE.ENABLED === true) {
 
-    if (!CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME) {
+    if (!CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME) {
       throw new Error('videos_bucket should be set when object storage support is enabled.')
     }
 
@@ -299,10 +299,10 @@ function checkObjectStorageConfig () {
     }
 
     if (
-      CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME &&
-      CONFIG.OBJECT_STORAGE.VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX
+      CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME &&
+      CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX
     ) {
-      if (CONFIG.OBJECT_STORAGE.VIDEOS.PREFIX === '') {
+      if (CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === '') {
         throw new Error('Object storage bucket prefixes should be set when the same bucket is used for both types of video.')
       }
 

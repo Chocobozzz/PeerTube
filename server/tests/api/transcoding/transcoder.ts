@@ -586,7 +586,7 @@ describe('Test video transcoding', function () {
             '1440p': true,
             '2160p': true
           },
-          web_videos: { enabled: true },
+          webVideos: { enabled: true },
           hls: { enabled: true }
         }
       }

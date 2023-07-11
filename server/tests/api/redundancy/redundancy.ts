@@ -160,7 +160,7 @@ async function check2Webseeds (videoUUID?: string) {
 
   const directories = [
     servers[0].getDirectoryPath('redundancy'),
-    servers[1].getDirectoryPath('videos')
+    servers[1].getDirectoryPath('web-videos')
   ]
 
   for (const directory of directories) {

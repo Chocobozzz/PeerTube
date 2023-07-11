@@ -7,7 +7,7 @@ import { AbstractPermanentFileCache } from './shared'
 export class AvatarPermanentFileCache extends AbstractPermanentFileCache<MActorImage> {
 
   constructor () {
-    super(CONFIG.STORAGE.ACTOR_IMAGES)
+    super(CONFIG.STORAGE.ACTOR_IMAGES_DIR)
   }
 
   protected loadModel (filename: string) {

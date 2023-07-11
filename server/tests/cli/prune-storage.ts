@@ -35,10 +35,10 @@ async function assertNotExists (server: PeerTubeServer, directory: string, subst
 
 async function assertCountAreOkay (servers: PeerTubeServer[]) {
   for (const server of servers) {
-    const videosCount = await countFiles(server, 'videos')
+    const videosCount = await countFiles(server, 'web-videos')
     expect(videosCount).to.equal(9) // 2 videos with 4 resolutions + private directory
 
-    const privateVideosCount = await countFiles(server, 'videos/private')
+    const privateVideosCount = await countFiles(server, 'web-videos/private')
     expect(privateVideosCount).to.equal(4)
 
     const torrentsCount = await countFiles(server, 'torrents')
@@ -131,8 +131,8 @@ describe('Test prune storage scripts', function () {
   it('Should create some dirty files', async function () {
     for (let i = 0; i < 2; i++) {
       {
-        const basePublic = servers[0].servers.buildDirectory('videos')
-        const basePrivate = servers[0].servers.buildDirectory(join('videos', 'private'))
+        const basePublic = servers[0].servers.buildDirectory('web-videos')
+        const basePrivate = servers[0].servers.buildDirectory(join('web-videos', 'private'))
 
         const n1 = buildUUID() + '.mp4'
         const n2 = buildUUID() + '.webm'
