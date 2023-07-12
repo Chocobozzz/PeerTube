@@ -115,7 +115,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
 
     for (const resolution of childrenResolutions) {
       const dependsOnRunnerJob = mainJob
-      const fps = computeOutputFPS({ inputFPS, resolution: maxResolution })
+      const fps = computeOutputFPS({ inputFPS, resolution })
 
       if (transcodingType === 'hls') {
         await new VODHLSTranscodingJobHandler().create({
