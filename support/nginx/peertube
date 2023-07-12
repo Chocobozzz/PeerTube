@@ -247,7 +247,7 @@ server {
     sendfile_max_chunk 1M; # prevent one fast connection from entirely occupying the worker process. should be > 800k.
     aio threads;
 
-    rewrite ^/static/webseed/(.*)$ /videos/$1 break;
+    rewrite ^/static/webseed/(.*)$ /web-videos/$1 break;
     rewrite ^/static/(.*)$         /$1        break;
 
     try_files $uri @api;
