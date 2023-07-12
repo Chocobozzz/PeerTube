@@ -159,44 +159,46 @@ export const runnerJobGetValidator = [
   }
 ]
 
-export const jobOfRunnerGetValidator = [
-  param('jobUUID').custom(isUUIDValid),
+export function jobOfRunnerGetValidatorFactory (allowedStates: RunnerJobState[]) {
+  return [
+    param('jobUUID').custom(isUUIDValid),
 
-  body('runnerToken').custom(isRunnerTokenValid),
-  body('jobToken').custom(isRunnerJobTokenValid),
+    body('runnerToken').custom(isRunnerTokenValid),
+    body('jobToken').custom(isRunnerJobTokenValid),
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res, { tags })) return cleanUpReqFiles(req)
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      if (areValidationErrors(req, res, { tags })) return cleanUpReqFiles(req)
 
-    const runnerJob = await RunnerJobModel.loadByRunnerAndJobTokensWithRunner({
-      uuid: req.params.jobUUID,
-      runnerToken: req.body.runnerToken,
-      jobToken: req.body.jobToken
-    })
-
-    if (!runnerJob) {
-      cleanUpReqFiles(req)
-
-      return res.fail({
-        status: HttpStatusCode.NOT_FOUND_404,
-        message: 'Unknown runner job',
-        tags
+      const runnerJob = await RunnerJobModel.loadByRunnerAndJobTokensWithRunner({
+        uuid: req.params.jobUUID,
+        runnerToken: req.body.runnerToken,
+        jobToken: req.body.jobToken
       })
+
+      if (!runnerJob) {
+        cleanUpReqFiles(req)
+
+        return res.fail({
+          status: HttpStatusCode.NOT_FOUND_404,
+          message: 'Unknown runner job',
+          tags
+        })
+      }
+
+      if (!allowedStates.includes(runnerJob.state)) {
+        cleanUpReqFiles(req)
+
+        return res.fail({
+          status: HttpStatusCode.BAD_REQUEST_400,
+          type: ServerErrorCode.RUNNER_JOB_NOT_IN_PROCESSING_STATE,
+          message: 'Job is not in "processing" state',
+          tags
+        })
+      }
+
+      res.locals.runnerJob = runnerJob
+
+      return next()
     }
-
-    if (runnerJob.state !== RunnerJobState.PROCESSING) {
-      cleanUpReqFiles(req)
-
-      return res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        type: ServerErrorCode.RUNNER_JOB_NOT_IN_PROCESSING_STATE,
-        message: 'Job is not in "processing" state',
-        tags
-      })
-    }
-
-    res.locals.runnerJob = runnerJob
-
-    return next()
-  }
-]
+  ]
+}

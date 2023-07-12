@@ -22,7 +22,7 @@ import {
   cancelRunnerJobValidator,
   errorRunnerJobValidator,
   getRunnerFromTokenValidator,
-  jobOfRunnerGetValidator,
+  jobOfRunnerGetValidatorFactory,
   runnerJobGetValidator,
   successRunnerJobValidator,
   updateRunnerJobValidator
@@ -85,7 +85,7 @@ runnerJobsRouter.post('/jobs/:jobUUID/accept',
 
 runnerJobsRouter.post('/jobs/:jobUUID/abort',
   apiRateLimiter,
-  asyncMiddleware(jobOfRunnerGetValidator),
+  asyncMiddleware(jobOfRunnerGetValidatorFactory([ RunnerJobState.PROCESSING ])),
   abortRunnerJobValidator,
   asyncMiddleware(abortRunnerJob)
 )
@@ -93,13 +93,13 @@ runnerJobsRouter.post('/jobs/:jobUUID/abort',
 runnerJobsRouter.post('/jobs/:jobUUID/update',
   runnerJobUpdateVideoFiles,
   apiRateLimiter, // Has to be after multer middleware to parse runner token
-  asyncMiddleware(jobOfRunnerGetValidator),
+  asyncMiddleware(jobOfRunnerGetValidatorFactory([ RunnerJobState.PROCESSING, RunnerJobState.COMPLETING, RunnerJobState.COMPLETED ])),
   updateRunnerJobValidator,
   asyncMiddleware(updateRunnerJobController)
 )
 
 runnerJobsRouter.post('/jobs/:jobUUID/error',
-  asyncMiddleware(jobOfRunnerGetValidator),
+  asyncMiddleware(jobOfRunnerGetValidatorFactory([ RunnerJobState.PROCESSING ])),
   errorRunnerJobValidator,
   asyncMiddleware(errorRunnerJob)
 )
@@ -107,7 +107,7 @@ runnerJobsRouter.post('/jobs/:jobUUID/error',
 runnerJobsRouter.post('/jobs/:jobUUID/success',
   postRunnerJobSuccessVideoFiles,
   apiRateLimiter, // Has to be after multer middleware to parse runner token
-  asyncMiddleware(jobOfRunnerGetValidator),
+  asyncMiddleware(jobOfRunnerGetValidatorFactory([ RunnerJobState.PROCESSING ])),
   successRunnerJobValidator,
   asyncMiddleware(postRunnerJobSuccess)
 )
@@ -271,6 +271,10 @@ async function updateRunnerJobController (req: express.Request, res: express.Res
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
   const body: RunnerJobUpdateBody = req.body
+
+  if (runnerJob.state === RunnerJobState.COMPLETING || runnerJob.state === RunnerJobState.COMPLETED) {
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  }
 
   const payloadBuilder = jobUpdateBuilders[runnerJob.type]
   const updatePayload = payloadBuilder

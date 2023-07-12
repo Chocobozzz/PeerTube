@@ -41,6 +41,7 @@ describe('Test managing runners', function () {
   let completedJobToken: string
   let completedJobUUID: string
 
+  let cancelledJobToken: string
   let cancelledJobUUID: string
 
   before(async function () {
@@ -86,6 +87,7 @@ describe('Test managing runners', function () {
 
       {
         const { job } = await server.runnerJobs.autoAccept({ runnerToken })
+        cancelledJobToken = job.jobToken
         cancelledJobUUID = job.uuid
         await server.runnerJobs.cancelByAdmin({ jobUUID: cancelledJobUUID })
       }
@@ -639,10 +641,10 @@ describe('Test managing runners', function () {
 
         it('Should fail with a job not in processing state', async function () {
           await server.runnerJobs.update({
-            jobUUID: completedJobUUID,
-            jobToken: completedJobToken,
+            jobUUID: cancelledJobUUID,
+            jobToken: cancelledJobToken,
             runnerToken,
-            expectedStatus: HttpStatusCode.BAD_REQUEST_400
+            expectedStatus: HttpStatusCode.NOT_FOUND_404
           })
         })
       })
