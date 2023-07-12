@@ -142,7 +142,7 @@ describe('Test prune storage scripts', function () {
         await createFile(join(basePrivate, n1))
         await createFile(join(basePrivate, n2))
 
-        badNames['videos'] = [ n1, n2 ]
+        badNames['web-videos'] = [ n1, n2 ]
       }
 
       {
