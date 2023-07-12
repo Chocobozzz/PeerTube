@@ -62,6 +62,14 @@ export class InstanceAboutAccordionComponent implements OnInit {
     this.pluginPanels = await this.hookService.wrapObject([], this.pluginScope, this.pluginHook)
   }
 
+  expandTerms () {
+    this.accordion.expand('terms')
+  }
+
+  expandCodeOfConduct () {
+    this.accordion.expand('code-of-conduct')
+  }
+
   getAdministratorsPanel () {
     if (!this.about) return false
     if (!this.panels.administrators) return false

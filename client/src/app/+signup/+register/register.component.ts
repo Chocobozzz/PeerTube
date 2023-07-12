@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router'
 import { AuthService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
-import { NgbAccordionDirective } from '@ng-bootstrap/ng-bootstrap'
 import { UserRegister } from '@shared/models'
 import { ServerConfig } from '@shared/models/server'
 import { SignupService } from '../shared/signup.service'
@@ -17,8 +16,7 @@ import { SignupService } from '../shared/signup.service'
 })
 export class RegisterComponent implements OnInit {
   @ViewChild('lastStep') lastStep: CdkStep
-
-  accordion: NgbAccordionDirective
+  @ViewChild('instanceAboutAccordion') instanceAboutAccordion: InstanceAboutAccordionComponent
 
   signupError: string
   signupSuccess = false
@@ -121,15 +119,14 @@ export class RegisterComponent implements OnInit {
   }
 
   onTermsClick () {
-    if (this.accordion) this.accordion.toggle('terms')
+    this.instanceAboutAccordion.expandTerms()
   }
 
   onCodeOfConductClick () {
-    if (this.accordion) this.accordion.toggle('code-of-conduct')
+    this.instanceAboutAccordion.expandCodeOfConduct()
   }
 
   onInstanceAboutAccordionInit (instanceAboutAccordion: InstanceAboutAccordionComponent) {
-    this.accordion = instanceAboutAccordion.accordion
     this.aboutHtml = instanceAboutAccordion.aboutHtml
   }
 
