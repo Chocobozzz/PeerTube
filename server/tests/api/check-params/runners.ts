@@ -177,6 +177,15 @@ describe('Test managing runners', function () {
 
         toDeleteId = id
       })
+
+      it('Should fail with the same runner name', async function () {
+        await server.runners.register({
+          name,
+          description: 'super description',
+          registrationToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      })
     })
 
     describe('Delete', function () {

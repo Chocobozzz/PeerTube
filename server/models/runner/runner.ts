@@ -16,6 +16,10 @@ import { CONSTRAINTS_FIELDS } from '@server/initializers/constants'
     },
     {
       fields: [ 'runnerRegistrationTokenId' ]
+    },
+    {
+      fields: [ 'name' ],
+      unique: true
     }
   ]
 })
@@ -69,6 +73,14 @@ export class RunnerModel extends Model<Partial<AttributesOnly<RunnerModel>>> {
   static loadByToken (runnerToken: string) {
     const query = {
       where: { runnerToken }
+    }
+
+    return RunnerModel.findOne(query)
+  }
+
+  static loadByName (name: string) {
+    const query = {
+      where: { name }
     }
 
     return RunnerModel.findOne(query)

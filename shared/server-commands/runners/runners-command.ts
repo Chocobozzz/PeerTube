@@ -1,4 +1,5 @@
 import { pick } from '@shared/core-utils'
+import { buildUUID } from '@shared/extra-utils'
 import { HttpStatusCode, RegisterRunnerBody, RegisterRunnerResult, ResultList, Runner, UnregisterRunnerBody } from '@shared/models'
 import { unwrapBody } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
@@ -68,7 +69,7 @@ export class RunnersCommand extends AbstractCommand {
     const { data } = await this.server.runnerRegistrationTokens.list({ sort: 'createdAt' })
 
     const { runnerToken } = await this.register({
-      name: 'runner',
+      name: 'runner ' + buildUUID(),
       registrationToken: data[0].registrationToken
     })
 

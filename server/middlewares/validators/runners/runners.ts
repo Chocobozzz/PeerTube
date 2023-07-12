@@ -35,6 +35,15 @@ const registerRunnerValidator = [
       })
     }
 
+    const existing = await RunnerModel.loadByName(body.name)
+    if (existing) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'This runner name already exists on this instance',
+        tags
+      })
+    }
+
     res.locals.runnerRegistrationToken = runnerRegistrationToken
 
     return next()
