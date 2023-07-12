@@ -105,6 +105,7 @@
 
       <div #instanceInformation class="instance-information">
         <my-instance-about-accordion
+          #instanceAboutAccordion
           [displayInstanceName]="false"
           (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"
           pluginScope="login" pluginHook="filter:login.instance-about-plugin-panels.create.result"

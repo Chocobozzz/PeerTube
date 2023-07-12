@@ -43,6 +43,7 @@
           </my-signup-step-title>
 
           <my-instance-about-accordion
+            #instanceAboutAccordion
             [displayInstanceName]="false"
             (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"
             pluginScope="signup" pluginHook="filter:signup.instance-about-plugin-panels.create.result"

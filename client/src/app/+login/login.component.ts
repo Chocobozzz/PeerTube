@@ -22,6 +22,7 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
 
   @ViewChild('forgotPasswordModal', { static: true }) forgotPasswordModal: ElementRef
   @ViewChild('otpTokenInput') otpTokenInput: InputTextComponent
+  @ViewChild('instanceAboutAccordion') instanceAboutAccordion: InstanceAboutAccordionComponent
 
   accordion: NgbAccordionDirective
   error: string = null
@@ -70,8 +71,8 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   onTermsClick (event: Event, instanceInformation: HTMLElement) {
     event.preventDefault()
 
-    if (this.accordion) {
-      this.accordion.expand('terms')
+    if (this.instanceAboutAccordion) {
+      this.instanceAboutAccordion.expandTerms()
       instanceInformation.scrollIntoView({ behavior: 'smooth' })
     }
   }

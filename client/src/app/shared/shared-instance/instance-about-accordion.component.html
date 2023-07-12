@@ -3,7 +3,7 @@
 <div *ngIf="displayInstanceShortDescription" class="instance-short-description ellipsis-multiline-3">{{ about?.instance.shortDescription }}</div>
 
 <div ngbAccordion #accordion="ngbAccordion" [closeOthers]="true">
-  <div ngbAccordionItem *ngIf="panels.features" id="instance-features">
+  <div ngbAccordionItem="instance-features" *ngIf="panels.features">
     <div ngbAccordionHeader>
       <button ngbAccordionButton>
         <my-global-icon iconName="playlists"></my-global-icon>
@@ -53,7 +53,7 @@
       </div>
     </div>
 
-    <div ngbAccordionItem *ngIf="termsPanel" id="terms">
+    <div ngbAccordionItem="terms" *ngIf="termsPanel">
       <div ngbAccordionHeader>
         <button ngbAccordionButton>
           <my-global-icon iconName="playlists"></my-global-icon>
@@ -71,7 +71,7 @@
       </div>
     </div>
 
-    <div ngbAccordionItem *ngIf="moderationPanel" id="moderation-information">
+    <div ngbAccordionItem="moderation-information" *ngIf="moderationPanel">
       <div ngbAccordionHeader>
         <button ngbAccordionButton>
           <my-global-icon iconName="playlists"></my-global-icon>
@@ -89,7 +89,7 @@
       </div>
     </div>
 
-    <div ngbAccordionItem *ngIf="codeOfConductPanel" id="code-of-conduct">
+    <div ngbAccordionItem="code-of-conduct" *ngIf="codeOfConductPanel">
       <div ngbAccordionHeader>
         <button ngbAccordionButton>
           <my-global-icon iconName="playlists"></my-global-icon>
