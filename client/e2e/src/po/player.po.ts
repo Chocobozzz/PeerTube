@@ -29,18 +29,12 @@ export class PlayerPage {
   }
 
   async playAndPauseVideo (isAutoplay: boolean, waitUntilSec: number) {
-    const videojsElem = () => $('div.video-js')
-
-    await videojsElem().waitForExist()
-
-    // Autoplay is disabled on iOS and Safari
-    if (isIOS() || isSafari() || isMobileDevice()) {
-      // We can't play the video if it is not muted
-      await browser.execute(`document.querySelector('video').muted = true`)
-      await this.clickOnPlayButton()
-    } else if (isAutoplay === false) {
-      await this.clickOnPlayButton()
+    // Autoplay is disabled on mobile and Safari
+    if (isIOS() || isSafari() || isMobileDevice() || isAutoplay === false) {
+      await this.playVideo()
     }
+
+    await $('div.video-js.vjs-has-started').waitForExist()
 
     await browserSleep(2000)
 
@@ -48,10 +42,19 @@ export class PlayerPage {
       return (await this.getWatchVideoPlayerCurrentTime()) >= waitUntilSec
     })
 
-    await videojsElem().click()
+    // Pause video
+    await $('div.video-js').click()
   }
 
   async playVideo () {
+    await $('div.video-js.vjs-paused').waitForExist()
+
+    // Autoplay is disabled on iOS and Safari
+    if (isIOS() || isSafari() || isMobileDevice()) {
+      // We can't play the video if it is not muted
+      await browser.execute(`document.querySelector('video').muted = true`)
+    }
+
     return this.clickOnPlayButton()
   }
 

@@ -315,7 +315,8 @@ class PeerTubePlugin extends Plugin {
   }
 
   private initCaptions () {
-    debugLogger('Init captions with current subtitle ' + this.currentSubtitle)
+    if (this.currentSubtitle) debugLogger('Init captions with current subtitle ' + this.currentSubtitle)
+    else debugLogger('Init captions without current subtitle')
 
     this.player.tech(true).clearTracks('text')
 

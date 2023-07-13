@@ -17,18 +17,32 @@ function buildMainOptions (sessionName: string) {
   }
 }
 
-function buildBStackDesktopOptions (sessionName: string, resolution: string, os?: string) {
+function buildBStackDesktopOptions (options: {
+  sessionName: string
+  resolution: string
+  os?: string
+  osVersion?: string
+}) {
+  const { sessionName, resolution, os, osVersion } = options
+
   return {
     'bstack:options': {
       ...buildMainOptions(sessionName),
 
       os,
+      osVersion,
       resolution
     }
   }
 }
 
-function buildBStackMobileOptions (sessionName: string, deviceName: string, osVersion: string) {
+function buildBStackMobileOptions (options: {
+  sessionName: string
+  deviceName: string
+  osVersion: string
+}) {
+  const { sessionName, deviceName, osVersion } = options
+
   return {
     'bstack:options': {
       ...buildMainOptions(sessionName),
@@ -53,45 +67,45 @@ module.exports = {
       {
         browserName: 'Chrome',
 
-        ...buildBStackDesktopOptions('Latest Chrome Desktop', '1280x1024')
+        ...buildBStackDesktopOptions({ sessionName: 'Latest Chrome Desktop', resolution: '1280x1024', os: 'Windows', osVersion: '8' })
       },
       {
         browserName: 'Firefox',
         browserVersion: '78', // Very old ESR
 
-        ...buildBStackDesktopOptions('Firefox ESR Desktop', '1280x1024', 'Windows')
+        ...buildBStackDesktopOptions({ sessionName: 'Firefox ESR Desktop', resolution: '1280x1024', os: 'Windows', osVersion: '8' })
       },
       {
         browserName: 'Safari',
         browserVersion: '12.1',
 
-        ...buildBStackDesktopOptions('Safari Desktop', '1280x1024')
+        ...buildBStackDesktopOptions({ sessionName: 'Safari Desktop', resolution: '1280x1024' })
       },
       {
         browserName: 'Firefox',
 
-        ...buildBStackDesktopOptions('Firefox Latest', '1280x1024')
+        ...buildBStackDesktopOptions({ sessionName: 'Firefox Latest', resolution: '1280x1024', os: 'Windows', osVersion: '8' })
       },
       {
         browserName: 'Edge',
 
-        ...buildBStackDesktopOptions('Edge Latest', '1280x1024')
+        ...buildBStackDesktopOptions({ sessionName: 'Edge Latest', resolution: '1280x1024' })
       },
 
       {
         browserName: 'Chrome',
 
-        ...buildBStackMobileOptions('Latest Chrome Android', 'Samsung Galaxy S8', '7.0')
+        ...buildBStackMobileOptions({ sessionName: 'Latest Chrome Android', deviceName: 'Samsung Galaxy S8', osVersion: '7.0' })
       },
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions('Safari iPhone', 'iPhone 8 Plus', '12.4')
+        ...buildBStackMobileOptions({ sessionName: 'Safari iPhone', deviceName: 'iPhone 8 Plus', osVersion: '12.4' })
       },
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions('Safari iPad', 'iPad 7th', '13')
+        ...buildBStackMobileOptions({ sessionName: 'Safari iPad', deviceName: 'iPad 7th', osVersion: '13' })
       }
     ],
 
