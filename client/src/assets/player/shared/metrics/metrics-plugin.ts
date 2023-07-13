@@ -134,16 +134,16 @@ class MetricsPlugin extends Plugin {
 
   private trackBytes () {
     this.player.on('p2p-info', (_event, data: PlayerNetworkInfo) => {
-      this.downloadedBytesHTTP += data.http.downloaded - (this.lastPlayerNetworkInfo?.http.downloaded || 0)
-      this.downloadedBytesP2P += data.p2p.downloaded - (this.lastPlayerNetworkInfo?.p2p.downloaded || 0)
+      this.downloadedBytesHTTP += Math.round(data.http.downloaded - (this.lastPlayerNetworkInfo?.http.downloaded || 0))
+      this.downloadedBytesP2P += Math.round(data.p2p.downloaded - (this.lastPlayerNetworkInfo?.p2p.downloaded || 0))
 
-      this.uploadedBytesP2P += data.p2p.uploaded - (this.lastPlayerNetworkInfo?.p2p.uploaded || 0)
+      this.uploadedBytesP2P += Math.round(data.p2p.uploaded - (this.lastPlayerNetworkInfo?.p2p.uploaded || 0))
 
       this.lastPlayerNetworkInfo = data
     })
 
     this.player.on('http-info', (_event, data: PlayerNetworkInfo) => {
-      this.downloadedBytesHTTP += data.http.downloaded - (this.lastPlayerNetworkInfo?.http.downloaded || 0)
+      this.downloadedBytesHTTP += Math.round(data.http.downloaded - (this.lastPlayerNetworkInfo?.http.downloaded || 0))
     })
   }
 
