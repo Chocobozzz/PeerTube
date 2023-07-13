@@ -15,6 +15,8 @@ export class SegmentValidator {
 
   private destroyed = false
 
+  private segmentJSONPromise: Promise<SegmentsJSON>
+
   constructor (private readonly options: {
     serverUrl: string
     segmentsSha256Url: string
@@ -23,15 +25,16 @@ export class SegmentValidator {
     requiresPassword: boolean
     videoPassword: () => string
   }) {
-
   }
 
   async validate (segment: Segment, _method: string, _peerId: string, retry = 1) {
     if (this.destroyed) return
 
+    this.loadSha256SegmentsPromiseIfNeeded()
+
     const filename = basename(removeQueryParams(segment.url))
 
-    const segmentValue = (await this.fetchSha256Segments())[filename]
+    const segmentValue = (await this.segmentJSONPromise)[filename]
 
     if (!segmentValue && retry > maxRetries) {
       throw new Error(`Unknown segment name ${filename} in segment validator`)
@@ -41,6 +44,8 @@ export class SegmentValidator {
       logger.info(`Refetching sha segments for ${filename}`)
 
       await wait(500)
+
+      this.loadSha256SegmentsPromise()
 
       await this.validate(segment, _method, _peerId, retry + 1)
 
@@ -74,6 +79,16 @@ export class SegmentValidator {
 
   destroy () {
     this.destroyed = true
+  }
+
+  private loadSha256SegmentsPromiseIfNeeded () {
+    if (this.segmentJSONPromise) return
+
+    this.loadSha256SegmentsPromise()
+  }
+
+  private loadSha256SegmentsPromise () {
+    this.segmentJSONPromise = this.fetchSha256Segments()
   }
 
   private fetchSha256Segments (): Promise<SegmentsJSON> {

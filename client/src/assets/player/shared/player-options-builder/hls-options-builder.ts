@@ -108,7 +108,6 @@ export class HLSOptionsBuilder {
           if (!isSameOrigin(this.options.serverUrl, url)) return
 
           if (requiresPassword) xhr.setRequestHeader('x-peertube-video-password', this.options.videoPassword())
-
           else xhr.setRequestHeader('Authorization', this.options.authorizationHeader())
         },
 
