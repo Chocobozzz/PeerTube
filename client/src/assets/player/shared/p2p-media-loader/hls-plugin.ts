@@ -20,6 +20,8 @@ type Metadata = {
 
 type HookFn = (player: videojs.Player, hljs: Hlsjs) => void
 
+let alreadyRegistered = false
+
 const registerSourceHandler = function (vjs: typeof videojs) {
   if (!Hlsjs.isSupported()) {
     logger.warn('Hls.js is not supported in this browser!')
@@ -33,8 +35,9 @@ const registerSourceHandler = function (vjs: typeof videojs) {
     return
   }
 
-  // Already registered
-  if ((html5 as any).canPlaySource({ type: 'application/x-mpegURL' })) return
+  if (alreadyRegistered) return
+
+  alreadyRegistered = true;
 
   // FIXME: typings
   (html5 as any).registerSourceHandler({
