@@ -567,11 +567,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     // We'll jump to the thread id, so do not play the video
     if (this.route.snapshot.params['threadId']) return false
 
-    // Otherwise true by default
-    if (!this.user) return true
+    if (this.user) return this.user.autoPlayVideo
 
-    // Be sure the autoPlay is set to false
-    return this.user.autoPlayVideo !== false
+    if (this.anonymousUser) return this.anonymousUser.autoPlayVideo
+
+    throw new Error('Cannot guess autoplay because user and anonymousUser are not defined')
   }
 
   private isAutoPlayNext () {
