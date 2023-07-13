@@ -7,7 +7,6 @@ import {
   AuthService,
   AuthUser,
   ConfirmService,
-  MetaService,
   Notifier,
   PeerTubeSocket,
   PluginService,
@@ -112,14 +111,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private static VIEW_VIDEO_INTERVAL_MS = 5000
 
   constructor (
-    private elementRef: ElementRef,
     private route: ActivatedRoute,
     private router: Router,
     private videoService: VideoService,
     private playlistService: VideoPlaylistService,
     private liveVideoService: LiveVideoService,
     private confirmService: ConfirmService,
-    private metaService: MetaService,
     private authService: AuthService,
     private userService: UserService,
     private serverService: ServerService,
@@ -456,8 +453,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.loadPlayer({ loggedInOrAnonymousUser, forceAutoplay })
       .catch(err => logger.error('Cannot build the player', err))
-
-    this.setOpenGraphTags()
 
     const hookOptions = {
       videojs,
@@ -895,27 +890,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     this.hotkeysService.add(this.hotkeys)
-  }
-
-  private setOpenGraphTags () {
-    this.metaService.setTitle(this.video.name)
-
-    this.metaService.setTag('og:type', 'video')
-
-    this.metaService.setTag('og:title', this.video.name)
-    this.metaService.setTag('name', this.video.name)
-
-    this.metaService.setTag('og:description', this.video.description)
-    this.metaService.setTag('description', this.video.description)
-
-    this.metaService.setTag('og:image', this.video.previewPath)
-
-    this.metaService.setTag('og:duration', this.video.duration.toString())
-
-    this.metaService.setTag('og:site_name', 'PeerTube')
-
-    this.metaService.setTag('og:url', window.location.href)
-    this.metaService.setTag('url', window.location.href)
   }
 
   private getUrlOptions (): URLOptions {
