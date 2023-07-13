@@ -469,8 +469,8 @@ describe('Test videos filter', function () {
       const finderFactory = (name: string) => (videos: Video[]) => videos.some(v => v.name === name)
 
       await servers[0].config.enableTranscoding(true, false)
-      await servers[0].videos.upload({ attributes: { name: 'web video video' } })
-      const hasWebVideo = finderFactory('web video video')
+      await servers[0].videos.upload({ attributes: { name: 'web video' } })
+      const hasWebVideo = finderFactory('web video')
 
       await waitJobs(servers)
 
@@ -481,8 +481,8 @@ describe('Test videos filter', function () {
       await waitJobs(servers)
 
       await servers[0].config.enableTranscoding(true, true)
-      await servers[0].videos.upload({ attributes: { name: 'hls and web video video' } })
-      const hasBoth = finderFactory('hls and web video video')
+      await servers[0].videos.upload({ attributes: { name: 'hls and web video' } })
+      const hasBoth = finderFactory('hls and web video')
 
       await waitJobs(servers)
 

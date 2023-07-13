@@ -88,13 +88,13 @@ body {
   &.vjs-has-autoplay:not(.vjs-has-started),
   &.vjs-updating-resolution {
     .vjs-poster {
-      opacity: 0;
-      visibility: hidden;
+      display: none !important;
     }
   }
 
-  // Hide the big play button on autoplay
-  &.vjs-has-autoplay {
+  // Hide the big play button on autoplay or resolution change
+  &.vjs-has-autoplay,
+  &.vjs-updating-resolution {
     .vjs-big-play-button {
       display: none !important;
     }

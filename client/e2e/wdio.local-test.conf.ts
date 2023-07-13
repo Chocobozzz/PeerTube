@@ -28,7 +28,7 @@ module.exports = {
         'browserName': 'chrome',
         'acceptInsecureCerts': true,
         'goog:chromeOptions': {
-          args: [ '--disable-gpu', windowSizeArg ],
+          args: [ '--headless', '--disable-gpu', windowSizeArg ],
           prefs
         }
       },

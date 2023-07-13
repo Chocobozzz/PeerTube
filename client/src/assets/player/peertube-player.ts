@@ -360,7 +360,9 @@ export class PeerTubePlayer {
         videoCaptions: () => this.currentLoadOptions.videoCaptions,
         isLive: () => this.currentLoadOptions.isLive,
         videoUUID: () => this.currentLoadOptions.videoUUID,
-        subtitle: () => this.currentLoadOptions.subtitle
+        subtitle: () => this.currentLoadOptions.subtitle,
+
+        poster: () => this.currentLoadOptions.poster
       },
       metrics: {
         mode: () => this.currentLoadOptions.mode,

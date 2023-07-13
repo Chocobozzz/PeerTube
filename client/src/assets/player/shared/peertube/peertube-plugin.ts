@@ -1,7 +1,7 @@
 import debug from 'debug'
 import videojs from 'video.js'
 import { logger } from '@root-helpers/logger'
-import { isIOS, isMobile } from '@root-helpers/web-browser'
+import { isIOS, isMobile, isSafari } from '@root-helpers/web-browser'
 import { timeToInt } from '@shared/core-utils'
 import { VideoView, VideoViewEvent } from '@shared/models/videos'
 import {
@@ -63,8 +63,10 @@ class PeerTubePlugin extends Plugin {
 
       this.player.removeClass('vjs-has-autoplay')
 
-      // Fix a bug on iOS where the big play button is not displayed when autoplay fails
-      if (isIOS()) this.player.hasStarted(false)
+      this.player.poster(options.poster())
+
+      // Fix a bug on iOS/Safari where the big play button is not displayed when autoplay fails
+      if (isIOS() || isSafari()) this.player.hasStarted(false)
     })
 
     this.player.on('ratechange', () => {

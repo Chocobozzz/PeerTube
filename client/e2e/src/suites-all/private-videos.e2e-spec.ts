@@ -31,7 +31,7 @@ describe('Private videos all workflow', () => {
     return loginPage.loginOnPeerTube2()
   })
 
-  it('Should play an internal web video video', async () => {
+  it('Should play an internal web video', async () => {
     await go(FIXTURE_URLS.INTERNAL_WEB_VIDEO)
 
     await videoWatchPage.waitWatchVideoName(internalVideoName)

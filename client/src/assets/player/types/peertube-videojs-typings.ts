@@ -120,6 +120,8 @@ type PeerTubePluginOptions = {
   isLive: () => boolean
   videoUUID: () => string
   subtitle: () => string
+
+  poster: () => string
 }
 
 type MetricsPluginOptions = {

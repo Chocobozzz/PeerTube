@@ -9,11 +9,12 @@ export class VideoWatchPage {
   waitWatchVideoName (videoName: string) {
     if (this.isSafari) return browserSleep(5000)
 
-    // On mobile we display the first node, on desktop the second
+    // On mobile we display the first node, on desktop the second one
     const index = this.isMobileDevice ? 0 : 1
 
     return browser.waitUntil(async () => {
-      return (await $$('.video-info .video-info-name')[index].getText()).includes(videoName)
+      return await $('.video-info .video-info-name').isExisting() &&
+        (await $$('.video-info .video-info-name')[index].getText()).includes(videoName)
     })
   }
 

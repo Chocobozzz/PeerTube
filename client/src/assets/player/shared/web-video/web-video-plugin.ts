@@ -77,6 +77,9 @@ class WebVideoPlugin extends Plugin {
 
     const oldAutoplayValue = this.player.autoplay()
     if (options.isUserResolutionChange) {
+      // Prevent video source element displaying the poster when we change the resolution
+      (this.player.el() as HTMLVideoElement).poster = ''
+
       this.player.autoplay(false)
       this.player.addClass('vjs-updating-resolution')
     }
