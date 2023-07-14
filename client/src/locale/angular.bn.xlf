@@ -353,7 +353,7 @@
       </trans-unit>
       <trans-unit id="1970848297295860531" datatype="html">
         <source>ADMINISTRATORS &amp; SUSTAINABILITY</source>
-        <target/>
+        <target state="translated">ব্যবস্থাপক &amp; টেকসই ব্যবস্থা</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -369,7 +369,7 @@
       </trans-unit>
       <trans-unit id="4722135551130122302" datatype="html">
         <source>Why we created this instance</source>
-        <target/>
+        <target state="translated">আমরা কেন এই ইন্সট্যান্স তৈরি করেছি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">58</context>
@@ -377,7 +377,7 @@
       </trans-unit>
       <trans-unit id="6434467346812189214" datatype="html">
         <source>How long we plan to maintain this instance</source>
-        <target/>
+        <target state="translated">এই ইন্সট্যান্স কত সময় রক্ষণাবেক্ষণের পরিকল্পনা করছো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">72</context>
@@ -385,7 +385,7 @@
       </trans-unit>
       <trans-unit id="2646614e3af5f103885f64e4f097e45569091fd6" datatype="html">
         <source>How we will pay for this instance</source>
-        <target/>
+        <target state="translated">এই ইন্সট্যান্সের জন্য কিভাবে খরচ জোগাড় করবে</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">86</context>
@@ -16336,7 +16336,7 @@
       </trans-unit>
       <trans-unit id="7754186870520534716" datatype="html">
         <source>Video added in <x id="PH" equiv-text="playlist.displayName"/></source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="playlist.displayName"/> এ ভিডিও যোগ করা হয়েছে</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context>
           <context context-type="linenumber">378</context>
@@ -16344,7 +16344,7 @@
       </trans-unit>
       <trans-unit id="5643561794785412000" datatype="html">
         <source>Unavailable</source>
-        <target/>
+        <target state="translated">পাওয়া যায়নি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">32</context>
@@ -16352,7 +16352,7 @@
       </trans-unit>
       <trans-unit id="5263519165976128456" datatype="html">
         <source>Edit starts/stops at</source>
-        <target/>
+        <target state="translated">সম্পাদনা শুরু/থামে এখানে</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">50</context>
@@ -16360,7 +16360,7 @@
       </trans-unit>
       <trans-unit id="8890926675057871150" datatype="html">
         <source>Delete from <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></source>
-        <target/>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/> থেকে অপসারণ করো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">88</context>
@@ -16368,7 +16368,7 @@
       </trans-unit>
       <trans-unit id="6421445850411984665" datatype="html">
         <source>Starts at</source>
-        <target/>
+        <target state="translated">এখানে শুরু হয়</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">140</context>
@@ -16380,7 +16380,7 @@
       </trans-unit>
       <trans-unit id="7145200412085189912" datatype="html">
         <source>Stops at</source>
-        <target/>
+        <target state="translated">এখানে থামে</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">141</context>
@@ -16388,7 +16388,7 @@
       </trans-unit>
       <trans-unit id="921225940108335688" datatype="html">
         <source>and stops at</source>
-        <target/>
+        <target state="translated">এবং এখানে থামে</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">143</context>
@@ -16404,7 +16404,7 @@
       </trans-unit>
       <trans-unit id="7708270344948043036" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/> </source>
-        <target/>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/>। </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">22,24</context>
@@ -16412,7 +16412,7 @@
       </trans-unit>
       <trans-unit id="3044142083883783523" datatype="html">
         <source>Updated <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></source>
-        <target/>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/> হালনাগাদকৃত</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">29</context>
