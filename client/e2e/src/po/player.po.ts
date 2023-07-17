@@ -61,4 +61,15 @@ export class PlayerPage {
     await playButton().waitForClickable()
     await playButton().click()
   }
+
+  async fillEmbedVideoPassword (videoPassword: string) {
+    const videoPasswordInput = $('input#video-password-input')
+    const confirmButton = await $('button#video-password-submit')
+
+    await videoPasswordInput.clearValue()
+    await videoPasswordInput.setValue(videoPassword)
+    await confirmButton.waitForClickable()
+
+    return confirmButton.click()
+  }
 }

@@ -64,6 +64,15 @@ export class VideoUploadPage {
     return selectCustomSelect('privacy', 'Private')
   }
 
+  async setAsPasswordProtected (videoPassword: string) {
+    selectCustomSelect('privacy', 'Password protected')
+
+    const videoPasswordInput = $('input#videoPassword')
+    await videoPasswordInput.clearValue()
+
+    return videoPasswordInput.setValue(videoPassword)
+  }
+
   private getSecondStepSubmitButton () {
     return $('.submit-container my-button')
   }
