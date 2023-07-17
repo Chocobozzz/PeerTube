@@ -42,9 +42,7 @@ describe('Password protected videos', () => {
 
   before(async () => {
     await waitServerUp()
-  })
 
-  beforeEach(async () => {
     loginPage = new LoginPage(isMobileDevice())
     videoUploadPage = new VideoUploadPage()
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
