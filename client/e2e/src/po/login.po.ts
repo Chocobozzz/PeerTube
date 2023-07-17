@@ -1,4 +1,4 @@
-import { browserSleep, go, isAndroid, isMobileDevice } from '../utils'
+import { browserSleep, go, isAndroid } from '../utils'
 
 export class LoginPage {
 
