@@ -64,7 +64,7 @@ class ResolutionMenuButton extends MenuButton {
   update () {
     super.update()
 
-    this.trigger('menu-changed')
+    this.trigger('resolution-menu-changed')
   }
 
   buildCSSClass () {

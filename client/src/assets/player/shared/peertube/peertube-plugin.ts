@@ -310,8 +310,6 @@ class PeerTubePlugin extends Plugin {
   private setInactivityTimeout (timeout: number) {
     (this.player as any).cache_.inactivityTimeout = timeout
     this.player.options_.inactivityTimeout = timeout
-
-    debugLogger('Set player inactivity to ' + timeout)
   }
 
   private initCaptions () {

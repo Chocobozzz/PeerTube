@@ -1,3 +1,4 @@
+import debug from 'debug'
 import videojs from 'video.js'
 import { toTitleCase } from '../common'
 import { SettingsDialog } from './settings-dialog'
@@ -5,8 +6,16 @@ import { SettingsButton } from './settings-menu-button'
 import { SettingsPanel } from './settings-panel'
 import { SettingsPanelChild } from './settings-panel-child'
 
+const debugLogger = debug('peertube:player:settings')
+
 const MenuItem = videojs.getComponent('MenuItem')
-const component = videojs.getComponent('Component')
+const Component = videojs.getComponent('Component')
+
+interface MenuItemExtended extends videojs.MenuItem {
+  isSelected_: boolean
+
+  getLabel?: () => string
+}
 
 export interface SettingsMenuItemOptions extends videojs.MenuItemOptions {
   entry: string
@@ -76,15 +85,15 @@ class SettingsMenuItem extends MenuItem {
 
         if (subMenuName === 'CaptionsButton') {
           player.on('captions-changed', () => {
-            // Wait menu component rebuild
-            setTimeout(() => {
-              this.rebuildAfterMenuChange()
-            }, 150)
+            setTimeout(() => this.rebuildAfterMenuChange())
           })
+
+          // Needed because 'captions-changed' event doesn't contain the selected caption yet
+          player.on('texttrackchange', this.submenuClickHandler)
         }
 
         if (subMenuName === 'ResolutionMenuButton') {
-          this.subMenu.on('menu-changed', () => {
+          this.subMenu.on('resolution-menu-changed', () => {
             this.rebuildAfterMenuChange()
           })
         }
@@ -261,34 +270,28 @@ class SettingsMenuItem extends MenuItem {
   }
 
   update (event?: any) {
-    const subMenu = this.subMenu.name()
-
     // Playback rate menu button doesn't get a vjs-selected class
     // or sets options_['selected'] on the selected playback rate.
     // Thus we get the submenu value based on the labelEl of playbackRateMenuButton
-    if (subMenu === 'PlaybackRateMenuButton') {
-      const html = (this.subMenu as any).labelEl_.innerHTML
-
-      setTimeout(() => {
-        this.settingsSubMenuValueEl_.innerHTML = html
-      }, 250)
+    if (this.subMenu.name() === 'PlaybackRateMenuButton') {
+      this.settingsSubMenuValueEl_.innerHTML = (this.subMenu as any).labelEl_.textContent
     } else {
       // Loop through the submenu items to find the selected child
       for (const subMenuItem of this.subMenu.menu.children_) {
-        if (!(subMenuItem instanceof component)) {
+        if (!(subMenuItem instanceof MenuItem)) {
           continue
         }
 
-        if (subMenuItem.hasClass('vjs-selected')) {
-          const subMenuItemUntyped = subMenuItem as any
+        const subMenuItemExtended = subMenuItem as MenuItemExtended
+        if (subMenuItemExtended.isSelected_) {
 
           // Prefer to use the function
-          if (typeof subMenuItemUntyped.getLabel === 'function') {
-            this.settingsSubMenuValueEl_.innerHTML = subMenuItemUntyped.getLabel()
+          if (typeof subMenuItemExtended.getLabel === 'function') {
+            this.settingsSubMenuValueEl_.innerHTML = subMenuItemExtended.getLabel()
             break
           }
 
-          this.settingsSubMenuValueEl_.innerHTML = this.player().localize(subMenuItemUntyped.options_.label)
+          this.settingsSubMenuValueEl_.innerHTML = this.player().localize(subMenuItemExtended.options_.label)
         }
       }
     }
@@ -307,7 +310,7 @@ class SettingsMenuItem extends MenuItem {
 
   bindClickEvents () {
     for (const item of this.subMenu.menu.children()) {
-      if (!(item instanceof component)) {
+      if (!(item instanceof Component)) {
         continue
       }
       item.on([ 'tap', 'click' ], this.submenuClickHandler)
@@ -349,6 +352,8 @@ class SettingsMenuItem extends MenuItem {
   }
 
   private rebuildAfterMenuChange () {
+    debugLogger('Rebuilding menu ' + this.subMenu.name() + ' after change')
+
     this.settingsSubMenuEl_.innerHTML = ''
     this.settingsSubMenuEl_.appendChild(this.subMenu.menu.el())
     this.update()
