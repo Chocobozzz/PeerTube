@@ -26,7 +26,6 @@ import {
   setDefaultVideosSort,
   videosCustomGetValidator,
   videosGetValidator,
-  videoSourceGetValidator,
   videosRemoveValidator,
   videosSortValidator
 } from '../../../middlewares'
@@ -39,7 +38,9 @@ import { filesRouter } from './files'
 import { videoImportsRouter } from './import'
 import { liveRouter } from './live'
 import { ownershipVideoRouter } from './ownership'
+import { videoPasswordRouter } from './passwords'
 import { rateVideoRouter } from './rate'
+import { videoSourceRouter } from './source'
 import { statsRouter } from './stats'
 import { storyboardRouter } from './storyboard'
 import { studioRouter } from './studio'
@@ -48,7 +49,6 @@ import { transcodingRouter } from './transcoding'
 import { updateRouter } from './update'
 import { uploadRouter } from './upload'
 import { viewRouter } from './view'
-import { videoPasswordRouter } from './passwords'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -72,6 +72,7 @@ videosRouter.use('/', transcodingRouter)
 videosRouter.use('/', tokenRouter)
 videosRouter.use('/', videoPasswordRouter)
 videosRouter.use('/', storyboardRouter)
+videosRouter.use('/', videoSourceRouter)
 
 videosRouter.get('/categories',
   openapiOperationDoc({ operationId: 'getCategories' }),
@@ -106,13 +107,6 @@ videosRouter.get('/:id/description',
   openapiOperationDoc({ operationId: 'getVideoDesc' }),
   asyncMiddleware(videosGetValidator),
   asyncMiddleware(getVideoDescription)
-)
-
-videosRouter.get('/:id/source',
-  openapiOperationDoc({ operationId: 'getVideoSource' }),
-  authenticate,
-  asyncMiddleware(videoSourceGetValidator),
-  getVideoSource
 )
 
 videosRouter.get('/:id',
@@ -175,10 +169,6 @@ async function getVideoDescription (req: express.Request, res: express.Response)
     : await fetchRemoteVideoDescription(videoInstance)
 
   return res.json({ description })
-}
-
-function getVideoSource (req: express.Request, res: express.Response) {
-  return res.json(res.locals.videoSource.toFormattedJSON())
 }
 
 async function listVideos (req: express.Request, res: express.Response) {

@@ -27,13 +27,14 @@ async function autoBlacklistVideoIfNeeded (parameters: {
   user?: MUser
   isRemote: boolean
   isNew: boolean
+  isNewFile: boolean
   notify?: boolean
   transaction?: Transaction
 }) {
-  const { video, user, isRemote, isNew, notify = true, transaction } = parameters
+  const { video, user, isRemote, isNew, isNewFile, notify = true, transaction } = parameters
   const doAutoBlacklist = await Hooks.wrapFun(
     autoBlacklistNeeded,
-    { video, user, isRemote, isNew },
+    { video, user, isRemote, isNew, isNewFile },
     'filter:video.auto-blacklist.result'
   )
 
@@ -128,14 +129,15 @@ function autoBlacklistNeeded (parameters: {
   video: MVideoWithBlacklistLight
   isRemote: boolean
   isNew: boolean
+  isNewFile: boolean
   user?: MUser
 }) {
-  const { user, video, isRemote, isNew } = parameters
+  const { user, video, isRemote, isNew, isNewFile } = parameters
 
   // Already blacklisted
   if (video.VideoBlacklist) return false
   if (!CONFIG.AUTO_BLACKLIST.VIDEOS.OF_USERS.ENABLED || !user) return false
-  if (isRemote || isNew === false) return false
+  if (isRemote || (isNew === false && isNewFile === false)) return false
 
   if (user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) || user.hasAdminFlag(UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST)) return false
 

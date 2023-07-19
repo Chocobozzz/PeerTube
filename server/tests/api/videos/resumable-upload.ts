@@ -11,6 +11,7 @@ import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServ
 // Most classic resumable upload tests are done in other test suites
 
 describe('Test resumable upload', function () {
+  const path = '/api/v1/videos/upload-resumable'
   const defaultFixture = 'video_short.mp4'
   let server: PeerTubeServer
   let rootId: number
@@ -44,7 +45,7 @@ describe('Test resumable upload', function () {
 
     const mimetype = 'video/mp4'
 
-    const res = await server.videos.prepareResumableUpload({ token, attributes, size, mimetype, originalName, lastModified })
+    const res = await server.videos.prepareResumableUpload({ path, token, attributes, size, mimetype, originalName, lastModified })
 
     return res.header['location'].split('?')[1]
   }
@@ -66,6 +67,7 @@ describe('Test resumable upload', function () {
 
     return server.videos.sendResumableChunks({
       token,
+      path,
       pathUploadId,
       videoFilePath: absoluteFilePath,
       size,
@@ -125,7 +127,7 @@ describe('Test resumable upload', function () {
     it('Should correctly delete files after an upload', async function () {
       const uploadId = await prepareUpload()
       await sendChunks({ pathUploadId: uploadId })
-      await server.videos.endResumableUpload({ pathUploadId: uploadId })
+      await server.videos.endResumableUpload({ path, pathUploadId: uploadId })
 
       expect(await countResumableUploads()).to.equal(0)
     })
@@ -251,7 +253,7 @@ describe('Test resumable upload', function () {
       const uploadId1 = await prepareUpload({ originalName, lastModified, token: server.accessToken })
 
       await sendChunks({ pathUploadId: uploadId1 })
-      await server.videos.endResumableUpload({ pathUploadId: uploadId1 })
+      await server.videos.endResumableUpload({ path, pathUploadId: uploadId1 })
 
       const uploadId2 = await prepareUpload({ originalName, lastModified, token: server.accessToken })
       expect(uploadId1).to.equal(uploadId2)

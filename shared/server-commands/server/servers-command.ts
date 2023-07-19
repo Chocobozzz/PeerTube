@@ -1,5 +1,5 @@
 import { exec } from 'child_process'
-import { copy, ensureDir, readFile, remove } from 'fs-extra'
+import { copy, ensureDir, readFile, readdir, remove } from 'fs-extra'
 import { basename, join } from 'path'
 import { isGithubCI, root, wait } from '@shared/core-utils'
 import { getFileSize } from '@shared/extra-utils'
@@ -75,6 +75,12 @@ export class ServersCommand extends AbstractCommand {
 
   buildDirectory (directory: string) {
     return join(root(), 'test' + this.server.internalServerNumber, directory)
+  }
+
+  async countFiles (directory: string) {
+    const files = await readdir(this.buildDirectory(directory))
+
+    return files.length
   }
 
   buildWebVideoFilePath (fileUrl: string) {

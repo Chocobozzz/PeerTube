@@ -38,6 +38,8 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
       { videoObject: this.videoObject, ...this.lTags() }
     )
 
+    const oldInputFileUpdatedAt = this.video.inputFileUpdatedAt
+
     try {
       const channelActor = await this.getOrCreateVideoChannelFromVideoObject()
 
@@ -74,6 +76,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
         user: undefined,
         isRemote: true,
         isNew: false,
+        isNewFile: oldInputFileUpdatedAt !== videoUpdated.inputFileUpdatedAt,
         transaction: undefined
       })
 
@@ -129,6 +132,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     this.video.createdAt = videoData.createdAt
     this.video.publishedAt = videoData.publishedAt
     this.video.originallyPublishedAt = videoData.originallyPublishedAt
+    this.video.inputFileUpdatedAt = videoData.inputFileUpdatedAt
     this.video.privacy = videoData.privacy
     this.video.channelId = videoData.channelId
     this.video.views = videoData.views

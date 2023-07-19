@@ -7,7 +7,7 @@ import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { cleanupAndDestroyPermanentLive, cleanupTMPLiveFiles, cleanupUnsavedNormalLive } from '@server/lib/live'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveReplayBaseDirectory } from '@server/lib/paths'
-import { generateLocalVideoMiniature } from '@server/lib/thumbnail'
+import { generateLocalVideoMiniature, regenerateMiniaturesIfNeeded } from '@server/lib/thumbnail'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/hls-transcoding'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToNextState } from '@server/lib/video-state'
@@ -197,23 +197,7 @@ async function replaceLiveByReplay (options: {
   }
 
   // Regenerate the thumbnail & preview?
-  if (videoWithFiles.getMiniature().automaticallyGenerated === true) {
-    const miniature = await generateLocalVideoMiniature({
-      video: videoWithFiles,
-      videoFile: videoWithFiles.getMaxQualityFile(),
-      type: ThumbnailType.MINIATURE
-    })
-    await videoWithFiles.addAndSaveThumbnail(miniature)
-  }
-
-  if (videoWithFiles.getPreview().automaticallyGenerated === true) {
-    const preview = await generateLocalVideoMiniature({
-      video: videoWithFiles,
-      videoFile: videoWithFiles.getMaxQualityFile(),
-      type: ThumbnailType.PREVIEW
-    })
-    await videoWithFiles.addAndSaveThumbnail(preview)
-  }
+  await regenerateMiniaturesIfNeeded(videoWithFiles)
 
   // We consider this is a new video
   await moveToNextState({ video: videoWithFiles, isNewVideo: true })

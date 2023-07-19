@@ -2,13 +2,12 @@ import express from 'express'
 import { body, header, param, query, ValidationChain } from 'express-validator'
 import { isTestInstance } from '@server/helpers/core-utils'
 import { getResumableUploadPath } from '@server/helpers/upload'
-import { uploadx } from '@server/lib/uploadx'
 import { Redis } from '@server/lib/redis'
+import { uploadx } from '@server/lib/uploadx'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express-handler'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
 import { arrayify, getAllPrivacies } from '@shared/core-utils'
-import { getVideoStreamDuration } from '@shared/ffmpeg'
 import { HttpStatusCode, ServerErrorCode, UserRight, VideoInclude, VideoState } from '@shared/models'
 import {
   exists,
@@ -27,8 +26,6 @@ import {
   isValidPasswordProtectedPrivacy,
   isVideoCategoryValid,
   isVideoDescriptionValid,
-  isVideoFileMimeTypeValid,
-  isVideoFileSizeValid,
   isVideoFilterValid,
   isVideoImageValid,
   isVideoIncludeValid,
@@ -44,21 +41,19 @@ import { logger } from '../../../helpers/logger'
 import { getVideoWithAttributes } from '../../../helpers/video'
 import { CONFIG } from '../../../initializers/config'
 import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants'
-import { isLocalVideoAccepted } from '../../../lib/moderation'
-import { Hooks } from '../../../lib/plugins/hooks'
 import { VideoModel } from '../../../models/video/video'
 import {
   areValidationErrors,
   checkCanAccessVideoStaticFiles,
   checkCanSeeVideo,
   checkUserCanManageVideo,
-  checkUserQuota,
   doesVideoChannelOfAccountExist,
   doesVideoExist,
   doesVideoFileOfVideoExist,
   isValidVideoIdParam,
   isValidVideoPasswordHeader
 } from '../shared'
+import { addDurationToVideoFileIfNeeded, commonVideoFileChecks, isVideoFileAccepted } from './shared'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -83,25 +78,14 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
     const videoFile: express.VideoUploadFile = req.files['videofile'][0]
     const user = res.locals.oauth.token.User
 
-    if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files })) {
+    if (
+      !await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files }) ||
+      !isValidPasswordProtectedPrivacy(req, res) ||
+      !await addDurationToVideoFileIfNeeded({ videoFile, res, middlewareName: 'videosAddvideosAddLegacyValidatorResumableValidator' }) ||
+      !await isVideoFileAccepted({ req, res, videoFile, hook: 'filter:api.video.upload.accept.result' })
+    ) {
       return cleanUpReqFiles(req)
     }
-
-    if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
-
-    try {
-      if (!videoFile.duration) await addDurationToVideo(videoFile)
-    } catch (err) {
-      logger.error('Invalid input file in videosAddLegacyValidator.', { err })
-
-      res.fail({
-        status: HttpStatusCode.UNPROCESSABLE_ENTITY_422,
-        message: 'Video file unreadable.'
-      })
-      return cleanUpReqFiles(req)
-    }
-
-    if (!await isVideoAccepted(req, res, videoFile)) return cleanUpReqFiles(req)
 
     return next()
   }
@@ -146,22 +130,10 @@ const videosAddResumableValidator = [
     await Redis.Instance.setUploadSession(uploadId)
 
     if (!await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)) return cleanup()
+    if (!await addDurationToVideoFileIfNeeded({ videoFile: file, res, middlewareName: 'videosAddResumableValidator' })) return cleanup()
+    if (!await isVideoFileAccepted({ req, res, videoFile: file, hook: 'filter:api.video.upload.accept.result' })) return cleanup()
 
-    try {
-      if (!file.duration) await addDurationToVideo(file)
-    } catch (err) {
-      logger.error('Invalid input file in videosAddResumableValidator.', { err })
-
-      res.fail({
-        status: HttpStatusCode.UNPROCESSABLE_ENTITY_422,
-        message: 'Video file unreadable.'
-      })
-      return cleanup()
-    }
-
-    if (!await isVideoAccepted(req, res, file)) return cleanup()
-
-    res.locals.videoFileResumable = { ...file, originalname: file.filename }
+    res.locals.uploadVideoFileResumable = { ...file, originalname: file.filename }
 
     return next()
   }
@@ -604,76 +576,20 @@ function areErrorsInScheduleUpdate (req: express.Request, res: express.Response)
   return false
 }
 
-async function commonVideoChecksPass (parameters: {
+async function commonVideoChecksPass (options: {
   req: express.Request
   res: express.Response
   user: MUserAccountId
   videoFileSize: number
   files: express.UploadFilesForCheck
 }): Promise<boolean> {
-  const { req, res, user, videoFileSize, files } = parameters
+  const { req, res, user } = options
 
   if (areErrorsInScheduleUpdate(req, res)) return false
 
   if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return false
 
-  if (!isVideoFileMimeTypeValid(files)) {
-    res.fail({
-      status: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415,
-      message: 'This file is not supported. Please, make sure it is of the following type: ' +
-               CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
-    })
-    return false
-  }
-
-  if (!isVideoFileSizeValid(videoFileSize.toString())) {
-    res.fail({
-      status: HttpStatusCode.PAYLOAD_TOO_LARGE_413,
-      message: 'This file is too large. It exceeds the maximum file size authorized.',
-      type: ServerErrorCode.MAX_FILE_SIZE_REACHED
-    })
-    return false
-  }
-
-  if (await checkUserQuota(user, videoFileSize, res) === false) return false
+  if (!await commonVideoFileChecks(options)) return false
 
   return true
-}
-
-export async function isVideoAccepted (
-  req: express.Request,
-  res: express.Response,
-  videoFile: express.VideoUploadFile
-) {
-  // Check we accept this video
-  const acceptParameters = {
-    videoBody: req.body,
-    videoFile,
-    user: res.locals.oauth.token.User
-  }
-  const acceptedResult = await Hooks.wrapFun(
-    isLocalVideoAccepted,
-    acceptParameters,
-    'filter:api.video.upload.accept.result'
-  )
-
-  if (!acceptedResult || acceptedResult.accepted !== true) {
-    logger.info('Refused local video.', { acceptedResult, acceptParameters })
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: acceptedResult.errorMessage || 'Refused local video'
-    })
-    return false
-  }
-
-  return true
-}
-
-async function addDurationToVideo (videoFile: { path: string, duration?: number }) {
-  const duration = await getVideoStreamDuration(videoFile.path)
-
-  // FFmpeg may not be able to guess video duration
-  // For example with m2v files: https://trac.ffmpeg.org/ticket/9726#comment:2
-  if (isNaN(duration)) videoFile.duration = 0
-  else videoFile.duration = duration
 }

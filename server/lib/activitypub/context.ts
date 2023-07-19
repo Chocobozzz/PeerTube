@@ -60,6 +60,9 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
     },
 
     originallyPublishedAt: 'sc:datePublished',
+
+    uploadDate: 'sc:uploadDate',
+
     views: {
       '@type': 'sc:Number',
       '@id': 'pt:views'

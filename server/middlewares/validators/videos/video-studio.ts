@@ -11,8 +11,9 @@ import { cleanUpReqFiles } from '@server/helpers/express-utils'
 import { CONFIG } from '@server/initializers/config'
 import { approximateIntroOutroAdditionalSize, getTaskFileFromReq } from '@server/lib/video-studio'
 import { isAudioFile } from '@shared/ffmpeg'
-import { HttpStatusCode, UserRight, VideoState, VideoStudioCreateEdition, VideoStudioTask } from '@shared/models'
+import { HttpStatusCode, UserRight, VideoStudioCreateEdition, VideoStudioTask } from '@shared/models'
 import { areValidationErrors, checkUserCanManageVideo, checkUserQuota, doesVideoExist } from '../shared'
+import { checkVideoFileCanBeEdited } from './shared'
 
 const videoStudioAddEditionValidator = [
   param('videoId')
@@ -66,14 +67,7 @@ const videoStudioAddEditionValidator = [
     if (!await doesVideoExist(req.params.videoId, res)) return cleanUpReqFiles(req)
 
     const video = res.locals.videoAll
-    if (video.state === VideoState.TO_TRANSCODE || video.state === VideoState.TO_EDIT) {
-      res.fail({
-        status: HttpStatusCode.CONFLICT_409,
-        message: 'Cannot edit video that is already waiting for transcoding/edition'
-      })
-
-      return cleanUpReqFiles(req)
-    }
+    if (!checkVideoFileCanBeEdited(video, res)) return cleanUpReqFiles(req)
 
     const user = res.locals.oauth.token.User
     if (!checkUserCanManageVideo(user, video, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)

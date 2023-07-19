@@ -32,6 +32,7 @@ export type VideoEdit = Partial<Omit<VideoCreate, 'thumbnailfile' | 'previewfile
 }
 
 export class VideosCommand extends AbstractCommand {
+
   getCategories (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/videos/categories'
 
@@ -424,7 +425,7 @@ export class VideosCommand extends AbstractCommand {
 
     const created = mode === 'legacy'
       ? await this.buildLegacyUpload({ ...options, attributes })
-      : await this.buildResumeUpload({ ...options, attributes })
+      : await this.buildResumeUpload({ ...options, path: '/api/v1/videos/upload-resumable', attributes })
 
     // Wait torrent generation
     const expectedStatus = this.buildExpectedStatus({ ...options, defaultExpectedStatus: HttpStatusCode.OK_200 })
@@ -458,9 +459,10 @@ export class VideosCommand extends AbstractCommand {
   }
 
   async buildResumeUpload (options: OverrideCommandOptions & {
-    attributes: VideoEdit
+    path: string
+    attributes: { fixture?: string } & { [id: string]: any }
   }): Promise<VideoCreateResult> {
-    const { attributes, expectedStatus } = options
+    const { path, attributes, expectedStatus } = options
 
     let size = 0
     let videoFilePath: string
@@ -478,7 +480,15 @@ export class VideosCommand extends AbstractCommand {
     }
 
     // Do not check status automatically, we'll check it manually
-    const initializeSessionRes = await this.prepareResumableUpload({ ...options, expectedStatus: null, attributes, size, mimetype })
+    const initializeSessionRes = await this.prepareResumableUpload({
+      ...options,
+
+      path,
+      expectedStatus: null,
+      attributes,
+      size,
+      mimetype
+    })
     const initStatus = initializeSessionRes.status
 
     if (videoFilePath && initStatus === HttpStatusCode.CREATED_201) {
@@ -487,10 +497,23 @@ export class VideosCommand extends AbstractCommand {
 
       const pathUploadId = locationHeader.split('?')[1]
 
-      const result = await this.sendResumableChunks({ ...options, pathUploadId, videoFilePath, size })
+      const result = await this.sendResumableChunks({
+        ...options,
+
+        path,
+        pathUploadId,
+        videoFilePath,
+        size
+      })
 
       if (result.statusCode === HttpStatusCode.OK_200) {
-        await this.endResumableUpload({ ...options, expectedStatus: HttpStatusCode.NO_CONTENT_204, pathUploadId })
+        await this.endResumableUpload({
+          ...options,
+
+          expectedStatus: HttpStatusCode.NO_CONTENT_204,
+          path,
+          pathUploadId
+        })
       }
 
       return result.body?.video || result.body as any
@@ -506,18 +529,19 @@ export class VideosCommand extends AbstractCommand {
   }
 
   async prepareResumableUpload (options: OverrideCommandOptions & {
-    attributes: VideoEdit
+    path: string
+    attributes: { fixture?: string } & { [id: string]: any }
     size: number
     mimetype: string
 
     originalName?: string
     lastModified?: number
   }) {
-    const { attributes, originalName, lastModified, size, mimetype } = options
+    const { path, attributes, originalName, lastModified, size, mimetype } = options
 
-    const path = '/api/v1/videos/upload-resumable'
+    const attaches = this.buildUploadAttaches(omit(options.attributes, [ 'fixture' ]))
 
-    return this.postUploadRequest({
+    const uploadOptions = {
       ...options,
 
       path,
@@ -538,11 +562,16 @@ export class VideosCommand extends AbstractCommand {
       implicitToken: true,
 
       defaultExpectedStatus: null
-    })
+    }
+
+    if (Object.keys(attaches).length === 0) return this.postBodyRequest(uploadOptions)
+
+    return this.postUploadRequest(uploadOptions)
   }
 
   sendResumableChunks (options: OverrideCommandOptions & {
     pathUploadId: string
+    path: string
     videoFilePath: string
     size: number
     contentLength?: number
@@ -550,6 +579,7 @@ export class VideosCommand extends AbstractCommand {
     digestBuilder?: (chunk: any) => string
   }) {
     const {
+      path,
       pathUploadId,
       videoFilePath,
       size,
@@ -559,7 +589,6 @@ export class VideosCommand extends AbstractCommand {
       expectedStatus = HttpStatusCode.OK_200
     } = options
 
-    const path = '/api/v1/videos/upload-resumable'
     let start = 0
 
     const token = this.buildCommonRequestToken({ ...options, implicitToken: true })
@@ -610,12 +639,13 @@ export class VideosCommand extends AbstractCommand {
   }
 
   endResumableUpload (options: OverrideCommandOptions & {
+    path: string
     pathUploadId: string
   }) {
     return this.deleteRequest({
       ...options,
 
-      path: '/api/v1/videos/upload-resumable',
+      path: options.path,
       rawQuery: options.pathUploadId,
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
@@ -653,6 +683,21 @@ export class VideosCommand extends AbstractCommand {
     if (wait) await waitJobs([ this.server ])
 
     return { ...result, name }
+  }
+
+  // ---------------------------------------------------------------------------
+
+  replaceSourceFile (options: OverrideCommandOptions & {
+    videoId: number | string
+    fixture: string
+  }) {
+    return this.buildResumeUpload({
+      ...options,
+
+      path: '/api/v1/videos/' + options.videoId + '/source/replace-resumable',
+      attributes: { fixture: options.fixture },
+      expectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
   }
 
   // ---------------------------------------------------------------------------

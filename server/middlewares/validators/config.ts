@@ -65,6 +65,8 @@ const customConfigUpdateValidator = [
   body('videoStudio.enabled').isBoolean(),
   body('videoStudio.remoteRunners.enabled').isBoolean(),
 
+  body('videoFile.update.enabled').isBoolean(),
+
   body('import.videos.concurrency').isInt({ min: 0 }),
   body('import.videos.http.enabled').isBoolean(),
   body('import.videos.torrent.enabled').isBoolean(),

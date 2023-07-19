@@ -605,6 +605,11 @@ video_studio:
   remote_runners:
     enabled: false
 
+video_file:
+  update:
+    # Add ability for users to replace the video file of an existing video
+    enabled: false
+
 import:
   # Add ability for your users to import remote videos (from YouTube, torrent...)
   videos:

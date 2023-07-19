@@ -89,6 +89,7 @@ async function insertFromImportIntoDB (parameters: {
       notify: false,
       isRemote: false,
       isNew: true,
+      isNewFile: true,
       transaction: t
     })
 

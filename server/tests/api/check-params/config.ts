@@ -170,6 +170,11 @@ describe('Test config API validators', function () {
         enabled: true
       }
     },
+    videoFile: {
+      update: {
+        enabled: true
+      }
+    },
     import: {
       videos: {
         concurrency: 1,

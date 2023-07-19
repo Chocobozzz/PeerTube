@@ -4,7 +4,7 @@ import { generateImageFilename, generateImageFromVideoFile } from '../helpers/im
 import { CONFIG } from '../initializers/config'
 import { ASSETS_PATH, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../initializers/constants'
 import { ThumbnailModel } from '../models/video/thumbnail'
-import { MVideoFile, MVideoThumbnail, MVideoUUID } from '../types/models'
+import { MVideoFile, MVideoThumbnail, MVideoUUID, MVideoWithAllFiles } from '../types/models'
 import { MThumbnail } from '../types/models/video/thumbnail'
 import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist'
 import { VideoPathManager } from './video-path-manager'
@@ -187,8 +187,31 @@ function updateRemoteVideoThumbnail (options: {
 
 // ---------------------------------------------------------------------------
 
+async function regenerateMiniaturesIfNeeded (video: MVideoWithAllFiles) {
+  if (video.getMiniature().automaticallyGenerated === true) {
+    const miniature = await generateLocalVideoMiniature({
+      video,
+      videoFile: video.getMaxQualityFile(),
+      type: ThumbnailType.MINIATURE
+    })
+    await video.addAndSaveThumbnail(miniature)
+  }
+
+  if (video.getPreview().automaticallyGenerated === true) {
+    const preview = await generateLocalVideoMiniature({
+      video,
+      videoFile: video.getMaxQualityFile(),
+      type: ThumbnailType.PREVIEW
+    })
+    await video.addAndSaveThumbnail(preview)
+  }
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   generateLocalVideoMiniature,
+  regenerateMiniaturesIfNeeded,
   updateLocalVideoMiniatureFromUrl,
   updateLocalVideoMiniatureFromExisting,
   updateRemoteVideoThumbnail,

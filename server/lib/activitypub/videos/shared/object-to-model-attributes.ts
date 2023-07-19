@@ -231,6 +231,10 @@ function getVideoAttributesFromObject (videoChannel: MChannelId, videoObject: Vi
       ? new Date(videoObject.originallyPublishedAt)
       : null,
 
+    inputFileUpdatedAt: videoObject.uploadDate
+      ? new Date(videoObject.uploadDate)
+      : null,
+
     updatedAt: new Date(videoObject.updated),
     views: videoObject.views,
     remote: true,

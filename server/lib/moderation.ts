@@ -36,7 +36,7 @@ export type AcceptResult = {
 // ---------------------------------------------------------------------------
 
 // Stub function that can be filtered by plugins
-function isLocalVideoAccepted (object: {
+function isLocalVideoFileAccepted (object: {
   videoBody: VideoCreate
   videoFile: VideoUploadFile
   user: UserModel
@@ -201,7 +201,7 @@ function createAccountAbuse (options: {
 export {
   isLocalLiveVideoAccepted,
 
-  isLocalVideoAccepted,
+  isLocalVideoFileAccepted,
   isLocalVideoThreadAccepted,
   isRemoteVideoCommentAccepted,
   isLocalVideoCommentReplyAccepted,

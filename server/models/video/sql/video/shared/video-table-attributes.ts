@@ -263,6 +263,7 @@ export class VideoTableAttributes {
       'state',
       'publishedAt',
       'originallyPublishedAt',
+      'inputFileUpdatedAt',
       'channelId',
       'createdAt',
       'updatedAt',

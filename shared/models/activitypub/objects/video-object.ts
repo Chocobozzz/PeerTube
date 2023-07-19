@@ -31,9 +31,11 @@ export interface VideoObject {
   downloadEnabled: boolean
   waitTranscoding: boolean
   state: VideoState
+
   published: string
   originallyPublishedAt: string
   updated: string
+  uploadDate: string
 
   mediaType: 'text/markdown'
   content: string

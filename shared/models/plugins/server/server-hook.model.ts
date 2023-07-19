@@ -64,6 +64,7 @@ export const serverFilterHookObject = {
   'filter:api.video.pre-import-torrent.accept.result': true,
   'filter:api.video.post-import-url.accept.result': true,
   'filter:api.video.post-import-torrent.accept.result': true,
+  'filter:api.video.update-file.accept.result': true,
   // Filter the result of the accept comment (thread or reply) functions
   // If the functions return false then the user cannot post its comment
   'filter:api.video-thread.create.accept.result': true,
@@ -154,6 +155,9 @@ export const serverActionHookObject = {
   'action:api.video.uploaded': true,
   // Fired when a local video is viewed
   'action:api.video.viewed': true,
+
+  // Fired when a local video file has been replaced by a new one
+  'action:api.video.file-updated': true,
 
   // Fired when a video channel is created
   'action:api.video-channel.created': true,

@@ -192,6 +192,12 @@ export interface ServerConfig {
     }
   }
 
+  videoFile: {
+    update: {
+      enabled: boolean
+    }
+  }
+
   import: {
     videos: {
       http: {

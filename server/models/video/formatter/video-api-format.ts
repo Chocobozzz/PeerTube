@@ -149,6 +149,7 @@ export function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetail
     commentsEnabled: video.commentsEnabled,
     downloadEnabled: video.downloadEnabled,
     waitTranscoding: video.waitTranscoding,
+    inputFileUpdatedAt: video.inputFileUpdatedAt,
     state: {
       id: video.state,
       label: getStateLabel(video.state)

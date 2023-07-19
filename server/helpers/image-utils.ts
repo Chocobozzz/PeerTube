@@ -63,6 +63,8 @@ async function generateImageFromVideoFile (options: {
     } catch (err) {
       logger.debug('Cannot remove pending image path after generation error.', { err, ...lTags() })
     }
+
+    throw err
   }
 }
 

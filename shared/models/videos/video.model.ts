@@ -94,4 +94,6 @@ export interface VideoDetails extends Video {
 
   files: VideoFile[]
   streamingPlaylists: VideoStreamingPlaylist[]
+
+  inputFileUpdatedAt: string | Date
 }

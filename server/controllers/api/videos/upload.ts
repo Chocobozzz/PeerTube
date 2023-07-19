@@ -11,8 +11,9 @@ import { buildNewFile } from '@server/lib/video-file'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { buildNextVideoState } from '@server/lib/video-state'
 import { openapiOperationDoc } from '@server/middlewares/doc'
+import { VideoPasswordModel } from '@server/models/video/video-password'
 import { VideoSourceModel } from '@server/models/video/video-source'
-import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models'
+import { MVideoFile, MVideoFullLight } from '@server/types/models'
 import { uuidToShort } from '@shared/extra-utils'
 import { HttpStatusCode, VideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
@@ -33,7 +34,6 @@ import {
 } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
-import { VideoPasswordModel } from '@server/models/video/video-password'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -109,7 +109,7 @@ async function addVideoLegacy (req: express.Request, res: express.Response) {
 }
 
 async function addVideoResumable (req: express.Request, res: express.Response) {
-  const videoPhysicalFile = res.locals.videoFileResumable
+  const videoPhysicalFile = res.locals.uploadVideoFileResumable
   const videoInfo = videoPhysicalFile.metadata
   const files = { previewfile: videoInfo.previewfile, thumbnailfile: videoInfo.thumbnailfile }
 
@@ -193,6 +193,7 @@ async function addVideo (options: {
       user,
       isRemote: false,
       isNew: true,
+      isNewFile: true,
       transaction: t
     })
 
@@ -209,7 +210,7 @@ async function addVideo (options: {
   // Channel has a new content, set as updated
   await videoCreated.VideoChannel.setAsUpdated()
 
-  addVideoJobsAfterUpload(videoCreated, videoFile, user)
+  addVideoJobsAfterUpload(videoCreated, videoFile)
     .catch(err => logger.error('Cannot build new video jobs of %s.', videoCreated.uuid, { err, ...lTags(videoCreated.uuid) }))
 
   Hooks.runAction('action:api.video.uploaded', { video: videoCreated, req, res })
@@ -223,7 +224,7 @@ async function addVideo (options: {
   }
 }
 
-async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVideoFile, user: MUserId) {
+async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVideoFile) {
   const jobs: (CreateJobArgument & CreateJobOptions)[] = [
     {
       type: 'manage-video-torrent' as 'manage-video-torrent',

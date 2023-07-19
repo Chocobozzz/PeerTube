@@ -76,6 +76,8 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
 
     updated: video.updatedAt.toISOString(),
 
+    uploadDate: video.inputFileUpdatedAt?.toISOString(),
+
     tag: buildTags(video),
 
     mediaType: 'text/markdown',

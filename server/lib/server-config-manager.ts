@@ -171,6 +171,11 @@ class ServerConfigManager {
           enabled: CONFIG.VIDEO_STUDIO.REMOTE_RUNNERS.ENABLED
         }
       },
+      videoFile: {
+        update: {
+          enabled: CONFIG.VIDEO_FILE.UPDATE.ENABLED
+        }
+      },
       import: {
         videos: {
           http: {

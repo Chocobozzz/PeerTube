@@ -74,6 +74,28 @@ export class ConfigCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
+  disableFileUpdate () {
+    return this.setFileUpdateEnabled(false)
+  }
+
+  enableFileUpdate () {
+    return this.setFileUpdateEnabled(true)
+  }
+
+  private setFileUpdateEnabled (enabled: boolean) {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        videoFile: {
+          update: {
+            enabled
+          }
+        }
+      }
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   enableChannelSync () {
     return this.setChannelSyncEnabled(true)
   }
@@ -463,6 +485,11 @@ export class ConfigCommand extends AbstractCommand {
       videoStudio: {
         enabled: false,
         remoteRunners: {
+          enabled: false
+        }
+      },
+      videoFile: {
+        update: {
           enabled: false
         }
       },

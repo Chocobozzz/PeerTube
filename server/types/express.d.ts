@@ -86,12 +86,14 @@ declare module 'express' {
   // Our custom UploadXFile object using our custom metadata
   export type CustomUploadXFile <T extends Metadata> = UploadXFile & { metadata: T }
 
-  export type EnhancedUploadXFile = CustomUploadXFile<UploadXFileMetadata> & {
+  export type EnhancedUploadXFile = CustomUploadXFile<Metadata> & {
     duration: number
     path: string
     filename: string
     originalname: string
   }
+
+  export type UploadNewVideoUploadXFile = EnhancedUploadXFile & CustomUploadXFile<UploadXFileMetadata>
 
   // Extends Response with added functions and potential variables passed by middlewares
   interface Response {
@@ -139,7 +141,8 @@ declare module 'express' {
 
       videoFile?: MVideoFile
 
-      videoFileResumable?: EnhancedUploadXFile
+      uploadVideoFileResumable?: UploadNewVideoUploadXFile
+      updateVideoFileResumable?: EnhancedUploadXFile
 
       videoImport?: MVideoImportDefault
 

@@ -175,6 +175,12 @@ export interface CustomConfig {
     }
   }
 
+  videoFile: {
+    update: {
+      enabled: boolean
+    }
+  }
+
   import: {
     videos: {
       concurrency: number

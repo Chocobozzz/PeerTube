@@ -2641,22 +2641,6 @@ paths:
                 example: |
                   **[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n**Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**
 
-  '/api/v1/videos/{id}/source':
-    post:
-      summary: Get video source file metadata
-      operationId: getVideoSource
-      tags:
-        - Video
-      parameters:
-        - $ref: '#/components/parameters/idOrUUID'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VideoSource'
-
   '/api/v1/videos/{id}/views':
     post:
       summary: Notify user is watching a video
@@ -2871,21 +2855,8 @@ paths:
         - Video
         - Video Upload
       parameters:
-        - name: X-Upload-Content-Length
-          in: header
-          schema:
-            type: number
-            example: 2469036
-          required: true
-          description: Number of bytes that will be uploaded in subsequent requests. Set this value to the size of the file you are uploading.
-        - name: X-Upload-Content-Type
-          in: header
-          schema:
-            type: string
-            format: mimetype
-            example: video/mp4
-          required: true
-          description: MIME type of the file that you are uploading. Depending on your instance settings, acceptable values might vary.
+        - $ref: '#/components/parameters/resumableUploadInitContentLengthHeader'
+        - $ref: '#/components/parameters/resumableUploadInitContentTypeHeader'
       requestBody:
         content:
           application/json:
@@ -2924,36 +2895,9 @@ paths:
         - Video
         - Video Upload
       parameters:
-        - name: upload_id
-          in: query
-          required: true
-          description: |
-            Created session id to proceed with. If you didn't send chunks in the last hour, it is
-            not valid anymore and you need to initialize a new upload.
-          schema:
-            type: string
-        - name: Content-Range
-          in: header
-          schema:
-            type: string
-            example: bytes 0-262143/2469036
-          required: true
-          description: |
-            Specifies the bytes in the file that the request is uploading.
-
-            For example, a value of `bytes 0-262143/1000000` shows that the request is sending the first
-            262144 bytes (256 x 1024) in a 2,469,036 byte file.
-        - name: Content-Length
-          in: header
-          schema:
-            type: number
-            example: 262144
-          required: true
-          description: |
-            Size of the chunk that the request is sending.
-
-            Remember that larger chunks are more efficient. PeerTube's web client uses chunks varying from
-            1048576 bytes (~1MB) and increases or reduces size depending on connection health.
+        - $ref: '#/components/parameters/resumableUploadId'
+        - $ref: '#/components/parameters/resumableUploadChunkContentRangeHeader'
+        - $ref: '#/components/parameters/resumableUploadChunkContentLengthHeader'
       requestBody:
         content:
           application/octet-stream:
@@ -3009,14 +2953,7 @@ paths:
         - Video
         - Video Upload
       parameters:
-        - name: upload_id
-          in: query
-          required: true
-          description: |
-            Created session id to proceed with. If you didn't send chunks in the last 12 hours, it is
-            not valid anymore and the upload session has already been deleted with its data ;-)
-          schema:
-            type: string
+        - $ref: '#/components/parameters/resumableUploadId'
         - name: Content-Length
           in: header
           required: true
@@ -3285,6 +3222,140 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LiveVideoSessionResponse'
+
+  '/api/v1/videos/{id}/source':
+    get:
+      summary: Get video source file metadata
+      operationId: getVideoSource
+      tags:
+        - Video
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoSource'
+
+  '/api/v1/videos/{id}/source/replace-resumable':
+    post:
+      summary: Initialize the resumable replacement of a video
+      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to initialize the replacement of a video
+      operationId: replaceVideoSourceResumableInit
+      security:
+        - OAuth2: []
+      tags:
+        - Video
+        - Video Upload
+      parameters:
+        - $ref: '#/components/parameters/resumableUploadInitContentLengthHeader'
+        - $ref: '#/components/parameters/resumableUploadInitContentTypeHeader'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoReplaceSourceRequestResumable'
+      responses:
+        '200':
+          description: file already exists, send a [`resume`](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) request instead
+        '201':
+          description: created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: url
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+        '413':
+          x-summary: video file too large, due to quota, absolute max file size or concurrent partial upload limit
+          description: |
+            Disambiguate via `type`:
+            - `max_file_size_reached` for the absolute file size limit
+            - `quota_reached` for quota limits whether daily or global
+        '415':
+          description: video type unsupported
+    put:
+      summary: Send chunk for the resumable replacement of a video
+      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to continue, pause or resume the replacement of a video
+      operationId: replaceVideoSourceResumable
+      security:
+        - OAuth2: []
+      tags:
+        - Video
+        - Video Upload
+      parameters:
+        - $ref: '#/components/parameters/resumableUploadId'
+        - $ref: '#/components/parameters/resumableUploadChunkContentRangeHeader'
+        - $ref: '#/components/parameters/resumableUploadChunkContentLengthHeader'
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '204':
+          description: 'last chunk received: successful operation'
+        '308':
+          description: resume incomplete
+          headers:
+            Range:
+              schema:
+                type: string
+                example: bytes=0-262143
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+        '403':
+          description: video didn't pass file replacement filter
+        '404':
+          description: replace upload not found
+        '409':
+          description: chunk doesn't match range
+        '422':
+          description: video unreadable
+        '429':
+          description: too many concurrent requests
+        '503':
+          description: upload is already being processed
+          headers:
+            'Retry-After':
+              schema:
+                type: number
+                example: 300
+    delete:
+      summary: Cancel the resumable replacement of a video
+      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the replacement of a video
+      operationId: replaceVideoSourceResumableCancel
+      security:
+        - OAuth2: []
+      tags:
+        - Video
+        - Video Upload
+      parameters:
+        - $ref: '#/components/parameters/resumableUploadId'
+        - name: Content-Length
+          in: header
+          required: true
+          schema:
+            type: number
+            example: 0
+      responses:
+        '204':
+          description: source file replacement cancelled
+          headers:
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+        '404':
+          description: source file replacement not found
 
   /api/v1/users/me/abuses:
     get:
@@ -6640,6 +6711,58 @@ components:
       required: false
       schema:
         type: string
+    resumableUploadInitContentLengthHeader:
+        name: X-Upload-Content-Length
+        in: header
+        schema:
+          type: number
+          example: 2469036
+        required: true
+        description: Number of bytes that will be uploaded in subsequent requests. Set this value to the size of the file you are uploading.
+    resumableUploadInitContentTypeHeader:
+      name: X-Upload-Content-Type
+      in: header
+      schema:
+        type: string
+        format: mimetype
+        example: video/mp4
+      required: true
+      description: MIME type of the file that you are uploading. Depending on your instance settings, acceptable values might vary.
+    resumableUploadChunkContentRangeHeader:
+      name: Content-Range
+      in: header
+      schema:
+        type: string
+        example: bytes 0-262143/2469036
+      required: true
+      description: |
+        Specifies the bytes in the file that the request is uploading.
+
+        For example, a value of `bytes 0-262143/1000000` shows that the request is sending the first
+        262144 bytes (256 x 1024) in a 2,469,036 byte file.
+    resumableUploadChunkContentLengthHeader:
+      name: Content-Length
+      in: header
+      schema:
+        type: number
+        example: 262144
+      required: true
+      description: |
+        Size of the chunk that the request is sending.
+
+        Remember that larger chunks are more efficient. PeerTube's web client uses chunks varying from
+        1048576 bytes (~1MB) and increases or reduces size depending on connection health.
+    resumableUploadId:
+      name: upload_id
+      in: query
+      required: true
+      description: |
+        Created session id to proceed with. If you didn't send chunks in the last hour, it is
+        not valid anymore and you need to initialize a new upload.
+      schema:
+        type: string
+
+
   securitySchemes:
     OAuth2:
       description: |
@@ -7209,6 +7332,11 @@ components:
               type: boolean
             downloadEnabled:
               type: boolean
+            inputFileUpdatedAt:
+              type: string
+              format: date-time
+              nullable: true
+              description: Latest input file update. Null if the file has never been replaced since the original upload
             trackerUrls:
               type: array
               items:
@@ -7554,6 +7682,9 @@ components:
       properties:
         filename:
           type: string
+        createdAt:
+          type: string
+          format: date-time
     ActorImage:
       properties:
         path:
@@ -8403,6 +8534,13 @@ components:
               $ref: '#/components/schemas/Video/properties/uuid'
             shortUUID:
               $ref: '#/components/schemas/Video/properties/shortUUID'
+    VideoReplaceSourceRequestResumable:
+      properties:
+        filename:
+          description: Video filename including extension
+          type: string
+          format: filename
+          example: what_is_peertube.mp4
     CommentThreadResponse:
       properties:
         total:

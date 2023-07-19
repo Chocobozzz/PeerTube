@@ -19,12 +19,6 @@ import {
   waitJobs
 } from '@shared/server-commands'
 
-async function countFiles (server: PeerTubeServer, directory: string) {
-  const files = await readdir(server.servers.buildDirectory(directory))
-
-  return files.length
-}
-
 async function assertNotExists (server: PeerTubeServer, directory: string, substring: string) {
   const files = await readdir(server.servers.buildDirectory(directory))
 
@@ -35,28 +29,28 @@ async function assertNotExists (server: PeerTubeServer, directory: string, subst
 
 async function assertCountAreOkay (servers: PeerTubeServer[]) {
   for (const server of servers) {
-    const videosCount = await countFiles(server, 'web-videos')
+    const videosCount = await server.servers.countFiles('web-videos')
     expect(videosCount).to.equal(9) // 2 videos with 4 resolutions + private directory
 
-    const privateVideosCount = await countFiles(server, 'web-videos/private')
+    const privateVideosCount = await server.servers.countFiles('web-videos/private')
     expect(privateVideosCount).to.equal(4)
 
-    const torrentsCount = await countFiles(server, 'torrents')
+    const torrentsCount = await server.servers.countFiles('torrents')
     expect(torrentsCount).to.equal(24)
 
-    const previewsCount = await countFiles(server, 'previews')
+    const previewsCount = await server.servers.countFiles('previews')
     expect(previewsCount).to.equal(3)
 
-    const thumbnailsCount = await countFiles(server, 'thumbnails')
+    const thumbnailsCount = await server.servers.countFiles('thumbnails')
     expect(thumbnailsCount).to.equal(5) // 3 local videos, 1 local playlist, 2 remotes videos (lazy downloaded) and 1 remote playlist
 
-    const avatarsCount = await countFiles(server, 'avatars')
+    const avatarsCount = await server.servers.countFiles('avatars')
     expect(avatarsCount).to.equal(4)
 
-    const hlsRootCount = await countFiles(server, join('streaming-playlists', 'hls'))
+    const hlsRootCount = await server.servers.countFiles(join('streaming-playlists', 'hls'))
     expect(hlsRootCount).to.equal(3) // 2 videos + private directory
 
-    const hlsPrivateRootCount = await countFiles(server, join('streaming-playlists', 'hls', 'private'))
+    const hlsPrivateRootCount = await server.servers.countFiles(join('streaming-playlists', 'hls', 'private'))
     expect(hlsPrivateRootCount).to.equal(1)
   }
 }

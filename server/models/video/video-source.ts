@@ -1,27 +1,18 @@
-import { Op } from 'sequelize'
-import {
-  AllowNull,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  ForeignKey,
-  Model,
-  Table,
-  UpdatedAt
-} from 'sequelize-typescript'
+import { Transaction } from 'sequelize'
+import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { VideoSource } from '@shared/models/videos/video-source'
 import { AttributesOnly } from '@shared/typescript-utils'
+import { getSort } from '../shared'
 import { VideoModel } from './video'
 
 @Table({
   tableName: 'videoSource',
   indexes: [
     {
-      fields: [ 'videoId' ],
-      where: {
-        videoId: {
-          [Op.ne]: null
-        }
-      }
+      fields: [ 'videoId' ]
+    },
+    {
+      fields: [ { name: 'createdAt', order: 'DESC' } ]
     }
   ]
 })
@@ -40,16 +31,26 @@ export class VideoSourceModel extends Model<Partial<AttributesOnly<VideoSourceMo
   @Column
   videoId: number
 
-  @BelongsTo(() => VideoModel)
+  @BelongsTo(() => VideoModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
   Video: VideoModel
 
-  static loadByVideoId (videoId) {
-    return VideoSourceModel.findOne({ where: { videoId } })
+  static loadLatest (videoId: number, transaction?: Transaction) {
+    return VideoSourceModel.findOne({
+      where: { videoId },
+      order: getSort('-createdAt'),
+      transaction
+    })
   }
 
-  toFormattedJSON () {
+  toFormattedJSON (): VideoSource {
     return {
-      filename: this.filename
+      filename: this.filename,
+      createdAt: this.createdAt.toISOString()
     }
   }
 }

@@ -546,6 +546,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   @Column
   state: VideoState
 
+  // We already have the information in videoSource table for local videos, but we prefer to normalize it for performance
+  // And also to store the info from remote instances
+  @AllowNull(true)
+  @Column
+  inputFileUpdatedAt: Date
+
   @CreatedAt
   createdAt: Date
 
@@ -610,7 +616,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   @HasOne(() => VideoSourceModel, {
     foreignKey: {
       name: 'videoId',
-      allowNull: true
+      allowNull: false
     },
     onDelete: 'CASCADE'
   })

@@ -435,6 +435,11 @@ const CONFIG = {
       get ENABLED () { return config.get<boolean>('video_studio.remote_runners.enabled') }
     }
   },
+  VIDEO_FILE: {
+    UPDATE: {
+      get ENABLED () { return config.get<boolean>('video_file.update.enabled') }
+    }
+  },
   IMPORT: {
     VIDEOS: {
       get CONCURRENCY () { return config.get<number>('import.videos.concurrency') },

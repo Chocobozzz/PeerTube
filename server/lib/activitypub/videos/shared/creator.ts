@@ -49,6 +49,7 @@ export class APVideoCreator extends APVideoAbstractBuilder {
         user: undefined,
         isRemote: true,
         isNew: true,
+        isNewFile: true,
         transaction: t
       })
 

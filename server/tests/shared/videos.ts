@@ -277,7 +277,7 @@ function checkUploadVideoParam (
 ) {
   return mode === 'legacy'
     ? server.videos.buildLegacyUpload({ token, attributes, expectedStatus })
-    : server.videos.buildResumeUpload({ token, attributes, expectedStatus })
+    : server.videos.buildResumeUpload({ token, attributes, expectedStatus, path: '/api/v1/videos/upload-resumable' })
 }
 
 // serverNumber starts from 1

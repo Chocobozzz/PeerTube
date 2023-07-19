@@ -130,6 +130,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
         user: res.locals.oauth.token.User,
         isRemote: false,
         isNew: false,
+        isNewFile: false,
         transaction: t
       })
 
