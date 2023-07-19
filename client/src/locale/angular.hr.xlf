@@ -1936,7 +1936,7 @@
       </trans-unit>
       <trans-unit id="594064951138382358" datatype="html">
         <source>Also transcode original resolution</source>
-        <target state="translated">Također transkodiraj izvornu rezoluciju</target>
+        <target state="translated">Također prekodiraj izvornu rezoluciju</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
       <trans-unit id="5429376346987783852" datatype="html">
@@ -2010,7 +2010,7 @@
       </trans-unit>
       <trans-unit id="1473738049081128420" datatype="html">
         <source>Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically.</source>
-        <target state="translated">Procjenjivanje kapaciteta poslužitelja za transkodiranje i prijenose videa nije laka i ne možemo automatski podesiti PeerTube.</target>
+        <target state="translated">Procjenjivanje kapaciteta poslužitelja za prekodiranje i prijenose videa nije laka i ne možemo automatski podesiti PeerTube.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="8538708819525283296" datatype="html">
@@ -2105,7 +2105,7 @@
       </trans-unit>
       <trans-unit id="4437374135745051281" datatype="html">
         <source>Always transcode original resolution</source>
-        <target state="translated">Uvijek transkodiraj izvornu rezoluciju</target>
+        <target state="translated">Uvijek prekodiraj izvornu rezoluciju</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">116</context></context-group>
       </trans-unit>
       <trans-unit id="5431196295724512251" datatype="html">
@@ -2143,7 +2143,7 @@
       </trans-unit>
       <trans-unit id="1969393594784140832" datatype="html">
         <source>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</source>
-        <target state="translated">dozvoljava istovremeno transkodiranje više datoteka. ⚠️ Zahtijeva ponovno pokretanje PeerTubea</target>
+        <target state="translated">dozvoljava istovremeno prekodiranje više datoteka. ⚠️ Zahtijeva ponovno pokretanje PeerTubea</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">183</context></context-group>
       </trans-unit>
       <trans-unit id="2184317712452071847" datatype="html">
@@ -8770,7 +8770,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="8304621069698650554" datatype="html">
         <source>The video is being transcoded, it may not work properly.</source>
-        <target state="translated">Video se transkodira, možda neće ispravno raditi.</target>
+        <target state="translated">Video se prekodira, možda neće ispravno raditi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">13,15</context>
@@ -10242,7 +10242,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="5320424292625586941" datatype="html">
         <source>Transcoding threads must be greater or equal to 0.</source>
-        <target state="translated">Broj komponenti procesa transkodiranja mora biti veći ili jednak 0.</target>
+        <target state="translated">Broj komponenti procesa prekodiranja mora biti veći ili jednak 0.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="8185661254949728718" datatype="html">
@@ -11454,7 +11454,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="457567965747150035" datatype="html">
         <source>Transcoding in multiple resolutions</source>
-        <target state="translated">Transkodiranje u više rezolucija</target>
+        <target state="translated">Prekodiranje u više rezolucija</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="486979448055158839" datatype="html">
@@ -11479,7 +11479,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="8135461567542503937" datatype="html">
         <source>Transcode live video in multiple resolutions</source>
-        <target state="translated">Transkodiraj videa uživo u više rezolucija</target>
+        <target state="translated">Prekodiraj videa uživo u više rezolucija</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="4990508956923223990" datatype="html">
@@ -13338,13 +13338,13 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="6521421218398377925" datatype="html">
         <source>Run HLS transcoding</source>
-        <target state="translated">Pokreni HLS transkodiranje</target>
+        <target state="translated">Pokreni HLS prekodiranje</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">96</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">391</context></context-group>
       </trans-unit>
       <trans-unit id="6726093171366409167" datatype="html">
         <source>Run Web Video transcoding</source>
-        <target state="new">Run Web Video transcoding</target>
+        <target state="translated">Run Web Video prekodiranje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -13362,7 +13362,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="72391380513979568" datatype="html">
         <source>Delete Web Video files</source>
-        <target state="new">Delete Web Video files</target>
+        <target state="translated">Izbriši web video datoteke</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -13409,7 +13409,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="4435640428611044716" datatype="html">
         <source>Are you sure you want to delete Web Video files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete Web Video files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</target>
+        <target state="translated">Stvarno želiš izbrisati web video datoteke za {count, plural, =1 {1 video} few {<x id="count"/> videa} other {<x id="count"/> videa}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">277</context>
@@ -13422,7 +13422,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="7054344823477412274" datatype="html">
         <source>Transcoding jobs created.</source>
-        <target state="translated">Poslovi transkodiranja su stvoreni.</target>
+        <target state="translated">Poslovi prekodiranja su stvoreni.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">300</context></context-group>
       </trans-unit>
       <trans-unit id="2591467977473302125" datatype="html">
@@ -13745,7 +13745,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="5093002376262354382" datatype="html">
         <source>Transcoding failed</source>
-        <target state="translated">Transkodiranje neuspjelo</target>
+        <target state="translated">Prekodiranje neuspjelo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">191</context></context-group>
       </trans-unit>
       <trans-unit id="118687079501751948" datatype="html">
@@ -13755,12 +13755,12 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="4887724548587271148" datatype="html">
         <source>Waiting transcoding</source>
-        <target state="translated">Čeka na transkodiranje</target>
+        <target state="translated">Čeka na prekodiranje</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">199</context></context-group>
       </trans-unit>
       <trans-unit id="4517785179607945981" datatype="html">
         <source>To transcode</source>
-        <target state="translated">Za transkodiranje</target>
+        <target state="translated">Za prekodiranje</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">203</context></context-group>
       </trans-unit>
       <trans-unit id="3299576663551440736" datatype="html">
