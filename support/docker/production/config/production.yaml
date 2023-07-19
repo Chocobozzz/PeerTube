@@ -53,6 +53,7 @@ storage:
   logs: '../data/logs/'
   previews: '../data/previews/'
   thumbnails: '../data/thumbnails/'
+  storyboards: '../data/storyboards/'
   torrents: '../data/torrents/'
   captions: '../data/captions/'
   cache: '../data/cache/'
