@@ -9184,7 +9184,7 @@
       </trans-unit>
       <trans-unit id="5215550763077484072" datatype="html">
         <source>Allow email to be publicly displayed</source>
-        <target state="new">Allow email to be publicly displayed</target>
+        <target state="translated">Дозволити публічний показ електронної пошти</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">6</context>
@@ -9192,7 +9192,7 @@
       </trans-unit>
       <trans-unit id="3472732945521632942" datatype="html">
         <source>Necessary to claim podcast RSS feeds.</source>
-        <target state="new">Necessary to claim podcast RSS feeds.</target>
+        <target state="translated">Необхідно, щоб отримати RSS-канали подкастів.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">9</context>
@@ -10205,8 +10205,7 @@
       </trans-unit>
       <trans-unit id="4202012170513622087" datatype="html">
         <source>The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Since transcoding is enabled, videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target state="new"> The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Since transcoding is enabled, videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
-</target>
+        <target state="translated">Квота на відео враховує розмір лише <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>оригінального<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> відео. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Оскільки ввімкнено перекодування, розмір відео може бути не більше ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">1,4</context>
@@ -10347,7 +10346,7 @@
       </trans-unit>
       <trans-unit id="518461007481947848" datatype="html">
         <source>Cache size is required.</source>
-        <target state="new">Cache size is required.</target>
+        <target state="translated">Розмір кешу обов'язковий.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">28</context>
@@ -10355,7 +10354,7 @@
       </trans-unit>
       <trans-unit id="5481098690555703943" datatype="html">
         <source>Cache size must be greater than 1.</source>
-        <target state="new">Cache size must be greater than 1.</target>
+        <target state="translated">Розміру кешу повинен бути більшим за 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">29</context>
@@ -10363,7 +10362,7 @@
       </trans-unit>
       <trans-unit id="4704896848161515188" datatype="html">
         <source>Cache size must be a number.</source>
-        <target state="new">Cache size must be a number.</target>
+        <target state="translated">Розмір кешу повинен бути числом.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">30</context>
@@ -11042,7 +11041,7 @@
       </trans-unit>
       <trans-unit id="2340164151654372915" datatype="html">
         <source>A password should be at least 2 characters long.</source>
-        <target state="new">A password should be at least 2 characters long.</target>
+        <target state="translated">Пароль повинен складатися принаймні з 2 символів.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">32</context>
@@ -11050,7 +11049,7 @@
       </trans-unit>
       <trans-unit id="7699381877503388166" datatype="html">
         <source>A password should be shorter than 100 characters long.</source>
-        <target state="new">A password should be shorter than 100 characters long.</target>
+        <target state="translated">Пароль повинен бути коротшим за 100 символів.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">33</context>
@@ -11058,7 +11057,7 @@
       </trans-unit>
       <trans-unit id="3116180442048363146" datatype="html">
         <source>A password is required for password protected video.</source>
-        <target state="new">A password is required for password protected video.</target>
+        <target state="translated">Для перегляду відео, захищеного паролем, потрібен пароль.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">34</context>
@@ -12180,7 +12179,7 @@
       </trans-unit>
       <trans-unit id="7672331870004528654" datatype="html">
         <source>Display live information</source>
-        <target state="new">Display live information</target>
+        <target state="translated">Показувати інформацію трансляції</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">335</context></context-group>
       </trans-unit>
       <trans-unit id="4021752662928002901" datatype="html">
@@ -12212,7 +12211,7 @@
       </trans-unit>
       <trans-unit id="6726093171366409167" datatype="html">
         <source>Run Web Video transcoding</source>
-        <target state="new">Run Web Video transcoding</target>
+        <target state="translated">Запустити перекодування вебвідео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -12230,7 +12229,7 @@
       </trans-unit>
       <trans-unit id="72391380513979568" datatype="html">
         <source>Delete Web Video files</source>
-        <target state="new">Delete Web Video files</target>
+        <target state="translated">Видалення файлів вебвідео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -12638,7 +12637,7 @@
       </trans-unit>
       <trans-unit id="6173113330681958102" datatype="html">
         <source>Only users with the appropriate password can see this video</source>
-        <target state="new">Only users with the appropriate password can see this video</target>
+        <target state="translated">Тільки користувачі з відповідним паролем можуть переглядати це відео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">429</context>
@@ -12776,7 +12775,7 @@
       </trans-unit>
       <trans-unit id="6851759241723629925" datatype="html">
         <source>You need a password to watch this video</source>
-        <target state="new">You need a password to watch this video</target>
+        <target state="translated">Вам потрібен пароль для перегляду цього відео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">403</context>
@@ -12784,7 +12783,7 @@
       </trans-unit>
       <trans-unit id="7116606560384080593" datatype="html">
         <source>This video is password protected</source>
-        <target state="new">This video is password protected</target>
+        <target state="translated">Це відео захищене паролем</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">404</context>
@@ -12792,7 +12791,7 @@
       </trans-unit>
       <trans-unit id="6566384659758828708" datatype="html">
         <source>Incorrect password, please enter a correct password</source>
-        <target state="new">Incorrect password, please enter a correct password</target>
+        <target state="translated">Неправильний пароль. Введіть правильний пароль</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">405</context>
