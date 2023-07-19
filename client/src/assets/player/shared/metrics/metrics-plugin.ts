@@ -144,6 +144,8 @@ class MetricsPlugin extends Plugin {
 
     this.player.on('http-info', (_event, data: PlayerNetworkInfo) => {
       this.downloadedBytesHTTP += Math.round(data.http.downloaded - (this.lastPlayerNetworkInfo?.http.downloaded || 0))
+
+      this.lastPlayerNetworkInfo = data
     })
   }
 
