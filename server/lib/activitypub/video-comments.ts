@@ -1,3 +1,5 @@
+import { HTTP_SIGNATURE } from '@server/initializers/constants'
+import { getServerActor } from '@server/models/application/application'
 import { map } from 'bluebird'
 import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments'
 import { logger } from '../../helpers/logger'
@@ -139,7 +141,16 @@ async function resolveRemoteParentComment (params: ResolveThreadParams) {
     throw new Error('Recursion limit reached when resolving a thread')
   }
 
-  const { body } = await doJSONRequest<any>(url, { activityPub: true })
+  const serverActor = await getServerActor()
+  const keyId = serverActor.url
+  const httpSignature = {
+    algorithm: HTTP_SIGNATURE.ALGORITHM,
+    authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME,
+    keyId,
+    key: serverActor.privateKey,
+    headers: HTTP_SIGNATURE.HEADERS_TO_SIGN_FETCH
+  }
+  const { body } = await doJSONRequest<any>(url, { activityPub: true, httpSignature })
 
   if (sanitizeAndCheckVideoCommentObject(body) === false) {
     throw new Error(`Remote video comment JSON ${url} is not valid:` + JSON.stringify(body))
