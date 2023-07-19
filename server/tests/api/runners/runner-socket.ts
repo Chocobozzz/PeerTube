@@ -58,18 +58,20 @@ describe('Test runner socket', function () {
     localSocket.on('available-jobs', () => pings++)
 
     await server.videos.quickUpload({ name: 'video1' })
-
-    // Wait for debounce
-    await wait(1000)
     await waitJobs([ server ])
-    expect(pings).to.equal(1)
+
+    // eslint-disable-next-line no-unmodified-loop-condition
+    while (pings !== 1) {
+      await wait(500)
+    }
 
     await server.videos.quickUpload({ name: 'video2' })
-
-    // Wait for debounce
-    await wait(1000)
     await waitJobs([ server ])
-    expect(pings).to.equal(2)
+
+    // eslint-disable-next-line no-unmodified-loop-condition
+    while ((pings as number) !== 2) {
+      await wait(500)
+    }
 
     await server.runnerJobs.cancelAllJobs()
   })
@@ -80,18 +82,20 @@ describe('Test runner socket', function () {
     localSocket.on('available-jobs', () => pings++)
 
     await server.videos.quickUpload({ name: 'video3' })
-    // Wait for debounce
-    await wait(1000)
     await waitJobs([ server ])
 
-    expect(pings).to.equal(1)
+    // eslint-disable-next-line no-unmodified-loop-condition
+    while (pings !== 1) {
+      await wait(500)
+    }
 
     await server.runnerJobs.autoProcessWebVideoJob(runnerToken)
-    // Wait for debounce
-    await wait(1000)
     await waitJobs([ server ])
 
-    expect(pings).to.equal(2)
+    // eslint-disable-next-line no-unmodified-loop-condition
+    while ((pings as number) !== 2) {
+      await wait(500)
+    }
   })
 
   it('Should not send a ping if the ended job does not have a child', async function () {

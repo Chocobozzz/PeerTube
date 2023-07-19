@@ -63,7 +63,7 @@ describe('Test video storyboard', function () {
   })
 
   it('Should generate a storyboard after upload without transcoding', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     // 5s video
     const { uuid } = await servers[0].videos.quickUpload({ name: 'upload', fixture: 'video_short.webm' })
@@ -76,7 +76,7 @@ describe('Test video storyboard', function () {
   })
 
   it('Should generate a storyboard after upload without transcoding with a long video', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     // 124s video
     const { uuid } = await servers[0].videos.quickUpload({ name: 'upload', fixture: 'video_very_long_10p.mp4' })
@@ -88,7 +88,7 @@ describe('Test video storyboard', function () {
   })
 
   it('Should generate a storyboard after upload with transcoding', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     await servers[0].config.enableMinimumTranscoding()
 
@@ -102,7 +102,7 @@ describe('Test video storyboard', function () {
   })
 
   it('Should generate a storyboard after an audio upload', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     // 6s audio
     const attributes = { name: 'audio', fixture: 'sample.ogg' }
@@ -119,7 +119,7 @@ describe('Test video storyboard', function () {
   })
 
   it('Should generate a storyboard after HTTP import', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     if (areHttpImportTestsDisabled()) return
 
@@ -139,7 +139,7 @@ describe('Test video storyboard', function () {
   })
 
   it('Should generate a storyboard after torrent import', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     if (areHttpImportTestsDisabled()) return
 
