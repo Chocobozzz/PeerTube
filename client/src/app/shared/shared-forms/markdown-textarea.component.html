@@ -4,7 +4,7 @@
     [(ngModel)]="content" (ngModelChange)="onModelChange()"
     class="form-control" [ngClass]="{ 'input-error': formError }"
     [attr.disabled]="disabled || null"
-    [id]="name" [name]="name">
+    [id]="name" [name]="name" [dir]="dir">
   </textarea>
 
   <div ngbNav #nav="ngbNav" class="nav-pills nav-preview">

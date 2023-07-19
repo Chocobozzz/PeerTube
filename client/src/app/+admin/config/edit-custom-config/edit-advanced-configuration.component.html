@@ -94,7 +94,7 @@
             </my-help>
 
             <textarea
-              id="customizationJavascript" formControlName="javascript" class="form-control"
+              id="customizationJavascript" formControlName="javascript" class="form-control" dir="ltr"
               [ngClass]="{ 'input-error': formErrors['instance.customizations.javascript'] }"
             ></textarea>
 
@@ -124,7 +124,7 @@ color: red;
             </my-help>
 
             <textarea
-              id="customizationCSS" formControlName="css" class="form-control"
+              id="customizationCSS" formControlName="css" class="form-control" dir="ltr"
               [ngClass]="{ 'input-error': formErrors['instance.customizations.css'] }"
             ></textarea>
             <div *ngIf="formErrors.instance.customizations.css" class="form-error">{{ formErrors.instance.customizations.css }}</div>

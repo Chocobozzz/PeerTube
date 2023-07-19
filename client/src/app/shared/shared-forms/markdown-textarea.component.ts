@@ -37,6 +37,8 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
 
   @Input() name = 'description'
 
+  @Input() dir: string
+
   @ViewChild('textarea') textareaElement: ElementRef
   @ViewChild('previewElement') previewElement: ElementRef
 
