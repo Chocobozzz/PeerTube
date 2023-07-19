@@ -39,22 +39,21 @@ export class RecentVideosRecommendationService implements RecommendationService 
 
   private fetchPage (page: number, recommendation: RecommendationInfo): Observable<Video[]> {
     const pagination = { currentPage: page, itemsPerPage: this.pageSize + 1 }
-    const defaultSubscription = this.videos.getVideos({ videoPagination: pagination, sort: '-createdAt' })
-                                    .pipe(map(v => v.data))
-
-    const tags = recommendation.tags
-    const searchIndexConfig = this.config.search.searchIndex
-    if (
-      !tags || tags.length === 0 ||
-      (searchIndexConfig.enabled === true && searchIndexConfig.disableLocalSearch === true)
-    ) {
-      return defaultSubscription
-    }
 
     return this.userService.getAnonymousOrLoggedUser()
       .pipe(
-        map(user => {
-          return {
+        switchMap(user => {
+          const defaultSubscription = this.videos.getVideos({
+            videoPagination: pagination,
+            sort: '-publishedAt'
+          }).pipe(map(v => v.data))
+
+          const searchIndexConfig = this.config.search.searchIndex
+          if (searchIndexConfig.enabled === true && searchIndexConfig.disableLocalSearch === true) {
+            return defaultSubscription
+          }
+
+          return this.searchService.searchVideos({
             search: '',
             componentPagination: pagination,
             advancedSearch: new AdvancedSearch({
@@ -68,14 +67,15 @@ export class RecentVideosRecommendationService implements RecommendationService 
                 ? true
                 : undefined
             })
-          }
-        }),
-        switchMap(params => this.searchService.searchVideos(params)),
-        map(v => v.data),
-        switchMap(videos => {
-          if (videos.length <= 1) return defaultSubscription
+          })
+          .pipe(
+            map(v => v.data),
+            switchMap(videos => {
+              if (videos.length <= 1) return defaultSubscription
 
-          return of(videos)
+              return of(videos)
+            })
+          )
         })
       )
   }
