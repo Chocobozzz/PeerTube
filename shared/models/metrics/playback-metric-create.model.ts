@@ -6,6 +6,9 @@ export interface PlaybackMetricCreate {
   resolution?: VideoResolution
   fps?: number
 
+  p2pEnabled?: boolean
+  totalPeers?: number
+
   resolutionChanges: number
 
   errors: number

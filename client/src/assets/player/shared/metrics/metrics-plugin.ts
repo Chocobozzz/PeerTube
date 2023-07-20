@@ -18,6 +18,9 @@ class MetricsPlugin extends Plugin {
   private resolutionChanges = 0
   private errors = 0
 
+  private p2pEnabled: boolean
+  private totalPeers = 0
+
   private lastPlayerNetworkInfo: PlayerNetworkInfo
 
   private metricsInterval: any
@@ -113,6 +116,9 @@ class MetricsPlugin extends Plugin {
 
         uploadedBytesP2P: this.uploadedBytesP2P,
 
+        totalPeers: this.totalPeers,
+        p2pEnabled: this.p2pEnabled,
+
         videoId: this.options_.videoUUID()
       }
 
@@ -139,11 +145,17 @@ class MetricsPlugin extends Plugin {
 
       this.uploadedBytesP2P += Math.round(data.p2p.uploaded - (this.lastPlayerNetworkInfo?.p2p.uploaded || 0))
 
+      this.totalPeers = data.p2p.numPeers
+      this.p2pEnabled = true
+
       this.lastPlayerNetworkInfo = data
     })
 
     this.player.on('http-info', (_event, data: PlayerNetworkInfo) => {
       this.downloadedBytesHTTP += Math.round(data.http.downloaded - (this.lastPlayerNetworkInfo?.http.downloaded || 0))
+
+      this.totalPeers = 0
+      this.p2pEnabled = false
 
       this.lastPlayerNetworkInfo = data
     })

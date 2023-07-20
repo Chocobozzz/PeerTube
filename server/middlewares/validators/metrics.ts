@@ -12,6 +12,15 @@ const addPlaybackMetricValidator = [
   body('fps')
     .optional()
     .isInt({ min: 0 }),
+
+  body('totalPeers')
+    .optional()
+    .isInt({ min: 0 }),
+
+  body('p2pEnabled')
+    .optional()
+    .isBoolean(),
+
   body('playerMode')
     .custom(isValidPlayerMode),
 

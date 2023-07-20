@@ -89,10 +89,6 @@ describe('Test metrics API validators', function () {
       })
     })
 
-    it('Should fail with a missing errors', async function () {
-
-    })
-
     it('Should fail with an missing/invalid errors', async function () {
       await makePostBodyRequest({
         url: server.url,
@@ -149,6 +145,22 @@ describe('Test metrics API validators', function () {
       })
     })
 
+    it('Should fail with an invalid p2pEnabled', async function () {
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        fields: { ...baseParams, p2pEnabled: 'toto' }
+      })
+    })
+
+    it('Should fail with an invalid totalPeers', async function () {
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        fields: { ...baseParams, totalPeers: 'toto' }
+      })
+    })
+
     it('Should fail with a bad video id', async function () {
       await makePostBodyRequest({
         url: server.url,
@@ -171,6 +183,13 @@ describe('Test metrics API validators', function () {
         url: server.url,
         path,
         fields: baseParams,
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        fields: { ...baseParams, p2pEnabled: false, totalPeers: 32 },
         expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })

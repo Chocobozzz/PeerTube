@@ -62,6 +62,8 @@ describe('Open Telemetry', function () {
           downloadedBytesP2P: 0,
           downloadedBytesHTTP: 0,
           uploadedBytesP2P: 5,
+          totalPeers: 1,
+          p2pEnabled: false,
           videoId: video.uuid
         }
       })
