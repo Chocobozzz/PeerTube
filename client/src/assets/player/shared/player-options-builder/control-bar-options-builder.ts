@@ -59,7 +59,7 @@ export class ControlBarOptionsBuilder {
     return {
       settingsButton: {
         setup: {
-          maxHeightOffset: 40
+          maxHeightOffset: 60
         },
         entries: settingEntries
       }
