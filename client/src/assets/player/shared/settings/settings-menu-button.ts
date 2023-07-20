@@ -198,7 +198,7 @@ class SettingsButton extends Button {
 
     if (height > maxHeight) {
       height = maxHeight
-      width += 17
+      width += 15
       panelEl.style.maxHeight = `${height}px`
     } else if (panelEl.style.maxHeight !== '') {
       panelEl.style.maxHeight = ''

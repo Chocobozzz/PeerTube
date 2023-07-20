@@ -18,12 +18,13 @@ $setting-transition-easing: ease-out;
   .vjs-settings-dialog {
     position: absolute;
     right: .5em;
-    bottom: 3.5em;
+    bottom: 4em;
     color: pvar(--embedForegroundColor);
     opacity: $primary-foreground-opacity;
     margin: 0 auto;
     font-size: $font-size !important;
     z-index: 100;
+    border-radius: 10px;
 
     width: auto;
     overflow: hidden;
@@ -54,11 +55,9 @@ $setting-transition-easing: ease-out;
 
     .vjs-settings-panel {
       position: absolute;
-      bottom: 0;
       right: 0;
       overflow-y: auto;
       overflow-x: hidden;
-      border-radius: 1px;
     }
 
     .vjs-settings-panel-child {
@@ -118,10 +117,10 @@ $setting-transition-easing: ease-out;
           outline: 0;
           font-weight: $font-semibold;
           text-align: end;
-          padding: 5px 8px;
+          padding: 8px 15px;
 
           &.vjs-back-button {
-            padding: 12px 8px;
+            padding: 12px 15px;
             margin-bottom: 5px;
             border-bottom: 1px solid #808080;
             text-align: start;
@@ -146,7 +145,7 @@ $setting-transition-easing: ease-out;
               @include icon(15px);
 
               position: absolute;
-              left: 8px;
+              left: 15px;
               content: ' ';
               margin-top: 1px;
               background-image: url('#{$assets-path}/player/images/tick-white.svg');
@@ -157,13 +156,14 @@ $setting-transition-easing: ease-out;
         // Special captions case
         // Bigger caption button
         &.vjs-captions-button {
-          width: 200px;
+          min-width: 200px;
 
           .vjs-menu-item {
             text-align: start;
 
             .vjs-menu-item-text {
               @include margin-left(25px);
+
               text-transform: capitalize;
             }
           }
