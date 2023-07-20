@@ -47,7 +47,7 @@ storage:
   tmp_persistent: '../data/tmp-persistent/' # As tmp but the directory is not cleaned up between PeerTube restarts
   bin: '../data/bin/'
   avatars: '../data/avatars/'
-  web_videos: '../data/web-videos/'
+  web_videos: '../data/videos/' # Keep legacy "videos" directory name to not break existing PeerTube instances on upgrade
   streaming_playlists: '../data/streaming-playlists'
   redundancy: '../data/redundancy/'
   logs: '../data/logs/'
