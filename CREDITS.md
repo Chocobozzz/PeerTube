@@ -99,7 +99,7 @@
  * Kemal Oktay Aktoğan
  * Lucas Declercq
  * Sirxy
- * chris@famichiki.tube
+ * csakura
  * matograine
  * Alexander Ivanov
  * Daniel Santos
@@ -151,7 +151,6 @@
  * Benjamin Seitz
  * Bob Oob
  * Booteille
- * Chris Sakura 佐倉くりす on Youtube
  * DontUseGithub
  * I_Automne
  * Iñigo
@@ -342,7 +341,6 @@
  * Cadence Ember
  * Cale
  * Charles de Lacombe
- * Chris Sakura 佐倉くりす on Youtube - 日本語は第二言語やけ、間違っとったら思いっきり叩いてくださいｗ つたない日本語ばっかりやけど頑張りまーす♪
  * Christoph Geschwind
  * Chronos
  * Claude
@@ -707,5 +705,3 @@
 # Contributors to our 2018 crowdfunding :heart:
 
 *We ran [a crowdfunding campaign](https://www.kisskissbankbank.com/en/projects/peertube-a-free-and-federated-video-platform) in 2018 to pave the road to the version 1.0.0 of PeerTube, with 1,379 backers. Thanks to everyone who pitched in and shared the news!*
-
-
