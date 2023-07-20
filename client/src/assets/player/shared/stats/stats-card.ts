@@ -273,6 +273,8 @@ class StatsCard extends Component {
     colorSpace?: string
   }) {
     const { playerNetworkInfo, progress, colorSpace, codecs, resolution, buffer, latency } = options
+    const { downloadedFromServer, downloadedFromPeers } = playerNetworkInfo
+
     const player = this.player()
 
     const videoQuality: VideoPlaybackQuality = player.getVideoPlaybackQuality()
@@ -291,10 +293,14 @@ class StatsCard extends Component {
       ? `${playerNetworkInfo.downloadSpeed} &dArr; / ${playerNetworkInfo.uploadSpeed} &uArr;`
       : undefined
 
-    const totalTransferred = playerNetworkInfo.totalDownloaded
-      ? `${playerNetworkInfo.totalDownloaded} &dArr; / ${playerNetworkInfo.totalUploaded} &uArr;`
-      : undefined
-    const { downloadedFromServer, downloadedFromPeers } = playerNetworkInfo
+    let totalTransferred = playerNetworkInfo.totalDownloaded
+      ? `${playerNetworkInfo.totalDownloaded} &dArr;`
+      : ''
+
+    if (playerNetworkInfo.totalUploaded) {
+      totalTransferred += `/ ${playerNetworkInfo.totalUploaded} &uArr;`
+    }
+
     const downloadBreakdown = playerNetworkInfo.downloadedFromServer
       ? player.localize('{1} from servers · {2} from peers', [ downloadedFromServer, downloadedFromPeers ])
       : undefined
