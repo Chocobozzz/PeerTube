@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { GlobalIconName } from '@app/shared/shared-icons'
@@ -15,7 +15,8 @@ import { GlobalIconName } from '@app/shared/shared-icons'
     }
   ]
 })
-export class ReactiveFileComponent implements OnInit, ControlValueAccessor {
+export class ReactiveFileComponent implements OnInit, OnChanges, ControlValueAccessor {
+  @Input() theme: 'primary' | 'secondary' = 'secondary'
   @Input() inputLabel: string
   @Input() inputName: string
   @Input() extensions: string[] = []
@@ -29,6 +30,7 @@ export class ReactiveFileComponent implements OnInit, ControlValueAccessor {
 
   @Output() fileChanged = new EventEmitter<Blob>()
 
+  classes: { [id: string]: boolean } = {}
   allowedExtensionsMessage = ''
   fileInputValue: any
 
@@ -44,6 +46,20 @@ export class ReactiveFileComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit () {
     this.allowedExtensionsMessage = this.extensions.join(', ')
+
+    this.buildClasses()
+  }
+
+  ngOnChanges () {
+    this.buildClasses()
+  }
+
+  buildClasses () {
+    this.classes = {
+      'with-icon': !!this.icon,
+      'orange-button': this.theme === 'primary',
+      'grey-button': this.theme === 'secondary'
+    }
   }
 
   fileChange (event: any) {

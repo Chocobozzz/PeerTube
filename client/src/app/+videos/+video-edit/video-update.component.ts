@@ -1,25 +1,31 @@
-import { of } from 'rxjs'
-import { switchMap } from 'rxjs/operators'
+import debug from 'debug'
+import { UploadState, UploadxService } from 'ngx-uploadx'
+import { of, Subject, Subscription } from 'rxjs'
+import { catchError, map, switchMap } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
-import { Component, HostListener, OnInit } from '@angular/core'
+import { HttpErrorResponse } from '@angular/common/http'
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Notifier } from '@app/core'
+import { AuthService, CanComponentDeactivate, ConfirmService, Notifier, ServerService, UserService } from '@app/core'
+import { genericUploadErrorHandler } from '@app/helpers'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { Video, VideoCaptionEdit, VideoCaptionService, VideoDetails, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { logger } from '@root-helpers/logger'
 import { pick, simpleObjectsDeepEqual } from '@shared/core-utils'
-import { LiveVideo, LiveVideoUpdate, VideoPrivacy, VideoState } from '@shared/models'
+import { HttpStatusCode, LiveVideo, LiveVideoUpdate, VideoPrivacy, VideoState } from '@shared/models'
 import { VideoSource } from '@shared/models/videos/video-source'
 import { hydrateFormFromVideo } from './shared/video-edit-utils'
+import { VideoUploadService } from './shared/video-upload.service'
+
+const debugLogger = debug('peertube:video-update')
 
 @Component({
   selector: 'my-videos-update',
   styleUrls: [ './shared/video-edit.component.scss' ],
   templateUrl: './video-update.component.html'
 })
-export class VideoUpdateComponent extends FormReactive implements OnInit {
+export class VideoUpdateComponent extends FormReactive implements OnInit, OnDestroy, CanComponentDeactivate {
   videoEdit: VideoEdit
   videoDetails: VideoDetails
   videoSource: VideoSource
@@ -27,10 +33,23 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   videoCaptions: VideoCaptionEdit[] = []
   liveVideo: LiveVideo
 
+  userVideoQuotaUsed = 0
+  userVideoQuotaUsedDaily = 0
+
   isUpdatingVideo = false
   forbidScheduledPublication = false
 
-  private updateDone = false
+  isReplacingVideoFile = false
+  videoUploadPercents: number
+  uploadError: string
+
+  updateDone = false
+
+  private videoReplacementUploadedSubject = new Subject<void>()
+  private alreadyRefreshedToken = false
+
+  private uploadServiceSubscription: Subscription
+  private updateSubcription: Subscription
 
   constructor (
     protected formReactiveService: FormReactiveService,
@@ -40,13 +59,30 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private videoService: VideoService,
     private loadingBar: LoadingBarService,
     private videoCaptionService: VideoCaptionService,
-    private liveVideoService: LiveVideoService
+    private server: ServerService,
+    private liveVideoService: LiveVideoService,
+    private videoUploadService: VideoUploadService,
+    private confirmService: ConfirmService,
+    private auth: AuthService,
+    private userService: UserService,
+    private resumableUploadService: UploadxService
   ) {
     super()
   }
 
   ngOnInit () {
-    this.buildForm({})
+    this.buildForm({
+      replaceFile: null
+    })
+
+    this.userService.getMyVideoQuotaUsed()
+      .subscribe(data => {
+        this.userVideoQuotaUsed = data.videoQuotaUsed
+        this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
+      })
+
+    this.uploadServiceSubscription = this.resumableUploadService.events
+      .subscribe(state => this.onUploadVideoOngoing(state))
 
     const { videoData } = this.route.snapshot.data
     const { video, videoChannels, videoCaptions, videoSource, liveVideo, videoPassword } = videoData
@@ -60,6 +96,12 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.liveVideo = liveVideo
 
     this.forbidScheduledPublication = this.videoEdit.privacy !== VideoPrivacy.PRIVATE
+  }
+
+  ngOnDestroy () {
+    this.resumableUploadService.disconnect()
+
+    if (this.uploadServiceSubscription) this.uploadServiceSubscription.unsubscribe()
   }
 
   onFormBuilt () {
@@ -88,6 +130,13 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   canDeactivate (): { canDeactivate: boolean, text?: string } {
     if (this.updateDone === true) return { canDeactivate: true }
 
+    if (this.isUpdatingVideo) {
+      return {
+        canDeactivate: false,
+        text: $localize`Your video is currenctly being updated. If you leave, your changes will be lost.`
+      }
+    }
+
     const text = $localize`You have unsaved changes! If you leave, your changes will be lost.`
 
     for (const caption of this.videoCaptions) {
@@ -97,68 +146,90 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     return { canDeactivate: this.formChanged === false, text }
   }
 
+  getVideoExtensions () {
+    return this.videoUploadService.getVideoExtensions()
+  }
+
   isWaitTranscodingHidden () {
     return this.videoDetails.state.id !== VideoState.TO_TRANSCODE
+  }
+
+  isUpdateVideoFileEnabled () {
+    if (!this.server.getHTMLConfig().videoFile.update.enabled) return false
+
+    if (this.videoDetails.isLive) return false
+    if (this.videoDetails.state.id !== VideoState.PUBLISHED) return false
+
+    return true
   }
 
   async update () {
     await this.waitPendingCheck()
     this.forceCheck()
 
-    if (!this.form.valid || this.isUpdatingVideo === true) {
-      return
-    }
+    if (!this.form.valid || this.isUpdatingVideo === true) return
+
+    // Check and warn users about a file replacement
+    if (!await this.checkAndConfirmVideoFileReplacement()) return
 
     this.videoEdit.patch(this.form.value)
+
+    this.abortUpdateIfNeeded()
 
     this.loadingBar.useRef().start()
     this.isUpdatingVideo = true
 
-    // Update the video
-    this.videoService.updateVideo(this.videoEdit)
-        .pipe(
-          // Then update captions
-          switchMap(() => this.videoCaptionService.updateCaptions(this.videoEdit.id, this.videoCaptions)),
+    this.updateSubcription = this.videoReplacementUploadedSubject.pipe(
+      switchMap(() => this.videoService.updateVideo(this.videoEdit)),
 
-          switchMap(() => {
-            if (!this.liveVideo) return of(undefined)
+      // Then update captions
+      switchMap(() => this.videoCaptionService.updateCaptions(this.videoEdit.id, this.videoCaptions)),
 
-            const saveReplay = !!this.form.value.saveReplay
-            const replaySettings = saveReplay
-              ? { privacy: this.form.value.replayPrivacy }
-              : undefined
+      switchMap(() => {
+        if (!this.liveVideo) return of(undefined)
 
-            const liveVideoUpdate: LiveVideoUpdate = {
-              saveReplay,
-              replaySettings,
-              permanentLive: !!this.form.value.permanentLive,
-              latencyMode: this.form.value.latencyMode
-            }
+        const saveReplay = !!this.form.value.saveReplay
+        const replaySettings = saveReplay
+          ? { privacy: this.form.value.replayPrivacy }
+          : undefined
 
-            // Don't update live attributes if they did not change
-            const baseVideo = pick(this.liveVideo, Object.keys(liveVideoUpdate) as (keyof LiveVideoUpdate)[])
-            const liveChanged = !simpleObjectsDeepEqual(baseVideo, liveVideoUpdate)
-            if (!liveChanged) return of(undefined)
+        const liveVideoUpdate: LiveVideoUpdate = {
+          saveReplay,
+          replaySettings,
+          permanentLive: !!this.form.value.permanentLive,
+          latencyMode: this.form.value.latencyMode
+        }
 
-            return this.liveVideoService.updateLive(this.videoEdit.id, liveVideoUpdate)
-          })
-        )
-        .subscribe({
-          next: () => {
-            this.updateDone = true
-            this.isUpdatingVideo = false
-            this.loadingBar.useRef().complete()
-            this.notifier.success($localize`Video updated.`)
-            this.router.navigateByUrl(Video.buildWatchUrl(this.videoEdit))
-          },
+        // Don't update live attributes if they did not change
+        const baseVideo = pick(this.liveVideo, Object.keys(liveVideoUpdate) as (keyof LiveVideoUpdate)[])
+        const liveChanged = !simpleObjectsDeepEqual(baseVideo, liveVideoUpdate)
+        if (!liveChanged) return of(undefined)
 
-          error: err => {
-            this.loadingBar.useRef().complete()
-            this.isUpdatingVideo = false
-            this.notifier.error(err.message)
-            logger.error(err)
-          }
-        })
+        return this.liveVideoService.updateLive(this.videoEdit.id, liveVideoUpdate)
+      }),
+
+      map(() => true),
+
+      catchError(err => {
+        this.notifier.error(err.message)
+
+        return of(false)
+      })
+    )
+    .subscribe({
+      next: success => {
+        this.isUpdatingVideo = false
+        this.loadingBar.useRef().complete()
+
+        if (!success) return
+
+        this.updateDone = true
+        this.notifier.success($localize`Video updated.`)
+        this.router.navigateByUrl(Video.buildWatchUrl(this.videoEdit))
+      }
+    })
+
+    this.replaceFileIfNeeded()
   }
 
   hydratePluginFieldsFromVideo () {
@@ -171,5 +242,119 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
   getVideoUrl () {
     return Video.buildWatchUrl(this.videoDetails)
+  }
+
+  private async checkAndConfirmVideoFileReplacement () {
+    const replaceFile: File = this.form.value['replaceFile']
+    if (!replaceFile) return true
+
+    const user = this.auth.getUser()
+    if (!this.videoUploadService.checkQuotaAndNotify(replaceFile, user.videoQuota, this.userVideoQuotaUsed)) return
+    if (!this.videoUploadService.checkQuotaAndNotify(replaceFile, user.videoQuotaDaily, this.userVideoQuotaUsedDaily)) return
+
+    const willBeBlocked = this.server.getHTMLConfig().autoBlacklist.videos.ofUsers.enabled === true && !this.videoDetails.blacklisted
+    let blockedWarning = ''
+    if (willBeBlocked) {
+      // eslint-disable-next-line max-len
+      blockedWarning = ' ' + $localize`Your video will also be automatically blocked since video publication requires manual validation by moderators.`
+    }
+
+    const message = $localize`Uploading a new version of your video will completely erase the current version.` +
+      blockedWarning +
+      ' ' +
+      $localize`<br /><br />Do you still want to replace your video file?`
+
+    const res = await this.confirmService.confirm(message, $localize`Replace file warning`)
+    if (res === false) return false
+
+    return true
+  }
+
+  private replaceFileIfNeeded () {
+    if (!this.form.value['replaceFile']) {
+      this.videoReplacementUploadedSubject.next()
+      return
+    }
+
+    this.uploadFileReplacement(this.form.value['replaceFile'])
+  }
+
+  private uploadFileReplacement (file: File) {
+    const metadata = {
+      filename: file.name
+    }
+
+    this.resumableUploadService.handleFiles(file, {
+      ...this.videoUploadService.getReplaceUploadxOptions(this.videoDetails.uuid),
+
+      metadata
+    })
+
+    this.isReplacingVideoFile = true
+  }
+
+  onUploadVideoOngoing (state: UploadState) {
+    debugLogger('Upload state update', state)
+
+    switch (state.status) {
+      case 'error': {
+        if (!this.alreadyRefreshedToken && state.responseStatus === HttpStatusCode.UNAUTHORIZED_401) {
+          this.alreadyRefreshedToken = true
+
+          return this.refreshTokenAndRetryUpload()
+        }
+
+        this.handleUploadError(this.videoUploadService.buildHTTPErrorResponse(state))
+        break
+      }
+
+      case 'cancelled':
+        this.isReplacingVideoFile = false
+        this.videoUploadPercents = 0
+        this.uploadError = ''
+        break
+
+      case 'uploading':
+        this.videoUploadPercents = state.progress || 0
+        break
+
+      case 'complete':
+        this.isReplacingVideoFile = false
+        this.videoReplacementUploadedSubject.next()
+        this.videoUploadPercents = 100
+        break
+    }
+  }
+
+  cancelUpload () {
+    debugLogger('Cancelling upload')
+
+    this.resumableUploadService.control({ action: 'cancel' })
+
+    this.abortUpdateIfNeeded()
+  }
+
+  private handleUploadError (err: HttpErrorResponse) {
+    this.videoUploadPercents = 0
+    this.isReplacingVideoFile = false
+
+    this.uploadError = genericUploadErrorHandler({ err, name: $localize`video` })
+
+    this.videoReplacementUploadedSubject.error(err)
+  }
+
+  private refreshTokenAndRetryUpload () {
+    this.auth.refreshAccessToken()
+      .subscribe(() => this.uploadFileReplacement(this.form.value['replaceFile']))
+  }
+
+  private abortUpdateIfNeeded () {
+    if (this.updateSubcription) {
+      this.updateSubcription.unsubscribe()
+      this.updateSubcription = undefined
+    }
+
+    this.videoReplacementUploadedSubject = new Subject<void>()
+    this.loadingBar.useRef().complete()
   }
 }

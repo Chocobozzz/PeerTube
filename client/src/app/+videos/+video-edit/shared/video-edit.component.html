@@ -124,7 +124,7 @@
               <label i18n for="videoPassword">Password</label>
               <my-input-text formControlName="videoPassword" inputId="videoPassword" [withCopy]="true" [formError]="formErrors['videoPassword']"></my-input-text>
             </div>
-            
+
             <div *ngIf="schedulePublicationSelected" class="form-group">
               <label i18n for="schedulePublicationAt">Schedule publication ({{ calendarTimezone }})</label>
               <p-calendar
@@ -319,6 +319,8 @@
       <ng-template ngbNavContent>
         <div class="row advanced-settings">
           <div class="col-md-12 col-xl-8">
+
+            <ng-content></ng-content>
 
             <div class="form-group">
               <label i18n for="previewfile">Video thumbnail</label>

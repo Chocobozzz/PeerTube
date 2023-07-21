@@ -1,5 +1,5 @@
 <div class="root">
-  <div class="button-file" [ngClass]="{ 'with-icon': !!icon }" [ngbTooltip]="buttonTooltip">
+  <div class="button-file" [ngClass]="classes" [ngbTooltip]="buttonTooltip">
     <my-global-icon *ngIf="icon" [iconName]="icon"></my-global-icon>
 
     <span>{{ inputLabel }}</span>

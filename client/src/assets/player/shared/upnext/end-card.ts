@@ -48,6 +48,8 @@ class EndCard extends Component {
   suspendedMessage: HTMLElement
   nextButton: HTMLElement
 
+  private timeout: any
+
   private onEndedHandler: () => void
   private onPlayingHandler: () => void
 
@@ -84,6 +86,8 @@ class EndCard extends Component {
     if (this.onEndedHandler) this.player().off([ 'auto-stopped', 'ended' ], this.onEndedHandler)
     if (this.onPlayingHandler) this.player().off('playing', this.onPlayingHandler)
 
+    if (this.timeout) clearTimeout(this.timeout)
+
     super.dispose()
   }
 
@@ -114,8 +118,6 @@ class EndCard extends Component {
   }
 
   showCard (cb: (canceled: boolean) => void) {
-    let timeout: any
-
     this.autoplayRing.setAttribute('stroke-dasharray', `${this.dashOffsetStart}`)
     this.autoplayRing.setAttribute('stroke-dashoffset', `${-this.dashOffsetStart}`)
 
@@ -126,17 +128,20 @@ class EndCard extends Component {
     }
 
     this.upNextEvents.one('cancel', () => {
-      clearTimeout(timeout)
+      clearTimeout(this.timeout)
+      this.timeout = undefined
       cb(true)
     })
 
     this.upNextEvents.one('playing', () => {
-      clearTimeout(timeout)
+      clearTimeout(this.timeout)
+      this.timeout = undefined
       cb(true)
     })
 
     this.upNextEvents.one('next', () => {
-      clearTimeout(timeout)
+      clearTimeout(this.timeout)
+      this.timeout = undefined
       cb(false)
     })
 
@@ -154,19 +159,20 @@ class EndCard extends Component {
         this.suspendedMessage.innerText = this.options_.suspendedText
         goToPercent(0)
         this.ticks = 0
-        timeout = setTimeout(update.bind(this), 300) // checks once supsended can be a bit longer
+        this.timeout = setTimeout(update.bind(this), 300) // checks once supsended can be a bit longer
       } else if (this.ticks >= this.totalTicks) {
-        clearTimeout(timeout)
+        clearTimeout(this.timeout)
+        this.timeout = undefined
         cb(false)
       } else {
         this.suspendedMessage.innerText = ''
         tick()
-        timeout = setTimeout(update.bind(this), this.interval)
+        this.timeout = setTimeout(update.bind(this), this.interval)
       }
     }
 
     this.container.style.display = 'block'
-    timeout = setTimeout(update.bind(this), this.interval)
+    this.timeout = setTimeout(update.bind(this), this.interval)
   }
 }
 

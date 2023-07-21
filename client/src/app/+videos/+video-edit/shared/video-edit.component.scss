@@ -112,6 +112,11 @@ p-calendar {
   grid-gap: 30px;
 }
 
+.button-file {
+  @include peertube-button-file(max-content);
+  @include orange-button;
+}
+
 @include on-small-main-col {
   .form-columns {
     grid-template-columns: 1fr;

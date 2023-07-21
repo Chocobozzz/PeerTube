@@ -68,6 +68,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() videoSource: VideoSource
 
   @Input() hideWaitTranscoding = false
+  @Input() updateVideoFileEnabled = false
 
   @Input() type: VideoEditType
   @Input() liveVideo: LiveVideo

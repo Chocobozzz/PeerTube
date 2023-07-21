@@ -225,6 +225,11 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           enabled: null
         }
       },
+      videoFile: {
+        update: {
+          enabled: null
+        }
+      },
       autoBlacklist: {
         videos: {
           ofUsers: {

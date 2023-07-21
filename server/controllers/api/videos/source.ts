@@ -14,7 +14,7 @@ import { openapiOperationDoc } from '@server/middlewares/doc'
 import { VideoModel } from '@server/models/video/video'
 import { VideoSourceModel } from '@server/models/video/video-source'
 import { MStreamingPlaylistFiles, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
-import { HttpStatusCode, VideoState } from '@shared/models'
+import { VideoState } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import {
   asyncMiddleware,
@@ -121,7 +121,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
 
     await removeOldFiles({ video, files: oldWebVideoFiles, playlists: oldStreamingPlaylists })
 
-    await VideoSourceModel.create({
+    const source = await VideoSourceModel.create({
       filename: originalFilename,
       videoId: video.id,
       createdAt: inputFileUpdatedAt
@@ -135,7 +135,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
 
     Hooks.runAction('action:api.video.file-updated', { video, req, res })
 
-    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    return res.json(source.toFormattedJSON())
   } finally {
     videoFileMutexReleaser()
   }

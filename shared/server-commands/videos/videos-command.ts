@@ -462,7 +462,7 @@ export class VideosCommand extends AbstractCommand {
     path: string
     attributes: { fixture?: string } & { [id: string]: any }
   }): Promise<VideoCreateResult> {
-    const { path, attributes, expectedStatus } = options
+    const { path, attributes, expectedStatus = HttpStatusCode.OK_200 } = options
 
     let size = 0
     let videoFilePath: string
@@ -597,43 +597,47 @@ export class VideosCommand extends AbstractCommand {
     const readable = createReadStream(videoFilePath, { highWaterMark: 8 * 1024 })
     return new Promise<GotResponse<{ video: VideoCreateResult }>>((resolve, reject) => {
       readable.on('data', async function onData (chunk) {
-        readable.pause()
+        try {
+          readable.pause()
 
-        const headers = {
-          'Authorization': 'Bearer ' + token,
-          'Content-Type': 'application/octet-stream',
-          'Content-Range': contentRangeBuilder
-            ? contentRangeBuilder(start, chunk)
-            : `bytes ${start}-${start + chunk.length - 1}/${size}`,
-          'Content-Length': contentLength ? contentLength + '' : chunk.length + ''
+          const headers = {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/octet-stream',
+            'Content-Range': contentRangeBuilder
+              ? contentRangeBuilder(start, chunk)
+              : `bytes ${start}-${start + chunk.length - 1}/${size}`,
+            'Content-Length': contentLength ? contentLength + '' : chunk.length + ''
+          }
+
+          if (digestBuilder) {
+            Object.assign(headers, { digest: digestBuilder(chunk) })
+          }
+
+          const res = await got<{ video: VideoCreateResult }>({
+            url,
+            method: 'put',
+            headers,
+            path: path + '?' + pathUploadId,
+            body: chunk,
+            responseType: 'json',
+            throwHttpErrors: false
+          })
+
+          start += chunk.length
+
+          if (res.statusCode === expectedStatus) {
+            return resolve(res)
+          }
+
+          if (res.statusCode !== HttpStatusCode.PERMANENT_REDIRECT_308) {
+            readable.off('data', onData)
+            return reject(new Error('Incorrect transient behaviour sending intermediary chunks'))
+          }
+
+          readable.resume()
+        } catch (err) {
+          reject(err)
         }
-
-        if (digestBuilder) {
-          Object.assign(headers, { digest: digestBuilder(chunk) })
-        }
-
-        const res = await got<{ video: VideoCreateResult }>({
-          url,
-          method: 'put',
-          headers,
-          path: path + '?' + pathUploadId,
-          body: chunk,
-          responseType: 'json',
-          throwHttpErrors: false
-        })
-
-        start += chunk.length
-
-        if (res.statusCode === expectedStatus) {
-          return resolve(res)
-        }
-
-        if (res.statusCode !== HttpStatusCode.PERMANENT_REDIRECT_308) {
-          readable.off('data', onData)
-          return reject(new Error('Incorrect transient behaviour sending intermediary chunks'))
-        }
-
-        readable.resume()
       })
     })
   }
@@ -695,8 +699,7 @@ export class VideosCommand extends AbstractCommand {
       ...options,
 
       path: '/api/v1/videos/' + options.videoId + '/source/replace-resumable',
-      attributes: { fixture: options.fixture },
-      expectedStatus: HttpStatusCode.NO_CONTENT_204
+      attributes: { fixture: options.fixture }
     })
   }
 

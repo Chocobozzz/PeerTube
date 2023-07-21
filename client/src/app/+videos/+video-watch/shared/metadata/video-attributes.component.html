@@ -18,6 +18,11 @@
   </a>
 </div>
 
+<div *ngIf="!!video.inputFileUpdatedAt" class="attribute attribute-re-uploaded-on">
+  <span i18n class="attribute-label">Video re-upload</span>
+  <span class="attribute-value">{{ video.inputFileUpdatedAt | date: 'short' }}</span>
+</div>
+
 <div *ngIf="!!video.originallyPublishedAt" class="attribute attribute-originally-published-at">
   <span i18n class="attribute-label">Originally published</span>
   <span class="attribute-value">{{ video.originallyPublishedAt | date: 'dd MMMM yyyy' }}</span>

@@ -4,6 +4,12 @@
     <a [routerLink]="getVideoUrl()">{{ videoDetails?.name }}</a>
   </div>
 
+  <my-upload-progress
+    [isUploadingVideo]="isReplacingVideoFile" [videoUploadPercents]="videoUploadPercents" [error]="uploadError" [videoUploaded]="updateDone"
+    [enableRetryAfterError]="false" (cancel)="cancelUpload()"
+  >
+  </my-upload-progress>
+
   <form novalidate [formGroup]="form">
 
     <my-video-edit
@@ -12,10 +18,27 @@
       [videoCaptions]="videoCaptions" [hideWaitTranscoding]="isWaitTranscodingHidden()"
       type="update" (pluginFieldsAdded)="hydratePluginFieldsFromVideo()"
       [liveVideo]="liveVideo" [videoToUpdate]="videoDetails"
-      [videoSource]="videoSource"
+      [videoSource]="videoSource" [updateVideoFileEnabled]="isUpdateVideoFileEnabled()"
 
       (formBuilt)="onFormBuilt()"
-    ></my-video-edit>
+    >
+
+      <div *ngIf="isUpdateVideoFileEnabled()" class="form-group">
+        <label class="mb-0" i18n for="videofile">Replace video file</label>
+
+        <div i18n class="form-group-description">⚠️ Uploading a new version of your video will completely erase the current version</div>
+
+        <div>
+          <my-reactive-file
+            formControlName="replaceFile"
+            i18n-inputLabel inputLabel="Select the file to upload"
+            inputName="videofile" [extensions]="getVideoExtensions()" [displayFilename]="true" [displayReset]="true"
+            [buttonTooltip]="'(extensions: ' + getVideoExtensions() + ')'"
+            theme="primary"
+          ></my-reactive-file>
+        </div>
+      </div>
+    </my-video-edit>
 
     <div class="submit-container">
       <my-button className="orange-button" i18n-label label="Update" icon="circle-tick"

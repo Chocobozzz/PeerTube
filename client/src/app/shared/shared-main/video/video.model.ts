@@ -26,6 +26,7 @@ export class Video implements VideoServerModel {
   updatedAt: Date
   publishedAt: Date
   originallyPublishedAt: Date | string
+
   category: VideoConstant<number>
   licence: VideoConstant<number>
   language: VideoConstant<string>

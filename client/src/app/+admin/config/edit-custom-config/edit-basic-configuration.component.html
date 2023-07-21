@@ -345,6 +345,18 @@
         </ng-container>
       </ng-container>
 
+      <ng-container formGroupName="videoFile">
+        <ng-container formGroupName="update">
+          <div class="form-group">
+            <my-peertube-checkbox
+              inputName="videoFileUpdateEnabled" formControlName="enabled"
+              i18n-labelText labelText="Allow users to upload a new version of their video"
+            >
+            </my-peertube-checkbox>
+          </div>
+        </ng-container>
+      </ng-container>
+
     </div>
   </div>
 

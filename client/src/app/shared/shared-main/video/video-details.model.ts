@@ -27,6 +27,8 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
 
   trackerUrls: string[]
 
+  inputFileUpdatedAt: Date | string
+
   files: VideoFile[]
   streamingPlaylists: VideoStreamingPlaylist[]
 
@@ -40,6 +42,8 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.support = hash.support
     this.commentsEnabled = hash.commentsEnabled
     this.downloadEnabled = hash.downloadEnabled
+
+    this.inputFileUpdatedAt = hash.inputFileUpdatedAt
 
     this.trackerUrls = hash.trackerUrls
 
