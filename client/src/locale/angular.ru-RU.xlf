@@ -5591,7 +5591,7 @@
       </trans-unit>
       <trans-unit id="4354548488369167450" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Требуется ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Генерируйте списки воспроизведения HLS и фрагментированные файлы MP4, что приводит к лучшему воспроизведению, чем при использовании веб-видео:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Изменение разрешения происходит более плавно<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Более быстрое воспроизведение, особенно с длинными видео<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Более стабильное воспроизведение (меньше ошибок/бесконечная загрузка)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Если вы также включили поддержку веб-видео, это увеличит объем хранилища видео в 2 раза<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">94,103</context>
@@ -5745,7 +5745,7 @@
       </trans-unit>
       <trans-unit id="9180372875725189823" datatype="html">
         <source>Number of video storyboard images to keep in cache</source>
-        <target state="new">Number of video storyboard images to keep in cache</target>
+        <target state="translated">Количество изображений раскадровки видео для сохранения в кэше</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">57</context>
@@ -5753,7 +5753,7 @@
       </trans-unit>
       <trans-unit id="224402797620080356" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached storyboard} other {cached storyboards}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached storyboard} other {cached storyboards}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {кешированный кадр} other {кешированных кадров}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">64</context>
@@ -6060,7 +6060,7 @@
       </trans-unit>
       <trans-unit id="3021884317141422270" datatype="html">
         <source>Display all videos (private, unlisted, password protected or not yet published)</source>
-        <target state="new">Display all videos (private, unlisted, password protected or not yet published)</target>
+        <target state="translated">Отображать все видео (приватные, не включенные в список, защищенные паролем или еще не опубликованные)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">128</context>
@@ -6455,9 +6455,7 @@
       </trans-unit>
       <trans-unit id="978466626916963667" datatype="html">
         <source>Do you really want to delete <x id="PH" equiv-text="videoChannel.displayName"/>? It will delete <x id="PH_1" equiv-text="videoChannel.videosCount"/> videos uploaded in this channel, and you will not be able to create another channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</source>
-        <target state="new">Do you really want to delete <x id="PH" equiv-text="videoChannel.displayName"/>?
-It will delete <x id="PH_1" equiv-text="videoChannel.videosCount"/> videos uploaded in this channel, and you will not be able to create another
-channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</target>
+        <target state="translated">Вы действительно хотите удалить <x id="PH" equiv-text="videoChannel.displayName"/>? Это приведет к удалению <x id="PH_1" equiv-text="videoChannel.videosCount"/> видео, загруженных на этот канал, и вы не сможете создать другой канал или учетную запись с таким же именем (<x id="PH_2" equiv-text="videoChannel.name"/>)!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">55,57</context>
@@ -7693,7 +7691,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="166448092104563965" datatype="html">
         <source>Password protected</source>
-        <target state="new">Password protected</target>
+        <target state="translated">Защищен паролем</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
           <context context-type="linenumber">8</context>
@@ -8985,7 +8983,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="1882931826815906053" datatype="html">
         <source>With Web Videos</source>
-        <target state="new">With Web Videos</target>
+        <target state="translated">С Веб-Видео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">63</context>
@@ -8993,7 +8991,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="1590370632695044398" datatype="html">
         <source>Without Web Videos</source>
-        <target state="new">Without Web Videos</target>
+        <target state="translated">Без Веб-Видео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">67</context>
@@ -10380,7 +10378,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="518461007481947848" datatype="html">
         <source>Cache size is required.</source>
-        <target state="new">Cache size is required.</target>
+        <target state="translated">Требуется размер кэша.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">28</context>
@@ -10388,7 +10386,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="5481098690555703943" datatype="html">
         <source>Cache size must be greater than 1.</source>
-        <target state="new">Cache size must be greater than 1.</target>
+        <target state="translated">Размер кэша должен быть больше 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">29</context>
@@ -10396,7 +10394,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="4704896848161515188" datatype="html">
         <source>Cache size must be a number.</source>
-        <target state="new">Cache size must be a number.</target>
+        <target state="translated">Размер кэша должен быть числом.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">30</context>
@@ -11075,7 +11073,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="2340164151654372915" datatype="html">
         <source>A password should be at least 2 characters long.</source>
-        <target state="new">A password should be at least 2 characters long.</target>
+        <target state="translated">Длина пароля должна составлять не менее 2 символов.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">32</context>
@@ -11083,7 +11081,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="7699381877503388166" datatype="html">
         <source>A password should be shorter than 100 characters long.</source>
-        <target state="new">A password should be shorter than 100 characters long.</target>
+        <target state="translated">Длина пароля должна быть не более 100 символов.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">33</context>
@@ -11091,7 +11089,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="3116180442048363146" datatype="html">
         <source>A password is required for password protected video.</source>
-        <target state="new">A password is required for password protected video.</target>
+        <target state="translated">Для просмотра видео, защищенного паролем, требуется пароль.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">34</context>
@@ -12253,7 +12251,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="6726093171366409167" datatype="html">
         <source>Run Web Video transcoding</source>
-        <target state="new">Run Web Video transcoding</target>
+        <target state="translated">Запустите перекодирование веб-видео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -12271,7 +12269,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="72391380513979568" datatype="html">
         <source>Delete Web Video files</source>
-        <target state="new">Delete Web Video files</target>
+        <target state="translated">Удаление веб-видеофайлов</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -12679,7 +12677,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="6173113330681958102" datatype="html">
         <source>Only users with the appropriate password can see this video</source>
-        <target state="new">Only users with the appropriate password can see this video</target>
+        <target state="translated">Только пользователи с соответствующим паролем могут просмотреть это видео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">429</context>
@@ -12817,7 +12815,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="6851759241723629925" datatype="html">
         <source>You need a password to watch this video</source>
-        <target state="new">You need a password to watch this video</target>
+        <target state="translated">Вам нужен пароль, чтобы посмотреть это видео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">403</context>
@@ -12825,7 +12823,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="7116606560384080593" datatype="html">
         <source>This video is password protected</source>
-        <target state="new">This video is password protected</target>
+        <target state="translated">Это видео защищено паролем</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">404</context>
@@ -12833,7 +12831,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="6566384659758828708" datatype="html">
         <source>Incorrect password, please enter a correct password</source>
-        <target state="new">Incorrect password, please enter a correct password</target>
+        <target state="translated">Неверный пароль, пожалуйста, введите правильный пароль</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">405</context>
