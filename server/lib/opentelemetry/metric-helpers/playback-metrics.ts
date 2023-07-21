@@ -1,4 +1,4 @@
-import { Counter, Histogram, Meter } from '@opentelemetry/api'
+import { Counter, Meter } from '@opentelemetry/api'
 import { MVideoImmutable } from '@server/types/models'
 import { PlaybackMetricCreate } from '@shared/models'
 
@@ -11,7 +11,10 @@ export class PlaybackMetrics {
 
   private downloadedBytesHTTPCounter: Counter
 
-  private peersP2PPeers: Histogram
+  private peersP2PPeersGaugeBuffer: {
+    value: number
+    attributes: any
+  }[] = []
 
   constructor (private readonly meter: Meter) {
 
@@ -37,8 +40,14 @@ export class PlaybackMetrics {
       description: 'Uploaded bytes with P2P by PeerTube player.'
     })
 
-    this.peersP2PPeers = this.meter.createHistogram('peertube_playback_p2p_peers', {
+    this.meter.createObservableGauge('peertube_playback_p2p_peers', {
       description: 'Total P2P peers connected to the PeerTube player.'
+    }).addCallback(observableResult => {
+      for (const gauge of this.peersP2PPeersGaugeBuffer) {
+        observableResult.observe(gauge.value, gauge.attributes)
+      }
+
+      this.peersP2PPeersGaugeBuffer = []
     })
   }
 
@@ -66,6 +75,11 @@ export class PlaybackMetrics {
 
     this.uploadedBytesP2PCounter.add(metrics.uploadedBytesP2P, attributes)
 
-    if (metrics.totalPeers) this.peersP2PPeers.record(metrics.totalPeers, attributes)
+    if (metrics.p2pPeers) {
+      this.peersP2PPeersGaugeBuffer.push({
+        value: metrics.p2pPeers,
+        attributes
+      })
+    }
   }
 }

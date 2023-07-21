@@ -19,7 +19,7 @@ class MetricsPlugin extends Plugin {
   private errors = 0
 
   private p2pEnabled: boolean
-  private totalPeers = 0
+  private p2pPeers = 0
 
   private lastPlayerNetworkInfo: PlayerNetworkInfo
 
@@ -111,12 +111,12 @@ class MetricsPlugin extends Plugin {
 
         errors: this.errors,
 
-        downloadedBytesP2P: this.downloadedBytesP2P,
         downloadedBytesHTTP: this.downloadedBytesHTTP,
 
+        downloadedBytesP2P: this.downloadedBytesP2P,
         uploadedBytesP2P: this.uploadedBytesP2P,
 
-        totalPeers: this.totalPeers,
+        p2pPeers: this.p2pPeers,
         p2pEnabled: this.p2pEnabled,
 
         videoId: this.options_.videoUUID()
@@ -139,23 +139,14 @@ class MetricsPlugin extends Plugin {
   }
 
   private trackBytes () {
-    this.player.on('p2p-info', (_event, data: PlayerNetworkInfo) => {
+    this.player.on('network-info', (_event, data: PlayerNetworkInfo) => {
       this.downloadedBytesHTTP += Math.round(data.http.downloaded - (this.lastPlayerNetworkInfo?.http.downloaded || 0))
-      this.downloadedBytesP2P += Math.round(data.p2p.downloaded - (this.lastPlayerNetworkInfo?.p2p.downloaded || 0))
+      this.downloadedBytesP2P += Math.round((data.p2p?.downloaded || 0) - (this.lastPlayerNetworkInfo?.p2p?.downloaded || 0))
 
-      this.uploadedBytesP2P += Math.round(data.p2p.uploaded - (this.lastPlayerNetworkInfo?.p2p.uploaded || 0))
+      this.uploadedBytesP2P += Math.round((data.p2p?.uploaded || 0) - (this.lastPlayerNetworkInfo?.p2p?.uploaded || 0))
 
-      this.totalPeers = data.p2p.numPeers
-      this.p2pEnabled = true
-
-      this.lastPlayerNetworkInfo = data
-    })
-
-    this.player.on('http-info', (_event, data: PlayerNetworkInfo) => {
-      this.downloadedBytesHTTP += Math.round(data.http.downloaded - (this.lastPlayerNetworkInfo?.http.downloaded || 0))
-
-      this.totalPeers = 0
-      this.p2pEnabled = false
+      this.p2pPeers = data.p2p?.peersP2POnly
+      this.p2pEnabled = !!data.p2p
 
       this.lastPlayerNetworkInfo = data
     })

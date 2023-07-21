@@ -39,15 +39,14 @@ class P2PInfoButton extends Button {
     subDivP2P.appendChild(peersText)
 
     const subDivHttp = videojs.dom.createEl('div', { className: 'vjs-peertube-hidden' }) as HTMLElement
-    const subDivHttpText = videojs.dom.createEl('span', {
-      className: 'http-fallback',
-      textContent: 'HTTP'
-    })
+    const subDivHttpText = videojs.dom.createEl('span', { className: 'http-fallback' })
 
     subDivHttp.appendChild(subDivHttpText)
     div.appendChild(subDivHttp)
 
-    this.player_.on('p2p-info', (_event: any, data: PlayerNetworkInfo) => {
+    this.player_.on('network-info', (_event: any, data: PlayerNetworkInfo) => {
+      if (!data.p2p) return
+
       subDivP2P.className = 'vjs-peertube-displayed'
       subDivHttp.className = 'vjs-peertube-hidden'
 
@@ -58,7 +57,7 @@ class P2PInfoButton extends Button {
       const uploadSpeed = bytes(p2pStats.uploadSpeed)
       const totalDownloaded = bytes(p2pStats.downloaded + httpStats.downloaded)
       const totalUploaded = bytes(p2pStats.uploaded)
-      const numPeers = p2pStats.numPeers
+      const numPeers = p2pStats.peersWithWebSeed
 
       subDivP2P.title = this.player().localize('Total downloaded: ') + totalDownloaded.join(' ') + '\n'
 
@@ -85,8 +84,13 @@ class P2PInfoButton extends Button {
       subDivP2P.className = 'vjs-peertube-displayed'
     })
 
-    this.player_.on('http-info', (_event, data: PlayerNetworkInfo) => {
-      // We are in HTTP fallback
+    this.player_.on('network-info', (_event, data: PlayerNetworkInfo) => {
+      if (data.p2p) return
+
+      if (data.source === 'web-video') subDivHttpText.textContent = 'HTTP'
+      else if (data.source === 'p2p-media-loader') subDivHttpText.textContent = 'HLS'
+
+      // We are in HTTP mode
       subDivHttp.className = 'vjs-peertube-displayed'
       subDivP2P.className = 'vjs-peertube-hidden'
 

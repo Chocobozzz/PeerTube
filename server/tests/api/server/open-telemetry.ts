@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { expectLogContain, expectLogDoesNotContain, MockHTTP } from '@server/tests/shared'
-import { HttpStatusCode, VideoPrivacy, VideoResolution } from '@shared/models'
+import { HttpStatusCode, PlaybackMetricCreate, VideoPrivacy, VideoResolution } from '@shared/models'
 import { cleanupTests, createSingleServer, makeRawRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
 describe('Open Telemetry', function () {
@@ -62,14 +62,49 @@ describe('Open Telemetry', function () {
           downloadedBytesP2P: 0,
           downloadedBytesHTTP: 0,
           uploadedBytesP2P: 5,
-          totalPeers: 1,
+          p2pPeers: 1,
           p2pEnabled: false,
           videoId: video.uuid
         }
       })
 
       const res = await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.OK_200 })
+
       expect(res.text).to.contain('peertube_playback_http_downloaded_bytes_total{')
+      expect(res.text).to.contain('peertube_playback_p2p_peers{')
+      expect(res.text).to.contain('p2pEnabled="false"')
+    })
+
+    it('Should take the last playback metric', async function () {
+      await setAccessTokensToServers([ server ])
+
+      const video = await server.videos.quickUpload({ name: 'video' })
+
+      const metrics = {
+        playerMode: 'p2p-media-loader',
+        resolution: VideoResolution.H_1080P,
+        fps: 30,
+        resolutionChanges: 1,
+        errors: 2,
+        downloadedBytesP2P: 0,
+        downloadedBytesHTTP: 0,
+        uploadedBytesP2P: 5,
+        p2pPeers: 7,
+        p2pEnabled: false,
+        videoId: video.uuid
+      } as PlaybackMetricCreate
+
+      await server.metrics.addPlaybackMetric({ metrics })
+
+      metrics.p2pPeers = 42
+      await server.metrics.addPlaybackMetric({ metrics })
+
+      const res = await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.OK_200 })
+
+      // eslint-disable-next-line max-len
+      const label = `{videoOrigin="local",playerMode="p2p-media-loader",resolution="1080",fps="30",p2pEnabled="false",videoUUID="${video.uuid}"}`
+      expect(res.text).to.contain(`peertube_playback_p2p_peers${label} 42`)
+      expect(res.text).to.not.contain(`peertube_playback_p2p_peers${label} 7`)
     })
 
     it('Should disable http request duration metrics', async function () {

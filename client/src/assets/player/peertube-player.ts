@@ -203,7 +203,7 @@ export class PeerTubePlayer {
 
       this.player.one('error', () => handleError())
 
-      this.player.on('p2p-info', (_, data: PlayerNetworkInfo) => {
+      this.player.on('network-info', (_, data: PlayerNetworkInfo) => {
         if (data.source !== 'p2p-media-loader' || isNaN(data.bandwidthEstimate)) return
 
         saveAverageBandwidth(data.bandwidthEstimate)

@@ -184,6 +184,8 @@ type P2PMediaLoaderPluginOptions = {
   type: string
   src: string
 
+  p2pEnabled: boolean
+
   loader: P2PMediaLoader
   segmentValidator: SegmentValidator
 
@@ -240,9 +242,12 @@ type PlayerNetworkInfo = {
   p2p?: {
     downloadSpeed: number
     uploadSpeed: number
+
     downloaded: number
     uploaded: number
-    numPeers: number
+
+    peersWithWebSeed: number
+    peersP2POnly: number
   }
 
   // In bytes

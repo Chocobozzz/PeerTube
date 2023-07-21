@@ -38,6 +38,7 @@ describe('Test metrics API validators', function () {
         fps: 30,
         resolutionChanges: 1,
         errors: 2,
+        p2pEnabled: true,
         downloadedBytesP2P: 0,
         downloadedBytesHTTP: 0,
         uploadedBytesP2P: 0,
@@ -145,7 +146,13 @@ describe('Test metrics API validators', function () {
       })
     })
 
-    it('Should fail with an invalid p2pEnabled', async function () {
+    it('Should fail with a missing/invalid p2pEnabled', async function () {
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        fields: omit(baseParams, [ 'p2pEnabled' ])
+      })
+
       await makePostBodyRequest({
         url: server.url,
         path,
@@ -157,7 +164,7 @@ describe('Test metrics API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        fields: { ...baseParams, totalPeers: 'toto' }
+        fields: { ...baseParams, p2pPeers: 'toto' }
       })
     })
 

@@ -16,7 +16,8 @@ class P2pMediaLoaderPlugin extends Plugin {
   private statsP2PBytes = {
     pendingDownload: [] as number[],
     pendingUpload: [] as number[],
-    numPeers: 0,
+    peersWithWebSeed: 0,
+    peersP2POnly: 0,
     totalDownload: 0,
     totalUpload: 0
   }
@@ -113,7 +114,7 @@ class P2pMediaLoaderPlugin extends Plugin {
       this.options.redundancyUrlManager.removeBySegmentUrl(segment.requestUrl)
     })
 
-    this.statsP2PBytes.numPeers = 1 + this.options.redundancyUrlManager.countBaseUrls()
+    this.statsP2PBytes.peersWithWebSeed = 1 + this.options.redundancyUrlManager.countBaseUrls()
 
     this.runStats()
 
@@ -138,8 +139,14 @@ class P2pMediaLoaderPlugin extends Plugin {
       this.statsP2PBytes.totalUpload += bytes
     })
 
-    this.p2pEngine.on(Events.PeerConnect, () => this.statsP2PBytes.numPeers++)
-    this.p2pEngine.on(Events.PeerClose, () => this.statsP2PBytes.numPeers--)
+    this.p2pEngine.on(Events.PeerConnect, () => {
+      this.statsP2PBytes.peersWithWebSeed++
+      this.statsP2PBytes.peersP2POnly++
+    })
+    this.p2pEngine.on(Events.PeerClose, () => {
+      this.statsP2PBytes.peersWithWebSeed--
+      this.statsP2PBytes.peersP2POnly--
+    })
 
     this.networkInfoInterval = setInterval(() => {
       const p2pDownloadSpeed = this.arraySum(this.statsP2PBytes.pendingDownload)
@@ -151,20 +158,23 @@ class P2pMediaLoaderPlugin extends Plugin {
       this.statsP2PBytes.pendingUpload = []
       this.statsHTTPBytes.pendingDownload = []
 
-      return this.player.trigger('p2p-info', {
+      return this.player.trigger('network-info', {
         source: 'p2p-media-loader',
+        bandwidthEstimate: (this.hlsjs as any).bandwidthEstimate / 8,
         http: {
           downloadSpeed: httpDownloadSpeed,
           downloaded: this.statsHTTPBytes.totalDownload
         },
-        p2p: {
-          downloadSpeed: p2pDownloadSpeed,
-          uploadSpeed: p2pUploadSpeed,
-          numPeers: this.statsP2PBytes.numPeers,
-          downloaded: this.statsP2PBytes.totalDownload,
-          uploaded: this.statsP2PBytes.totalUpload
-        },
-        bandwidthEstimate: (this.hlsjs as any).bandwidthEstimate / 8
+        p2p: this.options.p2pEnabled
+          ? {
+            downloadSpeed: p2pDownloadSpeed,
+            uploadSpeed: p2pUploadSpeed,
+            peersWithWebSeed: this.statsP2PBytes.peersWithWebSeed,
+            peersP2POnly: this.statsP2PBytes.peersP2POnly,
+            downloaded: this.statsP2PBytes.totalDownload,
+            uploaded: this.statsP2PBytes.totalUpload
+          }
+          : undefined
       } as PlayerNetworkInfo)
     }, 1000)
   }

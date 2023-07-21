@@ -175,7 +175,7 @@ class WebVideoPlugin extends Plugin {
 
   private setupNetworkInfoInterval () {
     this.networkInfoInterval = setInterval(() => {
-      return this.player.trigger('http-info', {
+      return this.player.trigger('network-info', {
         source: 'web-video',
         http: {
           downloaded: this.player.bufferedPercent() * this.currentVideoFile.size

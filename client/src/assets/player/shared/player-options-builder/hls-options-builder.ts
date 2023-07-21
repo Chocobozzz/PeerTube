@@ -44,6 +44,8 @@ export class HLSOptionsBuilder {
       requiresUserAuth: this.options.requiresUserAuth,
       videoFileToken: this.options.videoFileToken,
 
+      p2pEnabled: this.options.p2pEnabled,
+
       redundancyUrlManager,
       type: 'application/x-mpegURL',
       src: this.options.hls.playlistUrl,

@@ -63,8 +63,7 @@ class StatsCard extends Component {
 
   private liveLatency: InfoElement
 
-  private onP2PInfoHandler: (_event: any, data: EventPlayerNetworkInfo) => void
-  private onHTTPInfoHandler: (_event: any, data: EventPlayerNetworkInfo) => void
+  private onNetworkInfoHandler: (_event: any, data: EventPlayerNetworkInfo) => void
 
   createEl () {
     this.containerEl = videojs.dom.createEl('div', {
@@ -89,33 +88,26 @@ class StatsCard extends Component {
 
     this.populateInfoBlocks()
 
-    this.onP2PInfoHandler = (_event, data) => {
+    this.onNetworkInfoHandler = (_event, data) => {
       this.mode = data.source
 
       const p2pStats = data.p2p
       const httpStats = data.http
 
-      this.playerNetworkInfo.downloadSpeed = bytes(p2pStats.downloadSpeed + httpStats.downloadSpeed).join(' ')
-      this.playerNetworkInfo.uploadSpeed = bytes(p2pStats.uploadSpeed).join(' ')
-      this.playerNetworkInfo.totalDownloaded = bytes(p2pStats.downloaded + httpStats.downloaded).join(' ')
-      this.playerNetworkInfo.totalUploaded = bytes(p2pStats.uploaded).join(' ')
-      this.playerNetworkInfo.numPeers = p2pStats.numPeers
-      this.playerNetworkInfo.averageBandwidth = bytes(data.bandwidthEstimate).join(' ') + '/s'
+      this.playerNetworkInfo.downloadSpeed = bytes((p2pStats?.downloadSpeed || 0) + (httpStats.downloadSpeed || 0)).join(' ')
+      this.playerNetworkInfo.uploadSpeed = bytes(p2pStats?.uploadSpeed || 0).join(' ')
+      this.playerNetworkInfo.totalDownloaded = bytes((p2pStats?.downloaded || 0) + httpStats.downloaded).join(' ')
+      this.playerNetworkInfo.totalUploaded = bytes(p2pStats?.uploaded || 0).join(' ')
+      this.playerNetworkInfo.numPeers = p2pStats?.peersWithWebSeed
 
       if (data.source === 'p2p-media-loader') {
+        this.playerNetworkInfo.averageBandwidth = bytes(data.bandwidthEstimate).join(' ') + '/s'
         this.playerNetworkInfo.downloadedFromServer = bytes(httpStats.downloaded).join(' ')
-        this.playerNetworkInfo.downloadedFromPeers = bytes(p2pStats.downloaded).join(' ')
+        this.playerNetworkInfo.downloadedFromPeers = bytes(p2pStats?.downloaded || 0).join(' ')
       }
     }
 
-    this.onHTTPInfoHandler = (_event, data) => {
-      this.mode = data.source
-
-      this.playerNetworkInfo.totalDownloaded = bytes(data.http.downloaded).join(' ')
-    }
-
-    this.player().on('p2p-info', this.onP2PInfoHandler)
-    this.player().on('http-info', this.onHTTPInfoHandler)
+    this.player().on('network-info', this.onNetworkInfoHandler)
 
     return this.containerEl
   }
@@ -123,8 +115,7 @@ class StatsCard extends Component {
   dispose () {
     if (this.updateInterval) clearInterval(this.updateInterval)
 
-    this.player().off('p2p-info', this.onP2PInfoHandler)
-    this.player().off('http-info', this.onHTTPInfoHandler)
+    this.player().off('network-info', this.onNetworkInfoHandler)
 
     super.dispose()
   }

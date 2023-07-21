@@ -9528,6 +9528,11 @@ components:
         fps:
           type: number
           description: Current player video fps
+        p2pEnabled:
+          type: boolean
+        p2pPeers:
+          type: number
+          description: P2P peers connected (doesn't include WebSeed peers)
         resolutionChanges:
           type: number
           description: How many resolution changes occured since the last metric creation
@@ -9555,6 +9560,7 @@ components:
         - downloadedBytesP2P
         - downloadedBytesHTTP
         - uploadedBytesP2P
+        - p2pEnabled
         - videoId
 
     RunnerRegistrationToken:
