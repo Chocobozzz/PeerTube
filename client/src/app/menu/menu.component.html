@@ -57,11 +57,11 @@
                 <span class="ms-auto muted">{{ nsfwPolicy }}</span>
               </a>
 
-              <button class="dropdown-item" (click)="toggleUseP2P()" (mousedown)="$event.stopPropagation()" ngbDropdownItem>
+              <button class="dropdown-item" (mousedown)="$event.stopPropagation(); toggleUseP2P()" ngbDropdownItem>
                 <my-global-icon iconName="p2p" aria-hidden="true"></my-global-icon>
                 <ng-container i18n>Help share videos</ng-container>
 
-                <my-input-switch inputName="p2p-enabled" class="ms-auto" [checked]="user.p2pEnabled"></my-input-switch>
+                <my-input-switch inputName="p2p-enabled" class="ms-auto" [preventUpdate]="true" [checked]="user.p2pEnabled"></my-input-switch>
               </button>
 
               <div class="dropdown-divider"></div>
