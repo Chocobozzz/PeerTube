@@ -372,6 +372,7 @@ plugins:
     url: 'https://packages.joinpeertube.org'
 
 federation:
+  sign_federated_fetches: false
   videos:
     federate_unlisted: false
 

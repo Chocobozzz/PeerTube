@@ -309,7 +309,8 @@ const CONFIG = {
     VIDEOS: {
       FEDERATE_UNLISTED: config.get<boolean>('federation.videos.federate_unlisted'),
       CLEANUP_REMOTE_INTERACTIONS: config.get<boolean>('federation.videos.cleanup_remote_interactions')
-    }
+    },
+    SIGN_FEDERATED_FETCHES: config.get<boolean>('federation.sign_federated_fetches')
   },
   PEERTUBE: {
     CHECK_LATEST_VERSION: {
