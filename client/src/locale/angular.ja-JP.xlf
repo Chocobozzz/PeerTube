@@ -597,7 +597,7 @@
       </trans-unit>
       <trans-unit id="4435640428611044716" datatype="html">
         <source>Are you sure you want to delete Web Video files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
-        <target state="translated">本当にウェブ動画ファイルの{count, plural, =1 {1 件の動画} other {<x id="count"/> 件の動画}}を削除してもよろしいですか？</target>
+        <target state="translated">本当にWeb動画ファイルの{count, plural, =1 {1 件の動画} other {<x id="count"/> 件の動画}}を削除してもよろしいですか？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">277</context>
@@ -2470,12 +2470,12 @@
       </trans-unit>
       <trans-unit id="6096602245926393232" datatype="html">
         <source>Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</source>
-        <target state="translated">本当に {count, plural, =1 {<x id="username"/> の登録リクエストを削除しますか？} other {<x id="count"/> 件の登録リクエストを削除しますか？}}</target>
+        <target state="translated">本当に、{count, plural, =1 {<x id="username"/>の登録リクエストを削除しますか？} other {<x id="count"/>件の登録リクエストを削除しますか？}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="9152096266184328708" datatype="html">
         <source>Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</source>
-        <target state="translated">{count, plural, =1 {<x id="username"/> の登録リクエスト} other {<x id="count"/> 件の登録リクエスト}}を削除しました</target>
+        <target state="translated">{count, plural, =1 {<x id="username"/>の登録リクエスト} other {<x id="count"/>件の登録リクエスト}}を削除しました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
       <trans-unit id="2806917038528218276" datatype="html">
@@ -5527,7 +5527,7 @@
       </trans-unit>
       <trans-unit id="2093595615152706886" datatype="html">
         <source>Web Videos enabled</source>
-        <target state="translated">ウェブ動画を有効にする</target>
+        <target state="translated">Web動画を有効にする</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">74</context>
@@ -5551,7 +5551,7 @@
       </trans-unit>
       <trans-unit id="4354548488369167450" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ffmpeg 4.1以上が必要<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>HLSプレイリストとフラグメント化されたMP4ファイルの生成は、ウェブ動画よりもスムーズな再生が可能になります:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>解像度の変更がスムーズになる<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>特に長時間の動画において再生の開始が早くなる<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>より安定した再生 (より少ないバグ/無限読み込み)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Web動画サポートも有効になっている場合、2倍のストレージスペースが必要となります<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">94,103</context>
@@ -6799,7 +6799,7 @@
       </trans-unit>
       <trans-unit id="2584956257063845668" datatype="html">
         <source>Your email has been verified and your account request has been sent!</source>
-        <target state="translated">あなたのメールが認証され、アカウントリクエストが送信されました!</target>
+        <target state="translated">あなたのメールアドレスが認証され、アカウントリクエストが送信されました!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">7</context>
@@ -6819,7 +6819,7 @@
       </trans-unit>
       <trans-unit id="381800444567495906" datatype="html">
         <source>Your email has been verified and your account has been created!</source>
-        <target state="translated">あなたのメールが認証され、アカウントが作成されました!</target>
+        <target state="translated">あなたのメールアドレスが認証され、アカウントが作成されました!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">15</context>
@@ -8931,7 +8931,7 @@
       </trans-unit>
       <trans-unit id="1882931826815906053" datatype="html">
         <source>With Web Videos</source>
-        <target state="translated">ウェブ動画有効</target>
+        <target state="translated">Web動画有効</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">63</context>
@@ -8939,7 +8939,7 @@
       </trans-unit>
       <trans-unit id="1590370632695044398" datatype="html">
         <source>Without Web Videos</source>
-        <target state="translated">ウェブ動画無効</target>
+        <target state="translated">Web動画無効</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">67</context>
@@ -12193,7 +12193,7 @@
       </trans-unit>
       <trans-unit id="6726093171366409167" datatype="html">
         <source>Run Web Video transcoding</source>
-        <target state="translated">ウェブ動画のトランスコードを開始</target>
+        <target state="translated">Web動画のトランスコードを開始</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -12211,7 +12211,7 @@
       </trans-unit>
       <trans-unit id="72391380513979568" datatype="html">
         <source>Delete Web Video files</source>
-        <target state="translated">ウェブ動画ファイルを削除</target>
+        <target state="translated">Web動画ファイルを削除</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">114</context>
