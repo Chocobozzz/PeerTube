@@ -4868,7 +4868,7 @@
       </trans-unit>
       <trans-unit id="5480243297215266596" datatype="html">
         <source>Why did you create this instance?</source>
-        <target state="translated">なぜこのインスタンスを建てたのですか？</target>
+        <target state="translated">なぜこのインスタンスを立てたのですか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
       <trans-unit id="6995481962115300007" datatype="html">
@@ -8171,7 +8171,7 @@
       </trans-unit>
       <trans-unit id="149121389669248117" datatype="html">
         <source>Violent or Repulsive</source>
-        <target state="translated">暴力的または非常に不快</target>
+        <target state="translated">暴力的または不快</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="2493388551376623687" datatype="html">
