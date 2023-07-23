@@ -828,7 +828,7 @@
       </trans-unit>
       <trans-unit id="5842305303142677924" datatype="html">
         <source>User registration</source>
-        <target state="translated">Реєстрація користувача</target>
+        <target state="translated">Реєстрація користувачів</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">21</context>
@@ -836,7 +836,7 @@
       </trans-unit>
       <trans-unit id="2562108310156005500" datatype="html">
         <source>Video uploads</source>
-        <target state="translated">Відвантаження відео</target>
+        <target state="translated">Вивантаження відео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
@@ -1175,7 +1175,7 @@
       </trans-unit>
       <trans-unit id="2101170466365500913" datatype="html">
         <source>Logging into an account lets you publish content</source>
-        <target state="translated">Вхід до облікового запису дозволяє публікувати контент</target>
+        <target state="translated">Вхід до облікового запису дає змогу публікувати матеріали</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="6584143415159913044" datatype="html">
@@ -2508,7 +2508,7 @@
       </trans-unit>
       <trans-unit id="9155449485123349070" datatype="html">
         <source>Contains sensitive content</source>
-        <target state="translated">Містить делікатний контент</target>
+        <target state="translated">Містить делікатні матеріали</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">143</context></context-group>
       </trans-unit>
       <trans-unit id="4850841867094321899" datatype="html">
@@ -4454,7 +4454,7 @@
       </trans-unit>
       <trans-unit id="9205443410527464015" datatype="html">
         <source>Plugins enabled</source>
-        <target state="translated">Плагіни увімкнено</target>
+        <target state="translated">Плагіни ввімкнено</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="5410940035535748578" datatype="html">
