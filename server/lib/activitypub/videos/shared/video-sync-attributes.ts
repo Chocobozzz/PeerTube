@@ -17,11 +17,14 @@ type SyncParam = {
   rates: boolean
   shares: boolean
   comments: boolean
-  thumbnail: boolean
   refreshVideo?: boolean
 }
 
-async function syncVideoExternalAttributes (video: MVideo, fetchedVideo: VideoObject, syncParam: SyncParam) {
+async function syncVideoExternalAttributes (
+  video: MVideo,
+  fetchedVideo: VideoObject,
+  syncParam: Pick<SyncParam, 'rates' | 'shares' | 'comments'>
+) {
   logger.info('Adding likes/dislikes/shares/comments of video %s.', video.uuid)
 
   const ratePromise = updateVideoRates(video, fetchedVideo)

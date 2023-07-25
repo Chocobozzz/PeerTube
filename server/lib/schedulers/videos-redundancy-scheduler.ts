@@ -365,7 +365,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     // We need more attributes and check if the video still exists
     const getVideoOptions = {
       videoObject: videoUrl,
-      syncParam: { rates: false, shares: false, comments: false, thumbnail: false, refreshVideo: true },
+      syncParam: { rates: false, shares: false, comments: false, refreshVideo: true },
       fetchType: 'all' as 'all'
     }
     const { video } = await getOrCreateAPVideo(getVideoOptions)

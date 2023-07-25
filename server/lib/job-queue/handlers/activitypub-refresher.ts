@@ -28,7 +28,7 @@ export {
 
 async function refreshVideo (videoUrl: string) {
   const fetchType = 'all' as 'all'
-  const syncParam = { rates: true, shares: true, comments: true, thumbnail: true }
+  const syncParam = { rates: true, shares: true, comments: true }
 
   const videoFromDatabase = await loadVideoByUrl(videoUrl, fetchType)
   if (videoFromDatabase) {

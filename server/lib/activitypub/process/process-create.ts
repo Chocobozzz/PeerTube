@@ -70,7 +70,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processCreateVideo (videoToCreateData: VideoObject, notify: boolean) {
-  const syncParam = { rates: false, shares: false, comments: false, thumbnail: true, refreshVideo: false }
+  const syncParam = { rates: false, shares: false, comments: false, refreshVideo: false }
   const { video, created } = await getOrCreateAPVideo({ videoObject: videoToCreateData, syncParam })
 
   if (created && notify) Notifier.Instance.notifyOnNewVideoIfNeeded(video)

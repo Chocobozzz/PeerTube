@@ -137,7 +137,6 @@ async function searchVideoURI (url: string, res: express.Response) {
         rates: false,
         shares: false,
         comments: false,
-        thumbnail: true,
         refreshVideo: false
       }
 

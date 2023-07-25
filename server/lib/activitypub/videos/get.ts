@@ -43,7 +43,7 @@ async function getOrCreateAPVideo (
   options: GetVideoParamAll | GetVideoParamImmutable | GetVideoParamOther
 ): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable> {
   // Default params
-  const syncParam = options.syncParam || { rates: true, shares: true, comments: true, thumbnail: true, refreshVideo: false }
+  const syncParam = options.syncParam || { rates: true, shares: true, comments: true, refreshVideo: false }
   const fetchType = options.fetchType || 'all'
   const allowRefresh = options.allowRefresh !== false
 
@@ -68,7 +68,7 @@ async function getOrCreateAPVideo (
 
   try {
     const creator = new APVideoCreator(videoObject)
-    const { autoBlacklisted, videoCreated } = await retryTransactionWrapper(creator.create.bind(creator), syncParam.thumbnail)
+    const { autoBlacklisted, videoCreated } = await retryTransactionWrapper(creator.create.bind(creator))
 
     await syncVideoExternalAttributes(videoCreated, videoObject, syncParam)
 
