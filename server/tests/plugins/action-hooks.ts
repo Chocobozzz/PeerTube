@@ -40,6 +40,8 @@ describe('Test plugin action hooks', function () {
       }
     })
 
+    await servers[0].config.enableFileUpdate()
+
     await doubleFollow(servers[0], servers[1])
   })
 
@@ -68,6 +70,12 @@ describe('Test plugin action hooks', function () {
       await servers[0].views.simulateView({ id: videoUUID })
 
       await checkHook('action:api.video.viewed')
+    })
+
+    it('Should run action:api.video.file-updated', async function () {
+      await servers[0].videos.replaceSourceFile({ videoId: videoUUID, fixture: 'video_short.mp4' })
+
+      await checkHook('action:api.video.file-updated')
     })
 
     it('Should run action:api.video.deleted', async function () {

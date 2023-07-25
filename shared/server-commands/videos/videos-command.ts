@@ -394,6 +394,7 @@ export class VideosCommand extends AbstractCommand {
     attributes?: VideoEdit
     mode?: 'legacy' | 'resumable' // default legacy
     waitTorrentGeneration?: boolean // default true
+    completedExpectedStatus?: HttpStatusCode
   } = {}) {
     const { mode = 'legacy', waitTorrentGeneration = true } = options
     let defaultChannelId = 1
@@ -461,8 +462,9 @@ export class VideosCommand extends AbstractCommand {
   async buildResumeUpload (options: OverrideCommandOptions & {
     path: string
     attributes: { fixture?: string } & { [id: string]: any }
+    completedExpectedStatus?: HttpStatusCode // When the upload is finished
   }): Promise<VideoCreateResult> {
-    const { path, attributes, expectedStatus = HttpStatusCode.OK_200 } = options
+    const { path, attributes, expectedStatus = HttpStatusCode.OK_200, completedExpectedStatus } = options
 
     let size = 0
     let videoFilePath: string
@@ -503,7 +505,8 @@ export class VideosCommand extends AbstractCommand {
         path,
         pathUploadId,
         videoFilePath,
-        size
+        size,
+        expectedStatus: completedExpectedStatus
       })
 
       if (result.statusCode === HttpStatusCode.OK_200) {
@@ -600,12 +603,14 @@ export class VideosCommand extends AbstractCommand {
         try {
           readable.pause()
 
+          const byterangeStart = start + chunk.length - 1
+
           const headers = {
             'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/octet-stream',
             'Content-Range': contentRangeBuilder
               ? contentRangeBuilder(start, chunk)
-              : `bytes ${start}-${start + chunk.length - 1}/${size}`,
+              : `bytes ${start}-${byterangeStart}/${size}`,
             'Content-Length': contentLength ? contentLength + '' : chunk.length + ''
           }
 
@@ -625,13 +630,19 @@ export class VideosCommand extends AbstractCommand {
 
           start += chunk.length
 
-          if (res.statusCode === expectedStatus) {
-            return resolve(res)
-          }
+          // Last request, check final status
+          if (byterangeStart + 1 === size) {
+            if (res.statusCode === expectedStatus) {
+              return resolve(res)
+            }
 
-          if (res.statusCode !== HttpStatusCode.PERMANENT_REDIRECT_308) {
-            readable.off('data', onData)
-            return reject(new Error('Incorrect transient behaviour sending intermediary chunks'))
+            if (res.statusCode !== HttpStatusCode.PERMANENT_REDIRECT_308) {
+              readable.off('data', onData)
+
+              // eslint-disable-next-line max-len
+              const message = `Incorrect transient behaviour sending intermediary chunks. Status code is ${res.statusCode} instead of ${expectedStatus}`
+              return reject(new Error(message))
+            }
           }
 
           readable.resume()
@@ -694,6 +705,7 @@ export class VideosCommand extends AbstractCommand {
   replaceSourceFile (options: OverrideCommandOptions & {
     videoId: number | string
     fixture: string
+    completedExpectedStatus?: HttpStatusCode
   }) {
     return this.buildResumeUpload({
       ...options,

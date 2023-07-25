@@ -9,6 +9,8 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       'action:api.video.uploaded',
       'action:api.video.viewed',
 
+      'action:api.video.file-updated',
+
       'action:api.video-channel.created',
       'action:api.video-channel.updated',
       'action:api.video-channel.deleted',
@@ -159,6 +161,16 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       }
     })
   }
+
+  registerHook({
+    target: 'filter:api.video.update-file.accept.result',
+    handler: ({ accepted }, { videoFile }) => {
+      if (!accepted) return { accepted: false }
+      if (videoFile.filename.includes('webm')) return { accepted: false, errorMessage: 'no webm' }
+
+      return { accepted: true }
+    }
+  })
 
   registerHook({
     target: 'filter:api.video.pre-import-url.accept.result',

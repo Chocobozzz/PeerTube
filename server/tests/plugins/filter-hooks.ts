@@ -64,6 +64,11 @@ describe('Test plugin filter hooks', function () {
       newConfig: {
         live: { enabled: true },
         signup: { enabled: true },
+        videoFile: {
+          update: {
+            enabled: true
+          }
+        },
         import: {
           videos: {
             http: { enabled: true },
@@ -178,7 +183,19 @@ describe('Test plugin filter hooks', function () {
   describe('Video/live/import accept', function () {
 
     it('Should run filter:api.video.upload.accept.result', async function () {
-      await servers[0].videos.upload({ attributes: { name: 'video with bad word' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      const options = { attributes: { name: 'video with bad word' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 }
+      await servers[0].videos.upload({ mode: 'legacy', ...options })
+      await servers[0].videos.upload({ mode: 'resumable', ...options })
+    })
+
+    it('Should run filter:api.video.update-file.accept.result', async function () {
+      const res = await servers[0].videos.replaceSourceFile({
+        videoId: videoUUID,
+        fixture: 'video_short1.webm',
+        completedExpectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+
+      expect((res as any)?.error).to.equal('no webm')
     })
 
     it('Should run filter:api.live-video.create.accept.result', async function () {

@@ -45,7 +45,7 @@ export async function isVideoFileAccepted (options: {
   videoFile: express.VideoUploadFile
   hook: Extract<ServerFilterHookName, 'filter:api.video.upload.accept.result' | 'filter:api.video.update-file.accept.result'>
 }) {
-  const { req, res, videoFile } = options
+  const { req, res, videoFile, hook } = options
 
   // Check we accept this video
   const acceptParameters = {
@@ -53,11 +53,7 @@ export async function isVideoFileAccepted (options: {
     videoFile,
     user: res.locals.oauth.token.User
   }
-  const acceptedResult = await Hooks.wrapFun(
-    isLocalVideoFileAccepted,
-    acceptParameters,
-    'filter:api.video.upload.accept.result'
-  )
+  const acceptedResult = await Hooks.wrapFun(isLocalVideoFileAccepted, acceptParameters, hook)
 
   if (!acceptedResult || acceptedResult.accepted !== true) {
     logger.info('Refused local video file.', { acceptedResult, acceptParameters })
