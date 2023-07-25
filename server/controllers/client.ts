@@ -5,27 +5,53 @@ import { join } from 'path'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { root } from '@shared/core-utils'
 import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '@shared/core-utils/i18n'
 import { HttpStatusCode } from '@shared/models'
-import { root } from '@shared/core-utils'
 import { STATIC_MAX_AGE } from '../initializers/constants'
 import { ClientHtml, sendHTML, serveIndexHTML } from '../lib/client-html'
-import { asyncMiddleware, embedCSP } from '../middlewares'
+import { asyncMiddleware, buildRateLimiter, embedCSP } from '../middlewares'
 
 const clientsRouter = express.Router()
+
+const clientsRateLimiter = buildRateLimiter({
+  windowMs: CONFIG.RATES_LIMIT.CLIENT.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.CLIENT.MAX
+})
 
 const distPath = join(root(), 'client', 'dist')
 const testEmbedPath = join(distPath, 'standalone', 'videos', 'test-embed.html')
 
 // Special route that add OpenGraph and oEmbed tags
 // Do not use a template engine for a so little thing
-clientsRouter.use([ '/w/p/:id', '/videos/watch/playlist/:id' ], asyncMiddleware(generateWatchPlaylistHtmlPage))
-clientsRouter.use([ '/w/:id', '/videos/watch/:id' ], asyncMiddleware(generateWatchHtmlPage))
-clientsRouter.use([ '/accounts/:nameWithHost', '/a/:nameWithHost' ], asyncMiddleware(generateAccountHtmlPage))
-clientsRouter.use([ '/video-channels/:nameWithHost', '/c/:nameWithHost' ], asyncMiddleware(generateVideoChannelHtmlPage))
-clientsRouter.use('/@:nameWithHost', asyncMiddleware(generateActorHtmlPage))
+clientsRouter.use([ '/w/p/:id', '/videos/watch/playlist/:id' ],
+  clientsRateLimiter,
+  asyncMiddleware(generateWatchPlaylistHtmlPage)
+)
+
+clientsRouter.use([ '/w/:id', '/videos/watch/:id' ],
+  clientsRateLimiter,
+  asyncMiddleware(generateWatchHtmlPage)
+)
+
+clientsRouter.use([ '/accounts/:nameWithHost', '/a/:nameWithHost' ],
+  clientsRateLimiter,
+  asyncMiddleware(generateAccountHtmlPage)
+)
+
+clientsRouter.use([ '/video-channels/:nameWithHost', '/c/:nameWithHost' ],
+  clientsRateLimiter,
+  asyncMiddleware(generateVideoChannelHtmlPage)
+)
+
+clientsRouter.use('/@:nameWithHost',
+  clientsRateLimiter,
+  asyncMiddleware(generateActorHtmlPage)
+)
 
 const embedMiddlewares = [
+  clientsRateLimiter,
+
   CONFIG.CSP.ENABLED
     ? embedCSP
     : (req: express.Request, res: express.Response, next: express.NextFunction) => next(),
@@ -48,11 +74,11 @@ clientsRouter.use('/video-playlists/embed', ...embedMiddlewares)
 
 const testEmbedController = (req: express.Request, res: express.Response) => res.sendFile(testEmbedPath)
 
-clientsRouter.use('/videos/test-embed', testEmbedController)
-clientsRouter.use('/video-playlists/test-embed', testEmbedController)
+clientsRouter.use('/videos/test-embed', clientsRateLimiter, testEmbedController)
+clientsRouter.use('/video-playlists/test-embed', clientsRateLimiter, testEmbedController)
 
 // Dynamic PWA manifest
-clientsRouter.get('/manifest.webmanifest', asyncMiddleware(generateManifest))
+clientsRouter.get('/manifest.webmanifest', clientsRateLimiter, asyncMiddleware(generateManifest))
 
 // Static client overrides
 // Must be consistent with static client overrides redirections in /support/nginx/peertube
@@ -88,7 +114,10 @@ clientsRouter.use('/client/*', (req: express.Request, res: express.Response) => 
 
 // Always serve index client page (the client is a single page application, let it handle routing)
 // Try to provide the right language index.html
-clientsRouter.use('/(:language)?', asyncMiddleware(serveIndexHTML))
+clientsRouter.use('/(:language)?',
+  clientsRateLimiter,
+  asyncMiddleware(serveIndexHTML)
+)
 
 // ---------------------------------------------------------------------------
 

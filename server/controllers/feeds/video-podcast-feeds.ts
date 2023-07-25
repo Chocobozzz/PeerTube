@@ -40,7 +40,7 @@ for (const event of ([ 'channel-updated', 'channel-deleted' ] as const)) {
 
 // ---------------------------------------------------------------------------
 
-videoPodcastFeedsRouter.get('/feeds/podcast/videos.xml',
+videoPodcastFeedsRouter.get('/podcast/videos.xml',
   setFeedPodcastContentType,
   videoFeedsPodcastSetCacheKey,
   podcastCacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),

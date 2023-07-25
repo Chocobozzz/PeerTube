@@ -26,7 +26,7 @@ const { middleware: cacheRouteMiddleware } = cacheRouteFactory({
 
 // ---------------------------------------------------------------------------
 
-videoFeedsRouter.get('/feeds/videos.:format',
+videoFeedsRouter.get('/videos.:format',
   videosSortValidator,
   setDefaultVideosSort,
   feedsFormatValidator,
@@ -37,7 +37,7 @@ videoFeedsRouter.get('/feeds/videos.:format',
   asyncMiddleware(generateVideoFeed)
 )
 
-videoFeedsRouter.get('/feeds/subscriptions.:format',
+videoFeedsRouter.get('/subscriptions.:format',
   videosSortValidator,
   setDefaultVideosSort,
   feedsFormatValidator,

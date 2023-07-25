@@ -114,7 +114,7 @@ describe('Test video sources API validator', function () {
       await server.videos.replaceSourceFile({
         fixture: 'video_short_fake.webm',
         videoId,
-        expectedStatus: HttpStatusCode.UNPROCESSABLE_ENTITY_422
+        completedExpectedStatus: HttpStatusCode.UNPROCESSABLE_ENTITY_422
       })
 
       await server.videos.replaceSourceFile({

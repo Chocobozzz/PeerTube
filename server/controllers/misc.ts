@@ -7,7 +7,7 @@ import { HttpStatusCode } from '@shared/models'
 import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo/nodeinfo.model'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION, ROUTE_CACHE_LIFETIME } from '../initializers/constants'
 import { getThemeOrDefault } from '../lib/plugins/theme-utils'
-import { asyncMiddleware } from '../middlewares'
+import { apiRateLimiter, asyncMiddleware } from '../middlewares'
 import { cacheRoute } from '../middlewares/cache/cache'
 import { UserModel } from '../models/user/user'
 import { VideoModel } from '../models/video/video'
@@ -18,12 +18,14 @@ const miscRouter = express.Router()
 miscRouter.use(cors())
 
 miscRouter.use('/nodeinfo/:version.json',
+  apiRateLimiter,
   cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO),
   asyncMiddleware(generateNodeinfo)
 )
 
 // robots.txt service
 miscRouter.get('/robots.txt',
+  apiRateLimiter,
   cacheRoute(ROUTE_CACHE_LIFETIME.ROBOTS),
   (_, res: express.Response) => {
     res.type('text/plain')
@@ -33,12 +35,14 @@ miscRouter.get('/robots.txt',
 )
 
 miscRouter.all('/teapot',
+  apiRateLimiter,
   getCup,
   asyncMiddleware(serveIndexHTML)
 )
 
 // security.txt service
 miscRouter.get('/security.txt',
+  apiRateLimiter,
   (_, res: express.Response) => {
     return res.redirect(HttpStatusCode.MOVED_PERMANENTLY_301, '/.well-known/security.txt')
   }

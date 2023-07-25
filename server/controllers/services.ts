@@ -2,17 +2,19 @@ import express from 'express'
 import { MChannelSummary } from '@server/types/models'
 import { escapeHTML } from '@shared/core-utils/renderer'
 import { EMBED_SIZE, PREVIEWS_SIZE, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants'
-import { asyncMiddleware, oembedValidator } from '../middlewares'
+import { apiRateLimiter, asyncMiddleware, oembedValidator } from '../middlewares'
 import { accountNameWithHostGetValidator } from '../middlewares/validators'
 import { forceNumber } from '@shared/core-utils'
 
 const servicesRouter = express.Router()
 
 servicesRouter.use('/oembed',
+  apiRateLimiter,
   asyncMiddleware(oembedValidator),
   generateOEmbed
 )
 servicesRouter.use('/redirect/accounts/:accountName',
+  apiRateLimiter,
   asyncMiddleware(accountNameWithHostGetValidator),
   redirectToAccountUrl
 )

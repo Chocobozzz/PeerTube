@@ -183,6 +183,26 @@ const CONFIG = {
     ASK_SEND_EMAIL: {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.ask_send_email.window')),
       MAX: config.get<number>('rates_limit.ask_send_email.max')
+    },
+    PLUGINS: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.plugins.window')),
+      MAX: config.get<number>('rates_limit.plugins.max')
+    },
+    WELL_KNOWN: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.well_known.window')),
+      MAX: config.get<number>('rates_limit.well_known.max')
+    },
+    FEEDS: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.feeds.window')),
+      MAX: config.get<number>('rates_limit.feeds.max')
+    },
+    ACTIVITY_PUB: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.activity_pub.window')),
+      MAX: config.get<number>('rates_limit.activity_pub.max')
+    },
+    CLIENT: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.client.window')),
+      MAX: config.get<number>('rates_limit.client.max')
     }
   },
   TRUST_PROXY: config.get<string[]>('trust_proxy'),

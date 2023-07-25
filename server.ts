@@ -115,7 +115,7 @@ import {
   pluginsRouter,
   trackerRouter,
   createWebsocketTrackerServer,
-  botsRouter,
+  sitemapRouter,
   downloadRouter
 } from './server/controllers'
 import { advertiseDoNotTrack } from './server/middlewares/dnt'
@@ -222,9 +222,7 @@ OpenTelemetryMetrics.Instance.init(app)
 
 // ----------- Views, routes and static files -----------
 
-// API
-const apiRoute = '/api/' + API_VERSION
-app.use(apiRoute, apiRouter)
+app.use('/api/' + API_VERSION, apiRouter)
 
 // Services (oembed...)
 app.use('/services', servicesRouter)
@@ -235,7 +233,7 @@ app.use('/', pluginsRouter)
 app.use('/', activityPubRouter)
 app.use('/', feedsRouter)
 app.use('/', trackerRouter)
-app.use('/', botsRouter)
+app.use('/', sitemapRouter)
 
 // Static files
 app.use('/', staticRouter)

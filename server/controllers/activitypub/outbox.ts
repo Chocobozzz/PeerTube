@@ -7,7 +7,13 @@ import { VideoPrivacy } from '../../../shared/models/videos'
 import { logger } from '../../helpers/logger'
 import { buildAudience } from '../../lib/activitypub/audience'
 import { buildAnnounceActivity, buildCreateActivity } from '../../lib/activitypub/send'
-import { asyncMiddleware, ensureIsLocalChannel, localAccountValidator, videoChannelsNameWithHostValidator } from '../../middlewares'
+import {
+  activityPubRateLimiter,
+  asyncMiddleware,
+  ensureIsLocalChannel,
+  localAccountValidator,
+  videoChannelsNameWithHostValidator
+} from '../../middlewares'
 import { apPaginationValidator } from '../../middlewares/validators/activitypub'
 import { VideoModel } from '../../models/video/video'
 import { activityPubResponse } from './utils'
@@ -15,12 +21,14 @@ import { activityPubResponse } from './utils'
 const outboxRouter = express.Router()
 
 outboxRouter.get('/accounts/:name/outbox',
+  activityPubRateLimiter,
   apPaginationValidator,
   localAccountValidator,
   asyncMiddleware(outboxController)
 )
 
 outboxRouter.get('/video-channels/:nameWithHost/outbox',
+  activityPubRateLimiter,
   apPaginationValidator,
   asyncMiddleware(videoChannelsNameWithHostValidator),
   ensureIsLocalChannel,

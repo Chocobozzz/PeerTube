@@ -1,7 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 import { join } from 'path'
-import { asyncMiddleware, handleStaticError, webfingerValidator } from '@server/middlewares'
+import { asyncMiddleware, buildRateLimiter, handleStaticError, webfingerValidator } from '@server/middlewares'
 import { root } from '@shared/core-utils'
 import { CONFIG } from '../initializers/config'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
@@ -9,14 +9,21 @@ import { cacheRoute } from '../middlewares/cache/cache'
 
 const wellKnownRouter = express.Router()
 
+const wellKnownRateLimiter = buildRateLimiter({
+  windowMs: CONFIG.RATES_LIMIT.WELL_KNOWN.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.WELL_KNOWN.MAX
+})
+
 wellKnownRouter.use(cors())
 
 wellKnownRouter.get('/.well-known/webfinger',
+  wellKnownRateLimiter,
   asyncMiddleware(webfingerValidator),
   webfingerController
 )
 
 wellKnownRouter.get('/.well-known/security.txt',
+  wellKnownRateLimiter,
   cacheRoute(ROUTE_CACHE_LIFETIME.SECURITYTXT),
   (_, res: express.Response) => {
     res.type('text/plain')
@@ -26,6 +33,7 @@ wellKnownRouter.get('/.well-known/security.txt',
 
 // nodeinfo service
 wellKnownRouter.use('/.well-known/nodeinfo',
+  wellKnownRateLimiter,
   cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO),
   (_, res: express.Response) => {
     return res.json({
@@ -41,6 +49,7 @@ wellKnownRouter.use('/.well-known/nodeinfo',
 
 // dnt-policy.txt service (see https://www.eff.org/dnt-policy)
 wellKnownRouter.use('/.well-known/dnt-policy.txt',
+  wellKnownRateLimiter,
   cacheRoute(ROUTE_CACHE_LIFETIME.DNT_POLICY),
   (_, res: express.Response) => {
     res.type('text/plain')
@@ -51,18 +60,21 @@ wellKnownRouter.use('/.well-known/dnt-policy.txt',
 
 // dnt service (see https://www.w3.org/TR/tracking-dnt/#status-resource)
 wellKnownRouter.use('/.well-known/dnt/',
+  wellKnownRateLimiter,
   (_, res: express.Response) => {
     res.json({ tracking: 'N' })
   }
 )
 
 wellKnownRouter.use('/.well-known/change-password',
+  wellKnownRateLimiter,
   (_, res: express.Response) => {
     res.redirect('/my-account/settings')
   }
 )
 
 wellKnownRouter.use('/.well-known/host-meta',
+  wellKnownRateLimiter,
   (_, res: express.Response) => {
     res.type('application/xml')
 
@@ -76,6 +88,7 @@ wellKnownRouter.use('/.well-known/host-meta',
 )
 
 wellKnownRouter.use('/.well-known/',
+  wellKnownRateLimiter,
   cacheRoute(ROUTE_CACHE_LIFETIME.WELL_KNOWN),
   express.static(CONFIG.STORAGE.WELL_KNOWN_DIR, { fallthrough: false }),
   handleStaticError

@@ -23,7 +23,7 @@ const { middleware: cacheRouteMiddleware } = cacheRouteFactory({
 
 // ---------------------------------------------------------------------------
 
-commentFeedsRouter.get('/feeds/video-comments.:format',
+commentFeedsRouter.get('/video-comments.:format',
   feedsFormatValidator,
   setFeedFormatContentType,
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),

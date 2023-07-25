@@ -45,6 +45,11 @@ export const apiRateLimiter = buildRateLimiter({
   max: CONFIG.RATES_LIMIT.API.MAX
 })
 
+export const activityPubRateLimiter = buildRateLimiter({
+  windowMs: CONFIG.RATES_LIMIT.ACTIVITY_PUB.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.ACTIVITY_PUB.MAX
+})
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------

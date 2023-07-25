@@ -1,6 +1,8 @@
 import express from 'express'
 import { join } from 'path'
 import { logger } from '@server/helpers/logger'
+import { CONFIG } from '@server/initializers/config'
+import { buildRateLimiter } from '@server/middlewares'
 import { optionalAuthenticate } from '@server/middlewares/auth'
 import { getCompleteLocale, is18nLocale } from '../../shared/core-utils/i18n'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
@@ -18,57 +20,72 @@ const sendFileOptions = {
 
 const pluginsRouter = express.Router()
 
+const pluginsRateLimiter = buildRateLimiter({
+  windowMs: CONFIG.RATES_LIMIT.PLUGINS.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.PLUGINS.MAX
+})
+
 pluginsRouter.get('/plugins/global.css',
+  pluginsRateLimiter,
   servePluginGlobalCSS
 )
 
 pluginsRouter.get('/plugins/translations/:locale.json',
+  pluginsRateLimiter,
   getPluginTranslations
 )
 
 pluginsRouter.get('/plugins/:pluginName/:pluginVersion/auth/:authName',
+  pluginsRateLimiter,
   getPluginValidator(PluginType.PLUGIN),
   getExternalAuthValidator,
   handleAuthInPlugin
 )
 
 pluginsRouter.get('/plugins/:pluginName/:pluginVersion/static/:staticEndpoint(*)',
+  pluginsRateLimiter,
   getPluginValidator(PluginType.PLUGIN),
   pluginStaticDirectoryValidator,
   servePluginStaticDirectory
 )
 
 pluginsRouter.get('/plugins/:pluginName/:pluginVersion/client-scripts/:staticEndpoint(*)',
+  pluginsRateLimiter,
   getPluginValidator(PluginType.PLUGIN),
   pluginStaticDirectoryValidator,
   servePluginClientScripts
 )
 
 pluginsRouter.use('/plugins/:pluginName/router',
+  pluginsRateLimiter,
   getPluginValidator(PluginType.PLUGIN, false),
   optionalAuthenticate,
   servePluginCustomRoutes
 )
 
 pluginsRouter.use('/plugins/:pluginName/:pluginVersion/router',
+  pluginsRateLimiter,
   getPluginValidator(PluginType.PLUGIN),
   optionalAuthenticate,
   servePluginCustomRoutes
 )
 
 pluginsRouter.get('/themes/:pluginName/:pluginVersion/static/:staticEndpoint(*)',
+  pluginsRateLimiter,
   getPluginValidator(PluginType.THEME),
   pluginStaticDirectoryValidator,
   servePluginStaticDirectory
 )
 
 pluginsRouter.get('/themes/:pluginName/:pluginVersion/client-scripts/:staticEndpoint(*)',
+  pluginsRateLimiter,
   getPluginValidator(PluginType.THEME),
   pluginStaticDirectoryValidator,
   servePluginClientScripts
 )
 
 pluginsRouter.get('/themes/:themeName/:themeVersion/css/:staticEndpoint(*)',
+  pluginsRateLimiter,
   serveThemeCSSValidator,
   serveThemeCSSDirectory
 )

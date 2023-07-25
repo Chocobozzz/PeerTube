@@ -1,6 +1,6 @@
 export * from './activitypub'
 export * from './api'
-export * from './bots'
+export * from './sitemap'
 export * from './client'
 export * from './download'
 export * from './feeds'

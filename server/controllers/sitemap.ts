@@ -5,17 +5,16 @@ import { logger } from '@server/helpers/logger'
 import { getServerActor } from '@server/models/application/application'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
-import { asyncMiddleware } from '../middlewares'
+import { apiRateLimiter, asyncMiddleware } from '../middlewares'
 import { cacheRoute } from '../middlewares/cache/cache'
 import { AccountModel } from '../models/account/account'
 import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
 
-const botsRouter = express.Router()
+const sitemapRouter = express.Router()
 
-// Special route that add OpenGraph and oEmbed tags
-// Do not use a template engine for a so little thing
-botsRouter.use('/sitemap.xml',
+sitemapRouter.use('/sitemap.xml',
+  apiRateLimiter,
   cacheRoute(ROUTE_CACHE_LIFETIME.SITEMAP),
   asyncMiddleware(getSitemap)
 )
@@ -23,7 +22,7 @@ botsRouter.use('/sitemap.xml',
 // ---------------------------------------------------------------------------
 
 export {
-  botsRouter
+  sitemapRouter
 }
 
 // ---------------------------------------------------------------------------

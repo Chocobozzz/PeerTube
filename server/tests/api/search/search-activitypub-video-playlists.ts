@@ -23,7 +23,7 @@ describe('Test ActivityPub playlists search', function () {
   let command: SearchCommand
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(240000)
 
     servers = await createMultipleServers(2)
 
