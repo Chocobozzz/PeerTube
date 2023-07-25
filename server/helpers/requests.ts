@@ -14,6 +14,7 @@ export interface PeerTubeRequestError extends Error {
   statusCode?: number
   responseBody?: any
   responseHeaders?: any
+  requestHeaders?: any
 }
 
 type PeerTubeRequestOptions = {
@@ -241,6 +242,10 @@ function buildRequestError (error: RequestError) {
     newError.responseBody = error.response.body
     newError.responseHeaders = error.response.headers
     newError.statusCode = error.response.statusCode
+  }
+
+  if (error.options) {
+    newError.requestHeaders = error.options.headers
   }
 
   return newError
