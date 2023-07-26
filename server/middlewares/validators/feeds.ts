@@ -73,7 +73,7 @@ function feedContentTypeResponse (
 
 // ---------------------------------------------------------------------------
 
-const videoFeedsValidator = [
+const feedsAccountOrChannelFiltersValidator = [
   query('accountId')
     .optional()
     .custom(isIdValid),
@@ -170,7 +170,7 @@ export {
   feedsFormatValidator,
   setFeedFormatContentType,
   setFeedPodcastContentType,
-  videoFeedsValidator,
+  feedsAccountOrChannelFiltersValidator,
   videoFeedsPodcastValidator,
   videoSubscriptionFeedsValidator,
   videoFeedsPodcastSetCacheKey,

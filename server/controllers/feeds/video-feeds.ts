@@ -12,7 +12,7 @@ import {
   feedsFormatValidator,
   setDefaultVideosSort,
   setFeedFormatContentType,
-  videoFeedsValidator,
+  feedsAccountOrChannelFiltersValidator,
   videosSortValidator,
   videoSubscriptionFeedsValidator
 } from '../../middlewares'
@@ -33,7 +33,7 @@ videoFeedsRouter.get('/videos.:format',
   setFeedFormatContentType,
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
   commonVideosFiltersValidator,
-  asyncMiddleware(videoFeedsValidator),
+  asyncMiddleware(feedsAccountOrChannelFiltersValidator),
   asyncMiddleware(generateVideoFeed)
 )
 

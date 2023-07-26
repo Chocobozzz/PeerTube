@@ -107,10 +107,7 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
           }
         })
       })
-
     })
-
-
   } finally {
     inputFileMutexReleaser()
   }

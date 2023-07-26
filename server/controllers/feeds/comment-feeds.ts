@@ -8,7 +8,7 @@ import {
   feedsFormatValidator,
   setFeedFormatContentType,
   videoCommentsFeedsValidator,
-  videoFeedsValidator
+  feedsAccountOrChannelFiltersValidator
 } from '../../middlewares'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { buildFeedMetadata, initFeed, sendFeed } from './shared'
@@ -27,7 +27,7 @@ commentFeedsRouter.get('/video-comments.:format',
   feedsFormatValidator,
   setFeedFormatContentType,
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
-  asyncMiddleware(videoFeedsValidator),
+  asyncMiddleware(feedsAccountOrChannelFiltersValidator),
   asyncMiddleware(videoCommentsFeedsValidator),
   asyncMiddleware(generateVideoCommentsFeed)
 )
