@@ -268,16 +268,25 @@ async function saveVideoInServers (servers: PeerTubeServer[], uuid: string) {
   }
 }
 
-function checkUploadVideoParam (
-  server: PeerTubeServer,
-  token: string,
-  attributes: Partial<VideoEdit>,
-  expectedStatus = HttpStatusCode.OK_200,
-  mode: 'legacy' | 'resumable' = 'legacy'
-) {
+function checkUploadVideoParam (options: {
+  server: PeerTubeServer
+  token: string
+  attributes: Partial<VideoEdit>
+  expectedStatus?: HttpStatusCode
+  completedExpectedStatus?: HttpStatusCode
+  mode?: 'legacy' | 'resumable'
+}) {
+  const { server, token, attributes, completedExpectedStatus, expectedStatus, mode = 'legacy' } = options
+
   return mode === 'legacy'
-    ? server.videos.buildLegacyUpload({ token, attributes, expectedStatus })
-    : server.videos.buildResumeUpload({ token, attributes, expectedStatus, path: '/api/v1/videos/upload-resumable' })
+    ? server.videos.buildLegacyUpload({ token, attributes, expectedStatus: expectedStatus || completedExpectedStatus })
+    : server.videos.buildResumeUpload({
+      token,
+      attributes,
+      expectedStatus,
+      completedExpectedStatus,
+      path: '/api/v1/videos/upload-resumable'
+    })
 }
 
 // serverNumber starts from 1

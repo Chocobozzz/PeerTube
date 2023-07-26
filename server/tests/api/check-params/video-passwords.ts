@@ -106,12 +106,12 @@ describe('Test video passwords validator', function () {
     }
     if (mode === 'uploadLegacy') {
       const fields = { ...baseCorrectParams, videoPasswords }
-      return checkUploadVideoParam(server, token, { ...fields, ...attaches }, expectedStatus, 'legacy')
+      return checkUploadVideoParam({ server, token, attributes: { ...fields, ...attaches }, expectedStatus, mode: 'legacy' })
     }
 
     if (mode === 'uploadResumable') {
       const fields = { ...baseCorrectParams, videoPasswords }
-      return checkUploadVideoParam(server, token, { ...fields, ...attaches }, expectedStatus, 'resumable')
+      return checkUploadVideoParam({ server, token, attributes: { ...fields, ...attaches }, expectedStatus, mode: 'resumable' })
     }
 
     if (mode === 'import') {
