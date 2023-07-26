@@ -8,12 +8,12 @@ run()
   })
 
 async function run () {
-  const blacklist = getContributorsBlacklist()
+  const excludeList = getContributorsExcludeList()
 
   {
     let contributors = await getGitContributors()
     contributors = contributors.concat(getZanataContributors())
-    contributors = contributors.filter(c => blacklist[c.username] !== true)
+    contributors = contributors.filter(c => !excludeList.has(c.username))
 
     console.log('# Code & Translators contributors\n')
     for (const contributor of contributors) {
@@ -186,13 +186,16 @@ function getZanataContributors () {
   ]
 }
 
-function getContributorsBlacklist () {
-  return {
-    'Bigard Florian': true,
-    'chocobozzz': true,
-    'Rigel': true,
+function getContributorsExcludeList () {
+  return new Set([
+    'Bigard Florian',
+    'chocobozzz',
+    'Rigel',
 
     // Requested by the contributor
-    'Marcel Cramm': true
-  }
+    'Marcel Cramm',
+    'Chris Sakura 佐倉くりす on Youtube',
+    'Chris Sakura 佐倉くりす on Youtube - 日本語は第二言語やけ、間違っとったら思いっきり叩いてくださいｗ つたない日本語ばっかりやけど頑張りまーす♪',
+    'chris@famichiki.tube'
+  ])
 }

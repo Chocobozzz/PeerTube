@@ -11,30 +11,30 @@
  * Filip Bengtsson
  * Ihor Hordiichuk
  * Jeff Huang
+ * Payman Moghadam
  * Simon Brosdetzko
  * kontrollanten
  * Jiri Podhorecky
- * Payman Moghadam
  * Phongpanot
  * hecko
- * Laurent Ettouati
  * Milo Ivir
+ * Laurent Ettouati
  * kimsible
  * Zet
  * GunChleoc
  * Clemens Schielicke
  * Racida S
- * Marcin Mikołajczak
- * Ewout van Mansom
- * Eivind Ødegård
  * Sveinn í Felli
+ * Ewout van Mansom
+ * Marcin Mikołajczak
+ * Eivind Ødegård
  * Tirifto
  * Kim
+ * Wicklow
  * Armin
  * Hannes Ylä-Jääski
- * Mohamad Reza
  * Vodoyo Kamal
- * Wicklow
+ * Mohamad Reza
  * John Livingston
  * Kimsible
  * Besnik Bleta
@@ -71,6 +71,7 @@
  * jan Seli
  * lutangar
  * 李奕寯
+ * Blood Axe
  * Martin Hoefler
  * Porrumentzio
  * Poslovitch
@@ -94,12 +95,10 @@
  * Ms Kimsible
  * Thomas Citharel
  * Benjamin Bouvier
- * Blood Axe
  * Joe Bill
  * Kemal Oktay Aktoğan
  * Lucas Declercq
  * Sirxy
- * chris@famichiki.tube
  * matograine
  * Alexander Ivanov
  * Daniel Santos
@@ -151,8 +150,8 @@
  * Benjamin Seitz
  * Bob Oob
  * Booteille
- * Chris Sakura 佐倉くりす on Youtube
  * DontUseGithub
+ * Farooq Karimi Zadeh
  * I_Automne
  * Iñigo
  * Joan Montané
@@ -196,7 +195,6 @@
  * Eder Etxebarria
  * Ehsan Gholami
  * Elga Ahmad Prayoga
- * Farooq Karimi Zadeh
  * Girish Ramakrishnan
  * Hakim Oubouali
  * Hans Meiser
@@ -206,6 +204,7 @@
  * Jocelyn Jaubert
  * Johan Fleury
  * Jurij Podgoršek
+ * Kindred La Boneta
  * Kiro
  * Leopere
  * Linus
@@ -235,6 +234,7 @@
  * Ömer Faruk Çakmak
  * AQR_Rastiq
  * Al-Hassan Abdel-Raouf
+ * Alecks Gates
  * Amos Tamam
  * Andrew Morgan
  * Andy Khit
@@ -246,10 +246,12 @@
  * Average Dude
  * BitTube
  * Boo Teille
+ * Branislav Pavelka
  * Dashie
  * David Luís Pereira Pires
  * David Marzal
  * EndoGai
+ * Ettore Atalan
  * Fatih Özsoy
  * FediverseTV
  * Florent Fayolle
@@ -265,6 +267,7 @@
  * HybridGlucose
  * J C Worm
  * Jan Marsalek
+ * José M
  * Joël Galeran
  * Julien Lemaire
  * Lucas Teixeira
@@ -299,6 +302,7 @@
  * libertas
  * merty
  * plr20
+ * q_h
  * qwerty
  * spf
  * taziden
@@ -316,7 +320,6 @@
  * Agron
  * Aitozl
  * Alberto Mardegan
- * Alecks Gates
  * Alejandro Criado-Pérez
  * Aleksandr Sokolov
  * Alexander F. Rødseth
@@ -342,7 +345,6 @@
  * Cadence Ember
  * Cale
  * Charles de Lacombe
- * Chris Sakura 佐倉くりす on Youtube - 日本語は第二言語やけ、間違っとったら思いっきり叩いてくださいｗ つたない日本語ばっかりやけど頑張りまーす♪
  * Christoph Geschwind
  * Chronos
  * Claude
@@ -382,6 +384,7 @@
  * Iván Cabaleiro
  * J Webb
  * Jacen
+ * Jackson Chen
  * Jacob
  * Jacques Foucry
  * Jagannath Bhat
@@ -491,6 +494,7 @@
  * Vagelis F
  * Varik Valefor
  * Vegard Fjeldberg
+ * Victor Hampel
  * Vik
  * Vincent Stakenburg
  * WhiredPlanck
@@ -540,7 +544,6 @@
  * philippe lhardy
  * pitchum
  * potedeo
- * q_h
  * rdxuan
  * retiolus
  * ruvilonix
