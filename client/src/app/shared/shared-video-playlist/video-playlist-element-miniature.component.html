@@ -38,7 +38,7 @@
           <ng-container *ngIf="getVideoOwnerDisplayType(playlistElement) === 'videoChannel'">{{ playlistElement.video.byVideoChannel }}</ng-container>
         </a>
 
-        <span *ngIf="!accountLink" tabindex="-1" class="video-info-account">{{ playlistElement.video.byAccount }}</span>
+        <span *ngIf="!accountLink" tabindex="-1" class="video-info-owner">{{ playlistElement.video.byAccount }}</span>
 
         <span tabindex="-1" class="video-info-timestamp">{{ formatTimestamp(playlistElement) }}</span>
       </ng-container>
