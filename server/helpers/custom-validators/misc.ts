@@ -119,7 +119,7 @@ function toCompleteUUID (value: string) {
     try {
       return shortToUUID(value)
     } catch {
-      return null
+      return ''
     }
   }
 
