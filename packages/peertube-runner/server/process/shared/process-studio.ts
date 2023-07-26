@@ -1,7 +1,7 @@
 import { remove } from 'fs-extra'
-import { pick } from 'lodash'
 import { logger } from 'packages/peertube-runner/shared'
 import { join } from 'path'
+import { pick } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
 import {
   RunnerJobStudioTranscodingPayload,

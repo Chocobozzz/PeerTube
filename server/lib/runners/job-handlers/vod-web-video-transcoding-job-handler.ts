@@ -1,8 +1,8 @@
-import { pick } from 'lodash'
 import { logger } from '@server/helpers/logger'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { MVideo } from '@server/types/models'
 import { MRunnerJob } from '@server/types/models/runners'
+import { pick } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
 import {
   RunnerJobUpdatePayload,

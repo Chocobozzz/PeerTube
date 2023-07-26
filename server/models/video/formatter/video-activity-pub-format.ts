@@ -1,5 +1,4 @@
-
-import { isArray } from 'lodash'
+import { isArray } from '@server/helpers/custom-validators/misc'
 import { generateMagnetUri } from '@server/helpers/webtorrent'
 import { getActivityStreamDuration } from '@server/lib/activitypub/activity'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls'
