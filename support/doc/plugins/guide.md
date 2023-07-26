@@ -1,56 +1,6 @@
 # Plugins & Themes
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-- [Concepts](#concepts)
-  - [Hooks](#hooks)
-  - [Static files](#static-files)
-  - [CSS](#css)
-  - [Server API (only for plugins)](#server-api-only-for-plugins)
-    - [Settings](#settings)
-    - [Storage](#storage)
-    - [Update video constants](#update-video-constants)
-    - [Add custom routes](#add-custom-routes)
-    - [Add custom WebSocket handlers](#add-custom-websocket-handlers)
-    - [Add external auth methods](#add-external-auth-methods)
-    - [Add new transcoding profiles](#add-new-transcoding-profiles)
-    - [Server helpers](#server-helpers)
-    - [Federation](#federation)
-  - [Client API (themes & plugins)](#client-api-themes--plugins)
-    - [Get plugin static and router routes](#get-plugin-static-and-router-routes)
-    - [Notifier](#notifier)
-    - [Markdown Renderer](#markdown-renderer)
-    - [Auth header](#auth-header)
-    - [Custom Modal](#custom-modal)
-    - [Translate](#translate)
-    - [Get public settings](#get-public-settings)
-    - [Get server config](#get-server-config)
-    - [Add custom fields to video form](#add-custom-fields-to-video-form)
-    - [Register settings script](#register-settings-script)
-    - [Plugin selector on HTML elements](#plugin-selector-on-html-elements)
-    - [HTML placeholder elements](#html-placeholder-elements)
-    - [Add/remove left menu links](#addremove-left-menu-links)
-    - [Create client page](#create-client-page)
-  - [Publishing](#publishing)
-- [Write a plugin/theme](#write-a-plugintheme)
-  - [Clone the quickstart repository](#clone-the-quickstart-repository)
-  - [Configure your repository](#configure-your-repository)
-  - [Update README](#update-readme)
-  - [Update package.json](#update-packagejson)
-  - [Write code](#write-code)
-  - [Add translations](#add-translations)
-  - [Build your plugin](#build-your-plugin)
-  - [Test your plugin/theme](#test-your-plugintheme)
-  - [Publish](#publish)
-  - [Unpublish](#unpublish)
-- [Plugin & Theme hooks/helpers API](#plugin--theme-hookshelpers-api)
-- [Tips](#tips)
-  - [Compatibility with PeerTube](#compatibility-with-peertube)
-  - [Spam/moderation plugin](#spammoderation-plugin)
-  - [Other plugin examples](#other-plugin-examples)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+[[toc]]
 
 ## Concepts
 
@@ -167,7 +117,7 @@ or `/themes/{theme-name}/{theme-version}/static/` routes.
 Plugins can declare CSS files that PeerTube will automatically inject in the client.
 If you need to override existing style, you can use the `#custom-css` selector:
 
-```
+```css
 body#custom-css {
   color: red;
 }
@@ -946,13 +896,13 @@ Steps:
 
 If you develop a plugin, clone the `peertube-plugin-quickstart` repository:
 
-```
+```sh
 git clone https://framagit.org/framasoft/peertube/peertube-plugin-quickstart.git peertube-plugin-mysupername
 ```
 
 If you develop a theme, clone the `peertube-theme-quickstart` repository:
 
-```
+```sh
 git clone https://framagit.org/framasoft/peertube/peertube-theme-quickstart.git peertube-theme-mysupername
 ```
 
@@ -960,7 +910,7 @@ git clone https://framagit.org/framasoft/peertube/peertube-theme-quickstart.git 
 
 Set your repository URL:
 
-```
+```sh
 cd peertube-plugin-mysupername # or cd peertube-theme-mysupername
 git remote set-url origin https://your-git-repo
 ```
@@ -969,7 +919,7 @@ git remote set-url origin https://your-git-repo
 
 Update `README.md` file:
 
-```
+```sh
 $EDITOR README.md
 ```
 
@@ -1099,19 +1049,19 @@ If you added client scripts, you'll need to build them using webpack.
 
 Install webpack:
 
-```
+```sh
 npm install
 ```
 
 Add/update your files in the `clientFiles` array of `webpack.config.js`:
 
-```
+```sh
 $EDITOR ./webpack.config.js
 ```
 
 Build your client files:
 
-```
+```sh
 npm run build
 ```
 
@@ -1128,31 +1078,31 @@ You'll need to have a local PeerTube instance:
  (to clone the repository, install dependencies and prepare the database)
  * Build PeerTube:
 
-```
+```sh
 npm run build
 ```
 
  * Build the CLI:
 
-```
+```sh
 npm run setup:cli
 ```
 
  * Run PeerTube (you can access to your instance on `localhost:9000`):
 
-```
+```sh
 NODE_ENV=dev npm start
 ```
 
  * Register the instance via the CLI:
 
-```
+```sh
 node ./dist/server/tools/peertube.js auth add -u 'http://localhost:9000' -U 'root' --password 'test'
 ```
 
 Then, you can install or reinstall your local plugin/theme by running:
 
-```
+```sh
 node ./dist/server/tools/peertube.js plugins install --path /your/absolute/plugin-or-theme/path
 ```
 
@@ -1160,7 +1110,7 @@ node ./dist/server/tools/peertube.js plugins install --path /your/absolute/plugi
 
 Go in your plugin/theme directory, and run:
 
-```
+```sh
 npm publish
 ```
 
