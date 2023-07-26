@@ -1,5 +1,6 @@
 import express from 'express'
 import { pathExists, readFile } from 'fs-extra'
+import { truncate } from 'lodash'
 import { join } from 'path'
 import validator from 'validator'
 import { isTestOrDevInstance } from '@server/helpers/core-utils'
@@ -45,7 +46,7 @@ type Tags = {
 
   escapedSiteName: string
   escapedTitle: string
-  escapedDescription: string
+  escapedTruncatedDescription: string
 
   url: string
   originUrl: string
@@ -111,10 +112,10 @@ class ClientHtml {
       res.status(HttpStatusCode.NOT_FOUND_404)
       return html
     }
-    const description = mdToOneLinePlainText(video.description)
+    const escapedTruncatedDescription = buildEscapedTruncatedDescription(video.description)
 
     let customHtml = ClientHtml.addTitleTag(html, video.name)
-    customHtml = ClientHtml.addDescriptionTag(customHtml, description)
+    customHtml = ClientHtml.addDescriptionTag(customHtml, escapedTruncatedDescription)
 
     const url = WEBSERVER.URL + video.getWatchStaticPath()
     const originUrl = video.url
@@ -141,7 +142,7 @@ class ClientHtml {
       originUrl,
       escapedSiteName: escapeHTML(siteName),
       escapedTitle: escapeHTML(title),
-      escapedDescription: escapeHTML(description),
+      escapedTruncatedDescription,
       disallowIndexation: video.privacy !== VideoPrivacy.PUBLIC,
       image,
       embed,
@@ -173,10 +174,10 @@ class ClientHtml {
       return html
     }
 
-    const description = mdToOneLinePlainText(videoPlaylist.description)
+    const escapedTruncatedDescription = buildEscapedTruncatedDescription(videoPlaylist.description)
 
     let customHtml = ClientHtml.addTitleTag(html, videoPlaylist.name)
-    customHtml = ClientHtml.addDescriptionTag(customHtml, description)
+    customHtml = ClientHtml.addDescriptionTag(customHtml, escapedTruncatedDescription)
 
     const url = WEBSERVER.URL + videoPlaylist.getWatchStaticPath()
     const originUrl = videoPlaylist.url
@@ -205,7 +206,7 @@ class ClientHtml {
       originUrl,
       escapedSiteName: escapeHTML(siteName),
       escapedTitle: escapeHTML(title),
-      escapedDescription: escapeHTML(description),
+      escapedTruncatedDescription,
       disallowIndexation: videoPlaylist.privacy !== VideoPlaylistPrivacy.PUBLIC,
       embed,
       image,
@@ -276,10 +277,10 @@ class ClientHtml {
       return ClientHtml.getIndexHTML(req, res)
     }
 
-    const description = mdToOneLinePlainText(entity.description)
+    const escapedTruncatedDescription = buildEscapedTruncatedDescription(entity.description)
 
     let customHtml = ClientHtml.addTitleTag(html, entity.getDisplayName())
-    customHtml = ClientHtml.addDescriptionTag(customHtml, description)
+    customHtml = ClientHtml.addDescriptionTag(customHtml, escapedTruncatedDescription)
 
     const url = entity.getClientUrl()
     const originUrl = entity.Actor.url
@@ -302,7 +303,7 @@ class ClientHtml {
       originUrl,
       escapedTitle: escapeHTML(title),
       escapedSiteName: escapeHTML(siteName),
-      escapedDescription: escapeHTML(description),
+      escapedTruncatedDescription,
       image,
       ogType,
       twitterCard,
@@ -387,9 +388,9 @@ class ClientHtml {
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.TITLE, titleTag)
   }
 
-  private static addDescriptionTag (htmlStringPage: string, description?: string) {
-    const content = description || CONFIG.INSTANCE.SHORT_DESCRIPTION
-    const descriptionTag = `<meta name="description" content="${escapeHTML(content)}" />`
+  private static addDescriptionTag (htmlStringPage: string, escapedTruncatedDescription?: string) {
+    const content = escapedTruncatedDescription || escapeHTML(CONFIG.INSTANCE.SHORT_DESCRIPTION)
+    const descriptionTag = `<meta name="description" content="${content}" />`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.DESCRIPTION, descriptionTag)
   }
@@ -445,7 +446,7 @@ class ClientHtml {
     }
 
     metaTags['og:url'] = tags.url
-    metaTags['og:description'] = tags.escapedDescription
+    metaTags['og:description'] = tags.escapedTruncatedDescription
 
     if (tags.embed) {
       metaTags['og:video:url'] = tags.embed.url
@@ -461,7 +462,7 @@ class ClientHtml {
   private static generateStandardMetaTags (tags: Tags) {
     return {
       name: tags.escapedTitle,
-      description: tags.escapedDescription,
+      description: tags.escapedTruncatedDescription,
       image: tags.image.url
     }
   }
@@ -471,7 +472,7 @@ class ClientHtml {
       'twitter:card': tags.twitterCard,
       'twitter:site': CONFIG.SERVICES.TWITTER.USERNAME,
       'twitter:title': tags.escapedTitle,
-      'twitter:description': tags.escapedDescription,
+      'twitter:description': tags.escapedTruncatedDescription,
       'twitter:image': tags.image.url
     }
 
@@ -494,7 +495,7 @@ class ClientHtml {
       '@context': 'http://schema.org',
       '@type': tags.schemaType,
       'name': tags.escapedTitle,
-      'description': tags.escapedDescription,
+      'description': tags.escapedTruncatedDescription,
       'image': tags.image.url,
       'url': tags.url
     }
@@ -615,4 +616,8 @@ async function generateHTMLPage (req: express.Request, res: express.Response, pa
   const html = await ClientHtml.getDefaultHTMLPage(req, res, paramLang)
 
   return sendHTML(html, res, true)
+}
+
+function buildEscapedTruncatedDescription (description: string) {
+  return truncate(mdToOneLinePlainText(description), { length: 200 })
 }
