@@ -59,7 +59,7 @@ export class StoryboardModel extends Model<Partial<AttributesOnly<StoryboardMode
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
-      allowNull: true
+      allowNull: false
     },
     onDelete: 'CASCADE'
   })

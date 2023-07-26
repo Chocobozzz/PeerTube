@@ -1,10 +1,13 @@
 import { Job } from 'bullmq'
 import { join } from 'path'
+import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg'
 import { generateImageFilename, getImageSize } from '@server/helpers/image-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
+import { deleteFileAndCatch } from '@server/helpers/utils'
 import { CONFIG } from '@server/initializers/config'
 import { STORYBOARD } from '@server/initializers/constants'
+import { sequelizeTypescript } from '@server/initializers/database'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { StoryboardModel } from '@server/models/video/storyboard'
@@ -75,25 +78,39 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
 
       const imageSize = await getImageSize(destination)
 
-      const existing = await StoryboardModel.loadByVideo(video.id)
-      if (existing) await existing.destroy()
+      await retryTransactionWrapper(() => {
+        return sequelizeTypescript.transaction(async transaction => {
+          const videoStillExists = await VideoModel.load(video.id, transaction)
+          if (!videoStillExists) {
+            logger.info('Video %s does not exist anymore, skipping storyboard generation.', payload.videoUUID, lTags)
+            deleteFileAndCatch(destination)
+            return
+          }
 
-      await StoryboardModel.create({
-        filename,
-        totalHeight: imageSize.height,
-        totalWidth: imageSize.width,
-        spriteHeight: STORYBOARD.SPRITE_SIZE.height,
-        spriteWidth: STORYBOARD.SPRITE_SIZE.width,
-        spriteDuration,
-        videoId: video.id
+          const existing = await StoryboardModel.loadByVideo(video.id, transaction)
+          if (existing) await existing.destroy({ transaction })
+
+          await StoryboardModel.create({
+            filename,
+            totalHeight: imageSize.height,
+            totalWidth: imageSize.width,
+            spriteHeight: STORYBOARD.SPRITE_SIZE.height,
+            spriteWidth: STORYBOARD.SPRITE_SIZE.width,
+            spriteDuration,
+            videoId: video.id
+          }, { transaction })
+
+          logger.info('Storyboard generation %s ended for video %s.', destination, video.uuid, lTags)
+
+          if (payload.federate) {
+            await federateVideoIfNeeded(video, false, transaction)
+          }
+        })
       })
 
-      logger.info('Storyboard generation %s ended for video %s.', destination, video.uuid, lTags)
     })
 
-    if (payload.federate) {
-      await federateVideoIfNeeded(video, false)
-    }
+
   } finally {
     inputFileMutexReleaser()
   }
