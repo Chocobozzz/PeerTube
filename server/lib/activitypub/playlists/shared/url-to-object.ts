@@ -1,8 +1,8 @@
 import { isPlaylistElementObjectValid, isPlaylistObjectValid } from '@server/helpers/custom-validators/activitypub/playlist'
 import { isArray } from '@server/helpers/custom-validators/misc'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
-import { doJSONRequest } from '@server/helpers/requests'
 import { PlaylistElementObject, PlaylistObject } from '@shared/models'
+import { fetchAP } from '../../activity'
 import { checkUrlsSameHost } from '../../url'
 
 async function fetchRemoteVideoPlaylist (playlistUrl: string): Promise<{ statusCode: number, playlistObject: PlaylistObject }> {
@@ -10,7 +10,7 @@ async function fetchRemoteVideoPlaylist (playlistUrl: string): Promise<{ statusC
 
   logger.info('Fetching remote playlist %s.', playlistUrl, lTags())
 
-  const { body, statusCode } = await doJSONRequest<any>(playlistUrl, { activityPub: true })
+  const { body, statusCode } = await fetchAP<any>(playlistUrl)
 
   if (isPlaylistObjectValid(body) === false || checkUrlsSameHost(body.id, playlistUrl) !== true) {
     logger.debug('Remote video playlist JSON is not valid.', { body, ...lTags() })
@@ -30,7 +30,7 @@ async function fetchRemotePlaylistElement (elementUrl: string): Promise<{ status
 
   logger.debug('Fetching remote playlist element %s.', elementUrl, lTags())
 
-  const { body, statusCode } = await doJSONRequest<PlaylistElementObject>(elementUrl, { activityPub: true })
+  const { body, statusCode } = await fetchAP<PlaylistElementObject>(elementUrl)
 
   if (!isPlaylistElementObjectValid(body)) throw new Error(`Invalid body in fetch playlist element ${elementUrl}`)
 

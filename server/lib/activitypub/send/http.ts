@@ -23,11 +23,14 @@ async function computeBody <T> (
   return body
 }
 
-async function buildSignedRequestOptions (payload: Payload<any>) {
+async function buildSignedRequestOptions (options: {
+  signatureActorId?: number
+  hasPayload: boolean
+}) {
   let actor: MActor | null
 
-  if (payload.signatureActorId) {
-    actor = await ActorModel.load(payload.signatureActorId)
+  if (options.signatureActorId) {
+    actor = await ActorModel.load(options.signatureActorId)
     if (!actor) throw new Error('Unknown signature actor id.')
   } else {
     // We need to sign the request, so use the server
@@ -40,7 +43,9 @@ async function buildSignedRequestOptions (payload: Payload<any>) {
     authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME,
     keyId,
     key: actor.privateKey,
-    headers: HTTP_SIGNATURE.HEADERS_TO_SIGN
+    headers: options.hasPayload
+      ? HTTP_SIGNATURE.HEADERS_TO_SIGN_WITH_PAYLOAD
+      : HTTP_SIGNATURE.HEADERS_TO_SIGN_WITHOUT_PAYLOAD
   }
 }
 

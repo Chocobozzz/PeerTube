@@ -12,7 +12,7 @@ async function processActivityPubHttpUnicast (job: Job) {
   const uri = payload.uri
 
   const body = await computeBody(payload)
-  const httpSignatureOptions = await buildSignedRequestOptions(payload)
+  const httpSignatureOptions = await buildSignedRequestOptions({ signatureActorId: payload.signatureActorId, hasPayload: true })
 
   const options = {
     method: 'POST' as 'POST',

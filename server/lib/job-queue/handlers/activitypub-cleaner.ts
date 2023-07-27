@@ -6,8 +6,9 @@ import {
   isLikeActivityValid
 } from '@server/helpers/custom-validators/activitypub/activity'
 import { sanitizeAndCheckVideoCommentObject } from '@server/helpers/custom-validators/activitypub/video-comments'
-import { doJSONRequest, PeerTubeRequestError } from '@server/helpers/requests'
+import { PeerTubeRequestError } from '@server/helpers/requests'
 import { AP_CLEANER } from '@server/initializers/constants'
+import { fetchAP } from '@server/lib/activitypub/activity'
 import { checkUrlsSameHost } from '@server/lib/activitypub/url'
 import { Redis } from '@server/lib/redis'
 import { VideoModel } from '@server/models/video/video'
@@ -85,7 +86,7 @@ async function updateObjectIfNeeded <T> (options: {
   }
 
   try {
-    const { body } = await doJSONRequest<any>(url, { activityPub: true })
+    const { body } = await fetchAP<any>(url)
 
     // If not same id, check same host and update
     if (!body?.id || !bodyValidator(body)) throw new Error(`Body or body id of ${url} is invalid`)

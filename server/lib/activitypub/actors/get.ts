@@ -5,7 +5,7 @@ import { ActorLoadByUrlType, loadActorByUrl } from '@server/lib/model-loaders'
 import { MActor, MActorAccountChannelId, MActorAccountChannelIdActor, MActorAccountId, MActorFullActor } from '@server/types/models'
 import { arrayify } from '@shared/core-utils'
 import { ActivityPubActor, APObjectId } from '@shared/models'
-import { fetchAPObject, getAPId } from '../activity'
+import { fetchAPObjectIfNeeded, getAPId } from '../activity'
 import { checkUrlsSameHost } from '../url'
 import { refreshActorIfNeeded } from './refresh'
 import { APActorCreator, fetchRemoteActor } from './shared'
@@ -87,7 +87,7 @@ async function getOrCreateAPOwner (actorObject: ActivityPubActor, actorUrl: stri
 
 async function findOwner (rootUrl: string, attributedTo: APObjectId[] | APObjectId, type: 'Person' | 'Group') {
   for (const actorToCheck of arrayify(attributedTo)) {
-    const actorObject = await fetchAPObject<ActivityPubActor>(getAPId(actorToCheck))
+    const actorObject = await fetchAPObjectIfNeeded<ActivityPubActor>(getAPId(actorToCheck))
 
     if (!actorObject) {
       logger.warn('Unknown attributed to actor %s for owner %s', actorToCheck, rootUrl)

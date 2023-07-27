@@ -1,9 +1,10 @@
 import express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
 import { pickSearchVideoQuery } from '@server/helpers/query'
-import { doJSONRequest, findLatestRedirection } from '@server/helpers/requests'
+import { doJSONRequest } from '@server/helpers/requests'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
+import { findLatestAPRedirection } from '@server/lib/activitypub/activity'
 import { getOrCreateAPVideo } from '@server/lib/activitypub/videos'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search'
@@ -141,7 +142,7 @@ async function searchVideoURI (url: string, res: express.Response) {
       }
 
       const result = await getOrCreateAPVideo({
-        videoObject: await findLatestRedirection(url, { activityPub: true }),
+        videoObject: await findLatestAPRedirection(url),
         syncParam
       })
       video = result ? result.video : undefined

@@ -38,7 +38,7 @@ export {
 
 async function buildRequestOptions (payload: ActivitypubHttpBroadcastPayload) {
   const body = await computeBody(payload)
-  const httpSignatureOptions = await buildSignedRequestOptions(payload)
+  const httpSignatureOptions = await buildSignedRequestOptions({ signatureActorId: payload.signatureActorId, hasPayload: true })
 
   return {
     method: 'POST' as 'POST',

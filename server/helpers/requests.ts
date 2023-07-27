@@ -21,6 +21,7 @@ type PeerTubeRequestOptions = {
   timeout?: number
   activityPub?: boolean
   bodyKBLimit?: number // 1MB
+
   httpSignature?: {
     algorithm: string
     authorizationHeaderName: string
@@ -28,7 +29,10 @@ type PeerTubeRequestOptions = {
     key: string
     headers: string[]
   }
+
   jsonResponse?: boolean
+
+  followRedirect?: boolean
 } & Pick<GotOptions, 'headers' | 'json' | 'method' | 'searchParams'>
 
 const peertubeGot = got.extend({
@@ -180,16 +184,6 @@ function isBinaryResponse (result: Response<any>) {
   return BINARY_CONTENT_TYPES.has(result.headers['content-type'])
 }
 
-async function findLatestRedirection (url: string, options: PeerTubeRequestOptions, iteration = 1) {
-  if (iteration > 10) throw new Error('Too much iterations to find final URL ' + url)
-
-  const { headers } = await peertubeGot(url, { followRedirect: false, ...buildGotOptions(options) })
-
-  if (headers.location) return findLatestRedirection(headers.location, options, iteration + 1)
-
-  return url
-}
-
 // ---------------------------------------------------------------------------
 
 export {
@@ -200,7 +194,6 @@ export {
   doRequestAndSaveToFile,
   isBinaryResponse,
   getAgent,
-  findLatestRedirection,
   peertubeGot
 }
 
@@ -227,6 +220,7 @@ function buildGotOptions (options: PeerTubeRequestOptions) {
     timeout: options.timeout ?? REQUEST_TIMEOUTS.DEFAULT,
     json: options.json,
     searchParams: options.searchParams,
+    followRedirect: options.followRedirect,
     retry: 2,
     headers,
     context

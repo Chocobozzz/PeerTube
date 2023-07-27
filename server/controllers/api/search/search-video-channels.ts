@@ -1,9 +1,10 @@
 import express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
 import { pickSearchChannelQuery } from '@server/helpers/query'
-import { doJSONRequest, findLatestRedirection } from '@server/helpers/requests'
+import { doJSONRequest } from '@server/helpers/requests'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
+import { findLatestAPRedirection } from '@server/lib/activitypub/activity'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search'
 import { getServerActor } from '@server/models/application/application'
@@ -126,7 +127,7 @@ async function searchVideoChannelURI (search: string, res: express.Response) {
 
   if (isUserAbleToSearchRemoteURI(res)) {
     try {
-      const latestUri = await findLatestRedirection(uri, { activityPub: true })
+      const latestUri = await findLatestAPRedirection(uri)
 
       const actor = await getOrCreateAPActor(latestUri, 'all', true, true)
       videoChannel = actor.VideoChannel

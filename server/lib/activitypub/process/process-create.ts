@@ -18,7 +18,7 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../../types/models'
 import { Notifier } from '../../notifier'
-import { fetchAPObject } from '../activity'
+import { fetchAPObjectIfNeeded } from '../activity'
 import { createOrUpdateCacheFile } from '../cache-file'
 import { createOrUpdateLocalVideoViewer } from '../local-video-viewer'
 import { createOrUpdateVideoPlaylist } from '../playlists'
@@ -31,7 +31,7 @@ async function processCreateActivity (options: APProcessorOptions<ActivityCreate
 
   // Only notify if it is not from a fetcher job
   const notify = options.fromFetch !== true
-  const activityObject = await fetchAPObject<Exclude<ActivityObject, AbuseObject>>(activity.object)
+  const activityObject = await fetchAPObjectIfNeeded<Exclude<ActivityObject, AbuseObject>>(activity.object)
   const activityType = activityObject.type
 
   if (activityType === 'Video') {

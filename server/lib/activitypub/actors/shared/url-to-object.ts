@@ -1,29 +1,13 @@
 import { sanitizeAndCheckActorObject } from '@server/helpers/custom-validators/activitypub/actor'
 import { logger } from '@server/helpers/logger'
-import { doJSONRequest } from '@server/helpers/requests'
-import { CONFIG } from '@server/initializers/config'
-import { HTTP_SIGNATURE } from '@server/initializers/constants'
-import { getServerActor } from '@server/models/application/application'
 import { ActivityPubActor, ActivityPubOrderedCollection } from '@shared/models'
+import { fetchAP } from '../../activity'
 import { checkUrlsSameHost } from '../../url'
 
 async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode: number, actorObject: ActivityPubActor }> {
   logger.info('Fetching remote actor %s.', actorUrl)
 
-  let httpSignature = null
-  if (CONFIG.FEDERATION.SIGN_FEDERATED_FETCHES) {
-    const serverActor = await getServerActor()
-    const keyId = serverActor.url
-    httpSignature = {
-      algorithm: HTTP_SIGNATURE.ALGORITHM,
-      authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME,
-      keyId,
-      key: serverActor.privateKey,
-      headers: HTTP_SIGNATURE.HEADERS_TO_SIGN_FETCH
-    }
-  }
-
-  const { body, statusCode } = await doJSONRequest<ActivityPubActor>(actorUrl, { activityPub: true, httpSignature })
+  const { body, statusCode } = await fetchAP<ActivityPubActor>(actorUrl)
 
   if (sanitizeAndCheckActorObject(body) === false) {
     logger.debug('Remote actor JSON is not valid.', { actorJSON: body })
@@ -62,7 +46,7 @@ export {
 
 async function fetchActorTotalItems (url: string) {
   try {
-    const { body } = await doJSONRequest<ActivityPubOrderedCollection<unknown>>(url, { activityPub: true })
+    const { body } = await fetchAP<ActivityPubOrderedCollection<unknown>>(url)
 
     return body.totalItems || 0
   } catch (err) {

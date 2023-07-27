@@ -10,7 +10,7 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { ActorModel } from '../../../models/actor/actor'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorFull, MActorSignature } from '../../../types/models'
-import { fetchAPObject } from '../activity'
+import { fetchAPObjectIfNeeded } from '../activity'
 import { APActorUpdater } from '../actors/updater'
 import { createOrUpdateCacheFile } from '../cache-file'
 import { createOrUpdateVideoPlaylist } from '../playlists'
@@ -20,7 +20,7 @@ import { APVideoUpdater, getOrCreateAPVideo } from '../videos'
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate<ActivityUpdateObject>>) {
   const { activity, byActor } = options
 
-  const object = await fetchAPObject(activity.object)
+  const object = await fetchAPObjectIfNeeded(activity.object)
   const objectType = object.type
 
   if (objectType === 'Video') {
