@@ -1,6 +1,6 @@
 import videojs from 'video.js'
 import { UpNextPluginOptions } from '../../types'
-import { EndCardOptions } from './end-card'
+import { EndCard, EndCardOptions } from './end-card'
 
 const Plugin = videojs.getPlugin('plugin')
 
@@ -24,7 +24,10 @@ class UpNextPlugin extends Plugin {
       player.addClass('vjs-upnext')
     })
 
-    player.addChild('EndCard', settings)
+    const component = new EndCard(player, settings)
+
+    player.addChild(component)
+    this.on('dispose', () => player.removeChild(component))
   }
 }
 

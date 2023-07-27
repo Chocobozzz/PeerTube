@@ -12,7 +12,10 @@ class BezelsPlugin extends Plugin {
       player.addClass('vjs-bezels')
     })
 
-    player.addChild(new PauseBezel(player, options))
+    const component = new PauseBezel(player, options)
+    player.addChild(component)
+
+    this.on('dispose', () => player.removeChild(component))
   }
 }
 

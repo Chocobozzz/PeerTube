@@ -31,7 +31,7 @@ export interface EndCardOptions extends videojs.ComponentOptions, UpNextPluginOp
 }
 
 const Component = videojs.getComponent('Component')
-class EndCard extends Component {
+export class EndCard extends Component {
   options_: EndCardOptions
 
   dashOffsetTotal = 586
