@@ -3,10 +3,11 @@ import { sanitizeUrl } from '@server/helpers/core-utils'
 import { isUserAbleToSearchRemoteURI } from '@server/helpers/express-utils'
 import { logger } from '@server/helpers/logger'
 import { pickSearchPlaylistQuery } from '@server/helpers/query'
-import { doJSONRequest, findLatestRedirection } from '@server/helpers/requests'
+import { doJSONRequest } from '@server/helpers/requests'
 import { getFormattedObjects } from '@server/helpers/utils'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
+import { findLatestAPRedirection } from '@server/lib/activitypub/activity'
 import { getOrCreateAPVideoPlaylist } from '@server/lib/activitypub/playlists/get'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search'
@@ -105,7 +106,7 @@ async function searchVideoPlaylistsURI (search: string, res: express.Response) {
 
   if (isUserAbleToSearchRemoteURI(res)) {
     try {
-      const url = await findLatestRedirection(search, { activityPub: true })
+      const url = await findLatestAPRedirection(search)
 
       videoPlaylist = await getOrCreateAPVideoPlaylist(url)
     } catch (err) {

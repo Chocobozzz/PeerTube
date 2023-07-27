@@ -712,7 +712,8 @@ const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
 const HTTP_SIGNATURE = {
   HEADER_NAME: 'signature',
   ALGORITHM: 'rsa-sha256',
-  HEADERS_TO_SIGN: [ '(request-target)', 'host', 'date', 'digest' ],
+  HEADERS_TO_SIGN_WITH_PAYLOAD: [ '(request-target)', 'host', 'date', 'digest' ],
+  HEADERS_TO_SIGN_WITHOUT_PAYLOAD: [ '(request-target)', 'host', 'date' ],
   CLOCK_SKEW_SECONDS: 1800
 }
 

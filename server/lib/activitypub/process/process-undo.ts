@@ -19,7 +19,7 @@ import { VideoRedundancyModel } from '../../../models/redundancy/video-redundanc
 import { VideoShareModel } from '../../../models/video/video-share'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
-import { fetchAPObject } from '../activity'
+import { fetchAPObjectIfNeeded } from '../activity'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils'
 import { federateVideoIfNeeded, getOrCreateAPVideo } from '../videos'
 
@@ -32,7 +32,7 @@ async function processUndoActivity (options: APProcessorOptions<ActivityUndo<Act
   }
 
   if (activityToUndo.type === 'Create') {
-    const objectToUndo = await fetchAPObject<CacheFileObject>(activityToUndo.object)
+    const objectToUndo = await fetchAPObjectIfNeeded<CacheFileObject>(activityToUndo.object)
 
     if (objectToUndo.type === 'CacheFile') {
       return retryTransactionWrapper(processUndoCacheFile, byActor, activity, objectToUndo)

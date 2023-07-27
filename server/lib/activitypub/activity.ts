@@ -1,22 +1,26 @@
-import { doJSONRequest } from '@server/helpers/requests'
-import { APObjectId, ActivityObject, ActivityPubActor, ActivityType } from '@shared/models'
+import { doJSONRequest, PeerTubeRequestOptions } from '@server/helpers/requests'
+import { CONFIG } from '@server/initializers/config'
+import { ActivityObject, ActivityPubActor, ActivityType, APObjectId } from '@shared/models'
+import { buildSignedRequestOptions } from './send'
 
-function getAPId (object: string | { id: string }) {
+export function getAPId (object: string | { id: string }) {
   if (typeof object === 'string') return object
 
   return object.id
 }
 
-function getActivityStreamDuration (duration: number) {
+export function getActivityStreamDuration (duration: number) {
   // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
   return 'PT' + duration + 'S'
 }
 
-function getDurationFromActivityStream (duration: string) {
+export function getDurationFromActivityStream (duration: string) {
   return parseInt(duration.replace(/[^\d]+/, ''))
 }
 
-function buildAvailableActivities (): ActivityType[] {
+// ---------------------------------------------------------------------------
+
+export function buildAvailableActivities (): ActivityType[] {
   return [
     'Create',
     'Update',
@@ -33,9 +37,25 @@ function buildAvailableActivities (): ActivityType[] {
   ]
 }
 
-async function fetchAPObject <T extends (ActivityObject | ActivityPubActor)> (object: APObjectId) {
+// ---------------------------------------------------------------------------
+
+export async function fetchAP <T> (url: string, moreOptions: PeerTubeRequestOptions = {}) {
+  const options = {
+    activityPub: true,
+
+    httpSignature: CONFIG.FEDERATION.SIGN_FEDERATED_FETCHES
+      ? await buildSignedRequestOptions({ hasPayload: false })
+      : undefined,
+
+    ...moreOptions
+  }
+
+  return doJSONRequest<T>(url, options)
+}
+
+export async function fetchAPObjectIfNeeded <T extends (ActivityObject | ActivityPubActor)> (object: APObjectId) {
   if (typeof object === 'string') {
-    const { body } = await doJSONRequest<Exclude<T, string>>(object, { activityPub: true })
+    const { body } = await fetchAP<Exclude<T, string>>(object)
 
     return body
   }
@@ -43,10 +63,12 @@ async function fetchAPObject <T extends (ActivityObject | ActivityPubActor)> (ob
   return object as Exclude<T, string>
 }
 
-export {
-  getAPId,
-  fetchAPObject,
-  getActivityStreamDuration,
-  buildAvailableActivities,
-  getDurationFromActivityStream
+export async function findLatestAPRedirection (url: string, iteration = 1) {
+  if (iteration > 10) throw new Error('Too much iterations to find final URL ' + url)
+
+  const { headers } = await fetchAP(url, { followRedirect: false })
+
+  if (headers.location) return findLatestAPRedirection(headers.location, iteration + 1)
+
+  return url
 }

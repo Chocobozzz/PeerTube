@@ -1,12 +1,12 @@
 import { runInReadCommittedTransaction } from '@server/helpers/database-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
-import { doJSONRequest } from '@server/helpers/requests'
 import { JobQueue } from '@server/lib/job-queue'
 import { VideoModel } from '@server/models/video/video'
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { VideoShareModel } from '@server/models/video/video-share'
 import { MVideo } from '@server/types/models'
 import { ActivitypubHttpFetcherPayload, ActivityPubOrderedCollection, VideoObject } from '@shared/models'
+import { fetchAP } from '../../activity'
 import { crawlCollectionPage } from '../../crawl'
 import { addVideoShares } from '../../share'
 import { addVideoComments } from '../../video-comments'
@@ -63,17 +63,15 @@ async function getRatesCount (type: 'like' | 'dislike', video: MVideo, fetchedVi
     : fetchedVideo.dislikes
 
   logger.info('Sync %s of video %s', type, video.url)
-  const options = { activityPub: true }
 
-  const response = await doJSONRequest<ActivityPubOrderedCollection<any>>(uri, options)
-  const totalItems = response.body.totalItems
+  const { body } = await fetchAP<ActivityPubOrderedCollection<any>>(uri)
 
-  if (isNaN(totalItems)) {
-    logger.error('Cannot sync %s of video %s, totalItems is not a number', type, video.url, { body: response.body })
+  if (isNaN(body.totalItems)) {
+    logger.error('Cannot sync %s of video %s, totalItems is not a number', type, video.url, { body })
     return
   }
 
-  return totalItems
+  return body.totalItems
 }
 
 function syncShares (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {

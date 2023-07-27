@@ -1,13 +1,13 @@
 import { sanitizeAndCheckActorObject } from '@server/helpers/custom-validators/activitypub/actor'
 import { logger } from '@server/helpers/logger'
-import { doJSONRequest } from '@server/helpers/requests'
 import { ActivityPubActor, ActivityPubOrderedCollection } from '@shared/models'
+import { fetchAP } from '../../activity'
 import { checkUrlsSameHost } from '../../url'
 
 async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode: number, actorObject: ActivityPubActor }> {
   logger.info('Fetching remote actor %s.', actorUrl)
 
-  const { body, statusCode } = await doJSONRequest<ActivityPubActor>(actorUrl, { activityPub: true })
+  const { body, statusCode } = await fetchAP<ActivityPubActor>(actorUrl)
 
   if (sanitizeAndCheckActorObject(body) === false) {
     logger.debug('Remote actor JSON is not valid.', { actorJSON: body })
@@ -46,7 +46,7 @@ export {
 
 async function fetchActorTotalItems (url: string) {
   try {
-    const { body } = await doJSONRequest<ActivityPubOrderedCollection<unknown>>(url, { activityPub: true })
+    const { body } = await fetchAP<ActivityPubOrderedCollection<unknown>>(url)
 
     return body.totalItems || 0
   } catch (err) {

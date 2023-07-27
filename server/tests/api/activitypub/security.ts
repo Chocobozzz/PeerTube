@@ -58,7 +58,7 @@ async function makeFollowRequest (to: { url: string }, by: { url: string, privat
     authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME,
     keyId: by.url,
     key: by.privateKey,
-    headers: HTTP_SIGNATURE.HEADERS_TO_SIGN
+    headers: HTTP_SIGNATURE.HEADERS_TO_SIGN_WITH_PAYLOAD
   }
   const headers = {
     'digest': buildDigest(body),
@@ -82,7 +82,7 @@ describe('Test ActivityPub security', function () {
     authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME,
     keyId: 'acct:peertube@' + servers[1].host,
     key: keys.privateKey,
-    headers: HTTP_SIGNATURE.HEADERS_TO_SIGN
+    headers: HTTP_SIGNATURE.HEADERS_TO_SIGN_WITH_PAYLOAD
   })
 
   // ---------------------------------------------------------------

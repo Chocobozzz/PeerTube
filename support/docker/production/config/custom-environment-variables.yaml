@@ -12,6 +12,11 @@ webserver:
     __name: "PEERTUBE_WEBSERVER_HTTPS"
     __format: "json"
 
+federation:
+  sign_federated_fetches:
+    __name: "PEERTUBE_SIGN_FEDERATED_FETCHES"
+    __format: "json"
+
 secrets:
   peertube: "PEERTUBE_SECRET"
 

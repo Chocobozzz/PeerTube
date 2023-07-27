@@ -3,8 +3,8 @@ import { URL } from 'url'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { ActivityPubOrderedCollection } from '../../../shared/models/activitypub'
 import { logger } from '../../helpers/logger'
-import { doJSONRequest } from '../../helpers/requests'
 import { ACTIVITY_PUB, WEBSERVER } from '../../initializers/constants'
+import { fetchAP } from './activity'
 
 type HandlerFunction<T> = (items: T[]) => (Promise<any> | Bluebird<any>)
 type CleanerFunction = (startedDate: Date) => Promise<any>
@@ -14,11 +14,9 @@ async function crawlCollectionPage <T> (argUrl: string, handler: HandlerFunction
 
   logger.info('Crawling ActivityPub data on %s.', url)
 
-  const options = { activityPub: true }
-
   const startDate = new Date()
 
-  const response = await doJSONRequest<ActivityPubOrderedCollection<T>>(url, options)
+  const response = await fetchAP<ActivityPubOrderedCollection<T>>(url)
   const firstBody = response.body
 
   const limit = ACTIVITY_PUB.FETCH_PAGE_LIMIT
@@ -34,7 +32,7 @@ async function crawlCollectionPage <T> (argUrl: string, handler: HandlerFunction
 
       url = nextLink
 
-      const res = await doJSONRequest<ActivityPubOrderedCollection<T>>(url, options)
+      const res = await fetchAP<ActivityPubOrderedCollection<T>>(url)
       body = res.body
     } else {
       // nextLink is already the object we want

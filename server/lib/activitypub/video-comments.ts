@@ -1,12 +1,13 @@
 import { map } from 'bluebird'
+
 import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments'
 import { logger } from '../../helpers/logger'
-import { doJSONRequest } from '../../helpers/requests'
 import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { MComment, MCommentOwner, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../types/models/video'
 import { isRemoteVideoCommentAccepted } from '../moderation'
 import { Hooks } from '../plugins/hooks'
+import { fetchAP } from './activity'
 import { getOrCreateAPActor } from './actors'
 import { checkUrlsSameHost } from './url'
 import { getOrCreateAPVideo } from './videos'
@@ -139,7 +140,7 @@ async function resolveRemoteParentComment (params: ResolveThreadParams) {
     throw new Error('Recursion limit reached when resolving a thread')
   }
 
-  const { body } = await doJSONRequest<any>(url, { activityPub: true })
+  const { body } = await fetchAP<any>(url)
 
   if (sanitizeAndCheckVideoCommentObject(body) === false) {
     throw new Error(`Remote video comment JSON ${url} is not valid:` + JSON.stringify(body))

@@ -374,6 +374,9 @@ plugins:
     url: 'https://packages.joinpeertube.org'
 
 federation:
+  # Some federated software such as Mastodon may require an HTTP signature to access content
+  sign_federated_fetches: true
+
   videos:
     federate_unlisted: false
 
