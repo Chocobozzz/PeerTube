@@ -145,7 +145,7 @@ function checkInvalidConfigIfEmailDisabled (customConfig: CustomConfig, res: exp
   if (isEmailEnabled()) return true
 
   if (customConfig.signup.requiresEmailVerification === true) {
-    res.fail({ message: 'Emailer is disabled but you require signup email verification.' })
+    res.fail({ message: 'SMTP is not configured but you require signup email verification.' })
     return false
   }
 

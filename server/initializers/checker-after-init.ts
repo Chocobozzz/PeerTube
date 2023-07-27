@@ -139,16 +139,16 @@ function checkSecretsConfig () {
 function checkEmailConfig () {
   if (!isEmailEnabled()) {
     if (CONFIG.SIGNUP.ENABLED && CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
-      throw new Error('Emailer is disabled but you require signup email verification.')
+      throw new Error('SMTP is not configured but you require signup email verification.')
     }
 
     if (CONFIG.SIGNUP.ENABLED && CONFIG.SIGNUP.REQUIRES_APPROVAL) {
       // eslint-disable-next-line max-len
-      logger.warn('Emailer is disabled but signup approval is enabled: PeerTube will not be able to send an email to the user upon acceptance/rejection of the registration request')
+      logger.warn('SMTP is not configured but signup approval is enabled: PeerTube will not be able to send an email to the user upon acceptance/rejection of the registration request')
     }
 
     if (CONFIG.CONTACT_FORM.ENABLED) {
-      logger.warn('Emailer is disabled so the contact form will not work.')
+      logger.warn('SMTP is not configured so the contact form will not work.')
     }
   }
 }

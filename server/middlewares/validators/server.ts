@@ -50,7 +50,7 @@ const contactAdministratorValidator = [
     if (isEmailEnabled() === false) {
       return res.fail({
         status: HttpStatusCode.CONFLICT_409,
-        message: 'Emailer is not enabled on this instance.'
+        message: 'SMTP is not configured on this instance.'
       })
     }
 
