@@ -36,6 +36,8 @@ class PeerTubePlugin extends Plugin {
   private mouseInControlBar = false
   private mouseInSettings = false
 
+  private errorModal: videojs.ModalDialog
+
   private videoViewOnPlayHandler: (...args: any[]) => void
   private videoViewOnSeekedHandler: (...args: any[]) => void
   private videoViewOnEndedHandler: (...args: any[]) => void
@@ -109,6 +111,8 @@ class PeerTubePlugin extends Plugin {
 
       this.player.on('video-change', () => {
         this.initOnVideoChange()
+
+        this.hideFatalError()
       })
     })
   }
@@ -130,6 +134,11 @@ class PeerTubePlugin extends Plugin {
   }
 
   displayFatalError () {
+    // Already displayed an error
+    if (this.errorModal) return
+
+    debugLogger('Display fatal error')
+
     this.player.loadingSpinner.hide()
 
     const buildModal = (error: MediaError) => {
@@ -150,17 +159,24 @@ class PeerTubePlugin extends Plugin {
       return wrapper
     }
 
-    const modal = this.player.createModal(buildModal(this.player.error()), {
-      temporary: false,
+    this.errorModal = this.player.createModal(buildModal(this.player.error()), {
+      temporary: true,
       uncloseable: true
     })
-    modal.addClass('vjs-custom-error-display')
+    this.errorModal.addClass('vjs-custom-error-display')
 
     this.player.addClass('vjs-error-display-enabled')
   }
 
   hideFatalError () {
+    if (!this.errorModal) return
+
+    debugLogger('Hiding fatal error')
+
     this.player.removeClass('vjs-error-display-enabled')
+    this.player.removeChild(this.errorModal)
+    this.errorModal.close()
+    this.errorModal = undefined
   }
 
   private initializePlayer () {

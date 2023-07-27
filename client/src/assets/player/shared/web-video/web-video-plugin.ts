@@ -65,9 +65,10 @@ class WebVideoPlugin extends Plugin {
     const playbackRate = this.player.playbackRate()
     const currentTime = this.player.currentTime()
 
-    // Enable error display now this is our last fallback
-    this.onErrorHandler = () => this.player.peertube().displayFatalError()
-    this.player.one('error', this.onErrorHandler)
+    if (!this.onErrorHandler) {
+      this.onErrorHandler = () => this.player.peertube().displayFatalError()
+      this.player.one('error', this.onErrorHandler)
+    }
 
     let httpUrl = this.currentVideoFile.fileUrl
 
