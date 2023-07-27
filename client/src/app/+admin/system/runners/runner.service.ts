@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService, ServerService } from '@app/core'
 import { arrayify, peertubeTranslate } from '@shared/core-utils'
 import { ResultList } from '@shared/models/common'
-import { Runner, RunnerJob, RunnerJobAdmin, RunnerRegistrationToken } from '@shared/models/runners'
+import { Runner, RunnerJob, RunnerJobAdmin, RunnerJobState, RunnerRegistrationToken } from '@shared/models/runners'
 import { environment } from '../../../../environments/environment'
 
 export type RunnerJobFormatted = RunnerJob & {
@@ -60,7 +60,9 @@ export class RunnerService {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    if (search) params = params.append('search', search)
+    if (search) {
+      params = this.buildParamsFromSearch(search, params)
+    }
 
     return forkJoin([
       this.authHttp.get<ResultList<RunnerJobAdmin>>(RunnerService.BASE_RUNNER_URL + '/jobs', { params }),
@@ -90,12 +92,48 @@ export class RunnerService {
     )
   }
 
+  private buildParamsFromSearch (search: string, params: HttpParams) {
+    const filters = this.restService.parseQueryStringFilter(search, {
+      stateOneOf: {
+        prefix: 'state:',
+        multiple: true,
+        handler: v => {
+          if (v === 'completed') return RunnerJobState.COMPLETED
+          if (v === 'processing') return RunnerJobState.PROCESSING
+          if (v === 'errored') return RunnerJobState.ERRORED
+          if (v === 'pending') return RunnerJobState.PENDING
+          if (v === 'waiting-for-parent-job') return RunnerJobState.WAITING_FOR_PARENT_JOB
+          if (v === 'parent-errored') return RunnerJobState.PARENT_ERRORED
+
+          return undefined
+        }
+      }
+    })
+
+    console.log(filters)
+
+    return this.restService.addObjectParams(params, filters)
+  }
+
+  // ---------------------------------------------------------------------------
+
   cancelJobs (jobsArg: RunnerJob | RunnerJob[]) {
     const jobs = arrayify(jobsArg)
 
     return from(jobs)
       .pipe(
         concatMap(job => this.authHttp.post(RunnerService.BASE_RUNNER_URL + '/jobs/' + job.uuid + '/cancel', {})),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
+  }
+
+  removeJobs (jobsArg: RunnerJob | RunnerJob[]) {
+    const jobs = arrayify(jobsArg)
+
+    return from(jobs)
+      .pipe(
+        concatMap(job => this.authHttp.delete(RunnerService.BASE_RUNNER_URL + '/jobs/' + job.uuid)),
         toArray(),
         catchError(err => this.restExtractor.handleError(err))
       )

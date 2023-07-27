@@ -64,11 +64,11 @@
 
             <div class="actor-handle">
               <span>@{{ videoChannel.nameWithHost }}</span>
-              <button [cdkCopyToClipboard]="videoChannel.nameWithHostForced" (click)="activateCopiedMessage()"
-                      class="btn btn-outline-secondary btn-sm copy-button" title="Copy channel handle" i18n-title
-              >
-                <my-global-icon iconName="copy"></my-global-icon>
-              </button>
+
+              <my-copy-button
+                [value]="videoChannel.nameWithHostForced" i18n-notification notification="Handle copied"
+                title="Copy channel handle" i18n-title
+              ></my-copy-button>
             </div>
 
             <div class="actor-counters">

@@ -152,14 +152,8 @@
   display: none;
 }
 
-.copy-button {
+my-copy-button {
   @include margin-left(3px);
-
-  border: 0;
-
-  my-global-icon {
-    width: 15px;
-  }
 }
 
 @media screen and (max-width: 1400px) {

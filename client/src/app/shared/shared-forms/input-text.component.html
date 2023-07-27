@@ -11,13 +11,12 @@
     <my-global-icon *ngIf="!show" iconName="eye-close"></my-global-icon>
   </button>
 
-  <button
-    *ngIf="withCopy" [cdkCopyToClipboard]="input.value" (click)="activateCopiedMessage()" type="button"
-    class="btn btn-outline-secondary text-uppercase" i18n-title title="Copy"
+  <my-copy-button
+    *ngIf="withCopy" [value]="input.value" i18n-notification notification="Copied"
+    [isInputGroup]="true" i18n
   >
-    <my-global-icon iconName="copy"></my-global-icon>
-    <span class="copy-text">Copy</span>
-  </button>
+    COPY
+  </my-copy-button>
 </div>
 
 <div *ngIf="formError" class="form-error">{{ formError }}</div>

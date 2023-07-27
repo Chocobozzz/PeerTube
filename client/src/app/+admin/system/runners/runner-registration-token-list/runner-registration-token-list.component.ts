@@ -7,6 +7,7 @@ import { RunnerService } from '../runner.service'
 
 @Component({
   selector: 'my-runner-registration-token-list',
+  styleUrls: [ './runner-registration-token-list.component.scss' ],
   templateUrl: './runner-registration-token-list.component.html'
 })
 export class RunnerRegistrationTokenListComponent extends RestTable <RunnerRegistrationToken> implements OnInit {

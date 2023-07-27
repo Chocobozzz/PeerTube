@@ -115,10 +115,6 @@ export class AccountsComponent implements OnInit, OnDestroy {
     this.redirectService.redirectToHomepage()
   }
 
-  activateCopiedMessage () {
-    this.notifier.success($localize`Username copied`)
-  }
-
   searchChanged (search: string) {
     const queryParams = { search }
 

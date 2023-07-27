@@ -25,11 +25,11 @@
 
             <div class="actor-handle">
               <span>@{{ account.nameWithHost }}</span>
-              <button [cdkCopyToClipboard]="account.nameWithHostForced" (click)="activateCopiedMessage()"
-                      class="btn btn-outline-secondary btn-sm copy-button" title="Copy account handle" i18n-title
-              >
-                <my-global-icon iconName="copy"></my-global-icon>
-              </button>
+
+              <my-copy-button
+                [value]="account.nameWithHostForced" i18n-notification notification="Username copied"
+                title="Copy account handle" i18n-title
+              ></my-copy-button>
             </div>
 
             <div class="actor-counters">

@@ -31,7 +31,7 @@
       <th style="width: 100px" i18n pSortableColumn="priority">Priority <p-sortIcon field="priority"></p-sortIcon></th>
       <th style="width: 100px" i18n pSortableColumn="progress">Progress <p-sortIcon field="progress"></p-sortIcon></th>
       <th i18n>Runner</th>
-      <th style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th style="width: 200px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
@@ -47,7 +47,7 @@
       </div>
 
       <div class="ms-auto d-flex">
-        <my-advanced-input-filter class="me-2" (search)="onSearch($event)"></my-advanced-input-filter>
+        <my-advanced-input-filter class="me-2" [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
 
         <my-button i18n-label label="Refresh" icon="refresh" (click)="reloadData()"></my-button>
       </div>
@@ -73,7 +73,9 @@
 
       <td>{{ runnerJob.uuid }}</td>
       <td>{{ runnerJob.type }}</td>
-      <td>{{ runnerJob.state.label }}</td>
+      <td>
+        <span class="pt-badge" [ngClass]="getStateBadgeColor(runnerJob)">{{ runnerJob.state.label }}</span>
+      </td>
       <td>{{ runnerJob.priority }}</td>
 
       <td>

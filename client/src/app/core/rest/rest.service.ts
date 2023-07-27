@@ -7,16 +7,18 @@ import { RestPagination } from './rest-pagination'
 
 const debugLogger = debug('peertube:rest')
 
+type ParseQueryHandlerResult = string | number | boolean | string[] | number[] | boolean[]
+
 interface QueryStringFilterPrefixes {
   [key: string]: {
     prefix: string
-    handler?: (v: string) => string | number | boolean
+    handler?: (v: string) => ParseQueryHandlerResult
     multiple?: boolean
     isBoolean?: boolean
   }
 }
 
-type ParseQueryStringFilters <K extends keyof any> = Partial<Record<K, string | number | boolean | (string | number | boolean)[]>>
+type ParseQueryStringFilters <K extends keyof any> = Partial<Record<K, ParseQueryHandlerResult | ParseQueryHandlerResult[]>>
 type ParseQueryStringFiltersResult <K extends keyof any> = ParseQueryStringFilters<K> & { search?: string }
 
 @Injectable()

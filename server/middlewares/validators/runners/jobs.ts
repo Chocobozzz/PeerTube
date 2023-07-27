@@ -1,8 +1,9 @@
 import express from 'express'
-import { body, param } from 'express-validator'
-import { isUUIDValid } from '@server/helpers/custom-validators/misc'
+import { body, param, query } from 'express-validator'
+import { exists, isUUIDValid } from '@server/helpers/custom-validators/misc'
 import {
   isRunnerJobAbortReasonValid,
+  isRunnerJobArrayOfStateValid,
   isRunnerJobErrorMessageValid,
   isRunnerJobProgressValid,
   isRunnerJobSuccessPayloadValid,
@@ -12,7 +13,9 @@ import {
 import { isRunnerTokenValid } from '@server/helpers/custom-validators/runners/runners'
 import { cleanUpReqFiles } from '@server/helpers/express-utils'
 import { LiveManager } from '@server/lib/live'
+import { runnerJobCanBeCancelled } from '@server/lib/runners'
 import { RunnerJobModel } from '@server/models/runner/runner-job'
+import { arrayify } from '@shared/core-utils'
 import {
   HttpStatusCode,
   RunnerJobLiveRTMPHLSTranscodingPrivatePayload,
@@ -119,13 +122,7 @@ export const cancelRunnerJobValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const runnerJob = res.locals.runnerJob
 
-    const allowedStates = new Set<RunnerJobState>([
-      RunnerJobState.PENDING,
-      RunnerJobState.PROCESSING,
-      RunnerJobState.WAITING_FOR_PARENT_JOB
-    ])
-
-    if (allowedStates.has(runnerJob.state) !== true) {
+    if (runnerJobCanBeCancelled(runnerJob) !== true) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
         message: 'Cannot cancel this job that is not in "pending", "processing" or "waiting for parent job" state',
@@ -133,6 +130,21 @@ export const cancelRunnerJobValidator = [
       })
     }
 
+    return next()
+  }
+]
+
+export const listRunnerJobsValidator = [
+  query('search')
+    .optional()
+    .custom(exists),
+
+  query('stateOneOf')
+    .optional()
+    .customSanitizer(arrayify)
+    .custom(isRunnerJobArrayOfStateValid),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
     return next()
   }
 ]

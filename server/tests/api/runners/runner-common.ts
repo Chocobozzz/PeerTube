@@ -339,6 +339,30 @@ describe('Test runner common actions', function () {
 
           expect(data).to.not.have.lengthOf(0)
           expect(total).to.not.equal(0)
+
+          for (const job of data) {
+            expect(job.type).to.include('hls')
+          }
+        }
+      })
+
+      it('Should filter jobs', async function () {
+        {
+          const { total, data } = await server.runnerJobs.list({ stateOneOf: [ RunnerJobState.WAITING_FOR_PARENT_JOB ] })
+
+          expect(data).to.not.have.lengthOf(0)
+          expect(total).to.not.equal(0)
+
+          for (const job of data) {
+            expect(job.state.label).to.equal('Waiting for parent job to finish')
+          }
+        }
+
+        {
+          const { total, data } = await server.runnerJobs.list({ stateOneOf: [ RunnerJobState.COMPLETED ] })
+
+          expect(data).to.have.lengthOf(0)
+          expect(total).to.equal(0)
         }
       })
     })
@@ -595,6 +619,33 @@ describe('Test runner common actions', function () {
         await server.runnerJobs.cancelByAdmin({ jobUUID })
 
         await server.runnerJobs.abort({ runnerToken, jobUUID, jobToken, reason: 'aborted', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      })
+    })
+
+    describe('Remove', function () {
+
+      it('Should remove a pending job', async function () {
+        await server.videos.quickUpload({ name: 'video' })
+        await waitJobs([ server ])
+
+        {
+          const { data } = await server.runnerJobs.list({ count: 10, sort: '-updatedAt' })
+
+          const pendingJob = data.find(j => j.state.id === RunnerJobState.PENDING)
+          jobUUID = pendingJob.uuid
+
+          await server.runnerJobs.deleteByAdmin({ jobUUID })
+        }
+
+        {
+          const { data } = await server.runnerJobs.list({ count: 10, sort: '-updatedAt' })
+
+          const parent = data.find(j => j.uuid === jobUUID)
+          expect(parent).to.not.exist
+
+          const children = data.filter(j => j.parent?.uuid === jobUUID)
+          expect(children).to.have.lengthOf(0)
+        }
       })
     })
 

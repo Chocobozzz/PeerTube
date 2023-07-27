@@ -1,6 +1,6 @@
 import { UploadFilesForCheck } from 'express'
 import validator from 'validator'
-import { CONSTRAINTS_FIELDS } from '@server/initializers/constants'
+import { CONSTRAINTS_FIELDS, RUNNER_JOB_STATES } from '@server/initializers/constants'
 import {
   LiveRTMPHLSTranscodingSuccess,
   RunnerJobSuccessPayload,
@@ -11,7 +11,7 @@ import {
   VODHLSTranscodingSuccess,
   VODWebVideoTranscodingSuccess
 } from '@shared/models'
-import { exists, isFileValid, isSafeFilename } from '../misc'
+import { exists, isArray, isFileValid, isSafeFilename } from '../misc'
 
 const RUNNER_JOBS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.RUNNER_JOBS
 
@@ -56,6 +56,14 @@ function isRunnerJobErrorMessageValid (value: string) {
   return validator.isLength(value, RUNNER_JOBS_CONSTRAINTS_FIELDS.ERROR_MESSAGE)
 }
 
+function isRunnerJobStateValid (value: any) {
+  return exists(value) && RUNNER_JOB_STATES[value] !== undefined
+}
+
+function isRunnerJobArrayOfStateValid (value: any) {
+  return isArray(value) && value.every(v => isRunnerJobStateValid(v))
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -65,7 +73,9 @@ export {
   isRunnerJobTokenValid,
   isRunnerJobErrorMessageValid,
   isRunnerJobProgressValid,
-  isRunnerJobAbortReasonValid
+  isRunnerJobAbortReasonValid,
+  isRunnerJobArrayOfStateValid,
+  isRunnerJobStateValid
 }
 
 // ---------------------------------------------------------------------------

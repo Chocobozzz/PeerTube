@@ -2,8 +2,9 @@ import express from 'express'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { sequelizeTypescript } from '@server/initializers/database'
-import { MRunner } from '@server/types/models/runners'
+import { MRunner, MRunnerJob } from '@server/types/models/runners'
 import { RUNNER_JOBS } from '@server/initializers/constants'
+import { RunnerJobState } from '@shared/models'
 
 const lTags = loggerTagsFactory('runner')
 
@@ -32,6 +33,17 @@ function updateLastRunnerContact (req: express.Request, runner: MRunner) {
   .finally(() => updatingRunner.delete(runner.id))
 }
 
+function runnerJobCanBeCancelled (runnerJob: MRunnerJob) {
+  const allowedStates = new Set<RunnerJobState>([
+    RunnerJobState.PENDING,
+    RunnerJobState.PROCESSING,
+    RunnerJobState.WAITING_FOR_PARENT_JOB
+  ])
+
+  return allowedStates.has(runnerJob.state)
+}
+
 export {
-  updateLastRunnerContact
+  updateLastRunnerContact,
+  runnerJobCanBeCancelled
 }

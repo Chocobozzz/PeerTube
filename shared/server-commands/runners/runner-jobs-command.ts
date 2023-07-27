@@ -8,6 +8,7 @@ import {
   isHLSTranscodingPayloadSuccess,
   isLiveRTMPHLSTranscodingUpdatePayload,
   isWebVideoOrAudioMergeTranscodingPayloadSuccess,
+  ListRunnerJobsQuery,
   RequestRunnerJobBody,
   RequestRunnerJobResult,
   ResultList,
@@ -27,19 +28,14 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class RunnerJobsCommand extends AbstractCommand {
 
-  list (options: OverrideCommandOptions & {
-    start?: number
-    count?: number
-    sort?: string
-    search?: string
-  } = {}) {
+  list (options: OverrideCommandOptions & ListRunnerJobsQuery = {}) {
     const path = '/api/v1/runners/jobs'
 
     return this.getRequestBody<ResultList<RunnerJobAdmin>>({
       ...options,
 
       path,
-      query: pick(options, [ 'start', 'count', 'sort', 'search' ]),
+      query: pick(options, [ 'start', 'count', 'sort', 'search', 'stateOneOf' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
@@ -49,6 +45,18 @@ export class RunnerJobsCommand extends AbstractCommand {
     const path = '/api/v1/runners/jobs/' + options.jobUUID + '/cancel'
 
     return this.postBodyRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  deleteByAdmin (options: OverrideCommandOptions & { jobUUID: string }) {
+    const path = '/api/v1/runners/jobs/' + options.jobUUID
+
+    return this.deleteRequest({
       ...options,
 
       path,

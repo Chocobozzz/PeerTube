@@ -120,10 +120,6 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
     return this.isOwner() || this.authService.getUser().hasRight(UserRight.MANAGE_ANY_VIDEO_CHANNEL)
   }
 
-  activateCopiedMessage () {
-    this.notifier.success($localize`Username copied`)
-  }
-
   hasShowMoreDescription () {
     return !this.channelDescriptionExpanded && this.channelDescriptionHTML.length > 100
   }

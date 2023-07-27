@@ -1,14 +1,14 @@
-import { basename } from 'path'
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+import { basename } from 'path'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
 import {
   HttpStatusCode,
   isVideoStudioTaskIntro,
   RunnerJob,
   RunnerJobState,
+  RunnerJobStudioTranscodingPayload,
   RunnerJobSuccessPayload,
   RunnerJobUpdatePayload,
-  RunnerJobStudioTranscodingPayload,
   VideoPrivacy,
   VideoStudioTaskIntro
 } from '@shared/models'
@@ -236,6 +236,10 @@ describe('Test managing runners', function () {
         await checkBadSortPagination(server.url, path, server.accessToken)
       })
 
+      it('Should fail with an invalid state', async function () {
+        await server.runners.list({ start: 0, count: 5, sort: '-createdAt' })
+      })
+
       it('Should succeed to list with the correct params', async function () {
         await server.runners.list({ start: 0, count: 5, sort: '-createdAt' })
       })
@@ -307,8 +311,48 @@ describe('Test managing runners', function () {
         await checkBadSortPagination(server.url, path, server.accessToken)
       })
 
-      it('Should succeed to list with the correct params', async function () {
-        await server.runnerJobs.list({ start: 0, count: 5, sort: '-createdAt' })
+      it('Should fail with an invalid state', async function () {
+        await server.runnerJobs.list({ start: 0, count: 5, sort: '-createdAt', stateOneOf: 42 as any })
+        await server.runnerJobs.list({ start: 0, count: 5, sort: '-createdAt', stateOneOf: [ 42 ] as any })
+      })
+
+      it('Should succeed with the correct params', async function () {
+        await server.runnerJobs.list({ start: 0, count: 5, sort: '-createdAt', stateOneOf: [ RunnerJobState.COMPLETED ] })
+      })
+    })
+
+    describe('Delete', function () {
+      let jobUUID: string
+
+      before(async function () {
+        this.timeout(60000)
+
+        await server.videos.quickUpload({ name: 'video' })
+        await waitJobs([ server ])
+
+        const { availableJobs } = await server.runnerJobs.request({ runnerToken })
+        jobUUID = availableJobs[0].uuid
+      })
+
+      it('Should fail without oauth token', async function () {
+        await server.runnerJobs.deleteByAdmin({ token: null, jobUUID, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      })
+
+      it('Should fail without admin rights', async function () {
+        await server.runnerJobs.deleteByAdmin({ token: userToken, jobUUID, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      })
+
+      it('Should fail with a bad job uuid', async function () {
+        await server.runnerJobs.deleteByAdmin({ jobUUID: 'hello', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      })
+
+      it('Should fail with an unknown job uuid', async function () {
+        const jobUUID = badUUID
+        await server.runnerJobs.deleteByAdmin({ jobUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      })
+
+      it('Should succeed with the correct params', async function () {
+        await server.runnerJobs.deleteByAdmin({ jobUUID })
       })
     })
 

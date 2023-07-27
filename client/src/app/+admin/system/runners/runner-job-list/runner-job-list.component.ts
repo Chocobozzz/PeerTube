@@ -5,6 +5,7 @@ import { formatICU } from '@app/helpers'
 import { DropdownAction } from '@app/shared/shared-main'
 import { RunnerJob, RunnerJobState } from '@shared/models'
 import { RunnerJobFormatted, RunnerService } from '../runner.service'
+import { AdvancedInputFilter } from '@app/shared/shared-forms'
 
 @Component({
   selector: 'my-runner-job-list',
@@ -19,6 +20,30 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
 
   actions: DropdownAction<RunnerJob>[][] = []
   bulkActions: DropdownAction<RunnerJob[]>[][] = []
+
+  inputFilters: AdvancedInputFilter[] = [
+    {
+      title: $localize`Advanced filters`,
+      children: [
+        {
+          value: 'state:completed',
+          label: $localize`Completed jobs`
+        },
+        {
+          value: 'state:pending state:waiting-for-parent-job',
+          label: $localize`Pending jobs`
+        },
+        {
+          value: 'state:processing',
+          label: $localize`Jobs that are being processed`
+        },
+        {
+          value: 'state:errored state:parent-errored',
+          label: $localize`Failed jobs`
+        }
+      ]
+    }
+  ]
 
   constructor (
     private runnerService: RunnerService,
@@ -36,6 +61,12 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
           handler: job => this.cancelJobs([ job ]),
           isDisplayed: job => this.canCancelJob(job)
         }
+      ],
+      [
+        {
+          label: $localize`Delete this job`,
+          handler: job => this.removeJobs([ job ])
+        }
       ]
     ]
 
@@ -45,6 +76,12 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
           label: $localize`Cancel`,
           handler: jobs => this.cancelJobs(jobs),
           isDisplayed: jobs => jobs.every(j => this.canCancelJob(j))
+        }
+      ],
+      [
+        {
+          label: $localize`Delete`,
+          handler: jobs => this.removeJobs(jobs)
         }
       ]
     ]
@@ -75,6 +112,45 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
 
           error: err => this.notifier.error(err.message)
         })
+  }
+
+  async removeJobs (jobs: RunnerJob[]) {
+    const message = formatICU(
+      $localize`Do you really want to remove {count, plural, =1 {this job} other {{count} jobs}}? Children jobs will also be removed.`,
+      { count: jobs.length }
+    )
+
+    const res = await this.confirmService.confirm(message, $localize`Remove`)
+
+    if (res === false) return
+
+    this.runnerService.removeJobs(jobs)
+        .subscribe({
+          next: () => {
+            this.reloadData()
+            this.notifier.success($localize`Job(s) removed.`)
+          },
+
+          error: err => this.notifier.error(err.message)
+        })
+  }
+
+  getStateBadgeColor (job: RunnerJob) {
+    switch (job.state.id) {
+      case RunnerJobState.ERRORED:
+      case RunnerJobState.PARENT_ERRORED:
+        return 'badge-danger'
+
+      case RunnerJobState.COMPLETED:
+        return 'badge-success'
+
+      case RunnerJobState.PENDING:
+      case RunnerJobState.WAITING_FOR_PARENT_JOB:
+        return 'badge-warning'
+
+      default:
+        return 'badge-info'
+    }
   }
 
   protected reloadDataInternal () {

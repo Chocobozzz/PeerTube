@@ -45,7 +45,14 @@
         ></my-action-dropdown>
       </td>
 
-      <td>{{ registrationToken.registrationToken }}</td>
+      <td>
+        {{ registrationToken.registrationToken }}
+
+        <my-copy-button
+          [value]="registrationToken.registrationToken" i18n-notification notification="Registration token copied"
+          i18n-title title="Copy registration token"
+        ></my-copy-button>
+      </td>
 
       <td>{{ registrationToken.createdAt | date: 'short'  }}</td>
 

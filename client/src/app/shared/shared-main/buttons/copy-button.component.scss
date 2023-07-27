@@ -1,0 +1,15 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+button:not(.is-input-group) {
+  border: 0;
+}
+
+.is-input-group {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+my-global-icon {
+  width: 15px;
+}

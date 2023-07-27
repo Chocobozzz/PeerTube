@@ -5,7 +5,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { generateRunnerJobToken } from '@server/helpers/token-generator'
 import { MIMETYPES } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
-import { getRunnerJobHandlerClass, updateLastRunnerContact } from '@server/lib/runners'
+import { getRunnerJobHandlerClass, runnerJobCanBeCancelled, updateLastRunnerContact } from '@server/lib/runners'
 import {
   apiRateLimiter,
   asyncMiddleware,
@@ -23,6 +23,7 @@ import {
   errorRunnerJobValidator,
   getRunnerFromTokenValidator,
   jobOfRunnerGetValidatorFactory,
+  listRunnerJobsValidator,
   runnerJobGetValidator,
   successRunnerJobValidator,
   updateRunnerJobValidator
@@ -131,7 +132,15 @@ runnerJobsRouter.get('/jobs',
   runnerJobsSortValidator,
   setDefaultSort,
   setDefaultPagination,
+  listRunnerJobsValidator,
   asyncMiddleware(listRunnerJobs)
+)
+
+runnerJobsRouter.delete('/jobs/:jobUUID',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_RUNNERS),
+  asyncMiddleware(runnerJobGetValidator),
+  asyncMiddleware(deleteRunnerJob)
 )
 
 // ---------------------------------------------------------------------------
@@ -374,6 +383,21 @@ async function cancelRunnerJob (req: express.Request, res: express.Response) {
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
+async function deleteRunnerJob (req: express.Request, res: express.Response) {
+  const runnerJob = res.locals.runnerJob
+
+  logger.info('Deleting job %s (%s)', runnerJob.uuid, runnerJob.type, lTags(runnerJob.uuid, runnerJob.type))
+
+  if (runnerJobCanBeCancelled(runnerJob)) {
+    const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
+    await new RunnerJobHandler().cancel({ runnerJob })
+  }
+
+  await runnerJob.destroy()
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
 async function listRunnerJobs (req: express.Request, res: express.Response) {
   const query: ListRunnerJobsQuery = req.query
 
@@ -381,7 +405,8 @@ async function listRunnerJobs (req: express.Request, res: express.Response) {
     start: query.start,
     count: query.count,
     sort: query.sort,
-    search: query.search
+    search: query.search,
+    stateOneOf: query.stateOneOf
   })
 
   return res.json({

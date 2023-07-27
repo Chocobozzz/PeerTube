@@ -46,10 +46,6 @@ export class InputTextComponent implements ControlValueAccessor {
     this.show = !this.show
   }
 
-  activateCopiedMessage () {
-    this.notifier.success($localize`Copied`)
-  }
-
   propagateChange = (_: any) => { /* empty */ }
 
   writeValue (value: string) {

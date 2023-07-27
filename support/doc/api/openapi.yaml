@@ -6088,6 +6088,21 @@ paths:
         '204':
           description: successful operation
 
+  /api/v1/runners/jobs/{jobUUID}:
+    delete:
+      summary: Delete a job
+      description: The endpoint will first cancel the job if needed, and then remove it from the database. Children jobs will also be removed
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Runner Jobs
+      parameters:
+        - $ref: '#/components/parameters/jobUUID'
+      responses:
+        '204':
+          description: successful operation
+
   /api/v1/runners/jobs:
     get:
       summary: List jobs
@@ -6101,6 +6116,13 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/runnerJobSort'
         - $ref: '#/components/parameters/search'
+        - name: stateOneOf
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/RunnerJobState'
       responses:
         '200':
           description: successful operation

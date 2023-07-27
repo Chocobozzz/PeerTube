@@ -1,4 +1,4 @@
-import { FindOptions, Op, Transaction } from 'sequelize'
+import { Op, Transaction } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -13,7 +13,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { isUUIDValid } from '@server/helpers/custom-validators/misc'
+import { isArray, isUUIDValid } from '@server/helpers/custom-validators/misc'
 import { CONSTRAINTS_FIELDS, RUNNER_JOB_STATES } from '@server/initializers/constants'
 import { MRunnerJob, MRunnerJobRunner, MRunnerJobRunnerParent } from '@server/types/models/runners'
 import { RunnerJob, RunnerJobAdmin, RunnerJobPayload, RunnerJobPrivatePayload, RunnerJobState, RunnerJobType } from '@shared/models'
@@ -227,26 +227,36 @@ export class RunnerJobModel extends Model<Partial<AttributesOnly<RunnerJobModel>
     count: number
     sort: string
     search?: string
+    stateOneOf?: RunnerJobState[]
   }) {
-    const { start, count, sort, search } = options
+    const { start, count, sort, search, stateOneOf } = options
 
-    const query: FindOptions = {
+    const query = {
       offset: start,
       limit: count,
-      order: getSort(sort)
+      order: getSort(sort),
+      where: []
     }
 
     if (search) {
       if (isUUIDValid(search)) {
-        query.where = { uuid: search }
+        query.where.push({ uuid: search })
       } else {
-        query.where = {
+        query.where.push({
           [Op.or]: [
             searchAttribute(search, 'type'),
             searchAttribute(search, '$Runner.name$')
           ]
-        }
+        })
       }
+    }
+
+    if (isArray(stateOneOf) && stateOneOf.length !== 0) {
+      query.where.push({
+        state: {
+          [Op.in]: stateOneOf
+        }
+      })
     }
 
     return Promise.all([
