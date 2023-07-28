@@ -13,9 +13,6 @@ export abstract class Actor implements ServerActor {
 
   createdAt: Date | string
 
-  // TODO: remove, deprecated in 4.2
-  avatar: never
-
   avatars: ActorImage[]
 
   isLocal: boolean

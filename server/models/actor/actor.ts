@@ -540,12 +540,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       url: this.url,
       name: this.preferredUsername,
       host: this.getHost(),
-      avatars: (this.Avatars || []).map(a => a.toFormattedJSON()),
-
-      // TODO: remove, deprecated in 4.2
-      avatar: this.hasImage(ActorImageType.AVATAR)
-        ? this.Avatars[0].toFormattedJSON()
-        : undefined
+      avatars: (this.Avatars || []).map(a => a.toFormattedJSON())
     }
   }
 
@@ -559,23 +554,16 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       followersCount: this.followersCount,
       createdAt: this.getCreatedAt(),
 
-      banners: (this.Banners || []).map(b => b.toFormattedJSON()),
-
-      // TODO: remove, deprecated in 4.2
-      banner: this.hasImage(ActorImageType.BANNER)
-        ? this.Banners[0].toFormattedJSON()
-        : undefined
+      banners: (this.Banners || []).map(b => b.toFormattedJSON())
     }
   }
 
   toActivityPubObject (this: MActorAPChannel | MActorAPAccount, name: string) {
-    let icon: ActivityIconObject
-    let icons: ActivityIconObject[]
+    let icon: ActivityIconObject[]
     let image: ActivityIconObject
 
     if (this.hasImage(ActorImageType.AVATAR)) {
-      icon = getBiggestActorImage(this.Avatars).toActivityPubObject()
-      icons = this.Avatars.map(a => a.toActivityPubObject())
+      icon = this.Avatars.map(a => a.toActivityPubObject())
     }
 
     if (this.hasImage(ActorImageType.BANNER)) {
@@ -613,7 +601,6 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       published: this.getCreatedAt().toISOString(),
 
       icon,
-      icons,
 
       image
     }

@@ -107,15 +107,11 @@ describe('Test index search', function () {
       expect(video.account.host).to.equal('framatube.org')
       expect(video.account.name).to.equal('framasoft')
       expect(video.account.url).to.equal('https://framatube.org/accounts/framasoft')
-      // TODO: remove, deprecated in 4.2
-      expect(video.account.avatar).to.exist
       expect(video.account.avatars.length).to.equal(2, 'Account should have one avatar image')
 
       expect(video.channel.host).to.equal('framatube.org')
       expect(video.channel.name).to.equal('joinpeertube')
       expect(video.channel.url).to.equal('https://framatube.org/video-channels/joinpeertube')
-      // TODO: remove, deprecated in 4.2
-      expect(video.channel.avatar).to.exist
       expect(video.channel.avatars.length).to.equal(2, 'Channel should have one avatar image')
     }
 
@@ -293,16 +289,12 @@ describe('Test index search', function () {
       const videoChannel = body.data[0]
       expect(videoChannel.url).to.equal('https://framatube.org/video-channels/bf54d359-cfad-4935-9d45-9d6be93f63e8')
       expect(videoChannel.host).to.equal('framatube.org')
-      // TODO: remove, deprecated in 4.2
-      expect(videoChannel.avatar).to.exist
       expect(videoChannel.avatars.length).to.equal(2, 'Channel should have two avatar images')
       expect(videoChannel.displayName).to.exist
 
       expect(videoChannel.ownerAccount.url).to.equal('https://framatube.org/accounts/framasoft')
       expect(videoChannel.ownerAccount.name).to.equal('framasoft')
       expect(videoChannel.ownerAccount.host).to.equal('framatube.org')
-      // TODO: remove, deprecated in 4.2
-      expect(videoChannel.ownerAccount.avatar).to.exist
       expect(videoChannel.ownerAccount.avatars.length).to.equal(2, 'Account should have two avatar images')
     }
 
@@ -369,15 +361,11 @@ describe('Test index search', function () {
       expect(videoPlaylist.ownerAccount.url).to.equal('https://peertube2.cpy.re/accounts/chocobozzz')
       expect(videoPlaylist.ownerAccount.name).to.equal('chocobozzz')
       expect(videoPlaylist.ownerAccount.host).to.equal('peertube2.cpy.re')
-      // TODO: remove, deprecated in 4.2
-      expect(videoPlaylist.ownerAccount.avatar).to.exist
       expect(videoPlaylist.ownerAccount.avatars.length).to.equal(2, 'Account should have two avatar images')
 
       expect(videoPlaylist.videoChannel.url).to.equal('https://peertube2.cpy.re/video-channels/chocobozzz_channel')
       expect(videoPlaylist.videoChannel.name).to.equal('chocobozzz_channel')
       expect(videoPlaylist.videoChannel.host).to.equal('peertube2.cpy.re')
-      // TODO: remove, deprecated in 4.2
-      expect(videoPlaylist.videoChannel.avatar).to.exist
       expect(videoPlaylist.videoChannel.avatars.length).to.equal(2, 'Channel should have two avatar images')
     }
 

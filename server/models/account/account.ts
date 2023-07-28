@@ -433,10 +433,7 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
       name: actor.name,
       url: actor.url,
       host: actor.host,
-      avatars: actor.avatars,
-
-      // TODO: remove, deprecated in 4.2
-      avatar: actor.avatar
+      avatars: actor.avatars
     }
   }
 

@@ -28,10 +28,7 @@ export interface ActivityPubActor {
   }
 
   image?: ActivityIconObject | ActivityIconObject[]
-
   icon?: ActivityIconObject | ActivityIconObject[]
-  // TODO: migrate to `icon`, introduced in 4.2
-  icons?: ActivityIconObject[]
 
   published?: string
 }

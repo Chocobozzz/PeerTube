@@ -12,9 +12,6 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   nameWithHost: string
   nameWithHostForced: string
 
-  // TODO: remove, deprecated in 4.2
-  banner: never
-
   banners: ActorImage[]
 
   bannerUrl: string

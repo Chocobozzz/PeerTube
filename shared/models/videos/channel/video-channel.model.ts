@@ -21,9 +21,6 @@ export interface VideoChannel extends Actor {
   totalViews?: number
 
   banners: ActorImage[]
-
-  // TODO: remove, deprecated in 4.2
-  banner: ActorImage
 }
 
 export interface VideoChannelSummary {
@@ -34,7 +31,4 @@ export interface VideoChannelSummary {
   host: string
 
   avatars: ActorImage[]
-
-  // TODO: remove, deprecated in 4.2
-  avatar: ActorImage
 }

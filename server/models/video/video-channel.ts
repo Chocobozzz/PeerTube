@@ -779,10 +779,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
       displayName: this.getDisplayName(),
       url: actor.url,
       host: actor.host,
-      avatars: actor.avatars,
-
-      // TODO: remove, deprecated in 4.2
-      avatar: actor.avatar
+      avatars: actor.avatars
     }
   }
 
@@ -821,10 +818,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
       viewsPerDay,
       totalViews,
 
-      avatars: actor.avatars,
-
-      // TODO: remove, deprecated in 4.2
-      avatar: actor.avatar
+      avatars: actor.avatars
     }
 
     if (this.Account) videoChannel.ownerAccount = this.Account.toFormattedJSON()

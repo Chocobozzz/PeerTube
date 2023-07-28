@@ -1,6 +1,5 @@
 import express from 'express'
 import { pickCommonVideoQuery } from '@server/helpers/query'
-import { getBiggestActorImage } from '@server/lib/actor-image'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { getServerActor } from '@server/models/application/application'
@@ -213,8 +212,6 @@ async function updateVideoChannelBanner (req: express.Request, res: express.Resp
   auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
 
   return res.json({
-    // TODO: remove, deprecated in 4.2
-    banner: getBiggestActorImage(banners).toFormattedJSON(),
     banners: banners.map(b => b.toFormattedJSON())
   })
 }
@@ -228,8 +225,6 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
   auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
 
   return res.json({
-    // TODO: remove, deprecated in 4.2
-    avatar: getBiggestActorImage(avatars).toFormattedJSON(),
     avatars: avatars.map(a => a.toFormattedJSON())
   })
 }

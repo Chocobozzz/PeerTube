@@ -27,9 +27,6 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
     language: 'sc:inLanguage',
     identifier: 'sc:identifier',
 
-    // TODO: remove in a few versions, introduced in 4.2
-    icons: 'as:icon',
-
     isLiveBroadcast: 'sc:isLiveBroadcast',
     liveSaveReplay: {
       '@type': 'sc:Boolean',

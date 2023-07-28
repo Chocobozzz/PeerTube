@@ -19,7 +19,4 @@ export interface AccountSummary {
   host: string
 
   avatars: ActorImage[]
-
-  // TODO: remove, deprecated in 4.2
-  avatar: ActorImage
 }

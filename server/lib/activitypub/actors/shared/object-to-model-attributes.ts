@@ -32,7 +32,7 @@ function getActorAttributesFromObject (
 
 function getImagesInfoFromObject (actorObject: ActivityPubActor, type: ActorImageType) {
   const iconsOrImages = type === ActorImageType.AVATAR
-    ? actorObject.icons || actorObject.icon
+    ? actorObject.icon
     : actorObject.image
 
   return normalizeIconOrImage(iconsOrImages)
