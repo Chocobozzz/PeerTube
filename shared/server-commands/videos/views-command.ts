@@ -6,7 +6,7 @@ export class ViewsCommand extends AbstractCommand {
 
   view (options: OverrideCommandOptions & {
     id: number | string
-    currentTime?: number
+    currentTime: number
     viewEvent?: VideoViewEvent
     xForwardedFor?: string
   }) {
@@ -19,7 +19,7 @@ export class ViewsCommand extends AbstractCommand {
       path,
       xForwardedFor,
       fields: {
-        currentTime: currentTime ?? 1,
+        currentTime,
         viewEvent
       },
       implicitToken: false,

@@ -43,8 +43,9 @@ describe('Test videos views', function () {
 
   describe('When viewing a video', async function () {
 
-    // TODO: implement it when we'll remove backward compatibility in REST API
-    it('Should fail without current time')
+    it('Should fail without current time', async function () {
+      await servers[0].views.view({ id: videoId, currentTime: undefined, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
 
     it('Should fail with an invalid current time', async function () {
       await servers[0].views.view({ id: videoId, currentTime: -1, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })

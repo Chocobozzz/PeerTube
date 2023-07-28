@@ -114,8 +114,7 @@ function createWebsocketTrackerServer (app: express.Application) {
         return
       }
 
-      // FIXME: typings
-      return wss.handleUpgrade(request, socket as any, head, ws => wss.emit('connection', ws, request))
+      return wss.handleUpgrade(request, socket, head, ws => wss.emit('connection', ws, request))
     }
 
     // Don't destroy socket, we have Socket.IO too

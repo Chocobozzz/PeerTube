@@ -546,7 +546,7 @@ describe('Test videos filter', function () {
 
         expect(foundVideo).to.not.be.undefined
       }
-      await servers[0].views.view({ id, token: servers[0].accessToken })
+      await servers[0].views.view({ id, currentTime: 1, token: servers[0].accessToken })
 
       for (const path of paths) {
         const videos = await listVideos({ server: servers[0], path, excludeAlreadyWatched: true })
