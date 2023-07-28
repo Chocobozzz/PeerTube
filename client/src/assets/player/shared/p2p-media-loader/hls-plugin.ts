@@ -24,7 +24,7 @@ let alreadyRegistered = false
 
 const registerSourceHandler = function (vjs: typeof videojs) {
   if (!Hlsjs.isSupported()) {
-    logger.warn('Hls.js is not supported in this browser!')
+    logger.info('Hls.js is not supported in this browser.')
     return
   }
 
