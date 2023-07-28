@@ -189,7 +189,7 @@ async function replaceLiveByReplay (options: {
 
   await assignReplayFilesToVideo({ video: videoWithFiles, replayDirectory })
 
-  // FIXME: should not happen in this function
+  // Should not happen in this function, but we keep the code if in the future we can replace the permanent live by a replay
   if (permanentLive) { // Remove session replay
     await remove(replayDirectory)
   } else { // We won't stream again in this live, we can delete the base replay directory

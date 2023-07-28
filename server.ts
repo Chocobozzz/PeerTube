@@ -123,7 +123,6 @@ import { apiFailMiddleware } from './server/middlewares/error'
 import { Redis } from './server/lib/redis'
 import { ActorFollowScheduler } from './server/lib/schedulers/actor-follow-scheduler'
 import { RemoveOldViewsScheduler } from './server/lib/schedulers/remove-old-views-scheduler'
-import { RemoveOldJobsScheduler } from './server/lib/schedulers/remove-old-jobs-scheduler'
 import { UpdateVideosScheduler } from './server/lib/schedulers/update-videos-scheduler'
 import { YoutubeDlUpdateScheduler } from './server/lib/schedulers/youtube-dl-update-scheduler'
 import { VideosRedundancyScheduler } from './server/lib/schedulers/videos-redundancy-scheduler'
@@ -310,7 +309,6 @@ async function startApplication () {
 
   // Enable Schedulers
   ActorFollowScheduler.Instance.enable()
-  RemoveOldJobsScheduler.Instance.enable()
   UpdateVideosScheduler.Instance.enable()
   YoutubeDlUpdateScheduler.Instance.enable()
   VideosRedundancyScheduler.Instance.enable()
