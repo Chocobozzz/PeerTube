@@ -145,8 +145,6 @@ function removeObjectByFullKey (fullKey: string, bucketInfo: BucketInfo) {
 }
 
 async function removePrefix (prefix: string, bucketInfo: BucketInfo) {
-  // FIXME: use bulk delete when s3ninja will support this operation
-
   logger.debug('Removing prefix %s in bucket %s', prefix, bucketInfo.BUCKET_NAME, lTags())
 
   return applyOnPrefix({
