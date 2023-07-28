@@ -51,8 +51,6 @@ export class OverviewService {
               switchMap(videos => this.videosService.extractVideos({ total: 0, data: videos })),
               map(result => result.data),
               tap(videos => {
-                // FIXME: typings & lint
-                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 videosOverviewResult[key].push(immutableAssign(object, { videos }) as any)
               })
             )
