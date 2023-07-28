@@ -775,19 +775,16 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  runTranscoding (options: OverrideCommandOptions & {
+  runTranscoding (options: OverrideCommandOptions & VideoTranscodingCreate & {
     videoId: number | string
-    transcodingType: 'hls' | 'webtorrent' | 'web-video'
   }) {
     const path = '/api/v1/videos/' + options.videoId + '/transcoding'
-
-    const fields: VideoTranscodingCreate = pick(options, [ 'transcodingType' ])
 
     return this.postBodyRequest({
       ...options,
 
       path,
-      fields,
+      fields: pick(options, [ 'transcodingType', 'forceTranscoding' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })

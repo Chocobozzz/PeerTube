@@ -1,9 +1,10 @@
 import express from 'express'
 import { body } from 'express-validator'
+import { isBooleanValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc'
 import { isValidCreateTranscodingType } from '@server/helpers/custom-validators/video-transcoding'
 import { CONFIG } from '@server/initializers/config'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
-import { HttpStatusCode } from '@shared/models'
+import { HttpStatusCode, ServerErrorCode, VideoTranscodingCreate } from '@shared/models'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
 
 const createTranscodingValidator = [
@@ -11,6 +12,11 @@ const createTranscodingValidator = [
 
   body('transcodingType')
     .custom(isValidCreateTranscodingType),
+
+  body('forceTranscoding')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -32,11 +38,14 @@ const createTranscodingValidator = [
       })
     }
 
-    // Prefer using job info table instead of video state because before 4.0 failed transcoded video were stuck in "TO_TRANSCODE" state
+    const body = req.body as VideoTranscodingCreate
+    if (body.forceTranscoding === true) return next()
+
     const info = await VideoJobInfoModel.load(video.id)
     if (info && info.pendingTranscode > 0) {
       return res.fail({
         status: HttpStatusCode.CONFLICT_409,
+        type: ServerErrorCode.VIDEO_ALREADY_BEING_TRANSCODED,
         message: 'This video is already being transcoded'
       })
     }

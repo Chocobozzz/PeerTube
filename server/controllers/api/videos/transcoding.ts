@@ -3,6 +3,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { createTranscodingJobs } from '@server/lib/transcoding/create-transcoding-job'
 import { computeResolutionsToTranscode } from '@server/lib/transcoding/transcoding-resolutions'
+import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { HttpStatusCode, UserRight, VideoState, VideoTranscodingCreate } from '@shared/models'
 import { asyncMiddleware, authenticate, createTranscodingValidator, ensureUserHasRight } from '../../../middlewares'
 
@@ -29,6 +30,8 @@ async function createTranscoding (req: express.Request, res: express.Response) {
   logger.info('Creating %s transcoding job for %s.', req.body.transcodingType, video.url, lTags())
 
   const body: VideoTranscodingCreate = req.body
+
+  await VideoJobInfoModel.abortAllTasks(video.uuid, 'pendingTranscode')
 
   const { resolution: maxResolution, hasAudio } = await video.probeMaxQualityFile()
 

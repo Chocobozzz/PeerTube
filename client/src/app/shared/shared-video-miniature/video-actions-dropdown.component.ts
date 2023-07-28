@@ -198,8 +198,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
     return this.video.canRemoveFiles(this.user)
   }
 
-  canRunTranscoding () {
-    return this.video.canRunTranscoding(this.user)
+  canRunForcedTranscoding () {
+    return this.video.canRunForcedTranscoding(this.user)
   }
 
   /* Action handlers */
@@ -291,10 +291,10 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   runTranscoding (video: Video, type: 'hls' | 'web-video') {
-    this.videoService.runTranscoding([ video.id ], type)
+    this.videoService.runTranscoding({ videoIds: [ video.id ], type, askForForceTranscodingIfNeeded: true })
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Transcoding jobs created for ${video.name}.`)
+          this.notifier.success($localize`Transcoding jobs created for "${video.name}".`)
           this.transcodingCreated.emit()
         },
 
@@ -390,13 +390,13 @@ export class VideoActionsDropdownComponent implements OnChanges {
         {
           label: $localize`Run HLS transcoding`,
           handler: ({ video }) => this.runTranscoding(video, 'hls'),
-          isDisplayed: () => this.displayOptions.transcoding && this.canRunTranscoding(),
+          isDisplayed: () => this.displayOptions.transcoding && this.canRunForcedTranscoding(),
           iconName: 'cog'
         },
         {
           label: $localize`Run Web Video transcoding`,
           handler: ({ video }) => this.runTranscoding(video, 'web-video'),
-          isDisplayed: () => this.displayOptions.transcoding && this.canRunTranscoding(),
+          isDisplayed: () => this.displayOptions.transcoding && this.canRunForcedTranscoding(),
           iconName: 'cog'
         },
         {

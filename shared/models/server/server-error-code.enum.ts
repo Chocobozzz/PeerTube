@@ -52,7 +52,9 @@ export const enum ServerErrorCode {
   UNKNOWN_RUNNER_TOKEN = 'unknown_runner_token',
 
   VIDEO_REQUIRES_PASSWORD = 'video_requires_password',
-  INCORRECT_VIDEO_PASSWORD = 'incorrect_video_password'
+  INCORRECT_VIDEO_PASSWORD = 'incorrect_video_password',
+
+  VIDEO_ALREADY_BEING_TRANSCODED = 'video_already_being_transcoded'
 }
 
 /**

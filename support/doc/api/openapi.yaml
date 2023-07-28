@@ -4914,6 +4914,10 @@ paths:
                     enum:
                       - hls
                       - web-video
+                  forceTranscoding:
+                    type: boolean
+                    default: false
+                    description: If the video is stuck in transcoding state, do it anyway
                 required:
                   - transcodingType
       responses:

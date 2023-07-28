@@ -93,15 +93,17 @@ describe('Test transcoding API validators', function () {
     await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'hls' })
     await waitJobs(servers)
 
-    await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'web-video' })
+    await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'web-video', forceTranscoding: true })
     await waitJobs(servers)
   })
 
-  it('Should not run transcoding on a video that is already being transcoded', async function () {
+  it('Should not run transcoding on a video that is already being transcoded if forceTranscoding is not set', async function () {
     await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'web-video' })
 
     const expectedStatus = HttpStatusCode.CONFLICT_409
     await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'web-video', expectedStatus })
+
+    await servers[0].videos.runTranscoding({ videoId: validId, transcodingType: 'web-video', forceTranscoding: true })
   })
 
   after(async function () {

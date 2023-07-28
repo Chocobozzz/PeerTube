@@ -3,7 +3,7 @@ import { finalize } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
-import { formatICU } from '@app/helpers'
+import { formatICU, getAbsoluteAPIUrl } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { VideoBlockComponent, VideoBlockService } from '@app/shared/shared-moderation'
@@ -166,7 +166,7 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
 
     const files = getAllFiles(video)
 
-    return files.some(f => !f.fileUrl.startsWith(window.location.origin))
+    return files.some(f => !f.fileUrl.startsWith(getAbsoluteAPIUrl()))
   }
 
   canRemoveOneFile (video: Video) {
@@ -294,7 +294,7 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
   }
 
   private runTranscoding (videos: Video[], type: 'hls' | 'web-video') {
-    this.videoService.runTranscoding(videos.map(v => v.id), type)
+    this.videoService.runTranscoding({ videoIds: videos.map(v => v.id), type, askForForceTranscodingIfNeeded: false })
       .subscribe({
         next: () => {
           this.notifier.success($localize`Transcoding jobs created.`)

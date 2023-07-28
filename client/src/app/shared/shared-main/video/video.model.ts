@@ -257,9 +257,12 @@ export class Video implements VideoServerModel {
   }
 
   canRunTranscoding (user: AuthUser) {
+    return this.canRunForcedTranscoding(user) && this.state.id !== VideoState.TO_TRANSCODE
+  }
+
+  canRunForcedTranscoding (user: AuthUser) {
     return this.isLocal &&
-      user && user.hasRight(UserRight.RUN_VIDEO_TRANSCODING) &&
-      this.state.id !== VideoState.TO_TRANSCODE
+      user && user.hasRight(UserRight.RUN_VIDEO_TRANSCODING)
   }
 
   hasHLS () {

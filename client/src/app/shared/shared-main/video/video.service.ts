@@ -1,9 +1,9 @@
 import { SortMeta } from 'primeng/api'
-import { from, Observable, of } from 'rxjs'
+import { from, Observable, of, throwError } from 'rxjs'
 import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { AuthService, ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
+import { AuthService, ComponentPaginationLight, ConfirmService, RestExtractor, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import { arrayify } from '@shared/core-utils'
 import {
@@ -11,6 +11,7 @@ import {
   FeedFormat,
   NSFWPolicyType,
   ResultList,
+  ServerErrorCode,
   Storyboard,
   UserVideoRate,
   UserVideoRateType,
@@ -33,8 +34,8 @@ import { AccountService } from '../account/account.service'
 import { VideoChannel, VideoChannelService } from '../video-channel'
 import { VideoDetails } from './video-details.model'
 import { VideoEdit } from './video-edit.model'
-import { Video } from './video.model'
 import { VideoPasswordService } from './video-password.service'
+import { Video } from './video.model'
 
 export type CommonVideoParams = {
   videoPagination?: ComponentPaginationLight
@@ -64,7 +65,8 @@ export class VideoService {
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private confirmService: ConfirmService
   ) {}
 
   getVideoViewUrl (uuid: string) {
@@ -325,16 +327,52 @@ export class VideoService {
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  runTranscoding (videoIds: (number | string)[], type: 'hls' | 'web-video') {
-    const body: VideoTranscodingCreate = { transcodingType: type }
+  runTranscoding (options: {
+    videoIds: (number | string)[]
+    type: 'hls' | 'web-video'
+    askForForceTranscodingIfNeeded: boolean
+    forceTranscoding?: boolean
+  }): Observable<any> {
+    const { videoIds, type, askForForceTranscodingIfNeeded, forceTranscoding } = options
+
+    if (askForForceTranscodingIfNeeded && videoIds.length !== 1) {
+      throw new Error('Cannot ask to force transcoding on multiple videos')
+    }
+
+    const body: VideoTranscodingCreate = { transcodingType: type, forceTranscoding }
 
     return from(videoIds)
       .pipe(
-        concatMap(id => this.authHttp.post(VideoService.BASE_VIDEO_URL + '/' + id + '/transcoding', body)),
+        concatMap(id => {
+          return this.authHttp.post(VideoService.BASE_VIDEO_URL + '/' + id + '/transcoding', body)
+            .pipe(
+              catchError(err => {
+                if (askForForceTranscodingIfNeeded && err.error?.code === ServerErrorCode.VIDEO_ALREADY_BEING_TRANSCODED) {
+                  const message = $localize`PeerTube considers this video is already being transcoded.` +
+                    // eslint-disable-next-line max-len
+                    $localize` If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcoding on this video.` +
+                    ` Do you still want to run transcoding?`
+
+                  return from(this.confirmService.confirm(message, $localize`Force transcoding`))
+                    .pipe(
+                      switchMap(res => {
+                        if (res === false) return throwError(() => err)
+
+                        return this.runTranscoding({ videoIds, type, askForForceTranscodingIfNeeded: false, forceTranscoding: true })
+                      })
+                    )
+                }
+
+                return throwError(() => err)
+              })
+            )
+        }),
         toArray(),
         catchError(err => this.restExtractor.handleError(err))
       )
   }
+
+  // ---------------------------------------------------------------------------
 
   loadCompleteDescription (descriptionPath: string) {
     return this.authHttp
