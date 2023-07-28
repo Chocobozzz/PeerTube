@@ -50,6 +50,7 @@
 
 .primary-row {
   display: flex;
+  width: 100%;
 
   my-peertube-checkbox {
     @include margin-right(10px);
@@ -67,7 +68,7 @@
   }
 
   .optional-row-icon {
-    @include margin-left(5px);
+    @include margin-left(0.5rem);
 
     display: flex;
     align-items: center;
@@ -78,6 +79,8 @@
       @include apply-svg-color(#333);
       @include margin-right(0);
 
+      position: relative;
+      top: 1px;
       width: 19px;
       height: 19px;
     }

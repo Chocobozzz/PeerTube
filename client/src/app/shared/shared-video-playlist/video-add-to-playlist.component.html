@@ -24,7 +24,10 @@
           {{ playlist.displayName }}
         </label>
 
-        <button class="optional-row-icon button-unstyle" *ngIf="isPrimaryCheckboxChecked(playlist)" (click)="$event.stopPropagation(); toggleOptionalRow(playlist)">
+        <button
+          class="optional-row-icon button-unstyle" [ngClass]="{ 'invisible': !isPrimaryCheckboxChecked(playlist) }"
+          (click)="$event.stopPropagation(); toggleOptionalRow(playlist)"
+        >
           <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
         </button>
       </button>
