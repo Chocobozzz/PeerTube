@@ -1,7 +1,8 @@
-import { Response, Request, UploadFilesForCheck } from 'express'
+import { Request, Response, UploadFilesForCheck } from 'express'
 import { decode as magnetUriDecode } from 'magnet-uri'
 import validator from 'validator'
-import { HttpStatusCode, VideoFilter, VideoInclude, VideoPrivacy, VideoRateType } from '@shared/models'
+import { getVideoWithAttributes } from '@server/helpers/video'
+import { HttpStatusCode, VideoInclude, VideoPrivacy, VideoRateType } from '@shared/models'
 import {
   CONSTRAINTS_FIELDS,
   MIMETYPES,
@@ -13,13 +14,8 @@ import {
   VIDEO_STATES
 } from '../../initializers/constants'
 import { exists, isArray, isDateValid, isFileValid } from './misc'
-import { getVideoWithAttributes } from '@server/helpers/video'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
-
-function isVideoFilterValid (filter: VideoFilter) {
-  return filter === 'local' || filter === 'all-local' || filter === 'all'
-}
 
 function isVideoIncludeValid (include: VideoInclude) {
   return exists(include) && validator.isInt('' + include)
@@ -217,7 +213,6 @@ export {
   isVideoFileSizeValid,
   isVideoImageValid,
   isVideoSupportValid,
-  isVideoFilterValid,
   isPasswordValid,
   isValidPasswordProtectedPrivacy
 }

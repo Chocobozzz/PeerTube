@@ -1639,7 +1639,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
   private static throwIfPrivateIncludeWithoutUser (include: VideoInclude, user: MUserAccountId) {
     if (VideoModel.isPrivateInclude(include) && !user?.hasRight(UserRight.SEE_ALL_VIDEOS)) {
-      throw new Error('Try to filter all-local but user cannot see all videos')
+      throw new Error('Try to include protected videos but user cannot see all videos')
     }
   }
 

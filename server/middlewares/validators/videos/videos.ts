@@ -7,8 +7,8 @@ import { uploadx } from '@server/lib/uploadx'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express-handler'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
-import { arrayify, getAllPrivacies } from '@shared/core-utils'
-import { HttpStatusCode, ServerErrorCode, UserRight, VideoInclude, VideoState } from '@shared/models'
+import { arrayify } from '@shared/core-utils'
+import { HttpStatusCode, ServerErrorCode, UserRight, VideoState } from '@shared/models'
 import {
   exists,
   isBooleanValid,
@@ -26,7 +26,6 @@ import {
   isValidPasswordProtectedPrivacy,
   isVideoCategoryValid,
   isVideoDescriptionValid,
-  isVideoFilterValid,
   isVideoImageValid,
   isVideoIncludeValid,
   isVideoLanguageValid,
@@ -464,9 +463,6 @@ const commonVideosFiltersValidator = [
     .optional()
     .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid isLive boolean'),
-  query('filter')
-    .optional()
-    .custom(isVideoFilterValid),
   query('include')
     .optional()
     .custom(isVideoIncludeValid),
@@ -500,22 +496,6 @@ const commonVideosFiltersValidator = [
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-
-    // FIXME: deprecated in 4.0, to remove
-    {
-      if (req.query.filter === 'all-local') {
-        req.query.include = VideoInclude.NOT_PUBLISHED_STATE
-        req.query.isLocal = true
-        req.query.privacyOneOf = getAllPrivacies()
-      } else if (req.query.filter === 'all') {
-        req.query.include = VideoInclude.NOT_PUBLISHED_STATE
-        req.query.privacyOneOf = getAllPrivacies()
-      } else if (req.query.filter === 'local') {
-        req.query.isLocal = true
-      }
-
-      req.query.filter = undefined
-    }
 
     const user = res.locals.oauth?.token.User
 

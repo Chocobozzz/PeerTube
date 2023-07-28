@@ -12,9 +12,6 @@ export interface VideosCommonQuery {
 
   isLive?: boolean
 
-  // FIXME: deprecated in 4.0 in favour of isLocal and include, to remove
-  filter?: never
-
   isLocal?: boolean
   include?: VideoInclude
 
@@ -45,7 +42,4 @@ export interface VideosCommonQueryAfterSanitize extends VideosCommonQuery {
   start: number
   count: number
   sort: string
-
-  // FIXME: deprecated in 4.0, to remove
-  filter?: never
 }

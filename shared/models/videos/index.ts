@@ -22,7 +22,6 @@ export * from './video-constant.model'
 export * from './video-create.model'
 
 export * from './video-privacy.enum'
-export * from './video-filter.type'
 export * from './video-include.enum'
 export * from './video-rate.type'
 
