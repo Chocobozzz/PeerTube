@@ -1,13 +1,13 @@
 import { Server as HTTPServer } from 'http'
 import { Namespace, Server as SocketServer, Socket } from 'socket.io'
 import { isIdValid } from '@server/helpers/custom-validators/misc'
+import { Debounce } from '@server/helpers/debounce'
 import { MVideo, MVideoImmutable } from '@server/types/models'
 import { MRunner } from '@server/types/models/runners'
 import { UserNotificationModelForApi } from '@server/types/models/user'
 import { LiveVideoEventPayload, LiveVideoEventType } from '@shared/models'
 import { logger } from '../helpers/logger'
 import { authenticateRunnerSocket, authenticateSocket } from '../middlewares'
-import { Debounce } from '@server/helpers/debounce'
 
 class PeerTubeSocket {
 
@@ -98,7 +98,7 @@ class PeerTubeSocket {
   }
 
   sendVideoViewsUpdate (video: MVideoImmutable, numViewers: number) {
-    const data: LiveVideoEventPayload = { viewers: numViewers, views: numViewers }
+    const data: LiveVideoEventPayload = { viewers: numViewers }
     const type: LiveVideoEventType = 'views-change'
 
     logger.debug('Sending video live views update notification of %s.', video.url, { viewers: numViewers })
