@@ -146,8 +146,7 @@ export class MarkdownService {
   }
 
   private async createMarkdownIt (config: MarkdownConfig) {
-    // FIXME: import('...') returns a struct module, containing a "default" field
-    const MarkdownItClass: typeof import ('markdown-it') = (await import('markdown-it') as any).default
+    const MarkdownItClass = (await import('markdown-it')).default
 
     const markdownIt = new MarkdownItClass('zero', { linkify: true, breaks: config.breaks, html: config.html })
 

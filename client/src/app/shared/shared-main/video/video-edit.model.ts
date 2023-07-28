@@ -70,7 +70,6 @@ export class VideoEdit implements VideoUpdate {
 
   patch (values: { [ id: string ]: any }) {
     objectKeysTyped(values).forEach(key => {
-      // FIXME: typings
       (this as any)[key] = values[key]
     })
 

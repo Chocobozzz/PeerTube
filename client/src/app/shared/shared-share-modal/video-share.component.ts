@@ -106,7 +106,6 @@ export class VideoShareComponent {
       includeVideoInPlaylist: false
     }, {
       set: (target, prop, value) => {
-        // FIXME: typings
         (target as any)[prop] = value
 
         if (prop === 'embedP2P') {

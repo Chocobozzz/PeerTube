@@ -36,7 +36,6 @@ export class HtmlRendererService {
   }
 
   private async loadSanitizeHtml () {
-    // FIXME: import('..') returns a struct module, containing a "default" field corresponding to our sanitizeHtml function
-    this.sanitizeHtml = (await import('sanitize-html') as any).default
+    this.sanitizeHtml = (await import('sanitize-html')).default
   }
 }

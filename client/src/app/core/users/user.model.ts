@@ -130,7 +130,6 @@ export class User implements UserServerModel {
 
   patch (obj: UserServerModel) {
     for (const key of objectKeysTyped(obj)) {
-      // FIXME: typings
       (this as any)[key] = obj[key]
     }
 

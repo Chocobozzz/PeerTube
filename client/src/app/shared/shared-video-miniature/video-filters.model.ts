@@ -83,7 +83,6 @@ export class VideoFilters {
     for (const [ key, value ] of this.defaultValues) {
       if (specificKey && specificKey !== key) continue
 
-      // FIXME: typings
       (this as any)[key] = value
     }
 
