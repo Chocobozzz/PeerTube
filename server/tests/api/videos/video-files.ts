@@ -25,7 +25,7 @@ describe('Test videos files', function () {
 
     await doubleFollow(servers[0], servers[1])
 
-    await servers[0].config.enableTranscoding(true, true)
+    await servers[0].config.enableTranscoding({ hls: true, webVideo: true })
   })
 
   describe('When deleting all files', function () {

@@ -87,7 +87,7 @@ describe('Test videos files', function () {
       }
 
       {
-        await servers[0].config.enableTranscoding(true, true)
+        await servers[0].config.enableTranscoding({ hls: true, webVideo: true })
 
         {
           const { uuid } = await servers[0].videos.quickUpload({ name: 'both 1' })
@@ -108,7 +108,7 @@ describe('Test videos files', function () {
       await waitJobs(servers)
 
       {
-        await servers[0].config.enableTranscoding(false, true)
+        await servers[0].config.enableTranscoding({ hls: true, webVideo: false })
         const { uuid } = await servers[0].videos.quickUpload({ name: 'hls' })
         hlsId = uuid
       }
@@ -116,7 +116,7 @@ describe('Test videos files', function () {
       await waitJobs(servers)
 
       {
-        await servers[0].config.enableTranscoding(false, true)
+        await servers[0].config.enableTranscoding({ webVideo: true, hls: false })
         const { uuid } = await servers[0].videos.quickUpload({ name: 'web-video' })
         webVideoId = uuid
       }

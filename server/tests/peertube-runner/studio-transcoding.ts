@@ -68,7 +68,7 @@ describe('Test studio transcoding in peertube-runner program', function () {
 
     await doubleFollow(servers[0], servers[1])
 
-    await servers[0].config.enableTranscoding(true, true)
+    await servers[0].config.enableTranscoding({ hls: true, webVideo: true })
     await servers[0].config.enableStudio()
     await servers[0].config.enableRemoteStudio()
 

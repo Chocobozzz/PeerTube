@@ -114,7 +114,7 @@ describe('Test a video file replacement', function () {
 
         const previousPaths: string[] = []
 
-        await servers[0].config.enableTranscoding(true, true, true)
+        await servers[0].config.enableTranscoding({ hls: true, webVideo: true, with0p: true })
 
         const { uuid: videoUUID } = await servers[0].videos.quickUpload({ name: 'fs with transcoding', fixture: 'video_short_720p.mp4' })
         uuid = videoUUID
@@ -387,7 +387,7 @@ describe('Test a video file replacement', function () {
 
         const previousPaths: string[] = []
 
-        await servers[0].config.enableTranscoding(true, true, true)
+        await servers[0].config.enableTranscoding({ hls: true, webVideo: true, with0p: true })
 
         const { uuid: videoUUID } = await servers[0].videos.quickUpload({
           name: 'object storage with transcoding',

@@ -133,7 +133,7 @@ describe('Fast restream in live', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    await server.config.enableMinimumTranscoding(false, true)
+    await server.config.enableMinimumTranscoding({ webVideo: false, hls: true })
     await server.config.enableLive({ allowReplay: true, transcoding: true, resolutions: 'min' })
   })
 

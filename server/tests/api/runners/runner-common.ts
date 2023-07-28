@@ -40,7 +40,7 @@ describe('Test runner common actions', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    await server.config.enableTranscoding(true, true)
+    await server.config.enableTranscoding({ hls: true, webVideo: true })
     await server.config.enableRemoteTranscoding()
   })
 

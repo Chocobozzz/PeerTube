@@ -201,7 +201,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         expect(getAllFiles(video)).to.have.lengthOf(1)
       }
 
-      await servers[0].config.enableTranscoding(true, true, true)
+      await servers[0].config.enableTranscoding({ hls: true, webVideo: true, with0p: true })
 
       await servers[0].videos.runTranscoding({ transcodingType: 'web-video', videoId: uuid })
       await waitJobs(servers, { runnerJobs: true })
@@ -259,7 +259,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     describe('Web video only enabled', function () {
 
       before(async function () {
-        await servers[0].config.enableTranscoding(true, false, true)
+        await servers[0].config.enableTranscoding({ webVideo: true, hls: false, with0p: true })
       })
 
       runSuite({ webVideoEnabled: true, hlsEnabled: false })
@@ -268,7 +268,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     describe('HLS videos only enabled', function () {
 
       before(async function () {
-        await servers[0].config.enableTranscoding(false, true, true)
+        await servers[0].config.enableTranscoding({ webVideo: false, hls: true, with0p: true })
       })
 
       runSuite({ webVideoEnabled: false, hlsEnabled: true })
@@ -277,7 +277,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     describe('Web video & HLS enabled', function () {
 
       before(async function () {
-        await servers[0].config.enableTranscoding(true, true, true)
+        await servers[0].config.enableTranscoding({ hls: true, webVideo: true, with0p: true })
       })
 
       runSuite({ webVideoEnabled: true, hlsEnabled: true })
@@ -303,7 +303,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     describe('Web video only enabled', function () {
 
       before(async function () {
-        await servers[0].config.enableTranscoding(true, false, true)
+        await servers[0].config.enableTranscoding({ webVideo: true, hls: false, with0p: true })
       })
 
       runSuite({ webVideoEnabled: true, hlsEnabled: false, objectStorage })
@@ -312,7 +312,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     describe('HLS videos only enabled', function () {
 
       before(async function () {
-        await servers[0].config.enableTranscoding(false, true, true)
+        await servers[0].config.enableTranscoding({ webVideo: false, hls: true, with0p: true })
       })
 
       runSuite({ webVideoEnabled: false, hlsEnabled: true, objectStorage })
@@ -321,7 +321,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     describe('Web video & HLS enabled', function () {
 
       before(async function () {
-        await servers[0].config.enableTranscoding(true, true, true)
+        await servers[0].config.enableTranscoding({ hls: true, webVideo: true, with0p: true })
       })
 
       runSuite({ webVideoEnabled: true, hlsEnabled: true, objectStorage })

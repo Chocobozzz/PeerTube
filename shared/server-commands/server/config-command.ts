@@ -152,8 +152,13 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
-  // TODO: convert args to object
-  enableTranscoding (webVideo = true, hls = true, with0p = false) {
+  enableTranscoding (options: {
+    webVideo?: boolean // default true
+    hls?: boolean // default true
+    with0p?: boolean // default false
+  } = {}) {
+    const { webVideo = true, hls = true, with0p = false } = options
+
     return this.updateExistingSubConfig({
       newConfig: {
         transcoding: {
@@ -175,8 +180,12 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
-  // TODO: convert args to object
-  enableMinimumTranscoding (webVideo = true, hls = true) {
+  enableMinimumTranscoding (options: {
+    webVideo?: boolean // default true
+    hls?: boolean // default true
+  } = {}) {
+    const { webVideo = true, hls = true } = options
+
     return this.updateExistingSubConfig({
       newConfig: {
         transcoding: {

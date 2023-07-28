@@ -65,7 +65,7 @@ describe('Test managing runners', function () {
     registrationToken = data[0].registrationToken
     registrationTokenId = data[0].id
 
-    await server.config.enableTranscoding(true, true)
+    await server.config.enableTranscoding({ hls: true, webVideo: true })
     await server.config.enableStudio()
     await server.config.enableRemoteTranscoding()
     await server.config.enableRemoteStudio()
@@ -451,7 +451,7 @@ describe('Test managing runners', function () {
         const { uuid } = await server.videos.quickUpload({ name: 'video studio' })
         videoStudioUUID = uuid
 
-        await server.config.enableTranscoding(true, true)
+        await server.config.enableTranscoding({ hls: true, webVideo: true })
         await server.config.enableStudio()
 
         await server.videoStudio.createEditionTasks({

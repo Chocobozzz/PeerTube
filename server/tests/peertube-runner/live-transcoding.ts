@@ -139,7 +139,7 @@ describe('Test Live transcoding in peertube-runner program', function () {
     sqlCommandServer1 = new SQLCommand(servers[0])
 
     await servers[0].config.enableRemoteTranscoding()
-    await servers[0].config.enableTranscoding(true, true, true)
+    await servers[0].config.enableTranscoding({ hls: true, webVideo: true, with0p: true })
     await servers[0].config.enableLive({ allowReplay: true, resolutions: 'max', transcoding: true })
 
     const registrationToken = await servers[0].runnerRegistrationTokens.getFirstRegistrationToken()
@@ -152,7 +152,7 @@ describe('Test Live transcoding in peertube-runner program', function () {
   describe('With lives on local filesystem storage', function () {
 
     before(async function () {
-      await servers[0].config.enableTranscoding(true, false, true)
+      await servers[0].config.enableTranscoding({ webVideo: true, hls: false, with0p: true })
     })
 
     runSuite()

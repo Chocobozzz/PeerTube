@@ -85,7 +85,7 @@ describe('Test runner VOD transcoding', function () {
     before(async function () {
       this.timeout(60000)
 
-      await servers[0].config.enableTranscoding(true, true)
+      await servers[0].config.enableTranscoding({ hls: true, webVideo: true })
     })
 
     it('Should error a transcoding job', async function () {
@@ -133,7 +133,7 @@ describe('Test runner VOD transcoding', function () {
       this.timeout(60000)
 
       await servers[0].runnerJobs.cancelAllJobs()
-      await servers[0].config.enableTranscoding(true, false)
+      await servers[0].config.enableTranscoding({ hls: false, webVideo: true })
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'web video', fixture: 'video_short.webm' })
       videoUUID = uuid
@@ -264,7 +264,7 @@ describe('Test runner VOD transcoding', function () {
     before(async function () {
       this.timeout(60000)
 
-      await servers[0].config.enableTranscoding(false, true)
+      await servers[0].config.enableTranscoding({ hls: true, webVideo: false })
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'hls video', fixture: 'video_short.webm' })
       videoUUID = uuid
@@ -384,7 +384,7 @@ describe('Test runner VOD transcoding', function () {
     before(async function () {
       this.timeout(60000)
 
-      await servers[0].config.enableTranscoding(true, true)
+      await servers[0].config.enableTranscoding({ hls: true, webVideo: true })
 
       await servers[0].videos.quickUpload({ name: 'web video and hls video', fixture: 'video_short.webm' })
 
@@ -422,7 +422,7 @@ describe('Test runner VOD transcoding', function () {
     before(async function () {
       this.timeout(60000)
 
-      await servers[0].config.enableTranscoding(true, true)
+      await servers[0].config.enableTranscoding({ hls: true, webVideo: true })
 
       const attributes = { name: 'audio_with_preview', previewfile: 'custom-preview.jpg', fixture: 'sample.ogg' }
       const { uuid } = await servers[0].videos.upload({ attributes, mode: 'legacy' })
