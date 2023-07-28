@@ -43,9 +43,14 @@ export class RecentVideosRecommendationService implements RecommendationService 
     return this.userService.getAnonymousOrLoggedUser()
       .pipe(
         switchMap(user => {
+          const nsfw = user.nsfwPolicy
+            ? this.videos.nsfwPolicyToParam(user.nsfwPolicy)
+            : undefined
+
           const defaultSubscription = this.videos.getVideos({
             videoPagination: pagination,
-            sort: '-publishedAt'
+            sort: '-publishedAt',
+            nsfw
           }).pipe(map(v => v.data))
 
           const searchIndexConfig = this.config.search.searchIndex
@@ -60,9 +65,7 @@ export class RecentVideosRecommendationService implements RecommendationService 
               tagsOneOf: recommendation.tags.join(','),
               sort: '-publishedAt',
               searchTarget: 'local',
-              nsfw: user.nsfwPolicy
-                ? this.videos.nsfwPolicyToParam(user.nsfwPolicy)
-                : undefined,
+              nsfw,
               excludeAlreadyWatched: user.id
                 ? true
                 : undefined

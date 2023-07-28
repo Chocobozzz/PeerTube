@@ -84,7 +84,9 @@ export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, O
     return this.userService.getAnonymousOrLoggedUser()
       .pipe(
         map(user => user.nsfwPolicy),
-        switchMap(nsfwPolicy => this.videoService.getVideoChannelVideos({ ...videoOptions, nsfwPolicy }))
+        switchMap(nsfwPolicy => {
+          return this.videoService.getVideoChannelVideos({ ...videoOptions, nsfw: this.videoService.nsfwPolicyToParam(nsfwPolicy) })
+        })
       )
   }
 }

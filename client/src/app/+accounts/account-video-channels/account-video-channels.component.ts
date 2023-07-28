@@ -2,10 +2,10 @@ import { from, Subject, Subscription } from 'rxjs'
 import { concatMap, map, switchMap, tap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ComponentPagination, hasMoreItems, MarkdownService, User, UserService } from '@app/core'
+import { SimpleMemoize } from '@app/helpers'
 import { Account, AccountService, Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
 import { NSFWPolicyType, VideoSortField } from '@shared/models'
-import { SimpleMemoize } from '@app/helpers'
 
 @Component({
   selector: 'my-account-video-channels',
@@ -98,7 +98,7 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
             videoChannel,
             videoPagination: this.videosPagination,
             sort: this.videosSort,
-            nsfwPolicy: this.nsfwPolicy
+            nsfw: this.videoService.nsfwPolicyToParam(this.nsfwPolicy)
           }
 
           return this.videoService.getVideoChannelVideos(options)

@@ -47,9 +47,6 @@ export type CommonVideoParams = {
   privacyOneOf?: VideoPrivacy[]
   isLive?: boolean
   skipCount?: boolean
-
-  // FIXME: remove?
-  nsfwPolicy?: NSFWPolicyType
   nsfw?: BooleanBothQuery
 }
 
@@ -499,7 +496,7 @@ export class VideoService {
     throw new Error('No highest privacy available')
   }
 
-  nsfwPolicyToParam (nsfwPolicy: NSFWPolicyType) {
+  nsfwPolicyToParam (nsfwPolicy: NSFWPolicyType): BooleanBothQuery {
     return nsfwPolicy === 'do_not_list'
       ? 'false'
       : 'both'
@@ -534,7 +531,6 @@ export class VideoService {
       languageOneOf,
       privacyOneOf,
       skipCount,
-      nsfwPolicy,
       isLive,
       nsfw
     } = options
@@ -551,7 +547,6 @@ export class VideoService {
     if (include !== undefined) newParams = newParams.set('include', include)
     if (isLive !== undefined) newParams = newParams.set('isLive', isLive)
     if (nsfw !== undefined) newParams = newParams.set('nsfw', nsfw)
-    if (nsfwPolicy !== undefined) newParams = newParams.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
     if (languageOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
     if (categoryOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
     if (privacyOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
