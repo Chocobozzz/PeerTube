@@ -3,7 +3,6 @@ import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/h
 import { Injectable } from '@angular/core'
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { BytesPipe, VideoService } from '@app/shared/shared-main'
-import { isIOS } from '@root-helpers/web-browser'
 import { HttpStatusCode } from '@shared/models'
 import { UploaderXFormData } from './uploaderx-form-data'
 
@@ -64,17 +63,11 @@ export class VideoUploadService {
   }
 
   private getUploadxOptions (endpoint: string, uploaderClass: typeof UploaderXFormData) {
-    // FIXME: https://github.com/Chocobozzz/PeerTube/issues/4382#issuecomment-915854167
-    const chunkSize = isIOS()
-      ? 0
-      : undefined // Auto chunk size
-
     return {
       endpoint,
       multiple: false,
 
       maxChunkSize: this.server.getHTMLConfig().client.videos.resumableUpload.maxChunkSize,
-      chunkSize,
 
       token: this.authService.getAccessToken(),
 

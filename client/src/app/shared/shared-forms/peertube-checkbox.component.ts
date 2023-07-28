@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectorRef, Component, ContentChildren, forwardRef, Input, QueryList, TemplateRef } from '@angular/core'
+import { AfterContentInit, Component, ContentChildren, forwardRef, Input, QueryList, TemplateRef } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { PeerTubeTemplateDirective } from '@app/shared/shared-main'
 
@@ -25,13 +25,8 @@ export class PeertubeCheckboxComponent implements ControlValueAccessor, AfterCon
 
   @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective<'label' | 'help'>>
 
-  // FIXME: https://github.com/angular/angular/issues/10816#issuecomment-307567836
-  @Input() onPushWorkaround = false
-
   labelTemplate: TemplateRef<any>
   helpTemplate: TemplateRef<any>
-
-  constructor (private cdr: ChangeDetectorRef) { }
 
   ngAfterContentInit () {
     {
@@ -49,10 +44,6 @@ export class PeertubeCheckboxComponent implements ControlValueAccessor, AfterCon
 
   writeValue (checked: boolean) {
     this.checked = checked
-
-    if (this.onPushWorkaround) {
-      this.cdr.markForCheck()
-    }
   }
 
   registerOnChange (fn: (_: any) => void) {

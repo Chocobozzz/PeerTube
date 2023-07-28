@@ -158,8 +158,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         break
 
       case 'uploading':
-        // TODO: remove || 0 when // https://github.com/kukhariev/ngx-uploadx/pull/368 is released
-        this.videoUploadPercents = state.progress || 0
+        this.videoUploadPercents = state.progress
         break
 
       case 'paused':

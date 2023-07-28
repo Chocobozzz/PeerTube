@@ -17,7 +17,7 @@
       <button class="primary-row button-unstyle" (click)="toggleMainPlaylist($event, playlist)">
         <my-peertube-checkbox
           [disabled]="isPresentMultipleTimes(playlist) || playlist.optionalRowDisplayed" [inputName]="getPrimaryInputName(playlist)"
-          [ngModel]="isPrimaryCheckboxChecked(playlist)" [onPushWorkaround]="true"
+          [ngModel]="isPrimaryCheckboxChecked(playlist)"
         ></my-peertube-checkbox>
 
         <label [for]="getPrimaryInputName(playlist)" class="display-name">
@@ -36,7 +36,7 @@
         <ng-container *ngFor="let element of buildOptionalRowElements(playlist)">
           <my-peertube-checkbox
             [inputName]="getOptionalInputName(playlist, element)"
-            [ngModel]="element.enabled" [onPushWorkaround]="true"
+            [ngModel]="element.enabled"
             (click)="toggleOptionalPlaylist($event, playlist, element, startAt.timestamp, stopAt.timestamp)"
           ></my-peertube-checkbox>
 
