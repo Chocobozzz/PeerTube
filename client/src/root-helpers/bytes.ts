@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 PeerTube contributors <https://joinpeertube.org/>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 const dictionary: { max: number, type: string }[] = [
   { max: 1024, type: 'B' },
   { max: 1048576, type: 'KB' },

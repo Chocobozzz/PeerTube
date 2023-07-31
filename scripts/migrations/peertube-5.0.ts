@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 PeerTube contributors <https://joinpeertube.org/>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { ensureDir } from 'fs-extra'
 import { Op } from 'sequelize'
 import { updateTorrentMetadata } from '@server/helpers/webtorrent'

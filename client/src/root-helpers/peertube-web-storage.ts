@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 PeerTube contributors <https://joinpeertube.org/>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // Thanks: https://github.com/capaj/localstorage-polyfill
 
 const valuesMap = new Map()

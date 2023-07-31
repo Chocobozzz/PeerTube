@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 PeerTube contributors <https://joinpeertube.org/>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 function getParamToggle (params: URLSearchParams, name: string, defaultValue?: boolean) {
   return params.has(name)
     ? (params.get(name) === '1' || params.get(name) === 'true')
