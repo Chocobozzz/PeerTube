@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { wait } from '@shared/core-utils'
-import { VideoPrivacy, VideoState } from '@shared/models'
+import { LiveVideoEventPayload, VideoPrivacy, VideoState } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -117,7 +117,7 @@ describe('Test live socket messages', function () {
         const videoId = await servers[0].videos.getId({ uuid: liveVideoUUID })
 
         const localSocket = servers[0].socketIO.getLiveNotificationSocket()
-        localSocket.on('views-change', data => { localLastVideoViews = data.views })
+        localSocket.on('views-change', (data: LiveVideoEventPayload) => { localLastVideoViews = data.viewers })
         localSocket.emit('subscribe', { videoId })
       }
 
@@ -125,7 +125,7 @@ describe('Test live socket messages', function () {
         const videoId = await servers[1].videos.getId({ uuid: liveVideoUUID })
 
         const remoteSocket = servers[1].socketIO.getLiveNotificationSocket()
-        remoteSocket.on('views-change', data => { remoteLastVideoViews = data.views })
+        remoteSocket.on('views-change', (data: LiveVideoEventPayload) => { remoteLastVideoViews = data.viewers })
         remoteSocket.emit('subscribe', { videoId })
       }
 
