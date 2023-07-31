@@ -41,8 +41,8 @@ describe('Test logs', function () {
       const body = await logsCommand.getLogs({ startDate: now })
       const logsString = JSON.stringify(body)
 
-      expect(logsString.includes('video 1')).to.be.false
-      expect(logsString.includes('video 2')).to.be.true
+      expect(logsString.includes('Video with name video 1')).to.be.false
+      expect(logsString.includes('Video with name video 2')).to.be.true
     })
 
     it('Should get logs with an end date', async function () {
@@ -64,9 +64,9 @@ describe('Test logs', function () {
       const body = await logsCommand.getLogs({ startDate: now1, endDate: now2 })
       const logsString = JSON.stringify(body)
 
-      expect(logsString.includes('video 3')).to.be.false
-      expect(logsString.includes('video 4')).to.be.true
-      expect(logsString.includes('video 5')).to.be.false
+      expect(logsString.includes('Video with name video 3')).to.be.false
+      expect(logsString.includes('Video with name video 4')).to.be.true
+      expect(logsString.includes('Video with name video 5')).to.be.false
     })
 
     it('Should filter by level', async function () {
@@ -81,14 +81,14 @@ describe('Test logs', function () {
         const body = await logsCommand.getLogs({ startDate: now, level: 'info' })
         const logsString = JSON.stringify(body)
 
-        expect(logsString.includes('video 6')).to.be.true
+        expect(logsString.includes('Video with name video 6')).to.be.true
       }
 
       {
         const body = await logsCommand.getLogs({ startDate: now, level: 'warn' })
         const logsString = JSON.stringify(body)
 
-        expect(logsString.includes('video 6')).to.be.false
+        expect(logsString.includes('Video with name video 6')).to.be.false
       }
     })
 
