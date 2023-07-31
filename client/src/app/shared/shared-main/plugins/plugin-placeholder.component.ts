@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { PluginElementPlaceholder } from '@shared/models'
+import { PluginElementPlaceholder } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-plugin-placeholder',

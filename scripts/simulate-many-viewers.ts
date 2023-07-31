@@ -1,5 +1,5 @@
 import Bluebird from 'bluebird'
-import { wait } from '@shared/core-utils'
+import { wait } from '@peertube/peertube-core-utils'
 import {
   createSingleServer,
   doubleFollow,
@@ -7,7 +7,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/server-commands'
+} from '@peertube/peertube-server-commands'
 
 let servers: PeerTubeServer[]
 const viewers: { xForwardedFor: string }[] = []

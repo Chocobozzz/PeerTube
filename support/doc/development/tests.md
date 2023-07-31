@@ -8,7 +8,7 @@ Prepare PostgreSQL user so PeerTube can delete/create the test databases:
 sudo -u postgres createuser you_username --createdb --superuser
 ```
 
-Prepare databases:
+Prepare the databases:
 
 ```bash
 npm run clean:server:test
@@ -45,22 +45,19 @@ sudo apt-get install parallel libimage-exiftool-perl
 
 ### Test
 
-To run all test suites:
+To run all test suites (can be long!):
 
 ```bash
 npm run test # See scripts/test.sh to run a particular suite
 ```
 
-Most of tests can be run using:
+To run a specific test:
 
 ```bash
-TS_NODE_TRANSPILE_ONLY=true npm run mocha -- --timeout 30000 --exit -r ts-node/register -r tsconfig-paths/register --bail server/tests/api/videos/video-transcoder.ts
-```
+npm run mocha -- --exit --bail packages/tests/src/your-test.ts
 
-`server/tests/api/activitypub` tests will need different options:
-
-```
-TS_NODE_FILES=true mocha -- --timeout 30000 --exit -r ts-node/register -r tsconfig-paths/register --bail server/tests/api/activitypub/security.ts
+# For example
+npm run mocha -- --exit --bail packages/tests/src/api/videos/single-server.ts
 ```
 
 ### Configuration

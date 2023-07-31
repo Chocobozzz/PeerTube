@@ -10,22 +10,22 @@ import { RestExtractor } from '@app/core/rest'
 import { ServerService } from '@app/core/server/server.service'
 import { getDevLocale, isOnDevLocale } from '@app/helpers'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
-import { PluginInfo, PluginsManager } from '@root-helpers/plugins-manager'
-import { getKeys } from '@shared/core-utils'
-import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@shared/core-utils/i18n'
+import { getCompleteLocale, getKeys, isDefaultLocale, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
   ClientHook,
   ClientHookName,
   PluginClientScope,
   PluginTranslation,
   PluginType,
+  PluginType_Type,
   PublicServerSetting,
   RegisterClientFormFieldOptions,
   RegisterClientRouteOptions,
   RegisterClientSettingsScriptOptions,
   RegisterClientVideoFieldOptions,
   ServerConfigPlugin
-} from '@shared/models'
+} from '@peertube/peertube-models'
+import { PluginInfo, PluginsManager } from '@root-helpers/plugins-manager'
 import { environment } from '../../../environments/environment'
 import { RegisterClientHelpers } from '../../../types/register-client-option.model'
 
@@ -110,7 +110,7 @@ export class PluginService implements ClientHook {
     return this.pluginsManager.removePlugin(plugin)
   }
 
-  nameToNpmName (name: string, type: PluginType) {
+  nameToNpmName (name: string, type: PluginType_Type) {
     const prefix = type === PluginType.PLUGIN
       ? 'peertube-plugin-'
       : 'peertube-theme-'

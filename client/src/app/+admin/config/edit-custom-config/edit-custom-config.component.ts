@@ -27,7 +27,7 @@ import {
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { CustomPageService } from '@app/shared/shared-main/custom-page'
-import { CustomConfig, CustomPage, HTMLServerConfig } from '@shared/models'
+import { CustomConfig, CustomPage, HTMLServerConfig } from '@peertube/peertube-models'
 import { EditConfigurationService } from './edit-configuration.service'
 
 type ComponentCustomConfig = CustomConfig & {

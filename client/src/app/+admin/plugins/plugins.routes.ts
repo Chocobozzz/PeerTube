@@ -3,7 +3,7 @@ import { PluginListInstalledComponent } from '@app/+admin/plugins/plugin-list-in
 import { PluginSearchComponent } from '@app/+admin/plugins/plugin-search/plugin-search.component'
 import { PluginShowInstalledComponent } from '@app/+admin/plugins/plugin-show-installed/plugin-show-installed.component'
 import { UserRightGuard } from '@app/core'
-import { UserRight } from '@shared/models'
+import { UserRight } from '@peertube/peertube-models'
 
 export const PluginsRoutes: Routes = [
   {

@@ -4,7 +4,7 @@ import { VIDEO_CAPTION_FILE_VALIDATOR, VIDEO_CAPTION_LANGUAGE_VALIDATOR } from '
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { VideoCaptionEdit } from '@app/shared/shared-main'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
-import { HTMLServerConfig, VideoConstant } from '@shared/models'
+import { HTMLServerConfig, VideoConstant } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-video-caption-add-modal',

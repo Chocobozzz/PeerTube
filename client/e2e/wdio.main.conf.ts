@@ -107,14 +107,6 @@ export const config = {
 
     tsNodeOpts: {
       project: require('path').join(__dirname, './tsconfig.json')
-    },
-
-    tsConfigPathsOpts: {
-      baseUrl: './',
-      paths: {
-        '@server/*': [ '../../server/*' ],
-        '@shared/*': [ '../../shared/*' ]
-      }
     }
   },
 

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main'
-import { VideoStudioCreateEdition, VideoStudioTask } from '@shared/models'
+import { VideoStudioCreateEdition, VideoStudioTask } from '@peertube/peertube-models'
 
 @Injectable()
 export class VideoStudioService {

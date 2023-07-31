@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs'
 import { ManagerOptions, Socket, SocketOptions } from 'socket.io-client'
 import { Injectable } from '@angular/core'
-import { LiveVideoEventPayload, LiveVideoEventType, UserNotification as UserNotificationServer } from '@shared/models'
+import { LiveVideoEventPayload, LiveVideoEventType, UserNotification as UserNotificationServer } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
 import { AuthService } from '../auth'
 

@@ -5,7 +5,7 @@ import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, S
 import { formatICU } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction } from '@app/shared/shared-main'
-import { UserRegistration, UserRegistrationState } from '@shared/models'
+import { UserRegistration, UserRegistrationState } from '@peertube/peertube-models'
 import { AdminRegistrationService } from './admin-registration.service'
 import { ProcessRegistrationModalComponent } from './process-registration-modal.component'
 

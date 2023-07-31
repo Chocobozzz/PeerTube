@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core'
 import { ServerService } from '@app/core'
 import { CustomMarkupService } from '@app/shared/shared-custom-markup'
 import { AboutHTML, InstanceService } from '@app/shared/shared-instance'
-import { About, ServerStats } from '@shared/models/server'
+import { About, ServerStats } from '@peertube/peertube-models'
 
 export type ResolverData = {
   serverStats: ServerStats

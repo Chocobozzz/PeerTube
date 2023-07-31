@@ -1,4 +1,4 @@
-import { ResultList, VideoPassword } from '@shared/models'
+import { ResultList, VideoPassword } from '@peertube/peertube-models'
 import { Injectable } from '@angular/core'
 import { catchError, switchMap } from 'rxjs'
 import { HttpClient, HttpHeaders } from '@angular/common/http'

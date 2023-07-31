@@ -1,7 +1,7 @@
 import debug from 'debug'
 import videojs from 'video.js'
+import { PlaybackMetricCreate, VideoResolutionType } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { PlaybackMetricCreate } from '../../../../../../shared/models'
 import { MetricsPluginOptions, PlayerNetworkInfo } from '../../types'
 
 const debugLogger = debug('peertube:player:metrics')
@@ -102,7 +102,7 @@ class MetricsPlugin extends Plugin {
       }
 
       const body: PlaybackMetricCreate = {
-        resolution,
+        resolution: resolution as VideoResolutionType,
         fps,
 
         playerMode: this.options_.mode(),

@@ -1,4 +1,4 @@
-import { peertubeTranslate } from '../../../../../shared/core-utils/i18n'
+import { peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
   HTMLServerConfig,
   LiveVideo,
@@ -9,7 +9,7 @@ import {
   VideoPlaylistElement,
   VideoState,
   VideoStreamingPlaylistType
-} from '../../../../../shared/models'
+} from '@peertube/peertube-models'
 import { HLSOptions, PeerTubePlayerContructorOptions, PeerTubePlayerLoadOptions, PlayerMode, VideoJSCaption } from '../../../assets/player'
 import {
   getBoolOrDefault,

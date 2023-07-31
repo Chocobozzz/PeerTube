@@ -1,9 +1,9 @@
 import debug from 'debug'
 import videojs from 'video.js'
+import { timeToInt } from '@peertube/peertube-core-utils'
+import { VideoView, VideoViewEvent } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { isIOS, isMobile, isSafari } from '@root-helpers/web-browser'
-import { timeToInt } from '@shared/core-utils'
-import { VideoView, VideoViewEvent } from '@shared/models/videos'
 import {
   getStoredLastSubtitle,
   getStoredMute,

@@ -11,9 +11,9 @@ import {
 } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactiveService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
-import { HTMLServerConfig, VideoChannelUpdate } from '@shared/models'
+import { HTMLServerConfig, VideoChannelUpdate } from '@peertube/peertube-models'
 import { VideoChannelEdit } from './video-channel-edit'
-import { shallowCopy } from '@shared/core-utils'
+import { shallowCopy } from '@peertube/peertube-core-utils'
 
 @Component({
   selector: 'my-video-channel-update',

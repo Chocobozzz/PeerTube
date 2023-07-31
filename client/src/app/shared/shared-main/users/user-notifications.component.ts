@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ComponentPagination, hasMoreItems, Notifier } from '@app/core'
-import { AbuseState } from '@shared/models'
+import { AbuseState } from '@peertube/peertube-models'
 import { UserNotification } from './user-notification.model'
 import { UserNotificationService } from './user-notification.service'
 

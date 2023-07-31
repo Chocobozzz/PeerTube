@@ -53,7 +53,7 @@ info:
     }
     ```
 
-    We provide error `type` values for [a growing number of cases](https://github.com/Chocobozzz/PeerTube/blob/develop/shared/models/server/server-error-code.enum.ts),
+    We provide error `type` values for [a growing number of cases](https://github.com/Chocobozzz/PeerTube/blob/develop/packages/models/server/server-error-code.enum.ts),
     but it is still optional. Types are used to disambiguate errors that bear the same status code
     and are non-obvious:
 
@@ -8752,7 +8752,7 @@ components:
         password:
           $ref: '#/components/schemas/password'
     UpdateMe:
-      # see shared/models/users/user-update-me.model.ts:
+      # see packages/models/users/user-update-me.model.ts:
       properties:
         password:
           $ref: '#/components/schemas/password'

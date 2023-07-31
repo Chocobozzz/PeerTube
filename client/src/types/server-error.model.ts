@@ -1,9 +1,9 @@
-import { ServerErrorCode } from '@shared/models/index'
+import { ServerErrorCodeType } from '@peertube/peertube-models'
 
 export class PeerTubeServerError extends Error {
-  serverCode: ServerErrorCode
+  serverCode: ServerErrorCodeType
 
-  constructor (message: string, serverCode: ServerErrorCode) {
+  constructor (message: string, serverCode: ServerErrorCodeType) {
     super(message)
     this.name = 'CustomError'
     this.serverCode = serverCode

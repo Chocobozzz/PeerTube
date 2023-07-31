@@ -2,8 +2,7 @@ import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
 import { durationToString, formatICU, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
-import { buildVideoWatchPath, getAllFiles } from '@shared/core-utils'
-import { peertubeTranslate } from '@shared/core-utils/i18n'
+import { buildVideoWatchPath, getAllFiles, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
   ActorImage,
   HTMLServerConfig,
@@ -12,11 +11,13 @@ import {
   VideoConstant,
   VideoFile,
   VideoPrivacy,
+  VideoPrivacyType,
   VideoScheduleUpdate,
   VideoState,
+  VideoStateType,
   VideoStreamingPlaylist,
   VideoStreamingPlaylistType
-} from '@shared/models'
+} from '@peertube/peertube-models'
 
 export class Video implements VideoServerModel {
   byVideoChannel: string
@@ -30,7 +31,7 @@ export class Video implements VideoServerModel {
   category: VideoConstant<number>
   licence: VideoConstant<number>
   language: VideoConstant<string>
-  privacy: VideoConstant<VideoPrivacy>
+  privacy: VideoConstant<VideoPrivacyType>
 
   truncatedDescription: string
   description: string
@@ -70,7 +71,7 @@ export class Video implements VideoServerModel {
   originInstanceHost: string
 
   waitTranscoding?: boolean
-  state?: VideoConstant<VideoState>
+  state?: VideoConstant<VideoStateType>
   scheduledUpdate?: VideoScheduleUpdate
 
   blacklisted?: boolean

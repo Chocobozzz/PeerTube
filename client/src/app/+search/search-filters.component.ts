@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ServerService } from '@app/core'
 import { AdvancedSearch } from '@app/shared/shared-search'
-import { HTMLServerConfig, VideoConstant } from '@shared/models'
+import { HTMLServerConfig, VideoConstant } from '@peertube/peertube-models'
 
 type FormOption = { id: string, label: string }
 

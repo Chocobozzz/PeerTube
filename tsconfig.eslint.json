@@ -1,0 +1,32 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "baseUrl": "./",
+    "paths": {
+      "@server/*": [ "server/*" ]
+    },
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "include": [
+    "./server.ts",
+    "server/**/*.ts",
+    "packages/**/*.ts",
+    "apps/**/*.ts",
+    "scripts/**/*.ts"
+  ],
+  "references": [
+    { "path": "./server" },
+    { "path": "./scripts" },
+    { "path": "./apps/peertube-runner" },
+    { "path": "./apps/peertube-cli" },
+    { "path": "./packages/core-utils" },
+    { "path": "./packages/ffmpeg" },
+    { "path": "./packages/models" },
+    { "path": "./packages/node-utils" },
+    { "path": "./packages/server-commands" },
+    { "path": "./packages/typescript-utils" }
+  ]
+}

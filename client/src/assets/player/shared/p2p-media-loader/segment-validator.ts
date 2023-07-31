@@ -2,7 +2,7 @@ import { basename } from 'path'
 import { Segment } from '@peertube/p2p-media-loader-core'
 import { logger } from '@root-helpers/logger'
 import { wait } from '@root-helpers/utils'
-import { removeQueryParams } from '@shared/core-utils'
+import { removeQueryParams } from '@peertube/peertube-core-utils'
 import { isSameOrigin } from '../common'
 
 type SegmentsJSON = { [filename: string]: string | { [byterange: string]: string } }

@@ -6,7 +6,7 @@ import {
   VideoChannelsSearchQuery,
   VideoPlaylistsSearchQuery,
   VideosSearchQuery
-} from '@shared/models'
+} from '@peertube/peertube-models'
 
 export type AdvancedSearchResultType = 'videos' | 'playlists' | 'channels'
 

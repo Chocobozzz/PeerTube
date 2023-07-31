@@ -26,7 +26,7 @@ Nothing to do here, Github will automatically send a webhook to Weblate that wil
 
 ## Support a new language
 
- * Add it to [/shared/models/i18n/i18n.ts](/shared/models/i18n/i18n.ts)
+ * Add it to [/packages/models/i18n/i18n.ts](/packages/models/i18n/i18n.ts)
  * Add it to [/scripts/build/client.sh](/scripts/build/client.sh)
  * Add it to [/client/angular.json](/client/angular.json)
  * Add it to [/scripts/i18n/update.sh](/scripts/i18n/update.sh)

@@ -5,7 +5,7 @@ import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthService, ComponentPaginationLight, ConfirmService, RestExtractor, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
-import { arrayify } from '@shared/core-utils'
+import { arrayify } from '@peertube/peertube-core-utils'
 import {
   BooleanBothQuery,
   FeedFormat,
@@ -21,13 +21,14 @@ import {
   VideoConstant,
   VideoDetails as VideoDetailsServerModel,
   VideoFileMetadata,
-  VideoInclude,
+  VideoIncludeType,
   VideoPrivacy,
+  VideoPrivacyType,
   VideoSortField,
+  VideoSource,
   VideoTranscodingCreate,
   VideoUpdate
-} from '@shared/models'
-import { VideoSource } from '@shared/models/videos/video-source'
+} from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account/account.model'
 import { AccountService } from '../account/account.service'
@@ -40,11 +41,11 @@ import { Video } from './video.model'
 export type CommonVideoParams = {
   videoPagination?: ComponentPaginationLight
   sort: VideoSortField | SortMeta
-  include?: VideoInclude
+  include?: VideoIncludeType
   isLocal?: boolean
   categoryOneOf?: number[]
   languageOneOf?: string[]
-  privacyOneOf?: VideoPrivacy[]
+  privacyOneOf?: VideoPrivacyType[]
   isLive?: boolean
   skipCount?: boolean
   nsfw?: BooleanBothQuery
@@ -455,7 +456,7 @@ export class VideoService {
                )
   }
 
-  explainedPrivacyLabels (serverPrivacies: VideoConstant<VideoPrivacy>[], defaultPrivacyId = VideoPrivacy.PUBLIC) {
+  explainedPrivacyLabels (serverPrivacies: VideoConstant<VideoPrivacyType>[], defaultPrivacyId: VideoPrivacyType = VideoPrivacy.PUBLIC) {
     const descriptions = {
       [VideoPrivacy.PRIVATE]: $localize`Only I can see this video`,
       [VideoPrivacy.UNLISTED]: $localize`Only shareable via a private link`,
@@ -478,7 +479,7 @@ export class VideoService {
     }
   }
 
-  getHighestAvailablePrivacy (serverPrivacies: VideoConstant<VideoPrivacy>[]) {
+  getHighestAvailablePrivacy (serverPrivacies: VideoConstant<VideoPrivacyType>[]) {
     // We do not add a password as this requires additional configuration.
     const order = [
       VideoPrivacy.PRIVATE,

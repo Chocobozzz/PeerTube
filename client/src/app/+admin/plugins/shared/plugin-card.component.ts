@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { PeerTubePlugin, PeerTubePluginIndex, PluginType } from '@shared/models'
+import { PeerTubePlugin, PeerTubePluginIndex, PluginType_Type } from '@peertube/peertube-models'
 import { PluginApiService } from './plugin-api.service'
 
 @Component({
@@ -11,7 +11,7 @@ import { PluginApiService } from './plugin-api.service'
 export class PluginCardComponent {
   @Input() plugin: PeerTubePluginIndex | PeerTubePlugin
   @Input() version: string
-  @Input() pluginType: PluginType
+  @Input() pluginType: PluginType_Type
 
   constructor (
     private pluginApiService: PluginApiService

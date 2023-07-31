@@ -1,15 +1,15 @@
 import { getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main'
-import { buildPlaylistWatchPath } from '@shared/core-utils'
-import { peertubeTranslate } from '@shared/core-utils/i18n'
+import { buildPlaylistWatchPath, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
   AccountSummary,
   VideoChannelSummary,
   VideoConstant,
   VideoPlaylist as ServerVideoPlaylist,
-  VideoPlaylistPrivacy,
-  VideoPlaylistType
-} from '@shared/models'
+  VideoPlaylistPrivacyType,
+  VideoPlaylistType,
+  VideoPlaylistType_Type
+} from '@peertube/peertube-models'
 
 export class VideoPlaylist implements ServerVideoPlaylist {
   id: number
@@ -22,11 +22,11 @@ export class VideoPlaylist implements ServerVideoPlaylist {
 
   displayName: string
   description: string
-  privacy: VideoConstant<VideoPlaylistPrivacy>
+  privacy: VideoConstant<VideoPlaylistPrivacyType>
 
   videosLength: number
 
-  type: VideoConstant<VideoPlaylistType>
+  type: VideoConstant<VideoPlaylistType_Type>
 
   createdAt: Date | string
   updatedAt: Date | string

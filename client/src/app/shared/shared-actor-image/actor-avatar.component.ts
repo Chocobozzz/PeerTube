@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core'
 import { VideoChannel } from '../shared-main'
 import { Account } from '../shared-main/account/account.model'
-import { objectKeysTyped } from '@shared/core-utils'
+import { objectKeysTyped } from '@peertube/peertube-core-utils'
 
 type ActorInput = {
   name: string

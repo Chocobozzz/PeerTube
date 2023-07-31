@@ -4,8 +4,7 @@ import { environment } from 'src/environments/environment'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
-import { ResultList } from '@shared/models/common'
-import { VideoChannelSync, VideoChannelSyncCreate } from '@shared/models/videos'
+import { ResultList, VideoChannelSync, VideoChannelSyncCreate } from '@peertube/peertube-models'
 import { Account, AccountService } from '../account'
 
 @Injectable({

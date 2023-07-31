@@ -259,6 +259,7 @@ open_telemetry:
       port: 9091
 
   tracing:
+    # If tracing is enabled, you must provide --experimental-loader=@opentelemetry/instrumentation/hook.mjs flag to the node binary
     enabled: false
 
     # Send traces to a Jaeger compatible endpoint

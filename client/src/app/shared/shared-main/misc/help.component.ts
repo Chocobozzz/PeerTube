@@ -1,6 +1,6 @@
 import { AfterContentInit, Component, ContentChildren, Input, OnChanges, OnInit, QueryList, TemplateRef } from '@angular/core'
 import { GlobalIconName } from '@app/shared/shared-icons'
-import { ENHANCED_RULES, TEXT_RULES } from '@shared/core-utils/renderer/markdown'
+import { ENHANCED_RULES, TEXT_RULES } from '@peertube/peertube-core-utils'
 import { PeerTubeTemplateDirective } from '../angular'
 
 @Component({

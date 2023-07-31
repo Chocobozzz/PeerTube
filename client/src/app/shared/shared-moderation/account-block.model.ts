@@ -1,4 +1,4 @@
-import { AccountBlock as AccountBlockServer } from '@shared/models'
+import { AccountBlock as AccountBlockServer } from '@peertube/peertube-models'
 import { Account } from '@app/shared/shared-main'
 
 export class AccountBlock implements AccountBlockServer {

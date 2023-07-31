@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2015",
+    "module": "NodeNext",
+    "target": "ES2017",
     "noImplicitAny": false,
     "sourceMap": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "isolatedModules": true,
     "importHelpers": true,
     "removeComments": true,
     "esModuleInterop": true,
@@ -19,11 +20,6 @@
       "es2019"
     ],
     "baseUrl": "./",
-    "paths": {
-      "@server/*": [ "server/*" ],
-      "@shared/*": [ "shared/*" ],
-      "@client/*": [ "client/src/*" ]
-    },
     "resolveJsonModule": true,
     "strict": false,
     "strictBindCallApply": true,

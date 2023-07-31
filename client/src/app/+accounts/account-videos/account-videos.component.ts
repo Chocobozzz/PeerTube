@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ComponentPaginationLight, DisableForReuseHook, ScreenService } from '@app/core'
 import { Account, AccountService, VideoService } from '@app/shared/shared-main'
 import { VideoFilters } from '@app/shared/shared-video-miniature'
-import { VideoSortField } from '@shared/models'
+import { VideoSortField } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-account-videos',

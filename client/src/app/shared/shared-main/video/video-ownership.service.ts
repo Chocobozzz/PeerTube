@@ -4,7 +4,7 @@ import { catchError } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
-import { ResultList, VideoChangeOwnership, VideoChangeOwnershipAccept, VideoChangeOwnershipCreate } from '@shared/models'
+import { ResultList, VideoChangeOwnership, VideoChangeOwnershipAccept, VideoChangeOwnershipCreate } from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
 
 @Injectable()

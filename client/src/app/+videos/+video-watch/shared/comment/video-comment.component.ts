@@ -5,7 +5,7 @@ import { AuthService } from '@app/core/auth'
 import { Account, DropdownAction, Video } from '@app/shared/shared-main'
 import { CommentReportComponent } from '@app/shared/shared-moderation/report-modals/comment-report.component'
 import { VideoComment, VideoCommentThreadTree } from '@app/shared/shared-video-comment'
-import { User, UserRight } from '@shared/models'
+import { User, UserRight } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-video-comment',

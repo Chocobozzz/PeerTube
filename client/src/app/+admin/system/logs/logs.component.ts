@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { LocalStorageService, Notifier } from '@app/core'
-import { ServerLogLevel } from '@shared/models'
+import { ServerLogLevel } from '@peertube/peertube-models'
 import { LogRow } from './log-row.model'
 import { LogsService } from './logs.service'
 

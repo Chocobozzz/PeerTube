@@ -1,0 +1,490 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { HttpStatusCode, PeerTubePlugin, PluginType } from '@peertube/peertube-models'
+import {
+  cleanupTests,
+  createSingleServer,
+  makeGetRequest,
+  makePostBodyRequest,
+  makePutBodyRequest,
+  PeerTubeServer,
+  setAccessTokensToServers
+} from '@peertube/peertube-server-commands'
+
+describe('Test server plugins API validators', function () {
+  let server: PeerTubeServer
+  let userAccessToken = null
+
+  const npmPlugin = 'peertube-plugin-hello-world'
+  const pluginName = 'hello-world'
+  let npmVersion: string
+
+  const themePlugin = 'peertube-theme-background-red'
+  const themeName = 'background-red'
+  let themeVersion: string
+
+  // ---------------------------------------------------------------
+
+  before(async function () {
+    this.timeout(60000)
+
+    server = await createSingleServer(1)
+
+    await setAccessTokensToServers([ server ])
+
+    const user = {
+      username: 'user1',
+      password: 'password'
+    }
+
+    await server.users.create({ username: user.username, password: user.password })
+    userAccessToken = await server.login.getAccessToken(user)
+
+    {
+      const res = await server.plugins.install({ npmName: npmPlugin })
+      const plugin = res.body as PeerTubePlugin
+      npmVersion = plugin.version
+    }
+
+    {
+      const res = await server.plugins.install({ npmName: themePlugin })
+      const plugin = res.body as PeerTubePlugin
+      themeVersion = plugin.version
+    }
+  })
+
+  describe('With static plugin routes', function () {
+    it('Should fail with an unknown plugin name/plugin version', async function () {
+      const paths = [
+        '/plugins/' + pluginName + '/0.0.1/auth/fake-auth',
+        '/plugins/' + pluginName + '/0.0.1/static/images/chocobo.png',
+        '/plugins/' + pluginName + '/0.0.1/client-scripts/client/common-client-plugin.js',
+        '/themes/' + themeName + '/0.0.1/static/images/chocobo.png',
+        '/themes/' + themeName + '/0.0.1/client-scripts/client/video-watch-client-plugin.js',
+        '/themes/' + themeName + '/0.0.1/css/assets/style1.css'
+      ]
+
+      for (const p of paths) {
+        await makeGetRequest({ url: server.url, path: p, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      }
+    })
+
+    it('Should fail when requesting a plugin in the theme path', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: '/themes/' + pluginName + '/' + npmVersion + '/static/images/chocobo.png',
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
+      })
+    })
+
+    it('Should fail with invalid versions', async function () {
+      const paths = [
+        '/plugins/' + pluginName + '/0.0.1.1/auth/fake-auth',
+        '/plugins/' + pluginName + '/0.0.1.1/static/images/chocobo.png',
+        '/plugins/' + pluginName + '/0.1/client-scripts/client/common-client-plugin.js',
+        '/themes/' + themeName + '/1/static/images/chocobo.png',
+        '/themes/' + themeName + '/0.0.1000a/client-scripts/client/video-watch-client-plugin.js',
+        '/themes/' + themeName + '/0.a.1/css/assets/style1.css'
+      ]
+
+      for (const p of paths) {
+        await makeGetRequest({ url: server.url, path: p, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      }
+    })
+
+    it('Should fail with invalid paths', async function () {
+      const paths = [
+        '/plugins/' + pluginName + '/' + npmVersion + '/static/images/../chocobo.png',
+        '/plugins/' + pluginName + '/' + npmVersion + '/client-scripts/../client/common-client-plugin.js',
+        '/themes/' + themeName + '/' + themeVersion + '/static/../images/chocobo.png',
+        '/themes/' + themeName + '/' + themeVersion + '/client-scripts/client/video-watch-client-plugin.js/..',
+        '/themes/' + themeName + '/' + themeVersion + '/css/../assets/style1.css'
+      ]
+
+      for (const p of paths) {
+        await makeGetRequest({ url: server.url, path: p, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      }
+    })
+
+    it('Should fail with an unknown auth name', async function () {
+      const path = '/plugins/' + pluginName + '/' + npmVersion + '/auth/bad-auth'
+
+      await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should fail with an unknown static file', async function () {
+      const paths = [
+        '/plugins/' + pluginName + '/' + npmVersion + '/static/fake/chocobo.png',
+        '/plugins/' + pluginName + '/' + npmVersion + '/client-scripts/client/fake.js',
+        '/themes/' + themeName + '/' + themeVersion + '/static/fake/chocobo.png',
+        '/themes/' + themeName + '/' + themeVersion + '/client-scripts/client/fake.js'
+      ]
+
+      for (const p of paths) {
+        await makeGetRequest({ url: server.url, path: p, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      }
+    })
+
+    it('Should fail with an unknown CSS file', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: '/themes/' + themeName + '/' + themeVersion + '/css/assets/fake.css',
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
+      })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
+      const paths = [
+        '/plugins/' + pluginName + '/' + npmVersion + '/static/images/chocobo.png',
+        '/plugins/' + pluginName + '/' + npmVersion + '/client-scripts/client/common-client-plugin.js',
+        '/themes/' + themeName + '/' + themeVersion + '/static/images/chocobo.png',
+        '/themes/' + themeName + '/' + themeVersion + '/client-scripts/client/video-watch-client-plugin.js',
+        '/themes/' + themeName + '/' + themeVersion + '/css/assets/style1.css'
+      ]
+
+      for (const p of paths) {
+        await makeGetRequest({ url: server.url, path: p, expectedStatus: HttpStatusCode.OK_200 })
+      }
+
+      const authPath = '/plugins/' + pluginName + '/' + npmVersion + '/auth/fake-auth'
+      await makeGetRequest({ url: server.url, path: authPath, expectedStatus: HttpStatusCode.FOUND_302 })
+    })
+  })
+
+  describe('When listing available plugins/themes', function () {
+    const path = '/api/v1/plugins/available'
+    const baseQuery = {
+      search: 'super search',
+      pluginType: PluginType.PLUGIN,
+      currentPeerTubeEngine: '1.2.3'
+    }
+
+    it('Should fail with an invalid token', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: 'fake_token',
+        query: baseQuery,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail if the user is not an administrator', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: userAccessToken,
+        query: baseQuery,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSortPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should fail with an invalid plugin type', async function () {
+      const query = { ...baseQuery, pluginType: 5 }
+
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        query
+      })
+    })
+
+    it('Should fail with an invalid current peertube engine', async function () {
+      const query = { ...baseQuery, currentPeerTubeEngine: '1.0' }
+
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        query
+      })
+    })
+
+    it('Should success with the correct parameters', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        query: baseQuery,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    })
+  })
+
+  describe('When listing local plugins/themes', function () {
+    const path = '/api/v1/plugins'
+    const baseQuery = {
+      pluginType: PluginType.THEME
+    }
+
+    it('Should fail with an invalid token', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: 'fake_token',
+        query: baseQuery,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail if the user is not an administrator', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: userAccessToken,
+        query: baseQuery,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSortPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should fail with an invalid plugin type', async function () {
+      const query = { ...baseQuery, pluginType: 5 }
+
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        query
+      })
+    })
+
+    it('Should success with the correct parameters', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        query: baseQuery,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    })
+  })
+
+  describe('When getting a plugin or the registered settings or public settings', function () {
+    const path = '/api/v1/plugins/'
+
+    it('Should fail with an invalid token', async function () {
+      for (const suffix of [ npmPlugin, `${npmPlugin}/registered-settings` ]) {
+        await makeGetRequest({
+          url: server.url,
+          path: path + suffix,
+          token: 'fake_token',
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+        })
+      }
+    })
+
+    it('Should fail if the user is not an administrator', async function () {
+      for (const suffix of [ npmPlugin, `${npmPlugin}/registered-settings` ]) {
+        await makeGetRequest({
+          url: server.url,
+          path: path + suffix,
+          token: userAccessToken,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+      }
+    })
+
+    it('Should fail with an invalid npm name', async function () {
+      for (const suffix of [ 'toto', 'toto/registered-settings', 'toto/public-settings' ]) {
+        await makeGetRequest({
+          url: server.url,
+          path: path + suffix,
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
+
+      for (const suffix of [ 'peertube-plugin-TOTO', 'peertube-plugin-TOTO/registered-settings', 'peertube-plugin-TOTO/public-settings' ]) {
+        await makeGetRequest({
+          url: server.url,
+          path: path + suffix,
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
+    })
+
+    it('Should fail with an unknown plugin', async function () {
+      for (const suffix of [ 'peertube-plugin-toto', 'peertube-plugin-toto/registered-settings', 'peertube-plugin-toto/public-settings' ]) {
+        await makeGetRequest({
+          url: server.url,
+          path: path + suffix,
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.NOT_FOUND_404
+        })
+      }
+    })
+
+    it('Should succeed with the correct parameters', async function () {
+      for (const suffix of [ npmPlugin, `${npmPlugin}/registered-settings`, `${npmPlugin}/public-settings` ]) {
+        await makeGetRequest({
+          url: server.url,
+          path: path + suffix,
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.OK_200
+        })
+      }
+    })
+  })
+
+  describe('When updating plugin settings', function () {
+    const path = '/api/v1/plugins/'
+    const settings = { setting1: 'value1' }
+
+    it('Should fail with an invalid token', async function () {
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + npmPlugin + '/settings',
+        fields: { settings },
+        token: 'fake_token',
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail if the user is not an administrator', async function () {
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + npmPlugin + '/settings',
+        fields: { settings },
+        token: userAccessToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail with an invalid npm name', async function () {
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + 'toto/settings',
+        fields: { settings },
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + 'peertube-plugin-TOTO/settings',
+        fields: { settings },
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with an unknown plugin', async function () {
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + 'peertube-plugin-toto/settings',
+        fields: { settings },
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
+      })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + npmPlugin + '/settings',
+        fields: { settings },
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+    })
+  })
+
+  describe('When installing/updating/uninstalling a plugin', function () {
+    const path = '/api/v1/plugins/'
+
+    it('Should fail with an invalid token', async function () {
+      for (const suffix of [ 'install', 'update', 'uninstall' ]) {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + suffix,
+          fields: { npmName: npmPlugin },
+          token: 'fake_token',
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+        })
+      }
+    })
+
+    it('Should fail if the user is not an administrator', async function () {
+      for (const suffix of [ 'install', 'update', 'uninstall' ]) {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + suffix,
+          fields: { npmName: npmPlugin },
+          token: userAccessToken,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+      }
+    })
+
+    it('Should fail with an invalid npm name', async function () {
+      for (const suffix of [ 'install', 'update', 'uninstall' ]) {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + suffix,
+          fields: { npmName: 'toto' },
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
+
+      for (const suffix of [ 'install', 'update', 'uninstall' ]) {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + suffix,
+          fields: { npmName: 'peertube-plugin-TOTO' },
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
+    })
+
+    it('Should succeed with the correct parameters', async function () {
+      const it = [
+        { suffix: 'install', status: HttpStatusCode.OK_200 },
+        { suffix: 'update', status: HttpStatusCode.OK_200 },
+        { suffix: 'uninstall', status: HttpStatusCode.NO_CONTENT_204 }
+      ]
+
+      for (const obj of it) {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + obj.suffix,
+          fields: { npmName: npmPlugin },
+          token: server.accessToken,
+          expectedStatus: obj.status
+        })
+      }
+    })
+  })
+
+  after(async function () {
+    await cleanupTests([ server ])
+  })
+})

@@ -1,8 +1,14 @@
 import autocannon, { printResult } from 'autocannon'
 import { program } from 'commander'
-import { writeJson } from 'fs-extra'
-import { Video, VideoPrivacy } from '@shared/models'
-import { createMultipleServers, doubleFollow, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
+import { writeJson } from 'fs-extra/esm'
+import { Video, VideoPrivacy } from '@peertube/peertube-models'
+import {
+  createMultipleServers,
+  doubleFollow,
+  killallServers,
+  PeerTubeServer,
+  setAccessTokensToServers
+} from '@peertube/peertube-server-commands'
 
 let servers: PeerTubeServer[]
 // First server

@@ -4,8 +4,7 @@ import { first } from 'rxjs/operators'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { AuthService, Notifier, ServerService, User, UserService } from '@app/core'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { UserUpdateMe } from '@shared/models'
-import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
+import { NSFWPolicyType, UserUpdateMe } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-user-video-settings',

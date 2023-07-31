@@ -1,0 +1,19 @@
+{
+  "name": "@peertube/peertube-cli",
+  "version": "1.0.1",
+  "type": "module",
+  "main": "dist/peertube.js",
+  "bin": "dist/peertube.js",
+  "engines": {
+    "node": ">=16.x"
+  },
+  "scripts": {},
+  "license": "AGPL-3.0",
+  "private": false,
+  "devDependencies": {
+    "application-config": "^2.0.0",
+    "cli-table3": "^0.6.0",
+    "netrc-parser": "^3.1.6"
+  },
+  "dependencies": {}
+}

@@ -7,9 +7,9 @@ import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, S
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, VideoService } from '@app/shared/shared-main'
 import { VideoBlockService } from '@app/shared/shared-moderation'
+import { buildVideoEmbedLink, decorateVideoLink } from '@peertube/peertube-core-utils'
+import { VideoBlacklist, VideoBlacklistType, VideoBlacklistType_Type } from '@peertube/peertube-models'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
-import { buildVideoEmbedLink, decorateVideoLink } from '@shared/core-utils'
-import { VideoBlacklist, VideoBlacklistType } from '@shared/models'
 
 @Component({
   selector: 'my-video-block-list',
@@ -21,7 +21,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
-  blocklistTypeFilter: VideoBlacklistType = undefined
+  blocklistTypeFilter: VideoBlacklistType_Type
 
   videoBlocklistActions: DropdownAction<VideoBlacklist>[][] = []
 

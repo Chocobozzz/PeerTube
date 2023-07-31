@@ -1,7 +1,7 @@
 import { environment } from 'src/environments/environment'
 import { Component, ElementRef, Input, OnInit } from '@angular/core'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
-import { buildPlaylistEmbedLink, buildVideoEmbedLink } from '@shared/core-utils'
+import { buildPlaylistEmbedLink, buildVideoEmbedLink } from '@peertube/peertube-core-utils'
 import { CustomMarkupComponent } from './shared'
 
 @Component({

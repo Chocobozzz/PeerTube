@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { getCustomMarkupSanitizeOptions, getDefaultSanitizeOptions } from '@shared/core-utils/renderer/html'
+import { getCustomMarkupSanitizeOptions, getDefaultSanitizeOptions } from '@peertube/peertube-core-utils'
 import { LinkifierService } from './linkifier.service'
 
 @Injectable()

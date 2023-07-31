@@ -6,7 +6,7 @@ import { ComponentPagination, ConfirmService, HooksService, Notifier, ScreenServ
 import { DropdownAction } from '@app/shared/shared-main'
 import { VideoShareComponent } from '@app/shared/shared-share-modal'
 import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { VideoPlaylistType } from '@shared/models'
+import { VideoPlaylistType } from '@peertube/peertube-models'
 
 @Component({
   templateUrl: './my-video-playlist-elements.component.html',

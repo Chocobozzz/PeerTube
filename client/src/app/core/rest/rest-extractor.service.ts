@@ -1,10 +1,10 @@
 import { throwError as observableThrowError } from 'rxjs'
+import { HttpHeaderResponse } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { Router } from '@angular/router'
 import { DateFormat, dateToHuman } from '@app/helpers'
+import { HttpStatusCode, HttpStatusCodeType, ResultList } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { HttpStatusCode, ResultList } from '@shared/models'
-import { HttpHeaderResponse } from '@angular/common/http'
 
 @Injectable()
 export class RestExtractor {
@@ -45,7 +45,11 @@ export class RestExtractor {
     return target
   }
 
-  redirectTo404IfNotFound (obj: { status: number }, type: 'video' | 'other', status = [ HttpStatusCode.NOT_FOUND_404 ]) {
+  redirectTo404IfNotFound (
+    obj: { status: HttpStatusCodeType },
+    type: 'video' | 'other',
+    status: HttpStatusCodeType[] = [ HttpStatusCode.NOT_FOUND_404 ]
+  ) {
     if (obj?.status && status.includes(obj.status)) {
       // Do not use redirectService to avoid circular dependencies
       this.router.navigate([ '/404' ], { state: { type, obj }, skipLocationChange: true })

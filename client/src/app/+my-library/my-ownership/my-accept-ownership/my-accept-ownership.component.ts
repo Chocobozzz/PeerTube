@@ -6,7 +6,7 @@ import { OWNERSHIP_CHANGE_CHANNEL_VALIDATOR } from '@app/shared/form-validators/
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { VideoOwnershipService } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { VideoChangeOwnership } from '@shared/models'
+import { VideoChangeOwnership } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-accept-ownership',

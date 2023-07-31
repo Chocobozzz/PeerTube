@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Meta, Title } from '@angular/platform-browser'
-import { HTMLServerConfig } from '@shared/models/server'
+import { HTMLServerConfig } from '@peertube/peertube-models'
 import { ServerService } from '../server'
 
 export interface MetaSettings {

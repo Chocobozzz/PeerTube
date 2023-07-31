@@ -1,4 +1,4 @@
-import { peertubeTranslate } from '../../../../../shared/core-utils/i18n'
+import { peertubeTranslate } from '@peertube/peertube-core-utils'
 import { logger } from '../../../root-helpers'
 import { Translations } from './translations'
 

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core'
 import { AuthUser } from '@app/core'
 import { VideoDetails } from '@app/shared/shared-main'
-import { VideoPrivacy, VideoState } from '@shared/models'
+import { VideoPrivacy, VideoState } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-video-alert',

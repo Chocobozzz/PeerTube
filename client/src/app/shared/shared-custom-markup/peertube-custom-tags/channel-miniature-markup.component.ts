@@ -3,7 +3,7 @@ import { finalize, map, switchMap, tap } from 'rxjs/operators'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { MarkdownService, Notifier, UserService } from '@app/core'
 import { FindInBulkService } from '@app/shared/shared-search'
-import { VideoSortField } from '@shared/models'
+import { VideoSortField } from '@peertube/peertube-models'
 import { Video, VideoChannel, VideoService } from '../../shared-main'
 import { CustomMarkupComponent } from './shared'
 

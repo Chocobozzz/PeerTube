@@ -11,7 +11,7 @@ import {
 } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactiveService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
-import { HttpStatusCode, VideoChannelCreate } from '@shared/models'
+import { HttpStatusCode, VideoChannelCreate } from '@peertube/peertube-models'
 import { VideoChannelEdit } from './video-channel-edit'
 
 @Component({

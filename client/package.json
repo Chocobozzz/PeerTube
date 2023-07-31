@@ -14,7 +14,7 @@
   },
   "scripts": {
     "lint": "npm run lint-ts && npm run lint-scss",
-    "lint-ts": "eslint --ext .ts src/standalone/**/*.ts && npm run ng lint",
+    "lint-ts": "eslint --cache --ext .ts src/standalone/**/*.ts && npm run ng lint",
     "lint-scss": "stylelint 'src/**/*.scss'",
     "webpack": "webpack",
     "eslint": "eslint",
@@ -24,6 +24,9 @@
     "ngx-extractor": "ngx-extractor",
     "stylelint": "stylelint"
   },
+  "workspaces": [
+    "../packages/*"
+  ],
   "typings": "*.d.ts",
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.0.2",
@@ -57,6 +60,8 @@
     "@peertube/maildev": "^1.2.0",
     "@peertube/p2p-media-loader-core": "^1.0.14",
     "@peertube/p2p-media-loader-hlsjs": "^1.0.14",
+    "@peertube/peertube-core-utils": "*",
+    "@peertube/peertube-models": "*",
     "@peertube/videojs-contextmenu": "^5.5.0",
     "@peertube/xliffmerge": "^2.0.3",
     "@popperjs/core": "^2.11.5",
@@ -86,7 +91,7 @@
     "buffer": "^6.0.3",
     "chart.js": "^4.3.0",
     "chartjs-plugin-zoom": "~2.0.1",
-    "chromedriver": "^113.0.0",
+    "chromedriver": "^115.0.1",
     "core-js": "^3.22.8",
     "css-loader": "^6.2.0",
     "debug": "^4.3.1",
@@ -122,6 +127,7 @@
     "stylelint": "^15.1.0",
     "stylelint-config-sass-guidelines": "^10.0.0",
     "ts-loader": "^9.3.0",
+    "ts-node": "^10.9.1",
     "tslib": "^2.4.0",
     "typescript": "~4.9.5",
     "video.js": "^7.19.2",

@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier } from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
-import { compareSemVer } from '@shared/core-utils'
-import { PeerTubePlugin, PluginType } from '@shared/models'
+import { compareSemVer } from '@peertube/peertube-core-utils'
+import { PeerTubePlugin, PluginType, PluginType_Type } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-plugin-list-installed',
@@ -13,7 +13,7 @@ import { PeerTubePlugin, PluginType } from '@shared/models'
   styleUrls: [ './plugin-list-installed.component.scss' ]
 })
 export class PluginListInstalledComponent implements OnInit {
-  pluginType: PluginType
+  pluginType: PluginType_Type
 
   pagination: ComponentPagination = {
     currentPage: 1,
@@ -48,7 +48,7 @@ export class PluginListInstalledComponent implements OnInit {
     this.route.queryParams.subscribe(query => {
       if (!query['pluginType']) return
 
-      this.pluginType = parseInt(query['pluginType'], 10)
+      this.pluginType = parseInt(query['pluginType'], 10) as PluginType_Type
 
       this.reloadPlugins()
     })

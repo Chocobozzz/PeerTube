@@ -5,7 +5,7 @@ import { ComponentPagination, hasMoreItems, MarkdownService, User, UserService }
 import { SimpleMemoize } from '@app/helpers'
 import { Account, AccountService, Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
-import { NSFWPolicyType, VideoSortField } from '@shared/models'
+import { NSFWPolicyType, VideoSortField } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-account-video-channels',

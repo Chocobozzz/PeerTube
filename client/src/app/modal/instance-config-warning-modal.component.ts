@@ -2,9 +2,9 @@ import { Location } from '@angular/common'
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { Notifier, User, UserService } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { About, ServerConfig } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { About, ServerConfig } from '@shared/models/server'
 
 @Component({
   selector: 'my-instance-config-warning-modal',

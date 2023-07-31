@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core'
 import { AuthService, Notifier, ServerService, UserService } from '@app/core'
 import { USER_EMAIL_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { HttpStatusCode, User } from '@shared/models'
+import { HttpStatusCode, User } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-account-change-email',

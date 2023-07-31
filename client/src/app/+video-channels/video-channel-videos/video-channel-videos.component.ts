@@ -4,7 +4,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
 import { ComponentPaginationLight, DisableForReuseHook, HooksService, ScreenService } from '@app/core'
 import { VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 import { MiniatureDisplayOptions, VideoFilters } from '@app/shared/shared-video-miniature'
-import { Video, VideoSortField } from '@shared/models'
+import { Video, VideoSortField } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-video-channel-videos',

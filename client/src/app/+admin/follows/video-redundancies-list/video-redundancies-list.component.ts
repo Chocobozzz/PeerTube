@@ -3,9 +3,8 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { BytesPipe, RedundancyService } from '@app/shared/shared-main'
+import { VideoRedundanciesTarget, VideoRedundancy, VideosRedundancyStats } from '@peertube/peertube-models'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { VideoRedundanciesTarget, VideoRedundancy } from '@shared/models'
-import { VideosRedundancyStats } from '@shared/models/server'
 
 @Component({
   selector: 'my-video-redundancies-list',

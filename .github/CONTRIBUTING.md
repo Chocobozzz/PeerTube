@@ -53,13 +53,25 @@ interested in, user interface, design, decentralized architecture...
 You can help to write the documentation of the REST API, code, architecture,
 demonstrations.
 
-For the REST API you can see the documentation in [/support/doc/api](https://github.com/Chocobozzz/PeerTube/tree/develop/support/doc/api) directory.
-Then, you can just open the `openapi.yaml` file in a special editor like [http://editor.swagger.io/](http://editor.swagger.io/) to easily see and edit the documentation. You can also use [redoc-cli](https://github.com/Redocly/redoc/blob/master/cli/README.md) and run `redoc-cli serve --watch support/doc/api/openapi.yaml` to see the final result.
+### User documentation
+
+The official user documentation is available on https://docs.joinpeertube.org/
+
+You can update it by writing markdown files in the following repository: https://framagit.org/framasoft/peertube/documentation/
+
+### REST API documentation
+
+The [REST API documentation](https://docs.joinpeertube.org/api-rest-reference.html) is generated from `support/doc/api/openapi.yaml` file.
+To quickly get a preview of your changes, you can generate the documentation *on the fly* using the following command:
+
+```
+npx @redocly/cli preview-docs ./support/doc/api/openapi.yaml
+```
 
 Some hints:
- * Routes are defined in [/server/controllers/](https://github.com/Chocobozzz/PeerTube/tree/develop/server/controllers) directory
- * Parameters validators are defined in [/server/middlewares/validators](https://github.com/Chocobozzz/PeerTube/tree/develop/server/middlewares/validators) directory
- * Models sent/received by the controllers are defined in [/shared/models](https://github.com/Chocobozzz/PeerTube/tree/develop/shared/models) directory
+ * Routes are defined in [/server/server/controllers/](https://github.com/Chocobozzz/PeerTube/tree/develop/server/server/controllers) directory
+ * Parameters validators are defined in [/server/server/middlewares/validators](https://github.com/Chocobozzz/PeerTube/tree/develop/server/server/middlewares/validators) directory
+ * Models sent/received by the controllers are defined in [/packages/models](https://github.com/Chocobozzz/PeerTube/tree/develop/packages/models) directory
 
 
 ## Improve the website
@@ -241,15 +253,6 @@ To test emails with PeerTube:
 
  * Run [mailslurper](http://mailslurper.com/)
  * Run PeerTube using mailslurper SMTP port: `NODE_CONFIG='{ "smtp": { "hostname": "localhost", "port": 2500, "tls": false } }' NODE_ENV=dev node dist/server`
-
-### OpenAPI documentation
-
-The [REST API documentation](https://docs.joinpeertube.org/api-rest-reference.html) is generated from `support/doc/api/openapi.yaml` file.
-To quickly get a preview of your changes, you can generate the documentation *on the fly* using the following command:
-
-```
-npx @redocly/cli preview-docs ./support/doc/api/openapi.yaml
-```
 
 ### Environment variables
 

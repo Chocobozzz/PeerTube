@@ -1,4 +1,4 @@
-import { HTMLServerConfig, Video, VideoFile } from '@shared/models'
+import { HTMLServerConfig, Video, VideoFile } from '@peertube/peertube-models'
 
 function toTitleCase (str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)

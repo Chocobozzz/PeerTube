@@ -6,16 +6,16 @@ import { listUserChannelsForSelect } from '@app/helpers'
 import { FormReactive } from '@app/shared/shared-forms'
 import { VideoCaptionEdit, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { HTMLServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
+import { HTMLServerConfig, VideoConstant, VideoPrivacyType } from '@peertube/peertube-models'
 
 @Directive()
 // eslint-disable-next-line @angular-eslint/directive-class-suffix
 export abstract class VideoSend extends FormReactive implements OnInit {
   userVideoChannels: SelectChannelItem[] = []
-  videoPrivacies: VideoConstant<VideoPrivacy>[] = []
+  videoPrivacies: VideoConstant<VideoPrivacyType>[] = []
   videoCaptions: VideoCaptionEdit[] = []
 
-  firstStepPrivacyId: VideoPrivacy
+  firstStepPrivacyId: VideoPrivacyType
   firstStepChannelId: number
 
   abstract firstStepDone: EventEmitter<string>
@@ -31,7 +31,7 @@ export abstract class VideoSend extends FormReactive implements OnInit {
 
   protected serverConfig: HTMLServerConfig
 
-  protected highestPrivacy: VideoPrivacy
+  protected highestPrivacy: VideoPrivacyType
 
   abstract canDeactivate (): CanComponentDeactivateResult
 

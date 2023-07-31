@@ -19,7 +19,7 @@ import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { Video } from '@app/shared/shared-main'
 import { VideoComment, VideoCommentService } from '@app/shared/shared-video-comment'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { VideoCommentCreate } from '@shared/models'
+import { VideoCommentCreate } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-video-comment-add',

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router'
 import { UserRightGuard } from '@app/core'
-import { UserRight } from '@shared/models'
+import { UserRight } from '@peertube/peertube-models'
 import { RunnerJobListComponent } from './runner-job-list'
 import { RunnerListComponent } from './runner-list'
 import { RunnerRegistrationTokenListComponent } from './runner-registration-token-list'

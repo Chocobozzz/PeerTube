@@ -6,7 +6,7 @@ import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction } from '@app/shared/shared-main'
 import { BulkService } from '@app/shared/shared-moderation'
 import { VideoCommentAdmin, VideoCommentService } from '@app/shared/shared-video-comment'
-import { FeedFormat, UserRight } from '@shared/models'
+import { FeedFormat, UserRight } from '@peertube/peertube-models'
 import { formatICU } from '@app/helpers'
 
 @Component({

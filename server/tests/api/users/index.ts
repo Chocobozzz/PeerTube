@@ -1,8 +1,0 @@
-import './oauth'
-import './registrations`'
-import './two-factor'
-import './user-subscriptions'
-import './user-videos'
-import './users'
-import './users-multiple-servers'
-import './users-email-verification'

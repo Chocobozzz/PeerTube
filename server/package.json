@@ -1,0 +1,12 @@
+{
+  "name": "@peertube/peertube-server",
+  "private": true,
+  "version": "0.0.0",
+  "files": [ "dist" ],
+  "type": "module",
+  "exports": {
+    "./*": "./dist/*"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}

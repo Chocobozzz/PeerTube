@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io-client'
-import { LiveVideoEventPayload, VideoDetails, VideoState } from '../../../../../shared/models'
+import { LiveVideoEventPayload, VideoDetails, VideoState, VideoStateType } from '@peertube/peertube-models'
 import { PlayerHTML } from './player-html'
 import { Translations } from './translations'
 
@@ -49,7 +49,7 @@ export class LiveManager {
   }
 
   displayInfo (options: {
-    state: VideoState
+    state: VideoStateType
     translations: Translations
   }) {
     const { state, translations } = options

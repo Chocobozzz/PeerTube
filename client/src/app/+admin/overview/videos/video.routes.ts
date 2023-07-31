@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router'
 import { UserRightGuard } from '@app/core'
-import { UserRight } from '@shared/models'
+import { UserRight } from '@peertube/peertube-models'
 import { VideoListComponent } from './video-list.component'
 
 export const videosRoutes: Routes = [

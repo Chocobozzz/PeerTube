@@ -1,0 +1,19 @@
+{
+  "name": "@peertube/peertube-models",
+  "private": true,
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "type": "module",
+  "files": [ "dist" ],
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "peertube:tsx": "./src/index.ts",
+    "default": "./dist/index.js"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "dependencies": {}
+}

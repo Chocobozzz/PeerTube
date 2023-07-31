@@ -8,7 +8,7 @@ import { Account, ListOverflowItem, VideoChannel, VideoChannelService, VideoServ
 import { BlocklistService } from '@app/shared/shared-moderation'
 import { SupportModalComponent } from '@app/shared/shared-support-modal'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
-import { HttpStatusCode, UserRight } from '@shared/models'
+import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 
 @Component({
   templateUrl: './video-channels.component.html',

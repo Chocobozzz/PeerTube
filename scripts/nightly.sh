@@ -20,6 +20,13 @@ tar_name="peertube-nightly-$today.tar.xz"
 
 npm run build -- --source-map
 
+# Clean up declaration files
+find dist/ packages/core-utils/dist/ \
+  packages/ffmpeg/dist/ \
+  packages/node-utils/dist/ \
+  packages/models/dist/ \
+  \( -name '*.d.ts' -o -name '*.d.ts.map' \) -type f -delete
+
 nightly_version="nightly-$today"
 sed -i 's/"version": "\([^"]\+\)"/"version": "\1-'"$nightly_version"'"/' ./package.json
 
@@ -28,6 +35,10 @@ sed -i 's/"version": "\([^"]\+\)"/"version": "\1-'"$nightly_version"'"/' ./packa
   # local variables
   directories_to_archive=("$directory_name/CREDITS.md" "$directory_name/FAQ.md" \
                           "$directory_name/LICENSE" "$directory_name/README.md" \
+                          "$directory_name/packages/core-utils/dist/" "$directory_name/packages/core-utils/package.json" \
+                          "$directory_name/packages/ffmpeg/dist/" "$directory_name/packages/ffmpeg/package.json" \
+                          "$directory_name/packages/node-utils/dist/" "$directory_name/packages/node-utils/package.json" \
+                          "$directory_name/packages/models/dist/" "$directory_name/packages/models/package.json" \
                           "$directory_name/client/dist/" "$directory_name/client/yarn.lock" \
                           "$directory_name/client/package.json" "$directory_name/config" \
                           "$directory_name/dist" "$directory_name/package.json" \

@@ -7,7 +7,7 @@ import { listUserChannelsForSelect } from '@app/helpers'
 import { VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { VideoChannelService, VideoChannelSyncService } from '@app/shared/shared-main'
-import { VideoChannelSyncCreate } from '@shared/models/videos'
+import { VideoChannelSyncCreate } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-video-channel-sync-edit',

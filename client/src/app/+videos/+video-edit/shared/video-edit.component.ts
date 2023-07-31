@@ -24,8 +24,6 @@ import { FormReactiveValidationMessages, FormValidatorService } from '@app/share
 import { InstanceService } from '@app/shared/shared-instance'
 import { VideoCaptionEdit, VideoCaptionWithPathEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { logger } from '@root-helpers/logger'
-import { PluginInfo } from '@root-helpers/plugins-manager'
 import {
   HTMLServerConfig,
   LiveVideo,
@@ -34,9 +32,12 @@ import {
   RegisterClientVideoFieldOptions,
   VideoConstant,
   VideoDetails,
-  VideoPrivacy
-} from '@shared/models'
-import { VideoSource } from '@shared/models/videos/video-source'
+  VideoPrivacy,
+  VideoPrivacyType,
+  VideoSource
+} from '@peertube/peertube-models'
+import { logger } from '@root-helpers/logger'
+import { PluginInfo } from '@root-helpers/plugins-manager'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
 import { VideoCaptionEditModalContentComponent } from './video-caption-edit-modal-content/video-caption-edit-modal-content.component'
@@ -81,8 +82,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
 
-  videoPrivacies: VideoConstant<VideoPrivacy | typeof VideoEdit.SPECIAL_SCHEDULED_PRIVACY > [] = []
-  replayPrivacies: VideoConstant<VideoPrivacy> [] = []
+  videoPrivacies: VideoConstant<VideoPrivacyType | typeof VideoEdit.SPECIAL_SCHEDULED_PRIVACY > [] = []
+  replayPrivacies: VideoConstant<VideoPrivacyType> [] = []
   videoCategories: VideoConstant<number>[] = []
   videoLicences: VideoConstant<number>[] = []
   videoLanguages: VideoLanguages[] = []

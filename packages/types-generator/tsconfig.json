@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "noEmit": true
+  },
+  "files": [ "./generate-package.ts" ],
+  "references": [
+    { "path": "../node-utils" }
+  ]
+}

@@ -3,7 +3,7 @@ import { Notifier } from '@app/core'
 import { USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { UserAdminService } from '@app/shared/shared-users'
-import { UserUpdate } from '@shared/models'
+import { UserUpdate } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-user-password',

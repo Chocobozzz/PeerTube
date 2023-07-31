@@ -1,7 +1,7 @@
 import { minBy } from 'lodash-es'
 import { first, map } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
-import { VideoChannel } from '@shared/models'
+import { VideoChannel } from '@peertube/peertube-models'
 import { AuthService } from '../../core/auth'
 
 function listUserChannelsForSelect (authService: AuthService) {

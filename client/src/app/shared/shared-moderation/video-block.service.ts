@@ -4,8 +4,8 @@ import { catchError, concatMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
-import { arrayify } from '@shared/core-utils'
-import { ResultList, VideoBlacklist, VideoBlacklistType } from '@shared/models'
+import { arrayify } from '@peertube/peertube-core-utils'
+import { ResultList, VideoBlacklist, VideoBlacklistType, VideoBlacklistType_Type } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -22,7 +22,7 @@ export class VideoBlockService {
     pagination: RestPagination
     sort: SortMeta
     search?: string
-    type?: VideoBlacklistType
+    type?: VideoBlacklistType_Type
   }): Observable<ResultList<VideoBlacklist>> {
     const { pagination, sort, search, type } = options
 

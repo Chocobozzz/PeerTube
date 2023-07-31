@@ -1,8 +1,8 @@
 import debug from 'debug'
 import videojs from 'video.js'
 import { logger } from '@root-helpers/logger'
-import { addQueryParams } from '@shared/core-utils'
-import { VideoFile } from '@shared/models'
+import { addQueryParams } from '@peertube/peertube-core-utils'
+import { VideoFile } from '@peertube/peertube-models'
 import { PeerTubeResolution, PlayerNetworkInfo, WebVideoPluginOptions } from '../../types'
 
 const debugLogger = debug('peertube:player:web-video-plugin')

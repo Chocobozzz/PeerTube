@@ -11,7 +11,7 @@ import {
 } from '@app/shared/form-validators/user-validators'
 import { FormReactiveService } from '@app/shared/shared-forms'
 import { TwoFactorService, UserAdminService } from '@app/shared/shared-users'
-import { User as UserType, UserAdminFlag, UserRole, UserUpdate } from '@shared/models'
+import { User as UserType, UserAdminFlag, UserRole, UserUpdate } from '@peertube/peertube-models'
 import { UserEdit } from './user-edit'
 
 @Component({

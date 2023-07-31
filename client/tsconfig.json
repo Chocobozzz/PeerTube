@@ -11,6 +11,7 @@
     "noImplicitAny": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
+    "allowJs": true,
     "importHelpers": true,
     "allowSyntheticDefaultImports": true,
     "strictBindCallApply": true,
@@ -37,24 +38,6 @@
       "@app/*": [
         "src/app/*"
       ],
-      "@shared/models/*": [
-        "../shared/models/*"
-      ],
-      "@shared/models": [
-        "../shared/models"
-      ],
-      "@shared/core-utils": [
-        "../shared/core-utils"
-      ],
-      "@shared/core-utils/*": [
-        "../shared/core-utils/*"
-      ],
-      "@shared/typescript-utils": [
-        "../shared/typescript-utils"
-      ],
-      "@shared/typescript-utils/*": [
-        "../shared/typescript-utils/*"
-      ],
       "@root-helpers/*": [
         "src/root-helpers/*"
       ],
@@ -70,6 +53,11 @@
     },
     "useDefineForClassFields": false
   },
+  "references": [
+    { "path": "../packages/core-utils" },
+    { "path": "../packages/models" },
+    { "path": "../packages/typescript-utils" }
+  ],
   "files": [
     "src/polyfills.ts"
   ],
@@ -77,10 +65,6 @@
     "src/main*.ts",
     "src/**/*.d.ts",
     "src/shims/*.ts"
-  ],
-  "exclude": [
-    "../node_modules",
-    "../server"
   ],
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

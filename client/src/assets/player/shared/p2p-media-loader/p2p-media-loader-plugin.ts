@@ -3,7 +3,7 @@ import videojs from 'video.js'
 import { Events, Segment } from '@peertube/p2p-media-loader-core'
 import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from '@peertube/p2p-media-loader-hlsjs'
 import { logger } from '@root-helpers/logger'
-import { addQueryParams } from '@shared/core-utils'
+import { addQueryParams } from '@peertube/peertube-core-utils'
 import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../../types'
 import { SettingsButton } from '../settings/settings-menu-button'
 

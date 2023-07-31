@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
 import { Account, DropdownAction } from '@app/shared/shared-main'
-import { BulkRemoveCommentsOfBody, User, UserRight } from '@shared/models'
+import { BulkRemoveCommentsOfBody, User, UserRight } from '@peertube/peertube-models'
 import { UserAdminService } from '../shared-users'
 import { BlocklistService } from './blocklist.service'
 import { BulkService } from './bulk.service'

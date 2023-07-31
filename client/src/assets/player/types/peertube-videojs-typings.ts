@@ -1,7 +1,7 @@
 import { HlsConfig, Level } from 'hls.js'
 import videojs from 'video.js'
 import { Engine } from '@peertube/p2p-media-loader-hlsjs'
-import { VideoFile, VideoPlaylist, VideoPlaylistElement } from '@shared/models'
+import { VideoFile, VideoPlaylist, VideoPlaylistElement } from '@peertube/peertube-models'
 import { BezelsPlugin } from '../shared/bezels/bezels-plugin'
 import { StoryboardPlugin } from '../shared/control-bar/storyboard-plugin'
 import { PeerTubeDockPlugin, PeerTubeDockPluginOptions } from '../shared/dock/peertube-dock-plugin'

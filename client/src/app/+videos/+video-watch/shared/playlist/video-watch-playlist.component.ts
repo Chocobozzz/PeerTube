@@ -5,7 +5,7 @@ import { isInViewport } from '@app/helpers'
 import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { getBoolOrDefault } from '@root-helpers/local-storage-utils'
 import { peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
-import { VideoPlaylistPrivacy } from '@shared/models'
+import { VideoPlaylistPrivacy } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-video-watch-playlist',

@@ -11,7 +11,7 @@ import {
   VideoPlaylist,
   VideoPlaylistElement,
   VideoState
-} from '../../../../shared/models'
+} from '@peertube/peertube-models'
 import { PeerTubePlayer } from '../../assets/player/peertube-player'
 import { TranslationsManager } from '../../assets/player/translations-manager'
 import { getParamString, logger, videoRequiresFileToken } from '../../root-helpers'

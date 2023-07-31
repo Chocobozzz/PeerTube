@@ -5,8 +5,8 @@ import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { CommonVideoParams, Video, VideoService } from '@app/shared/shared-main'
-import { ResultList, VideoInclude, VideoPrivacy } from '@shared/models'
-import { getAllPrivacies } from '@shared/core-utils'
+import { ResultList, VideoInclude, VideoPrivacy } from '@peertube/peertube-models'
+import { getAllPrivacies } from '@peertube/peertube-core-utils'
 
 @Injectable()
 export class VideoAdminService {

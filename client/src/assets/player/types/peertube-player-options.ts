@@ -1,5 +1,5 @@
+import { LiveVideoLatencyModeType, VideoFile } from '@peertube/peertube-models'
 import { PluginsManager } from '@root-helpers/plugins-manager'
-import { LiveVideoLatencyMode, VideoFile } from '@shared/models'
 import { PeerTubeDockPluginOptions } from '../shared/dock/peertube-dock-plugin'
 import { PlaylistPluginOptions, VideoJSCaption, VideoJSStoryboard } from './peertube-videojs-typings'
 
@@ -59,7 +59,7 @@ export type PeerTubePlayerLoadOptions = {
   isLive: boolean
 
   liveOptions?: {
-    latencyMode: LiveVideoLatencyMode
+    latencyMode: LiveVideoLatencyModeType
   }
 
   videoCaptions: VideoJSCaption[]

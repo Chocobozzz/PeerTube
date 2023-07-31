@@ -1,4 +1,4 @@
-import { HttpStatusCode, OAuth2ErrorCode, UserRefreshToken } from '../../../../../shared/models'
+import { HttpStatusCode, OAuth2ErrorCode, OAuth2ErrorCodeType, UserRefreshToken } from '@peertube/peertube-models'
 import { OAuthUserTokens, objectToUrlEncoded } from '../../../root-helpers'
 import { peertubeLocalStorage } from '../../../root-helpers/peertube-web-storage'
 
@@ -66,7 +66,7 @@ export class AuthHTTP {
             if (res.status === HttpStatusCode.UNAUTHORIZED_401) return undefined
 
             return res.json()
-          }).then((obj: UserRefreshToken & { code?: OAuth2ErrorCode }) => {
+          }).then((obj: UserRefreshToken & { code?: OAuth2ErrorCodeType }) => {
             if (!obj || obj.code === OAuth2ErrorCode.INVALID_GRANT) {
               OAuthUserTokens.flushLocalStorage(peertubeLocalStorage)
               this.removeTokensFromHeaders()

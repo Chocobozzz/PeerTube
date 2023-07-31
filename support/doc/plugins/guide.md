@@ -387,7 +387,7 @@ function register (...) {
       displayName: 'User display name',
 
       // Custom admin flags (bypass video auto moderation etc.)
-      // https://github.com/Chocobozzz/PeerTube/blob/develop/shared/models/users/user-flag.model.ts
+      // https://github.com/Chocobozzz/PeerTube/blob/develop/packages/models/users/user-flag.model.ts
       // PeerTube >= 5.1
       adminFlags: 0,
       // Quota in bytes
@@ -977,7 +977,7 @@ npm install --save-dev @peertube/peertube-types
 
 This package exposes *server* definition files by default:
 ```ts
-import { RegisterServerOptions } from '@peertube/peertube-types'
+import { RegisterServerOptions } from '@peertube/peertube-types.js'
 
 export async function register ({ registerHook }: RegisterServerOptions) {
   registerHook({
@@ -989,8 +989,8 @@ export async function register ({ registerHook }: RegisterServerOptions) {
 
 But it also exposes client types and various models used in __PeerTube__:
 ```ts
-import { Video } from '@peertube/peertube-types';
-import { RegisterClientOptions } from '@peertube/peertube-types/client';
+import { Video } from '@peertube/peertube-types.js';
+import { RegisterClientOptions } from '@peertube/peertube-types/client.js';
 
 function register({ registerHook, peertubeHelpers }: RegisterClientOptions) {
   registerHook({
@@ -1032,7 +1032,7 @@ If you want to translate strings of your plugin (like labels of your registered 
 }
 ```
 
-The key should be one of the locales defined in [i18n.ts](https://github.com/Chocobozzz/PeerTube/blob/develop/shared/models/i18n/i18n.ts).
+The key should be one of the locales defined in [i18n.ts](https://github.com/Chocobozzz/PeerTube/blob/develop/packages/models/i18n/i18n.ts).
 
 Translation files are just objects, with the english sentence as the key and the translation as the value.
 `fr.json` could contain for example:
@@ -1070,40 +1070,25 @@ You built files are in the `dist/` directory. Check `package.json` to correctly 
 
 ### Test your plugin/theme
 
-PeerTube dev server (ran with `npm run dev` on `localhost:3000`) can't inject plugin CSS.
-It's the reason why we don't use the dev mode but build PeerTube instead.
+You need to have a running PeerTube instance with an administrator account.
+If you're using dev server on your local computer, test your plugin on `localhost:9000` using `npm run dev` because plugin CSS is not injected in Angular webserver (`localhost:3000`).
 
-You'll need to have a local PeerTube instance:
- * Follow the [dev prerequisites](https://github.com/Chocobozzz/PeerTube/blob/develop/.github/CONTRIBUTING.md#prerequisites)
- (to clone the repository, install dependencies and prepare the database)
- * Build PeerTube:
+Install PeerTube CLI (can be installed on another computer/server than the PeerTube instance):
 
-```sh
-npm run build
+```bash
+npm install -g @peertube/peertube-cli
 ```
 
- * Build the CLI:
+Register the PeerTube instance via the CLI:
 
 ```sh
-npm run setup:cli
+peertube-cli auth add -u 'https://peertube.example.com' -U 'root' --password 'test'
 ```
 
- * Run PeerTube (you can access to your instance on `localhost:9000`):
+Then, you can install your local plugin/theme by running:
 
 ```sh
-NODE_ENV=dev npm start
-```
-
- * Register the instance via the CLI:
-
-```sh
-node ./dist/server/tools/peertube.js auth add -u 'http://localhost:9000' -U 'root' --password 'test'
-```
-
-Then, you can install or reinstall your local plugin/theme by running:
-
-```sh
-node ./dist/server/tools/peertube.js plugins install --path /your/absolute/plugin-or-theme/path
+peertube-cli plugins install --path /your/absolute/plugin-or-theme/path
 ```
 
 ### Publish

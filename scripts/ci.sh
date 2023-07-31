@@ -10,7 +10,7 @@ fi
 retries=3
 speedFactor="${2:-1}"
 
-runTest () {
+runJSTest () {
     jobname=$1
     shift
 
@@ -24,7 +24,7 @@ runTest () {
     joblog="$jobname-ci.log"
 
     parallel -j $jobs --retries $retries \
-        "echo Trying {} >> $joblog; npm run mocha -- -c --timeout 30000 --exit --bail {}" \
+        "echo Trying {} >> $joblog; npm run mocha -- --timeout 30000 --no-config -c --exit --bail {}" \
         ::: $files
 
     cat "$joblog" | sort | uniq -c
@@ -32,92 +32,116 @@ runTest () {
 }
 
 findTestFiles () {
-    exception="-not -name index.js"
+    exception="-not -name index.js -not -name index.ts -not -name *.d.ts"
 
     if [ ! -z ${2+x} ]; then
         exception="$exception -not -name $2"
     fi
 
-    find $1 -type f -name "*.js" $exception | xargs echo
+    find $1 -type f \( -name "*.js" -o -name "*.ts" \) $exception | xargs echo
 }
 
 if [ "$1" = "types-package" ]; then
     npm run generate-types-package 0.0.0
-    npm run tsc -- --noEmit --esModuleInterop packages/types/tests/test.ts
+
+    # Test on in independent directory
+    rm -fr /tmp/types-generator
+    mkdir -p /tmp/types-generator
+    cp -r packages/types-generator/tests /tmp/types-generator/tests
+    cp -r packages/types-generator/dist /tmp/types-generator/dist
+    (cd /tmp/types-generator/dist && npm install)
+
+    npm run tsc -- --noEmit --esModuleInterop --moduleResolution node16 /tmp/types-generator/tests/test.ts
+    rm -r /tmp/types-generator
 elif [ "$1" = "client" ]; then
     npm run build
+    npm run build:tests
 
-    feedsFiles=$(findTestFiles ./dist/server/tests/feeds)
-    helperFiles=$(findTestFiles ./dist/server/tests/helpers)
-    libFiles=$(findTestFiles ./dist/server/tests/lib)
-    miscFiles="./dist/server/tests/client.js ./dist/server/tests/misc-endpoints.js"
+    feedsFiles=$(findTestFiles ./packages/tests/dist/feeds)
+    miscFiles="./packages/tests/dist/client.js ./packages/tests/dist/misc-endpoints.js"
     # Not in their own task, they need an index.html
-    pluginFiles="./dist/server/tests/plugins/html-injection.js ./dist/server/tests/api/server/plugins.js"
+    pluginFiles="./packages/tests/dist/plugins/html-injection.js ./packages/tests/dist/api/server/plugins.js"
 
-    MOCHA_PARALLEL=true runTest "$1" $((2*$speedFactor)) $feedsFiles $helperFiles $miscFiles $pluginFiles $libFiles
+    MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $feedsFiles $miscFiles $pluginFiles
+
+    # Use TS tests directly because we import server files
+    helperFiles=$(findTestFiles ./packages/tests/src/server-helpers)
+    libFiles=$(findTestFiles ./packages/tests/src/server-lib)
+
+    npm run mocha -- --timeout 30000 -c --exit --bail $libFiles $helperFiles
 elif [ "$1" = "cli-plugin" ]; then
     # Simulate HTML
     mkdir -p "./client/dist/en-US/"
     cp "./client/src/index.html" "./client/dist/en-US/index.html"
 
     npm run build:server
-    npm run setup:cli
+    npm run build:tests
+    npm run build:peertube-cli
 
-    pluginsFiles=$(findTestFiles ./dist/server/tests/plugins html-injection.js)
-    cliFiles=$(findTestFiles ./dist/server/tests/cli)
+    # html-injection test needs an HTML file
+    pluginsFiles=$(findTestFiles ./packages/tests/dist/plugins html-injection.js)
+    cliFiles=$(findTestFiles ./packages/tests/dist/cli)
 
-    MOCHA_PARALLEL=true runTest "$1" $((2*$speedFactor)) $pluginsFiles
-    runTest "$1" 1 $cliFiles
+    MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $pluginsFiles
+    runJSTest "$1" 1 $cliFiles
 elif [ "$1" = "api-1" ]; then
     npm run build:server
+    npm run build:tests
 
-    checkParamFiles=$(findTestFiles ./dist/server/tests/api/check-params)
-    notificationsFiles=$(findTestFiles ./dist/server/tests/api/notifications)
-    searchFiles=$(findTestFiles ./dist/server/tests/api/search)
+    checkParamFiles=$(findTestFiles ./packages/tests/dist/api/check-params)
+    notificationsFiles=$(findTestFiles ./packages/tests/dist/api/notifications)
+    searchFiles=$(findTestFiles ./packages/tests/dist/api/search)
 
-    MOCHA_PARALLEL=true runTest "$1" $((3*$speedFactor)) $notificationsFiles $searchFiles $checkParamFiles
+    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $notificationsFiles $searchFiles $checkParamFiles
 elif [ "$1" = "api-2" ]; then
     npm run build:server
+    npm run build:tests
 
-    liveFiles=$(findTestFiles ./dist/server/tests/api/live)
-    serverFiles=$(findTestFiles ./dist/server/tests/api/server plugins.js)
-    usersFiles=$(findTestFiles ./dist/server/tests/api/users)
+    liveFiles=$(findTestFiles ./packages/tests/dist/api/live)
+    # plugins test needs an HTML file
+    serverFiles=$(findTestFiles ./packages/tests/dist/api/server plugins.js)
+    usersFiles=$(findTestFiles ./packages/tests/dist/api/users)
 
-    MOCHA_PARALLEL=true runTest "$1" $((3*$speedFactor)) $liveFiles $serverFiles $usersFiles
+    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $liveFiles $serverFiles $usersFiles
 elif [ "$1" = "api-3" ]; then
     npm run build:server
+    npm run build:tests
 
-    videosFiles=$(findTestFiles ./dist/server/tests/api/videos)
-    viewsFiles=$(findTestFiles ./dist/server/tests/api/views)
+    videosFiles=$(findTestFiles ./packages/tests/dist/api/videos)
+    viewsFiles=$(findTestFiles ./packages/tests/dist/api/views)
 
-    MOCHA_PARALLEL=true runTest "$1" $((3*$speedFactor)) $viewsFiles $videosFiles
+    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $viewsFiles $videosFiles
 elif [ "$1" = "api-4" ]; then
     npm run build:server
+    npm run build:tests
 
-    moderationFiles=$(findTestFiles ./dist/server/tests/api/moderation)
-    redundancyFiles=$(findTestFiles ./dist/server/tests/api/redundancy)
-    objectStorageFiles=$(findTestFiles ./dist/server/tests/api/object-storage)
-    activitypubFiles=$(findTestFiles ./dist/server/tests/api/activitypub)
+    moderationFiles=$(findTestFiles ./packages/tests/dist/api/moderation)
+    redundancyFiles=$(findTestFiles ./packages/tests/dist/api/redundancy)
+    objectStorageFiles=$(findTestFiles ./packages/tests/dist/api/object-storage)
+    activitypubFiles=$(findTestFiles ./packages/tests/dist/api/activitypub)
 
-    MOCHA_PARALLEL=true runTest "$1" $((2*$speedFactor)) $moderationFiles $redundancyFiles $activitypubFiles $objectStorageFiles
+    MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $moderationFiles $redundancyFiles $activitypubFiles $objectStorageFiles
 elif [ "$1" = "api-5" ]; then
     npm run build:server
+    npm run build:tests
 
-    transcodingFiles=$(findTestFiles ./dist/server/tests/api/transcoding)
-    runnersFiles=$(findTestFiles ./dist/server/tests/api/runners)
+    transcodingFiles=$(findTestFiles ./packages/tests/dist/api/transcoding)
+    runnersFiles=$(findTestFiles ./packages/tests/dist/api/runners)
 
-    MOCHA_PARALLEL=true runTest "$1" $((2*$speedFactor)) $transcodingFiles $runnersFiles
+    MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $transcodingFiles $runnersFiles
 elif [ "$1" = "external-plugins" ]; then
     npm run build:server
+    npm run build:tests
     npm run build:peertube-runner
 
-    externalPluginsFiles=$(findTestFiles ./dist/server/tests/external-plugins)
-    peertubeRunnerFiles=$(findTestFiles ./dist/server/tests/peertube-runner)
+    externalPluginsFiles=$(findTestFiles ./packages/tests/dist/external-plugins)
+    peertubeRunnerFiles=$(findTestFiles ./packages/tests/dist/peertube-runner)
 
-    runTest "$1" 1 $externalPluginsFiles
-    MOCHA_PARALLEL=true runTest "$1" $((2*$speedFactor)) $peertubeRunnerFiles
+    runJSTest "$1" 1 $externalPluginsFiles
+    MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $peertubeRunnerFiles
 elif [ "$1" = "lint" ]; then
-    npm run eslint -- --ext .ts "./server/**/*.ts" "shared/**/*.ts" "scripts/**/*.ts"
+    npm run eslint -- --ext .ts "server/**/*.ts"  "scripts/**/*.ts" "packages/**/*.ts" "apps/**/*.ts"
+
     npm run swagger-cli -- validate support/doc/api/openapi.yaml
 
     ( cd client

@@ -2,7 +2,7 @@ import { catchError } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor } from '@app/core'
-import { BulkRemoveCommentsOfBody } from '@shared/models'
+import { BulkRemoveCommentsOfBody } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
 
 @Injectable()

@@ -9,7 +9,7 @@ import {
   Video as VideoServerModel,
   VideoChannel as VideoChannelServerModel,
   VideoPlaylist as VideoPlaylistServerModel
-} from '@shared/models'
+} from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
 import { VideoPlaylist, VideoPlaylistService } from '../shared-video-playlist'
 import { AdvancedSearch } from './advanced-search.model'

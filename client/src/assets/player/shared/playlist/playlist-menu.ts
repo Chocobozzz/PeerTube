@@ -1,5 +1,5 @@
 import videojs from 'video.js'
-import { VideoPlaylistElement } from '@shared/models'
+import { VideoPlaylistElement } from '@peertube/peertube-models'
 import { PlaylistPluginOptions } from '../../types'
 import { PlaylistMenuItem } from './playlist-menu-item'
 
