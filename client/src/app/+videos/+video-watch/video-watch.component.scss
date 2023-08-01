@@ -67,7 +67,6 @@ $video-height: 66vh;
 
   ::ng-deep .video-js {
     width: 100%;
-    max-width: getPlayerWidth($video-height);
     height: $video-height;
 
     // VideoJS create an inner video player
