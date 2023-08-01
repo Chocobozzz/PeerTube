@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 PeerTube contributors <https://joinpeertube.org/>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { writeJSON } from 'fs-extra'
 import { join } from 'path'
 import { root, USER_ROLE_LABELS } from '@shared/core-utils'

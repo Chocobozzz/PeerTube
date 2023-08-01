@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023 PeerTube contributors <https://joinpeertube.org/>
+#
+# SPDX-License-Identifier: CC0-1.0
+
 # NPM instalation
 /node_modules/
 /server/tools/node_modules
