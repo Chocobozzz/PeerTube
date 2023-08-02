@@ -1,6 +1,9 @@
 import { exec } from 'child_process'
 import ffmpeg from 'fluent-ffmpeg'
 
+/**
+ * @returns FFmpeg version string. Usually a semver string, but may vary when depending on installation method.
+ */
 export function getFFmpegVersion () {
   return new Promise<string>((res, rej) => {
     (ffmpeg() as any)._getFfmpegPath((err, ffmpegPath) => {
@@ -10,14 +13,10 @@ export function getFFmpegVersion () {
       return exec(`${ffmpegPath} -version`, (err, stdout) => {
         if (err) return rej(err)
 
-        const parsed = stdout.match(/ffmpeg version .?(\d+\.\d+(\.\d+)?)/)
-        if (!parsed?.[1]) return rej(new Error(`Could not find ffmpeg version in ${stdout}`))
+        const parsed = stdout.match(/(?<=ffmpeg version )[a-zA-Z\d.-]+/)
+        if (!parsed) return rej(new Error(`Could not find ffmpeg version in ${stdout}`))
 
-        // Fix ffmpeg version that does not include patch version (4.4 for example)
-        let version = parsed[1]
-        if (version.match(/^\d+\.\d+$/)) {
-          version += '.0'
-        }
+        res(parsed[0])
       })
     })
   })

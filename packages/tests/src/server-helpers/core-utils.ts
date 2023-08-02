@@ -5,7 +5,7 @@ import snakeCase from 'lodash-es/snakeCase.js'
 import validator from 'validator'
 import { getAverageTheoreticalBitrate, getMaxTheoreticalBitrate } from '@peertube/peertube-core-utils'
 import { VideoResolution } from '@peertube/peertube-models'
-import { objectConverter, parseBytes, parseDurationToMs } from '@peertube/peertube-server/server/helpers/core-utils.js'
+import { objectConverter, parseBytes, parseDurationToMs, parseSemVersion } from '@peertube/peertube-server/server/helpers/core-utils.js'
 
 describe('Parse Bytes', function () {
 
@@ -146,5 +146,56 @@ describe('Bitrate', function () {
     for (const test of tests) {
       expect(getAverageTheoreticalBitrate(test)).to.be.above(test.min * 1000).and.below(test.max * 1000)
     }
+  })
+})
+
+describe('Parse semantic version string', function () {
+
+  it('Should parse Node.js version string', function () {
+    const actual = parseSemVersion('v18.16.0')
+
+    expect(actual.major).to.equal(18)
+    expect(actual.minor).to.equal(16)
+    expect(actual.patch).to.equal(0)
+  })
+
+  it('Should parse FFmpeg version string from Debian 12 repo', function () {
+    const actual = parseSemVersion('5.1.3-1')
+
+    expect(actual.major).to.equal(5)
+    expect(actual.minor).to.equal(1)
+    expect(actual.patch).to.equal(3)
+  })
+
+  it('Should parse FFmpeg version string from Arch repo', function () {
+    const actual = parseSemVersion('n6.0')
+
+    expect(actual.major).to.equal(6)
+    expect(actual.minor).to.equal(0)
+    expect(actual.patch).to.equal(0)
+  })
+
+  it('Should parse FFmpeg version from GitHub release', function () {
+    const actual = parseSemVersion('5.1.3')
+
+    expect(actual.major).to.equal(5)
+    expect(actual.minor).to.equal(1)
+    expect(actual.patch).to.equal(3)
+  })
+
+  it('Should parse FFmpeg version from GitHub dev release', function () {
+    const actual = parseSemVersion('5.1.git')
+
+    expect(actual.major).to.equal(5)
+    expect(actual.minor).to.equal(1)
+    expect(actual.patch).to.equal(0)
+  })
+
+  it('Should parse FFmpeg version string with missing patch segment', function () {
+    const actual = parseSemVersion('4.4')
+
+    expect(actual.major).to.equal(4)
+    expect(actual.minor).to.equal(4)
+    expect(actual.patch).to.equal(0)
   })
 })
