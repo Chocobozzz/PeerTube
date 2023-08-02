@@ -78,7 +78,14 @@ async function applicationExist () {
 
 async function checkFFmpegVersion () {
   const version = await getFFmpegVersion()
-  const { major, minor, patch } = parseSemVersion(version)
+  const semvar = parseSemVersion(version)
+
+  if (!semvar) {
+    logger.warn('Your ffmpeg version (%s) does not use semvar. Unable to determine version compatibility.', version)
+    return
+  }
+
+  const { major, minor, patch } = semvar
 
   if (major < 4 || (major === 4 && minor < 1)) {
     logger.warn('Your ffmpeg version (%s) is outdated. PeerTube supports ffmpeg >= 4.1. Please upgrade ffmpeg.', version)
