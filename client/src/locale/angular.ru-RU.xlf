@@ -845,7 +845,7 @@
       </trans-unit>
       <trans-unit id="24003535274174906" datatype="html">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fs-7 fw-normal fst-italic&quot;&gt;"/>can be redefined by the users<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Политика NSFW/конфиденциальность видео по умолчанию<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fs-7 fw-normal fst-italic&quot;&gt;"/>может быть переопределена пользователями<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fs-7 fw-normal fst-italic&quot;&gt;"/></target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Политика NSFW/конфиденциальных видео по умолчанию<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fs-7 fw-normal fst-italic&quot;&gt;"/>может быть переопределена пользователями<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -1481,7 +1481,7 @@
       </trans-unit>
       <trans-unit id="7997432701743294657" datatype="html">
         <source>Set up</source>
-        <target state="translated">Настроить</target>
+        <target state="translated">Настройка</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="9202089339019827574" datatype="html">
@@ -1644,7 +1644,7 @@
       </trans-unit>
       <trans-unit id="6013345175862135505" datatype="html">
         <source>Configure</source>
-        <target state="translated">Настроить</target>
+        <target state="translated">Конфигурация</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="742596572641738016">
@@ -3281,7 +3281,7 @@
       </trans-unit>
       <trans-unit id="1979134407801821102">
         <source>Dislike this video</source>
-        <target>Мне не понравилось</target>
+        <target state="translated">Не нравится это видео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="4001371302469308813" datatype="html">
@@ -13091,7 +13091,7 @@
       </trans-unit>
       <trans-unit id="7692127636377222448">
         <source>Dislike the video</source>
-        <target>Мне не понравилось</target>
+        <target state="translated">Не нравится видео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="3093549590814158078" datatype="html">
