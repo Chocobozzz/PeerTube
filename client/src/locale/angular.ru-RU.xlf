@@ -4598,7 +4598,7 @@
       </trans-unit>
       <trans-unit id="29832309535656200" datatype="html">
         <source>System</source>
-        <target state="translated">Системный</target>
+        <target state="translated">Система</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">165</context></context-group>
       </trans-unit>
       <trans-unit id="2279400024471134535" datatype="html">
@@ -8667,7 +8667,7 @@
       </trans-unit>
       <trans-unit id="3422890808980876594" datatype="html">
         <source>Debug</source>
-        <target state="translated">Отлаживать</target>
+        <target state="translated">Отладка</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">201</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/system.routes.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
