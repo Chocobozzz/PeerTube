@@ -612,11 +612,12 @@ describe('Test video imports', function () {
       await testBinaryUpdate('https://api.github.com/repos/ytdl-org/youtube-dl/releases', 'youtube-dl')
     })
 
-    it('Should update youtube-dl from raw URL', async function () {
-      this.timeout(120_000)
+    // FIXME: official instance is broken
+    // it('Should update youtube-dl from raw URL', async function () {
+    //   this.timeout(120_000)
 
-      await testBinaryUpdate('https://yt-dl.org/downloads/latest/youtube-dl', 'youtube-dl')
-    })
+    //   await testBinaryUpdate('https://yt-dl.org/downloads/latest/youtube-dl', 'youtube-dl')
+    // })
 
     it('Should update youtube-dl from youtube-dl fork', async function () {
       this.timeout(120_000)

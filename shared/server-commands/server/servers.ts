@@ -46,7 +46,7 @@ function getServerImportConfig (mode: 'youtube-dl' | 'yt-dlp') {
         http: {
           youtube_dl_release: {
             url: mode === 'youtube-dl'
-              ? 'https://yt-dl.org/downloads/latest/youtube-dl'
+              ? 'https://api.github.com/repos/ytdl-org/youtube-dl/releases'
               : 'https://api.github.com/repos/yt-dlp/yt-dlp/releases',
 
             name: mode
