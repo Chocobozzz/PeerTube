@@ -819,7 +819,7 @@
       </trans-unit>
       <trans-unit id="1740917574463702967">
         <source>Subscribe with your local account</source>
-        <target>Harpidetu zure tokiko kontuarekin</target>
+        <target state="translated">Harpidetu zure kontu lokalarekin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="8023282004085823427" datatype="html">
@@ -1004,7 +1004,7 @@
       </trans-unit>
       <trans-unit id="2906587845957718064">
         <source>Local</source>
-        <target>Tokikoa</target>
+        <target state="translated">Lokala</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">135</context></context-group>
       </trans-unit>
       <trans-unit id="1670306451865226564" datatype="html">
@@ -3817,7 +3817,7 @@
       </trans-unit>
       <trans-unit id="8898602327647937914" datatype="html">
         <source>Open actor page in a new tab</source>
-        <target state="translated">Ireki aktorearen orria fitxa berri batean</target>
+        <target state="translated">Ireki aktorearen orrialdea erlaitz berri batean</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="7317290694079257887">
@@ -3886,7 +3886,7 @@
       </trans-unit>
       <trans-unit id="8246779176913476983" datatype="html">
         <source>Open instance in a new tab</source>
-        <target state="translated">Zabaldu instantzia fitxa berri batean</target>
+        <target state="translated">Ireki instantzia erlaitz berri batean</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">58</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">43</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">43</context></context-group>
@@ -3942,7 +3942,7 @@
       </trans-unit>
       <trans-unit id="8363291180171434623" datatype="html">
         <source>Table parameters</source>
-        <target state="new">Table parameters</target>
+        <target state="translated">Taularen parametroak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="5230110096688656830" datatype="html">
@@ -4005,7 +4005,7 @@
       </trans-unit>
       <trans-unit id="588099657508661970" datatype="html">
         <source>None (local authentication)</source>
-        <target state="new">None (local authentication)</target>
+        <target state="translated">Bat ere ez (autentifikazio lokala)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">184</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">184</context></context-group>
       </trans-unit>
@@ -4084,7 +4084,7 @@
       </trans-unit>
       <trans-unit id="2348557406282409966" datatype="html">
         <source>Open account in a new tab</source>
-        <target state="translated">Zabaldu kontua fitxa berri batean</target>
+        <target state="translated">Ireki kontua erlaitz berri batean</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">69</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">94</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">32</context></context-group>
@@ -4282,7 +4282,7 @@
       </trans-unit>
       <trans-unit id="4604870995665811499" datatype="html">
         <source>Local comments</source>
-        <target state="new">Local comments</target>
+        <target state="translated">Iruzkin lokalak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="2721988499779041837" datatype="html">
@@ -4292,7 +4292,7 @@
       </trans-unit>
       <trans-unit id="7483158147658382515" datatype="html">
         <source>Comments on local videos</source>
-        <target state="new">Comments on local videos</target>
+        <target state="translated">Bideo lokaletako iruzkinak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="1420624050293070194" datatype="html">
@@ -4454,7 +4454,7 @@
       </trans-unit>
       <trans-unit id="1191715835847858871" datatype="html">
         <source>Open video in a new tab</source>
-        <target state="translated">Zabaldu bideoa fitxa berri baten</target>
+        <target state="translated">Ireki bideoa erlaitz berri batean</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="3301856295120048857">
@@ -4657,7 +4657,7 @@
       </trans-unit>
       <trans-unit id="7002061007877950198" datatype="html">
         <source>Plugin homepage (new window)</source>
-        <target state="new">Plugin homepage (new window)</target>
+        <target state="translated">Pluginaren orrialdea (leiho berria)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-card.component.html</context><context context-type="linenumber">8</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-card.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
@@ -4716,7 +4716,7 @@
       </trans-unit>
       <trans-unit id="2006841089844688970" datatype="html">
         <source>To load your new installed plugins or themes, refresh the page.</source>
-        <target state="translated">Instalatu berri diren plugin edo themeak ikusteko, berritu orria.</target>
+        <target state="translated">Instalatu berri diren plugin edo itxurak ikusteko, freskatu orrialdea.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="7577430199525157466" datatype="html">
@@ -4797,7 +4797,7 @@
       </trans-unit>
       <trans-unit id="5902504074840207881" datatype="html">
         <source>Local jobs</source>
-        <target state="new">Local jobs</target>
+        <target state="translated">Lan lokalak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">185</context>
@@ -5019,7 +5019,7 @@
       </trans-unit>
       <trans-unit id="6236140336967052987" datatype="html">
         <source>When on a video page, directly start playing the video.</source>
-        <target state="translated">Bideo-orri batean zaudenean, hasi bideoa zuzenean erreproduzitzen.</target>
+        <target state="translated">Bideo baten orrialdean, zuzenean hasi bideoa erreproduzitzen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="9135112681389493865" datatype="html">
@@ -5189,7 +5189,7 @@
       </trans-unit>
       <trans-unit id="4096396973250090478" datatype="html">
         <source>Landing page</source>
-        <target state="new">Landing page</target>
+        <target state="translated">Lurrartze orrialdea</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="2609416025385742456" datatype="html">
@@ -5496,12 +5496,12 @@
       </trans-unit>
       <trans-unit id="8524278911521465398" datatype="html">
         <source>Disable local search in search bar</source>
-        <target state="new">Disable local search in search bar</target>
+        <target state="translated">Desgaitu bilaketa lokala bilaketa barran</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">448</context></context-group>
       </trans-unit>
       <trans-unit id="6568991917245875948" datatype="html">
         <source>Otherwise the local search stays used by default</source>
-        <target state="new">Otherwise the local search stays used by default</target>
+        <target state="translated">Bestela bilaketa lokala lehenetsia izango da</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">458</context></context-group>
       </trans-unit>
       <trans-unit id="4444955208013675027" datatype="html">
@@ -6268,7 +6268,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8481241275509347668" datatype="html">
         <source>Local videos (this instance)</source>
-        <target state="new">Local videos (this instance)</target>
+        <target state="translated">Bideo lokalak (instantzia hau)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="8383401711408398806" datatype="html">
@@ -6418,7 +6418,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3610344835750059476" datatype="html">
         <source>My ownership changes</source>
-        <target state="new">My ownership changes</target>
+        <target state="translated">Nire jabetza aldatzen da</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="7391040346436232576">
@@ -6442,13 +6442,13 @@ color: red;
       </trans-unit>
       <trans-unit id="5417361655914085905" datatype="html">
         <source>Account page</source>
-        <target state="translated">Kontuaren orria</target>
+        <target state="translated">Kontuaren orrialdea</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">69</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="2000373220662583633" datatype="html">
         <source>No ownership change request found.</source>
-        <target state="new">No ownership change request found.</target>
+        <target state="translated">Ez da jabetza aldaketa eskaririk aurkitu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="2091927708110728875" datatype="html">
@@ -6688,7 +6688,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4000980858407872649" datatype="html">
         <source>Channel page</source>
-        <target state="new">Channel page</target>
+        <target state="translated">Kanalaren orrialdea</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">34</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">20</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context><context context-type="linenumber">65</context></context-group>
@@ -6718,12 +6718,12 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="228548407872312756" datatype="html">
         <source>Owner account page</source>
-        <target state="translated">Jabearen kontuaren orria</target>
+        <target state="translated">Kontu jabearen orrialdea</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4781078006040259916" datatype="html">
         <source>You don't have any video in your watch history yet.</source>
-        <target state="new">You don't have any video in your watch history yet.</target>
+        <target state="translated">Orain ez daukazu bideorik zure ikusitakoen zerrendan.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">143</context></context-group>
       </trans-unit>
       <trans-unit id="989169929300254768" datatype="html">
@@ -6936,7 +6936,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="5691818894884119596" datatype="html">
         <source>Watch time</source>
-        <target state="new">Watch time</target>
+        <target state="translated">Ikusi denbora</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="683980015107026060" datatype="html">
@@ -6969,7 +6969,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="5382746022482410588" datatype="html">
         <source>A view means that someone watched the video for at least 30 seconds</source>
-        <target state="new">A view means that someone watched the video for at least 30 seconds</target>
+        <target state="translated">Ikustaldi batek esan nahi du norbaitek bideoa ikusi duela gutxienez 30 segundoz</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">257</context></context-group>
       </trans-unit>
       <trans-unit id="6782077395930235254" datatype="html">
@@ -6985,12 +6985,12 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="1155438117303179048" datatype="html">
         <source>Average watch time</source>
-        <target state="new">Average watch time</target>
+        <target state="translated">Batezbesteko ikustaldi denbora</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">267</context></context-group>
       </trans-unit>
       <trans-unit id="3457644129579531516" datatype="html">
         <source>Total watch time</source>
-        <target state="new">Total watch time</target>
+        <target state="translated">Ikusitako denbora guztira</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">271</context></context-group>
       </trans-unit>
       <trans-unit id="7988517647183541852" datatype="html">
@@ -8181,7 +8181,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="1305357231288135414" datatype="html">
         <source>Homepage</source>
-        <target state="new">Homepage</target>
+        <target state="translated">Hasierako orrialdea</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">12</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-homepage.component.html</context><context context-type="linenumber">13</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+home/home-routing.module.ts</context><context context-type="linenumber">11</context></context-group>
@@ -8203,7 +8203,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="6920964195632624609" datatype="html">
         <source>INSTANCE HOMEPAGE</source>
-        <target state="new">INSTANCE HOMEPAGE</target>
+        <target state="translated">INSTANTZIAREN HASIERAKO ORRIALDEA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-homepage.component.html</context>
           <context context-type="linenumber">7</context>
@@ -9531,13 +9531,13 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="1486537403020619891" datatype="html">
         <source>My watch history</source>
-        <target state="new">My watch history</target>
+        <target state="translated">Ikusi ikustaldien historia</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="3656932706364053858" datatype="html">
         <source>Track watch history</source>
-        <target state="new">Track watch history</target>
+        <target state="translated">Jarraitu ikustaldien historia</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="778524577866863576" datatype="html">
@@ -9852,7 +9852,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="5294742063044966238" datatype="html">
         <source>Follower page</source>
-        <target state="new">Follower page</target>
+        <target state="translated">Jarraitzaileen orrialdea</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">20</context>
@@ -9978,7 +9978,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="4844578664427956129" datatype="html">
         <source>Change ownership</source>
-        <target state="new">Change ownership</target>
+        <target state="translated">Aldatu jabetza</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/modals/video-change-ownership.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">237</context></context-group>
       </trans-unit>
@@ -10072,7 +10072,7 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="7545420287297803988" datatype="html">
         <source>My playlists</source>
-        <target state="new">My playlists</target>
+        <target state="translated">Nire erreprodukzio zerrenda</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">95</context></context-group>
@@ -10329,27 +10329,27 @@ channel or account with the same name (<x id="PH_2" equiv-text="videoChannel.nam
       </trans-unit>
       <trans-unit id="5409372033656550095" datatype="html">
         <source>Go to the discover videos page</source>
-        <target state="new">Go to the discover videos page</target>
+        <target state="translated">Joan bideoak aurkitzeko orrialdera</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">305</context></context-group>
       </trans-unit>
       <trans-unit id="4278050445961255445">
         <source>Go to the trending videos page</source>
-        <target>Joan puri-purian dauden bideoen orrira</target>
+        <target state="translated">Joan puri-purian dauden bideoen orrialdera</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">310</context></context-group>
       </trans-unit>
       <trans-unit id="3242234958443825475">
         <source>Go to the recently added videos page</source>
-        <target>Joan gehitutako azken bideoen orrira</target>
+        <target state="translated">Joan gehitutako azken bideoen orrialdera</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">315</context></context-group>
       </trans-unit>
       <trans-unit id="2887122197778293919">
         <source>Go to the local videos page</source>
-        <target>Joan bideo lokalen orrira</target>
+        <target state="translated">Joan bideo lokalen orrialdera</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">320</context></context-group>
       </trans-unit>
       <trans-unit id="8009065619559214982">
         <source>Go to the videos upload page</source>
-        <target>Joan bideoak igotzeko orrira</target>
+        <target state="translated">Joan bideoak igotzeko orrialdera</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">325</context></context-group>
       </trans-unit>
       <trans-unit id="3779524668013120370">
@@ -11607,7 +11607,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4670312387769733978">
         <source>All unsaved data will be lost, are you sure you want to leave this page?</source>
-        <target>Gorde gabeko datu guztiak galduko dira, ziur orri hau utzi nahi duzula?</target>
+        <target state="translated">Gorde gabeko datu guztiak galduko dira, ziur zaude orrialde hau utzi nahi duzula?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/routing/can-deactivate-guard.service.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="6950140976689343775">
@@ -12066,18 +12066,14 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
         <source><x id="PH"/> (channel page) </source>
-        <target state="new">
-          <x id="PH"/> (channel page)
-        </target>
+        <target state="translated"><x id="PH"/> (kanalaren orrialdea) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">20</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="1209500590333005801" datatype="html">
         <source><x id="PH"/> (account page) </source>
-        <target state="new">
-          <x id="PH"/> (account page)
-        </target>
+        <target state="translated"><x id="PH"/> (kontuaren orrialdea) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">21</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
@@ -13106,12 +13102,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1795705931707209785" datatype="html">
         <source>Add to watch later</source>
-        <target state="new">Add to watch later</target>
+        <target state="translated">Gehitu geroago ikusteko</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="8498940878158860248" datatype="html">
         <source>Remove from watch later</source>
-        <target state="new">Remove from watch later</target>
+        <target state="translated">Kendu geroago ikustekoetatik</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="435589893738610428" datatype="html">
@@ -13170,12 +13166,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5699822024600815733">
         <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
-        <target>Baina dagozkion datuak (etiketak, deskripzioa...) galduko dira, ziur orri hau utzi nahi duzula?</target>
+        <target state="translated">Baina dagozkion datuak (etiketak, deskripzioa...) galduko dira, ziur zaude orrialde hau utzi nahi duzula?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="1219739004043110649">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
-        <target>Zur bideoa ez da igo oraindik, ziur orri hau utzi nahi duzula?</target>
+        <target state="translated">Zure bideoa ez da igo oraindik, ziur zaude orrialde hau utzi nahi duzula?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="1830802698757049943" datatype="html">
@@ -13323,7 +13319,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6851759241723629925" datatype="html">
         <source>You need a password to watch this video</source>
-        <target state="new">You need a password to watch this video</target>
+        <target state="translated">Pasahitza behar duzu bideo hau ikusteko</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">403</context>
@@ -13502,7 +13498,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8681933925782924101" datatype="html">
         <source>Local videos</source>
-        <target state="new">Local videos</target>
+        <target state="translated">Bideo lokalak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">89</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">193</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">151</context></context-group>
