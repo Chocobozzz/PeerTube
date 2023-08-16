@@ -4216,6 +4216,7 @@
       </trans-unit>
       <trans-unit id="5026011498416291967" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></source>
+        <target state="needs-translation"><x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =0 {Chan eil gearan ann} =1 {1 ghearan} one {abuse.countReportsForReporter ghearan} two {abuse.countReportsForReporter ghearan} few {abuse.countReportsForReporter gearanan} other {abuse.countReportsForReporter gearan}}"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">21,23</context>
@@ -4553,6 +4554,7 @@
       </trans-unit>
       <trans-unit id="2279400024471134535" datatype="html">
         <source>Remote runners</source>
+        <target state="translated">Ruitheadairean cèine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">171</context>
@@ -4572,6 +4574,7 @@
       </trans-unit>
       <trans-unit id="7565129593705813435" datatype="html">
         <source>Runner jobs</source>
+        <target state="translated">Obraichean cèine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">177</context>
@@ -4583,6 +4586,7 @@
       </trans-unit>
       <trans-unit id="5902504074840207881" datatype="html">
         <source>Local jobs</source>
+        <target state="translated">Obraichean ionadail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">185</context>
@@ -4961,7 +4965,7 @@
       </trans-unit>
       <trans-unit id="371306187337992930" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or add slight <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="needs-translation"> </target>
+        <target state="translated">Cleachd <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>plugain ⁊ ùrlaran<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> airson atharrachaidhean nas iom-fhillte no cuir <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>gnàthachadh<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> beag ris. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -4984,6 +4988,7 @@
       </trans-unit>
       <trans-unit id="4046343890883004514" datatype="html">
         <source>Recent views</source>
+        <target state="translated">Seallaidhean o chionn goirid</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="8177374861384376651" datatype="html">
@@ -4993,6 +4998,7 @@
       </trans-unit>
       <trans-unit id="297360345401834321" datatype="html">
         <source>Global views</source>
+        <target state="translated">Seallaidhean uile-choitcheann</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="5862227717871131052" datatype="html">
@@ -5173,6 +5179,7 @@
       </trans-unit>
       <trans-unit id="1140716714758760841" datatype="html">
         <source>Automatically enable video history for new users</source>
+        <target state="translated">Cuir eachdraidh nam videothan an comas gu fèin-obrachail do chleachdaichean ùra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">254</context>
@@ -5190,10 +5197,12 @@
       </trans-unit>
       <trans-unit id="2634326893148077182" datatype="html">
         <source>Allow channel synchronization with channel of other platforms like YouTube (requires allowing import with HTTP URL)</source>
+        <target state="translated">Ceadaich sioncronachadh sheanailean le seanailean air ùrlaran eile mar YouTube (feumaidh tu ion-phortadh le URL HTTP a cheadachadh)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">316</context></context-group>
       </trans-unit>
       <trans-unit id="7404104645798703279" datatype="html">
         <source>⛔ You need to allow import with HTTP URL to be able to activate this feature.</source>
+        <target state="translated">⛔ Feumaidh tu ion-phortadh le URL HTTP a cheadachadh airson an gleus seo a chur an comas.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">319</context></context-group>
       </trans-unit>
       <trans-unit id="3950258704315544174" datatype="html">
@@ -5203,6 +5212,7 @@
       </trans-unit>
       <trans-unit id="7055002182446434458" datatype="html">
         <source>Allow users to upload a new version of their video</source>
+        <target state="translated">Leig leis an luchd-chleachdaidh tionndaidhean ùra de na videothan aca a luchdadh suas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">353</context>
@@ -5322,6 +5332,7 @@
       </trans-unit>
       <trans-unit id="1206277798664538171" datatype="html">
         <source>Signup requires approval by moderators</source>
+        <target state="translated">Tha an clàradh feumach air aontachadh le maoir</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">174</context></context-group>
       </trans-unit>
       <trans-unit id="1718269478813020014" datatype="html">
@@ -5425,6 +5436,7 @@
       </trans-unit>
       <trans-unit id="5191164170233238999" datatype="html">
         <source>Max simultaneous lives created on your instance</source>
+        <target state="translated">An àireamh as motha de shruthan beòtha aig an aon àm a dh’fhaodas cruthachadh air an ionstans agad</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="6830777508073747241" datatype="html">
@@ -5435,6 +5447,7 @@
       </trans-unit>
       <trans-unit id="1834362188086938736" datatype="html">
         <source>Max simultaneous lives created per user</source>
+        <target state="translated">An àireamh as motha de shruthan beòtha aig an aon àm a dh’fhaodas cleachdaiche a chruthachadh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="1521259619066122077" datatype="html">
@@ -5474,14 +5487,17 @@
       </trans-unit>
       <trans-unit id="594064951138382358" datatype="html">
         <source>Also transcode original resolution</source>
+        <target state="translated">Dèan tar-chòdachadh air an dùmhlachd-bhreacaidh thùsail cuideachd</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
       <trans-unit id="5429376346987783852" datatype="html">
         <source>Even if it's above your maximum enabled resolution</source>
+        <target state="translated">Fiù ’s ma tha e nas motha na an dùmhlachd-bhreacaidh as motha a chuirte an comas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="3283660108004661843" datatype="html">
         <source>Enable remote runners for lives</source>
+        <target state="translated">Cuir an comas ruitheadairean cèine do shruthaidhean beòtha</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">151</context>
@@ -5499,7 +5515,7 @@
       </trans-unit>
       <trans-unit id="2134381456844896041" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </source>
-        <target state="needs-translation"> </target>
+        <target state="translated">Cleachd <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>ruitheadairean cèine<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> airson tar-chòdachadh nan sruthaidhean beòtha a phròiseasadh. Feumaidh na ruitheadairean cèine clàradh air an ionstans agad an toiseach. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="5975271795105968425" datatype="html">
@@ -5536,7 +5552,7 @@
       </trans-unit>
       <trans-unit id="8646250517331978259" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </source>
-        <target state="needs-translation"> </target>
+        <target state="translated">Cleachd <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>ruitheadairean cèine<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> airson tar-chòdachadh nam videothan air an iarraidh a phròiseasadh. Feumaidh na ruitheadairean cèine clàradh air an ionstans agad an toiseach. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="7452751710576287271" datatype="html">
@@ -5566,6 +5582,7 @@
       </trans-unit>
       <trans-unit id="2093595615152706886" datatype="html">
         <source>Web Videos enabled</source>
+        <target state="translated">Tha videothan-lìn an comas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">74</context>
@@ -5589,6 +5606,7 @@
       </trans-unit>
       <trans-unit id="4354548488369167450" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Bidh feum air ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Gin liostaichean-cluich HLS agus faidhlichean MP4 ’nam bloighean agus thèid an cluich nas fheàrr nach rachadh le videothan-lìn:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Bidh atharrachadh na dùmhlachd-breacaidh nas rèidhe<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Thèid na videothan fada a chluich nas luaithe gu h-àraidh<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Bidh a’ chluiche nas seasmhaiche (nas lugha de bugaichean/luchdadh gun chrìoch)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Ma chuir thu taic ri videothan-lìn an comas cuideachd, thèid stòras nam videothan iomadachadh le 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">94,103</context>
@@ -5596,10 +5614,12 @@
       </trans-unit>
       <trans-unit id="6698240176427495644" datatype="html">
         <source>Resolutions to generate</source>
+        <target state="translated">Na dùmhlachdan-breacaidh ri an ginntinn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="4437374135745051281" datatype="html">
         <source>Always transcode original resolution</source>
+        <target state="translated">Dèan tar-chòdachadh air an dùmhlachd-bhreacaidh thùsail an-còmhnaidh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">116</context></context-group>
       </trans-unit>
       <trans-unit id="5431196295724512251" datatype="html">
@@ -5609,6 +5629,7 @@
       </trans-unit>
       <trans-unit id="8056487097039524924" datatype="html">
         <source>Enable remote runners for VOD</source>
+        <target state="translated">Cuir an comas ruitheadairean cèine do videothan air an iarraidh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">147</context>
@@ -5671,6 +5692,7 @@
       </trans-unit>
       <trans-unit id="7185229240632050966" datatype="html">
         <source>Enable remote runners for studio</source>
+        <target state="translated">Cuir an comas ruitheadairean cèine dhan stiùideo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">237</context>
