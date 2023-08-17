@@ -1071,7 +1071,7 @@ You built files are in the `dist/` directory. Check `package.json` to correctly 
 
 ### Test your plugin/theme
 
-You need to have a running PeerTube instance with an administrator account.
+You need to have a local PeerTube instance with an administrator account.
 If you're using dev server on your local computer, test your plugin on `localhost:9000` using `npm run dev` because plugin CSS is not injected in Angular webserver (`localhost:3000`).
 
 Install PeerTube CLI (can be installed on another computer/server than the PeerTube instance):
@@ -1086,7 +1086,9 @@ Register the PeerTube instance via the CLI:
 peertube-cli auth add -u 'https://peertube.example.com' -U 'root' --password 'test'
 ```
 
-Then, you can install your local plugin/theme by running:
+Then, you can install your local plugin/theme.
+The `--path` option is the local path on the PeerTube instance.
+If the PeerTube instance is running on another server/computer, you must copy your plugin directory there.
 
 ```sh
 peertube-cli plugins install --path /your/absolute/plugin-or-theme/path
