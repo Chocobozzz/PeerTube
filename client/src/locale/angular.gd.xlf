@@ -3855,11 +3855,13 @@
       </trans-unit>
       <trans-unit id="3141984777339778129" datatype="html">
         <source>User bypasses video validation by moderators</source>
+        <target state="translated">Thèid an cleachdaiche seachad air dearbhadh leis na maoir</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">193</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">193</context></context-group>
       </trans-unit>
       <trans-unit id="8975798495439347971" datatype="html">
         <source>Enable this checkbox if this user doesn't need to have its videos reviewed by moderators.</source>
+        <target state="translated">Cuir cromag sa bhogsa seo mur eil an cleachdaiche seo feumach air lèirmheas le maoir air na videothan aca.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">195</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">195</context></context-group>
       </trans-unit>
@@ -3883,11 +3885,13 @@
       </trans-unit>
       <trans-unit id="7217118144256898288" datatype="html">
         <source>This user has two factor authentication enabled</source>
+        <target state="translated">Tha an dearbhadh dà-cheumnach an comas aig a’ chleachdaiche seo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">232</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">232</context></context-group>
       </trans-unit>
       <trans-unit id="1636606892066514698" datatype="html">
         <source>Disable two factor authentication</source>
+        <target state="translated">Cuir an dearbhadh dà-cheumnach à comas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">233</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">233</context></context-group>
       </trans-unit>
@@ -4118,6 +4122,7 @@
       </trans-unit>
       <trans-unit id="7483158147658382515" datatype="html">
         <source>Comments on local videos</source>
+        <target state="translated">Beachdan air videothan ionadail</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="1420624050293070194" datatype="html">
@@ -5760,6 +5765,7 @@
       </trans-unit>
       <trans-unit id="9180372875725189823" datatype="html">
         <source>Number of video storyboard images to keep in cache</source>
+        <target state="translated">An àireamh de dhealbhan bòrd-stòiridh video a thèid a chumail san tasgadan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">57</context>
@@ -5856,6 +5862,7 @@
       </trans-unit>
       <trans-unit id="4309045590850686400" datatype="html">
         <source>Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</source>
+        <target state="translated">Cuiridh an dearbhadh dà-cheumnach ìre a bharrachd de thèarainteachd ris a’ chunntas agad le iarraidh còd àireamhail o uidheam eile (fònaichean-làimhe mar as trice) nuair a nì thu clàradh a-steach.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -5863,6 +5870,7 @@
       </trans-unit>
       <trans-unit id="2955617286542082394" datatype="html">
         <source>Enable two-factor authentication</source>
+        <target state="translated">Cuir an dearbhadh dà-cheumnach an comas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">5</context>
@@ -5870,6 +5878,7 @@
       </trans-unit>
       <trans-unit id="2658424416565652268" datatype="html">
         <source>Disable two-factor authentication</source>
+        <target state="translated">Cuir an dearbhadh dà-cheumnach à comas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">9</context>
@@ -5885,6 +5894,7 @@
       </trans-unit>
       <trans-unit id="3757273554886026258" datatype="html">
         <source>Disable two factor</source>
+        <target state="translated">Cuir an dearbhadh dà-cheumnach dheth</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -5892,6 +5902,7 @@
       </trans-unit>
       <trans-unit id="7121657131608757909" datatype="html">
         <source>Two factor authentication disabled</source>
+        <target state="translated">Chaidh an dearbhadh dà-cheumnach a chur à comas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">43</context>
@@ -5899,6 +5910,7 @@
       </trans-unit>
       <trans-unit id="872237557319890340" datatype="html">
         <source>Two factor authentication is already enabled.</source>
+        <target state="translated">Tha an dearbhadh dà-cheumnach an comas mu thràth.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -6068,6 +6080,7 @@
       </trans-unit>
       <trans-unit id="3021884317141422270" datatype="html">
         <source>Display all videos (private, unlisted, password protected or not yet published)</source>
+        <target state="translated">Seall a h-uile video (prìobhaideach, falaichte o liostaichean, fo dhìon le facal-faire no gun fhoillseachadh fhathast)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">128</context>
@@ -6218,6 +6231,7 @@
       </trans-unit>
       <trans-unit id="2091927708110728875" datatype="html">
         <source>⚠️ The instance doesn't allow channel synchronization</source>
+        <target state="translated">⚠️ Cha cheadaich an t-ionstans sioncronachadh seanail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">9</context>
@@ -6233,6 +6247,7 @@
       </trans-unit>
       <trans-unit id="4955509738673204025" datatype="html">
         <source>Add synchronization</source>
+        <target state="translated">Cuir sioncronachadh ris</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">25</context>
@@ -6264,6 +6279,7 @@
       </trans-unit>
       <trans-unit id="2015493719998914454" datatype="html">
         <source>List imports</source>
+        <target state="translated">Seall liosta dhe na h-ion-phortaidhean</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -6271,10 +6287,12 @@
       </trans-unit>
       <trans-unit id="6587439290311664751" datatype="html">
         <source>Fully synchronize the channel</source>
+        <target state="translated">Sioncronaich an t-seanail shlàn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="2070181811140868440" datatype="html">
         <source>This fetches any missing videos on the local channel</source>
+        <target state="translated">Gheibh seo video sam bith a tha a dhìth air an t-seanail ionadail</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="3997040276213089746" datatype="html">
@@ -6289,6 +6307,7 @@
       </trans-unit>
       <trans-unit id="6985972846000785992" datatype="html">
         <source>NEW SYNCHRONIZATION</source>
+        <target state="translated">SIONCRONACHADH ÙR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">8</context>
@@ -6296,6 +6315,7 @@
       </trans-unit>
       <trans-unit id="5175196640561919257" datatype="html">
         <source>Remote channel URL</source>
+        <target state="translated">URL na seanail cèine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">13</context>
@@ -6319,6 +6339,7 @@
       </trans-unit>
       <trans-unit id="8290237842846954767" datatype="html">
         <source>Options for existing videos on remote channel:</source>
+        <target state="translated">Roghainnean dha na videothan a tha san t-seanail chèin:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">42</context>
@@ -6326,6 +6347,7 @@
       </trans-unit>
       <trans-unit id="1331848767706809293" datatype="html">
         <source>Import all and watch for new publications</source>
+        <target state="translated">Ion-phortaich na h-uile agus cùm sùil air foillseachaidhean ùra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">46</context>
@@ -6333,6 +6355,7 @@
       </trans-unit>
       <trans-unit id="1469193438847554223" datatype="html">
         <source>Only watch for new publications</source>
+        <target state="translated">Cùm sùil air foillseachaidhean ùra a-mhàin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">51</context>
@@ -6340,6 +6363,7 @@
       </trans-unit>
       <trans-unit id="9049939123029212539" datatype="html">
         <source>Synchronization created successfully.</source>
+        <target state="translated">Chaidh an sioncronachadh a chruthachadh.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -6352,6 +6376,7 @@
       </trans-unit>
       <trans-unit id="5863226045830598109" datatype="html">
         <source>Two factor authentication</source>
+        <target state="translated">Dearbhadh dà-cheumnach</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">39</context>
@@ -6478,6 +6503,7 @@
       </trans-unit>
       <trans-unit id="111295045776045026" datatype="html">
         <source>Video history is enabled</source>
+        <target state="translated">Tha eachdraidh nam videothan an comas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">96,95</context>
@@ -6485,6 +6511,7 @@
       </trans-unit>
       <trans-unit id="1869266307786648674" datatype="html">
         <source>Video history is disabled</source>
+        <target state="translated">Tha eachdraidh nam videothan à comas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">97,95</context>
@@ -6492,6 +6519,7 @@
       </trans-unit>
       <trans-unit id="7505147502630555700" datatype="html">
         <source>Delete video history</source>
+        <target state="translated">Sguab às eachdraidh nam videothan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -6507,6 +6535,7 @@
       </trans-unit>
       <trans-unit id="7708910304029766516" datatype="html">
         <source>Video history deleted</source>
+        <target state="translated">Chaidh eachdraidh nam videothan a sguabadh às</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">129</context>
@@ -6630,6 +6659,7 @@
       </trans-unit>
       <trans-unit id="6904641160356013310" datatype="html">
         <source>Account request sent</source>
+        <target state="translated">Chaidh iarrtas air chunntas a chur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6652,6 +6682,7 @@
       </trans-unit>
       <trans-unit id="7849797693092882170" datatype="html">
         <source>Since the video publication</source>
+        <target state="translated">O fhoillseachadh a’ video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -6680,6 +6711,7 @@
       </trans-unit>
       <trans-unit id="5697131528899933134" datatype="html">
         <source>Viewers stats</source>
+        <target state="translated">Stadastaireachd coimhid</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">156</context></context-group>
       </trans-unit>
       <trans-unit id="8089238718524110373" datatype="html">
@@ -6692,10 +6724,12 @@
       </trans-unit>
       <trans-unit id="3249405667632600635" datatype="html">
         <source>Custom dates</source>
+        <target state="translated">Cinn-là gnàthaichte</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">238</context></context-group>
       </trans-unit>
       <trans-unit id="5382746022482410588" datatype="html">
         <source>A view means that someone watched the video for at least 30 seconds</source>
+        <target state="translated">Is ciall do choimhead gun do choimhead cuideigin air a’ video fad 30 diog air a char as giorra</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">257</context></context-group>
       </trans-unit>
       <trans-unit id="6782077395930235254" datatype="html">
@@ -6716,6 +6750,7 @@
       </trans-unit>
       <trans-unit id="3457644129579531516" datatype="html">
         <source>Total watch time</source>
+        <target state="translated">Ùine iomlan na coimhid</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">271</context></context-group>
       </trans-unit>
       <trans-unit id="7988517647183541852" datatype="html">
@@ -6730,6 +6765,7 @@
       </trans-unit>
       <trans-unit id="7299658893351817136" datatype="html">
         <source>Unique viewers</source>
+        <target state="translated">Luchd-coimhead àraidh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">282</context>
@@ -6755,6 +6791,7 @@
       </trans-unit>
       <trans-unit id="3458449147454605646" datatype="html">
         <source>Request a new verification email</source>
+        <target state="translated">Iarr post-d dearbhaidh ùr</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">15,17</context>
@@ -6762,6 +6799,7 @@
       </trans-unit>
       <trans-unit id="6001536520193131937" datatype="html">
         <source>Unable to find verification string in URL query.</source>
+        <target state="translated">Cha deach leinn sreang dhearbhaidh a lorg sa cheist URL.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -6769,6 +6807,7 @@
       </trans-unit>
       <trans-unit id="7264033009244104285" datatype="html">
         <source>Unable to find user id or registration id in URL query.</source>
+        <target state="translated">Cha deach leinn ID cleachdaiche no ID clàraidh a lorg sa cheist URL.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -6806,6 +6845,7 @@
       </trans-unit>
       <trans-unit id="6040639330855198542" datatype="html">
         <source>Ask to send an email to verify your account</source>
+        <target state="translated">Iarr gun dèid post-d a chur thugad airson an cunntas agad a dhearbhadh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">24</context>
@@ -6813,6 +6853,7 @@
       </trans-unit>
       <trans-unit id="5634180635200972996" datatype="html">
         <source>Email verified!</source>
+        <target state="translated">Chaidh am post-d a dhearbhadh!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -6820,6 +6861,7 @@
       </trans-unit>
       <trans-unit id="2584956257063845668" datatype="html">
         <source>Your email has been verified and your account request has been sent!</source>
+        <target state="translated">Chaidh am post-d agad a dhearbhadh agus an t-iarrtas agad air cunntas a chur!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">7</context>
