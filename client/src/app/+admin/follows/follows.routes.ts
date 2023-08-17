@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router'
 import { VideoRedundanciesListComponent } from '@app/+admin/follows/video-redundancies-list'
 import { UserRightGuard } from '@app/core'
-import { UserRight } from '@shared/models'
+import { UserRight } from '@peertube/peertube-models'
 import { FollowersListComponent } from './followers-list'
 import { FollowingListComponent } from './following-list/following-list.component'
 

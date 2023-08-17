@@ -69,11 +69,22 @@ npm run build -- --source-map
 rm -f "./client/dist/en-US/stats.json"
 rm -f "./client/dist/embed-stats.json"
 
+# Clean up declaration files
+find dist/ packages/core-utils/dist/ \
+  packages/ffmpeg/dist/ \
+  packages/node-utils/dist/ \
+  packages/models/dist/ \
+  \( -name '*.d.ts' -o -name '*.d.ts.map' \) -type f -delete
+
 # Creating the archives
 (
   # local variables
   directories_to_archive=("$directory_name/CREDITS.md" "$directory_name/FAQ.md" \
                           "$directory_name/LICENSE" "$directory_name/README.md" \
+                          "$directory_name/packages/core-utils/dist/" "$directory_name/packages/core-utils/package.json" \
+                          "$directory_name/packages/ffmpeg/dist/" "$directory_name/packages/ffmpeg/package.json" \
+                          "$directory_name/packages/node-utils/dist/" "$directory_name/packages/node-utils/package.json" \
+                          "$directory_name/packages/models/dist/" "$directory_name/packages/models/package.json" \
                           "$directory_name/client/dist/" "$directory_name/client/yarn.lock" \
                           "$directory_name/client/package.json" "$directory_name/config" \
                           "$directory_name/dist" "$directory_name/package.json" \
@@ -124,7 +135,7 @@ rm -f "./client/dist/embed-stats.json"
 
       # Release types package
       npm run generate-types-package "$version"
-      cd packages/types/dist
+      cd packages/types-generator/dist
       npm publish --access public
   fi
 )

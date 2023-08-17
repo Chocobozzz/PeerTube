@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { DropdownAction } from '@app/shared/shared-main'
-import { RunnerJob, RunnerJobState } from '@shared/models'
+import { RunnerJob, RunnerJobState } from '@peertube/peertube-models'
 import { RunnerJobFormatted, RunnerService } from '../runner.service'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 

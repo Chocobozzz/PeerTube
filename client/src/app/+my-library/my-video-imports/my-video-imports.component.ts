@@ -2,7 +2,7 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { Video, VideoImportService } from '@app/shared/shared-main'
-import { VideoImport, VideoImportState } from '@shared/models'
+import { VideoImport, VideoImportState, VideoImportStateType } from '@peertube/peertube-models'
 
 @Component({
   templateUrl: './my-video-imports.component.html',
@@ -29,7 +29,7 @@ export class MyVideoImportsComponent extends RestTable implements OnInit {
     return 'MyVideoImportsComponent'
   }
 
-  getVideoImportStateClass (state: VideoImportState) {
+  getVideoImportStateClass (state: VideoImportStateType) {
     switch (state) {
       case VideoImportState.FAILED:
         return 'badge-red'

@@ -1,6 +1,7 @@
-import { writeJSON } from 'fs-extra'
+import { readJsonSync, writeJSON } from 'fs-extra/esm'
 import { join } from 'path'
-import { root, USER_ROLE_LABELS } from '@shared/core-utils'
+import { I18N_LOCALES, USER_ROLE_LABELS } from '@peertube/peertube-core-utils'
+import { root } from '@peertube/peertube-node-utils'
 import {
   ABUSE_STATES,
   buildLanguages,
@@ -14,10 +15,9 @@ import {
   VIDEO_PLAYLIST_TYPES,
   VIDEO_PRIVACIES,
   VIDEO_STATES
-} from '../../server/initializers/constants'
-import { I18N_LOCALES } from '../../shared/core-utils/i18n'
+} from '../../server/initializers/constants.js'
 
-const videojs = require(join(root(), 'client', 'src', 'locale', 'videojs.en-US.json'))
+const videojs = readJsonSync(join(root(), 'client', 'src', 'locale', 'videojs.en-US.json'))
 const playerKeys = {
   'Quality': 'Quality',
   'Auto': 'Auto',
@@ -131,13 +131,13 @@ async function writeAll () {
 
   for (const key of Object.keys(I18N_LOCALES)) {
     const playerJsonPath = join(localePath, `player.${key}.json`)
-    const translatedPlayer = require(playerJsonPath)
+    const translatedPlayer = readJsonSync(playerJsonPath)
 
     const newTranslatedPlayer = Object.assign({}, playerKeys, translatedPlayer)
     await writeJSON(playerJsonPath, newTranslatedPlayer, { spaces: 4 })
 
     const serverJsonPath = join(localePath, `server.${key}.json`)
-    const translatedServer = require(serverJsonPath)
+    const translatedServer = readJsonSync(serverJsonPath)
 
     const newTranslatedServer = Object.assign({}, serverKeys, translatedServer)
     await writeJSON(serverJsonPath, newTranslatedServer, { spaces: 4 })

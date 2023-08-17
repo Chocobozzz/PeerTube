@@ -4,8 +4,8 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService } from '@app/core'
+import { PeerTubePluginIndex, PluginType, PluginType_Type } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { PeerTubePluginIndex, PluginType } from '@shared/models'
 
 @Component({
   selector: 'my-plugin-search',
@@ -13,7 +13,7 @@ import { PeerTubePluginIndex, PluginType } from '@shared/models'
   styleUrls: [ './plugin-search.component.scss' ]
 })
 export class PluginSearchComponent implements OnInit {
-  pluginType: PluginType
+  pluginType: PluginType_Type
 
   pagination: ComponentPagination = {
     currentPage: 1,
@@ -53,7 +53,7 @@ export class PluginSearchComponent implements OnInit {
     this.route.queryParams.subscribe(query => {
       if (!query['pluginType']) return
 
-      this.pluginType = parseInt(query['pluginType'], 10)
+      this.pluginType = parseInt(query['pluginType'], 10) as PluginType_Type
       this.search = query['search'] || ''
 
       this.reloadPlugins()

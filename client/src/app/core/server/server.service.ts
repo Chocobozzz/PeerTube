@@ -3,9 +3,16 @@ import { first, map, share, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { getDevLocale, isOnDevLocale } from '@app/helpers'
+import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@peertube/peertube-core-utils'
+import {
+  HTMLServerConfig,
+  ServerConfig,
+  ServerStats,
+  VideoConstant,
+  VideoPlaylistPrivacyType,
+  VideoPrivacyType
+} from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@shared/core-utils/i18n'
-import { HTMLServerConfig, ServerConfig, ServerStats, VideoConstant } from '@shared/models'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -21,8 +28,8 @@ export class ServerService {
   private localeObservable: Observable<any>
   private videoLicensesObservable: Observable<VideoConstant<number>[]>
   private videoCategoriesObservable: Observable<VideoConstant<number>[]>
-  private videoPrivaciesObservable: Observable<VideoConstant<number>[]>
-  private videoPlaylistPrivaciesObservable: Observable<VideoConstant<number>[]>
+  private videoPrivaciesObservable: Observable<VideoConstant<VideoPrivacyType>[]>
+  private videoPlaylistPrivaciesObservable: Observable<VideoConstant<VideoPlaylistPrivacyType>[]>
   private videoLanguagesObservable: Observable<VideoConstant<string>[]>
   private configObservable: Observable<ServerConfig>
 
@@ -123,7 +130,7 @@ export class ServerService {
 
   getVideoPrivacies () {
     if (!this.videoPrivaciesObservable) {
-      this.videoPrivaciesObservable = this.loadAttributeEnum<number>(ServerService.BASE_VIDEO_URL, 'privacies')
+      this.videoPrivaciesObservable = this.loadAttributeEnum<VideoPrivacyType>(ServerService.BASE_VIDEO_URL, 'privacies')
     }
 
     return this.videoPrivaciesObservable.pipe(first())
@@ -131,7 +138,10 @@ export class ServerService {
 
   getVideoPlaylistPrivacies () {
     if (!this.videoPlaylistPrivaciesObservable) {
-      this.videoPlaylistPrivaciesObservable = this.loadAttributeEnum<number>(ServerService.BASE_VIDEO_PLAYLIST_URL, 'privacies')
+      this.videoPlaylistPrivaciesObservable = this.loadAttributeEnum<VideoPlaylistPrivacyType>(
+        ServerService.BASE_VIDEO_PLAYLIST_URL,
+        'privacies'
+      )
     }
 
     return this.videoPlaylistPrivaciesObservable.pipe(first())

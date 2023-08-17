@@ -2,7 +2,7 @@ import { catchError } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor } from '@app/core'
-import { CustomConfig } from '@shared/models'
+import { CustomConfig } from '@peertube/peertube-models'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 import { environment } from '../../../../environments/environment'
 

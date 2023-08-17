@@ -1,4 +1,4 @@
-import { VideoPlaylist, VideoPlaylistElement } from '../../../../../shared/models'
+import { VideoPlaylist, VideoPlaylistElement } from '@peertube/peertube-models'
 import { logger } from '../../../root-helpers'
 
 export class PlaylistTracker {

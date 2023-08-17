@@ -3,7 +3,7 @@ import { AbuseListComponent } from '@app/+admin/moderation/abuse-list'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
 import { VideoBlockListComponent } from '@app/+admin/moderation/video-block-list'
 import { UserRightGuard } from '@app/core'
-import { UserRight } from '@shared/models'
+import { UserRight } from '@peertube/peertube-models'
 import { RegistrationListComponent } from './registration-list'
 
 export const ModerationRoutes: Routes = [

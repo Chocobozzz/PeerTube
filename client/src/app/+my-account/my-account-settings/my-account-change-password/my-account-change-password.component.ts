@@ -7,7 +7,7 @@ import {
   USER_PASSWORD_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { HttpStatusCode, User } from '@shared/models'
+import { HttpStatusCode, User } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-account-change-password',

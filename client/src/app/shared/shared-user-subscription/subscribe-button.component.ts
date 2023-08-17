@@ -2,7 +2,7 @@ import { concat, forkJoin, merge } from 'rxjs'
 import { Component, Input, OnChanges, OnInit } from '@angular/core'
 import { AuthService, Notifier, RedirectService } from '@app/core'
 import { Account, VideoChannel, VideoService } from '@app/shared/shared-main'
-import { FeedFormat } from '@shared/models'
+import { FeedFormat } from '@peertube/peertube-models'
 import { UserSubscriptionService } from './user-subscription.service'
 
 @Component({

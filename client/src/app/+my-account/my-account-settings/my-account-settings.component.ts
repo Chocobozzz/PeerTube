@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { AfterViewChecked, Component, OnInit } from '@angular/core'
 import { AuthService, Notifier, User, UserService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
-import { shallowCopy } from '@shared/core-utils'
+import { shallowCopy } from '@peertube/peertube-core-utils'
 
 @Component({
   selector: 'my-account-settings',

@@ -3,8 +3,8 @@ import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@ang
 import { ActivatedRoute } from '@angular/router'
 import { Notifier, ServerService } from '@app/core'
 import { AboutHTML } from '@app/shared/shared-instance'
+import { HTMLServerConfig, ServerStats } from '@peertube/peertube-models'
 import { copyToClipboard } from '@root-helpers/utils'
-import { HTMLServerConfig, ServerStats } from '@shared/models/server'
 import { ResolverData } from './about-instance.resolver'
 import { ContactAdminModalComponent } from './contact-admin-modal.component'
 

@@ -2,7 +2,7 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ComponentPagination, hasMoreItems, Notifier, RestService, ServerService } from '@app/core'
 import { InstanceFollowService } from '@app/shared/shared-instance'
-import { Actor } from '@shared/models/actors'
+import { Actor } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-about-follows',

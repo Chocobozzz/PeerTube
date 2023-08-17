@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { secondsToTime, timeToInt } from '@shared/core-utils'
+import { secondsToTime, timeToInt } from '@peertube/peertube-core-utils'
 
 @Component({
   selector: 'my-timestamp-input',

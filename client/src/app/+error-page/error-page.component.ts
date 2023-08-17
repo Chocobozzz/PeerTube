@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Title } from '@angular/platform-browser'
 import { Router } from '@angular/router'
-import { HttpStatusCode } from '@shared/models'
+import { HttpStatusCode, HttpStatusCodeType } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-error-page',
@@ -9,7 +9,7 @@ import { HttpStatusCode } from '@shared/models'
   styleUrls: [ './error-page.component.scss' ]
 })
 export class ErrorPageComponent implements OnInit {
-  status = HttpStatusCode.NOT_FOUND_404
+  status: HttpStatusCodeType = HttpStatusCode.NOT_FOUND_404
   type: 'video' | 'other' = 'other'
 
   public constructor (

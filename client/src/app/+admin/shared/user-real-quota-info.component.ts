@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
-import { HTMLServerConfig, VideoResolution } from '@shared/models/index'
+import { HTMLServerConfig, VideoResolution } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-user-real-quota-info',

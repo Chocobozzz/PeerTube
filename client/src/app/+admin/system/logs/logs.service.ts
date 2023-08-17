@@ -3,7 +3,7 @@ import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestService } from '@app/core'
-import { ServerLogLevel } from '@shared/models'
+import { ServerLogLevel } from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
 import { LogRow } from './log-row.model'
 

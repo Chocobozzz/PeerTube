@@ -6,7 +6,7 @@ import { Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@an
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { SafeHtml } from '@angular/platform-browser'
 import { MarkdownService, ScreenService } from '@app/core'
-import { Video } from '@shared/models'
+import { Video } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-markdown-textarea',

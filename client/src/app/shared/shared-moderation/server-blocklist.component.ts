@@ -2,7 +2,7 @@ import { SortMeta } from 'primeng/api'
 import { Directive, OnInit, ViewChild } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { BatchDomainsModalComponent } from '@app/shared/shared-moderation/batch-domains-modal.component'
-import { ServerBlock } from '@shared/models'
+import { ServerBlock } from '@peertube/peertube-models'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
 @Directive()

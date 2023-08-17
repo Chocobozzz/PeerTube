@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { AuthService, AuthUser, ScreenService, ServerService } from '@app/core'
-import { HTMLServerConfig } from '@shared/models'
+import { HTMLServerConfig } from '@peertube/peertube-models'
 import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
 
 @Component({

@@ -2,7 +2,7 @@ import { Subject, Subscription } from 'rxjs'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { AuthService, Notifier, ServerService, ThemeService, UserService } from '@app/core'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { HTMLServerConfig, User, UserUpdateMe } from '@shared/models'
+import { HTMLServerConfig, User, UserUpdateMe } from '@peertube/peertube-models'
 import { SelectOptionsItem } from 'src/types'
 
 @Component({

@@ -1,7 +1,7 @@
-import { FeedFormat } from '@shared/models'
+import { FeedFormatType } from '@peertube/peertube-models'
 
 export interface Syndication {
-  format: FeedFormat
+  format: FeedFormatType
   label: string
   url: string
 }

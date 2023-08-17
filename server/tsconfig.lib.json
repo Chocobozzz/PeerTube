@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
+    "baseUrl": "../",
+    "rootDir": ".",
+    "paths": {
+      "@server/*": [ "server/server/*" ]
+    }
+  }
+}

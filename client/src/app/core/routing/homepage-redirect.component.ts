@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { is18nPath } from '@shared/core-utils/i18n/i18n'
+import { is18nPath } from '@peertube/peertube-core-utils'
 import { RedirectService } from './redirect.service'
 
 /*

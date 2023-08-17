@@ -1,4 +1,4 @@
-import { ClientLogCreate } from '@shared/models/server'
+import { ClientLogCreate } from '@peertube/peertube-models'
 import { peertubeLocalStorage } from './peertube-web-storage'
 import { OAuthUserTokens } from './users'
 

@@ -1,3 +1,3 @@
-import { JobState } from '@shared/models'
+import { JobState } from '@peertube/peertube-models'
 
 export type JobStateClient = JobState

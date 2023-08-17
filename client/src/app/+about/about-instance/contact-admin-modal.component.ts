@@ -11,7 +11,7 @@ import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { HTMLServerConfig, HttpStatusCode } from '@shared/models'
+import { HTMLServerConfig, HttpStatusCode } from '@peertube/peertube-models'
 
 type Prefill = {
   subject?: string

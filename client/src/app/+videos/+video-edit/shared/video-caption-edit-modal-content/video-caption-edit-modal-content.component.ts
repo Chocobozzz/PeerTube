@@ -3,7 +3,7 @@ import { VIDEO_CAPTION_FILE_CONTENT_VALIDATOR } from '@app/shared/form-validator
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { VideoCaptionEdit, VideoCaptionService, VideoCaptionWithPathEdit } from '@app/shared/shared-main'
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
-import { HTMLServerConfig, VideoConstant } from '@shared/models'
+import { HTMLServerConfig, VideoConstant } from '@peertube/peertube-models'
 import { ServerService } from '../../../../core'
 
 /**

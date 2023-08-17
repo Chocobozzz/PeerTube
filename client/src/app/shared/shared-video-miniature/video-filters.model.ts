@@ -1,8 +1,14 @@
 import { splitIntoArray, toBoolean } from '@app/helpers'
-import { getAllPrivacies } from '@shared/core-utils'
-import { escapeHTML } from '@shared/core-utils/renderer'
-import { BooleanBothQuery, NSFWPolicyType, VideoInclude, VideoPrivacy, VideoSortField } from '@shared/models'
-import { AttributesOnly } from '@shared/typescript-utils'
+import { escapeHTML, getAllPrivacies } from '@peertube/peertube-core-utils'
+import {
+  BooleanBothQuery,
+  NSFWPolicyType,
+  VideoInclude,
+  VideoIncludeType,
+  VideoPrivacyType,
+  VideoSortField
+} from '@peertube/peertube-models'
+import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 
 type VideoFiltersKeys = {
   [ id in keyof AttributesOnly<VideoFilters> ]: any
@@ -207,8 +213,8 @@ export class VideoFilters {
 
   toVideosAPIObject () {
     let isLocal: boolean
-    let include: VideoInclude
-    let privacyOneOf: VideoPrivacy[]
+    let include: VideoIncludeType
+    let privacyOneOf: VideoPrivacyType[]
 
     if (this.scope === 'local') {
       isLocal = true

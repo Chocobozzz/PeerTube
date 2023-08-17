@@ -9,9 +9,10 @@ import {
   PeerTubePlugin,
   PeerTubePluginIndex,
   PluginType,
+  PluginType_Type,
   RegisteredServerSettings,
   ResultList
-} from '@shared/models'
+} from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
 
 @Injectable()
@@ -25,7 +26,7 @@ export class PluginApiService {
     private pluginService: PluginService
   ) { }
 
-  getPluginTypeLabel (type: PluginType) {
+  getPluginTypeLabel (type: PluginType_Type) {
     if (type === PluginType.PLUGIN) {
       return $localize`plugin`
     }
@@ -34,7 +35,7 @@ export class PluginApiService {
   }
 
   getPlugins (
-    pluginType: PluginType,
+    pluginType: PluginType_Type,
     componentPagination: ComponentPagination,
     sort: string
   ) {
@@ -49,7 +50,7 @@ export class PluginApiService {
   }
 
   searchAvailablePlugins (
-    pluginType: PluginType,
+    pluginType: PluginType_Type,
     componentPagination: ComponentPagination,
     sort: string,
     search?: string
@@ -73,7 +74,7 @@ export class PluginApiService {
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  getPluginRegisteredSettings (pluginName: string, pluginType: PluginType) {
+  getPluginRegisteredSettings (pluginName: string, pluginType: PluginType_Type) {
     const npmName = this.pluginService.nameToNpmName(pluginName, pluginType)
     const path = PluginApiService.BASE_PLUGIN_URL + '/' + npmName + '/registered-settings'
 
@@ -83,7 +84,7 @@ export class PluginApiService {
                )
   }
 
-  updatePluginSettings (pluginName: string, pluginType: PluginType, settings: any) {
+  updatePluginSettings (pluginName: string, pluginType: PluginType_Type, settings: any) {
     const npmName = this.pluginService.nameToNpmName(pluginName, pluginType)
     const path = PluginApiService.BASE_PLUGIN_URL + '/' + npmName + '/settings'
 
@@ -91,7 +92,7 @@ export class PluginApiService {
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  uninstall (pluginName: string, pluginType: PluginType) {
+  uninstall (pluginName: string, pluginType: PluginType_Type) {
     const body: ManagePlugin = {
       npmName: this.pluginService.nameToNpmName(pluginName, pluginType)
     }
@@ -100,7 +101,7 @@ export class PluginApiService {
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  update (pluginName: string, pluginType: PluginType) {
+  update (pluginName: string, pluginType: PluginType_Type) {
     const body: ManagePlugin = {
       npmName: this.pluginService.nameToNpmName(pluginName, pluginType)
     }
@@ -118,7 +119,7 @@ export class PluginApiService {
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  getPluginOrThemeHref (type: PluginType, name: string) {
+  getPluginOrThemeHref (type: PluginType_Type, name: string) {
     const typeString = type === PluginType.PLUGIN
       ? 'plugin'
       : 'theme'

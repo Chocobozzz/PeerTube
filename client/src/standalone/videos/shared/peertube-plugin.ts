@@ -1,5 +1,5 @@
-import { peertubeTranslate } from '../../../../../shared/core-utils/i18n'
-import { HTMLServerConfig, PublicServerSetting } from '../../../../../shared/models'
+import { peertubeTranslate } from '@peertube/peertube-core-utils'
+import { HTMLServerConfig, PublicServerSetting } from '@peertube/peertube-models'
 import { PluginInfo, PluginsManager } from '../../../root-helpers'
 import { RegisterClientHelpers } from '../../../types'
 import { AuthHTTP } from './auth-http'

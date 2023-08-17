@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
 import { buildBulkObservable } from '@app/helpers'
 import { Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
-import { ActorFollow, ResultList, VideoChannel as VideoChannelServer, VideoSortField } from '@shared/models'
+import { ActorFollow, ResultList, VideoChannel as VideoChannelServer, VideoSortField } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
 
 const debugLogger = debug('peertube:subscriptions:UserSubscriptionService')

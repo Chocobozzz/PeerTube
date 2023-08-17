@@ -15,7 +15,7 @@ import {
   AdminAbuse,
   ResultList,
   UserAbuse
-} from '@shared/models'
+} from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
 
 @Injectable()

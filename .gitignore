@@ -1,8 +1,8 @@
 # NPM instalation
-/node_modules/
-/server/tools/node_modules
+node_modules
 *npm-debug.log
 yarn-error.log
+.yarn
 
 # Testing
 /test1/
@@ -11,8 +11,8 @@ yarn-error.log
 /test4/
 /test5/
 /test6/
-/server/tests/fixtures/video_high_bitrate_1080p.mp4
-/server/tests/fixtures/video_59fps.mp4
+/packages/tests/fixtures/video_high_bitrate_1080p.mp4
+/packages/tests/fixtures/video_59fps.mp4
 
 # Production
 /storage
@@ -49,12 +49,14 @@ yarn-error.log
 /*.tar.xz
 /*.asc
 *.DS_Store
-/server/tools/import-mediacore.ts
 /docker-volume/
 /init.mp4
 
 # TypeScript
 *.tsbuildinfo
 
-# Packages
-/packages/types/dist/
+# EsLint
+.eslintcache
+
+# Compiled output
+dist

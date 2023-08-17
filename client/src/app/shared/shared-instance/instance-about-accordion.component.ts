@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { HooksService, Notifier } from '@app/core'
 import { NgbAccordionDirective } from '@ng-bootstrap/ng-bootstrap'
-import { ClientFilterHookName, PluginClientScope } from '@shared/models/plugins'
-import { About } from '@shared/models/server'
+import { About, ClientFilterHookName, PluginClientScope } from '@peertube/peertube-models'
 import { InstanceService } from './instance.service'
 
 @Component({

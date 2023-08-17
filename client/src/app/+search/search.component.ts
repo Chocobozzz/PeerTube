@@ -9,7 +9,7 @@ import { Video, VideoChannel } from '@app/shared/shared-main'
 import { AdvancedSearch, SearchService } from '@app/shared/shared-search'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
-import { HTMLServerConfig, SearchTargetType } from '@shared/models'
+import { HTMLServerConfig, SearchTargetType } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-search',

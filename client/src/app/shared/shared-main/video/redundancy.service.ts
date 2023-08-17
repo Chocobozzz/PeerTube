@@ -4,7 +4,7 @@ import { catchError, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
-import { ResultList, Video, VideoRedundanciesTarget, VideoRedundancy } from '@shared/models'
+import { ResultList, Video, VideoRedundanciesTarget, VideoRedundancy } from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
 
 @Injectable()

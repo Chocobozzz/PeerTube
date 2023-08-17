@@ -1,4 +1,4 @@
-import { HttpStatusCode, ResultList, VideoPlaylistElement } from '../../../../../shared/models'
+import { HttpStatusCode, ResultList, VideoPlaylistElement } from '@peertube/peertube-models'
 import { logger } from '../../../root-helpers'
 import { AuthHTTP } from './auth-http'
 

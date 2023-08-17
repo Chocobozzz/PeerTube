@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router'
 import { AuthService, ComponentPagination, Notifier } from '@app/core'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
-import { ActorFollow } from '@shared/models'
+import { ActorFollow } from '@peertube/peertube-models'
 
 @Component({
   templateUrl: './my-followers.component.html',

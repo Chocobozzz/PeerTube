@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "rootDir": "src",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+  },
+  "references": [
+    { "path": "../../packages/core-utils" },
+    { "path": "../../packages/ffmpeg" },
+    { "path": "../../packages/models" },
+    { "path": "../../packages/node-utils" },
+    { "path": "../../packages/server-commands" }
+  ]
+}

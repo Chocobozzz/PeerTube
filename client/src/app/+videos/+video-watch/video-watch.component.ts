@@ -22,9 +22,7 @@ import { Video, VideoCaptionService, VideoDetails, VideoFileTokenService, VideoS
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { logger } from '@root-helpers/logger'
-import { isP2PEnabled, videoRequiresFileToken, videoRequiresUserAuth } from '@root-helpers/video'
-import { timeToInt } from '@shared/core-utils'
+import { timeToInt } from '@peertube/peertube-core-utils'
 import {
   HTMLServerConfig,
   HttpStatusCode,
@@ -34,8 +32,11 @@ import {
   Storyboard,
   VideoCaption,
   VideoPrivacy,
-  VideoState
-} from '@shared/models'
+  VideoState,
+  VideoStateType
+} from '@peertube/peertube-models'
+import { logger } from '@root-helpers/logger'
+import { isP2PEnabled, videoRequiresFileToken, videoRequiresUserAuth } from '@root-helpers/video'
 import {
   HLSOptions,
   PeerTubePlayer,
@@ -812,7 +813,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       })
   }
 
-  private handleLiveStateChange (newState: VideoState) {
+  private handleLiveStateChange (newState: VideoStateType) {
     if (newState !== VideoState.PUBLISHED) return
 
     logger.info('Loading video after live update.')

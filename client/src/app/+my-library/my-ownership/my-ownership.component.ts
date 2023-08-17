@@ -2,7 +2,7 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { Account, VideoOwnershipService } from '@app/shared/shared-main'
-import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '@shared/models'
+import { VideoChangeOwnership, VideoChangeOwnershipStatus, VideoChangeOwnershipStatusType } from '@peertube/peertube-models'
 import { MyAcceptOwnershipComponent } from './my-accept-ownership/my-accept-ownership.component'
 
 @Component({
@@ -32,7 +32,7 @@ export class MyOwnershipComponent extends RestTable implements OnInit {
     return 'MyOwnershipComponent'
   }
 
-  getStatusClass (status: VideoChangeOwnershipStatus) {
+  getStatusClass (status: VideoChangeOwnershipStatusType) {
     switch (status) {
       case VideoChangeOwnershipStatus.ACCEPTED:
         return 'badge-green'

@@ -1,6 +1,6 @@
 import { Validators, AbstractControl } from '@angular/forms'
 import { BuildFormValidator } from './form-validator.model'
-import { VideoPlaylistPrivacy } from '@shared/models'
+import { VideoPlaylistPrivacy, VideoPlaylistPrivacyType } from '@peertube/peertube-models'
 
 export const VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [
@@ -42,7 +42,7 @@ export const VIDEO_PLAYLIST_CHANNEL_ID_VALIDATOR: BuildFormValidator = {
   }
 }
 
-export function setPlaylistChannelValidator (channelControl: AbstractControl, privacy: VideoPlaylistPrivacy) {
+export function setPlaylistChannelValidator (channelControl: AbstractControl, privacy: VideoPlaylistPrivacyType) {
   if (privacy.toString() === VideoPlaylistPrivacy.PUBLIC.toString()) {
     channelControl.setValidators([ Validators.required ])
   } else {

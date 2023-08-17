@@ -5,7 +5,7 @@ import { AfterViewChecked, Component, OnDestroy, OnInit, QueryList, ViewChildren
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
 import { logger } from '@root-helpers/logger'
-import { HTMLServerConfig, SearchTargetType } from '@shared/models'
+import { HTMLServerConfig, SearchTargetType } from '@peertube/peertube-models'
 import { SuggestionComponent, SuggestionPayload, SuggestionPayloadType } from './suggestion.component'
 
 @Component({

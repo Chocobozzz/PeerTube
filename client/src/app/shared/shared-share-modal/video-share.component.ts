@@ -5,8 +5,8 @@ import { VideoDetails } from '@app/shared/shared-main'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
-import { buildPlaylistLink, buildVideoLink, decoratePlaylistLink, decorateVideoLink } from '@shared/core-utils'
-import { VideoCaption, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+import { buildPlaylistLink, buildVideoLink, decoratePlaylistLink, decorateVideoLink } from '@peertube/peertube-core-utils'
+import { VideoCaption, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
 
 type Customizations = {
   startAtCheckbox: boolean

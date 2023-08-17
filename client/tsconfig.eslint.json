@@ -4,5 +4,10 @@
     // adjust "includes" to what makes sense for you and your project
     "src/**/*.ts",
     "e2e/**/*.ts"
+  ],
+  "references": [
+    { "path": "../packages/core-utils" },
+    { "path": "../packages/models" },
+    { "path": "../packages/typescript-utils" }
   ]
 }

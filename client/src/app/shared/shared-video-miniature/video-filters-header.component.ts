@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { AuthService } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
-import { UserRight } from '@shared/models'
+import { UserRight } from '@peertube/peertube-models'
 import { PeertubeModalService } from '../shared-main'
 import { VideoFilters } from './video-filters.model'
 

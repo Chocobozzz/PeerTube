@@ -5,7 +5,7 @@ import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifie
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { Syndication, VideoDetails } from '@app/shared/shared-main'
 import { VideoComment, VideoCommentService, VideoCommentThreadTree } from '@app/shared/shared-video-comment'
-import { PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
+import { PeerTubeProblemDocument, ServerErrorCode } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-video-comments',

@@ -5,7 +5,7 @@ import { formatICU } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { InstanceFollowService } from '@app/shared/shared-instance'
 import { DropdownAction } from '@app/shared/shared-main'
-import { ActorFollow } from '@shared/models'
+import { ActorFollow } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-followers-list',

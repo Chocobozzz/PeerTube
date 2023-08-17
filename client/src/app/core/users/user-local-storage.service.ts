@@ -1,13 +1,11 @@
-
 import { filter, throttleTime } from 'rxjs'
 import { Injectable } from '@angular/core'
 import { AuthService, AuthStatus } from '@app/core/auth'
+import { objectKeysTyped } from '@peertube/peertube-core-utils'
+import { NSFWPolicyType, UserRoleType, UserUpdateMe } from '@peertube/peertube-models'
 import { getBoolOrDefault } from '@root-helpers/local-storage-utils'
 import { logger } from '@root-helpers/logger'
 import { OAuthUserTokens, UserLocalStorageKeys } from '@root-helpers/users'
-import { objectKeysTyped } from '@shared/core-utils'
-import { UserRole, UserUpdateMe } from '@shared/models'
-import { NSFWPolicyType } from '@shared/models/videos'
 import { ServerService } from '../server'
 import { LocalStorageService } from '../wrappers/storage.service'
 
@@ -61,7 +59,7 @@ export class UserLocalStorageService {
       username: this.localStorageService.getItem(UserLocalStorageKeys.USERNAME),
       email: this.localStorageService.getItem(UserLocalStorageKeys.EMAIL),
       role: {
-        id: parseInt(this.localStorageService.getItem(UserLocalStorageKeys.ROLE), 10) as UserRole,
+        id: parseInt(this.localStorageService.getItem(UserLocalStorageKeys.ROLE), 10) as UserRoleType,
         label: ''
       },
 
@@ -74,7 +72,7 @@ export class UserLocalStorageService {
     username: string
     email: string
     role: {
-      id: UserRole
+      id: UserRoleType
     }
   }) {
     this.localStorageService.setItem(UserLocalStorageKeys.ID, user.id.toString())

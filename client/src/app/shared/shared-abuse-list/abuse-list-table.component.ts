@@ -7,8 +7,8 @@ import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } 
 import { Account, Actor, DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { AbuseService, BlocklistService, VideoBlockService } from '@app/shared/shared-moderation'
 import { VideoCommentService } from '@app/shared/shared-video-comment'
+import { AbuseState, AbuseStateType, AdminAbuse } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { AbuseState, AdminAbuse } from '@shared/models'
 import { AdvancedInputFilter } from '../shared-forms'
 import { AbuseMessageModalComponent } from './abuse-message-modal.component'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
@@ -144,7 +144,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
       })
   }
 
-  updateAbuseState (abuse: AdminAbuse, state: AbuseState) {
+  updateAbuseState (abuse: AdminAbuse, state: AbuseStateType) {
     this.abuseService.updateAbuse(abuse, { state })
       .subscribe({
         next: () => this.reloadData(),

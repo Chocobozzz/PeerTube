@@ -8,7 +8,7 @@ import {
   ServerService,
   UserService
 } from '@app/core'
-import { HTMLServerConfig } from '@shared/models'
+import { HTMLServerConfig } from '@peertube/peertube-models'
 import { VideoEditType } from './shared/video-edit.type'
 import { VideoGoLiveComponent } from './video-add-components/video-go-live.component'
 import { VideoImportTorrentComponent } from './video-add-components/video-import-torrent.component'

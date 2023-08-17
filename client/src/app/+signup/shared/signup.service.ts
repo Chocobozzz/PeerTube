@@ -2,7 +2,7 @@ import { catchError, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, UserService } from '@app/core'
-import { UserRegister, UserRegistrationRequest } from '@shared/models'
+import { UserRegister, UserRegistrationRequest } from '@peertube/peertube-models'
 
 @Injectable()
 export class SignupService {

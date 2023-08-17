@@ -10,7 +10,7 @@ import {
   PlaylistMiniatureMarkupData,
   VideoMiniatureMarkupData,
   VideosListMarkupData
-} from '@shared/models'
+} from '@peertube/peertube-models'
 import { DynamicElementService } from './dynamic-element.service'
 import {
   ButtonMarkupComponent,

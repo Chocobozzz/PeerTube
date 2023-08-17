@@ -1,7 +1,7 @@
 import { HybridLoaderSettings } from '@peertube/p2p-media-loader-core'
 import { HlsJsEngineSettings } from '@peertube/p2p-media-loader-hlsjs'
 import { logger } from '@root-helpers/logger'
-import { LiveVideoLatencyMode } from '@shared/models'
+import { LiveVideoLatencyMode } from '@peertube/peertube-models'
 import { getAverageBandwidthInStore } from '../../peertube-player-local-storage'
 import { P2PMediaLoader, P2PMediaLoaderPluginOptions, PeerTubePlayerContructorOptions, PeerTubePlayerLoadOptions } from '../../types'
 import { getRtcConfig, isSameOrigin } from '../common'

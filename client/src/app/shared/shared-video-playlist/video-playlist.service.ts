@@ -20,7 +20,7 @@ import {
   VideoPlaylistReorder,
   VideoPlaylistUpdate,
   VideosExistInPlaylists
-} from '@shared/models'
+} from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
 import { VideoPlaylistElement } from './video-playlist-element.model'
 import { VideoPlaylist } from './video-playlist.model'

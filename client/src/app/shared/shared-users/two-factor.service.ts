@@ -2,7 +2,7 @@ import { catchError } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, UserService } from '@app/core'
-import { TwoFactorEnableResult } from '@shared/models'
+import { TwoFactorEnableResult } from '@peertube/peertube-models'
 
 @Injectable()
 export class TwoFactorService {

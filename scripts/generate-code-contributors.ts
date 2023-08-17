@@ -1,4 +1,4 @@
-import { CLICommand } from '@shared/server-commands'
+import { CLICommand } from '@peertube/peertube-server-commands'
 
 run()
   .then(() => process.exit(0))

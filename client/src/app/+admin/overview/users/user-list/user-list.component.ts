@@ -7,8 +7,8 @@ import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { Actor, DropdownAction } from '@app/shared/shared-main'
 import { AccountMutedStatus, BlocklistService, UserBanModalComponent, UserModerationDisplayType } from '@app/shared/shared-moderation'
 import { UserAdminService } from '@app/shared/shared-users'
+import { User, UserRole, UserRoleType } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { User, UserRole } from '@shared/models'
 
 type UserForList = User & {
   rawVideoQuota: number
@@ -166,7 +166,7 @@ export class UserListComponent extends RestTable <User> implements OnInit {
     return 'UserListComponent'
   }
 
-  getRoleClass (role: UserRole) {
+  getRoleClass (role: UserRoleType) {
     switch (role) {
       case UserRole.ADMINISTRATOR:
         return 'badge-purple'

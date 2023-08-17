@@ -3,8 +3,8 @@ import { Subject } from 'rxjs'
 import { Component, Input, OnInit } from '@angular/core'
 import { Notifier, ServerService, User } from '@app/core'
 import { UserNotificationService } from '@app/shared/shared-main'
-import { objectKeysTyped } from '@shared/core-utils'
-import { UserNotificationSetting, UserNotificationSettingValue, UserRight } from '@shared/models'
+import { objectKeysTyped } from '@peertube/peertube-core-utils'
+import { UserNotificationSetting, UserNotificationSettingValue, UserRight, UserRightType } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-account-notification-preferences',
@@ -19,7 +19,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   emailNotifications: { [ id in keyof UserNotificationSetting ]?: boolean } = {}
   webNotifications: { [ id in keyof UserNotificationSetting ]?: boolean } = {}
   labelNotifications: { [ id in keyof UserNotificationSetting ]?: string } = {}
-  rightNotifications: { [ id in keyof Partial<UserNotificationSetting> ]?: UserRight } = {}
+  rightNotifications: { [ id in keyof Partial<UserNotificationSetting> ]?: UserRightType } = {}
   emailEnabled = false
 
   private savePreferences = debounce(this.savePreferencesImpl.bind(this), 500)

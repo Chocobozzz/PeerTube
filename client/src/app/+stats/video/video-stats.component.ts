@@ -7,15 +7,15 @@ import { ActivatedRoute } from '@angular/router'
 import { Notifier, PeerTubeRouterService } from '@app/core'
 import { NumberFormatterPipe, VideoDetails } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
-import { secondsToTime } from '@shared/core-utils'
-import { HttpStatusCode } from '@shared/models/http'
+import { secondsToTime } from '@peertube/peertube-core-utils'
 import {
+  HttpStatusCode,
   LiveVideoSession,
   VideoStatsOverall,
   VideoStatsRetention,
   VideoStatsTimeserie,
   VideoStatsTimeserieMetric
-} from '@shared/models/videos'
+} from '@peertube/peertube-models'
 import { VideoStatsService } from './video-stats.service'
 
 type ActiveGraphId = VideoStatsTimeserieMetric | 'retention' | 'countries'

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { durationToString } from '@app/helpers'
-import { AbusePredefinedReasonsString } from '@shared/models'
+import { AbusePredefinedReasonsString } from '@peertube/peertube-models'
 import { ProcessedAbuse } from './processed-abuse.model'
 
 @Component({

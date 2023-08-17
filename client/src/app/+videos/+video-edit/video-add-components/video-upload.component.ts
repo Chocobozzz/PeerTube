@@ -10,7 +10,7 @@ import { FormReactiveService } from '@app/shared/shared-forms'
 import { Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
-import { HttpStatusCode, VideoCreateResult } from '@shared/models'
+import { HttpStatusCode, VideoCreateResult } from '@peertube/peertube-models'
 import { VideoUploadService } from '../shared/video-upload.service'
 import { VideoSend } from './video-send'
 

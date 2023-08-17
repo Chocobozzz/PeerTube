@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { ServerStats } from '@shared/models/server'
+import { ServerStats } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-instance-statistics',

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScopedTokensService } from '@app/core'
 import { VideoService } from '@app/shared/shared-main'
-import { FeedFormat } from '@shared/models'
-import { ScopedToken } from '@shared/models/users/user-scoped-token'
+import { FeedFormat, ScopedToken } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
 
 @Component({

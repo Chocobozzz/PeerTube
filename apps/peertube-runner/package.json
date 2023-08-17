@@ -1,0 +1,20 @@
+{
+  "name": "@peertube/peertube-runner",
+  "version": "0.0.5",
+  "type": "module",
+  "main": "dist/peertube-runner.js",
+  "bin": "dist/peertube-runner.js",
+  "engines": {
+    "node": ">=16.x"
+  },
+  "license": "AGPL-3.0",
+  "dependencies": {},
+  "devDependencies": {
+    "@commander-js/extra-typings": "^10.0.3",
+    "@iarna/toml": "^2.2.5",
+    "env-paths": "^3.0.0",
+    "net-ipc": "^2.0.1",
+    "pino": "^8.11.0",
+    "pino-pretty": "^10.0.0"
+  }
+}

@@ -5,8 +5,8 @@ import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { VideoDetails } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
-import { secondsToTime } from '@shared/core-utils'
-import { VideoStudioTask, VideoStudioTaskCut } from '@shared/models'
+import { secondsToTime } from '@peertube/peertube-core-utils'
+import { VideoStudioTask, VideoStudioTaskCut } from '@peertube/peertube-models'
 import { VideoStudioService } from '../shared'
 
 @Component({

@@ -1,5 +1,5 @@
 import { Video } from '@app/shared/shared-main'
-import { VideoChannelSummary, VideoConstant, VideosOverview as VideosOverviewServer } from '@shared/models'
+import { VideoChannelSummary, VideoConstant, VideosOverview as VideosOverviewServer } from '@peertube/peertube-models'
 
 export class VideosOverview implements VideosOverviewServer {
   channels: {

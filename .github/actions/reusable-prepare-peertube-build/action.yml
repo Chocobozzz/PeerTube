@@ -32,4 +32,12 @@ runs:
 
     - name: Install peertube runner dependencies
       shell: bash
-      run: cd packages/peertube-runner && yarn install --frozen-lockfile
+      run: cd apps/peertube-runner && yarn install --frozen-lockfile
+
+    - name: Install peertube CLI dependencies
+      shell: bash
+      run: cd apps/peertube-cli && yarn install --frozen-lockfile
+
+    - name: Display PeerTube dependencies
+      shell: bash
+      run: ls -l node_modules/@peertube

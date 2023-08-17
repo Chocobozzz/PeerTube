@@ -1,13 +1,14 @@
 import * as MarkdownIt from 'markdown-it'
 import { Injectable } from '@angular/core'
-import { buildVideoLink, decorateVideoLink } from '@shared/core-utils'
 import {
+  buildVideoLink,
   COMPLETE_RULES,
+  decorateVideoLink,
   ENHANCED_RULES,
   ENHANCED_WITH_HTML_RULES,
   TEXT_RULES,
   TEXT_WITH_HTML_RULES
-} from '@shared/core-utils/renderer/markdown'
+} from '@peertube/peertube-core-utils'
 import { HtmlRendererService } from './html-renderer.service'
 
 type MarkdownParsers = {

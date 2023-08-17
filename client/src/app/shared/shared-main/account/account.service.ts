@@ -3,7 +3,7 @@ import { catchError, map, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor } from '@app/core'
-import { Account as ServerAccount } from '@shared/models'
+import { Account as ServerAccount } from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
 import { Account } from './account.model'
 

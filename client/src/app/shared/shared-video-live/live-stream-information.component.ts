@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { Video } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { LiveVideo, LiveVideoError, LiveVideoSession } from '@shared/models'
+import { LiveVideo, LiveVideoError, LiveVideoErrorType, LiveVideoSession } from '@peertube/peertube-models'
 import { LiveVideoService } from './live-video.service'
 
 @Component({
@@ -38,7 +38,7 @@ export class LiveStreamInformationComponent {
   getErrorLabel (session: LiveVideoSession) {
     if (!session.error) return undefined
 
-    const errors: { [ id in LiveVideoError ]: string } = {
+    const errors: { [ id in LiveVideoErrorType ]: string } = {
       [LiveVideoError.BAD_SOCKET_HEALTH]: $localize`Server too slow`,
       [LiveVideoError.BLACKLISTED]: $localize`Live blacklisted`,
       [LiveVideoError.DURATION_EXCEEDED]: $localize`Max duration exceeded`,

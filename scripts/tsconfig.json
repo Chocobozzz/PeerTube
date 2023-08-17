@@ -4,7 +4,10 @@
     "outDir": "../dist/scripts"
   },
   "references": [
-    { "path": "../shared" },
+    { "path": "../packages/core-utils" },
+    { "path": "../packages/models" },
+    { "path": "../packages/node-utils" },
+    { "path": "../packages/server-commands" },
     { "path": "../server" }
   ]
 }

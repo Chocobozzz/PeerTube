@@ -16,7 +16,7 @@ import {
   PeerTubeProblemDocument,
   ServerErrorCode,
   VideoPrivacy
-} from '@shared/models'
+} from '@peertube/peertube-models'
 import { VideoSend } from './video-send'
 
 @Component({

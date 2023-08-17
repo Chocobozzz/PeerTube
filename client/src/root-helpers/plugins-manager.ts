@@ -3,7 +3,7 @@ import * as debug from 'debug'
 import { firstValueFrom, ReplaySubject } from 'rxjs'
 import { first, shareReplay } from 'rxjs/operators'
 import { RegisterClientHelpers } from 'src/types/register-client-option.model'
-import { getExternalAuthHref, getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
+import { getExternalAuthHref, getHookType, internalRunHook } from '@peertube/peertube-core-utils'
 import {
   ClientHookName,
   clientHookObject,
@@ -11,13 +11,14 @@ import {
   HTMLServerConfig,
   PluginClientScope,
   PluginType,
+  PluginType_Type,
   RegisterClientFormFieldOptions,
   RegisterClientHookOptions,
   RegisterClientRouteOptions,
   RegisterClientSettingsScriptOptions,
   RegisterClientVideoFieldOptions,
   ServerConfigPlugin
-} from '@shared/models'
+} from '@peertube/peertube-models'
 import { environment } from '../environments/environment'
 import { ClientScript } from '../types'
 import { logger } from './logger'
@@ -32,7 +33,7 @@ type Hooks = { [ name: string ]: HookStructValue[] }
 type PluginInfo = {
   plugin: ServerConfigPlugin
   clientScript: ClientScriptJSON
-  pluginType: PluginType
+  pluginType: PluginType_Type
   isTheme: boolean
 }
 

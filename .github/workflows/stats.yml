@@ -36,12 +36,12 @@ jobs:
         run: |
           wget "https://github.com/boyter/scc/releases/download/v3.0.0/scc-3.0.0-x86_64-unknown-linux.zip"
           unzip "scc-3.0.0-x86_64-unknown-linux.zip"
-          ./scc --format=json --exclude-dir .git,node_modules,client/node_modules,client/dist,dist,yarn.lock,client/yarn.lock,client/src/locale,test1,test2,test3,client/src/assets/images,config,storage,server/tests/fixtures,support/openapi,.idea,.vscode,docker-volume,ffmpeg-3,ffmpeg-4 > ./scc.json
+          ./scc --format=json --exclude-dir .git,node_modules,client/node_modules,client/dist,dist,yarn.lock,client/yarn.lock,client/src/locale,test1,test2,test3,client/src/assets/images,config,storage,packages/tests/fixtures,support/openapi,.idea,.vscode,docker-volume,ffmpeg-3,ffmpeg-4 > ./scc.json
 
       - name: PeerTube client stats
         if: github.event_name != 'pull_request'
         run: |
-          node dist/scripts/client-build-stats.js > client-build-stats.json
+          npm run client:build-stats > client-build-stats.json
 
       - name: PeerTube client lighthouse report
         if: github.event_name != 'pull_request'

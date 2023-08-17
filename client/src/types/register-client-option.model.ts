@@ -5,7 +5,7 @@ import {
   RegisterClientSettingsScriptOptions,
   RegisterClientVideoFieldOptions,
   ServerConfig, SettingEntries
-} from '@shared/models'
+} from '@peertube/peertube-models'
 
 export type RegisterClientOptions = {
   registerHook: (options: RegisterClientHookOptions) => void

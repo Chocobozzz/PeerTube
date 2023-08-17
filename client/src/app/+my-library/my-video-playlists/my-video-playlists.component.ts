@@ -3,7 +3,7 @@ import { mergeMap } from 'rxjs/operators'
 import { Component } from '@angular/core'
 import { AuthService, ComponentPagination, ConfirmService, Notifier } from '@app/core'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { VideoPlaylistType } from '@shared/models'
+import { VideoPlaylistType } from '@peertube/peertube-models'
 
 @Component({
   templateUrl: './my-video-playlists.component.html',

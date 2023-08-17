@@ -3,7 +3,7 @@ import { Notifier, ServerService } from '@app/core'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { UserRegistration } from '@shared/models'
+import { UserRegistration } from '@peertube/peertube-models'
 import { AdminRegistrationService } from './admin-registration.service'
 import { REGISTRATION_MODERATION_RESPONSE_VALIDATOR } from './process-registration-validators'
 

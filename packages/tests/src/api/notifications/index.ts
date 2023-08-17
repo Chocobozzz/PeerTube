@@ -1,0 +1,6 @@
+import './admin-notifications.js'
+import './comments-notifications.js'
+import './moderation-notifications.js'
+import './notifications-api.js'
+import './registrations-notifications.js'
+import './user-notifications.js'

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { PluginType } from '@shared/models/plugins'
+import { PluginType_Type } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-plugin-navigation',
@@ -7,5 +7,5 @@ import { PluginType } from '@shared/models/plugins'
   styleUrls: [ './plugin-navigation.component.scss' ]
 })
 export class PluginNavigationComponent {
-  @Input() pluginType: PluginType
+  @Input() pluginType: PluginType_Type
 }

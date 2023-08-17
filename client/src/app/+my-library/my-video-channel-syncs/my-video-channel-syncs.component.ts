@@ -3,8 +3,7 @@ import { mergeMap } from 'rxjs'
 import { Component, OnInit } from '@angular/core'
 import { AuthService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { DropdownAction, VideoChannelService, VideoChannelSyncService } from '@app/shared/shared-main'
-import { HTMLServerConfig } from '@shared/models/server'
-import { VideoChannelSync, VideoChannelSyncState } from '@shared/models/videos'
+import { HTMLServerConfig, VideoChannelSync, VideoChannelSyncState, VideoChannelSyncStateType } from '@peertube/peertube-models'
 
 @Component({
   templateUrl: './my-video-channel-syncs.component.html',
@@ -124,7 +123,7 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
     return '/my-library/video-channel-syncs/create'
   }
 
-  getSyncStateClass (stateId: VideoChannelSyncState) {
+  getSyncStateClass (stateId: VideoChannelSyncStateType) {
     return [ 'pt-badge', MyVideoChannelSyncsComponent.STATE_CLASS_BY_ID[stateId] ]
   }
 

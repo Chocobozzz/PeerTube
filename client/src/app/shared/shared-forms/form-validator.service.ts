@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { AsyncValidatorFn, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms'
-import { objectKeysTyped } from '@shared/core-utils'
+import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
 import { FormReactiveErrors, FormReactiveValidationMessages } from './form-reactive.service'
 

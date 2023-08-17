@@ -4,9 +4,8 @@ import { catchError, concatMap, forkJoin, from, map, toArray } from 'rxjs'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService, ServerService } from '@app/core'
-import { arrayify, peertubeTranslate } from '@shared/core-utils'
-import { ResultList } from '@shared/models/common'
-import { Runner, RunnerJob, RunnerJobAdmin, RunnerJobState, RunnerRegistrationToken } from '@shared/models/runners'
+import { arrayify, peertubeTranslate } from '@peertube/peertube-core-utils'
+import { ResultList, Runner, RunnerJob, RunnerJobAdmin, RunnerJobState, RunnerRegistrationToken } from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
 
 export type RunnerJobFormatted = RunnerJob & {

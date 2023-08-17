@@ -4,8 +4,7 @@ import { HTTP_INTERCEPTORS, HttpErrorResponse, HttpEvent, HttpHandler, HttpInter
 import { Injectable, Injector } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService } from '@app/core/auth/auth.service'
-import { HttpStatusCode } from '@shared/models'
-import { OAuth2ErrorCode, PeerTubeProblemDocument } from '@shared/models/server'
+import { HttpStatusCode, OAuth2ErrorCode, PeerTubeProblemDocument } from '@peertube/peertube-models'
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {

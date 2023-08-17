@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "stripInternal": true,
+    "removeComments": false,
+    "emitDeclarationOnly": true,
+    "sourceMap": false,
+    "outDir": "./dist/",
+    "baseUrl": "./",
+    "rootDir": "./src",
+    "tsBuildInfoFile": "./dist/tsconfig.server.types.tsbuildinfo",
+    "paths": {
+      "@server/*": [ "../../server/server/*" ]
+    }
+  },
+  "references": [
+    { "path": "../models/tsconfig.types.json" },
+    { "path": "../typescript-utils/tsconfig.types.json" },
+    { "path": "../../server/tsconfig.types.json" },
+    { "path": "./src/client/tsconfig.types.json" }
+  ],
+  "files": ["./src/index.ts"]
+}

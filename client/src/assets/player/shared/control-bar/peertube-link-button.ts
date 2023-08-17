@@ -1,5 +1,5 @@
 import videojs from 'video.js'
-import { buildVideoLink, decorateVideoLink } from '@shared/core-utils'
+import { buildVideoLink, decorateVideoLink } from '@peertube/peertube-core-utils'
 import { PeerTubeLinkButtonOptions } from '../../types'
 
 const Component = videojs.getComponent('Component')

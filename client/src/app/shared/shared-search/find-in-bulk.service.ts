@@ -3,11 +3,11 @@ import { Observable, Subject } from 'rxjs'
 import { filter, first, map } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { buildBulkObservable } from '@app/helpers'
-import { ResultList } from '@shared/models/common'
+import { ResultList } from '@peertube/peertube-models'
 import { Video, VideoChannel } from '../shared-main'
 import { VideoPlaylist } from '../shared-video-playlist'
-import { SearchService } from './search.service'
 import { AdvancedSearch } from './advanced-search.model'
+import { SearchService } from './search.service'
 
 const debugLogger = debug('peertube:search:FindInBulkService')
 

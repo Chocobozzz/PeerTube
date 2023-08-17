@@ -1,5 +1,6 @@
 {
   "extends": "standard-with-typescript",
+  "root": true,
   "rules": {
     "eol-last": [
       "error",
@@ -126,18 +127,20 @@
     ]
   },
   "ignorePatterns": [
-    "node_modules/",
-    "server/tests/fixtures"
+    "node_modules",
+    "packages/tests/fixtures",
+    "apps/**/dist",
+    "packages/**/dist",
+    "server/dist",
+    "packages/types-generator/tests",
+    "*.js",
+    "/client",
+    "/dist"
   ],
   "parserOptions": {
-    "EXPERIMENTAL_useSourceOfProjectReferenceRedirect": true,
     "project": [
-      "./tsconfig.json",
-      "./shared/tsconfig.json",
-      "./scripts/tsconfig.json",
-      "./server/tsconfig.json",
-      "./server/tools/tsconfig.json",
-      "./packages/peertube-runner/tsconfig.json"
-    ]
+      "./tsconfig.eslint.json"
+    ],
+    "EXPERIMENTAL_useSourceOfProjectReferenceRedirect": true
   }
 }

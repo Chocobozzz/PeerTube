@@ -10,7 +10,7 @@ import {
   VideoChannelCreate,
   VideoChannelUpdate,
   VideosImportInChannelCreate
-} from '@shared/models'
+} from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account'
 import { AccountService } from '../account/account.service'

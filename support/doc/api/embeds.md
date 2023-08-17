@@ -20,7 +20,7 @@ yarn add @peertube/embed-api
 Now just use the `PeerTubePlayer` class exported by the module:
 
 ```typescript
-import { PeerTubePlayer } from '@peertube/embed-api'
+import { PeerTubePlayer } from '@peertube/embed-api.js'
 
 ...
 ```

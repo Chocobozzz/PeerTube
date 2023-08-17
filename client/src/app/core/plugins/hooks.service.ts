@@ -3,7 +3,7 @@ import { mergeMap, switchMap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { logger } from '@root-helpers/logger'
-import { ClientActionHookName, ClientFilterHookName, PluginClientScope } from '@shared/models'
+import { ClientActionHookName, ClientFilterHookName, PluginClientScope } from '@peertube/peertube-models'
 import { AuthService, AuthStatus } from '../auth'
 
 type RawFunction<U, T> = (params: U) => T

@@ -4,7 +4,7 @@ import { HttpClient, HttpContext, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthService, ComponentPaginationLight, PeerTubeSocket, RestExtractor, RestService } from '@app/core'
 import { NGX_LOADING_BAR_IGNORED } from '@ngx-loading-bar/http-client'
-import { ResultList, UserNotification as UserNotificationServer, UserNotificationSetting } from '@shared/models'
+import { ResultList, UserNotification as UserNotificationServer, UserNotificationSetting } from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
 import { UserNotification } from './user-notification.model'
 

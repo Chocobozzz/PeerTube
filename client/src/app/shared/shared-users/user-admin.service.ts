@@ -5,8 +5,8 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService, ServerService, UserService } from '@app/core'
 import { getBytes } from '@root-helpers/bytes'
-import { arrayify, peertubeTranslate } from '@shared/core-utils'
-import { ResultList, User as UserServerModel, UserCreate, UserUpdate } from '@shared/models'
+import { arrayify, peertubeTranslate } from '@peertube/peertube-core-utils'
+import { ResultList, User as UserServerModel, UserCreate, UserUpdate } from '@peertube/peertube-models'
 
 @Injectable()
 export class UserAdminService {

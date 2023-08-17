@@ -16,7 +16,7 @@ import {
   VideosSelectionComponent
 } from '@app/shared/shared-video-miniature'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { VideoChannel, VideoExistInPlaylist, VideosExistInPlaylists, VideoSortField } from '@shared/models'
+import { VideoChannel, VideoExistInPlaylist, VideosExistInPlaylists, VideoSortField } from '@peertube/peertube-models'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
 @Component({

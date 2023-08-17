@@ -1,7 +1,7 @@
 import { getAbsoluteAPIUrl } from '@app/helpers'
-import { VideoPassword, VideoPrivacy, VideoScheduleUpdate, VideoUpdate } from '@shared/models'
+import { objectKeysTyped } from '@peertube/peertube-core-utils'
+import { VideoPassword, VideoPrivacy, VideoPrivacyType, VideoScheduleUpdate, VideoUpdate } from '@peertube/peertube-models'
 import { VideoDetails } from './video-details.model'
-import { objectKeysTyped } from '@shared/core-utils'
 
 export class VideoEdit implements VideoUpdate {
   static readonly SPECIAL_SCHEDULED_PRIVACY = -1
@@ -17,7 +17,7 @@ export class VideoEdit implements VideoUpdate {
   downloadEnabled: boolean
   waitTranscoding: boolean
   channelId: number
-  privacy: VideoPrivacy
+  privacy: VideoPrivacyType
   videoPassword?: string
   support: string
   thumbnailfile?: any

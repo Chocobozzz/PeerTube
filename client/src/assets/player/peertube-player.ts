@@ -30,7 +30,7 @@ import { PluginsManager } from '@root-helpers/plugins-manager'
 import { copyToClipboard } from '@root-helpers/utils'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { isMobile } from '@root-helpers/web-browser'
-import { buildVideoLink, decorateVideoLink, isDefaultLocale, pick } from '@shared/core-utils'
+import { buildVideoLink, decorateVideoLink, isDefaultLocale, pick } from '@peertube/peertube-core-utils'
 import { saveAverageBandwidth } from './peertube-player-local-storage'
 import { ControlBarOptionsBuilder, HLSOptionsBuilder, WebVideoOptionsBuilder } from './shared/player-options-builder'
 import { TranslationsManager } from './translations-manager'
@@ -50,6 +50,8 @@ const PlayProgressBar = videojs.getComponent('PlayProgressBar') as any
 if (PlayProgressBar.prototype.options_.children.includes('timeTooltip') !== true) {
   PlayProgressBar.prototype.options_.children.push('timeTooltip')
 }
+
+export { videojs }
 
 export class PeerTubePlayer {
   private pluginsManager: PluginsManager
@@ -515,10 +517,4 @@ export class PeerTubePlayer {
 
     return { content }
   }
-}
-
-// ############################################################################
-
-export {
-  videojs
 }

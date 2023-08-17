@@ -1,0 +1,12 @@
+{
+  "name": "@peertube/tests",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "devDependencies": {},
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "dependencies": {}
+}

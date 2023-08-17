@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { AuthService, ScreenService, ServerService } from '@app/core'
 import { ListOverflowItem } from '@app/shared/shared-main'
 import { TopMenuDropdownParam } from '@app/shared/shared-main/misc/top-menu-dropdown.component'
-import { UserRight } from '@shared/models'
+import { UserRight } from '@peertube/peertube-models'
 
 @Component({
   templateUrl: './admin.component.html',

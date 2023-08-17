@@ -1,6 +1,6 @@
-import { readdir, stat } from 'fs-extra'
+import { readdir, stat } from 'fs/promises'
 import { join } from 'path'
-import { root } from '@shared/core-utils'
+import { root } from '@peertube/peertube-node-utils'
 
 async function run () {
   const result = {

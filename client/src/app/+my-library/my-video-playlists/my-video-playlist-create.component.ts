@@ -11,8 +11,7 @@ import {
 } from '@app/shared/form-validators/video-playlist-validators'
 import { FormReactiveService } from '@app/shared/shared-forms'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { VideoPlaylistCreate } from '@shared/models/videos/playlist/video-playlist-create.model'
-import { VideoPlaylistPrivacy } from '@shared/models/videos/playlist/video-playlist-privacy.model'
+import { VideoPlaylistCreate, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
 
 @Component({

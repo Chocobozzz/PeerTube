@@ -1,16 +1,16 @@
 import { Observable, of } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { User } from '@app/core/users/user.model'
-import { OAuthUserTokens } from '@root-helpers/users'
-import { hasUserRight } from '@shared/core-utils/users'
+import { hasUserRight } from '@peertube/peertube-core-utils'
 import {
   MyUser as ServerMyUserModel,
   MyUserSpecialPlaylist,
   User as ServerUserModel,
-  UserRight,
+  UserRightType,
   UserRole,
   UserVideoQuota
-} from '@shared/models'
+} from '@peertube/peertube-models'
+import { OAuthUserTokens } from '@root-helpers/users'
 
 export class AuthUser extends User implements ServerMyUserModel {
   oauthTokens: OAuthUserTokens
@@ -42,7 +42,7 @@ export class AuthUser extends User implements ServerMyUserModel {
     this.oauthTokens.refreshToken = refreshToken
   }
 
-  hasRight (right: UserRight) {
+  hasRight (right: UserRightType) {
     return hasUserRight(this.role.id, right)
   }
 

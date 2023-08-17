@@ -4,7 +4,7 @@ import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { logger } from '@root-helpers/logger'
-import { AbuseMessage, UserAbuse } from '@shared/models'
+import { AbuseMessage, UserAbuse } from '@peertube/peertube-models'
 import { ABUSE_MESSAGE_VALIDATOR } from '../form-validators/abuse-validators'
 import { AbuseService } from '../shared-moderation'
 

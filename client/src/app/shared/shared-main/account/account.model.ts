@@ -1,4 +1,4 @@
-import { Account as ServerAccount, ActorImage, BlockStatus } from '@shared/models'
+import { Account as ServerAccount, ActorImage, BlockStatus } from '@peertube/peertube-models'
 import { Actor } from './actor.model'
 
 export class Account extends Actor implements ServerAccount {

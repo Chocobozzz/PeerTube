@@ -2,22 +2,23 @@ import { AuthUser } from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
-import { logger } from '@root-helpers/logger'
 import {
-  AbuseState,
+  AbuseStateType,
   ActorInfo,
   FollowState,
-  PluginType,
+  PluginType_Type,
   UserNotification as UserNotificationServer,
   UserNotificationType,
+  UserNotificationType_Type,
   UserRight,
   VideoInfo
-} from '@shared/models'
+} from '@peertube/peertube-models'
+import { logger } from '@root-helpers/logger'
 import { Video } from '../video'
 
 export class UserNotification implements UserNotificationServer {
   id: number
-  type: UserNotificationType
+  type: UserNotificationType_Type
   read: boolean
 
   video?: VideoInfo & {
@@ -41,7 +42,7 @@ export class UserNotification implements UserNotificationServer {
 
   abuse?: {
     id: number
-    state: AbuseState
+    state: AbuseStateType
 
     video?: VideoInfo
 
@@ -75,7 +76,7 @@ export class UserNotification implements UserNotificationServer {
 
   plugin?: {
     name: string
-    type: PluginType
+    type: PluginType_Type
     latestVersion: string
   }
 

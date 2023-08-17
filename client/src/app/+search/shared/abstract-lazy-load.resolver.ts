@@ -2,7 +2,7 @@ import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { ActivatedRouteSnapshot, Router } from '@angular/router'
 import { logger } from '@root-helpers/logger'
-import { ResultList } from '@shared/models'
+import { ResultList } from '@peertube/peertube-models'
 
 export abstract class AbstractLazyLoadResolver <T> {
   protected router: Router

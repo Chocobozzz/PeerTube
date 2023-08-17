@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core'
 import { ServerService, UserService } from '@app/core'
 import { Video, VideoService } from '@app/shared/shared-main'
 import { AdvancedSearch, SearchService } from '@app/shared/shared-search'
-import { HTMLServerConfig } from '@shared/models'
+import { HTMLServerConfig } from '@peertube/peertube-models'
 import { RecommendationInfo } from './recommendation-info.model'
 import { RecommendationService } from './recommendations.service'
 

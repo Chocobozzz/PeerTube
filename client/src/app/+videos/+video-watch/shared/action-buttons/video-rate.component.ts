@@ -3,7 +3,7 @@ import { Observable } from 'rxjs'
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core'
 import { Notifier, ScreenService } from '@app/core'
 import { VideoDetails, VideoService } from '@app/shared/shared-main'
-import { UserVideoRateType } from '@shared/models'
+import { UserVideoRateType } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-video-rate',
