@@ -18,6 +18,7 @@ NODE_APP_INSTANCE=6 NODE_ENV=test node dist/server --benchmark-startup
  * Check CI tests are green
  * Run BrowserStack **and** local E2E tests
  * Release: `GITHUB_TOKEN=my_token npm run release -- 1.x.x`
+ * Update `openapi.yaml` version
  * Upload `tar.xz` on https://builds.joinpeertube.org/release
  * Create a dedicated branch: `git checkout -b release/1.x.x && git push origin release/1.x.x`
  * Check the release is okay: https://github.com/Chocobozzz/PeerTube/releases
