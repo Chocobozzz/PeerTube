@@ -2,7 +2,8 @@
 @use '_mixins' as *;
 
 .comment-flagged-account,
-.account-flagged-handle {
+.account-flagged-handle,
+.video-owner {
   font-size: 11px;
   color: var(--greyForegroundColor);
 }

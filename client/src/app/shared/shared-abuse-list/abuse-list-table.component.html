@@ -80,9 +80,11 @@
             <div class="table-video-text">
               <div>
                 {{ abuse.video.name }}
-                <my-global-icon iconName="delete"></my-global-icon>
+
+                <span i18n class="fst-italic">(Deleted video)</span>
               </div>
-              <div i18n>by {{ abuse.video.channel?.displayName }} on {{ abuse.video.channel?.host }} </div>
+
+              <div class="video-owner" i18n>by {{ abuse.video.channel?.displayName }} on {{ abuse.video.channel?.host }} </div>
             </div>
           </div>
         </td>
