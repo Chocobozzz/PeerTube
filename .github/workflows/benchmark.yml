@@ -42,6 +42,7 @@ jobs:
       - name: Build
         run: |
           startClient=`date +%s`
+          npm run build:server
           npm run build:client
           endClient=`date +%s`
           clientBuildTime=$((endClient-startClient))
