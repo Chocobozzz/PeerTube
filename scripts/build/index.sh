@@ -2,12 +2,11 @@
 
 set -eu
 
-if [ ! -z ${1+x} ]; then
-  clientCommand="npm run build:client -- $1"
-else
-  clientCommand="npm run build:client"
-fi
+npm run build:server
 
-npm run concurrently -- --raw \
-  "$clientCommand" \
-  "npm run build:server"
+# Angular does not support project references, it's the reason why we can't builds concurrently
+if [ ! -z ${1+x} ]; then
+  npm run build:client -- $1
+else
+  npm run build:client
+fi
