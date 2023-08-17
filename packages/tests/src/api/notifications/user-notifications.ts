@@ -67,8 +67,6 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a new video notification if the user follows the local video publisher', async function () {
-      this.timeout(15000)
-
       await servers[0].subscriptions.add({ token: userAccessToken, targetUri: 'root_channel@' + servers[0].host })
       await waitJobs(servers)
 
