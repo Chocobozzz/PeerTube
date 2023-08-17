@@ -1,25 +1,26 @@
 <div class="video-info-description">
   <div
+    #descriptionHTML
     class="video-info-description-html"
-    [innerHTML]="getHTMLDescription()"
+    [ngClass]="{ 'ellipsis-multiline-3': !completeDescriptionShown }"
+    [innerHTML]="videoHTMLDescription"
     (timestampClicked)="onTimestampClicked($event)"
     myTimestampRouteTransformer
   ></div>
 
   <button
-    *ngIf="completeDescriptionShown === false && video.description?.length >= 250"
-    (click)="showMoreDescription()" class="video-info-description-more button-unstyle"
+    *ngIf="(hasEllipsis() && !completeDescriptionShown) || completeDescriptionShown"
+    (click)="completeDescriptionShown = !completeDescriptionShown"
+    class="video-info-description-more button-unstyle"
   >
-    <ng-container i18n>Show more</ng-container>
-    <span *ngIf="descriptionLoading === false" class="chevron-down"></span>
-    <my-loader size="sm" class="description-loading" [loading]="descriptionLoading"></my-loader>
-  </button>
+    <ng-container *ngIf="!completeDescriptionShown">
+      <ng-container i18n>Show more</ng-container>
+      <span class="chevron-down"></span>
+    </ng-container>
 
-  <button
-    *ngIf="completeDescriptionShown === true"
-    (click)="showLessDescription()" class="video-info-description-more button-unstyle"
-  >
-    <ng-container i18n>Show less</ng-container>
-    <span *ngIf="descriptionLoading === false" class="chevron-up"></span>
+    <ng-container *ngIf="completeDescriptionShown">
+      <ng-container i18n>Show less</ng-container>
+      <span class="chevron-up"></span>
+    </ng-container>
   </button>
 </div>

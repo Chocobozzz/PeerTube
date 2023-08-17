@@ -11,8 +11,14 @@
   .video-info-description-html {
     @include peertube-word-wrap;
 
-    ::ng-deep a {
-      text-decoration: none;
+    ::ng-deep {
+      a {
+        text-decoration: none;
+      }
+
+      p:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 
@@ -21,10 +27,12 @@
   }
 
   .video-info-description-more {
+    @include font-size(14px);
+
     cursor: pointer;
     font-weight: $font-semibold;
     color: pvar(--greyForegroundColor);
-    font-size: 14px;
+    margin-top: 1rem;
   }
 }
 

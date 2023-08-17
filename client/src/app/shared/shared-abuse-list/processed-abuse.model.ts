@@ -12,8 +12,7 @@ export type ProcessedAbuse = AdminAbuse & {
   reporterAccount?: Account
   flaggedAccount?: Account
 
-  truncatedCommentHtml?: string
-  commentHtml?: string
+  commentHTML?: string
 
   video: AdminAbuse['video'] & {
     channel: AdminAbuse['video']['channel'] & {

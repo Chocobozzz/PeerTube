@@ -8,11 +8,11 @@
   </textarea>
 
   <div ngbNav #nav="ngbNav" class="nav-pills nav-preview">
-    <ng-container ngbNavItem *ngIf="truncate !== undefined">
+    <ng-container ngbNavItem *ngIf="truncateTo3Lines">
       <a ngbNavLink i18n>Truncated preview</a>
 
       <ng-template ngbNavContent>
-        <div [innerHTML]="truncatedPreviewHTML"></div>
+        <div class="ellipsis-multiline-3" [innerHTML]="previewHTML"></div>
       </ng-template>
     </ng-container>
 

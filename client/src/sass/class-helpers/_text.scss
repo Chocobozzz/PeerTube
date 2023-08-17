@@ -36,6 +36,10 @@
   overflow: hidden;
 }
 
+.ellipsis-multiline-1 {
+  @include ellipsis-multiline(1);
+}
+
 .ellipsis-multiline-2 {
   @include ellipsis-multiline(2);
 }
@@ -45,3 +49,7 @@
 }
 
 // ---------------------------------------------------------------------------
+
+.ellipsis {
+  @include ellipsis;
+}

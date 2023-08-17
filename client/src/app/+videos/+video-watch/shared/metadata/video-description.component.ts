@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
-import { MarkdownService, Notifier } from '@app/core'
-import { VideoDetails, VideoService } from '@app/shared/shared-main'
-import { logger } from '@root-helpers/logger'
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild, ElementRef } from '@angular/core'
+import { MarkdownService } from '@app/core'
+import { VideoDetails } from '@app/shared/shared-main'
 
 @Component({
   selector: 'my-video-description',
@@ -9,36 +8,34 @@ import { logger } from '@root-helpers/logger'
   styleUrls: [ './video-description.component.scss' ]
 })
 export class VideoDescriptionComponent implements OnChanges {
+  @ViewChild('descriptionHTML') descriptionHTML: ElementRef<HTMLElement>
+
   @Input() video: VideoDetails
 
   @Output() timestampClicked = new EventEmitter<number>()
 
-  descriptionLoading = false
   completeDescriptionShown = false
 
-  completeVideoDescriptionLoaded = false
-
-  videoHTMLTruncatedDescription = ''
   videoHTMLDescription = ''
 
   constructor (
-    private videoService: VideoService,
-    private notifier: Notifier,
     private markdownService: MarkdownService
   ) { }
 
   ngOnChanges () {
-    this.descriptionLoading = false
     this.completeDescriptionShown = false
 
     this.setVideoDescriptionHTML()
   }
 
-  showMoreDescription () {
-    if (!this.completeVideoDescriptionLoaded) {
-      return this.loadCompleteDescription()
-    }
+  hasEllipsis () {
+    const el = this.descriptionHTML?.nativeElement
+    if (!el) return false
 
+    return el.offsetHeight < el.scrollHeight
+  }
+
+  showMoreDescription () {
     this.completeDescriptionShown = true
   }
 
@@ -46,51 +43,13 @@ export class VideoDescriptionComponent implements OnChanges {
     this.completeDescriptionShown = false
   }
 
-  loadCompleteDescription () {
-    this.descriptionLoading = true
-
-    this.videoService.loadCompleteDescription(this.video.descriptionPath)
-        .subscribe({
-          next: description => {
-            this.completeDescriptionShown = true
-            this.descriptionLoading = false
-
-            this.video.description = description
-
-            this.setVideoDescriptionHTML()
-              .catch(err => logger.error(err))
-          },
-
-          error: err => {
-            this.descriptionLoading = false
-            this.notifier.error(err.message)
-          }
-        })
-  }
-
   onTimestampClicked (timestamp: number) {
     this.timestampClicked.emit(timestamp)
   }
 
-  getHTMLDescription () {
-    if (this.completeDescriptionShown) {
-      return this.videoHTMLDescription
-    }
-
-    return this.videoHTMLTruncatedDescription
-  }
-
   private async setVideoDescriptionHTML () {
-    {
-      const html = await this.markdownService.textMarkdownToHTML({ markdown: this.video.description })
+    const html = await this.markdownService.textMarkdownToHTML({ markdown: this.video.description })
 
-      this.videoHTMLDescription = this.markdownService.processVideoTimestamps(this.video.shortUUID, html)
-    }
-
-    {
-      const html = await this.markdownService.textMarkdownToHTML({ markdown: this.video.truncatedDescription })
-
-      this.videoHTMLTruncatedDescription = this.markdownService.processVideoTimestamps(this.video.shortUUID, html)
-    }
+    this.videoHTMLDescription = this.markdownService.processVideoTimestamps(this.video.shortUUID, html)
   }
 }

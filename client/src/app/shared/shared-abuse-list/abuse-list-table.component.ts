@@ -1,5 +1,4 @@
 import * as debug from 'debug'
-import truncate from 'lodash-es/truncate'
 import { SortMeta } from 'primeng/api'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -211,11 +210,9 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
 
           if (abuse.comment) {
             if (abuse.comment.deleted) {
-              abuse.truncatedCommentHtml = abuse.commentHtml = $localize`Deleted comment`
+              abuse.commentHTML = $localize`Deleted comment`
             } else {
-              const truncated = truncate(abuse.comment.text, { length: 100 })
-              abuse.truncatedCommentHtml = await this.markdownRenderer.textMarkdownToHTML({ markdown: truncated, withHtml: true })
-              abuse.commentHtml = await this.markdownRenderer.textMarkdownToHTML({ markdown: abuse.comment.text, withHtml: true })
+              abuse.commentHTML = await this.markdownRenderer.textMarkdownToHTML({ markdown: abuse.comment.text, withHtml: true })
             }
           }
 
