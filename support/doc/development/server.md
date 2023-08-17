@@ -20,10 +20,10 @@ Some of these may be optional (for example your new endpoint may not need to sen
    - Check new configuration keys are set in `server/server/initializers/checker-before-init.ts`
    - You can also ensure configuration consistency in `server/server/initializers/checker-after-init.ts`
    - If you want your configuration to be available in the client:
-     + Add your field in `packages/models/server/server/server-config.model.ts`
+     + Add your field in `packages/models/src/server/server/server-config.model.ts`
      + Update `server/server/lib/server-config-manager.ts` to include your new configuration
    - If you want your configuration to be updatable by the web admin in the client:
-     + Add your field in `packages/models/server/server/custom-config.model.ts`
+     + Add your field in `packages/models/src/server/server/custom-config.model.ts`
      + Add the configuration to the config object in the `server/server/controllers/api/config.ts` controller
  * Controllers:
    - Create the controller file and fill it with your REST API routes
@@ -57,7 +57,7 @@ Some of these may be optional (for example your new endpoint may not need to sen
        * Create the migration file in `initializers/migrations` using Sequelize Query Interface (`.addColumn`, `.dropTable`, `.changeColumn`)
        * Update `LAST_MIGRATION_VERSION` in `server/server/initializers/constants.ts`
  * Notifications:
-   - Create the new notification model in `packages/models/users/user-notification.model.ts`
+   - Create the new notification model in `packages/models/src/users/user-notification.model.ts`
    - Create the notification logic in `server/server/lib/notifier/shared`:
      + Email subject has a common prefix (defined by the admin in PeerTube configuration)
    - Add your notification to `server/server/lib/notifier/notifier.ts`
@@ -66,14 +66,14 @@ Some of these may be optional (for example your new endpoint may not need to sen
      + The template usually extends `../common/grettings` that already says "Hi" and "Cheers". You just have to write the title and the content blocks that will be inserted in the appropriate places in the HTML template
    - If you need to associate a new table with `userNotification`:
      + Associate the new table in `UserNotificationModel` (don't forget the index)
-     + Add the object property in the API model definition (`packages/models/users/user-notification.model.ts`)
+     + Add the object property in the API model definition (`packages/models/src/users/user-notification.model.ts`)
      + Add the object in `UserNotificationModel.toFormattedJSON`
      + Handle this new notification type in client (`UserNotificationsComponent`)
      + Handle the new object property in client model (`UserNotification`)
  * Tests:
    - Create your command class in `packages/server-commands/` that will wrap HTTP requests to your new endpoint
    - Add your command file in `index.ts` of current directory
-   - Instantiate your command class in `packages/server-commands/server/server/server.ts`
+   - Instantiate your command class in `packages/server-commands/src/server/server.ts`
    - Create your test file in `server/server/tests/api/check-params` to test middleware validators/authentification/user rights (offensive tests)
    - Add it to `server/server/tests/api/check-params/index.ts`
    - Create your test file in `server/server/tests/api` to test your new endpoints

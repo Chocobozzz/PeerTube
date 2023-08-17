@@ -387,7 +387,7 @@ function register (...) {
       displayName: 'User display name',
 
       // Custom admin flags (bypass video auto moderation etc.)
-      // https://github.com/Chocobozzz/PeerTube/blob/develop/packages/models/users/user-flag.model.ts
+      // https://github.com/Chocobozzz/PeerTube/blob/develop/packages/models/src/users/user-flag.model.ts
       // PeerTube >= 5.1
       adminFlags: 0,
       // Quota in bytes
@@ -1032,7 +1032,7 @@ If you want to translate strings of your plugin (like labels of your registered 
 }
 ```
 
-The key should be one of the locales defined in [i18n.ts](https://github.com/Chocobozzz/PeerTube/blob/develop/packages/models/i18n/i18n.ts).
+The key should be one of the locales defined in [i18n.ts](https://github.com/Chocobozzz/PeerTube/blob/develop/packages/core-utils/src/i18n/i18n.ts).
 
 Translation files are just objects, with the english sentence as the key and the translation as the value.
 `fr.json` could contain for example:
