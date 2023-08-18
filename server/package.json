@@ -5,7 +5,10 @@
   "files": [ "dist" ],
   "type": "module",
   "exports": {
-    "./*": "./dist/*"
+    "./*": {
+      "peertube:tsx": "./*",
+      "default": "./dist/*"
+    }
   },
   "devDependencies": {},
   "dependencies": {}
