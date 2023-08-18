@@ -6,7 +6,8 @@
     "rootDir": "src",
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
     "paths": {
-      "@tests/*": [ "src/*" ]
+      "@tests/*": [ "src/*" ],
+      "@server/*": [ "../../server/server/*" ]
     }
   },
   "references": [
