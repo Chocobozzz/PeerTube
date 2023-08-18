@@ -19,15 +19,4 @@
 
     font-weight: $font-semibold;
   }
-
-  .reset-button {
-    @include peertube-button;
-    @include grey-button;
-
-    font-size: 80%;
-    margin-left: 5px;
-    line-height: initial;
-    padding: 2px 5px;
-    height: auto;
-  }
 }

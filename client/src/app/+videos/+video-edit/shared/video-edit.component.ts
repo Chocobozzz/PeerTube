@@ -264,6 +264,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     if (this.schedulerInterval) clearInterval(this.schedulerInterval)
   }
 
+  // ---------------------------------------------------------------------------
+
   getExistingCaptions () {
     return this.videoCaptions
                .filter(c => c.action !== 'REMOVE')
@@ -312,6 +314,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     modalRef.componentInstance.captionEdited.subscribe(this.onCaptionEdited.bind(this))
   }
 
+  // ---------------------------------------------------------------------------
+
   isSaveReplayAllowed () {
     return this.serverConfig.live.allowReplay
   }
@@ -327,6 +331,18 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   isLatencyModeEnabled () {
     return this.serverConfig.live.latencySetting.enabled
   }
+
+  hasPublicationDate () {
+    return !!this.form.value['originallyPublishedAt']
+  }
+
+  // ---------------------------------------------------------------------------
+
+  resetField (name: string) {
+    this.form.patchValue({ [name]: null })
+  }
+
+  // ---------------------------------------------------------------------------
 
   isPluginFieldHidden (pluginField: PluginField) {
     if (typeof pluginField.commonOptions.hidden !== 'function') return false

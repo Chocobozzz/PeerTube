@@ -49,7 +49,32 @@
   margin-top: 10px;
 }
 
-label+.form-group-description {
+// Useful with a "reset" button
+.label-container {
+  display: flex;
+  white-space: nowrap;
+  align-items: baseline;
+}
+
+label + .form-group-description,
+.label-container + .form-group-description {
   margin-bottom: 10px;
   margin-top: 0;
 }
+
+.reset-button {
+  @include peertube-button;
+  @include grey-button;
+
+  height: auto;
+
+  &.reset-button-small {
+    font-size: 80%;
+    padding: 2px 5px;
+    margin: 0 0.25rem;
+    height: fit-content;
+    line-height: initial;
+  }
+}
+
+

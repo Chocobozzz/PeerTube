@@ -34,27 +34,3 @@ input[type=submit] {
 .submit-button {
   text-align: end;
 }
-
-.reset-button {
-  @include peertube-button;
-  @include margin-right(1rem);
-
-  font-weight: $font-semibold;
-  display: inline-block;
-  padding: 0 10px;
-  white-space: nowrap;
-  background: transparent;
-}
-
-.reset-button-small {
-  font-size: 80%;
-  height: unset;
-  line-height: unset;
-  margin: unset;
-  margin-bottom: 0.5rem;
-}
-
-.label-container {
-  display: flex;
-  white-space: nowrap;
-}

@@ -86,8 +86,10 @@ async function updateVideo (req: express.Request, res: express.Response) {
         if (videoInfoToUpdate[key] !== undefined) video.set(key, videoInfoToUpdate[key])
       }
 
-      if (videoInfoToUpdate.originallyPublishedAt !== undefined && videoInfoToUpdate.originallyPublishedAt !== null) {
-        video.originallyPublishedAt = new Date(videoInfoToUpdate.originallyPublishedAt)
+      if (videoInfoToUpdate.originallyPublishedAt !== undefined) {
+        video.originallyPublishedAt = videoInfoToUpdate.originallyPublishedAt
+          ? new Date(videoInfoToUpdate.originallyPublishedAt)
+          : null
       }
 
       // Privacy update?

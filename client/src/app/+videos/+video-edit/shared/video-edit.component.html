@@ -365,14 +365,18 @@
             </div>
 
             <div class="form-group originally-published-at">
-              <label i18n for="originallyPublishedAt">Original publication date</label>
-              <my-help>
-                <ng-template ptTemplate="preHtml">
-                  <ng-container i18n>
-                    This is the date when the content was originally published (e.g. the release date for a film)
-                  </ng-container>
-                </ng-template>
-              </my-help>
+              <div class="label-container">
+                <label i18n for="originallyPublishedAt">Original publication date</label>
+
+                <button i18n class="reset-button reset-button-small" (click)="resetField('originallyPublishedAt')" *ngIf="hasPublicationDate()">
+                  Reset
+                </button>
+              </div>
+
+              <div class="form-group-description" i18n>
+                This is the date when the content was originally published (e.g. the release date for a film)
+              </div>
+
               <p-calendar
                 id="originallyPublishedAt" formControlName="originallyPublishedAt" [dateFormat]="calendarDateFormat" [firstDayOfWeek]="0"
                 [showTime]="true" [hideOnDateTimeSelect]="true" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="myYearRange"
