@@ -2,9 +2,7 @@
   [value]="abuses" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
-  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
-  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} reports"
-  [expandedRowKeys]="expandedRows"
+  [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()" [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="caption">
     <div class="caption">

@@ -7,8 +7,7 @@
   [value]="blockedAccounts" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords"
   [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions" [first]="pagination.start"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
-  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
-  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} muted accounts"
+  [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
 >
   <ng-template pTemplate="caption">
     <div class="caption">

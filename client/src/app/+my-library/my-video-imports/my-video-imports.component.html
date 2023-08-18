@@ -17,8 +17,7 @@
 <p-table
   [value]="videoImports" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" dataKey="id"
-  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
-  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} imports"
+  [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
   [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="header">

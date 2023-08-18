@@ -82,6 +82,10 @@ export abstract class RestTable <T = unknown> {
     return this.selectedRows.length !== 0
   }
 
+  getPaginationTemplate () {
+    return $localize`{first} - {last} of {totalRecords}`
+  }
+
   protected abstract reloadDataInternal (): void
 
   protected reloadData () {

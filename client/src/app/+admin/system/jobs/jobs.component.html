@@ -35,9 +35,7 @@
   [value]="jobs" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order"
   (onLazyLoad)="loadLazy($event)" dataKey="uniqId" [first]="pagination.start" [tableStyle]="{'table-layout':'auto'}"
-  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
-  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} jobs"
-  [expandedRowKeys]="expandedRows"
+  [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()" [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="header">
     <tr>

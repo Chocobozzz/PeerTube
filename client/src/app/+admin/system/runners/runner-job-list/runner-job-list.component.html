@@ -14,8 +14,7 @@
   [value]="runnerJobs" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order"
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
-  [(selection)]="selectedRows" [showCurrentPageReport]="true" i18n-currentPageReportTemplate
-  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} runner jobs"
+  [(selection)]="selectedRows" [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
   [expandedRowKeys]="expandedRows" dataKey="uuid"
 >
   <ng-template pTemplate="header">

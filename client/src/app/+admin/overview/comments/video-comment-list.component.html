@@ -11,8 +11,7 @@
   [value]="comments" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id"
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
-  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
-  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} comments"
+  [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
   [expandedRowKeys]="expandedRows" [(selection)]="selectedRows"
 >
   <ng-template pTemplate="caption">
