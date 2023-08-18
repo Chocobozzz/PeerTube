@@ -197,7 +197,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
 
     if (videoLive.saveReplay) {
       const replaySettings = new VideoLiveReplaySettingModel({
-        privacy: videoInfo.replaySettings.privacy
+        privacy: videoInfo.replaySettings.privacy || videoCreated.privacy
       })
       await replaySettings.save(sequelizeOptions)
 
