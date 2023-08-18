@@ -16,6 +16,7 @@ import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoShareModel } from '@server/models/video/video-share.js'
 import { VideoModel } from '@server/models/video/video.js'
+import { MActorAccount } from '@server/types/models/index.js'
 
 run()
   .then(() => process.exit(0))
@@ -30,7 +31,7 @@ async function run () {
   const serverAccount = await getServerActor()
 
   {
-    const res = await ActorFollowModel.listAcceptedFollowingUrlsForApi([ serverAccount.id ], undefined)
+    const res = await ActorFollowModel.listAcceptedFollowingUrlsForApi([ serverAccount.id ], undefined, 0, 1)
     const hasFollowing = res.total > 0
 
     if (hasFollowing === true) {
@@ -40,7 +41,10 @@ async function run () {
 
   console.log('Updating actors.')
 
-  const actors: ActorModel[] = await ActorModel.unscoped().findAll({
+  const actors: MActorAccount[] = await ActorModel.unscoped().findAll({
+    where: {
+      serverId: null
+    },
     include: [
       {
         model: VideoChannelModel.unscoped(),
@@ -53,8 +57,6 @@ async function run () {
     ]
   })
   for (const actor of actors) {
-    if (actor.isOwned() === false) continue
-
     console.log('Updating actor ' + actor.url)
 
     const newUrl = actor.Account
@@ -74,11 +76,18 @@ async function run () {
   console.log('Updating video shares.')
 
   const videoShares: VideoShareModel[] = await VideoShareModel.findAll({
-    include: [ VideoModel.unscoped(), ActorModel.unscoped() ]
+    include: [
+      {
+        model: VideoModel.unscoped(),
+        where: {
+          remote: false
+        },
+        required: true
+      },
+      ActorModel.unscoped()
+    ]
   })
   for (const videoShare of videoShares) {
-    if (videoShare.Video.isOwned() === false) continue
-
     console.log('Updating video share ' + videoShare.url)
 
     videoShare.url = getLocalVideoAnnounceActivityPubUrl(videoShare.Actor, videoShare.Video)
@@ -93,17 +102,20 @@ async function run () {
       },
       {
         model: AccountModel.unscoped(),
+        required: true,
         include: [
           {
-            model: ActorModel.unscoped()
+            model: ActorModel.unscoped(),
+            where: {
+              serverId: null
+            },
+            required: true
           }
         ]
       }
     ]
   })
   for (const comment of videoComments) {
-    if (comment.isOwned() === false) continue
-
     console.log('Updating comment ' + comment.url)
 
     comment.url = getLocalVideoCommentActivityPubUrl(comment.Video, comment)
