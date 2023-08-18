@@ -12,7 +12,7 @@ export class ButtonComponent implements OnInit, OnChanges {
   @Input() label = ''
   @Input() className = 'grey-button'
   @Input() icon: GlobalIconName = undefined
-  @Input() routerLink: string[] | string
+  @Input() ptRouterLink: string[] | string
   @Input() title: string = undefined
   @Input() loading = false
   @Input() disabled = false

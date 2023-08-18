@@ -6,14 +6,14 @@ import { Component, Input, OnInit } from '@angular/core'
     <my-button
       icon="edit" className="grey-button-link"
       [label]="label" [title]="title" [responsiveLabel]="responsiveLabel"
-      [routerLink]="routerLink"
+      [ptRouterLink]="ptRouterLink"
     ></my-button>
   `
 })
 export class EditButtonComponent implements OnInit {
   @Input() label: string
   @Input() title: string
-  @Input() routerLink: string[] | string = []
+  @Input() ptRouterLink: string[] | string = []
   @Input() responsiveLabel = false
 
   ngOnInit () {

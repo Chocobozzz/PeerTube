@@ -50,7 +50,7 @@
       </div>
 
       <div class="video-channel-buttons">
-        <my-edit-button label [routerLink]="[ '/manage/update', videoChannel.nameWithHost ]"></my-edit-button>
+        <my-edit-button label [ptRouterLink]="[ '/manage/update', videoChannel.nameWithHost ]"></my-edit-button>
         <my-delete-button label (click)="deleteVideoChannel(videoChannel)"></my-delete-button>
       </div>
 

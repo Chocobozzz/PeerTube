@@ -54,7 +54,7 @@
 
   <ng-template ptTemplate="rowButtons" let-video>
     <div class="action-button">
-      <my-edit-button label [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
+      <my-edit-button label [ptRouterLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
 
       <my-video-actions-dropdown
         [video]="video" [displayOptions]="videoDropdownDisplayOptions" [moreActions]="moreVideoActions"

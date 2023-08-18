@@ -9,7 +9,7 @@
     <my-plugin-card [plugin]="plugin" [version]="plugin.version" [pluginType]="pluginType">
       <div ngProjectAs="buttons">
         <my-edit-button
-          *ngIf="!isTheme(plugin)" [routerLink]="getShowRouterLink(plugin)" label="Settings" i18n-label
+          *ngIf="!isTheme(plugin)" [ptRouterLink]="getShowRouterLink(plugin)" label="Settings" i18n-label
           [responsiveLabel]="true"
         ></my-edit-button>
 

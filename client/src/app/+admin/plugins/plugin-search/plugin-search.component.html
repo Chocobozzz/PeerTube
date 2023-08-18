@@ -41,7 +41,7 @@
 
       <div ngProjectAs="buttons">
         <my-edit-button
-          *ngIf="plugin.installed === true && !isThemeSearch()" [routerLink]="getShowRouterLink(plugin)"
+          *ngIf="plugin.installed === true && !isThemeSearch()" [ptRouterLink]="getShowRouterLink(plugin)"
           label="Settings" i18n-label [responsiveLabel]="true"
         ></my-edit-button>
 
