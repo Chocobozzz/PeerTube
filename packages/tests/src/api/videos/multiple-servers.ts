@@ -678,6 +678,21 @@ describe('Test multiple servers', function () {
       }
     })
 
+    it('Should be able to remove originallyPublishedAt attribute', async function () {
+      this.timeout(60000)
+
+      const attributes = { originallyPublishedAt: null }
+      await servers[2].videos.update({ id: toRemove[0].id, attributes })
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: toRemove[0].uuid })
+
+        expect(video.originallyPublishedAt).to.not.exist
+      }
+    })
+
     it('Should only update thumbnail and update updatedAt attribute', async function () {
       this.timeout(30000)
 
