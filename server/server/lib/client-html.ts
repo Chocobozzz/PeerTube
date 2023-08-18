@@ -406,7 +406,7 @@ class ClientHtml {
   }
 
   private static async addAsyncPluginCSS (htmlStringPage: string) {
-    if (!pathExists(PLUGIN_GLOBAL_CSS_PATH)) {
+    if (!await pathExists(PLUGIN_GLOBAL_CSS_PATH)) {
       logger.info('Plugin Global CSS file is not available (generation may still be in progress), ignoring it.')
       return htmlStringPage
     }
