@@ -38,6 +38,11 @@ export type PeerTubePlayerContructorOptions = {
   language: string
 
   pluginsManager: PluginsManager
+
+  autoPlayerRatio?: {
+    cssRatioVariable: string
+    cssPlayerPortraitModeVariable: string
+  }
 }
 
 export type PeerTubePlayerLoadOptions = {

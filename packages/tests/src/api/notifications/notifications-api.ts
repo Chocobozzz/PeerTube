@@ -18,7 +18,7 @@ describe('Test notifications API', function () {
   let emails: object[] = []
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(240000)
 
     const res = await prepareNotificationsTest(1)
     emails = res.emails

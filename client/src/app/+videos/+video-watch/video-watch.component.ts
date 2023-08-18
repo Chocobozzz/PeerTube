@@ -623,7 +623,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       peertubeLink: () => false,
 
-      pluginsManager: this.pluginService.getPluginsManager()
+      pluginsManager: this.pluginService.getPluginsManager(),
+
+      autoPlayerRatio: {
+        cssRatioVariable: '--player-ratio',
+        cssPlayerPortraitModeVariable: '--player-portrait-mode'
+      }
     }
   }
 

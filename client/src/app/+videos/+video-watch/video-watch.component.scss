@@ -4,15 +4,8 @@
 @use '_bootstrap-variables';
 @use '_miniature' as *;
 
-$video-height: 66vh;
-
-@function getPlayerHeight ($width) {
-  @return calc(#{$width} / #{$video-watch-player-factor});
-}
-
-@function getPlayerWidth ($height) {
-  @return calc(#{$height} * #{$video-watch-player-factor});
-}
+$video-default-height: 66vh;
+$video-theater-height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
 
 @mixin playlist-below-player {
   width: 100% !important;
@@ -38,20 +31,16 @@ $video-height: 66vh;
 
 .root {
   &.theater-enabled #video-wrapper {
-    $height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
-
     flex-direction: column;
     justify-content: center;
 
     #videojs-wrapper {
       width: 100%;
-      height: $height;
+      height: $video-theater-height;
     }
 
     ::ng-deep .video-js {
-      height: $height;
-      width: 100%;
-      max-width: initial;
+      --player-height: #{$video-theater-height};
     }
 
     my-video-watch-playlist ::ng-deep .playlist {
@@ -65,10 +54,24 @@ $video-height: 66vh;
   display: flex;
   justify-content: center;
 
+  #videojs-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    height: $video-default-height;
+  }
+
   ::ng-deep .video-js {
+    --player-height: #{$video-default-height};
+    --player-portrait-mode: 0;
+    // Default player ratio, redefined by the player to automatically adapt player size
+    --player-ratio: #{math.div(16, 9)};
+
     width: 100%;
-    max-width: getPlayerWidth($video-height);
-    height: $video-height;
+    height: var(--player-height);
+
+    // Can be recalculated by the player depending on video ratio
+    max-width: calc(var(--player-height) * var(--player-ratio));
 
     // VideoJS create an inner video player
     video {
@@ -76,13 +79,6 @@ $video-height: 66vh;
       position: relative !important;
     }
   }
-}
-
-#videojs-wrapper {
-  display: flex;
-  justify-content: center;
-  flex-grow: 1;
-  height: $video-height;
 }
 
 .remote-server-down {
@@ -253,12 +249,16 @@ my-video-comments {
 
 @media screen and (max-width: 600px) {
   #videojs-wrapper {
-    height: getPlayerHeight(100vw) !important;
+    // Reset height
+    height: initial !important;
 
     .remote-server-down,
     ::ng-deep .video-js {
-      width: 100vw;
-      height: getPlayerHeight(100vw) !important;
+      --player-portrait-mode: 1;
+
+      // Can be recalculated by the player depending on video ratio
+      height: calc(100vw / var(--player-ratio)) !important;
+      max-height: $video-theater-height;
     }
   }
 

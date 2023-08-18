@@ -115,6 +115,8 @@ class PeerTubePlugin extends Plugin {
         this.hideFatalError()
       })
     })
+
+    this.initOnRatioChange()
   }
 
   dispose () {
@@ -208,6 +210,25 @@ class PeerTubePlugin extends Plugin {
 
     this.handleStartStopTime()
     this.runUserViewing()
+  }
+
+  private initOnRatioChange () {
+    if (!this.options.autoPlayerRatio) return
+
+    const defaultRatio = getComputedStyle(this.player.el()).getPropertyValue(this.options.autoPlayerRatio.cssRatioVariable)
+
+    this.player.on('video-ratio-changed', (_event, data: { ratio: number }) => {
+      const el = this.player.el() as HTMLElement
+
+      // In portrait screen mode, we allow player with bigger height size than width
+      const portraitMode = getComputedStyle(el).getPropertyValue(this.options.autoPlayerRatio.cssPlayerPortraitModeVariable) === '1'
+
+      const currentRatio = !portraitMode && data.ratio < 1
+        ? defaultRatio
+        : data.ratio
+
+      el.style.setProperty('--player-ratio', currentRatio + '')
+    })
   }
 
   // ---------------------------------------------------------------------------

@@ -364,7 +364,9 @@ export class PeerTubePlayer {
         videoUUID: () => this.currentLoadOptions.videoUUID,
         subtitle: () => this.currentLoadOptions.subtitle,
 
-        poster: () => this.currentLoadOptions.poster
+        poster: () => this.currentLoadOptions.poster,
+
+        autoPlayerRatio: this.options.autoPlayerRatio
       },
       metrics: {
         mode: () => this.currentLoadOptions.mode,

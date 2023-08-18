@@ -140,10 +140,10 @@ class MetricsPlugin extends Plugin {
 
   private trackBytes () {
     this.player.on('network-info', (_event, data: PlayerNetworkInfo) => {
-      this.downloadedBytesHTTP += Math.round(data.http.downloaded - (this.lastPlayerNetworkInfo?.http.downloaded || 0))
-      this.downloadedBytesP2P += Math.round((data.p2p?.downloaded || 0) - (this.lastPlayerNetworkInfo?.p2p?.downloaded || 0))
+      this.downloadedBytesHTTP += Math.max(Math.round(data.http.downloaded - (this.lastPlayerNetworkInfo?.http.downloaded || 0)), 0)
+      this.downloadedBytesP2P += Math.max(Math.round((data.p2p?.downloaded || 0) - (this.lastPlayerNetworkInfo?.p2p?.downloaded || 0)), 0)
 
-      this.uploadedBytesP2P += Math.round((data.p2p?.uploaded || 0) - (this.lastPlayerNetworkInfo?.p2p?.uploaded || 0))
+      this.uploadedBytesP2P += Math.max(Math.round((data.p2p?.uploaded || 0) - (this.lastPlayerNetworkInfo?.p2p?.uploaded || 0)), 0)
 
       this.p2pPeers = data.p2p?.peersP2POnly
       this.p2pEnabled = !!data.p2p

@@ -104,6 +104,11 @@ type VideoJSStoryboard = {
 }
 
 type PeerTubePluginOptions = {
+  autoPlayerRatio: {
+    cssRatioVariable: string
+    cssPlayerPortraitModeVariable: string
+  }
+
   hasAutoplay: () => videojs.Autoplay
 
   videoViewUrl: () => string

@@ -19,6 +19,7 @@ class WebVideoPlugin extends Plugin {
 
   private onErrorHandler: () => void
   private onPlayHandler: () => void
+  private onLoadedMetadata: () => void
 
   constructor (player: videojs.Player, options?: WebVideoPluginOptions) {
     super(player, options)
@@ -27,6 +28,12 @@ class WebVideoPlugin extends Plugin {
     this.videoFileToken = options.videoFileToken
 
     this.updateVideoFile({ videoFile: this.pickAverageVideoFile(), isUserResolutionChange: false })
+
+    this.onLoadedMetadata = () => {
+      player.trigger('video-ratio-changed', { ratio: this.player.videoWidth() / this.player.videoHeight() })
+    }
+
+    player.on('loadedmetadata', this.onLoadedMetadata)
 
     player.ready(() => {
       this.buildQualities()
@@ -43,6 +50,7 @@ class WebVideoPlugin extends Plugin {
   dispose () {
     clearInterval(this.networkInfoInterval)
 
+    if (this.onLoadedMetadata) this.player.off('loadedmetadata', this.onLoadedMetadata)
     if (this.onErrorHandler) this.player.off('error', this.onErrorHandler)
     if (this.onPlayHandler) this.player.off('canplay', this.onPlayHandler)
 
