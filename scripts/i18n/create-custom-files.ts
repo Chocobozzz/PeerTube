@@ -15,7 +15,7 @@ import {
   VIDEO_PLAYLIST_TYPES,
   VIDEO_PRIVACIES,
   VIDEO_STATES
-} from '../../server/initializers/constants.js'
+} from '@peertube/peertube-server/server/initializers/constants.js'
 
 const videojs = readJsonSync(join(root(), 'client', 'src', 'locale', 'videojs.en-US.json'))
 const playerKeys = {

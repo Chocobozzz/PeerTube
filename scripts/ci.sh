@@ -144,7 +144,5 @@ elif [ "$1" = "lint" ]; then
 
     npm run swagger-cli -- validate support/doc/api/openapi.yaml
 
-    ( cd client
-      npm run lint
-    )
+    ( cd client && npm run lint )
 fi

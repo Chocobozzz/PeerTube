@@ -4,6 +4,7 @@ import { Subject } from 'rxjs'
 import { Component } from '@angular/core'
 import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, ScreenService } from '@app/core'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
+import { formatICU } from '@app/helpers'
 
 @Component({
   templateUrl: './my-video-channels.component.html',
@@ -52,9 +53,13 @@ export class MyVideoChannelsComponent {
 
   async deleteVideoChannel (videoChannel: VideoChannel) {
     const res = await this.confirmService.confirmWithExpectedInput(
-      $localize`Do you really want to delete ${videoChannel.displayName}?
-It will delete ${videoChannel.videosCount} videos uploaded in this channel, and you will not be able to create another
-channel or account with the same name (${videoChannel.name})!`,
+      $localize`Do you really want to delete ${videoChannel.displayName}?` +
+      `<br />` +
+      formatICU(
+        // eslint-disable-next-line max-len
+        $localize`It will delete {count, plural, =1 {1 video} other {{count} videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (${videoChannel.name})!`,
+        { count: videoChannel.videosCount }
+      ),
 
       $localize`Please type the name of the video channel (${videoChannel.name}) to confirm`,
 

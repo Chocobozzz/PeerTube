@@ -1,7 +1,10 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "../dist/scripts"
+    "outDir": "../dist/scripts",
+    "paths": {
+      "@server/*": [ "./server/server/*" ]
+    }
   },
   "references": [
     { "path": "../packages/core-utils" },

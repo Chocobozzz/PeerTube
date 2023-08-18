@@ -57,7 +57,7 @@
     "test": "bash ./scripts/test.sh",
     "generate-cli-doc": "bash ./scripts/generate-cli-doc.sh",
     "generate-types-package": "tsx --conditions=peertube:tsx ./packages/types-generator/generate-package.ts",
-    "i18n:create-custom-files": "tsx --conditions=peertube:tsx ./scripts/i18n/create-custom-files.ts",
+    "i18n:create-custom-files": "tsx --tsconfig ./scripts/tsconfig.json --conditions=peertube:tsx ./scripts/i18n/create-custom-files.ts",
     "benchmark-server": "tsx --conditions=peertube:tsx ./scripts/benchmark.ts",
     "client:build-stats": "tsx --conditions=peertube:tsx ./scripts/client-build-stats.ts",
     "generate-code-contributors": "tsx --conditions=peertube:tsx ./scripts/generate-code-contributors.ts",
