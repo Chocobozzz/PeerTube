@@ -1,4 +1,5 @@
 import * as esbuild from 'esbuild'
+import { readFileSync } from 'fs'
 
 const packageJSON = JSON.parse(readFileSync(new URL('../package.json', import.meta.url)))
 
