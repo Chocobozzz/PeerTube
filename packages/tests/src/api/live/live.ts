@@ -683,9 +683,6 @@ describe('Test live', function () {
         channelId: servers[0].store.channel.id,
         privacy: VideoPrivacy.PUBLIC,
         saveReplay: options.saveReplay,
-        replaySettings: options.saveReplay
-          ? { privacy: VideoPrivacy.PUBLIC }
-          : undefined,
         permanentLive: options.permanent
       }
 
