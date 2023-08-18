@@ -132,7 +132,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit, OnDest
     if (this.isUpdatingVideo) {
       return {
         canDeactivate: false,
-        text: $localize`Your video is currenctly being updated. If you leave, your changes will be lost.`
+        text: $localize`Your video is currently being updated. If you leave, your changes will be lost.`
       }
     }
 
