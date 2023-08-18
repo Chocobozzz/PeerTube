@@ -27,7 +27,7 @@ wellKnownRouter.get('/.well-known/security.txt',
   cacheRoute(ROUTE_CACHE_LIFETIME.SECURITYTXT),
   (_, res: express.Response) => {
     res.type('text/plain')
-    return res.send(CONFIG.INSTANCE.SECURITYTXT + CONFIG.INSTANCE.SECURITYTXT_CONTACT)
+    return res.send(CONFIG.INSTANCE.SECURITYTXT)
   }
 )
 

@@ -546,8 +546,7 @@ const CONFIG = {
       get CSS () { return config.get<string>('instance.customizations.css') }
     },
     get ROBOTS () { return config.get<string>('instance.robots') },
-    get SECURITYTXT () { return config.get<string>('instance.securitytxt') },
-    get SECURITYTXT_CONTACT () { return config.get<string>('admin.email') }
+    get SECURITYTXT () { return config.get<string>('instance.securitytxt') }
   },
   SERVICES: {
     TWITTER: {
