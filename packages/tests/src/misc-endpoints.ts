@@ -36,7 +36,7 @@ describe('Test misc endpoints', function () {
         expectedStatus: HttpStatusCode.OK_200
       })
 
-      expect(res.text).to.contain('security issue')
+      expect(res.text).to.contain('SECURITY.md')
     })
 
     it('Should get nodeinfo', async function () {
