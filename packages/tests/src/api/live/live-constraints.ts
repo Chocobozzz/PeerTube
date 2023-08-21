@@ -4,9 +4,7 @@ import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
 import { LiveVideoError, UserVideoQuota, VideoPrivacy } from '@peertube/peertube-models'
 import {
-  cleanupTests,
-  ConfigCommand,
-  createMultipleServers,
+  cleanupTests, createMultipleServers,
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
