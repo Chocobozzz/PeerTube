@@ -6,6 +6,7 @@ import { MarkdownService, RestExtractor, ServerService } from '@app/core'
 import { objectKeysTyped, peertubeTranslate } from '@peertube/peertube-core-utils'
 import { About } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
+import { logger } from '@root-helpers/logger'
 
 export type AboutHTML = Pick<About['instance'],
 'terms' | 'codeOfConduct' | 'moderationInformation' | 'administrator' | 'creationReason' |
@@ -69,11 +70,15 @@ export class InstanceService {
     ]).pipe(
       map(([ languagesArray, translations ]) => {
         return about.instance.languages
-                    .map(l => {
-                      const languageObj = languagesArray.find(la => la.id === l)
+          .map(l => {
+            const languageObj = languagesArray.find(la => la.id === l)
+            if (!languageObj) {
+              logger.error(`Cannot find language ${l} in available languages`)
+              return ''
+            }
 
-                      return peertubeTranslate(languageObj.label, translations)
-                    })
+            return peertubeTranslate(languageObj.label, translations)
+          })
       })
     )
   }
@@ -85,11 +90,15 @@ export class InstanceService {
     ]).pipe(
       map(([ categoriesArray, translations ]) => {
         return about.instance.categories
-                    .map(c => {
-                      const categoryObj = categoriesArray.find(ca => ca.id === c)
+          .map(c => {
+            const categoryObj = categoriesArray.find(ca => ca.id === c)
+            if (!categoryObj) {
+              logger.error(`Cannot find instance category ${c} in available categories`)
+              return ''
+            }
 
-                      return peertubeTranslate(categoryObj.label, translations)
-                    })
+            return peertubeTranslate(categoryObj.label, translations)
+          })
       })
     )
   }
