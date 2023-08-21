@@ -213,7 +213,16 @@ describe('Test live constraints', function () {
           maxDuration: 15,
           transcoding: {
             enabled: true,
-            resolutions: ConfigCommand.getCustomConfigResolutions(true)
+            resolutions: {
+              '144p': true,
+              '240p': true,
+              '360p': false,
+              '480p': false,
+              '720p': true,
+              '1080p': false,
+              '1440p': false,
+              '2160p': false
+            }
           }
         }
       }
@@ -225,7 +234,7 @@ describe('Test live constraints', function () {
     await waitUntilLiveReplacedByReplayOnAllServers(servers, userVideoLiveoId)
     await waitJobs(servers)
 
-    await checkSaveReplay(userVideoLiveoId, [ 720, 480, 360, 240, 144 ])
+    await checkSaveReplay(userVideoLiveoId, [ 720, 240, 144 ])
 
     const session = await servers[0].live.getReplaySession({ videoId: userVideoLiveoId })
     expect(session.error).to.equal(LiveVideoError.DURATION_EXCEEDED)
