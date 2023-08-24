@@ -6,7 +6,7 @@
 
   * **Important** Remove NodeJS 14 support
   * **Important** You must update your nginx configuration to support remote runners: https://github.com/Chocobozzz/PeerTube/blob/develop/support/nginx/peertube#L101
-  * Add `storage.tmp_persistent` directory in configuration file. **You must configure it in your production.yaml**: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L128
+  * Add `storage.tmp_persistent` directory in configuration file. **You must configure it in your production.yaml**: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L148
   * PeerTube requires **Docker Compose >= v2** for Docker compose installation
 
 ### Maintenance
