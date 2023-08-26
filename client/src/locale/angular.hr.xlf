@@ -8122,7 +8122,7 @@
       </trans-unit>
       <trans-unit id="7225855031009203336" datatype="html">
         <source>Your video is currently being updated. If you leave, your changes will be lost.</source>
-        <target state="new">Your video is currently being updated. If you leave, your changes will be lost.</target>
+        <target state="translated">Tvoj se video trenutačno aktualizira. Ako odeš, izgubit ćeš tvoje promjene.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -9308,7 +9308,7 @@
       </trans-unit>
       <trans-unit id="6774469419636010791" datatype="html">
         <source>{first} - {last} of {totalRecords}</source>
-        <target state="new">{first} - {last} of {totalRecords}</target>
+        <target state="translated">{first} – {last} od {totalRecords}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-table.ts</context>
           <context context-type="linenumber">86</context>
@@ -10930,7 +10930,7 @@
       </trans-unit>
       <trans-unit id="945158208982640603" datatype="html">
         <source>(Deleted video)</source>
-        <target state="new">(Deleted video)</target>
+        <target state="translated">(Izbrisani video)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">82</context>
