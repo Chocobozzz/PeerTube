@@ -4,18 +4,28 @@ import { of, Subject, Subscription } from 'rxjs'
 import { catchError, map, switchMap } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { HttpErrorResponse } from '@angular/common/http'
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core'
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, ConfirmService, Notifier, ServerService, UserService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { Video, VideoCaptionEdit, VideoCaptionService, VideoDetails, VideoEdit, VideoService } from '@app/shared/shared-main'
+import {
+  Video,
+  VideoCaptionEdit,
+  VideoCaptionService,
+  VideoChapterService,
+  VideoChaptersEdit,
+  VideoDetails,
+  VideoEdit,
+  VideoService
+} from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { pick, simpleObjectsDeepEqual } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, LiveVideo, LiveVideoUpdate, VideoPrivacy, VideoSource, VideoState } from '@peertube/peertube-models'
 import { hydrateFormFromVideo } from './shared/video-edit-utils'
 import { VideoUploadService } from './shared/video-upload.service'
+import { VideoEditComponent } from './shared/video-edit.component'
 
 const debugLogger = debug('peertube:video-update')
 
@@ -25,6 +35,8 @@ const debugLogger = debug('peertube:video-update')
   templateUrl: './video-update.component.html'
 })
 export class VideoUpdateComponent extends FormReactive implements OnInit, OnDestroy, CanComponentDeactivate {
+  @ViewChild('videoEdit', { static: false }) videoEditComponent: VideoEditComponent
+
   videoEdit: VideoEdit
   videoDetails: VideoDetails
   videoSource: VideoSource
@@ -50,6 +62,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit, OnDest
   private uploadServiceSubscription: Subscription
   private updateSubcription: Subscription
 
+  private chaptersEdit = new VideoChaptersEdit()
+
   constructor (
     protected formReactiveService: FormReactiveService,
     private route: ActivatedRoute,
@@ -58,6 +72,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit, OnDest
     private videoService: VideoService,
     private loadingBar: LoadingBarService,
     private videoCaptionService: VideoCaptionService,
+    private videoChapterService: VideoChapterService,
     private server: ServerService,
     private liveVideoService: LiveVideoService,
     private videoUploadService: VideoUploadService,
@@ -84,10 +99,11 @@ export class VideoUpdateComponent extends FormReactive implements OnInit, OnDest
       .subscribe(state => this.onUploadVideoOngoing(state))
 
     const { videoData } = this.route.snapshot.data
-    const { video, videoChannels, videoCaptions, videoSource, liveVideo, videoPassword } = videoData
+    const { video, videoChannels, videoCaptions, videoChapters, videoSource, liveVideo, videoPassword } = videoData
 
     this.videoDetails = video
     this.videoEdit = new VideoEdit(this.videoDetails, videoPassword)
+    this.chaptersEdit.loadFromAPI(videoChapters)
 
     this.userVideoChannels = videoChannels
     this.videoCaptions = videoCaptions
@@ -105,6 +121,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit, OnDest
 
   onFormBuilt () {
     hydrateFormFromVideo(this.form, this.videoEdit, true)
+
+    setTimeout(() => this.videoEditComponent.patchChapters(this.chaptersEdit))
 
     if (this.liveVideo) {
       this.form.patchValue({
@@ -172,6 +190,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit, OnDest
     if (!await this.checkAndConfirmVideoFileReplacement()) return
 
     this.videoEdit.patch(this.form.value)
+    this.chaptersEdit.patch(this.form.value)
 
     this.abortUpdateIfNeeded()
 
@@ -180,10 +199,12 @@ export class VideoUpdateComponent extends FormReactive implements OnInit, OnDest
 
     this.updateSubcription = this.videoReplacementUploadedSubject.pipe(
       switchMap(() => this.videoService.updateVideo(this.videoEdit)),
+      switchMap(() => this.videoCaptionService.updateCaptions(this.videoEdit.uuid, this.videoCaptions)),
+      switchMap(() => {
+        if (this.liveVideo) return of(true)
 
-      // Then update captions
-      switchMap(() => this.videoCaptionService.updateCaptions(this.videoEdit.id, this.videoCaptions)),
-
+        return this.videoChapterService.updateChapters(this.videoEdit.uuid, this.chaptersEdit)
+      }),
       switchMap(() => {
         if (!this.liveVideo) return of(undefined)
 

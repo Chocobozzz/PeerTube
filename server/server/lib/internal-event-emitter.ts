@@ -1,4 +1,4 @@
-import { MChannel, MVideo } from '@server/types/models/index.js'
+import { MChannel, MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { EventEmitter } from 'events'
 
 export interface PeerTubeInternalEvents {
@@ -9,6 +9,8 @@ export interface PeerTubeInternalEvents {
   'channel-created': (options: { channel: MChannel }) => void
   'channel-updated': (options: { channel: MChannel }) => void
   'channel-deleted': (options: { channel: MChannel }) => void
+
+  'chapters-updated': (options: { video: MVideoImmutable }) => void
 }
 
 declare interface InternalEventEmitter {

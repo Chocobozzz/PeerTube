@@ -3,6 +3,7 @@ const FIXTURE_URLS = {
   peertube_short: 'https://peertube2.cpy.re/w/3fbif9S3WmtTP8gGsC5HBd',
 
   youtube: 'https://www.youtube.com/watch?v=msX3jv1XdvM',
+  youtubeChapters: 'https://www.youtube.com/watch?v=TL9P-Er7ils',
 
   /**
    * The video is used to check format-selection correctness wrt. HDR,
@@ -25,6 +26,8 @@ const FIXTURE_URLS = {
   badVideo: 'https://download.cpy.re/peertube/bad_video.mp4',
   goodVideo: 'https://download.cpy.re/peertube/good_video.mp4',
   goodVideo720: 'https://download.cpy.re/peertube/good_video_720.mp4',
+
+  chatersVideo: 'https://download.cpy.re/peertube/video_chapters.mp4',
 
   file4K: 'https://download.cpy.re/peertube/4k_file.txt'
 }

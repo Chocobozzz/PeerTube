@@ -1,4 +1,4 @@
-import { LiveVideoLatencyModeType, VideoFile } from '@peertube/peertube-models'
+import { LiveVideoLatencyModeType, VideoChapter, VideoFile } from '@peertube/peertube-models'
 import { PluginsManager } from '@root-helpers/plugins-manager'
 import { PeerTubeDockPluginOptions } from '../shared/dock/peertube-dock-plugin'
 import { PlaylistPluginOptions, VideoJSCaption, VideoJSStoryboard } from './peertube-videojs-typings'
@@ -68,6 +68,7 @@ export type PeerTubePlayerLoadOptions = {
   }
 
   videoCaptions: VideoJSCaption[]
+  videoChapters: VideoChapter[]
   storyboard: VideoJSStoryboard
 
   videoUUID: string

@@ -3,7 +3,7 @@ import { PickWith } from '@peertube/peertube-typescript-utils'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist.js'
 import { MAccount, MAccountDefault, MAccountSummary, MAccountSummaryFormattable } from '../account/index.js'
 import { MThumbnail } from './thumbnail.js'
-import { MChannelDefault, MChannelSummary, MChannelSummaryFormattable, MChannelUrl } from './video-channels.js'
+import { MChannelDefault, MChannelSummary, MChannelSummaryFormattable, MChannelUrl } from './video-channel.js'
 
 type Use<K extends keyof VideoPlaylistModel, M> = PickWith<VideoPlaylistModel, K, M>
 

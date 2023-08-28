@@ -1,6 +1,6 @@
 import { Component, ElementRef, forwardRef, Input, ViewChild } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { Notifier } from '@app/core'
+import { FormReactiveErrors } from './form-reactive.service'
 
 @Component({
   selector: 'my-input-text',
@@ -26,9 +26,7 @@ export class InputTextComponent implements ControlValueAccessor {
   @Input() withCopy = false
   @Input() readonly = false
   @Input() show = false
-  @Input() formError: string
-
-  constructor (private notifier: Notifier) { }
+  @Input() formError: string | FormReactiveErrors | FormReactiveErrors[]
 
   get inputType () {
     return this.show

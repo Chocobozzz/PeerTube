@@ -16,7 +16,7 @@ import {
   MChannelFormattable,
   MChannelHostOnly,
   MChannelUserId
-} from './video-channels.js'
+} from './video-channel.js'
 import { MVideoFile, MVideoFileRedundanciesAll, MVideoFileRedundanciesOpt } from './video-file.js'
 import { MVideoLive } from './video-live.js'
 import {

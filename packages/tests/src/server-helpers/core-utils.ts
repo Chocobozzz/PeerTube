@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import snakeCase from 'lodash-es/snakeCase.js'
 import validator from 'validator'
-import { getAverageTheoreticalBitrate, getMaxTheoreticalBitrate } from '@peertube/peertube-core-utils'
+import { getAverageTheoreticalBitrate, getMaxTheoreticalBitrate, parseChapters } from '@peertube/peertube-core-utils'
 import { VideoResolution } from '@peertube/peertube-models'
 import { objectConverter, parseBytes, parseDurationToMs, parseSemVersion } from '@peertube/peertube-server/server/helpers/core-utils.js'
 
@@ -197,5 +197,30 @@ describe('Parse semantic version string', function () {
     expect(actual.major).to.equal(4)
     expect(actual.minor).to.equal(4)
     expect(actual.patch).to.equal(0)
+  })
+})
+
+describe('Extract chapters', function () {
+
+  it('Should not extract chapters', function () {
+    expect(parseChapters('my super description\nno?')).to.deep.equal([])
+    expect(parseChapters('m00:00 super description\nno?')).to.deep.equal([])
+    expect(parseChapters('00:00super description\nno?')).to.deep.equal([])
+  })
+
+  it('Should extract chapters', function () {
+    expect(parseChapters('00:00 coucou')).to.deep.equal([ { timecode: 0, title: 'coucou' } ])
+    expect(parseChapters('my super description\n\n00:01:30 chapter 1\n00:01:35 chapter 2')).to.deep.equal([
+      { timecode: 90, title: 'chapter 1' },
+      { timecode: 95, title: 'chapter 2' }
+    ])
+    expect(parseChapters('hi\n\n00:01:30 chapter 1\n00:01:35 chapter 2\nhi')).to.deep.equal([
+      { timecode: 90, title: 'chapter 1' },
+      { timecode: 95, title: 'chapter 2' }
+    ])
+    expect(parseChapters('hi\n\n00:01:30 chapter 1\n00:01:35 chapter 2\nhi\n00:01:40 chapter 3')).to.deep.equal([
+      { timecode: 90, title: 'chapter 1' },
+      { timecode: 95, title: 'chapter 2' }
+    ])
   })
 })

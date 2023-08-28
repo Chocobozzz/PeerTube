@@ -36,9 +36,10 @@ export class VideoFetcher {
     }
 
     const captionsPromise = this.loadVideoCaptions({ videoId, videoPassword })
+    const chaptersPromise = this.loadVideoChapters({ videoId, videoPassword })
     const storyboardsPromise = this.loadStoryboards(videoId)
 
-    return { captionsPromise, storyboardsPromise, videoResponse }
+    return { captionsPromise, chaptersPromise, storyboardsPromise, videoResponse }
   }
 
   loadLive (video: VideoDetails) {
@@ -62,6 +63,10 @@ export class VideoFetcher {
 
   private loadVideoCaptions ({ videoId, videoPassword }: { videoId: string, videoPassword?: string }): Promise<Response> {
     return this.http.fetch(this.getVideoUrl(videoId) + '/captions', { optionalAuth: true }, videoPassword)
+  }
+
+  private loadVideoChapters ({ videoId, videoPassword }: { videoId: string, videoPassword?: string }): Promise<Response> {
+    return this.http.fetch(this.getVideoUrl(videoId) + '/chapters', { optionalAuth: true }, videoPassword)
   }
 
   private getVideoUrl (id: string) {

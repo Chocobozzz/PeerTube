@@ -6,6 +6,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { SafeHtml } from '@angular/platform-browser'
 import { MarkdownService, ScreenService } from '@app/core'
 import { Video } from '@peertube/peertube-models'
+import { FormReactiveErrors } from './form-reactive.service'
 
 @Component({
   selector: 'my-markdown-textarea',
@@ -23,7 +24,7 @@ import { Video } from '@peertube/peertube-models'
 export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input() content = ''
 
-  @Input() formError: string
+  @Input() formError: string | FormReactiveErrors | FormReactiveErrors[]
 
   @Input() truncateTo3Lines: boolean
 

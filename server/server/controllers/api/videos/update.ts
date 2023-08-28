@@ -22,6 +22,7 @@ import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist.js'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosUpdateValidator } from '../../../middlewares/index.js'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update.js'
 import { VideoModel } from '../../../models/video/video.js'
+import { replaceChaptersFromDescriptionIfNeeded } from '@server/lib/video-chapters.js'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -67,6 +68,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       // Refresh video since thumbnails to prevent concurrent updates
       const video = await VideoModel.loadFull(videoFromReq.id, t)
 
+      const oldDescription = video.description
       const oldVideoChannel = video.VideoChannel
 
       const keysToUpdate: (keyof VideoUpdate & FilteredModelAttributes<VideoModel>)[] = [
@@ -126,6 +128,15 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
       // Schedule an update in the future?
       await updateSchedule(videoInstanceUpdated, videoInfoToUpdate, t)
+
+      if (oldDescription !== video.description) {
+        await replaceChaptersFromDescriptionIfNeeded({
+          newDescription: videoInstanceUpdated.description,
+          transaction: t,
+          video,
+          oldDescription
+        })
+      }
 
       await autoBlacklistVideoIfNeeded({
         video: videoInstanceUpdated,

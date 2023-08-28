@@ -4,9 +4,17 @@ import { Directive, EventEmitter, OnInit } from '@angular/core'
 import { AuthService, CanComponentDeactivateResult, Notifier, ServerService } from '@app/core'
 import { listUserChannelsForSelect } from '@app/helpers'
 import { FormReactive } from '@app/shared/shared-forms'
-import { VideoCaptionEdit, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
+import {
+  VideoCaptionEdit,
+  VideoCaptionService,
+  VideoChapterService,
+  VideoChaptersEdit,
+  VideoEdit,
+  VideoService
+} from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { HTMLServerConfig, VideoConstant, VideoPrivacyType } from '@peertube/peertube-models'
+import { of } from 'rxjs'
 
 @Directive()
 // eslint-disable-next-line @angular-eslint/directive-class-suffix
@@ -14,6 +22,7 @@ export abstract class VideoSend extends FormReactive implements OnInit {
   userVideoChannels: SelectChannelItem[] = []
   videoPrivacies: VideoConstant<VideoPrivacyType>[] = []
   videoCaptions: VideoCaptionEdit[] = []
+  chaptersEdit = new VideoChaptersEdit()
 
   firstStepPrivacyId: VideoPrivacyType
   firstStepChannelId: number
@@ -28,6 +37,7 @@ export abstract class VideoSend extends FormReactive implements OnInit {
   protected serverService: ServerService
   protected videoService: VideoService
   protected videoCaptionService: VideoCaptionService
+  protected videoChapterService: VideoChapterService
 
   protected serverConfig: HTMLServerConfig
 
@@ -60,13 +70,23 @@ export abstract class VideoSend extends FormReactive implements OnInit {
           })
   }
 
-  protected updateVideoAndCaptions (video: VideoEdit) {
+  protected updateVideoAndCaptionsAndChapters (options: {
+    video: VideoEdit
+    captions: VideoCaptionEdit[]
+    chapters?: VideoChaptersEdit
+  }) {
+    const { video, captions, chapters } = options
+
     this.loadingBar.useRef().start()
 
     return this.videoService.updateVideo(video)
         .pipe(
-          // Then update captions
-          switchMap(() => this.videoCaptionService.updateCaptions(video.id, this.videoCaptions)),
+          switchMap(() => this.videoCaptionService.updateCaptions(video.uuid, captions)),
+          switchMap(() => {
+            return chapters
+              ? this.videoChapterService.updateChapters(video.uuid, chapters)
+              : of(true)
+          }),
           tap(() => this.loadingBar.useRef().complete()),
           catchError(err => {
             this.loadingBar.useRef().complete()

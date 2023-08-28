@@ -13,6 +13,7 @@
   <form novalidate [formGroup]="form">
 
     <my-video-edit
+      #videoEdit
       [form]="form" [formErrors]="formErrors" [forbidScheduledPublication]="forbidScheduledPublication"
       [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"
       [videoCaptions]="videoCaptions" [hideWaitTranscoding]="isWaitTranscodingHidden()"

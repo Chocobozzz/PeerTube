@@ -13,4 +13,5 @@ export type ContextType =
   'Flag' |
   'Actor' |
   'Collection' |
-  'WatchAction'
+  'WatchAction' |
+  'Chapters'

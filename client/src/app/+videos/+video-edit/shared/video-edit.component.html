@@ -230,6 +230,57 @@
       </ng-template>
     </ng-container>
 
+    <ng-container ngbNavItem *ngIf="!liveVideo">
+      <a ngbNavLink i18n>Chapters</a>
+
+      <ng-template ngbNavContent>
+        <div class="row mb-5">
+          <div class="chapters col-md-12 col-xl-6" formArrayName="chapters">
+            <ng-container *ngFor="let chapterControl of getChaptersFormArray().controls; let i = index">
+              <div class="chapter" [formGroupName]="i">
+                <!-- Row 1 -->
+                <div></div>
+
+                <label i18n [ngClass]="{ 'hide-chapter-label': i !== 0 }" [for]="'timecode[' + i + ']'">Timecode</label>
+
+                <label i18n [ngClass]="{ 'hide-chapter-label': i !== 0 }" [for]="'title[' + i + ']'">Chapter name</label>
+
+                <div></div>
+
+                <!-- Row 2 -->
+                <div class="position">{{ i + 1 }}</div>
+
+                <my-timestamp-input
+                  class="d-block" [disableBorder]="false" [inputName]="'timecode[' + i + ']'"
+                  [maxTimestamp]="videoToUpdate?.duration" formControlName="timecode"
+                ></my-timestamp-input>
+
+                <div>
+                  <input
+                    [ngClass]="{ 'input-error': formErrors.chapters[i].title }"
+                    type="text" [id]="'title[' + i + ']'" [name]="'title[' + i + ']'" formControlName="title"
+                  />
+
+                  <div [ngClass]="{ 'opacity-0': !formErrors.chapters[i].title }" class="form-error">
+                    <span class="opacity-0">t</span> <!-- Ensure we have reserve a correct height -->
+                    {{ formErrors.chapters[i].title }}
+                  </div>
+                </div>
+
+                <my-delete-button *ngIf="!isLastChapterControl(i)" (click)="deleteChapterControl(i)"></my-delete-button>
+              </div>
+            </ng-container>
+
+            <div *ngIf="getChapterArrayErrors()" class="form-error">
+              {{ getChapterArrayErrors() }}
+            </div>
+          </div>
+
+          <my-embed *ngIf="videoToUpdate" class="col-md-12 col-xl-6" [video]="videoToUpdate"></my-embed>
+        </div>
+      </ng-template>
+    </ng-container>
+
     <ng-container ngbNavItem *ngIf="liveVideo">
       <a ngbNavLink i18n>Live settings</a>
 
@@ -311,7 +362,6 @@
       </ng-template>
 
     </ng-container>
-
 
     <ng-container ngbNavItem>
       <a ngbNavLink i18n>Advanced settings</a>

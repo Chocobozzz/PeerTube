@@ -34,6 +34,8 @@ import {
 } from '../../../middlewares/index.js'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update.js'
 import { VideoModel } from '../../../models/video/video.js'
+import { getChaptersFromContainer } from '@peertube/peertube-ffmpeg'
+import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from '@server/lib/video-chapters.js'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -143,6 +145,9 @@ async function addVideo (options: {
   const videoFile = await buildNewFile({ path: videoPhysicalFile.path, mode: 'web-video' })
   const originalFilename = videoPhysicalFile.originalname
 
+  const containerChapters = await getChaptersFromContainer(videoPhysicalFile.path)
+  logger.debug(`Got ${containerChapters.length} chapters from video "${video.name}" container`, { containerChapters, ...lTags(video.uuid) })
+
   // Move physical file
   const destination = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
   await move(videoPhysicalFile.path, destination)
@@ -186,6 +191,10 @@ async function addVideo (options: {
         updateAt: new Date(videoInfo.scheduleUpdate.updateAt),
         privacy: videoInfo.scheduleUpdate.privacy || null
       }, sequelizeOptions)
+    }
+
+    if (!await replaceChaptersFromDescriptionIfNeeded({ newDescription: video.description, video, transaction: t })) {
+      await replaceChapters({ video, chapters: containerChapters, transaction: t })
     }
 
     await autoBlacklistVideoIfNeeded({

@@ -4,7 +4,7 @@ import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
 import { FormReactiveService } from '@app/shared/shared-forms'
-import { VideoCaptionService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
+import { VideoCaptionService, VideoChapterService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
 import { PeerTubeProblemDocument, ServerErrorCode, VideoUpdate } from '@peertube/peertube-models'
@@ -42,6 +42,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Af
     protected serverService: ServerService,
     protected videoService: VideoService,
     protected videoCaptionService: VideoCaptionService,
+    protected videoChapterService: VideoChapterService,
     private router: Router,
     private videoImportService: VideoImportService,
     private hooks: HooksService
@@ -124,24 +125,25 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Af
     if (!await this.isFormValid()) return
 
     this.video.patch(this.form.value)
+    this.chaptersEdit.patch(this.form.value)
 
     this.isUpdatingVideo = true
 
     // Update the video
-    this.updateVideoAndCaptions(this.video)
-        .subscribe({
-          next: () => {
-            this.isUpdatingVideo = false
-            this.notifier.success($localize`Video to import updated.`)
+    this.updateVideoAndCaptionsAndChapters({ video: this.video, captions: this.videoCaptions, chapters: this.chaptersEdit })
+      .subscribe({
+        next: () => {
+          this.isUpdatingVideo = false
+          this.notifier.success($localize`Video to import updated.`)
 
-            this.router.navigate([ '/my-library', 'video-imports' ])
-          },
+          this.router.navigate([ '/my-library', 'video-imports' ])
+        },
 
-          error: err => {
-            this.error = err.message
-            scrollToTop()
-            logger.error(err)
-          }
-        })
+        error: err => {
+          this.error = err.message
+          scrollToTop()
+          logger.error(err)
+        }
+      })
   }
 }

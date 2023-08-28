@@ -60,6 +60,8 @@ export class APVideoCreator extends APVideoAbstractBuilder {
       return { autoBlacklisted, videoCreated }
     })
 
+    await this.updateChaptersOutsideTransaction(videoCreated)
+
     return { autoBlacklisted, videoCreated }
   }
 }

@@ -45,11 +45,13 @@ function isLastWeek (d: Date) {
 
 // ---------------------------------------------------------------------------
 
+export const timecodeRegexString = `((\\d+)[h:])?((\\d+)[m:])?((\\d+)s?)?`
+
 function timeToInt (time: number | string) {
   if (!time) return 0
   if (typeof time === 'number') return time
 
-  const reg = /^((\d+)[h:])?((\d+)[m:])?((\d+)s?)?$/
+  const reg = new RegExp(`^${timecodeRegexString}$`)
   const matches = time.match(reg)
 
   if (!matches) return 0

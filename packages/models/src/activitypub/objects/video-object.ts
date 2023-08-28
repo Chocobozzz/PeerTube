@@ -50,6 +50,7 @@ export interface VideoObject {
   dislikes: string
   shares: string
   comments: string
+  hasParts: string
 
   attributedTo: ActivityPubAttributedTo[]
 

@@ -30,6 +30,7 @@ import {
   ChangeOwnershipCommand,
   ChannelsCommand,
   ChannelSyncsCommand,
+  ChaptersCommand,
   CommentsCommand,
   HistoryCommand,
   ImportsCommand,
@@ -152,6 +153,7 @@ export class PeerTubeServer {
   videoPasswords?: VideoPasswordsCommand
 
   storyboard?: StoryboardCommand
+  chapters?: ChaptersCommand
 
   runners?: RunnersCommand
   runnerRegistrationTokens?: RunnerRegistrationTokensCommand
@@ -442,6 +444,7 @@ export class PeerTubeServer {
     this.registrations = new RegistrationsCommand(this)
 
     this.storyboard = new StoryboardCommand(this)
+    this.chapters = new ChaptersCommand(this)
 
     this.runners = new RunnersCommand(this)
     this.runnerRegistrationTokens = new RunnerRegistrationTokensCommand(this)

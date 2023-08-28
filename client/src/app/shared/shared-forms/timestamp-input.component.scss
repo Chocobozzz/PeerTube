@@ -4,6 +4,7 @@
 p-inputmask {
   ::ng-deep input {
     width: 80px;
+    text-align: center;
 
     &:focus-within,
     &:focus {

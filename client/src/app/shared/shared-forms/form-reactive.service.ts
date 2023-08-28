@@ -4,9 +4,9 @@ import { wait } from '@root-helpers/utils'
 import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
 import { FormValidatorService } from './form-validator.service'
 
-export type FormReactiveErrors = { [ id: string ]: string | FormReactiveErrors }
+export type FormReactiveErrors = { [ id: string | number ]: string | FormReactiveErrors | FormReactiveErrors[] }
 export type FormReactiveValidationMessages = {
-  [ id: string ]: { [ name: string ]: string } | FormReactiveValidationMessages
+  [ id: string | number ]: { [ name: string ]: string } | FormReactiveValidationMessages | FormReactiveValidationMessages[]
 }
 
 @Injectable()
@@ -86,7 +86,7 @@ export class FormReactiveService {
 
       if (!control || (onlyDirty && !control.dirty) || !control.enabled || !control.errors) continue
 
-      const staticMessages = validationMessages[field]
+      const staticMessages = validationMessages[field] as FormReactiveValidationMessages
       for (const key of Object.keys(control.errors)) {
         const formErrorValue = control.errors[key]
 

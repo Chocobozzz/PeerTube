@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core'
-import { getDevLocale, isOnDevLocale, sortBy } from '@app/helpers'
+import { getDevLocale, isOnDevLocale } from '@app/helpers'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { getCompleteLocale, getShortLocale, I18N_LOCALES, objectKeysTyped } from '@peertube/peertube-core-utils'
+import { getCompleteLocale, getShortLocale, I18N_LOCALES, objectKeysTyped, sortBy } from '@peertube/peertube-core-utils'
 
 @Component({
   selector: 'my-language-chooser',

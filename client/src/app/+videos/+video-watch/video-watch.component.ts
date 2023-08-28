@@ -18,7 +18,7 @@ import {
 } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { isXPercentInViewport, scrollToTop, toBoolean } from '@app/helpers'
-import { Video, VideoCaptionService, VideoDetails, VideoFileTokenService, VideoService } from '@app/shared/shared-main'
+import { Video, VideoCaptionService, VideoChapterService, VideoDetails, VideoFileTokenService, VideoService } from '@app/shared/shared-main'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
@@ -31,6 +31,7 @@ import {
   ServerErrorCode,
   Storyboard,
   VideoCaption,
+  VideoChapter,
   VideoPrivacy,
   VideoState,
   VideoStateType
@@ -83,6 +84,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   video: VideoDetails = null
   videoCaptions: VideoCaption[] = []
+  videoChapters: VideoChapter[] = []
   liveVideo: LiveVideo
   videoPassword: string
   storyboards: Storyboard[] = []
@@ -125,6 +127,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private notifier: Notifier,
     private zone: NgZone,
     private videoCaptionService: VideoCaptionService,
+    private videoChapterService: VideoChapterService,
     private hotkeysService: HotkeysService,
     private hooks: HooksService,
     private pluginService: PluginService,
@@ -306,14 +309,16 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     forkJoin([
       videoAndLiveObs,
       this.videoCaptionService.listCaptions(videoId, videoPassword),
+      this.videoChapterService.getChapters({ videoId, videoPassword }),
       this.videoService.getStoryboards(videoId, videoPassword),
       this.userService.getAnonymousOrLoggedUser()
     ]).subscribe({
-      next: ([ { video, live, videoFileToken }, captionsResult, storyboards, loggedInOrAnonymousUser ]) => {
+      next: ([ { video, live, videoFileToken }, captionsResult, chaptersResult, storyboards, loggedInOrAnonymousUser ]) => {
         this.onVideoFetched({
           video,
           live,
           videoCaptions: captionsResult.data,
+          videoChapters: chaptersResult.chapters,
           storyboards,
           videoFileToken,
           videoPassword,
@@ -411,6 +416,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     video: VideoDetails
     live: LiveVideo
     videoCaptions: VideoCaption[]
+    videoChapters: VideoChapter[]
     storyboards: Storyboard[]
     videoFileToken: string
     videoPassword: string
@@ -422,6 +428,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       video,
       live,
       videoCaptions,
+      videoChapters,
       storyboards,
       videoFileToken,
       videoPassword,
@@ -433,6 +440,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.video = video
     this.videoCaptions = videoCaptions
+    this.videoChapters = videoChapters
     this.liveVideo = live
     this.videoFileToken = videoFileToken
     this.videoPassword = videoPassword
@@ -480,6 +488,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const params = {
       video: this.video,
       videoCaptions: this.videoCaptions,
+      videoChapters: this.videoChapters,
       storyboards: this.storyboards,
       liveVideo: this.liveVideo,
       videoFileToken: this.videoFileToken,
@@ -636,6 +645,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     video: VideoDetails
     liveVideo: LiveVideo
     videoCaptions: VideoCaption[]
+    videoChapters: VideoChapter[]
     storyboards: Storyboard[]
 
     videoFileToken: string
@@ -651,6 +661,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       video,
       liveVideo,
       videoCaptions,
+      videoChapters,
       storyboards,
       videoFileToken,
       videoPassword,
@@ -750,6 +761,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       videoPassword: () => videoPassword,
 
       videoCaptions: playerCaptions,
+      videoChapters,
       storyboard,
 
       videoShortUUID: video.shortUUID,

@@ -45,20 +45,20 @@ export class FormValidatorService {
     form: FormGroup,
     formErrors: FormReactiveErrors,
     validationMessages: FormReactiveValidationMessages,
-    obj: BuildFormArgument,
+    formToBuild: BuildFormArgument,
     defaultValues: BuildFormDefaultValues = {}
   ) {
-    for (const name of objectKeysTyped(obj)) {
+    for (const name of objectKeysTyped(formToBuild)) {
       formErrors[name] = ''
 
-      const field = obj[name]
+      const field = formToBuild[name]
       if (this.isRecursiveField(field)) {
         this.updateFormGroup(
           // FIXME: typings
           (form as any)[name],
           formErrors[name] as FormReactiveErrors,
           validationMessages[name] as FormReactiveValidationMessages,
-          obj[name] as BuildFormArgument,
+          formToBuild[name] as BuildFormArgument,
           defaultValues[name] as BuildFormDefaultValues
         )
         continue
@@ -66,13 +66,62 @@ export class FormValidatorService {
 
       if (field?.MESSAGES) validationMessages[name] = field.MESSAGES as { [ name: string ]: string }
 
-      const defaultValue = defaultValues[name] || ''
+      const defaultValue = defaultValues[name] ?? ''
 
       form.addControl(
         name + '',
         new FormControl(defaultValue, field?.VALIDATORS as ValidatorFn[], field?.ASYNC_VALIDATORS as AsyncValidatorFn[])
       )
     }
+  }
+
+  addControlInFormArray (options: {
+    formErrors: FormReactiveErrors
+    validationMessages: FormReactiveValidationMessages
+    formArray: FormArray
+    controlName: string
+    formToBuild: BuildFormArgument
+    defaultValues?: BuildFormDefaultValues
+  }) {
+    const { formArray, formErrors, validationMessages, controlName, formToBuild, defaultValues = {} } = options
+
+    const formGroup = new FormGroup({})
+    if (!formErrors[controlName]) formErrors[controlName] = [] as FormReactiveErrors[]
+    if (!validationMessages[controlName]) validationMessages[controlName] = []
+
+    const formArrayErrors = formErrors[controlName] as FormReactiveErrors[]
+    const formArrayValidationMessages = validationMessages[controlName] as FormReactiveValidationMessages[]
+
+    const totalControls = formArray.controls.length
+    formArrayErrors.push({})
+    formArrayValidationMessages.push({})
+
+    this.updateFormGroup(
+      formGroup,
+      formArrayErrors[totalControls],
+      formArrayValidationMessages[totalControls],
+      formToBuild,
+      defaultValues
+    )
+
+    formArray.push(formGroup)
+  }
+
+  removeControlFromFormArray (options: {
+    formErrors: FormReactiveErrors
+    validationMessages: FormReactiveValidationMessages
+    index: number
+    formArray: FormArray
+    controlName: string
+  }) {
+    const { formArray, formErrors, validationMessages, index, controlName } = options
+
+    const formArrayErrors = formErrors[controlName] as FormReactiveErrors[]
+    const formArrayValidationMessages = validationMessages[controlName] as FormReactiveValidationMessages[]
+
+    formArrayErrors.splice(index, 1)
+    formArrayValidationMessages.splice(index, 1)
+    formArray.removeAt(index)
   }
 
   updateTreeValidity (group: FormGroup | FormArray): void {

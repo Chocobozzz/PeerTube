@@ -70,14 +70,6 @@ export const VIDEO_DESCRIPTION_VALIDATOR: BuildFormValidator = {
   }
 }
 
-export const VIDEO_TAG_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [ Validators.minLength(2), Validators.maxLength(30) ],
-  MESSAGES: {
-    minlength: $localize`A tag should be more than 2 characters long.`,
-    maxlength: $localize`A tag should be less than 30 characters long.`
-  }
-}
-
 export const VIDEO_TAGS_ARRAY_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.maxLength(5), arrayTagLengthValidator() ],
   MESSAGES: {

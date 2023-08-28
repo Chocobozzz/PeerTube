@@ -31,15 +31,7 @@ describe('Test video captions API validator', function () {
 
     video = await server.videos.upload()
     privateVideo = await server.videos.upload({ attributes: { privacy: VideoPrivacy.PRIVATE } })
-
-    {
-      const user = {
-        username: 'user1',
-        password: 'my super password'
-      }
-      await server.users.create({ username: user.username, password: user.password })
-      userAccessToken = await server.login.getAccessToken(user)
-    }
+    userAccessToken = await server.users.generateUserAndToken('user1')
   })
 
   describe('When adding video caption', function () {
@@ -117,6 +109,19 @@ describe('Test video captions API validator', function () {
         fields,
         attaches,
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail with another user token', async function () {
+      const captionPath = path + video.uuid + '/captions/fr'
+      await makeUploadRequest({
+        method: 'PUT',
+        url: server.url,
+        path: captionPath,
+        token: userAccessToken,
+        fields,
+        attaches,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 

@@ -1,6 +1,6 @@
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import { FunctionProperties, PickWith } from '@peertube/peertube-typescript-utils'
-import { MChannelAccountDefault, MChannelFormattable } from './video-channels.js'
+import { MChannelAccountDefault, MChannelFormattable } from './video-channel.js'
 
 type Use<K extends keyof VideoChannelSyncModel, M> = PickWith<VideoChannelSyncModel, K, M>
 

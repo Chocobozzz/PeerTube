@@ -32,6 +32,7 @@ import { MVideoImport, MVideoImportDefault, MVideoImportDefaultFiles, MVideoImpo
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
 import {
   ffprobePromise,
+  getChaptersFromContainer,
   getVideoStreamDimensionsInfo,
   getVideoStreamDuration,
   getVideoStreamFPS,
@@ -49,6 +50,7 @@ import { federateVideoIfNeeded } from '../../activitypub/videos/index.js'
 import { Notifier } from '../../notifier/index.js'
 import { generateLocalVideoMiniature } from '../../thumbnail.js'
 import { JobQueue } from '../job-queue.js'
+import { replaceChaptersIfNotExist } from '@server/lib/video-chapters.js'
 
 async function processVideoImport (job: Job): Promise<VideoImportPreventExceptionResult> {
   const payload = job.data as VideoImportPayload
@@ -150,6 +152,8 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     const fps = await getVideoStreamFPS(tempVideoPath, probe)
     const duration = await getVideoStreamDuration(tempVideoPath, probe)
 
+    const containerChapters = await getChaptersFromContainer(tempVideoPath, probe)
+
     // Prepare video file object for creation in database
     const fileExt = getLowercaseExtension(tempVideoPath)
     const videoFileData = {
@@ -227,6 +231,8 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
           if (thumbnailModel) await video.addAndSaveThumbnail(thumbnailModel, t)
           if (previewModel) await video.addAndSaveThumbnail(previewModel, t)
+
+          await replaceChaptersIfNotExist({ video, chapters: containerChapters, transaction: t })
 
           // Now we can federate the video (reload from database, we need more attributes)
           const videoForFederation = await VideoModel.loadFull(video.uuid, t)

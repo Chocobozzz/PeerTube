@@ -59,6 +59,7 @@ import { VideoTagModel } from '../models/video/video-tag.js'
 import { VideoModel } from '../models/video/video.js'
 import { VideoViewModel } from '../models/view/video-view.js'
 import { CONFIG } from './config.js'
+import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 
 pg.defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -137,6 +138,7 @@ async function initDatabaseModels (silent: boolean) {
     VideoShareModel,
     VideoFileModel,
     VideoSourceModel,
+    VideoChapterModel,
     VideoCaptionModel,
     VideoBlacklistModel,
     VideoTagModel,

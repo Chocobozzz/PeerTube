@@ -257,6 +257,8 @@ tags:
     description: Operations dealing with synchronizing PeerTube user's channel with channels of other platforms
   - name: Video Captions
     description: Operations dealing with listing, adding and removing closed captions of a video.
+  - name: Video Chapters
+    description: Operations dealing with managing chapters of a video.
   - name: Video Channels
     description: Operations dealing with the creation, modification and listing of videos within a channel.
   - name: Video Comments
@@ -328,6 +330,7 @@ x-tagGroups:
       - Video Upload
       - Video Imports
       - Video Captions
+      - Video Chapters
       - Video Channels
       - Video Comments
       - Video Rates
@@ -3242,7 +3245,7 @@ paths:
   '/api/v1/videos/{id}/source/replace-resumable':
     post:
       summary: Initialize the resumable replacement of a video
-      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to initialize the replacement of a video
+      description: "**PeerTube >= 6.0** Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to initialize the replacement of a video"
       operationId: replaceVideoSourceResumableInit
       security:
         - OAuth2: []
@@ -3281,7 +3284,7 @@ paths:
           description: video type unsupported
     put:
       summary: Send chunk for the resumable replacement of a video
-      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to continue, pause or resume the replacement of a video
+      description: "**PeerTube >= 6.0** Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to continue, pause or resume the replacement of a video"
       operationId: replaceVideoSourceResumable
       security:
         - OAuth2: []
@@ -3331,7 +3334,7 @@ paths:
                 example: 300
     delete:
       summary: Cancel the resumable replacement of a video
-      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the replacement of a video
+      description: "**PeerTube >= 6.0** Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the replacement of a video"
       operationId: replaceVideoSourceResumableCancel
       security:
         - OAuth2: []
@@ -3742,6 +3745,7 @@ paths:
   /api/v1/videos/{id}/storyboards:
     get:
       summary: List storyboards of a video
+      description: "**PeerTube** >= 6.0"
       operationId: listVideoStoryboards
       tags:
         - Video
@@ -3832,9 +3836,59 @@ paths:
         '404':
           description: video or language or caption for that language not found
 
+  /api/v1/videos/{id}/chapters:
+    get:
+      summary: Get chapters of a video
+      description: "**PeerTube** >= 6.0"
+      operationId: getVideoChapters
+      tags:
+        - Video Chapters
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/videoPasswordHeader'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoChapters'
+    put:
+      summary: Replace video chapters
+      description: "**PeerTube** >= 6.0"
+      operationId: replaceVideoChapters
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Video Chapters
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                chapters:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                      timecode:
+                        type: integer
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: video not found
+
   /api/v1/videos/{id}/passwords:
     get:
       summary: List video passwords
+      description: "**PeerTube** >= 6.0"
       security:
         - OAuth2:
           - user
@@ -3856,6 +3910,7 @@ paths:
           description: video is not password protected
     put:
       summary: Update video passwords
+      description: "**PeerTube** >= 6.0"
       security:
         - OAuth2:
           - user
@@ -3880,6 +3935,7 @@ paths:
   /api/v1/videos/{id}/passwords/{videoPasswordId}:
     delete:
       summary: Delete a video password
+      description: "**PeerTube** >= 6.0"
       security:
         - OAuth2:
           - user
@@ -7704,6 +7760,15 @@ components:
           $ref: '#/components/schemas/VideoConstantString-Language'
         captionPath:
           type: string
+    VideoChapters:
+      properties:
+        chapters:
+          type: object
+          properties:
+            title:
+              type: string
+            timecode:
+              type: integer
     VideoSource:
       properties:
         filename:

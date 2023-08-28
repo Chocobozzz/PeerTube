@@ -4,7 +4,7 @@ import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
 import { FormReactiveService } from '@app/shared/shared-forms'
-import { Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { Video, VideoCaptionService, VideoChapterService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
@@ -54,6 +54,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
     protected serverService: ServerService,
     protected videoService: VideoService,
     protected videoCaptionService: VideoCaptionService,
+    protected videoChapterService: VideoChapterService,
     private liveVideoService: LiveVideoService,
     private router: Router,
     private hooks: HooksService
@@ -137,6 +138,8 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
     video.uuid = this.videoUUID
     video.shortUUID = this.videoShortUUID
 
+    this.chaptersEdit.patch(this.form.value)
+
     const saveReplay = this.form.value.saveReplay
     const replaySettings = saveReplay
       ? { privacy: this.form.value.replayPrivacy }
@@ -151,7 +154,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
 
     // Update the video
     forkJoin([
-      this.updateVideoAndCaptions(video),
+      this.updateVideoAndCaptionsAndChapters({ video, captions: this.videoCaptions }),
 
       this.liveVideoService.updateLive(this.videoId, liveVideoUpdate)
     ]).subscribe({

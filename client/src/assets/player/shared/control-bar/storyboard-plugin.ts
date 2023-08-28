@@ -141,7 +141,9 @@ class StoryboardPlugin extends Plugin {
       const ctop = Math.floor(position / columns) * -scaledHeight
 
       const bgSize = `${imgWidth * scaleFactor}px ${imgHeight * scaleFactor}px`
-      const topOffset = -scaledHeight - 60
+
+      const timeTooltip = this.player.el().querySelector('.vjs-time-tooltip')
+      const topOffset = -scaledHeight + parseInt(getComputedStyle(timeTooltip).top.replace('px', '')) - 20
 
       const previewHalfSize = Math.round(scaledWidth / 2)
       let left = seekBarRect.width * seekBarX - previewHalfSize

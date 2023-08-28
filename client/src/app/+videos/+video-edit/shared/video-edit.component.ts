@@ -2,10 +2,10 @@ import { forkJoin } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { SelectChannelItem, SelectOptionsItem } from 'src/types/select-options-item.model'
 import { ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
-import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
+import { AbstractControl, FormArray, FormGroup, Validators } from '@angular/forms'
 import { HooksService, PluginService, ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
-import { BuildFormValidator } from '@app/shared/form-validators'
+import { BuildFormArgument, BuildFormValidator } from '@app/shared/form-validators'
 import {
   VIDEO_CATEGORY_VALIDATOR,
   VIDEO_CHANNEL_VALIDATOR,
@@ -20,9 +20,10 @@ import {
   VIDEO_SUPPORT_VALIDATOR,
   VIDEO_TAGS_ARRAY_VALIDATOR
 } from '@app/shared/form-validators/video-validators'
-import { FormReactiveValidationMessages, FormValidatorService } from '@app/shared/shared-forms'
+import { VIDEO_CHAPTERS_ARRAY_VALIDATOR, VIDEO_CHAPTER_TITLE_VALIDATOR } from '@app/shared/form-validators/video-chapter-validators'
+import { FormReactiveErrors, FormReactiveValidationMessages, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
-import { VideoCaptionEdit, VideoCaptionWithPathEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { VideoCaptionEdit, VideoCaptionWithPathEdit, VideoChaptersEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import {
   HTMLServerConfig,
@@ -30,6 +31,7 @@ import {
   LiveVideoLatencyMode,
   RegisterClientFormFieldOptions,
   RegisterClientVideoFieldOptions,
+  VideoChapter,
   VideoConstant,
   VideoDetails,
   VideoPrivacy,
@@ -57,7 +59,7 @@ type PluginField = {
 })
 export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup
-  @Input() formErrors: { [ id: string ]: string } = {}
+  @Input() formErrors: FormReactiveErrors & { chapters?: { title: string }[] } = {}
   @Input() validationMessages: FormReactiveValidationMessages = {}
 
   @Input() videoToUpdate: VideoDetails
@@ -67,6 +69,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   @Input() videoCaptions: VideoCaptionWithPathEdit[] = []
   @Input() videoSource: VideoSource
+
+  @Input() videoChapters: VideoChapter[] = []
 
   @Input() hideWaitTranscoding = false
   @Input() updateVideoFileEnabled = false
@@ -150,7 +154,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       licence: this.serverConfig.defaults.publish.licence,
       tags: []
     }
-    const obj: { [ id: string ]: BuildFormValidator } = {
+    const obj: BuildFormArgument = {
       name: VIDEO_NAME_VALIDATOR,
       privacy: VIDEO_PRIVACY_VALIDATOR,
       videoPassword: VIDEO_PASSWORD_VALIDATOR,
@@ -183,12 +187,16 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       defaultValues
     )
 
-    this.form.addControl('captions', new FormArray([
-      new FormGroup({
-        language: new FormControl(),
-        captionfile: new FormControl()
-      })
-    ]))
+    this.form.addControl('chapters', new FormArray([], VIDEO_CHAPTERS_ARRAY_VALIDATOR.VALIDATORS))
+    this.addNewChapterControl()
+
+    this.form.get('chapters').valueChanges.subscribe((chapters: { title: string, timecode: string }[]) => {
+      const lastChapter = chapters[chapters.length - 1]
+
+      if (lastChapter.title || lastChapter.timecode) {
+        this.addNewChapterControl()
+      }
+    })
 
     this.trackChannelChange()
     this.trackPrivacyChange()
@@ -426,6 +434,70 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.form.valueChanges.subscribe(() => this.formValidatorService.updateTreeValidity(this.pluginDataFormGroup))
   }
 
+  // ---------------------------------------------------------------------------
+
+  addNewChapterControl () {
+    const chaptersFormArray = this.getChaptersFormArray()
+    const controls = chaptersFormArray.controls
+
+    if (controls.length !== 0) {
+      const lastControl = chaptersFormArray.controls[controls.length - 1]
+      lastControl.get('title').addValidators(Validators.required)
+    }
+
+    this.formValidatorService.addControlInFormArray({
+      controlName: 'chapters',
+      formArray: chaptersFormArray,
+      formErrors: this.formErrors,
+      validationMessages: this.validationMessages,
+      formToBuild: {
+        timecode: null,
+        title: VIDEO_CHAPTER_TITLE_VALIDATOR
+      },
+      defaultValues: {
+        timecode: 0
+      }
+    })
+  }
+
+  getChaptersFormArray () {
+    return this.form.controls['chapters'] as FormArray
+  }
+
+  deleteChapterControl (index: number) {
+    this.formValidatorService.removeControlFromFormArray({
+      controlName: 'chapters',
+      formArray: this.getChaptersFormArray(),
+      formErrors: this.formErrors,
+      validationMessages: this.validationMessages,
+      index
+    })
+  }
+
+  isLastChapterControl (index: number) {
+    return this.getChaptersFormArray().length - 1 === index
+  }
+
+  patchChapters (chaptersEdit: VideoChaptersEdit) {
+    const totalChapters = chaptersEdit.getChaptersForUpdate().length
+    const totalControls = this.getChaptersFormArray().length
+
+    // Add missing controls. We use <= because we need the "empty control" to add another chapter
+    for (let i = 0; i <= totalChapters - totalControls; i++) {
+      this.addNewChapterControl()
+    }
+
+    this.form.patchValue(chaptersEdit.toFormPatch())
+  }
+
+  getChapterArrayErrors () {
+    if (!this.getChaptersFormArray().errors) return ''
+
+    return Object.values(this.getChaptersFormArray().errors).join('. ')
+  }
+
+  // ---------------------------------------------------------------------------
+
   private trackPrivacyChange () {
     // We will update the schedule input and the wait transcoding checkbox validators
     this.form.controls['privacy']
@@ -469,8 +541,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
           } else {
             videoPasswordControl.clearValidators()
           }
-          videoPasswordControl.updateValueAndValidity()
 
+          videoPasswordControl.updateValueAndValidity()
         }
       )
   }

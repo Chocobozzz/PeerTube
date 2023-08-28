@@ -7,6 +7,8 @@ import './shared/bezels/bezels-plugin'
 import './shared/peertube/peertube-plugin'
 import './shared/resolutions/peertube-resolutions-plugin'
 import './shared/control-bar/storyboard-plugin'
+import './shared/control-bar/chapters-plugin'
+import './shared/control-bar/time-tooltip'
 import './shared/control-bar/next-previous-video-button'
 import './shared/control-bar/p2p-info-button'
 import './shared/control-bar/peertube-link-button'
@@ -227,6 +229,7 @@ export class PeerTubePlayer {
     if (this.player.usingPlugin('upnext')) this.player.upnext().dispose()
     if (this.player.usingPlugin('stats')) this.player.stats().dispose()
     if (this.player.usingPlugin('storyboard')) this.player.storyboard().dispose()
+    if (this.player.usingPlugin('chapters')) this.player.chapters().dispose()
 
     if (this.player.usingPlugin('peertubeDock')) this.player.peertubeDock().dispose()
 
@@ -271,6 +274,10 @@ export class PeerTubePlayer {
 
     if (this.currentLoadOptions.storyboard) {
       this.player.storyboard(this.currentLoadOptions.storyboard)
+    }
+
+    if (this.currentLoadOptions.videoChapters) {
+      this.player.chapters({ chapters: this.currentLoadOptions.videoChapters })
     }
 
     if (this.currentLoadOptions.dock) {

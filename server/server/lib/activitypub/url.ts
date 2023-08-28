@@ -80,6 +80,10 @@ function getLocalVideoCommentsActivityPubUrl (video: MVideoUrl) {
   return video.url + '/comments'
 }
 
+function getLocalVideoChaptersActivityPubUrl (video: MVideoUrl) {
+  return video.url + '/chapters'
+}
+
 function getLocalVideoLikesActivityPubUrl (video: MVideoUrl) {
   return video.url + '/likes'
 }
@@ -167,6 +171,7 @@ export {
   getDeleteActivityPubUrl,
   getLocalVideoSharesActivityPubUrl,
   getLocalVideoCommentsActivityPubUrl,
+  getLocalVideoChaptersActivityPubUrl,
   getLocalVideoLikesActivityPubUrl,
   getLocalVideoDislikesActivityPubUrl,
   getLocalVideoViewerActivityPubUrl,

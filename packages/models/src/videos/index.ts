@@ -12,6 +12,7 @@ export * from './rate/index.js'
 export * from './stats/index.js'
 export * from './transcoding/index.js'
 export * from './channel-sync/index.js'
+export * from './chapter/index.js'
 
 export * from './nsfw-policy.type.js'
 

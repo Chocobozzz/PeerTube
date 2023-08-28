@@ -3,7 +3,6 @@ import { param, query } from 'express-validator'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { isValidRSSFeed } from '../../helpers/custom-validators/feeds.js'
 import { exists, isIdOrUUIDValid, isIdValid, toCompleteUUID } from '../../helpers/custom-validators/misc.js'
-import { buildPodcastGroupsCache } from '../cache/index.js'
 import {
   areValidationErrors,
   checkCanSeeVideo,
@@ -114,15 +113,6 @@ const videoFeedsPodcastValidator = [
   }
 ]
 
-const videoFeedsPodcastSetCacheKey = [
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (req.query.videoChannelId) {
-      res.locals.apicacheGroups = [ buildPodcastGroupsCache({ channelId: req.query.videoChannelId }) ]
-    }
-
-    return next()
-  }
-]
 // ---------------------------------------------------------------------------
 
 const videoSubscriptionFeedsValidator = [
@@ -173,6 +163,5 @@ export {
   feedsAccountOrChannelFiltersValidator,
   videoFeedsPodcastValidator,
   videoSubscriptionFeedsValidator,
-  videoFeedsPodcastSetCacheKey,
   videoCommentsFeedsValidator
 }

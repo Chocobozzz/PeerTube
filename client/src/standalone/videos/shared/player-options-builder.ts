@@ -5,6 +5,7 @@ import {
   Storyboard,
   Video,
   VideoCaption,
+  VideoChapter,
   VideoDetails,
   VideoPlaylistElement,
   VideoState,
@@ -199,6 +200,8 @@ export class PlayerOptionsBuilder {
 
     storyboardsResponse: Response
 
+    chaptersResponse: Response
+
     live?: LiveVideo
 
     alreadyPlayed: boolean
@@ -229,12 +232,14 @@ export class PlayerOptionsBuilder {
       forceAutoplay,
       playlist,
       live,
-      storyboardsResponse
+      storyboardsResponse,
+      chaptersResponse
     } = options
 
-    const [ videoCaptions, storyboard ] = await Promise.all([
+    const [ videoCaptions, storyboard, chapters ] = await Promise.all([
       this.buildCaptions(captionsResponse, translations),
-      this.buildStoryboard(storyboardsResponse)
+      this.buildStoryboard(storyboardsResponse),
+      this.buildChapters(chaptersResponse)
     ])
 
     return {
@@ -248,6 +253,7 @@ export class PlayerOptionsBuilder {
       subtitle: this.subtitle,
 
       storyboard,
+      videoChapters: chapters,
 
       startTime: playlist
         ? playlist.playlistTracker.getCurrentElement().startTimestamp
@@ -310,6 +316,12 @@ export class PlayerOptionsBuilder {
       width: storyboards[0].spriteWidth,
       interval: storyboards[0].spriteDuration
     }
+  }
+
+  private async buildChapters (chaptersResponse: Response) {
+    const { chapters } = await chaptersResponse.json() as { chapters: VideoChapter[] }
+
+    return chapters
   }
 
   private buildPlaylistOptions (options?: {

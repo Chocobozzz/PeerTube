@@ -79,6 +79,8 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
 
     uploadDate: 'sc:uploadDate',
 
+    hasParts: 'sc:hasParts',
+
     views: {
       '@type': 'sc:Number',
       '@id': 'pt:views'
@@ -195,7 +197,14 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
   Announce: buildContext(),
   Comment: buildContext(),
   Delete: buildContext(),
-  Rate: buildContext()
+  Rate: buildContext(),
+
+  Chapters: buildContext({
+    name: 'sc:name',
+    hasPart: 'sc:hasPart',
+    endOffset: 'sc:endOffset',
+    startOffset: 'sc:startOffset'
+  })
 }
 
 async function getContextData (type: ContextType, contextFilter: ContextFilter) {

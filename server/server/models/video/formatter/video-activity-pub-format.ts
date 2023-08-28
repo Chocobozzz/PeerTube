@@ -13,6 +13,7 @@ import {
 } from '@peertube/peertube-models'
 import { MIMETYPES, WEBSERVER } from '../../../initializers/constants.js'
 import {
+  getLocalVideoChaptersActivityPubUrl,
   getLocalVideoCommentsActivityPubUrl,
   getLocalVideoDislikesActivityPubUrl,
   getLocalVideoLikesActivityPubUrl,
@@ -95,6 +96,7 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     dislikes: getLocalVideoDislikesActivityPubUrl(video),
     shares: getLocalVideoSharesActivityPubUrl(video),
     comments: getLocalVideoCommentsActivityPubUrl(video),
+    hasParts: getLocalVideoChaptersActivityPubUrl(video),
 
     attributedTo: [
       {

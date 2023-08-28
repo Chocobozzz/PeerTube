@@ -39,6 +39,7 @@ import {
 } from '@server/types/models/index.js'
 import { getLocalVideoActivityPubUrl } from './activitypub/url.js'
 import { updateLocalVideoMiniatureFromExisting, updateLocalVideoMiniatureFromUrl } from './thumbnail.js'
+import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
 
 class YoutubeDlImportError extends Error {
   code: YoutubeDlImportError.CODE
@@ -225,6 +226,29 @@ async function buildYoutubeDLImport (options: {
       videoChannelSyncId: channelSync?.id
     },
     videoPasswords: importDataOverride.videoPasswords
+  })
+
+  await sequelizeTypescript.transaction(async transaction => {
+    // Priority to explicitely set description
+    if (importDataOverride?.description) {
+      const inserted = await replaceChaptersFromDescriptionIfNeeded({ newDescription: importDataOverride.description, video, transaction })
+      if (inserted) return
+    }
+
+    // Then priority to youtube-dl chapters
+    if (youtubeDLInfo.chapters.length !== 0) {
+      logger.info(
+        `Inserting chapters in video ${video.uuid} from youtube-dl`,
+        { chapters: youtubeDLInfo.chapters, tags: [ 'chapters', video.uuid ] }
+      )
+
+      await replaceChapters({ video, chapters: youtubeDLInfo.chapters, transaction })
+      return
+    }
+
+    if (video.description) {
+      await replaceChaptersFromDescriptionIfNeeded({ newDescription: video.description, video, transaction })
+    }
   })
 
   // Get video subtitles

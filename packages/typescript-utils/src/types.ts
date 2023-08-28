@@ -43,3 +43,5 @@ export type DeepOmit<T, K> = T extends Primitive ? T : DeepOmitHelper<T, Exclude
 export type DeepOmitArray<T extends any[], K> = {
   [P in keyof T]: DeepOmit<T[P], K>
 }
+
+export type Unpacked<T> = T extends (infer U)[] ? U : T

@@ -1,16 +1,17 @@
 import { forkJoin } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
-import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core'
+import { AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
 import { FormReactiveService } from '@app/shared/shared-forms'
-import { VideoCaptionService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
+import { VideoCaptionService, VideoChapterService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
 import { VideoUpdate } from '@peertube/peertube-models'
 import { hydrateFormFromVideo } from '../shared/video-edit-utils'
 import { VideoSend } from './video-send'
+import { VideoEditComponent } from '../shared/video-edit.component'
 
 @Component({
   selector: 'my-video-import-url',
@@ -21,6 +22,8 @@ import { VideoSend } from './video-send'
   ]
 })
 export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterViewInit, CanComponentDeactivate {
+  @ViewChild('videoEdit', { static: false }) videoEditComponent: VideoEditComponent
+
   @Output() firstStepDone = new EventEmitter<string>()
   @Output() firstStepError = new EventEmitter<void>()
 
@@ -41,6 +44,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
     protected serverService: ServerService,
     protected videoService: VideoService,
     protected videoCaptionService: VideoCaptionService,
+    protected videoChapterService: VideoChapterService,
     private router: Router,
     private videoImportService: VideoImportService,
     private hooks: HooksService
@@ -85,12 +89,13 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
           switchMap(previous => {
             return forkJoin([
               this.videoCaptionService.listCaptions(previous.video.uuid),
+              this.videoChapterService.getChapters({ videoId: previous.video.uuid }),
               this.videoService.getVideo({ videoId: previous.video.uuid })
-            ]).pipe(map(([ videoCaptionsResult, video ]) => ({ videoCaptions: videoCaptionsResult.data, video })))
+            ]).pipe(map(([ videoCaptionsResult, { chapters }, video ]) => ({ videoCaptions: videoCaptionsResult.data, chapters, video })))
           })
         )
         .subscribe({
-          next: ({ video, videoCaptions }) => {
+          next: ({ video, videoCaptions, chapters }) => {
             this.loadingBar.useRef().complete()
             this.firstStepDone.emit(video.name)
             this.isImportingVideo = false
@@ -99,9 +104,12 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
             this.video = new VideoEdit(video)
             this.video.patch({ privacy: this.firstStepPrivacyId })
 
+            this.chaptersEdit.loadFromAPI(chapters)
+
             this.videoCaptions = videoCaptions
 
             hydrateFormFromVideo(this.form, this.video, true)
+            setTimeout(() => this.videoEditComponent.patchChapters(this.chaptersEdit))
           },
 
           error: err => {
@@ -117,11 +125,12 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
     if (!await this.isFormValid()) return
 
     this.video.patch(this.form.value)
+    this.chaptersEdit.patch(this.form.value)
 
     this.isUpdatingVideo = true
 
     // Update the video
-    this.updateVideoAndCaptions(this.video)
+    this.updateVideoAndCaptionsAndChapters({ video: this.video, captions: this.videoCaptions, chapters: this.chaptersEdit })
         .subscribe({
           next: () => {
             this.isUpdatingVideo = false

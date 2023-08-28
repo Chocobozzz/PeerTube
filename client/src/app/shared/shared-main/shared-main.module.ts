@@ -49,6 +49,7 @@ import { UserHistoryService, UserNotificationsComponent, UserNotificationService
 import {
   EmbedComponent,
   RedundancyService,
+  VideoChapterService,
   VideoFileTokenService,
   VideoImportService,
   VideoOwnershipService,
@@ -214,6 +215,8 @@ import { VideoChannelService } from './video-channel'
     VideoChannelService,
 
     VideoPasswordService,
+
+    VideoChapterService,
 
     CustomPageService,
 

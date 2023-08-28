@@ -1,6 +1,7 @@
 import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES } from '../../initializers/constants.js'
 import { peertubeTruncate } from '../core-utils.js'
 import { isUrlValid } from '../custom-validators/activitypub/misc.js'
+import { isArray } from '../custom-validators/misc.js'
 
 export type YoutubeDLInfo = {
   name?: string
@@ -16,6 +17,11 @@ export type YoutubeDLInfo = {
   webpageUrl?: string
 
   urls?: string[]
+
+  chapters?: {
+    timecode: number
+    title: string
+  }[]
 }
 
 export class YoutubeDLInfoBuilder {
@@ -83,7 +89,10 @@ export class YoutubeDLInfoBuilder {
       urls: this.buildAvailableUrl(obj),
       originallyPublishedAtWithoutTime: this.buildOriginallyPublishedAt(obj),
       ext: obj.ext,
-      webpageUrl: obj.webpage_url
+      webpageUrl: obj.webpage_url,
+      chapters: isArray(obj.chapters)
+        ? obj.chapters.map((c: { start_time: number, title: string }) => ({ timecode: c.start_time, title: c.title }))
+        : []
     }
   }
 

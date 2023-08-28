@@ -1,3 +1,4 @@
+import express from 'express'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { ApiCache, APICacheOptions } from './shared/index.js'
 
@@ -8,13 +9,13 @@ const defaultOptions: APICacheOptions = {
   ]
 }
 
-function cacheRoute (duration: string) {
+export function cacheRoute (duration: string) {
   const instance = new ApiCache(defaultOptions)
 
   return instance.buildMiddleware(duration)
 }
 
-function cacheRouteFactory (options: APICacheOptions) {
+export function cacheRouteFactory (options: APICacheOptions = {}) {
   const instance = new ApiCache({ ...defaultOptions, ...options })
 
   return { instance, middleware: instance.buildMiddleware.bind(instance) }
@@ -22,17 +23,36 @@ function cacheRouteFactory (options: APICacheOptions) {
 
 // ---------------------------------------------------------------------------
 
-function buildPodcastGroupsCache (options: {
+export function buildPodcastGroupsCache (options: {
   channelId: number
 }) {
   return 'podcast-feed-' + options.channelId
 }
 
+export function buildAPVideoChaptersGroupsCache (options: {
+  videoId: number | string
+}) {
+  return 'ap-video-chapters-' + options.videoId
+}
+
 // ---------------------------------------------------------------------------
 
-export {
-  cacheRoute,
-  cacheRouteFactory,
+export const videoFeedsPodcastSetCacheKey = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (req.query.videoChannelId) {
+      res.locals.apicacheGroups = [ buildPodcastGroupsCache({ channelId: req.query.videoChannelId }) ]
+    }
 
-  buildPodcastGroupsCache
-}
+    return next()
+  }
+]
+
+export const apVideoChaptersSetCacheKey = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (req.params.id) {
+      res.locals.apicacheGroups = [ buildAPVideoChaptersGroupsCache({ videoId: req.params.id }) ]
+    }
+
+    return next()
+  }
+]

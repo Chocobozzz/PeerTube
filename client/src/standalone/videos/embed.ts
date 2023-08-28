@@ -195,10 +195,11 @@ export class PeerTubeEmbed {
       const {
         videoResponse,
         captionsPromise,
+        chaptersPromise,
         storyboardsPromise
       } = await this.videoFetcher.loadVideo({ videoId: uuid, videoPassword: this.videoPassword })
 
-      return this.buildVideoPlayer({ videoResponse, captionsPromise, storyboardsPromise, forceAutoplay })
+      return this.buildVideoPlayer({ videoResponse, captionsPromise, chaptersPromise, storyboardsPromise, forceAutoplay })
     } catch (err) {
 
       if (await this.handlePasswordError(err)) this.loadVideoAndBuildPlayer({ ...options })
@@ -210,9 +211,10 @@ export class PeerTubeEmbed {
     videoResponse: Response
     storyboardsPromise: Promise<Response>
     captionsPromise: Promise<Response>
+    chaptersPromise: Promise<Response>
     forceAutoplay: boolean
   }) {
-    const { videoResponse, captionsPromise, storyboardsPromise, forceAutoplay } = options
+    const { videoResponse, captionsPromise, chaptersPromise, storyboardsPromise, forceAutoplay } = options
 
     const videoInfoPromise = videoResponse.json()
       .then(async (videoInfo: VideoDetails) => {
@@ -233,11 +235,13 @@ export class PeerTubeEmbed {
       { video, live, videoFileToken },
       translations,
       captionsResponse,
+      chaptersResponse,
       storyboardsResponse
     ] = await Promise.all([
       videoInfoPromise,
       this.translationsPromise,
       captionsPromise,
+      chaptersPromise,
       storyboardsPromise,
       this.buildPlayerIfNeeded()
     ])
@@ -260,6 +264,7 @@ export class PeerTubeEmbed {
     const loadOptions = await this.playerOptionsBuilder.getPlayerLoadOptions({
       video,
       captionsResponse,
+      chaptersResponse,
       translations,
 
       storyboardsResponse,

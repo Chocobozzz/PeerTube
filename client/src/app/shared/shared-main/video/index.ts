@@ -1,5 +1,7 @@
 export * from './embed.component'
 export * from './redundancy.service'
+export * from './video-chapter.service'
+export * from './video-chapters-edit.model'
 export * from './video-details.model'
 export * from './video-edit.model'
 export * from './video-file-token.service'

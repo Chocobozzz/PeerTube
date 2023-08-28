@@ -10,7 +10,7 @@ import { VideoResolution } from '@peertube/peertube-models'
 
 function ffprobePromise (path: string) {
   return new Promise<FfprobeData>((res, rej) => {
-    ffmpeg.ffprobe(path, (err, data) => {
+    ffmpeg.ffprobe(path, [ '-show_chapters' ], (err, data) => {
       if (err) return rej(err)
 
       return res(data)
@@ -169,9 +169,26 @@ async function getVideoStream (path: string, existingProbe?: FfprobeData) {
 }
 
 // ---------------------------------------------------------------------------
+// Chapters
+// ---------------------------------------------------------------------------
+
+async function getChaptersFromContainer (path: string, existingProbe?: FfprobeData) {
+  const metadata = existingProbe || await ffprobePromise(path)
+
+  if (!Array.isArray(metadata?.chapters)) return []
+
+  return metadata.chapters
+    .map(c => ({
+      timecode: c.start_time,
+      title: c['TAG:title']
+    }))
+}
+
+// ---------------------------------------------------------------------------
 
 export {
   getVideoStreamDimensionsInfo,
+  getChaptersFromContainer,
   getMaxAudioBitrate,
   getVideoStream,
   getVideoStreamDuration,

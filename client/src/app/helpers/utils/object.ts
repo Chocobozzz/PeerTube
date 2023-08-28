@@ -7,17 +7,6 @@ function removeElementFromArray <T> (arr: T[], elem: T) {
   if (index !== -1) arr.splice(index, 1)
 }
 
-function sortBy (obj: any[], key1: string, key2?: string) {
-  return obj.sort((a, b) => {
-    const elem1 = key2 ? a[key1][key2] : a[key1]
-    const elem2 = key2 ? b[key1][key2] : b[key1]
-
-    if (elem1 < elem2) return -1
-    if (elem1 === elem2) return 0
-    return 1
-  })
-}
-
 function splitIntoArray (value: any) {
   if (!value) return undefined
   if (Array.isArray(value)) return value
@@ -41,7 +30,6 @@ function toBoolean (value: any) {
 }
 
 export {
-  sortBy,
   immutableAssign,
   removeElementFromArray,
   splitIntoArray,

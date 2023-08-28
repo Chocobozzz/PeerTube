@@ -3,6 +3,16 @@
 @use '_mixins' as *;
 @use './_player-variables' as *;
 
+.vjs-peertube-skin.has-chapter {
+  .vjs-time-tooltip {
+    white-space: pre;
+    line-height: 1.5;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    top: -4.9em;
+  }
+}
+
 .video-js.vjs-peertube-skin .vjs-control-bar {
   z-index: 100;
 
@@ -494,4 +504,13 @@
       }
     }
   }
+}
+
+.vjs-marker {
+  position: absolute;
+  width: 3px;
+  opacity: .5;
+  background-color: #000;
+  height: 100%;
+  top: 0;
 }

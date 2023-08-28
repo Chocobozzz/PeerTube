@@ -1,7 +1,7 @@
 import { HlsConfig, Level } from 'hls.js'
 import videojs from 'video.js'
 import { Engine } from '@peertube/p2p-media-loader-hlsjs'
-import { VideoFile, VideoPlaylist, VideoPlaylistElement } from '@peertube/peertube-models'
+import { VideoChapter, VideoFile, VideoPlaylist, VideoPlaylistElement } from '@peertube/peertube-models'
 import { BezelsPlugin } from '../shared/bezels/bezels-plugin'
 import { StoryboardPlugin } from '../shared/control-bar/storyboard-plugin'
 import { PeerTubeDockPlugin, PeerTubeDockPluginOptions } from '../shared/dock/peertube-dock-plugin'
@@ -19,6 +19,7 @@ import { UpNextPlugin } from '../shared/upnext/upnext-plugin'
 import { WebVideoPlugin } from '../shared/web-video/web-video-plugin'
 import { PlayerMode } from './peertube-player-options'
 import { SegmentValidator } from '../shared/p2p-media-loader/segment-validator'
+import { ChaptersPlugin } from '../shared/control-bar/chapters-plugin'
 
 declare module 'video.js' {
 
@@ -61,6 +62,8 @@ declare module 'video.js' {
     storyboard (options?: StoryboardOptions): StoryboardPlugin
 
     peertubeDock (options?: PeerTubeDockPluginOptions): PeerTubeDockPlugin
+
+    chapters (options?: ChaptersOptions): ChaptersPlugin
 
     upnext (options?: UpNextPluginOptions): UpNextPlugin
 
@@ -142,6 +145,10 @@ type StoryboardOptions = {
   interval: number
 }
 
+type ChaptersOptions = {
+  chapters: VideoChapter[]
+}
+
 type PlaylistPluginOptions = {
   elements: VideoPlaylistElement[]
 
@@ -159,6 +166,10 @@ type UpNextPluginOptions = {
   getTitle: () => string
   isDisplayed: () => boolean
   isSuspended: () => boolean
+}
+
+type ProgressBarMarkerComponentOptions = {
+  timecode: number
 }
 
 type NextPreviousVideoButtonOptions = {
@@ -273,6 +284,7 @@ export {
   NextPreviousVideoButtonOptions,
   ResolutionUpdateData,
   AutoResolutionUpdateData,
+  ProgressBarMarkerComponentOptions,
   PlaylistPluginOptions,
   MetricsPluginOptions,
   VideoJSCaption,
@@ -284,5 +296,6 @@ export {
   UpNextPluginOptions,
   LoadedQualityData,
   StoryboardOptions,
+  ChaptersOptions,
   PeerTubeLinkButtonOptions
 }

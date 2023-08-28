@@ -56,6 +56,7 @@
 <!-- Hidden because we want to load the component -->
 <form [hidden]="!hasImportedVideo" novalidate [formGroup]="form">
   <my-video-edit
+    #videoEdit
     [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions" [forbidScheduledPublication]="true"
     [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"
     type="import-url"

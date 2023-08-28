@@ -1,6 +1,12 @@
 import { CreationAttributes, Transaction } from 'sequelize'
-import { ActivityTagObject, ThumbnailType, VideoObject, VideoStreamingPlaylistType_Type } from '@peertube/peertube-models'
-import { deleteAllModels, filterNonExistingModels } from '@server/helpers/database-utils.js'
+import {
+  ActivityTagObject,
+  ThumbnailType,
+  VideoChaptersObject,
+  VideoObject,
+  VideoStreamingPlaylistType_Type
+} from '@peertube/peertube-models'
+import { deleteAllModels, filterNonExistingModels, retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger, LoggerTagsFn } from '@server/helpers/logger.js'
 import { updateRemoteVideoThumbnail } from '@server/lib/thumbnail.js'
 import { setVideoTags } from '@server/lib/video.js'
@@ -29,6 +35,10 @@ import {
   getThumbnailFromIcons
 } from './object-to-model-attributes.js'
 import { getTrackerUrls, setVideoTrackers } from './trackers.js'
+import { fetchAP } from '../../activity.js'
+import { isVideoChaptersObjectValid } from '@server/helpers/custom-validators/activitypub/video-chapters.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
+import { replaceChapters } from '@server/lib/video-chapters.js'
 
 export abstract class APVideoAbstractBuilder {
   protected abstract videoObject: VideoObject
@@ -44,7 +54,7 @@ export abstract class APVideoAbstractBuilder {
   protected async setThumbnail (video: MVideoThumbnail, t?: Transaction) {
     const miniatureIcon = getThumbnailFromIcons(this.videoObject)
     if (!miniatureIcon) {
-      logger.warn('Cannot find thumbnail in video object', { object: this.videoObject })
+      logger.warn('Cannot find thumbnail in video object', { object: this.videoObject, ...this.lTags() })
       return undefined
     }
 
@@ -136,6 +146,26 @@ export abstract class APVideoAbstractBuilder {
     // Update or add other one
     const upsertTasks = newVideoFiles.map(f => VideoFileModel.customUpsert(f, 'video', t))
     video.VideoFiles = await Promise.all(upsertTasks)
+  }
+
+  protected async updateChaptersOutsideTransaction (video: MVideoFullLight) {
+    if (!this.videoObject.hasParts || typeof this.videoObject.hasParts !== 'string') return
+
+    const { body } = await fetchAP<VideoChaptersObject>(this.videoObject.hasParts)
+    if (!isVideoChaptersObjectValid(body)) {
+      logger.warn('Chapters AP object is not valid, skipping', { body, ...this.lTags() })
+      return
+    }
+
+    logger.debug('Fetched chapters AP object', { body, ...this.lTags() })
+
+    return retryTransactionWrapper(() => {
+      return sequelizeTypescript.transaction(async t => {
+        const chapters = body.hasPart.map(p => ({ title: p.name, timecode: p.startOffset }))
+
+        await replaceChapters({ chapters, transaction: t, video })
+      })
+    })
   }
 
   protected async setStreamingPlaylists (video: MVideoFullLight, t: Transaction) {

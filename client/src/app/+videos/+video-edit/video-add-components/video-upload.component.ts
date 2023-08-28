@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, MetaService, Notifier, ServerService, UserService } from '@app/core'
 import { genericUploadErrorHandler, scrollToTop } from '@app/helpers'
 import { FormReactiveService } from '@app/shared/shared-forms'
-import { Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { Video, VideoCaptionService, VideoChapterService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
 import { HttpStatusCode, VideoCreateResult } from '@peertube/peertube-models'
@@ -63,6 +63,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     protected serverService: ServerService,
     protected videoService: VideoService,
     protected videoCaptionService: VideoCaptionService,
+    protected videoChapterService: VideoChapterService,
     private userService: UserService,
     private router: Router,
     private hooks: HooksService,
@@ -241,9 +242,11 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     video.uuid = this.videoUploadedIds.uuid
     video.shortUUID = this.videoUploadedIds.shortUUID
 
+    this.chaptersEdit.patch(this.form.value)
+
     this.isUpdatingVideo = true
 
-    this.updateVideoAndCaptions(video)
+    this.updateVideoAndCaptionsAndChapters({ video, captions: this.videoCaptions, chapters: this.chaptersEdit })
         .subscribe({
           next: () => {
             this.isUpdatingVideo = false

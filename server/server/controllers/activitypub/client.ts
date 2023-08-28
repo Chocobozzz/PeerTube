@@ -1,6 +1,13 @@
 import cors from 'cors'
 import express from 'express'
-import { VideoCommentObject, VideoPlaylistPrivacy, VideoPrivacy, VideoRateType } from '@peertube/peertube-models'
+import {
+  VideoChapterObject,
+  VideoChaptersObject,
+  VideoCommentObject,
+  VideoPlaylistPrivacy,
+  VideoPrivacy,
+  VideoRateType
+} from '@peertube/peertube-models'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
 import { getContextFilter } from '@server/lib/activitypub/context.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -12,12 +19,18 @@ import { buildAnnounceWithVideoAudience, buildLikeActivity } from '../../lib/act
 import { buildCreateActivity } from '../../lib/activitypub/send/send-create.js'
 import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike.js'
 import {
+  getLocalVideoChaptersActivityPubUrl,
   getLocalVideoCommentsActivityPubUrl,
   getLocalVideoDislikesActivityPubUrl,
   getLocalVideoLikesActivityPubUrl,
   getLocalVideoSharesActivityPubUrl
 } from '../../lib/activitypub/url.js'
-import { cacheRoute } from '../../middlewares/cache/cache.js'
+import {
+  apVideoChaptersSetCacheKey,
+  buildAPVideoChaptersGroupsCache,
+  cacheRoute,
+  cacheRouteFactory
+} from '../../middlewares/cache/cache.js'
 import {
   activityPubRateLimiter,
   asyncMiddleware,
@@ -42,6 +55,8 @@ import { VideoCommentModel } from '../../models/video/video-comment.js'
 import { VideoPlaylistModel } from '../../models/video/video-playlist.js'
 import { VideoShareModel } from '../../models/video/video-share.js'
 import { activityPubResponse } from './utils.js'
+import { VideoChapterModel } from '@server/models/video/video-chapter.js'
+import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 
 const activityPubClientRouter = express.Router()
 activityPubClientRouter.use(cors())
@@ -144,6 +159,27 @@ activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity
   asyncMiddleware(videoCommentGetValidator),
   asyncMiddleware(videoCommentController)
 )
+
+// ---------------------------------------------------------------------------
+
+const { middleware: chaptersCacheRouteMiddleware, instance: chaptersApiCache } = cacheRouteFactory()
+
+InternalEventEmitter.Instance.on('chapters-updated', ({ video }) => {
+  if (video.remote) return
+
+  chaptersApiCache.clearGroupSafe(buildAPVideoChaptersGroupsCache({ videoId: video.uuid }))
+})
+
+activityPubClientRouter.get('/videos/watch/:id/chapters',
+  executeIfActivityPub,
+  activityPubRateLimiter,
+  apVideoChaptersSetCacheKey,
+  chaptersCacheRouteMiddleware(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
+  asyncMiddleware(videosCustomGetValidator('only-video')),
+  asyncMiddleware(videoChaptersController)
+)
+
+// ---------------------------------------------------------------------------
 
 activityPubClientRouter.get(
   [ '/video-channels/:nameWithHost', '/video-channels/:nameWithHost/videos', '/c/:nameWithHost', '/c/:nameWithHost/videos' ],
@@ -388,6 +424,31 @@ async function videoCommentController (req: express.Request, res: express.Respon
   }
 
   return activityPubResponse(activityPubContextify(videoCommentObject, 'Comment', getContextFilter()), res)
+}
+
+async function videoChaptersController (req: express.Request, res: express.Response) {
+  const video = res.locals.onlyVideo
+
+  if (redirectIfNotOwned(video.url, res)) return
+
+  const chapters = await VideoChapterModel.listChaptersOfVideo(video.id)
+
+  const hasPart: VideoChapterObject[] = []
+
+  if (chapters.length !== 0) {
+    for (let i = 0; i < chapters.length - 1; i++) {
+      hasPart.push(chapters[i].toActivityPubJSON({ video, nextChapter: chapters[i + 1] }))
+    }
+
+    hasPart.push(chapters[chapters.length - 1].toActivityPubJSON({ video: res.locals.onlyVideo, nextChapter: null }))
+  }
+
+  const chaptersObject: VideoChaptersObject = {
+    id: getLocalVideoChaptersActivityPubUrl(video),
+    hasPart
+  }
+
+  return activityPubResponse(activityPubContextify(chaptersObject, 'Chapters', getContextFilter()), res)
 }
 
 async function videoRedundancyController (req: express.Request, res: express.Response) {

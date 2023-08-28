@@ -14,7 +14,7 @@ import {
   MActorSummaryFormattable,
   MActorUrl
 } from '../actor/index.js'
-import { MChannelDefault } from '../video/video-channels.js'
+import { MChannelDefault } from '../video/video-channel.js'
 import { MAccountBlocklistId } from './account-blocklist.js'
 
 type Use<K extends keyof AccountModel, M> = PickWith<AccountModel, K, M>

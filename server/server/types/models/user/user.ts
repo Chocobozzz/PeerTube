@@ -11,7 +11,7 @@ import {
   MAccountIdActorId,
   MAccountUrl
 } from '../account/index.js'
-import { MChannelFormattable } from '../video/video-channels.js'
+import { MChannelFormattable } from '../video/video-channel.js'
 import { MNotificationSetting, MNotificationSettingFormattable } from './user-notification-setting.js'
 
 type Use<K extends keyof UserModel, M> = PickWith<UserModel, K, M>
