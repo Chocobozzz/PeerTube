@@ -35,18 +35,15 @@
 
   @keyframes vjs-spinner-show {
     0% {
-      display: none;
       opacity: 0;
     }
 
     1% {
-      display: block;
       visibility: visible;
       opacity: 0;
     }
 
     100% {
-      display: block;
       visibility: visible;
       opacity: 1;
     }
