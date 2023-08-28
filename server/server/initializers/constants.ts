@@ -1372,6 +1372,7 @@ async function buildLanguages () {
     rsl: true, // Russian sign language
 
     kab: true, // Kabyle
+    gcf: true, // Guadeloupean
 
     lat: true, // Latin
 
