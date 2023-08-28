@@ -1,6 +1,4 @@
-import {
-  HttpStatusCode, VideoChapterUpdate, VideoChapters
-} from '@peertube/peertube-models'
+import { HttpStatusCode, VideoChapter, VideoChapterUpdate } from '@peertube/peertube-models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class ChaptersCommand extends AbstractCommand {
@@ -10,7 +8,7 @@ export class ChaptersCommand extends AbstractCommand {
   }) {
     const path = '/api/v1/videos/' + options.videoId + '/chapters'
 
-    return this.getRequestBody<VideoChapters>({
+    return this.getRequestBody<{ chapters: VideoChapter[] }>({
       ...options,
 
       path,
