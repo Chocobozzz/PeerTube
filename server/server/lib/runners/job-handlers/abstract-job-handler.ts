@@ -213,6 +213,8 @@ export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S
     runnerJob.resetToPending()
 
     await saveInTransactionWithRetries(runnerJob)
+
+    PeerTubeSocket.Instance.sendAvailableJobsPingToRunners()
   }
 
   protected setAbortState (runnerJob: MRunnerJob) {
@@ -259,6 +261,8 @@ export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S
 
         await this.error({ runnerJob: child, message: 'Parent error', fromParent: true })
       }
+    } else {
+      PeerTubeSocket.Instance.sendAvailableJobsPingToRunners()
     }
   }
 
