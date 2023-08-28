@@ -54,7 +54,7 @@ export class RunnerServer {
     }
 
     // Cleanup on exit
-    for (const code of [ 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'uncaughtException' ]) {
+    for (const code of [ 'SIGTERM', 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'uncaughtException' ]) {
       process.on(code, async (err, origin) => {
         if (code === 'uncaughtException') {
           logger.error({ err, origin }, 'uncaughtException')
