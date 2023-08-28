@@ -46,7 +46,7 @@ export class FFmpegImage {
 
     this.commandWrapper.buildCommand(fromPath)
       .seekInput(duration / 2)
-      .videoFilter('thumbnail=500')
+      .videoFilter('thumbnail=50')
       .outputOption('-frames:v 1')
       .output(output)
 
