@@ -206,6 +206,7 @@ describe('Extract chapters', function () {
     expect(parseChapters('my super description\nno?')).to.deep.equal([])
     expect(parseChapters('m00:00 super description\nno?')).to.deep.equal([])
     expect(parseChapters('00:00super description\nno?')).to.deep.equal([])
+    expect(parseChapters('my super description\n'.repeat(10) + ' * list1\n * list 2\n * list 3')).to.deep.equal([])
   })
 
   it('Should extract chapters', function () {
