@@ -1,5 +1,15 @@
 # Changelog
 
+## v5.2.1
+
+### Bug fixes
+
+ * Fix loading spinner displayed forever on Chrome
+ * Fix broken replay with long live name
+ * Fix fps transcoding on remote runners
+ * Fix terms/code of conduct link toggle
+
+
 ## v5.2.0
 
 ### IMPORTANT NOTES
