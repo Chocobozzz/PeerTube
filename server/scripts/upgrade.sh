@@ -91,10 +91,10 @@ echo "=========================================================="
 echo ""
 
 if [ -x "$(command -v git)" ]; then
-  cd /var/www/peertube
+  cd $PEERTUBE_PATH
 
   git merge-file -p config/production.yaml "$LATEST_VERSION_DIRECTORY/config/production.yaml.example" "peertube-latest/config/production.yaml.example" | tee "config/production.yaml.new" > /dev/null
-  echo "/var/www/peertube/config/production.yaml.new generated"
+  echo "$PEERTUBE_PATH/config/production.yaml.new generated"
   echo "You can review it and replace your existing production.yaml configuration"
 else
   echo "git command not found: unable to generate config/production.yaml.new configuration file based on your existing production.yaml configuration"
