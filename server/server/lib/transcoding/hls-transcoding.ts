@@ -58,8 +58,9 @@ export async function onHLSVideoFileTranscoding (options: {
   videoFile: MVideoFile
   videoOutputPath: string
   m3u8OutputPath: string
+  filesLockedInParent?: boolean // default false
 }) {
-  const { video, videoFile, videoOutputPath, m3u8OutputPath } = options
+  const { video, videoFile, videoOutputPath, m3u8OutputPath, filesLockedInParent = false } = options
 
   // Create or update the playlist
   const playlist = await retryTransactionWrapper(() => {
@@ -69,7 +70,9 @@ export async function onHLSVideoFileTranscoding (options: {
   })
   videoFile.videoStreamingPlaylistId = playlist.id
 
-  const mutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+  const mutexReleaser = !filesLockedInParent
+    ? await VideoPathManager.Instance.lockFiles(video.uuid)
+    : null
 
   try {
     await video.reload()
@@ -114,7 +117,7 @@ export async function onHLSVideoFileTranscoding (options: {
 
     return { resolutionPlaylistPath, videoFile: savedVideoFile }
   } finally {
-    mutexReleaser()
+    if (mutexReleaser) mutexReleaser()
   }
 }
 
@@ -176,5 +179,11 @@ async function generateHlsPlaylistCommon (options: {
     fps: -1
   })
 
-  await onHLSVideoFileTranscoding({ video, videoFile: newVideoFile, videoOutputPath, m3u8OutputPath })
+  await onHLSVideoFileTranscoding({
+    video,
+    videoFile: newVideoFile,
+    videoOutputPath,
+    m3u8OutputPath,
+    filesLockedInParent: !inputFileMutexReleaser
+  })
 }

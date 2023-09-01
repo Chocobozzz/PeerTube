@@ -102,7 +102,9 @@ export class FFmpegVOD {
 
     command.on('start', () => {
       setTimeout(() => {
-        options.inputFileMutexReleaser()
+        if (options.inputFileMutexReleaser) {
+          options.inputFileMutexReleaser()
+        }
       }, 1000)
     })
 

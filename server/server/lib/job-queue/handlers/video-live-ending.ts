@@ -8,7 +8,12 @@ import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { cleanupAndDestroyPermanentLive, cleanupTMPLiveFiles, cleanupUnsavedNormalLive } from '@server/lib/live/index.js'
-import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveReplayBaseDirectory } from '@server/lib/paths.js'
+import {
+  generateHLSMasterPlaylistFilename,
+  generateHlsSha256SegmentsFilename,
+  getHLSDirectory,
+  getLiveReplayBaseDirectory
+} from '@server/lib/paths.js'
 import { generateLocalVideoMiniature, regenerateMiniaturesIfNeeded } from '@server/lib/thumbnail.js'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/hls-transcoding.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -24,6 +29,7 @@ import { MVideo, MVideoLive, MVideoLiveSession, MVideoWithAllFiles } from '@serv
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { JobQueue } from '../job-queue.js'
+import { isVideoInPublicDirectory } from '@server/lib/video-privacy.js'
 
 const lTags = loggerTagsFactory('live', 'job')
 
@@ -139,9 +145,15 @@ async function saveReplayToExternalVideo (options: {
     })
   }
 
-  await assignReplayFilesToVideo({ video: replayVideo, replayDirectory })
+  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(liveVideo.uuid)
 
-  await remove(replayDirectory)
+  try {
+    await assignReplayFilesToVideo({ video: replayVideo, replayDirectory })
+
+    await remove(replayDirectory)
+  } finally {
+    inputFileMutexReleaser()
+  }
 
   for (const type of [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ]) {
     const image = await generateLocalVideoMiniature({ video: replayVideo, videoFile: replayVideo.getMaxQualityFile(), type })
@@ -160,11 +172,14 @@ async function replaceLiveByReplay (options: {
   permanentLive: boolean
   replayDirectory: string
 }) {
-  const { video, liveSession, live, permanentLive, replayDirectory } = options
+  const { video: liveVideo, liveSession, live, permanentLive, replayDirectory } = options
 
   const replaySettings = await VideoLiveReplaySettingModel.load(liveSession.replaySettingId)
-  const videoWithFiles = await VideoModel.loadFull(video.id)
+  const videoWithFiles = await VideoModel.loadFull(liveVideo.id)
   const hlsPlaylist = videoWithFiles.getHLSPlaylist()
+  const replayInAnotherDirectory = isVideoInPublicDirectory(liveVideo.privacy) !== isVideoInPublicDirectory(replaySettings.privacy)
+
+  logger.info(`Replacing live ${liveVideo.uuid} by replay ${replayDirectory}.`, { replayInAnotherDirectory, ...lTags(liveVideo.uuid) })
 
   await cleanupTMPLiveFiles(videoWithFiles, hlsPlaylist)
 
@@ -188,13 +203,25 @@ async function replaceLiveByReplay (options: {
   hlsPlaylist.segmentsSha256Filename = generateHlsSha256SegmentsFilename()
   await hlsPlaylist.save()
 
-  await assignReplayFilesToVideo({ video: videoWithFiles, replayDirectory })
+  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(videoWithFiles.uuid)
 
-  // Should not happen in this function, but we keep the code if in the future we can replace the permanent live by a replay
-  if (permanentLive) { // Remove session replay
-    await remove(replayDirectory)
-  } else { // We won't stream again in this live, we can delete the base replay directory
-    await remove(getLiveReplayBaseDirectory(videoWithFiles))
+  try {
+    await assignReplayFilesToVideo({ video: videoWithFiles, replayDirectory })
+
+    // Should not happen in this function, but we keep the code if in the future we can replace the permanent live by a replay
+    if (permanentLive) { // Remove session replay
+      await remove(replayDirectory)
+    } else {
+      // We won't stream again in this live, we can delete the base replay directory
+      await remove(getLiveReplayBaseDirectory(liveVideo))
+
+      // If the live was in another base directory, also delete it
+      if (replayInAnotherDirectory) {
+        await remove(getHLSDirectory(liveVideo))
+      }
+    }
+  } finally {
+    inputFileMutexReleaser()
   }
 
   // Regenerate the thumbnail & preview?
@@ -214,8 +241,10 @@ async function assignReplayFilesToVideo (options: {
 
   const concatenatedTsFiles = await readdir(replayDirectory)
 
+  logger.info(`Assigning replays ${replayDirectory} to video ${video.uuid}.`, { concatenatedTsFiles, ...lTags(video.uuid) })
+
   for (const concatenatedTsFile of concatenatedTsFiles) {
-    const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+    // Generating hls playlist can be long, reload the video in this case
     await video.reload()
 
     const concatenatedTsFilePath = join(replayDirectory, concatenatedTsFile)
@@ -228,17 +257,17 @@ async function assignReplayFilesToVideo (options: {
     try {
       await generateHlsPlaylistResolutionFromTS({
         video,
-        inputFileMutexReleaser,
+        inputFileMutexReleaser: null, // Already locked in parent
         concatenatedTsFilePath,
         resolution,
         fps,
         isAAC: audioStream?.codec_name === 'aac'
       })
+
+      logger.error('coucou')
     } catch (err) {
       logger.error('Cannot generate HLS playlist resolution from TS files.', { err })
     }
-
-    inputFileMutexReleaser()
   }
 
   return video
