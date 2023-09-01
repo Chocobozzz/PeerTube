@@ -21,7 +21,7 @@ import { APProcessorOptions } from '../../../types/activitypub-processor.model.j
 import { MActorSignature } from '../../../types/models/index.js'
 import { fetchAPObjectIfNeeded } from '../activity.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
-import { federateVideoIfNeeded, getOrCreateAPVideo } from '../videos/index.js'
+import { federateVideoIfNeeded, getOrCreateAPVideo, maybeGetOrCreateAPVideo } from '../videos/index.js'
 
 async function processUndoActivity (options: APProcessorOptions<ActivityUndo<ActivityUndoObject>>) {
   const { activity, byActor } = options
@@ -67,9 +67,8 @@ export {
 async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo<ActivityLike>) {
   const likeActivity = activity.object
 
-  const { video: onlyVideo } = await getOrCreateAPVideo({ videoObject: likeActivity.object })
-  // We don't care about likes of remote videos
-  if (!onlyVideo.isOwned()) return
+  const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: likeActivity.object })
+  if (!onlyVideo?.isOwned()) return
 
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
@@ -92,9 +91,8 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
 async function processUndoDislike (byActor: MActorSignature, activity: ActivityUndo<ActivityDislike>) {
   const dislikeActivity = activity.object
 
-  const { video: onlyVideo } = await getOrCreateAPVideo({ videoObject: dislikeActivity.object })
-  // We don't care about likes of remote videos
-  if (!onlyVideo.isOwned()) return
+  const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: dislikeActivity.object })
+  if (!onlyVideo?.isOwned()) return
 
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)

@@ -6,7 +6,7 @@ import { getAPId } from '../../../lib/activitypub/activity.js'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature } from '../../../types/models/index.js'
-import { federateVideoIfNeeded, getOrCreateAPVideo } from '../videos/index.js'
+import { federateVideoIfNeeded, maybeGetOrCreateAPVideo } from '../videos/index.js'
 
 async function processLikeActivity (options: APProcessorOptions<ActivityLike>) {
   const { activity, byActor } = options
@@ -28,10 +28,8 @@ async function processLikeVideo (byActor: MActorSignature, activity: ActivityLik
   const byAccount = byActor.Account
   if (!byAccount) throw new Error('Cannot create like with the non account actor ' + byActor.url)
 
-  const { video: onlyVideo } = await getOrCreateAPVideo({ videoObject: videoUrl, fetchType: 'only-video' })
-
-  // We don't care about likes of remote videos
-  if (!onlyVideo.isOwned()) return
+  const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: videoUrl, fetchType: 'only-video' })
+  if (!onlyVideo?.isOwned()) return
 
   return sequelizeTypescript.transaction(async t => {
     const video = await VideoModel.loadFull(onlyVideo.id, t)

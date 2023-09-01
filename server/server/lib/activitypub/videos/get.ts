@@ -35,11 +35,10 @@ type GetVideoParamOther = {
   allowRefresh?: boolean
 }
 
-function getOrCreateAPVideo (options: GetVideoParamAll): GetVideoResult<MVideoAccountLightBlacklistAllFiles>
-function getOrCreateAPVideo (options: GetVideoParamImmutable): GetVideoResult<MVideoImmutable>
-function getOrCreateAPVideo (options: GetVideoParamOther): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail>
-
-async function getOrCreateAPVideo (
+export function getOrCreateAPVideo (options: GetVideoParamAll): GetVideoResult<MVideoAccountLightBlacklistAllFiles>
+export function getOrCreateAPVideo (options: GetVideoParamImmutable): GetVideoResult<MVideoImmutable>
+export function getOrCreateAPVideo (options: GetVideoParamOther): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail>
+export async function getOrCreateAPVideo (
   options: GetVideoParamAll | GetVideoParamImmutable | GetVideoParamOther
 ): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable> {
   // Default params
@@ -86,12 +85,22 @@ async function getOrCreateAPVideo (
   }
 }
 
-// ---------------------------------------------------------------------------
+export function maybeGetOrCreateAPVideo (options: GetVideoParamAll): GetVideoResult<MVideoAccountLightBlacklistAllFiles>
+export function maybeGetOrCreateAPVideo (options: GetVideoParamImmutable): GetVideoResult<MVideoImmutable>
+export function maybeGetOrCreateAPVideo (options: GetVideoParamOther): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail>
+export async function maybeGetOrCreateAPVideo (options: GetVideoParamAll | GetVideoParamImmutable | GetVideoParamOther) {
+  try {
+    const result = await getOrCreateAPVideo(options as any)
 
-export {
-  getOrCreateAPVideo
+    return result
+  } catch (err) {
+    logger.debug('Cannot fetch remote video ' + options.videoObject + ': maybe not a video object?', { err })
+    return { video: undefined, created: false }
+  }
 }
 
+// ---------------------------------------------------------------------------
+// Private
 // ---------------------------------------------------------------------------
 
 async function scheduleRefresh (video: MVideoThumbnail, fetchType: VideoLoadByUrlType, syncParam: SyncParam) {

@@ -1,14 +1,13 @@
 import { ActivityAnnounce } from '@peertube/peertube-models'
 import { getAPId } from '@server/lib/activitypub/activity.js'
 import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
-import { logger } from '../../../helpers/logger.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { VideoShareModel } from '../../../models/video/video-share.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
-import { MActorSignature, MVideoAccountLightBlacklistAllFiles } from '../../../types/models/index.js'
+import { MActorSignature } from '../../../types/models/index.js'
 import { Notifier } from '../../notifier/index.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
-import { getOrCreateAPVideo } from '../videos/index.js'
+import { maybeGetOrCreateAPVideo } from '../videos/index.js'
 
 async function processAnnounceActivity (options: APProcessorOptions<ActivityAnnounce>) {
   const { activity, byActor: actorAnnouncer } = options
@@ -32,17 +31,8 @@ export {
 async function processVideoShare (actorAnnouncer: MActorSignature, activity: ActivityAnnounce, notify: boolean) {
   const objectUri = getAPId(activity.object)
 
-  let video: MVideoAccountLightBlacklistAllFiles
-  let videoCreated: boolean
-
-  try {
-    const result = await getOrCreateAPVideo({ videoObject: objectUri })
-    video = result.video
-    videoCreated = result.created
-  } catch (err) {
-    logger.debug('Cannot process share of %s. Maybe this is not a video object, so just skipping.', objectUri, { err })
-    return
-  }
+  const { video, created: videoCreated } = await maybeGetOrCreateAPVideo({ videoObject: objectUri })
+  if (!video) return
 
   await sequelizeTypescript.transaction(async t => {
     // Add share entry

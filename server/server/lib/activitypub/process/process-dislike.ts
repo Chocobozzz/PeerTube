@@ -5,7 +5,7 @@ import { sequelizeTypescript } from '../../../initializers/database.js'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature } from '../../../types/models/index.js'
-import { federateVideoIfNeeded, getOrCreateAPVideo } from '../videos/index.js'
+import { federateVideoIfNeeded, maybeGetOrCreateAPVideo } from '../videos/index.js'
 
 async function processDislikeActivity (options: APProcessorOptions<ActivityDislike>) {
   const { activity, byActor } = options
@@ -26,10 +26,8 @@ async function processDislike (activity: ActivityDislike, byActor: MActorSignatu
 
   if (!byAccount) throw new Error('Cannot create dislike with the non account actor ' + byActor.url)
 
-  const { video: onlyVideo } = await getOrCreateAPVideo({ videoObject: dislikeObject, fetchType: 'only-video' })
-
-  // We don't care about dislikes of remote videos
-  if (!onlyVideo.isOwned()) return
+  const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: dislikeObject, fetchType: 'only-video' })
+  if (!onlyVideo?.isOwned()) return
 
   return sequelizeTypescript.transaction(async t => {
     const video = await VideoModel.loadFull(onlyVideo.id, t)
