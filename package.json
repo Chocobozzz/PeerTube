@@ -106,7 +106,7 @@
     "@opentelemetry/sdk-trace-base": "^1.15.1",
     "@opentelemetry/sdk-trace-node": "^1.15.1",
     "@opentelemetry/semantic-conventions": "^1.15.1",
-    "@peertube/feed": "^5.1.0",
+    "@peertube/feed": "^5.1.1",
     "@peertube/http-signature": "^1.7.0",
     "@uploadx/core": "^6.0.0",
     "async-lru": "^1.1.1",

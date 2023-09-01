@@ -17,7 +17,6 @@ function apiFailMiddleware (req: express.Request, res: express.Response, next: e
       error: message
     })
 
-
     const json = new ProblemDocument({
       status,
       title,

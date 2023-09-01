@@ -2247,10 +2247,10 @@
   dependencies:
     "@opentelemetry/core" "^1.1.0"
 
-"@peertube/feed@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@peertube/feed/-/feed-5.1.0.tgz#e2fec950459ebaa32ea35791c45177f8b6fa85e9"
-  integrity sha512-ggwIbjxh4oc1aAGYV7ZxtIpiEIGq3Rkg6FxvOSrk/EPZ76rExoIJCjKeSyd4zb/sGkyKldy+bGs1OUUVidWWTQ==
+"@peertube/feed@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@peertube/feed/-/feed-5.1.1.tgz#b2cc0ece4576fc3829cf77af84ac2d8bbce85375"
+  integrity sha512-/B1CvV4/5jtc2DQemo6uMP3kM7sE7mBtjrBqq/aD1bsJqJkTjhF33ewytTnw1BCEISVN7l3aufkxXWpU4gNz+Q==
   dependencies:
     xml-js "^1.6.11"
 
