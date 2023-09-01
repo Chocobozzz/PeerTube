@@ -259,5 +259,7 @@ function buildUrlList (video: MVideo, videoFile: MVideoFile) {
 }
 
 function buildInfoName (video: MVideo, videoFile: MVideoFile) {
-  return `${video.name} ${videoFile.resolution}p${videoFile.extname}`
+  const videoName = video.name.replace(/[/\\?%*:|"<>]/g, '-')
+
+  return `${videoName} ${videoFile.resolution}p${videoFile.extname}`
 }
