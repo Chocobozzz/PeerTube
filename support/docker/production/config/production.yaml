@@ -71,6 +71,12 @@ storage:
   # If not, peertube will fallback to the default fil
   client_overrides: '../data/client-overrides/'
 
+
+object_storage:
+  upload_acl:
+    public: null # Set to null here because we can't using env variables
+    private: null
+
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
 
