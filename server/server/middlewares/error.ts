@@ -17,11 +17,6 @@ function apiFailMiddleware (req: express.Request, res: express.Response, next: e
       error: message
     })
 
-    res.status(status)
-
-    if (!res.headersSent) {
-      res.setHeader('Content-Type', 'application/problem+json')
-    }
 
     const json = new ProblemDocument({
       status,
@@ -37,6 +32,12 @@ function apiFailMiddleware (req: express.Request, res: express.Response, next: e
 
     logger.debug('Bad HTTP request.', { json, tags })
 
+    res.status(status)
+
+    // Cannot display a proper error to the client since headers are already sent
+    if (res.headersSent) return
+
+    res.setHeader('Content-Type', 'application/problem+json')
     res.json(json)
   }
 

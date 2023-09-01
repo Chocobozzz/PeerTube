@@ -83,6 +83,8 @@ function handleObjectStorageFailure (res: express.Response, err: Error) {
     return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
   }
 
+  logger.error('Object storage failure', { err })
+
   return res.fail({
     status: HttpStatusCode.INTERNAL_SERVER_ERROR_500,
     message: err.message,
