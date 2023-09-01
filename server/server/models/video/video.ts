@@ -797,6 +797,20 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   @BeforeDestroy
+  static stopLiveIfNeeded (instance: VideoModel) {
+    if (!instance.isLive) return
+
+    logger.info('Stopping live of video %s after video deletion.', instance.uuid)
+
+    LiveManager.Instance.stopSessionOf(instance.uuid, null)
+  }
+
+  @BeforeDestroy
+  static invalidateCache (instance: VideoModel) {
+    ModelCache.Instance.invalidateCache('video', instance.id)
+  }
+
+  @BeforeDestroy
   static async sendDelete (instance: MVideoAccountLight, options: { transaction: Transaction }) {
     if (!instance.isOwned()) return undefined
 
@@ -846,20 +860,6 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       .catch(err => logger.error('Some errors when removing files of video %s in before destroy hook.', instance.uuid, { err }))
 
     return undefined
-  }
-
-  @BeforeDestroy
-  static stopLiveIfNeeded (instance: VideoModel) {
-    if (!instance.isLive) return
-
-    logger.info('Stopping live of video %s after video deletion.', instance.uuid)
-
-    LiveManager.Instance.stopSessionOf(instance.uuid, null)
-  }
-
-  @BeforeDestroy
-  static invalidateCache (instance: VideoModel) {
-    ModelCache.Instance.invalidateCache('video', instance.id)
   }
 
   @BeforeDestroy
