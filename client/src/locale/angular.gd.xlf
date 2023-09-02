@@ -6750,7 +6750,7 @@
       </trans-unit>
       <trans-unit id="1433545855928203716" datatype="html">
         <source>A moderator will check your registration request soon and you'll receive an email when it will be accepted or rejected.</source>
-        <target state="translated">Bheir maor sùil air an t-iarrtas clàraidh agad a dh’aithghearr agus gheibh thu post-d nuair a bhios e air aontachadh no air a dhiùltadh.</target>
+        <target state="translated">Bheir maor sùil air an t-iarrtas clàraidh agad a dh’aithghearr is gheibh thu post-d nuair a bhios e air aontachadh no diùltadh.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -7356,6 +7356,7 @@
       </trans-unit>
       <trans-unit id="1506228075480230031" datatype="html">
         <source>Example: Sweet Melodies</source>
+        <target state="translated">Ball-eisimpleir: Fuinn bhinn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">27</context>
@@ -7363,7 +7364,7 @@
       </trans-unit>
       <trans-unit id="1346553616305614767" datatype="html">
         <source>Channel identifier</source>
-        <target state="translated">Aithnichear na seanail</target>
+        <target state="translated">Aithnichear seanail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">36</context>
@@ -7371,7 +7372,7 @@
       </trans-unit>
       <trans-unit id="1421502666684458815" datatype="html">
         <source>This is the name that will be displayed in your profile URL.</source>
-        <target state="translated">Seo an t-ainm a nochdas ann an URL na pròifile agad.</target>
+        <target state="translated">Seo an t-ainm a thèid a shealltainn ann an URL na pròifile agad.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">38</context>
@@ -7379,6 +7380,7 @@
       </trans-unit>
       <trans-unit id="5007378598046048755" datatype="html">
         <source>Example: sweetmelodies24</source>
+        <target state="translated">Ball-eisimpleir: fuinnbhinn24</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">42</context>
@@ -7446,6 +7448,7 @@
       </trans-unit>
       <trans-unit id="1926625386720791836" datatype="html">
         <source>Example: John Doe</source>
+        <target state="translated">Ball-eisimpleir: Calum MacCaluim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">17</context>
@@ -7453,7 +7456,7 @@
       </trans-unit>
       <trans-unit id="8656171949584591423" datatype="html">
         <source>This is the name that will be displayed in your profile URL.</source>
-        <target state="translated">Seo an t-ainm a nochdas ann an URL na pròifile agad.</target>
+        <target state="translated">Seo an t-ainm a thèid a shealltainn ann an URL na pròifile agad.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -7461,6 +7464,7 @@
       </trans-unit>
       <trans-unit id="9199457913561943854" datatype="html">
         <source>Example: john_doe58</source>
+        <target state="translated">Ball-eisimpleir: calum_maccaluim58</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">34</context>
@@ -7468,6 +7472,7 @@
       </trans-unit>
       <trans-unit id="5856397248272246243" datatype="html">
         <source>This email address will be used to validate your account.</source>
+        <target state="translated">Thèid an seòladh puist-d seo a chleachdadh airson an cunntas agad a dhearbhadh.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">48,50</context>
@@ -7997,6 +8002,7 @@
       </trans-unit>
       <trans-unit id="4309656190692990192" datatype="html">
         <source>Deleted followers will be able to send again a follow request.</source>
+        <target state="translated">’S urrainn dhan luchd-leantainn a sguab thu às iarrtas leantainn a chur thugad a-rithist.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="4187075675930483010" datatype="html">
@@ -8032,6 +8038,7 @@
       </trans-unit>
       <trans-unit id="3069073855436209848" datatype="html">
         <source>Subscriptions of your instance</source>
+        <target state="translated">Fo-sgrìobhaidhean an ionstans agad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -8514,6 +8521,7 @@
       </trans-unit>
       <trans-unit id="6410650387447929805" datatype="html">
         <source>Light/Orange or Dark</source>
+        <target state="translated">Soilleir/Orains no dorcha</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/theme/theme.service.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="1519954996184640001" datatype="html">
@@ -8559,14 +8567,17 @@
       </trans-unit>
       <trans-unit id="1046771510013067927" datatype="html">
         <source>Private payload:</source>
+        <target state="translated">Eallach prìobhaideach:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="6133673901299224277" datatype="html">
         <source>No runner jobs found.</source>
+        <target state="translated">Cha deach obair ruitheadair a lorg.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context><context context-type="linenumber">117</context></context-group>
       </trans-unit>
       <trans-unit id="7146070362549250677" datatype="html">
         <source>Completed jobs</source>
+        <target state="translated">Obraichean coileanta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">30</context>
@@ -8574,6 +8585,7 @@
       </trans-unit>
       <trans-unit id="2841995988789172579" datatype="html">
         <source>Pending jobs</source>
+        <target state="translated">Obraichean ri dhèiligeadh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -8581,6 +8593,7 @@
       </trans-unit>
       <trans-unit id="6587308737467829649" datatype="html">
         <source>Jobs that are being processed</source>
+        <target state="translated">Obraichean ’gam pròiseasadh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -8588,6 +8601,7 @@
       </trans-unit>
       <trans-unit id="2902296494834684511" datatype="html">
         <source>Failed jobs</source>
+        <target state="translated">Obraichean a dh’fhàillig</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -8595,10 +8609,12 @@
       </trans-unit>
       <trans-unit id="2785060445730155276" datatype="html">
         <source>Cancel this job</source>
+        <target state="translated">Sguir dhen obair seo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="410829478323542752" datatype="html">
         <source>Delete this job</source>
+        <target state="translated">Sguab às an obair seo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -8611,6 +8627,7 @@
       </trans-unit>
       <trans-unit id="8430670111153715725" datatype="html">
         <source>Job(s) cancelled.</source>
+        <target state="translated">Chaidh sgur dhen obair/dhe na h-obraichean.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="2175266358082397536" datatype="html">
@@ -8623,6 +8640,7 @@
       </trans-unit>
       <trans-unit id="453899642867587306" datatype="html">
         <source>Runner registration tokens</source>
+        <target state="translated">Tòcanan clàraidh ruitheadair</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">9</context>
@@ -8639,10 +8657,12 @@
       </trans-unit>
       <trans-unit id="251663748987415005" datatype="html">
         <source>Last contact</source>
+        <target state="translated">An conaltradh mu dheireadh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="6329354273972175246" datatype="html">
         <source>No remote runners found.</source>
+        <target state="translated">Cha deach ruitheadair cèin a lorg.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="1886888801485703107" datatype="html">
@@ -8663,6 +8683,7 @@
       </trans-unit>
       <trans-unit id="2434590176499222618" datatype="html">
         <source>User registrations</source>
+        <target state="translated">Clàradh chleachdaichean</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">79</context>
@@ -8683,6 +8704,7 @@
       </trans-unit>
       <trans-unit id="2237982448344718491" datatype="html">
         <source>Registration email has not been verified. Email delivery has been disabled by default.</source>
+        <target state="translated">Cha deach am post-d clàraidh a dhearbhadh. Chaidh lìbhrigeadh nam post-d a chur à comas a ghnàth.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -8738,6 +8760,7 @@
       </trans-unit>
       <trans-unit id="608706297814044931" datatype="html">
         <source>Prevent email from being sent to the user</source>
+        <target state="translated">Bac cur puist-d dhan chleachdaiche</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">60</context>
@@ -8745,10 +8768,12 @@
       </trans-unit>
       <trans-unit id="1067821087200879310" datatype="html">
         <source>Accept registration</source>
+        <target state="translated">Aontaich ris a’ chlàradh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="9200323379330335050" datatype="html">
         <source>Reject registration</source>
+        <target state="translated">Diùlt an clàradh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="5919197630789088814" datatype="html">
@@ -8763,6 +8788,7 @@
       </trans-unit>
       <trans-unit id="5941489410560989457" datatype="html">
         <source>Moderation response is required.</source>
+        <target state="translated">Tha feum air freagairt na maorsainneachd.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -8770,6 +8796,7 @@
       </trans-unit>
       <trans-unit id="1762427369052469243" datatype="html">
         <source>Moderation response must be at least 2 characters long.</source>
+        <target state="translated">Feumaidh freagairt na maorsainneachd a bhith 2 charactar a dh’fhaid air a char as giorra.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -8777,6 +8804,7 @@
       </trans-unit>
       <trans-unit id="3326945092799111194" datatype="html">
         <source>Moderation response cannot be more than 3000 characters long.</source>
+        <target state="translated">Chan fhaod freagairt na maorsainneachd a bhith nas fhaide na 3000 caractar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -8784,6 +8812,7 @@
       </trans-unit>
       <trans-unit id="7060967501175301883" datatype="html">
         <source>Registration requests</source>
+        <target state="translated">Iarrtasan clàraidh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -8860,6 +8889,7 @@
       </trans-unit>
       <trans-unit id="1882931826815906053" datatype="html">
         <source>With Web Videos</source>
+        <target state="translated">Le videothan-lìn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">63</context>
@@ -8867,6 +8897,7 @@
       </trans-unit>
       <trans-unit id="1590370632695044398" datatype="html">
         <source>Without Web Videos</source>
+        <target state="translated">Gun videothan-lìn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">67</context>
@@ -8967,10 +8998,12 @@
       </trans-unit>
       <trans-unit id="5945924096465496818" datatype="html">
         <source>&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</source>
+        <target state="translated">&lt;p&gt;Chan urrainn dhut cleachdaiche no seanail a chruthachadh le ainm-cleachdaiche a bhiodh ’ga chleachdadh le cleachdaiche/seanail a chaidh a sguabadh às.&lt;/p&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
       <trans-unit id="5643060985393782358" datatype="html">
         <source>It means the following usernames will be permanently deleted and cannot be recovered:</source>
+        <target state="translated">Is ciall dha gun dèid na h-ainmean-cleachdaiche seo a sguabadh às gu buan ’s nach gabh an aiseag:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="1301767781765127363" datatype="html">
@@ -9085,6 +9118,7 @@
       </trans-unit>
       <trans-unit id="5215550763077484072" datatype="html">
         <source>Allow email to be publicly displayed</source>
+        <target state="translated">Ceadaich sealltainn poblach a’ phuist-d</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">6</context>
@@ -9092,6 +9126,7 @@
       </trans-unit>
       <trans-unit id="3472732945521632942" datatype="html">
         <source>Necessary to claim podcast RSS feeds.</source>
+        <target state="translated">Tha feum air seo airson sealbh air inbhirean RSS pod-chraolaidh a ghabhail.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">9</context>
@@ -9145,6 +9180,7 @@
       </trans-unit>
       <trans-unit id="5935212402338564229" datatype="html">
         <source>You or one of your channels has a new follower</source>
+        <target state="translated">Tha cuideigin ùr ’gad leantainn no a’ leantainn seanail no dhà agad</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="5315689532659759332" datatype="html">
@@ -9508,6 +9544,7 @@
       </trans-unit>
       <trans-unit id="1498264516089100469" datatype="html">
         <source>My synchronizations</source>
+        <target state="translated">Na sioncronachaidhean agam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">11</context>
@@ -9559,6 +9596,7 @@
       </trans-unit>
       <trans-unit id="4250548381153518208" datatype="html">
         <source>Change your email</source>
+        <target state="translated">Atharraich am post-d agam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">11</context>
@@ -9585,6 +9623,7 @@
       </trans-unit>
       <trans-unit id="6328603643802633101" datatype="html">
         <source>Create new synchronization</source>
+        <target state="translated">Cruthaich sioncronachadh ùr</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context>
           <context context-type="linenumber">153</context>
@@ -9836,6 +9875,7 @@
       </trans-unit>
       <trans-unit id="8093156107152165809" datatype="html">
         <source>Show/hide this help menu</source>
+        <target state="translated">Seall/Falaich clàr-taice na cobharach seo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/core.module.ts</context>
           <context context-type="linenumber">45</context>
@@ -9843,6 +9883,7 @@
       </trans-unit>
       <trans-unit id="3314265031897048047" datatype="html">
         <source>Hide this help menu</source>
+        <target state="translated">Falaich clàr-taice na cobharach seo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/core.module.ts</context>
           <context context-type="linenumber">46</context>
@@ -9898,10 +9939,12 @@
       </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html">
         <source>This account is awaiting approval by moderators.</source>
+        <target state="translated">Tha an cunntas seo a’ feitheamh air aontachadh le maoir.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">223</context></context-group>
       </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html">
         <source>Registration approval has been rejected for this account.</source>
+        <target state="translated">Chaidh aontachadh air clàradh a dhiùltadh dhan chunntas seo.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">228</context></context-group>
       </trans-unit>
       <trans-unit id="7939914198003891823" datatype="html">
@@ -10089,6 +10132,7 @@
       </trans-unit>
       <trans-unit id="5378618511917875694" datatype="html">
         <source>User email has been verified</source>
+        <target state="translated">Chaidh post-d a’ chleachdaiche a dhearbhadh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">15</context>
@@ -10096,6 +10140,7 @@
       </trans-unit>
       <trans-unit id="2754481302921121772" datatype="html">
         <source>User email hasn't been verified</source>
+        <target state="translated">Cha deach post-d a’ chleachdaiche a dhearbhadh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">18</context>
@@ -10189,6 +10234,7 @@
       </trans-unit>
       <trans-unit id="3381033584543723394" datatype="html">
         <source>Scan this QR code into a TOTP app on your phone. This app will generate tokens that you will have to enter when logging in.</source>
+        <target state="translated">Sganaich an còd QR le aplacaid dearbhadh TOTP air an fhòn agad. Ginidh an aplacaid ud tòcanan a dh’fheumas tu cur a-steach nuair a bhios tu ri clàradh a-steach.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -10220,6 +10266,7 @@
       </trans-unit>
       <trans-unit id="2026328843059071368" datatype="html">
         <source>Two factor authentication has been enabled.</source>
+        <target state="translated">Chaidh an dearbhadh dà-cheumnach a chur an comas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -10242,6 +10289,7 @@
       </trans-unit>
       <trans-unit id="518461007481947848" datatype="html">
         <source>Cache size is required.</source>
+        <target state="translated">Tha meud tasgadain riatanach.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">28</context>
@@ -10249,6 +10297,7 @@
       </trans-unit>
       <trans-unit id="5481098690555703943" datatype="html">
         <source>Cache size must be greater than 1.</source>
+        <target state="translated">Feumaidh meud an tasgadain a bhith nas motha na 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">29</context>
@@ -10256,6 +10305,7 @@
       </trans-unit>
       <trans-unit id="4704896848161515188" datatype="html">
         <source>Cache size must be a number.</source>
+        <target state="translated">Feumaidh meud an tasgadain a bhith ’na àireamh.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">30</context>
@@ -10400,6 +10450,7 @@
       </trans-unit>
       <trans-unit id="3159508433607320799" datatype="html">
         <source>OTP token is required.</source>
+        <target state="translated">Tha tòcan dearbhadh OTP riatanach.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">69</context>
@@ -10566,6 +10617,7 @@
       </trans-unit>
       <trans-unit id="27494409477574248" datatype="html">
         <source>Registration reason is required.</source>
+        <target state="translated">Tha adhbhar a’ chlàraidh riatanach.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -10573,6 +10625,7 @@
       </trans-unit>
       <trans-unit id="7602123087076969338" datatype="html">
         <source>Registration reason must be at least 2 characters long.</source>
+        <target state="translated">Feumaidh adhbhar a’ chlàraidh a bhith 2 charactar a dh’fhaid air a char as giorra.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -10580,6 +10633,7 @@
       </trans-unit>
       <trans-unit id="2092241175249165802" datatype="html">
         <source>Registration reason cannot be more than 3000 characters long.</source>
+        <target state="translated">Chan fhaod adhbhar a’ chlàraidh a bhith nas fhaide na 3000 caractar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -10738,6 +10792,7 @@
       </trans-unit>
       <trans-unit id="6149476559621965756" datatype="html">
         <source>Remote channel url is required.</source>
+        <target state="translated">Tha URL na seanail cèine riatanach.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">59</context>
@@ -10745,6 +10800,7 @@
       </trans-unit>
       <trans-unit id="7820654428820536159" datatype="html">
         <source>External channel URL must begin with "https://" or "http://"</source>
+        <target state="translated">Feumaidh URL na seanail cèine a thòiseachadh le “https://” no “http://”</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">60</context>
@@ -10752,6 +10808,7 @@
       </trans-unit>
       <trans-unit id="5090406837784732474" datatype="html">
         <source>External channel URL cannot be more than 1000 characters long</source>
+        <target state="translated">Chan fhaod URL na seanail cèine a bhith nas fhaide na 1000 caractar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">61</context>
@@ -10836,6 +10893,7 @@
       </trans-unit>
       <trans-unit id="4022826795131920912" datatype="html">
         <source>You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live</source>
+        <target state="translated">Chan urrainn dhut video beò àbhaisteach a shruthadh ach aon turas. Ma chuireas tu an ath-chluiche an comas, thèid a shàbhaladh fon aon URL ’s a tha aig a’ video bheò agad</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">265</context></context-group>
       </trans-unit>
       <trans-unit id="2261925229535541622" datatype="html">
@@ -10845,6 +10903,7 @@
       </trans-unit>
       <trans-unit id="8986073791327847979" datatype="html">
         <source>You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos</source>
+        <target state="translated">’S urrainn dhut video beò maireannach/ath-chùrsach a shruthadh iomadh turas. Ma chuireas tu na h-ath-chluichean an comas, thèid an sàbhaladh nam videothan fa leth</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">274</context></context-group>
       </trans-unit>
       <trans-unit id="3112273530390098557" datatype="html">
@@ -10857,6 +10916,7 @@
       </trans-unit>
       <trans-unit id="6445713766140892433" datatype="html">
         <source>Latest live sessions</source>
+        <target state="translated">Na seiseanan beòtha as ùire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">36</context>
@@ -10880,6 +10940,7 @@
       </trans-unit>
       <trans-unit id="3424935624805832445" datatype="html">
         <source>Go to replay</source>
+        <target state="translated">Tadhail air an ath-chluiche</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">44</context>
@@ -10887,6 +10948,7 @@
       </trans-unit>
       <trans-unit id="6989092358991683843" datatype="html">
         <source>Replay is being processed...</source>
+        <target state="translated">Tha an ath-chluiche ’ga phròiseasadh…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">45</context>
@@ -10922,6 +10984,7 @@
       </trans-unit>
       <trans-unit id="2340164151654372915" datatype="html">
         <source>A password should be at least 2 characters long.</source>
+        <target state="translated">Feumaidh facal-faire a bhith 2 charactar a dh’fhaid air a char as giorra.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">32</context>
@@ -10929,6 +10992,7 @@
       </trans-unit>
       <trans-unit id="7699381877503388166" datatype="html">
         <source>A password should be shorter than 100 characters long.</source>
+        <target state="translated">Feumaidh facal-faire a bhith nas giorra na 100 charactar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">33</context>
@@ -10936,6 +11000,7 @@
       </trans-unit>
       <trans-unit id="3116180442048363146" datatype="html">
         <source>A password is required for password protected video.</source>
+        <target state="translated">Tha facal-faire riatanach airson video fo dhìon facail-fhaire.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">34</context>
@@ -11429,6 +11494,7 @@
       </trans-unit>
       <trans-unit id="2684349290932402590" datatype="html">
         <source>Requires approval by moderators</source>
+        <target state="translated">Tha seo feumach air aontachadh le maoir</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="4816216590591222133" datatype="html">
@@ -11463,14 +11529,17 @@
       </trans-unit>
       <trans-unit id="1792453450803202450" datatype="html">
         <source>Accepted follows</source>
+        <target state="translated">Iarrtasan leantainn air an aontachadh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
       <trans-unit id="1745310805516417209" datatype="html">
         <source>Rejected follows</source>
+        <target state="translated">Iarrtasan leantainn air an diùltadh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="1810206793608630396" datatype="html">
         <source>Pending follows</source>
+        <target state="translated">Iarrtasan leantainn ri dhèiligeadh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
@@ -11855,10 +11924,12 @@
       </trans-unit>
       <trans-unit id="7793333806747606771" datatype="html">
         <source>Server is unavailable. Please retry later.</source>
+        <target state="translated">Chan eil am frithealaiche ri fhaighinn. Feuch ris a-rithist an ceann greis.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="7436975022198908854" datatype="html">
         <source>Unknown server error</source>
+        <target state="translated">Mearachd frithealaiche nach aithne dhuinn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">144</context></context-group>
       </trans-unit>
       <trans-unit id="6774469419636010791" datatype="html">
@@ -12088,6 +12159,7 @@
       </trans-unit>
       <trans-unit id="6726093171366409167" datatype="html">
         <source>Run Web Video transcoding</source>
+        <target state="translated">Ruith tar-chòdachadh video-lìn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -12105,6 +12177,7 @@
       </trans-unit>
       <trans-unit id="72391380513979568" datatype="html">
         <source>Delete Web Video files</source>
+        <target state="translated">Sguab às na faidhlichean video-lìn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -12126,6 +12199,7 @@
       </trans-unit>
       <trans-unit id="7016764388104297354" datatype="html">
         <source>File removed.</source>
+        <target state="translated">Chaidh am faidhle a thoirt air falbh.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html">
