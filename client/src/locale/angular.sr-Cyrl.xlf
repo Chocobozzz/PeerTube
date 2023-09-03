@@ -553,7 +553,7 @@
       </trans-unit>
       <trans-unit id="1769661379068269645" datatype="html">
         <source>Your email</source>
-        <target state="translated">Ваша е-пошта</target>
+        <target state="translated">Ваш имејл</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">20</context>
@@ -1825,7 +1825,7 @@
       </trans-unit>
       <trans-unit id="4497115134891299867" datatype="html">
         <source>Signup requires email verification</source>
-        <target state="translated">За регистрацију је потребна верификација путем е-поште</target>
+        <target state="translated">За регистрацију је потребна верификација путем имејла</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">152</context>
@@ -2140,7 +2140,7 @@
       </trans-unit>
       <trans-unit id="3171683206914962995" datatype="html">
         <source>Admin email</source>
-        <target state="translated">Е-пошта администратора</target>
+        <target state="translated">Имејл администратора</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">446</context>
@@ -5257,7 +5257,7 @@
       </trans-unit>
       <trans-unit id="4768749765465246664" datatype="html">
         <source>Email</source>
-        <target/>
+        <target state="translated">Имејл</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">105</context>
