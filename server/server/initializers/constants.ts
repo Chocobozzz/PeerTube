@@ -1401,6 +1401,9 @@ async function buildLanguages () {
   languages['zh-Hans'] = 'Simplified Chinese'
   languages['zh-Hant'] = 'Traditional Chinese'
 
+  // Catalan languages
+  languages['ca-valencia'] = 'Valencian'
+
   return languages
 }
 
