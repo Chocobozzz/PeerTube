@@ -194,7 +194,7 @@
       </trans-unit>
       <trans-unit id="9157178301885999151" datatype="html">
         <source>Do you really want to delete {length, plural, =1 {this video} other {<x id="length"/> videos}}?</source>
-        <target state="new">Do you really want to delete {length, plural, =1 {this video} other {<x id="length"/> videos}}?</target>
+        <target state="translated">Do you really want to delete {length, plural, =1 {هذا الفيديو} other {<x id="length"/> الفيديوهات}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">188</context></context-group>
       </trans-unit>
       <trans-unit id="7585826646011739428" datatype="html">
@@ -353,7 +353,7 @@
       </trans-unit>
       <trans-unit id="906167214730624194" datatype="html">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="new">{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</target>
+        <target state="translated">{views, plural, =0 {لا مشاهدة} =1 {مشاهدة} other {<x id="views"/> مشاهدات}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context><context context-type="linenumber">292</context></context-group>
       </trans-unit>
       <trans-unit id="1747775295354213975" datatype="html">
@@ -373,7 +373,7 @@
       </trans-unit>
       <trans-unit id="4873265433447388314" datatype="html">
         <source>{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</source>
-        <target state="new">{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</target>
+        <target state="translated">{viewers, plural, =0 {لا مُشاهد} =1 {مُشاهد} other {<x id="viewers"/> مُشاهدون}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context><context context-type="linenumber">289</context></context-group>
       </trans-unit>
       <trans-unit id="3321250177023376249" datatype="html">
@@ -485,7 +485,7 @@
       </trans-unit>
       <trans-unit id="1534085756270333258" datatype="html">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target>في صفحات: المضافة حديثًا ، الشائعة ، المحلية ، الأكثر إعجابًا وصفحة البحث</target>
+        <target state="translated">في صفحات: المضافة حديثًا، المُتداول، المحلية، الأكثر إعجابًا وصفحة البحث</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="2658703380934466003" datatype="html">
@@ -953,7 +953,7 @@
       </trans-unit>
       <trans-unit id="3848077896245199337" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target>قم بإعداد حسابك ، وإدارة قوائم تشغيل الفيديو ، واكتشاف تطبيقات الطرف الثالث ...</target>
+        <target state="translated">قم بإعداد حسابك، وإدارة قوائم تشغيل الفيديو، واكتشاف تطبيقات الطرف الثالث...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6284442506490785579" datatype="html">
@@ -1006,7 +1006,7 @@
       </trans-unit>
       <trans-unit id="5850698978356573024" datatype="html">
         <source>Confirm your password</source>
-        <target state="new">Confirm your password</target>
+        <target state="translated">أكد رقمك السري</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/confirm.component.ts</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="5410940035535748578" datatype="html">
@@ -1122,7 +1122,7 @@
       </trans-unit>
       <trans-unit id="1726363342938046830" datatype="html">
         <source>About</source>
-        <target>عن</target>
+        <target state="translated">‌عن بيرتيوب</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">17</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">131</context></context-group>
       </trans-unit>
@@ -1218,7 +1218,7 @@
       </trans-unit>
       <trans-unit id="2497681082724639563" datatype="html">
         <source>powered by PeerTube</source>
-        <target>يعمل بـ بيرتيوب</target>
+        <target state="translated">يعمل بـبييرتيوب</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">151</context></context-group>
       </trans-unit>
       <trans-unit id="403762424689874454" datatype="html">
@@ -1935,7 +1935,7 @@
       </trans-unit>
       <trans-unit id="1431416938026210429" datatype="html">
         <source>Password</source>
-        <target>كلمة المرور</target>
+        <target state="translated">كلمة السرّ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">117</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">117</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">60</context></context-group>
@@ -1947,7 +1947,7 @@
       </trans-unit>
       <trans-unit id="8371296837649897723" datatype="html">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target>إذا تركت كلمة المرور فارغة ، سترسل رسالة إلى البريد الإلكتروني للمستخدم.</target>
+        <target state="translated">إذا تركت كلمة السرّ فارغة، سترسل رسالة إلى البريد الإلكتروني للمستخدم.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">121</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
@@ -1999,19 +1999,19 @@
       </trans-unit>
       <trans-unit id="6667250632809964191" datatype="html">
         <source>Send a link to reset the password by email to the user</source>
-        <target>أرسل رابطًا لإعادة تعيين كلمة المرور عبر البريد الإلكتروني للمستخدم</target>
+        <target state="translated">أرسل رابطًا لإعادة تعيين كلمة السرّ عبر البريد الإلكتروني للمستخدم</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">222</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">222</context></context-group>
       </trans-unit>
       <trans-unit id="1412406834353485520" datatype="html">
         <source>Ask for new password</source>
-        <target>اطلب كلمة مرور جديدة</target>
+        <target state="translated">اطلب كلمة سرّ جديدة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">223</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">223</context></context-group>
       </trans-unit>
       <trans-unit id="3791201588898094481" datatype="html">
         <source>Manually set the user password</source>
-        <target>عيّن كلمة مرور المستخدم يدويًا</target>
+        <target state="translated">عيّن كلمة سرّ المستخدم يدويًا</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">227</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">227</context></context-group>
       </trans-unit>
@@ -3051,7 +3051,7 @@
       </trans-unit>
       <trans-unit id="2609416025385742456" datatype="html">
         <source>Default trending page</source>
-        <target state="translated">صفحة الفيديوهات الشائعة الافتراضية</target>
+        <target state="translated">صفحة الفيديوهات المُتداولة الافتراضية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="554741830445276244" datatype="html">
@@ -3173,7 +3173,7 @@
       </trans-unit>
       <trans-unit id="8342879272354516454" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {year old} other {years old}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {سنة} other {سنة old}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {منذ سنة} other {سنوات}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">209</context></context-group>
       </trans-unit>
       <trans-unit id="7456307533995141215" datatype="html">
@@ -4190,7 +4190,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7789395291034300662" datatype="html">
         <source>PASSWORD</source>
-        <target>كلمة المرور</target>
+        <target state="translated">كلمة السرّ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="3892825090402620438" datatype="html">
@@ -4265,7 +4265,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4921687518561446633" datatype="html">
         <source>Your password</source>
-        <target state="new">Your password</target>
+        <target state="translated">كلمة سرّك</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">14</context>
@@ -4273,7 +4273,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2990026202987449106" datatype="html">
         <source>Confirm your password to enable two factor authentication</source>
-        <target state="new">Confirm your password to enable two factor authentication</target>
+        <target state="translated">أكد كلمة سرّك لتفعيل المصادقة الثنائية</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">15</context>
@@ -4281,25 +4281,25 @@ color: red;
       </trans-unit>
       <trans-unit id="6309828574111583895" datatype="html">
         <source>Change password</source>
-        <target>تغيير كلمة المرور</target>
+        <target state="translated">تغيير كلمة السرّ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.html</context><context context-type="linenumber">5</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="5340498030552368470" datatype="html">
         <source>Current password</source>
-        <target>كلمة المرور الحالية</target>
+        <target state="translated">كلمة السرّ الحالية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">29</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.html</context><context context-type="linenumber">7</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="3588415639242079458" datatype="html">
         <source>New password</source>
-        <target>كلمة المرور الجديدة</target>
+        <target state="translated">كلمة السرّ الجديدة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="8656126574213649581" datatype="html">
         <source>Confirm new password</source>
-        <target>تأكيد كلمة المرور الجديدة</target>
+        <target state="translated">تأكيد كلمة السرّ الجديدة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="264068562357780835" datatype="html">
@@ -4657,7 +4657,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3343758569423394070" datatype="html">
         <source>No videos found for "<x id="PH" equiv-text="this.search"/>".</source>
-        <target state="new">No videos found for "<x id="PH" equiv-text="this.search"/>".</target>
+        <target state="translated">لم يتم العثور على مقاطع فيديو لـ "<x id="PH" equiv-text="this.search"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">140</context>
@@ -5776,7 +5776,7 @@ color: red;
       </trans-unit>
       <trans-unit id="603966779971722604" datatype="html">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </source>
-        <target state="new"> I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </target>
+        <target state="translated">عمري لا يقل عن <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> سنة وأوافق على <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>الشروط<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> و على <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>قواعد السلوك<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-terms.component.html</context>
           <context context-type="linenumber">17,22</context>
@@ -5874,17 +5874,17 @@ color: red;
       </trans-unit>
       <trans-unit id="3782563238994348625" datatype="html">
         <source>Confirm password</source>
-        <target>تأكيد الكلمة السرية</target>
+        <target state="translated">أكد كلمة السرّ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="2501430660070156325" datatype="html">
         <source>Confirmed password</source>
-        <target>تم تأكيد الكلمة المرور</target>
+        <target state="translated">أُكِّد الكلمة السرّ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8547184468496530386" datatype="html">
         <source>Reset my password</source>
-        <target>أعادة تعيين كلمة السر</target>
+        <target state="translated">أعِد تعيين كلمة سري</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context><context context-type="linenumber">2</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
@@ -6036,12 +6036,12 @@ color: red;
       </trans-unit>
       <trans-unit id="8715156686857791956" datatype="html">
         <source>Click here to reset your password</source>
-        <target>انقر هنا لإعادة تعيين كلمة المرور الخاصة بك</target>
+        <target state="translated">انقر هنا لإعادة تعيين كلمة سرك</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="7736587919193927267" datatype="html">
         <source>I forgot my password</source>
-        <target state="new"> I forgot my password </target>
+        <target state="translated">نسيتُ كلمة السرّ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">84,86</context>
@@ -6080,7 +6080,7 @@ color: red;
       </trans-unit>
       <trans-unit id="87327320394367488" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target state="translated">عذرًا ، لا يمكنك استرداد كلمة سرّك لأن مدير خادمك لم يضبط نظام البريد الإلكتروني لبييرتيوب.</target>
+        <target state="translated">عذرًا، لا يمكنك استرداد كلمة سرّك لأن مدير خادمك لم يضبط نظام البريد الإلكتروني لبييرتيوب.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
       <trans-unit id="3188014010833256853" datatype="html">
@@ -10429,7 +10429,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8489397598480880903" datatype="html">
         <source>{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</source>
-        <target state="new">{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</target>
+        <target state="translated">{interval, plural, =1 {منذ سنة} other {<x id="interval"/> سنوات}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="599762045687999334" datatype="html">
@@ -10728,7 +10728,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8067135025051844577" datatype="html">
         <source>Trending videos</source>
-        <target state="translated">الفيديوهات الشائعة</target>
+        <target state="translated">الفيديوهات المُتداولة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="664221386829541948" datatype="html">
@@ -10763,7 +10763,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4278050445961255445" datatype="html">
         <source>Go to the trending videos page</source>
-        <target>انتقل إلى صفحة الفيديوهات الشائعة</target>
+        <target state="translated">انتقل إلى صفحة الفيديوهات المُتداولة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">310</context></context-group>
       </trans-unit>
       <trans-unit id="3242234958443825475" datatype="html">
@@ -10844,7 +10844,7 @@ color: red;
       </trans-unit>
       <trans-unit id="232050922346936574" datatype="html">
         <source>Trending</source>
-        <target state="new">Trending</target>
+        <target state="translated">المُتداول</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">205</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
@@ -10905,7 +10905,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2279527393438260622" datatype="html">
         <source>Search videos, playlists, channels…</source>
-        <target state="new">Search videos, playlists, channels…</target>
+        <target state="translated">البحث في مقاطع الفيديو وقوائم التشغيل والقنوات…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">3</context>
