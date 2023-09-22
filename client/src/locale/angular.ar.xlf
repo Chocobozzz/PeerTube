@@ -6355,7 +6355,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3265632123453688399" datatype="html">
         <source>Enter a new tag</source>
-        <target>أدخل وسمًا جديدا</target>
+        <target state="translated">أدخل وسمًا جديدًا</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-tags.component.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="6179532215548637839" datatype="html">
@@ -10318,7 +10318,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5699822024600815733" datatype="html">
         <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
-        <target>ولكن ستفقد البيانات المرتبطة (العلامات ،الوصف...) ، هل تريد بالتأكيد مغادرة هذه الصفحة؟</target>
+        <target state="translated">ولكن ستفقد البيانات المرتبطة (الوسوم، الوصف...) ، هل تريد بالتأكيد مغادرة هذه الصفحة؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="1219739004043110649" datatype="html">
