@@ -880,7 +880,7 @@
       </trans-unit>
       <trans-unit id="24003535274174906" datatype="html">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fs-7 fw-normal fst-italic&quot;&gt;"/>can be redefined by the users<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="new"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fs-7 fw-normal fst-italic&quot;&gt;"/>can be redefined by the users<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>NSFW/hunkigarria den bideoen gidalerro lehenetsiak<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fs-7 fw-normal fst-italic&quot;&gt;"/>can be redefined by the users<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -1076,7 +1076,7 @@
       </trans-unit>
       <trans-unit id="5950472748615640135" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file was too large </source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file was too large </target>
+        <target state="translated"><x id="PH" equiv-text="name"/> fitxategiaren izena luzeegia da </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="232729887013001609" datatype="html">
@@ -1960,18 +1960,18 @@
       </trans-unit>
       <trans-unit id="7366678433039425999" datatype="html">
         <source>We couldn't find any resource tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="new">We couldn't find any resource tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</target>
+        <target state="translated">Ezin izan dugu aurkitu baliabiderik bilatzen ari zinen <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> URLari lotuta.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="3522707340816553139" datatype="html">
         <source>Possible reasons:</source>
-        <target state="new">Possible reasons:</target>
+        <target state="translated">Arrazoi posibleak:</target>
         <note priority="1" from="description">Possible reasons preceding a list of reasons a `Not Found` error page may occur</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="6925335998927745197" datatype="html">
         <source>You may have used an outdated or broken link</source>
-        <target state="new">You may have used an outdated or broken link</target>
+        <target state="translated">Baliteke eguneratu gabeko edo apurtutako esteka bat erabili izatea</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="1171455174603388942" datatype="html">
@@ -2023,7 +2023,7 @@
       </trans-unit>
       <trans-unit id="7231414106228227962" datatype="html">
         <source>The requested entity body blends sweet bits with a mellow earthiness.</source>
-        <target state="new"> The requested entity body blends sweet bits with a mellow earthiness. </target>
+        <target state="translated">Eskatutako entitatearen gorputzak gozokiak lur usainarekin nahasten ditu.</target>
         <note priority="1" from="description">Description of a tea flavour, keeping the 'requested entity body' as a technical expression referring to a web request</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
