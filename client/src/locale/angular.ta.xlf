@@ -532,7 +532,7 @@
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">130</context></context-group></trans-unit><trans-unit id="1006562256968398209" datatype="html">
         <source>video</source><target state="new">video</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">295</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">340</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">62</context></context-group></trans-unit><trans-unit id="6995024616159044376" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">298</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">361</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">62</context></context-group></trans-unit><trans-unit id="6995024616159044376" datatype="html">
         <source>Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source><target state="new">Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-upload.service.ts</context><context context-type="linenumber">34</context></context-group></trans-unit><trans-unit id="5235042777215655908" datatype="html">
@@ -764,7 +764,7 @@
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">79</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">79</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">195</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">329</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">43</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">79</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">79</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">195</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">379</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">43</context></context-group></trans-unit>
       <trans-unit id="5293515551330482519" datatype="html">
         <source>Truncated preview</source>
         <target state="new">Truncated preview</target>
@@ -2077,7 +2077,7 @@ The link will expire within 1 hour.</target>
       Reset
     </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">22</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">41</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">60</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">74</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">109</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">122</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">135</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">148</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">163</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">171</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">188</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">229</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">371</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.html</context><context context-type="linenumber">16</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">22</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">41</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">60</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">74</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">109</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">122</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">135</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">148</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">163</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">171</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">188</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">229</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">421</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.html</context><context context-type="linenumber">16</context></context-group></trans-unit>
       <trans-unit id="8829497237648100098" datatype="html">
         <source>Filter</source>
         <target state="new">Filter</target>
@@ -2395,29 +2395,47 @@ The link will expire within 1 hour.</target>
             No captions for now.
           </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">225</context></context-group></trans-unit><trans-unit id="8508836953540308271" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">225</context></context-group></trans-unit><trans-unit id="5096495468612049743" datatype="html">
+        <source>Chapters</source><target state="new">Chapters</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
+          <context context-type="linenumber">234</context>
+        </context-group>
+      </trans-unit><trans-unit id="7840115150430999864" datatype="html">
+        <source>Timecode</source><target state="new">Timecode</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
+          <context context-type="linenumber">244</context>
+        </context-group>
+      </trans-unit><trans-unit id="7423239318801197963" datatype="html">
+        <source>Chapter name</source><target state="new">Chapter name</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
+          <context context-type="linenumber">246</context>
+        </context-group>
+      </trans-unit><trans-unit id="8508836953540308271" datatype="html">
         <source>Live settings</source><target state="new">Live settings</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">234</context></context-group></trans-unit><trans-unit id="1212376766715456139" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">285</context></context-group></trans-unit><trans-unit id="1212376766715456139" datatype="html">
         <source>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</source><target state="new">⚠️ If you enable this option, your live will be terminated if you exceed your video quota</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">287</context></context-group></trans-unit><trans-unit id="4964217545822568684" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">338</context></context-group></trans-unit><trans-unit id="4964217545822568684" datatype="html">
         <source>Privacy of the new replay</source><target state="new">Privacy of the new replay</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">293</context></context-group></trans-unit><trans-unit id="1966495339378120213" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">344</context></context-group></trans-unit><trans-unit id="1966495339378120213" datatype="html">
         <source>Latency mode</source><target state="new">Latency mode</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">300</context></context-group></trans-unit><trans-unit id="8891497955962997247" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">351</context></context-group></trans-unit><trans-unit id="8891497955962997247" datatype="html">
         <source>Automatically publish a replay when your live ends</source><target state="new">Automatically publish a replay when your live ends</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">283</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">334</context></context-group></trans-unit>
       
       
       <trans-unit id="2288513108450439427" datatype="html">
         <source>Support</source>
         <target state="new">Support</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">62</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">62</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">17</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">335</context></context-group></trans-unit><trans-unit id="1359533927353954373" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">62</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">62</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">17</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">385</context></context-group></trans-unit><trans-unit id="1359533927353954373" datatype="html">
         <source>View account</source><target state="new">View account</target>
         
         
@@ -2452,18 +2470,18 @@ The link will expire within 1 hour.</target>
                     Short text to tell people how they can support you (membership platform...).
                   </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">338</context></context-group></trans-unit><trans-unit id="7003790776240394114" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">388</context></context-group></trans-unit><trans-unit id="7003790776240394114" datatype="html">
         <source>Filename</source><target state="new">Filename</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">354</context></context-group></trans-unit><trans-unit id="1186960092655764809" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">404</context></context-group></trans-unit><trans-unit id="1186960092655764809" datatype="html">
         <source> Name of the uploaded file </source><target state="new"> Name of the uploaded file </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">358</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">408</context></context-group></trans-unit>
       <trans-unit id="7958716262877895706" datatype="html">
         <source>Original publication date</source>
         <target state="new">Original publication date</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">369</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">419</context></context-group></trans-unit>
       <trans-unit id="50985514722149155" datatype="html">
         <source>
                     This is the date when the content was originally published (e.g. the release date for a film)
@@ -2472,49 +2490,49 @@ The link will expire within 1 hour.</target>
                     This is the date when the content was originally published (e.g. the release date for a film)
                   </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">376</context></context-group></trans-unit><trans-unit id="1669378369440073270" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">426</context></context-group></trans-unit><trans-unit id="1669378369440073270" datatype="html">
         <source>Plugin settings</source><target state="new">Plugin settings</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">406</context></context-group></trans-unit><trans-unit id="54931094224146544" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">456</context></context-group></trans-unit><trans-unit id="54931094224146544" datatype="html">
         <source>Small latency</source><target state="new">Small latency</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">93</context></context-group></trans-unit><trans-unit id="668281328725856861" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">97</context></context-group></trans-unit><trans-unit id="668281328725856861" datatype="html">
         <source>Reduce latency to ~15s disabling P2P</source><target state="new">Reduce latency to ~15s disabling P2P</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">94</context></context-group></trans-unit><trans-unit id="5607669932062416162" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">98</context></context-group></trans-unit><trans-unit id="5607669932062416162" datatype="html">
         <source>Default</source><target state="new">Default</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context><context context-type="linenumber">55</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context><context context-type="linenumber">50</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">98</context></context-group></trans-unit><trans-unit id="4299493457408757206" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context><context context-type="linenumber">55</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context><context context-type="linenumber">50</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">102</context></context-group></trans-unit><trans-unit id="4299493457408757206" datatype="html">
         <source>Average latency of 30s</source><target state="new">Average latency of 30s</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">99</context></context-group></trans-unit><trans-unit id="3378360148342029710" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">103</context></context-group></trans-unit><trans-unit id="3378360148342029710" datatype="html">
         <source>High latency</source><target state="new">High latency</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">103</context></context-group></trans-unit><trans-unit id="369497609327288447" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">107</context></context-group></trans-unit><trans-unit id="369497609327288447" datatype="html">
         <source>Average latency of 60s increasing P2P ratio</source><target state="new">Average latency of 60s increasing P2P ratio</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">104</context></context-group></trans-unit><trans-unit id="8693603235657020323" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">108</context></context-group></trans-unit><trans-unit id="8693603235657020323" datatype="html">
         <source>Other</source><target state="new">Other</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">220</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context><context context-type="linenumber">50</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">228</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context><context context-type="linenumber">50</context></context-group></trans-unit>
       <trans-unit id="2200003513633568069" datatype="html">
         <source>Enable video comments</source>
         <target state="new">Enable video comments</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">393</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">443</context></context-group></trans-unit>
       <trans-unit id="8896564060463626070" datatype="html">
         <source>Enable download</source>
         <target state="new">Enable download</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">398</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">448</context></context-group></trans-unit>
       <trans-unit id="8821221480638803282" datatype="html">
         <source>Advanced settings</source>
         <target state="new">Advanced settings</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">317</context></context-group></trans-unit><trans-unit id="5407145687662795944" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">367</context></context-group></trans-unit><trans-unit id="5407145687662795944" datatype="html">
         <source>Video thumbnail</source><target state="new">Video thumbnail</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">326</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">376</context></context-group></trans-unit>
       <trans-unit id="2375260419993138758" datatype="html">
         <source>URL</source>
         <target state="new">URL</target>
@@ -2551,17 +2569,17 @@ The link will expire within 1 hour.</target>
         <source>Select the file to upload</source>
         <target state="new">Select the file to upload</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">6</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">34</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">6</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">35</context></context-group></trans-unit>
       <trans-unit id="9172233176401579786" datatype="html">
         <source>Scheduled</source>
         <target state="new">Scheduled</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">241</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">249</context></context-group></trans-unit>
       <trans-unit id="1435317307066082710" datatype="html">
         <source>Hide the video until a specific date</source>
         <target state="new">Hide the video until a specific date</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">242</context></context-group></trans-unit><trans-unit id="1087181129481039628" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">250</context></context-group></trans-unit><trans-unit id="1087181129481039628" datatype="html">
         <source>Normal live</source><target state="new">Normal live</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
@@ -2630,7 +2648,7 @@ The link will expire within 1 hour.</target>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">83</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/header/header.component.html</context><context context-type="linenumber">5</context></context-group></trans-unit><trans-unit id="6161604372916832458" datatype="html">
         <source>Upload on hold</source><target state="new">Upload on hold</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">165</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">166</context></context-group></trans-unit>
       <trans-unit id="285180972645018518" datatype="html">
         <source>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</source>
         <target state="new">Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</target>
@@ -2655,23 +2673,14 @@ The link will expire within 1 hour.</target>
         </context-group>
       </trans-unit><trans-unit id="5757542293078916779" datatype="html">
         <source>Replace video file</source><target state="new">Replace video file</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context>
-          <context context-type="linenumber">27</context>
-        </context-group>
-      </trans-unit><trans-unit id="7042425445354775897" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">28</context></context-group></trans-unit><trans-unit id="7042425445354775897" datatype="html">
         <source>⚠️ Uploading a new version of your video will completely erase the current version</source><target state="new">⚠️ Uploading a new version of your video will completely erase the current version</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context>
-          <context context-type="linenumber">29</context>
-        </context-group>
-      </trans-unit><trans-unit id="7225855031009203336" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">30</context></context-group></trans-unit><trans-unit id="7225855031009203336" datatype="html">
         <source>Your video is currently being updated. If you leave, your changes will be lost.</source><target state="new">Your video is currently being updated. If you leave, your changes will be lost.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context>
-          <context context-type="linenumber">135</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">153</context></context-group></trans-unit>
       <trans-unit id="2587226585711833549" datatype="html">
         <source>Read instance rules for help</source>
         <target state="new">Read instance rules for help</target>
@@ -2704,28 +2713,28 @@ The link will expire within 1 hour.</target>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">55</context></context-group></trans-unit><trans-unit id="4422946962830681102" datatype="html">
         <source>Torrents with only 1 file are supported.</source><target state="new">Torrents with only 1 file are supported.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.ts</context><context context-type="linenumber">115</context></context-group></trans-unit><trans-unit id="7860848084471862305" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.ts</context><context context-type="linenumber">116</context></context-group></trans-unit><trans-unit id="7860848084471862305" datatype="html">
         <source>Cannot create live because this instance have too many created lives</source><target state="new">Cannot create live because this instance have too many created lives</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">119</context></context-group></trans-unit><trans-unit id="1278564497286613571" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">120</context></context-group></trans-unit><trans-unit id="1278564497286613571" datatype="html">
         <source>Cannot create live because you created too many lives</source><target state="new">Cannot create live because you created too many lives</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">121</context></context-group></trans-unit><trans-unit id="2621043320678012413" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">122</context></context-group></trans-unit><trans-unit id="2621043320678012413" datatype="html">
         <source>Live published.</source><target state="new">Live published.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">161</context></context-group></trans-unit><trans-unit id="8675588963276687921" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">164</context></context-group></trans-unit><trans-unit id="8675588963276687921" datatype="html">
         <source>Stream only once, replay will replace your live</source><target state="new">Stream only once, replay will replace your live</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">180</context></context-group></trans-unit><trans-unit id="2360261543675520397" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">183</context></context-group></trans-unit><trans-unit id="2360261543675520397" datatype="html">
         <source>Stream only once</source><target state="new">Stream only once</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">183</context></context-group></trans-unit><trans-unit id="3384650899171037827" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">186</context></context-group></trans-unit><trans-unit id="3384650899171037827" datatype="html">
         <source>Stream multiple times, replays will be separate videos</source><target state="new">Stream multiple times, replays will be separate videos</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">188</context></context-group></trans-unit><trans-unit id="58134197356653483" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">191</context></context-group></trans-unit><trans-unit id="58134197356653483" datatype="html">
         <source>Stream multiple times using the same URL</source><target state="new">Stream multiple times using the same URL</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">191</context></context-group></trans-unit><trans-unit id="8218579597782287078" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">194</context></context-group></trans-unit><trans-unit id="8218579597782287078" datatype="html">
         <source>Go Live</source><target state="new">Go Live</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">37</context></context-group></trans-unit><trans-unit id="3282368691598224543" datatype="html">
@@ -3601,12 +3610,12 @@ The link will expire within 1 hour.</target>
         <source>Show</source>
         <target state="new">Show</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-password.component.html</context><context context-type="linenumber">10</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/input-text.component.ts</context><context context-type="linenumber">42</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-password.component.html</context><context context-type="linenumber">10</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/input-text.component.ts</context><context context-type="linenumber">40</context></context-group></trans-unit>
       <trans-unit id="8461609631969932886" datatype="html">
         <source>Hide</source>
         <target state="new">Hide</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">115</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-password.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/input-text.component.ts</context><context context-type="linenumber">41</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">16</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">79</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">115</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-password.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/input-text.component.ts</context><context context-type="linenumber">39</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">16</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">79</context></context-group></trans-unit>
       <trans-unit id="7049348886126005391" datatype="html">
         <source>Batch actions</source>
         <target state="new">Batch actions</target>
@@ -8628,10 +8637,10 @@ color: red;
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context><context context-type="linenumber">44</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/preview-upload.component.ts</context><context context-type="linenumber">38</context></context-group></trans-unit><trans-unit id="6489275254908395777" datatype="html">
         <source>Maximize editor</source><target state="new">Maximize editor</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context><context context-type="linenumber">49</context></context-group></trans-unit><trans-unit id="4243591013849340688" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context><context context-type="linenumber">50</context></context-group></trans-unit><trans-unit id="4243591013849340688" datatype="html">
         <source>Exit maximized editor</source><target state="new">Exit maximized editor</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context><context context-type="linenumber">50</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context><context context-type="linenumber">51</context></context-group></trans-unit>
       
       
       <trans-unit id="2687679787442328897" datatype="html">
@@ -8660,7 +8669,7 @@ color: red;
         <target state="new">Subscribe to the account</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">85</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">894</context></context-group></trans-unit><trans-unit id="3131904093925601441" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">85</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">906</context></context-group></trans-unit><trans-unit id="3131904093925601441" datatype="html">
         <source>PLAYLISTS</source><target state="new">PLAYLISTS</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">91</context></context-group></trans-unit><trans-unit id="1593265243494758679" datatype="html">
@@ -9609,6 +9618,30 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
+      </trans-unit><trans-unit id="1653315912561885898" datatype="html">
+        <source>A chapter title is required.</source><target state="new">A chapter title is required.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit><trans-unit id="4021088770925947810" datatype="html">
+        <source>A chapter title should be more than 2 characters long.</source><target state="new">A chapter title should be more than 2 characters long.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit><trans-unit id="5999631145853755676" datatype="html">
+        <source>A chapter title should be less than 100 characters long.</source><target state="new">A chapter title should be less than 100 characters long.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit><trans-unit id="3038146146697752093" datatype="html">
+        <source>Multiple chapters have the same timecode <x id="PH" equiv-text="chapter.timecode"/></source><target state="new">Multiple chapters have the same timecode <x id="PH" equiv-text="chapter.timecode"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
       </trans-unit><trans-unit id="5637879201055173642" datatype="html">
         <source> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>   "/> to learn how to use the PeerTube live streaming feature.
 </source><target state="new"> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>   "/> to learn how to use the PeerTube live streaming feature.
@@ -9657,29 +9690,29 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit><trans-unit id="7220386604464537651" datatype="html">
         <source>Live RTMP Url</source><target state="new">Live RTMP Url</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">244</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">19</context></context-group></trans-unit><trans-unit id="4956017863340142734" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">295</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">19</context></context-group></trans-unit><trans-unit id="4956017863340142734" datatype="html">
         <source>Live RTMPS Url</source><target state="new">Live RTMPS Url</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">249</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">24</context></context-group></trans-unit><trans-unit id="1225050607125362052" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">300</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">24</context></context-group></trans-unit><trans-unit id="1225050607125362052" datatype="html">
         <source>Live stream key</source><target state="new">Live stream key</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">254</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">29</context></context-group></trans-unit><trans-unit id="5058286083557987083" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">305</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">29</context></context-group></trans-unit><trans-unit id="5058286083557987083" datatype="html">
         <source>⚠️ Never share your stream key with anyone.</source><target state="new">⚠️ Never share your stream key with anyone.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">257</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">32</context></context-group></trans-unit><trans-unit id="5941639683192662500" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">308</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">32</context></context-group></trans-unit><trans-unit id="5941639683192662500" datatype="html">
         <source>This is a normal live</source><target state="new">This is a normal live</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">263</context></context-group></trans-unit><trans-unit id="4022826795131920912" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">314</context></context-group></trans-unit><trans-unit id="4022826795131920912" datatype="html">
         <source> You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live </source><target state="new"> You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">265</context></context-group></trans-unit><trans-unit id="2261925229535541622" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">316</context></context-group></trans-unit><trans-unit id="2261925229535541622" datatype="html">
         <source>This is a permanent/recurring live</source><target state="new">This is a permanent/recurring live</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">272</context></context-group></trans-unit><trans-unit id="8986073791327847979" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">323</context></context-group></trans-unit><trans-unit id="8986073791327847979" datatype="html">
         <source> You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos </source><target state="new"> You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">274</context></context-group></trans-unit><trans-unit id="3112273530390098557" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">325</context></context-group></trans-unit><trans-unit id="3112273530390098557" datatype="html">
         <source>Replay will be saved</source><target state="new">Replay will be saved</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
@@ -9775,40 +9808,32 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Video description cannot be more than 10000 characters long.</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">69</context></context-group></trans-unit>
-      <trans-unit id="142488285332434408" datatype="html">
-        <source>A tag should be more than 2 characters long.</source>
-        <target state="new">A tag should be more than 2 characters long.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">76</context></context-group></trans-unit>
-      <trans-unit id="691846635236293620" datatype="html">
-        <source>A tag should be less than 30 characters long.</source>
-        <target state="new">A tag should be less than 30 characters long.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">77</context></context-group></trans-unit>
+      
+      
       <trans-unit id="4146790476782316573" datatype="html">
         <source>A maximum of 5 tags can be used on a video.</source>
         <target state="new">A maximum of 5 tags can be used on a video.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">84</context></context-group></trans-unit><trans-unit id="2389667090302909529" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">76</context></context-group></trans-unit><trans-unit id="2389667090302909529" datatype="html">
         <source>A tag should be more than 1 and less than 30 characters long.</source><target state="new">A tag should be more than 1 and less than 30 characters long.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">85</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">77</context></context-group></trans-unit>
       
       <trans-unit id="4806300480558315727" datatype="html">
         <source>Video support must be at least 3 characters long.</source>
         <target state="new">Video support must be at least 3 characters long.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">92</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">84</context></context-group></trans-unit>
       <trans-unit id="6655773021893755977" datatype="html">
         <source>Video support cannot be more than 1000 characters long.</source>
         <target state="new">Video support cannot be more than 1000 characters long.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">93</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">85</context></context-group></trans-unit>
       <trans-unit id="4246579596585402255" datatype="html">
         <source>A date is required to schedule video update.</source>
         <target state="new">A date is required to schedule video update.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">100</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">92</context></context-group></trans-unit>
       <trans-unit id="8728283516316752593" datatype="html">
         <source>This file is too large.</source>
         <target state="new">This file is too large.</target>
@@ -10183,13 +10208,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Instance languages</source>
         <target state="new">Instance languages</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">223</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">231</context></context-group></trans-unit>
       <trans-unit id="40119547597591062" datatype="html">
         <source>All languages</source>
         <target state="new">All languages</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">224</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context><context context-type="linenumber">25</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">232</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context><context context-type="linenumber">25</context></context-group></trans-unit>
       <trans-unit id="996392855508119363" datatype="html">
         <source>Hidden</source>
         <target state="new">Hidden</target>
@@ -10860,7 +10885,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">335</context></context-group></trans-unit><trans-unit id="4021752662928002901" datatype="html">
         <source>Update</source><target state="new">Update</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context><context context-type="linenumber">194</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context><context context-type="linenumber">115</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">62</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">68</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">65</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">44</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/edit-button.component.ts</context><context context-type="linenumber">22</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/edit-button.component.ts</context><context context-type="linenumber">27</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">341</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context><context context-type="linenumber">194</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context><context context-type="linenumber">115</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">62</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">68</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">66</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">45</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/edit-button.component.ts</context><context context-type="linenumber">22</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/edit-button.component.ts</context><context context-type="linenumber">27</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">341</context></context-group></trans-unit>
       <trans-unit id="420763834450076269" datatype="html">
         <source>Block</source>
         <target state="new">Block</target>
@@ -11184,28 +11209,28 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Video to import updated.</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.ts</context><context context-type="linenumber">135</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.ts</context><context context-type="linenumber">128</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.ts</context><context context-type="linenumber">137</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.ts</context><context context-type="linenumber">137</context></context-group></trans-unit>
       <trans-unit id="3284171506518522275" datatype="html">
         <source>Your video was uploaded to your account and is private.</source>
         <target state="new">Your video was uploaded to your account and is private.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">105</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">106</context></context-group></trans-unit>
       <trans-unit id="5699822024600815733" datatype="html">
         <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
         <target state="new">But associated data (tags, description...) will be lost, are you sure you want to leave this page?</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">106</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">107</context></context-group></trans-unit>
       <trans-unit id="1219739004043110649" datatype="html">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
         <target state="new">Your video is not uploaded yet, are you sure you want to leave this page?</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">108</context></context-group></trans-unit><trans-unit id="1830802698757049943" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">109</context></context-group></trans-unit><trans-unit id="1830802698757049943" datatype="html">
         <source>Publish <x id="PH" equiv-text="videoName"/></source><target state="new">Publish <x id="PH" equiv-text="videoName"/></target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">121</context></context-group></trans-unit><trans-unit id="6932865105766151309" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">122</context></context-group></trans-unit><trans-unit id="6932865105766151309" datatype="html">
         <source>Upload</source><target state="new">Upload</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">229</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">230</context></context-group></trans-unit>
       <trans-unit id="8278735427925094503" datatype="html">
         <source>Upload 
           <x id="PH"/>
@@ -11214,37 +11239,37 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <x id="PH"/>
         </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">231</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">232</context></context-group></trans-unit>
       
       <trans-unit id="5981816353437801748" datatype="html">
         <source>Video published.</source>
         <target state="new">Video published.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">252</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">255</context></context-group></trans-unit>
       
       
       <trans-unit id="764164089183618119" datatype="html">
         <source>You have unsaved changes! If you leave, your changes will be lost.</source>
         <target state="new">You have unsaved changes! If you leave, your changes will be lost.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">139</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">157</context></context-group></trans-unit>
       <trans-unit id="8306050839443016954" datatype="html">
         <source>Video updated.</source>
         <target state="new">Video updated.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">226</context></context-group></trans-unit><trans-unit id="3323006969479129148" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">247</context></context-group></trans-unit><trans-unit id="3323006969479129148" datatype="html">
         <source>Your video will also be automatically blocked since video publication requires manual validation by moderators.</source><target state="new">Your video will also be automatically blocked since video publication requires manual validation by moderators.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">258</context></context-group></trans-unit><trans-unit id="6552806326413045734" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">279</context></context-group></trans-unit><trans-unit id="6552806326413045734" datatype="html">
         <source>Uploading a new version of your video will completely erase the current version.</source><target state="new">Uploading a new version of your video will completely erase the current version.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">261</context></context-group></trans-unit><trans-unit id="5315061036888228823" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">282</context></context-group></trans-unit><trans-unit id="5315061036888228823" datatype="html">
         <source>&lt;br />&lt;br />Do you still want to replace your video file?</source><target state="new">&lt;br />&lt;br />Do you still want to replace your video file?</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">264</context></context-group></trans-unit><trans-unit id="5434400211005236230" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">285</context></context-group></trans-unit><trans-unit id="5434400211005236230" datatype="html">
         <source>Replace file warning</source><target state="new">Replace file warning</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">266</context></context-group></trans-unit><trans-unit id="5609201297201028750" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">287</context></context-group></trans-unit><trans-unit id="5609201297201028750" datatype="html">
         <source>(extensions: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</source><target state="new">(extensions: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</target>
         
         
@@ -11324,30 +11349,30 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="961774488937452220" datatype="html">
         <source>This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"><x id="PH_1"/>&lt;/a>?</source><target state="new">This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"><x id="PH_1"/>&lt;/a>?</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">371</context></context-group></trans-unit><trans-unit id="5761611056224181752" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">376</context></context-group></trans-unit><trans-unit id="5761611056224181752" datatype="html">
         <source>Redirection</source><target state="new">Redirection</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">372</context></context-group></trans-unit><trans-unit id="6851759241723629925" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">377</context></context-group></trans-unit><trans-unit id="6851759241723629925" datatype="html">
         <source>You need a password to watch this video</source><target state="new">You need a password to watch this video</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">404</context></context-group></trans-unit><trans-unit id="7116606560384080593" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">409</context></context-group></trans-unit><trans-unit id="7116606560384080593" datatype="html">
         <source>This video is password protected</source><target state="new">This video is password protected</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">405</context></context-group></trans-unit><trans-unit id="6566384659758828708" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">410</context></context-group></trans-unit><trans-unit id="6566384659758828708" datatype="html">
         <source>Incorrect password, please enter a correct password</source><target state="new">Incorrect password, please enter a correct password</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">406</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">411</context></context-group></trans-unit>
       
       <trans-unit id="8858527736400081688" datatype="html">
         <source>This video contains mature or explicit content. Are you sure you want to watch it?</source>
         <target state="new">This video contains mature or explicit content. Are you sure you want to watch it?</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">447</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">455</context></context-group></trans-unit>
       <trans-unit id="3937119019020041049" datatype="html">
         <source>Mature or explicit content</source>
         <target state="new">Mature or explicit content</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">448</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">456</context></context-group></trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
         <source>Cancel</source><target state="new">Cancel</target>
         
@@ -11355,43 +11380,43 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="5856931617181450881" datatype="html">
         <source>Enter/exit fullscreen</source><target state="new">Enter/exit fullscreen</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">857</context></context-group></trans-unit><trans-unit id="2971009377468404076" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">869</context></context-group></trans-unit><trans-unit id="2971009377468404076" datatype="html">
         <source>Play/Pause the video</source><target state="new">Play/Pause the video</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">858</context></context-group></trans-unit><trans-unit id="4147087312411482964" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">870</context></context-group></trans-unit><trans-unit id="4147087312411482964" datatype="html">
         <source>Mute/unmute the video</source><target state="new">Mute/unmute the video</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">859</context></context-group></trans-unit><trans-unit id="4791956574676305640" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">871</context></context-group></trans-unit><trans-unit id="4791956574676305640" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90%</source><target state="new">Skip to a percentage of the video: 0 is 0% and 9 is 90%</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">874</context></context-group></trans-unit><trans-unit id="3887762369650091344" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">886</context></context-group></trans-unit><trans-unit id="3887762369650091344" datatype="html">
         <source>Increase the volume</source><target state="new">Increase the volume</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">861</context></context-group></trans-unit><trans-unit id="1363382131573461910" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">873</context></context-group></trans-unit><trans-unit id="1363382131573461910" datatype="html">
         <source>Decrease the volume</source><target state="new">Decrease the volume</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">862</context></context-group></trans-unit><trans-unit id="2541031516422557760" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">874</context></context-group></trans-unit><trans-unit id="2541031516422557760" datatype="html">
         <source>Seek the video forward</source><target state="new">Seek the video forward</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">876</context></context-group></trans-unit><trans-unit id="8813023402019364882" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">888</context></context-group></trans-unit><trans-unit id="8813023402019364882" datatype="html">
         <source>Seek the video backward</source><target state="new">Seek the video backward</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">877</context></context-group></trans-unit><trans-unit id="581757752202843950" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">889</context></context-group></trans-unit><trans-unit id="581757752202843950" datatype="html">
         <source>Increase playback rate</source><target state="new">Increase playback rate</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">879</context></context-group></trans-unit><trans-unit id="5467642834854681120" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">891</context></context-group></trans-unit><trans-unit id="5467642834854681120" datatype="html">
         <source>Decrease playback rate</source><target state="new">Decrease playback rate</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">880</context></context-group></trans-unit><trans-unit id="3860402955823859506" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">892</context></context-group></trans-unit><trans-unit id="3860402955823859506" datatype="html">
         <source>Navigate in the video to the previous frame</source><target state="new">Navigate in the video to the previous frame</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">882</context></context-group></trans-unit><trans-unit id="8232494782895420700" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">894</context></context-group></trans-unit><trans-unit id="8232494782895420700" datatype="html">
         <source>Navigate in the video to the next frame</source><target state="new">Navigate in the video to the next frame</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">883</context></context-group></trans-unit><trans-unit id="8223917068580581095" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">895</context></context-group></trans-unit><trans-unit id="8223917068580581095" datatype="html">
         <source>Toggle theater mode</source><target state="new">Toggle theater mode</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">867</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">879</context></context-group></trans-unit>
       
       
       
