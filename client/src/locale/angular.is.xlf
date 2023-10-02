@@ -7110,7 +7110,7 @@
       </trans-unit>
       <trans-unit id="8501241441398968873" datatype="html">
         <source>It will delete {count, plural, =1 {1 video} other {<x id="count"/> videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (<x id="PH" equiv-text="videoChannel.name"/>)!</source>
-        <target state="translated">Það mun eyða {count, plural, =1 {1 myndskeiði} other {<x id="count"/> myndskeiðum}} sem send hafa verið inn á þessa rás og þú munt ekki geta útbúið aðra rás með heitinu (<x id="PH_" equiv-text="videoChannel.name"/>)!</target>
+        <target state="translated">Það mun eyða {count, plural, =1 {1 myndskeiði} other {<x id="count"/> myndskeiðum}} sem send hafa verið inn á þessa rás og þú munt ekki geta útbúið aðra rás með heitinu (<x id="PH" equiv-text="videoChannel.name"/>)!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">60</context>
