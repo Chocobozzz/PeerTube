@@ -263,8 +263,6 @@ async function assignReplayFilesToVideo (options: {
         fps,
         isAAC: audioStream?.codec_name === 'aac'
       })
-
-      logger.error('coucou')
     } catch (err) {
       logger.error('Cannot generate HLS playlist resolution from TS files.', { err })
     }

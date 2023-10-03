@@ -155,6 +155,8 @@ async function getVideo (_req: express.Request, res: express.Response) {
   const userId = res.locals.oauth?.token.User.id
 
   const video = await Hooks.wrapObject(res.locals.videoAPI, 'filter:api.video.get.result', { id: videoId, userId })
+  // Filter may return null/undefined value to forbid video access
+  if (!video) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
   if (video.isOutdated()) {
     JobQueue.Instance.createJobAsync({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })

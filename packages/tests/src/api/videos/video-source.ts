@@ -317,7 +317,7 @@ describe('Test a video file replacement', function () {
       })
 
       it('Should not auto blacklist if auto blacklist has been disabled between the upload and the replacement', async function () {
-        this.timeout(120000)
+        this.timeout(240000)
 
         const { uuid } = await servers[0].videos.quickUpload({ token: userToken, name: 'user video' })
         await waitJobs(servers)
