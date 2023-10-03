@@ -76,6 +76,10 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
     return this.isUserLoggedIn() && this.videoChannels.length > 1 && this.isAtLeastOneChannelSubscribed
   }
 
+  get isSingleSubscribe () {
+    return !this.account
+  }
+
   ngOnInit () {
     this.loadSubscribedStatus()
   }
@@ -168,7 +172,7 @@ export class SubscribeButtonComponent implements OnInit, OnChanges {
   }
 
   isRemoteSubscribeAvailable () {
-    return !this.isUserLoggedIn()
+    return this.isSingleSubscribe && !this.isUserLoggedIn()
   }
 
   private getChannelHandler (videoChannel: VideoChannel) {

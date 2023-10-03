@@ -5,15 +5,16 @@
 
   <ng-template #userLoggedOut>
     <span [ngClass]="{ 'extra-text': isAtLeastOneChannelSubscribed }">
-      <ng-container *ngIf="account; then multiple; else single"></ng-container>
-      <ng-template i18n #single>Subscribe</ng-template>
-      <ng-template #multiple>
+      <ng-container i18n *ngIf="isSingleSubscribe">Subscribe</ng-container>
+
+      <ng-container *ngIf="!isSingleSubscribe">
         <span i18n>Subscribe to all channels</span>
         <span *ngIf="isAtLeastOneChannelSubscribed">{{ subscribeStatus(true).length }}/{{ subscribed.size }}
           <ng-container i18n>channels subscribed</ng-container>
         </span>
-      </ng-template>
+      </ng-container>
     </span>
+
     <span *ngIf="!isBigButton && displayFollowers && videoChannels.length > 1 && videoChannel.followersCount !== 0" class="followers-count">
       {{ videoChannels[0].followersCount | myNumberFormatter }}
     </span>
