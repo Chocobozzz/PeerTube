@@ -8,6 +8,7 @@ import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS, isAudi
 import { lTags } from './object-storage/shared/index.js'
 import { generateHLSVideoFilename, generateWebVideoFilename } from './paths.js'
 import { VideoPathManager } from './video-path-manager.js'
+import { MIMETYPES } from '@server/initializers/constants.js'
 
 async function buildNewFile (options: {
   path: string
@@ -130,6 +131,12 @@ async function buildFileMetadata (path: string, existingProbe?: FfprobeData) {
   return new VideoFileMetadata(metadata)
 }
 
+function getVideoFileMimeType (extname: string, isAudio: boolean) {
+  return isAudio && extname === '.mp4' // We use .mp4 even for audio file only
+    ? MIMETYPES.AUDIO.EXT_MIMETYPE['.m4a']
+    : MIMETYPES.VIDEO.EXT_MIMETYPE[extname]
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -140,5 +147,6 @@ export {
   removeAllWebVideoFiles,
   removeWebVideoFile,
 
-  buildFileMetadata
+  buildFileMetadata,
+  getVideoFileMimeType
 }

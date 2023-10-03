@@ -15,6 +15,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import {
+  ActivityVideoUrlObject,
   CacheFileObject,
   FileRedundancyInformation,
   StreamingPlaylistRedundancyInformation,
@@ -31,7 +32,7 @@ import { MActor, MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, M
 import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
-import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
 import { ActorModel } from '../actor/actor.js'
 import { ServerModel } from '../server/server.js'
 import { getSort, getVideoSort, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
@@ -40,6 +41,7 @@ import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoFileModel } from '../video/video-file.js'
 import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist.js'
 import { VideoModel } from '../video/video.js'
+import { getVideoFileMimeType } from '@server/lib/video-file.js'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'
@@ -733,15 +735,19 @@ export class VideoRedundancyModel extends Model<Partial<AttributesOnly<VideoRedu
       id: this.url,
       type: 'CacheFile' as 'CacheFile',
       object: this.VideoFile.Video.url,
-      expires: this.expiresOn ? this.expiresOn.toISOString() : null,
+
+      expires: this.expiresOn
+        ? this.expiresOn.toISOString()
+        : null,
+
       url: {
         type: 'Link',
-        mediaType: MIMETYPES.VIDEO.EXT_MIMETYPE[this.VideoFile.extname] as any,
+        mediaType: getVideoFileMimeType(this.VideoFile.extname, this.VideoFile.isAudio()),
         href: this.fileUrl,
         height: this.VideoFile.resolution,
         size: this.VideoFile.size,
         fps: this.VideoFile.fps
-      }
+      } as ActivityVideoUrlObject
     }
   }
 

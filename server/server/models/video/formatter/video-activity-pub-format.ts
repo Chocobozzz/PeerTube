@@ -9,9 +9,10 @@ import {
   ActivityTagObject,
   ActivityTrackerUrlObject,
   ActivityUrlObject,
+  ActivityVideoUrlObject,
   VideoObject
 } from '@peertube/peertube-models'
-import { MIMETYPES, WEBSERVER } from '../../../initializers/constants.js'
+import { WEBSERVER } from '../../../initializers/constants.js'
 import {
   getLocalVideoChaptersActivityPubUrl,
   getLocalVideoCommentsActivityPubUrl,
@@ -23,6 +24,7 @@ import { MStreamingPlaylistFiles, MUserId, MVideo, MVideoAP, MVideoFile } from '
 import { VideoCaptionModel } from '../video-caption.js'
 import { sortByResolutionDesc } from './shared/index.js'
 import { getCategoryLabel, getLanguageLabel, getLicenceLabel } from './video-api-format.js'
+import { getVideoFileMimeType } from '@server/lib/video-file.js'
 
 export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
   const language = video.language
@@ -179,18 +181,20 @@ function buildVideoFileUrls (options: {
     .sort(sortByResolutionDesc)
 
   for (const file of sortedFiles) {
+    const mimeType = getVideoFileMimeType(file.extname, file.isAudio())
+
     urls.push({
       type: 'Link',
-      mediaType: MIMETYPES.VIDEO.EXT_MIMETYPE[file.extname] as any,
+      mediaType: mimeType,
       href: file.getFileUrl(video),
       height: file.resolution,
       size: file.size,
       fps: file.fps
-    })
+    } as ActivityVideoUrlObject)
 
     urls.push({
       type: 'Link',
-      rel: [ 'metadata', MIMETYPES.VIDEO.EXT_MIMETYPE[file.extname] ],
+      rel: [ 'metadata', mimeType ],
       mediaType: 'application/json' as 'application/json',
       href: getLocalVideoFileMetadataUrl(video, file),
       height: file.resolution,

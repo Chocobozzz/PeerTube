@@ -46,13 +46,7 @@ describe('Test syndication feeds', () => {
 
     // Run servers
     servers = await createMultipleServers(2)
-    serverHLSOnly = await createSingleServer(3, {
-      transcoding: {
-        enabled: true,
-        web_videos: { enabled: false },
-        hls: { enabled: true }
-      }
-    })
+    serverHLSOnly = await createSingleServer(3)
 
     await setAccessTokensToServers([ ...servers, serverHLSOnly ])
     await setDefaultChannelAvatar(servers[0])
@@ -60,6 +54,7 @@ describe('Test syndication feeds', () => {
     await doubleFollow(servers[0], servers[1])
 
     await servers[0].config.enableLive({ allowReplay: false, transcoding: false })
+    await serverHLSOnly.config.enableTranscoding({ webVideo: false, hls: true, with0p: true })
 
     {
       const user = await servers[0].users.getMyInfo()
@@ -397,9 +392,9 @@ describe('Test syndication feeds', () => {
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[0].attachments).to.exist
-        expect(jsonObj.items[0].attachments.length).to.be.eq(4)
+        expect(jsonObj.items[0].attachments.length).to.be.eq(6)
 
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 6; i++) {
           expect(jsonObj.items[0].attachments[i].mime_type).to.be.eq('application/x-bittorrent')
           expect(jsonObj.items[0].attachments[i].size_in_bytes).to.be.greaterThan(0)
           expect(jsonObj.items[0].attachments[i].url).to.exist
@@ -448,6 +443,25 @@ describe('Test syndication feeds', () => {
         const imageUrl = jsonObj.icon
         expect(imageUrl).to.include('/lazy-static/avatars/')
         await makeRawRequest({ url: imageUrl, expectedStatus: HttpStatusCode.OK_200 })
+      })
+    })
+
+    describe('XML feed', function () {
+
+      it('Should correctly have video mime types feed with HLS only', async function () {
+        this.timeout(120000)
+
+        const rss = await serverHLSOnly.feed.getXML({ feed: 'videos', ignoreCache: true })
+        const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+        const xmlDoc = parser.parse(rss)
+
+        for (const media of xmlDoc.rss.channel.item['media:group']['media:content']) {
+          if (media['@_height'] === 0) {
+            expect(media['@_type']).to.equal('audio/mp4')
+          } else {
+            expect(media['@_type']).to.equal('video/mp4')
+          }
+        }
       })
     })
   })

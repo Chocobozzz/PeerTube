@@ -630,9 +630,10 @@ const MIMETYPES = {
       'audio/vnd.dlna.adts': '.aac',
       'audio/aac': '.aac',
 
+      // Keep priority for preferred mime type
       'audio/m4a': '.m4a',
-      'audio/mp4': '.m4a',
       'audio/x-m4a': '.m4a',
+      'audio/mp4': '.m4a',
 
       'audio/vnd.dolby.dd-raw': '.ac3',
       'audio/ac3': '.ac3'

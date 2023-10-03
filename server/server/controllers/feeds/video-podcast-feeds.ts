@@ -15,6 +15,7 @@ import { asyncMiddleware, setFeedPodcastContentType, videoFeedsPodcastValidator 
 import { VideoModel } from '../../models/video/video.js'
 import { VideoCaptionModel } from '../../models/video/video-caption.js'
 import { buildFeedMetadata, getCommonVideoFeedAttributes, getVideosForFeeds, initFeed } from './shared/index.js'
+import { getVideoFileMimeType } from '@server/lib/video-file.js'
 
 const videoPodcastFeedsRouter = express.Router()
 
@@ -243,11 +244,6 @@ async function addLivePodcastItem (options: {
 // ---------------------------------------------------------------------------
 
 function buildVODWebVideoFile (video: MVideo, videoFile: VideoFile) {
-  const isAudio = videoFile.resolution.id === VideoResolution.H_NOVIDEO
-  const type = isAudio
-    ? MIMETYPES.AUDIO.EXT_MIMETYPE[extname(videoFile.fileUrl)]
-    : MIMETYPES.VIDEO.EXT_MIMETYPE[extname(videoFile.fileUrl)]
-
   const sources = [
     { uri: videoFile.fileUrl },
     { uri: videoFile.torrentUrl, contentType: 'application/x-bittorrent' }
@@ -258,7 +254,7 @@ function buildVODWebVideoFile (video: MVideo, videoFile: VideoFile) {
   }
 
   return {
-    type,
+    type: getVideoFileMimeType(extname(videoFile.fileUrl), videoFile.resolution.id === VideoResolution.H_NOVIDEO),
     title: videoFile.resolution.label,
     length: videoFile.size,
     bitrate: videoFile.size / video.duration * 8,
