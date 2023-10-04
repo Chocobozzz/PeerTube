@@ -169,6 +169,12 @@ $setting-transition-easing: ease-out;
           }
         }
 
+        &.vjs-resolution-button {
+          .vjs-menu-item-text {
+            @include margin-left(25px);
+          }
+        }
+
         .vjs-menu {
           width: inherit;
         }

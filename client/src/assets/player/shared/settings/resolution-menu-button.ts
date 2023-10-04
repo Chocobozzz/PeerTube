@@ -68,7 +68,7 @@ class ResolutionMenuButton extends MenuButton {
   }
 
   buildCSSClass () {
-    return super.buildCSSClass() + ' vjs-resolution-button'
+    return 'vjs-resolution-button ' + super.buildCSSClass()
   }
 
   buildWrapperCSSClass () {
