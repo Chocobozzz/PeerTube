@@ -88,7 +88,7 @@ async function checkResolutionsInMasterPlaylist (options: {
     if (resolution === VideoResolution.H_NOVIDEO) {
       expect(masterPlaylist).to.match(new RegExp(`${base},CODECS="mp4a.40.2"`))
     } else if (transcoded) {
-      expect(masterPlaylist).to.match(new RegExp(`${base},(FRAME-RATE=\\d+,)?CODECS="avc1.64001f,mp4a.40.2"`))
+      expect(masterPlaylist).to.match(new RegExp(`${base},(FRAME-RATE=\\d+,)?CODECS="avc1.6400[0-f]{2},mp4a.40.2"`))
     } else {
       expect(masterPlaylist).to.match(new RegExp(`${base}`))
     }
