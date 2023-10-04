@@ -192,7 +192,7 @@ class Emailer {
       },
       transport: this.transporter,
       views: {
-        root: join(root(), 'dist', 'server', 'lib', 'emails')
+        root: join(root(), 'dist', 'core', 'lib', 'emails')
       },
       subjectPrefix: CONFIG.EMAIL.SUBJECT.PREFIX
     })

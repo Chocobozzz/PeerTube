@@ -987,8 +987,8 @@ const OTP = {
 }
 
 const ASSETS_PATH = {
-  DEFAULT_AUDIO_BACKGROUND: join(root(), 'dist', 'server', 'assets', 'default-audio-background.jpg'),
-  DEFAULT_LIVE_BACKGROUND: join(root(), 'dist', 'server', 'assets', 'default-live-background.jpg')
+  DEFAULT_AUDIO_BACKGROUND: join(root(), 'dist', 'core', 'assets', 'default-audio-background.jpg'),
+  DEFAULT_LIVE_BACKGROUND: join(root(), 'dist', 'core', 'assets', 'default-live-background.jpg')
 }
 
 // ---------------------------------------------------------------------------
