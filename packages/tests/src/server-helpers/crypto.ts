@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { decrypt, encrypt } from '@peertube/peertube-server/server/helpers/peertube-crypto.js'
+import { decrypt, encrypt } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
 
 describe('Encrypt/Descrypt', function () {
 

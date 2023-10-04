@@ -1,7 +1,7 @@
 import { program } from 'commander'
 import { isAbsolute } from 'path'
-import { initDatabaseModels } from '../../server/initializers/database.js'
-import { PluginManager } from '../../server/lib/plugins/plugin-manager.js'
+import { initDatabaseModels } from '../../core/initializers/database.js'
+import { PluginManager } from '../../core/lib/plugins/plugin-manager.js'
 
 program
   .option('-n, --npm-name [npmName]', 'Plugin to install')

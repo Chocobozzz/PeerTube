@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { basename } from 'path'
-import { ACTOR_IMAGES_SIZE } from '@peertube/peertube-server/server/initializers/constants.js'
+import { ACTOR_IMAGES_SIZE } from '@peertube/peertube-server/core/initializers/constants.js'
 import { testFileExistsOrNot, testImage } from '@tests/shared/checks.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { wait } from '@peertube/peertube-core-utils'

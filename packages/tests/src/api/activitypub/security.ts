@@ -8,9 +8,9 @@ import {
   activityPubContextify,
   buildGlobalHTTPHeaders,
   signAndContextify
-} from '@peertube/peertube-server/server/helpers/activity-pub-utils.js'
-import { buildDigest } from '@peertube/peertube-server/server/helpers/peertube-crypto.js'
-import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@peertube/peertube-server/server/initializers/constants.js'
+} from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'
+import { buildDigest } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
+import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@peertube/peertube-server/core/initializers/constants.js'
 import { makePOSTAPRequest } from '@tests/shared/requests.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'

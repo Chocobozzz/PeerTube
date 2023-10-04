@@ -12,7 +12,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { DEFAULT_AUDIO_RESOLUTION } from '@peertube/peertube-server/server/initializers/constants.js'
+import { DEFAULT_AUDIO_RESOLUTION } from '@peertube/peertube-server/core/initializers/constants.js'
 import { checkDirectoryIsEmpty, checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
 

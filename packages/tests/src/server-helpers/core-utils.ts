@@ -5,7 +5,7 @@ import snakeCase from 'lodash-es/snakeCase.js'
 import validator from 'validator'
 import { getAverageTheoreticalBitrate, getMaxTheoreticalBitrate, parseChapters } from '@peertube/peertube-core-utils'
 import { VideoResolution } from '@peertube/peertube-models'
-import { objectConverter, parseBytes, parseDurationToMs, parseSemVersion } from '@peertube/peertube-server/server/helpers/core-utils.js'
+import { objectConverter, parseBytes, parseDurationToMs, parseSemVersion } from '@peertube/peertube-server/core/helpers/core-utils.js'
 
 describe('Parse Bytes', function () {
 

@@ -14,12 +14,12 @@ mkdir -p "./client/dist"
 rm -rf "./client/dist/locale"
 cp -r "./client/src/locale" "./client/dist/locale"
 
-mkdir -p "./dist/server/lib"
+mkdir -p "./dist/core/lib"
 
 npm run tsc -- -b -v --incremental server/tsconfig.json
 npm run resolve-tspaths:server
 
-cp -r ./server/server/static ./server/server/assets ./dist/server
-cp -r "./server/server/lib/emails" "./dist/server/lib"
+cp -r ./server/core/static ./server/core/assets ./dist/core
+cp -r "./server/core/lib/emails" "./dist/core/lib"
 
 ./node_modules/.bin/tsc-watch --build --preserveWatchOutput --verbose --onSuccess 'sh -c "npm run resolve-tspaths:server && NODE_ENV=dev node dist/server"' server/tsconfig.json

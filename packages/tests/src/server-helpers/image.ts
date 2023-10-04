@@ -5,8 +5,8 @@ import { remove } from 'fs-extra/esm'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 import { buildAbsoluteFixturePath, root } from '@peertube/peertube-node-utils'
-import { execPromise } from '@peertube/peertube-server/server/helpers/core-utils.js'
-import { processImage } from '@peertube/peertube-server/server/helpers/image-utils.js'
+import { execPromise } from '@peertube/peertube-server/core/helpers/core-utils.js'
+import { processImage } from '@peertube/peertube-server/core/helpers/image-utils.js'
 
 async function checkBuffers (path1: string, path2: string, equals: boolean) {
   const [ buf1, buf2 ] = await Promise.all([

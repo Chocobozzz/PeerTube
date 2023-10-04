@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { isResolvingToUnicastOnly } from '@peertube/peertube-server/server/helpers/dns.js'
+import { isResolvingToUnicastOnly } from '@peertube/peertube-server/core/helpers/dns.js'
 
 describe('DNS helpers', function () {
 

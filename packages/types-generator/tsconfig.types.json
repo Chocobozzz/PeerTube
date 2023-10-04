@@ -10,7 +10,7 @@
     "rootDir": "./src",
     "tsBuildInfoFile": "./dist/tsconfig.server.types.tsbuildinfo",
     "paths": {
-      "@server/*": [ "../../server/server/*" ]
+      "@server/*": [ "../../server/core/*" ]
     }
   },
   "references": [

@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { getAllFiles, getMaxTheoreticalBitrate, getMinTheoreticalBitrate, omit } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoFileMetadata, VideoState } from '@peertube/peertube-models'
-import { canDoQuickTranscode } from '@peertube/peertube-server/server/lib/transcoding/transcoding-quick-transcode.js'
+import { canDoQuickTranscode } from '@peertube/peertube-server/core/lib/transcoding/transcoding-quick-transcode.js'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   ffprobePromise,

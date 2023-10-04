@@ -7,8 +7,8 @@ import {
   VIDEO_LICENCES,
   VIDEO_PLAYLIST_PRIVACIES,
   VIDEO_PRIVACIES
-} from '@peertube/peertube-server/server/initializers/constants.js'
-import { VideoConstantManagerFactory } from '@peertube/peertube-server/server/lib/plugins/video-constant-manager-factory.js'
+} from '@peertube/peertube-server/core/initializers/constants.js'
+import { VideoConstantManagerFactory } from '@peertube/peertube-server/core/lib/plugins/video-constant-manager-factory.js'
 
 describe('VideoConstantManagerFactory', function () {
   const factory = new VideoConstantManagerFactory('peertube-plugin-constants')

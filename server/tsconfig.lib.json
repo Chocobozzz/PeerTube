@@ -6,7 +6,7 @@
     "baseUrl": "../",
     "rootDir": ".",
     "paths": {
-      "@server/*": [ "server/server/*" ]
+      "@server/*": [ "server/core/*" ]
     }
   }
 }

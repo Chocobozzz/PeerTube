@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { extractMentions } from '@peertube/peertube-server/server/helpers/mentions.js'
+import { extractMentions } from '@peertube/peertube-server/core/helpers/mentions.js'
 
 describe('Comment model', function () {
   it('Should correctly extract mentions', async function () {

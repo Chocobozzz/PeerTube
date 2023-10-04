@@ -12,7 +12,7 @@ import {
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
   VIDEO_PRIVACIES
-} from '@peertube/peertube-server/server/initializers/constants.js'
+} from '@peertube/peertube-server/core/initializers/constants.js'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { makeRawRequest, PeerTubeServer, VideoEdit, waitJobs } from '@peertube/peertube-server-commands'
 import { dateIsValid, expectStartWith, testImageGeneratedByFFmpeg } from './checks.js'

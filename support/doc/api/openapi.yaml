@@ -53,7 +53,7 @@ info:
     }
     ```
 
-    We provide error `type` values for [a growing number of cases](https://github.com/Chocobozzz/PeerTube/blob/develop/packages/models/src/server/server-error-code.enum.ts),
+    We provide error `type` values for [a growing number of cases](https://github.com/Chocobozzz/PeerTube/blob/develop/packages/models/src/server/core-error-code.enum.ts),
     but it is still optional. Types are used to disambiguate errors that bear the same status code
     and are non-obvious:
 

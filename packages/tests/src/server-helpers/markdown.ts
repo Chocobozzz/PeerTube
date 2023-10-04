@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { mdToOneLinePlainText } from '@peertube/peertube-server/server/helpers/markdown.js'
+import { mdToOneLinePlainText } from '@peertube/peertube-server/core/helpers/markdown.js'
 import { expect } from 'chai'
 
 describe('Markdown helpers', function () {

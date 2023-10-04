@@ -69,8 +69,8 @@ npx @redocly/cli preview-docs ./support/doc/api/openapi.yaml
 ```
 
 Some hints:
- * Routes are defined in [/server/server/controllers/](https://github.com/Chocobozzz/PeerTube/tree/develop/server/server/controllers) directory
- * Parameters validators are defined in [/server/server/middlewares/validators](https://github.com/Chocobozzz/PeerTube/tree/develop/server/server/middlewares/validators) directory
+ * Routes are defined in [/server/core/controllers/](https://github.com/Chocobozzz/PeerTube/tree/develop/server/core/controllers) directory
+ * Parameters validators are defined in [/server/core/middlewares/validators](https://github.com/Chocobozzz/PeerTube/tree/develop/server/core/middlewares/validators) directory
  * Models sent/received by the controllers are defined in [/packages/models](https://github.com/Chocobozzz/PeerTube/tree/develop/packages/models) directory
 
 

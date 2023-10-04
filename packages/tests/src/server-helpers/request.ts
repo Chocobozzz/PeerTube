@@ -5,7 +5,7 @@ import { pathExists, remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { wait } from '@peertube/peertube-core-utils'
 import { root } from '@peertube/peertube-node-utils'
-import { doRequest, doRequestAndSaveToFile } from '@peertube/peertube-server/server/helpers/requests.js'
+import { doRequest, doRequestAndSaveToFile } from '@peertube/peertube-server/core/helpers/requests.js'
 import { Mock429 } from '@tests/shared/mock-servers/mock-429.js'
 import { FIXTURE_URLS } from '@tests/shared/tests.js'
 
