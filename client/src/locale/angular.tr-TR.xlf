@@ -811,23 +811,23 @@
       <trans-unit id="1779391511451594552" datatype="html">
         <source>Using an ActivityPub account</source>
         <target state="translated">ActivityPub hesabı kullanılıyor</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">48</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">49</context></context-group></trans-unit>
       <trans-unit id="3372646000533908418" datatype="html">
         <source>Subscribe with a remote account:</source>
         <target state="translated">Uzak bir hesapla abone olun:</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">56</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">57</context></context-group></trans-unit>
       <trans-unit id="6691897331062834756" datatype="html">
         <source>Subscribe with an account on this instance</source>
         <target state="translated">Bu örnekteki bir hesapla abone olun</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">51</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">52</context></context-group></trans-unit>
       <trans-unit id="1740917574463702967" datatype="html">
         <source>Subscribe with your local account</source>
         <target state="translated">Yerel hesabınızla abone olun</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">52</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">53</context></context-group></trans-unit>
       <trans-unit id="8023282004085823427" datatype="html">
         <source><x id="PH" equiv-text="this.video.name"/> will be duplicated by your instance.</source>
         <target state="translated"><x id="PH" equiv-text="this.video.name"/> örneğiniz tarafından çoğaltılacaktır.</target>
@@ -858,13 +858,13 @@
       <trans-unit id="2949829240129672512" datatype="html">
         <source>Using a syndication feed</source>
         <target state="translated">Sendikasyon beslemesi kullanma</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">62</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">63</context></context-group></trans-unit>
       <trans-unit id="7695158742270602420" datatype="html">
         <source>Subscribe via RSS</source>
         <target state="translated">RSS ile abone ol</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">63</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">64</context></context-group></trans-unit>
       <trans-unit id="6086125715086510222" datatype="html">
         <source>PROFILE SETTINGS</source>
         <target state="translated">PROFİL AYARLARI</target>
@@ -889,11 +889,17 @@
         <source>PeerTube version</source>
         <target state="translated">PeerTube sürümü</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">6</context></context-group>
-      </trans-unit><trans-unit id="24003535274174906" datatype="html">
-        <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fs-7 fw-normal fst-italic&quot;>"/>can be redefined by the users<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span>"/></source><target state="new"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fs-7 fw-normal fst-italic&quot;>"/>can be redefined by the users<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span>"/></target>
+      </trans-unit><trans-unit id="3805147953573030976" datatype="html">
+        <source>Default NSFW/sensitive videos policy</source><target state="new">Default NSFW/sensitive videos policy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
-          <context context-type="linenumber">13,14</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit><trans-unit id="5211109801015470691" datatype="html">
+        <source>can be redefined by the users</source><target state="new">can be redefined by the users</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       
@@ -3342,8 +3348,8 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1144407473317535723" datatype="html">
         <source>Subscribe</source>
         <target state="translated">Abone ol</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">9</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">8</context></context-group></trans-unit>
       <trans-unit id="5432070253720498105" datatype="html">
         <source>Subscribe to all channels</source>
         <target state="translated">Bütün kanallara abone ol</target>
@@ -3357,8 +3363,8 @@ The link will expire within 1 hour.</source>
       <trans-unit id="8426539297729416784" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
         <target state="new">{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">28</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">29</context></context-group></trans-unit>
       <trans-unit id="7215101881367554791">
         <source>Show more</source>
         <target>Daha fazla göster</target>
@@ -12241,49 +12247,49 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Subscribed to all current channels of 
           <x id="PH"/>. You will be notified of all their new videos.
         </target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">108</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">112</context></context-group></trans-unit>
       <trans-unit id="2780460651686172544" datatype="html">
         <source>Subscribed to <x id="PH"/>. You will be notified of all their new videos.</source>
         <target state="new">Subscribed to 
           <x id="PH"/>. You will be notified of all their new videos.
         </target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">109</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">113</context></context-group></trans-unit>
       <trans-unit id="7019115336138470191">
         <source>Subscribed</source>
         <target>Abone olundu</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">111</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">115</context></context-group></trans-unit>
       <trans-unit id="7070823964189404459" datatype="html">
         <source>Unsubscribed from all channels of <x id="PH"/> </source>
         <target state="new">Unsubscribed from all channels of 
           <x id="PH"/>
         </target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">138</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">142</context></context-group></trans-unit>
       <trans-unit id="9201562016527884133" datatype="html">
         <source>Unsubscribed from <x id="PH"/> </source>
         <target state="new">Unsubscribed from 
           <x id="PH"/>
         </target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">139</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">143</context></context-group></trans-unit>
       <trans-unit id="516954136005961440" datatype="html">
         <source>Unsubscribed</source>
         <target state="translated">Abonelikten çıkıldı</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">141</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">145</context></context-group></trans-unit>
       <trans-unit id="1000724328916033777" datatype="html">
         <source>Multiple ways to subscribe to the current channel</source>
         <target state="new">Multiple ways to subscribe to the current channel</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">38</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="363499678348067004" datatype="html">
         <source>Open subscription dropdown</source>
         <target state="new">Open subscription dropdown</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">40</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">41</context></context-group></trans-unit>
       
       <trans-unit id="2279527393438260622" datatype="html">
         <source>Search videos, playlists, channels…</source>
