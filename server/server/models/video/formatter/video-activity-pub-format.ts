@@ -181,7 +181,8 @@ function buildVideoFileUrls (options: {
     .sort(sortByResolutionDesc)
 
   for (const file of sortedFiles) {
-    const mimeType = getVideoFileMimeType(file.extname, file.isAudio())
+    // FIXME: Replace false by file.isAudio(), federation breaking change correctly handled in 6.0
+    const mimeType = getVideoFileMimeType(file.extname, false)
 
     urls.push({
       type: 'Link',

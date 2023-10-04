@@ -672,8 +672,27 @@ const MIMETYPES = {
     MIMETYPE_EXT: {
       'application/vnd.apple.mpegurl': '.m3u8'
     }
+  },
+  AP_VIDEO: {
+    MIMETYPE_EXT: {
+      'video/mp4': '.mp4',
+      'video/ogg': '.ogv',
+      'video/webm': '.webm',
+      'audio/mp4': '.mp4'
+    }
+  },
+  AP_TORRENT: {
+    MIMETYPE_EXT: {
+      'application/x-bittorrent': '.torrent'
+    }
+  },
+  AP_MAGNET: {
+    MIMETYPE_EXT: {
+      'application/x-bittorrent;x-scheme-handler/magnet': '.magnet'
+    }
   }
 }
+
 MIMETYPES.AUDIO.EXT_MIMETYPE = invert(MIMETYPES.AUDIO.MIMETYPE_EXT)
 MIMETYPES.IMAGE.EXT_MIMETYPE = invert(MIMETYPES.IMAGE.MIMETYPE_EXT)
 MIMETYPES.VIDEO_CAPTIONS.EXT_MIMETYPE = invert(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT)
@@ -707,11 +726,6 @@ const ACTIVITY_PUB = {
   PUBLIC: 'https://www.w3.org/ns/activitystreams#Public',
   COLLECTION_ITEMS_PER_PAGE: 10,
   FETCH_PAGE_LIMIT: 2000,
-  URL_MIME_TYPES: {
-    VIDEO: [] as string[],
-    TORRENT: [ 'application/x-bittorrent' ],
-    MAGNET: [ 'application/x-bittorrent;x-scheme-handler/magnet' ]
-  },
   MAX_RECURSION_COMMENTS: 100,
   ACTOR_REFRESH_INTERVAL: 3600 * 24 * 1000 * 2, // 2 days
   VIDEO_REFRESH_INTERVAL: 3600 * 24 * 1000 * 2, // 2 days
@@ -1312,8 +1326,6 @@ function updateWebserverUrls () {
 function updateWebserverConfig () {
   MIMETYPES.VIDEO.MIMETYPE_EXT = buildVideoMimetypeExt()
   MIMETYPES.VIDEO.MIMETYPES_REGEX = buildMimetypesRegex(MIMETYPES.VIDEO.MIMETYPE_EXT)
-
-  ACTIVITY_PUB.URL_MIME_TYPES.VIDEO = Object.keys(MIMETYPES.VIDEO.MIMETYPE_EXT)
 
   MIMETYPES.VIDEO.EXT_MIMETYPE = buildVideoExtMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT)
 

@@ -264,9 +264,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function isAPVideoUrlObject (url: any): url is ActivityVideoUrlObject {
-  const urlMediaType = url.mediaType
-
-  return MIMETYPES.VIDEO.MIMETYPE_EXT[urlMediaType] && urlMediaType.startsWith('video/')
+  return !!MIMETYPES.AP_VIDEO.MIMETYPE_EXT[url.mediaType]
 }
 
 function isAPStreamingPlaylistUrlObject (url: any): url is ActivityPlaylistUrlObject {

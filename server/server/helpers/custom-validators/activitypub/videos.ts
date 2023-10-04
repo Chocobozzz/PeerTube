@@ -8,7 +8,7 @@ import {
   VideoState
 } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
-import { ACTIVITY_PUB, CONSTRAINTS_FIELDS } from '../../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
 import { peertubeTruncate } from '../../core-utils.js'
 import { isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc.js'
 import { isLiveLatencyModeValid } from '../video-lives.js'
@@ -91,7 +91,7 @@ function isRemoteVideoUrlValid (url: any) {
   return url.type === 'Link' &&
     // Video file link
     (
-      ACTIVITY_PUB.URL_MIME_TYPES.VIDEO.includes(url.mediaType) &&
+      MIMETYPES.AP_VIDEO.MIMETYPE_EXT[url.mediaType] &&
       isActivityPubUrlValid(url.href) &&
       validator.default.isInt(url.height + '', { min: 0 }) &&
       validator.default.isInt(url.size + '', { min: 0 }) &&
@@ -99,13 +99,13 @@ function isRemoteVideoUrlValid (url: any) {
     ) ||
     // Torrent link
     (
-      ACTIVITY_PUB.URL_MIME_TYPES.TORRENT.includes(url.mediaType) &&
+      MIMETYPES.AP_TORRENT.MIMETYPE_EXT[url.mediaType] &&
       isActivityPubUrlValid(url.href) &&
       validator.default.isInt(url.height + '', { min: 0 })
     ) ||
     // Magnet link
     (
-      ACTIVITY_PUB.URL_MIME_TYPES.MAGNET.includes(url.mediaType) &&
+      MIMETYPES.AP_MAGNET.MIMETYPE_EXT[url.mediaType] &&
       validator.default.isLength(url.href, { min: 5 }) &&
       validator.default.isInt(url.height + '', { min: 0 })
     ) ||

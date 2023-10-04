@@ -16,7 +16,7 @@ export interface ActivityIconObject {
 
 export type ActivityVideoUrlObject = {
   type: 'Link'
-  mediaType: 'video/mp4' | 'video/webm' | 'video/ogg'
+  mediaType: 'video/mp4' | 'video/webm' | 'video/ogg' | 'audio/mp4'
   href: string
   height: number
   size: number
