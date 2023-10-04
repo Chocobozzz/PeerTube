@@ -21,9 +21,6 @@ export function addDefaultEncoderParams (options: {
   const { command, encoder, fps, streamNum } = options
 
   if (encoder === 'libx264') {
-    // 3.1 is the minimal resource allocation for our highest supported resolution
-    command.outputOption(buildStreamSuffix('-level:v', streamNum) + ' 3.1')
-
     if (fps) {
       // Keyframe interval of 2 seconds for faster seeking and resolution switching.
       // https://streaminglearningcenter.com/blogs/whats-the-right-keyframe-interval.html
