@@ -20,12 +20,12 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 120px;">
+      <th scope="col" style="width: 120px;">
         <span i18n class="visually-hidden">Actions</span>
       </th>
-      <th i18n>Token</th>
-      <th style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th style="width: 160px;" i18n>Associated runners</th>
+      <th scope="col" i18n>Token</th>
+      <th scope="col" style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 160px;" i18n>Associated runners</th>
     </tr>
   </ng-template>
 

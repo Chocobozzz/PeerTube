@@ -34,19 +34,19 @@
 
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 40px;">
+      <th scope="col" style="width: 40px;">
         <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
       </th>
-      <th style="width: 40px;">
+      <th scope="col" style="width: 40px;">
         <span i18n class="visually-hidden">More information</span>
       </th>
-      <th style="width: 150px;">
+      <th scope="col" style="width: 150px;">
         <span i18n class="visually-hidden">Actions</span>
       </th>
-      <th style="width: 300px;" i18n>Account</th>
-      <th style="width: 300px;" i18n>Video</th>
-      <th i18n>Comment</th>
-      <th style="width: 150px;" i18n pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 300px;" i18n>Account</th>
+      <th scope="col" style="width: 300px;" i18n>Video</th>
+      <th scope="col" i18n>Comment</th>
+      <th scope="col" style="width: 150px;" i18n pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 

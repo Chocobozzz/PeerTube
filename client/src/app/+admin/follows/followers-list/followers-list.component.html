@@ -28,14 +28,14 @@
 
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 40px">
+      <th scope="col" style="width: 40px">
         <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
       </th>
-      <th style="width: 150px;" i18n>Actions</th>
-      <th i18n>Follower</th>
-      <th style="width: 100px;" i18n pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
-      <th style="width: 100px;" i18n pSortableColumn="score">Score <p-sortIcon field="score"></p-sortIcon></th>
-      <th style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 150px;" i18n>Actions</th>
+      <th scope="col" i18n>Follower</th>
+      <th scope="col" style="width: 100px;" i18n pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
+      <th scope="col" style="width: 100px;" i18n pSortableColumn="score">Score <p-sortIcon field="score"></p-sortIcon></th>
+      <th scope="col" style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 

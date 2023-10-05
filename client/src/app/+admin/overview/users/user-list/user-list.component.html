@@ -33,13 +33,13 @@
 
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 40px">
+      <th scope="col" style="width: 40px">
         <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
       </th>
-      <th style="width: 40px;">
+      <th scope="col" style="width: 40px;">
         <span i18n class="visually-hidden">More information</span>
       </th>
-      <th style="width: 70px;">
+      <th scope="col" style="width: 70px;">
         <div class="c-hand column-toggle" ngbDropdown placement="bottom-left auto" container="body" autoClose="outside">
           <my-global-icon iconName="columns" ngbDropdownToggle></my-global-icon>
 
@@ -61,14 +61,14 @@
           </div>
         </div>
       </th>
-      <th *ngIf="isSelected('username')" pResizableColumn  pSortableColumn="username">{{ getColumn('username').label }} <p-sortIcon field="username"></p-sortIcon></th>
-      <th *ngIf="isSelected('role')" style="width: 120px;"  pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
-      <th *ngIf="isSelected('email')">{{ getColumn('email').label }}</th>
-      <th *ngIf="isSelected('quota')" style="width: 160px;"  pSortableColumn="videoQuotaUsed">{{ getColumn('quota').label }} <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
-      <th *ngIf="isSelected('quotaDaily')" style="width: 160px;">{{ getColumn('quotaDaily').label }}</th>
-      <th *ngIf="isSelected('pluginAuth')" style="width: 140px;" pResizableColumn >{{ getColumn('pluginAuth').label }}</th>
-      <th *ngIf="isSelected('createdAt')" style="width: 150px;"  pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th *ngIf="isSelected('lastLoginDate')" style="width: 150px;"  pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('username')" pResizableColumn  pSortableColumn="username">{{ getColumn('username').label }} <p-sortIcon field="username"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('role')" style="width: 120px;"  pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('email')">{{ getColumn('email').label }}</th>
+      <th scope="col" *ngIf="isSelected('quota')" style="width: 160px;"  pSortableColumn="videoQuotaUsed">{{ getColumn('quota').label }} <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('quotaDaily')" style="width: 160px;">{{ getColumn('quotaDaily').label }}</th>
+      <th scope="col" *ngIf="isSelected('pluginAuth')" style="width: 140px;" pResizableColumn >{{ getColumn('pluginAuth').label }}</th>
+      <th scope="col" *ngIf="isSelected('createdAt')" style="width: 150px;"  pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('lastLoginDate')" style="width: 150px;"  pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
     </tr>
   </ng-template>
 
