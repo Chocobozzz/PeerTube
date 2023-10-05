@@ -106,6 +106,7 @@ export class GlobalIconComponent implements OnInit {
       'filter:internal.common.svg-icons.get-content.params',
       'filter:internal.common.svg-icons.get-content.result'
     )
+    nativeElement.ariaHidden = 'true'
 
     if (this.width) {
       nativeElement.style.width = this.width
