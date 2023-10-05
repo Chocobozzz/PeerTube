@@ -20,8 +20,12 @@
 
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 40px;"></th>
-      <th style="width: 150px;"></th>
+      <th style="width: 40px;">
+        <span i18n class="visually-hidden">More information</span>
+      </th>
+      <th style="width: 150px;">
+        <span i18n class="visually-hidden">Actions</span>
+      </th>
       <th i18n pSortableColumn="name">Video <p-sortIcon field="name"></p-sortIcon></th>
       <th style="width: 100px;" i18n>Sensitive</th>
       <th style="width: 120px;" i18n>Unfederated</th>
@@ -31,7 +35,9 @@
 
   <ng-template pTemplate="body" let-videoBlock let-expanded="expanded">
     <tr>
-      <td *ngIf="!videoBlock.reason"></td>
+      <td *ngIf="!videoBlock.reason">
+        <span i18n class="visually-hidden">No more information is available for this row</span>
+      </td>
       <td class="expand-cell" *ngIf="videoBlock.reason" [pRowToggler]="videoBlock">
         <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
       </td>

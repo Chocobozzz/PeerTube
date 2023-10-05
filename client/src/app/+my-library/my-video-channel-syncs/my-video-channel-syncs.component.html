@@ -29,7 +29,9 @@
 
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 10%"></th>
+      <th style="width: 10%;">
+        <span i18n class="visually-hidden">Actions</span>
+      </th>
       <th style="width: 25%" i18n pSortableColumn="externalChannelUrl">External Channel <p-sortIcon field="externalChannelUrl"></p-sortIcon></th>
       <th style="width: 25%" i18n pSortableColumn="videoChannel">Channel <p-sortIcon field="videoChannel"></p-sortIcon></th>
       <th style="width: 10%" i18n pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>

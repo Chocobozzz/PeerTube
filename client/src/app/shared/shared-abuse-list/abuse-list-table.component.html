@@ -14,8 +14,12 @@
 
   <ng-template pTemplate="header">
     <tr> <!-- header -->
-      <th style="width: 40px;"></th>
-      <th style="width: 150px;"></th>
+      <th style="width: 40px;">
+        <span i18n class="visually-hidden">More information</span>
+      </th>
+      <th style="width: 150px;">
+        <span i18n class="visually-hidden">Actions</span>
+      </th>
       <th *ngIf="isAdminView()" style="width: 20%;" pResizableColumn i18n>Reporter</th>
       <th i18n>Video/Comment/Account</th>
       <th style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
