@@ -39,37 +39,40 @@
   max-height: 100%;
 }
 
-.cfp-hotkeys table {
+.cfp-hotkeys ul {
   margin: auto;
+  width: fit-content;
+  list-style: none;
   color: pvar(--mainForegroundColor);
 }
 
-.cfp-content {
-  display: table-cell;
-  vertical-align: middle;
+.cfp-hotkeys-keys,
+.cfp-hotkeys-text {
+  display: inline-block;
 }
 
 .cfp-hotkeys-keys {
   padding: 5px;
-  text-align: end;
-}
+  min-width: 90px;
 
-.cfp-hotkeys-key {
-  @include margin-right(5px);
+  > span {
+    @include margin-right(5px);
 
-  display: inline-block;
-  color: pvar(--mainBackgroundColor);
-  background-color: pvar(--mainForegroundColor);
-  border: 1px solid pvar(--mainForegroundColor);
-  border-radius: 5px;
-  text-align: center;
-  box-shadow: inset 0 1px 0 #666, 0 1px 0 #bbb;
-  padding: 5px 9px;
-  font-size: 1em;
+    display: inline-block;
+    color: pvar(--mainBackgroundColor);
+    background-color: pvar(--mainForegroundColor);
+    border: 1px solid pvar(--mainForegroundColor);
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: inset 0 1px 0 #666, 0 1px 0 #bbb;
+    padding: 5px 9px;
+    font-size: 1em;
+  }
 }
 
 .cfp-hotkeys-text {
   @include padding-left(10px);
+
   font-size: 1em;
 }
 
@@ -85,11 +88,11 @@
   min-height: 45px;
   min-width: 45px;
   text-align: center;
-}
 
-.cfp-hotkeys-close:hover {
-  cursor: pointer;
-  opacity: 0.8;
+  &:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
 }
 
 @media all and (max-width: $mobile-view) {
