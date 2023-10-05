@@ -31,10 +31,10 @@
         <div *ngIf="broadcastMessage" class="broadcast-message alert" [ngClass]="broadcastMessage.class">
           <div [innerHTML]="broadcastMessage.message"></div>
 
-          <my-global-icon
-            *ngIf="broadcastMessage.dismissable" (click)="hideBroadcastMessage()"
-            iconName="cross" role="button" title="Close this message" i18n-title
-          ></my-global-icon>
+          <button
+          *ngIf="broadcastMessage.dismissable" (click)="hideBroadcastMessage()" class="border-0" title="Close this message" i18n-title>
+            <my-global-icon iconName="cross"></my-global-icon>
+          </button>
         </div>
 
         <router-outlet></router-outlet>

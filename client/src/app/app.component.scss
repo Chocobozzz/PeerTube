@@ -97,10 +97,14 @@
   grid-template-columns: 1fr 30px;
   column-gap: 10px;
 
-  my-global-icon {
-    justify-self: center;
-    align-self: center;
-    cursor: pointer;
-    width: 20px;
+  button {
+    display: block;
+    color: inherit;
+    height: fit-content;
+    margin: auto;
+
+    > my-global-icon {
+      width: 20px;
+    }
   }
 }
