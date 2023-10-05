@@ -52,6 +52,10 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     this.serverConfig = this.serverService.getHTMLConfig()
   }
 
+  getVideoAriaLabel () {
+    return $localize`Watch video ${this.playlistElement.video.name}`
+  }
+
   getVideoOwnerDisplayType (element: VideoPlaylistElement) {
     return this.videoService.buildDefaultOwnerDisplayType(element.video)
   }

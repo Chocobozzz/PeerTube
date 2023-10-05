@@ -2,10 +2,10 @@
   <ng-content></ng-content>
 </ng-template>
 
-<a *ngIf="!href" [routerLink]="internalLink" [attr.title]="title" [tabindex]="tabindex" [ngClass]="builtClasses">
+<a *ngIf="!href" [routerLink]="internalLink" [attr.title]="title" [ariaLabel]="ariaLabel" [tabindex]="tabindex" [ngClass]="builtClasses">
   <ng-template *ngTemplateOutlet="content"></ng-template>
 </a>
 
-<a *ngIf="href" [href]="href" [target]="target" [attr.title]="title" [tabindex]="tabindex" [ngClass]="builtClasses">
+<a *ngIf="href" [href]="href" [target]="target" [attr.title]="title" [ariaLabel]="ariaLabel" [tabindex]="tabindex" [ngClass]="builtClasses">
   <ng-template *ngTemplateOutlet="content"></ng-template>
 </a>

@@ -1,5 +1,6 @@
 <div class="video-miniature" [ngClass]="getClasses()" (mouseenter)="loadActions()">
   <my-video-thumbnail
+    [ariaLabel]="getAriaLabel()"
     [video]="video" [nsfw]="isVideoBlur" [videoRouterLink]="videoRouterLink" [videoHref]="videoHref" [videoTarget]="videoTarget"
     [displayWatchLaterPlaylist]="isWatchLaterPlaylistDisplayed()" [inWatchLaterPlaylist]="inWatchLaterPlaylist" (watchLaterClick)="onWatchLaterClick($event)"
   >
@@ -26,6 +27,7 @@
         <div class="w-100 d-flex flex-column">
           <my-link
             [internalLink]="videoRouterLink" [href]="videoHref" [target]="videoTarget" [inheritParentCSS]="true"
+            [ariaLabel]="getAriaLabel()"
             [title]="video.name" class="video-miniature-name" className="ellipsis-multiline-2" [ngClass]="{ 'blur-filter': isVideoBlur }"
           >
             {{ video.name }}

@@ -18,6 +18,8 @@ export class LinkComponent implements OnInit {
 
   @Input() tabindex: string | number
 
+  @Input() ariaLabel: string
+
   builtClasses: string
 
   ngOnInit () {

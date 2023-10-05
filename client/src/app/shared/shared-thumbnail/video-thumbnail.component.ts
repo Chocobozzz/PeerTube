@@ -20,6 +20,8 @@ export class VideoThumbnailComponent {
   @Input() displayWatchLaterPlaylist: boolean
   @Input() inWatchLaterPlaylist: boolean
 
+  @Input({ required: true }) ariaLabel: string
+
   @Output() watchLaterClick = new EventEmitter<boolean>()
 
   addToWatchLaterText: string

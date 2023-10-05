@@ -8,7 +8,7 @@
     <my-video-thumbnail
       *ngIf="playlistElement.video"
       [video]="playlistElement.video" [nsfw]="isVideoBlur(playlistElement.video)"
-      [videoRouterLink]="buildRouterLink()" [queryParams]="buildRouterQuery()"
+      [videoRouterLink]="buildRouterLink()" [queryParams]="buildRouterQuery()" [ariaLabel]="getVideoAriaLabel()"
     ></my-video-thumbnail>
 
     <div class="fake-thumbnail" *ngIf="!playlistElement.video"></div>
@@ -16,9 +16,9 @@
     <div class="video-info">
       <ng-container *ngIf="playlistElement.video">
         <div class="video-info-header">
-          <a tabindex="-1" class="video-info-name"
+          <a
+            tabindex="-1" class="video-info-name" [ariaLabel]="getVideoAriaLabel()" [attr.title]="playlistElement.video.name"
             [routerLink]="buildRouterLink()" [queryParams]="buildRouterQuery()"
-            [attr.title]="playlistElement.video.name"
           >{{ playlistElement.video.name }}</a>
 
           <span i18n *ngIf="isVideoPrivate()" class="pt-badge badge-yellow">Private</span>

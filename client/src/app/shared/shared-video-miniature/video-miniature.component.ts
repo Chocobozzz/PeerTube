@@ -214,6 +214,10 @@ export class VideoMiniatureComponent implements OnInit {
     return ''
   }
 
+  getAriaLabel () {
+    return $localize`Watch video ${this.video.name}`
+  }
+
   loadActions () {
     if (this.displayVideoActions) this.showActions = true
 
