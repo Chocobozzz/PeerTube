@@ -12,9 +12,10 @@ import { JOB_PRIORITY } from '@server/initializers/constants.js'
 import { LiveManager } from '@server/lib/live/index.js'
 import { MStreamingPlaylist, MVideo } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
-import { move, remove } from 'fs-extra/esm'
+import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { AbstractJobHandler } from './abstract-job-handler.js'
+import { tryAtomicMove } from '@server/helpers/fs.js'
 
 type CreateOptions = {
   video: MVideo
@@ -84,25 +85,23 @@ export class LiveRTMPHLSTranscodingJobHandler extends AbstractJobHandler<CreateO
 
     // Always process the chunk first before moving m3u8 that references this chunk
     if (updatePayload.type === 'add-chunk') {
-      await move(
+      await tryAtomicMove(
         updatePayload.videoChunkFile as string,
-        join(outputDirectory, updatePayload.videoChunkFilename),
-        { overwrite: true }
+        join(outputDirectory, updatePayload.videoChunkFilename)
       )
     } else if (updatePayload.type === 'remove-chunk') {
       await remove(join(outputDirectory, updatePayload.videoChunkFilename))
     }
 
     if (updatePayload.resolutionPlaylistFile && updatePayload.resolutionPlaylistFilename) {
-      await move(
+      await tryAtomicMove(
         updatePayload.resolutionPlaylistFile as string,
-        join(outputDirectory, updatePayload.resolutionPlaylistFilename),
-        { overwrite: true }
+        join(outputDirectory, updatePayload.resolutionPlaylistFilename)
       )
     }
 
     if (updatePayload.masterPlaylistFile) {
-      await move(updatePayload.masterPlaylistFile as string, join(outputDirectory, privatePayload.masterPlaylistName), { overwrite: true })
+      await tryAtomicMove(updatePayload.masterPlaylistFile as string, join(outputDirectory, privatePayload.masterPlaylistName))
     }
 
     logger.debug(
