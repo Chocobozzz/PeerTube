@@ -213,8 +213,13 @@ export class AppComponent implements OnInit, AfterViewInit {
         error: 'alert-danger'
       }
 
+      const root = document.createElement('div')
+      root.innerHTML = await this.markdownService.markdownToUnsafeHTML({ markdown: messageConfig.message })
+      // Use alert-link class on links since there will be in an alert block
+      root.querySelectorAll('a').forEach(a => a.className += ' alert-link')
+
       this.broadcastMessage = {
-        message: await this.markdownService.markdownToUnsafeHTML({ markdown: messageConfig.message }),
+        message: root.innerHTML,
         dismissable: messageConfig.dismissable,
         class: classes[messageConfig.level]
       }
