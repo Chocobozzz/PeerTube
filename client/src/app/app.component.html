@@ -1,8 +1,11 @@
 <div *ngIf="customCSS" [innerHTML]="customCSS"></div>
 
-<my-hotkeys-cheatsheet></my-hotkeys-cheatsheet>
+<my-hotkeys-cheatsheet (hotkeysModalStateChange)="onHotkeysModalStateChange($event)"></my-hotkeys-cheatsheet>
 
-<div class="peertube-container" [ngClass]="{ 'user-logged-in': isUserLoggedIn(), 'user-not-logged-in': !isUserLoggedIn() }">
+<div
+  class="peertube-container"
+  [ngClass]="{ 'user-logged-in': isUserLoggedIn(), 'user-not-logged-in': !isUserLoggedIn(), 'hotkeys-modal-opened': hotkeysModalOpened }"
+>
   <div class="root-header">
 
     <div class="top-left-block">

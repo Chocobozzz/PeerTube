@@ -49,6 +49,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   customCSS: SafeHtml
   broadcastMessage: { message: string, dismissable: boolean, class: string } | null = null
+  hotkeysModalOpened = false
 
   private serverConfig: HTMLServerConfig
 
@@ -308,6 +309,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // ---------------------------------------------------------------------------
+
   private initHotkeys () {
     this.hotkeysService.add([
       new Hotkey([ '/', 's' ], (event: KeyboardEvent): boolean => {
@@ -346,6 +349,12 @@ export class AppComponent implements OnInit, AfterViewInit {
       }, undefined, $localize`Go to the videos upload page`)
     ])
   }
+
+  onHotkeysModalStateChange (opened: boolean) {
+    this.hotkeysModalOpened = opened
+  }
+
+  // ---------------------------------------------------------------------------
 
   private loadUser () {
     const tokens = this.userLocalStorage.getTokens()

@@ -1,6 +1,6 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { Subscription } from 'rxjs'
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 
 @Component({
   selector: 'my-hotkeys-cheatsheet',
@@ -9,6 +9,9 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 })
 export class CheatSheetComponent implements OnInit, OnDestroy {
   @Input() title = $localize`Keyboard Shortcuts:`
+
+  @Output() hotkeysModalStateChange = new EventEmitter<boolean>()
+
   helpVisible = false
   subscription: Subscription
 
@@ -29,6 +32,8 @@ export class CheatSheetComponent implements OnInit, OnDestroy {
       } else {
         this.toggleHelpVisible()
       }
+
+      this.hotkeysModalStateChange.emit(this.helpVisible)
     })
   }
 
