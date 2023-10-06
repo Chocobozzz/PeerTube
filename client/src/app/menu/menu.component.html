@@ -1,5 +1,5 @@
 <div class="menu-wrapper">
-  <menu [ngClass]="{ 'is-logged-in': isLoggedIn }">
+  <nav [ngClass]="{ 'is-logged-in': isLoggedIn }">
     <div class="top-menu">
       <div *ngIf="isLoggedIn" class="logged-in-block">
         <div>
@@ -156,7 +156,7 @@
         </div>
       </div>
     </div>
-  </menu>
+  </nav>
 </div>
 
 <my-language-chooser #languageChooserModal></my-language-chooser>

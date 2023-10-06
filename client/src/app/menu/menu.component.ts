@@ -229,7 +229,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   // Lock menu scroll when menu scroll to avoid fleeing / detached dropdown
   onMenuScrollEvent () {
-    document.querySelector('menu').scrollTo(0, 0)
+    document.querySelector('nav').scrollTo(0, 0)
   }
 
   onDropdownOpenChange (opened: boolean) {
@@ -243,10 +243,10 @@ export class MenuComponent implements OnInit, OnDestroy {
 
     if (opened) {
       window.addEventListener('scroll', onWindowScroll)
-      document.querySelector('menu').scrollTo(0, 0) // Reset menu scroll to easy lock
-      document.querySelector('menu').addEventListener('scroll', this.onMenuScrollEvent)
+      document.querySelector('nav').scrollTo(0, 0) // Reset menu scroll to easy lock
+      document.querySelector('nav').addEventListener('scroll', this.onMenuScrollEvent)
     } else {
-      document.querySelector('menu').removeEventListener('scroll', this.onMenuScrollEvent)
+      document.querySelector('nav').removeEventListener('scroll', this.onMenuScrollEvent)
     }
   }
 

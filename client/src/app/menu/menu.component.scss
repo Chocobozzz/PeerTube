@@ -50,7 +50,7 @@ $footer-links-base-opacity: .8;
   scrollbar-color: pvar(--actionButtonColor) pvar(--menuBackgroundColor);
 }
 
-menu {
+nav {
   @include ellipsis;
 
   background-color: pvar(--menuBackgroundColor);
@@ -365,7 +365,7 @@ my-actor-avatar {
   .menu-wrapper {
     width: 100% !important;
 
-    menu {
+    nav {
       overflow-y: auto;
     }
   }
