@@ -6,6 +6,23 @@ $menu-link-icon-size: 22px;
 $menu-link-icon-margin-right: 18px;
 $footer-links-base-opacity: .8;
 
+ul {
+  margin: 0;
+  padding: 0;
+
+  li {
+    list-style: none;
+    width: 100%;
+  }
+}
+
+.footer-bottom {
+  li {
+    width: auto;
+    display: inline-flex;
+  }
+}
+
 .menu-link {
   @include disable-default-a-behaviour;
   @include padding-left($menu-lateral-padding);
@@ -289,11 +306,6 @@ my-actor-avatar {
 }
 
 .footer-links {
-  > div {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
   a,
   button {
     @include margin-right(8px);
