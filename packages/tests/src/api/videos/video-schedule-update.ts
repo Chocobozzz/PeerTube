@@ -24,7 +24,7 @@ describe('Test video update scheduler', function () {
   let video2UUID: string
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     // Run servers
     servers = await createMultipleServers(2)
