@@ -6,7 +6,7 @@
   class="peertube-container"
   [ngClass]="{ 'user-logged-in': isUserLoggedIn(), 'user-not-logged-in': !isUserLoggedIn(), 'hotkeys-modal-opened': hotkeysModalOpened }"
 >
-  <div class="root-header">
+  <header class="root-header">
 
     <div class="top-left-block">
       <button
@@ -25,12 +25,12 @@
     <div class="root-header-right">
       <my-header class="w-100 d-flex justify-content-end"></my-header>
     </div>
-  </div>
+  </header>
 
   <div class="sub-header-container">
     <my-menu id="left-menu" role="navigation" aria-label="Main menu" i18n-ariaLabel [hidden]="!menu.isMenuDisplayed"></my-menu>
 
-    <div id="content" class="main-col" [ngClass]="{ expanded: menu.isMenuDisplayed === false }">
+    <main id="content" class="main-col" [ngClass]="{ expanded: menu.isMenuDisplayed === false }">
 
       <div class="main-row">
 
@@ -45,7 +45,7 @@
 
         <router-outlet></router-outlet>
       </div>
-    </div>
+    </main>
   </div>
 </div>
 
