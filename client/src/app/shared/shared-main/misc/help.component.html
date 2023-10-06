@@ -3,9 +3,7 @@
     <ng-template *ngTemplateOutlet="preHtmlTemplate"></ng-template>
   </p>
 
-  <ng-container *ngIf="preHtmlTemplate && (customHtmlTemplate || mainHtml || postHtmlTemplate)">
-    <br /><br />
-  </ng-container>
+  <div *ngIf="preHtmlTemplate && (customHtmlTemplate || mainHtml || postHtmlTemplate)" class="mb-2"></div>
 
   <p *ngIf="customHtmlTemplate">
     <ng-template *ngTemplateOutlet="customHtmlTemplate"></ng-template>
@@ -13,9 +11,7 @@
 
   <p *ngIf="mainHtml" [innerHTML]="mainHtml"></p>
 
-  <ng-container *ngIf="(customHtmlTemplate || mainHtml) && postHtmlTemplate">
-    <br /><br />
-  </ng-container>
+  <div *ngIf="(customHtmlTemplate || mainHtml) && postHtmlTemplate" class="mb-2"></div>
 
   <p *ngIf="postHtmlTemplate">
     <ng-template *ngTemplateOutlet="postHtmlTemplate"></ng-template>

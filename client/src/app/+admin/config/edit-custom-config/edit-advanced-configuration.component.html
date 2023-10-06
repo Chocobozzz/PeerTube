@@ -88,7 +88,8 @@
             <my-help>
               <ng-template ptTemplate="customHtml">
                 <ng-container i18n>
-                  Write JavaScript code directly.<br />Example: <pre>console.log('my instance is amazing');</pre>
+                  <p class="mb-2">Write JavaScript code directly. Example:</p>
+                  <pre>console.log('my instance is amazing');</pre>
                 </ng-container>
               </ng-template>
             </my-help>
@@ -107,16 +108,16 @@
             <my-help>
               <ng-template ptTemplate="customHtml">
                 <ng-container i18n>
-                  Write CSS code directly. Example:<br /><br />
+                  <p class="mb-2">Write CSS code directly. Example:</p>
 <pre>
 #custom-css {{ '{' }}
-color: red;
+  color: red;
 {{ '}' }}
 </pre>
-                  Prepend with <em>#custom-css</em> to override styles. Example:<br /><br />
+                  <p class="mb-2">Prepend with <em>#custom-css</em> to override styles. Example:</p>
 <pre>
 #custom-css .logged-in-email {{ '{' }}
-color: red;
+  color: red;
 {{ '}' }}
 </pre>
                 </ng-container>

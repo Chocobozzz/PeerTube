@@ -606,16 +606,21 @@
           <div class="form-group">
             <my-peertube-checkbox inputName="servicesTwitterWhitelisted" formControlName="whitelisted">
               <ng-template ptTemplate="label">
-                <ng-container i18n>Instance allowed by Twitter</ng-container>
+                <ng-container i18n>Instance allowed by Twitter/X</ng-container>
               </ng-template>
 
               <ng-template ptTemplate="help">
                 <ng-container i18n>
-                  If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<br />
-                  If the instance is not, we use an image link card that will redirect to your PeerTube instance.<br /><br />
-                  Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/w/blabla) on
-                  <a class="link-orange" target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>https://cards-dev.twitter.com/validator</a>
-                  to see if you instance is allowed.
+                  <p class="mb-2">
+                    If your instance is explicitly allowed by Twitter/X, a video player will be embedded in the Twitter feed on PeerTube video share.<br />
+                    If the instance is not, we use an image link card that will redirect to your PeerTube instance.
+                  </p>
+
+                  <p>
+                    Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/w/blabla) on
+                    <a class="link-orange" target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>https://cards-dev.twitter.com/validator</a>
+                    to see if you instance is allowed.
+                  </p>
                 </ng-container>
               </ng-template>
             </my-peertube-checkbox>
