@@ -18,6 +18,12 @@
 
 @use './class-helpers/index.scss';
 
+/* clears the ‘X’ from Chrome */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration { display: none; }
+
 body {
   /*** theme ***/
   // now beware sass requires interpolation
