@@ -739,6 +739,12 @@ p-table {
   }
 
   @media screen and (max-width: $small-view) {
+    .p-datatable-wrapper {
+      table {
+        width: auto;
+      }
+    }
+
     p-paginator {
       .p-paginator-current {
         display: none !important;
