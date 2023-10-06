@@ -6,9 +6,12 @@
   <div class="root-header">
 
     <div class="top-left-block">
-      <span role="button" tabindex="0" [title]="getToggleTitle()" (click)="menu.toggleMenu()" (keyup.enter)="menu.toggleMenu()">
+      <button
+        class="border-0 padding-0" [title]="getToggleTitle()" (click)="menu.toggleMenu()" (keyup.enter)="menu.toggleMenu()"
+        [ariaExpanded]="menu.isMenuDisplayed" aria-controls="left-menu"
+      >
         <span class="icon icon-menu"></span>
-      </span>
+      </button>
 
       <a class="peertube-title c-hand" [routerLink]="getDefaultRoute()" [queryParams]="getDefaultRouteQuery()">
         <span class="icon icon-logo"></span>
@@ -22,7 +25,7 @@
   </div>
 
   <div class="sub-header-container">
-    <my-menu *ngIf="menu.isMenuDisplayed"></my-menu>
+    <my-menu id="left-menu" role="navigation" aria-label="Main menu" i18n-ariaLabel [hidden]="!menu.isMenuDisplayed"></my-menu>
 
     <div id="content" class="main-col" [ngClass]="{ expanded: menu.isMenuDisplayed === false }">
 
