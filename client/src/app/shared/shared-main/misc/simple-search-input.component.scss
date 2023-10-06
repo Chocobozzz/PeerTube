@@ -5,16 +5,18 @@
   display: flex;
 }
 
-.root > my-global-icon {
+.search-button,
+.close-search-button {
   @include margin-left(10px);
 
-  height: 28px;
-  width: 28px;
-  cursor: pointer;
-  color: pvar(--mainColor);
+  my-global-icon {
+    height: 28px;
+    width: 28px;
+    color: pvar(--mainColor);
 
-  &:hover {
-    color: pvar(--mainHoverColor);
+    &:hover {
+      color: pvar(--mainHoverColor);
+    }
   }
 }
 
@@ -26,6 +28,7 @@ input {
   }
 }
 
-.input-group > my-global-icon {
+.form-control-clear my-global-icon {
   width: 20px;
+  height: 20px;
 }

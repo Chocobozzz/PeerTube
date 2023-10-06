@@ -113,6 +113,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
   private videoRequests = new Subject<{ reset: boolean, obs: Observable<ResultList<Video>> }>()
 
+  private alreadyDoneSearch = false
+
   constructor (
     private notifier: Notifier,
     private authService: AuthService,
@@ -403,8 +405,9 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
   private subscribeToSearchChange () {
     this.routeSub = this.route.queryParams.subscribe(param => {
-      if (!param['search']) return
+      if (!this.alreadyDoneSearch && !param['search']) return
 
+      this.alreadyDoneSearch = true
       this.filters.load({ search: param['search'] })
       this.onFiltersChanged(true)
     })

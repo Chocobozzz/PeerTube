@@ -1,9 +1,8 @@
-<div class="input-group has-clear" ngbDropdown placement="bottom-left auto" container="body">
+<div class="input-group has-clear flex-nowrap" ngbDropdown placement="bottom-left auto" container="body">
 
   <ng-container *ngIf="hasFilters()">
-    <div class="input-group-text c-hand" ngbDropdownToggle>
-      <span class="caret" aria-haspopup="menu" role="button"></span>
-    </div>
+    <button class="input-group-text c-hand" title="Open quick filters" i18n-title ngbDropdownToggle>
+    </button>
 
     <div role="menu" ngbDropdownMenu>
       <ng-container *ngFor="let group of filters">
@@ -23,7 +22,10 @@
     class="last-in-group"
     [(ngModel)]="searchValue"
     (keyup)="onInputSearch($event)"
+    #input
   >
 
-  <my-global-icon iconName="cross" role="button" class="form-control-clear" title="Clear filter" i18n-title (click)="onResetTableFilter()"></my-global-icon>
+  <button class="p-0 border-0 form-control-clear" title="Clear filter" i18n-title (click)="onResetTableFilter(); input.focus()">
+    <my-global-icon iconName="cross" ></my-global-icon>
+  </button>
 </div>

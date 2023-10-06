@@ -355,17 +355,14 @@ body {
 
 .has-clear {
   input {
-    @include padding-right(1.5rem !important);
+    padding-inline-end: 30px !important;
   }
 
   .form-control-clear {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 95%;
-    font-size: 14px;
     position: absolute;
     right: .5rem;
+    top: 0;
+    bottom: 0;
     opacity: 0.4;
 
     &:hover {

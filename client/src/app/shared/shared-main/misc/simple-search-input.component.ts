@@ -17,9 +17,8 @@ export class SimpleSearchInputComponent implements OnInit {
   @Output() inputDisplayChanged = new EventEmitter<boolean>()
 
   value = ''
+  lastSearch = ''
   inputShown: boolean
-
-  private hasAlreadySentSearch = false
 
   ngOnInit () {
     if (this.isInputShown()) this.showInput(false)
@@ -64,13 +63,16 @@ export class SimpleSearchInputComponent implements OnInit {
   }
 
   sendSearch () {
-    this.hasAlreadySentSearch = true
+    if (this.lastSearch === this.value) return
+
+    this.lastSearch = this.value
     this.searchChanged.emit(this.value)
   }
 
   onResetFilter () {
     this.value = ''
+    this.input.nativeElement.focus()
 
-    if (this.hasAlreadySentSearch) this.sendSearch()
+    this.sendSearch()
   }
 }

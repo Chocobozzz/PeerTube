@@ -1,6 +1,10 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
+.input-group {
+  width: fit-content;
+}
+
 .dropdown-item {
   font-size: 14px;
 }
@@ -13,15 +17,23 @@ input {
   background-color: transparent;
 }
 
+.form-control-clear my-global-icon {
+  display: block;
+
+  ::ng-deep svg {
+    vertical-align: inherit;
+  }
+}
+
 my-global-icon {
-  $size: 18px;
+  $size: 19px;
   $margin: 2px;
 
   @include margin-right($margin);
 
   opacity: 1;
-  width: 18px;
-  height: 18px;
+  width: $size;
+  height: $size;
 
   &.no-visible {
     @include margin-right($size + $margin);
