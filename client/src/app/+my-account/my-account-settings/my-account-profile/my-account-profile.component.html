@@ -19,7 +19,7 @@
       type="text" id="display-name" class="form-control"
       formControlName="display-name" [ngClass]="{ 'input-error': formErrors['display-name'] }"
     >
-    <div *ngIf="formErrors['display-name']" class="form-error">
+    <div *ngIf="formErrors['display-name']" class="form-error" role="alert">
       {{ formErrors['display-name'] }}
     </div>
   </div>
@@ -30,7 +30,7 @@
       id="description" formControlName="description" class="form-control"
       [ngClass]="{ 'input-error': formErrors['description'] }"
     ></textarea>
-    <div *ngIf="formErrors.description" class="form-error">
+    <div *ngIf="formErrors.description" class="form-error" role="alert">
       {{ formErrors.description }}
     </div>
   </div>

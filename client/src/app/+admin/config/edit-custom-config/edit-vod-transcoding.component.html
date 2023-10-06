@@ -175,7 +175,7 @@
             [clearable]="false"
           ></my-select-custom-value>
 
-          <div *ngIf="formErrors.transcoding.threads" class="form-error">{{ formErrors.transcoding.threads }}</div>
+          <div *ngIf="formErrors.transcoding.threads" class="form-error" role="alert">{{ formErrors.transcoding.threads }}</div>
         </div>
 
         <div class="form-group" [ngClass]="getLocalTranscodingDisabledClass()">
@@ -187,7 +187,7 @@
             <span i18n>jobs in parallel</span>
           </div>
 
-          <div *ngIf="formErrors.transcoding.concurrency" class="form-error">{{ formErrors.transcoding.concurrency }}</div>
+          <div *ngIf="formErrors.transcoding.concurrency" class="form-error" role="alert">{{ formErrors.transcoding.concurrency }}</div>
         </div>
 
         <div class="form-group" [ngClass]="getLocalTranscodingDisabledClass()">
@@ -201,7 +201,7 @@
             [clearable]="false"
           ></my-select-options>
 
-          <div *ngIf="formErrors.transcoding.profile" class="form-error">{{ formErrors.transcoding.profile }}</div>
+          <div *ngIf="formErrors.transcoding.profile" class="form-error" role="alert">{{ formErrors.transcoding.profile }}</div>
         </div>
 
       </ng-container>

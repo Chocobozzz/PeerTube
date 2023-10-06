@@ -74,7 +74,7 @@
         type="text" id="displayName"
         formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
       >
-      <div *ngIf="formErrors['displayName']" class="form-error">
+      <div *ngIf="formErrors['displayName']" class="form-error" role="alert">
         {{ formErrors['displayName'] }}
       </div>
     </div>

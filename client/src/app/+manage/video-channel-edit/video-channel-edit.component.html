@@ -31,7 +31,7 @@
             >
             <div class="input-group-text">@{{ instanceHost }}</div>
           </div>
-          <div *ngIf="formErrors['name']" class="form-error">
+          <div *ngIf="formErrors['name']" class="form-error" role="alert">
             {{ formErrors['name'] }}
           </div>
         </div>
@@ -42,7 +42,7 @@
             type="text" id="display-name" class="form-control d-block"
             formControlName="display-name" [ngClass]="{ 'input-error': formErrors['display-name'] }"
           >
-          <div *ngIf="formErrors['display-name']" class="form-error">
+          <div *ngIf="formErrors['display-name']" class="form-error" role="alert">
             {{ formErrors['display-name'] }}
           </div>
         </div>
@@ -53,7 +53,7 @@
             id="description" formControlName="description" class="form-control d-block"
             [ngClass]="{ 'input-error': formErrors['description'] }"
           ></textarea>
-          <div *ngIf="formErrors.description" class="form-error">
+          <div *ngIf="formErrors.description" class="form-error" role="alert">
             {{ formErrors.description }}
           </div>
         </div>

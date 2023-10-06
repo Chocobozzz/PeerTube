@@ -16,7 +16,7 @@
             <div class="form-group">
               <label i18n for="name">Title</label>
               <input type="text" id="name" class="form-control" formControlName="name" />
-              <div *ngIf="formErrors.name" class="form-error">
+              <div *ngIf="formErrors.name" class="form-error" role="alert">
                 {{ formErrors.name }}
               </div>
             </div>
@@ -35,7 +35,7 @@
               </my-help>
 
               <my-select-tags labelForId="label-tags" formControlName="tags"></my-select-tags>
-              <div *ngIf="formErrors.tags" class="form-error">
+              <div *ngIf="formErrors.tags" class="form-error" role="alert">
                 {{ formErrors.tags }}
               </div>
             </div>
@@ -72,7 +72,7 @@
                 labelForId="category" [items]="videoCategories" formControlName="category" [clearable]="true"
               ></my-select-options>
 
-              <div *ngIf="formErrors.category" class="form-error">
+              <div *ngIf="formErrors.category" class="form-error" role="alert">
                 {{ formErrors.category }}
               </div>
             </div>
@@ -92,7 +92,7 @@
                 labelForId="licence" [items]="videoLicences" formControlName="licence" [clearable]="true"
               ></my-select-options>
 
-              <div *ngIf="formErrors.licence" class="form-error">
+              <div *ngIf="formErrors.licence" class="form-error" role="alert">
                 {{ formErrors.licence }}
               </div>
             </div>
@@ -104,7 +104,7 @@
                 [clearable]="true" [searchable]="true" [groupBy]="'group'"
               ></my-select-options>
 
-              <div *ngIf="formErrors.language" class="form-error">
+              <div *ngIf="formErrors.language" class="form-error" role="alert">
                 {{ formErrors.language }}
               </div>
             </div>
@@ -115,7 +115,7 @@
                 labelForId="privacy" [items]="videoPrivacies" formControlName="privacy" [clearable]="false"
               ></my-select-options>
 
-              <div *ngIf="formErrors.privacy" class="form-error">
+              <div *ngIf="formErrors.privacy" class="form-error" role="alert">
                 {{ formErrors.privacy }}
               </div>
             </div>
@@ -133,7 +133,7 @@
               >
               </p-calendar>
 
-              <div *ngIf="formErrors.schedulePublicationAt" class="form-error">
+              <div *ngIf="formErrors.schedulePublicationAt" class="form-error" role="alert">
                 {{ formErrors.schedulePublicationAt }}
               </div>
             </div>
@@ -261,7 +261,7 @@
                     type="text" [id]="'title[' + i + ']'" [name]="'title[' + i + ']'" formControlName="title"
                   />
 
-                  <div [ngClass]="{ 'opacity-0': !formErrors.chapters[i].title }" class="form-error">
+                  <div [ngClass]="{ 'opacity-0': !formErrors.chapters[i].title }" class="form-error" role="alert">
                     <span class="opacity-0">t</span> <!-- Ensure we have reserve a correct height -->
                     {{ formErrors.chapters[i].title }}
                   </div>
@@ -271,7 +271,7 @@
               </div>
             </ng-container>
 
-            <div *ngIf="getChapterArrayErrors()" class="form-error">
+            <div *ngIf="getChapterArrayErrors()" class="form-error" role="alert">
               {{ getChapterArrayErrors() }}
             </div>
           </div>
@@ -353,7 +353,7 @@
                 labelForId="latencyMode" [items]="latencyModes" formControlName="latencyMode" [clearable]="true"
               ></my-select-options>
 
-              <div *ngIf="formErrors.latencyMode" class="form-error">
+              <div *ngIf="formErrors.latencyMode" class="form-error" role="alert">
                 {{ formErrors.latencyMode }}
               </div>
             </div>
@@ -433,7 +433,7 @@
               >
               </p-calendar>
 
-              <div *ngIf="formErrors.originallyPublishedAt" class="form-error">
+              <div *ngIf="formErrors.originallyPublishedAt" class="form-error" role="alert">
                 {{ formErrors.originallyPublishedAt }}
               </div>
             </div>

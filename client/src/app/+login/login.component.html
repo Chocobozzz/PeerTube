@@ -49,7 +49,7 @@
                 >
               </div>
 
-              <div *ngIf="formErrors.username" class="form-error">{{ formErrors.username }}</div>
+              <div *ngIf="formErrors.username" class="form-error" role="alert">{{ formErrors.username }}</div>
 
               <div *ngIf="hasUsernameUppercase()" i18n class="form-warning">
                 ⚠️ Most email addresses do not include capital letters.

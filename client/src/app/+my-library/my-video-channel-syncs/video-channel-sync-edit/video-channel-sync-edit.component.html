@@ -24,7 +24,7 @@
             >
           </div>
 
-          <div *ngIf="formErrors['externalChannelUrl']" class="form-error">
+          <div *ngIf="formErrors['externalChannelUrl']" class="form-error" role="alert">
             {{ formErrors['externalChannelUrl'] }}
           </div>
         </div>
@@ -33,7 +33,7 @@
           <label i18n for="videoChannel">Video Channel</label>
           <my-select-channel required [items]="userVideoChannels" formControlName="videoChannel"></my-select-channel>
 
-          <div *ngIf="formErrors['videoChannel']" class="form-error">
+          <div *ngIf="formErrors['videoChannel']" class="form-error" role="alert">
             {{ formErrors['videoChannel'] }}
           </div>
         </div>

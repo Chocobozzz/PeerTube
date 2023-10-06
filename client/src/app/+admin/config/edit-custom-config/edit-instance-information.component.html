@@ -16,7 +16,7 @@
             formControlName="name" [ngClass]="{ 'input-error': formErrors.instance.name }"
           >
 
-          <div *ngIf="formErrors.instance.name" class="form-error">{{ formErrors.instance.name }}</div>
+          <div *ngIf="formErrors.instance.name" class="form-error" role="alert">{{ formErrors.instance.name }}</div>
         </div>
 
         <div class="form-group">
@@ -27,7 +27,7 @@
             [ngClass]="{ 'input-error': formErrors['instance.shortDescription'] }"
           ></textarea>
 
-          <div *ngIf="formErrors.instance.shortDescription" class="form-error">{{ formErrors.instance.shortDescription }}</div>
+          <div *ngIf="formErrors.instance.shortDescription" class="form-error" role="alert">{{ formErrors.instance.shortDescription }}</div>
         </div>
 
         <div class="form-group">
@@ -118,7 +118,7 @@
             </select>
           </div>
 
-          <div *ngIf="formErrors.instance.defaultNSFWPolicy" class="form-error">{{ formErrors.instance.defaultNSFWPolicy }}</div>
+          <div *ngIf="formErrors.instance.defaultNSFWPolicy" class="form-error" role="alert">{{ formErrors.instance.defaultNSFWPolicy }}</div>
         </div>
 
         <div class="form-group">

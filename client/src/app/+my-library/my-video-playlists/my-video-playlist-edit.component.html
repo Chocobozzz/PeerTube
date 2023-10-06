@@ -35,7 +35,7 @@
             type="text" id="displayName" class="form-control"
             formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
           >
-          <div *ngIf="formErrors['displayName']" class="form-error">
+          <div *ngIf="formErrors['displayName']" class="form-error" role="alert">
             {{ formErrors['displayName'] }}
           </div>
         </div>
@@ -55,7 +55,7 @@
           ></my-select-options>
           </div>
 
-          <div *ngIf="formErrors.privacy" class="form-error">
+          <div *ngIf="formErrors.privacy" class="form-error" role="alert">
             {{ formErrors.privacy }}
           </div>
         </div>
@@ -67,7 +67,7 @@
             labelForId="videoChannelIdl" [items]="userVideoChannels" formControlName="videoChannelId"
           ></my-select-channel>
 
-          <div *ngIf="formErrors['videoChannelId']" class="form-error">
+          <div *ngIf="formErrors['videoChannelId']" class="form-error" role="alert">
             {{ formErrors['videoChannelId'] }}
           </div>
         </div>

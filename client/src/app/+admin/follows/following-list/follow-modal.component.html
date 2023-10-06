@@ -15,7 +15,7 @@
           class="form-control" [ngClass]="{ 'input-error': formErrors['hostsOrHandles'] }" ngbAutofocus
         ></textarea>
 
-        <div *ngIf="formErrors.hostsOrHandles" class="form-error">
+        <div *ngIf="formErrors.hostsOrHandles" class="form-error" role="alert">
           {{ formErrors.hostsOrHandles }}
 
           <div *ngIf="form.controls['hostsOrHandles'].errors.validHostsOrHandles">

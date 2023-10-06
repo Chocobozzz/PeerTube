@@ -19,7 +19,7 @@
         >
       </div>
 
-      <div *ngIf="formErrors.displayName" class="form-error">{{ formErrors.displayName }}</div>
+      <div *ngIf="formErrors.displayName" class="form-error" role="alert">{{ formErrors.displayName }}</div>
     </div>
 
     <div class="col-md-12 col-xl-6 form-group">
@@ -37,7 +37,7 @@
         <span class="input-group-text">@{{ instanceHost }}</span>
       </div>
 
-      <div *ngIf="formErrors.username" class="form-error">{{ formErrors.username }}</div>
+      <div *ngIf="formErrors.username" class="form-error" role="alert">{{ formErrors.username }}</div>
     </div>
   </div>
 
@@ -54,7 +54,7 @@
         formControlName="email" class="form-control" [ngClass]="{ 'input-error': formErrors['email'] }"
       >
 
-      <div *ngIf="formErrors.email" class="form-error">{{ formErrors.email }}</div>
+      <div *ngIf="formErrors.email" class="form-error" role="alert">{{ formErrors.email }}</div>
     </div>
 
     <div class="col-md-12 col-xl-6 form-group">

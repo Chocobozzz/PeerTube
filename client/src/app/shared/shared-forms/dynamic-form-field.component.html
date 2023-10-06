@@ -40,7 +40,7 @@
 
   <div *ngIf="setting.type === 'html'" [innerHTML]="setting.html"></div>
 
-  <div *ngIf="hasDedicatedFormError() && formErrors[setting.name]" class="form-error">
+  <div *ngIf="hasDedicatedFormError() && formErrors[setting.name]" class="form-error" role="alert">
     {{ formErrors[setting.name] }}
   </div>
 

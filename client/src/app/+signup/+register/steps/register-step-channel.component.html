@@ -29,7 +29,7 @@
         >
       </div>
 
-      <div *ngIf="formErrors.displayName" class="form-error">{{ formErrors.displayName }}</div>
+      <div *ngIf="formErrors.displayName" class="form-error" role="alert">{{ formErrors.displayName }}</div>
     </div>
 
     <div class="col-md-12 col-xl-6 form-group">
@@ -45,9 +45,9 @@
         <div class="input-group-text">@{{ instanceHost }}</div>
       </div>
 
-      <div *ngIf="formErrors.name" class="form-error">{{ formErrors.name }}</div>
+      <div *ngIf="formErrors.name" class="form-error" role="alert">{{ formErrors.name }}</div>
 
-      <div *ngIf="isSameThanUsername()" class="form-error" i18n>
+      <div *ngIf="isSameThanUsername()" class="form-error" role="alert" i18n>
         Channel identifier cannot be the same as your account name. You can click on the first step to update your account name.
       </div>
     </div>

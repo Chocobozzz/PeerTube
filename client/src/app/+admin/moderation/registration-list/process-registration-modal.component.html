@@ -49,7 +49,7 @@
           [ngClass]="{ 'input-error': formErrors['moderationResponse'] }" class="form-control"
         ></textarea>
 
-        <div *ngIf="formErrors.moderationResponse" class="form-error">
+        <div *ngIf="formErrors.moderationResponse" class="form-error" role="alert">
           {{ formErrors.moderationResponse }}
         </div>
       </div>

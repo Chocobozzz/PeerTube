@@ -19,7 +19,7 @@
       type="email" id="new-email" i18n-placeholder placeholder="New email" class="form-control"
       formControlName="new-email" [ngClass]="{ 'input-error': formErrors['new-email'] }"
     >
-    <div *ngIf="formErrors['new-email']" class="form-error">
+    <div *ngIf="formErrors['new-email']" class="form-error" role="alert">
       {{ formErrors['new-email'] }}
     </div>
   </div>

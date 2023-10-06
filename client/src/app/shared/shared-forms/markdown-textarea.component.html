@@ -34,5 +34,5 @@
 
   <div [ngbNavOutlet]="nav"></div>
 
-  <div *ngIf="!isMaximized && formError" class="form-error">{{ formError }}</div>
+  <div *ngIf="!isMaximized && formError" class="form-error" role="alert">{{ formError }}</div>
 </div>

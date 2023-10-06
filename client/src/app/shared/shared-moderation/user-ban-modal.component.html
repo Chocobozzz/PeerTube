@@ -16,7 +16,7 @@
           i18n-placeholder placeholder="Reason..." formControlName="reason"
           class="form-control" [ngClass]="{ 'input-error': formErrors['reason'] }"
         ></textarea>
-        <div *ngIf="formErrors.reason" class="form-error">
+        <div *ngIf="formErrors.reason" class="form-error" role="alert">
           {{ formErrors.reason }}
         </div>
       </div>

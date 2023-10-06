@@ -8,7 +8,7 @@
       [ngClass]="{ 'input-error': formErrors['registrationReason'] }"
     ></textarea>
 
-    <div *ngIf="formErrors.registrationReason" class="form-error">{{ formErrors.registrationReason }}</div>
+    <div *ngIf="formErrors.registrationReason" class="form-error" role="alert">{{ formErrors.registrationReason }}</div>
   </div>
 
   <div class="form-group">
@@ -23,6 +23,6 @@
       </ng-template>
     </my-peertube-checkbox>
 
-    <div *ngIf="formErrors.terms" class="form-error">{{ formErrors.terms }}</div>
+    <div *ngIf="formErrors.terms" class="form-error" role="alert">{{ formErrors.terms }}</div>
   </div>
 </form>

@@ -13,7 +13,7 @@
           type="text" id="fromName" class="form-control"
           formControlName="fromName" [ngClass]="{ 'input-error': formErrors.fromName }"
         >
-        <div *ngIf="formErrors.fromName" class="form-error">{{ formErrors.fromName }}</div>
+        <div *ngIf="formErrors.fromName" class="form-error" role="alert">{{ formErrors.fromName }}</div>
       </div>
 
       <div class="form-group">
@@ -22,7 +22,7 @@
           type="text" id="fromEmail" class="form-control"
           formControlName="fromEmail" [ngClass]="{ 'input-error': formErrors['fromEmail'] }"
         >
-        <div *ngIf="formErrors.fromEmail" class="form-error">{{ formErrors.fromEmail }}</div>
+        <div *ngIf="formErrors.fromEmail" class="form-error" role="alert">{{ formErrors.fromEmail }}</div>
       </div>
 
       <div class="form-group">
@@ -31,14 +31,14 @@
           type="text" id="subject" class="form-control"
           formControlName="subject" [ngClass]="{ 'input-error': formErrors['subject'] }"
         >
-        <div *ngIf="formErrors.subject" class="form-error">{{ formErrors.subject }}</div>
+        <div *ngIf="formErrors.subject" class="form-error" role="alert">{{ formErrors.subject }}</div>
       </div>
 
       <div class="form-group">
         <label i18n for="body">Your message</label>
         <textarea id="body" formControlName="body" class="form-control" [ngClass]="{ 'input-error': formErrors['body'] }">
         </textarea>
-        <div *ngIf="formErrors.body" class="form-error">{{ formErrors.body }}</div>
+        <div *ngIf="formErrors.body" class="form-error" role="alert">{{ formErrors.body }}</div>
       </div>
 
       <div *ngIf="error" class="alert alert-danger">{{ error }}</div>

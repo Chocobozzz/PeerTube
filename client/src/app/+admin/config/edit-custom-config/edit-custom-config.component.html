@@ -68,7 +68,7 @@
     <div class="col-md-7 col-xl-5"></div>
     <div class="col-md-5 col-xl-5">
 
-      <div class="form-error submit-error" i18n *ngIf="!form.valid && isUpdateAllowed()">
+      <div role="alert" class="form-error submit-error" i18n *ngIf="!form.valid && isUpdateAllowed()">
         There are errors in the form:
 
         <ul>
@@ -78,7 +78,7 @@
         </ul>
       </div>
 
-      <span class="form-error submit-error" i18n *ngIf="!hasLiveAllowReplayConsistentOptions()">
+      <span role="alert" class="form-error submit-error" i18n *ngIf="!hasLiveAllowReplayConsistentOptions()">
         You cannot allow live replay if you don't enable transcoding.
       </span>
 

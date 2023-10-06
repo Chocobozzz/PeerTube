@@ -10,7 +10,7 @@
       <label i18n for="channel">Select a channel to receive the video</label>
       <my-select-channel labelForId="channel" formControlName="channel" [items]="videoChannels"></my-select-channel>
 
-      <div *ngIf="formErrors.channel" class="form-error">{{ formErrors.channel }}</div>
+      <div *ngIf="formErrors.channel" class="form-error" role="alert">{{ formErrors.channel }}</div>
     </div>
   </div>
 

@@ -10,7 +10,7 @@
       <label i18n for="next-ownership-username">Select the next owner</label>
       <p-autoComplete formControlName="username" [suggestions]="usernamePropositions"
                       (completeMethod)="search($event)" id="next-ownership-username"></p-autoComplete>
-      <div *ngIf="formErrors.username" class="form-error">
+      <div *ngIf="formErrors.username" class="form-error" role="alert">
         {{ formErrors.username }}
       </div>
     </div>

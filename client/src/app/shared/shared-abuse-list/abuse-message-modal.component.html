@@ -35,7 +35,7 @@
           [ngClass]="{ 'input-error': formErrors['message'] }" class="form-control"
         ></textarea>
 
-        <div *ngIf="formErrors.message" class="form-error">
+        <div *ngIf="formErrors.message" class="form-error" role="alert">
           {{ formErrors.message }}
         </div>
       </div>
