@@ -10,7 +10,7 @@
 
     <div class="top-left-block">
       <button
-        class="border-0 padding-0" [title]="getToggleTitle()" (click)="menu.toggleMenu()" (keyup.enter)="menu.toggleMenu()"
+        class="border-0 p-0" [title]="getToggleTitle()" (click)="menu.toggleMenu()" (keyup.enter)="menu.toggleMenu()"
         [ariaExpanded]="menu.isMenuDisplayed" aria-controls="left-menu"
       >
         <span class="icon icon-menu"></span>
@@ -61,7 +61,7 @@
         <p>{{ message.detail }}</p>
       </div>
 
-      <button class="border-0 padding-0">
+      <button class="border-0 p-0">
         <my-global-icon [iconName]="getNotificationIcon(message)"></my-global-icon>
       </button>
     </div>

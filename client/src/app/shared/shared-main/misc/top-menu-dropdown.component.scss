@@ -1,14 +1,10 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.parent-entry {
-  span[role=button] {
-    cursor: pointer;
-  }
-
-  a {
-    display: block;
-  }
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .sub-menu ::ng-deep .dropdown-toggle::after {

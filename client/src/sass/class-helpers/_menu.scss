@@ -5,6 +5,8 @@
   @include disable-default-a-behaviour;
   @include margin-right(55px);
 
+  border: 0;
+  padding: 0;
   opacity: 0.7;
   color: pvar(--mainForegroundColor);
   display: inline-block;
