@@ -53,12 +53,14 @@
 <p-toast position="bottom-right">
   <ng-template let-message pTemplate="message">
     <div class="notification-block">
-      <div class="message">
+      <div class="message" [attr.role]="getNotificationRole(message)">
         <h3>{{ message.summary }}</h3>
         <p>{{ message.detail }}</p>
       </div>
 
-      <my-global-icon [iconName]="getNotificationIcon(message)"></my-global-icon>
+      <button class="border-0 padding-0">
+        <my-global-icon [iconName]="getNotificationIcon(message)"></my-global-icon>
+      </button>
     </div>
   </ng-template>
 </p-toast>

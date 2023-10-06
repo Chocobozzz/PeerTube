@@ -160,16 +160,32 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.screenService.isBroadcastMessageDisplayed = false
   }
 
+  // ---------------------------------------------------------------------------
+
   getNotificationIcon (message: { severity: 'success' | 'error' | 'info' }): GlobalIconName {
     switch (message.severity) {
       case 'error':
         return 'cross'
+
       case 'success':
         return 'tick'
+
       case 'info':
         return 'help'
     }
   }
+
+  getNotificationRole (message: { severity: 'success' | 'error' | 'info' }) {
+    switch (message.severity) {
+      case 'error':
+        return 'alert'
+
+      default:
+        return 'status'
+    }
+  }
+
+  // ---------------------------------------------------------------------------
 
   private initRouteEvents () {
     const eventsObs = this.router.events
