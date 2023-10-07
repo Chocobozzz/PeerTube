@@ -888,7 +888,7 @@
       </trans-unit>
       <trans-unit id="5211109801015470691" datatype="html">
         <source>can be redefined by the users</source>
-        <target state="new">can be redefined by the users</target>
+        <target state="translated">erabiltzaileek birdefinitu dezakete</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">14</context>
@@ -4920,7 +4920,7 @@
       </trans-unit>
       <trans-unit id="4620493570088713907" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="new"> Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </target>
+        <target state="translated">Gaitzean, beste administratzaileei eduki hunkigarria nagusiki federatzen ari zarela jakingo dute.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Halaber, bideoaren igoerako NSFW kontrol-laukia automatikoki markatu da lehenespenez. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="7497677457560701935">
@@ -4930,7 +4930,7 @@
       </trans-unit>
       <trans-unit id="8930852890861583005">
         <source>Blur thumbnails</source>
-        <target>Lausotu irudiak</target>
+        <target state="translated">Lausotu koadro txikiak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">116</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
@@ -5029,17 +5029,17 @@
       </trans-unit>
       <trans-unit id="4739907951373047958" datatype="html">
         <source>i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</source>
-        <target state="new">i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</target>
+        <target state="translated">adib. 2vCore 2GB RAM, alokatuta duzun zerbitzariaren esteka zuzena, etab.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">214</context></context-group>
       </trans-unit>
       <trans-unit id="8557599287230755359" datatype="html">
         <source>APPEARANCE</source>
-        <target state="new">APPEARANCE</target>
+        <target state="translated">ITXURA</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="371306187337992930" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or add slight <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or add slight <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Erabili <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>osagarriak &amp; gaiak<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> aldaketa nabarmenagoak lortzeko, edo gehitu arruntagoak diren <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>pertsonalizazioak<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -5052,17 +5052,17 @@
       </trans-unit>
       <trans-unit id="2609416025385742456" datatype="html">
         <source>Default trending page</source>
-        <target state="new">Default trending page</target>
+        <target state="translated">Pil-pilean dauden bideoen orri lehenetsia</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="554741830445276244" datatype="html">
         <source>Hot videos</source>
-        <target state="new">Hot videos</target>
+        <target state="translated">Bideo ospetsuak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="4046343890883004514" datatype="html">
         <source>Recent views</source>
-        <target state="new">Recent views</target>
+        <target state="translated">Berriki ikusitakoak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="8177374861384376651" datatype="html">
@@ -5072,12 +5072,12 @@
       </trans-unit>
       <trans-unit id="297360345401834321" datatype="html">
         <source>Global views</source>
-        <target state="new">Global views</target>
+        <target state="translated">Orokorrean ikusitakoak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="5862227717871131052" datatype="html">
         <source>Prefer author display name in video miniature</source>
-        <target state="new">Prefer author display name in video miniature</target>
+        <target state="translated">Nahiago egilearen bistaratzeko izena bideoaren miniaturan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="5444889468197427724" datatype="html">
@@ -6681,7 +6681,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3943893855105372623" datatype="html">
         <source>Playlist thumbnail</source>
-        <target state="new">Playlist thumbnail</target>
+        <target state="translated">Erreprodukzio-zerrendaren koadro txikia</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">76</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
@@ -8415,7 +8415,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6907161397537530258" datatype="html">
         <source>Thumbnails</source>
-        <target state="new">Thumbnails</target>
+        <target state="translated">Koadro txikiak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context><context context-type="linenumber">26</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">161</context></context-group>
       </trans-unit>
@@ -10132,7 +10132,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4278050445961255445">
         <source>Go to the trending videos page</source>
-        <target state="translated">Joan puri-purian dauden bideoen orrialdera</target>
+        <target state="translated">Joan pil-pilean dauden bideoen orrira</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">310</context></context-group>
       </trans-unit>
       <trans-unit id="3242234958443825475">
@@ -10214,7 +10214,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="232050922346936574" datatype="html">
         <source>Trending</source>
-        <target state="new">Trending</target>
+        <target state="translated">Pil-pilean</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">205</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
