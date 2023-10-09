@@ -24,9 +24,11 @@ export class DateToggleComponent implements OnChanges {
   }
 
   getTitle () {
-    return this.toggled
+    const target = this.toggled
       ? this.dateRelative
       : this.dateAbsolute
+
+    return $localize`Toggle this date format to "${target}"`
   }
 
   getContent () {
