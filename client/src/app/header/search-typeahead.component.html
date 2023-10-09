@@ -2,7 +2,7 @@
   <input
     type="search" id="search-video" name="search-video" #searchVideo i18n-placeholder placeholder="Search videos, playlists, channels…"
     [(ngModel)]="search" (ngModelChange)="onSearchChange()" (keydown)="handleKey($event)"
-    aria-label="Search" autocomplete="off"
+    autocomplete="off"
   >
 
   <button class="border-0 search-button" title="Search" i18n-title (click)="doSearch()">
