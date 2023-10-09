@@ -2,7 +2,7 @@
 
   <div class="row">
     <div class="col-lg-4 col-md-6 col-xs-12">
-      <div class="form-group">
+      <fieldset class="form-group" role="radiogroup">
         <div class="radio-label label-container">
           <label for="sort" i18n>Sort</label>
           <button i18n class="reset-button reset-button-small" (click)="resetField('sort', '-match')" *ngIf="advancedSearch.sort !== '-match'">
@@ -14,9 +14,9 @@
           <input type="radio" name="sort" [id]="sort.id" [value]="sort.id" [(ngModel)]="advancedSearch.sort">
           <label [for]="sort.id" class="radio">{{ sort.label }}</label>
         </div>
-      </div>
+      </fieldset>
 
-      <div class="form-group">
+      <div class="form-group" role="radiogroup">
         <div class="radio-label label-container">
           <label for="isLive" i18n>Display only</label>
           <button i18n class="reset-button reset-button-small" (click)="resetField('isLive')" *ngIf="advancedSearch.isLive !== undefined">
@@ -35,7 +35,7 @@
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" role="radiogroup">
         <div class="radio-label label-container">
           <label for="sensitiveContent" i18n>Display sensitive content</label>
           <button i18n class="reset-button reset-button-small" (click)="resetField('nsfw')" *ngIf="advancedSearch.nsfw !== undefined">
@@ -103,7 +103,7 @@
     </div>
 
     <div class="col-lg-4 col-md-6 col-xs-12">
-      <div class="form-group">
+      <div class="form-group" role="radiogroup">
         <div class="radio-label label-container">
           <label for="durationRange" i18n>Duration</label>
           <button i18n class="reset-button reset-button-small" (click)="resetLocalField('durationRange')" *ngIf="durationRange !== undefined">
@@ -182,7 +182,7 @@
         >
       </div>
 
-      <div class="form-group">
+      <div class="form-group" role="radiogroup">
         <div class="radio-label label-container">
           <label for="resultType" i18n>Result types</label>
           <button i18n class="reset-button reset-button-small" (click)="resetField('resultType')" *ngIf="advancedSearch.resultType !== undefined">
@@ -207,7 +207,7 @@
 
       </div>
 
-      <div class="form-group" *ngIf="isSearchTargetEnabled()">
+      <div class="form-group" *ngIf="isSearchTargetEnabled()" role="radiogroup">
         <div class="radio-label label-container">
           <label for="searchTarget" i18n>Search target</label>
         </div>

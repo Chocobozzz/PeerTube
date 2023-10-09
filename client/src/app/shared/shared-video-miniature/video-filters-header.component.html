@@ -65,7 +65,7 @@
         <my-select-languages [maxLanguages]="20" formControlName="languageOneOf"></my-select-languages>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" role="radiogroup">
         <label class="with-description" for="nsfw" i18n>Sensitive content:</label>
         <ng-template *ngTemplateOutlet="updateSettings; context: { $implicit: 'video-sensitive-content-policy' }"></ng-template>
 
@@ -80,7 +80,7 @@
         </div>
       </div>
 
-      <div class="form-group" *ngIf="!hideScope">
+      <div class="form-group" *ngIf="!hideScope" role="radiogroup">
         <label for="scope" i18n>Scope:</label>
 
         <div class="peertube-radio-container">
@@ -94,7 +94,7 @@
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" role="radiogroup">
         <label for="type" i18n>Type:</label>
 
         <div class="peertube-radio-container">
