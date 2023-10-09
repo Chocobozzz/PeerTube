@@ -937,23 +937,11 @@
 }
 
 @mixin margin-left ($value) {
-  @supports (margin-inline-start: $value) {
-    @include rfs($value, margin-inline-start);
-  }
-
-  @supports not (margin-inline-start: $value) {
-    @include rfs($value, margin-left);
-  }
+  @include rfs($value, margin-inline-start);
 }
 
 @mixin margin-right ($value) {
-  @supports (margin-inline-end: $value) {
-    @include rfs($value, margin-inline-end);
-  }
-
-  @supports not (margin-inline-end: $value) {
-    @include rfs($value, margin-right);
-  }
+  @include rfs($value, margin-inline-end);
 }
 
 @mixin padding-original ($block-start, $inline-end, $block-end, $inline-start) {
@@ -962,7 +950,6 @@
   @include padding-top($block-start);
   @include padding-bottom($block-end);
 }
-
 
 @mixin padding ($arg1: null, $arg2: null, $arg3: null, $arg4: null) {
   @if $arg2 == null and $arg3 == null and $arg4 == null {
@@ -977,21 +964,9 @@
 }
 
 @mixin padding-left ($value) {
-  @supports (padding-inline-start: $value) {
-    @include rfs($value, padding-inline-start);
-  }
-
-  @supports not (padding-inline-start: $value) {
-    @include rfs($value, padding-left);
-  }
+  @include rfs($value, padding-inline-start);
 }
 
 @mixin padding-right ($value) {
-  @supports (padding-inline-end: $value) {
-    @include rfs($value, padding-inline-end);
-  }
-
-  @supports not (padding-inline-end: $value) {
-    @include rfs($value, padding-right);
-  }
+  @include rfs($value, padding-inline-end);
 }
