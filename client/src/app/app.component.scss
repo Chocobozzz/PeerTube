@@ -1,6 +1,18 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
+.skip-to-content {
+  position: absolute;
+  top: 0;
+  display: block;
+  z-index: z(modal);
+  width: 100%;
+  background: pvar(--mainBackgroundColor);
+  padding: 1rem;
+  text-align: center;
+  text-decoration: underline;
+}
+
 .peertube-container {
   padding-bottom: 20px;
 

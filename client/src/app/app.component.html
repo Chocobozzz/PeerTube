@@ -1,5 +1,7 @@
 <div *ngIf="customCSS" [innerHTML]="customCSS"></div>
 
+<a i18n class="visually-hidden-focusable skip-to-content" href="#content" (click)="$event.preventDefault(); mainContent.focus()">Skip to main content</a>
+
 <my-hotkeys-cheatsheet (hotkeysModalStateChange)="onHotkeysModalStateChange($event)"></my-hotkeys-cheatsheet>
 
 <div
@@ -30,7 +32,7 @@
   <div class="sub-header-container">
     <my-menu id="left-menu" role="navigation" aria-label="Main menu" i18n-ariaLabel [hidden]="!menu.isMenuDisplayed"></my-menu>
 
-    <main id="content" class="main-col" [ngClass]="{ expanded: menu.isMenuDisplayed === false }">
+    <main #mainContent tabindex="-1" id="content" class="main-col" [ngClass]="{ expanded: menu.isMenuDisplayed === false }">
 
       <div class="main-row">
 
