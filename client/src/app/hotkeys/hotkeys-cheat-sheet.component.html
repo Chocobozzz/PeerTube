@@ -2,6 +2,13 @@
   <div class="cfp-hotkeys">
     <h1 class="cfp-hotkeys-title">{{ title }}</h1>
 
+    <div class="d-flex justify-content-center m-3">
+      <my-peertube-checkbox
+        inputName="enable-hotkeys" [(ngModel)]="hotkeysEnabled" (ngModelChange)="onHotkeysEnabledChange()"
+        i18n-labelText labelText="Enable hotkeys in this web browser"
+      ></my-peertube-checkbox>
+    </div>
+
     <ul role="presentation">
       <li *ngFor="let hotkey of hotkeys">
         <div class="cfp-hotkeys-keys">

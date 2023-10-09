@@ -1,4 +1,4 @@
-import { Hotkey, HotkeysService } from 'angular2-hotkeys'
+import { Hotkey, HotkeysService } from '@app/core'
 import { Observable, ReplaySubject, Subject, throwError as observableThrowError } from 'rxjs'
 import { catchError, map, mergeMap, share, tap } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http'
@@ -57,22 +57,22 @@ export class AuthService {
 
     // Set HotKeys
     this.hotkeys = [
-      new Hotkey('m s', (event: KeyboardEvent): boolean => {
+      new Hotkey('m s', e => {
         this.router.navigate([ '/videos/subscriptions' ])
         return false
-      }, undefined, $localize`Go to my subscriptions`),
-      new Hotkey('m v', (event: KeyboardEvent): boolean => {
+      }, $localize`Go to my subscriptions`),
+      new Hotkey('m v', e => {
         this.router.navigate([ '/my-library/videos' ])
         return false
-      }, undefined, $localize`Go to my videos`),
-      new Hotkey('m i', (event: KeyboardEvent): boolean => {
+      }, $localize`Go to my videos`),
+      new Hotkey('m i', e => {
         this.router.navigate([ '/my-library/video-imports' ])
         return false
-      }, undefined, $localize`Go to my imports`),
-      new Hotkey('m c', (event: KeyboardEvent): boolean => {
+      }, $localize`Go to my imports`),
+      new Hotkey('m c', e => {
         this.router.navigate([ '/my-library/video-channels' ])
         return false
-      }, undefined, $localize`Go to my channels`)
+      }, $localize`Go to my channels`)
     ]
   }
 

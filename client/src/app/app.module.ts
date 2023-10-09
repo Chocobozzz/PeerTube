@@ -26,6 +26,7 @@ import { SharedGlobalIconModule } from './shared/shared-icons'
 import { SharedInstanceModule } from './shared/shared-instance'
 import { SharedMainModule } from './shared/shared-main'
 import { SharedUserInterfaceSettingsModule } from './shared/shared-user-settings'
+import { HotkeysCheatSheetComponent } from './hotkeys'
 
 registerLocaleData(localeOc, 'oc')
 
@@ -63,7 +64,9 @@ export function loadConfigFactory (server: ServerService, pluginService: PluginS
     CustomModalComponent,
     AdminWelcomeModalComponent,
     InstanceConfigWarningModalComponent,
-    ConfirmComponent
+    ConfirmComponent,
+
+    HotkeysCheatSheetComponent
   ],
 
   imports: [

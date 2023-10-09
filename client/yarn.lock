@@ -2460,11 +2460,6 @@
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-10.0.1.tgz#2f4f65bb08bc368ac39c96da7b2f09140b26851b"
   integrity sha512-/fvYntiO1GeICvqbQ3doGDIP97vWmvFt83GKguJ6prmQM2iXZfFcq6YE8KteFyRtX2/h5Hf91BYvPodJKFYv5Q==
 
-"@types/mousetrap@^1.6.9":
-  version "1.6.11"
-  resolved "https://registry.yarnpkg.com/@types/mousetrap/-/mousetrap-1.6.11.tgz#ef9620160fdcefcb85bccda8aaa3e84d7429376d"
-  integrity sha512-F0oAily9Q9QQpv9JKxKn0zMKfOo36KHCW7myYsmUyf2t0g+sBTbG3UleTPoguHdE1z3GLFr3p7/wiOio52QFjQ==
-
 "@types/ms@*":
   version "0.7.31"
   resolved "https://registry.yarnpkg.com/@types/ms/-/ms-0.7.31.tgz#31b7ca6407128a3d2bbc27fe2d21b345397f6197"
@@ -3292,15 +3287,6 @@ ajv@^6.10.0, ajv@^6.12.4, ajv@^6.12.5:
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
-
-angular2-hotkeys@^13.1.0:
-  version "13.4.0"
-  resolved "https://registry.yarnpkg.com/angular2-hotkeys/-/angular2-hotkeys-13.4.0.tgz#a96676466936556655cd64f92e1f5cd3aeac8e10"
-  integrity sha512-WvkouvdXtTYw3tpuaoEVF+ue41pvI2XSa8m4tVRPLzAblT/f7PG0uQO4npyjVw3oDIc7qnFkQR+oqGl1KM1eow==
-  dependencies:
-    "@types/mousetrap" "^1.6.9"
-    mousetrap "^1.6.5"
-    tslib "^2.3.1"
 
 angularx-qrcode@16.0.0:
   version "16.0.0"
@@ -8186,11 +8172,6 @@ moment@^2.10.2:
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
   integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
-mousetrap@^1.6.5:
-  version "1.6.5"
-  resolved "https://registry.yarnpkg.com/mousetrap/-/mousetrap-1.6.5.tgz#8a766d8c272b08393d5f56074e0b5ec183485bf9"
-  integrity sha512-QNo4kEepaIBwiT8CDhP98umTetp+JNfQYBWvC1pc6/OAibuXtRcxZ58Qz8skvEHYvURne/7R8T5VoOI7rDsEUA==
-
 mpd-parser@0.22.1, mpd-parser@^0.22.1:
   version "0.22.1"
   resolved "https://registry.yarnpkg.com/mpd-parser/-/mpd-parser-0.22.1.tgz#bc2bf7d3e56368e4b0121035b055675401871521"
@@ -10788,6 +10769,11 @@ thunky@^1.0.2:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/thunky/-/thunky-1.1.0.tgz#5abaf714a9405db0504732bbccd2cedd9ef9537d"
   integrity sha512-eHY7nBftgThBqOyHGVN+l8gF0BucP09fMo0oO/Lb0w1OF80dJv+lDVpXG60WMQvkcxAkNybKsrEIE3ZtKGmPrA==
+
+tinykeys@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/tinykeys/-/tinykeys-2.1.0.tgz#1341563e92a7fac9ca90053fddaf2b7553500298"
+  integrity sha512-/MESnqBD1xItZJn5oGQ4OsNORQgJfPP96XSGoyu4eLpwpL0ifO0SYR5OD76u0YMhMXsqkb0UqvI9+yXTh4xv8Q==
 
 tmp@0.2.1, tmp@~0.2.1:
   version "0.2.1"

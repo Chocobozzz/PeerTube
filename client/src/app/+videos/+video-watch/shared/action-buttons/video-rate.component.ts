@@ -1,7 +1,6 @@
-import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { Observable } from 'rxjs'
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core'
-import { Notifier, ScreenService } from '@app/core'
+import { Notifier, ScreenService, Hotkey, HotkeysService } from '@app/core'
 import { VideoDetails, VideoService } from '@app/shared/shared-main'
 import { UserVideoRateType } from '@peertube/peertube-models'
 
@@ -41,15 +40,15 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
 
     if (this.isUserLoggedIn) {
       this.hotkeys = [
-        new Hotkey('shift+l', () => {
+        new Hotkey('Shift+l', () => {
           this.setLike()
           return false
-        }, undefined, $localize`Like the video`),
+        }, $localize`Like the video`),
 
-        new Hotkey('shift+d', () => {
+        new Hotkey('Shift+d', () => {
           this.setDislike()
           return false
-        }, undefined, $localize`Dislike the video`)
+        }, $localize`Dislike the video`)
       ]
 
       this.hotkeysService.add(this.hotkeys)

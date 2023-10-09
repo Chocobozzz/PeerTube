@@ -195,7 +195,6 @@
               "path-browserify",
               "deep-merge",
               "escape-string-regexp",
-              "mousetrap",
               "is-plain-object",
               "parse-srcset",
               "deepmerge",

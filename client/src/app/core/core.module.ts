@@ -1,4 +1,3 @@
-import { HotkeyModule } from 'angular2-hotkeys'
 import { MessageService } from 'primeng/api'
 import { ToastModule } from 'primeng/toast'
 import { CommonModule } from '@angular/common'
@@ -8,7 +7,6 @@ import { PeerTubeSocket } from '@app/core/notification/peertube-socket.service'
 import { HooksService, PluginService } from '@app/core/plugins'
 import { AuthService } from './auth'
 import { ConfirmService } from './confirm'
-import { CheatSheetComponent } from './hotkeys'
 import { MenuService } from './menu'
 import { throwIfAlreadyLoaded } from './module-import-guard'
 import { Notifier } from './notification'
@@ -32,30 +30,23 @@ import { ServerService } from './server'
 import { ThemeService } from './theme'
 import { UserLocalStorageService, UserService } from './users'
 import { LocalStorageService, ScreenService, SessionStorageService } from './wrappers'
+import { HotkeysService } from './hotkeys'
 
 @NgModule({
   imports: [
     CommonModule,
     BrowserAnimationsModule,
 
-    ToastModule,
-
-    HotkeyModule.forRoot({
-      cheatSheetCloseEsc: true,
-      cheatSheetDescription: $localize`Show/hide this help menu`,
-      cheatSheetCloseEscDescription: $localize`Hide this help menu`
-    })
+    ToastModule
   ],
 
   declarations: [
-    CheatSheetComponent,
     HomepageRedirectComponent
   ],
 
   exports: [
     ToastModule,
 
-    CheatSheetComponent,
     HomepageRedirectComponent
   ],
 
@@ -97,7 +88,9 @@ import { LocalStorageService, ScreenService, SessionStorageService } from './wra
     ScrollService,
 
     MetaService,
-    MetaGuard
+    MetaGuard,
+
+    HotkeysService
   ]
 })
 export class CoreModule {

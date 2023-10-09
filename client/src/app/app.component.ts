@@ -1,4 +1,3 @@
-import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { delay, forkJoin } from 'rxjs'
 import { filter, first, map } from 'rxjs/operators'
 import { DOCUMENT, getLocaleDirection, PlatformLocation } from '@angular/common'
@@ -15,7 +14,9 @@ import {
   ServerService,
   ThemeService,
   User,
-  UserLocalStorageService
+  UserLocalStorageService,
+  Hotkey,
+  HotkeysService
 } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PluginService } from '@app/core/plugins/plugin.service'
@@ -313,40 +314,40 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   private initHotkeys () {
     this.hotkeysService.add([
-      new Hotkey([ '/', 's' ], (event: KeyboardEvent): boolean => {
+      new Hotkey([ '/', 's' ], () => {
         document.getElementById('search-video').focus()
         return false
-      }, undefined, $localize`Focus the search bar`),
+      }, $localize`Focus the search bar`),
 
-      new Hotkey('b', (event: KeyboardEvent): boolean => {
+      new Hotkey('b', () => {
         this.menu.toggleMenu()
         return false
-      }, undefined, $localize`Toggle the left menu`),
+      }, $localize`Toggle the left menu`),
 
-      new Hotkey('g o', (event: KeyboardEvent): boolean => {
+      new Hotkey('g o', () => {
         this.router.navigate([ '/videos/overview' ])
         return false
-      }, undefined, $localize`Go to the discover videos page`),
+      }, $localize`Go to the discover videos page`),
 
-      new Hotkey('g t', (event: KeyboardEvent): boolean => {
+      new Hotkey('g t', () => {
         this.router.navigate([ '/videos/trending' ])
         return false
-      }, undefined, $localize`Go to the trending videos page`),
+      }, $localize`Go to the trending videos page`),
 
-      new Hotkey('g r', (event: KeyboardEvent): boolean => {
+      new Hotkey('g r', () => {
         this.router.navigate([ '/videos/recently-added' ])
         return false
-      }, undefined, $localize`Go to the recently added videos page`),
+      }, $localize`Go to the recently added videos page`),
 
-      new Hotkey('g l', (event: KeyboardEvent): boolean => {
+      new Hotkey('g l', () => {
         this.router.navigate([ '/videos/local' ])
         return false
-      }, undefined, $localize`Go to the local videos page`),
+      }, $localize`Go to the local videos page`),
 
-      new Hotkey('g u', (event: KeyboardEvent): boolean => {
+      new Hotkey('g u', () => {
         this.router.navigate([ '/videos/upload' ])
         return false
-      }, undefined, $localize`Go to the videos upload page`)
+      }, $localize`Go to the videos upload page`)
     ])
   }
 

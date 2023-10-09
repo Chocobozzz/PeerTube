@@ -1,4 +1,3 @@
-import { HotkeysService } from 'angular2-hotkeys'
 import * as debug from 'debug'
 import { forkJoin, Subscription } from 'rxjs'
 import { first, switchMap } from 'rxjs/operators'
@@ -10,6 +9,7 @@ import {
   AuthStatus,
   AuthUser,
   HooksService,
+  HotkeysService,
   MenuSection,
   MenuService,
   RedirectService,

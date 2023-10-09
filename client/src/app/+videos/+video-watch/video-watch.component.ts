@@ -1,4 +1,3 @@
-import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { forkJoin, map, Observable, of, Subscription, switchMap } from 'rxjs'
 import { PlatformLocation } from '@angular/common'
 import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
@@ -13,6 +12,8 @@ import {
   RestExtractor,
   ScreenService,
   ServerService,
+  Hotkey,
+  HotkeysService,
   User,
   UserService
 } from '@app/core'
@@ -866,33 +867,33 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.hotkeys = [
       // These hotkeys are managed by the player
-      new Hotkey('f', e => e, undefined, $localize`Enter/exit fullscreen`),
-      new Hotkey('space', e => e, undefined, $localize`Play/Pause the video`),
-      new Hotkey('m', e => e, undefined, $localize`Mute/unmute the video`),
+      new Hotkey('f', e => e, $localize`Enter/exit fullscreen`),
+      new Hotkey('space', e => e, $localize`Play/Pause the video`),
+      new Hotkey('m', e => e, $localize`Mute/unmute the video`),
 
-      new Hotkey('up', e => e, undefined, $localize`Increase the volume`),
-      new Hotkey('down', e => e, undefined, $localize`Decrease the volume`),
+      new Hotkey('up', e => e, $localize`Increase the volume`),
+      new Hotkey('down', e => e, $localize`Decrease the volume`),
 
       new Hotkey('t', e => {
         this.theaterEnabled = !this.theaterEnabled
         return false
-      }, undefined, $localize`Toggle theater mode`)
+      }, $localize`Toggle theater mode`)
     ]
 
     if (!video.isLive) {
       this.hotkeys = this.hotkeys.concat([
         // These hotkeys are also managed by the player but only for VOD
 
-        new Hotkey('0-9', e => e, undefined, $localize`Skip to a percentage of the video: 0 is 0% and 9 is 90%`),
+        new Hotkey('0-9', e => e, $localize`Skip to a percentage of the video: 0 is 0% and 9 is 90%`),
 
-        new Hotkey('right', e => e, undefined, $localize`Seek the video forward`),
-        new Hotkey('left', e => e, undefined, $localize`Seek the video backward`),
+        new Hotkey('right', e => e, $localize`Seek the video forward`),
+        new Hotkey('left', e => e, $localize`Seek the video backward`),
 
-        new Hotkey('>', e => e, undefined, $localize`Increase playback rate`),
-        new Hotkey('<', e => e, undefined, $localize`Decrease playback rate`),
+        new Hotkey('>', e => e, $localize`Increase playback rate`),
+        new Hotkey('<', e => e, $localize`Decrease playback rate`),
 
-        new Hotkey(',', e => e, undefined, $localize`Navigate in the video to the previous frame`),
-        new Hotkey('.', e => e, undefined, $localize`Navigate in the video to the next frame`)
+        new Hotkey(',', e => e, $localize`Navigate in the video to the previous frame`),
+        new Hotkey('.', e => e, $localize`Navigate in the video to the next frame`)
       ])
     }
 
@@ -903,7 +904,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           else this.subscribeButton.subscribe()
 
           return false
-        }, undefined, $localize`Subscribe to the account`)
+        }, $localize`Subscribe to the account`)
       ])
     }
 
