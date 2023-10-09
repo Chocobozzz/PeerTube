@@ -21,6 +21,7 @@
         <input
           type="text" id="fromEmail" class="form-control"
           formControlName="fromEmail" [ngClass]="{ 'input-error': formErrors['fromEmail'] }"
+          i18n-placeholder placeholder="Example: john@example.com"
         >
         <div *ngIf="formErrors.fromEmail" class="form-error" role="alert">{{ formErrors.fromEmail }}</div>
       </div>
