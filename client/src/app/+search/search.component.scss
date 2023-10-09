@@ -4,11 +4,11 @@
 
 @mixin build-channel-img-size ($video-img-width) {
   $image-size: min(130px, $video-img-width);
-  $margin-size: math.div(($video-img-width - $image-size), 2); // So we have the same width than the video miniature
+  $margin-size: math.div(($video-img-width - $image-size), 2); // So we have the same width as the video miniature
 
   @include actor-avatar-size($image-size);
 
-  margin: 0 $margin-size 0 $margin-size;
+  margin: 0 calc($margin-size + 1rem) 0 $margin-size;
 }
 
 .search-result {
@@ -57,9 +57,14 @@
   max-width: 800px;
 }
 
+.video-channel {
+  my-actor-avatar {
+    @include margin-right(1rem);
+  }
+}
+
 .video-channel-info {
   flex-grow: 1;
-  margin: 0 10px;
   width: fit-content;
 }
 
@@ -70,6 +75,7 @@
   align-items: baseline;
   color: pvar(--mainForegroundColor);
   width: fit-content;
+  flex-wrap: wrap;
 }
 
 .video-channel-display-name {
@@ -78,8 +84,6 @@
 }
 
 .video-channel-name {
-  @include margin-left(5px);
-
   font-size: $video-miniature-row-info-font-size;
   color: pvar(--greyForegroundColor);
 }

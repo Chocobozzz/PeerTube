@@ -36,7 +36,10 @@
   <ng-container *ngFor="let result of results">
     <div *ngIf="isVideoChannel(result)" class="entry video-channel">
 
-      <my-actor-avatar [actor]="result" actorType="channel" [internalHref]="getInternalChannelUrl(result)" [href]="getExternalChannelUrl(result)" size="120"></my-actor-avatar>
+      <my-actor-avatar
+        [actor]="result" actorType="channel"
+        [internalHref]="getInternalChannelUrl(result)" [href]="getExternalChannelUrl(result)" size="120"
+      ></my-actor-avatar>
 
       <div class="video-channel-info">
         <a *ngIf="!isExternalChannelUrl()" [routerLink]="getInternalChannelUrl(result)" class="video-channel-names">
@@ -48,7 +51,7 @@
         </a>
 
         <ng-template #aContent>
-          <div class="video-channel-display-name">{{ result.displayName }}</div>
+          <div class="video-channel-display-name me-2">{{ result.displayName }}</div>
           <div class="video-channel-name">{{ result.nameWithHost }}</div>
         </ng-template>
 

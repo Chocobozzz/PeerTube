@@ -3,7 +3,7 @@ import { LinkType } from 'src/types/link.type'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, HooksService, MetaService, Notifier, ServerService, User, UserService } from '@app/core'
-import { immutableAssign } from '@app/helpers'
+import { immutableAssign, SimpleMemoize } from '@app/helpers'
 import { validateHost } from '@app/shared/form-validators/host-validators'
 import { Video, VideoChannel } from '@app/shared/shared-main'
 import { AdvancedSearch, SearchService } from '@app/shared/shared-search'
@@ -225,6 +225,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     return undefined
   }
 
+  @SimpleMemoize()
   getInternalChannelUrl (channel: VideoChannel) {
     const linkType = this.getLinkType()
 

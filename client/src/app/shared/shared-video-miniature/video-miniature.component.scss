@@ -159,7 +159,7 @@ my-actor-avatar {
   }
 
   my-video-thumbnail {
-    @include margin-right(10px);
+    @include margin-right(1rem);
 
     min-width: var(--rowThumbnailWidth);
     max-width: var(--rowThumbnailWidth);
