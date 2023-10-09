@@ -16,6 +16,7 @@
         <input
           type="text" id="displayName" i18n-placeholder placeholder="Example: John Doe"
           formControlName="displayName" class="form-control" [ngClass]="{ 'input-error': formErrors['displayName'] }"
+          autocomplete="nickname"
         >
       </div>
 
@@ -33,6 +34,7 @@
         <input
           type="text" id="username" i18n-placeholder placeholder="Example: john_doe58"
           formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }"
+          autocomplete="username"
         >
         <span class="input-group-text">@{{ instanceHost }}</span>
       </div>
@@ -50,7 +52,7 @@
       </div>
 
       <input
-        type="text" id="email" i18n-placeholder placeholder="Example: john@example.com"
+        type="text" id="email" i18n-placeholder placeholder="Example: john@example.com" autocomplete="email"
         formControlName="email" class="form-control" [ngClass]="{ 'input-error': formErrors['email'] }"
       >
 
