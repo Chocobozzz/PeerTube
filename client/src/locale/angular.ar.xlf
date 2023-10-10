@@ -3465,7 +3465,7 @@
       </trans-unit>
       <trans-unit id="5191164170233238999" datatype="html">
         <source>Max simultaneous lives created on your instance</source>
-        <target state="new">Max simultaneous lives created on your instance</target>
+        <target state="translated">الحد الأقصى لعدد مرات الحياة المتزامنة التي نشأت على نُسختك</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="6830777508073747241" datatype="html">
@@ -3476,7 +3476,7 @@
       </trans-unit>
       <trans-unit id="1834362188086938736" datatype="html">
         <source>Max simultaneous lives created per user</source>
-        <target state="new">Max simultaneous lives created per user</target>
+        <target state="translated">الحد الأقصى من الحياة المتزامنة التي نشأت لكل مستخدم</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="1521259619066122077" datatype="html">
@@ -3501,7 +3501,7 @@
       </trans-unit>
       <trans-unit id="1417246074503129277" datatype="html">
         <source>Live transcoding profile</source>
-        <target state="new">Live transcoding profile</target>
+        <target state="translated">الملف الشخصي لتحويل الترميز المباشر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">185</context></context-group>
       </trans-unit>
       <trans-unit id="8294583621306221742" datatype="html">
