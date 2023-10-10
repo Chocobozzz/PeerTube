@@ -63,8 +63,8 @@
         <p-tableCheckbox [value]="runnerJob" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
       </td>
 
-      <td class="expand-cell" [pRowToggler]="runnerJob">
-        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
+      <td class="expand-cell">
+        <my-table-expander-icon [pRowToggler]="runnerJob" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">

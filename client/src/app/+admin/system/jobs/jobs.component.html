@@ -53,8 +53,8 @@
 
   <ng-template pTemplate="body" let-expanded="expanded" let-job>
     <tr>
-      <td class="expand-cell" [pRowToggler]="job">
-        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
+      <td class="expand-cell">
+        <my-table-expander-icon [pRowToggler]="job" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="job-id c-hand" [pRowToggler]="job" [title]="job.id">{{ job.id }}</td>

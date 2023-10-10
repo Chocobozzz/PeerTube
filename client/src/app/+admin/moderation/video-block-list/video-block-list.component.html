@@ -38,8 +38,9 @@
       <td *ngIf="!videoBlock.reason">
         <span i18n class="visually-hidden">No more information is available for this row</span>
       </td>
-      <td class="expand-cell" *ngIf="videoBlock.reason" [pRowToggler]="videoBlock">
-        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
+
+      <td class="expand-cell" *ngIf="videoBlock.reason" >
+        <my-table-expander-icon [pRowToggler]="videoBlock" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">

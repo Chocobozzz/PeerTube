@@ -31,8 +31,8 @@
 
   <ng-template pTemplate="body" let-expanded="expanded" let-abuse>
     <tr>
-      <td class="expand-cell" [pRowToggler]="abuse">
-        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
+      <td class="expand-cell">
+        <my-table-expander-icon [pRowToggler]="abuse" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">

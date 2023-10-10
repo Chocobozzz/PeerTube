@@ -36,8 +36,8 @@
 
   <ng-template pTemplate="body" let-expanded="expanded" let-redundancy>
     <tr>
-      <td class="expand-cell" [pRowToggler]="redundancy">
-        <my-table-expander-icon i18n-ngbTooltip ngbTooltip="List redundancies" [expanded]="expanded"></my-table-expander-icon>
+      <td class="expand-cell">
+        <my-table-expander-icon [pRowToggler]="redundancy" [expanded]="expanded" i18n-tooltip tooltip="List redundancies"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">
