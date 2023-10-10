@@ -5,24 +5,24 @@
       (rateUpdated)="onRateUpdated($event)" (userRatingLoaded)="onRateUpdated($event)"
     ></my-video-rate>
 
-    <button *ngIf="video.support" (click)="showSupportModal()" (keyup.enter)="showSupportModal()" class="action-button action-button-support" [attr.aria-label]="tooltipSupport"
-      [ngbTooltip]="tooltipSupport"
-      placement="bottom auto"
+    <button
+      *ngIf="video.support" (click)="showSupportModal()" (keyup.enter)="showSupportModal()" class="action-button action-button-support"
+      [attr.aria-label]="tooltipSupport" [ngbTooltip]="tooltipSupport" placement="bottom auto"
     >
       <my-global-icon iconName="support" aria-hidden="true"></my-global-icon>
       <span class="icon-text" i18n>SUPPORT</span>
     </button>
 
-    <button (click)="showShareModal()" (keyup.enter)="showShareModal()" class="action-button">
+    <button (click)="showShareModal()" (keyup.enter)="showShareModal()" class="action-button" aria-label="Open the modal to share this video" i18n-ariaLabel>
       <my-global-icon iconName="share" aria-hidden="true"></my-global-icon>
       <span class="icon-text" i18n>SHARE</span>
     </button>
 
     <div
+      *ngIf="isVideoAddableToPlaylist()"
       class="action-dropdown" ngbDropdown placement="top" role="button" autoClose="outside"
-       *ngIf="isVideoAddableToPlaylist()" (openChange)="addContent.openChange($event)"
-       [ngbTooltip]="tooltipSaveToPlaylist"
-       placement="bottom auto"
+      (openChange)="addContent.openChange($event)"
+      [ngbTooltip]="tooltipSaveToPlaylist" placement="bottom auto"
     >
       <button class="action-button action-button-save" ngbDropdownToggle>
         <my-global-icon iconName="playlist-add" aria-hidden="true"></my-global-icon>
@@ -38,6 +38,7 @@
       <button
         *ngIf="isVideoDownloadable()" class="action-button action-button-download"
         (click)="showDownloadModal()" (keydown.enter)="showDownloadModal()"
+        aria-label="Open the modal to download this video" i18n-ariaLabel
       >
         <my-global-icon iconName="download" aria-hidden="true"></my-global-icon>
         <span class="icon-text d-none d-sm-inline" i18n>DOWNLOAD</span>
@@ -56,27 +57,14 @@
 
   <div class="likes-dislikes-bar-outer-container">
     <div
-      class="likes-dislikes-bar-inner-container"
-      *ngIf="video.likes !== 0 || video.dislikes !== 0"
-      [ngbTooltip]="likesBarTooltipText"
-      placement="bottom"
+      *ngIf="video.likes !== 0 || video.dislikes !== 0" class="likes-dislikes-bar-inner-container"
+      [ngbTooltip]="likesBarTooltipText" placement="bottom" tabindex="0"
     >
-      <div
-        class="likes-dislikes-bar"
-      >
+      <div class="likes-dislikes-bar">
         <div class="likes-bar" [ngClass]="{ 'liked': userRating !== 'none' }" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
       </div>
     </div>
   </div>
-</div>
-
-<div
-  class="likes-dislikes-bar"
-  *ngIf="video.likes !== 0 || video.dislikes !== 0"
-  [ngbTooltip]="likesBarTooltipText"
-  placement="bottom"
->
-  <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
 </div>
 
 <ng-container *ngIf="video">

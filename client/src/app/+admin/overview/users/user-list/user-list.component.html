@@ -116,8 +116,10 @@
 
       <td *ngIf="isSelected('quota')">
         <div class="progress" i18n-title title="Total video quota">
-          <div class="progress-bar" role="progressbar" [style]="{ width: getUserVideoQuotaPercentage(user) + '%' }"
-               [attr.aria-valuenow]="user.rawVideoQuotaUsed" aria-valuemin="0" [attr.aria-valuemax]="user.rawVideoQuota">
+          <div
+            class="progress-bar" role="progressbar" [style]="{ width: getUserVideoQuotaPercentage(user) + '%' }"
+            [attr.aria-valuenow]="user.rawVideoQuotaUsed" aria-valuemin="0" [attr.aria-valuemax]="user.rawVideoQuota"
+          >
           </div>
           <span>{{ user.videoQuotaUsed }}</span>
           <span>{{ user.videoQuota }}</span>
@@ -126,8 +128,10 @@
 
       <td *ngIf="isSelected('quotaDaily')">
         <div class="progress" i18n-title title="Total daily video quota">
-          <div class="progress-bar" role="progressbar" [style]="{ width: getUserVideoQuotaDailyPercentage(user) + '%' }"
-               [attr.aria-valuenow]="user.rawVideoQuotaUsedDaily" aria-valuemin="0" [attr.aria-valuemax]="user.rawVideoQuotaDaily">
+          <div
+            class="progress-bar" role="progressbar" [style]="{ width: getUserVideoQuotaDailyPercentage(user) + '%' }"
+            [attr.aria-valuenow]="user.rawVideoQuotaUsedDaily" aria-valuemin="0" [attr.aria-valuemax]="user.rawVideoQuotaDaily"
+          >
           </div>
           <span>{{ user.videoQuotaUsedDaily }}</span>
           <span>{{ user.videoQuotaDaily }}</span>
