@@ -778,6 +778,10 @@ p-tablecheckbox:hover div .p-checkbox-box {
       background-color: pvar(--mainColor) !important;
       border-color: pvar(--mainColor) !important;
     }
+
+    &.p-focus {
+      border: 2px solid pvar(--mainForegroundColor) !important;
+    }
   }
 }
 

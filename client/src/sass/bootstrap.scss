@@ -79,8 +79,8 @@ body {
 
     &.active {
       color: pvar(--mainBackgroundColor) !important;
-      background-color: pvar(--mainHoverColor);
-      opacity: 0.9;
+      background-color: pvar(--mainColor);
+      font-weight: $font-semibold;
     }
 
     &::after {
