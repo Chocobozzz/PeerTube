@@ -110,8 +110,8 @@
           <my-login-link className="peertube-button-link orange-button w-100 text-truncate"></my-login-link>
         </li>
 
-        <li>
-          <a *ngIf="isRegistrationAllowed()" routerLink="/signup" class="peertube-button-link create-account-button text-truncate">
+        <li *ngIf="isRegistrationAllowed()" class="mt-2">
+          <a routerLink="/signup" class="create-account-button peertube-button-link text-truncate d-block">
             <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
           </a>
         </li>
