@@ -43,7 +43,7 @@
       <th scope="col" i18n>Video</th>
       <th scope="col" i18n>Info</th>
       <th scope="col" i18n>Files</th>
-      <th scope="col" style="width: 150px;" i18n pSortableColumn="publishedAt">Published <p-sortIcon field="publishedAt"></p-sortIcon></th>
+      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="publishedAt">Published <p-sortIcon field="publishedAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 

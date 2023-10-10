@@ -22,6 +22,8 @@ export abstract class RestTable <T = unknown> {
 
   search: string
 
+  sortTooltip = $localize`Sort by this column`
+
   protected route: ActivatedRoute
   protected router: Router
 

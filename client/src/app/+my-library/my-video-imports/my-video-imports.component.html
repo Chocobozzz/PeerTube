@@ -29,7 +29,7 @@
       <th scope="col" style="width: 45%" i18n>Target</th>
       <th scope="col" style="width: 55%" i18n>Video</th>
       <th scope="col" style="width: 150px" i18n>State</th>
-      <th scope="col" style="width: 150px" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 150px" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
