@@ -524,6 +524,10 @@ p-table {
         color: pvar(--mainForegroundColor) !important;
       }
     }
+
+    &.focus-visible {
+      border: 1px solid pvar(--mainForegroundColor) !important
+    }
   }
 
   .p-datatable-tbody {
