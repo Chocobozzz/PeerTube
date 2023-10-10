@@ -3506,7 +3506,7 @@
       </trans-unit>
       <trans-unit id="8294583621306221742" datatype="html">
         <source>new live transcoding profiles can be added by PeerTube plugins</source>
-        <target state="new">new live transcoding profiles can be added by PeerTube plugins</target>
+        <target state="translated">يمكن إضافة ملفات تعريف تحويل الترميز المباشرة الجديدة بواسطة مكونات بييرتيوب الإضافية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">186</context></context-group>
       </trans-unit>
       <trans-unit id="6727057461851446921" datatype="html">
@@ -3516,17 +3516,17 @@
       </trans-unit>
       <trans-unit id="594064951138382358" datatype="html">
         <source>Also transcode original resolution</source>
-        <target state="new">Also transcode original resolution</target>
+        <target state="translated">قم أيضًا بتحويل الدقة الأصلية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
       <trans-unit id="5429376346987783852" datatype="html">
         <source>Even if it's above your maximum enabled resolution</source>
-        <target state="new"> Even if it's above your maximum enabled resolution </target>
+        <target state="translated">حتى لو كان أعلى من الحد الأقصى للدقة الممكنة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="3283660108004661843" datatype="html">
         <source>Enable remote runners for lives</source>
-        <target state="new">Enable remote runners for lives</target>
+        <target state="translated">تفعيل العدائين عن بعد للحياة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">151</context>
@@ -3560,7 +3560,7 @@
       </trans-unit>
       <trans-unit id="8212237880239644112" datatype="html">
         <source>Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some.</source>
-        <target state="new"> Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some. </target>
+        <target state="translated">تمامًا مثل تحويل ترميز VOD، يتم تحويل ترميز البث المباشر بحيث يكون في شكل قابل للبث ويمكن لأي جهاز تشغيله. يتطلب وحدة المعالجة المركزية سمين، ثم بعض.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="3444148141968928069" datatype="html">
@@ -3585,7 +3585,7 @@
       </trans-unit>
       <trans-unit id="5698272164915890247" datatype="html">
         <source>Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</source>
-        <target state="new">Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</target>
+        <target state="translated">يسمح للمستخدمين بتحميل مقاطع فيديو بامتدادات إضافية غير .mp4 و.ogv و.webm (على سبيل المثال: .avi و.mov و.mkv وما إلى ذلك).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="1823941382992046371" datatype="html">
@@ -3595,17 +3595,17 @@
       </trans-unit>
       <trans-unit id="8340360585610503574" datatype="html">
         <source>Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</source>
-        <target state="new">Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</target>
+        <target state="translated">يسمح للمستخدمين بتحميل الملفات الصوتية ذات الامتدادات mp3. أو .ogg أو .wma أو .flac أو .aac أو .ac3.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="5867513506373651775" datatype="html">
         <source>The file will be merged in a still image video with the preview file on upload.</source>
-        <target state="new">The file will be merged in a still image video with the preview file on upload.</target>
+        <target state="translated">سيتم دمج الملف في صورة فيديو ثابتة مع ملف المعاينة عند التحميل.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="2093595615152706886" datatype="html">
         <source>Web Videos enabled</source>
-        <target state="new">Web Videos enabled</target>
+        <target state="translated">مقاطع فيديو الويب مفعّلة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">74</context>
@@ -3613,13 +3613,13 @@
       </trans-unit>
       <trans-unit id="2036818807823848377" datatype="html">
         <source>Output formats</source>
-        <target state="new">Output formats</target>
+        <target state="translated">تنسيقات الإخراج</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">114</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="8373385486403101567" datatype="html">
         <source>If you also enabled HLS support, it will multiply videos storage by 2</source>
-        <target state="new">If you also enabled HLS support, it will multiply videos storage by 2</target>
+        <target state="translated">إذا قمت أيضًا بتفعيل دعم HLS، فسيتضاعف تخزين مقاطع الفيديو بمقدار 2</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="3839590624406770455" datatype="html">
@@ -3637,22 +3637,22 @@
       </trans-unit>
       <trans-unit id="6698240176427495644" datatype="html">
         <source>Resolutions to generate</source>
-        <target state="new">Resolutions to generate</target>
+        <target state="translated">مستويات دقة لتوليدها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="4437374135745051281" datatype="html">
         <source>Always transcode original resolution</source>
-        <target state="new">Always transcode original resolution</target>
+        <target state="translated">قم دائمًا بتحويل الدقة الأصلية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">116</context></context-group>
       </trans-unit>
       <trans-unit id="5431196295724512251" datatype="html">
         <source>The original file resolution will be the default target if no option is selected.</source>
-        <target state="new"> The original file resolution will be the default target if no option is selected. </target>
+        <target state="translated">ستكون دقة الملف الأصلية هي الهدف الافتراضي إذا لم يتم تحديد أي خيار.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">120</context></context-group>
       </trans-unit>
       <trans-unit id="8056487097039524924" datatype="html">
         <source>Enable remote runners for VOD</source>
-        <target state="new">Enable remote runners for VOD</target>
+        <target state="translated">فعّل عدّائين عن بعد لـ VOD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">147</context>
@@ -3675,47 +3675,47 @@
       </trans-unit>
       <trans-unit id="7185278676178506632" datatype="html">
         <source>Transcoding jobs concurrency</source>
-        <target state="new">Transcoding jobs concurrency</target>
+        <target state="translated">تحويل وظائف التزامن</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">182</context></context-group>
       </trans-unit>
       <trans-unit id="1969393594784140832" datatype="html">
         <source>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</source>
-        <target state="new">allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</target>
+        <target state="translated">يسمح بتحويل ترميز ملفات متعددة بالتوازي. ⚠️ يتطلب إعادة تشغيل بييرتيوب</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">183</context></context-group>
       </trans-unit>
       <trans-unit id="2184317712452071847" datatype="html">
         <source>Transcoding profile</source>
-        <target state="new">Transcoding profile</target>
+        <target state="translated">الملف الشخصي لتحويل الترميز</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="6289966287765074028" datatype="html">
         <source>new transcoding profiles can be added by PeerTube plugins</source>
-        <target state="new">new transcoding profiles can be added by PeerTube plugins</target>
+        <target state="translated">يمكن إضافة ملفات تعريف تحويل الترميز الجديدة بواسطة مكونات بييرتيوب الإضافية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">195</context></context-group>
       </trans-unit>
       <trans-unit id="5843661880070076970" datatype="html">
         <source>VIDEO STUDIO</source>
-        <target state="new">VIDEO STUDIO</target>
+        <target state="translated">استوديو الفيديو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">214</context></context-group>
       </trans-unit>
       <trans-unit id="4078329985026583770" datatype="html">
         <source>Allows your users to edit their video (cut, add intro/outro, add a watermark etc)</source>
-        <target state="new"> Allows your users to edit their video (cut, add intro/outro, add a watermark etc) </target>
+        <target state="translated">يسمح للمستخدمين بتحرير الفيديو الخاص بهم (قص، إضافة مقدمة/خاتمة، إضافة علامة مائية، إلخ)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">215</context></context-group>
       </trans-unit>
       <trans-unit id="252604800845369275" datatype="html">
         <source>Enable video studio</source>
-        <target state="new">Enable video studio</target>
+        <target state="translated">فعّل استوديو الفيديو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">226</context></context-group>
       </trans-unit>
       <trans-unit id="3313548535394806921" datatype="html">
         <source>⚠️ You need to enable transcoding first to enable video studio</source>
-        <target state="new">⚠️ You need to enable transcoding first to enable video studio</target>
+        <target state="translated">⚠️ تحتاج إلى تفعيل تحويل الترميز أولاً لتفعيل استوديو الفيديو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">229</context></context-group>
       </trans-unit>
       <trans-unit id="7185229240632050966" datatype="html">
         <source>Enable remote runners for studio</source>
-        <target state="new">Enable remote runners for studio</target>
+        <target state="translated">فعّل العدائين عن بعد للاستوديو</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">237</context>
@@ -3736,7 +3736,7 @@
       </trans-unit>
       <trans-unit id="5511334650211127631" datatype="html">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
-        <target state="new"> Some files are not federated, and fetched when necessary. Define their caching policies. </target>
+        <target state="translated">لا يتم توحيد بعض الملفات، ويتم جلبها عند الضرورة. تحديد سياسات التخزين المؤقت الخاصة بهم.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="4382565260112874406" datatype="html">
