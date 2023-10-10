@@ -3767,7 +3767,7 @@
       </trans-unit>
       <trans-unit id="330647913034301472" datatype="html">
         <source>Number of video torrents to keep in cache</source>
-        <target state="new">Number of video torrents to keep in cache</target>
+        <target state="translated">عدد مقاطع فيديو التورنت التي يجب الاحتفاظ بها في ذاكرة التخزين المؤقت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">43</context>
@@ -3783,7 +3783,7 @@
       </trans-unit>
       <trans-unit id="9180372875725189823" datatype="html">
         <source>Number of video storyboard images to keep in cache</source>
-        <target state="new">Number of video storyboard images to keep in cache</target>
+        <target state="translated">عدد صور القصة المصورة للفيديو التورنت التي يجب الاحتفاظ بها في ذاكرة التخزين المؤقت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">57</context>
