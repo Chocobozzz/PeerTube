@@ -84,8 +84,8 @@
     "swagger-cli": "swagger-cli"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.190.0",
-    "@aws-sdk/lib-storage": "^3.190.0",
+    "@aws-sdk/client-s3": "^3.414.0",
+    "@aws-sdk/lib-storage": "^3.414.0",
     "@aws-sdk/s3-request-presigner": "^3.345.0",
     "@babel/parser": "^7.17.8",
     "@commander-js/extra-typings": "^11.0.0",
