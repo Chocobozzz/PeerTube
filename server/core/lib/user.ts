@@ -299,7 +299,7 @@ async function buildChannelAttributes (options: {
   if (channelNames) return channelNames
 
   const channelName = await findAvailableLocalActorName(user.username + '_channel', transaction)
-  const videoChannelDisplayName = `Main ${user.username} channel`
+  const videoChannelDisplayName = CONFIG.USER.DEFAULT_CHANNEL_NAME.replace('$1', user.username)
 
   return {
     name: channelName,
