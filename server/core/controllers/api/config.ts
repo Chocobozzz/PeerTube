@@ -215,7 +215,8 @@ function customConfig (): CustomConfig {
         }
       },
       videoQuota: CONFIG.USER.VIDEO_QUOTA,
-      videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
+      videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
+      defaultChannelName: CONFIG.USER.DEFAULT_CHANNEL_NAME
     },
     videoChannels: {
       maxPerUser: CONFIG.VIDEO_CHANNELS.MAX_PER_USER
