@@ -11,7 +11,7 @@ import {
 import { AUDIT_LOG_FILENAME } from '@server/initializers/constants.js'
 import { diff } from 'deep-object-diff'
 import express from 'express'
-import flatten from 'flat'
+import { flatten } from 'flat'
 import { join } from 'path'
 import { addColors, config, createLogger, format, transports } from 'winston'
 import { CONFIG } from '../initializers/config.js'

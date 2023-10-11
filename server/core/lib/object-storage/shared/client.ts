@@ -10,7 +10,7 @@ async function getProxyRequestHandler () {
 
   const { agent } = getAgent()
 
-  const { NodeHttpHandler } = await import('@aws-sdk/node-http-handler')
+  const { NodeHttpHandler } = await import('@smithy/node-http-handler')
 
   return new NodeHttpHandler({
     httpAgent: agent.http,

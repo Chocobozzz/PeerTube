@@ -400,7 +400,7 @@ async function checkNewCommentOnMyVideo (options: CheckerBaseParams & {
       checkVideo(notification.comment.video, undefined, shortUUID)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n === undefined || n.comment === undefined || n.comment.id !== commentId
+        return n?.comment === undefined || n.comment.id !== commentId
       })
     }
   }
@@ -437,7 +437,7 @@ async function checkNewVideoAbuseForModerators (options: CheckerBaseParams & {
       checkVideo(notification.abuse.video, videoName, shortUUID)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n === undefined || n.abuse === undefined || n.abuse.video.shortUUID !== shortUUID
+        return n?.abuse === undefined || n.abuse.video.shortUUID !== shortUUID
       })
     }
   }
@@ -499,7 +499,7 @@ async function checkAbuseStateChange (options: CheckerBaseParams & {
       expect(notification.abuse.state).to.equal(state)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n === undefined || n.abuse === undefined || n.abuse.id !== abuseId
+        return n?.abuse === undefined || n.abuse.id !== abuseId
       })
     }
   }
@@ -534,7 +534,7 @@ async function checkNewCommentAbuseForModerators (options: CheckerBaseParams & {
       checkVideo(notification.abuse.comment.video, videoName, shortUUID)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n === undefined || n.abuse === undefined || n.abuse.comment.video.shortUUID !== shortUUID
+        return n?.abuse === undefined || n.abuse.comment.video.shortUUID !== shortUUID
       })
     }
   }
@@ -563,7 +563,7 @@ async function checkNewAccountAbuseForModerators (options: CheckerBaseParams & {
       expect(notification.abuse.account.displayName).to.equal(displayName)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n === undefined || n.abuse === undefined || n.abuse.account.displayName !== displayName
+        return n?.abuse === undefined || n.abuse.account.displayName !== displayName
       })
     }
   }
@@ -593,7 +593,7 @@ async function checkVideoAutoBlacklistForModerators (options: CheckerBaseParams 
       checkVideo(notification.videoBlacklist.video, videoName, shortUUID)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n === undefined || n.video === undefined || n.video.shortUUID !== shortUUID
+        return n?.video === undefined || n.video.shortUUID !== shortUUID
       })
     }
   }
@@ -653,7 +653,7 @@ async function checkNewPeerTubeVersion (options: CheckerBaseParams & {
       expect(notification.peertube.latestVersion).to.equal(latestVersion)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n === undefined || n.peertube === undefined || n.peertube.latestVersion !== latestVersion
+        return n?.peertube === undefined || n.peertube.latestVersion !== latestVersion
       })
     }
   }
@@ -684,7 +684,7 @@ async function checkNewPluginVersion (options: CheckerBaseParams & {
       expect(notification.plugin.type).to.equal(pluginType)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n === undefined || n.plugin === undefined || n.plugin.name !== pluginName
+        return n?.plugin === undefined || n.plugin.name !== pluginName
       })
     }
   }

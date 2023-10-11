@@ -1,4 +1,3 @@
-
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 
 export abstract class AbstractJobBuilder {

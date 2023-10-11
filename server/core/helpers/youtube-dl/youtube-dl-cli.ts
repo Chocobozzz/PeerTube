@@ -1,4 +1,4 @@
-import execa from 'execa'
+import { execa, NodeOptions as ExecaNodeOptions } from 'execa'
 import { ensureDir, pathExists } from 'fs-extra/esm'
 import { writeFile } from 'fs/promises'
 import { OptionsOfBufferResponseBody } from 'got'
@@ -111,7 +111,7 @@ export class YoutubeDLCLI {
     url: string
     format: string
     output: string
-    processOptions: execa.NodeOptions
+    processOptions: ExecaNodeOptions
     timeout?: number
     additionalYoutubeDLArgs?: string[]
   }) {
@@ -129,7 +129,7 @@ export class YoutubeDLCLI {
   async getInfo (options: {
     url: string
     format: string
-    processOptions: execa.NodeOptions
+    processOptions: ExecaNodeOptions
     additionalYoutubeDLArgs?: string[]
   }) {
     const { url, format, additionalYoutubeDLArgs = [], processOptions } = options
@@ -149,7 +149,7 @@ export class YoutubeDLCLI {
   async getListInfo (options: {
     url: string
     latestVideosCount?: number
-    processOptions: execa.NodeOptions
+    processOptions: ExecaNodeOptions
   }): Promise<{ upload_date: string, webpage_url: string }[]> {
     const additionalYoutubeDLArgs = [ '--skip-download', '--playlist-reverse' ]
 
@@ -178,7 +178,7 @@ export class YoutubeDLCLI {
   async getSubs (options: {
     url: string
     format: 'vtt'
-    processOptions: execa.NodeOptions
+    processOptions: ExecaNodeOptions
   }) {
     const { url, format, processOptions } = options
 
@@ -204,7 +204,7 @@ export class YoutubeDLCLI {
     url: string
     args: string[]
     timeout?: number
-    processOptions: execa.NodeOptions
+    processOptions: ExecaNodeOptions
   }) {
     const { url, args, timeout, processOptions } = options
 

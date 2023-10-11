@@ -1,4 +1,3 @@
-
 import { VideoState } from '@peertube/peertube-models'
 import { AbstractOwnedVideoPublication } from './abstract-owned-video-publication.js'
 

@@ -129,7 +129,8 @@ async function createTorrentAndSetInfoHashFromPath (
     await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
   }
 
-  const parsedTorrent = parseTorrent(torrentContent)
+  // FIXME: typings: parseTorrent now returns an async result
+  const parsedTorrent = await (parseTorrent(torrentContent) as unknown as Promise<parseTorrent.Instance>)
   videoFile.infoHash = parsedTorrent.infoHash
   videoFile.torrentFilename = torrentFilename
 }

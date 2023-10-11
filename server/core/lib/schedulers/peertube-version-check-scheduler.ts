@@ -1,4 +1,3 @@
-
 import { doJSONRequest } from '@server/helpers/requests.js'
 import { ApplicationModel } from '@server/models/application/application.js'
 import { compareSemVer } from '@peertube/peertube-core-utils'

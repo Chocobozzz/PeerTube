@@ -1,5 +1,5 @@
 import { ChildProcess, fork, ForkOptions } from 'child_process'
-import execa from 'execa'
+import { execa } from 'execa'
 import { join } from 'path'
 import { root } from '@peertube/peertube-node-utils'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'

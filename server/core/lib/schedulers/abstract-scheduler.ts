@@ -5,7 +5,7 @@ export abstract class AbstractScheduler {
 
   protected abstract schedulerIntervalMs: number
 
-  private interval: NodeJS.Timer
+  private interval: NodeJS.Timeout
   private isRunning = false
 
   enable () {
