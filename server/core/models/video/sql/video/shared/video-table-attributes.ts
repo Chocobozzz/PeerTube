@@ -1,4 +1,3 @@
-
 /**
  *
  * Class to build video attributes/join names we want to fetch from the database

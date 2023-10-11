@@ -1,4 +1,3 @@
-
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { AbuseFilter, AbuseStateType, AbuseVideoIs } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'

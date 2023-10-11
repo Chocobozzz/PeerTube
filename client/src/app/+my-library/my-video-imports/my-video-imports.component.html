@@ -29,14 +29,14 @@
       <th scope="col" style="width: 45%" i18n>Target</th>
       <th scope="col" style="width: 55%" i18n>Video</th>
       <th scope="col" style="width: 150px" i18n>State</th>
-      <th scope="col" style="width: 150px" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 150px" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-expanded="expanded" let-videoImport>
     <tr>
-      <td class="expand-cell" [pRowToggler]="videoImport">
-        <my-table-expander-icon *ngIf="videoImport.error" [expanded]="expanded"></my-table-expander-icon>
+      <td class="expand-cell">
+        <my-table-expander-icon *ngIf="videoImport.error" [pRowToggler]="videoImport" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">

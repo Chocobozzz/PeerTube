@@ -47,14 +47,14 @@
       <th scope="col" style="width: 200px" class="job-priority" i18n>Priority <small>(1 = highest priority)</small></th>
       <th scope="col" style="width: 200px" class="job-state" i18n *ngIf="jobState === 'all'">State</th>
       <th scope="col" style="width: 100px" class="job-progress" i18n *ngIf="hasGlobalProgress()">Progress</th>
-      <th scope="col" style="width: 150px" class="job-date" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 150px" class="job-date" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-expanded="expanded" let-job>
     <tr>
-      <td class="expand-cell" [pRowToggler]="job">
-        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
+      <td class="expand-cell">
+        <my-table-expander-icon [pRowToggler]="job" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="job-id c-hand" [pRowToggler]="job" [title]="job.id">{{ job.id }}</td>

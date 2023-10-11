@@ -1,4 +1,3 @@
-
 import { expect } from 'chai'
 import { getAllFiles, wait } from '@peertube/peertube-core-utils'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'

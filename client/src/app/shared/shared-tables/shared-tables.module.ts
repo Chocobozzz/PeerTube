@@ -1,4 +1,3 @@
-
 import { NgModule } from '@angular/core'
 import { SharedMainModule } from '../shared-main/shared-main.module'
 import { TableExpanderIconComponent } from './table-expander-icon.component'

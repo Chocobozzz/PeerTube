@@ -46,7 +46,7 @@
       <th scope="col" style="width: 300px;" i18n>Account</th>
       <th scope="col" style="width: 300px;" i18n>Video</th>
       <th scope="col" i18n>Comment</th>
-      <th scope="col" style="width: 150px;" i18n pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
@@ -57,8 +57,8 @@
         <p-tableCheckbox [value]="videoComment" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
       </td>
 
-      <td class="expand-cell" [pRowToggler]="videoComment">
-        <my-table-expander-icon i18n-ngbTooltip ngbTooltip="See full comment" [expanded]="expanded"></my-table-expander-icon>
+      <td class="expand-cell">
+        <my-table-expander-icon [pRowToggler]="videoComment" i18n-tooltip tooltip="See full comment" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">

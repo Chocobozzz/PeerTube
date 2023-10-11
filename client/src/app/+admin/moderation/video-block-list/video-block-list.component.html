@@ -26,10 +26,10 @@
       <th scope="col" style="width: 150px;">
         <span i18n class="visually-hidden">Actions</span>
       </th>
-      <th scope="col" i18n pSortableColumn="name">Video <p-sortIcon field="name"></p-sortIcon></th>
+      <th scope="col" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="name">Video <p-sortIcon field="name"></p-sortIcon></th>
       <th scope="col" style="width: 100px;" i18n>Sensitive</th>
       <th scope="col" style="width: 120px;" i18n>Unfederated</th>
-      <th scope="col" style="width: 150px;" i18n pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
@@ -38,8 +38,9 @@
       <td *ngIf="!videoBlock.reason">
         <span i18n class="visually-hidden">No more information is available for this row</span>
       </td>
-      <td class="expand-cell" *ngIf="videoBlock.reason" [pRowToggler]="videoBlock">
-        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
+
+      <td class="expand-cell" *ngIf="videoBlock.reason" >
+        <my-table-expander-icon [pRowToggler]="videoBlock" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">

@@ -1,4 +1,3 @@
-
 import * as Sequelize from 'sequelize'
 
 async function up (utils: {

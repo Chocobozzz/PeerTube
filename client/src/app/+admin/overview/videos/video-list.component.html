@@ -43,7 +43,7 @@
       <th scope="col" i18n>Video</th>
       <th scope="col" i18n>Info</th>
       <th scope="col" i18n>Files</th>
-      <th scope="col" style="width: 150px;" i18n pSortableColumn="publishedAt">Published <p-sortIcon field="publishedAt"></p-sortIcon></th>
+      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="publishedAt">Published <p-sortIcon field="publishedAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
@@ -54,8 +54,8 @@
         <p-tableCheckbox [value]="video" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
       </td>
 
-      <td class="expand-cell" [pRowToggler]="video">
-        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
+      <td class="expand-cell">
+        <my-table-expander-icon [pRowToggler]="video" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">

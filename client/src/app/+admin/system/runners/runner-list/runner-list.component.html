@@ -25,7 +25,7 @@
       <th scope="col" i18n>Description</th>
       <th scope="col" i18n>IP</th>
       <th scope="col" i18n>Last contact</th>
-      <th scope="col" style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 

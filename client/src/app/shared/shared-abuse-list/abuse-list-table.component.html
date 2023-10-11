@@ -22,8 +22,8 @@
       </th>
       <th scope="col" *ngIf="isAdminView()" style="width: 20%;" pResizableColumn i18n>Reporter</th>
       <th scope="col" i18n>Video/Comment/Account</th>
-      <th scope="col" style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th scope="col" i18n pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
+      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
       <th scope="col" i18n style="width: 80px;">Messages</th>
       <th scope="col" i18n *ngIf="isAdminView()" style="width: 100px;">Internal note</th>
     </tr>
@@ -31,8 +31,8 @@
 
   <ng-template pTemplate="body" let-expanded="expanded" let-abuse>
     <tr>
-      <td class="expand-cell" [pRowToggler]="abuse">
-        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
+      <td class="expand-cell">
+        <my-table-expander-icon [pRowToggler]="abuse" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">

@@ -524,6 +524,10 @@ p-table {
         color: pvar(--mainForegroundColor) !important;
       }
     }
+
+    &.focus-visible {
+      border: 1px solid pvar(--mainForegroundColor) !important
+    }
   }
 
   .p-datatable-tbody {
@@ -576,6 +580,10 @@ p-table {
       background-color: pvar(--submenuBackgroundColor) !important;
     }
 
+    &.p-sortable-column.focus-visible {
+      border: 1px solid pvar(--mainForegroundColor) !important
+    }
+
     &.p-highlight {
       background-color: pvar(--submenuBackgroundColor) !important;
 
@@ -614,7 +622,7 @@ p-table {
   }
 
   p-paginator {
-    .p-paginator-bottom {
+    .p-paginator {
       background-color: pvar(--mainBackgroundColor) !important;
       position: relative;
       border: none;
@@ -777,6 +785,10 @@ p-tablecheckbox:hover div .p-checkbox-box {
       color: pvar(--mainBackgroundColor) !important;
       background-color: pvar(--mainColor) !important;
       border-color: pvar(--mainColor) !important;
+    }
+
+    &.p-focus {
+      border: 2px solid pvar(--mainForegroundColor) !important;
     }
   }
 }

@@ -41,9 +41,9 @@
       <th scope="col" i18n>Email</th>
       <th scope="col" i18n>Channel</th>
       <th scope="col" i18n>Registration reason</th>
-      <th scope="col" i18n pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
+      <th scope="col" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
       <th scope="col" i18n>Moderation response</th>
-      <th scope="col" style="width: 150px;" i18n pSortableColumn="createdAt">Requested on <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Requested on <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 
@@ -53,8 +53,8 @@
         <p-tableCheckbox [value]="registration" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
       </td>
 
-      <td class="expand-cell" [pRowToggler]="registration">
-        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
+      <td class="expand-cell">
+        <my-table-expander-icon [pRowToggler]="registration" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">

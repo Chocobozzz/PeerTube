@@ -1,4 +1,3 @@
-
 import { UploadFilesForCheck } from 'express'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
 import { isFileValid } from './misc.js'

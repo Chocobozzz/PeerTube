@@ -18,7 +18,7 @@
                 (userChanged)="onUserChanged()" (userDeleted)="onUserDeleted()"
               ></my-user-moderation-dropdown>
 
-              <span *ngIf="accountUser?.blocked" [ngbTooltip]="accountUser.blockedReason" class="pt-badge badge-danger" i18n>Banned</span>
+              <span *ngIf="accountUser?.blocked" tabindex="0" [ngbTooltip]="accountUser.blockedReason" class="pt-badge badge-danger" i18n>Banned</span>
 
               <my-account-block-badges [account]="account"></my-account-block-badges>
             </div>

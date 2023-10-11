@@ -1,4 +1,4 @@
-FROM node:16-bookworm-slim
+FROM node:18-bookworm-slim
 
 # Install dependencies
 RUN apt update \

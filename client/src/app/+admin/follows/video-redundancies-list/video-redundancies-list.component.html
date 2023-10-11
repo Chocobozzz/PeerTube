@@ -29,15 +29,15 @@
       </th>
       <th scope="col" style="width: 150px;" i18n>Action</th>
       <th scope="col" style="width: 160px;" i18n *ngIf="isDisplayingRemoteVideos()">Strategy</th>
-      <th scope="col" i18n pSortableColumn="name">Video <p-sortIcon field="name"></p-sortIcon></th >
+      <th scope="col" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="name">Video <p-sortIcon field="name"></p-sortIcon></th >
       <th scope="col" style="width: 100px;" i18n *ngIf="isDisplayingRemoteVideos()">Total size</th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-expanded="expanded" let-redundancy>
     <tr>
-      <td class="expand-cell" [pRowToggler]="redundancy">
-        <my-table-expander-icon i18n-ngbTooltip ngbTooltip="List redundancies" [expanded]="expanded"></my-table-expander-icon>
+      <td class="expand-cell">
+        <my-table-expander-icon [pRowToggler]="redundancy" [expanded]="expanded" i18n-tooltip tooltip="List redundancies"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">

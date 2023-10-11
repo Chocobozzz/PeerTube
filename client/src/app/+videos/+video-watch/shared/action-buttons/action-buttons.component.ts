@@ -57,7 +57,7 @@ export class ActionButtonsComponent implements OnInit, OnChanges {
   ngOnInit () {
     // Hide the tooltips for unlogged users in mobile view, this adds confusion with the popover
     if (this.isUserLoggedIn || !this.screenService.isInMobileView()) {
-      this.tooltipSupport = $localize`Support options for this video`
+      this.tooltipSupport = $localize`Open the modal to support the video uploader`
       this.tooltipSaveToPlaylist = $localize`Save to playlist`
     }
   }

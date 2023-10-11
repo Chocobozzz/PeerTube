@@ -1,4 +1,3 @@
-
 import { STATIC_PATHS, WEBSERVER } from '@server/initializers/constants.js'
 import { MStreamingPlaylist, MVideo, MVideoFile, MVideoUUID } from '@server/types/models/index.js'
 

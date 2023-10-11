@@ -1,4 +1,3 @@
-
 import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'

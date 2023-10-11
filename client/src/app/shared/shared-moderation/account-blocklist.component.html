@@ -21,7 +21,7 @@
     <tr>
       <th scope="col" style="width: 150px;" i18n>Action</th> <!-- column for action buttons -->
       <th scope="col" i18n>Account</th>
-      <th scope="col" style="width: 150px;" i18n pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
 

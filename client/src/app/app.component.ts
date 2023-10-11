@@ -314,7 +314,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   private initHotkeys () {
     this.hotkeysService.add([
-      new Hotkey([ '/', 's' ], () => {
+      new Hotkey([ 'Shift+/', 's' ], () => {
         document.getElementById('search-video').focus()
         return false
       }, $localize`Focus the search bar`),

@@ -3,7 +3,8 @@
 
 input {
   position: absolute;
-  visibility: hidden;
+  top: -100px;
+  left: -100px;
 
   + label {
     cursor: pointer;
@@ -40,5 +41,9 @@ input {
       left: calc(100% - 3px);
       transform: translateX(-100%);
     }
+  }
+
+  &:focus-visible + label {
+    outline: 2px solid;
   }
 }

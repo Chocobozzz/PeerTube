@@ -281,6 +281,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
       }
     ]
 
+    let onlyOlderPeriod = true
+
     for (const video of this.videos) {
       const publishedDate = video.publishedAt
 
@@ -290,6 +292,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
         if (currentGroupedDate <= period.value && period.validator(publishedDate)) {
 
           if (currentGroupedDate !== period.value) {
+            if (period.value !== GroupDate.OLDER) onlyOlderPeriod = false
+
             currentGroupedDate = period.value
             this.groupedDates[video.id] = currentGroupedDate
           }
@@ -298,6 +302,9 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
         }
       }
     }
+
+    // No need to group by date, there is only "Older" period available
+    if (onlyOlderPeriod) this.groupedDates = {}
   }
 
   getCurrentGroupedDateLabel (video: Video) {

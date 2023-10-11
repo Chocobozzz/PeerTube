@@ -41,7 +41,9 @@
       </th>
       <th scope="col" style="width: 70px;">
         <div class="c-hand column-toggle" ngbDropdown placement="bottom-left auto" container="body" autoClose="outside">
-          <my-global-icon iconName="columns" ngbDropdownToggle></my-global-icon>
+          <button class="border-0 p-0" ngbDropdownToggle>
+            <my-global-icon iconName="columns"></my-global-icon>
+          </button>
 
           <div role="menu" class="dropdown-menu" ngbDropdownMenu>
             <div class="dropdown-header" i18n>Table parameters</div>
@@ -61,14 +63,14 @@
           </div>
         </div>
       </th>
-      <th scope="col" *ngIf="isSelected('username')" pResizableColumn  pSortableColumn="username">{{ getColumn('username').label }} <p-sortIcon field="username"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('role')" style="width: 120px;"  pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('username')" pResizableColumn [ngbTooltip]="sortTooltip" container="body" pSortableColumn="username">{{ getColumn('username').label }} <p-sortIcon field="username"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('role')" style="width: 120px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
       <th scope="col" *ngIf="isSelected('email')">{{ getColumn('email').label }}</th>
-      <th scope="col" *ngIf="isSelected('quota')" style="width: 160px;"  pSortableColumn="videoQuotaUsed">{{ getColumn('quota').label }} <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('quota')" style="width: 160px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="videoQuotaUsed">{{ getColumn('quota').label }} <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
       <th scope="col" *ngIf="isSelected('quotaDaily')" style="width: 160px;">{{ getColumn('quotaDaily').label }}</th>
       <th scope="col" *ngIf="isSelected('pluginAuth')" style="width: 140px;" pResizableColumn >{{ getColumn('pluginAuth').label }}</th>
-      <th scope="col" *ngIf="isSelected('createdAt')" style="width: 150px;"  pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th scope="col" *ngIf="isSelected('lastLoginDate')" style="width: 150px;"  pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('createdAt')" style="width: 150px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" *ngIf="isSelected('lastLoginDate')" style="width: 150px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
     </tr>
   </ng-template>
 
@@ -79,8 +81,8 @@
         <p-tableCheckbox [value]="user" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
       </td>
 
-      <td class="expand-cell" [ngClass]="{ 'empty-cell': !user.blockedReason }" [pRowToggler]="user">
-        <my-table-expander-icon *ngIf="user.blockedReason" [expanded]="expanded"></my-table-expander-icon>
+      <td class="expand-cell" [ngClass]="{ 'empty-cell': !user.blockedReason }">
+        <my-table-expander-icon *ngIf="user.blockedReason" [pRowToggler]="user" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">
@@ -116,8 +118,10 @@
 
       <td *ngIf="isSelected('quota')">
         <div class="progress" i18n-title title="Total video quota">
-          <div class="progress-bar" role="progressbar" [style]="{ width: getUserVideoQuotaPercentage(user) + '%' }"
-               [attr.aria-valuenow]="user.rawVideoQuotaUsed" aria-valuemin="0" [attr.aria-valuemax]="user.rawVideoQuota">
+          <div
+            class="progress-bar" role="progressbar" [style]="{ width: getUserVideoQuotaPercentage(user) + '%' }"
+            [attr.aria-valuenow]="user.rawVideoQuotaUsed" aria-valuemin="0" [attr.aria-valuemax]="user.rawVideoQuota"
+          >
           </div>
           <span>{{ user.videoQuotaUsed }}</span>
           <span>{{ user.videoQuota }}</span>
@@ -126,8 +130,10 @@
 
       <td *ngIf="isSelected('quotaDaily')">
         <div class="progress" i18n-title title="Total daily video quota">
-          <div class="progress-bar" role="progressbar" [style]="{ width: getUserVideoQuotaDailyPercentage(user) + '%' }"
-               [attr.aria-valuenow]="user.rawVideoQuotaUsedDaily" aria-valuemin="0" [attr.aria-valuemax]="user.rawVideoQuotaDaily">
+          <div
+            class="progress-bar" role="progressbar" [style]="{ width: getUserVideoQuotaDailyPercentage(user) + '%' }"
+            [attr.aria-valuenow]="user.rawVideoQuotaUsedDaily" aria-valuemin="0" [attr.aria-valuemax]="user.rawVideoQuotaDaily"
+          >
           </div>
           <span>{{ user.videoQuotaUsedDaily }}</span>
           <span>{{ user.videoQuotaDaily }}</span>
