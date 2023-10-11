@@ -4,9 +4,9 @@
 </h1>
 
 <p-table
-  [value]="users" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
+  [value]="users" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="start"
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
-  [(selection)]="selectedRows" [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
+  [(selection)]="selectedRows" [lazy]="true" (onLazyLoad)="onLazyLoadHandler($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()" [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="caption">

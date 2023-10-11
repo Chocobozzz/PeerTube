@@ -9,6 +9,7 @@ import { AccountMutedStatus, BlocklistService, UserBanModalComponent, UserModera
 import { UserAdminService } from '@app/shared/shared-users'
 import { User, UserRole, UserRoleType } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
+import { TableLazyLoadEvent } from 'primeng/table'
 
 type UserForList = User & {
   rawVideoQuota: number
@@ -88,7 +89,18 @@ export class UserListComponent extends RestTable <User> implements OnInit {
     this.saveSelectedColumns()
   }
 
+  start = 0
+
   ngOnInit () {
+    this.route.queryParams.subscribe(params => {
+      const paramPage = +params['page'];
+      const paramCount = +params['count'];
+
+      if (!isNaN(paramPage) && !isNaN(paramCount)) {
+        this.rowsPerPage = paramCount
+        this.start = paramCount * (paramPage - 1);
+      }
+    });
     this.serverService.getConfig()
         .subscribe(config => this.requiresEmailVerification = config.signup.requiresEmailVerification)
 
@@ -321,4 +333,22 @@ export class UserListComponent extends RestTable <User> implements OnInit {
         }
       })
   }
+
+  onLazyLoadHandler(event: TableLazyLoadEvent) {
+    this.loadLazy(event)
+
+    const url = new URL(window.location.href)
+    const page = event.first/event.rows + 1
+    
+    url.searchParams.set('page', page.toString())
+    url.searchParams.set('count', event.rows.toString())
+    
+    window.history.pushState({}, document.title, url.href)
+
+    this.start = event.first
+
+    this.pagination.start = this.start
+  }
+
+
 }
