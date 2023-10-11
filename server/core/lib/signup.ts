@@ -38,7 +38,7 @@ export function isSignupAllowedForCurrentIP (ip: string) {
   let matched = ''
 
   // if there is a valid, non-empty whitelist, we exclude all unknown addresses too
-  if (CONFIG.SIGNUP.FILTERS.CIDR.WHITELIST.filter(cidr => isIPV4Cidr(cidr) || isIPV6Cidr(cidr))) {
+  if (CONFIG.SIGNUP.FILTERS.CIDR.WHITELIST.some(cidr => isIPV4Cidr(cidr) || isIPV6Cidr(cidr))) {
     excludeList.push('unknown')
   }
 

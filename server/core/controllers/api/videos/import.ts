@@ -237,7 +237,8 @@ async function processTorrentOrAbortRequest (req: express.Request, res: express.
   torrentfile.path = newTorrentPath
 
   const buf = await readFile(torrentfile.path)
-  const parsedTorrent = parseTorrent(buf) as Instance
+  // FIXME: typings: parseTorrent now returns an async result
+  const parsedTorrent = await (parseTorrent(buf) as unknown as Promise<Instance>)
 
   if (parsedTorrent.files.length !== 1) {
     cleanUpReqFiles(req)
