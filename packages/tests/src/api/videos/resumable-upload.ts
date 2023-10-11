@@ -183,14 +183,9 @@ describe('Test resumable upload', function () {
     it('Should not accept more chunks than expected with an invalid content length/content range', async function () {
       const uploadId = await prepareUpload({ size: 1500 })
 
-      // Content length check can be different depending on the node version
-      try {
-        await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.CONFLICT_409, contentLength: 1000 })
-        await checkFileSize(uploadId, 0)
-      } catch {
-        await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.BAD_REQUEST_400, contentLength: 1000 })
-        await checkFileSize(uploadId, 0)
-      }
+      await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.CONFLICT_409, contentLength: 1000 })
+
+      await checkFileSize(uploadId, 0)
     })
 
     it('Should not accept more chunks than expected with an invalid content length', async function () {
@@ -198,13 +193,8 @@ describe('Test resumable upload', function () {
 
       const size = 1000
 
-      // Content length check seems to have changed in v16
-      const expectedStatus = process.version.startsWith('v16')
-        ? HttpStatusCode.CONFLICT_409
-        : HttpStatusCode.BAD_REQUEST_400
-
       const contentRangeBuilder = (start: number) => `bytes ${start}-${start + size - 1}/${size}`
-      await sendChunks({ pathUploadId: uploadId, expectedStatus, contentRangeBuilder, contentLength: size })
+      await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.CONFLICT_409, contentRangeBuilder, contentLength: size })
       await checkFileSize(uploadId, 0)
     })
 
