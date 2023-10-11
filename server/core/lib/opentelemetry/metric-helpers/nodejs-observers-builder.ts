@@ -107,12 +107,7 @@ export class NodeJSObserversBuilder {
     const obs = new PerformanceObserver(list => {
       const entry = list.getEntries()[0]
 
-      // Node < 16 uses entry.kind
-      // Node >= 16 uses entry.detail.kind
-      // See: https://nodejs.org/docs/latest-v16.x/api/deprecations.html#deprecations_dep0152_extension_performanceentry_properties
-      const kind = entry.detail
-        ? kinds[(entry.detail as NodeGCPerformanceDetail).kind]
-        : kinds[(entry as any).kind]
+      const kind = kinds[(entry.detail as NodeGCPerformanceDetail).kind]
 
       // Convert duration from milliseconds to seconds
       histogram.record(entry.duration / 1000, {
