@@ -1,4 +1,3 @@
-
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { GlobalIconComponent } from './global-icon.component'

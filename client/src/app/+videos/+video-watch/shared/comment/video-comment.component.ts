@@ -1,4 +1,3 @@
-
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core'
 import { MarkdownService, Notifier, UserService } from '@app/core'
 import { AuthService } from '@app/core/auth'

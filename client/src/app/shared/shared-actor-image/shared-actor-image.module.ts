@@ -1,4 +1,3 @@
-
 import { NgModule } from '@angular/core'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { SharedMainModule } from '../shared-main/shared-main.module'
