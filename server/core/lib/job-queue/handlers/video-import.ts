@@ -41,7 +41,7 @@ import {
 import { logger } from '../../../helpers/logger.js'
 import { getSecureTorrentName } from '../../../helpers/utils.js'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent.js'
-import { JOB_TTL } from '../../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, JOB_TTL } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { VideoFileModel } from '../../../models/video/video-file.js'
 import { VideoImportModel } from '../../../models/video/video-import.js'
@@ -143,16 +143,20 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
       throw new Error('The user video quota is exceeded with this video to import.')
     }
 
-    const probe = await ffprobePromise(tempVideoPath)
+    const ffprobe = await ffprobePromise(tempVideoPath)
 
-    const { resolution } = await isAudioFile(tempVideoPath, probe)
+    const { resolution } = await isAudioFile(tempVideoPath, ffprobe)
       ? { resolution: VideoResolution.H_NOVIDEO }
-      : await getVideoStreamDimensionsInfo(tempVideoPath, probe)
+      : await getVideoStreamDimensionsInfo(tempVideoPath, ffprobe)
 
-    const fps = await getVideoStreamFPS(tempVideoPath, probe)
-    const duration = await getVideoStreamDuration(tempVideoPath, probe)
+    const fps = await getVideoStreamFPS(tempVideoPath, ffprobe)
+    const duration = await getVideoStreamDuration(tempVideoPath, ffprobe)
 
-    const containerChapters = await getChaptersFromContainer(tempVideoPath, probe)
+    const containerChapters = await getChaptersFromContainer({
+      path: tempVideoPath,
+      maxTitleLength: CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.TITLE.max,
+      ffprobe
+    })
 
     // Prepare video file object for creation in database
     const fileExt = getLowercaseExtension(tempVideoPath)
