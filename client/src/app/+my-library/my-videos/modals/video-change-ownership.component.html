@@ -2,14 +2,20 @@
   <div class="modal-header">
     <h4 i18n class="modal-title">Change ownership</h4>
 
-    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="dismiss()"></my-global-icon>
+    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="dismiss()">
+      <my-global-icon iconName="cross"></my-global-icon>
+    </button>
   </div>
 
   <div class="modal-body" [formGroup]="form">
     <div class="form-group">
       <label i18n for="next-ownership-username">Select the next owner</label>
-      <p-autoComplete formControlName="username" [suggestions]="usernamePropositions"
-                      (completeMethod)="search($event)" id="next-ownership-username"></p-autoComplete>
+
+      <p-autoComplete
+        formControlName="username" [suggestions]="usernamePropositions"
+        (completeMethod)="search($event)" id="next-ownership-username"
+      ></p-autoComplete>
+
       <div *ngIf="formErrors.username" class="form-error" role="alert">
         {{ formErrors.username }}
       </div>
