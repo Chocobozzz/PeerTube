@@ -37,7 +37,7 @@ export class LogsComponent implements OnInit {
 
   ngOnInit (): void {
     this.serverConfig = this.serverService.getHTMLConfig()
-    console.log(JSON.stringify(this.serverConfig))
+    this.isAuditLogsEnabled = this.serverConfig.instance.logs.auditLogs.enabled
 
     this.buildTimeChoices()
     this.buildLevelChoices()
