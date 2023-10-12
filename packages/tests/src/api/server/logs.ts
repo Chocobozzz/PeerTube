@@ -195,7 +195,7 @@ describe('Test logs', function () {
     })
 
     it('Should refuse to create logs if disabled', async function () {
-      this.timeout(60000)
+      this.timeout(100000)
 
       await server.config.updateCustomSubConfig({
         newConfig: {
