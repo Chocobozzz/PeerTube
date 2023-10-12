@@ -19,23 +19,21 @@
     </div>
 
     <div class="playlist-controls">
-      <my-global-icon
-        iconName="videos"
-        [class.active]="autoPlayNextVideoPlaylist"
-        (click)="switchAutoPlayNextVideoPlaylist()"
-        [ngbTooltip]="autoPlayNextVideoPlaylistSwitchText"
-        placement="bottom auto"
-        container="body"
-      ></my-global-icon>
+      <button
+        class="border-0 p-0 me-2" [ngClass]="{ active: autoPlayNextVideoPlaylist }" (click)="switchAutoPlayNextVideoPlaylist()"
+        [ngbTooltip]="autoPlayNextVideoPlaylistSwitchText" [ariaLabel]="autoPlayNextVideoPlaylistSwitchText"
+        placement="bottom auto" container="body"
+      >
+        <my-global-icon iconName="videos"></my-global-icon>
+      </button>
 
-      <my-global-icon
-        iconName="repeat"
-        [class.active]="loopPlaylist"
-        (click)="switchLoopPlaylist()"
-        [ngbTooltip]="loopPlaylistSwitchText"
-        placement="bottom auto"
-        container="body"
-      ></my-global-icon>
+      <button
+        class="border-0 p-0" [ngClass]="{ active: loopPlaylist }" (click)="switchLoopPlaylist()"
+        [ngbTooltip]="loopPlaylistSwitchText" [ariaLabel]="loopPlaylistSwitchText"
+        placement="bottom auto" container="body"
+      >
+        <my-global-icon iconName="repeat"></my-global-icon>
+      </button>
     </div>
   </div>
 
