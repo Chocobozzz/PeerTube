@@ -257,6 +257,9 @@ class JobQueue {
     queue.on('error', err => { logger.error('Error in job queue %s.', handlerName, { err }) })
 
     this.queues[handlerName] = queue
+
+    queue.removeDeprecatedPriorityKey()
+      .catch(err => logger.error('Cannot remove bullmq deprecated priority keys of ' + handlerName, { err }))
   }
 
   private buildQueueEvent (handlerName: JobType) {
@@ -455,12 +458,15 @@ class JobQueue {
   }
 
   private buildStateFilter (state?: JobState) {
-    if (!state) return jobStates
+    if (!state) return Array.from(jobStates)
 
     const states = [ state ]
 
-    // Include parent if filtering on waiting
-    if (state === 'waiting') states.push('waiting-children')
+    // Include parent and prioritized if filtering on waiting
+    if (state === 'waiting') {
+      states.push('waiting-children')
+      states.push('prioritized')
+    }
 
     return states
   }
