@@ -93,14 +93,14 @@ export class UserListComponent extends RestTable <User> implements OnInit {
 
   ngOnInit () {
     this.route.queryParams.subscribe(params => {
-      const paramPage = +params['page'];
-      const paramCount = +params['count'];
+      const paramPage = +params['page']
+      const paramCount = +params['count']
 
       if (!isNaN(paramPage) && !isNaN(paramCount)) {
         this.rowsPerPage = paramCount
-        this.start = paramCount * (paramPage - 1);
+        this.start = paramCount * (paramPage - 1)
       }
-    });
+    })
     this.serverService.getConfig()
         .subscribe(config => this.requiresEmailVerification = config.signup.requiresEmailVerification)
 
@@ -334,21 +334,20 @@ export class UserListComponent extends RestTable <User> implements OnInit {
       })
   }
 
-  onLazyLoadHandler(event: TableLazyLoadEvent) {
+  onLazyLoadHandler (event: TableLazyLoadEvent) {
     this.loadLazy(event)
 
     const url = new URL(window.location.href)
-    const page = event.first/event.rows + 1
-    
+    const page = event.first / event.rows + 1
+
     url.searchParams.set('page', page.toString())
     url.searchParams.set('count', event.rows.toString())
-    
+
     window.history.pushState({}, document.title, url.href)
 
     this.start = event.first
 
     this.pagination.start = this.start
   }
-
 
 }
