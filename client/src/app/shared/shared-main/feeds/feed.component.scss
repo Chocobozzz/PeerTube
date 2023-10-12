@@ -4,15 +4,15 @@
 .feed {
   width: 100%;
   color: inherit;
+}
 
-  a {
-    color: pvar(--mainForegroundColor);
-    display: block;
-    min-width: 100px;
+.feed-link {
+  color: pvar(--mainForegroundColor);
+  display: block;
+  min-width: 100px;
 
-    &:hover {
-      text-decoration: underline;
-    }
+  &:hover {
+    text-decoration: underline;
   }
 }
 
