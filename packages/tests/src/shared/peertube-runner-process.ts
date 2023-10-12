@@ -1,5 +1,5 @@
 import { ChildProcess, fork, ForkOptions } from 'child_process'
-import { execa } from 'execa'
+import { execaNode } from 'execa'
 import { join } from 'path'
 import { root } from '@peertube/peertube-node-utils'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'
@@ -99,6 +99,6 @@ export class PeerTubeRunnerProcess {
   }
 
   private runCommand (path: string, args: string[]) {
-    return execa.node(path, args, { env: { ...process.env, NODE_OPTIONS: '' } })
+    return execaNode(path, args, { env: { ...process.env, NODE_OPTIONS: '' } })
   }
 }

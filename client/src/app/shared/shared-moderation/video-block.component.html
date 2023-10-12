@@ -9,7 +9,9 @@
       <h4 i18n class="modal-title" *ngIf="getSingleVideo().isLive">Block live "{{ getSingleVideo().name }}"</h4>
     </ng-container>
 
-    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
+    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
+      <my-global-icon iconName="cross"></my-global-icon>
+    </button>
   </div>
 
   <div class="modal-body">

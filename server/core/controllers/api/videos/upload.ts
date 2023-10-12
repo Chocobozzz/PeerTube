@@ -19,7 +19,7 @@ import { HttpStatusCode, VideoCreate, VideoPrivacy, VideoState } from '@peertube
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
 import { createReqFiles } from '../../../helpers/express-utils.js'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
-import { MIMETYPES } from '../../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { Hooks } from '../../../lib/plugins/hooks.js'
 import { generateLocalVideoMiniature } from '../../../lib/thumbnail.js'
@@ -145,7 +145,10 @@ async function addVideo (options: {
   const videoFile = await buildNewFile({ path: videoPhysicalFile.path, mode: 'web-video' })
   const originalFilename = videoPhysicalFile.originalname
 
-  const containerChapters = await getChaptersFromContainer(videoPhysicalFile.path)
+  const containerChapters = await getChaptersFromContainer({
+    path: videoPhysicalFile.path,
+    maxTitleLength: CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.TITLE.max
+  })
   logger.debug(`Got ${containerChapters.length} chapters from video "${video.name}" container`, { containerChapters, ...lTags(video.uuid) })
 
   // Move physical file

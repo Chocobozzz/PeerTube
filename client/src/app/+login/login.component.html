@@ -1,7 +1,7 @@
-<h1 i18n class="title-page-v2">
+<h1 class="title-page-v2">
   <strong class="underline-orange">{{ instanceName }}</strong>
-  >
-  Login
+
+  <ng-container i18n>Login</ng-container>
 </h1>
 
 <div class="margin-content">
@@ -120,7 +120,9 @@
   <div class="modal-header">
     <h4 i18n class="modal-title">Forgot your password</h4>
 
-    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hideForgotPasswordModal()"></my-global-icon>
+    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hideForgotPasswordModal()">
+      <my-global-icon iconName="cross"></my-global-icon>
+    </button>
   </div>
 
   <div class="modal-body text-start">

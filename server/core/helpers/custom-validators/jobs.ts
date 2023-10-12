@@ -2,10 +2,10 @@ import { JobState } from '@peertube/peertube-models'
 import { jobTypes } from '@server/lib/job-queue/job-queue.js'
 import { exists } from './misc.js'
 
-const jobStates: JobState[] = [ 'active', 'completed', 'failed', 'waiting', 'delayed', 'paused', 'waiting-children' ]
+const jobStates = new Set<JobState>([ 'active', 'completed', 'failed', 'waiting', 'delayed', 'paused', 'waiting-children', 'prioritized' ])
 
 function isValidJobState (value: JobState) {
-  return exists(value) && jobStates.includes(value)
+  return exists(value) && jobStates.has(value)
 }
 
 function isValidJobType (value: any) {

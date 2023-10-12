@@ -53,10 +53,13 @@
 
   <my-edit-button *ngIf="owned && touchScreenEditButton" [ptRouterLink]="[ '/my-library', 'video-playlists', playlist.uuid ]"></my-edit-button>
 
-  <div *ngIf="owned" class="more dropdown-root" ngbDropdown #moreDropdown="ngbDropdown" placement="left auto"
-       (openChange)="onDropdownOpenChange()" autoClose="outside" container="body"
+  <div
+    *ngIf="owned" class="more dropdown-root" ngbDropdown #moreDropdown="ngbDropdown" placement="left auto"
+    (openChange)="onDropdownOpenChange()" autoClose="outside" container="body"
   >
-    <my-global-icon iconName="more-vertical" ngbDropdownToggle role="button" class="icon-more" (click)="$event.preventDefault()"></my-global-icon>
+    <button class="border-0 p-0 more-button" (click)="$event.preventDefault()" ngbDropdownToggle>
+      <my-global-icon iconName="more-vertical"></my-global-icon>
+    </button>
 
     <div ngbDropdownMenu>
       <ng-container *ngIf="playlistElement.video">

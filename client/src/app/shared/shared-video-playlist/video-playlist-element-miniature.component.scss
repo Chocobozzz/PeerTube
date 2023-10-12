@@ -29,24 +29,6 @@ my-video-thumbnail,
   padding: 10px;
   border-bottom: 1px solid $separator-border-color;
 
-  .more {
-    display: flex;
-  }
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-
-    .more {
-      opacity: 1;
-    }
-  }
-
-  @media not all and (hover: hover) and (pointer: fine) {
-    .more {
-      opacity: 1 !important;
-    }
-  }
-
   &.playing {
     background-color: rgba(0, 0, 0, 0.02);
   }
@@ -87,20 +69,38 @@ my-video-thumbnail,
   }
 
   .more {
+    display: flex;
+    align-items: center;
+  }
+
+  .more-button {
     opacity: 0;
 
-    &.show {
-      opacity: 1;
+    &::after {
+      border: 0;
     }
 
-    .icon-more {
+    my-global-icon {
       @include apply-svg-color(pvar(--greyForegroundColor));
+    }
+  }
 
-      display: flex;
+  &:hover,
+  &:focus {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
 
-      &::after {
-        border: 0;
-      }
+  &:hover,
+  &:focus-within,
+  .show {
+    .more-button {
+      opacity: 1;
+    }
+  }
+
+  @media not all and (hover: hover) and (pointer: fine) {
+    .more-button {
+      opacity: 1 !important;
     }
   }
 }
@@ -183,7 +183,7 @@ my-video-thumbnail,
     my-edit-button {
       display: none;
 
-      + .more {
+      + .more-button {
         display: inline-flex;
       }
     }
@@ -204,7 +204,7 @@ my-video-thumbnail,
       }
     }
 
-    my-edit-button + .more {
+    my-edit-button + .more-button {
       display: none;
     }
   }
