@@ -242,6 +242,7 @@ const customConfigKeysToKeep = new Set([
   'instance-defaultNSFWPolicy',
   'instance-customizations-javascript',
   'instance-customizations-css',
+  'instance-logs-auditLogs-enabled',
   'services-twitter-username',
   'services-twitter-whitelisted',
   'cache-previews-size',

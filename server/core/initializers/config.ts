@@ -546,7 +546,12 @@ const CONFIG = {
       get CSS () { return config.get<string>('instance.customizations.css') }
     },
     get ROBOTS () { return config.get<string>('instance.robots') },
-    get SECURITYTXT () { return config.get<string>('instance.securitytxt') }
+    get SECURITYTXT () { return config.get<string>('instance.securitytxt') },
+    LOGS: {
+      AUDIT_LOGS:{
+        get ENABLED () { return config.get<boolean>('instance.logs.audit_logs.enabled') }
+      }
+    }
   },
   SERVICES: {
     TWITTER: {

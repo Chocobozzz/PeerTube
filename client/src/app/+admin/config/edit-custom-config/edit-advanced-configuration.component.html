@@ -136,4 +136,27 @@
     </div>
   </div>
 
+  <div class="row mt-4"> <!-- cache grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
+      <div class="anchor" id="customizations"></div> <!-- customizations anchor -->
+      <h2 i18n class="inner-form-title">LOGS</h2>
+      <div i18n class="inner-form-description">
+        Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-8 col-xl-9">
+      <ng-container formGroupName="instance">
+        <ng-container formGroupName="logs">
+          <ng-container formGroupName="auditLogs">
+            <div class="form-group">
+              <my-peertube-checkbox inputName="auditLogsEnabled" formControlName="enabled" i18n-labelText
+                labelText="Enable audit logs"></my-peertube-checkbox>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+
 </ng-container>

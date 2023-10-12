@@ -37,7 +37,9 @@
   <div *ngIf="loading" i18n>Loading...</div>
 
   <div #logsElement>
-    <div *ngIf="!loading && logs.length === 0" i18n>No log.</div>
+    <div *ngIf="isAuditLog && !isAuditLogsEnabled" i18n>Audit logs disabled.</div>
+
+    <div *ngIf="!loading && logs.length === 0 && isAuditLogsEnabled" i18n>No log.</div>
 
     <div *ngFor="let log of logs" class="log-row" [ngClass]="{ error: log.level === 'error', warn: log.level === 'warn' }">
       <span class="log-level">{{ log.level }}</span>

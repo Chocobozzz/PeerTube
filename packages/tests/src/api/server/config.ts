@@ -264,6 +264,11 @@ const newCustomConfig: CustomConfig = {
     customizations: {
       javascript: 'alert("coucou")',
       css: 'body { background-color: red; }'
+    },
+    logs: {
+      auditLogs: {
+        enabled: true
+      }
     }
   },
   theme: {

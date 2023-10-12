@@ -90,6 +90,11 @@ export interface ServerConfig {
       javascript: string
       css: string
     }
+    logs: {
+      auditLogs: {
+        enabled: boolean
+      }
+    }
   }
 
   search: {

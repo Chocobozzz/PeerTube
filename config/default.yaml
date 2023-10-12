@@ -763,6 +763,9 @@ instance:
   securitytxt: |
     Contact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md
     Expires: 2025-12-31T11:00:00.000Z'
+  logs:
+    audit_logs: 
+      enabled: true
 
 services:
   # Cards configuration to format video in Twitter

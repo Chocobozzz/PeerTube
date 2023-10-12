@@ -158,6 +158,12 @@ function customConfig (): CustomConfig {
       customizations: {
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS,
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT
+      },
+
+      logs: {
+        auditLogs: {
+          enabled: CONFIG.INSTANCE.LOGS.AUDIT_LOGS.ENABLED
+        }
       }
     },
     theme: {

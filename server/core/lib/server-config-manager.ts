@@ -100,6 +100,11 @@ class ServerConfigManager {
         customizations: {
           javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
           css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
+        },
+        logs: {
+          auditLogs: {
+            enabled: CONFIG.INSTANCE.LOGS.AUDIT_LOGS.ENABLED
+          }
         }
       },
       search: {

@@ -80,6 +80,8 @@ const getAuditLogsValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
+    if (!CONFIG.INSTANCE.LOGS.AUDIT_LOGS.ENABLED) return res.sendStatus(HttpStatusCode.FORBIDDEN_403)
+
     return next()
   }
 ]

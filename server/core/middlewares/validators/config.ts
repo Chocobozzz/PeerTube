@@ -17,6 +17,7 @@ const customConfigUpdateValidator = [
   body('instance.defaultClientRoute').exists(),
   body('instance.customizations.css').exists(),
   body('instance.customizations.javascript').exists(),
+  body('instance.logs.auditLogs.enabled').exists(),
 
   body('services.twitter.username').exists(),
   body('services.twitter.whitelisted').isBoolean(),

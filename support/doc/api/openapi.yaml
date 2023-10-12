@@ -7935,6 +7935,14 @@ components:
                   type: string
                 css:
                   type: string
+            logs:
+              type: object
+              properties:
+                auditLogs:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
         search:
           type: object
           properties:
@@ -8252,6 +8260,14 @@ components:
                   type: string
                 css:
                   type: string
+            logs:
+              type: object
+              properties:
+                auditLogs:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
         theme:
           type: object
           properties:

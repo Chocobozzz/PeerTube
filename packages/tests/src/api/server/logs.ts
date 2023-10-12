@@ -193,6 +193,41 @@ describe('Test logs', function () {
       expect(logsString.includes('video 10')).to.be.true
       expect(logsString.includes('video 11')).to.be.false
     })
+
+    it('Should refuse to create logs if disabled', async function () {
+      this.timeout(60000)
+
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          instance: {
+            logs: {
+              auditLogs:{
+                enabled: false
+              }
+            }
+          }
+        }
+      })
+
+      await server.videos.upload({ attributes: { name: 'video 12' } })
+      await waitJobs([ server ])
+
+      const now1 = new Date()
+
+      await server.videos.upload({ attributes: { name: 'video 13' } })
+      await waitJobs([ server ])
+
+      const now2 = new Date()
+
+      await server.videos.upload({ attributes: { name: 'video 14' } })
+      await waitJobs([ server ])
+
+      await logsCommand.getAuditLogs({
+        startDate: now1,
+        endDate: now2,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
   })
 
   describe('When creating log from the client', function () {

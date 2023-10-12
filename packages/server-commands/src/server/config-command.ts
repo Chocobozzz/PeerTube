@@ -371,6 +371,12 @@ export class ConfigCommand extends AbstractCommand {
         customizations: {
           javascript: 'alert("coucou")',
           css: 'body { background-color: red; }'
+        },
+
+        logs: {
+          auditLogs: {
+            enabled: true
+          }
         }
       },
       theme: {

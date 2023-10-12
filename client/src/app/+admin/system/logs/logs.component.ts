@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { LocalStorageService, Notifier } from '@app/core'
-import { ServerLogLevel } from '@peertube/peertube-models'
+import { LocalStorageService, Notifier, ServerService } from '@app/core'
+import { HTMLServerConfig, ServerLogLevel } from '@peertube/peertube-models'
 import { LogRow } from './log-row.model'
 import { LogsService } from './logs.service'
 
@@ -25,13 +25,20 @@ export class LogsComponent implements OnInit {
   logType: 'audit' | 'standard'
   tagsOneOf: string[] = []
 
+  serverConfig: HTMLServerConfig
+  isAuditLogsEnabled: boolean
+
   constructor (
     private logsService: LogsService,
     private notifier: Notifier,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
+    private serverService: ServerService
   ) { }
 
   ngOnInit (): void {
+    this.serverConfig = this.serverService.getHTMLConfig()
+    console.log(JSON.stringify(this.serverConfig))
+
     this.buildTimeChoices()
     this.buildLevelChoices()
     this.buildLogTypeChoices()
@@ -55,7 +62,10 @@ export class LogsComponent implements OnInit {
     const tagsOneOf = this.tagsOneOf.length !== 0
       ? this.tagsOneOf
       : undefined
-
+    if (!this.isAuditLogsEnabled) {
+      this.loading = false
+      return
+    }
     this.logsService.getLogs({
       isAuditLog: this.isAuditLog(),
       level: this.level,

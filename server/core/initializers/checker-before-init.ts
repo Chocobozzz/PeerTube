@@ -48,7 +48,7 @@ function checkMissedConfig () {
     'client.videos.miniature.prefer_author_display_name', 'client.menu.login.redirect_on_single_external_auth',
     'defaults.publish.download_enabled', 'defaults.publish.comments_enabled', 'defaults.publish.privacy', 'defaults.publish.licence',
     'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route',
-    'instance.is_nsfw', 'instance.default_nsfw_policy', 'instance.robots', 'instance.securitytxt',
+    'instance.is_nsfw', 'instance.default_nsfw_policy', 'instance.robots', 'instance.securitytxt', 'instance.logs.audit_logs.enabled',
     'services.twitter.username', 'services.twitter.whitelisted',
     'followers.instance.enabled', 'followers.instance.manual_approval',
     'tracker.enabled', 'tracker.private', 'tracker.reject_too_many_announces',

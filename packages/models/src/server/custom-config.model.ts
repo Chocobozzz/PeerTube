@@ -39,6 +39,12 @@ export interface CustomConfig {
       javascript?: string
       css?: string
     }
+
+    logs: {
+      auditLogs: {
+        enabled: boolean
+      }
+    }
   }
 
   theme: {
