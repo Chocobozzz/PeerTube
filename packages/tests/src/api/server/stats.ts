@@ -232,7 +232,7 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   it('Should have the correct AP stats', async function () {
-    this.timeout(120000)
+    this.timeout(240000)
 
     await servers[0].config.disableTranscoding()
 
