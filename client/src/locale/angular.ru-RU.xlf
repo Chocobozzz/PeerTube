@@ -2562,7 +2562,7 @@
       </trans-unit>
       <trans-unit id="5096495468612049743" datatype="html">
         <source>Chapters</source>
-        <target state="translated">Временные метки</target>
+        <target state="translated">Эпизоды</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">234</context>
@@ -2578,7 +2578,7 @@
       </trans-unit>
       <trans-unit id="7423239318801197963" datatype="html">
         <source>Chapter name</source>
-        <target state="translated">Название метки</target>
+        <target state="translated">Название главы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">246</context>
@@ -10978,7 +10978,7 @@
       </trans-unit>
       <trans-unit id="1653315912561885898" datatype="html">
         <source>A chapter title is required.</source>
-        <target state="translated">Требуется название метки.</target>
+        <target state="translated">Требуется название главы.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -10986,7 +10986,7 @@
       </trans-unit>
       <trans-unit id="4021088770925947810" datatype="html">
         <source>A chapter title should be more than 2 characters long.</source>
-        <target state="translated">Длина названия метки должна содержать более 2 символов.</target>
+        <target state="translated">Длина названия главы должна содержать более 2 символов.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -10994,7 +10994,7 @@
       </trans-unit>
       <trans-unit id="5999631145853755676" datatype="html">
         <source>A chapter title should be less than 100 characters long.</source>
-        <target state="translated">Длина названия метки должна составлять менее 100 символов.</target>
+        <target state="translated">Длина названия главы должна составлять менее 100 символов.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -11002,7 +11002,7 @@
       </trans-unit>
       <trans-unit id="3038146146697752093" datatype="html">
         <source>Multiple chapters have the same timecode <x id="PH" equiv-text="chapter.timecode"/></source>
-        <target state="translated">Несколько меток имеют одинаковый временной код <x id="PH" equiv-text="chapter.timecode"/></target>
+        <target state="translated">Несколько глав имеют одинаковую временную метку <x id="PH" equiv-text="chapter.timecode"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">26</context>
@@ -12167,7 +12167,7 @@
       </trans-unit>
       <trans-unit id="1056145626640340519">
         <source>Video added in <x id="PH"/> at timestamps <x id="PH_1"/></source>
-        <target>Видео добавлено в <x id="PH"/> с временной меткой <x id="PH_1"/></target>
+        <target state="translated">Видео добавлено в <x id="PH"/> с временными метками <x id="PH_1"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">379</context></context-group>
       </trans-unit>
       <trans-unit id="7754186870520534716">
@@ -12179,7 +12179,7 @@
       </trans-unit>
       <trans-unit id="985751964589921228">
         <source>Timestamps updated</source>
-        <target>Обновлены временные метки</target>
+        <target state="translated">Обновлены главы</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">277</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">129</context></context-group>
       </trans-unit>
