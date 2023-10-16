@@ -1,4 +1,4 @@
-import { buildVideoEmbedPath, buildVideoWatchPath, pick } from '@peertube/peertube-core-utils'
+import { buildVideoEmbedPath, buildVideoWatchPath, pick, wait } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS, hasAudioStream } from '@peertube/peertube-ffmpeg'
 import {
   ResultList,
@@ -1925,7 +1925,20 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       ? getHLSRedundancyDirectory(this)
       : getHLSDirectory(this)
 
-    await remove(directoryPath)
+    try {
+      await remove(directoryPath)
+    } catch (err) {
+      // If it's a live, ffmpeg may have added another file while fs-extra is removing the directory
+      // So wait a little bit and retry
+      if (err.code === 'ENOTEMPTY') {
+        await wait(1000)
+        await remove(directoryPath)
+
+        return
+      }
+
+      throw err
+    }
 
     if (isRedundancy !== true) {
       const streamingPlaylistWithFiles = streamingPlaylist as MStreamingPlaylistFilesVideo

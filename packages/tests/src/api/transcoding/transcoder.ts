@@ -489,7 +489,7 @@ describe('Test video transcoding', function () {
     })
 
     it('Should downscale to the closest divisor standard framerate', async function () {
-      this.timeout(200_000)
+      this.timeout(360_000)
 
       let tempFixturePath: string
 

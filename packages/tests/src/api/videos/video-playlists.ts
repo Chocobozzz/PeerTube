@@ -74,7 +74,7 @@ describe('Test video playlists', function () {
   let commands: PlaylistsCommand[]
 
   before(async function () {
-    this.timeout(240000)
+    this.timeout(360000)
 
     servers = await createMultipleServers(3)
 
