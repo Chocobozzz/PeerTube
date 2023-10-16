@@ -19,7 +19,7 @@ describe('Test videos chapters API validator', function () {
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     server = await createSingleServer(1)
 

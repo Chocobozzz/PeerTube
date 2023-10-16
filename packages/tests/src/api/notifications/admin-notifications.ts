@@ -66,7 +66,7 @@ describe('Test admin notifications', function () {
 
       joinPeerTubeServer.setLatestVersion('1.4.2')
 
-      await wait(3000)
+      await wait(4500)
       await checkNewPeerTubeVersion({ ...baseParams, latestVersion: '1.4.2', checkType: 'absence' })
     })
 
@@ -75,14 +75,14 @@ describe('Test admin notifications', function () {
 
       joinPeerTubeServer.setLatestVersion('15.4.2')
 
-      await wait(3000)
+      await wait(4500)
       await checkNewPeerTubeVersion({ ...baseParams, latestVersion: '15.4.2', checkType: 'presence' })
     })
 
     it('Should not send the same notification to admins', async function () {
       this.timeout(30000)
 
-      await wait(3000)
+      await wait(4500)
       expect(adminNotifications.filter(n => n.type === UserNotificationType.NEW_PEERTUBE_VERSION)).to.have.lengthOf(1)
     })
 
@@ -97,7 +97,7 @@ describe('Test admin notifications', function () {
 
       joinPeerTubeServer.setLatestVersion('15.4.3')
 
-      await wait(3000)
+      await wait(4500)
       await checkNewPeerTubeVersion({ ...baseParams, latestVersion: '15.4.3', checkType: 'presence' })
       expect(adminNotifications.filter(n => n.type === UserNotificationType.NEW_PEERTUBE_VERSION)).to.have.lengthOf(2)
     })

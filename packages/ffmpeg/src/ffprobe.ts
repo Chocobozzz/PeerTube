@@ -172,15 +172,21 @@ async function getVideoStream (path: string, existingProbe?: FfprobeData) {
 // Chapters
 // ---------------------------------------------------------------------------
 
-async function getChaptersFromContainer (path: string, existingProbe?: FfprobeData) {
-  const metadata = existingProbe || await ffprobePromise(path)
+async function getChaptersFromContainer (options: {
+  path: string
+  maxTitleLength: number
+  ffprobe?: FfprobeData
+}) {
+  const { path, maxTitleLength, ffprobe } = options
+
+  const metadata = ffprobe || await ffprobePromise(path)
 
   if (!Array.isArray(metadata?.chapters)) return []
 
   return metadata.chapters
     .map(c => ({
-      timecode: c.start_time,
-      title: c['TAG:title']
+      timecode: Math.round(c.start_time),
+      title: (c['TAG:title'] || '').slice(0, maxTitleLength)
     }))
 }
 

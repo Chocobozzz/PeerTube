@@ -40,7 +40,9 @@
           <div [innerHTML]="broadcastMessage.message"></div>
 
           <button
-          *ngIf="broadcastMessage.dismissable" (click)="hideBroadcastMessage()" class="border-0" title="Close this message" i18n-title>
+            *ngIf="broadcastMessage.dismissable" (click)="hideBroadcastMessage()"
+            class="border-0" title="Close this message" i18n-title
+          >
             <my-global-icon iconName="cross"></my-global-icon>
           </button>
         </div>

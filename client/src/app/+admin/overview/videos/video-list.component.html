@@ -112,11 +112,13 @@
               <li *ngFor="let file of video.files">
                 <a target="_blank" rel="noopener noreferrer" [href]="file.fileUrl">{{ file.resolution.label }}</a>: {{ file.size | bytes: 1 }}
 
-                <my-global-icon
-                  *ngIf="canRemoveOneFile(video)"
-                  i18n-ngbTooltip ngbTooltip="Delete this file" iconName="delete" role="button"
+                <button
+                  *ngIf="canRemoveOneFile(video)" class="border-0 p-0"
+                  i18n-title title="Delete this file"
                   (click)="removeVideoFile(video, file, 'web-videos')"
-                ></my-global-icon>
+                >
+                  <my-global-icon iconName="delete"></my-global-icon>
+                </button>
               </li>
             </ul>
           </div>
@@ -128,11 +130,13 @@
               <li *ngFor="let file of video.streamingPlaylists[0].files">
                 <a target="_blank" rel="noopener noreferrer" [href]="file.fileUrl">{{ file.resolution.label }}</a>: {{ file.size | bytes: 1 }}
 
-                <my-global-icon
-                  *ngIf="canRemoveOneFile(video)"
-                  i18n-ngbTooltip ngbTooltip="Delete this file" iconName="delete" role="button"
+                <button
+                  *ngIf="canRemoveOneFile(video)" class="border-0 p-0"
+                  i18n-title title="Delete this file"
                   (click)="removeVideoFile(video, file, 'hls')"
-                ></my-global-icon>
+                >
+                  <my-global-icon iconName="delete"></my-global-icon>
+                </button>
               </li>
             </ul>
           </div>

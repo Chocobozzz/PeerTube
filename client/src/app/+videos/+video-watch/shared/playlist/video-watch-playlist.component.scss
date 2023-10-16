@@ -46,18 +46,8 @@
     display: flex;
     margin: 10px 0;
 
-    my-global-icon:not(:last-child) {
-      @include margin-right(.5rem);
-    }
-
-    my-global-icon {
-      &:not(.active) {
-        opacity: .5;
-      }
-
-      ::ng-deep {
-        cursor: pointer;
-      }
+    button:not(.active) {
+      opacity: .5;
     }
   }
 

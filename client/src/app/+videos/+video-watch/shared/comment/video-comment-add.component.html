@@ -3,11 +3,13 @@
     <my-actor-avatar [actor]="user?.account" [actorType]="getAvatarActorType()" size="25"></my-actor-avatar>
 
     <div class="textarea-wrapper">
-      <textarea i18n-placeholder placeholder="Add comment..." myAutoResize
-                [readonly]="(user === null) ? true : false"
-                (click)="openVisitorModal($event)"
-                formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
-                (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" #textarea>
+      <textarea
+        i18n-placeholder placeholder="Add comment..." myAutoResize
+        [readonly]="(user === null) ? true : false"
+        (click)="openVisitorModal($event)"
+        formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
+        (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" #textarea
+      >
       </textarea>
 
       <my-help
@@ -57,7 +59,10 @@
 <ng-template #visitorModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title" i18n>You are one step away from commenting</h4>
-    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hideModals()"></my-global-icon>
+
+    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hideModals()">
+      <my-global-icon iconName="cross"></my-global-icon>
+    </button>
   </div>
 
   <div class="modal-body">
@@ -81,8 +86,12 @@
 <ng-template #emojiModal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title" i18n>Markdown Emoji List</h4>
-    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hideModals()"></my-global-icon>
+
+    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hideModals()">
+      <my-global-icon iconName="cross"></my-global-icon>
+    </button>
   </div>
+
   <div class="modal-body">
     <div class="emoji-flex">
       <div class="emoji-flex-item" *ngFor="let emojiMarkup of getEmojiMarkupList()">

@@ -17,16 +17,14 @@ class ChaptersPlugin extends Plugin {
     this.player.ready(() => {
       player.addClass('vjs-chapters')
 
-      this.player.one('durationchange', () => {
-        for (const chapter of this.chapters) {
-          if (chapter.timecode === 0) continue
+      for (const chapter of this.chapters) {
+        if (chapter.timecode === 0) continue
 
-          const marker = new ProgressBarMarkerComponent(player, { timecode: chapter.timecode })
+        const marker = new ProgressBarMarkerComponent(player, { timecode: chapter.timecode })
 
-          this.markers.push(marker)
-          this.getSeekBar().addChild(marker)
-        }
-      })
+        this.markers.push(marker)
+        this.getSeekBar().addChild(marker)
+      }
     })
   }
 
@@ -34,6 +32,8 @@ class ChaptersPlugin extends Plugin {
     for (const marker of this.markers) {
       this.getSeekBar().removeChild(marker)
     }
+
+    super.dispose()
   }
 
   getChapter (timecode: number) {

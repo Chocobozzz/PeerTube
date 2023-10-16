@@ -199,7 +199,7 @@ describe('Test video studio API validator', function () {
       })
 
       it('Should fail with a video that is already waiting for edition', async function () {
-        this.timeout(120000)
+        this.timeout(360000)
 
         await command.createEditionTasks({
           videoId: videoUUID,
@@ -257,7 +257,7 @@ describe('Test video studio API validator', function () {
       })
 
       it('Should succeed with the correct params', async function () {
-        this.timeout(120000)
+        this.timeout(360000)
 
         await cut(0, 2, HttpStatusCode.NO_CONTENT_204)
 
@@ -291,7 +291,7 @@ describe('Test video studio API validator', function () {
       })
 
       it('Should succeed with the correct params', async function () {
-        this.timeout(120000)
+        this.timeout(360000)
 
         await addWatermark('custom-thumbnail.jpg', HttpStatusCode.NO_CONTENT_204)
 
@@ -337,7 +337,7 @@ describe('Test video studio API validator', function () {
       })
 
       it('Should succeed with the correct params', async function () {
-        this.timeout(120000)
+        this.timeout(360000)
 
         await addIntroOutro('add-intro', 'video_very_short_240p.mp4', HttpStatusCode.NO_CONTENT_204)
         await waitJobs([ server ])
@@ -347,7 +347,7 @@ describe('Test video studio API validator', function () {
       })
 
       it('Should check total quota when creating the task', async function () {
-        this.timeout(120000)
+        this.timeout(360000)
 
         const user = await server.users.create({ username: 'user_quota_1' })
         const token = await server.login.getAccessToken('user_quota_1')

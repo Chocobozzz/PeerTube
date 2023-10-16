@@ -4,12 +4,11 @@
 @use '_miniature' as *;
 
 // Cannot set margin top to videos-header because of the main header fixed position
-$margin-top: 30px;
+$margin-top: 2rem;
 
 .videos-header {
   display: grid;
   grid-template-columns: auto 1fr auto;
-  margin-bottom: 30px;
 
   .title,
   .title-subscription {
@@ -21,9 +20,6 @@ $margin-top: 30px;
     color: pvar(--mainForegroundColor);
     display: inline-block;
     font-weight: $font-semibold;
-
-    margin-top: $margin-top;
-    margin-bottom: 0;
   }
 
   .title-subscription {
@@ -39,7 +35,6 @@ $margin-top: 30px;
   .action-block {
     grid-column: 3;
     grid-row: 1/3;
-    margin-top: $margin-top;
   }
 
   my-feed {
@@ -77,15 +72,15 @@ $margin-top: 30px;
   @include margin-right(pvar(--horizontalMarginContent));
 
   .video-wrapper {
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
   }
 }
 
 @media screen and (max-width: $mobile-view) {
   .videos-header,
   my-video-filters-header {
-    @include margin-left(15px);
-    @include margin-right(15px);
+    @include margin-left(1rem);
+    @include margin-right(1rem);
 
     display: inline-block;
   }
@@ -95,9 +90,8 @@ $margin-top: 30px;
   }
 
   .videos-header {
-    flex-direction: column;
-    align-items: center;
-    height: auto;
-    margin-bottom: 10px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 1rem;
   }
 }
