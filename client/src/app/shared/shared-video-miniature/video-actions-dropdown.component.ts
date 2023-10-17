@@ -127,8 +127,13 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   showDownloadModal () {
     this.modalOpened.emit()
-
-    this.videoDownloadModal.show(this.video as VideoDetails, this.videoCaptions)
+    if (!(this.video instanceof VideoDetails)) {
+      this.videoService.getVideo({ videoId: this.video.uuid }).subscribe((details: VideoDetails) => {
+        this.videoDownloadModal.show(details, this.videoCaptions)
+      })
+    } else {
+      this.videoDownloadModal.show(this.video, this.videoCaptions)
+    }
   }
 
   showReportModal () {
@@ -180,10 +185,11 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   isVideoDownloadable () {
-    return this.video &&
-      this.video.isLive !== true &&
-      this.video instanceof VideoDetails &&
-      this.video.downloadEnabled
+    if (!this.video || this.video.isLive) {
+      return false
+    }
+
+    return (this.video instanceof VideoDetails && this.video.downloadEnabled) || this.video.isDownloadableBy(this.user)
   }
 
   canVideoBeDuplicated () {

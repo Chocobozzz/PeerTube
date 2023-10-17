@@ -48,7 +48,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   }
   videoDropdownDisplayOptions: VideoActionsDisplayType = {
     playlist: false,
-    download: false,
+    download: true,
     update: false,
     blacklist: false,
     delete: true,

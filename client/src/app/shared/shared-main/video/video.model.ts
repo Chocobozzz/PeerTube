@@ -251,6 +251,14 @@ export class Video implements VideoServerModel {
       this.hasWebVideos()
   }
 
+  isDownloadableBy (user: AuthUser) {
+    if (!user || this.isLocal !== true) {
+      return false
+    }
+
+    return this.account.name === user.username || user.hasRight(UserRight.MANAGE_VIDEO_FILES)
+  }
+
   canRunTranscoding (user: AuthUser) {
     return this.canRunForcedTranscoding(user) && this.state.id !== VideoState.TO_TRANSCODE
   }
