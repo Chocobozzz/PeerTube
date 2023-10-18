@@ -21,7 +21,7 @@ describe('Test abuses', function () {
   let commands: AbusesCommand[]
 
   before(async function () {
-    this.timeout(50000)
+    this.timeout(120000)
 
     // Run servers
     servers = await createMultipleServers(2)

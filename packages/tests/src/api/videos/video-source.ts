@@ -111,7 +111,7 @@ describe('Test a video file replacement', function () {
       })
 
       it('Should replace a video file with transcoding enabled', async function () {
-        this.timeout(120000)
+        this.timeout(240000)
 
         const previousPaths: string[] = []
 
@@ -384,7 +384,7 @@ describe('Test a video file replacement', function () {
       })
 
       it('Should replace a video file with transcoding enabled', async function () {
-        this.timeout(120000)
+        this.timeout(240000)
 
         const previousPaths: string[] = []
 

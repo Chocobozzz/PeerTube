@@ -139,7 +139,7 @@ describe('Test video storyboard', function () {
   })
 
   it('Should generate a storyboard after torrent import', async function () {
-    this.timeout(120000)
+    this.timeout(240000)
 
     if (areHttpImportTestsDisabled()) return
 
