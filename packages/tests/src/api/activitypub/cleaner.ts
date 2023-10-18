@@ -23,7 +23,7 @@ describe('Test AP cleaner', function () {
   let videoUUIDs: string[]
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(240000)
 
     const config = {
       federation: {

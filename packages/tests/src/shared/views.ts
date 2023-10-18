@@ -35,17 +35,8 @@ async function prepareViewsServers () {
   await setAccessTokensToServers(servers)
   await setDefaultVideoChannel(servers)
 
-  await servers[0].config.updateCustomSubConfig({
-    newConfig: {
-      live: {
-        enabled: true,
-        allowReplay: true,
-        transcoding: {
-          enabled: false
-        }
-      }
-    }
-  })
+  await servers[0].config.enableMinimumTranscoding()
+  await servers[0].config.enableLive({ allowReplay: true, transcoding: false })
 
   await doubleFollow(servers[0], servers[1])
 

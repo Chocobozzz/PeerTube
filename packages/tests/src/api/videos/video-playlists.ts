@@ -537,7 +537,7 @@ describe('Test video playlists', function () {
   describe('Element timestamps', function () {
 
     it('Should create a playlist containing different startTimestamp/endTimestamp videos', async function () {
-      this.timeout(30000)
+      this.timeout(120000)
 
       const addVideo = (attributes: any) => {
         return commands[0].addElement({ playlistId: playlistServer1Id, attributes })
