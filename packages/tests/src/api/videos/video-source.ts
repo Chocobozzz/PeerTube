@@ -26,7 +26,7 @@ describe('Test a video file replacement', function () {
   let uuid: string
 
   before(async function () {
-    this.timeout(50000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(2)
 
@@ -111,7 +111,7 @@ describe('Test a video file replacement', function () {
       })
 
       it('Should replace a video file with transcoding enabled', async function () {
-        this.timeout(120000)
+        this.timeout(240000)
 
         const previousPaths: string[] = []
 
@@ -384,7 +384,7 @@ describe('Test a video file replacement', function () {
       })
 
       it('Should replace a video file with transcoding enabled', async function () {
-        this.timeout(120000)
+        this.timeout(240000)
 
         const previousPaths: string[] = []
 

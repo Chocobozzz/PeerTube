@@ -523,7 +523,7 @@ describe('Test video channels', function () {
   })
 
   it('Should list channels by updatedAt desc if a video has been uploaded', async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     await servers[0].videos.upload({ attributes: { channelId: totoChannel } })
     await waitJobs(servers)

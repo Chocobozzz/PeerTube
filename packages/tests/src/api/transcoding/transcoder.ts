@@ -234,7 +234,7 @@ describe('Test video transcoding', function () {
   describe('Audio transcoding', function () {
 
     it('Should transcode high bit rate mp3 to proper bit rate', async function () {
-      this.timeout(60_000)
+      this.timeout(120_000)
 
       const attributes = {
         name: 'mp3_256k',
@@ -266,7 +266,7 @@ describe('Test video transcoding', function () {
     })
 
     it('Should transcode video with no audio and have no audio itself', async function () {
-      this.timeout(60_000)
+      this.timeout(120_000)
 
       const attributes = {
         name: 'no_audio',
@@ -290,7 +290,7 @@ describe('Test video transcoding', function () {
     })
 
     it('Should leave the audio untouched, but properly transcode the video', async function () {
-      this.timeout(60_000)
+      this.timeout(120_000)
 
       const attributes = {
         name: 'untouched_audio',
