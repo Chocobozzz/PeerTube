@@ -321,7 +321,8 @@ const newCustomConfig: CustomConfig = {
       }
     },
     videoQuota: 5242881,
-    videoQuotaDaily: 318742
+    videoQuotaDaily: 318742,
+    defaultChannelName: 'Main $1 channel'
   },
   videoChannels: {
     maxPerUser: 24

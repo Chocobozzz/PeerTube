@@ -546,6 +546,30 @@ describe('Test video channels', function () {
     }
   })
 
+  it('Should apply another default channel name', async function () {
+    this.timeout(15000)
+
+    await servers[0].config.updateCustomSubConfig({
+      newConfig: {
+        user: {
+          defaultChannelName: `$1's channel`
+        }
+      }
+    })
+
+    await servers[0].users.generate('third_user')
+
+    const body = await servers[0].channels.listByAccount({ accountName: 'third_user' })
+
+    expect(body.total).to.equal(1)
+    expect(body.data).to.be.an('array')
+    expect(body.data).to.have.lengthOf(1)
+
+    const videoChannel = body.data[0]
+    expect(videoChannel.displayName).to.equal(`third_user's channel`)
+    expect(videoChannel.name).to.equal('third_user_channel')
+  })
+
   after(async function () {
     for (const sqlCommand of sqlCommands) {
       await sqlCommand.cleanup()
