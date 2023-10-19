@@ -47,7 +47,7 @@ type Tags = {
   url: string
   originUrl: string
 
-  disallowIndexation?: boolean
+  indexationPolicy: 'always' | 'never'
 
   embed?: {
     url: string
@@ -139,7 +139,11 @@ class ClientHtml {
       escapedSiteName: escapeHTML(siteName),
       escapedTitle: escapeHTML(title),
       escapedTruncatedDescription,
-      disallowIndexation: video.privacy !== VideoPrivacy.PUBLIC,
+
+      indexationPolicy: video.privacy !== VideoPrivacy.PUBLIC
+        ? 'never'
+        : 'always',
+
       image,
       embed,
       ogType,
@@ -203,7 +207,11 @@ class ClientHtml {
       escapedSiteName: escapeHTML(siteName),
       escapedTitle: escapeHTML(title),
       escapedTruncatedDescription,
-      disallowIndexation: videoPlaylist.privacy !== VideoPlaylistPrivacy.PUBLIC,
+
+      indexationPolicy: videoPlaylist.privacy !== VideoPlaylistPrivacy.PUBLIC
+        ? 'never'
+        : 'always',
+
       embed,
       image,
       list,
@@ -304,7 +312,10 @@ class ClientHtml {
       ogType,
       twitterCard,
       schemaType,
-      disallowIndexation: !entity.Actor.isOwned()
+
+      indexationPolicy: entity.Actor.isOwned()
+        ? 'always'
+        : 'never'
     }, {})
 
     return customHtml
@@ -520,7 +531,7 @@ class ClientHtml {
     const twitterCardMetaTags = this.generateTwitterCardMetaTags(tagsValues)
     const schemaTags = await this.generateSchemaTags(tagsValues, context)
 
-    const { url, escapedTitle, embed, originUrl, disallowIndexation } = tagsValues
+    const { url, escapedTitle, embed, originUrl, indexationPolicy } = tagsValues
 
     const oembedLinkTags: { type: string, href: string, escapedTitle: string }[] = []
 
@@ -568,7 +579,7 @@ class ClientHtml {
     // SEO, use origin URL
     tagsStr += `<link rel="canonical" href="${originUrl}" />`
 
-    if (disallowIndexation) {
+    if (indexationPolicy === 'never') {
       tagsStr += `<meta name="robots" content="noindex" />`
     }
 
