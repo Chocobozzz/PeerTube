@@ -1,20 +1,17 @@
 import { copy, remove } from 'fs-extra/esm'
 import { readFile, rename } from 'fs/promises'
-import { join } from 'path'
 import { ColorActionName } from '@jimp/plugin-color'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
-import { convertWebPToJPG, generateThumbnailFromVideo, processGIF } from './ffmpeg/index.js'
-import { logger, loggerTagsFactory } from './logger.js'
+import { convertWebPToJPG, processGIF } from './ffmpeg/index.js'
+import { logger } from './logger.js'
 
 import type Jimp from 'jimp'
 
-const lTags = loggerTagsFactory('image-utils')
-
-function generateImageFilename (extension = '.jpg') {
+export function generateImageFilename (extension = '.jpg') {
   return buildUUID() + extension
 }
 
-async function processImage (options: {
+export async function processImage (options: {
   path: string
   destination: string
   newSize: { width: number, height: number }
@@ -38,38 +35,11 @@ async function processImage (options: {
   }
 
   if (keepOriginal !== true) await remove(path)
+
+  logger.debug('Finished processing image %s to %s.', path, destination)
 }
 
-async function generateImageFromVideoFile (options: {
-  fromPath: string
-  folder: string
-  imageName: string
-  size: { width: number, height: number }
-}) {
-  const { fromPath, folder, imageName, size } = options
-
-  const pendingImageName = 'pending-' + imageName
-  const pendingImagePath = join(folder, pendingImageName)
-
-  try {
-    await generateThumbnailFromVideo({ fromPath, output: pendingImagePath })
-
-    const destination = join(folder, imageName)
-    await processImage({ path: pendingImagePath, destination, newSize: size })
-  } catch (err) {
-    logger.error('Cannot generate image from video %s.', fromPath, { err, ...lTags() })
-
-    try {
-      await remove(pendingImagePath)
-    } catch (err) {
-      logger.debug('Cannot remove pending image path after generation error.', { err, ...lTags() })
-    }
-
-    throw err
-  }
-}
-
-async function getImageSize (path: string) {
+export async function getImageSize (path: string) {
   const inputBuffer = await readFile(path)
 
   const Jimp = await import('jimp')
@@ -83,16 +53,7 @@ async function getImageSize (path: string) {
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  generateImageFilename,
-  generateImageFromVideoFile,
-
-  processImage,
-
-  getImageSize
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 async function jimpProcessor (path: string, destination: string, newSize: { width: number, height: number }, inputExt: string) {

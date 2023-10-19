@@ -155,9 +155,14 @@ async function saveReplayToExternalVideo (options: {
     inputFileMutexReleaser()
   }
 
-  for (const type of [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ]) {
-    const image = await generateLocalVideoMiniature({ video: replayVideo, videoFile: replayVideo.getMaxQualityFile(), type })
-    await replayVideo.addAndSaveThumbnail(image)
+  const thumbnails = await generateLocalVideoMiniature({
+    video: replayVideo,
+    videoFile: replayVideo.getMaxQualityFile(),
+    types: [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ]
+  })
+
+  for (const thumbnail of thumbnails) {
+    await replayVideo.addAndSaveThumbnail(thumbnail)
   }
 
   await moveToNextState({ video: replayVideo, isNewVideo: true })

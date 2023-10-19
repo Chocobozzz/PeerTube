@@ -971,6 +971,10 @@ const WORKER_THREADS = {
   PROCESS_IMAGE: {
     CONCURRENCY: 1,
     MAX_THREADS: 5
+  },
+  GET_IMAGE_SIZE: {
+    CONCURRENCY: 1,
+    MAX_THREADS: 5
   }
 }
 

@@ -26,7 +26,6 @@ import { isAbleToUploadVideo } from '@server/lib/user.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { buildMoveToObjectStorageJob } from '@server/lib/video.js'
-import { ThumbnailModel } from '@server/models/video/thumbnail.js'
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import { MVideoImport, MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import.js'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
@@ -51,6 +50,7 @@ import { Notifier } from '../../notifier/index.js'
 import { generateLocalVideoMiniature } from '../../thumbnail.js'
 import { JobQueue } from '../job-queue.js'
 import { replaceChaptersIfNotExist } from '@server/lib/video-chapters.js'
+import { FfprobeData } from 'fluent-ffmpeg'
 
 async function processVideoImport (job: Job): Promise<VideoImportPreventExceptionResult> {
   const payload = job.data as VideoImportPayload
@@ -205,20 +205,10 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
       tempVideoPath = null // This path is not used anymore
 
-      let {
-        miniatureModel: thumbnailModel,
-        miniatureJSONSave: thumbnailSave
-      } = await generateMiniature(videoImportWithFiles, videoFile, ThumbnailType.MINIATURE)
-
-      let {
-        miniatureModel: previewModel,
-        miniatureJSONSave: previewSave
-      } = await generateMiniature(videoImportWithFiles, videoFile, ThumbnailType.PREVIEW)
+      const thumbnails = await generateMiniature({ videoImportWithFiles, videoFile, ffprobe })
 
       // Create torrent
       await createTorrentAndSetInfoHash(videoImportWithFiles.Video, videoFile)
-
-      const videoFileSave = videoFile.toJSON()
 
       const { videoImportUpdated, video } = await retryTransactionWrapper(() => {
         return sequelizeTypescript.transaction(async t => {
@@ -233,8 +223,9 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
           video.state = buildNextVideoState(video.state)
           await video.save({ transaction: t })
 
-          if (thumbnailModel) await video.addAndSaveThumbnail(thumbnailModel, t)
-          if (previewModel) await video.addAndSaveThumbnail(previewModel, t)
+          for (const thumbnail of thumbnails) {
+            await video.addAndSaveThumbnail(thumbnail, t)
+          }
 
           await replaceChaptersIfNotExist({ video, chapters: containerChapters, transaction: t })
 
@@ -249,14 +240,6 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
           logger.info('Video %s imported.', video.uuid)
 
           return { videoImportUpdated, video: videoForFederation }
-        }).catch(err => {
-          // Reset fields
-          if (thumbnailModel) thumbnailModel = new ThumbnailModel(thumbnailSave)
-          if (previewModel) previewModel = new ThumbnailModel(previewSave)
-
-          videoFile = new VideoFileModel(videoFileSave)
-
-          throw err
         })
       })
 
@@ -279,34 +262,29 @@ async function refreshVideoImportFromDB (videoImport: MVideoImportDefault, video
   return Object.assign(videoImport, { Video: videoWithFiles })
 }
 
-async function generateMiniature (
-  videoImportWithFiles: MVideoImportDefaultFiles,
-  videoFile: MVideoFile,
-  thumbnailType: ThumbnailType_Type
-) {
-  // Generate miniature if the import did not created it
-  const needsMiniature = thumbnailType === ThumbnailType.MINIATURE
-    ? !videoImportWithFiles.Video.getMiniature()
-    : !videoImportWithFiles.Video.getPreview()
+async function generateMiniature (options: {
+  videoImportWithFiles: MVideoImportDefaultFiles
+  videoFile: MVideoFile
+  ffprobe: FfprobeData
+}) {
+  const { ffprobe, videoFile, videoImportWithFiles } = options
 
-  if (!needsMiniature) {
-    return {
-      miniatureModel: null,
-      miniatureJSONSave: null
-    }
+  const thumbnailsToGenerate: ThumbnailType_Type[] = []
+
+  if (!videoImportWithFiles.Video.getMiniature()) {
+    thumbnailsToGenerate.push(ThumbnailType.MINIATURE)
   }
 
-  const miniatureModel = await generateLocalVideoMiniature({
+  if (!videoImportWithFiles.Video.getPreview()) {
+    thumbnailsToGenerate.push(ThumbnailType.PREVIEW)
+  }
+
+  return generateLocalVideoMiniature({
     video: videoImportWithFiles.Video,
     videoFile,
-    type: thumbnailType
+    types: thumbnailsToGenerate,
+    ffprobe
   })
-  const miniatureJSONSave = miniatureModel.toJSON()
-
-  return {
-    miniatureModel,
-    miniatureJSONSave
-  }
 }
 
 async function afterImportSuccess (options: {

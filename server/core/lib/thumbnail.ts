@@ -1,6 +1,6 @@
 import { join } from 'path'
 import { ThumbnailType, ThumbnailType_Type } from '@peertube/peertube-models'
-import { generateImageFilename, generateImageFromVideoFile } from '../helpers/image-utils.js'
+import { generateImageFilename } from '../helpers/image-utils.js'
 import { CONFIG } from '../initializers/config.js'
 import { ASSETS_PATH, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../initializers/constants.js'
 import { ThumbnailModel } from '../models/video/thumbnail.js'
@@ -9,6 +9,13 @@ import { MThumbnail } from '../types/models/video/thumbnail.js'
 import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist.js'
 import { VideoPathManager } from './video-path-manager.js'
 import { downloadImageFromWorker, processImageFromWorker } from './worker/parent-process.js'
+import { generateThumbnailFromVideo } from '@server/helpers/ffmpeg/ffmpeg-image.js'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { remove } from 'fs-extra'
+import { FfprobeData } from 'fluent-ffmpeg'
+import Bluebird from 'bluebird'
+
+const lTags = loggerTagsFactory('thumbnail')
 
 type ImageSize = { height?: number, width?: number }
 
@@ -88,39 +95,68 @@ function updateLocalVideoMiniatureFromExisting (options: {
   })
 }
 
+// Returns thumbnail models sorted by their size (height) in descendent order (biggest first)
 function generateLocalVideoMiniature (options: {
   video: MVideoThumbnail
   videoFile: MVideoFile
-  type: ThumbnailType_Type
-}) {
-  const { video, videoFile, type } = options
+  types: ThumbnailType_Type[]
+  ffprobe?: FfprobeData
+}): Promise<MThumbnail[]> {
+  const { video, videoFile, types, ffprobe } = options
+
+  if (types.length === 0) return Promise.resolve([])
 
   return VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), input => {
-    const { filename, basePath, height, width, existingThumbnail, outputPath } = buildMetadataFromVideo(video, type)
-
-    const thumbnailCreator = videoFile.isAudio()
-      ? () => processImageFromWorker({
-        path: ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND,
-        destination: outputPath,
-        newSize: { width, height },
-        keepOriginal: true
-      })
-      : () => generateImageFromVideoFile({
-        fromPath: input,
-        folder: basePath,
-        imageName: filename,
-        size: { height, width }
+    // Get bigger images to generate first
+    const metadatas = types.map(type => buildMetadataFromVideo(video, type))
+      .sort((a, b) => {
+        if (a.height < b.height) return 1
+        if (a.height === b.height) return 0
+        return -1
       })
 
-    return updateThumbnailFromFunction({
-      thumbnailCreator,
-      filename,
-      height,
-      width,
-      type,
-      automaticallyGenerated: true,
-      onDisk: true,
-      existingThumbnail
+    let biggestImagePath: string
+    return Bluebird.mapSeries(metadatas, metadata => {
+      const { filename, basePath, height, width, existingThumbnail, outputPath, type } = metadata
+
+      let thumbnailCreator: () => Promise<any>
+
+      if (videoFile.isAudio()) {
+        thumbnailCreator = () => processImageFromWorker({
+          path: ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND,
+          destination: outputPath,
+          newSize: { width, height },
+          keepOriginal: true
+        })
+      } else if (biggestImagePath) {
+        thumbnailCreator = () => processImageFromWorker({
+          path: biggestImagePath,
+          destination: outputPath,
+          newSize: { width, height },
+          keepOriginal: true
+        })
+      } else {
+        thumbnailCreator = () => generateImageFromVideoFile({
+          fromPath: input,
+          folder: basePath,
+          imageName: filename,
+          size: { height, width },
+          ffprobe
+        })
+      }
+
+      if (!biggestImagePath) biggestImagePath = outputPath
+
+      return updateThumbnailFromFunction({
+        thumbnailCreator,
+        filename,
+        height,
+        width,
+        type,
+        automaticallyGenerated: true,
+        onDisk: true,
+        existingThumbnail
+      })
     })
   })
 }
@@ -188,22 +224,24 @@ function updateRemoteVideoThumbnail (options: {
 // ---------------------------------------------------------------------------
 
 async function regenerateMiniaturesIfNeeded (video: MVideoWithAllFiles) {
+  const thumbnailsToGenerate: ThumbnailType_Type[] = []
+
   if (video.getMiniature().automaticallyGenerated === true) {
-    const miniature = await generateLocalVideoMiniature({
-      video,
-      videoFile: video.getMaxQualityFile(),
-      type: ThumbnailType.MINIATURE
-    })
-    await video.addAndSaveThumbnail(miniature)
+    thumbnailsToGenerate.push(ThumbnailType.MINIATURE)
   }
 
   if (video.getPreview().automaticallyGenerated === true) {
-    const preview = await generateLocalVideoMiniature({
-      video,
-      videoFile: video.getMaxQualityFile(),
-      type: ThumbnailType.PREVIEW
-    })
-    await video.addAndSaveThumbnail(preview)
+    thumbnailsToGenerate.push(ThumbnailType.PREVIEW)
+  }
+
+  const models = await generateLocalVideoMiniature({
+    video,
+    videoFile: video.getMaxQualityFile(),
+    types: thumbnailsToGenerate
+  })
+
+  for (const model of models) {
+    await video.addAndSaveThumbnail(model)
   }
 }
 
@@ -256,6 +294,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType_Typ
     const basePath = CONFIG.STORAGE.THUMBNAILS_DIR
 
     return {
+      type,
       filename,
       basePath,
       existingThumbnail,
@@ -270,6 +309,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType_Typ
     const basePath = CONFIG.STORAGE.PREVIEWS_DIR
 
     return {
+      type,
       filename,
       basePath,
       existingThumbnail,
@@ -324,4 +364,36 @@ async function updateThumbnailFromFunction (parameters: {
   await thumbnailCreator()
 
   return thumbnail
+}
+
+async function generateImageFromVideoFile (options: {
+  fromPath: string
+  folder: string
+  imageName: string
+  size: { width: number, height: number }
+  ffprobe?: FfprobeData
+}) {
+  const { fromPath, folder, imageName, size, ffprobe } = options
+
+  const pendingImageName = 'pending-' + imageName
+  const pendingImagePath = join(folder, pendingImageName)
+
+  try {
+    await generateThumbnailFromVideo({ fromPath, output: pendingImagePath, ffprobe })
+
+    const destination = join(folder, imageName)
+    await processImageFromWorker({ path: pendingImagePath, destination, newSize: size })
+
+    return destination
+  } catch (err) {
+    logger.error('Cannot generate image from video %s.', fromPath, { err, ...lTags() })
+
+    try {
+      await remove(pendingImagePath)
+    } catch (err) {
+      logger.debug('Cannot remove pending image path after generation error.', { err, ...lTags() })
+    }
+
+    throw err
+  }
 }

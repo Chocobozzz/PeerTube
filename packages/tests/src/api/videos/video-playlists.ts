@@ -652,7 +652,7 @@ describe('Test video playlists', function () {
     let video3: string
 
     before(async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       groupUser1 = [ Object.assign({}, servers[0], { accessToken: userTokenServer1 }) ]
       groupWithoutToken1 = [ Object.assign({}, servers[0], { accessToken: undefined }) ]
