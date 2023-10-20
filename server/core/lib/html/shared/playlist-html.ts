@@ -60,7 +60,7 @@ export class PlaylistHtml {
     return this.buildPlaylistHTML({
       html,
       playlist,
-      addEmbedInfo: false,
+      addEmbedInfo: true,
       addOG: false,
       addTwitterCard: false
     })

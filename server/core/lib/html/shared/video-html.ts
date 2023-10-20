@@ -62,7 +62,7 @@ export class VideoHtml {
     return this.buildVideoHTML({
       html,
       video,
-      addEmbedInfo: false,
+      addEmbedInfo: true,
       addOG: false,
       addTwitterCard: false
     })
