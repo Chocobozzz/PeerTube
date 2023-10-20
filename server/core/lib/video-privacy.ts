@@ -6,7 +6,7 @@ import { DIRECTORIES } from '@server/initializers/constants.js'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import { updateHLSFilesACL, updateWebVideoFileACL } from './object-storage/index.js'
 
-const validPrivacySet = new Set([
+const validPrivacySet = new Set<VideoPrivacyType>([
   VideoPrivacy.PRIVATE,
   VideoPrivacy.INTERNAL,
   VideoPrivacy.PASSWORD_PROTECTED
@@ -20,7 +20,7 @@ function setVideoPrivacy (video: MVideo, newPrivacy: VideoPrivacyType) {
   video.privacy = newPrivacy
 }
 
-function isVideoInPrivateDirectory (privacy) {
+function isVideoInPrivateDirectory (privacy: VideoPrivacyType) {
   return validPrivacySet.has(privacy)
 }
 
