@@ -212,11 +212,11 @@ describe('Test misc endpoints', function () {
       expect(res.text).to.contain('<video:title>video 2</video:title>')
       expect(res.text).to.not.contain('<video:title>video 3</video:title>')
 
-      expect(res.text).to.contain('<url><loc>' + server.url + '/video-channels/channel1</loc></url>')
-      expect(res.text).to.contain('<url><loc>' + server.url + '/video-channels/channel2</loc></url>')
+      expect(res.text).to.contain('<url><loc>' + server.url + '/c/channel1</loc></url>')
+      expect(res.text).to.contain('<url><loc>' + server.url + '/c/channel2</loc></url>')
 
-      expect(res.text).to.contain('<url><loc>' + server.url + '/accounts/user1</loc></url>')
-      expect(res.text).to.contain('<url><loc>' + server.url + '/accounts/user2</loc></url>')
+      expect(res.text).to.contain('<url><loc>' + server.url + '/a/user1</loc></url>')
+      expect(res.text).to.contain('<url><loc>' + server.url + '/a/user2</loc></url>')
     })
 
     it('Should not fail with big title/description videos', async function () {
