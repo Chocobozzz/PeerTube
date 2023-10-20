@@ -6,19 +6,6 @@
     <meta name="robots" content="noindex">
     <meta property="og:platform" content="PeerTube" />
 
-    <script type="text/javascript">
-    // Thanks: https://mathiasbynens.be/notes/globalthis
-    (function() {
-      if (typeof globalThis === 'object') return;
-      Object.prototype.__defineGetter__('__magic__', function() {
-        return this;
-      });
-      __magic__.globalThis = __magic__
-      delete Object.prototype.__magic__;
-    }());
-    </script>
-
-
     <!-- /!\ The following comment is used by the server to prerender some tags /!\ -->
 
     <!-- title tag -->
