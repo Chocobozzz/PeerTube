@@ -374,6 +374,7 @@ paths:
       tags:
         - Static Video Files
       summary: Get public Web Video file
+      description: "**PeerTube >= 6.0**"
       parameters:
         - $ref: '#/components/parameters/staticFilename'
       responses:
@@ -386,6 +387,7 @@ paths:
       tags:
         - Static Video Files
       summary: Get private Web Video file
+      description: "**PeerTube >= 6.0**"
       parameters:
         - $ref: '#/components/parameters/staticFilename'
         - $ref: '#/components/parameters/videoFileToken'
@@ -4934,6 +4936,7 @@ paths:
   '/api/v1/videos/{id}/web-videos':
     delete:
       summary: Delete video Web Video files
+      description: "**PeerTube >= 6.0**"
       security:
         - OAuth2:
           - admin
@@ -6630,7 +6633,7 @@ components:
       required: false
       schema:
         type: boolean
-      description: '**PeerTube >= 4.0** Display only videos that have Web Video files'
+      description: '**PeerTube >= 6.0** Display only videos that have Web Video files'
     privacyOneOf:
       name: privacyOneOf
       in: query
