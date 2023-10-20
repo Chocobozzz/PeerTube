@@ -7,7 +7,7 @@ import { About, CustomConfig, UserRight } from '@peertube/peertube-models'
 import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '../../helpers/audit-logger.js'
 import { objectConverter } from '../../helpers/core-utils.js'
 import { CONFIG, reloadConfig } from '../../initializers/config.js'
-import { ClientHtml } from '../../lib/client-html.js'
+import { ClientHtml } from '../../lib/html/client-html.js'
 import { apiRateLimiter, asyncMiddleware, authenticate, ensureUserHasRight, openapiOperationDoc } from '../../middlewares/index.js'
 import { customConfigUpdateValidator, ensureConfigIsEditable } from '../../middlewares/validators/config.js'
 
@@ -94,7 +94,7 @@ async function deleteCustomConfig (req: express.Request, res: express.Response) 
   auditLogger.delete(getAuditIdFromRes(res), new CustomConfigAuditView(customConfig()))
 
   await reloadConfig()
-  ClientHtml.invalidCache()
+  ClientHtml.invalidateCache()
 
   const data = customConfig()
 
@@ -110,7 +110,7 @@ async function updateCustomConfig (req: express.Request, res: express.Response) 
   await writeJSON(CONFIG.CUSTOM_FILE, toUpdateJSON, { spaces: 2 })
 
   await reloadConfig()
-  ClientHtml.invalidCache()
+  ClientHtml.invalidateCache()
 
   const data = customConfig()
 

@@ -9,7 +9,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { currentDir, root } from '@peertube/peertube-node-utils'
 import { STATIC_MAX_AGE } from '../initializers/constants.js'
-import { ClientHtml, sendHTML, serveIndexHTML } from '../lib/client-html.js'
+import { ClientHtml, sendHTML, serveIndexHTML } from '../lib/html/client-html.js'
 import { asyncMiddleware, buildRateLimiter, embedCSP } from '../middlewares/index.js'
 
 const clientsRouter = express.Router()
@@ -49,6 +49,8 @@ clientsRouter.use('/@:nameWithHost',
   asyncMiddleware(generateActorHtmlPage)
 )
 
+// ---------------------------------------------------------------------------
+
 const embedMiddlewares = [
   clientsRateLimiter,
 
@@ -64,18 +66,20 @@ const embedMiddlewares = [
     res.setHeader('Cache-Control', 'public, max-age=0')
 
     next()
-  },
-
-  asyncMiddleware(generateEmbedHtmlPage)
+  }
 ]
 
-clientsRouter.use('/videos/embed', ...embedMiddlewares)
-clientsRouter.use('/video-playlists/embed', ...embedMiddlewares)
+clientsRouter.use('/videos/embed/:id', ...embedMiddlewares, asyncMiddleware(generateVideoEmbedHtmlPage))
+clientsRouter.use('/video-playlists/embed/:id', ...embedMiddlewares, asyncMiddleware(generateVideoPlaylistEmbedHtmlPage))
+
+// ---------------------------------------------------------------------------
 
 const testEmbedController = (req: express.Request, res: express.Response) => res.sendFile(testEmbedPath)
 
 clientsRouter.use('/videos/test-embed', clientsRateLimiter, testEmbedController)
 clientsRouter.use('/video-playlists/test-embed', clientsRateLimiter, testEmbedController)
+
+// ---------------------------------------------------------------------------
 
 // Dynamic PWA manifest
 clientsRouter.get('/manifest.webmanifest', clientsRateLimiter, asyncMiddleware(generateManifest))
@@ -142,17 +146,13 @@ function serveServerTranslations (req: express.Request, res: express.Response) {
   return res.status(HttpStatusCode.NOT_FOUND_404).end()
 }
 
-async function generateEmbedHtmlPage (req: express.Request, res: express.Response) {
-  const hookName = req.originalUrl.startsWith('/video-playlists/')
-    ? 'filter:html.embed.video-playlist.allowed.result'
-    : 'filter:html.embed.video.allowed.result'
-
+async function generateVideoEmbedHtmlPage (req: express.Request, res: express.Response) {
   const allowParameters = { req }
 
   const allowedResult = await Hooks.wrapFun(
     isEmbedAllowed,
     allowParameters,
-    hookName
+    'filter:html.embed.video.allowed.result'
   )
 
   if (!allowedResult || allowedResult.allowed !== true) {
@@ -161,7 +161,27 @@ async function generateEmbedHtmlPage (req: express.Request, res: express.Respons
     return sendHTML(allowedResult?.html || '', res)
   }
 
-  const html = await ClientHtml.getEmbedHTML()
+  const html = await ClientHtml.getVideoEmbedHTML(req.params.id)
+
+  return sendHTML(html, res)
+}
+
+async function generateVideoPlaylistEmbedHtmlPage (req: express.Request, res: express.Response) {
+  const allowParameters = { req }
+
+  const allowedResult = await Hooks.wrapFun(
+    isEmbedAllowed,
+    allowParameters,
+    'filter:html.embed.video-playlist.allowed.result'
+  )
+
+  if (!allowedResult || allowedResult.allowed !== true) {
+    logger.info('Embed is not allowed.', { allowedResult })
+
+    return sendHTML(allowedResult?.html || '', res)
+  }
+
+  const html = await ClientHtml.getVideoPlaylistEmbedHTML(req.params.id)
 
   return sendHTML(html, res)
 }

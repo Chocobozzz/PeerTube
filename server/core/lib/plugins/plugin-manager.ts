@@ -30,7 +30,7 @@ import {
   RegisterServerAuthPassOptions,
   RegisterServerOptions
 } from '../../types/plugins/index.js'
-import { ClientHtml } from '../client-html.js'
+import { ClientHtml } from '../html/client-html.js'
 import { RegisterHelpers } from './register-helpers.js'
 import { installNpmPlugin, installNpmPluginFromDisk, rebuildNativePlugins, removeNpmPlugin } from './yarn.js'
 
@@ -329,7 +329,7 @@ export class PluginManager implements ServerHook {
       await this.regeneratePluginGlobalCSS()
     }
 
-    ClientHtml.invalidCache()
+    ClientHtml.invalidateCache()
   }
 
   // ###################### Installation ######################
@@ -497,7 +497,7 @@ export class PluginManager implements ServerHook {
 
     await this.addTranslations(plugin, npmName, packageJSON.translations)
 
-    ClientHtml.invalidCache()
+    ClientHtml.invalidateCache()
   }
 
   private async registerPlugin (plugin: PluginModel, pluginPath: string, packageJSON: PluginPackageJSON) {
