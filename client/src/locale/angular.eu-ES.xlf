@@ -12470,54 +12470,54 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2909684945706361544" datatype="html">
         <source>Delete video</source>
-        <target state="new">Delete video</target>
+        <target state="translated">Ezabatu bideoa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">368</context></context-group>
       </trans-unit>
       <trans-unit id="2210418817778733727" datatype="html">
         <source>Actions for the comment</source>
-        <target state="new">Actions for the comment</target>
+        <target state="translated">Iruzkinaren ekintzak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">397</context></context-group>
       </trans-unit>
       <trans-unit id="7978668497183230348" datatype="html">
         <source>Delete comment</source>
-        <target state="new">Delete comment</target>
+        <target state="translated">Ezabatu iruzkina</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">403</context></context-group>
       </trans-unit>
       <trans-unit id="6747218355168080191" datatype="html">
         <source>Do you really want to delete this comment?</source>
-        <target state="new">Do you really want to delete this comment?</target>
+        <target state="translated">Ziur zaude iruzkin hau ezabatu nahi duzula?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">184</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">407</context></context-group>
       </trans-unit>
       <trans-unit id="7837272126865175984" datatype="html">
         <source>Comment deleted.</source>
-        <target state="new">Comment deleted.</target>
+        <target state="translated">Iruzkina ezabatu da.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">415</context></context-group>
       </trans-unit>
       <trans-unit id="346270517625845962" datatype="html">
         <source>Encoder</source>
-        <target state="new">Encoder</target>
+        <target state="translated">Kodetzailea</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">223</context></context-group>
       </trans-unit>
       <trans-unit id="2331557444464201331" datatype="html">
         <source>Format name</source>
-        <target state="new">Format name</target>
+        <target state="translated">Formatuaren izena</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">224</context></context-group>
       </trans-unit>
       <trans-unit id="45739481977493163" datatype="html">
         <source>Size</source>
-        <target state="new">Size</target>
+        <target state="translated">Tamaina</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">225</context></context-group>
       </trans-unit>
       <trans-unit id="7742520815129539114" datatype="html">
         <source>Bitrate</source>
-        <target state="new">Bitrate</target>
+        <target state="translated">Bit-emaria</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">227</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">250</context></context-group>
       </trans-unit>
       <trans-unit id="4094960161662677662" datatype="html">
         <source>Codec</source>
-        <target state="new">Codec</target>
+        <target state="translated">Kodeka</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">247</context></context-group>
       </trans-unit>
       <trans-unit id="2115592966120408375">
@@ -12527,7 +12527,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8726695529938456424" datatype="html">
         <source>COPY</source>
-        <target state="new"> COPY </target>
+        <target state="translated">KOPIATU</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/input-text.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -12546,35 +12546,35 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3941342949736653028" datatype="html">
         <source>Video deleted.</source>
-        <target state="new">Video deleted.</target>
+        <target state="translated">Bideoa ezabatu da.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">102</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">380</context></context-group>
       </trans-unit>
       <trans-unit id="5072091387445907742" datatype="html">
         <source>Actions for the reporter</source>
-        <target state="new">Actions for the reporter</target>
+        <target state="translated">Salatzailearen ekintzak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">307</context></context-group>
       </trans-unit>
       <trans-unit id="6599069899275412095" datatype="html">
         <source>Mute reporter</source>
-        <target state="new">Mute reporter</target>
+        <target state="translated">Mututu salatzailea</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">313</context></context-group>
       </trans-unit>
       <trans-unit id="3099741642167775297" datatype="html">
         <source>Download</source>
-        <target state="new">Download</target>
+        <target state="translated">Deskargatu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">329</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
       <trans-unit id="7672331870004528654" datatype="html">
         <source>Display live information</source>
-        <target state="new">Display live information</target>
+        <target state="translated">Bistaratu informazioa zuzenean</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">335</context></context-group>
       </trans-unit>
       <trans-unit id="4021752662928002901" datatype="html">
         <source>Update</source>
-        <target state="new">Update</target>
+        <target state="translated">Eguneratu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context><context context-type="linenumber">194</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context><context context-type="linenumber">115</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">62</context></context-group>
@@ -12588,20 +12588,20 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="420763834450076269" datatype="html">
         <source>Block</source>
-        <target state="new">Block</target>
+        <target state="translated">Blokeatu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">82</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">52</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">359</context></context-group>
       </trans-unit>
       <trans-unit id="6521421218398377925" datatype="html">
         <source>Run HLS transcoding</source>
-        <target state="new">Run HLS transcoding</target>
+        <target state="translated">Exekutatu HLS-ren transkodetzea</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">96</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">391</context></context-group>
       </trans-unit>
       <trans-unit id="6726093171366409167" datatype="html">
         <source>Run Web Video transcoding</source>
-        <target state="new">Run Web Video transcoding</target>
+        <target state="translated">Exekutatu Web Video-ren transkodetzea</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -12619,7 +12619,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="72391380513979568" datatype="html">
         <source>Delete Web Video files</source>
-        <target state="new">Delete Web Video files</target>
+        <target state="translated">Ezabatu Web Video fitxategiak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -12631,7 +12631,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8315587636588243636" datatype="html">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</source>
-        <target state="new">Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</target>
+        <target state="translated">Ziur <x id="PH" equiv-text="file.resolution.label"/> fitxategi hau ezabatu nahi duzula?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">187</context></context-group>
       </trans-unit>
       <trans-unit id="6693349469471580292" datatype="html">
@@ -12646,7 +12646,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</target>
+        <target state="translated">Ziur {count, plural, =1 {bideo hau ezabatu nahi duzula} other {<x id="count"/> bideo hauek ezabatu nahi dituzula}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">223</context></context-group>
       </trans-unit>
       <trans-unit id="1950057220179636309" datatype="html">
@@ -12657,7 +12657,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4503408361537553733" datatype="html">
         <source>Mirror</source>
-        <target state="new">Mirror</target>
+        <target state="translated">Kopiatu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">371</context></context-group>
       </trans-unit>
       <trans-unit id="2631340539474479416" datatype="html">
@@ -12677,7 +12677,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="754514708851972720" datatype="html">
         <source>Job(s) removed.</source>
-        <target state="new">Job(s) removed.</target>
+        <target state="translated">Lanak kendu dira.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">131</context>
@@ -12685,7 +12685,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8527948211896740910" datatype="html">
         <source>Do you really want to delete this runner? It won't be able to process jobs anymore.</source>
-        <target state="new">Do you really want to delete this runner? It won't be able to process jobs anymore.</target>
+        <target state="translated">Ziur zaude exekutatzaile hau ezabatu nahi duzula? Ezin izango ditu prozesatu lanak berriro.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -12693,7 +12693,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1331591430867610406" datatype="html">
         <source>Remove <x id="PH" equiv-text="runner.name"/></source>
-        <target state="new">Remove <x id="PH" equiv-text="runner.name"/></target>
+        <target state="translated">Kendu <x id="PH" equiv-text="runner.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -12701,7 +12701,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7401875498720294519" datatype="html">
         <source>Runner removed.</source>
-        <target state="new">Runner removed.</target>
+        <target state="translated">Exekutatzailea kendu da.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -12709,32 +12709,32 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3039940756451018621" datatype="html">
         <source>Token</source>
-        <target state="new">Token</target>
+        <target state="translated">Tokena</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="5024831045497027714" datatype="html">
         <source>Associated runners</source>
-        <target state="new">Associated runners</target>
+        <target state="translated">Lotutako exekutatzaileak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="2344549567732505963" datatype="html">
         <source>Generate token</source>
-        <target state="new">Generate token</target>
+        <target state="translated">Sortu tokena</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="8075170500509574933" datatype="html">
         <source>Registration token copied</source>
-        <target state="new">Registration token copied</target>
+        <target state="translated">Erregistroaren tokena kopiatu da</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="320641639634758368" datatype="html">
         <source>Copy registration token</source>
-        <target state="new">Copy registration token</target>
+        <target state="translated">Kopiatu erregistroaren tokena</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="1952170121636976975" datatype="html">
         <source>No registration token found for remote runners.</source>
-        <target state="new">No registration token found for remote runners.</target>
+        <target state="translated">Ez da aurkitu urruneko exekutatzaileen erregistroaren tokenik.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="8244506587463177080" datatype="html">
@@ -13118,7 +13118,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2677581013897190613" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></source>
-        <target state="new">Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
+        <target state="translated">Bideoa <x id="PH" equiv-text="secondsToTime(start)"/> segundotan hasiko da eta <x id="PH_1" equiv-text="secondsToTime(end)"/> segundotan amaituko da</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="2299077646120636288" datatype="html">
