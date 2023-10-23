@@ -13,10 +13,11 @@ import { MIMETYPES } from '@server/initializers/constants.js'
 async function buildNewFile (options: {
   path: string
   mode: 'web-video' | 'hls'
+  ffprobe?: FfprobeData
 }) {
-  const { path, mode } = options
+  const { path, mode, ffprobe: probeArg } = options
 
-  const probe = await ffprobePromise(path)
+  const probe = probeArg ?? await ffprobePromise(path)
   const size = await getFileSize(path)
 
   const videoFile = new VideoFileModel({

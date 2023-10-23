@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { UploadFiles } from 'express'
 import { move } from 'fs-extra/esm'
 import { basename } from 'path'
 import { getResumableUploadPath } from '@server/helpers/upload.js'
@@ -13,9 +13,9 @@ import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
-import { MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { MVideoFile, MVideoFullLight, MVideoThumbnail } from '@server/types/models/index.js'
 import { uuidToShort } from '@peertube/peertube-node-utils'
-import { HttpStatusCode, VideoCreate, VideoPrivacy, VideoState } from '@peertube/peertube-models'
+import { HttpStatusCode, ThumbnailType, VideoCreate, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
 import { createReqFiles } from '../../../helpers/express-utils.js'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
@@ -34,8 +34,9 @@ import {
 } from '../../../middlewares/index.js'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update.js'
 import { VideoModel } from '../../../models/video/video.js'
-import { getChaptersFromContainer } from '@peertube/peertube-ffmpeg'
+import { ffprobePromise, getChaptersFromContainer } from '@peertube/peertube-ffmpeg'
 import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from '@server/lib/video-chapters.js'
+import { FfprobeData } from 'fluent-ffmpeg'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -142,12 +143,15 @@ async function addVideo (options: {
   video.VideoChannel = videoChannel
   video.url = getLocalVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
-  const videoFile = await buildNewFile({ path: videoPhysicalFile.path, mode: 'web-video' })
+  const ffprobe = await ffprobePromise(videoPhysicalFile.path)
+
+  const videoFile = await buildNewFile({ path: videoPhysicalFile.path, mode: 'web-video', ffprobe })
   const originalFilename = videoPhysicalFile.originalname
 
   const containerChapters = await getChaptersFromContainer({
     path: videoPhysicalFile.path,
-    maxTitleLength: CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.TITLE.max
+    maxTitleLength: CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.TITLE.max,
+    ffprobe
   })
   logger.debug(`Got ${containerChapters.length} chapters from video "${video.name}" container`, { containerChapters, ...lTags(video.uuid) })
 
@@ -158,19 +162,16 @@ async function addVideo (options: {
   videoPhysicalFile.filename = basename(destination)
   videoPhysicalFile.path = destination
 
-  const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
-    video,
-    files,
-    fallback: type => generateLocalVideoMiniature({ video, videoFile, type })
-  })
+  const thumbnails = await createThumbnailFiles({ video, files, videoFile, ffprobe })
 
   const { videoCreated } = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
     const videoCreated = await video.save(sequelizeOptions) as MVideoFullLight
 
-    await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
-    await videoCreated.addAndSaveThumbnail(previewModel, t)
+    for (const thumbnail of thumbnails) {
+      await videoCreated.addAndSaveThumbnail(thumbnail, t)
+    }
 
     // Do not forget to add video channel information to the created video
     videoCreated.VideoChannel = res.locals.videoChannel
@@ -296,4 +297,28 @@ async function deleteUploadResumableCache (req: express.Request, res: express.Re
   await Redis.Instance.deleteUploadSession(req.query.upload_id)
 
   return next()
+}
+
+async function createThumbnailFiles (options: {
+  video: MVideoThumbnail
+  files: UploadFiles
+  videoFile: MVideoFile
+  ffprobe?: FfprobeData
+}) {
+  const { video, videoFile, files, ffprobe } = options
+
+  const models = await buildVideoThumbnailsFromReq({
+    video,
+    files,
+    fallback: () => Promise.resolve(undefined)
+  })
+
+  const filteredModels = models.filter(m => !!m)
+
+  const thumbnailsToGenerate = [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ].filter(type => {
+    // Generate missing thumbnail types
+    return !filteredModels.some(m => m.type === type)
+  })
+
+  return [ ...filteredModels, ...await generateLocalVideoMiniature({ video, videoFile, types: thumbnailsToGenerate, ffprobe }) ]
 }

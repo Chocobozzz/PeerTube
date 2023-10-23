@@ -77,7 +77,6 @@ $margin-top: 2rem;
 }
 
 @media screen and (max-width: $mobile-view) {
-  .videos-header,
   my-video-filters-header {
     @include margin-left(1rem);
     @include margin-right(1rem);
@@ -93,5 +92,6 @@ $margin-top: 2rem;
     text-align: center;
     width: 100%;
     margin-bottom: 1rem;
+    display: block;
   }
 }

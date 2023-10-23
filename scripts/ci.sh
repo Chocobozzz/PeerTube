@@ -58,11 +58,12 @@ elif [ "$1" = "client" ]; then
     npm run build:tests
 
     feedsFiles=$(findTestFiles ./packages/tests/dist/feeds)
-    miscFiles="./packages/tests/dist/client.js ./packages/tests/dist/misc-endpoints.js"
+    clientFiles=$(findTestFiles ./packages/tests/dist/client)
+    miscFiles="./packages/tests/dist/misc-endpoints.js"
     # Not in their own task, they need an index.html
     pluginFiles="./packages/tests/dist/plugins/html-injection.js ./packages/tests/dist/api/server/plugins.js"
 
-    MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $feedsFiles $miscFiles $pluginFiles
+    MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $feedsFiles $miscFiles $pluginFiles $clientFiles
 
     # Use TS tests directly because we import server files
     helperFiles=$(findTestFiles ./packages/tests/src/server-helpers)

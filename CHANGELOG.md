@@ -1,5 +1,148 @@
 # Changelog
 
+## 6.0.0-rc.1 (not yet released)
+
+### IMPORTANT NOTES
+
+We have many important notes in this release. We know it's a pain for sysadmin, but consider each one as a major step forward for PeerTube quality!
+
+#### Sysadmins important notes
+
+  * Remove NodeJS 16 support (see https://nodejs.org/fr/blog/announcements/nodejs16-eol):
+    * Please upgrade to NodeJS 18 before upgrading PeerTube
+    * If you use NodeSource repository, you may have to migrate to their new repository: https://github.com/nodesource/distributions/wiki/How-to-migrate-to-the-new-repository
+    * Check in `production.yaml` that you use `127.0.0.1` instead of `localhost` for `listen.hostname` (https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L2) to ensure PeerTube is listening on IPv4
+
+  * Remove WebTorrent support in player:
+    * "WebTorrent videos" are renamed to "Web Video". The video format is the same, we just stop to use P2P for these videos
+    * There is not "Auto" quality anymore for Web Videos. The viewer has to explicitly choose the video resolution
+    * We still use P2P with the HLS player, which is the recommended transcoding format since several versions
+    * See https://github.com/Chocobozzz/PeerTube/issues/5465 for more information
+
+  * Configuration key that you must update in your `production.yaml` if not automatically done by your upgrade script:
+    * `storage.videos` must be **renamed** to `storage.web_videos`. The value of this configuration doesn't need to be changed: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L151
+    * `transcoding.webtorrent` must be **renamed** to `transcoding.web_videos`: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L522
+    * `object_storage.videos` must be **renamed** to `object_storage.web_videos`. The value of this `object_storage.web_videos.bucket_name` doesn't need to be changed: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L223
+    * `storage.storyboards` must be **added**: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L157
+
+  * PeerTube Docker image now uses `bookworm`. `chocobozzz/peertube:production-bullseye` needs to be replaced by `chocobozzz/peertube:production-bookworm`
+
+  * Env configuration that your must update if you use Docker:
+    * `PEERTUBE_TRANSCODING_WEBTORRENT_ENABLED` must be **renamed** to `PEERTUBE_TRANSCODING_WEB_VIDEOS_ENABLED`
+    * `PEERTUBE_OBJECT_STORAGE_VIDEOS_BUCKET_NAME` must be **renamed** to `PEERTUBE_OBJECT_STORAGE_WEB_VIDEOS_BUCKET_NAME`
+    * `PEERTUBE_OBJECT_STORAGE_VIDEOS_PREFIX` must be **renamed** to `PEERTUBE_OBJECT_STORAGE_WEB_VIDEOS_PREFIX`
+    * `PEERTUBE_OBJECT_STORAGE_VIDEOS_BASE_URL` must be **renamed** to `PEERTUBE_OBJECT_STORAGE_WEB_VIDEOS_BASE_URL`
+
+  * You must update nginx configuration: https://github.com/Chocobozzz/PeerTube/blob/develop/support/nginx/peertube
+    * `location ~ ^/static/(thumbnails|avatars)/ {` block must be removed
+    * `location ~ ^(/static/(webseed|streaming-playlists)/private/)|^/download {` must be updated to `location ~ ^(/static/(webseed|web-videos|streaming-playlists)/private/)|^/download {`
+    * `location ~ ^/static/(webseed|redundancy|streaming-playlists)/ {` must be updated to `location ~ ^/static/(webseed|web-videos|redundancy|streaming-playlists)/ {`
+
+  * Tracing requires `--experimental-loader=@opentelemetry/instrumentation/hook.mjs` node option: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L263
+
+#### Developers important notes
+
+  * REST API breaking changes:
+    * Removed `webtorrentEnabled` from user response (deprecated since 4.1 in favour of `p2pEnabled`)
+    * Removed `avatar` and `banner` fields from account/channel responses (deprecated since 4.2 in favour of `avatars` and `banners`)
+    * Removed `filter` query when listing videos (deprecated since 4.0 in favour of `isLocal` and `include`)
+    * Deprecate `/api/v1/videos/:id/webtorrent` video file routes in favour of `/api/v1/videos/:id/web-videos` routes
+    * Deprecate `hasWebtorrentFiles` body video filter in favour of `hasWebVideoFiles` when listing videos
+    * Deprecate `webtorrent` `transcodingType` in favour of `web-video` in `/api/v1/videos/{id}/transcoding` route
+    * `currentTime` is now required to notify the user is watching the video using `/api/v1/videos/{id}/views` (introduced in 4.2)
+
+  * Static server paths breaking changes:
+    * `/static/webseed/...` is deprecated in favour of `/static/web-videos/...`
+    * `/object-storage-proxy/webseed/...` is deprecated in favour of `/object-storage-proxy/web-videos/...`
+    * `/static/thumbnails/...` is deprecated in favour of `/static/lazy-thumbnails/...`
+
+  * Plugin API breaking changes:
+    * Deprecated `webtorrent` key in `getFiles()` helper result. Use `webVideo` instead
+
+
+### CLI tools
+
+  * Removed unmaintained `peertube-import-videos` (also aliased as `peertube import-videos` or `peertube import`) script
+  * PeerTube remote CLI is much more simpler to install using NPM: https://docs.joinpeertube.org/maintain/tools#remote-peertube-cli
+
+### Features
+
+  * :tada: Add "Password protected" video privacy [#5836](https://github.com/Chocobozzz/PeerTube/pull/5836) :tada:
+    * A single password can be set using the web interface at video upload/import/update
+    * The REST API can store as many passwords as you want, allowing developers to use this feature to easily give or revoke access to a video *on the fly*
+  * :tada: Add video storyboard support :tada:
+    * PeerTube automatically generates a storyboard on video upload/import
+    * Viewers can see the image around the targeted timecode when hovering the progress bar
+    * Storyboard of videos uploaded/imported before v6 can be generated by the admin using `npm run create-generate-storyboard-job` command
+  * :tada: Add ability for users to replace their video file :tada:
+    * Has to be enabled by the PeerTube instance administrator
+    * The user can replace the video file in the *Update Video* page
+    * The *re-upload* date is displayed under the video player
+  * :tada: Add video chapters support :tada:
+    * Add chapters in the upload/import/update video page or let PeerTube automatically imports them from the video container/youtube-dl
+    * Markers are displayed in the player progress bar to symbolize a chapter
+    * Chapter title is displayed when hovering/touching the player progress bar
+  * Better video player:
+    * More efficient as we don't rebuild the player every time the played video changes
+    * The player keeps the current player settings (playback speed, fullscreen...) when the played video changes
+    * Automatically adjust the player size to match video ratio
+  * Improve SEO and video link sharing:
+    * Use short video/channel/account URLs in sitemap and for canonical tags
+    * Add JSON-LD tag in embed page
+    * Embed page does not forbid indexation anymore: we use a canonical tag instead that targets the watch page
+    * Forbid indexation of remote videos, accounts and channels (instead of providing an invalid canonical tag)
+    * Truncate OpenGraph/Twitter card link description
+  * Fix client accessibility and keyboard navigation:
+    * Fix links in bootstrap alerts color
+    * Better input placeholder contrast
+    * Fix video miniature link label
+    * Add ability to disable hotkeys
+    * Improve table overall accessibility
+    * Wrap icons that can lead to an action inside buttons
+    * Fix left menu admin/my-library menu accessibility
+    * And many more improvements!
+  * Improve remote runner management:
+    * Add ability to remove runner jobs
+    * Add runner job state quick filter
+    * Merge registration tokens and runners tables in same page
+    * Add copy button to copy registration token
+  * Add ability for admins to force transcoding on a specific video even if it's in broken state (stuck in *To Transcode* for example)
+  * Add an option to sign federated fetches (ActivityPub based software such as Mastodon may require it to access content)
+  * Download video file directly from S3 using pre signed URLs
+  * Lazy download remote video thumbnails to reduce storage
+  * Improve recommended videos when the watched video doesn't have tags set
+  * Add more rate limits in configuration (`plugins`, `well-known`, `feeds`, `activity_pub` and `client` endpoints)
+  * Add ability to reset video *Originally published at* attribute
+  * Add ability for admins to set the default user channel name [#6000](https://github.com/Chocobozzz/PeerTube/pull/6000)
+  * Server now uses [ESM modules](https://nodejs.org/api/esm.html)
+
+
+### Bug fixes
+
+  * Don't cache upload response if the video has been deleted
+  * Fix broken upgrade script when using custom database port
+  * Prevent duplicate runner names
+  * Avoid runner job update error
+  * Notify remote runners there are available jobs when a job is aborted/errored
+  * Fix updating P2P settings in left menu
+  * Fix 500 HTTP error on invalid short UUID conversion
+  * Don't display admin email in `security.txt` well-known endpoint
+  * Optimize `update-host` script to fix out of memory error
+  * Fix error log when using an unconventional distribution of FFmpeg with a non-standard version string [#5917](https://github.com/Chocobozzz/PeerTube/pull/5917)
+  * Fix live replay REST API breaking change: `replaySettings.privacy` is not required anymore
+  * Fix broken live replay when updating replay privacy
+  * More robust *About* page when getting category from server
+  * Fix `ERR_HTTP_HEADERS_SENT` crash
+  * Avoid illegal characters in torrent filename
+  * Avoid federation error log with remote `Like` on `Note`
+  * Fix atom feed with *Science & Technology* category
+  * Support empty value returned by `filter:api.video.get.result` hook
+  * Prevent remote subscribe on accounts (not yet supported by PeerTube)
+  * Fix feed audio file mimetype
+  * Fix video quality on high video resolution/fps
+  * Fix disabling Object Storage ACL using Docker env `PEERTUBE_OBJECT_STORAGE_UPLOAD_ACL_PUBLIC` and `PEERTUBE_OBJECT_STORAGE_UPLOAD_ACL_PRIVATE` in `.env`
+
+
 ## v5.2.1
 
 ### Bug fixes

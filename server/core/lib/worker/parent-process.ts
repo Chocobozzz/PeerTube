@@ -1,9 +1,10 @@
 import { join } from 'path'
 import Piscina from 'piscina'
 import { JOB_CONCURRENCY, WORKER_THREADS } from '@server/initializers/constants.js'
-import httpBroadcast from './workers/http-broadcast.js'
-import downloadImage from './workers/image-downloader.js'
-import processImage from './workers/image-processor.js'
+import type httpBroadcast from './workers/http-broadcast.js'
+import type downloadImage from './workers/image-downloader.js'
+import type processImage from './workers/image-processor.js'
+import type getImageSize from './workers/get-image-size.js'
 
 let downloadImageWorker: Piscina
 
@@ -33,6 +34,22 @@ function processImageFromWorker (options: Parameters<typeof processImage>[0]): P
   }
 
   return processImageWorker.run(options)
+}
+
+// ---------------------------------------------------------------------------
+
+let getImageSizeWorker: Piscina
+
+function getImageSizeFromWorker (options: Parameters<typeof getImageSize>[0]): Promise<ReturnType<typeof getImageSize>> {
+  if (!getImageSizeWorker) {
+    getImageSizeWorker = new Piscina({
+      filename: new URL(join('workers', 'get-image-size.js'), import.meta.url).href,
+      concurrentTasksPerWorker: WORKER_THREADS.GET_IMAGE_SIZE.CONCURRENCY,
+      maxThreads: WORKER_THREADS.GET_IMAGE_SIZE.MAX_THREADS
+    })
+  }
+
+  return getImageSizeWorker.run(options)
 }
 
 // ---------------------------------------------------------------------------
@@ -73,5 +90,6 @@ export {
   downloadImageFromWorker,
   processImageFromWorker,
   parallelHTTPBroadcastFromWorker,
+  getImageSizeFromWorker,
   sequentialHTTPBroadcastFromWorker
 }

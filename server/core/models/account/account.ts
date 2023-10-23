@@ -23,9 +23,7 @@ import { isAccountDescriptionValid } from '../../helpers/custom-validators/accou
 import { CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants.js'
 import { sendDeleteActor } from '../../lib/activitypub/send/send-delete.js'
 import {
-  MAccount,
-  MAccountActor,
-  MAccountAP,
+  MAccount, MAccountAP,
   MAccountDefault,
   MAccountFormattable,
   MAccountHost,
@@ -390,7 +388,7 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
     return AccountModel.findOne(query)
   }
 
-  static listLocalsForSitemap (sort: string): Promise<MAccountActor[]> {
+  static listLocalsForSitemap (sort: string): Promise<MAccountHost[]> {
     const query = {
       attributes: [ ],
       offset: 0,

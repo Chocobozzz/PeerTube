@@ -34,7 +34,6 @@ import {
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants.js'
 import { sendDeleteActor } from '../../lib/activitypub/send/index.js'
 import {
-  MChannelActor,
   MChannelAP,
   MChannelBannerAccountDefault,
   MChannelFormattable,
@@ -500,7 +499,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
     }
   }
 
-  static listLocalsForSitemap (sort: string): Promise<MChannelActor[]> {
+  static listLocalsForSitemap (sort: string): Promise<MChannelHost[]> {
     const query = {
       attributes: [ ],
       offset: 0,

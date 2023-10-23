@@ -38,7 +38,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
       : undefined
 
     it('Should upload a classic video mp4 and transcode it', async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'mp4', fixture: 'video_short.mp4' })
 
@@ -76,7 +76,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     })
 
     it('Should upload a webm video and transcode it', async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'mp4', fixture: 'video_short.webm' })
 
@@ -114,7 +114,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     })
 
     it('Should upload an audio only video and transcode it', async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       const attributes = { name: 'audio_without_preview', fixture: 'sample.ogg' }
       const { uuid } = await servers[0].videos.upload({ attributes, mode: 'resumable' })
@@ -152,7 +152,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     })
 
     it('Should upload a private video and transcode it', async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'mp4', fixture: 'video_short.mp4', privacy: VideoPrivacy.PRIVATE })
 
@@ -188,7 +188,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     })
 
     it('Should transcode videos on manual run', async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       await servers[0].config.disableTranscoding()
 

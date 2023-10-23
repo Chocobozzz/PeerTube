@@ -2,7 +2,7 @@ import { Job } from 'bullmq'
 import { join } from 'path'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
-import { generateImageFilename, getImageSize } from '@server/helpers/image-utils.js'
+import { generateImageFilename } from '@server/helpers/image-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { deleteFileAndCatch } from '@server/helpers/utils.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -15,6 +15,7 @@ import { VideoModel } from '@server/models/video/video.js'
 import { MVideo } from '@server/types/models/index.js'
 import { FFmpegImage, isAudioFile } from '@peertube/peertube-ffmpeg'
 import { GenerateStoryboardPayload } from '@peertube/peertube-models'
+import { getImageSizeFromWorker } from '@server/lib/worker/parent-process.js'
 
 const lTagsBase = loggerTagsFactory('storyboard')
 
@@ -76,7 +77,7 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
         }
       })
 
-      const imageSize = await getImageSize(destination)
+      const imageSize = await getImageSizeFromWorker(destination)
 
       await retryTransactionWrapper(() => {
         return sequelizeTypescript.transaction(async transaction => {

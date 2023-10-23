@@ -1,3 +1,4 @@
+import { FfprobeData } from 'fluent-ffmpeg'
 import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-command-wrapper.js'
 import { getVideoStreamDuration } from './ffprobe.js'
 
@@ -38,10 +39,11 @@ export class FFmpegImage {
   async generateThumbnailFromVideo (options: {
     fromPath: string
     output: string
+    ffprobe?: FfprobeData
   }) {
-    const { fromPath, output } = options
+    const { fromPath, output, ffprobe } = options
 
-    let duration = await getVideoStreamDuration(fromPath)
+    let duration = await getVideoStreamDuration(fromPath, ffprobe)
     if (isNaN(duration)) duration = 0
 
     this.commandWrapper.buildCommand(fromPath)

@@ -1949,10 +1949,10 @@
   dependencies:
     tslib "^2.3.0"
 
-"@ng-select/ng-select@^11.1.1":
-  version "11.1.1"
-  resolved "https://registry.yarnpkg.com/@ng-select/ng-select/-/ng-select-11.1.1.tgz#49fc89420bfc4022543833de5212214a1e00a0dd"
-  integrity sha512-Z5wV/u2HgaKl7CQSG3Sy1oF+BPQolmVV6jBuPqHa2+OWg0Nn2e9eXYdcZT8Q3BahfP5j5rHNIBrkkESg/m4YiQ==
+"@ng-select/ng-select@^11.2.0":
+  version "11.2.0"
+  resolved "https://registry.yarnpkg.com/@ng-select/ng-select/-/ng-select-11.2.0.tgz#33048ddeb6a524078f3134167d75137239bf1c6e"
+  integrity sha512-lTyw93kFdKGecp9eKmOP0PQSCaAJS8DCt4D60ns055+ixvRSp2fuXAuJUvn1e3gAsvpZor37osmYlOJ4LYwYIA==
   dependencies:
     tslib "^2.3.1"
 
