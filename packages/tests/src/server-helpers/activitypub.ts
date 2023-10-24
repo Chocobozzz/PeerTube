@@ -5,12 +5,21 @@ import { signAndContextify } from '@peertube/peertube-server/core/helpers/activi
 import {
   isHTTPSignatureVerified,
   isJsonLDSignatureVerified,
-  parseHTTPSignature
+  parseHTTPSignature,
+  signJsonLDObject
 } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
 import { buildRequestStub } from '@tests/shared/tests.js'
 import { expect } from 'chai'
 import { readJsonSync } from 'fs-extra/esm'
 import cloneDeep from 'lodash-es/cloneDeep.js'
+
+function signJsonLDObjectWithoutAssertion (options: Parameters<typeof signJsonLDObject>[0]) {
+  return signJsonLDObject({
+    ...options,
+
+    disableWorkerThreadAssertion: true
+  })
+}
 
 function fakeFilter () {
   return (data: any) => Promise.resolve(data)
@@ -55,7 +64,13 @@ describe('Test activity pub helpers', function () {
       const body = readJsonSync(buildAbsoluteFixturePath('./ap-json/peertube/announce-without-context.json'))
 
       const actorSignature = { url: 'http://localhost:9002/accounts/peertube', privateKey: keys.privateKey }
-      const signedBody = await signAndContextify(actorSignature as any, body, 'Announce', fakeFilter())
+      const signedBody = await signAndContextify({
+        byActor: actorSignature as any,
+        data: body,
+        contextType: 'Announce',
+        contextFilter: fakeFilter(),
+        signerFunction: signJsonLDObjectWithoutAssertion
+      })
 
       const fromActor = { publicKey: keys.publicKey, url: 'http://localhost:9002/accounts/peertube' }
       const result = await isJsonLDSignatureVerified(fromActor as any, signedBody)
@@ -68,7 +83,13 @@ describe('Test activity pub helpers', function () {
       const body = readJsonSync(buildAbsoluteFixturePath('./ap-json/peertube/announce-without-context.json'))
 
       const actorSignature = { url: 'http://localhost:9002/accounts/peertube', privateKey: keys.privateKey }
-      const signedBody = await signAndContextify(actorSignature as any, body, 'Announce', fakeFilter())
+      const signedBody = await signAndContextify({
+        byActor: actorSignature as any,
+        data: body,
+        contextType: 'Announce',
+        contextFilter: fakeFilter(),
+        signerFunction: signJsonLDObjectWithoutAssertion
+      })
 
       const fromActor = { publicKey: keys.publicKey, url: 'http://localhost:9002/accounts/peertube' }
       const result = await isJsonLDSignatureVerified(fromActor as any, signedBody)

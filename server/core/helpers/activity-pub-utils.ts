@@ -2,11 +2,14 @@ import { ContextType } from '@peertube/peertube-models'
 import { ACTIVITY_PUB } from '@server/initializers/constants.js'
 import { buildDigest, signJsonLDObject } from './peertube-crypto.js'
 
-type ContextFilter = <T> (arg: T) => Promise<T>
+export type ContextFilter = <T> (arg: T) => Promise<T>
 
-export function buildGlobalHTTPHeaders (body: any) {
+export function buildGlobalHTTPHeaders (
+  body: any,
+  digestBuilder: typeof buildDigest
+) {
   return {
-    'digest': buildDigest(body),
+    'digest': digestBuilder(body),
     'content-type': 'application/activity+json',
     'accept': ACTIVITY_PUB.ACCEPT_HEADER
   }
@@ -16,17 +19,20 @@ export async function activityPubContextify <T> (data: T, type: ContextType, con
   return { ...await getContextData(type, contextFilter), ...data }
 }
 
-export async function signAndContextify <T> (
-  byActor: { url: string, privateKey: string },
-  data: T,
-  contextType: ContextType | null,
+export async function signAndContextify <T> (options: {
+  byActor: { url: string, privateKey: string }
+  data: T
+  contextType: ContextType | null
   contextFilter: ContextFilter
-) {
+  signerFunction: typeof signJsonLDObject<T>
+}) {
+  const { byActor, data, contextType, contextFilter, signerFunction } = options
+
   const activity = contextType
     ? await activityPubContextify(data, contextType, contextFilter)
     : data
 
-  return signJsonLDObject(byActor, activity)
+  return signerFunction({ byActor, data: activity })
 }
 
 // ---------------------------------------------------------------------------

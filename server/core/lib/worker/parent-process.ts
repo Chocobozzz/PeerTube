@@ -5,10 +5,12 @@ import type httpBroadcast from './workers/http-broadcast.js'
 import type downloadImage from './workers/image-downloader.js'
 import type processImage from './workers/image-processor.js'
 import type getImageSize from './workers/get-image-size.js'
+import type signJsonLDObject from './workers/sign-json-ld-object.js'
+import type buildDigest from './workers/build-digest.js'
 
 let downloadImageWorker: Piscina
 
-function downloadImageFromWorker (options: Parameters<typeof downloadImage>[0]): Promise<ReturnType<typeof downloadImage>> {
+export function downloadImageFromWorker (options: Parameters<typeof downloadImage>[0]): Promise<ReturnType<typeof downloadImage>> {
   if (!downloadImageWorker) {
     downloadImageWorker = new Piscina({
       filename: new URL(join('workers', 'image-downloader.js'), import.meta.url).href,
@@ -24,7 +26,7 @@ function downloadImageFromWorker (options: Parameters<typeof downloadImage>[0]):
 
 let processImageWorker: Piscina
 
-function processImageFromWorker (options: Parameters<typeof processImage>[0]): Promise<ReturnType<typeof processImage>> {
+export function processImageFromWorker (options: Parameters<typeof processImage>[0]): Promise<ReturnType<typeof processImage>> {
   if (!processImageWorker) {
     processImageWorker = new Piscina({
       filename: new URL(join('workers', 'image-processor.js'), import.meta.url).href,
@@ -40,7 +42,7 @@ function processImageFromWorker (options: Parameters<typeof processImage>[0]): P
 
 let getImageSizeWorker: Piscina
 
-function getImageSizeFromWorker (options: Parameters<typeof getImageSize>[0]): Promise<ReturnType<typeof getImageSize>> {
+export function getImageSizeFromWorker (options: Parameters<typeof getImageSize>[0]): Promise<ReturnType<typeof getImageSize>> {
   if (!getImageSizeWorker) {
     getImageSizeWorker = new Piscina({
       filename: new URL(join('workers', 'get-image-size.js'), import.meta.url).href,
@@ -56,7 +58,7 @@ function getImageSizeFromWorker (options: Parameters<typeof getImageSize>[0]): P
 
 let parallelHTTPBroadcastWorker: Piscina
 
-function parallelHTTPBroadcastFromWorker (options: Parameters<typeof httpBroadcast>[0]): Promise<ReturnType<typeof httpBroadcast>> {
+export function parallelHTTPBroadcastFromWorker (options: Parameters<typeof httpBroadcast>[0]): Promise<ReturnType<typeof httpBroadcast>> {
   if (!parallelHTTPBroadcastWorker) {
     parallelHTTPBroadcastWorker = new Piscina({
       filename: new URL(join('workers', 'http-broadcast.js'), import.meta.url).href,
@@ -73,7 +75,9 @@ function parallelHTTPBroadcastFromWorker (options: Parameters<typeof httpBroadca
 
 let sequentialHTTPBroadcastWorker: Piscina
 
-function sequentialHTTPBroadcastFromWorker (options: Parameters<typeof httpBroadcast>[0]): Promise<ReturnType<typeof httpBroadcast>> {
+export function sequentialHTTPBroadcastFromWorker (
+  options: Parameters<typeof httpBroadcast>[0]
+): Promise<ReturnType<typeof httpBroadcast>> {
   if (!sequentialHTTPBroadcastWorker) {
     sequentialHTTPBroadcastWorker = new Piscina({
       filename: new URL(join('workers', 'http-broadcast.js'), import.meta.url).href,
@@ -86,10 +90,40 @@ function sequentialHTTPBroadcastFromWorker (options: Parameters<typeof httpBroad
   return sequentialHTTPBroadcastWorker.run(options)
 }
 
-export {
-  downloadImageFromWorker,
-  processImageFromWorker,
-  parallelHTTPBroadcastFromWorker,
-  getImageSizeFromWorker,
-  sequentialHTTPBroadcastFromWorker
+// ---------------------------------------------------------------------------
+
+let signJsonLDObjectWorker: Piscina
+
+export function signJsonLDObjectFromWorker <T> (
+  options: Parameters<typeof signJsonLDObject<T>>[0]
+): ReturnType<typeof signJsonLDObject<T>> {
+  if (!signJsonLDObjectWorker) {
+    signJsonLDObjectWorker = new Piscina({
+      filename: new URL(join('workers', 'sign-json-ld-object.js'), import.meta.url).href,
+      // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
+      concurrentTasksPerWorker: WORKER_THREADS.SIGN_JSON_LD_OBJECT.CONCURRENCY,
+      maxThreads: WORKER_THREADS.SIGN_JSON_LD_OBJECT.MAX_THREADS
+    })
+  }
+
+  return signJsonLDObjectWorker.run(options)
+}
+
+// ---------------------------------------------------------------------------
+
+let buildDigestWorker: Piscina
+
+export function buildDigestFromWorker (
+  options: Parameters<typeof buildDigest>[0]
+): Promise<ReturnType<typeof buildDigest>> {
+  if (!buildDigestWorker) {
+    buildDigestWorker = new Piscina({
+      filename: new URL(join('workers', 'build-digest.js'), import.meta.url).href,
+      // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
+      concurrentTasksPerWorker: WORKER_THREADS.BUILD_DIGEST.CONCURRENCY,
+      maxThreads: WORKER_THREADS.BUILD_DIGEST.MAX_THREADS
+    })
+  }
+
+  return buildDigestWorker.run(options)
 }

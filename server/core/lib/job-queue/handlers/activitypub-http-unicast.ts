@@ -1,7 +1,6 @@
 import { Job } from 'bullmq'
 import { ActivitypubHttpUnicastPayload } from '@peertube/peertube-models'
-import { buildGlobalHTTPHeaders } from '@server/helpers/activity-pub-utils.js'
-import { buildSignedRequestOptions, computeBody } from '@server/lib/activitypub/send/index.js'
+import { buildGlobalHTTPHeaders, buildSignedRequestOptions, computeBody } from '@server/lib/activitypub/send/http.js'
 import { logger } from '../../../helpers/logger.js'
 import { doRequest } from '../../../helpers/requests.js'
 import { ActorFollowHealthCache } from '../../actor-follow-health-cache.js'
@@ -19,7 +18,7 @@ async function processActivityPubHttpUnicast (job: Job) {
     method: 'POST' as 'POST',
     json: body,
     httpSignature: httpSignatureOptions,
-    headers: buildGlobalHTTPHeaders(body)
+    headers: await buildGlobalHTTPHeaders(body)
   }
 
   try {
