@@ -240,6 +240,9 @@ log:
   log_ping_requests: true
   log_tracker_unknown_infohash: true
 
+  # If you have many concurrent requests, you can disable HTTP requests logging to reduce PeerTube CPU load
+  log_http_requests: true
+
   prettify_sql: false
 
   # Accept warn/error logs coming from the client
