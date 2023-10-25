@@ -31,8 +31,9 @@ export class SearchService {
     componentPagination?: ComponentPaginationLight
     advancedSearch?: AdvancedSearch
     uuids?: string[]
+    skipCount?: boolean
   }): Observable<ResultList<Video>> {
-    const { search, uuids, componentPagination, advancedSearch } = parameters
+    const { search, uuids, componentPagination, advancedSearch, skipCount } = parameters
 
     if (advancedSearch?.resultType !== undefined && advancedSearch.resultType !== 'videos') {
       return of({ total: 0, data: [] })
@@ -49,6 +50,7 @@ export class SearchService {
     params = this.restService.addRestGetParams(params, pagination)
 
     if (search) params = params.append('search', search)
+    if (skipCount === true) params = params.append('skipCount', true)
     if (uuids) params = this.restService.addArrayParams(params, 'uuids', uuids)
 
     if (advancedSearch) {

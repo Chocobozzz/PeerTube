@@ -61,6 +61,7 @@ export class RecentVideosRecommendationService implements RecommendationService 
           return this.searchService.searchVideos({
             search: '',
             componentPagination: pagination,
+            skipCount: true,
             advancedSearch: new AdvancedSearch({
               tagsOneOf: recommendation.tags.join(','),
               sort: '-publishedAt',

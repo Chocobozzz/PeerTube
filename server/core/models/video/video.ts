@@ -1241,6 +1241,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     uuids?: string[]
 
     excludeAlreadyWatched?: boolean
+
+    countVideos?: boolean
   }) {
     VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
     VideoModel.throwIfPrivacyOneOfWithoutUser(options.privacyOneOf, options.user)
@@ -1281,7 +1283,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       serverAccountIdForBlock: serverActor.Account.id
     }
 
-    return VideoModel.getAvailableForApi(queryOptions)
+    return VideoModel.getAvailableForApi(queryOptions, options.countVideos)
   }
 
   static countLives (options: {
