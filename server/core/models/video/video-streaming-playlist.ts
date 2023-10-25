@@ -139,9 +139,9 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   })
 
   static doesInfohashExist (infoHash: string) {
-    const query = 'SELECT 1 FROM "videoStreamingPlaylist" WHERE $infoHash = ANY("p2pMediaLoaderInfohashes") LIMIT 1'
+    const query = 'SELECT 1 FROM "videoStreamingPlaylist" WHERE "p2pMediaLoaderInfohashes" @> $infoHash LIMIT 1'
 
-    return doesExist(this.sequelize, query, { infoHash })
+    return doesExist(this.sequelize, query, { infoHash: `{${infoHash}}` }) // Transform infoHash in a PG array
   }
 
   static buildP2PMediaLoaderInfoHashes (playlistUrl: string, files: unknown[]) {
