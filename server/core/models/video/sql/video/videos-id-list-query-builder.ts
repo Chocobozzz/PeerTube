@@ -434,28 +434,30 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private whereTagsOneOf (tagsOneOf: string[]) {
     const tagsOneOfLower = tagsOneOf.map(t => t.toLowerCase())
 
-    this.and.push(
-      'EXISTS (' +
-      '  SELECT 1 FROM "videoTag" ' +
+    this.cte.push(
+      '"tagsOneOf" AS (' +
+      '  SELECT "videoTag"."videoId" AS "videoId" FROM "videoTag" ' +
       '  INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
       '  WHERE lower("tag"."name") IN (' + createSafeIn(this.sequelize, tagsOneOfLower) + ') ' +
-      '  AND "video"."id" = "videoTag"."videoId"' +
       ')'
     )
+
+    this.joins.push('INNER JOIN "tagsOneOf" ON "video"."id" = "tagsOneOf"."videoId"')
   }
 
   private whereTagsAllOf (tagsAllOf: string[]) {
     const tagsAllOfLower = tagsAllOf.map(t => t.toLowerCase())
 
-    this.and.push(
-      'EXISTS (' +
-      '  SELECT 1 FROM "videoTag" ' +
+    this.cte.push(
+      '"tagsAllOf" AS (' +
+      '  SELECT "videoTag"."videoId" AS "videoId" FROM "videoTag" ' +
       '  INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
       '  WHERE lower("tag"."name") IN (' + createSafeIn(this.sequelize, tagsAllOfLower) + ') ' +
-      '  AND "video"."id" = "videoTag"."videoId" ' +
       '  GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + tagsAllOfLower.length +
       ')'
     )
+
+    this.joins.push('INNER JOIN "tagsAllOf" ON "video"."id" = "tagsAllOf"."videoId"')
   }
 
   private wherePrivacyOneOf (privacyOneOf: VideoPrivacyType[]) {
