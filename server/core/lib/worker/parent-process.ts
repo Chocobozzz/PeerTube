@@ -7,6 +7,7 @@ import type processImage from './workers/image-processor.js'
 import type getImageSize from './workers/get-image-size.js'
 import type signJsonLDObject from './workers/sign-json-ld-object.js'
 import type buildDigest from './workers/build-digest.js'
+import type httpUnicast from './workers/http-unicast.js'
 
 let downloadImageWorker: Piscina
 
@@ -92,6 +93,25 @@ export function sequentialHTTPBroadcastFromWorker (
 
 // ---------------------------------------------------------------------------
 
+let httpUnicastWorker: Piscina
+
+export function httpUnicastFromWorker (
+  options: Parameters<typeof httpUnicast>[0]
+): Promise<ReturnType<typeof httpUnicast>> {
+  if (!httpUnicastWorker) {
+    httpUnicastWorker = new Piscina({
+      filename: new URL(join('workers', 'http-unicast.js'), import.meta.url).href,
+      // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
+      concurrentTasksPerWorker: JOB_CONCURRENCY['activitypub-http-unicast'],
+      maxThreads: 1
+    })
+  }
+
+  return httpUnicastWorker.run(options)
+}
+
+// ---------------------------------------------------------------------------
+
 let signJsonLDObjectWorker: Piscina
 
 export function signJsonLDObjectFromWorker <T> (
@@ -100,7 +120,6 @@ export function signJsonLDObjectFromWorker <T> (
   if (!signJsonLDObjectWorker) {
     signJsonLDObjectWorker = new Piscina({
       filename: new URL(join('workers', 'sign-json-ld-object.js'), import.meta.url).href,
-      // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
       concurrentTasksPerWorker: WORKER_THREADS.SIGN_JSON_LD_OBJECT.CONCURRENCY,
       maxThreads: WORKER_THREADS.SIGN_JSON_LD_OBJECT.MAX_THREADS
     })
