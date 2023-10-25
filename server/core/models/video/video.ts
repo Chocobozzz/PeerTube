@@ -431,6 +431,12 @@ export type ForAPIOptions = {
       }
     },
     {
+      fields: [ 'isLive' ], // Most of the videos are VOD
+      where: {
+        isLive: true
+      }
+    },
+    {
       fields: [ 'remote' ], // Only index local videos
       where: {
         remote: false
