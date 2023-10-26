@@ -15,6 +15,7 @@ import {
   StatsObserversBuilder,
   ViewersObserversBuilder
 } from './metric-helpers/index.js'
+import { WorkerThreadsObserversBuilder } from './metric-helpers/worker-threads-observers.js'
 
 class OpenTelemetryMetrics {
 
@@ -69,23 +70,13 @@ class OpenTelemetryMetrics {
     this.playbackMetrics = new PlaybackMetrics(this.meter)
     this.playbackMetrics.buildCounters()
 
-    const nodeJSObserversBuilder = new NodeJSObserversBuilder(this.meter)
-    nodeJSObserversBuilder.buildObservers()
-
-    const jobQueueObserversBuilder = new JobQueueObserversBuilder(this.meter)
-    jobQueueObserversBuilder.buildObservers()
-
-    const statsObserversBuilder = new StatsObserversBuilder(this.meter)
-    statsObserversBuilder.buildObservers()
-
-    const livesObserversBuilder = new LivesObserversBuilder(this.meter)
-    livesObserversBuilder.buildObservers()
-
-    const viewersObserversBuilder = new ViewersObserversBuilder(this.meter)
-    viewersObserversBuilder.buildObservers()
-
-    const bittorrentTrackerObserversBuilder = new BittorrentTrackerObserversBuilder(this.meter, options.trackerServer)
-    bittorrentTrackerObserversBuilder.buildObservers()
+    new NodeJSObserversBuilder(this.meter).buildObservers()
+    new JobQueueObserversBuilder(this.meter).buildObservers()
+    new StatsObserversBuilder(this.meter).buildObservers()
+    new LivesObserversBuilder(this.meter).buildObservers()
+    new ViewersObserversBuilder(this.meter).buildObservers()
+    new WorkerThreadsObserversBuilder(this.meter).buildObservers()
+    new BittorrentTrackerObserversBuilder(this.meter, options.trackerServer).buildObservers()
   }
 
   observePlaybackMetric (video: MVideoImmutable, metrics: PlaybackMetricCreate) {
