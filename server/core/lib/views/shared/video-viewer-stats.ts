@@ -34,6 +34,8 @@ type LocalViewerStats = {
 export class VideoViewerStats {
   private processingViewersStats = false
 
+  private readonly viewerCache = new Map<string, LocalViewerStats>()
+
   constructor () {
     setInterval(() => this.processViewerStats(), VIEW_LIFETIME.VIEWER_STATS)
   }
@@ -56,7 +58,7 @@ export class VideoViewerStats {
   // ---------------------------------------------------------------------------
 
   async getWatchTime (videoId: number, ip: string) {
-    const stats: LocalViewerStats = await Redis.Instance.getLocalVideoViewer({ ip, videoId })
+    const stats: LocalViewerStats = await this.getLocalVideoViewerByIP({ ip, videoId })
 
     return stats?.watchTime || 0
   }
@@ -72,7 +74,7 @@ export class VideoViewerStats {
     const { video, ip, viewEvent, currentTime } = options
     const nowMs = new Date().getTime()
 
-    let stats: LocalViewerStats = await Redis.Instance.getLocalVideoViewer({ ip, videoId: video.id })
+    let stats: LocalViewerStats = await this.getLocalVideoViewerByIP({ ip, videoId: video.id })
 
     if (stats && stats.watchSections.length >= MAX_LOCAL_VIEWER_WATCH_SECTIONS) {
       logger.warn('Too much watch section to store for a viewer, skipping this one', { currentTime, viewEvent, ...lTags(video.uuid) })
@@ -121,7 +123,7 @@ export class VideoViewerStats {
 
     logger.debug('Set local video viewer stats for video %s.', video.uuid, { stats, ...lTags(video.uuid) })
 
-    await Redis.Instance.setLocalVideoViewer(ip, video.id, stats)
+    await this.setLocalVideoViewer(ip, video.id, stats)
   }
 
   async processViewerStats () {
@@ -136,7 +138,7 @@ export class VideoViewerStats {
       const allKeys = await Redis.Instance.listLocalVideoViewerKeys()
 
       for (const key of allKeys) {
-        const stats: LocalViewerStats = await Redis.Instance.getLocalVideoViewer({ key })
+        const stats: LocalViewerStats = await this.getLocalVideoViewerByKey(key)
 
         // Process expired stats
         if (stats.lastUpdated > now - VIEW_LIFETIME.VIEWER_STATS) {
@@ -155,7 +157,7 @@ export class VideoViewerStats {
             }
           })
 
-          await Redis.Instance.deleteLocalVideoViewersKeys(key)
+          await this.deleteLocalVideoViewersKeys(key)
         } catch (err) {
           logger.error('Cannot process viewer stats for Redis key %s.', key, { err, ...lTags() })
         }
@@ -192,5 +194,40 @@ export class VideoViewerStats {
 
   private buildWatchTimeFromSections (sections: { start: number, end: number }[]) {
     return sections.reduce((p, current) => p + (current.end - current.start), 0)
+  }
+
+  /**
+   *
+   *  Redis calls can be expensive so try to cache things in front of it
+   *
+   */
+
+  private getLocalVideoViewerByIP (options: {
+    ip: string
+    videoId: number
+  }): Promise<LocalViewerStats> {
+    const { viewerKey } = Redis.Instance.generateLocalVideoViewerKeys(options.ip, options.videoId)
+
+    return this.getLocalVideoViewerByKey(viewerKey)
+  }
+
+  private getLocalVideoViewerByKey (key: string): Promise<LocalViewerStats> {
+    const viewer = this.viewerCache.get(key)
+    if (viewer) return Promise.resolve(viewer)
+
+    return Redis.Instance.getLocalVideoViewer({ key })
+  }
+
+  private setLocalVideoViewer (ip: string, videoId: number, stats: LocalViewerStats) {
+    const { viewerKey } = Redis.Instance.generateLocalVideoViewerKeys(ip, videoId)
+    this.viewerCache.set(viewerKey, stats)
+
+    return Redis.Instance.setLocalVideoViewer(ip, videoId, stats)
+  }
+
+  private deleteLocalVideoViewersKeys (key: string) {
+    this.viewerCache.delete(key)
+
+    return Redis.Instance.deleteLocalVideoViewersKeys(key)
   }
 }

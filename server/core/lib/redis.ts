@@ -352,9 +352,9 @@ class Redis {
     return { setKey: `local-video-views-buffer`, videoKey: `local-video-views-buffer-${videoId}` }
   }
 
-  private generateLocalVideoViewerKeys (ip: string, videoId: number): { setKey: string, viewerKey: string }
-  private generateLocalVideoViewerKeys (): { setKey: string }
-  private generateLocalVideoViewerKeys (ip?: string, videoId?: number) {
+  generateLocalVideoViewerKeys (ip: string, videoId: number): { setKey: string, viewerKey: string }
+  generateLocalVideoViewerKeys (): { setKey: string }
+  generateLocalVideoViewerKeys (ip?: string, videoId?: number) {
     return { setKey: `local-video-viewer-stats-keys`, viewerKey: `local-video-viewer-stats-${ip}-${videoId}` }
   }
 
