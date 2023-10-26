@@ -7484,12 +7484,12 @@
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="needs-translation">View <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
+        <target state="translated">View <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/>من <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="5535545444690528619" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/></source>
-        <target state="needs-translation">View <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/></target>
+        <target state="translated">عرض<x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="1055254162789146714" datatype="html">
@@ -7519,7 +7519,7 @@
       </trans-unit>
       <trans-unit id="723038562278401061" datatype="html">
         <source>Friendly Reminder:</source>
-        <target state="new">Friendly Reminder:</target>
+        <target state="translated">تذكير ودي:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context>
           <context context-type="linenumber">4</context>
@@ -7588,7 +7588,7 @@
       </trans-unit>
       <trans-unit id="7508177761852352782" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example).</source>
-        <target state="new"> You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example). </target>
+        <target state="translated">يمكنك التعليق باستخدام حساب على أي نُسْخَة متوافق مع ActivityPub (حساب بييرتيوب/Mastodon/Pleroma على سبيل المثال).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="2958389355547305739" datatype="html">
@@ -7837,7 +7837,7 @@
       </trans-unit>
       <trans-unit id="6659155428791414865" datatype="html">
         <source>x264, targeting maximum device compatibility</source>
-        <target state="new">x264, targeting maximum device compatibility</target>
+        <target state="translated">x264، يستهدف الحد الأقصى من توافق الأجهزة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context><context context-type="linenumber">54</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
