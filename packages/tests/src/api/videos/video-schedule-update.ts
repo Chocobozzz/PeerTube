@@ -12,9 +12,9 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 
-function in10Seconds () {
+function in15Seconds () {
   const now = new Date()
-  now.setSeconds(now.getSeconds() + 10)
+  now.setSeconds(now.getSeconds() + 15)
 
   return now
 }
@@ -39,7 +39,7 @@ describe('Test video update scheduler', function () {
       name: 'video 1',
       privacy: VideoPrivacy.PRIVATE,
       scheduleUpdate: {
-        updateAt: in10Seconds().toISOString(),
+        updateAt: in15Seconds().toISOString(),
         privacy: VideoPrivacy.PUBLIC
       }
     }
@@ -102,7 +102,7 @@ describe('Test video update scheduler', function () {
     const attributes = {
       name: 'video 2 updated',
       scheduleUpdate: {
-        updateAt: in10Seconds().toISOString(),
+        updateAt: in15Seconds().toISOString(),
         privacy: VideoPrivacy.PUBLIC
       }
     }

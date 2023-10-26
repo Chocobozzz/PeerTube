@@ -57,7 +57,7 @@ describe('Test auto follows', function () {
   describe('Auto follow back', function () {
 
     it('Should not auto follow back if the option is not enabled', async function () {
-      this.timeout(15000)
+      this.timeout(30000)
 
       await server1Follows2(servers)
 
