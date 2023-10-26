@@ -48,6 +48,7 @@ export class RecentVideosRecommendationService implements RecommendationService 
             : undefined
 
           const defaultSubscription = this.videos.getVideos({
+            skipCount: true,
             videoPagination: pagination,
             sort: '-publishedAt',
             nsfw
