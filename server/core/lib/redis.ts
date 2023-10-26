@@ -382,7 +382,7 @@ class Redis {
     return 'verify-email-registration-' + registrationId
   }
 
-  private generateIPViewKey (ip: string, videoUUID: string) {
+  generateIPViewKey (ip: string, videoUUID: string) {
     return `views-${videoUUID}-${ip}`
   }
 
