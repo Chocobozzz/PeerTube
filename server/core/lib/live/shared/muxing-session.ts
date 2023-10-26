@@ -26,6 +26,7 @@ import { LiveQuotaStore } from '../live-quota-store.js'
 import { LiveSegmentShaStore } from '../live-segment-sha-store.js'
 import { buildConcatenatedName, getLiveSegmentTime } from '../live-utils.js'
 import { AbstractTranscodingWrapper, FFmpegTranscodingWrapper, RemoteTranscodingWrapper } from './transcoding-wrapper/index.js'
+import { wait } from '@peertube/peertube-core-utils'
 
 interface MuxingSessionEvents {
   'live-ready': (options: { videoUUID: string }) => void
@@ -186,7 +187,16 @@ class MuxingSession extends EventEmitter {
 
       try {
         if (this.streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
-          const masterContent = await readFile(path, 'utf-8')
+          let masterContent = await readFile(path, 'utf-8')
+
+          // If the disk sync is slow, don't upload an empty master playlist on object storage
+          // Wait for ffmpeg to correctly fill it
+          while (!masterContent) {
+            await wait(100)
+
+            masterContent = await readFile(path, 'utf-8')
+          }
+
           logger.debug('Uploading live master playlist on object storage for %s', this.videoUUID, { masterContent, ...this.lTags() })
 
           const url = await storeHLSFileFromContent(this.streamingPlaylist, this.streamingPlaylist.playlistFilename, masterContent)
