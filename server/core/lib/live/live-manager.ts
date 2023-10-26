@@ -378,6 +378,7 @@ class LiveManager {
       .catch(err => {
         logger.error('Cannot run muxing.', { err, ...localLTags })
         this.abortSession(sessionId)
+        this.videoSessions.delete(videoUUID)
       })
   }
 
