@@ -527,7 +527,7 @@ export class VideoStatsComponent implements OnInit {
 
     const date = new Date(label)
 
-    if (data.groupInterval.match(/ month?$/)) {
+    if (data.groupInterval.match(/ months?$/)) {
       return date.toLocaleDateString([], { year: '2-digit', month: 'numeric' })
     }
 
