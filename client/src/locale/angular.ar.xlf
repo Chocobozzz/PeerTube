@@ -8708,17 +8708,17 @@
       </trans-unit>
       <trans-unit id="1046771510013067927" datatype="html">
         <source>Private payload:</source>
-        <target state="new">Private payload:</target>
+        <target state="translated">الحمولة الخاصة:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="6133673901299224277" datatype="html">
         <source>No runner jobs found.</source>
-        <target state="new">No runner jobs found.</target>
+        <target state="translated">لم يتم العثور على وظائف عداء.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="7146070362549250677" datatype="html">
         <source>Completed jobs</source>
-        <target state="new">Completed jobs</target>
+        <target state="translated">وظائف مكتملة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">30</context>
@@ -8726,7 +8726,7 @@
       </trans-unit>
       <trans-unit id="2841995988789172579" datatype="html">
         <source>Pending jobs</source>
-        <target state="new">Pending jobs</target>
+        <target state="translated">وظائف في انتظار</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -8734,7 +8734,7 @@
       </trans-unit>
       <trans-unit id="6587308737467829649" datatype="html">
         <source>Jobs that are being processed</source>
-        <target state="new">Jobs that are being processed</target>
+        <target state="translated">الوظائف التي تتم معالجتها</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -8742,7 +8742,7 @@
       </trans-unit>
       <trans-unit id="2902296494834684511" datatype="html">
         <source>Failed jobs</source>
-        <target state="new">Failed jobs</target>
+        <target state="translated">وظائف فشلت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -8750,12 +8750,12 @@
       </trans-unit>
       <trans-unit id="2785060445730155276" datatype="html">
         <source>Cancel this job</source>
-        <target state="new">Cancel this job</target>
+        <target state="translated">إلغاء هذه الوظيفة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="410829478323542752" datatype="html">
         <source>Delete this job</source>
-        <target state="new">Delete this job</target>
+        <target state="translated">حذف هذه الوظيفة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -8768,7 +8768,7 @@
       </trans-unit>
       <trans-unit id="8430670111153715725" datatype="html">
         <source>Job(s) cancelled.</source>
-        <target state="new">Job(s) cancelled.</target>
+        <target state="translated">وظيفة (الوظائف) أُلغيت.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="2175266358082397536" datatype="html">
@@ -8781,7 +8781,7 @@
       </trans-unit>
       <trans-unit id="453899642867587306" datatype="html">
         <source>Runner registration tokens</source>
-        <target state="new">Runner registration tokens</target>
+        <target state="translated">رموز تسجيل العدّاء</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">9</context>
@@ -8798,12 +8798,12 @@
       </trans-unit>
       <trans-unit id="251663748987415005" datatype="html">
         <source>Last contact</source>
-        <target state="new">Last contact</target>
+        <target state="translated">آخر اتصال</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6329354273972175246" datatype="html">
         <source>No remote runners found.</source>
-        <target state="new">No remote runners found.</target>
+        <target state="translated">لم يتم العثور على عدّائين عن بُعد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="1886888801485703107" datatype="html">
@@ -8819,12 +8819,12 @@
       </trans-unit>
       <trans-unit id="7098180453085889026" datatype="html">
         <source>Blocked videos</source>
-        <target state="new">Blocked videos</target>
+        <target state="translated">مقاطع الفيديو المحظورة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="2434590176499222618" datatype="html">
         <source>User registrations</source>
-        <target state="new">User registrations</target>
+        <target state="translated">تسجيلات المستخدم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">79</context>
@@ -8837,7 +8837,7 @@
       </trans-unit>
       <trans-unit id="2072636325858679364" datatype="html">
         <source><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;&gt;"/>Accept <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;&gt;"/>Reject <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></source>
-        <target state="new"><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;&gt;"/>Accept <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;&gt;"/>Reject <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
+        <target state="translated"><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;&gt;"/>قبول<x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> التسجيل<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;&gt;"/>رفض<x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> التسجيل<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">4,5</context>
@@ -8845,12 +8845,12 @@
       </trans-unit>
       <trans-unit id="2237982448344718491" datatype="html">
         <source>Registration email has not been verified. Email delivery has been disabled by default.</source>
-        <target state="new"> Registration email has not been verified. Email delivery has been disabled by default. </target>
+        <target state="translated">لم يتم التحقق من البريد الإلكتروني للتسجيل. تسليم البريد الإلكتروني مُعطَّل بشكل افتراضي.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="2884115244144130373" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registration will create the account and channel. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registration will create the account and channel. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>قبول<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> سيؤدي التسجيل إلى إنشاء الحساب والقناة. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="4287036840463640002" datatype="html">
