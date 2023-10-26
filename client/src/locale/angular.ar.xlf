@@ -8089,7 +8089,7 @@
       </trans-unit>
       <trans-unit id="3069073855436209848" datatype="html">
         <source>Subscriptions of your instance</source>
-        <target state="new">Subscriptions of your instance</target>
+        <target state="translated">اشتراكات نُسْخَتك</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -8107,7 +8107,7 @@
       </trans-unit>
       <trans-unit id="397182597341363053" datatype="html">
         <source>Redundancy</source>
-        <target state="new">Redundancy</target>
+        <target state="translated">تكرارية</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/follows.routes.ts</context>
           <context context-type="linenumber">48</context>
@@ -8239,7 +8239,7 @@
       </trans-unit>
       <trans-unit id="3143238830256588661" datatype="html">
         <source>The live stream will be automatically terminated and replays won't be saved.</source>
-        <target state="new">The live stream will be automatically terminated and replays won't be saved.</target>
+        <target state="translated">سيتم إنهاء البث المباشر تلقائيًا ولن يتم حفظ الإعادات.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">233</context>
@@ -8469,7 +8469,7 @@
       </trans-unit>
       <trans-unit id="7686590072950686188" datatype="html">
         <source>Proceed upgrade</source>
-        <target state="new">Proceed upgrade</target>
+        <target state="translated">متابعة الترقية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="7830308409197461339" datatype="html">
@@ -8541,7 +8541,7 @@
       </trans-unit>
       <trans-unit id="722088235348685072" datatype="html">
         <source>If this is not your correct public IP, please consider fixing it because:</source>
-        <target state="new">If this is not your correct public IP, please consider fixing it because:</target>
+        <target state="translated">إذا لم يكن هذا هو عنوان IP العام الصحيح الخاص بك، فيرجى التفكير في إصلاحه للأسباب التالية:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">6</context>
@@ -8557,7 +8557,7 @@
       </trans-unit>
       <trans-unit id="565435193934699740" datatype="html">
         <source>Anti brute force system could be overzealous</source>
-        <target state="new">Anti brute force system could be overzealous</target>
+        <target state="translated">قد يكون نظام مكافحة القوة الغاشمة (force system) مفرطًا في الحماس</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">9</context>
@@ -8565,7 +8565,7 @@
       </trans-unit>
       <trans-unit id="4468853448271686046" datatype="html">
         <source>P2P system could not work correctly</source>
-        <target state="new">P2P system could not work correctly</target>
+        <target state="translated">نظام P2P لا يمكن أن يعمل بشكل صحيح</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">10</context>
@@ -8581,7 +8581,7 @@
       </trans-unit>
       <trans-unit id="1285026053775066761" datatype="html">
         <source>Check the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> configuration key</source>
-        <target state="new">Check the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> configuration key</target>
+        <target state="translated">تحقق من <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> مفتاح التضبيط</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">15</context>
@@ -8589,7 +8589,7 @@
       </trans-unit>
       <trans-unit id="7014275542536964627" datatype="html">
         <source>If you run PeerTube using Docker, check you run the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> (see <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>issue 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</source>
-        <target state="new">If you run PeerTube using Docker, check you run the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> (see <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>issue 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</target>
+        <target state="translated">إذا قمت بتشغيل بييرتيوب باستخدام Docker، فتأكد من تشغيل <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>الوكيل العكسي<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> مع <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>وضع الشبكة: "المضيف"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> (راجع <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>الإصدار 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">16,17</context>
@@ -8612,24 +8612,24 @@
       </trans-unit>
       <trans-unit id="3164845764519833078" datatype="html">
         <source>debug</source>
-        <target state="new">debug</target>
+        <target state="translated">تنقيح</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="4279081882680795350" datatype="html">
         <source>info</source>
-        <target state="new">info</target>
+        <target state="translated">معلومات</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">123</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="3379167598974960777" datatype="html">
         <source>warning</source>
-        <target state="new">warning</target>
+        <target state="translated">تحذير</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">124</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
         <source>error</source>
-        <target state="new">error</target>
+        <target state="translated">خطأ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">125</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
@@ -8647,12 +8647,12 @@
       </trans-unit>
       <trans-unit id="4116911651502837995" datatype="html">
         <source>Files</source>
-        <target state="new">Files</target>
+        <target state="translated">ملفات</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="4767765747214995164" datatype="html">
         <source>Published <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="new">Published <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">نُشر <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="6759205696902713848" datatype="html">
