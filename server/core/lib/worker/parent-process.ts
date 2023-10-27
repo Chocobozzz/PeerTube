@@ -149,39 +149,47 @@ export function buildDigestFromWorker (
 
 // ---------------------------------------------------------------------------
 
-export function getWorkersQueueSize () {
+export function getWorkersStats () {
   return [
     {
       label: 'downloadImage',
-      queueSize: downloadImageWorker?.queueSize || 0
+      queueSize: downloadImageWorker?.queueSize || 0,
+      completed: downloadImageWorker?.completed || 0
     },
     {
       label: 'processImageWorker',
-      queueSize: processImageWorker?.queueSize || 0
+      queueSize: processImageWorker?.queueSize || 0,
+      completed: processImageWorker?.completed || 0
     },
     {
       label: 'getImageSizeWorker',
-      queueSize: getImageSizeWorker?.queueSize || 0
+      queueSize: getImageSizeWorker?.queueSize || 0,
+      completed: getImageSizeWorker?.completed || 0
     },
     {
       label: 'parallelHTTPBroadcastWorker',
-      queueSize: parallelHTTPBroadcastWorker?.queueSize || 0
+      queueSize: parallelHTTPBroadcastWorker?.queueSize || 0,
+      completed: parallelHTTPBroadcastWorker?.completed || 0
     },
     {
       label: 'sequentialHTTPBroadcastWorker',
-      queueSize: sequentialHTTPBroadcastWorker?.queueSize || 0
+      queueSize: sequentialHTTPBroadcastWorker?.queueSize || 0,
+      completed: sequentialHTTPBroadcastWorker?.completed || 0
     },
     {
       label: 'httpUnicastWorker',
-      queueSize: httpUnicastWorker?.queueSize || 0
+      queueSize: httpUnicastWorker?.queueSize || 0,
+      completed: httpUnicastWorker?.completed || 0
     },
     {
       label: 'signJsonLDObjectWorker',
-      queueSize: signJsonLDObjectWorker?.queueSize || 0
+      queueSize: signJsonLDObjectWorker?.queueSize || 0,
+      completed: signJsonLDObjectWorker?.completed || 0
     },
     {
       label: 'buildDigestWorker',
-      queueSize: buildDigestWorker?.queueSize || 0
+      queueSize: buildDigestWorker?.queueSize || 0,
+      completed: buildDigestWorker?.completed || 0
     }
   ]
 }
