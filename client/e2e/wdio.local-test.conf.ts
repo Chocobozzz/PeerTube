@@ -43,7 +43,7 @@ module.exports = {
       }
     ],
 
-    services: [ 'chromedriver', 'geckodriver', 'shared-store' ],
+    services: [ 'shared-store' ],
 
     beforeSession: beforeLocalSession,
     beforeSuite: beforeLocalSuite,

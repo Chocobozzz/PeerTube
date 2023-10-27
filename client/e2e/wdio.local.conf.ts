@@ -22,6 +22,7 @@ module.exports = {
       {
         'browserName': 'chrome',
         'goog:chromeOptions': {
+          binary: '/usr/bin/google-chrome-stable',
           args: [ '--headless', '--disable-gpu', windowSizeArg ],
           prefs
         }
@@ -37,7 +38,7 @@ module.exports = {
       }
     ],
 
-    services: [ 'chromedriver', 'geckodriver', 'shared-store' ],
+    services: [ 'shared-store' ],
 
     beforeSession: beforeLocalSession,
     beforeSuite: beforeLocalSuite,
