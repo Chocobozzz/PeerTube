@@ -37,6 +37,9 @@ my-video-thumbnail,
     @include disable-default-a-behaviour;
 
     color: pvar(--mainForegroundColor);
+  }
+
+  > a {
     display: flex;
     min-width: 0;
     align-items: center;
@@ -125,11 +128,11 @@ my-video-thumbnail,
 
     a {
       width: auto;
-      padding-right: 5px;
     }
 
     .pt-badge {
-      @include margin-right(5px);
+      margin: 0 5px;
+      white-space: nowrap;
     }
   }
 
