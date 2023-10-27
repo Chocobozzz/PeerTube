@@ -3,6 +3,8 @@ import { join, resolve } from 'path'
 
 function runServer (appInstance: number, config: any = {}) {
   const env = Object.create(process.env)
+
+  env['NODE_OPTIONS'] = ''
   env['NODE_ENV'] = 'test'
   env['NODE_APP_INSTANCE'] = appInstance + ''
 
@@ -43,7 +45,10 @@ function runServer (appInstance: number, config: any = {}) {
 
 function runCommand (command: string) {
   return new Promise<void>((res, rej) => {
-    const p = exec(command, { cwd: getRootCWD() })
+    // Reset NODE_OPTIONS env set by webdriverio
+    const env = { ...process.env, NODE_OPTIONS: '' }
+
+    const p = exec(command, { env, cwd: getRootCWD() })
 
     p.stderr.on('data', data => console.error(data.toString()))
     p.on('error', err => rej(err))
