@@ -3,7 +3,7 @@ import { SignupPage } from '../po/signup.po'
 import { PlayerPage } from '../po/player.po'
 import { VideoUploadPage } from '../po/video-upload.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { go, isMobileDevice, isSafari, waitServerUp } from '../utils'
+import { getScreenshotPath, go, isMobileDevice, isSafari, waitServerUp } from '../utils'
 import { MyAccountPage } from '../po/my-account.po'
 
 describe('Password protected videos', () => {
@@ -153,6 +153,7 @@ describe('Password protected videos', () => {
   })
 
   describe('Regular users', function () {
+
     before(async () => {
       await signupPage.fullSignup({
         accountInfo: {
@@ -220,5 +221,9 @@ describe('Password protected videos', () => {
       await playerPage.playVideo()
       await videoWatchPage.waitUntilVideoName(publicVideoName2, 40 * 1000)
     })
+  })
+
+  after(async () => {
+    await browser.saveScreenshot(getScreenshotPath('after-test.png'))
   })
 })

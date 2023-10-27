@@ -128,7 +128,8 @@ export class MyAccountPage {
     await selectCustomSelect('privacy', privacy)
 
     const submit = await $('form input[type=submit]')
-    submit.waitForClickable()
+    await submit.waitForClickable()
+    await submit.scrollIntoView()
     await submit.click()
 
     return browser.waitUntil(async () => {
