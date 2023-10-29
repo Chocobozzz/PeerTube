@@ -10599,27 +10599,27 @@
       </trans-unit>
       <trans-unit id="8354695459880751923" datatype="html">
         <source>Max video channels per user must be a number.</source>
-        <target state="new">Max video channels per user must be a number.</target>
+        <target state="translated">Erabiltzaile bakoitzeko gehieneko bideo-kanal kopurua zenbaki bat izan behar du.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="5832601947705094130" datatype="html">
         <source>Concurrency is required.</source>
-        <target state="new">Concurrency is required.</target>
+        <target state="translated">Aldiberekotasuna beharrezkoa da.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="4751566092251132371" datatype="html">
         <source>Concurrency should be greater or equal to 1.</source>
-        <target state="new">Concurrency should be greater or equal to 1.</target>
+        <target state="translated">Aldiberekotasunak 1 edo handiagoa izan behar du.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="75589896034107743" datatype="html">
         <source>Index URL should be a URL</source>
-        <target state="new">Index URL should be a URL</target>
+        <target state="translated">Aurkibidearen URLak URL bat izan behar du</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">112</context></context-group>
       </trans-unit>
       <trans-unit id="3964961007325702684" datatype="html">
         <source>Search index URL should be a URL</source>
-        <target state="new">Search index URL should be a URL</target>
+        <target state="translated">Bilaketaren aurkibidearen URLak URL bat izan behar du</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">119</context></context-group>
       </trans-unit>
       <trans-unit id="8602814243662345124">
@@ -10646,7 +10646,7 @@
       </trans-unit>
       <trans-unit id="3159508433607320799" datatype="html">
         <source>OTP token is required.</source>
-        <target state="new">OTP token is required.</target>
+        <target state="translated">OTP tokena beharrezkoa da.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">69</context>
@@ -10654,47 +10654,47 @@
       </trans-unit>
       <trans-unit id="4968369344159400023" datatype="html">
         <source>Your name is required.</source>
-        <target state="new">Your name is required.</target>
+        <target state="translated">Izena beharrezkoa da.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="5799695548385507586" datatype="html">
         <source>Your name must be at least 1 character long.</source>
-        <target state="new">Your name must be at least 1 character long.</target>
+        <target state="translated">Izenak, gutxienez, karaktere bat izan behar du.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="3600004643604731577" datatype="html">
         <source>Your name cannot be more than 120 characters long.</source>
-        <target state="new">Your name cannot be more than 120 characters long.</target>
+        <target state="translated">Izenak 120 karaktere baino gutxiago izan behar ditu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="3981804692726336204" datatype="html">
         <source>A subject is required.</source>
-        <target state="new">A subject is required.</target>
+        <target state="translated">Gaia beharrezkoa da.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="7787099349830266861" datatype="html">
         <source>The subject must be at least 1 character long.</source>
-        <target state="new">The subject must be at least 1 character long.</target>
+        <target state="translated">Gaiak, gutxienez, karaktere bat baino gehiago izan behar du.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="5905189237950302829" datatype="html">
         <source>The subject cannot be more than 120 characters long.</source>
-        <target state="new">The subject cannot be more than 120 characters long.</target>
+        <target state="translated">Gaiak ezin ditu 120 karaktere baino gehiago izan.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="847704400962945123" datatype="html">
         <source>A message is required.</source>
-        <target state="new">A message is required.</target>
+        <target state="translated">Mezua beharrezkoa da.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="3871842658394273178" datatype="html">
         <source>The message must be at least 3 characters long.</source>
-        <target state="new">The message must be at least 3 characters long.</target>
+        <target state="translated">Mezuak, gutxienez, 3 karaktere baino gehiago izan behar ditu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="3731145759205895653" datatype="html">
         <source>The message cannot be more than 5000 characters long.</source>
-        <target state="new">The message cannot be more than 5000 characters long.</target>
+        <target state="translated">Mezuak ezin ditu 5000 karaktere baino gehiago izan.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="3868123820758341861">
@@ -10717,17 +10717,17 @@
       </trans-unit>
       <trans-unit id="4786141633412279939" datatype="html">
         <source>Username must be at least 1 character long.</source>
-        <target state="new">Username must be at least 1 character long.</target>
+        <target state="translated">Erabiltzaile-izenak, gutxienez, karaktere bat izan behar du.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="1019755749203839300" datatype="html">
         <source>Username cannot be more than 50 characters long.</source>
-        <target state="new">Username cannot be more than 50 characters long.</target>
+        <target state="translated">Erabiltzaile-izenak ezin ditu 50 karaktere baino gehiago izan.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="5621067256208426608" datatype="html">
         <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Username should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">Erabiltzaile-izena letra xeheak eta alfazenbakizko karaktereak izan behar ditu; puntuak eta azpimarrak onartzen dira.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
