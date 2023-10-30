@@ -73,7 +73,7 @@ function timeToInt (time: number | string) {
   }
 
   let result = 0
-  for (let i = parts.length - 1; i >= 0; i--) {
+  for (let i = 0; i < parts.length; i++) {
     const partInt = parseInt(parts[i], 10)
     if (isNaN(partInt)) return 0
 
