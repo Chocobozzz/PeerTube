@@ -409,10 +409,12 @@ class PeerTubePlugin extends Plugin {
 
     // Prefer canplaythrough instead of canplay because Chrome has issues with the second one
     this.player.one('canplaythrough', () => {
-      if (this.options.startTime()) {
-        debugLogger('Start the video at ' + this.options.startTime())
+      const startTime = this.options.startTime()
 
-        this.player.currentTime(timeToInt(this.options.startTime()))
+      if (startTime !== null && startTime !== undefined) {
+        debugLogger('Start the video at ' + startTime)
+
+        this.player.currentTime(timeToInt(startTime))
       }
 
       if (this.options.stopTime()) {

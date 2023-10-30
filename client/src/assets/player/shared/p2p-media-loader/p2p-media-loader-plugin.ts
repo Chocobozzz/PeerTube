@@ -87,15 +87,25 @@ class P2pMediaLoaderPlugin extends Plugin {
     super.dispose()
   }
 
+  // ---------------------------------------------------------------------------
+
   getCurrentLevel () {
     if (!this.hlsjs) return undefined
 
     return this.hlsjs.levels[this.hlsjs.currentLevel]
   }
 
+  // ---------------------------------------------------------------------------
+
   getLiveLatency () {
     return Math.round(this.hlsjs.latency)
   }
+
+  getLiveLatencyFromEdge () {
+    return Math.round(this.hlsjs.latency - this.hlsjs.targetLatency)
+  }
+
+  // ---------------------------------------------------------------------------
 
   getHLSJS () {
     return this.hlsjs

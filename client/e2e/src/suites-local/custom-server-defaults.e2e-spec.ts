@@ -1,7 +1,7 @@
 import { LoginPage } from '../po/login.po'
 import { VideoUploadPage } from '../po/video-upload.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { go, isMobileDevice, isSafari, waitServerUp } from '../utils'
+import { getScreenshotPath, go, isMobileDevice, isSafari, waitServerUp } from '../utils'
 
 describe('Custom server defaults', () => {
   let videoUploadPage: VideoUploadPage
@@ -82,5 +82,9 @@ describe('Custom server defaults', () => {
 
       await checkP2P(false)
     })
+  })
+
+  after(async () => {
+    await browser.saveScreenshot(getScreenshotPath('after-test.png'))
   })
 })

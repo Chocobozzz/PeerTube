@@ -9,12 +9,20 @@ import {
   buildGlobalHTTPHeaders,
   signAndContextify
 } from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'
-import { buildDigest } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
+import { buildDigest, signJsonLDObject } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
 import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@peertube/peertube-server/core/initializers/constants.js'
 import { makePOSTAPRequest } from '@tests/shared/requests.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
 import { readJsonSync } from 'fs-extra/esm'
+
+function signJsonLDObjectWithoutAssertion (options: Parameters<typeof signJsonLDObject>[0]) {
+  return signJsonLDObject({
+    ...options,
+
+    disableWorkerThreadAssertion: true
+  })
+}
 
 function fakeFilter () {
   return (data: any) => Promise.resolve(data)
@@ -132,7 +140,7 @@ describe('Test ActivityPub security', function () {
 
     it('Should fail with an invalid date', async function () {
       const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeFilter())
-      const headers = buildGlobalHTTPHeaders(body)
+      const headers = buildGlobalHTTPHeaders(body, buildDigest)
       headers['date'] = 'Wed, 21 Oct 2015 07:28:00 GMT'
 
       try {
@@ -148,7 +156,7 @@ describe('Test ActivityPub security', function () {
       await setKeysOfServer(sqlCommands[1], servers[1].url, invalidKeys.publicKey, invalidKeys.privateKey)
 
       const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeFilter())
-      const headers = buildGlobalHTTPHeaders(body)
+      const headers = buildGlobalHTTPHeaders(body, buildDigest)
 
       try {
         await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
@@ -163,7 +171,7 @@ describe('Test ActivityPub security', function () {
       await setKeysOfServer(sqlCommands[1], servers[1].url, keys.publicKey, keys.privateKey)
 
       const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeFilter())
-      const headers = buildGlobalHTTPHeaders(body)
+      const headers = buildGlobalHTTPHeaders(body, buildDigest)
 
       const signatureOptions = baseHttpSignature()
       const badHeadersMatrix = [
@@ -186,7 +194,7 @@ describe('Test ActivityPub security', function () {
 
     it('Should succeed with a valid HTTP signature draft 11 (without date but with (created))', async function () {
       const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeFilter())
-      const headers = buildGlobalHTTPHeaders(body)
+      const headers = buildGlobalHTTPHeaders(body, buildDigest)
 
       const signatureOptions = baseHttpSignature()
       signatureOptions.headers = [ '(request-target)', '(created)', 'host', 'digest' ]
@@ -197,7 +205,7 @@ describe('Test ActivityPub security', function () {
 
     it('Should succeed with a valid HTTP signature', async function () {
       const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeFilter())
-      const headers = buildGlobalHTTPHeaders(body)
+      const headers = buildGlobalHTTPHeaders(body, buildDigest)
 
       const { statusCode } = await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
       expect(statusCode).to.equal(HttpStatusCode.NO_CONTENT_204)
@@ -216,7 +224,7 @@ describe('Test ActivityPub security', function () {
       await servers[1].run()
 
       const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeFilter())
-      const headers = buildGlobalHTTPHeaders(body)
+      const headers = buildGlobalHTTPHeaders(body, buildDigest)
 
       try {
         await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
@@ -247,9 +255,15 @@ describe('Test ActivityPub security', function () {
       body.actor = servers[2].url + '/accounts/peertube'
 
       const signer: any = { privateKey: invalidKeys.privateKey, url: servers[2].url + '/accounts/peertube' }
-      const signedBody = await signAndContextify(signer, body, 'Announce', fakeFilter())
+      const signedBody = await signAndContextify({
+        byActor: signer,
+        data: body,
+        contextType: 'Announce',
+        contextFilter: fakeFilter(),
+        signerFunction: signJsonLDObjectWithoutAssertion
+      })
 
-      const headers = buildGlobalHTTPHeaders(signedBody)
+      const headers = buildGlobalHTTPHeaders(signedBody, buildDigest)
 
       try {
         await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
@@ -267,11 +281,17 @@ describe('Test ActivityPub security', function () {
       body.actor = servers[2].url + '/accounts/peertube'
 
       const signer: any = { privateKey: keys.privateKey, url: servers[2].url + '/accounts/peertube' }
-      const signedBody = await signAndContextify(signer, body, 'Announce', fakeFilter())
+      const signedBody: any = await signAndContextify({
+        byActor: signer,
+        data: body,
+        contextType: 'Announce',
+        contextFilter: fakeFilter(),
+        signerFunction: signJsonLDObjectWithoutAssertion
+      })
 
       signedBody.actor = servers[2].url + '/account/peertube'
 
-      const headers = buildGlobalHTTPHeaders(signedBody)
+      const headers = buildGlobalHTTPHeaders(signedBody, buildDigest)
 
       try {
         await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
@@ -286,9 +306,15 @@ describe('Test ActivityPub security', function () {
       body.actor = servers[2].url + '/accounts/peertube'
 
       const signer: any = { privateKey: keys.privateKey, url: servers[2].url + '/accounts/peertube' }
-      const signedBody = await signAndContextify(signer, body, 'Announce', fakeFilter())
+      const signedBody = await signAndContextify({
+        byActor: signer,
+        data: body,
+        contextType: 'Announce',
+        contextFilter: fakeFilter(),
+        signerFunction: signJsonLDObjectWithoutAssertion
+      })
 
-      const headers = buildGlobalHTTPHeaders(signedBody)
+      const headers = buildGlobalHTTPHeaders(signedBody, buildDigest)
 
       const { statusCode } = await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)
       expect(statusCode).to.equal(HttpStatusCode.NO_CONTENT_204)
@@ -308,9 +334,15 @@ describe('Test ActivityPub security', function () {
       body.actor = servers[2].url + '/accounts/peertube'
 
       const signer: any = { privateKey: keys.privateKey, url: servers[2].url + '/accounts/peertube' }
-      const signedBody = await signAndContextify(signer, body, 'Announce', fakeFilter())
+      const signedBody = await signAndContextify({
+        byActor: signer,
+        data: body,
+        contextType: 'Announce',
+        contextFilter: fakeFilter(),
+        signerFunction: signJsonLDObjectWithoutAssertion
+      })
 
-      const headers = buildGlobalHTTPHeaders(signedBody)
+      const headers = buildGlobalHTTPHeaders(signedBody, buildDigest)
 
       try {
         await makePOSTAPRequest(url, signedBody, baseHttpSignature(), headers)

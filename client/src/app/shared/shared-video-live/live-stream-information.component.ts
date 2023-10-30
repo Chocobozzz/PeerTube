@@ -45,7 +45,9 @@ export class LiveStreamInformationComponent {
       [LiveVideoError.FFMPEG_ERROR]: $localize`Server error`,
       [LiveVideoError.QUOTA_EXCEEDED]: $localize`Quota exceeded`,
       [LiveVideoError.RUNNER_JOB_CANCEL]: $localize`Runner job cancelled`,
-      [LiveVideoError.RUNNER_JOB_ERROR]: $localize`Error in runner job`
+      [LiveVideoError.RUNNER_JOB_ERROR]: $localize`Error in runner job`,
+      [LiveVideoError.UNKNOWN_ERROR]: $localize`Unknown error`,
+      [LiveVideoError.INVALID_INPUT_VIDEO_STREAM]: $localize`Invalid input video stream`
     }
 
     return errors[session.error]

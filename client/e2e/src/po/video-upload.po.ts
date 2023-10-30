@@ -68,6 +68,7 @@ export class VideoUploadPage {
     selectCustomSelect('privacy', 'Password protected')
 
     const videoPasswordInput = $('input#videoPassword')
+    await videoPasswordInput.waitForClickable()
     await videoPasswordInput.clearValue()
 
     return videoPasswordInput.setValue(videoPassword)

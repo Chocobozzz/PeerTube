@@ -31,7 +31,8 @@ async function prepare () {
 
   const config = {
     log: {
-      level: 'info'
+      level: 'info',
+      log_http_requests: false
     },
     rates_limit: {
       api: {

@@ -168,8 +168,7 @@ export class PeerTubePlayer {
     const webVideoOptionsBuilder = new WebVideoOptionsBuilder(pick(this.currentLoadOptions, [
       'videoFileToken',
       'webVideo',
-      'hls',
-      'startTime'
+      'hls'
     ]))
 
     this.player.webVideo(webVideoOptionsBuilder.getPluginOptions())

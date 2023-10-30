@@ -5,10 +5,17 @@ import { getServerActor } from '@server/models/application/application.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { Redis } from '../../redis.js'
+import { LRUCache } from 'lru-cache'
+import { VIEW_LIFETIME } from '@server/initializers/constants.js'
 
 const lTags = loggerTagsFactory('views')
 
 export class VideoViews {
+
+  private readonly viewsCache = new LRUCache<string, boolean>({
+    max: 10_000,
+    ttl: VIEW_LIFETIME.VIEW
+  })
 
   async addLocalView (options: {
     video: MVideoImmutable
@@ -21,10 +28,10 @@ export class VideoViews {
 
     if (!await this.hasEnoughWatchTime(video, watchTime)) return false
 
-    const viewExists = await Redis.Instance.doesVideoIPViewExist(ip, video.uuid)
+    const viewExists = await this.doesVideoIPViewExist(ip, video.uuid)
     if (viewExists) return false
 
-    await Redis.Instance.setIPVideoView(ip, video.uuid)
+    await this.setIPVideoView(ip, video.uuid)
 
     await this.addView(video)
 
@@ -66,5 +73,20 @@ export class VideoViews {
 
     // Check more than 50% of the video is watched
     return duration / watchTime < 2
+  }
+
+  private doesVideoIPViewExist (ip: string, videoUUID: string) {
+    const key = Redis.Instance.generateIPViewKey(ip, videoUUID)
+    const value = this.viewsCache.has(key)
+    if (value === true) return Promise.resolve(true)
+
+    return Redis.Instance.doesVideoIPViewExist(ip, videoUUID)
+  }
+
+  private setIPVideoView (ip: string, videoUUID: string) {
+    const key = Redis.Instance.generateIPViewKey(ip, videoUUID)
+    this.viewsCache.set(key, true)
+
+    return Redis.Instance.setIPVideoView(ip, videoUUID)
   }
 }

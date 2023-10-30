@@ -695,6 +695,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     const getStartTime = () => {
+      if (video.isLive) return undefined
+
       const byUrl = urlOptions.startTime !== undefined
       const byHistory = video.userHistory && (!this.playlist || urlOptions.resume !== undefined)
       const byLocalStorage = getStoredVideoWatchHistory(video.uuid)

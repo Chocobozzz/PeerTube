@@ -191,7 +191,6 @@ type TheaterButtonOptions = {
 
 type WebVideoPluginOptions = {
   videoFiles: VideoFile[]
-  startTime: number | string
   videoFileToken: () => string
 }
 

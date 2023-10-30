@@ -26,7 +26,7 @@
     "Current Time": "Waktu Saat Ini",
     "Duration": "Durasi",
     "Remaining Time": "Waktu yang Tersisa",
-    "Stream Type": "Tipe Pemutaran",
+    "Stream Type": "Tipe Pemutar",
     "LIVE": "LANGSUNG",
     "Loaded": "Dimuat",
     "Progress": "Progres",
@@ -100,5 +100,5 @@
     "Caption Settings Dialog": "Dialog Pengaturan Keterangan",
     "Beginning of dialog window. Escape will cancel and close the window.": "Awal bilah. Escape akan membatalkan dan menutup jendela.",
     "End of dialog window.": "Akhir bilah.",
-    "{1} is loading.": "{1} sedang dimuat."
+    "{1} is loading.": "{1} sedang loading"
 }

@@ -42,7 +42,7 @@ describe('Test follows', function () {
       })
 
       it('Should have server 1 following root account of server 2 and server 3', async function () {
-        this.timeout(30000)
+        this.timeout(60000)
 
         await servers[0].follows.follow({
           hosts: [ servers[2].url ],

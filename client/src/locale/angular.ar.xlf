@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source>
-        <target state="translated">الشريحة <x id="INTERPOLATION" equiv-text="get wrap("/> من <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
+        <target state="translated">الشريحة<x id="INTERPOLATION" equiv-text="get wrap("/> تبع <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
@@ -54,12 +54,12 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.previous" datatype="html">
         <source>«</source>
-        <target state="translated">«</target>
+        <target state="needs-translation">«</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.next" datatype="html">
         <source>»</source>
-        <target state="translated">»</target>
+        <target state="needs-translation">»</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last" datatype="html">
@@ -3759,7 +3759,7 @@
       </trans-unit>
       <trans-unit id="3710881484246327863" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {صورة مخزنة مؤقتا} other {صور مخزنة مؤقتا}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">22</context>
@@ -3772,7 +3772,7 @@
       </trans-unit>
       <trans-unit id="6193666854590647323" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {تسمية توضيحية مخزنة مؤقتا} other {تسميات توضيحية مخزنة مؤقتا}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">36</context>
@@ -3788,7 +3788,7 @@
       </trans-unit>
       <trans-unit id="4613961764793311850" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached torrent} other {cached torrents}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached torrent} other {cached torrents}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {تورنت مخزنة مؤقتا} other {تورنتات مخزنة مؤقتا}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">50</context>
@@ -7492,12 +7492,12 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="needs-translation">View <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
+        <target state="translated">View <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/>من <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="5535545444690528619" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/></source>
-        <target state="needs-translation">View <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/></target>
+        <target state="translated">عرض<x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="1055254162789146714" datatype="html">
@@ -7527,7 +7527,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="723038562278401061" datatype="html">
         <source>Friendly Reminder:</source>
-        <target state="new">Friendly Reminder:</target>
+        <target state="translated">تذكير ودي:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context>
           <context context-type="linenumber">4</context>
@@ -7596,7 +7596,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7508177761852352782" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example).</source>
-        <target state="new"> You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example). </target>
+        <target state="translated">يمكنك التعليق باستخدام حساب على أي نُسْخَة متوافق مع ActivityPub (حساب بييرتيوب/Mastodon/Pleroma على سبيل المثال).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="2958389355547305739" datatype="html">
@@ -7845,18 +7845,18 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6659155428791414865" datatype="html">
         <source>x264, targeting maximum device compatibility</source>
-        <target state="new">x264, targeting maximum device compatibility</target>
+        <target state="translated">x264، يستهدف الحد الأقصى من توافق الأجهزة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context><context context-type="linenumber">54</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="1473738049081128420" datatype="html">
         <source>Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically.</source>
-        <target state="new"> Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically. </target>
+        <target state="translated">إن تقدير قدرة الخادم على تحويل ترميز مقاطع الفيديو ودفقها ليس بالأمر السهل، ولا يمكننا ضبط بييرتيوب تلقائيًا.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="8538708819525283296" datatype="html">
         <source>However, you may want to read <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://docs.joinpeertube.org/admin-configuration?id=transcoding&quot;>"/>our guidelines<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> before tweaking the following values. </source>
-        <target state="new"> However, you may want to read <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://docs.joinpeertube.org/admin-configuration?id=transcoding&quot;>"/>our guidelines<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> before tweaking the following values. </target>
+        <target state="translated">ومع ذلك، قد ترغب في قراءة <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://docs.joinpeertube.org/admin-configuration?id=transcoding&quot;>"/>إرشاداتنا<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> قبل تعديل القيم التالية. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">12,14</context>
@@ -7864,7 +7864,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2384409178337534505" datatype="html">
         <source>Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully.</source>
-        <target state="new"> Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully. </target>
+        <target state="translated">قم بمعالجة مقاطع الفيديو التي تم تحميلها بحيث تكون في شكل قابل للبث ويمكن لأي جهاز تشغيله. على الرغم من أنه مكلف من حيث الموارد، إلا أنه يعد جزءًا مهمًا من بييرتيوب، لذا تعامل معه بحذر.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="709846045064893539" datatype="html">
@@ -7907,7 +7907,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3203902538239082422" datatype="html">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
-        <target state="new">You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</target>
+        <target state="translated">لقد قمت بتفعيل الاشتراك: لقد قمنا تلقائيًا بتمكين مربع الاختيار "حظر مقاطع الفيديو الجديدة تلقائيًا" في قسم "مقاطع الفيديو" الموجود أدناه مباشرةً.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="6284468333579755406" datatype="html">
@@ -8070,7 +8070,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4309656190692990192" datatype="html">
         <source>Deleted followers will be able to send again a follow request.</source>
-        <target state="new">Deleted followers will be able to send again a follow request.</target>
+        <target state="translated">سيتمكن المتابعين المحذوفين من إرسال طلب متابعة مرة أخرى.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="4187075675930483010" datatype="html">
@@ -8092,12 +8092,12 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3596798855644241001" datatype="html">
         <source>1 host (without "http://"), account handle or channel handle per line</source>
-        <target state="new">1 host (without "http://"), account handle or channel handle per line</target>
+        <target state="translated">مضيف واحد (بدون "http://")، مقبض حساب أو مقبض قناة في كل سطر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="3069073855436209848" datatype="html">
         <source>Subscriptions of your instance</source>
-        <target state="new">Subscriptions of your instance</target>
+        <target state="translated">اشتراكات نُسْخَتك</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -8115,7 +8115,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="397182597341363053" datatype="html">
         <source>Redundancy</source>
-        <target state="new">Redundancy</target>
+        <target state="translated">تكرارية</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/follows.routes.ts</context>
           <context context-type="linenumber">48</context>
@@ -8247,7 +8247,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3143238830256588661" datatype="html">
         <source>The live stream will be automatically terminated and replays won't be saved.</source>
-        <target state="new">The live stream will be automatically terminated and replays won't be saved.</target>
+        <target state="translated">سيتم إنهاء البث المباشر تلقائيًا ولن يتم حفظ الإعادات.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">233</context>
@@ -8477,7 +8477,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7686590072950686188" datatype="html">
         <source>Proceed upgrade</source>
-        <target state="new">Proceed upgrade</target>
+        <target state="translated">متابعة الترقية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="7830308409197461339" datatype="html">
@@ -8549,7 +8549,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="722088235348685072" datatype="html">
         <source>If this is not your correct public IP, please consider fixing it because:</source>
-        <target state="new">If this is not your correct public IP, please consider fixing it because:</target>
+        <target state="translated">إذا لم يكن هذا هو عنوان IP العام الصحيح الخاص بك، فيرجى التفكير في إصلاحه للأسباب التالية:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">6</context>
@@ -8565,7 +8565,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="565435193934699740" datatype="html">
         <source>Anti brute force system could be overzealous</source>
-        <target state="new">Anti brute force system could be overzealous</target>
+        <target state="translated">قد يكون نظام مكافحة القوة الغاشمة (force system) مفرطًا في الحماس</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">9</context>
@@ -8573,7 +8573,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4468853448271686046" datatype="html">
         <source>P2P system could not work correctly</source>
-        <target state="new">P2P system could not work correctly</target>
+        <target state="translated">نظام P2P لا يمكن أن يعمل بشكل صحيح</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">10</context>
@@ -8589,7 +8589,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1285026053775066761" datatype="html">
         <source>Check the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> configuration key</source>
-        <target state="new">Check the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> configuration key</target>
+        <target state="translated">تحقق من <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> مفتاح التضبيط</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">15</context>
@@ -8597,7 +8597,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7014275542536964627" datatype="html">
         <source>If you run PeerTube using Docker, check you run the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> (see <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;>"/>issue 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>)</source>
-        <target state="new">If you run PeerTube using Docker, check you run the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> (see <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;>"/>issue 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>)</target>
+        <target state="translated">إذا قمت بتشغيل بييرتيوب باستخدام Docker، فتأكد من تشغيل <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/>الوكيل العكسي<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> مع <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/>وضع الشبكة: "المضيف"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> (راجع <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;>"/>الإصدار 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">16,17</context>
@@ -8620,24 +8620,24 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3164845764519833078" datatype="html">
         <source>debug</source>
-        <target state="new">debug</target>
+        <target state="translated">تنقيح</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="4279081882680795350" datatype="html">
         <source>info</source>
-        <target state="new">info</target>
+        <target state="translated">معلومات</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">123</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="3379167598974960777" datatype="html">
         <source>warning</source>
-        <target state="new">warning</target>
+        <target state="translated">تحذير</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">124</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
         <source>error</source>
-        <target state="new">error</target>
+        <target state="translated">خطأ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">125</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
@@ -8655,12 +8655,12 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4116911651502837995" datatype="html">
         <source>Files</source>
-        <target state="new">Files</target>
+        <target state="translated">ملفات</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="4767765747214995164" datatype="html">
         <source>Published <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;>"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon>"/></source>
-        <target state="new">Published <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;>"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon>"/></target>
+        <target state="translated">نُشر <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;>"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon>"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="6759205696902713848" datatype="html">
@@ -8670,7 +8670,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6410650387447929805" datatype="html">
         <source>Light/Orange or Dark</source>
-        <target state="new">Light/Orange or Dark</target>
+        <target state="translated">فاتح/برتقالي أو داكن</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/theme/theme.service.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="1519954996184640001" datatype="html">
@@ -8696,37 +8696,37 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1421364405181899930" datatype="html">
         <source>Priority <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;priority&quot;>"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th>"/></source>
-        <target state="new">Priority <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;priority&quot;>"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th>"/></target>
+        <target state="translated">أولوية<x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;priority&quot;>"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th>"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="736603280382549123" datatype="html">
         <source>Progress <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;progress&quot;>"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th>"/></source>
-        <target state="new">Progress <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;progress&quot;>"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th>"/></target>
+        <target state="translated">تقدم<x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;progress&quot;>"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th>"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="492731212914442494" datatype="html">
         <source>Runner</source>
-        <target state="new">Runner</target>
+        <target state="translated">العدّاء</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="5944078821855011619" datatype="html">
         <source>Payload:</source>
-        <target state="new">Payload:</target>
+        <target state="translated">الحمولة:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="1046771510013067927" datatype="html">
         <source>Private payload:</source>
-        <target state="new">Private payload:</target>
+        <target state="translated">الحمولة الخاصة:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="6133673901299224277" datatype="html">
         <source>No runner jobs found.</source>
-        <target state="new">No runner jobs found.</target>
+        <target state="translated">لم يتم العثور على وظائف عداء.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="7146070362549250677" datatype="html">
         <source>Completed jobs</source>
-        <target state="new">Completed jobs</target>
+        <target state="translated">وظائف مكتملة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">30</context>
@@ -8734,7 +8734,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2841995988789172579" datatype="html">
         <source>Pending jobs</source>
-        <target state="new">Pending jobs</target>
+        <target state="translated">وظائف في انتظار</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -8742,7 +8742,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6587308737467829649" datatype="html">
         <source>Jobs that are being processed</source>
-        <target state="new">Jobs that are being processed</target>
+        <target state="translated">الوظائف التي تتم معالجتها</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -8750,7 +8750,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2902296494834684511" datatype="html">
         <source>Failed jobs</source>
-        <target state="new">Failed jobs</target>
+        <target state="translated">وظائف فشلت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -8758,12 +8758,12 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2785060445730155276" datatype="html">
         <source>Cancel this job</source>
-        <target state="new">Cancel this job</target>
+        <target state="translated">إلغاء هذه الوظيفة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="410829478323542752" datatype="html">
         <source>Delete this job</source>
-        <target state="new">Delete this job</target>
+        <target state="translated">حذف هذه الوظيفة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -8776,7 +8776,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8430670111153715725" datatype="html">
         <source>Job(s) cancelled.</source>
-        <target state="new">Job(s) cancelled.</target>
+        <target state="translated">وظيفة (الوظائف) أُلغيت.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="2175266358082397536" datatype="html">
@@ -8789,7 +8789,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="453899642867587306" datatype="html">
         <source>Runner registration tokens</source>
-        <target state="new">Runner registration tokens</target>
+        <target state="translated">رموز تسجيل العدّاء</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">9</context>
@@ -8806,12 +8806,12 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="251663748987415005" datatype="html">
         <source>Last contact</source>
-        <target state="new">Last contact</target>
+        <target state="translated">آخر اتصال</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6329354273972175246" datatype="html">
         <source>No remote runners found.</source>
-        <target state="new">No remote runners found.</target>
+        <target state="translated">لم يتم العثور على عدّائين عن بُعد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="1886888801485703107" datatype="html">
@@ -8827,12 +8827,12 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7098180453085889026" datatype="html">
         <source>Blocked videos</source>
-        <target state="new">Blocked videos</target>
+        <target state="translated">مقاطع الفيديو المحظورة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="2434590176499222618" datatype="html">
         <source>User registrations</source>
-        <target state="new">User registrations</target>
+        <target state="translated">تسجيلات المستخدم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context>
           <context context-type="linenumber">79</context>
@@ -8845,7 +8845,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2072636325858679364" datatype="html">
         <source><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;>"/>Accept <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container>"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;>"/>Reject <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container>"/></source>
-        <target state="new"><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;>"/>Accept <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container>"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;>"/>Reject <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container>"/></target>
+        <target state="translated"><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;>"/>قبول<x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> التسجيل<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container>"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;>"/>رفض<x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> التسجيل<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">4,5</context>
@@ -8853,67 +8853,67 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2237982448344718491" datatype="html">
         <source>Registration email has not been verified. Email delivery has been disabled by default.</source>
-        <target state="new"> Registration email has not been verified. Email delivery has been disabled by default. </target>
+        <target state="translated">لم يتم التحقق من البريد الإلكتروني للتسجيل. تسليم البريد الإلكتروني مُعطَّل بشكل افتراضي.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="2884115244144130373" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> registration will create the account and channel. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> registration will create the account and channel. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>قبول<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> سيؤدي التسجيل إلى إنشاء الحساب والقناة. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="4287036840463640002" datatype="html">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> explaining its account has been created with the moderation response you'll write below. </source>
-        <target state="new"> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> explaining its account has been created with the moderation response you'll write below. </target>
+        <target state="translated">سيتم إرسال بريد إلكتروني إلى <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> موضحًا أنه تم إنشاء حسابه باستخدام استجابة الإشراف التي ستكتبها أدناه. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="6252848909934071768" datatype="html">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> explaining its account has been created. </source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> explaining its account has been created. </target>
+        <target state="translated">لم يتم تمكين رسائل البريد الإلكتروني في هذه الحالة، لذا لن يتمكن بييرتيوب من إرسال بريد إلكتروني إلى <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> موضحًا أنه تم إنشاء حسابه. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="908816482785584930" datatype="html">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> with the moderation response you'll write below. </source>
-        <target state="new"> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> with the moderation response you'll write below. </target>
+        <target state="translated">سيتم إرسال بريد إلكتروني إلى <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> موضحًا أن طلب التسجيل الخاص به كان <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>تم الرفض<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> مع استجابة الإشراف الذي ستكتبه أدناه. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="2693506849974732500" datatype="html">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> explaining its registration request has been rejected. </source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> explaining its registration request has been rejected. </target>
+        <target state="translated">لم يتم تمكين رسائل البريد الإلكتروني في هذه الحالة، لذا لن يتمكن بييرتيوب من إرسال بريد إلكتروني إلى <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em>"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em>"/> موضحًا أنه تم طلب التسجيل الخاص به مرفوض. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="8494092276635837685" datatype="html">
         <source>Send a message to the user</source>
-        <target state="new">Send a message to the user</target>
+        <target state="translated">إرسال رسالة إلى المستخدم</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="608706297814044931" datatype="html">
         <source>Prevent email from being sent to the user</source>
-        <target state="new">Prevent email from being sent to the user</target>
+        <target state="translated">منع إرسال البريد الإلكتروني إلى المستخدم</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="1067821087200879310" datatype="html">
         <source>Accept registration</source>
-        <target state="new">Accept registration</target>
+        <target state="translated">قبول التسجيل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="9200323379330335050" datatype="html">
         <source>Reject registration</source>
-        <target state="new">Reject registration</target>
+        <target state="translated">رفض التسجيل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="5919197630789088814" datatype="html">
         <source><x id="PH" equiv-text="this.registration.username"/> account created</source>
-        <target state="new"><x id="PH" equiv-text="this.registration.username"/> account created</target>
+        <target state="translated">أُنشئت حساب <x id="PH" equiv-text="this.registration.username"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="2989631909091294713" datatype="html">
         <source><x id="PH" equiv-text="this.registration.username"/> registration rejected</source>
-        <target state="new"><x id="PH" equiv-text="this.registration.username"/> registration rejected</target>
+        <target state="translated">رُفض تسجيل <x id="PH" equiv-text="this.registration.username"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">112</context></context-group>
       </trans-unit>
       <trans-unit id="5941489410560989457" datatype="html">
         <source>Moderation response is required.</source>
-        <target state="new">Moderation response is required.</target>
+        <target state="translated">مطلوب استجابة الإشراف.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -8921,7 +8921,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1762427369052469243" datatype="html">
         <source>Moderation response must be at least 2 characters long.</source>
-        <target state="new">Moderation response must be at least 2 characters long.</target>
+        <target state="translated">يجب أن تتكون استجابة الإشراف من حرفين على الأقل.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -8929,7 +8929,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3326945092799111194" datatype="html">
         <source>Moderation response cannot be more than 3000 characters long.</source>
-        <target state="new">Moderation response cannot be more than 3000 characters long.</target>
+        <target state="translated">لا يمكن أن يزيد طول استجابة الإشراف عن 3000 حرف.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -8937,7 +8937,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7060967501175301883" datatype="html">
         <source>Registration requests</source>
-        <target state="new">Registration requests</target>
+        <target state="translated">طلبات التسجيل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -8970,7 +8970,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5679185794144903715" datatype="html">
         <source>Two factor authentication of <x id="PH" equiv-text="this.user.username"/> disabled.</source>
-        <target state="new">Two factor authentication of <x id="PH" equiv-text="this.user.username"/> disabled.</target>
+        <target state="translated">الاستيثاق الثنائي لـ <x id="PH" equiv-text="this.user.username"/> معطّل.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">134</context>
@@ -8993,7 +8993,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2005509140164856243" datatype="html">
         <source>Video type</source>
-        <target state="new">Video type</target>
+        <target state="translated">نوع الفيديو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="1878553503929537171" datatype="html">
@@ -9003,18 +9003,18 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8610504659433544583" datatype="html">
         <source>Live</source>
-        <target state="new">Live</target>
+        <target state="translated">مباشر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">53</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="545237611115823456" datatype="html">
         <source>Video files</source>
-        <target state="new">Video files</target>
+        <target state="translated">ملفات الفيديو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="1882931826815906053" datatype="html">
         <source>With Web Videos</source>
-        <target state="new">With Web Videos</target>
+        <target state="translated">مع أشرطة فيديو الويب</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">63</context>
@@ -9022,7 +9022,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1590370632695044398" datatype="html">
         <source>Without Web Videos</source>
-        <target state="new">Without Web Videos</target>
+        <target state="translated">بدون أشرطة فيديو الويب</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">67</context>
@@ -9030,22 +9030,22 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7468888924775619361" datatype="html">
         <source>With HLS</source>
-        <target state="new">With HLS</target>
+        <target state="translated">مع HLS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="5489331826268601489" datatype="html">
         <source>Without HLS</source>
-        <target state="new">Without HLS</target>
+        <target state="translated">بدون HLS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="7091163288887549392" datatype="html">
         <source>Videos scope</source>
-        <target state="new">Videos scope</target>
+        <target state="translated">نطاق الفيديوهات</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="1144415254281227966" datatype="html">
         <source>Remote videos</source>
-        <target state="new">Remote videos</target>
+        <target state="translated">فيديوهات عن بُعد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
@@ -9086,17 +9086,17 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4207916966377787111" datatype="html">
         <source>Created</source>
-        <target state="new">Created</target>
+        <target state="translated">أُنشئ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="8140268298586972139" datatype="html">
         <source>Daily quota</source>
-        <target state="new">Daily quota</target>
+        <target state="translated">الحصة اليومية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
       <trans-unit id="7910076708497708162" datatype="html">
         <source>Last login</source>
-        <target state="new">Last login</target>
+        <target state="translated">آخر تسجيل دخول</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">135</context></context-group>
       </trans-unit>
       <trans-unit id="3403978719736970622" datatype="html">
@@ -9123,12 +9123,12 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5945924096465496818" datatype="html">
         <source>&lt;p>You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p></source>
-        <target state="new">&lt;p>You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p></target>
+        <target state="translated">&lt;p>لا يمكنك إنشاء مستخدمين أو قنوات باسم مستخدم تم استخدامه بالفعل بواسطة مستخدم/قناة محذوفة.&lt;/p></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
       <trans-unit id="5643060985393782358" datatype="html">
         <source>It means the following usernames will be permanently deleted and cannot be recovered:</source>
-        <target state="new">It means the following usernames will be permanently deleted and cannot be recovered:</target>
+        <target state="translated">وهذا يعني أنه سيتم حذف أسماء المستخدمين التالية نهائيًا ولا يمكن استعادتها:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="1301767781765127363" datatype="html">
@@ -9153,12 +9153,12 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html">
         <source>This account is awaiting approval by moderators.</source>
-        <target state="new">This account is awaiting approval by moderators.</target>
+        <target state="translated">هذا الحساب في انتظار موافقة المشرفين.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">223</context></context-group>
       </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html">
         <source>Registration approval has been rejected for this account.</source>
-        <target state="new">Registration approval has been rejected for this account.</target>
+        <target state="translated">تم رفض الموافقة على التسجيل لهذا الحساب.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">228</context></context-group>
       </trans-unit>
       <trans-unit id="1137937154872046253" datatype="html">
@@ -9178,17 +9178,17 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8407755843502300957" datatype="html">
         <source>Banner changed.</source>
-        <target state="new">Banner changed.</target>
+        <target state="translated">تم تغيير الشعار.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context><context context-type="linenumber">155</context></context-group>
       </trans-unit>
       <trans-unit id="689638706960732906" datatype="html">
         <source>banner</source>
-        <target state="new">banner</target>
+        <target state="translated">الشعار</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="3230561499965076671" datatype="html">
         <source>Banner deleted.</source>
-        <target state="new">Banner deleted.</target>
+        <target state="translated">حذفت الشعار.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context><context context-type="linenumber">172</context></context-group>
       </trans-unit>
       <trans-unit id="3525866160632851851" datatype="html">
@@ -9199,13 +9199,13 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8920809083620698740" datatype="html">
         <source>avatar</source>
-        <target state="new">avatar</target>
+        <target state="translated">الصورة الرمزية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context><context context-type="linenumber">129</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="2775050991871557896" datatype="html">
         <source>Avatar deleted.</source>
-        <target state="new">Avatar deleted.</target>
+        <target state="translated">حذفت الصورة الرمزية.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context><context context-type="linenumber">139</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
@@ -9221,13 +9221,13 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7440637814928143808" datatype="html">
         <source>My followers</source>
-        <target state="new">My followers</target>
+        <target state="translated">متابعيني</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="2521678336272309407" datatype="html">
         <source>No follower found.</source>
-        <target state="new">No follower found.</target>
+        <target state="translated">لم يتم العثور على أي متابع.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">13</context>
@@ -9235,7 +9235,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5294742063044966238" datatype="html">
         <source>Follower page</source>
-        <target state="new">Follower page</target>
+        <target state="translated">صفحة المتابعين</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">20</context>
@@ -9243,7 +9243,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="797409137967291468" datatype="html">
         <source>Is following all your channels</source>
-        <target state="new">Is following all your channels</target>
+        <target state="translated">يتابع كل قنواتك</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">26</context>
@@ -9251,7 +9251,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7940720844854710428" datatype="html">
         <source>Is following your channel <x id="INTERPOLATION" equiv-text="{{ follow.following.name }}"/></source>
-        <target state="new">Is following your channel <x id="INTERPOLATION" equiv-text="{{ follow.following.name }}"/></target>
+        <target state="translated">يتابع قناتك <x id="INTERPOLATION" equiv-text="{{ follow.following.name }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">27</context>
@@ -9259,7 +9259,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1716062177529601456" datatype="html">
         <source>Channel filters</source>
-        <target state="new">Channel filters</target>
+        <target state="translated">مرشحات القناة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.ts</context><context context-type="linenumber">49</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">129</context></context-group>
       </trans-unit>
@@ -9275,12 +9275,12 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1009095940160473792" datatype="html">
         <source>URL parameter is missing in URL parameters</source>
-        <target state="new">URL parameter is missing in URL parameters</target>
+        <target state="translated">معلمة URL مفقودة في معلمات URL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="7553172329217243895" datatype="html">
         <source>Cannot access to the remote resource</source>
-        <target state="new">Cannot access to the remote resource</target>
+        <target state="translated">لا يمكن الوصول إلى المورد البعيد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="1636934520301910285" datatype="html">
@@ -9293,7 +9293,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3851357780293085233" datatype="html">
         <source>Remote interaction</source>
-        <target state="new">Remote interaction</target>
+        <target state="translated">التفاعل عن بُعد</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction-routing.module.ts</context>
           <context context-type="linenumber">13</context>
@@ -9355,7 +9355,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="577064441120663273" datatype="html">
         <source>Are you sure you want to delete your account?</source>
-        <target state="new">Are you sure you want to delete your account?</target>
+        <target state="translated">هل انت متأكد انك تريد حذف حسابك؟</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">22</context>
@@ -9363,7 +9363,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2740531699780274491" datatype="html">
         <source>This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</source>
-        <target state="new">This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</target>
+        <target state="translated">سيؤدي هذا إلى حذف جميع بياناتك، بما في ذلك القنوات ومقاطع الفيديو والتعليقات ولن تتمكن من إنشاء مستخدم آخر غلى هذه النُسْخَة باستخدام "<x id="PH" equiv-text="this.user.username"/>" اسم المستخدم.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -9371,7 +9371,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5422897685524094185" datatype="html">
         <source>Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="new">Content cached by other servers and other third-parties might make longer to be deleted.</target>
+        <target state="translated">قد يؤدي المحتوى الذي تم تخزينه مؤقتًا بواسطة خوادم أخرى والجهات الخارجية الأخرى إلى إطالة وقت حذفه.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -9389,7 +9389,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5215550763077484072" datatype="html">
         <source>Allow email to be publicly displayed</source>
-        <target state="new">Allow email to be publicly displayed</target>
+        <target state="translated">السماح بعرض البريد الإلكتروني للعامة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">6</context>
@@ -9397,7 +9397,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3472732945521632942" datatype="html">
         <source>Necessary to claim podcast RSS feeds.</source>
-        <target state="new">Necessary to claim podcast RSS feeds.</target>
+        <target state="translated">من الضروري المطالبة بخلاصات RSS للبودكاست.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">9</context>
@@ -9445,7 +9445,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5935212402338564229" datatype="html">
         <source>You or one of your channels has a new follower</source>
-        <target state="new">You or one of your channels has a new follower</target>
+        <target state="translated">لديك أنت أو إحدى قنواتك متابع جديد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="5315689532659759332" datatype="html">
@@ -9485,7 +9485,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="988319118163514570" datatype="html">
         <source>Video studio edition has finished</source>
-        <target state="new">Video studio edition has finished</target>
+        <target state="translated">انتهت نسخة استوديو الفيديو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="4579496777570550463" datatype="html">
@@ -9549,7 +9549,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5767090948392236130" datatype="html">
         <source>Notification preferences</source>
-        <target state="new">Notification preferences</target>
+        <target state="translated">تفضيلات الإشعارات</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context>
           <context context-type="linenumber">6</context>
@@ -9685,8 +9685,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5603224609929994288" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> is awaiting email verification </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> is awaiting email verification
-</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> في انتظار التحقق من البريد الإلكتروني </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">5,6</context>
@@ -9694,7 +9693,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4250548381153518208" datatype="html">
         <source>Change your email</source>
-        <target state="new">Change your email</target>
+        <target state="translated">غيّر بريدك الإلكتروني</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">11</context>
@@ -9702,7 +9701,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3173210699559672958" datatype="html">
         <source>Your current email is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>. It is never shown to the public. </source>
-        <target state="new"> Your current email is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>. It is never shown to the public. </target>
+        <target state="translated">بريدك الإلكتروني الحالي هو <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>. لم يتم عرضه للعامة أبدًا. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">13,16</context>
@@ -9828,12 +9827,12 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6183000905044663854" datatype="html">
         <source>Search <x id="PH" equiv-text="this.currentSearch"/></source>
-        <target state="new">Search <x id="PH" equiv-text="this.currentSearch"/></target>
+        <target state="translated">بحث <x id="PH" equiv-text="this.currentSearch"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.ts</context><context context-type="linenumber">257</context></context-group>
       </trans-unit>
       <trans-unit id="8491751845906232809" datatype="html">
         <source>PeerTube instance host filter is invalid</source>
-        <target state="new">PeerTube instance host filter is invalid</target>
+        <target state="translated">عامل تصفية مضيف نُسْخَة بييرتيوب غير صالح</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.ts</context><context context-type="linenumber">332</context></context-group>
       </trans-unit>
       <trans-unit id="4580988005648117665" datatype="html">
@@ -9857,7 +9856,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6901018060567164184" datatype="html">
         <source>Plugins</source>
-        <target state="new">Plugins</target>
+        <target state="translated">المُلحقات</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-navigation.component.html</context>
           <context context-type="linenumber">8</context>
@@ -9865,7 +9864,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2798270190074840767" datatype="html">
         <source>Themes</source>
-        <target state="new">Themes</target>
+        <target state="translated">السمات</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-navigation.component.html</context>
           <context context-type="linenumber">9</context>
@@ -9873,7 +9872,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5378618511917875694" datatype="html">
         <source>User email has been verified</source>
-        <target state="new">User email has been verified</target>
+        <target state="translated">تم التحقق من البريد الإلكتروني للمستخدم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">15</context>
@@ -9881,7 +9880,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2754481302921121772" datatype="html">
         <source>User email hasn't been verified</source>
-        <target state="new">User email hasn't been verified</target>
+        <target state="translated">لم يتم التحقق من البريد الإلكتروني للمستخدم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">18</context>
@@ -9889,8 +9888,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4202012170513622087" datatype="html">
         <source>The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />"/> Since transcoding is enabled, videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target state="new"> The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />"/> Since transcoding is enabled, videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
-</target>
+        <target state="translated">حصة الفيديو تأخذ في الاعتبار فقط <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>الأصلي<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> حجم الفيديو. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />"/>نظرًا لتقعيل تحويل الترميز، يمكن أن يكون حجم مقاطع الفيديو على الأكثر ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">1,4</context>
@@ -9911,7 +9909,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4227831333725112678" datatype="html">
         <source>Verify email</source>
-        <target state="new">Verify email</target>
+        <target state="translated">التحقق من البريد الإلكتروني</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -9920,9 +9918,9 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1783173774503340906" datatype="html">
         <source>Subscribe to the account</source>
         <target>الاشتراك في الحساب</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">84</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">907</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">84</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">909</context></context-group></trans-unit>
       <trans-unit id="3131904093925601441" datatype="html">
         <source>PLAYLISTS</source>
         <target state="translated">قوائم التشغيل</target>
@@ -9963,7 +9961,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5030063045826839645" datatype="html">
         <source>Concatenate a file at the beginning of the video.</source>
-        <target state="new">Concatenate a file at the beginning of the video.</target>
+        <target state="translated">قم بتسلسل ملف في بداية الفيديو.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="4798642303989337390" datatype="html">
@@ -9973,17 +9971,17 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7698413240170540435" datatype="html">
         <source>ADD OUTRO</source>
-        <target state="new">ADD OUTRO</target>
+        <target state="translated">أضِف أخرى</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="2832051749922509643" datatype="html">
         <source>Concatenate a file at the end of the video.</source>
-        <target state="new">Concatenate a file at the end of the video.</target>
+        <target state="translated">قم بتسلسل ملف في نهاية الفيديو.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="4368653199478595315" datatype="html">
         <source>Select the outro video file</source>
-        <target state="new">Select the outro video file</target>
+        <target state="translated">حدد ملف الفيديو الخاتمة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="3463158361655332380" datatype="html">
@@ -10003,17 +10001,17 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3926035808219061063" datatype="html">
         <source>Run video edition</source>
-        <target state="new">Run video edition</target>
+        <target state="translated">تشغيل إصدار الفيديو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="1514792472513458403" datatype="html">
         <source>Video before edition</source>
-        <target state="new">Video before edition</target>
+        <target state="translated">الفيديو قبل الاصدار</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="1109043661443571733" datatype="html">
         <source>Edition tasks:</source>
-        <target state="new">Edition tasks:</target>
+        <target state="translated">مهام الإصدار:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="3541115907775840269" datatype="html">
@@ -10023,17 +10021,17 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3858880927114551513" datatype="html">
         <source>The current video will be overwritten by this edited video and &lt;strong>you won't be able to recover it&lt;/strong>.&lt;br />&lt;br /></source>
-        <target state="new">The current video will be overwritten by this edited video and &lt;strong>you won't be able to recover it&lt;/strong>.&lt;br />&lt;br /></target>
+        <target state="translated">سيتم استبدال الفيديو الحالي بهذا الفيديو المعدل &lt;strong>لن تتمكن من استعادته&lt;/strong>.&lt;br />&lt;br /></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="4876327655498234453" datatype="html">
         <source>As a reminder, the following tasks will be executed: &lt;ol><x id="PH" equiv-text="listHTML"/>&lt;/ol></source>
-        <target state="new">As a reminder, the following tasks will be executed: &lt;ol><x id="PH" equiv-text="listHTML"/>&lt;/ol></target>
+        <target state="translated">وللتذكير سيتم تنفيذ المهام التالية: &lt;ol><x id="PH" equiv-text="listHTML"/>&lt;/ol></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="7934869554046374009" datatype="html">
         <source>Edition tasks created.</source>
-        <target state="new">Edition tasks created.</target>
+        <target state="translated">أُنشئت مهام الإصدار.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="6950140976689343775" datatype="html">
@@ -10466,22 +10464,22 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3323006969479129148" datatype="html">
         <source>Your video will also be automatically blocked since video publication requires manual validation by moderators.</source>
-        <target state="new">Your video will also be automatically blocked since video publication requires manual validation by moderators.</target>
+        <target state="translated">سيتم أيضًا حظر الفيديو الخاص بك تلقائيًا نظرًا لأن نشر الفيديو يتطلب التحقق اليدوي من قبل المشرفين.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">279</context></context-group>
       </trans-unit>
       <trans-unit id="6552806326413045734" datatype="html">
         <source>Uploading a new version of your video will completely erase the current version.</source>
-        <target state="new">Uploading a new version of your video will completely erase the current version.</target>
+        <target state="translated">سيؤدي تحميل نسخة جديدة من الفيديو إلى مسح النسخة الحالية بالكامل.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">282</context></context-group>
       </trans-unit>
       <trans-unit id="5315061036888228823" datatype="html">
         <source>&lt;br />&lt;br />Do you still want to replace your video file?</source>
-        <target state="new">&lt;br />&lt;br />Do you still want to replace your video file?</target>
+        <target state="translated">&lt;br />&lt;br />هل مازلت تريد استبدال ملف الفيديو الخاص بك؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">285</context></context-group>
       </trans-unit>
       <trans-unit id="5434400211005236230" datatype="html">
         <source>Replace file warning</source>
-        <target state="new">Replace file warning</target>
+        <target state="translated">استبدال تحذير الملف</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">287</context></context-group>
       </trans-unit>
       <trans-unit id="5609201297201028750" datatype="html">
@@ -10502,22 +10500,22 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="665518679871959619" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" image watermark will be added to the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" image watermark will be added to the video</target>
+        <target state="translated">ستتم إضافة العلامة المائية "<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" إلى الفيديو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="2677581013897190613" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></source>
-        <target state="new">Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
+        <target state="translated">سيبدأ الفيديو عند <x id="PH" equiv-text="secondsToTime(start)"/> ويتوقف عند<x id="PH_1" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="2299077646120636288" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></source>
-        <target state="new">Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></target>
+        <target state="translated">سيبدأ الفيديو عند <x id="PH" equiv-text="secondsToTime(start)"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">144</context></context-group>
       </trans-unit>
       <trans-unit id="7209039243783736285" datatype="html">
         <source>Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></source>
-        <target state="new">Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></target>
+        <target state="translated">سيتوقف الفيديو عند <x id="PH" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">148</context></context-group>
       </trans-unit>
       <trans-unit id="5512208811126492983" datatype="html">
@@ -10562,12 +10560,12 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6499699285816188400" datatype="html">
         <source>Abuse reports</source>
-        <target state="new">Abuse reports</target>
+        <target state="translated">تقارير إساءة الاستخدام</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="4930506384627295710" datatype="html">
         <source>Settings</source>
-        <target state="new">Settings</target>
+        <target state="translated">الإعدادات</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.html</context><context context-type="linenumber">12</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">45</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">1</context></context-group>
@@ -10595,7 +10593,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1254111869788332501" datatype="html">
         <source>Other videos</source>
-        <target state="new">Other videos</target>
+        <target state="translated">فيديوهات اخرى</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">4,6</context>
@@ -10681,69 +10679,69 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5856931617181450881" datatype="html">
         <source>Enter/exit fullscreen</source>
-        <target state="new">Enter/exit fullscreen</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">870</context></context-group>
-      </trans-unit>
+        <target state="translated">الدخول/الخروج في وضع ملء الشاشة</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">872</context></context-group></trans-unit>
       <trans-unit id="2971009377468404076" datatype="html">
         <source>Play/Pause the video</source>
-        <target state="new">Play/Pause the video</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">871</context></context-group>
-      </trans-unit>
+        <target state="translated">تشغيل/إيقاف الفيديو مؤقتًا</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">873</context></context-group></trans-unit>
       <trans-unit id="4147087312411482964" datatype="html">
         <source>Mute/unmute the video</source>
-        <target state="new">Mute/unmute the video</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">872</context></context-group>
-      </trans-unit>
+        <target state="translated">كتم/إلغاء كتم صوت الفيديو</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">874</context></context-group></trans-unit>
       <trans-unit id="4791956574676305640" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90%</source>
-        <target state="new">Skip to a percentage of the video: 0 is 0% and 9 is 90%</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">887</context></context-group>
-      </trans-unit>
+        <target state="translated">انتقل إلى نسبة مئوية من الفيديو: 0 يمثل 0% و9 يمثل 90%</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">889</context></context-group></trans-unit>
       <trans-unit id="3887762369650091344" datatype="html">
         <source>Increase the volume</source>
-        <target state="new">Increase the volume</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">874</context></context-group>
-      </trans-unit>
+        <target state="translated">رفع مستوى الصوت</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">876</context></context-group></trans-unit>
       <trans-unit id="1363382131573461910" datatype="html">
         <source>Decrease the volume</source>
-        <target state="new">Decrease the volume</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">875</context></context-group>
-      </trans-unit>
+        <target state="translated">خفض مستوى الصوت</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">877</context></context-group></trans-unit>
       <trans-unit id="2541031516422557760" datatype="html">
         <source>Seek the video forward</source>
-        <target state="new">Seek the video forward</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">889</context></context-group>
-      </trans-unit>
+        <target state="translated">تسعى الفيديو إلى الأمام</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">891</context></context-group></trans-unit>
       <trans-unit id="8813023402019364882" datatype="html">
         <source>Seek the video backward</source>
-        <target state="new">Seek the video backward</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">890</context></context-group>
-      </trans-unit>
+        <target state="translated">تسعى عن الفيديو للخلف</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">892</context></context-group></trans-unit>
       <trans-unit id="581757752202843950" datatype="html">
         <source>Increase playback rate</source>
-        <target state="new">Increase playback rate</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">892</context></context-group>
-      </trans-unit>
+        <target state="translated">زيادة معدل التشغيل</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">894</context></context-group></trans-unit>
       <trans-unit id="5467642834854681120" datatype="html">
         <source>Decrease playback rate</source>
-        <target state="new">Decrease playback rate</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">893</context></context-group>
-      </trans-unit>
+        <target state="translated">تقليل معدل التشغيل</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">895</context></context-group></trans-unit>
       <trans-unit id="3860402955823859506" datatype="html">
         <source>Navigate in the video to the previous frame</source>
-        <target state="new">Navigate in the video to the previous frame</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">895</context></context-group>
-      </trans-unit>
+        <target state="translated">انتقل في الفيديو إلى الإطار السابق</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">897</context></context-group></trans-unit>
       <trans-unit id="8232494782895420700" datatype="html">
         <source>Navigate in the video to the next frame</source>
-        <target state="new">Navigate in the video to the next frame</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">896</context></context-group>
-      </trans-unit>
+        <target state="translated">انتقل في الفيديو إلى الإطار التالي</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">898</context></context-group></trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
         <source>Toggle theater mode</source>
-        <target state="new">Toggle theater mode</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">880</context></context-group>
-      </trans-unit>
+        <target state="translated">تبديل وضع المسرح</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">882</context></context-group></trans-unit>
       <trans-unit id="8025996572234182184" datatype="html">
         <source>Like the video</source>
         <target>أعجبني الفيديو</target>
@@ -10756,7 +10754,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3093549590814158078" datatype="html">
         <source>You need to be logged in to rate this video.</source>
-        <target state="new">You need to be logged in to rate this video.</target>
+        <target state="translated">يجب عليك تسجيل الدخول لتقييم هذا الفيديو.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="2431286785954354122" datatype="html">
@@ -10786,7 +10784,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5237588857224999862" datatype="html">
         <source>Open actions</source>
-        <target state="new">Open actions</target>
+        <target state="translated">الإجراءات المفتوحة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/buttons/action-dropdown.component.html</context>
           <context context-type="linenumber">4</context>
@@ -10794,7 +10792,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2587910160708766081" datatype="html">
         <source>Toggle this date format to "<x id="PH" equiv-text="target"/>"</source>
-        <target state="new">Toggle this date format to "<x id="PH" equiv-text="target"/>"</target>
+        <target state="translated">تبديل تنسيق التاريخ هذا إلى "<x id="PH" equiv-text="target"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-toggle.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -10810,17 +10808,17 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5668077948386857930" datatype="html">
         <source>Exclude</source>
-        <target state="new">Exclude</target>
+        <target state="translated">استبعاد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="7147755274837297932" datatype="html">
         <source>Exclude muted accounts</source>
-        <target state="new">Exclude muted accounts</target>
+        <target state="translated">استبعاد الحسابات الصامتة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="8397092871503752085" datatype="html">
         <source>Exclude public videos</source>
-        <target state="new">Exclude public videos</target>
+        <target state="translated">استبعاد مقاطع الفيديو العامة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">103</context>
@@ -10828,7 +10826,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3037358578603095196" datatype="html">
         <source>Only videos uploaded on this instance are displayed</source>
-        <target state="new">Only videos uploaded on this instance are displayed</target>
+        <target state="translated">يتم عرض مقاطع الفيديو التي تم تحميلها في هذه الحالة فقط</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="4668975178372693951" datatype="html">
@@ -10859,7 +10857,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1914592173926880968" datatype="html">
         <source>Skip to main content</source>
-        <target state="new">Skip to main content</target>
+        <target state="translated">انتقل إلى المحتوى الرئيسي</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
           <context context-type="linenumber">3</context>
@@ -10923,7 +10921,7 @@ The link will expire within 1 hour.</source>
       <trans-unit id="2013324644839511073" datatype="html">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
 Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="needs-translation">Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.text"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</target>
+        <target state="translated">لا يمكن استرداد بيانات اعتماد عميل OAuth: <x id="PH" equiv-text="err.message"/>. تأكد من أنك قمت بتكوين بييرتيوب (الدليل/التكوين) بشكل صحيح، وخاصة قسم "خادم الويب".</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="375263728166936544" datatype="html">
@@ -10933,7 +10931,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6667870723906986565" datatype="html">
         <source>Show / hide this help menu</source>
-        <target state="new">Show / hide this help menu</target>
+        <target state="translated">إظهار/إخفاء قائمة المساعدة هذه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/hotkeys/hotkeys.service.ts</context>
           <context context-type="linenumber">33</context>
@@ -10941,7 +10939,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3314265031897048047" datatype="html">
         <source>Hide this help menu</source>
-        <target state="new">Hide this help menu</target>
+        <target state="translated">إخفاء قائمة المساعدة هذه</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/hotkeys/hotkeys.service.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="3608407683173066091" datatype="html">
@@ -10951,7 +10949,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4024404994702813072" datatype="html">
         <source>In my library</source>
-        <target state="new">In my library</target>
+        <target state="translated">في مكتبتي</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="232050922346936574" datatype="html">
@@ -10962,12 +10960,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6470888608149621404" datatype="html">
         <source>ON <x id="PH" equiv-text="config.instance.name"/></source>
-        <target state="new">ON <x id="PH" equiv-text="config.instance.name"/></target>
+        <target state="translated">على <x id="PH" equiv-text="config.instance.name"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">159</context></context-group>
       </trans-unit>
       <trans-unit id="2821179408673282599" datatype="html">
         <source>Home</source>
-        <target state="new">Home</target>
+        <target state="translated">الشاشة الرئيسية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">124</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
@@ -10994,17 +10992,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7793333806747606771" datatype="html">
         <source>Server is unavailable. Please retry later.</source>
-        <target state="new">Server is unavailable. Please retry later.</target>
+        <target state="translated">الخادم غير متوفر. يُرجى إعادة المحاولة لاحقًا.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="7436975022198908854" datatype="html">
         <source>Unknown server error</source>
-        <target state="new">Unknown server error</target>
+        <target state="translated">خطأ غير معروف في الخادم</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">144</context></context-group>
       </trans-unit>
       <trans-unit id="3779435129809850171" datatype="html">
         <source>Sort by this column</source>
-        <target state="new">Sort by this column</target>
+        <target state="translated">الترتيب حسب هذا العمود</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-table.ts</context>
           <context context-type="linenumber">25</context>
@@ -11012,7 +11010,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6774469419636010791" datatype="html">
         <source>{first} - {last} of {totalRecords}</source>
-        <target state="new">{first} - {last} of {totalRecords}</target>
+        <target state="translated">{first} - {last} من {totalRecords}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-table.ts</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="4670312387769733978" datatype="html">
@@ -11062,7 +11060,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3381033584543723394" datatype="html">
         <source>Scan this QR code into a TOTP app on your phone. This app will generate tokens that you will have to enter when logging in.</source>
-        <target state="new"> Scan this QR code into a TOTP app on your phone. This app will generate tokens that you will have to enter when logging in. </target>
+        <target state="translated">قم بمسح رمز QR هذا ضوئيًا في تطبيق TOTP على هاتفك. سيقوم هذا التطبيق بإنشاء الرموز المميزة التي سيتعين عليك إدخالها عند تسجيل الدخول.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -11070,7 +11068,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7990066577913542327" datatype="html">
         <source>If you can't scan the QR code and need to enter it manually, here is the plain-text secret:</source>
-        <target state="new"> If you can't scan the QR code and need to enter it manually, here is the plain-text secret: </target>
+        <target state="translated">إذا لم تتمكن من مسح رمز QR ضوئيًا وتحتاج إلى إدخاله يدويًا، فإليك سر النص العادي:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">34,36</context>
@@ -11078,7 +11076,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2363389479062804726" datatype="html">
         <source>Two-factor code</source>
-        <target state="new">Two-factor code</target>
+        <target state="translated">كود ثنائي</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">42</context>
@@ -11086,7 +11084,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="336731433013115653" datatype="html">
         <source>Enter the code generated by your authenticator app to confirm</source>
-        <target state="new">Enter the code generated by your authenticator app to confirm</target>
+        <target state="translated">أدخل الرمز الذي أنشأه تطبيق الاستيثاق الخاص بك للتأكيد</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">43</context>
@@ -11094,7 +11092,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2026328843059071368" datatype="html">
         <source>Two factor authentication has been enabled.</source>
-        <target state="new">Two factor authentication has been enabled.</target>
+        <target state="translated">فُعّلت الاستيثاق الثنائي.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -11108,7 +11106,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7951488350851416577" datatype="html">
         <source>Hosts entered are invalid.</source>
-        <target state="new">Hosts entered are invalid.</target>
+        <target state="translated">المضيفون الذين تم إدخالهم غير صالحين.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">93</context>
@@ -11116,7 +11114,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1469559036084108672" datatype="html">
         <source>Hosts entered contain duplicates.</source>
-        <target state="new">Hosts entered contain duplicates.</target>
+        <target state="translated">تحتوي المضيفات التي تم إدخالها على نسخ مكررة.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">94</context>
@@ -11124,7 +11122,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5991533283446904296" datatype="html">
         <source>Hosts or handles are invalid.</source>
-        <target state="new">Hosts or handles are invalid.</target>
+        <target state="translated">المضيفين أو المقابض غير صالحة.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">102</context>
@@ -11132,7 +11130,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6759198394434886237" datatype="html">
         <source>Hosts or handles contain duplicates.</source>
-        <target state="new">Hosts or handles contain duplicates.</target>
+        <target state="translated">تحتوي المضيفات أو المقابض على نسخ مكررة.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">103</context>
@@ -11161,7 +11159,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="518461007481947848" datatype="html">
         <source>Cache size is required.</source>
-        <target state="new">Cache size is required.</target>
+        <target state="translated">حجم ذاكرة التخزين المؤقت مطلوب.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">28</context>
@@ -11169,7 +11167,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5481098690555703943" datatype="html">
         <source>Cache size must be greater than 1.</source>
-        <target state="new">Cache size must be greater than 1.</target>
+        <target state="translated">يجب أن يكون حجم ذاكرة التخزين المؤقت أكبر من 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">29</context>
@@ -11177,7 +11175,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4704896848161515188" datatype="html">
         <source>Cache size must be a number.</source>
-        <target state="new">Cache size must be a number.</target>
+        <target state="translated">يجب أن يكون حجم ذاكرة التخزين المؤقت رقمًا.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">30</context>
@@ -11190,7 +11188,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5630311719329022718" datatype="html">
         <source>Signup limit must be greater than 1. Use -1 to disable it.</source>
-        <target state="new">Signup limit must be greater than 1. Use -1 to disable it.</target>
+        <target state="translated">يجب أن يكون حد الاشتراك أكبر من 1. استخدم -1 لتعطيله.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="2555843408410000965" datatype="html">
@@ -11200,17 +11198,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="346485141381099383" datatype="html">
         <source>Signup minimum age is required.</source>
-        <target state="new">Signup minimum age is required.</target>
+        <target state="translated">مطلوب الحد الأدنى لسن الاشتراك.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="4230672031132838318" datatype="html">
         <source>Signup minimum age must be greater than 1.</source>
-        <target state="new">Signup minimum age must be greater than 1.</target>
+        <target state="translated">يجب أن يكون الحد الأدنى لسن الاشتراك أكبر من 1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="5929230001329133993" datatype="html">
         <source>Signup minimum age must be a number.</source>
-        <target state="new">Signup minimum age must be a number.</target>
+        <target state="translated">الحد الأدنى لسن الاشتراك يجب أن يكون رقمًا.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="240096858386658337" datatype="html">
@@ -11235,27 +11233,27 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8185661254949728718" datatype="html">
         <source>Max live duration is required.</source>
-        <target state="new">Max live duration is required.</target>
+        <target state="translated">مطلوب أقصى مدة البث مباشر.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="8892863662898651766" datatype="html">
         <source>Max live duration should be greater or equal to -1.</source>
-        <target state="new">Max live duration should be greater or equal to -1.</target>
+        <target state="translated">يجب أن تكون المدة القصوى للبث المباشر أكبر أو تساوي -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="8196240396863235661" datatype="html">
         <source>Max instance lives is required.</source>
-        <target state="new">Max instance lives is required.</target>
+        <target state="translated">الحد الأقصى للبث المباشر النُسْخَة مطلوب.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="913683464711184925" datatype="html">
         <source>Max instance lives should be greater or equal to -1.</source>
-        <target state="new">Max instance lives should be greater or equal to -1.</target>
+        <target state="translated">يجب أن يكون الحد الأقصى للبث المباشر النُسْخَة أكبر أو يساوي -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="5614457087254770778" datatype="html">
         <source>Max user lives is required.</source>
-        <target state="new">Max user lives is required.</target>
+        <target state="translated">مطلوب الحد الأقصى للبث المباشر المستخدم.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
       <trans-unit id="2779726697233311712" datatype="html">
@@ -11280,12 +11278,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5832601947705094130" datatype="html">
         <source>Concurrency is required.</source>
-        <target state="new">Concurrency is required.</target>
+        <target state="translated">التزامن مطلوب.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="4751566092251132371" datatype="html">
         <source>Concurrency should be greater or equal to 1.</source>
-        <target state="new">Concurrency should be greater or equal to 1.</target>
+        <target state="translated">يجب أن يكون التزامن أكبر أو يساوي 1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="75589896034107743" datatype="html">
@@ -11322,7 +11320,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3159508433607320799" datatype="html">
         <source>OTP token is required.</source>
-        <target state="new">OTP token is required.</target>
+        <target state="translated">مطلوب رمز OTP.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">69</context>
@@ -11489,7 +11487,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="27494409477574248" datatype="html">
         <source>Registration reason is required.</source>
-        <target state="new">Registration reason is required.</target>
+        <target state="translated">سبب التسجيل مطلوب</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -11497,7 +11495,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7602123087076969338" datatype="html">
         <source>Registration reason must be at least 2 characters long.</source>
-        <target state="new">Registration reason must be at least 2 characters long.</target>
+        <target state="translated">يجب أن يتكون سبب التسجيل من حرفين على الأقل.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -11505,7 +11503,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2092241175249165802" datatype="html">
         <source>Registration reason cannot be more than 3000 characters long.</source>
-        <target state="new">Registration reason cannot be more than 3000 characters long.</target>
+        <target state="translated">لا يمكن أن يزيد طول سبب التسجيل عن 3000 حرف.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/shared/register-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -11656,7 +11654,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6122525173522570480" datatype="html">
         <source>Support text cannot be more than 1000 characters long.</source>
-        <target state="new">Support text cannot be more than 1000 characters long.</target>
+        <target state="translated">لا يمكن أن يزيد طول نص الدعم عن 1000 حرف.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">48</context>
@@ -11664,7 +11662,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6149476559621965756" datatype="html">
         <source>Remote channel url is required.</source>
-        <target state="new">Remote channel url is required.</target>
+        <target state="translated">مطلوب عنوان URL للقناة البعيدة.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">59</context>
@@ -11672,7 +11670,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7820654428820536159" datatype="html">
         <source>External channel URL must begin with "https://" or "http://"</source>
-        <target state="new">External channel URL must begin with "https://" or "http://"</target>
+        <target state="translated">يجب أن يبدأ عنوان URL للقناة الخارجية بـ "https://" أو "http://"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">60</context>
@@ -11680,7 +11678,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5090406837784732474" datatype="html">
         <source>External channel URL cannot be more than 1000 characters long</source>
-        <target state="new">External channel URL cannot be more than 1000 characters long</target>
+        <target state="translated">لا يمكن أن يزيد طول عنوان URL للقناة الخارجية عن 1000 حرف</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">61</context>
@@ -11688,7 +11686,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1653315912561885898" datatype="html">
         <source>A chapter title is required.</source>
-        <target state="new">A chapter title is required.</target>
+        <target state="translated">مطلوب عنوان الفصل.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -11696,7 +11694,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4021088770925947810" datatype="html">
         <source>A chapter title should be more than 2 characters long.</source>
-        <target state="new">A chapter title should be more than 2 characters long.</target>
+        <target state="translated">يجب أن يكون طول عنوان الفصل أكثر من حرفين.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -11704,7 +11702,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5999631145853755676" datatype="html">
         <source>A chapter title should be less than 100 characters long.</source>
-        <target state="new">A chapter title should be less than 100 characters long.</target>
+        <target state="translated">يجب أن يكون طول عنوان الفصل أقل من 100 حرف.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -11712,7 +11710,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3038146146697752093" datatype="html">
         <source>Multiple chapters have the same timecode <x id="PH" equiv-text="chapter.timecode"/></source>
-        <target state="new">Multiple chapters have the same timecode <x id="PH" equiv-text="chapter.timecode"/></target>
+        <target state="translated">فصول متعددة لها نفس الرمز الزمني <x id="PH" equiv-text="chapter.timecode"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">26</context>
@@ -11760,7 +11758,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5078078160576986217" datatype="html">
         <source>Permanent/Recurring live</source>
-        <target state="new">Permanent/Recurring live</target>
+        <target state="translated">البث المباشر الدائم/المتكرر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="7220386604464537651" datatype="html">
@@ -11794,17 +11792,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4022826795131920912" datatype="html">
         <source>You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live</source>
-        <target state="new"> You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live </target>
+        <target state="translated">يمكنك البث مرة واحدة فقط في الحياة العادية. إذا قمت بتمكين إعادة التشغيل، فسيتم حفظه تحت نفس عنوان URL الخاص ببثك المباشر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">316</context></context-group>
       </trans-unit>
       <trans-unit id="2261925229535541622" datatype="html">
         <source>This is a permanent/recurring live</source>
-        <target state="new">This is a permanent/recurring live</target>
+        <target state="translated">هذا البث المباشر دائم/متكرر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">323</context></context-group>
       </trans-unit>
       <trans-unit id="8986073791327847979" datatype="html">
         <source>You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos</source>
-        <target state="new"> You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos </target>
+        <target state="translated">يمكنك البث عدة مرات في بث مباشر دائم/متكرر. إذا قمت بتمكين عمليات الإعادة، فسيتم حفظها كمقاطع فيديو منفصلة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">325</context></context-group>
       </trans-unit>
       <trans-unit id="3112273530390098557" datatype="html">
@@ -11814,27 +11812,27 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6445713766140892433" datatype="html">
         <source>Latest live sessions</source>
-        <target state="new">Latest live sessions</target>
+        <target state="translated">أحدث الجلسات المباشرة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="1018828582442463303" datatype="html">
         <source>Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></source>
-        <target state="new">Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></target>
+        <target state="translated">بدأت في <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="6765028278622459314" datatype="html">
         <source>Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></source>
-        <target state="new">Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
+        <target state="translated">انتهت في <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="3424935624805832445" datatype="html">
         <source>Go to replay</source>
-        <target state="new">Go to replay</target>
+        <target state="translated">انتقل إلى إعادة التشغيل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="6989092358991683843" datatype="html">
         <source>Replay is being processed...</source>
-        <target state="new">Replay is being processed...</target>
+        <target state="translated">جارِ معالجة الإعادة...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="5437132245714159662" datatype="html">
@@ -11936,7 +11934,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8726695529938456424" datatype="html">
         <source>COPY</source>
-        <target state="new"> COPY </target>
+        <target state="translated">نسخ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/input-text.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -11965,7 +11963,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5604677701754367707" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</source>
-        <target state="new">PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
+        <target state="translated">لا يستطيع بييرتيوب التعامل مع هذا النوع من الملفات. الامتدادات المقبولة هي <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="3393133458004181121" datatype="html">
@@ -12006,17 +12004,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5769292297914455214" datatype="html">
         <source>Disabled</source>
-        <target state="new">Disabled</target>
+        <target state="translated">مُعطَّل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="2684349290932402590" datatype="html">
         <source>Requires approval by moderators</source>
-        <target state="new">Requires approval by moderators</target>
+        <target state="translated">يتطلب موافقة المشرفين</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="4816216590591222133" datatype="html">
         <source>Enabled</source>
-        <target state="new">Enabled</target>
+        <target state="translated">مفعّل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="3911025298999036211" datatype="html">
@@ -12046,17 +12044,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1792453450803202450" datatype="html">
         <source>Accepted follows</source>
-        <target state="new">Accepted follows</target>
+        <target state="translated">المتابعات المقبولة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
       <trans-unit id="1745310805516417209" datatype="html">
         <source>Rejected follows</source>
-        <target state="new">Rejected follows</target>
+        <target state="translated">المتابعات المرفوضة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="1810206793608630396" datatype="html">
         <source>Pending follows</source>
-        <target state="new">Pending follows</target>
+        <target state="translated">المتابعات قيد الانتظار</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
@@ -12223,7 +12221,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4350392487994839749" datatype="html">
         <source>If you remove this user, you won't be able to create another user or channel with &lt;strong><x id="PH" equiv-text="user.username"/>&lt;/strong> username!</source>
-        <target state="new">If you remove this user, you won't be able to create another user or channel with &lt;strong><x id="PH" equiv-text="user.username"/>&lt;/strong> username!</target>
+        <target state="translated">إذا قمت بإزالة هذا المستخدم، فلن تتمكن من إنشاء مستخدم أو قناة أخرى باستخدام &lt;strong><x id="PH" equiv-text="user.username"/>&lt;/strong> اسم المستخدم!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -12289,7 +12287,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4268530178786707817" datatype="html">
         <source>My account moderation</source>
-        <target state="new">My account moderation</target>
+        <target state="translated">الإشراف في حسابي</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">291</context></context-group>
       </trans-unit>
       <trans-unit id="7187838764371214919" datatype="html">
@@ -12325,7 +12323,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2365286519320230773" datatype="html">
         <source>Hide any content from that user from you.</source>
-        <target state="new">Hide any content from that user from you.</target>
+        <target state="translated">إخفاء أي محتوى من هذا المستخدم منك.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">297</context></context-group>
       </trans-unit>
       <trans-unit id="4043508901590508211" datatype="html">
@@ -12367,22 +12365,22 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4810478487244286994" datatype="html">
         <source>Remove comments made by this account on your videos.</source>
-        <target state="new">Remove comments made by this account on your videos.</target>
+        <target state="translated">أزِل التعليقات التي نشرها هذا الحساب على مقاطع الفيديو الخاصة بك.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">321</context></context-group>
       </trans-unit>
       <trans-unit id="2077144178298031252" datatype="html">
         <source>Hide any content from that user from you, your instance and its users.</source>
-        <target state="new">Hide any content from that user from you, your instance and its users.</target>
+        <target state="translated">أخفي أي محتوى خاص بهذا المستخدم منك ومن نُسْخَتك ومستخدميه.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">375</context></context-group>
       </trans-unit>
       <trans-unit id="7675070596643104983" datatype="html">
         <source>Show this user's content to the users of this instance again.</source>
-        <target state="new">Show this user's content to the users of this instance again.</target>
+        <target state="translated">اعرض محتوى هذا المستخدم لمستخدمي هذه النُسْخَة مرة أخرى.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">381</context></context-group>
       </trans-unit>
       <trans-unit id="525915681688649453" datatype="html">
         <source>Hide any content from that instance from you, your instance and its users.</source>
-        <target state="new">Hide any content from that instance from you, your instance and its users.</target>
+        <target state="translated">أخفي أي محتوى من هذه النُسْخَة عنك وعن نُسْخَتك ومستخدميه.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">393</context></context-group>
       </trans-unit>
       <trans-unit id="5325628963747139770" datatype="html">
@@ -12402,17 +12400,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4809327075591089709" datatype="html">
         <source>Remove comments made by this account from your instance.</source>
-        <target state="new">Remove comments made by this account from your instance.</target>
+        <target state="translated">أزِل التعليقات التي أدلى بها هذا الحساب من نُسْخَتك.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">410</context></context-group>
       </trans-unit>
       <trans-unit id="6504240011224861621" datatype="html">
         <source>Instance moderation</source>
-        <target state="new">Instance moderation</target>
+        <target state="translated">إشراف النُسْخَة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">419</context></context-group>
       </trans-unit>
       <trans-unit id="8546847443058492245" datatype="html">
         <source>Block <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> videos</source>
-        <target state="new">Block <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> videos</target>
+        <target state="translated">حظر <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> مقاطع الفيديو</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">4</context>
@@ -12507,7 +12505,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="435589893738610428" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> default theme (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> default theme (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> السمة الافتراضية (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -12515,12 +12513,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5622582942980351192" datatype="html">
         <source>Light/Orange</source>
-        <target state="new">Light/Orange</target>
+        <target state="translated">برتقالي/فاتح</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/theme/theme.service.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="1219783168145776019" datatype="html">
         <source>LIVE ENDED</source>
-        <target state="new">LIVE ENDED</target>
+        <target state="translated">انتهى البث المباشر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="4776289814033837037" datatype="html">
@@ -12581,12 +12579,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1000724328916033777" datatype="html">
         <source>Multiple ways to subscribe to the current channel</source>
-        <target state="new">Multiple ways to subscribe to the current channel</target>
+        <target state="translated">طرق متعددة للاشتراك في القناة الحالية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="363499678348067004" datatype="html">
         <source>Open subscription dropdown</source>
-        <target state="new">Open subscription dropdown</target>
+        <target state="translated">افتح القائمة المنسدلة للاشتراك</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="3099741642167775297" datatype="html">
@@ -12598,7 +12596,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7672331870004528654" datatype="html">
         <source>Display live information</source>
-        <target state="new">Display live information</target>
+        <target state="translated">عرض معلومات البث المباشر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">335</context></context-group>
       </trans-unit>
       <trans-unit id="4021752662928002901" datatype="html">
@@ -12624,13 +12622,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6521421218398377925" datatype="html">
         <source>Run HLS transcoding</source>
-        <target state="new">Run HLS transcoding</target>
+        <target state="translated">تشغيل تحويل ترميز HLS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">96</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">391</context></context-group>
       </trans-unit>
       <trans-unit id="6726093171366409167" datatype="html">
         <source>Run Web Video transcoding</source>
-        <target state="new">Run Web Video transcoding</target>
+        <target state="translated">تشغيل تحويل ترميز فيديو الويب</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -12642,13 +12640,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="5972374600810542430" datatype="html">
         <source>Delete HLS files</source>
-        <target state="new">Delete HLS files</target>
+        <target state="translated">حذف ملفات HLS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">108</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">403</context></context-group>
       </trans-unit>
       <trans-unit id="72391380513979568" datatype="html">
         <source>Delete Web Video files</source>
-        <target state="new">Delete Web Video files</target>
+        <target state="translated">حذف ملفات فيديو الويب</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -12660,17 +12658,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8315587636588243636" datatype="html">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</source>
-        <target state="new">Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</target>
+        <target state="translated">هل أنت متأكد من أنك تريد حذف هذا الملف <x id="PH" equiv-text="file.resolution.label"/>؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">187</context></context-group>
       </trans-unit>
       <trans-unit id="6693349469471580292" datatype="html">
         <source>Delete file</source>
-        <target state="new">Delete file</target>
+        <target state="translated">احذف ملف</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">188</context></context-group>
       </trans-unit>
       <trans-unit id="7016764388104297354" datatype="html">
         <source>File removed.</source>
-        <target state="new">File removed.</target>
+        <target state="translated">تمت إزالة الملف.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html">
@@ -12685,7 +12683,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2631340539474479416" datatype="html">
         <source>Subtitles</source>
-        <target state="new">Subtitles</target>
+        <target state="translated">ترجمات</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">9</context>

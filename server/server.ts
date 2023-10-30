@@ -167,27 +167,31 @@ if (isTestOrDevInstance()) {
   }))
 }
 
-// For the logger
-token('remote-addr', (req: express.Request) => {
-  if (CONFIG.LOG.ANONYMIZE_IP === true || req.get('DNT') === '1') {
-    return anonymize(req.ip, 16, 16)
-  }
+// HTTP logging
+if (CONFIG.LOG.LOG_HTTP_REQUESTS) {
+  token('remote-addr', (req: express.Request) => {
+    if (CONFIG.LOG.ANONYMIZE_IP === true || req.get('DNT') === '1') {
+      return anonymize(req.ip, 16, 16)
+    }
 
-  return req.ip
-})
-token('user-agent', (req: express.Request) => {
-  if (req.get('DNT') === '1') {
-    return parse(req.get('user-agent')).family
-  }
+    return req.ip
+  })
 
-  return req.get('user-agent')
-})
-app.use(morgan('combined', {
-  stream: {
-    write: (str: string) => logger.info(str.trim(), { tags: [ 'http' ] })
-  },
-  skip: req => CONFIG.LOG.LOG_PING_REQUESTS === false && req.originalUrl === '/api/v1/ping'
-}))
+  token('user-agent', (req: express.Request) => {
+    if (req.get('DNT') === '1') {
+      return parse(req.get('user-agent')).family
+    }
+
+    return req.get('user-agent')
+  })
+
+  app.use(morgan('combined', {
+    stream: {
+      write: (str: string) => logger.info(str.trim(), { tags: [ 'http' ] })
+    },
+    skip: req => CONFIG.LOG.LOG_PING_REQUESTS === false && req.originalUrl === '/api/v1/ping'
+  }))
+}
 
 // Add .fail() helper to response
 app.use(apiFailMiddleware)

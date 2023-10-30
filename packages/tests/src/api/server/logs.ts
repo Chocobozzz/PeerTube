@@ -113,7 +113,7 @@ describe('Test logs', function () {
       }
     })
 
-    it('Should log ping requests', async function () {
+    it('Should log ping/HTTP requests', async function () {
       const now = new Date()
 
       await server.servers.ping()
@@ -122,23 +122,26 @@ describe('Test logs', function () {
       const logsString = JSON.stringify(body)
 
       expect(logsString.includes('/api/v1/ping')).to.be.true
+      expect(logsString.includes(' HTTP/1.1')).to.be.true
     })
 
-    it('Should not log ping requests', async function () {
+    it('Should not log ping/HTTP requests', async function () {
       this.timeout(60000)
 
       await killallServers([ server ])
 
-      await server.run({ log: { log_ping_requests: false } })
+      await server.run({ log: { log_ping_requests: false, log_http_requests: false } })
 
       const now = new Date()
 
       await server.servers.ping()
+      await server.videos.list()
 
       const body = await logsCommand.getLogs({ startDate: now, level: 'info' })
       const logsString = JSON.stringify(body)
 
       expect(logsString.includes('/api/v1/ping')).to.be.false
+      expect(logsString.includes(' HTTP/1.1"')).to.be.false
     })
   })
 

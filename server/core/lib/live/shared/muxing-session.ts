@@ -14,7 +14,7 @@ import { removeHLSFileObjectStorageByPath, storeHLSFileFromContent, storeHLSFile
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models/index.js'
-import { VideoStorage, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import { LiveVideoError, VideoStorage, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import {
   generateHLSMasterPlaylistFilename,
   generateHlsSha256SegmentsFilename,
@@ -26,6 +26,7 @@ import { LiveQuotaStore } from '../live-quota-store.js'
 import { LiveSegmentShaStore } from '../live-segment-sha-store.js'
 import { buildConcatenatedName, getLiveSegmentTime } from '../live-utils.js'
 import { AbstractTranscodingWrapper, FFmpegTranscodingWrapper, RemoteTranscodingWrapper } from './transcoding-wrapper/index.js'
+import { wait } from '@peertube/peertube-core-utils'
 
 interface MuxingSessionEvents {
   'live-ready': (options: { videoUUID: string }) => void
@@ -186,7 +187,16 @@ class MuxingSession extends EventEmitter {
 
       try {
         if (this.streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
-          const masterContent = await readFile(path, 'utf-8')
+          let masterContent = await readFile(path, 'utf-8')
+
+          // If the disk sync is slow, don't upload an empty master playlist on object storage
+          // Wait for ffmpeg to correctly fill it
+          while (!masterContent) {
+            await wait(100)
+
+            masterContent = await readFile(path, 'utf-8')
+          }
+
           logger.debug('Uploading live master playlist on object storage for %s', this.videoUUID, { masterContent, ...this.lTags() })
 
           const url = await storeHLSFileFromContent(this.streamingPlaylist, this.streamingPlaylist.playlistFilename, masterContent)
@@ -480,10 +490,21 @@ class MuxingSession extends EventEmitter {
       inputLocalUrl: this.inputLocalUrl,
       inputPublicUrl: this.inputPublicUrl,
 
-      toTranscode: this.allResolutions.map(resolution => ({
-        resolution,
-        fps: computeOutputFPS({ inputFPS: this.fps, resolution })
-      })),
+      toTranscode: this.allResolutions.map(resolution => {
+        let toTranscodeFPS: number
+
+        try {
+          toTranscodeFPS = computeOutputFPS({ inputFPS: this.fps, resolution })
+        } catch (err) {
+          err.liveVideoErrorCode = LiveVideoError.INVALID_INPUT_VIDEO_STREAM
+          throw err
+        }
+
+        return {
+          resolution,
+          fps: toTranscodeFPS
+        }
+      }),
 
       fps: this.fps,
       bitrate: this.bitrate,

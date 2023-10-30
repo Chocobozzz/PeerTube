@@ -1,10 +1,11 @@
 import { ContextType } from '@peertube/peertube-models'
-import { signAndContextify } from '@server/helpers/activity-pub-utils.js'
-import { HTTP_SIGNATURE } from '@server/initializers/constants.js'
+import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@server/initializers/constants.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MActor } from '@server/types/models/index.js'
 import { getContextFilter } from '../context.js'
+import { buildDigestFromWorker, signJsonLDObjectFromWorker } from '@server/lib/worker/parent-process.js'
+import { signAndContextify } from '@server/helpers/activity-pub-utils.js'
 
 type Payload <T> = { body: T, contextType: ContextType, signatureActorId?: number }
 
@@ -17,10 +18,24 @@ export async function computeBody <T> (
     const actorSignature = await ActorModel.load(payload.signatureActorId)
     if (!actorSignature) throw new Error('Unknown signature actor id.')
 
-    body = await signAndContextify(actorSignature, payload.body, payload.contextType, getContextFilter())
+    body = await signAndContextify({
+      byActor: { url: actorSignature.url, privateKey: actorSignature.privateKey },
+      data: payload.body,
+      contextType: payload.contextType,
+      contextFilter: getContextFilter(),
+      signerFunction: signJsonLDObjectFromWorker
+    })
   }
 
   return body
+}
+
+export async function buildGlobalHTTPHeaders (body: any) {
+  return {
+    'digest': await buildDigestFromWorker(body),
+    'content-type': 'application/activity+json',
+    'accept': ACTIVITY_PUB.ACCEPT_HEADER
+  }
 }
 
 export async function buildSignedRequestOptions (options: {

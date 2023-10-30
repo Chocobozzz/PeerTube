@@ -395,7 +395,7 @@ export class VideoService {
             return of([])
           }
 
-          this.restExtractor.handleError(err)
+          return this.restExtractor.handleError(err)
         })
       )
   }
@@ -411,7 +411,7 @@ export class VideoService {
                      return of(undefined)
                    }
 
-                   this.restExtractor.handleError(err)
+                   return this.restExtractor.handleError(err)
                  })
                )
   }

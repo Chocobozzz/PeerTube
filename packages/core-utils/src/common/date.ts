@@ -45,21 +45,42 @@ function isLastWeek (d: Date) {
 
 // ---------------------------------------------------------------------------
 
-export const timecodeRegexString = `((\\d+)[h:])?((\\d+)[m:])?((\\d+)s?)`
+export const timecodeRegexString = `(\\d+[h:])?(\\d+[m:])?\\d+s?`
 
 function timeToInt (time: number | string) {
   if (!time) return 0
   if (typeof time === 'number') return time
 
-  const reg = new RegExp(`^${timecodeRegexString}$`)
+  // Try with 00h00m00s format first
+  const reg = new RegExp(`^(\\d+h)?(\\d+m)?(\\d+)s?$`)
   const matches = time.match(reg)
-  if (!matches) return 0
 
-  const hours = parseInt(matches[2] || '0', 10)
-  const minutes = parseInt(matches[4] || '0', 10)
-  const seconds = parseInt(matches[6] || '0', 10)
+  if (matches) {
+    const hours = parseInt(matches[1] || '0', 10)
+    const minutes = parseInt(matches[2] || '0', 10)
+    const seconds = parseInt(matches[3] || '0', 10)
 
-  return hours * 3600 + minutes * 60 + seconds
+    return hours * 3600 + minutes * 60 + seconds
+  }
+
+  // ':' format fallback
+  const parts = time.split(':').reverse()
+
+  const iMultiplier = {
+    0: 1,
+    1: 60,
+    2: 3600
+  }
+
+  let result = 0
+  for (let i = 0; i < parts.length; i++) {
+    const partInt = parseInt(parts[i], 10)
+    if (isNaN(partInt)) return 0
+
+    result += iMultiplier[i] * partInt
+  }
+
+  return result
 }
 
 function secondsToTime (seconds: number, full = false, symbol?: string) {

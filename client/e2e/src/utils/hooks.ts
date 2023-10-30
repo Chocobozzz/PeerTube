@@ -93,5 +93,14 @@ function buildConfig (suiteFile: string = undefined) {
     }
   }
 
+  if (filename === 'video-password.e2e-spec.ts') {
+    return {
+      signup: {
+        enabled: true,
+        limit: -1
+      }
+    }
+  }
+
   return {}
 }

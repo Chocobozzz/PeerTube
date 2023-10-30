@@ -10,7 +10,7 @@ import { Hooks } from '@server/lib/plugins/hooks.js'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { HttpStatusCode, ResultList, Video, VideosSearchQueryAfterSanitize } from '@peertube/peertube-models'
-import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
+import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import {
@@ -61,7 +61,7 @@ function searchVideos (req: express.Request, res: express.Response) {
     return searchVideosIndex(query, res)
   }
 
-  return searchVideosDB(query, res)
+  return searchVideosDB(query, req, res)
 }
 
 async function searchVideosIndex (query: VideosSearchQueryAfterSanitize, res: express.Response) {
@@ -101,7 +101,7 @@ async function searchVideosIndex (query: VideosSearchQueryAfterSanitize, res: ex
   }
 }
 
-async function searchVideosDB (query: VideosSearchQueryAfterSanitize, res: express.Response) {
+async function searchVideosDB (query: VideosSearchQueryAfterSanitize, req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
 
   const apiOptions = await Hooks.wrapObject({
@@ -111,6 +111,8 @@ async function searchVideosDB (query: VideosSearchQueryAfterSanitize, res: expre
       actorId: serverActor.id,
       orLocalVideos: true
     },
+
+    countVideos: getCountVideos(req),
 
     nsfw: buildNSFWFilter(res, query.nsfw),
     user: res.locals.oauth

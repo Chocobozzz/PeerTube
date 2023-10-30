@@ -23,7 +23,7 @@ export class CustomPageService {
                               return of({ content: '' })
                             }
 
-                            this.restExtractor.handleError(err)
+                            return this.restExtractor.handleError(err)
                           })
                         )
   }

@@ -151,13 +151,13 @@ export class VideoWatchPage {
   }
 
   async fillVideoPassword (videoPassword: string) {
-    const videoPasswordInput = $('input#confirmInput')
-    const confirmButton = await $('input[value="Confirm"]')
-
+    const videoPasswordInput = await $('input#confirmInput')
+    await videoPasswordInput.waitForClickable()
     await videoPasswordInput.clearValue()
     await videoPasswordInput.setValue(videoPassword)
-    await confirmButton.waitForClickable()
 
+    const confirmButton = await $('input[value="Confirm"]')
+    await confirmButton.waitForClickable()
     return confirmButton.click()
   }
 
@@ -188,6 +188,7 @@ export class VideoWatchPage {
 
   async createThread (comment: string) {
     const textarea = await $('my-video-comment-add textarea')
+    await textarea.waitForClickable()
 
     await textarea.setValue(comment)
 
@@ -202,10 +203,12 @@ export class VideoWatchPage {
 
   async createReply (comment: string) {
     const replyButton = await $('button.comment-action-reply')
-
+    await replyButton.waitForClickable()
+    await replyButton.scrollIntoView()
     await replyButton.click()
-    const textarea = await $('my-video-comment my-video-comment-add textarea')
 
+    const textarea = await $('my-video-comment my-video-comment-add textarea')
+    await textarea.waitForClickable()
     await textarea.setValue(comment)
 
     const confirmButton = await $('my-video-comment .comment-buttons .orange-button')

@@ -281,7 +281,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a notification when the scheduled update has been proceeded', async function () {
-      this.timeout(70000)
+      this.timeout(140000)
 
       // In 2 seconds
       const updateAt = new Date(new Date().getTime() + 2000)

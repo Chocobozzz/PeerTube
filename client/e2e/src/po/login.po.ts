@@ -87,7 +87,7 @@ export class LoginPage {
     await logout.click()
 
     await browser.waitUntil(() => {
-      return $('.login-buttons-block, my-error-page a[href="/login"]').isDisplayed()
+      return $$('.login-buttons-block, my-error-page a[href="/login"]').some(e => e.isDisplayed())
     })
   }
 

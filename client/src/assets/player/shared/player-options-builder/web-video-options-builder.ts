@@ -1,6 +1,6 @@
 import { PeerTubePlayerLoadOptions, WebVideoPluginOptions } from '../../types'
 
-type ConstructorOptions = Pick<PeerTubePlayerLoadOptions, 'videoFileToken' | 'webVideo' | 'hls' | 'startTime'>
+type ConstructorOptions = Pick<PeerTubePlayerLoadOptions, 'videoFileToken' | 'webVideo' | 'hls'>
 
 export class WebVideoOptionsBuilder {
 
@@ -14,9 +14,7 @@ export class WebVideoOptionsBuilder {
 
       videoFiles: this.options.webVideo.videoFiles.length !== 0
         ? this.options.webVideo.videoFiles
-        : this.options?.hls.videoFiles || [],
-
-      startTime: this.options.startTime
+        : this.options?.hls.videoFiles || []
     }
   }
 }

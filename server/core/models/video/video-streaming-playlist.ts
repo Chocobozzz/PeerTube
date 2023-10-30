@@ -139,9 +139,10 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   })
 
   static doesInfohashExist (infoHash: string) {
-    const query = 'SELECT 1 FROM "videoStreamingPlaylist" WHERE $infoHash = ANY("p2pMediaLoaderInfohashes") LIMIT 1'
+    // Don't add a LIMIT 1 here to prevent seq scan by PostgreSQL (not sure why id doesn't use the index when we add a LIMIT)
+    const query = 'SELECT 1 FROM "videoStreamingPlaylist" WHERE "p2pMediaLoaderInfohashes" @> $infoHash'
 
-    return doesExist(this.sequelize, query, { infoHash })
+    return doesExist(this.sequelize, query, { infoHash: `{${infoHash}}` }) // Transform infoHash in a PG array
   }
 
   static buildP2PMediaLoaderInfoHashes (playlistUrl: string, files: unknown[]) {

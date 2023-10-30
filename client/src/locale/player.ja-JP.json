@@ -56,6 +56,7 @@
     "Cancel": "キャンセル",
     "Up Next": "Up Next",
     "Autoplay is suspended": "自動再生は停止中です",
+    "{1} (from edge: {2})": "{1} (from edge: {2})",
     "Audio Player": "音楽プレーヤー",
     "Video Player": "動画プレーヤー",
     "Play": "再生",

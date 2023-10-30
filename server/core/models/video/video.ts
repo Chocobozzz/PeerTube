@@ -431,6 +431,12 @@ export type ForAPIOptions = {
       }
     },
     {
+      fields: [ 'isLive' ], // Most of the videos are VOD
+      where: {
+        isLive: true
+      }
+    },
+    {
       fields: [ 'remote' ], // Only index local videos
       where: {
         remote: false
@@ -802,7 +808,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     logger.info('Stopping live of video %s after video deletion.', instance.uuid)
 
-    LiveManager.Instance.stopSessionOf(instance.uuid, null)
+    LiveManager.Instance.stopSessionOf({ videoUUID: instance.uuid, error: null })
   }
 
   @BeforeDestroy
@@ -1241,6 +1247,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     uuids?: string[]
 
     excludeAlreadyWatched?: boolean
+
+    countVideos?: boolean
   }) {
     VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
     VideoModel.throwIfPrivacyOneOfWithoutUser(options.privacyOneOf, options.user)
@@ -1281,7 +1289,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       serverAccountIdForBlock: serverActor.Account.id
     }
 
-    return VideoModel.getAvailableForApi(queryOptions)
+    return VideoModel.getAvailableForApi(queryOptions, options.countVideos)
   }
 
   static countLives (options: {

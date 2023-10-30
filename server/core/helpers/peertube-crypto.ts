@@ -7,6 +7,7 @@ import { BCRYPT_SALT_SIZE, ENCRYPTION, HTTP_SIGNATURE, PRIVATE_RSA_KEY_SIZE } fr
 import { MActor } from '../types/models/index.js'
 import { generateRSAKeyPairPromise, randomBytesPromise, scryptPromise } from './core-utils.js'
 import { logger } from './logger.js'
+import { assertIsInWorkerThread } from './threads.js'
 
 function createPrivateAndPublicKeys () {
   logger.info('Generating a RSA key...')
@@ -94,7 +95,15 @@ async function isJsonLDRSA2017Verified (fromActor: MActor, signedDocument: any) 
   return verify.verify(fromActor.publicKey, signedDocument.signature.signatureValue, 'base64')
 }
 
-async function signJsonLDObject <T> (byActor: { url: string, privateKey: string }, data: T) {
+async function signJsonLDObject <T> (options: {
+  byActor: { url: string, privateKey: string }
+  data: T
+  disableWorkerThreadAssertion?: boolean
+}) {
+  const { byActor, data, disableWorkerThreadAssertion = false } = options
+
+  if (!disableWorkerThreadAssertion) assertIsInWorkerThread()
+
   const signature = {
     type: 'RsaSignature2017',
     creator: byActor.url,
