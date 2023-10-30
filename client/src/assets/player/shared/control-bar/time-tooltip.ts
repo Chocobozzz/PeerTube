@@ -4,13 +4,19 @@ import videojs, { VideoJsPlayer } from 'video.js'
 const TimeToolTip = videojs.getComponent('TimeTooltip') as any // FIXME: typings don't have write method
 
 class TimeTooltip extends TimeToolTip {
+  private currentTimecode: string
+  private currentChapterTitle: string
 
   write (timecode: string) {
     const player: VideoJsPlayer = this.player()
 
     if (player.usingPlugin('chapters')) {
-      const chapterTitle = player.chapters().getChapter(timeToInt(timecode))
-      if (chapterTitle) return super.write(chapterTitle + '\r\n' + timecode)
+      if (timecode === this.currentTimecode) return
+
+      this.currentTimecode = timecode
+      this.currentChapterTitle = player.chapters().getChapter(timeToInt(this.currentTimecode))
+
+      if (this.currentChapterTitle) return super.write(this.currentChapterTitle + '\r\n' + this.currentTimecode)
     }
 
     return super.write(timecode)
