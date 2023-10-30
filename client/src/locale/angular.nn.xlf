@@ -6087,7 +6087,7 @@ The link will expire within 1 hour.</source>
         <source>Subscribe to the account</source>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">84</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">907</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">84</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">909</context></context-group></trans-unit>
       <trans-unit id="3131904093925601441" datatype="html">
         <source>PLAYLISTS</source>
         <target>SPELELISTER</target>
@@ -7761,67 +7761,67 @@ The link will expire within 1 hour.</source>
         <source>Enter/exit fullscreen</source>
         <target state="new">Enter/exit fullscreen</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">870</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">872</context></context-group></trans-unit>
       <trans-unit id="2971009377468404076" datatype="html">
         <source>Play/Pause the video</source>
         <target state="new">Play/Pause the video</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">871</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">873</context></context-group></trans-unit>
       <trans-unit id="4147087312411482964" datatype="html">
         <source>Mute/unmute the video</source>
         <target state="new">Mute/unmute the video</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">872</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">874</context></context-group></trans-unit>
       <trans-unit id="4791956574676305640" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90%</source>
         <target state="new">Skip to a percentage of the video: 0 is 0% and 9 is 90%</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">887</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">889</context></context-group></trans-unit>
       <trans-unit id="3887762369650091344" datatype="html">
         <source>Increase the volume</source>
         <target state="new">Increase the volume</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">874</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">876</context></context-group></trans-unit>
       <trans-unit id="1363382131573461910" datatype="html">
         <source>Decrease the volume</source>
         <target state="new">Decrease the volume</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">875</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">877</context></context-group></trans-unit>
       <trans-unit id="2541031516422557760" datatype="html">
         <source>Seek the video forward</source>
         <target state="new">Seek the video forward</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">889</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">891</context></context-group></trans-unit>
       <trans-unit id="8813023402019364882" datatype="html">
         <source>Seek the video backward</source>
         <target state="new">Seek the video backward</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">890</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">892</context></context-group></trans-unit>
       <trans-unit id="581757752202843950" datatype="html">
         <source>Increase playback rate</source>
         <target state="new">Increase playback rate</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">892</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">894</context></context-group></trans-unit>
       <trans-unit id="5467642834854681120" datatype="html">
         <source>Decrease playback rate</source>
         <target state="new">Decrease playback rate</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">893</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">895</context></context-group></trans-unit>
       <trans-unit id="3860402955823859506" datatype="html">
         <source>Navigate in the video to the previous frame</source>
         <target state="new">Navigate in the video to the previous frame</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">895</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">897</context></context-group></trans-unit>
       <trans-unit id="8232494782895420700" datatype="html">
         <source>Navigate in the video to the next frame</source>
         <target state="new">Navigate in the video to the next frame</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">896</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">898</context></context-group></trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
         <source>Toggle theater mode</source>
         <target state="new">Toggle theater mode</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">880</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">882</context></context-group></trans-unit>
       <trans-unit id="8025996572234182184" datatype="html">
         <source>Like the video</source>
         

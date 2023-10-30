@@ -9839,7 +9839,7 @@ The link will expire within 1 hour.</source>
         <target>S'abonner à ce compte</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">84</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">907</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">84</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">909</context></context-group></trans-unit>
       <trans-unit id="3131904093925601441" datatype="html">
         <source>PLAYLISTS</source>
         <target state="translated">LISTES DE LECTURE</target>
@@ -12947,67 +12947,67 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Enter/exit fullscreen</source>
         <target state="translated">Entrer/sortir du plein écran</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">870</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">872</context></context-group></trans-unit>
       <trans-unit id="2971009377468404076" datatype="html">
         <source>Play/Pause the video</source>
         <target state="translated">Lecture/Pause de la vidéo</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">871</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">873</context></context-group></trans-unit>
       <trans-unit id="4147087312411482964" datatype="html">
         <source>Mute/unmute the video</source>
         <target state="translated">Sourdine/reprise du son de la vidéo</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">872</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">874</context></context-group></trans-unit>
       <trans-unit id="4791956574676305640" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90%</source>
         <target state="translated">Passer à un pourcentage de la vidéo : 0 est 0% et 9 est 90%</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">887</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">889</context></context-group></trans-unit>
       <trans-unit id="3887762369650091344" datatype="html">
         <source>Increase the volume</source>
         <target state="translated">Augmenter le volume</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">874</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">876</context></context-group></trans-unit>
       <trans-unit id="1363382131573461910" datatype="html">
         <source>Decrease the volume</source>
         <target state="translated">Diminuer le volume</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">875</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">877</context></context-group></trans-unit>
       <trans-unit id="2541031516422557760" datatype="html">
         <source>Seek the video forward</source>
         <target state="translated">Faire avancer la vidéo</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">889</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">891</context></context-group></trans-unit>
       <trans-unit id="8813023402019364882" datatype="html">
         <source>Seek the video backward</source>
         <target state="translated">Faire reculer la vidéo</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">890</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">892</context></context-group></trans-unit>
       <trans-unit id="581757752202843950" datatype="html">
         <source>Increase playback rate</source>
         <target state="translated">Augmenter la vitesse de lecture</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">892</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">894</context></context-group></trans-unit>
       <trans-unit id="5467642834854681120" datatype="html">
         <source>Decrease playback rate</source>
         <target state="translated">Diminuer la vitesse de lecture</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">893</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">895</context></context-group></trans-unit>
       <trans-unit id="3860402955823859506" datatype="html">
         <source>Navigate in the video to the previous frame</source>
         <target state="translated">Naviguer dans la vidéo jusqu'à l'image précédente</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">895</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">897</context></context-group></trans-unit>
       <trans-unit id="8232494782895420700" datatype="html">
         <source>Navigate in the video to the next frame</source>
         <target state="translated">Naviguer dans la vidéo jusqu'à l'image suivante</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">896</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">898</context></context-group></trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
         <source>Toggle theater mode</source>
         <target state="translated">Basculer le mode théâtre</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">880</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">882</context></context-group></trans-unit>
       <trans-unit id="8025996572234182184">
         <source>Like the video</source>
         <target>J’aime cette vidéo</target>
