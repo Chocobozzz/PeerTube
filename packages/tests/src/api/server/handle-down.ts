@@ -254,8 +254,6 @@ describe('Test handle downs', function () {
   })
 
   it('Should correctly reply to the comment', async function () {
-    this.timeout(15000)
-
     await servers[2].comments.addReply({ videoId: missedVideo2.uuid, toCommentId: commentIdServer2, text: 'comment 1-4' })
 
     await waitJobs(servers)
