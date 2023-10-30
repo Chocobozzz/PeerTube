@@ -108,7 +108,7 @@ class Notifier {
     const models = this.notificationModels.newComment
 
     this.sendNotifications(models, comment)
-      .catch(err => logger.error('Cannot notify of new comment.', comment.url, { err }))
+      .catch(err => logger.error('Cannot notify of new comment %s.', comment.url, { err }))
   }
 
   notifyOnNewAbuse (payload: NewAbusePayload): void {
