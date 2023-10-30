@@ -808,7 +808,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     logger.info('Stopping live of video %s after video deletion.', instance.uuid)
 
-    LiveManager.Instance.stopSessionOf(instance.uuid, null)
+    LiveManager.Instance.stopSessionOf({ videoUUID: instance.uuid, error: null })
   }
 
   @BeforeDestroy

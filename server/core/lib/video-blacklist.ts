@@ -81,7 +81,7 @@ async function blacklistVideo (videoInstance: MVideoAccountLight, options: Video
   }
 
   if (videoInstance.isLive) {
-    LiveManager.Instance.stopSessionOf(videoInstance.uuid, LiveVideoError.BLACKLISTED)
+    LiveManager.Instance.stopSessionOf({ videoUUID: videoInstance.uuid, error: LiveVideoError.BLACKLISTED })
   }
 
   Notifier.Instance.notifyOnVideoBlacklist(blacklist)

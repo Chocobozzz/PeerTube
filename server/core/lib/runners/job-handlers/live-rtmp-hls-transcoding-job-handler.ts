@@ -165,7 +165,7 @@ export class LiveRTMPHLSTranscodingJobHandler extends AbstractJobHandler<CreateO
       cancelled: LiveVideoError.RUNNER_JOB_CANCEL
     }
 
-    LiveManager.Instance.stopSessionOf(privatePayload.videoUUID, errorType[type])
+    LiveManager.Instance.stopSessionOf({ videoUUID: privatePayload.videoUUID, error: errorType[type] })
 
     logger.info('Runner live RTMP to HLS job %s for video %s %s.', runnerJob.uuid, videoUUID, type, this.lTags(runnerJob.uuid, videoUUID))
   }

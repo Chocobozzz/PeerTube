@@ -14,7 +14,7 @@ import { removeHLSFileObjectStorageByPath, storeHLSFileFromContent, storeHLSFile
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models/index.js'
-import { VideoStorage, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import { LiveVideoError, VideoStorage, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import {
   generateHLSMasterPlaylistFilename,
   generateHlsSha256SegmentsFilename,
@@ -490,10 +490,21 @@ class MuxingSession extends EventEmitter {
       inputLocalUrl: this.inputLocalUrl,
       inputPublicUrl: this.inputPublicUrl,
 
-      toTranscode: this.allResolutions.map(resolution => ({
-        resolution,
-        fps: computeOutputFPS({ inputFPS: this.fps, resolution })
-      })),
+      toTranscode: this.allResolutions.map(resolution => {
+        let toTranscodeFPS: number
+
+        try {
+          toTranscodeFPS = computeOutputFPS({ inputFPS: this.fps, resolution })
+        } catch (err) {
+          err.liveVideoErrorCode = LiveVideoError.INVALID_INPUT_VIDEO_STREAM
+          throw err
+        }
+
+        return {
+          resolution,
+          fps: toTranscodeFPS
+        }
+      }),
 
       fps: this.fps,
       bitrate: this.bitrate,

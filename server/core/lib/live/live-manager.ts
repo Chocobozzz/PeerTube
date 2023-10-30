@@ -187,7 +187,13 @@ class LiveManager {
     return this.getContext().sessions.has(sessionId)
   }
 
-  stopSessionOf (videoUUID: string, error: LiveVideoErrorType | null) {
+  stopSessionOf (options: {
+    videoUUID: string
+    error: LiveVideoErrorType | null
+    errorOnReplay?: boolean
+  }) {
+    const { videoUUID, error } = options
+
     const sessionId = this.videoSessions.get(videoUUID)
     if (!sessionId) {
       logger.debug('No live session to stop for video %s', videoUUID, lTags(sessionId, videoUUID))
@@ -196,7 +202,7 @@ class LiveManager {
 
     logger.info('Stopping live session of video %s', videoUUID, { error, ...lTags(sessionId, videoUUID) })
 
-    this.saveEndingSession(videoUUID, error)
+    this.saveEndingSession(options)
       .catch(err => logger.error('Cannot save ending session.', { err, ...lTags(sessionId, videoUUID) }))
 
     this.videoSessions.delete(videoUUID)
@@ -338,23 +344,23 @@ class LiveManager {
         localLTags
       )
 
-      this.stopSessionOf(videoUUID, LiveVideoError.BAD_SOCKET_HEALTH)
+      this.stopSessionOf({ videoUUID, error: LiveVideoError.BAD_SOCKET_HEALTH })
     })
 
     muxingSession.on('duration-exceeded', ({ videoUUID }) => {
       logger.info('Stopping session of %s: max duration exceeded.', videoUUID, localLTags)
 
-      this.stopSessionOf(videoUUID, LiveVideoError.DURATION_EXCEEDED)
+      this.stopSessionOf({ videoUUID, error: LiveVideoError.DURATION_EXCEEDED })
     })
 
     muxingSession.on('quota-exceeded', ({ videoUUID }) => {
       logger.info('Stopping session of %s: user quota exceeded.', videoUUID, localLTags)
 
-      this.stopSessionOf(videoUUID, LiveVideoError.QUOTA_EXCEEDED)
+      this.stopSessionOf({ videoUUID, error: LiveVideoError.QUOTA_EXCEEDED })
     })
 
     muxingSession.on('transcoding-error', ({ videoUUID }) => {
-      this.stopSessionOf(videoUUID, LiveVideoError.FFMPEG_ERROR)
+      this.stopSessionOf({ videoUUID, error: LiveVideoError.FFMPEG_ERROR })
     })
 
     muxingSession.on('transcoding-end', ({ videoUUID }) => {
@@ -377,8 +383,15 @@ class LiveManager {
     muxingSession.runMuxing()
       .catch(err => {
         logger.error('Cannot run muxing.', { err, ...localLTags })
-        this.abortSession(sessionId)
-        this.videoSessions.delete(videoUUID)
+
+        this.muxingSessions.delete(sessionId)
+        muxingSession.destroy()
+
+        this.stopSessionOf({
+          videoUUID,
+          error: err.liveVideoErrorCode || LiveVideoError.UNKNOWN_ERROR,
+          errorOnReplay: true // Replay cannot be processed as muxing session failed directly
+        })
       })
   }
 
@@ -418,7 +431,7 @@ class LiveManager {
 
     this.videoSessions.delete(videoUUID)
 
-    this.saveEndingSession(videoUUID, null)
+    this.saveEndingSession({ videoUUID, error: null })
       .catch(err => logger.error('Cannot save ending session.', { err, ...lTags(sessionId) }))
   }
 
@@ -536,12 +549,22 @@ class LiveManager {
     })
   }
 
-  private async saveEndingSession (videoUUID: string, error: LiveVideoErrorType | null) {
+  private async saveEndingSession (options: {
+    videoUUID: string
+    error: LiveVideoErrorType | null
+    errorOnReplay?: boolean
+  }) {
+    const { videoUUID, error, errorOnReplay } = options
+
     const liveSession = await VideoLiveSessionModel.findCurrentSessionOf(videoUUID)
     if (!liveSession) return
 
     liveSession.endDate = new Date()
     liveSession.error = error
+
+    if (errorOnReplay === true) {
+      liveSession.endingProcessed = true
+    }
 
     return liveSession.save()
   }
