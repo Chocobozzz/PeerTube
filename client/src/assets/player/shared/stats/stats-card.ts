@@ -163,9 +163,11 @@ class StatsCard extends Component {
 
     let progress: number
     let latency: string
+    let latencyFromEdge: string
 
     if (this.options_.videoIsLive) {
       latency = secondsToTime(p2pMediaLoader.getLiveLatency())
+      latencyFromEdge = secondsToTime(p2pMediaLoader.getLiveLatencyFromEdge())
     } else {
       progress = this.player().bufferedPercent()
     }
@@ -176,6 +178,7 @@ class StatsCard extends Component {
       codecs,
       buffer,
       latency,
+      latencyFromEdge,
       progress
     }
   }
@@ -261,9 +264,10 @@ class StatsCard extends Component {
     buffer: string
 
     latency?: string
+    latencyFromEdge?: string
     colorSpace?: string
   }) {
-    const { playerNetworkInfo, progress, colorSpace, codecs, resolution, buffer, latency } = options
+    const { playerNetworkInfo, progress, colorSpace, codecs, resolution, buffer, latency, latencyFromEdge } = options
     const { downloadedFromServer, downloadedFromPeers } = playerNetworkInfo
 
     const player = this.player()
@@ -311,16 +315,18 @@ class StatsCard extends Component {
     this.setInfoValue(this.volume, volume)
     this.setInfoValue(this.codecs, codecs)
     this.setInfoValue(this.color, colorSpace)
+    this.setInfoValue(this.transferred, totalTransferred)
     this.setInfoValue(this.connection, playerNetworkInfo.averageBandwidth)
 
     this.setInfoValue(this.network, networkActivity)
-    this.setInfoValue(this.transferred, totalTransferred)
     this.setInfoValue(this.download, downloadBreakdown)
 
     this.setInfoValue(this.bufferProgress, bufferProgress)
     this.setInfoValue(this.bufferState, buffer)
 
-    this.setInfoValue(this.liveLatency, latency)
+    if (latency && latencyFromEdge) {
+      this.setInfoValue(this.liveLatency, player.localize('{1} (from edge: {2})', [ latency, latencyFromEdge ]))
+    }
   }
 
   private setInfoValue (el: InfoElement, value: string) {

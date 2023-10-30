@@ -75,7 +75,8 @@ const playerKeys = {
   'Incorrect password, please enter a correct password': 'Incorrect password, please enter a correct password',
   'Cancel': 'Cancel',
   'Up Next': 'Up Next',
-  'Autoplay is suspended': 'Autoplay is suspended'
+  'Autoplay is suspended': 'Autoplay is suspended',
+  '{1} (from edge: {2})': '{1} (from edge: {2})'
 }
 Object.assign(playerKeys, videojs)
 
