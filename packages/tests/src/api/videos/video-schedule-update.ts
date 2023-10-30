@@ -134,9 +134,16 @@ describe('Test video update scheduler', function () {
   })
 
   it('Should wait some seconds and have the updated video in public privacy', async function () {
-    this.timeout(20000)
+    this.timeout(45000)
 
-    await wait(15000)
+    let total = 0
+    do {
+      const res = await servers[0].videos.list()
+      total = res.total
+
+      await wait(500)
+    } while (total !== 2)
+
     await waitJobs(servers)
 
     for (const server of servers) {
