@@ -25,7 +25,7 @@ import {
   JobState,
   JobType,
   ManageVideoTorrentPayload,
-  MoveObjectStoragePayload,
+  MoveStoragePayload,
   NotifyPayload,
   RefreshPayload,
   TranscodingJobBuilderPayload,
@@ -70,6 +70,7 @@ import { processVideoLiveEnding } from './handlers/video-live-ending.js'
 import { processVideoStudioEdition } from './handlers/video-studio-edition.js'
 import { processVideoTranscoding } from './handlers/video-transcoding.js'
 import { processVideosViewsStats } from './handlers/video-views-stats.js'
+import { onMoveToFileSystemFailure, processMoveToFileSystem } from './handlers/move-to-file-system.js'
 
 export type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -91,11 +92,11 @@ export type CreateJobArgument =
   { type: 'delete-resumable-upload-meta-file', payload: DeleteResumableUploadMetaFilePayload } |
   { type: 'video-studio-edition', payload: VideoStudioEditionPayload } |
   { type: 'manage-video-torrent', payload: ManageVideoTorrentPayload } |
-  { type: 'move-to-object-storage', payload: MoveObjectStoragePayload } |
+  { type: 'move-to-object-storage', payload: MoveStoragePayload } |
+  { type: 'move-to-file-system', payload: MoveStoragePayload } |
   { type: 'video-channel-import', payload: VideoChannelImportPayload } |
   { type: 'after-video-channel-import', payload: AfterVideoChannelImportPayload } |
   { type: 'notify', payload: NotifyPayload } |
-  { type: 'move-to-object-storage', payload: MoveObjectStoragePayload } |
   { type: 'federate-video', payload: FederateVideoPayload } |
   { type: 'generate-video-storyboard', payload: GenerateStoryboardPayload }
 
@@ -120,6 +121,7 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'transcoding-job-builder': processTranscodingJobBuilder,
   'manage-video-torrent': processManageVideoTorrent,
   'move-to-object-storage': processMoveToObjectStorage,
+  'move-to-file-system': processMoveToFileSystem,
   'notify': processNotify,
   'video-channel-import': processVideoChannelImport,
   'video-file-import': processVideoFileImport,
@@ -133,7 +135,8 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
 }
 
 const errorHandlers: { [id in JobType]?: (job: Job, err: any) => Promise<any> } = {
-  'move-to-object-storage': onMoveToObjectStorageFailure
+  'move-to-object-storage': onMoveToObjectStorageFailure,
+  'move-to-file-system': onMoveToFileSystemFailure
 }
 
 const jobTypes: JobType[] = [
@@ -151,6 +154,7 @@ const jobTypes: JobType[] = [
   'generate-video-storyboard',
   'manage-video-torrent',
   'move-to-object-storage',
+  'move-to-file-system',
   'notify',
   'transcoding-job-builder',
   'video-channel-import',

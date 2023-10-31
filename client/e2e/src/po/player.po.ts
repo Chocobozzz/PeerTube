@@ -40,7 +40,7 @@ export class PlayerPage {
 
     await browser.waitUntil(async () => {
       return (await this.getWatchVideoPlayerCurrentTime()) >= waitUntilSec
-    }, { timeout: waitUntilSec * 2 * 1000 })
+    }, { timeout: Math.max(waitUntilSec * 2 * 1000, 30000) })
 
     // Pause video
     await $('div.video-js').click()

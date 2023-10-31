@@ -187,28 +187,32 @@ export class VideoMiniatureComponent implements OnInit {
       return $localize`Publication scheduled on ${updateAt}`
     }
 
-    if (video.state.id === VideoState.TRANSCODING_FAILED) {
-      return $localize`Transcoding failed`
-    }
+    switch (video.state.id) {
+      case VideoState.TRANSCODING_FAILED:
+        return $localize`Transcoding failed`
 
-    if (video.state.id === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED) {
-      return $localize`Move to external storage failed`
-    }
+      case VideoState.TO_MOVE_TO_FILE_SYSTEM:
+        return $localize`Moving to file system`
 
-    if (video.state.id === VideoState.TO_TRANSCODE && video.waitTranscoding === true) {
-      return $localize`Waiting transcoding`
-    }
+      case VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED:
+        return $localize`Moving to file system failed`
 
-    if (video.state.id === VideoState.TO_TRANSCODE) {
-      return $localize`To transcode`
-    }
+      case VideoState.TO_MOVE_TO_EXTERNAL_STORAGE:
+        return $localize`Moving to external storage`
 
-    if (video.state.id === VideoState.TO_IMPORT) {
-      return $localize`To import`
-    }
+      case VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED:
+        return $localize`Move to external storage failed`
 
-    if (video.state.id === VideoState.TO_EDIT) {
-      return $localize`To edit`
+      case VideoState.TO_TRANSCODE:
+        return video.waitTranscoding === true
+          ? $localize`Waiting transcoding`
+          : $localize`To transcode`
+
+      case VideoState.TO_IMPORT:
+        return $localize`To import`
+
+      case VideoState.TO_EDIT:
+        return $localize`To edit`
     }
 
     return ''

@@ -37,6 +37,7 @@ export class JobsComponent extends RestTable implements OnInit {
     'federate-video',
     'manage-video-torrent',
     'move-to-object-storage',
+    'move-to-file-system',
     'notify',
     'video-channel-import',
     'video-file-import',

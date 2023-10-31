@@ -15,6 +15,7 @@ import {
 } from '@peertube/peertube-server-commands'
 import { expectStartWith } from '../shared/checks.js'
 import { checkDirectoryIsEmpty } from '@tests/shared/directories.js'
+import { getAllFiles } from '@peertube/peertube-core-utils'
 
 async function checkFiles (origin: PeerTubeServer, video: VideoDetails, objectStorage?: ObjectStorageCommand) {
   for (const file of video.files) {
@@ -73,48 +74,106 @@ describe('Test create move video storage job', function () {
     await servers[0].run(objectStorage.getDefaultMockConfig())
   })
 
-  it('Should move only one file', async function () {
-    this.timeout(120000)
+  describe('To object storage', function () {
 
-    const command = `npm run create-move-video-storage-job -- --to-object-storage -v ${uuids[1]}`
-    await servers[0].cli.execWithEnv(command, objectStorage.getDefaultMockConfig())
-    await waitJobs(servers)
+    it('Should move only one file', async function () {
+      this.timeout(120000)
 
-    for (const server of servers) {
-      const video = await server.videos.get({ id: uuids[1] })
+      const command = `npm run create-move-video-storage-job -- --to-object-storage -v ${uuids[1]}`
+      await servers[0].cli.execWithEnv(command, objectStorage.getDefaultMockConfig())
+      await waitJobs(servers)
 
-      await checkFiles(servers[0], video, objectStorage)
-
-      for (const id of [ uuids[0], uuids[2] ]) {
-        const video = await server.videos.get({ id })
-
-        await checkFiles(servers[0], video)
-      }
-    }
-  })
-
-  it('Should move all files', async function () {
-    this.timeout(120000)
-
-    const command = `npm run create-move-video-storage-job -- --to-object-storage --all-videos`
-    await servers[0].cli.execWithEnv(command, objectStorage.getDefaultMockConfig())
-    await waitJobs(servers)
-
-    for (const server of servers) {
-      for (const id of [ uuids[0], uuids[2] ]) {
-        const video = await server.videos.get({ id })
+      for (const server of servers) {
+        const video = await server.videos.get({ id: uuids[1] })
 
         await checkFiles(servers[0], video, objectStorage)
+
+        for (const id of [ uuids[0], uuids[2] ]) {
+          const video = await server.videos.get({ id })
+
+          await checkFiles(servers[0], video)
+        }
       }
-    }
+    })
+
+    it('Should move all files', async function () {
+      this.timeout(120000)
+
+      const command = `npm run create-move-video-storage-job -- --to-object-storage --all-videos`
+      await servers[0].cli.execWithEnv(command, objectStorage.getDefaultMockConfig())
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        for (const id of [ uuids[0], uuids[2] ]) {
+          const video = await server.videos.get({ id })
+
+          await checkFiles(servers[0], video, objectStorage)
+        }
+      }
+    })
+
+    it('Should not have files on disk anymore', async function () {
+      await checkDirectoryIsEmpty(servers[0], 'web-videos', [ 'private' ])
+      await checkDirectoryIsEmpty(servers[0], join('web-videos', 'private'))
+
+      await checkDirectoryIsEmpty(servers[0], join('streaming-playlists', 'hls'), [ 'private' ])
+      await checkDirectoryIsEmpty(servers[0], join('streaming-playlists', 'hls', 'private'))
+    })
   })
 
-  it('Should not have files on disk anymore', async function () {
-    await checkDirectoryIsEmpty(servers[0], 'web-videos', [ 'private' ])
-    await checkDirectoryIsEmpty(servers[0], join('web-videos', 'private'))
+  describe('To file system', function () {
+    let oldFileUrls: string[]
 
-    await checkDirectoryIsEmpty(servers[0], join('streaming-playlists', 'hls'), [ 'private' ])
-    await checkDirectoryIsEmpty(servers[0], join('streaming-playlists', 'hls', 'private'))
+    before(async function () {
+      const video = await servers[0].videos.get({ id: uuids[1] })
+
+      oldFileUrls = [
+        ...getAllFiles(video).map(f => f.fileUrl),
+        video.streamingPlaylists[0].playlistUrl
+      ]
+    })
+
+    it('Should move only one file', async function () {
+      this.timeout(120000)
+
+      const command = `npm run create-move-video-storage-job -- --to-file-system -v ${uuids[1]}`
+      await servers[0].cli.execWithEnv(command, objectStorage.getDefaultMockConfig())
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: uuids[1] })
+
+        await checkFiles(servers[0], video)
+
+        for (const id of [ uuids[0], uuids[2] ]) {
+          const video = await server.videos.get({ id })
+
+          await checkFiles(servers[0], video, objectStorage)
+        }
+      }
+    })
+
+    it('Should move all files', async function () {
+      this.timeout(120000)
+
+      const command = `npm run create-move-video-storage-job -- --to-file-system --all-videos`
+      await servers[0].cli.execWithEnv(command, objectStorage.getDefaultMockConfig())
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        for (const id of [ uuids[0], uuids[2] ]) {
+          const video = await server.videos.get({ id })
+
+          await checkFiles(servers[0], video)
+        }
+      }
+    })
+
+    it('Should not have files on disk anymore', async function () {
+      for (const fileUrl of oldFileUrls) {
+        await makeRawRequest({ url: fileUrl, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      }
+    })
   })
 
   after(async function () {

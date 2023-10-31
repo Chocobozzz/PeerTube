@@ -3,21 +3,23 @@ import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { initDatabaseModels } from '@server/initializers/database.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
-import { moveToExternalStorageState } from '@server/lib/video-state.js'
+import { moveToExternalStorageState, moveToFileSystemState } from '@server/lib/video-state.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { VideoState, VideoStorage } from '@peertube/peertube-models'
+import { MStreamingPlaylist, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 
 program
   .description('Move videos to another storage.')
   .option('-o, --to-object-storage', 'Move videos in object storage')
+  .option('-f, --to-file-system', 'Move videos to file system')
   .option('-v, --video [videoUUID]', 'Move a specific video')
   .option('-a, --all-videos', 'Migrate all videos')
   .parse(process.argv)
 
 const options = program.opts()
 
-if (!options['toObjectStorage']) {
-  console.error('You need to choose where to send video files.')
+if (!options['toObjectStorage'] && !options['toFileSystem']) {
+  console.error('You need to choose where to send video files using --to-object-storage or --to-file-system.')
   process.exit(-1)
 }
 
@@ -63,8 +65,8 @@ async function run () {
       process.exit(-1)
     }
 
-    if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-      console.error('This video is already being moved to external storage')
+    if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE || video.state === VideoState.TO_MOVE_TO_FILE_SYSTEM) {
+      console.error('This video is already being moved to external storage/file system')
       process.exit(-1)
     }
 
@@ -75,25 +77,58 @@ async function run () {
 
   for (const id of ids) {
     const videoFull = await VideoModel.loadFull(id)
-
     if (videoFull.isLive) continue
 
-    const files = videoFull.VideoFiles || []
-    const hls = videoFull.getHLSPlaylist()
+    if (options['toObjectStorage']) {
+      await createMoveJobIfNeeded({
+        video: videoFull,
+        type: 'to object storage',
+        canProcessVideo: (files, hls) => {
+          return files.some(f => f.storage === VideoStorage.FILE_SYSTEM) || hls?.storage === VideoStorage.FILE_SYSTEM
+        },
+        handler: () => moveToExternalStorageState({ video: videoFull, isNewVideo: false, transaction: undefined })
+      })
 
-    if (files.some(f => f.storage === VideoStorage.FILE_SYSTEM) || hls?.storage === VideoStorage.FILE_SYSTEM) {
-      console.log('Processing video %s.', videoFull.name)
-
-      const success = await moveToExternalStorageState({ video: videoFull, isNewVideo: false, transaction: undefined })
-
-      if (!success) {
-        console.error(
-          'Cannot create move job for %s: job creation may have failed or there may be pending transcoding jobs for this video',
-          videoFull.name
-        )
-      }
+      continue
     }
 
-    console.log(`Created move-to-object-storage job for ${videoFull.name}.`)
+    if (options['toFileSystem']) {
+      await createMoveJobIfNeeded({
+        video: videoFull,
+        type: 'to file system',
+
+        canProcessVideo: (files, hls) => {
+          return files.some(f => f.storage === VideoStorage.OBJECT_STORAGE) || hls?.storage === VideoStorage.OBJECT_STORAGE
+        },
+        handler: () => moveToFileSystemState({ video: videoFull, isNewVideo: false, transaction: undefined })
+      })
+    }
+  }
+}
+
+async function createMoveJobIfNeeded (options: {
+  video: MVideoFullLight
+  type: 'to object storage' | 'to file system'
+
+  canProcessVideo: (files: MVideoFile[], hls: MStreamingPlaylist) => boolean
+  handler: () => Promise<any>
+}) {
+  const { video, type, canProcessVideo, handler } = options
+
+  const files = video.VideoFiles || []
+  const hls = video.getHLSPlaylist()
+
+  if (canProcessVideo(files, hls)) {
+    console.log(`Moving ${type} video ${video.name}`)
+
+    const success = await handler()
+
+    if (!success) {
+      console.error(
+        `Cannot create move ${type} for ${video.name}: job creation may have failed or there may be pending transcoding jobs for this video`
+      )
+    } else {
+      console.log(`Created job ${type} for ${video.name}.`)
+    }
   }
 }

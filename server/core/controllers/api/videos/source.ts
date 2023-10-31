@@ -5,7 +5,7 @@ import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-q
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { regenerateMiniaturesIfNeeded } from '@server/lib/thumbnail.js'
 import { uploadx } from '@server/lib/uploadx.js'
-import { buildMoveToObjectStorageJob } from '@server/lib/video.js'
+import { buildMoveJob } from '@server/lib/video.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { buildNewFile } from '@server/lib/video-file.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -171,7 +171,7 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
   ]
 
   if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-    jobs.push(await buildMoveToObjectStorageJob({ video, isNewVideo: false, previousVideoState: undefined }))
+    jobs.push(await buildMoveJob({ video, isNewVideo: false, previousVideoState: undefined, type: 'move-to-object-storage' }))
   }
 
   if (video.state === VideoState.TO_TRANSCODE) {

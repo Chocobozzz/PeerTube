@@ -186,6 +186,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-channel-import': 1,
   'after-video-channel-import': 1,
   'move-to-object-storage': 3,
+  'move-to-file-system': 3,
   'transcoding-job-builder': 1,
   'generate-video-storyboard': 1,
   'notify': 1,
@@ -209,6 +210,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
   'move-to-object-storage': 1,
+  'move-to-file-system': 1,
   'video-channel-import': 1,
   'after-video-channel-import': 1,
   'transcoding-job-builder': 1,
@@ -236,6 +238,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'generate-video-storyboard': 1000 * 60 * 10, // 10 minutes
   'manage-video-torrent': 1000 * 3600 * 3, // 3 hours
   'move-to-object-storage': 1000 * 60 * 60 * 3, // 3 hours
+  'move-to-file-system': 1000 * 60 * 60 * 3, // 3 hours
   'video-channel-import': 1000 * 60 * 60 * 4, // 4 hours
   'after-video-channel-import': 60000 * 5, // 5 minutes
   'transcoding-job-builder': 60000, // 1 minute
@@ -557,7 +560,9 @@ const VIDEO_STATES: { [ id in VideoStateType ]: string } = {
   [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE]: 'To move to an external storage',
   [VideoState.TRANSCODING_FAILED]: 'Transcoding failed',
   [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED]: 'External storage move failed',
-  [VideoState.TO_EDIT]: 'To edit*'
+  [VideoState.TO_EDIT]: 'To edit',
+  [VideoState.TO_MOVE_TO_FILE_SYSTEM]: 'To move to file system',
+  [VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED]: 'Move to file system failed'
 }
 
 const VIDEO_IMPORT_STATES: { [ id in VideoImportStateType ]: string } = {

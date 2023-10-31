@@ -6,7 +6,7 @@ import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-queue/index.js'
 import { Redis } from '@server/lib/redis.js'
 import { uploadx } from '@server/lib/uploadx.js'
-import { buildLocalVideoFromReq, buildMoveToObjectStorageJob, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video.js'
+import { buildLocalVideoFromReq, buildMoveJob, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video.js'
 import { buildNewFile } from '@server/lib/video-file.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
@@ -275,7 +275,7 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
   ]
 
   if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-    jobs.push(await buildMoveToObjectStorageJob({ video, previousVideoState: undefined }))
+    jobs.push(await buildMoveJob({ video, previousVideoState: undefined, type: 'move-to-object-storage' }))
   }
 
   if (video.state === VideoState.TO_TRANSCODE) {

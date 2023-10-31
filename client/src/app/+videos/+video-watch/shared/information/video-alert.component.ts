@@ -13,28 +13,34 @@ export class VideoAlertComponent {
   @Input() video: VideoDetails
   @Input() noPlaylistVideoFound: boolean
 
-  isVideoToTranscode () {
-    return this.video && this.video.state.id === VideoState.TO_TRANSCODE
-  }
+  getAlertWarning () {
+    if (!this.video) return
 
-  isVideoToEdit () {
-    return this.video && this.video.state.id === VideoState.TO_EDIT
-  }
+    switch (this.video.state.id) {
+      case VideoState.TO_TRANSCODE:
+        return $localize`The video is being transcoded, it may not work properly.`
 
-  isVideoTranscodingFailed () {
-    return this.video && this.video.state.id === VideoState.TRANSCODING_FAILED
-  }
+      case VideoState.TO_IMPORT:
+        return $localize`The video is being imported, it will be available when the import is finished.`
 
-  isVideoMoveToObjectStorageFailed () {
-    return this.video && this.video.state.id === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED
-  }
+      case VideoState.TO_MOVE_TO_FILE_SYSTEM:
+        return $localize`The video is being moved to server file system, it may not work properly`
 
-  isVideoToImport () {
-    return this.video && this.video.state.id === VideoState.TO_IMPORT
-  }
+      case VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED:
+        return $localize`Move to file system failed, this video may not work properly.`
 
-  isVideoToMoveToExternalStorage () {
-    return this.video && this.video.state.id === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE
+      case VideoState.TO_MOVE_TO_EXTERNAL_STORAGE:
+        return $localize`The video is being moved to an external server, it may not work properly.`
+
+      case VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED:
+        return $localize`Move to external storage failed, this video may not work properly.`
+
+      case VideoState.TO_EDIT:
+        return $localize`The video is being edited, it may not work properly.`
+
+      case VideoState.TRANSCODING_FAILED:
+        return $localize`Transcoding failed, this video may not work properly.`
+    }
   }
 
   hasVideoScheduledPublication () {

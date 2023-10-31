@@ -121,7 +121,8 @@ const bunyanLogger = {
 
 // ---------------------------------------------------------------------------
 
-type LoggerTagsFn = (...tags: string[]) => { tags: string[] }
+type LoggerTags = { tags: string[] }
+type LoggerTagsFn = (...tags: string[]) => LoggerTags
 function loggerTagsFactory (...defaultTags: string[]): LoggerTagsFn {
   return (...tags: string[]) => {
     return { tags: defaultTags.concat(tags) }
@@ -154,6 +155,7 @@ async function mtimeSortFilesDesc (files: string[], basePath: string) {
 
 export {
   type LoggerTagsFn,
+  type LoggerTags,
 
   buildLogger,
   timestampFormatter,

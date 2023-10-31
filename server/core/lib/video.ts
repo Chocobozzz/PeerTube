@@ -21,7 +21,7 @@ import { CreateJobArgument, JobQueue } from './job-queue/job-queue.js'
 import { updateLocalVideoMiniatureFromExisting } from './thumbnail.js'
 import { moveFilesIfPrivacyChanged } from './video-privacy.js'
 
-function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
+export function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
   return {
     name: videoInfo.name,
     remote: false,
@@ -42,7 +42,7 @@ function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): Fil
   }
 }
 
-async function buildVideoThumbnailsFromReq (options: {
+export async function buildVideoThumbnailsFromReq (options: {
   video: MVideoThumbnail
   files: UploadFiles
   fallback: (type: ThumbnailType_Type) => Promise<MThumbnail>
@@ -79,7 +79,7 @@ async function buildVideoThumbnailsFromReq (options: {
 
 // ---------------------------------------------------------------------------
 
-async function setVideoTags (options: {
+export async function setVideoTags (options: {
   video: MVideoTag
   tags: string[]
   transaction?: Transaction
@@ -95,17 +95,18 @@ async function setVideoTags (options: {
 
 // ---------------------------------------------------------------------------
 
-async function buildMoveToObjectStorageJob (options: {
+export async function buildMoveJob (options: {
   video: MVideoUUID
   previousVideoState: VideoStateType
+  type: 'move-to-object-storage' | 'move-to-file-system'
   isNewVideo?: boolean // Default true
 }) {
-  const { video, previousVideoState, isNewVideo = true } = options
+  const { video, previousVideoState, isNewVideo = true, type } = options
 
   await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingMove')
 
   return {
-    type: 'move-to-object-storage' as 'move-to-object-storage',
+    type,
     payload: {
       videoUUID: video.uuid,
       isNewVideo,
@@ -116,7 +117,7 @@ async function buildMoveToObjectStorageJob (options: {
 
 // ---------------------------------------------------------------------------
 
-async function getVideoDuration (videoId: number | string) {
+export async function getVideoDuration (videoId: number | string) {
   const video = await VideoModel.load(videoId)
 
   const duration = video.isLive
@@ -126,7 +127,7 @@ async function getVideoDuration (videoId: number | string) {
   return { duration, isLive: video.isLive }
 }
 
-const getCachedVideoDuration = memoizee(getVideoDuration, {
+export const getCachedVideoDuration = memoizee(getVideoDuration, {
   promise: true,
   max: MEMOIZE_LENGTH.VIDEO_DURATION,
   maxAge: MEMOIZE_TTL.VIDEO_DURATION
@@ -134,7 +135,7 @@ const getCachedVideoDuration = memoizee(getVideoDuration, {
 
 // ---------------------------------------------------------------------------
 
-async function addVideoJobsAfterUpdate (options: {
+export async function addVideoJobsAfterUpdate (options: {
   video: MVideoFullLight
   isNewVideo: boolean
 
@@ -187,15 +188,4 @@ async function addVideoJobsAfterUpdate (options: {
   }
 
   return JobQueue.Instance.createSequentialJobFlow(...jobs)
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  buildLocalVideoFromReq,
-  buildVideoThumbnailsFromReq,
-  setVideoTags,
-  buildMoveToObjectStorageJob,
-  addVideoJobsAfterUpdate,
-  getCachedVideoDuration
 }

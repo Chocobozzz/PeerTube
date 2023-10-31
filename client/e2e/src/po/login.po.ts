@@ -36,7 +36,7 @@ export class LoginPage {
     }
 
     if (this.isMobileDevice) {
-      const menuToggle = $('.top-left-block span[role=button]')
+      const menuToggle = $('.top-left-block button')
 
       await $('h2=Our content selection').waitForDisplayed()
 

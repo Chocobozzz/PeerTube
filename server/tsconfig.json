@@ -18,5 +18,8 @@
   ],
   "include": [
     "./**/*.ts"
+  ],
+  "exclude": [
+    "./dist/**/*.ts"
   ]
 }

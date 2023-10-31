@@ -25,7 +25,7 @@ import { createOptimizeOrMergeAudioJobs } from '@server/lib/transcoding/create-t
 import { isAbleToUploadVideo } from '@server/lib/user.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
-import { buildMoveToObjectStorageJob } from '@server/lib/video.js'
+import { buildMoveJob } from '@server/lib/video.js'
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import { MVideoImport, MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import.js'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
@@ -317,7 +317,7 @@ async function afterImportSuccess (options: {
 
   if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
     await JobQueue.Instance.createJob(
-      await buildMoveToObjectStorageJob({ video, previousVideoState: VideoState.TO_IMPORT })
+      await buildMoveJob({ video, previousVideoState: VideoState.TO_IMPORT, type: 'move-to-object-storage' })
     )
     return
   }

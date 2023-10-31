@@ -7,7 +7,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { generateWebVideoFilename } from '@server/lib/paths.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
-import { buildMoveToObjectStorageJob } from '@server/lib/video.js'
+import { buildMoveJob } from '@server/lib/video.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFullLight } from '@server/types/models/index.js'
@@ -30,7 +30,7 @@ async function processVideoFileImport (job: Job) {
   await updateVideoFile(video, payload.filePath)
 
   if (CONFIG.OBJECT_STORAGE.ENABLED) {
-    await JobQueue.Instance.createJob(await buildMoveToObjectStorageJob({ video, previousVideoState: video.state }))
+    await JobQueue.Instance.createJob(await buildMoveJob({ video, previousVideoState: video.state, type: 'move-to-object-storage' }))
   } else {
     await federateVideoIfNeeded(video, false)
   }

@@ -20,6 +20,7 @@ export type JobType =
   | 'transcoding-job-builder'
   | 'manage-video-torrent'
   | 'move-to-object-storage'
+  | 'move-to-file-system'
   | 'notify'
   | 'video-channel-import'
   | 'video-file-import'
@@ -196,7 +197,7 @@ export interface DeleteResumableUploadMetaFilePayload {
   filepath: string
 }
 
-export interface MoveObjectStoragePayload {
+export interface MoveStoragePayload {
   videoUUID: string
   isNewVideo: boolean
   previousVideoState: VideoStateType
