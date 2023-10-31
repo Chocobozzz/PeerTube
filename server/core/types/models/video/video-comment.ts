@@ -1,7 +1,7 @@
 import { PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import { MAccountDefault, MAccountFormattable, MAccountUrl } from '../account/index.js'
-import { MVideo, MVideoAccountLight, MVideoFeed, MVideoIdUrl, MVideoUrl } from './video.js'
+import { MVideo, MVideoAccountIdUrl, MVideoAccountLight, MVideoFeed, MVideoIdUrl, MVideoUrl } from './video.js'
 
 type Use<K extends keyof VideoCommentModel, M> = PickWith<VideoCommentModel, K, M>
 
@@ -29,12 +29,12 @@ export type MCommentReply =
 export type MCommentOwnerVideo =
   MComment &
   Use<'Account', MAccountDefault> &
-  Use<'Video', MVideoAccountLight>
+  Use<'Video', MVideoAccountIdUrl>
 
 export type MCommentOwnerVideoReply =
   MComment &
   Use<'Account', MAccountDefault> &
-  Use<'Video', MVideoAccountLight> &
+  Use<'Video', MVideoAccountIdUrl> &
   Use<'InReplyToVideoComment', MComment>
 
 export type MCommentOwnerReplyVideoLight =

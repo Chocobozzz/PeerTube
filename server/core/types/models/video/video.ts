@@ -10,6 +10,7 @@ import { MVideoBlacklist, MVideoBlacklistLight, MVideoBlacklistUnfederated } fro
 import { MVideoCaptionLanguage, MVideoCaptionLanguageUrl } from './video-caption.js'
 import {
   MChannelAccountDefault,
+  MChannelAccountIdUrl,
   MChannelAccountLight,
   MChannelAccountSummaryFormattable,
   MChannelActor,
@@ -135,6 +136,10 @@ export type MVideoAccountLightBlacklistAllFiles =
 export type MVideoAccountDefault =
   MVideo &
   Use<'VideoChannel', MChannelAccountDefault>
+
+export type MVideoAccountIdUrl =
+  MVideo &
+  Use<'VideoChannel', MChannelAccountIdUrl>
 
 export type MVideoThumbnailAccountDefault =
   MVideo &

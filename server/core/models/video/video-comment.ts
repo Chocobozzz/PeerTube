@@ -71,12 +71,26 @@ export enum ScopeNames {
         required: true,
         include: [
           {
-            model: VideoChannelModel,
+            model: VideoChannelModel.unscoped(),
+            attributes: [ 'id', 'accountId' ],
             required: true,
             include: [
               {
-                model: AccountModel,
+                attributes: [ 'id', 'url' ],
+                model: ActorModel.unscoped(),
                 required: true
+              },
+              {
+                attributes: [ 'id' ],
+                model: AccountModel.unscoped(),
+                required: true,
+                include: [
+                  {
+                    attributes: [ 'id', 'url' ],
+                    model: ActorModel.unscoped(),
+                    required: true
+                  }
+                ]
               }
             ]
           }

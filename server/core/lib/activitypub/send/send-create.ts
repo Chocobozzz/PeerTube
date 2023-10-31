@@ -32,6 +32,7 @@ import {
   sendVideoRelatedActivity,
   unicastTo
 } from './shared/index.js'
+import { AccountModel } from '@server/models/account/account.js'
 
 const lTags = loggerTagsFactory('ap', 'create')
 
@@ -114,6 +115,8 @@ async function sendCreateVideoComment (comment: MCommentOwnerVideo, transaction:
   const isOrigin = comment.Video.isOwned()
 
   const byActor = comment.Account.Actor
+  const videoAccount = await AccountModel.load(comment.Video.VideoChannel.Account.id, transaction)
+
   const threadParentComments = await VideoCommentModel.listThreadParentComments(comment, transaction)
   const commentObject = comment.toActivityPubObject(threadParentComments) as VideoCommentObject
 
@@ -170,7 +173,7 @@ async function sendCreateVideoComment (comment: MCommentOwnerVideo, transaction:
     return unicastTo({
       data: createActivity,
       byActor,
-      toActorUrl: comment.Video.VideoChannel.Account.Actor.getSharedInbox(),
+      toActorUrl: videoAccount.Actor.getSharedInbox(),
       contextType: 'Comment'
     })
   })

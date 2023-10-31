@@ -173,6 +173,8 @@ async function resolveRemoteParentComment (params: ResolveThreadParams) {
   }) as MCommentOwner
   comment.Account = actor ? actor.Account : null
 
+  logger.debug('Created remote comment %s', comment.url, { comment })
+
   return resolveThread({
     url: body.inReplyTo,
     comments: comments.concat([ comment ]),

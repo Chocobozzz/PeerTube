@@ -11,6 +11,7 @@ import { audiencify } from '../audience.js'
 import { getDeleteActivityPubUrl } from '../url.js'
 import { getActorsInvolvedInVideo, getVideoCommentAudience } from './shared/index.js'
 import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './shared/send-utils.js'
+import { AccountModel } from '@server/models/account/account.js'
 
 async function sendDeleteVideo (video: MVideoAccountLight, transaction: Transaction) {
   logger.info('Creating job to broadcast delete of video %s.', video.url)
@@ -55,9 +56,12 @@ async function sendDeleteVideoComment (videoComment: MCommentOwnerVideo, transac
   const isVideoOrigin = videoComment.Video.isOwned()
 
   const url = getDeleteActivityPubUrl(videoComment.url)
+
+  const videoAccount = await AccountModel.load(videoComment.Video.VideoChannel.Account.id, transaction)
+
   const byActor = videoComment.isOwned()
     ? videoComment.Account.Actor
-    : videoComment.Video.VideoChannel.Account.Actor
+    : videoAccount.Actor
 
   const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, transaction)
   const threadParentCommentsFiltered = threadParentComments.filter(c => !c.isDeleted())
@@ -105,7 +109,7 @@ async function sendDeleteVideoComment (videoComment: MCommentOwnerVideo, transac
     return unicastTo({
       data: activity,
       byActor,
-      toActorUrl: videoComment.Video.VideoChannel.Account.Actor.getSharedInbox(),
+      toActorUrl: videoAccount.Actor.getSharedInbox(),
       contextType: 'Delete'
     })
   })

@@ -64,7 +64,7 @@ function inboxController (req: express.Request, res: express.Response) {
   }
 
   // Only keep activities we are able to process
-  logger.debug('Filtering %d activities...', activities.length)
+  logger.debug('Filtering %d activities...', activities.length, { activities })
   activities = activities.filter(a => isActivityValid(a))
   logger.debug('We keep %d activities.', activities.length, { activities })
 

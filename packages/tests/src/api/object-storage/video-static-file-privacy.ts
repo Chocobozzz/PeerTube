@@ -352,13 +352,18 @@ describe('Object storage for video static file privacy', function () {
 
         await makeRawRequest({ url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
         await makeRawRequest({ url, query: { videoFileToken: fileToken }, expectedStatus: HttpStatusCode.OK_200 })
-        if (videoPassword) {
-          await makeRawRequest({ url, headers: { 'x-peertube-video-password': videoPassword }, expectedStatus: HttpStatusCode.OK_200 })
-        }
+
         await makeRawRequest({ url, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         await makeRawRequest({ url, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         await makeRawRequest({ url, query: { videoFileToken: unrelatedFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+
         if (videoPassword) {
+          await makeRawRequest({
+            url,
+            headers: { 'x-peertube-video-password': videoPassword },
+            expectedStatus: HttpStatusCode.OK_200
+          })
+
           await makeRawRequest({
             url,
             headers: { 'x-peertube-video-password': 'incorrectPassword' },

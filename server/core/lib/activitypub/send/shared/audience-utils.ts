@@ -53,10 +53,10 @@ function getAudienceFromFollowersOf (actorsInvolvedInObject: MActorFollowersUrl[
 async function getActorsInvolvedInVideo (video: MVideoId, t: Transaction) {
   const actors = await VideoShareModel.listActorIdsAndFollowerUrlsByShare(video.id, t)
 
-  const videoAll = video as VideoModel
+  const alreadyLoadedActor = (video as VideoModel).VideoChannel?.Account?.Actor
 
-  const videoActor = videoAll.VideoChannel?.Account
-    ? videoAll.VideoChannel.Account.Actor
+  const videoActor = alreadyLoadedActor?.url && alreadyLoadedActor?.followersUrl
+    ? alreadyLoadedActor
     : await ActorModel.loadAccountActorFollowerUrlByVideoId(video.id, t)
 
   actors.push(videoActor)
