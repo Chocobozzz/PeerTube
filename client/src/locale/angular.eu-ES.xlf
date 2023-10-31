@@ -1448,7 +1448,7 @@
       </trans-unit>
       <trans-unit id="5329436244765769292" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="translated">Izen-emateak ireki nahi badituzu, erabaki zeintzuk diren <x id="START_TAG_STRONG"/>moderazio arauak<x id="CLOSE_TAG_STRONG"/> eta <x id="START_TAG_STRONG"/>instantzia erabiltzeko baldintzak<x id="CLOSE_TAG_STRONG"/>, instantziako kategoriak, hizkuntzak eta moderatzaileen hizkuntzak zehaztearekin batera. Honela, erabiltzaileei Peertube instantzia <x id="START_TAG_STRONG"/>egokian<x id="CLOSE_TAG_STRONG"/> izena ematen lagunduko diezu. </target>
+        <target state="translated">Izen-emateak ireki nahi badituzu, erabaki zeintzuk diren <x id="START_TAG_STRONG"/>moderazio-arauak<x id="CLOSE_TAG_STRONG"/> eta <x id="START_TAG_STRONG"/>instantziaren zerbitzu-baldintzak<x id="CLOSE_TAG_STRONG"/>, instantziako kategoriak, hizkuntzak eta moderatzaileen hizkuntzak zehaztearekin batera. Honela, erabiltzaileei PeerTube instantzia <x id="START_TAG_STRONG"/>egokian<x id="CLOSE_TAG_STRONG"/> izena ematen lagunduko diezu. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="5704345824323933019" datatype="html">
@@ -1534,7 +1534,7 @@
       </trans-unit>
       <trans-unit id="5330788940795142335" datatype="html">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG"/>the appropriate instance<x id="CLOSE_TAG_STRONG"/>. Without them, your instance may not be referenced on the <x id="START_LINK"/>JoinPeerTube website<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Pentsatu eremu hauek konfiguratzean, jendeari <x id="START_TAG_STRONG"/>instantzia egokia<x id="CLOSE_TAG_STRONG"/> aukeratzen laguntzeko. Hauek bete ezean, posible da zure instantzia <x id="START_LINK"/>JoinPeerTube webgunean<x id="CLOSE_LINK"/> ez agertzea. </target>
+        <target state="translated">Eremu hauek konfigura zenitzake jendeari <x id="START_TAG_STRONG"/>instantzia egokia<x id="CLOSE_TAG_STRONG"/> aukeratzen laguntzeko. Hauek bete ezean, posible da zure instantzia <x id="START_LINK"/>JoinPeerTube webgunean<x id="CLOSE_LINK"/> ez agertzea. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="2728623642717111613" datatype="html">
@@ -1622,7 +1622,7 @@
       </trans-unit>
       <trans-unit id="2964653499524716819" datatype="html">
         <source>Help to translate PeerTube!</source>
-        <target state="translated">Zelan itzuli PeerTube!</target>
+        <target state="translated">Lagundu PeerTube itzultzen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/language-chooser.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="5464118521750361406" datatype="html">
@@ -1663,7 +1663,7 @@
       </trans-unit>
       <trans-unit id="1039157642448320025" datatype="html">
         <source>FAQ (Frequently Asked Questions) - about PeerTube</source>
-        <target state="translated">FAQ (Maiz eginiko galderak) - PeerTube-ri buruz</target>
+        <target state="translated">FAQ (maiz eginiko galderak) - PeerTube-ri buruz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">164</context>
@@ -1723,7 +1723,7 @@
       </trans-unit>
       <trans-unit id="2184839376696112704" datatype="html">
         <source>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</source>
-        <target state="translated">hainbat bideo paraleloan inportatzea onartzen du. ⚠️ PeerTube berrabiarazi behar da.</target>
+        <target state="translated">hainbat bideo paraleloan inportatzea baimentzen du. ⚠️ PeerTube berrabiarazi behar da.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">278</context></context-group>
       </trans-unit>
       <trans-unit id="780513172839038392" datatype="html">
@@ -1739,7 +1739,7 @@
       </trans-unit>
       <trans-unit id="2095604754338363597" datatype="html">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="translated">⚠️ Gaituta badago, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTP proxy bat<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> erabiltzea gomendatzen dugu, PeerTube zerbitzaritik URL pribatuetarako sarbidea ekiditeko</target>
+        <target state="translated">⚠️ Gaituta badago, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTP proxy bat<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> erabiltzea gomendatzen dugu, PeerTube-ren zerbitzaritik URL pribatuetarako sarbidea ekiditeko</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">294</context></context-group>
       </trans-unit>
       <trans-unit id="7627544798203088407" datatype="html">
@@ -2293,7 +2293,7 @@
       </trans-unit>
       <trans-unit id="1358902062258458923" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>Markdown compatible<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> that also supports <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>custom PeerTube HTML tags<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>Markdown-ekin bateragarria dena<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> eta honakoa onartzen duena: <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>PeerTube-ren HTML etiketa pertsonalizatuak<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>Markdown lengoaiarekin bateragarria dena<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> eta honakoa onartzen duena: <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferer noopener&quot;&gt;"/>PeerTube-ren HTML etiketa pertsonalizatuak<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/custom-markup-help.component.html</context>
           <context context-type="linenumber">2</context>
@@ -2470,7 +2470,7 @@
       </trans-unit>
       <trans-unit id="5503656190856739184" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2023</source>
-        <target state="translated">PeerTube-k bultzatuta - CopyLeft 2015-2023</target>
+        <target state="translated">PeerTube-rekin egina - CopyLeft 2015-2023</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">181</context></context-group>
       </trans-unit>
       <trans-unit id="3722967224215437913" datatype="html">
@@ -5784,7 +5784,7 @@
       </trans-unit>
       <trans-unit id="1714039296068260295" datatype="html">
         <source>Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.</source>
-        <target state="translated">PeerTube instantzian eginiko aldaketa txikiak plugin bat sortzean edo gaia gehiegizkoa denean.</target>
+        <target state="translated">PeerTube instantzian eginiko aldaketa txikiak osagarri bat sortzean edo gaia gehiegizkoa denean.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="6180346896314915203">
@@ -7273,7 +7273,7 @@
       </trans-unit>
       <trans-unit id="6213340208914097303" datatype="html">
         <source>The threats to privacy with YouTube are different from PeerTube's. In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you. Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).</source>
-        <target state="translated">YouTube-rekin gerta litezkeen pribatutasunaren mehatxuak ezberdinak dira PeerTube-rekin. YouTube-ren kasuan, plataformak zure informazio pertsonalaren kopuru handi bat biltzen du (ez soilk zure IP helbidea) analizatzeko eta zure jarraipen bat egiteko. Gainera, YouTube-ren jabea Google/Alphabet da, hainbat webguneren bitartez zure jarraipena egiten duen enpresa bat (AdSense edo Google Analytics bitartez).</target>
+        <target state="translated">YouTube-rekin gerta litezkeen pribatutasunaren mehatxuak ezberdinak dira PeerTube-rekin. YouTube-ren kasuan, plataformak zure informazio pertsonalaren kopuru handi bat biltzen du (ez soilk zure IP helbidea) analizatzeko eta zure jarraipen bat egiteko. Gainera, YouTube-ren jabea Google/Alphabet da, hainbat webguneren bitartez zure jarraipena egiten duen enpresa bat (AdSense-ren edo Google Analytics-en bitartez).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="2676074687792256808">
@@ -7293,7 +7293,7 @@
       </trans-unit>
       <trans-unit id="7404776804526394585" datatype="html">
         <source>PeerTube wants to deliver the best countermeasures possible, to give you more choice and render attacks less likely. Here is what we put in place so far:</source>
-        <target state="translated">PeerTube-k kontraneurri onenak eskaini nahi ditu, aukera gehiago emateko eta erasoak gutxiagoak izan daitezen. Hau da, dagoeneko, martxan jarri duguna:</target>
+        <target state="translated">PeerTube-k kontraneurri onenak eskaini nahi ditu, aukera gehiago emateko eta eraso gutxiago gerta daitezen. Hau da, dagoeneko, martxan jarri duguna:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">143</context></context-group>
       </trans-unit>
       <trans-unit id="8635362984201852982" datatype="html">
@@ -7698,7 +7698,7 @@
       </trans-unit>
       <trans-unit id="1097932116708163073" datatype="html">
         <source>This website is powered by PeerTube</source>
-        <target state="translated">Webgune hau PeerTube-rekin dabil</target>
+        <target state="translated">Webgune honek PeerTube darabil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -10023,7 +10023,7 @@
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="translated">Ezin da eskuratu OAuth bezeroaren kredentzialak: <x id="PH" equiv-text="err.message"/>. Ziurtatu PeerTube zuzen konfiguratu duzula (/config direktorioa), bereziki, "web-zerbitzaria" atala.</target>
+        <target state="translated">Ezin dira eskuratu OAuth bezeroaren kredentzialak: <x id="PH" equiv-text="err.message"/>. Ziurtatu PeerTube zuzen konfiguratu duzula (config/ direktorioa), bereziki, "web-zerbitzaria" atala.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="375263728166936544">
