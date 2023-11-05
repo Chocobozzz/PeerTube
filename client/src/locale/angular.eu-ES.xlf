@@ -1622,7 +1622,7 @@
       </trans-unit>
       <trans-unit id="2964653499524716819" datatype="html">
         <source>Help to translate PeerTube!</source>
-        <target state="translated">Lagundu PeerTube itzultzen.</target>
+        <target state="translated">Lagundu PeerTube itzultzen!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/language-chooser.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="5464118521750361406" datatype="html">
@@ -6814,7 +6814,7 @@
       </trans-unit>
       <trans-unit id="5634180635200972996" datatype="html">
         <source>Email verified!</source>
-        <target state="translated">Helbide elektronikoa baieztatu da.</target>
+        <target state="translated">Helbide elektronikoa baieztatu da!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -6822,7 +6822,7 @@
       </trans-unit>
       <trans-unit id="2584956257063845668" datatype="html">
         <source>Your email has been verified and your account request has been sent!</source>
-        <target state="translated">Helbide elektronikoa baieztatu da eta kontuaren eskaera bidali da.</target>
+        <target state="translated">Helbide elektronikoa baieztatu da eta kontuaren eskaera bidali da!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">7</context>
@@ -6842,7 +6842,7 @@
       </trans-unit>
       <trans-unit id="381800444567495906" datatype="html">
         <source>Your email has been verified and your account has been created!</source>
-        <target state="translated">Helbide elektronikoa baieztatu da eta kontua sortu da.</target>
+        <target state="translated">Helbide elektronikoa baieztatu da eta kontua sortu da!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">15</context>
@@ -6855,7 +6855,7 @@
       </trans-unit>
       <trans-unit id="8412827353958624080" datatype="html">
         <source>Your account request has been sent!</source>
-        <target state="translated">Kontuaren eskaera bidali da.</target>
+        <target state="translated">Kontuaren eskaera bidali da!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">13</context>
@@ -7183,7 +7183,7 @@
       </trans-unit>
       <trans-unit id="8674693181203168033" datatype="html">
         <source>Discover how to setup your account, what is a channel, how to create a playlist and more!</source>
-        <target state="translated">Jakin nola konfiguratu kontua, zer den kanal bat, nola sortu zerrenda bat eta gehiago.</target>
+        <target state="translated">Ikasi nola konfiguratu zure kontua, kanal bat zer den, nola sortu zerrenda bat eta gauza gehiago!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="5336387229608682776" datatype="html">
@@ -7193,7 +7193,7 @@
       </trans-unit>
       <trans-unit id="7916664392219781729" datatype="html">
         <source>Discover unofficial Android applications or browser addons!</source>
-        <target state="translated">Ezagutu ofizialak ez diren Android-erako aplikazioak edo arakatu gehigarriak.</target>
+        <target state="translated">Ezagutu ofizialak ez diren Android-erako aplikazioak eta arakatu gehigarriak!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="4093735071527927163" datatype="html">
@@ -7203,7 +7203,7 @@
       </trans-unit>
       <trans-unit id="6886584917624458638" datatype="html">
         <source>Want to help to improve PeerTube? You can translate the web interface, give your feedback or directly contribute to the code!</source>
-        <target state="translated">PeerTube hobetzen lagundu nahi duzu? Web-interfazea itzul dezakezu, zure iritzia eman edo lagundu zuzenean kodearekin.</target>
+        <target state="translated">PeerTube hobetzen lagundu nahi duzu? Web-interfazea itzul dezakezu, zure iritzia eman edo zuzenean kodearekin lagundu!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="185970110822844952">
@@ -7238,17 +7238,17 @@
       </trans-unit>
       <trans-unit id="4042605201005159699" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
-        <target state="translated">Bidalitako eskaera bakoitzeko, aztarnariak ausazko hainbat pareko itzultzen ditu kopuru mugatu batean. Adibidez, 1000 pareko badaude erlauntzan eta aztarnariak soilik 20 pareko bidaltzen baditu eskaera bakoitzeko, gutxienez, 50 eskaera bidali beharko lirateke erlauntzako pareko bakoitza ezagutzeko.</target>
+        <target state="translated">Bidalitako eskaera bakoitzeko, aztarnariak ausazko hainbat pareko itzultzen ditu kopuru mugatu batean. Adibidez, 1000 pareko badaude erlauntzan eta aztarnariak soilik 20 pareko bidaltzen baditu eskaera bakoitzeko, gutxienez, 50 eskaera bidali beharko lirateke erlauntzako pareko bakoitza ezagutzeko</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="8817667841110447397" datatype="html">
         <source>Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour</source>
-        <target state="translated">Eskaera horiek aldiro bidali behar dira nork hasten den edo amaitzen duen bideo bat ikusten jakiteko. Erraza da portaera hauek hautematea.</target>
+        <target state="translated">Eskaera horiek aldiro bidali behar dira bideo bat ikusten nor/k hasten/amaitzen duen jakiteko. Erraza da portaera hauek antzematea</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="4100327951517495019" datatype="html">
         <source>If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video</source>
-        <target state="translated">IP helbide bat aztarnarian gordetzen bada, ez du esan nahi IP helbidearen atzean dagoen pertsonak (benetan existitzen bada) bideoa ikusi duela.</target>
+        <target state="translated">IP helbide bat aztarnarian gordetzen bada, ez du esan nahi IP helbidearen atzean dagoen pertsonak (benetan existitzen bada) bideoa ikusi duela</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="7196664247366401915" datatype="html">
@@ -8269,7 +8269,7 @@
       </trans-unit>
       <trans-unit id="6537102123107780785" datatype="html">
         <source>Video redundancies removed!</source>
-        <target state="translated">Bideoaren erredundantziak kendu dira.</target>
+        <target state="translated">Bideoaren erredundantziak kendu dira!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="8639315630141911544">
@@ -9666,7 +9666,7 @@
       </trans-unit>
       <trans-unit id="8501241441398968873" datatype="html">
         <source>It will delete {count, plural, =1 {1 video} other {<x id="count"/> videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (<x id="PH" equiv-text="videoChannel.name"/>)!</source>
-        <target state="translated">Kanal honetan igotako {count, plural, =1 {bideo bat ezabatuko da} other {<x id="count"/> bideo ezabatuko dira}} eta ezin izango duzu sortu beste kanal edo kontu bat izen berarekin (<x id="PH" equiv-text="videoChannel.name"/>).</target>
+        <target state="translated">Kanal honetan igotako {count, plural, =1 {bideo bat ezabatuko da} other {<x id="count"/> bideo ezabatuko dira}} eta ezin izango duzu sortu beste kanal edo kontu bat izen berarekin (<x id="PH" equiv-text="videoChannel.name"/>)!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -10124,7 +10124,7 @@
       </trans-unit>
       <trans-unit id="8781423666414310853">
         <source>Your password has been successfully reset!</source>
-        <target state="translated">Zure pasahitza berrezarri da.</target>
+        <target state="translated">Zure pasahitza ondo berrezarri da!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="6048892649018070225">
@@ -11074,7 +11074,7 @@
       </trans-unit>
       <trans-unit id="4022826795131920912" datatype="html">
         <source>You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live</source>
-        <target state="translated">Behin soilik igor dezakezu zuzeneko arrunt batean. Errepikapena gaitzen baduzu, zuzenekoaren URL berean gordeko da.</target>
+        <target state="translated">Behin soilik igor dezakezu zuzeneko arrunt batean. Errepikapena gaitzen baduzu, zuzenekoaren URL berean gordeko da</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">316</context></context-group>
       </trans-unit>
       <trans-unit id="2261925229535541622" datatype="html">
@@ -11084,7 +11084,7 @@
       </trans-unit>
       <trans-unit id="8986073791327847979" datatype="html">
         <source>You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos</source>
-        <target state="translated">Hainbatetan igor dezakezu zuzeneko iraunkorrean/errepikakorrean. Errepikapenak gaitzen badituzu, aparteko bideo gisa gordeko dira.</target>
+        <target state="translated">Hainbatetan igor dezakezu zuzeneko iraunkorrean/errepikakorrean. Errepikapenak gaitzen badituzu, aparteko bideo gisa gordeko dira</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">325</context></context-group>
       </trans-unit>
       <trans-unit id="3112273530390098557" datatype="html">
@@ -11770,7 +11770,7 @@
       </trans-unit>
       <trans-unit id="4350392487994839749" datatype="html">
         <source>If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</source>
-        <target state="translated">Erabiltzaile hau kentzen baduzu, ezin izango duzu sortu &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; erabiltzailea duen erabiltzaile edo kanal bat.</target>
+        <target state="translated">Erabiltzaile hau kentzen baduzu, ezin izango duzu sortu &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; izena duen erabiltzailerik edo kanalik!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -12161,7 +12161,7 @@
       </trans-unit>
       <trans-unit id="1056145626640340519" datatype="html">
         <source>Video added in <x id="PH"/> at timestamps <x id="PH_1"/></source>
-        <target state="translated">Bideoa <x id="PH"/> zerrendara gehitu da, denbora-zigilu hauetan: <x id="PH_1"/>.</target>
+        <target state="translated">Bideoa <x id="PH"/> zerrendara gehitu da, denbora-zigilu hauetan: <x id="PH_1"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">379</context></context-group>
       </trans-unit>
       <trans-unit id="7754186870520534716" datatype="html">
