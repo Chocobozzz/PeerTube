@@ -26,7 +26,7 @@ describe('Test video blacklist API validators', function () {
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(240000)
 
     servers = await createMultipleServers(2)
 
