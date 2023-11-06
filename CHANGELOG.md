@@ -115,6 +115,14 @@ We have many important notes in this release. We know it's a pain for sysadmin, 
   * Add ability to reset video *Originally published at* attribute
   * Add ability for admins to set the default user channel name [#6000](https://github.com/Chocobozzz/PeerTube/pull/6000)
   * Server now uses [ESM modules](https://nodejs.org/api/esm.html)
+  * Add worker threads Prometheus metrics
+  * Performance:
+    * Process unicast HTTP job in worker threads
+    * Sign ActivityPub requests in worker threads
+    * Optimize recommended videos HTTP request
+    * Optimize videos SQL queries when filtering on lives or tags
+    * Optimize `/videos/{id}/views` endpoint with many viewers
+    * Add ability to disable PeerTube HTTP logs
 
 
 ### Bug fixes
@@ -141,6 +149,9 @@ We have many important notes in this release. We know it's a pain for sysadmin, 
   * Fix feed audio file mimetype
   * Fix video quality on high video resolution/fps
   * Fix disabling Object Storage ACL using Docker env `PEERTUBE_OBJECT_STORAGE_UPLOAD_ACL_PUBLIC` and `PEERTUBE_OBJECT_STORAGE_UPLOAD_ACL_PRIVATE` in `.env`
+  * Correctly end live session on ffprobe error
+  * Fix video stats X axis with old videos
+  * Fix empty master playlist upload on s3
 
 
 ## v5.2.1
