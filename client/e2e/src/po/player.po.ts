@@ -47,7 +47,9 @@ export class PlayerPage {
   }
 
   async playVideo () {
-    await $('div.video-js.vjs-paused').waitForExist()
+    await $('div.video-js.vjs-paused, div.video-js.vjs-playing').waitForExist()
+
+    if (await $('div.video-js.vjs-playing').isExisting()) return
 
     // Autoplay is disabled on iOS and Safari
     if (isIOS() || isSafari() || isMobileDevice()) {

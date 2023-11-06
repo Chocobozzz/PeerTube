@@ -26,7 +26,6 @@ function isIOS () {
 async function go (url: string) {
   await browser.url(url)
 
-  // Hide notifications that could fail tests when hiding buttons
   await browser.execute(() => {
     const style = document.createElement('style')
     style.innerHTML = 'p-toast { display: none }'

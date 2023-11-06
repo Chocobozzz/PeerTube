@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
   hmr: false,
-  apiUrl: 'http://localhost:9001',
-  originServerUrl: 'http://localhost:9001'
+  apiUrl: 'http://127.0.0.1:9001',
+  originServerUrl: 'http://127.0.0.1:9001'
 }
