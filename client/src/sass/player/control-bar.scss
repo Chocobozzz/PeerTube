@@ -171,6 +171,7 @@
     line-height: normal;
     position: relative;
     top: -1px;
+    width: auto;
 
     &.synced-with-live-edge {
       background: #d7281c;
@@ -180,6 +181,10 @@
       cursor: pointer;
       background: #80807f;
     }
+  }
+
+  .vjs-live-display {
+    white-space: nowrap;
   }
 
   .vjs-peertube {
