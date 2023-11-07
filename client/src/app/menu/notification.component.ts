@@ -66,20 +66,20 @@ export class NotificationComponent implements OnInit, OnDestroy {
   onPopoverShown () {
     this.opened = true
 
-    document.querySelector('menu').scrollTo(0, 0) // Reset menu scroll to easy lock
-    document.querySelector('menu').addEventListener('scroll', this.onMenuScrollEvent)
+    document.querySelector('nav').scrollTo(0, 0) // Reset menu scroll to easy lock
+    document.querySelector('nav').addEventListener('scroll', this.onMenuScrollEvent)
   }
 
   onPopoverHidden () {
     this.loaded = false
     this.opened = false
 
-    document.querySelector('menu').removeEventListener('scroll', this.onMenuScrollEvent)
+    document.querySelector('nav').removeEventListener('scroll', this.onMenuScrollEvent)
   }
 
   // Lock menu scroll when menu scroll to avoid fleeing / detached dropdown
   onMenuScrollEvent () {
-    document.querySelector('menu').scrollTo(0, 0)
+    document.querySelector('nav').scrollTo(0, 0)
   }
 
   onNotificationLoaded () {
