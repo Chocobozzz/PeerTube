@@ -11,7 +11,7 @@ We have many important notes in this release. We know it's a pain for sysadmin, 
   * Remove NodeJS 16 support (see https://nodejs.org/fr/blog/announcements/nodejs16-eol):
     * Please upgrade to NodeJS 18 before upgrading PeerTube
     * If you use NodeSource repository, you may have to migrate to their new repository: https://github.com/nodesource/distributions/wiki/How-to-migrate-to-the-new-repository
-    * Check in `production.yaml` that you use `127.0.0.1` instead of `localhost` for `listen.hostname` (https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L2) to ensure PeerTube is listening on IPv4
+    * Check in `production.yaml` that you use `127.0.0.1` instead of `localhost` for `listen.hostname`, `database.hostname` and `redis.hostname` as Node 18 favours IPv6 for `localhost` resolution
 
   * Remove WebTorrent support in player:
     * "WebTorrent videos" are renamed to "Web Video". The video format is the same, we just stop to use P2P for these videos

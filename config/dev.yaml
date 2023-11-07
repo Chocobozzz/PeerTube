@@ -17,11 +17,11 @@ rates_limit:
     max: 200
 
 database:
-  hostname: 'localhost'
+  hostname: '127.0.0.1'
   port: 5432
 
 redis:
-  hostname: 'localhost'
+  hostname: '127.0.0.1'
 
 smtp:
   hostname: null

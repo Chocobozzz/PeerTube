@@ -70,7 +70,7 @@ trust_proxy:
 
 # Your database name will be database.name OR 'peertube'+database.suffix
 database:
-  hostname: 'localhost'
+  hostname: '127.0.0.1'
   port: 5432
   ssl: false
   suffix: '_dev'
@@ -83,7 +83,7 @@ database:
 # You can also specify a 'socket' path to a unix socket but first need to
 # set 'hostname' and 'port' to null
 redis:
-  hostname: 'localhost'
+  hostname: '127.0.0.1'
   port: 6379
   auth: null # Used by both standalone and sentinel
   db: 0
