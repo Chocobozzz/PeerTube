@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.0.0-rc.1 (not yet released)
+## v6.0.0-rc.1
 
 ### IMPORTANT NOTES
 
