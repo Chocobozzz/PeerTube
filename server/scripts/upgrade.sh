@@ -81,6 +81,8 @@ cd "$LATEST_VERSION_DIRECTORY"
 # Launch yarn to check if we have all required dependencies
 NOCLIENT=1 yarn install --production --pure-lockfile
 
+OLD_VERSION_DIRECTORY=$(readlink "$PEERTUBE_PATH/peertube-latest")
+
 # Switch to latest code version
 rm -rf $PEERTUBE_PATH/peertube-latest
 ln -s "$LATEST_VERSION_DIRECTORY" $PEERTUBE_PATH/peertube-latest
@@ -93,7 +95,7 @@ echo ""
 if [ -x "$(command -v git)" ]; then
   cd $PEERTUBE_PATH
 
-  git merge-file -p config/production.yaml "$LATEST_VERSION_DIRECTORY/config/production.yaml.example" "peertube-latest/config/production.yaml.example" | tee "config/production.yaml.new" > /dev/null
+  git merge-file -p config/production.yaml "$OLD_VERSION_DIRECTORY/config/production.yaml.example" "peertube-latest/config/production.yaml.example" | tee "config/production.yaml.new" > /dev/null
   echo "$PEERTUBE_PATH/config/production.yaml.new generated"
   echo "You can review it and replace your existing production.yaml configuration"
 else
