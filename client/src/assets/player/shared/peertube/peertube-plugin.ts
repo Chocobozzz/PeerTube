@@ -291,7 +291,7 @@ class PeerTubePlugin extends Plugin {
       saveVideoWatchHistory(this.options.videoUUID(), currentTime)
     }
 
-    if (!this.videoViewUrl) return Promise.resolve(true)
+    if (!this.videoViewUrl()) return Promise.resolve(true)
 
     const body: VideoView = { currentTime, viewEvent }
 
