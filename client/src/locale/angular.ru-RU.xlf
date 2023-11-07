@@ -3231,7 +3231,7 @@
       </trans-unit>
       <trans-unit id="4659739156309424184" datatype="html">
         <source>The video is being transcoded, it may not work properly.</source>
-        <target state="translated">Видео перекодируется, оно может работать некорректно.</target>
+        <target state="translated">Видео перекодируется, сейчас оно может работать некорректно.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">21</context>
@@ -3247,7 +3247,7 @@
       </trans-unit>
       <trans-unit id="5332079713007503082" datatype="html">
         <source>The video is being moved to server file system, it may not work properly</source>
-        <target state="translated">Видео перемещается в файловую систему сервера, оно может работать некорректно</target>
+        <target state="translated">Видео перемещается в файловую систему сервера, сейчас оно может работать некорректно</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -3263,7 +3263,7 @@
       </trans-unit>
       <trans-unit id="8421704878620521033" datatype="html">
         <source>The video is being moved to an external server, it may not work properly.</source>
-        <target state="translated">Видео перемещается на внешний сервер, оно может работать некорректно.</target>
+        <target state="translated">Видео перемещается на внешний сервер, сейчас оно может работать некорректно.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -3279,7 +3279,7 @@
       </trans-unit>
       <trans-unit id="4982143979847413207" datatype="html">
         <source>The video is being edited, it may not work properly.</source>
-        <target state="translated">Видео редактируется, оно может работать некорректно.</target>
+        <target state="translated">Видео редактируется, сейчас оно может работать некорректно.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -11283,7 +11283,7 @@
       </trans-unit>
       <trans-unit id="8713535243933137493" datatype="html">
         <source>Fri</source>
-        <target state="translated">Пят</target>
+        <target state="translated">Пт</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">25</context>
