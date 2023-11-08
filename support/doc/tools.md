@@ -245,7 +245,7 @@ cd /var/www/peertube-docker
 docker-compose exec -u peertube peertube npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
 ```
 
-### Move video files to object storage
+### Move video files from filesystem to object storage
 
 Use this script to move all video files or a specific video file to object storage.
 
@@ -269,6 +269,34 @@ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production np
 # Docker installation
 cd /var/www/peertube-docker
 docker-compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage --all-videos
+```
+
+### Move video files from object storage to filesystem
+
+**PeerTube >= 6.0**
+
+Use this script to move all video files or a specific video file from object storage to the PeerTube instance filesystem.
+
+```bash
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-file-system -v [videoUUID]
+
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-file-system -v [videoUUID]
+```
+
+The script can also move all video files that are not already on the filesystem:
+
+```bash
+# Basic installation
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-move-video-storage-job -- --to-file-system --all-videos
+
+# Docker installation
+cd /var/www/peertube-docker
+docker-compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-file-system --all-videos
 ```
 
 ### Generate storyboard
