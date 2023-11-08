@@ -2,3 +2,5 @@ name: "PeerTube CodeQL config"
 
 paths-ignore:
  - packages/tests
+ - packages/server-commands
+ - packages/types-generator
