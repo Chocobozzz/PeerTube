@@ -271,7 +271,6 @@ cd /var/www/peertube-docker
 docker-compose exec -u peertube peertube npm run create-move-video-storage-job -- --to-object-storage --all-videos
 ```
 
-<!-- TODO: uncomment when PeerTube 6 is released
 ### Generate storyboard
 
 **PeerTube >= 6.0**
@@ -299,7 +298,6 @@ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production np
 cd /var/www/peertube-docker
 docker-compose exec -u peertube peertube npm run create-generate-storyboard-job -- --all-videos
 ```
--->
 
 ### Prune filesystem storage
 
