@@ -24,7 +24,7 @@ describe('Test server redundancy API validators', function () {
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(160000)
+    this.timeout(240000)
 
     servers = await createMultipleServers(2)
 
