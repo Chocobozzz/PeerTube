@@ -16,6 +16,7 @@ import {
 import { LiveStreamInformationComponent } from '../shared-video-live'
 import { VideoAddToPlaylistComponent } from '../shared-video-playlist'
 import { VideoDownloadComponent } from './video-download.component'
+import { of } from 'rxjs'
 
 export type VideoActionsDisplayType = {
   playlist?: boolean
@@ -127,13 +128,14 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   showDownloadModal () {
     this.modalOpened.emit()
-    if (!(this.video instanceof VideoDetails)) {
-      this.videoService.getVideo({ videoId: this.video.uuid }).subscribe((details: VideoDetails) => {
-        this.videoDownloadModal.show(details, this.videoCaptions)
-      })
-    } else {
-      this.videoDownloadModal.show(this.video, this.videoCaptions)
-    }
+
+    const obs = this.video instanceof VideoDetails
+      ? of(this.video)
+      : this.videoService.getVideo({ videoId: this.video.uuid })
+
+    obs.subscribe((videoDetails: VideoDetails) => {
+      this.videoDownloadModal.show(videoDetails, this.videoCaptions)
+    })
   }
 
   showReportModal () {
@@ -165,7 +167,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   isVideoStatsAvailable () {
-    return this.video.canSeeStats(this.user)
+    return this.video.isAccessibleBy(this.user)
   }
 
   isVideoRemovable () {
@@ -185,11 +187,11 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   isVideoDownloadable () {
-    if (!this.video || this.video.isLive) {
-      return false
-    }
-
-    return (this.video instanceof VideoDetails && this.video.downloadEnabled) || this.video.isDownloadableBy(this.user)
+    return (this.video &&
+      this.video.isLive !== true &&
+      this.video instanceof VideoDetails &&
+      this.video.downloadEnabled) ||
+      this.video.isAccessibleBy(this.user)
   }
 
   canVideoBeDuplicated () {

@@ -232,7 +232,7 @@ export class Video implements VideoServerModel {
       this.isUpdatableBy(user)
   }
 
-  canSeeStats (user: AuthUser) {
+  isAccessibleBy (user: AuthUser) {
     return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.SEE_ALL_VIDEOS))
   }
 
@@ -249,14 +249,6 @@ export class Video implements VideoServerModel {
       this.state.id !== VideoState.TO_TRANSCODE &&
       this.hasHLS() &&
       this.hasWebVideos()
-  }
-
-  isDownloadableBy (user: AuthUser) {
-    if (!user || this.isLocal !== true) {
-      return false
-    }
-
-    return this.account.name === user.username || user.hasRight(UserRight.MANAGE_VIDEO_FILES)
   }
 
   canRunTranscoding (user: AuthUser) {
