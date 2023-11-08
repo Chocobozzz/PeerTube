@@ -106,6 +106,10 @@ export class PeerTubePlayer {
 
     this.player.autoplay(this.getAutoPlayValue(this.currentLoadOptions.autoplay))
 
+    if (!this.player.autoplay()) {
+      this.setPoster(loadOptions.poster)
+    }
+
     this.player.trigger('video-change')
   }
 

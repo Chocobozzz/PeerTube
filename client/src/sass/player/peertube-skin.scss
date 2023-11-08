@@ -108,6 +108,7 @@ body {
 
   .vjs-poster {
     outline: 0;
+    background-size: cover;
   }
 
   @media screen and (max-width: $screen-width-750) {

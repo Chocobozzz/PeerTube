@@ -5,7 +5,7 @@
 @use '_miniature' as *;
 
 $video-default-height: 66vh;
-$video-theater-height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
+$video-max-height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
 
 @mixin playlist-below-player {
   width: 100% !important;
@@ -36,11 +36,11 @@ $video-theater-height: calc(100vh - #{$header-height} - #{$theater-bottom-space}
 
     #videojs-wrapper {
       width: 100%;
-      height: $video-theater-height;
+      height: $video-max-height;
     }
 
     ::ng-deep .video-js {
-      --player-height: #{$video-theater-height};
+      --player-height: #{$video-max-height};
     }
 
     my-video-watch-playlist ::ng-deep .playlist {
@@ -255,10 +255,9 @@ my-video-comments {
     .remote-server-down,
     ::ng-deep .video-js {
       --player-portrait-mode: 1;
+      --player-height: calc(100vw / var(--player-ratio)) !important;
 
-      // Can be recalculated by the player depending on video ratio
-      height: calc(100vw / var(--player-ratio)) !important;
-      max-height: $video-theater-height;
+      max-height: $video-max-height;
     }
   }
 

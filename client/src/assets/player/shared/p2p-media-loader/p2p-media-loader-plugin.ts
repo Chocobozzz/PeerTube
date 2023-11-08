@@ -131,7 +131,7 @@ class P2pMediaLoaderPlugin extends Plugin {
     this.hlsjs.on(Hlsjs.Events.LEVEL_SWITCHED, () => this.player.trigger('engine-resolution-change'))
 
     this.hlsjs.on(Hlsjs.Events.MANIFEST_PARSED, (_event, data) => {
-      if (Array.isArray(data.levels) && data.levels.length > 1) {
+      if (Array.isArray(data.levels) && data.levels.length >= 1) {
         const level = data.levels[0]
 
         this.player.trigger('video-ratio-changed', { ratio: level.width / level.height })
