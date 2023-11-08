@@ -88,7 +88,7 @@ find dist/ packages/core-utils/dist/ \
                           "$directory_name/client/dist/" "$directory_name/client/yarn.lock" \
                           "$directory_name/client/package.json" "$directory_name/config" \
                           "$directory_name/dist" "$directory_name/package.json" \
-                          "$directory_name/scripts" "$directory_name/support" \
+                          "$directory_name/scripts/upgrade.sh" "$directory_name/support" \
                           "$directory_name/yarn.lock")
 
   # temporary setup
