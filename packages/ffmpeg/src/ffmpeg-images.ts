@@ -39,16 +39,17 @@ export class FFmpegImage {
   async generateThumbnailFromVideo (options: {
     fromPath: string
     output: string
+    framesToAnalyze: number
     ffprobe?: FfprobeData
   }) {
-    const { fromPath, output, ffprobe } = options
+    const { fromPath, output, ffprobe, framesToAnalyze } = options
 
     let duration = await getVideoStreamDuration(fromPath, ffprobe)
     if (isNaN(duration)) duration = 0
 
     this.commandWrapper.buildCommand(fromPath)
       .seekInput(duration / 2)
-      .videoFilter('thumbnail=50')
+      .videoFilter('thumbnail=' + framesToAnalyze)
       .outputOption('-frames:v 1')
       .output(output)
 

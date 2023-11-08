@@ -417,6 +417,14 @@ remote_runners:
     live: '30 seconds'
     vod: '2 minutes'
 
+thumbnails:
+  # When automatically generating a thumbnail from the video
+  generation_from_video:
+    # How many frames to analyze at the middle of the video to select the most appropriate one
+    # Increasing this value will increase CPU and memory usage when generating the thumbnail, especially for high video resolution
+    # Minimum value is 2
+    frames_to_analyze: 50
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache

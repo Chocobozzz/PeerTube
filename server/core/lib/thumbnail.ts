@@ -379,7 +379,8 @@ async function generateImageFromVideoFile (options: {
   const pendingImagePath = join(folder, pendingImageName)
 
   try {
-    await generateThumbnailFromVideo({ fromPath, output: pendingImagePath, ffprobe })
+    const framesToAnalyze = CONFIG.THUMBNAILS.GENERATION_FROM_VIDEO.FRAMES_TO_ANALYZE
+    await generateThumbnailFromVideo({ fromPath, output: pendingImagePath, framesToAnalyze, ffprobe })
 
     const destination = join(folder, imageName)
     await processImageFromWorker({ path: pendingImagePath, destination, newSize: size })

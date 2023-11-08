@@ -344,6 +344,11 @@ const CONFIG = {
       VOD: parseDurationToMs(config.get<string>('remote_runners.stalled_jobs.vod'))
     }
   },
+  THUMBNAILS: {
+    GENERATION_FROM_VIDEO: {
+      FRAMES_TO_ANALYZE: config.get<number>('thumbnails.generation_from_video.frames_to_analyze')
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },

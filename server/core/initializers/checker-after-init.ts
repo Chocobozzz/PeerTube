@@ -53,6 +53,7 @@ function checkConfig () {
   checkLiveConfig()
   checkObjectStorageConfig()
   checkVideoStudioConfig()
+  checkThumbnailsConfig()
 }
 
 // We get db by param to not import it in this file (import orders)
@@ -329,5 +330,11 @@ function checkObjectStorageConfig () {
 function checkVideoStudioConfig () {
   if (CONFIG.VIDEO_STUDIO.ENABLED === true && CONFIG.TRANSCODING.ENABLED === false) {
     throw new Error('Video studio cannot be enabled if transcoding is disabled')
+  }
+}
+
+function checkThumbnailsConfig () {
+  if (CONFIG.THUMBNAILS.GENERATION_FROM_VIDEO.FRAMES_TO_ANALYZE < 2) {
+    throw new Error('thumbnails.generation_from_video.frames_to_analyze must be a number greater than 1')
   }
 }
