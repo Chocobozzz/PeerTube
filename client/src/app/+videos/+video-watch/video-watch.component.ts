@@ -15,7 +15,8 @@ import {
   Hotkey,
   HotkeysService,
   User,
-  UserService
+  UserService,
+  MetaService
 } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { isXPercentInViewport, scrollToTop, toBoolean } from '@app/helpers'
@@ -136,6 +137,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private screenService: ScreenService,
     private videoFileTokenService: VideoFileTokenService,
     private location: PlatformLocation,
+    private metaService: MetaService,
     @Inject(LOCALE_ID) private localeId: string
   ) { }
 
@@ -460,6 +462,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     this.buildHotkeysHelp(video)
+    this.setMetaTags(video)
 
     this.loadPlayer({ loggedInOrAnonymousUser, forceAutoplay })
       .catch(err => logger.error('Cannot build the player', err))
@@ -911,6 +914,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     this.hotkeysService.add(this.hotkeys)
+  }
+
+  private setMetaTags (video: Video) {
+    this.metaService.setTitle(video.name)
+
+    this.metaService.setTag('description', video.description)
   }
 
   private getUrlOptions (): URLOptions {
