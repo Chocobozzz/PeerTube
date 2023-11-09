@@ -864,10 +864,7 @@ const ACTOR_IMAGES_SIZE: { [key in ActorImageType_Type]: { width: number, height
 }
 
 const STORYBOARD = {
-  SPRITE_SIZE: {
-    width: 192,
-    height: 108
-  },
+  SPRITE_MAX_SIZE: 192,
   SPRITES_MAX_EDGE_COUNT: 10
 }
 

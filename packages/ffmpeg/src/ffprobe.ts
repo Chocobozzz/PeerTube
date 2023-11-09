@@ -114,6 +114,12 @@ async function getVideoStreamDimensionsInfo (path: string, existingProbe?: Ffpro
     }
   }
 
+  if (videoStream.rotation === '90' || videoStream.rotation === '-90') {
+    const width = videoStream.width
+    videoStream.width = videoStream.height
+    videoStream.height = width
+  }
+
   return {
     width: videoStream.width,
     height: videoStream.height,

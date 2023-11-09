@@ -13,7 +13,7 @@ import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo } from '@server/types/models/index.js'
-import { FFmpegImage, isAudioFile } from '@peertube/peertube-ffmpeg'
+import { FFmpegImage, ffprobePromise, getVideoStreamDimensionsInfo, isAudioFile } from '@peertube/peertube-ffmpeg'
 import { GenerateStoryboardPayload } from '@peertube/peertube-models'
 import { getImageSizeFromWorker } from '@server/lib/worker/parent-process.js'
 
@@ -37,11 +37,24 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
     const inputFile = video.getMaxQualityFile()
 
     await VideoPathManager.Instance.makeAvailableVideoFile(inputFile, async videoPath => {
-      const isAudio = await isAudioFile(videoPath)
+      const probe = await ffprobePromise(videoPath)
+      const isAudio = await isAudioFile(videoPath, probe)
 
       if (isAudio) {
         logger.info('Do not generate a storyboard of %s since the video does not have a video stream', payload.videoUUID, lTags)
         return
+      }
+
+      const videoStreamInfo = await getVideoStreamDimensionsInfo(videoPath, probe)
+      let spriteHeight: number
+      let spriteWidth: number
+
+      if (videoStreamInfo.isPortraitMode) {
+        spriteHeight = STORYBOARD.SPRITE_MAX_SIZE
+        spriteWidth = Math.round(STORYBOARD.SPRITE_MAX_SIZE / videoStreamInfo.ratio)
+      } else {
+        spriteHeight = Math.round(STORYBOARD.SPRITE_MAX_SIZE / videoStreamInfo.ratio)
+        spriteWidth = STORYBOARD.SPRITE_MAX_SIZE
       }
 
       const ffmpeg = new FFmpegImage(getFFmpegCommandWrapperOptions('thumbnail'))
@@ -49,7 +62,7 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
       const filename = generateImageFilename()
       const destination = join(CONFIG.STORAGE.STORYBOARDS_DIR, filename)
 
-      const totalSprites = buildTotalSprites(video)
+      const totalSprites = buildTotalSprites({ video, spriteHeight, spriteWidth })
       if (totalSprites === 0) {
         logger.info('Do not generate a storyboard of %s because the video is not long enough', payload.videoUUID, lTags)
         return
@@ -64,14 +77,17 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
 
       logger.debug(
         'Generating storyboard from video of %s to %s', video.uuid, destination,
-        { ...lTags, spritesCount, spriteDuration, videoDuration: video.duration }
+        { ...lTags, spritesCount, spriteDuration, videoDuration: video.duration, spriteHeight, spriteWidth }
       )
 
       await ffmpeg.generateStoryboardFromVideo({
         destination,
         path: videoPath,
         sprites: {
-          size: STORYBOARD.SPRITE_SIZE,
+          size: {
+            height: spriteHeight,
+            width: spriteWidth
+          },
           count: spritesCount,
           duration: spriteDuration
         }
@@ -95,8 +111,8 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
             filename,
             totalHeight: imageSize.height,
             totalWidth: imageSize.width,
-            spriteHeight: STORYBOARD.SPRITE_SIZE.height,
-            spriteWidth: STORYBOARD.SPRITE_SIZE.width,
+            spriteHeight,
+            spriteWidth,
             spriteDuration,
             videoId: video.id
           }, { transaction })
@@ -120,8 +136,14 @@ export {
   processGenerateStoryboard
 }
 
-function buildTotalSprites (video: MVideo) {
-  const maxSprites = STORYBOARD.SPRITE_SIZE.height * STORYBOARD.SPRITE_SIZE.width
+function buildTotalSprites (options: {
+  video: MVideo
+  spriteHeight: number
+  spriteWidth: number
+}) {
+  const { video, spriteHeight, spriteWidth } = options
+
+  const maxSprites = spriteHeight * spriteWidth
   const totalSprites = Math.min(Math.ceil(video.duration), maxSprites)
 
   // We can generate a single line

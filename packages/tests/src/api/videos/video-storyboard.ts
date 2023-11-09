@@ -22,10 +22,12 @@ import {
 async function checkStoryboard (options: {
   server: PeerTubeServer
   uuid: string
+  spriteHeight?: number
+  spriteWidth?: number
   tilesCount?: number
   minSize?: number
 }) {
-  const { server, uuid, tilesCount, minSize = 1000 } = options
+  const { server, uuid, tilesCount, spriteHeight = 108, spriteWidth = 192, minSize = 1000 } = options
 
   const { storyboards } = await server.storyboard.list({ id: uuid })
 
@@ -34,13 +36,13 @@ async function checkStoryboard (options: {
   const storyboard = storyboards[0]
 
   expect(storyboard.spriteDuration).to.equal(1)
-  expect(storyboard.spriteHeight).to.equal(108)
-  expect(storyboard.spriteWidth).to.equal(192)
+  expect(storyboard.spriteHeight).to.equal(spriteHeight)
+  expect(storyboard.spriteWidth).to.equal(spriteWidth)
   expect(storyboard.storyboardPath).to.exist
 
   if (tilesCount) {
-    expect(storyboard.totalWidth).to.equal(192 * Math.min(tilesCount, 10))
-    expect(storyboard.totalHeight).to.equal(108 * Math.max((tilesCount / 10), 1))
+    expect(storyboard.totalWidth).to.equal(spriteWidth * Math.min(tilesCount, 10))
+    expect(storyboard.totalHeight).to.equal(spriteHeight * Math.max((tilesCount / 10), 1))
   }
 
   const { body } = await makeGetRequest({ url: server.url, path: storyboard.storyboardPath, expectedStatus: HttpStatusCode.OK_200 })
@@ -83,7 +85,7 @@ describe('Test video storyboard', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      await checkStoryboard({ server, uuid, tilesCount: 100 })
+      await checkStoryboard({ server, uuid, spriteHeight: 154, tilesCount: 100 })
     }
   })
 
@@ -134,7 +136,7 @@ describe('Test video storyboard', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      await checkStoryboard({ server, uuid: video.uuid, tilesCount: 3 })
+      await checkStoryboard({ server, uuid: video.uuid, spriteHeight: 144, tilesCount: 3 })
     }
   })
 
