@@ -257,7 +257,7 @@ my-video-comments {
       --player-portrait-mode: 1;
       --player-height: calc(100vw / var(--player-ratio)) !important;
 
-      max-height: $video-max-height;
+      max-height: calc(100vh - #{$header-height} - #{$player-portrait-bottom-space});
     }
   }
 
