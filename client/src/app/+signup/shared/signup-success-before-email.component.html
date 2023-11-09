@@ -15,21 +15,21 @@
 
   <ng-container *ngIf="requiresEmailVerification">
     <p i18n *ngIf="requiresApproval">
-      <strong>Check your emails</strong> to validate your account and complete your registration request.
+      <strong>Check your email</strong> to validate your account and complete your registration request.
     </p>
 
     <p i18n *ngIf="!requiresApproval">
-      <strong>Check your emails</strong> to validate your account and complete your registration.
+      <strong>Check your email</strong> to validate your account and complete your registration.
     </p>
   </ng-container>
 
   <ng-container *ngIf="!requiresEmailVerification">
     <p i18n *ngIf="requiresApproval">
-      A moderator will check your registration request soon and you'll receive an email when it will be accepted or rejected.
+      A moderator will check your registration request soon and you'll receive an email when it is accepted or rejected.
     </p>
 
     <p *ngIf="!requiresApproval" i18n>
-      If you need help to use PeerTube, you can have a look at the <a class="link-orange" href="https://docs.joinpeertube.org/use/setup-account" target="_blank" rel="noopener noreferrer">documentation</a>.
+      If you need help using PeerTube, you can have a look at the <a class="link-orange" href="https://docs.joinpeertube.org/use/setup-account" target="_blank" rel="noopener noreferrer">documentation</a>.
     </p>
   </ng-container>
 </div>
