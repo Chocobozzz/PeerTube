@@ -3221,7 +3221,7 @@
       </trans-unit>
       <trans-unit id="4659739156309424184" datatype="html">
         <source>The video is being transcoded, it may not work properly.</source>
-        <target state="new">The video is being transcoded, it may not work properly.</target>
+        <target state="translated">動画は現在トランスコード中のため、正しく再生できない可能性があります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">21</context>
@@ -3229,7 +3229,7 @@
       </trans-unit>
       <trans-unit id="1380062134054846433" datatype="html">
         <source>The video is being imported, it will be available when the import is finished.</source>
-        <target state="new">The video is being imported, it will be available when the import is finished.</target>
+        <target state="translated">動画は現在インポート中です。インポート完了後に利用可能になります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -3237,7 +3237,7 @@
       </trans-unit>
       <trans-unit id="5332079713007503082" datatype="html">
         <source>The video is being moved to server file system, it may not work properly</source>
-        <target state="new">The video is being moved to server file system, it may not work properly</target>
+        <target state="translated">動画はサーバーのファイルシステムに移動中のため、正しく再生できない可能性があります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">27</context>
