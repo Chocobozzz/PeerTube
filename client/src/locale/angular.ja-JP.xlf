@@ -3245,7 +3245,7 @@
       </trans-unit>
       <trans-unit id="1670226671143418566" datatype="html">
         <source>Move to file system failed, this video may not work properly.</source>
-        <target state="new">Move to file system failed, this video may not work properly.</target>
+        <target state="translated">ファイルシステムへの移動に失敗したため、この動画は正しく再生できない可能性があります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">30</context>
@@ -3253,7 +3253,7 @@
       </trans-unit>
       <trans-unit id="8421704878620521033" datatype="html">
         <source>The video is being moved to an external server, it may not work properly.</source>
-        <target state="new">The video is being moved to an external server, it may not work properly.</target>
+        <target state="translated">動画は外部サーバーに移動中のため、正しく再生できない可能性があります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -3261,7 +3261,7 @@
       </trans-unit>
       <trans-unit id="1832806861457762248" datatype="html">
         <source>Move to external storage failed, this video may not work properly.</source>
-        <target state="new">Move to external storage failed, this video may not work properly.</target>
+        <target state="translated">外部ストレージへの移動に失敗したため、この動画は正しく再生できない可能性があります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -3269,7 +3269,7 @@
       </trans-unit>
       <trans-unit id="4982143979847413207" datatype="html">
         <source>The video is being edited, it may not work properly.</source>
-        <target state="new">The video is being edited, it may not work properly.</target>
+        <target state="translated">動画は編集中のため、正しく再生できない可能性があります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -3277,7 +3277,7 @@
       </trans-unit>
       <trans-unit id="6421273530586507643" datatype="html">
         <source>Transcoding failed, this video may not work properly.</source>
-        <target state="new">Transcoding failed, this video may not work properly.</target>
+        <target state="translated">トランスコードに失敗したため、この動画は正しく再生できない可能性があります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -12527,7 +12527,7 @@
       </trans-unit>
       <trans-unit id="1831940730037919560" datatype="html">
         <source>Moving to file system</source>
-        <target state="new">Moving to file system</target>
+        <target state="translated">ファイルシステムへ移動中</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">195</context>
@@ -12535,7 +12535,7 @@
       </trans-unit>
       <trans-unit id="4707274274243790782" datatype="html">
         <source>Moving to file system failed</source>
-        <target state="new">Moving to file system failed</target>
+        <target state="translated">ファイルシステムへの移動に失敗</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">198</context>
@@ -12543,7 +12543,7 @@
       </trans-unit>
       <trans-unit id="1792259951302458040" datatype="html">
         <source>Moving to external storage</source>
-        <target state="new">Moving to external storage</target>
+        <target state="translated">外部ストレージに移動中</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">201</context>
