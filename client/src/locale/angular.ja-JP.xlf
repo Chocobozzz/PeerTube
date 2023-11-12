@@ -1609,7 +1609,7 @@
       </trans-unit>
       <trans-unit id="1439766333173070230" datatype="html">
         <source>Invalid input video stream</source>
-        <target state="translated">無効なビデオストリーム</target>
+        <target state="translated">無効な動画ストリーム</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">50</context>
