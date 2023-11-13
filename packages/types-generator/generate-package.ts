@@ -91,6 +91,7 @@ async function run () {
     description,
     version,
     private: false,
+    main: '',
     license: licence,
     engines,
     author,
