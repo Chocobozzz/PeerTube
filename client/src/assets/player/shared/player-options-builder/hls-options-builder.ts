@@ -8,6 +8,7 @@ import { getRtcConfig, isSameOrigin } from '../common'
 import { RedundancyUrlManager } from '../p2p-media-loader/redundancy-url-manager'
 import { segmentUrlBuilderFactory } from '../p2p-media-loader/segment-url-builder'
 import { SegmentValidator } from '../p2p-media-loader/segment-validator'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 
 type ConstructorOptions =
   Pick<PeerTubePlayerContructorOptions, 'pluginsManager' | 'serverUrl' | 'authorizationHeader'> &
@@ -82,7 +83,10 @@ export class HLSOptionsBuilder {
     const { redundancyUrlManager, segmentValidator } = options
 
     let consumeOnly = false
-    if ((navigator as any)?.connection?.type === 'cellular') {
+    if (
+      (navigator as any)?.connection?.type === 'cellular' ||
+      peertubeLocalStorage.getItem('peertube-videojs-p2p-consume-only') === 'true' // Use for E2E testing
+    ) {
       logger.info('We are on a cellular connection: disabling seeding.')
       consumeOnly = true
     }
