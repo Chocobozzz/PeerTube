@@ -58,6 +58,7 @@ services:
      - "1935:1935" # Comment if you don't want to use the live feature
     #  - "9000:9000" # Uncomment if you use another webserver/proxy or test PeerTube in local, otherwise not suitable for production
     volumes:
+      # Remove the following line if you want to use another webserver/proxy or test PeerTube in local
       - assets:/app/client/dist
       - ./docker-volume/data:/data
       - ./docker-volume/config:/config
