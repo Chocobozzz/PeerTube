@@ -36,6 +36,8 @@ async function completeWebVideoFilesCheck (options: {
 
   const transcodingEnabled = serverConfig.transcoding.web_videos.enabled
 
+  expect(files).to.have.lengthOf(files.length)
+
   for (const attributeFile of files) {
     const file = video.files.find(f => f.resolution.id === attributeFile.resolution)
     expect(file, `resolution ${attributeFile.resolution} does not exist`).not.to.be.undefined

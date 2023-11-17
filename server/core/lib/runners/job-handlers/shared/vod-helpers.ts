@@ -8,6 +8,7 @@ import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFullLight } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { RunnerJobVODAudioMergeTranscodingPrivatePayload, RunnerJobVODWebVideoTranscodingPrivatePayload } from '@peertube/peertube-models'
+import { lTags } from '@server/lib/object-storage/shared/logger.js'
 
 export async function onVODWebVideoOrAudioMergeTranscodingJob (options: {
   video: MVideoFullLight
@@ -27,6 +28,23 @@ export async function onVODWebVideoOrAudioMergeTranscodingJob (options: {
     videoFile,
     videoOutputPath: newVideoFilePath
   })
+
+  if (privatePayload.deleteInputFileId) {
+    const inputFile = video.VideoFiles.find(f => f.id === privatePayload.deleteInputFileId)
+
+    if (inputFile) {
+      await video.removeWebVideoFile(inputFile)
+      await inputFile.destroy()
+
+      video.VideoFiles = video.VideoFiles.filter(f => f.id !== inputFile.id)
+    } else {
+      logger.error(
+        'Cannot delete input file %d of video %s: does not exist anymore',
+        privatePayload.deleteInputFileId, video.uuid,
+        { ...lTags(video.uuid), privatePayload }
+      )
+    }
+  }
 
   await onTranscodingEnded({ isNewVideo: privatePayload.isNewVideo, moveVideoToNextState: true, video })
 }

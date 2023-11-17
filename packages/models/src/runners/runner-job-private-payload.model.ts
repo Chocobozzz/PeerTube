@@ -15,11 +15,13 @@ export type RunnerJobPrivatePayload =
 export interface RunnerJobVODWebVideoTranscodingPrivatePayload {
   videoUUID: string
   isNewVideo: boolean
+  deleteInputFileId: number | null
 }
 
 export interface RunnerJobVODAudioMergeTranscodingPrivatePayload {
   videoUUID: string
   isNewVideo: boolean
+  deleteInputFileId: number | null
 }
 
 export interface RunnerJobVODHLSTranscodingPrivatePayload {

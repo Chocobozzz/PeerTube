@@ -20,6 +20,7 @@ type CreateOptions = {
   resolution: number
   fps: number
   priority: number
+  deleteInputFileId: number | null
   dependsOnRunnerJob?: MRunnerJob
 }
 
@@ -41,7 +42,7 @@ export class VODWebVideoTranscodingJobHandler extends AbstractVODTranscodingJobH
     }
 
     const privatePayload: RunnerJobVODWebVideoTranscodingPrivatePayload = {
-      ...pick(options, [ 'isNewVideo' ]),
+      ...pick(options, [ 'isNewVideo', 'deleteInputFileId' ]),
 
       videoUUID: video.uuid
     }

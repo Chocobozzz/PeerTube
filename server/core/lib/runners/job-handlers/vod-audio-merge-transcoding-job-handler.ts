@@ -21,6 +21,7 @@ type CreateOptions = {
   resolution: number
   fps: number
   priority: number
+  deleteInputFileId: number | null
   dependsOnRunnerJob?: MRunnerJob
 }
 
@@ -43,7 +44,7 @@ export class VODAudioMergeTranscodingJobHandler extends AbstractVODTranscodingJo
     }
 
     const privatePayload: RunnerJobVODWebVideoTranscodingPrivatePayload = {
-      ...pick(options, [ 'isNewVideo' ]),
+      ...pick(options, [ 'isNewVideo', 'deleteInputFileId' ]),
 
       videoUUID: video.uuid
     }
@@ -80,12 +81,6 @@ export class VODAudioMergeTranscodingJobHandler extends AbstractVODTranscodingJo
     // See https://trac.ffmpeg.org/ticket/5456
     video.duration = await getVideoStreamDuration(videoFilePath)
     await video.save()
-
-    // We can remove the old audio file
-    const oldAudioFile = video.VideoFiles[0]
-    await video.removeWebVideoFile(oldAudioFile)
-    await oldAudioFile.destroy()
-    video.VideoFiles = []
 
     await onVODWebVideoOrAudioMergeTranscodingJob({ video, videoFilePath, privatePayload })
 

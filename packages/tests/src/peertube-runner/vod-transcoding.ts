@@ -232,6 +232,45 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         resolutions: [ 720, 480, 360, 240, 144, 0 ]
       })
     })
+
+    it('Should not generate an upper resolution than original file', async function () {
+      this.timeout(120_000)
+
+      await servers[0].config.updateExistingSubConfig({
+        newConfig: {
+          transcoding: {
+            enabled: true,
+            hls: { enabled: true },
+            webVideos: { enabled: true },
+            resolutions: {
+              '0p': false,
+              '144p': false,
+              '240p': true,
+              '360p': false,
+              '480p': true,
+              '720p': false,
+              '1080p': false,
+              '1440p': false,
+              '2160p': false
+            },
+            alwaysTranscodeOriginalResolution: false
+          }
+        }
+      })
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video', fixture: 'video_short.webm' })
+      await waitJobs(servers, { runnerJobs: true })
+
+      const video = await servers[0].videos.get({ id: uuid })
+      const hlsFiles = video.streamingPlaylists[0].files
+
+      expect(video.files).to.have.lengthOf(2)
+      expect(hlsFiles).to.have.lengthOf(2)
+
+      // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
+      const resolutions = getAllFiles(video).map(f => f.resolution.id).sort()
+      expect(resolutions).to.deep.equal([ 240, 240, 480, 480 ])
+    })
   }
 
   before(async function () {
