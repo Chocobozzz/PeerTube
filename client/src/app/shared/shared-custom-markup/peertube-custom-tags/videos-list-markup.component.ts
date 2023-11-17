@@ -1,11 +1,12 @@
-import { finalize } from 'rxjs/operators'
+import { finalize, map } from 'rxjs/operators'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
-import { VideoSortField } from '@peertube/peertube-models'
+import { ResultList, VideoSortField } from '@peertube/peertube-models'
 import { Video, VideoService } from '../../shared-main'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { CustomMarkupComponent } from './shared'
+import { Observable } from 'rxjs'
 
 /*
  * Markup component list videos depending on criteria
@@ -75,7 +76,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
     return this.getVideosObservable()
       .pipe(finalize(() => this.loaded.emit(true)))
       .subscribe({
-        next: ({ data }) => {
+        next: data => {
           this.videos = data
           this.cd.markForCheck()
         },
@@ -96,12 +97,16 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
       isLive: this.isLive,
       sort: this.sort as VideoSortField,
       account: { nameWithHost: this.accountHandle },
-      videoChannel: { nameWithHost: this.channelHandle }
+      videoChannel: { nameWithHost: this.channelHandle },
+      skipCount: true
     }
 
-    if (this.channelHandle) return this.videoService.getVideoChannelVideos(options)
-    if (this.accountHandle) return this.videoService.getAccountVideos(options)
+    let obs: Observable<ResultList<Video>>
 
-    return this.videoService.getVideos(options)
+    if (this.channelHandle) obs = this.videoService.getVideoChannelVideos(options)
+    else if (this.accountHandle) obs = this.videoService.getAccountVideos(options)
+    else obs = this.videoService.getVideos(options)
+
+    return obs.pipe(map(({ data }) => data))
   }
 }
