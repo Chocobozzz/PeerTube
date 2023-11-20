@@ -531,8 +531,8 @@
       <trans-unit id="2466846716878254816" datatype="html">
         <source>Element <x id="PH" equiv-text="param"/> not found</source>
         <target state="translated">구성요소 <x id="PH" equiv-text="param"/> 를 찾을 수 없음</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-search/find-in-bulk.service.ts</context><context context-type="linenumber">86</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-search/find-in-bulk.service.ts</context><context context-type="linenumber">85</context></context-group></trans-unit>
       <trans-unit id="7539427273132299890">
         <source>Unlisted</source>
         <target>목록에 미표시</target>
@@ -2384,8 +2384,8 @@ The link will expire within 1 hour.</target>
       <trans-unit id="1247256698916587400" datatype="html">
         <source>Error in videos list component: <x id="PH" equiv-text="err.message"/></source>
         <target state="new">Error in videos list component: <x id="PH" equiv-text="err.message"/></target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context><context context-type="linenumber">83</context></context-group>
-      </trans-unit><trans-unit id="7596115240533332749" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context><context context-type="linenumber">84</context></context-group></trans-unit><trans-unit id="7596115240533332749" datatype="html">
         <source>Open quick filters</source><target state="new">Open quick filters</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
