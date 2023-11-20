@@ -1,5 +1,24 @@
 # Changelog
 
+## v6.0.0-rc.2
+
+**Since v6.0.0-rc.1**
+
+### Bug fixes
+
+ * Correctly generate `production.yaml.new` that should merge your current `production.yaml` with new keys defined by PeerTube
+ * Don't break `scripts/upgrade.sh` path. If you upgraded to v6.0.0-rc.1 you can find the upgrade script in `dist/scripts/upgrade.sh`
+ * Fix notification scrolling
+ * Add ability to customize frames to analyze in configuration (fix too long upload on low-power hardware)
+ * Fix player ratio on mobile with portrait videos
+ * Update page title and description on video change
+ * Adapt storyboard sprite ratio
+ * Fix card font color theme
+ * Optimize homepage videos query
+ * Respect "transcode original resolution" setting when using remote runners
+ * Prevent player mobile buttons flickering
+
+
 ## v6.0.0-rc.1
 
 ### IMPORTANT NOTES
