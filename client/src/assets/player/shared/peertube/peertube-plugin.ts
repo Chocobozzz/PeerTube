@@ -58,6 +58,8 @@ class PeerTubePlugin extends Plugin {
     this.initializePlayer()
     this.initOnVideoChange()
 
+    this.player.removeClass('vjs-can-play')
+
     this.deleteLegacyIndexedDB()
 
     this.player.on('autoplay-failure', () => {
@@ -85,6 +87,8 @@ class PeerTubePlugin extends Plugin {
 
       const muted = playerOptions.muted !== undefined ? playerOptions.muted : getStoredMute()
       if (muted !== undefined) this.player.muted(muted)
+
+      this.player.addClass('vjs-can-play')
     })
 
     this.player.ready(() => {
