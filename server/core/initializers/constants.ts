@@ -37,6 +37,7 @@ import { join } from 'path'
 // Do not use barrels, remain constants as independent as possible
 import { parseDurationToMs, sanitizeHost, sanitizeUrl } from '../helpers/core-utils.js'
 import { CONFIG, registerConfigChangedHandler } from './config.js'
+import { cpus } from 'os'
 
 // ---------------------------------------------------------------------------
 
@@ -966,6 +967,8 @@ const MEMOIZE_LENGTH = {
   VIDEO_DURATION: 200
 }
 
+const totalCPUs = cpus().length
+
 const WORKER_THREADS = {
   DOWNLOAD_IMAGE: {
     CONCURRENCY: 3,
@@ -973,19 +976,19 @@ const WORKER_THREADS = {
   },
   PROCESS_IMAGE: {
     CONCURRENCY: 1,
-    MAX_THREADS: 5
+    MAX_THREADS: Math.min(totalCPUs, 5)
   },
   GET_IMAGE_SIZE: {
     CONCURRENCY: 1,
-    MAX_THREADS: 5
+    MAX_THREADS: Math.min(totalCPUs, 5)
   },
   SIGN_JSON_LD_OBJECT: {
     CONCURRENCY: 1,
-    MAX_THREADS: 2
+    MAX_THREADS: Math.min(totalCPUs, 2)
   },
   BUILD_DIGEST: {
     CONCURRENCY: 1,
-    MAX_THREADS: 2
+    MAX_THREADS: Math.min(totalCPUs, 2)
   }
 }
 
