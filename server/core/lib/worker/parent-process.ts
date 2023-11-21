@@ -8,6 +8,7 @@ import type getImageSize from './workers/get-image-size.js'
 import type signJsonLDObject from './workers/sign-json-ld-object.js'
 import type buildDigest from './workers/build-digest.js'
 import type httpUnicast from './workers/http-unicast.js'
+import { logger } from '@server/helpers/logger.js'
 
 let downloadImageWorker: Piscina
 
@@ -18,6 +19,8 @@ export function downloadImageFromWorker (options: Parameters<typeof downloadImag
       concurrentTasksPerWorker: WORKER_THREADS.DOWNLOAD_IMAGE.CONCURRENCY,
       maxThreads: WORKER_THREADS.DOWNLOAD_IMAGE.MAX_THREADS
     })
+
+    downloadImageWorker.on('error', err => logger.error('Error in download image worker', { err }))
   }
 
   return downloadImageWorker.run(options)
@@ -34,6 +37,8 @@ export function processImageFromWorker (options: Parameters<typeof processImage>
       concurrentTasksPerWorker: WORKER_THREADS.PROCESS_IMAGE.CONCURRENCY,
       maxThreads: WORKER_THREADS.PROCESS_IMAGE.MAX_THREADS
     })
+
+    processImageWorker.on('error', err => logger.error('Error in process image worker', { err }))
   }
 
   return processImageWorker.run(options)
@@ -50,6 +55,8 @@ export function getImageSizeFromWorker (options: Parameters<typeof getImageSize>
       concurrentTasksPerWorker: WORKER_THREADS.GET_IMAGE_SIZE.CONCURRENCY,
       maxThreads: WORKER_THREADS.GET_IMAGE_SIZE.MAX_THREADS
     })
+
+    getImageSizeWorker.on('error', err => logger.error('Error in get image size worker', { err }))
   }
 
   return getImageSizeWorker.run(options)
@@ -67,6 +74,8 @@ export function parallelHTTPBroadcastFromWorker (options: Parameters<typeof http
       concurrentTasksPerWorker: JOB_CONCURRENCY['activitypub-http-broadcast-parallel'],
       maxThreads: 1
     })
+
+    parallelHTTPBroadcastWorker.on('error', err => logger.error('Error in parallel HTTP broadcast worker', { err }))
   }
 
   return parallelHTTPBroadcastWorker.run(options)
@@ -86,6 +95,8 @@ export function sequentialHTTPBroadcastFromWorker (
       concurrentTasksPerWorker: JOB_CONCURRENCY['activitypub-http-broadcast'],
       maxThreads: 1
     })
+
+    sequentialHTTPBroadcastWorker.on('error', err => logger.error('Error in sequential HTTP broadcast image worker', { err }))
   }
 
   return sequentialHTTPBroadcastWorker.run(options)
@@ -105,6 +116,8 @@ export function httpUnicastFromWorker (
       concurrentTasksPerWorker: JOB_CONCURRENCY['activitypub-http-unicast'],
       maxThreads: 1
     })
+
+    httpUnicastWorker.on('error', err => logger.error('Error in HTTP unicast worker', { err }))
   }
 
   return httpUnicastWorker.run(options)
@@ -123,6 +136,8 @@ export function signJsonLDObjectFromWorker <T> (
       concurrentTasksPerWorker: WORKER_THREADS.SIGN_JSON_LD_OBJECT.CONCURRENCY,
       maxThreads: WORKER_THREADS.SIGN_JSON_LD_OBJECT.MAX_THREADS
     })
+
+    signJsonLDObjectWorker.on('error', err => logger.error('Error in sign JSONLD object worker', { err }))
   }
 
   return signJsonLDObjectWorker.run(options)
@@ -142,6 +157,8 @@ export function buildDigestFromWorker (
       concurrentTasksPerWorker: WORKER_THREADS.BUILD_DIGEST.CONCURRENCY,
       maxThreads: WORKER_THREADS.BUILD_DIGEST.MAX_THREADS
     })
+
+    buildDigestWorker.on('error', err => logger.error('Error in build digest worker', { err }))
   }
 
   return buildDigestWorker.run(options)
