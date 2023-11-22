@@ -43,14 +43,11 @@
   }
 }
 
-
-@include on-small-main-col {
+@include on-mobile-main-col {
   .video {
     flex-wrap: wrap;
   }
-}
 
-@include on-mobile-main-col {
   .checkbox-container {
     display: none;
   }
