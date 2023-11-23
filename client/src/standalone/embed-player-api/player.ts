@@ -195,6 +195,15 @@ export class PeerTubePlayer {
     return this.sendMessage<undefined, number>('getCurrentPosition')
   }
 
+  /**
+   * Set video password to so the user doesn't have to manually fill it
+   *
+   * @param password
+   */
+  async setVideoPassword (password: string): Promise<void> {
+    await this.sendMessage('setVideoPassword', password)
+  }
+
   private constructChannel () {
     this.channel = Channel.build({
       window: this.embedElement.contentWindow,

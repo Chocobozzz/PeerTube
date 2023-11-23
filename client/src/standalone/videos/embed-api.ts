@@ -25,16 +25,15 @@ export class PeerTubeEmbedApi {
 
   initialize () {
     this.constructChannel()
-    this.setupStateTracking()
-
-    // We're ready!
-
-    this.notifyReady()
   }
 
-  reInit () {
+  initWithVideo () {
     this.disposeStateTracking()
     this.setupStateTracking()
+
+    if (!this.isReady) {
+      this.notifyReady()
+    }
   }
 
   private get element () {
@@ -43,6 +42,8 @@ export class PeerTubeEmbedApi {
 
   private constructChannel () {
     const channel = Channel.build({ window: window.parent, origin: '*', scope: this.embed.getScope() })
+
+    channel.bind('setVideoPassword', (txn, value) => this.embed.setVideoPasswordByAPI(value))
 
     channel.bind('play', (txn, params) => this.embed.player.play())
     channel.bind('pause', (txn, params) => this.embed.player.pause())
@@ -66,6 +67,7 @@ export class PeerTubeEmbedApi {
     channel.bind('playNextVideo', (txn, params) => this.embed.playNextPlaylistVideo())
     channel.bind('playPreviousVideo', (txn, params) => this.embed.playPreviousPlaylistVideo())
     channel.bind('getCurrentPosition', (txn, params) => this.embed.getCurrentPlaylistPosition())
+
     this.channel = channel
   }
 

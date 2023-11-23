@@ -49,6 +49,8 @@ export class PlayerOptionsBuilder {
   private bigPlayBackgroundColor: string
   private foregroundColor: string
 
+  private waitPasswordFromEmbedAPI = false
+
   private mode: PlayerMode
   private scope = 'peertube'
 
@@ -106,17 +108,15 @@ export class PlayerOptionsBuilder {
     return this.scope
   }
 
+  mustWaitPasswordFromEmbedAPI () {
+    return this.waitPasswordFromEmbedAPI
+  }
+
   // ---------------------------------------------------------------------------
 
-  loadParams (config: HTMLServerConfig, video: VideoDetails) {
+  loadCommonParams () {
     try {
       const params = new URL(window.location.toString()).searchParams
-
-      this.autoplay = getParamToggle(params, 'autoplay', false)
-      // Disable auto play on live videos that are not streamed
-      if (video.state.id === VideoState.LIVE_ENDED || video.state.id === VideoState.WAITING_FOR_LIVE) {
-        this.autoplay = false
-      }
 
       this.controls = getParamToggle(params, 'controls', true)
       this.controlBar = getParamToggle(params, 'controlBar', true)
@@ -125,9 +125,9 @@ export class PlayerOptionsBuilder {
       this.loop = getParamToggle(params, 'loop', false)
       this.title = getParamToggle(params, 'title', true)
       this.enableApi = getParamToggle(params, 'api', this.enableApi)
+      this.waitPasswordFromEmbedAPI = getParamToggle(params, 'waitPasswordFromEmbedAPI', this.waitPasswordFromEmbedAPI)
       this.warningTitle = getParamToggle(params, 'warningTitle', true)
       this.peertubeLink = getParamToggle(params, 'peertubeLink', true)
-      this.p2pEnabled = getParamToggle(params, 'p2p', this.isP2PEnabled(config, video))
 
       this.scope = getParamString(params, 'scope', this.scope)
       this.subtitle = getParamString(params, 'subtitle')
@@ -137,6 +137,22 @@ export class PlayerOptionsBuilder {
 
       this.bigPlayBackgroundColor = getParamString(params, 'bigPlayBackgroundColor')
       this.foregroundColor = getParamString(params, 'foregroundColor')
+    } catch (err) {
+      logger.error('Cannot get params from URL.', err)
+    }
+  }
+
+  loadVideoParams (config: HTMLServerConfig, video: VideoDetails) {
+    try {
+      const params = new URL(window.location.toString()).searchParams
+
+      this.autoplay = getParamToggle(params, 'autoplay', false)
+      // Disable auto play on live videos that are not streamed
+      if (video.state.id === VideoState.LIVE_ENDED || video.state.id === VideoState.WAITING_FOR_LIVE) {
+        this.autoplay = false
+      }
+
+      this.p2pEnabled = getParamToggle(params, 'p2p', this.isP2PEnabled(config, video))
 
       const modeParam = getParamString(params, 'mode')
 

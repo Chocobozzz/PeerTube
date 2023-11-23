@@ -53,6 +53,8 @@ export class PeerTubeEmbed {
   private alreadyPlayed = false
 
   private videoPassword: string
+  private videoPasswordFromAPI: string
+  private onVideoPasswordFromAPIResolver: (value: string) => void
   private requiresPassword: boolean
 
   constructor (videoWrapperId: string) {
@@ -142,15 +144,31 @@ export class PeerTubeEmbed {
   }
 
   private initializeApi () {
-    if (this.playerOptionsBuilder.hasAPIEnabled()) {
-      if (this.api) {
-        this.api.reInit()
-        return
-      }
+    if (!this.playerOptionsBuilder.hasAPIEnabled()) return
+    if (this.api) return
 
-      this.api = new PeerTubeEmbedApi(this)
-      this.api.initialize()
+    this.api = new PeerTubeEmbedApi(this)
+    this.api.initialize()
+  }
+
+  // ---------------------------------------------------------------------------
+
+  setVideoPasswordByAPI (password: string) {
+    logger.info('Setting password from API')
+
+    this.videoPasswordFromAPI = password
+
+    if (this.onVideoPasswordFromAPIResolver) {
+      this.onVideoPasswordFromAPIResolver(password)
     }
+  }
+
+  private getPasswordByAPI () {
+    if (this.videoPasswordFromAPI) return Promise.resolve(this.videoPasswordFromAPI)
+
+    return new Promise<string>(res => {
+      this.onVideoPasswordFromAPIResolver = res
+    })
   }
 
   // ---------------------------------------------------------------------------
@@ -191,6 +209,9 @@ export class PeerTubeEmbed {
   }) {
     const { uuid, forceAutoplay } = options
 
+    this.playerOptionsBuilder.loadCommonParams()
+    this.initializeApi()
+
     try {
       const {
         videoResponse,
@@ -218,7 +239,7 @@ export class PeerTubeEmbed {
 
     const videoInfoPromise = videoResponse.json()
       .then(async (videoInfo: VideoDetails) => {
-        this.playerOptionsBuilder.loadParams(this.config, videoInfo)
+        this.playerOptionsBuilder.loadVideoParams(this.config, videoInfo)
 
         const live = videoInfo.isLive
           ? await this.videoFetcher.loadLive(videoInfo)
@@ -287,7 +308,8 @@ export class PeerTubeEmbed {
       (window as any)['videojsPlayer'] = this.player
 
       this.buildCSS()
-      this.initializeApi()
+
+      if (this.api) this.api.initWithVideo()
     }
 
     this.alreadyInitialized = true
@@ -360,10 +382,30 @@ export class PeerTubeEmbed {
     if (incorrectPassword === null) return false
 
     this.requiresPassword = true
+
+    if (this.playerOptionsBuilder.mustWaitPasswordFromEmbedAPI()) {
+      logger.info('Waiting for password from Embed API')
+
+      const videoPasswordFromAPI = await this.getPasswordByAPI()
+
+      if (videoPasswordFromAPI && this.videoPassword !== videoPasswordFromAPI) {
+        logger.info('Using video password from API')
+
+        this.videoPassword = videoPasswordFromAPI
+
+        return true
+      }
+
+      logger.error('Password from embed API is not valid')
+
+      return false
+    }
+
     this.videoPassword = await this.playerHTML.askVideoPassword({
       incorrectPassword,
       translations: await this.translationsPromise
     })
+
     return true
   }
 

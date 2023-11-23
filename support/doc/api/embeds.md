@@ -154,6 +154,21 @@ Enable embed JavaScript API (see methods below).
 
 Value must be `0` or `1`.
 
+### waitPasswordFromEmbedAPI
+
+**PeerTube >= 6.0**
+
+If the video requires a password, PeerTube will wait a password provided by `setVideoPassword` method before loading the video.
+
+Until you provide a password, `player.ready` is not resolved.
+
+
+## Embed attributes
+
+### `ready: Promise<void>`
+
+This promise is resolved when the video is loaded an the player is ready.
+
 
 ## Embed methods
 
@@ -236,6 +251,15 @@ Play previous video in playlist.
 ### `getCurrentPosition(): Promise<void>`
 
 Get current position in playlist (starts from 1).
+
+
+### `setVideoPassword(): Promise<void>`
+
+**PeerTube >= 6.0**
+
+Set the video password so the user doesn't have to manually fill it.
+`waitPasswordFromEmbedAPI=1` is required in embed URL.
+
 
 ## Embed events
 
