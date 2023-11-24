@@ -1,6 +1,7 @@
 import { ContextType } from '@peertube/peertube-models'
 import { ACTIVITY_PUB } from '@server/initializers/constants.js'
-import { buildDigest, signJsonLDObject } from './peertube-crypto.js'
+import { buildDigest } from './peertube-crypto.js'
+import type { signJsonLDObject } from './peertube-jsonld.js'
 
 export type ContextFilter = <T> (arg: T) => Promise<T>
 

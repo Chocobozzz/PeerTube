@@ -4,7 +4,7 @@ import { getAPId } from '@server/lib/activitypub/activity.js'
 import { wrapWithSpanAndContext } from '@server/lib/opentelemetry/tracing.js'
 import { ActivityDelete, ActivityPubSignature, HttpStatusCode } from '@peertube/peertube-models'
 import { logger } from '../helpers/logger.js'
-import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../helpers/peertube-crypto.js'
+import { isHTTPSignatureVerified, parseHTTPSignature } from '../helpers/peertube-crypto.js'
 import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE } from '../initializers/constants.js'
 import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../lib/activitypub/actors/index.js'
 
@@ -122,6 +122,9 @@ async function checkHttpSignature (req: Request, res: Response) {
 }
 
 async function checkJsonLDSignature (req: Request, res: Response) {
+  // Lazy load the module as it's quite big with json.ld dependency
+  const { isJsonLDSignatureVerified } = await import('../helpers/peertube-jsonld.js')
+
   return wrapWithSpanAndContext('peertube.activitypub.JSONLDSignature', async () => {
     const signatureObject: ActivityPubSignature = req.body.signature
 
