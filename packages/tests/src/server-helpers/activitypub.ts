@@ -2,12 +2,8 @@
 
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { signAndContextify } from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'
-import {
-  isHTTPSignatureVerified,
-  isJsonLDSignatureVerified,
-  parseHTTPSignature,
-  signJsonLDObject
-} from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
+import { isHTTPSignatureVerified, parseHTTPSignature } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
+import { isJsonLDSignatureVerified, signJsonLDObject } from '@peertube/peertube-server/core/helpers/peertube-jsonld.js'
 import { buildRequestStub } from '@tests/shared/tests.js'
 import { expect } from 'chai'
 import { readJsonSync } from 'fs-extra/esm'

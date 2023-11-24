@@ -9,7 +9,8 @@ import {
   buildGlobalHTTPHeaders,
   signAndContextify
 } from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'
-import { buildDigest, signJsonLDObject } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
+import { buildDigest } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
+import { signJsonLDObject } from '@peertube/peertube-server/core/helpers/peertube-jsonld.js'
 import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@peertube/peertube-server/core/initializers/constants.js'
 import { makePOSTAPRequest } from '@tests/shared/requests.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
