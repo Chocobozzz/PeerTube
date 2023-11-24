@@ -984,7 +984,7 @@ const WORKER_THREADS = {
   },
   SIGN_JSON_LD_OBJECT: {
     CONCURRENCY: 1,
-    MAX_THREADS: Math.min(totalCPUs, 2)
+    MAX_THREADS: 1 // FIXME: we would want 2 threads but there is an issue with JSONLD in worker thread where CPU jumps and stays at 100%
   },
   BUILD_DIGEST: {
     CONCURRENCY: 1,
