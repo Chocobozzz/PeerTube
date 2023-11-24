@@ -86,15 +86,13 @@ export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S
       priority
     })
 
-    const job = await sequelizeTypescript.transaction(async transaction => {
-      return runnerJob.save({ transaction })
-    })
+    await saveInTransactionWithRetries(runnerJob)
 
     if (runnerJob.state === RunnerJobState.PENDING) {
       PeerTubeSocket.Instance.sendAvailableJobsPingToRunners()
     }
 
-    return job
+    return runnerJob
   }
 
   // ---------------------------------------------------------------------------
