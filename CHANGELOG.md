@@ -1,25 +1,6 @@
 # Changelog
 
-## v6.0.0-rc.2
-
-**Since v6.0.0-rc.1**
-
-### Bug fixes
-
- * Correctly generate `production.yaml.new` that should merge your current `production.yaml` with new keys defined by PeerTube
- * Don't break `scripts/upgrade.sh` path. If you upgraded to v6.0.0-rc.1 you can find the upgrade script in `dist/scripts/upgrade.sh`
- * Fix notification scrolling
- * Add ability to customize frames to analyze in configuration (fix too long upload on low-power hardware)
- * Fix player ratio on mobile with portrait videos
- * Update page title and description on video change
- * Adapt storyboard sprite ratio
- * Fix card font color theme
- * Optimize homepage videos query
- * Respect "transcode original resolution" setting when using remote runners
- * Prevent player mobile buttons flickering
-
-
-## v6.0.0-rc.1
+## v6.0.0
 
 ### IMPORTANT NOTES
 
@@ -41,7 +22,7 @@ We have many important notes in this release. We know it's a pain for sysadmin, 
   * Configuration key that you must update in your `production.yaml` if not automatically done by your upgrade script:
     * `storage.videos` must be **renamed** to `storage.web_videos`. The value of this configuration doesn't need to be changed: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L151
     * `transcoding.webtorrent` must be **renamed** to `transcoding.web_videos`: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L522
-    * `object_storage.videos` must be **renamed** to `object_storage.web_videos`. The value of this `object_storage.web_videos.bucket_name` doesn't need to be changed: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L223
+    * `object_storage.videos` must be **renamed** to `object_storage.web_videos`. The value of `object_storage.web_videos.bucket_name` doesn't need to be changed: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L223
     * `storage.storyboards` must be **added**: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L157
 
   * PeerTube Docker image now uses `bookworm`. `chocobozzz/peertube:production-bullseye` needs to be replaced by `chocobozzz/peertube:production-bookworm`
@@ -89,7 +70,8 @@ We have many important notes in this release. We know it's a pain for sysadmin, 
 
   * :tada: **Add "Password protected" video privacy** [#5836](https://github.com/Chocobozzz/PeerTube/pull/5836) :tada:
     * A single password can be set using the web interface at video upload/import/update
-    * The REST API can store as many passwords as you want, allowing developers to use this feature to easily give or revoke access to a video *on the fly*
+    * The [REST API](https://docs.joinpeertube.org/api-rest-reference.html#tag/Video-Passwords) can store as many passwords as you want, allowing developers to use this feature to easily give or revoke access to a video *on the fly*
+    * Developers that use PeerTube embeds can set the video password using [the embed API](https://docs.joinpeertube.org/api/embed-player#setvideopassword-promise-void)
   * :tada: **Add video storyboard support** :tada:
     * PeerTube automatically generates a storyboard on video upload/import
     * Viewers can see the image around the targeted timecode when hovering the progress bar
@@ -143,6 +125,7 @@ We have many important notes in this release. We know it's a pain for sysadmin, 
     * Optimize videos SQL queries when filtering on lives or tags
     * Optimize `/videos/{id}/views` endpoint with many viewers
     * Add ability to disable PeerTube HTTP logs
+    * Optimize homepage videos HTTP queries
 
 
 ### Bug fixes
@@ -172,6 +155,11 @@ We have many important notes in this release. We know it's a pain for sysadmin, 
   * Correctly end live session on ffprobe error
   * Fix video stats X axis with old videos
   * Fix empty master playlist upload on s3
+  * Correctly generate `production.yaml.new` that should merge your current `production.yaml` with new keys defined by PeerTube
+  * Fix card font color theme
+  * Respect "transcode original resolution" setting when using remote runners
+  * Prevent player mobile buttons flickering
+  * Fix graph zooming end date
 
 
 ## v5.2.1
