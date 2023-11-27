@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { DomSanitizer } from '@angular/platform-browser'
 
 const images = {
@@ -14,7 +14,8 @@ export type MascotImageName = keyof typeof images
 @Component({
   selector: 'my-signup-mascot',
   styleUrls: [ './signup-mascot.component.scss' ],
-  template: `<div class="root" [innerHTML]="html"></div>`
+  template: `<div class="root" [innerHTML]="html"></div>`,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignupMascotComponent {
   @Input() imageName: MascotImageName
