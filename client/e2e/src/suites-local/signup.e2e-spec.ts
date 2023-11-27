@@ -35,7 +35,7 @@ function checkEndMessage (options: {
   }
 
   {
-    const checkEmail = 'Check your emails'
+    const checkEmail = 'Check your email'
 
     if (requiresEmailVerification) {
       expect(message).toContain(checkEmail)

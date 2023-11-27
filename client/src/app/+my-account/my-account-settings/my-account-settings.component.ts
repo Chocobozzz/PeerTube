@@ -32,7 +32,7 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked () {
     if (window.location.hash && window.location.hash !== this.lastScrollHash) {
-      // this.viewportScroller.scrollToAnchor(window.location.hash.replace('#', ''))
+      this.viewportScroller.scrollToAnchor(window.location.hash.replace('#', ''))
 
       this.lastScrollHash = window.location.hash
     }
