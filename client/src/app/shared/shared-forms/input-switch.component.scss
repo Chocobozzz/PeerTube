@@ -3,7 +3,8 @@
 
 input {
   position: absolute;
-  top: -100px;
+  width: 0;
+  height: 0;
   left: -100px;
 
   + label {

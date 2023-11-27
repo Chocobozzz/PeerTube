@@ -17,6 +17,7 @@ export class InputSwitchComponent implements ControlValueAccessor {
   @Input() checked = false
   @Input() inputName: string
   @Input() preventUpdate = false
+  @Input() label = $localize`Toggle`
 
   propagateChange = (_: any) => { /* empty */ }
 

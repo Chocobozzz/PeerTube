@@ -12,6 +12,7 @@
 
         <div>
           <my-input-switch
+            [label]="getWebLabel(notificationType)"
             [inputName]="'web-notification-' + notificationType"
             [(ngModel)]="webNotifications[notificationType]"
             (ngModelChange)="updateWebSetting(notificationType, webNotifications[notificationType])"
@@ -20,6 +21,7 @@
 
         <div *ngIf="emailEnabled">
           <my-input-switch
+            [label]="getEmailLabel(notificationType)"
             [inputName]="'email-notification-' + notificationType"
             [(ngModel)]="emailNotifications[notificationType]"
             (ngModelChange)="updateEmailSetting(notificationType, emailNotifications[notificationType])"

@@ -116,6 +116,14 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     return this.user.hasRight(rightToHave)
   }
 
+  getWebLabel (notificationType: keyof UserNotificationSetting) {
+    return `Toggle web notification for "${this.labelNotifications[notificationType]}"`
+  }
+
+  getEmailLabel (notificationType: keyof UserNotificationSetting) {
+    return `Toggle email notification for "${this.labelNotifications[notificationType]}"`
+  }
+
   updateEmailSetting (field: keyof UserNotificationSetting, value: boolean) {
     if (value === true) this.user.notificationSettings[field] |= UserNotificationSettingValue.EMAIL
     else this.user.notificationSettings[field] &= ~UserNotificationSettingValue.EMAIL
