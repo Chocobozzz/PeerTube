@@ -109,7 +109,6 @@
     "@peertube/http-signature": "^1.7.0",
     "@smithy/node-http-handler": "^2.1.7",
     "@uploadx/core": "^6.0.0",
-    "async-lru": "^1.1.1",
     "async-mutex": "^0.4.0",
     "bcrypt": "5.1.1",
     "bencode": "^4.0.0",

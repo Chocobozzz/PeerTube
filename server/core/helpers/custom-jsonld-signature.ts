@@ -1,6 +1,4 @@
-import AsyncLRU from 'async-lru'
 import jsonld from 'jsonld'
-import { logger } from './logger.js'
 
 const CACHE = {
   'https://w3id.org/security/v1': {
@@ -55,36 +53,19 @@ const CACHE = {
   }
 }
 
-const nodeDocumentLoader = (jsonld as any).documentLoaders.node()
-
-const lru = new AsyncLRU({
-  max: 10,
-  load: (url, cb) => {
-    if (CACHE[url] !== undefined) {
-      logger.debug('Using cache for JSON-LD %s.', url)
-
-      return cb(null, {
-        contextUrl: null,
-        document: CACHE[url],
-        documentUrl: url
-      })
-    }
-
-    nodeDocumentLoader(url)
-      .then(value => cb(null, value))
-      .catch(err => cb(err))
-  }
-});
+const nodeDocumentLoader = (jsonld as any).documentLoaders.node();
 
 /* eslint-disable no-import-assign */
 (jsonld as any).documentLoader = (url) => {
-  return new Promise((res, rej) => {
-    lru.get(url, (err, value) => {
-      if (err) return rej(err)
-
-      return res(value)
+  if (url in CACHE) {
+    return Promise.resolve({
+      contextUrl: null,
+      document: CACHE[url],
+      documentUrl: url
     })
-  })
+  }
+
+  return nodeDocumentLoader(url)
 }
 
 export { jsonld }

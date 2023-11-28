@@ -988,7 +988,7 @@ const WORKER_THREADS = {
   },
   BUILD_DIGEST: {
     CONCURRENCY: 1,
-    MAX_THREADS: Math.min(totalCPUs, 2)
+    MAX_THREADS: 1
   }
 }
 
