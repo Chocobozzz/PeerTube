@@ -15,7 +15,7 @@ We have many important notes in this release. We know it's a pain for sysadmin, 
 
   * Remove WebTorrent support in player:
     * "WebTorrent videos" are renamed to "Web Video". The video format is the same, we just stop to use P2P for these videos
-    * There is not "Auto" quality anymore for Web Videos. The viewer has to explicitly choose the video resolution
+    * There is no "Auto" quality anymore for Web Videos. The viewer has to explicitly choose the video resolution
     * We still use P2P with the HLS player, which is the recommended transcoding format since several versions
     * See https://github.com/Chocobozzz/PeerTube/issues/5465 for more information
 
@@ -65,7 +65,7 @@ We have many important notes in this release. We know it's a pain for sysadmin, 
 
   * Removed unmaintained `peertube-import-videos` (also aliased as `peertube import-videos` or `peertube import`) script
   * PeerTube remote CLI is much more simpler to install using NPM: https://docs.joinpeertube.org/maintain/tools#remote-peertube-cli
-  * Support moving video files from object storage to filesystem: https://docs.joinpeertube.org/maintain/tools#generate-storyboard
+  * Support moving video files from object storage to filesystem: https://docs.joinpeertube.org/maintain/tools#move-video-files-from-object-storage-to-filesystem
 
 ### Features
 
