@@ -586,7 +586,7 @@
       </trans-unit>
       <trans-unit id="6228449077605046873" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</source>
-        <target state="new">Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</target>
+        <target state="translated">Biztos, hogy töröl {count, plural, =1 {1 HLS közvetítési lejátszólistát} other {<x id="count"/> HLS közvetítési lejátszólistát}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">271</context></context-group>
       </trans-unit>
       <trans-unit id="4435640428611044716" datatype="html">
@@ -599,12 +599,12 @@
       </trans-unit>
       <trans-unit id="1571742433738679426" datatype="html">
         <source>Files were removed.</source>
-        <target state="new">Files were removed.</target>
+        <target state="translated">A fájlok el lettek távolítva.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">288</context></context-group>
       </trans-unit>
       <trans-unit id="7054344823477412274" datatype="html">
         <source>Transcoding jobs created.</source>
-        <target state="new">Transcoding jobs created.</target>
+        <target state="translated">Az átkódolási feladatok létrehozva.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">300</context></context-group>
       </trans-unit>
       <trans-unit id="3514509630940272440" datatype="html">
@@ -730,7 +730,7 @@
       </trans-unit>
       <trans-unit id="80975420989930934" datatype="html">
         <source>(extensions: <x id="PH" equiv-text="this.videoImageExtensions"/>, <x id="PH_1" equiv-text="this.maxSizeText"/>: <x id="PH_2" equiv-text="this.maxVideoImageSizeInBytes"/>)</source>
-        <target state="new">(extensions: <x id="PH" equiv-text="this.videoImageExtensions"/>, <x id="PH_1" equiv-text="this.maxSizeText"/>: <x id="PH_2" equiv-text="this.maxVideoImageSizeInBytes"/>)</target>
+        <target state="translated">(kiterjesztések: <x id="PH" equiv-text="this.videoImageExtensions"/>, <x id="PH_1" equiv-text="this.maxSizeText"/>: <x id="PH_2" equiv-text="this.maxVideoImageSizeInBytes"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/preview-upload.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -758,27 +758,27 @@
       </trans-unit>
       <trans-unit id="8023282004085823427" datatype="html">
         <source><x id="PH" equiv-text="this.video.name"/> will be duplicated by your instance.</source>
-        <target state="new"><x id="PH" equiv-text="this.video.name"/> will be duplicated by your instance.</target>
+        <target state="translated">A példány megkettőzi a következőt: <x id="PH" equiv-text="this.video.name"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">254</context></context-group>
       </trans-unit>
       <trans-unit id="4140366911638662173" datatype="html">
         <source>Do you really want to remove "<x id="PH" equiv-text="this.video.name"/>" files?</source>
-        <target state="new">Do you really want to remove "<x id="PH" equiv-text="this.video.name"/>" files?</target>
+        <target state="translated">Biztos, hogy eltávolítja a következő fájljait: „<x id="PH" equiv-text="this.video.name"/>”?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">277</context></context-group>
       </trans-unit>
       <trans-unit id="2955645766721124100" datatype="html">
         <source>Remove "<x id="PH" equiv-text="this.video.name"/>" files</source>
-        <target state="new">Remove "<x id="PH" equiv-text="this.video.name"/>" files</target>
+        <target state="translated">A következő fájljainak eltávolítása: „<x id="PH" equiv-text="this.video.name"/>”</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">279</context></context-group>
       </trans-unit>
       <trans-unit id="7758350391886784213" datatype="html">
         <source>Removed files of <x id="PH" equiv-text="video.name"/>.</source>
-        <target state="new">Removed files of <x id="PH" equiv-text="video.name"/>.</target>
+        <target state="translated">A következő fájljai eltávolítva: <x id="PH" equiv-text="video.name"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">285</context></context-group>
       </trans-unit>
       <trans-unit id="1321621952409756532" datatype="html">
         <source>Transcoding jobs created for "<x id="PH" equiv-text="video.name"/>".</source>
-        <target state="new">Transcoding jobs created for "<x id="PH" equiv-text="video.name"/>".</target>
+        <target state="translated">Az átkódolási feladatok létrehozva a következőhöz: „<x id="PH" equiv-text="video.name"/>”.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">297</context>
@@ -821,7 +821,7 @@
       </trans-unit>
       <trans-unit id="3805147953573030976" datatype="html">
         <source>Default NSFW/sensitive videos policy</source>
-        <target state="new">Default NSFW/sensitive videos policy</target>
+        <target state="translated">Az érzékeny tartalmú videókra vonatkozó alapértelmezett házirend</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">13</context>
@@ -3416,7 +3416,7 @@
       </trans-unit>
       <trans-unit id="1465291804668949243" datatype="html">
         <source>NSFW</source>
-        <target state="translated">MKNM</target>
+        <target state="translated">érzékeny</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">62</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
@@ -4862,7 +4862,7 @@
       </trans-unit>
       <trans-unit id="3646118928964436382" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="new"> Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </target>
+        <target state="translated">Az engedélyezése tudatja a többi rendszergazdával, hogy főleg érzékeny tartalmat föderál.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Továbbá videófeltöltésnél az „érzékeny” jelölőmező automatikusan be lesz kapcsolva. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">93,96</context>
