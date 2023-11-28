@@ -3407,7 +3407,7 @@
       </trans-unit>
       <trans-unit id="2935783216050341269" datatype="html">
         <source>the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.</source>
-        <target state="translated">o sistema de compartición para este vídeo implica que certa información técnica acerca do teu sistema (como o enderezo IP público) pode ser enviada a outras usuarias.</target>
+        <target state="translated">o xeito en que se comparte este vídeo implica que certa información técnica acerca do teu sistema (como o enderezo IP público) pode ser enviada a outras usuarias.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="4619188387782427495" datatype="html">
