@@ -108,7 +108,7 @@ describe('Test index search', function () {
       expect(video.licence.label).to.equal('Attribution - Share Alike')
       expect(video.privacy.label).to.equal('Public')
       expect(video.duration).to.equal(113)
-      expect(video.thumbnailUrl.startsWith('https://framatube.org/static/thumbnails')).to.be.true
+      expect(video.thumbnailUrl.startsWith('https://framatube.org/lazy-static/thumbnails')).to.be.true
 
       expect(video.account.host).to.equal('framatube.org')
       expect(video.account.name).to.equal('framasoft')
