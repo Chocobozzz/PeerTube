@@ -17,7 +17,8 @@ export function downloadImageFromWorker (options: Parameters<typeof downloadImag
     downloadImageWorker = new Piscina({
       filename: new URL(join('workers', 'image-downloader.js'), import.meta.url).href,
       concurrentTasksPerWorker: WORKER_THREADS.DOWNLOAD_IMAGE.CONCURRENCY,
-      maxThreads: WORKER_THREADS.DOWNLOAD_IMAGE.MAX_THREADS
+      maxThreads: WORKER_THREADS.DOWNLOAD_IMAGE.MAX_THREADS,
+      minThreads: 1
     })
 
     downloadImageWorker.on('error', err => logger.error('Error in download image worker', { err }))
@@ -35,7 +36,8 @@ export function processImageFromWorker (options: Parameters<typeof processImage>
     processImageWorker = new Piscina({
       filename: new URL(join('workers', 'image-processor.js'), import.meta.url).href,
       concurrentTasksPerWorker: WORKER_THREADS.PROCESS_IMAGE.CONCURRENCY,
-      maxThreads: WORKER_THREADS.PROCESS_IMAGE.MAX_THREADS
+      maxThreads: WORKER_THREADS.PROCESS_IMAGE.MAX_THREADS,
+      minThreads: 1
     })
 
     processImageWorker.on('error', err => logger.error('Error in process image worker', { err }))
@@ -53,7 +55,8 @@ export function getImageSizeFromWorker (options: Parameters<typeof getImageSize>
     getImageSizeWorker = new Piscina({
       filename: new URL(join('workers', 'get-image-size.js'), import.meta.url).href,
       concurrentTasksPerWorker: WORKER_THREADS.GET_IMAGE_SIZE.CONCURRENCY,
-      maxThreads: WORKER_THREADS.GET_IMAGE_SIZE.MAX_THREADS
+      maxThreads: WORKER_THREADS.GET_IMAGE_SIZE.MAX_THREADS,
+      minThreads: 1
     })
 
     getImageSizeWorker.on('error', err => logger.error('Error in get image size worker', { err }))
@@ -72,7 +75,8 @@ export function parallelHTTPBroadcastFromWorker (options: Parameters<typeof http
       filename: new URL(join('workers', 'http-broadcast.js'), import.meta.url).href,
       // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
       concurrentTasksPerWorker: JOB_CONCURRENCY['activitypub-http-broadcast-parallel'],
-      maxThreads: 1
+      maxThreads: 1,
+      minThreads: 1
     })
 
     parallelHTTPBroadcastWorker.on('error', err => logger.error('Error in parallel HTTP broadcast worker', { err }))
@@ -93,7 +97,8 @@ export function sequentialHTTPBroadcastFromWorker (
       filename: new URL(join('workers', 'http-broadcast.js'), import.meta.url).href,
       // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
       concurrentTasksPerWorker: JOB_CONCURRENCY['activitypub-http-broadcast'],
-      maxThreads: 1
+      maxThreads: 1,
+      minThreads: 1
     })
 
     sequentialHTTPBroadcastWorker.on('error', err => logger.error('Error in sequential HTTP broadcast image worker', { err }))
@@ -114,7 +119,8 @@ export function httpUnicastFromWorker (
       filename: new URL(join('workers', 'http-unicast.js'), import.meta.url).href,
       // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
       concurrentTasksPerWorker: JOB_CONCURRENCY['activitypub-http-unicast'],
-      maxThreads: 1
+      maxThreads: 1,
+      minThreads: 1
     })
 
     httpUnicastWorker.on('error', err => logger.error('Error in HTTP unicast worker', { err }))
@@ -134,7 +140,8 @@ export function signJsonLDObjectFromWorker <T> (
     signJsonLDObjectWorker = new Piscina({
       filename: new URL(join('workers', 'sign-json-ld-object.js'), import.meta.url).href,
       concurrentTasksPerWorker: WORKER_THREADS.SIGN_JSON_LD_OBJECT.CONCURRENCY,
-      maxThreads: WORKER_THREADS.SIGN_JSON_LD_OBJECT.MAX_THREADS
+      maxThreads: WORKER_THREADS.SIGN_JSON_LD_OBJECT.MAX_THREADS,
+      minThreads: 1
     })
 
     signJsonLDObjectWorker.on('error', err => logger.error('Error in sign JSONLD object worker', { err }))
@@ -155,7 +162,8 @@ export function buildDigestFromWorker (
       filename: new URL(join('workers', 'build-digest.js'), import.meta.url).href,
       // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
       concurrentTasksPerWorker: WORKER_THREADS.BUILD_DIGEST.CONCURRENCY,
-      maxThreads: WORKER_THREADS.BUILD_DIGEST.MAX_THREADS
+      maxThreads: WORKER_THREADS.BUILD_DIGEST.MAX_THREADS,
+      minThreads: 1
     })
 
     buildDigestWorker.on('error', err => logger.error('Error in build digest worker', { err }))
