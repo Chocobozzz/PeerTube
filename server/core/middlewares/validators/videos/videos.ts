@@ -515,6 +515,15 @@ const commonVideosFiltersValidator = [
       })
       return false
     }
+
+    if (req.query.filter) {
+      res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: '"filter" query parameter is not supported anymore by PeerTube. Please use "isLocal" and "include" instead'
+      })
+      return false
+    }
+
     return next()
   }
 ]

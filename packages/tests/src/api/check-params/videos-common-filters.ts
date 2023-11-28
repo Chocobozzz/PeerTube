@@ -59,6 +59,7 @@ describe('Test video filters validators', function () {
       expectedStatus: HttpStatusCodeType
       excludeAlreadyWatched?: boolean
       unauthenticatedUser?: boolean
+      filter?: string
     }) {
       const paths = [
         '/api/v1/video-channels/root_channel/videos',
@@ -80,12 +81,17 @@ describe('Test video filters validators', function () {
             isLocal: options.isLocal,
             privacyOneOf: options.privacyOneOf,
             include: options.include,
-            excludeAlreadyWatched: options.excludeAlreadyWatched
+            excludeAlreadyWatched: options.excludeAlreadyWatched,
+            filter: options.filter
           },
           expectedStatus: options.expectedStatus
         })
       }
     }
+
+    it('Should fail with the old filter query param', async function () {
+      await testEndpoints({ filter: 'all-local', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
 
     it('Should fail with a bad privacyOneOf', async function () {
       await testEndpoints({ privacyOneOf: [ 'toto' ] as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
