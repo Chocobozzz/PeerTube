@@ -78,7 +78,7 @@ server {
     try_files /dev/null @api;
   }
 
-  location = /api/v1/videos/upload-resumable {
+  location ~ ^/api/v1/videos/(upload-resumable|([^/]+/source/replace-resumable))$ {
     client_max_body_size    0;
     proxy_request_buffering off;
 

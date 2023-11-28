@@ -35,6 +35,7 @@ We have many important notes in this release. We know it's a pain for sysadmin, 
 
   * You must update nginx configuration: https://github.com/Chocobozzz/PeerTube/blob/develop/support/nginx/peertube
     * `location ~ ^/static/(thumbnails|avatars)/ {` block must be removed
+    * `location = /api/v1/videos/upload-resumable {` must be updated to `location ~ ^/api/v1/videos/(upload-resumable|([^/]+/source/replace-resumable))$ {`
     * `location ~ ^(/static/(webseed|streaming-playlists)/private/)|^/download {` must be updated to `location ~ ^(/static/(webseed|web-videos|streaming-playlists)/private/)|^/download {`
     * `location ~ ^/static/(webseed|redundancy|streaming-playlists)/ {` must be updated to `location ~ ^/static/(webseed|web-videos|redundancy|streaming-playlists)/ {`
 
