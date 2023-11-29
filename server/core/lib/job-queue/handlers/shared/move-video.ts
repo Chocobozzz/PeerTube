@@ -38,7 +38,7 @@ export async function moveToJob (options: {
     }
 
     if (video.VideoStreamingPlaylists) {
-      logger.debug('Moving HLS playlist of %s.', video.uuid)
+      logger.debug('Moving HLS playlist of %s.', video.uuid, lTags)
 
       await moveHLSFiles(video)
     }
