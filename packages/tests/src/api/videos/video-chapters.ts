@@ -178,13 +178,13 @@ describe('Test video chapters', function () {
         checkChapters(chapters)
       }
 
-      await servers[0].videos.update({ id: video.uuid, attributes: { description: '00:01 chapter 1' } })
+      await servers[0].videos.update({ id: video.uuid, attributes: { description: '00:01 chapter 1\n00:03 chapter 2' } })
       await waitJobs(servers)
 
       for (const server of servers) {
         const { chapters } = await server.chapters.list({ videoId: video.uuid })
 
-        expect(chapters).to.deep.equal([ { timecode: 1, title: 'chapter 1' } ])
+        expect(chapters).to.deep.equal([ { timecode: 1, title: 'chapter 1' }, { timecode: 3, title: 'chapter 2' } ])
       }
 
       await servers[0].videos.update({ id: video.uuid, attributes: { description: 'null description' } })
