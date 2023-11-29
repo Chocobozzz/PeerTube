@@ -5,6 +5,7 @@ import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import { MVideoImmutable } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { InternalEventEmitter } from './internal-event-emitter.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 
 const lTags = loggerTagsFactory('video', 'chapters')
 
@@ -44,7 +45,7 @@ export async function replaceChaptersFromDescriptionIfNeeded (options: {
 }) {
   const { transaction, video, newDescription, oldDescription = '' } = options
 
-  const chaptersFromOldDescription = sortBy(parseChapters(oldDescription), 'timecode')
+  const chaptersFromOldDescription = sortBy(parseChapters(oldDescription, CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.TITLE.max), 'timecode')
   const existingChapters = await VideoChapterModel.listChaptersOfVideo(video.id, transaction)
 
   logger.debug(
@@ -54,7 +55,7 @@ export async function replaceChaptersFromDescriptionIfNeeded (options: {
 
   // Then we can update chapters from the new description
   if (areSameChapters(chaptersFromOldDescription, existingChapters)) {
-    const chaptersFromNewDescription = sortBy(parseChapters(newDescription), 'timecode')
+    const chaptersFromNewDescription = sortBy(parseChapters(newDescription, CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.TITLE.max), 'timecode')
     if (chaptersFromOldDescription.length === 0 && chaptersFromNewDescription.length === 0) return false
 
     await replaceChapters({ video, chapters: chaptersFromNewDescription, transaction })

@@ -221,25 +221,38 @@ describe('Parse semantic version string', function () {
 describe('Extract chapters', function () {
 
   it('Should not extract chapters', function () {
-    expect(parseChapters('my super description\nno?')).to.deep.equal([])
-    expect(parseChapters('m00:00 super description\nno?')).to.deep.equal([])
-    expect(parseChapters('00:00super description\nno?')).to.deep.equal([])
-    expect(parseChapters('my super description\n'.repeat(10) + ' * list1\n * list 2\n * list 3')).to.deep.equal([])
+    expect(parseChapters('my super description\nno?', 100)).to.deep.equal([])
+    expect(parseChapters('m00:00 super description\nno?', 100)).to.deep.equal([])
+    expect(parseChapters('00:00super description\nno?', 100)).to.deep.equal([])
+    expect(parseChapters('my super description\n'.repeat(10) + ' * list1\n * list 2\n * list 3', 100)).to.deep.equal([])
+    expect(parseChapters('3 Hello coucou', 100)).to.deep.equal([])
+    expect(parseChapters('00:00 coucou', 100)).to.deep.equal([])
   })
 
   it('Should extract chapters', function () {
-    expect(parseChapters('00:00 coucou')).to.deep.equal([ { timecode: 0, title: 'coucou' } ])
-    expect(parseChapters('my super description\n\n00:01:30 chapter 1\n00:01:35 chapter 2')).to.deep.equal([
+    expect(parseChapters('00:00 coucou\n00:05 hello', 100)).to.deep.equal([
+      { timecode: 0, title: 'coucou' },
+      { timecode: 5, title: 'hello' }
+    ])
+
+    expect(parseChapters('my super description\n\n00:01:30 chapter 1\n00:01:35 chapter 2', 100)).to.deep.equal([
       { timecode: 90, title: 'chapter 1' },
       { timecode: 95, title: 'chapter 2' }
     ])
-    expect(parseChapters('hi\n\n00:01:30 chapter 1\n00:01:35 chapter 2\nhi')).to.deep.equal([
+    expect(parseChapters('hi\n\n00:01:30 chapter 1\n00:01:35 chapter 2\nhi', 100)).to.deep.equal([
       { timecode: 90, title: 'chapter 1' },
       { timecode: 95, title: 'chapter 2' }
     ])
-    expect(parseChapters('hi\n\n00:01:30 chapter 1\n00:01:35 chapter 2\nhi\n00:01:40 chapter 3')).to.deep.equal([
+    expect(parseChapters('hi\n\n00:01:30 chapter 1\n00:01:35 chapter 2\nhi\n00:01:40 chapter 3', 100)).to.deep.equal([
       { timecode: 90, title: 'chapter 1' },
       { timecode: 95, title: 'chapter 2' }
+    ])
+  })
+
+  it('Should respect the max length option', function () {
+    expect(parseChapters('my super description\n\n00:01:30 chapter 1\n00:01:35 chapter 2', 3)).to.deep.equal([
+      { timecode: 90, title: 'cha' },
+      { timecode: 95, title: 'cha' }
     ])
   })
 })

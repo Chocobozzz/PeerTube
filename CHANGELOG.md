@@ -8,7 +8,7 @@
  * We've made some modifications in v6.0.0 IMPORTANT NOTES, so if you upgrade from PeerTube v6.0.0:
    * Ensure `location = /api/v1/videos/upload-resumable {` has been replaced by `location ~ ^/api/v1/videos/(upload-resumable|([^/]+/source/replace-resumable))$ {` in your nginx configuration
    * Ensure you updated `storage.web_videos` configuration value to use `web-videos/` directory name
-   * Ensure your directory name on filesystem is the same as `storage.web_videos` configuration
+   * Ensure your directory name on filesystem is the same as `storage.web_videos` configuration value: directory on filesystem must be renamed from `videos/` to `web-videos/` to represent the value of `storage.web_videos`
 
 ### Bug fixes
 

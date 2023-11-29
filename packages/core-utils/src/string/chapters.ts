@@ -2,7 +2,7 @@ import { timeToInt, timecodeRegexString } from '../common/date.js'
 
 const timecodeRegex = new RegExp(`^(${timecodeRegexString})\\s`)
 
-export function parseChapters (text: string) {
+export function parseChapters (text: string, maxTitleLength: number) {
   if (!text) return []
 
   const lines = text.split(/\r?\n|\r|\n/g)
@@ -25,8 +25,11 @@ export function parseChapters (text: string) {
     const timecode = timeToInt(timecodeText)
     const title = line.replace(matched[0], '')
 
-    chapters.push({ timecode, title })
+    chapters.push({ timecode, title: title.slice(0, maxTitleLength) })
   }
 
-  return chapters
+  // Only consider chapters if there are more than one
+  if (chapters.length > 1) return chapters
+
+  return []
 }
