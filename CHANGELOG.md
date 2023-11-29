@@ -1,5 +1,23 @@
 # Changelog
 
+## v6.0.1
+
+### IMPORTANT NOTES
+
+ * If you upgrade from PeerTube **< v6.0.0**, please follow 5.0.0 IMPORTANT NOTES
+ * We've made some modifications in v6.0.0 IMPORTANT NOTES, so if you upgrade from PeerTube 6.0.0:
+   * Ensure `location = /api/v1/videos/upload-resumable {` has been replaced by `location ~ ^/api/v1/videos/(upload-resumable|([^/]+/source/replace-resumable))$ {` in your nginx configuration
+   * Ensure you updated `storage.web_videos` configuration value to use `web-videos/` directory name
+   * Ensure your directory name on filesystem is the same as `storage.web_videos` configuration
+
+### Bug fixes
+
+ * Fix CPU going to 100% on odd cpu count
+ * Increase storyboard generation job TTL
+ * Add missing `generate-video-storyboard` job type in admin jobs list
+ * Regenerate storyboard after studio job
+
+
 ## v6.0.0
 
 ### IMPORTANT NOTES
