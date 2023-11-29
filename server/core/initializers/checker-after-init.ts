@@ -13,6 +13,7 @@ import { OAuthClientModel } from '../models/oauth/oauth-client.js'
 import { UserModel } from '../models/user/user.js'
 import { CONFIG, getLocalConfigFilePath, isEmailEnabled, reloadConfig } from './config.js'
 import { WEBSERVER } from './constants.js'
+import { basename } from 'path'
 
 async function checkActivityPubUrls () {
   const actor = await getServerActor()
@@ -223,6 +224,11 @@ function checkStorageConfig () {
           key
         )
       }
+    }
+
+    const webVideosDirname = basename(CONFIG.STORAGE.WEB_VIDEOS_DIR)
+    if (webVideosDirname !== 'web-videos') {
+      logger.warn(`storage.web_videos configuration should have a "web-videos" directory name (current value: "${webVideosDirname}")`)
     }
   }
 
