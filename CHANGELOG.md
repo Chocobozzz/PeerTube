@@ -20,7 +20,11 @@ We have many important notes in this release. We know it's a pain for sysadmin, 
     * See https://github.com/Chocobozzz/PeerTube/issues/5465 for more information
 
   * Configuration key that you must update in your `production.yaml` if not automatically done by your upgrade script:
-    * `storage.videos` must be **renamed** to `storage.web_videos`. The value of this configuration doesn't need to be changed: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L151
+    * `storage.videos` must be **renamed** to `storage.web_videos`: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L151
+    * Configuration value of `storage.web_videos` must have the directory name to be **changed** from `videos/` to `web-videos/`: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L151
+    * Directory on filesystem must be **renamed** from `videos/` to `web-videos/` to represent the value of `storage.web_videos`
+      * Classic installation: `mv '/var/www/peertube/storage/videos/' '/var/www/peertube/storage/web-videos/'`
+      * Docker installation: `mv '/path-to-docker-installation/docker-volume/videos/' '/path-to-docker-installation/docker-volume/web-videos/'`
     * `transcoding.webtorrent` must be **renamed** to `transcoding.web_videos`: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L522
     * `object_storage.videos` must be **renamed** to `object_storage.web_videos`. The value of `object_storage.web_videos.bucket_name` doesn't need to be changed: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L223
     * `storage.storyboards` must be **added**: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L157
