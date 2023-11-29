@@ -3,14 +3,11 @@ import { join } from 'path'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { createTorrentAndSetInfoHashFromPath } from '@server/helpers/webtorrent.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { UserModel } from '@server/models/user/user.js'
 import { MUser, MVideo, MVideoFile, MVideoFullLight, MVideoWithAllFiles } from '@server/types/models/index.js'
 import { getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import { VideoStudioEditionPayload, VideoStudioTask, VideoStudioTaskPayload } from '@peertube/peertube-models'
-import { federateVideoIfNeeded } from './activitypub/videos/index.js'
 import { JobQueue } from './job-queue/index.js'
 import { VideoStudioTranscodingJobHandler } from './runners/index.js'
-import { createOptimizeOrMergeAudioJobs } from './transcoding/create-transcoding-job.js'
 import { getTranscodingJobPriority } from './transcoding/transcoding-priority.js'
 import { buildNewFile, removeHLSPlaylist, removeWebVideoFile } from './video-file.js'
 import { VideoPathManager } from './video-path-manager.js'
@@ -108,11 +105,33 @@ export async function onVideoStudioEnded (options: {
   video.duration = await getVideoStreamDuration(outputPath)
   await video.save()
 
-  await federateVideoIfNeeded(video, false, undefined)
+  return JobQueue.Instance.createSequentialJobFlow(
+    {
+      type: 'generate-video-storyboard' as 'generate-video-storyboard',
+      payload: {
+        videoUUID: video.uuid,
+        federate: false
+      }
+    },
 
-  const user = await UserModel.loadByVideoId(video.id)
+    {
+      type: 'federate-video' as 'federate-video',
+      payload: {
+        videoUUID: video.uuid,
+        isNewVideo: false
+      }
+    },
 
-  await createOptimizeOrMergeAudioJobs({ video, videoFile: newFile, isNewVideo: false, user, videoFileAlreadyLocked: false })
+    {
+      type: 'transcoding-job-builder' as 'transcoding-job-builder',
+      payload: {
+        videoUUID: video.uuid,
+        optimizeJob: {
+          isNewVideo: false
+        }
+      }
+    }
+  )
 }
 
 // ---------------------------------------------------------------------------
