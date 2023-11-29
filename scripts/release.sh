@@ -133,6 +133,8 @@ find dist/ packages/core-utils/dist/ \
       git push origin master
       git checkout "$branch"
 
+      # Rebuild properly the server, with the declaration files
+      npm run build:server
       # Release types package
       npm run generate-types-package "$version"
       cd packages/types-generator/dist
