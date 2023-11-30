@@ -213,9 +213,6 @@ app.use(express.json({
   }
 }))
 
-// Cookies
-app.use(cookieParser())
-
 // W3C DNT Tracking Status
 app.use(advertiseDoNotTrack)
 
@@ -230,9 +227,6 @@ app.use('/api/' + API_VERSION, apiRouter)
 // Services (oembed...)
 app.use('/services', servicesRouter)
 
-// Plugins & themes
-app.use('/', pluginsRouter)
-
 app.use('/', activityPubRouter)
 app.use('/', feedsRouter)
 app.use('/', trackerRouter)
@@ -245,6 +239,12 @@ app.use('/', miscRouter)
 app.use('/', downloadRouter)
 app.use('/', lazyStaticRouter)
 app.use('/', objectStorageProxyRouter)
+
+// Cookies for plugins and HTML
+app.use(cookieParser())
+
+// Plugins & themes
+app.use('/', pluginsRouter)
 
 // Client files, last valid routes!
 const cliOptions = cli.opts<{ client: boolean, plugins: boolean }>()
