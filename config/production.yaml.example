@@ -225,6 +225,9 @@ object_storage:
     prefix: ''
     base_url: ''
 
+cdn:
+  web_videos_base_url: '' # Example: 'https://mirror.example.com'
+
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
 

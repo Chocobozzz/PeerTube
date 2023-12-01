@@ -256,6 +256,8 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
     if (video.isOwned()) {
       if (this.storage === VideoStorage.OBJECT_STORAGE) {
         return this.getMasterPlaylistObjectStorageUrl(video)
+      } else if (CONFIG.CDN.WEB_VIDEOS_BASE_URL) {
+        return CONFIG.CDN.WEB_VIDEOS_BASE_URL + this.getMasterPlaylistStaticPath(video)
       }
 
       return WEBSERVER.URL + this.getMasterPlaylistStaticPath(video)
@@ -278,6 +280,8 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
     if (video.isOwned()) {
       if (this.storage === VideoStorage.OBJECT_STORAGE) {
         return this.getSha256SegmentsObjectStorageUrl(video)
+      } else if (CONFIG.CDN.WEB_VIDEOS_BASE_URL) {
+        return CONFIG.CDN.WEB_VIDEOS_BASE_URL + this.getSha256SegmentsStaticPath(video)
       }
 
       return WEBSERVER.URL + this.getSha256SegmentsStaticPath(video)

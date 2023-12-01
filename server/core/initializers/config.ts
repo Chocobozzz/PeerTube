@@ -155,6 +155,9 @@ const CONFIG = {
       BASE_URL: config.get<string>('object_storage.streaming_playlists.base_url')
     }
   },
+  CDN: {
+    WEB_VIDEOS_BASE_URL: config.get<string>('cdn.web_videos_base_url')
+  },
   WEBSERVER: {
     SCHEME: config.get<boolean>('webserver.https') === true ? 'https' : 'http',
     WS: config.get<boolean>('webserver.https') === true ? 'wss' : 'ws',

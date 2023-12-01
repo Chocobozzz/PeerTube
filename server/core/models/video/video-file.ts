@@ -540,6 +540,8 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     if (video.isOwned()) {
       if (this.storage === VideoStorage.OBJECT_STORAGE) {
         return this.getObjectStorageUrl(video)
+      } else if (CONFIG.CDN.WEB_VIDEOS_BASE_URL) {
+        return CONFIG.CDN.WEB_VIDEOS_BASE_URL + this.getFileStaticPath(video)
       }
 
       return WEBSERVER.URL + this.getFileStaticPath(video)
@@ -579,7 +581,12 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
       ? join(STATIC_DOWNLOAD_PATHS.HLS_VIDEOS, `${video.uuid}-${this.resolution}-fragmented${this.extname}`)
       : join(STATIC_DOWNLOAD_PATHS.VIDEOS, `${video.uuid}-${this.resolution}${this.extname}`)
 
-    if (video.isOwned()) return WEBSERVER.URL + path
+    if (video.isOwned()) {
+      if (CONFIG.CDN.WEB_VIDEOS_BASE_URL) {
+        return CONFIG.CDN.WEB_VIDEOS_BASE_URL + path
+      }
+      return WEBSERVER.URL + path
+    }
 
     // FIXME: don't guess remote URL
     return buildRemoteVideoBaseUrl(video, path)

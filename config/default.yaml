@@ -227,6 +227,9 @@ object_storage:
     prefix: ''
     base_url: ''
 
+cdn:
+  web_videos_base_url: ''
+
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
 
