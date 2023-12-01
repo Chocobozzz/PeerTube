@@ -28,15 +28,31 @@ async function processCreateView (activity: ActivityView, byActor: MActorSignatu
     allowRefresh: false
   })
 
-  const viewerExpires = activity.expires
-    ? new Date(activity.expires)
-    : undefined
+  await VideoViewsManager.Instance.processRemoteView({
+    video,
+    viewerId: activity.id,
 
-  await VideoViewsManager.Instance.processRemoteView({ video, viewerId: activity.id, viewerExpires })
+    viewerExpires: activity.expires
+      ? new Date(activity.expires)
+      : undefined,
+    viewerResultCounter: getViewerResultCounter(activity)
+  })
 
   if (video.isOwned()) {
     // Forward the view but don't resend the activity to the sender
     const exceptions = [ byActor ]
     await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
   }
+}
+
+// Viewer protocol V2
+function getViewerResultCounter (activity: ActivityView) {
+  const result = activity.result
+
+  if (!activity.expires || result?.interactionType !== 'WatchAction' || result?.type !== 'InteractionCounter') return undefined
+
+  const counter = parseInt(result.userInteractionCount + '')
+  if (isNaN(counter)) return undefined
+
+  return counter
 }

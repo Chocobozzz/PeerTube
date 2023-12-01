@@ -1,4 +1,5 @@
-import { buildUUID, isTestOrDevInstance, sha256 } from '@peertube/peertube-node-utils'
+import { buildUUID, isTestOrDevInstance, isUsingViewersFederationV2, sha256 } from '@peertube/peertube-node-utils'
+import { exists } from '@server/helpers/custom-validators/misc.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { VIEW_LIFETIME } from '@server/initializers/constants.js'
 import { sendView } from '@server/lib/activitypub/send/send-view.js'
@@ -17,6 +18,7 @@ type Viewer = {
   id: string
   viewerScope: ViewerScope
   videoScope: VideoScope
+  viewerCount: number
   lastFederation?: number
 }
 
@@ -54,22 +56,48 @@ export class VideoViewerCounters {
       return false
     }
 
-    const newViewer = await this.addViewerToVideo({ viewerId, video, viewerScope: 'local' })
+    const newViewer = this.addViewerToVideo({ viewerId, video, viewerScope: 'local', viewerCount: 1 })
     await this.federateViewerIfNeeded(video, newViewer)
 
     return true
   }
 
-  async addRemoteViewer (options: {
+  addRemoteViewerOnLocalVideo (options: {
     video: MVideo
     viewerId: string
     viewerExpires: Date
   }) {
     const { video, viewerExpires, viewerId } = options
 
-    logger.debug('Adding remote viewer to video %s.', video.uuid, { ...lTags(video.uuid) })
+    logger.debug('Adding remote viewer to local video %s.', video.uuid, { viewerId, viewerExpires, ...lTags(video.uuid) })
 
-    await this.addViewerToVideo({ video, viewerExpires, viewerId, viewerScope: 'remote' })
+    this.addViewerToVideo({ video, viewerExpires, viewerId, viewerScope: 'remote', viewerCount: 1 })
+
+    return true
+  }
+
+  addRemoteViewerOnRemoteVideo (options: {
+    video: MVideo
+    viewerId: string
+    viewerExpires: Date
+    viewerResultCounter?: number
+  }) {
+    const { video, viewerExpires, viewerId, viewerResultCounter } = options
+
+    logger.debug(
+      'Adding remote viewer to remote video %s.', video.uuid,
+      { viewerId, viewerResultCounter, viewerExpires, ...lTags(video.uuid) }
+    )
+
+    this.addViewerToVideo({
+      video,
+      viewerExpires,
+      viewerId,
+      viewerScope: 'remote',
+      // The origin server sends a summary of all viewers, so we can replace our local copy
+      replaceCurrentViewers: exists(viewerResultCounter),
+      viewerCount: viewerResultCounter ?? 1
+    })
 
     return true
   }
@@ -83,17 +111,17 @@ export class VideoViewerCounters {
     let total = 0
 
     for (const viewers of this.viewersPerVideo.values()) {
-      total += viewers.filter(v => v.viewerScope === options.viewerScope && v.videoScope === options.videoScope).length
+      total += viewers.filter(v => v.viewerScope === options.viewerScope && v.videoScope === options.videoScope)
+        .reduce((p, c) => p + c.viewerCount, 0)
     }
 
     return total
   }
 
-  getViewers (video: MVideo) {
+  getTotalViewersOf (video: MVideoImmutable) {
     const viewers = this.viewersPerVideo.get(video.id)
-    if (!viewers) return 0
 
-    return viewers.length
+    return viewers?.reduce((p, c) => p + c.viewerCount, 0) || 0
   }
 
   buildViewerExpireTime () {
@@ -102,17 +130,19 @@ export class VideoViewerCounters {
 
   // ---------------------------------------------------------------------------
 
-  private async addViewerToVideo (options: {
+  private addViewerToVideo (options: {
     video: MVideoImmutable
     viewerId: string
     viewerScope: ViewerScope
+    viewerCount: number
+    replaceCurrentViewers?: boolean
     viewerExpires?: Date
   }) {
-    const { video, viewerExpires, viewerId, viewerScope } = options
+    const { video, viewerExpires, viewerId, viewerScope, viewerCount, replaceCurrentViewers } = options
 
     let watchers = this.viewersPerVideo.get(video.id)
 
-    if (!watchers) {
+    if (!watchers || replaceCurrentViewers) {
       watchers = []
       this.viewersPerVideo.set(video.id, watchers)
     }
@@ -125,12 +155,12 @@ export class VideoViewerCounters {
       ? 'remote'
       : 'local'
 
-    const viewer = { id: viewerId, expires, videoScope, viewerScope }
+    const viewer = { id: viewerId, expires, videoScope, viewerScope, viewerCount }
     watchers.push(viewer)
 
     this.idToViewer.set(viewerId, viewer)
 
-    await this.notifyClients(video.id, watchers.length)
+    this.notifyClients(video)
 
     return viewer
   }
@@ -162,7 +192,16 @@ export class VideoViewerCounters {
         if (newViewers.length === 0) this.viewersPerVideo.delete(videoId)
         else this.viewersPerVideo.set(videoId, newViewers)
 
-        await this.notifyClients(videoId, newViewers.length)
+        const video = await VideoModel.loadImmutableAttributes(videoId)
+
+        if (video) {
+          this.notifyClients(video)
+
+          // Let total viewers expire on remote instances if there are no more viewers
+          if (video.remote === false && newViewers.length !== 0) {
+            await this.federateTotalViewers(video)
+          }
+        }
       }
     } catch (err) {
       logger.error('Error in video clean viewers scheduler.', { err, ...lTags() })
@@ -171,13 +210,11 @@ export class VideoViewerCounters {
     this.processingViewerCounters = false
   }
 
-  private async notifyClients (videoId: string | number, viewersLength: number) {
-    const video = await VideoModel.loadImmutableAttributes(videoId)
-    if (!video) return
+  private notifyClients (video: MVideoImmutable) {
+    const totalViewers = this.getTotalViewersOf(video)
+    PeerTubeSocket.Instance.sendVideoViewsUpdate(video, totalViewers)
 
-    PeerTubeSocket.Instance.sendVideoViewsUpdate(video, viewersLength)
-
-    logger.debug('Video viewers update for %s is %d.', video.url, viewersLength, lTags())
+    logger.debug('Video viewers update for %s is %d.', video.url, totalViewers, lTags())
   }
 
   private generateViewerId (ip: string, videoUUID: string) {
@@ -190,8 +227,26 @@ export class VideoViewerCounters {
     const federationLimit = now - (VIEW_LIFETIME.VIEWER_COUNTER * 0.75)
 
     if (viewer.lastFederation && viewer.lastFederation > federationLimit) return
+    if (video.remote === false && isUsingViewersFederationV2()) return
 
-    await sendView({ byActor: await getServerActor(), video, type: 'viewer', viewerIdentifier: viewer.id })
+    await sendView({
+      byActor: await getServerActor(),
+      video,
+      viewersCount: 1,
+      viewerIdentifier: viewer.id
+    })
+
     viewer.lastFederation = now
+  }
+
+  private async federateTotalViewers (video: MVideoImmutable) {
+    if (!isUsingViewersFederationV2()) return
+
+    await sendView({
+      byActor: await getServerActor(),
+      video,
+      viewersCount: this.getTotalViewersOf(video),
+      viewerIdentifier: video.uuid
+    })
   }
 }

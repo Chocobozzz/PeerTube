@@ -9,7 +9,6 @@ export function Debounce (config: { timeoutMS: number }) {
 
       timeoutRef = setTimeout(() => {
         original.apply(this, args)
-
       }, config.timeoutMS)
     }
   }

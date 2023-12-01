@@ -196,11 +196,17 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
     uuid: 'sc:identifier'
   }),
 
+  View: buildContext({
+    WatchAction: 'sc:WatchAction',
+    InteractionCounter: 'sc:InteractionCounter',
+    interactionType: 'sc:interactionType',
+    userInteractionCount: 'sc:userInteractionCount'
+  }),
+
   Collection: buildContext(),
   Follow: buildContext(),
   Reject: buildContext(),
   Accept: buildContext(),
-  View: buildContext(),
   Announce: buildContext(),
   Comment: buildContext(),
   Delete: buildContext(),

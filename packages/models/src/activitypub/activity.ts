@@ -116,6 +116,11 @@ export interface ActivityView extends BaseActivity {
 
   // If sending a "viewer" event
   expires?: string
+  result?: {
+    type: 'InteractionCounter'
+    interactionType: 'WatchAction'
+    userInteractionCount: number
+  }
 }
 
 export interface ActivityDislike extends BaseActivity {

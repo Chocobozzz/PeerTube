@@ -35,7 +35,7 @@ export class VideoViews {
 
     await this.addView(video)
 
-    await sendView({ byActor: await getServerActor(), video, type: 'view', viewerIdentifier: buildUUID() })
+    await sendView({ byActor: await getServerActor(), video, viewerIdentifier: buildUUID() })
 
     return true
   }

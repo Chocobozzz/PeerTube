@@ -90,7 +90,7 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
     duration: video.duration,
 
     views: video.views,
-    viewers: VideoViewsManager.Instance.getViewers(video),
+    viewers: VideoViewsManager.Instance.getTotalViewersOf(video),
 
     likes: video.likes,
     dislikes: video.dislikes,

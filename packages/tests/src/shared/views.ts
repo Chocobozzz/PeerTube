@@ -30,8 +30,17 @@ async function processViewsBuffer (servers: PeerTubeServer[]) {
   await waitJobs(servers)
 }
 
-async function prepareViewsServers () {
-  const servers = await createMultipleServers(2)
+async function prepareViewsServers (options: {
+  viewersFederationV2?: boolean
+  viewExpiration?: string // default 1 second
+} = {}) {
+  const { viewExpiration = '1 second' } = options
+
+  const env = options?.viewersFederationV2 === true
+    ? { USE_VIEWERS_FEDERATION_V2: 'true' }
+    : undefined
+
+  const servers = await createMultipleServers(2, { views: { videos: { ip_view_expiration: viewExpiration } } }, { env })
   await setAccessTokensToServers(servers)
   await setDefaultVideoChannel(servers)
 

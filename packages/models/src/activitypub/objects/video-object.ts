@@ -18,6 +18,7 @@ export interface VideoObject {
   licence: ActivityIdentifierObject
   language: ActivityIdentifierObject
   subtitleLanguage: ActivityIdentifierObject[]
+
   views: number
 
   sensitive: boolean

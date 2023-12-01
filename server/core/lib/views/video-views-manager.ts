@@ -66,17 +66,29 @@ export class VideoViewsManager {
     video: MVideo
     viewerId: string | null
     viewerExpires?: Date
+    viewerResultCounter?: number
   }) {
-    const { video, viewerId, viewerExpires } = options
+    const { video, viewerId, viewerExpires, viewerResultCounter } = options
 
     logger.debug('Processing remote view for %s.', video.url, { viewerExpires, viewerId, ...lTags() })
 
-    if (viewerExpires) await this.videoViewerCounters.addRemoteViewer({ video, viewerId, viewerExpires })
-    else await this.videoViews.addRemoteView({ video })
+    // Viewer
+    if (viewerExpires) {
+      if (video.remote === false) {
+        this.videoViewerCounters.addRemoteViewerOnLocalVideo({ video, viewerId, viewerExpires })
+        return
+      }
+
+      this.videoViewerCounters.addRemoteViewerOnRemoteVideo({ video, viewerId, viewerExpires, viewerResultCounter })
+      return
+    }
+
+    // Just a view
+    await this.videoViews.addRemoteView({ video })
   }
 
-  getViewers (video: MVideo) {
-    return this.videoViewerCounters.getViewers(video)
+  getTotalViewersOf (video: MVideo) {
+    return this.videoViewerCounters.getTotalViewersOf(video)
   }
 
   getTotalViewers (options: {

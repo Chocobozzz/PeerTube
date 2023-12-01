@@ -21,133 +21,171 @@ describe('Test video views/viewers counters', function () {
     }
   }
 
-  before(async function () {
-    this.timeout(120000)
+  function runTests () {
+    describe('Test views counter on VOD', function () {
+      let videoUUID: string
 
-    servers = await prepareViewsServers()
-  })
+      before(async function () {
+        this.timeout(120000)
 
-  describe('Test views counter on VOD', function () {
-    let videoUUID: string
+        const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+        videoUUID = uuid
+
+        await waitJobs(servers)
+      })
+
+      it('Should not view a video if watch time is below the threshold', async function () {
+        await servers[0].views.simulateViewer({ id: videoUUID, currentTimes: [ 1, 2 ] })
+        await processViewsBuffer(servers)
+
+        await checkCounter('views', videoUUID, 0)
+      })
+
+      it('Should view a video if watch time is above the threshold', async function () {
+        await servers[0].views.simulateViewer({ id: videoUUID, currentTimes: [ 1, 4 ] })
+        await processViewsBuffer(servers)
+
+        await checkCounter('views', videoUUID, 1)
+      })
+
+      it('Should not view again this video with the same IP', async function () {
+        await servers[0].views.simulateViewer({ id: videoUUID, xForwardedFor: '0.0.0.1,127.0.0.1', currentTimes: [ 1, 4 ] })
+        await servers[0].views.simulateViewer({ id: videoUUID, xForwardedFor: '0.0.0.1,127.0.0.1', currentTimes: [ 1, 4 ] })
+        await processViewsBuffer(servers)
+
+        await checkCounter('views', videoUUID, 2)
+      })
+
+      it('Should view the video from server 2 and send the event', async function () {
+        await servers[1].views.simulateViewer({ id: videoUUID, currentTimes: [ 1, 4 ] })
+        await waitJobs(servers)
+        await processViewsBuffer(servers)
+
+        await checkCounter('views', videoUUID, 3)
+      })
+    })
+
+    describe('Test views and viewers counters on live and VOD', function () {
+      let liveVideoId: string
+      let vodVideoId: string
+      let command: FfmpegCommand
+
+      before(async function () {
+        this.timeout(240000);
+
+        ({ vodVideoId, liveVideoId, ffmpegCommand: command } = await prepareViewsVideos({ servers, live: true, vod: true }))
+      })
+
+      it('Should display no views and viewers', async function () {
+        await checkCounter('views', liveVideoId, 0)
+        await checkCounter('viewers', liveVideoId, 0)
+
+        await checkCounter('views', vodVideoId, 0)
+        await checkCounter('viewers', vodVideoId, 0)
+      })
+
+      it('Should view twice and display 1 view/viewer', async function () {
+        this.timeout(30000)
+
+        for (let i = 0; i < 3; i++) {
+          await servers[0].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
+          await servers[0].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
+          await servers[0].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
+          await servers[0].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
+
+          await wait(1000)
+        }
+
+        await waitJobs(servers)
+
+        await checkCounter('viewers', liveVideoId, 1)
+        await checkCounter('viewers', vodVideoId, 1)
+
+        await processViewsBuffer(servers)
+
+        await checkCounter('views', liveVideoId, 1)
+        await checkCounter('views', vodVideoId, 1)
+      })
+
+      it('Should wait and display 0 viewers but still have 1 view', async function () {
+        this.timeout(45000)
+
+        let error = false
+
+        do {
+          try {
+            await checkCounter('views', liveVideoId, 1)
+            await checkCounter('viewers', liveVideoId, 0)
+
+            await checkCounter('views', vodVideoId, 1)
+            await checkCounter('viewers', vodVideoId, 0)
+
+            error = false
+            await wait(2500)
+          } catch {
+            error = true
+          }
+        } while (error)
+      })
+
+      it('Should view on a remote and on local and display appropriate views/viewers', async function () {
+        this.timeout(30000)
+
+        await servers[0].views.simulateViewer({ id: vodVideoId, xForwardedFor: '0.0.0.1,127.0.0.1', currentTimes: [ 0, 5 ] })
+        await servers[0].views.simulateViewer({ id: vodVideoId, xForwardedFor: '0.0.0.1,127.0.0.1', currentTimes: [ 0, 5 ] })
+        await servers[0].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
+        await servers[1].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
+        await servers[1].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
+
+        await servers[0].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
+        await servers[1].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
+        await servers[1].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
+
+        await wait(3000) // Throttled federation
+        await waitJobs(servers)
+
+        await checkCounter('viewers', liveVideoId, 2)
+        await checkCounter('viewers', vodVideoId, 3)
+
+        await processViewsBuffer(servers)
+
+        await checkCounter('views', liveVideoId, 3)
+        await checkCounter('views', vodVideoId, 4)
+      })
+
+      after(async function () {
+        await stopFfmpeg(command)
+      })
+    })
+  }
+
+  describe('Federation V1', function () {
 
     before(async function () {
       this.timeout(120000)
 
-      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
-      videoUUID = uuid
-
-      await waitJobs(servers)
+      servers = await prepareViewsServers({ viewExpiration: '5 seconds', viewersFederationV2: false })
     })
 
-    it('Should not view a video if watch time is below the threshold', async function () {
-      await servers[0].views.simulateViewer({ id: videoUUID, currentTimes: [ 1, 2 ] })
-      await processViewsBuffer(servers)
-
-      await checkCounter('views', videoUUID, 0)
-    })
-
-    it('Should view a video if watch time is above the threshold', async function () {
-      await servers[0].views.simulateViewer({ id: videoUUID, currentTimes: [ 1, 4 ] })
-      await processViewsBuffer(servers)
-
-      await checkCounter('views', videoUUID, 1)
-    })
-
-    it('Should not view again this video with the same IP', async function () {
-      await servers[0].views.simulateViewer({ id: videoUUID, xForwardedFor: '0.0.0.1,127.0.0.1', currentTimes: [ 1, 4 ] })
-      await servers[0].views.simulateViewer({ id: videoUUID, xForwardedFor: '0.0.0.1,127.0.0.1', currentTimes: [ 1, 4 ] })
-      await processViewsBuffer(servers)
-
-      await checkCounter('views', videoUUID, 2)
-    })
-
-    it('Should view the video from server 2 and send the event', async function () {
-      await servers[1].views.simulateViewer({ id: videoUUID, currentTimes: [ 1, 4 ] })
-      await waitJobs(servers)
-      await processViewsBuffer(servers)
-
-      await checkCounter('views', videoUUID, 3)
-    })
-  })
-
-  describe('Test views and viewers counters on live and VOD', function () {
-    let liveVideoId: string
-    let vodVideoId: string
-    let command: FfmpegCommand
-
-    before(async function () {
-      this.timeout(240000);
-
-      ({ vodVideoId, liveVideoId, ffmpegCommand: command } = await prepareViewsVideos({ servers, live: true, vod: true }))
-    })
-
-    it('Should display no views and viewers', async function () {
-      await checkCounter('views', liveVideoId, 0)
-      await checkCounter('viewers', liveVideoId, 0)
-
-      await checkCounter('views', vodVideoId, 0)
-      await checkCounter('viewers', vodVideoId, 0)
-    })
-
-    it('Should view twice and display 1 view/viewer', async function () {
-      this.timeout(30000)
-
-      await servers[0].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
-      await servers[0].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
-      await servers[0].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
-      await servers[0].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
-
-      await waitJobs(servers)
-      await checkCounter('viewers', liveVideoId, 1)
-      await checkCounter('viewers', vodVideoId, 1)
-
-      await processViewsBuffer(servers)
-
-      await checkCounter('views', liveVideoId, 1)
-      await checkCounter('views', vodVideoId, 1)
-    })
-
-    it('Should wait and display 0 viewers but still have 1 view', async function () {
-      this.timeout(30000)
-
-      await wait(12000)
-      await waitJobs(servers)
-
-      await checkCounter('views', liveVideoId, 1)
-      await checkCounter('viewers', liveVideoId, 0)
-
-      await checkCounter('views', vodVideoId, 1)
-      await checkCounter('viewers', vodVideoId, 0)
-    })
-
-    it('Should view on a remote and on local and display 2 viewers and 3 views', async function () {
-      this.timeout(30000)
-
-      await servers[0].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
-      await servers[1].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
-      await servers[1].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
-
-      await servers[0].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
-      await servers[1].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
-      await servers[1].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
-
-      await waitJobs(servers)
-
-      await checkCounter('viewers', liveVideoId, 2)
-      await checkCounter('viewers', vodVideoId, 2)
-
-      await processViewsBuffer(servers)
-
-      await checkCounter('views', liveVideoId, 3)
-      await checkCounter('views', vodVideoId, 3)
-    })
+    runTests()
 
     after(async function () {
-      await stopFfmpeg(command)
+      await cleanupTests(servers)
     })
   })
 
-  after(async function () {
-    await cleanupTests(servers)
+  describe('Federation V2', function () {
+
+    before(async function () {
+      this.timeout(120000)
+
+      servers = await prepareViewsServers({ viewExpiration: '5 seconds', viewersFederationV2: true })
+    })
+
+    runTests()
+
+    after(async function () {
+      await cleanupTests(servers)
+    })
   })
 })
