@@ -255,12 +255,12 @@
       </trans-unit>
       <trans-unit id="7130219900907848048" datatype="html">
         <source><x id="START_LINK"/>Your video import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> succeeded </source>
-        <target state="translated"><x id="START_LINK"/>A videoimportálás <x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> sikerült </target>
+        <target state="translated"><x id="START_LINK"/>A videóimportálás <x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> sikerült </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="2099623308096969132" datatype="html">
         <source><x id="START_LINK"/>Your video import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> failed </source>
-        <target state="translated"><x id="START_LINK"/>A videoimportálás<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> nem sikerült </target>
+        <target state="translated"><x id="START_LINK"/>A videóimportálás<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> nem sikerült </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="3371351937331192777" datatype="html">
@@ -591,7 +591,7 @@
       </trans-unit>
       <trans-unit id="4435640428611044716" datatype="html">
         <source>Are you sure you want to delete Web Video files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete Web Video files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</target>
+        <target state="translated">Biztos, hogy törli {count, plural, =1 {1 videó} other {<x id="count"/> videó}} webes videófájljait?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">277</context>
@@ -829,7 +829,7 @@
       </trans-unit>
       <trans-unit id="5211109801015470691" datatype="html">
         <source>can be redefined by the users</source>
-        <target state="new">can be redefined by the users</target>
+        <target state="translated">a felhasználók felülírhatják</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">14</context>
@@ -845,7 +845,7 @@
       </trans-unit>
       <trans-unit id="2562108310156005500" datatype="html">
         <source>Video uploads</source>
-        <target state="translated">Videofeltöltések</target>
+        <target state="translated">Videófeltöltések</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
@@ -886,7 +886,7 @@
       </trans-unit>
       <trans-unit id="2602586221576511475">
         <source>Video quota</source>
-        <target>Videokvóta</target>
+        <target state="translated">Videókvóta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">146</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">146</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">133</context></context-group>
@@ -911,7 +911,7 @@
       </trans-unit>
       <trans-unit id="5812787579835788700" datatype="html">
         <source>HTTP import (YouTube, Vimeo, direct URL...)</source>
-        <target state="translated">HTTP-importálás (YouTube, Vimeo, közvetlen URL…)</target>
+        <target state="translated">HTTP-importálás (YouTube, Vimeo, közvetlen webcím…)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="4992364287704007430" datatype="html">
@@ -921,7 +921,7 @@
       </trans-unit>
       <trans-unit id="7417677567611860270" datatype="html">
         <source>Channel synchronization with other platforms (YouTube, Vimeo, ...)</source>
-        <target state="new">Channel synchronization with other platforms (YouTube, Vimeo, ...)</target>
+        <target state="translated">Csatornaszinkronizáció más platformokkal (YouTube, Vimeo, …)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="4603134051700562542" datatype="html">
@@ -931,7 +931,7 @@
       </trans-unit>
       <trans-unit id="5851173629316588976" datatype="html">
         <source>By users on this instance</source>
-        <target state="new">By users on this instance</target>
+        <target state="translated">A példány felhasználói szerint</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="2906587845957718064">
@@ -952,23 +952,23 @@
       </trans-unit>
       <trans-unit id="1408045022812097780" datatype="html">
         <source>views</source>
-        <target state="new">views</target>
+        <target state="translated">megtekintés</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="117954017715534854" datatype="html">
         <source>comments</source>
-        <target state="new">comments</target>
+        <target state="translated">hozzászólás</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="6090561122481711127" datatype="html">
         <source>hosted video</source>
-        <target state="new">hosted video</target>
+        <target state="translated">tárolt videó</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="6827125739942610231" datatype="html">
         <source>In this instance federation</source>
-        <target state="new">In this instance federation</target>
+        <target state="translated">Ebben a példányföderációban</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="8726138323871139597" datatype="html">
@@ -997,7 +997,7 @@
       </trans-unit>
       <trans-unit id="6994936570572804302" datatype="html">
         <source>Request an account</source>
-        <target state="new">Request an account</target>
+        <target state="translated">Fiók kérése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/signup-label.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1015,22 +1015,22 @@
       </trans-unit>
       <trans-unit id="732935381486595265" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</target>
+        <target state="translated">A(z) <x id="PH" equiv-text="name"/> fájlját nem sikerült átvinni a kiszolgálóproxy időtúllépése előtt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="5950472748615640135" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file was too large </source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file was too large </target>
+        <target state="translated">A(z) <x id="PH" equiv-text="name"/> fájl túl nagy volt </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="232729887013001609" datatype="html">
         <source>(max. size: <x id="PH" equiv-text="maxFileSize"/>)</source>
-        <target state="new"> (max. size: <x id="PH" equiv-text="maxFileSize"/>)</target>
+        <target state="translated">(legnagyobb méret: <x id="PH" equiv-text="maxFileSize"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="4892001398723483418" datatype="html">
         <source>Enable hotkeys in this web browser</source>
-        <target state="new">Enable hotkeys in this web browser</target>
+        <target state="translated">Gyorsbillentyűk engedélyezése ebben a webböngészőben</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/hotkeys/hotkeys-cheat-sheet.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1038,7 +1038,7 @@
       </trans-unit>
       <trans-unit id="4831075576673859232" datatype="html">
         <source>Keyboard Shortcuts</source>
-        <target state="new">Keyboard Shortcuts</target>
+        <target state="translated">Gyorsbillentyűk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/hotkeys/hotkeys-cheat-sheet.component.ts</context>
           <context context-type="linenumber">11</context>
@@ -1066,27 +1066,27 @@
       </trans-unit>
       <trans-unit id="9133713232258232158" datatype="html">
         <source>Unfederate</source>
-        <target state="new">Unfederate</target>
+        <target state="translated">Föderáció megszüntetése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="7312374115603954471" datatype="html">
         <source>This will ask remote instances to delete local videos</source>
-        <target state="new">This will ask remote instances to delete local videos</target>
+        <target state="translated">Ez megkéri a távoli példányokat, hogy töröljék a helyi videókat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="2728722206183105047" datatype="html">
         <source>This will ask remote instances to delete this video</source>
-        <target state="new">This will ask remote instances to delete this video</target>
+        <target state="translated">Ez megkéri a távoli példányokat, hogy töröljék ezt a videót</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3849007546028672808" datatype="html">
         <source>Blocking a live will automatically terminate the live stream.</source>
-        <target state="new"> Blocking a live will automatically terminate the live stream. </target>
+        <target state="translated">Az élő közvetítés blokkolása automatikusan megszakítja azt.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="901879091817013957" datatype="html">
         <source>{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> videos.}}</source>
-        <target state="new">{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> videos.}}</target>
+        <target state="translated">{count, plural, =1 {Blokkolva: <x id="videoName"/>.} other {<x id="count"/> videó blokkolva.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="1191071088182425837" datatype="html">
@@ -1112,7 +1112,7 @@
       </trans-unit>
       <trans-unit id="5418570600695268383" datatype="html">
         <source>Request new verification email</source>
-        <target state="new"> Request new verification email </target>
+        <target state="translated">Új ellenőrző e-mail kérése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="3997350348765083892">
@@ -1122,24 +1122,24 @@
       </trans-unit>
       <trans-unit id="175344056589888866" datatype="html">
         <source>Example: john@example.com</source>
-        <target state="new">Example: john@example.com</target>
+        <target state="translated">Példa: john@example.com</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context><context context-type="linenumber">28</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">49</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="1758058452376026925" datatype="html">
         <source>⚠️ Most email addresses do not include capital letters.</source>
-        <target state="translated">⚠️ A legtöbb e-mailcímben nincsenek nagybetűk.</target>
+        <target state="translated">⚠️ A legtöbb e-mail-címben nincsenek nagybetűk.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="6512825581399429064" datatype="html">
         <source>Enter the two-factor code generated by your phone app:</source>
-        <target state="new">Enter the two-factor code generated by your phone app:</target>
+        <target state="translated">Adja meg a telefonos alkalmazása által előállított kétlépcsős hitelesítési kódot:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="42685862314953751" datatype="html">
         <source>Two factor authentication token</source>
-        <target state="new">Two factor authentication token</target>
+        <target state="translated">Kétlépcsős hitelesítési token</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="1431416938026210429">
@@ -1161,7 +1161,7 @@
       </trans-unit>
       <trans-unit id="7736587919193927267" datatype="html">
         <source>I forgot my password</source>
-        <target state="new"> I forgot my password </target>
+        <target state="translated">Elfelejtettem a jelszavamat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
       <trans-unit id="2101170466365500913" datatype="html">
@@ -1171,12 +1171,12 @@
       </trans-unit>
       <trans-unit id="6584143415159913044" datatype="html">
         <source>This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Ez a példány engedélyezi a regisztrációt. Viszont alaposan olvassa el a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Feltételeket<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Feltételeket<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> mielőtt fiókot hoz létre. Ezen az oldalon kereshet másik példányt is, amely jobban megfelel az igényeinek: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="1394326136451741248" datatype="html">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">A példány jelenleg nem engedélyezi a felhasználói regisztrációt, megnézheti a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Feltételeket<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, hogy további részleteket tudjon meg, vagy hogy találjon egy olyan példányt, amelyen regisztrálhat egy fiókot, és ahová feltöltheti a saját videóit. Találja meg a sajátját a számos példány közül: <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="3183213940445113677" datatype="html">
@@ -1270,7 +1270,7 @@
       </trans-unit>
       <trans-unit id="1779569416352510488" datatype="html">
         <source>Why creating an account?</source>
-        <target state="new">Why creating an account?</target>
+        <target state="translated">Miért hozzon létre fiókot?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">2</context>
@@ -1278,7 +1278,7 @@
       </trans-unit>
       <trans-unit id="4502972592942341883" datatype="html">
         <source>As you probably noticed: creating an account is not necessary to watch video on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </source>
-        <target state="new"> As you probably noticed: creating an account is not necessary to watch video on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </target>
+        <target state="translated">Ahogy bizonyára észrevette, a(z) <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> videóinak megtekintéséhez nincs szüksége fiókra. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Viszont, ha létrehoz egy fiókot a(z) <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> oldalon, akkor ez a továbbiakat teszi lehetővé: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">4,8</context>
@@ -1286,7 +1286,7 @@
       </trans-unit>
       <trans-unit id="3514732276382852116" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos</source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Hozzászólás<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a videókhoz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1294,7 +1294,7 @@
       </trans-unit>
       <trans-unit id="6928511254538021087" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Subscribe<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to channels to be notified of new videos</source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Subscribe<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to channels to be notified of new videos</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Feliratkozás<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a csatornákra, hogy értesüljön az új videókról</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1302,7 +1302,7 @@
       </trans-unit>
       <trans-unit id="269413964682905563" datatype="html">
         <source>Have access to your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>watch history<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Have access to your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>watch history<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Hozzáférés a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>megtekintési előzményekhez<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">13</context>
@@ -1310,7 +1310,7 @@
       </trans-unit>
       <trans-unit id="7760677303939127268" datatype="html">
         <source>Create your channel to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Create your channel to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Saját csatorna létrehozása a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>videói közzétételéhez<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1318,7 +1318,7 @@
       </trans-unit>
       <trans-unit id="8576568778101631795" datatype="html">
         <source>Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form. </source>
-        <target state="new"> Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form. </target>
+        <target state="translated">Ha befejezte az űrlap kitöltését, akkor a(z) <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> moderátorainak jóvá kell hagyniuk a regisztrációját. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -1326,22 +1326,22 @@
       </trans-unit>
       <trans-unit id="5767014923310516" datatype="html">
         <source>Do you use Mastodon, ActivityPub or a RSS feed aggregator?</source>
-        <target state="new">Do you use Mastodon, ActivityPub or a RSS feed aggregator?</target>
+        <target state="translated">Használ Mastodont, ActivityPubot vagy egy RSS-hírolvasót?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="5853527794391720600" datatype="html">
         <source>You can already follow <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> using your favorite tool. </source>
-        <target state="new"> You can already follow <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> using your favorite tool. </target>
+        <target state="translated">Már most is követheti a(z) <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> példányt a kedvenc eszközével. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="7772973173091400795" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> has been created using <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, a video creation platform developed by Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is a french non-profit organization that offers alternatives to Big Tech's digital tools </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> has been created using <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, a video creation platform developed by Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is a french non-profit organization that offers alternatives to Big Tech's digital tools </target>
+        <target state="translated">A(z) <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> használatával lett létrehozva, a Framasoft által fejlesztett videómegosztó platformmal. A <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> egy francia nonprofit szervezet, amely alternatívát nyújt a technológiai nagyvállalatok digitális eszközeihez. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="2528596078796844503" datatype="html">
         <source>You want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Then you need to create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="new"> You want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Then you need to create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">Videókat szeretne <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>közzétenni<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a(z) <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> példányon? Akkor hozza létre az első <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>csatornáját<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -1349,7 +1349,7 @@
       </trans-unit>
       <trans-unit id="1335686739562009265" datatype="html">
         <source>You might want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>create a channel by theme:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> for example, you can create a channel named "SweetMelodies" to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology. </source>
-        <target state="new"> You might want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>create a channel by theme:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> for example, you can create a channel named "SweetMelodies" to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology. </target>
+        <target state="translated">Lehet, hogy <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>téma szerint hozna létre egy csatornát:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> például, hozzon létre egy „Dallamok” nevű csatornát a zongoraversenyeinek közzétételéhez, vagy egy másikat „Ökölógia” néven, amelyen az ökológiáról szóló videóit osztja meg. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">6,9</context>
@@ -1357,7 +1357,7 @@
       </trans-unit>
       <trans-unit id="5716290603546738313" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators allow you to publish up to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> of videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on their website. </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators allow you to publish up to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> of videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on their website. </target>
+        <target state="translated">A(z) <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> rendszergazdái legfeljebb <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/>-nyi videót engednek közzétenni<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a weboldalukon. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -1407,7 +1407,7 @@
       </trans-unit>
       <trans-unit id="3848077896245199337" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="translated">Fiók beállítása, videolejátszási listák kezelése, harmadik féltől származó alkalmazások felfedezése…</target>
+        <target state="translated">Fiók beállítása, videók lejátszási listáinak kezelése, harmadik féltől származó alkalmazások felfedezése…</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="6284442506490785579" datatype="html">
@@ -1432,7 +1432,7 @@
       </trans-unit>
       <trans-unit id="1852111465407058121" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="new"> Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of instance they are. </target>
+        <target state="translated">A látogatók számára rendkívül fontos, hogy megadja a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>példány nevét<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>beállítsa a leírását<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, valamint elmondja, hogy <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ki Ön<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, miért <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>hozta létre a példányát<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> és <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>meddig<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tervezi <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>működtetni<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Így megérthetik, hogy milyen típusú példány is ez. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="5329436244765769292" datatype="html">
@@ -1452,12 +1452,12 @@
       </trans-unit>
       <trans-unit id="9202089339019827574" datatype="html">
         <source>Configure my instance</source>
-        <target state="translated">Példányom beállítása</target>
+        <target state="translated">Saját példány beállítása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="5850698978356573024" datatype="html">
         <source>Confirm your password</source>
-        <target state="new">Confirm your password</target>
+        <target state="translated">Jelszó megerősítése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/confirm.component.ts</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="9005121595859995793" datatype="html">
@@ -1492,7 +1492,7 @@
       </trans-unit>
       <trans-unit id="1909672990242291785" datatype="html">
         <source>How you plan to pay for keeping your instance running</source>
-        <target state="translated">Hogy kíván fizetni, hogy a példánya tovább működhessen</target>
+        <target state="translated">Hogyan tervezi kifizetni a példánya további működését</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="869943508869906576" datatype="html">
@@ -1518,17 +1518,17 @@
       </trans-unit>
       <trans-unit id="7630362802781892981" datatype="html">
         <source>Interface</source>
-        <target state="new">Interface</target>
+        <target state="translated">Felhasználói felület</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="5330788940795142335" datatype="html">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG"/>the appropriate instance<x id="CLOSE_TAG_STRONG"/>. Without them, your instance may not be referenced on the <x id="START_LINK"/>JoinPeerTube website<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Fontolja meg ezeknek a mezőknek a beállítását, hogy az emberek kiválaszthassák <x id="START_TAG_STRONG"/>a megfelelő példányt <x id="CLOSE_TAG_STRONG"/>. Ezek nélkül a példánya lehet, hogy nem lesz megtalálható a <x id="START_LINK"/>JoinPeerTube weboldalon <x id="CLOSE_LINK"/>. </target>
+        <target state="translated">Fontolja meg ezeknek a mezőknek a beállítását, hogy az emberek kiválaszthassák <x id="START_TAG_STRONG"/>a megfelelő példányt<x id="CLOSE_TAG_STRONG"/>. Ezek nélkül a példánya lehet, hogy nem lesz megtalálható a <x id="START_LINK"/>JoinPeerTube weboldalon <x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="2728623642717111613" datatype="html">
         <source>Don't show me this warning anymore</source>
-        <target state="translated">Ne mutasd ezt a figyelmeztetést többet</target>
+        <target state="translated">Többé ne mutassa ezt a figyelmeztetést</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="7819314041543176992">
@@ -1545,7 +1545,7 @@
       </trans-unit>
       <trans-unit id="1254225561962113354" datatype="html">
         <source>Server too slow</source>
-        <target state="new">Server too slow</target>
+        <target state="translated">A kiszolgáló túl lassú</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -1553,7 +1553,7 @@
       </trans-unit>
       <trans-unit id="1599290313974118905" datatype="html">
         <source>Live blacklisted</source>
-        <target state="new">Live blacklisted</target>
+        <target state="translated">Az elő közvetítés feketelistára téve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">43</context>
@@ -1561,7 +1561,7 @@
       </trans-unit>
       <trans-unit id="5274374742436838139" datatype="html">
         <source>Max duration exceeded</source>
-        <target state="new">Max duration exceeded</target>
+        <target state="translated">A legnagyobb időtartam túllépve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -1569,7 +1569,7 @@
       </trans-unit>
       <trans-unit id="1677142486230902467" datatype="html">
         <source>Server error</source>
-        <target state="new">Server error</target>
+        <target state="translated">Kiszolgálóhiba</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -1577,7 +1577,7 @@
       </trans-unit>
       <trans-unit id="189546967059369850" datatype="html">
         <source>Quota exceeded</source>
-        <target state="new">Quota exceeded</target>
+        <target state="translated">A kvóta túllépve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -1585,7 +1585,7 @@
       </trans-unit>
       <trans-unit id="1327409825122054374" datatype="html">
         <source>Runner job cancelled</source>
-        <target state="new">Runner job cancelled</target>
+        <target state="translated">A futtató feladata megszakítva</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -1593,7 +1593,7 @@
       </trans-unit>
       <trans-unit id="2874360404134250412" datatype="html">
         <source>Error in runner job</source>
-        <target state="new">Error in runner job</target>
+        <target state="translated">Hiba a futtató feladatában</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -1601,7 +1601,7 @@
       </trans-unit>
       <trans-unit id="2657043015926552641" datatype="html">
         <source>Unknown error</source>
-        <target state="new">Unknown error</target>
+        <target state="translated">Ismeretlen hiba</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -1609,7 +1609,7 @@
       </trans-unit>
       <trans-unit id="1439766333173070230" datatype="html">
         <source>Invalid input video stream</source>
-        <target state="new">Invalid input video stream</target>
+        <target state="translated">Érvénytelen bemeneti videófolyam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -1652,7 +1652,7 @@
       </trans-unit>
       <trans-unit id="3430483831942247060" datatype="html">
         <source>Help share videos</source>
-        <target state="translated">Segítség videók megosztásában</target>
+        <target state="translated">Segítség a videók megosztásában</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="7005745151564974365" datatype="html">
@@ -1668,7 +1668,7 @@
       </trans-unit>
       <trans-unit id="1039157642448320025" datatype="html">
         <source>FAQ (Frequently Asked Questions) - about PeerTube</source>
-        <target state="new">FAQ (Frequently Asked Questions) - about PeerTube</target>
+        <target state="translated">GYIK (gyakran ismételt kérdések) – a PeerTube-ról</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">164</context>
@@ -1723,7 +1723,7 @@
       </trans-unit>
       <trans-unit id="667372110624203230" datatype="html">
         <source>Import jobs concurrency</source>
-        <target state="translated">Importálási folyamat konkurencia</target>
+        <target state="translated">Importálási feladatok párhuzamosítása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">277</context></context-group>
       </trans-unit>
       <trans-unit id="2184839376696112704" datatype="html">
@@ -1739,12 +1739,12 @@
       </trans-unit>
       <trans-unit id="5997625369044180192" datatype="html">
         <source>Allow import with HTTP URL (e.g. YouTube)</source>
-        <target state="translated">Importálás engedélyezése HTTP URL-ről (pl. YouTube)</target>
+        <target state="translated">Importálás engedélyezése a HTTP webcímekről (például YouTube)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">291</context></context-group>
       </trans-unit>
       <trans-unit id="2095604754338363597" datatype="html">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="new">⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</target>
+        <target state="translated">⚠️ Ha be van kapcsolva, akkor javasoljuk <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>egy HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> használatát, hogy megakadályozza, hogy a PeerTube kiszolgálója privát webcímeket érjen el.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">294</context></context-group>
       </trans-unit>
       <trans-unit id="7627544798203088407" datatype="html">
@@ -1767,7 +1767,7 @@
       </trans-unit>
       <trans-unit id="2948577454705183445" datatype="html">
         <source>on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">ezen: <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">23,24</context>
@@ -1775,37 +1775,37 @@
       </trans-unit>
       <trans-unit id="8246967116432095499" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>I already have an account<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, I log in </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>I already have an account<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, I log in </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>Már van fiókom<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, bejelentkezem </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="6075115017891566450" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Term"/>Terms<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Term"/>Terms<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/></target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>A(z) <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Term"/>feltételei<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="5788965650054506209" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>Setup<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>your account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>Setup<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>your account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Saját fiók<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>beállítása<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="6090939006626576593" datatype="html">
         <source>My channel</source>
-        <target state="new">My channel</target>
+        <target state="translated">Saját csatorna</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="3071761663064320665" datatype="html">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>Create<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your first channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>Create<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your first channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>Hozza létre<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>az első csatornáját<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="3761381527105312450" datatype="html">
         <source>I don't want to create a channel</source>
-        <target state="new">I don't want to create a channel</target>
+        <target state="translated">Nem akarok csatornát létrehozni</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="1792963373738226329" datatype="html">
         <source>You will be able to create a channel later</source>
-        <target state="new">You will be able to create a channel later</target>
+        <target state="translated">Később is fog tudni csatornát létrehozni</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="7922989125096435449" datatype="html">
@@ -1878,12 +1878,12 @@
       </trans-unit>
       <trans-unit id="3343007694071351756" datatype="html">
         <source>We couldn't find any video tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="translated">Nem található videó ehhez az URL-hez <x id="INTERPOLATION" equiv-text="{{ pathname }}"/>, amelyet felkeresett volna.</target>
+        <target state="translated">Nem található videó a keresett webcímhez: <x id="INTERPOLATION" equiv-text="{{ pathname }}"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="7366678433039425999" datatype="html">
         <source>We couldn't find any resource tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="translated">Nem található erőforrás ehhez az URL-hez <x id="INTERPOLATION" equiv-text="{{ pathname }}"/>, amelyet felkeresett volna.</target>
+        <target state="translated">Nem található erőforrás a keresett webcímhez: <x id="INTERPOLATION" equiv-text="{{ pathname }}"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="3522707340816553139" datatype="html">
@@ -1909,7 +1909,7 @@
       </trans-unit>
       <trans-unit id="3209594685692897380" datatype="html">
         <source>You may have typed the address or URL incorrectly</source>
-        <target state="translated">Hibásan írta be a címet vagy URL-t</target>
+        <target state="translated">Hibásan írta be a webcímet</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="3290262698447971494" datatype="html">
@@ -1920,7 +1920,7 @@
       </trans-unit>
       <trans-unit id="8497991113445747319" datatype="html">
         <source>You might need to login to see the video.</source>
-        <target state="new">You might need to login to see the video.</target>
+        <target state="translated">Lehet, hogy be kell jelentkeznie a videó megtekintéséhez.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">30</context>
@@ -1928,7 +1928,7 @@
       </trans-unit>
       <trans-unit id="250608669543270729" datatype="html">
         <source>You might need to login to see the resource.</source>
-        <target state="new">You might need to login to see the resource.</target>
+        <target state="translated">Lehet, hogy be kell jelentkeznie az erőforrás megtekintéséhez.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">31</context>
@@ -2029,7 +2029,7 @@
       </trans-unit>
       <trans-unit id="8151924435547335490" datatype="html">
         <source>Upload failed</source>
-        <target state="new">Upload failed</target>
+        <target state="translated">A feltöltés sikertelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">12</context>
@@ -2146,7 +2146,7 @@
       </trans-unit>
       <trans-unit id="8244789432276387088" datatype="html">
         <source>Result types</source>
-        <target state="new">Result types</target>
+        <target state="translated">Eredménytípusok</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">187</context>
@@ -2193,37 +2193,37 @@
       </trans-unit>
       <trans-unit id="1909308046360229945">
         <source>Add caption</source>
-        <target>Képaláírás hozzáadása</target>
+        <target state="translated">Felirat hozzáadása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="753928283782809091">
         <source>Select the caption file</source>
-        <target>A képaláírásfájl kiválasztása</target>
+        <target state="translated">A feliratfájl kiválasztása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="4616828176080418150">
         <source>This will replace an existing caption!</source>
-        <target>Ez lecseréli a meglévő képaláírást!</target>
+        <target state="translated">Ez lecseréli a meglévő feliratot!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="2752121353049766867">
         <source>Add this caption</source>
-        <target>Képaláírás hozzáadása</target>
+        <target state="translated">Felirat hozzáadása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="480001148850006323" datatype="html">
         <source>Edit caption</source>
-        <target state="new">Edit caption</target>
+        <target state="translated">Felirat szerkesztése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal-content/video-caption-edit-modal-content.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="6838559377527923778" datatype="html">
         <source>Caption</source>
-        <target state="new">Caption</target>
+        <target state="translated">Felirat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal-content/video-caption-edit-modal-content.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="1989971680596153649" datatype="html">
         <source>Edit this caption</source>
-        <target state="new">Edit this caption</target>
+        <target state="translated">Felirat szerkesztése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal-content/video-caption-edit-modal-content.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="5701618810648052610">
@@ -2244,7 +2244,7 @@
       </trans-unit>
       <trans-unit id="6191471816002237724" datatype="html">
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target state="new">Video descriptions are truncated by default and require manual action to expand them.</target>
+        <target state="translated">A videóleírások alapértelmezetten rövidítve vannak, és kézileg kell őket kibontani.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">48</context>
@@ -2252,7 +2252,7 @@
       </trans-unit>
       <trans-unit id="4621588014938487698" datatype="html">
         <source>A timestamp (<x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>00:05<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> for example) is automatically converted into a link to a part of the video.</source>
-        <target state="new">A timestamp (<x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>00:05<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> for example) is automatically converted into a link to a part of the video.</target>
+        <target state="translated">Az időbélyegek (például <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>00:05<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>) automatikusan a videó egy adott részére mutató hivatkozásokká lesznek alakítva.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">52</context>
@@ -2332,7 +2332,7 @@
       </trans-unit>
       <trans-unit id="7596115240533332749" datatype="html">
         <source>Open quick filters</source>
-        <target state="new">Open quick filters</target>
+        <target state="translated">Gyors szűrők megnyitása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">4</context>
@@ -2386,42 +2386,42 @@
       </trans-unit>
       <trans-unit id="8025853188527690631" datatype="html">
         <source>Registration reason</source>
-        <target state="new">Registration reason</target>
+        <target state="translated">Regisztráció oka</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="5767444971673380379" datatype="html">
         <source>Moderation response</source>
-        <target state="new">Moderation response</target>
+        <target state="translated">Moderátori válasz</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="2710484935079923248" datatype="html">
         <source>Requested on <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;     &lt;/"/></source>
-        <target state="new">Requested on <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;     &lt;/"/></target>
+        <target state="translated">Kérés ideje: <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;     &lt;/"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="7009543831499017491" datatype="html">
         <source>Registration reason:</source>
-        <target state="new">Registration reason:</target>
+        <target state="translated">Regisztráció oka:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context><context context-type="linenumber">112</context></context-group>
       </trans-unit>
       <trans-unit id="5199584494687692924" datatype="html">
         <source>Moderation response:</source>
-        <target state="new">Moderation response:</target>
+        <target state="translated">Moderátori válasz:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context><context context-type="linenumber">117</context></context-group>
       </trans-unit>
       <trans-unit id="7902116364830754147" datatype="html">
         <source>No registrations found matching current filters.</source>
-        <target state="new">No registrations found matching current filters.</target>
+        <target state="translated">Nem találhatók a jelenlegi szűrőknek megfelelő regisztrációk.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
       <trans-unit id="178076727880316864" datatype="html">
         <source>No registrations found.</source>
-        <target state="new">No registrations found.</target>
+        <target state="translated">Nem találhatók regisztrációk.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context><context context-type="linenumber">131</context></context-group>
       </trans-unit>
       <trans-unit id="977007520755394668" datatype="html">
         <source>Accept this request</source>
-        <target state="new">Accept this request</target>
+        <target state="translated">Kérés elfogadása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -2429,7 +2429,7 @@
       </trans-unit>
       <trans-unit id="2571315112879096897" datatype="html">
         <source>Reject this request</source>
-        <target state="new">Reject this request</target>
+        <target state="translated">Kérés elutasítása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -2437,7 +2437,7 @@
       </trans-unit>
       <trans-unit id="2518898597119712407" datatype="html">
         <source>Remove this request</source>
-        <target state="new">Remove this request</target>
+        <target state="translated">Kérés eltávolítása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -2445,7 +2445,7 @@
       </trans-unit>
       <trans-unit id="5778734409199071482" datatype="html">
         <source>Remove the request from the list. The user can register again.</source>
-        <target state="new">Remove the request from the list. The user can register again.</target>
+        <target state="translated">A kérés eltávolítása a listából. A felhasználó újból regisztrálhat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -2453,17 +2453,17 @@
       </trans-unit>
       <trans-unit id="6096602245926393232" datatype="html">
         <source>Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</source>
-        <target state="new">Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</target>
+        <target state="translated">Biztos, hogy {count, plural, =1 {törli <x id="username"/> regisztrációs kérését?} other {töröl <x id="count"/> regisztrációs kérést?}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="9152096266184328708" datatype="html">
         <source>Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</source>
-        <target state="new">Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</target>
+        <target state="translated">{count, plural, =1 {<x id="username"/> regisztrációs kérése} other {<x id="count"/> regisztrációs kérés}} eltávolítva</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
       <trans-unit id="2806917038528218276" datatype="html">
         <source>FAQ</source>
-        <target state="translated">Gyakori kérdések</target>
+        <target state="translated">GYIK</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">164</context></context-group>
       </trans-unit>
       <trans-unit id="8942351587754185907" datatype="html">
@@ -2473,7 +2473,7 @@
       </trans-unit>
       <trans-unit id="5503656190856739184" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2023</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2023</target>
+        <target state="translated">a gépházban: PeerTube – CopyLeft 2015-2023</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">181</context></context-group>
       </trans-unit>
       <trans-unit id="3722967224215437913" datatype="html">
@@ -2503,7 +2503,7 @@
       </trans-unit>
       <trans-unit id="1124038634267013139" datatype="html">
         <source>The video may be unplayable during the transcoding process. It's the reason why we prefer to publish publicly the video after transcoding.</source>
-        <target state="new">The video may be unplayable during the transcoding process. It's the reason why we prefer to publish publicly the video after transcoding.</target>
+        <target state="translated">Ez a videó lehet, hogy nem játszható le az átkódolás folyamata alatt. Ez az oka annak, hogy jobban szeretjük csak az átkódolás után közzétenni a videókat.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">157</context></context-group>
       </trans-unit>
       <trans-unit id="5984574397847510001">
@@ -2513,7 +2513,7 @@
       </trans-unit>
       <trans-unit id="2142169012597585513">
         <source>Add another caption</source>
-        <target>Másik képaláírás hozzáadása</target>
+        <target state="translated">Másik felirat hozzáadása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">180</context></context-group>
       </trans-unit>
       <trans-unit id="4525569337497033381">
@@ -2523,7 +2523,7 @@
       </trans-unit>
       <trans-unit id="4335724652642647824" datatype="html">
         <source>Already uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | date }}"/> ✔</source>
-        <target state="new">Already uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | date }}"/>	✔</target>
+        <target state="translated">Már ekkor fel lett töltve: <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | date }}"/> ✔</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">193</context></context-group>
       </trans-unit>
       <trans-unit id="73284819990858102">
@@ -2538,12 +2538,12 @@
       </trans-unit>
       <trans-unit id="8541869921865486762" datatype="html">
         <source>Will be edited on update</source>
-        <target state="new">Will be edited on update</target>
+        <target state="translated">Frissítéskor szerkesztve lesz</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">210</context></context-group>
       </trans-unit>
       <trans-unit id="4013233634947488312" datatype="html">
         <source>Cancel edition</source>
-        <target state="new">Cancel edition</target>
+        <target state="translated">Szerkesztés megszakítása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">212</context></context-group>
       </trans-unit>
       <trans-unit id="7879454016898626211">
@@ -2558,12 +2558,12 @@
       </trans-unit>
       <trans-unit id="360396717319152766">
         <source>No captions for now.</source>
-        <target>Nincsenek képaláírások most.</target>
+        <target state="translated">Egyelőre nincsenek feliratok.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">225</context></context-group>
       </trans-unit>
       <trans-unit id="5096495468612049743" datatype="html">
         <source>Chapters</source>
-        <target state="new">Chapters</target>
+        <target state="translated">Fejezetek</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">234</context>
@@ -2571,7 +2571,7 @@
       </trans-unit>
       <trans-unit id="7840115150430999864" datatype="html">
         <source>Timecode</source>
-        <target state="new">Timecode</target>
+        <target state="translated">Időkód</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">244</context>
@@ -2579,7 +2579,7 @@
       </trans-unit>
       <trans-unit id="7423239318801197963" datatype="html">
         <source>Chapter name</source>
-        <target state="new">Chapter name</target>
+        <target state="translated">Fejezetnév</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">246</context>
@@ -2597,12 +2597,12 @@
       </trans-unit>
       <trans-unit id="4964217545822568684" datatype="html">
         <source>Privacy of the new replay</source>
-        <target state="new">Privacy of the new replay</target>
+        <target state="translated">Az új visszajátszás adatvédelmi beállítása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">344</context></context-group>
       </trans-unit>
       <trans-unit id="1966495339378120213" datatype="html">
         <source>Latency mode</source>
-        <target state="new">Latency mode</target>
+        <target state="translated">Késleltetési mód</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">351</context></context-group>
       </trans-unit>
       <trans-unit id="8891497955962997247" datatype="html">
@@ -2620,8 +2620,7 @@
       </trans-unit>
       <trans-unit id="1037891113581600591" datatype="html">
         <source>Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt; When a video is uploaded in this channel, the video support field will be automatically filled by this text.</source>
-        <target state="new">Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt;
-      When a video is uploaded in this channel, the video support field will be automatically filled by this text.</target>
+        <target state="translated">Rövid szöveg, amely ismerteti, hogy miként támogathatják a csatornáját (tagsági platform…).&lt;br /&gt; Ha egy videó feltöltésre kerül a csatornára, akkor a videó támogatási mezője automatikusan ezzel a szöveggel lesz kitöltve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">64,65</context>
@@ -2633,27 +2632,27 @@
       </trans-unit>
       <trans-unit id="1359533927353954373" datatype="html">
         <source>View account</source>
-        <target state="translated">Fiók megjelenítése</target>
+        <target state="translated">Fiók megtekintése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="3799746968259478616" datatype="html">
         <source>View account</source>
-        <target state="translated">Fiók megjelenítése</target>
+        <target state="translated">Fiók megtekintése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="6778225321073009261" datatype="html">
         <source>View owner account</source>
-        <target state="translated">Tulajdonos fiók megjelenítése</target>
+        <target state="translated">Tulajdonos fiókjának megtekintése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="8798391261676185924" datatype="html">
         <source>VIDEO CHANNEL</source>
-        <target state="translated">VIDEÓ CSATORNA</target>
+        <target state="translated">VIDEÓCSATORNA</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="3233726805394397544" datatype="html">
         <source>Handle copied</source>
-        <target state="new">Handle copied</target>
+        <target state="translated">Azonosító másolva</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context>
           <context context-type="linenumber">69</context>
@@ -2661,27 +2660,27 @@
       </trans-unit>
       <trans-unit id="5121874940679887597" datatype="html">
         <source>Copy channel handle</source>
-        <target state="translated">Csatorna nevének másolása</target>
+        <target state="translated">Csatornaazonosító másolása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="2486917589932345430" datatype="html">
         <source>OWNER ACCOUNT</source>
-        <target state="translated">TULAJDONOS FIÓK</target>
+        <target state="translated">TULAJDONOS FIÓKJA</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="1952020204339597057" datatype="html">
         <source>Short text to tell people how they can support you (membership platform...).</source>
-        <target state="translated">Rövid szöveg, amely ismerteti az embereknek, hogy hogyan támogathatják Önt (tagsági platform…).</target>
+        <target state="translated">Rövid szöveg, amely ismerteti, hogy miként támogathatják Önt (tagsági platform…).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">388</context></context-group>
       </trans-unit>
       <trans-unit id="7003790776240394114" datatype="html">
         <source>Filename</source>
-        <target state="new">Filename</target>
+        <target state="translated">Fájlnév</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">404</context></context-group>
       </trans-unit>
       <trans-unit id="1186960092655764809" datatype="html">
         <source>Name of the uploaded file</source>
-        <target state="new"> Name of the uploaded file </target>
+        <target state="translated">A feltöltött fájl neve</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">408</context></context-group>
       </trans-unit>
       <trans-unit id="7958716262877895706">
@@ -2701,45 +2700,45 @@
       </trans-unit>
       <trans-unit id="54931094224146544" datatype="html">
         <source>Small latency</source>
-        <target state="new">Small latency</target>
+        <target state="translated">Kis késleltetés</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="668281328725856861" datatype="html">
         <source>Reduce latency to ~15s disabling P2P</source>
-        <target state="new">Reduce latency to ~15s disabling P2P</target>
+        <target state="translated">A késleltetés ~15 mp-re csökkentése, kikapcsolva a P2P forgalmat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="5607669932062416162" datatype="html">
         <source>Default</source>
-        <target state="new">Default</target>
+        <target state="translated">Alapértelmezett</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context><context context-type="linenumber">54</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.ts</context><context context-type="linenumber">49</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="4299493457408757206" datatype="html">
         <source>Average latency of 30s</source>
-        <target state="new">Average latency of 30s</target>
+        <target state="translated">30 mp-es átlagos késleltetés</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="3378360148342029710" datatype="html">
         <source>High latency</source>
-        <target state="new">High latency</target>
+        <target state="translated">Magas késleltetés</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="369497609327288447" datatype="html">
         <source>Average latency of 60s increasing P2P ratio</source>
-        <target state="new">Average latency of 60s increasing P2P ratio</target>
+        <target state="translated">60 mp-es átlagos késleltetés, növelve a P2P forgalom arányát</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="8693603235657020323" datatype="html">
         <source>Other</source>
-        <target state="new">Other</target>
+        <target state="translated">Egyéb</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">228</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="2200003513633568069">
         <source>Enable video comments</source>
-        <target>Videó hozzászólások engedélyezése</target>
+        <target state="translated">Videó hozzászólásainak engedélyezése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">443</context></context-group>
       </trans-unit>
       <trans-unit id="8896564060463626070">
@@ -2754,24 +2753,24 @@
       </trans-unit>
       <trans-unit id="5407145687662795944" datatype="html">
         <source>Video thumbnail</source>
-        <target state="new">Video thumbnail</target>
+        <target state="translated">Videó bélyegképe</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">376</context></context-group>
       </trans-unit>
       <trans-unit id="2375260419993138758">
         <source>URL</source>
-        <target>URL</target>
+        <target state="translated">Webcím</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">6</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">117</context></context-group>
       </trans-unit>
       <trans-unit id="6760671759540007434" datatype="html">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="translated">Bármilyen a <x id="START_LINK"/>youtube-dl által támogatott<x id="CLOSE_LINK"/> vagy médiafájlra mutató URL-t importálhat. Győződjön meg arról, hogy tartalomterjesztési jogokkal rendelkezik, különben jogi problémákba keverheti magát és a példányát. </target>
+        <target state="translated">Bármilyen a <x id="START_LINK"/>youtube-dl által támogatott<x id="CLOSE_LINK"/> vagy médiafájlra mutató webcímet importálhat. Győződjön meg arról, hogy tartalomterjesztési jogokkal rendelkezik, különben jogi problémákba keverheti magát és a példányát. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="25952900092483482" datatype="html">
         <source>You can also synchronize a remote channel in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>your library<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> You can also synchronize a remote channel in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>your library<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Szinkronizálhat egy távoli csatornát a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>könyvtárába<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="460353452916242022">
@@ -2848,7 +2847,7 @@
       </trans-unit>
       <trans-unit id="2127094963121208963" datatype="html">
         <source>Total video quota</source>
-        <target state="translated">Teljes videokvóta</target>
+        <target state="translated">Teljes videókvóta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">120</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-quota.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
@@ -2904,12 +2903,12 @@
       </trans-unit>
       <trans-unit id="5757542293078916779" datatype="html">
         <source>Replace video file</source>
-        <target state="new">Replace video file</target>
+        <target state="translated">Videófájl cseréje</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="7042425445354775897" datatype="html">
         <source>⚠️ Uploading a new version of your video will completely erase the current version</source>
-        <target state="new">⚠️ Uploading a new version of your video will completely erase the current version</target>
+        <target state="translated">⚠️ A videó új verziójának feltöltése teljesen törli a jelenlegi verziót</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="7225855031009203336" datatype="html">
@@ -2980,7 +2979,7 @@
       </trans-unit>
       <trans-unit id="58134197356653483" datatype="html">
         <source>Stream multiple times using the same URL</source>
-        <target state="translated">Közvetítés többször ugyanazzal az URL-lel</target>
+        <target state="translated">Közvetítés többször ugyanazzal a webcímmel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="8218579597782287078" datatype="html">
@@ -3015,7 +3014,7 @@
       </trans-unit>
       <trans-unit id="2061223017941329156">
         <source>Import with URL</source>
-        <target>Importálás URL-lel</target>
+        <target state="translated">Importálás webcímmel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="8740142697043012403">
@@ -3079,7 +3078,7 @@
       </trans-unit>
       <trans-unit id="8920371331444717794" datatype="html">
         <source>Only display embed URL</source>
-        <target state="new">Only display embed URL</target>
+        <target state="translated">Csak a beágyazási webcím megjelenítése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">82</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">191</context></context-group>
       </trans-unit>
@@ -3120,7 +3119,7 @@
       </trans-unit>
       <trans-unit id="1122876732223594710" datatype="html">
         <source>The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).</source>
-        <target state="translated">Az URL nem biztonságos (nem HTTPS), ezért a beágyazott videó nem fog működni a HTTPS weboldalakon (a webböngészők letiltják a nem biztonságos HTTP kéréseket a HTTPS weboldalakon).</target>
+        <target state="translated">A webcím nem biztonságos (nem HTTPS), ezért a beágyazott videó nem fog működni a HTTPS-t használó weboldalakon (a webböngészők letiltják a nem biztonságos HTTP-kéréseket a HTTPS-t használó weboldalakon).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">56</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
@@ -3177,7 +3176,7 @@
       </trans-unit>
       <trans-unit id="5908032061347078472" datatype="html">
         <source>Use origin instance URL</source>
-        <target state="translated">Eredeti példány URL-jének használata</target>
+        <target state="translated">Eredeti példány webcímének használata</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">237</context></context-group>
       </trans-unit>
       <trans-unit id="6212841954039032241" datatype="html">
@@ -3615,7 +3614,7 @@
       </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
         <source>Video redundancies</source>
-        <target state="translated">Videoredundanciák</target>
+        <target state="translated">Videók redundanciája</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="3516494528184217808" datatype="html">
@@ -3651,12 +3650,12 @@
       </trans-unit>
       <trans-unit id="7944777648309302794" datatype="html">
         <source>Feed URL</source>
-        <target state="translated">Lista URL</target>
+        <target state="translated">Lista webcíme</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="6086365181226161548" datatype="html">
         <source>Feed Token</source>
-        <target state="translated">Lista Token</target>
+        <target state="translated">Lista tokenje</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="6492684506192237359" datatype="html">
@@ -3677,13 +3676,13 @@
       </trans-unit>
       <trans-unit id="4965562695253171955" datatype="html">
         <source>Clear filter</source>
-        <target state="new">Clear filter</target>
+        <target state="translated">Szűrő törlése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context><context context-type="linenumber">28</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/simple-search-input.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="6738889286784295744" datatype="html">
         <source>Toggle</source>
-        <target state="new">Toggle</target>
+        <target state="translated">Átváltás</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/input-switch.component.ts</context>
           <context context-type="linenumber">20</context>
@@ -3737,7 +3736,7 @@
       </trans-unit>
       <trans-unit id="4188654437346976139" datatype="html">
         <source>Rejected</source>
-        <target state="new">Rejected</target>
+        <target state="translated">Elutasítva</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">64</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
@@ -3751,7 +3750,7 @@
       </trans-unit>
       <trans-unit id="8415175881466057254">
         <source>Refuse</source>
-        <target>Visszautasítás</target>
+        <target state="translated">Elutasítás</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="6961112234462008319" datatype="html">
@@ -3766,7 +3765,7 @@
       </trans-unit>
       <trans-unit id="6571718060636962350" datatype="html">
         <source>Redundancy allowed <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Redundancia megengedett <x id="START_TAG_P-SORTICON"/><x id="CLOSE_TAG_P-SORTICON"/></target>
+        <target state="translated">A redundancia megengedett <x id="START_TAG_P-SORTICON"/><x id="CLOSE_TAG_P-SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="8246779176913476983" datatype="html">
@@ -3788,7 +3787,7 @@
       </trans-unit>
       <trans-unit id="8168516547268350654" datatype="html">
         <source>Do you really want to unfollow {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> entries?}}</source>
-        <target state="new">Do you really want to unfollow {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> entries?}}</target>
+        <target state="translated">Biztos, hogy megszünteti {count, plural, =1 {a(z) <x id="entryName"/> követését?} other {<x id="count"/> elem követését?}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="9216117865911519658" datatype="html">
@@ -3867,7 +3866,7 @@
       </trans-unit>
       <trans-unit id="2743014784334706527">
         <source>Daily video quota</source>
-        <target>Napi videokvóta</target>
+        <target state="translated">Napi videókvóta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">164</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">164</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-quota.component.html</context><context context-type="linenumber">14</context></context-group>
@@ -3917,13 +3916,13 @@
       </trans-unit>
       <trans-unit id="7217118144256898288" datatype="html">
         <source>This user has two factor authentication enabled</source>
-        <target state="new">This user has two factor authentication enabled</target>
+        <target state="translated">Ennél a felhasználónál be van kapcsolva a kétlépcsős hitelesítés</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">232</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">232</context></context-group>
       </trans-unit>
       <trans-unit id="1636606892066514698" datatype="html">
         <source>Disable two factor authentication</source>
-        <target state="new">Disable two factor authentication</target>
+        <target state="translated">Kétlépcsős hitelesítés letiltása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">233</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">233</context></context-group>
       </trans-unit>
@@ -3997,12 +3996,12 @@
       </trans-unit>
       <trans-unit id="17234570072885140" datatype="html">
         <source>Registrations</source>
-        <target state="new">Registrations</target>
+        <target state="translated">Regisztrációk</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="746099155736913817" datatype="html">
         <source>Video blocks</source>
-        <target state="translated">Videó tiltások</target>
+        <target state="translated">Videótiltások</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">126</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
@@ -4063,12 +4062,12 @@
       </trans-unit>
       <trans-unit id="4824046935922837124" datatype="html">
         <source>Used (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</source>
-        <target state="new">Used (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</target>
+        <target state="translated">Használva (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="5874809640561431793" datatype="html">
         <source>Available (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</source>
-        <target state="new">Available (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</target>
+        <target state="translated">Elérhető (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="7574091010118901399">
@@ -4109,7 +4108,7 @@
       </trans-unit>
       <trans-unit id="4043531994869127329" datatype="html">
         <source>See full comment</source>
-        <target state="new">See full comment</target>
+        <target state="translated">Teljes hozzászólás megtekintése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="3193976279273491157">
@@ -4166,7 +4165,7 @@
       </trans-unit>
       <trans-unit id="7483158147658382515" datatype="html">
         <source>Comments on local videos</source>
-        <target state="new">Comments on local videos</target>
+        <target state="translated">Hozzászólások a helyi videókon</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="1420624050293070194" datatype="html">
@@ -4307,7 +4306,7 @@
       </trans-unit>
       <trans-unit id="945158208982640603" datatype="html">
         <source>(Deleted video)</source>
-        <target state="new">(Deleted video)</target>
+        <target state="translated">(Törölt videó)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="1530731524535521716" datatype="html">
@@ -4819,7 +4818,7 @@
       </trans-unit>
       <trans-unit id="6236140336967052987" datatype="html">
         <source>When on a video page, directly start playing the video.</source>
-        <target state="translated">Ha egy videooldalon van, azonnal elindítja a videó lejátszását.</target>
+        <target state="translated">Ha egy videóoldalon van, azonnal elindítja a videó lejátszását.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="9135112681389493865" datatype="html">
@@ -5178,7 +5177,7 @@
       </trans-unit>
       <trans-unit id="502260296951057925" datatype="html">
         <source>Default video quota per user</source>
-        <target state="translated">Alapértelmezett videokvóta felhasználóként</target>
+        <target state="translated">Alapértelmezett videókvóta felhasználóként</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">221</context></context-group>
       </trans-unit>
       <trans-unit id="7169210802367807492" datatype="html">
@@ -5242,17 +5241,17 @@
       </trans-unit>
       <trans-unit id="424703522835656806" datatype="html">
         <source>VIDEO CHANNELS</source>
-        <target state="new">VIDEO CHANNELS</target>
+        <target state="translated">VIDEÓCSATORNÁK</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">365</context></context-group>
       </trans-unit>
       <trans-unit id="7026684190224451991" datatype="html">
         <source>Max video channels per user</source>
-        <target state="new">Max video channels per user</target>
+        <target state="translated">Maximális videócsatornák száma felhasználónként</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">370</context></context-group>
       </trans-unit>
       <trans-unit id="3840267063842708224" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {channel} other {channels}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {channel} other {channels}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {csatorna} other {csatorna}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">377</context></context-group>
       </trans-unit>
       <trans-unit id="3428986951244800347" datatype="html">
@@ -5297,7 +5296,7 @@
       </trans-unit>
       <trans-unit id="2331464426553277323" datatype="html">
         <source>Search index URL</source>
-        <target state="translated">Keresőindex URL</target>
+        <target state="translated">Keresőindex webcíme</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">435</context></context-group>
       </trans-unit>
       <trans-unit id="8524278911521465398" datatype="html">
@@ -5359,7 +5358,7 @@
       </trans-unit>
       <trans-unit id="1718269478813020014" datatype="html">
         <source>Index URL</source>
-        <target state="translated">Index URL</target>
+        <target state="translated">Index webcíme</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">535</context></context-group>
       </trans-unit>
       <trans-unit id="173263206605027981" datatype="html">
@@ -5369,7 +5368,7 @@
       </trans-unit>
       <trans-unit id="9076632742417302918" datatype="html">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information about the expected URL </source>
-        <target state="translated">A <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>dokumentációban<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> talál információkat a szükséges URL-ről </target>
+        <target state="translated">A <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>dokumentációban<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> talál információkat a várt webcímről </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">528</context></context-group>
       </trans-unit>
       <trans-unit id="3946988229617310200" datatype="html">
@@ -5759,7 +5758,7 @@
       </trans-unit>
       <trans-unit id="2279905277031617076" datatype="html">
         <source>Number of video captions to keep in cache</source>
-        <target state="translated">A gyorsítótárban tartandó video-képaláírások száma</target>
+        <target state="translated">A gyorsítótárban tartandó videófeliratok száma</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6193666854590647323" datatype="html">
@@ -5864,7 +5863,7 @@
       </trans-unit>
       <trans-unit id="5439158575454281141" datatype="html">
         <source>VIDEO SETTINGS</source>
-        <target state="translated">VIDEOBEÁLLÍTÁSOK</target>
+        <target state="translated">VIDEÓBEÁLLÍTÁSOK</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="507542497458686905" datatype="html">
@@ -6280,7 +6279,7 @@
       </trans-unit>
       <trans-unit id="4570488343211069802" datatype="html">
         <source>External Channel <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;externalChannelUrl&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="new">External Channel <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;externalChannelUrl&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">Külső csatorna <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;externalChannelUrl&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="2576202554023575152" datatype="html">
@@ -6320,7 +6319,7 @@
       </trans-unit>
       <trans-unit id="6985972846000785992" datatype="html">
         <source>NEW SYNCHRONIZATION</source>
-        <target state="new">NEW SYNCHRONIZATION</target>
+        <target state="translated">ÚJ SZINKRONIZÁLÁS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">8</context>
@@ -6328,7 +6327,7 @@
       </trans-unit>
       <trans-unit id="5175196640561919257" datatype="html">
         <source>Remote channel URL</source>
-        <target state="new">Remote channel URL</target>
+        <target state="translated">Távoli csatorna webcíme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">13</context>
@@ -6336,7 +6335,7 @@
       </trans-unit>
       <trans-unit id="4025171182231078987" datatype="html">
         <source>Example: https://youtube.com/channel/UC_fancy_channel</source>
-        <target state="new">Example: https://youtube.com/channel/UC_fancy_channel</target>
+        <target state="translated">Példa: https://youtube.com/channel/UC_fancy_channel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">20</context>
@@ -6344,7 +6343,7 @@
       </trans-unit>
       <trans-unit id="454806725275556650" datatype="html">
         <source>Video Channel</source>
-        <target state="new">Video Channel</target>
+        <target state="translated">Videócsatorna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">33</context>
@@ -6352,7 +6351,7 @@
       </trans-unit>
       <trans-unit id="8290237842846954767" datatype="html">
         <source>Options for existing videos on remote channel:</source>
-        <target state="new">Options for existing videos on remote channel:</target>
+        <target state="translated">Távoli csatornán lévő meglévő videók lehetőségei:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">42</context>
@@ -6360,7 +6359,7 @@
       </trans-unit>
       <trans-unit id="1331848767706809293" datatype="html">
         <source>Import all and watch for new publications</source>
-        <target state="new">Import all and watch for new publications</target>
+        <target state="translated">Az összes importálása, és az új közzétételek figyelése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">46</context>
@@ -6368,7 +6367,7 @@
       </trans-unit>
       <trans-unit id="1469193438847554223" datatype="html">
         <source>Only watch for new publications</source>
-        <target state="new">Only watch for new publications</target>
+        <target state="translated">Csak az új közzétételek figyelése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">51</context>
@@ -6376,7 +6375,7 @@
       </trans-unit>
       <trans-unit id="9049939123029212539" datatype="html">
         <source>Synchronization created successfully.</source>
-        <target state="new">Synchronization created successfully.</target>
+        <target state="translated">A szinkronizálás sikeresen létrejött.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -6389,7 +6388,7 @@
       </trans-unit>
       <trans-unit id="5863226045830598109" datatype="html">
         <source>Two factor authentication</source>
-        <target state="new">Two factor authentication</target>
+        <target state="translated">Kétlépcsős hitelesítés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">39</context>
@@ -6406,13 +6405,13 @@
       </trans-unit>
       <trans-unit id="7801453816697513153" datatype="html">
         <source>My imports</source>
-        <target state="translated">Saját importok</target>
+        <target state="translated">Saját importálások</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="7000850040589508423" datatype="html">
         <source>Create video channel</source>
-        <target state="translated">Videocsatorna létrehozása</target>
+        <target state="translated">Videócsatorna létrehozása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="5700655611297335752" datatype="html">
@@ -6794,7 +6793,7 @@
       </trans-unit>
       <trans-unit id="6001536520193131937" datatype="html">
         <source>Unable to find verification string in URL query.</source>
-        <target state="new">Unable to find verification string in URL query.</target>
+        <target state="translated">Nem található az ellenőrzőszöveg a kérés webcímében.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -10518,17 +10517,17 @@
       </trans-unit>
       <trans-unit id="351272950792130803" datatype="html">
         <source>Max video channels per user is required.</source>
-        <target state="new">Max video channels per user is required.</target>
+        <target state="translated">A felhasználónkénti maximális videócsatornák számának megadása kötelező.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="5253683089104713724" datatype="html">
         <source>Max video channels per user must be greater or equal to 1.</source>
-        <target state="new">Max video channels per user must be greater or equal to 1.</target>
+        <target state="translated">A felhasználónkénti maximális videócsatornák számának 1-nek, vagy annál nagyobbnak kell lennie.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="8354695459880751923" datatype="html">
         <source>Max video channels per user must be a number.</source>
-        <target state="new">Max video channels per user must be a number.</target>
+        <target state="translated">A felhasználónkénti maximális videócsatornák számának számnak kell lennie.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="5832601947705094130" datatype="html">
@@ -10538,17 +10537,17 @@
       </trans-unit>
       <trans-unit id="4751566092251132371" datatype="html">
         <source>Concurrency should be greater or equal to 1.</source>
-        <target state="translated">A konkurencia értéke 1 vagy annál több kell legyen.</target>
+        <target state="translated">A konkurencia értékének 1-nek, vagy annál nagyobbnak kell lennie.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="75589896034107743" datatype="html">
         <source>Index URL should be a URL</source>
-        <target state="translated">Az index URL-nek URL-nek kell lennie</target>
+        <target state="translated">Az index webcímének webcímnek kell lennie</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">112</context></context-group>
       </trans-unit>
       <trans-unit id="3964961007325702684" datatype="html">
         <source>Search index URL should be a URL</source>
-        <target state="translated">A keresőindex URL egy URL kell legyen</target>
+        <target state="translated">A keresőindex webcímének webcímnek kell lennie</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">119</context></context-group>
       </trans-unit>
       <trans-unit id="8602814243662345124" datatype="html">
@@ -10575,7 +10574,7 @@
       </trans-unit>
       <trans-unit id="3159508433607320799" datatype="html">
         <source>OTP token is required.</source>
-        <target state="new">OTP token is required.</target>
+        <target state="translated">OTP token szükséges.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">69</context>
@@ -10583,17 +10582,17 @@
       </trans-unit>
       <trans-unit id="4968369344159400023" datatype="html">
         <source>Your name is required.</source>
-        <target state="translated">Az Ön nevének megadása kötelező.</target>
+        <target state="translated">A saját nevének megadása kötelező.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="5799695548385507586" datatype="html">
         <source>Your name must be at least 1 character long.</source>
-        <target state="translated">Az Ön nevének legalább 1 karakter hosszúságúnak kell lennie.</target>
+        <target state="translated">A saját nevének legalább 1 karakter hosszúságúnak kell lennie.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="3600004643604731577" datatype="html">
         <source>Your name cannot be more than 120 characters long.</source>
-        <target state="translated">Az Ön neve nem lehet hosszabb 120 karakternél.</target>
+        <target state="translated">A saját neve nem lehet hosszabb 120 karakternél.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="3981804692726336204" datatype="html">
@@ -10698,7 +10697,7 @@
       </trans-unit>
       <trans-unit id="2027337371129904473" datatype="html">
         <source>Video quota is required.</source>
-        <target state="translated">A videokvóta megadása kötelező.</target>
+        <target state="translated">A videókvóta megadása kötelező.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="267386529333143660" datatype="html">
@@ -10856,17 +10855,17 @@
       </trans-unit>
       <trans-unit id="1099619384694370156" datatype="html">
         <source>Video caption language is required.</source>
-        <target state="translated">A video-képaláírás nyelvének megadása kötelező.</target>
+        <target state="translated">A videófelirat nyelvének megadása kötelező.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="3438639650276868976" datatype="html">
         <source>Video caption file is required.</source>
-        <target state="translated">A videoképaláírás-fájl megadása kötelező.</target>
+        <target state="translated">A videófelirat-fájl megadása kötelező.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="9145435275110757909" datatype="html">
         <source>Caption content is required.</source>
-        <target state="new">Caption content is required.</target>
+        <target state="translated">A felirattartalom kötelező.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">21</context>
@@ -11018,13 +11017,13 @@
       </trans-unit>
       <trans-unit id="7220386604464537651" datatype="html">
         <source>Live RTMP Url</source>
-        <target state="translated">Élő RTMP URL</target>
+        <target state="translated">Élő közvetítés RTMP webcíme</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">295</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="4956017863340142734" datatype="html">
         <source>Live RTMPS Url</source>
-        <target state="new">Live RTMPS Url</target>
+        <target state="translated">Élő közvetítés RTMPS webcíme</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">300</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
@@ -11120,7 +11119,7 @@
       </trans-unit>
       <trans-unit id="2340164151654372915" datatype="html">
         <source>A password should be at least 2 characters long.</source>
-        <target state="new">A password should be at least 2 characters long.</target>
+        <target state="translated">A jelszónak legalább két karakteresnek kell lennie.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">32</context>
@@ -11128,7 +11127,7 @@
       </trans-unit>
       <trans-unit id="7699381877503388166" datatype="html">
         <source>A password should be shorter than 100 characters long.</source>
-        <target state="new">A password should be shorter than 100 characters long.</target>
+        <target state="translated">A jelszó legfeljebb 100 karakteres lehet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">33</context>
@@ -11136,7 +11135,7 @@
       </trans-unit>
       <trans-unit id="3116180442048363146" datatype="html">
         <source>A password is required for password protected video.</source>
-        <target state="new">A password is required for password protected video.</target>
+        <target state="translated">A jelszó megadása kötelező a jelszóval védett videóknál.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">34</context>
@@ -11189,17 +11188,17 @@
       </trans-unit>
       <trans-unit id="5604677701754367707" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</source>
-        <target state="new">PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
+        <target state="translated">A PeerTube nem tud ilyen típusú fájlt kezelni. Az elfogadott kiterjesztések a következők: <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="3393133458004181121" datatype="html">
         <source>All categories</source>
-        <target state="translated">Minden kategória</target>
+        <target state="translated">Összes kategória</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-categories.component.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="8280589137189201687" datatype="html">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="new">You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</target>
+        <target state="translated">Nem választhat {maxItems, plural, =1 {1} other {<x id="maxItems"/>}} elemnél többet</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="6708273825233539746" datatype="html">
@@ -11209,7 +11208,7 @@
       </trans-unit>
       <trans-unit id="4076995379551303829" datatype="html">
         <source>Custom value...</source>
-        <target state="translated">Egyedi érték...</target>
+        <target state="translated">Egyéni érték…</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-custom-value.component.ts</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="4670312387769733978" datatype="html">
@@ -11219,42 +11218,42 @@
       </trans-unit>
       <trans-unit id="6950140976689343775" datatype="html">
         <source>Sunday</source>
-        <target state="translated">Vasárnap</target>
+        <target state="translated">vasárnap</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="8739442281958563044" datatype="html">
         <source>Monday</source>
-        <target state="translated">Hétfő</target>
+        <target state="translated">hétfő</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="9176037901730521018" datatype="html">
         <source>Tuesday</source>
-        <target state="translated">Kedd</target>
+        <target state="translated">kedd</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="8798932904948432529" datatype="html">
         <source>Wednesday</source>
-        <target state="translated">Szerda</target>
+        <target state="translated">szerda</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="1433683192825895947" datatype="html">
         <source>Thursday</source>
-        <target state="translated">Csütörtök</target>
+        <target state="translated">csütörtök</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="3730139500618908668" datatype="html">
         <source>Friday</source>
-        <target state="translated">Péntek</target>
+        <target state="translated">péntek</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="1830554030016307335" datatype="html">
         <source>Saturday</source>
-        <target state="translated">Szombat</target>
+        <target state="translated">szombat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="1391351050292665308" datatype="html">
         <source>Sun</source>
-        <target state="new">Sun</target>
+        <target state="translated">V</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">20</context>
@@ -11264,7 +11263,7 @@
       </trans-unit>
       <trans-unit id="7037142944838911104" datatype="html">
         <source>Mon</source>
-        <target state="new">Mon</target>
+        <target state="translated">H</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">21</context>
@@ -11274,7 +11273,7 @@
       </trans-unit>
       <trans-unit id="4051951828654963549" datatype="html">
         <source>Tue</source>
-        <target state="new">Tue</target>
+        <target state="translated">K</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -11284,7 +11283,7 @@
       </trans-unit>
       <trans-unit id="5265738215297391426" datatype="html">
         <source>Wed</source>
-        <target state="new">Wed</target>
+        <target state="translated">Sze</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">23</context>
@@ -11294,7 +11293,7 @@
       </trans-unit>
       <trans-unit id="1370330981433231150" datatype="html">
         <source>Thu</source>
-        <target state="new">Thu</target>
+        <target state="translated">Cs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">24</context>
@@ -11304,7 +11303,7 @@
       </trans-unit>
       <trans-unit id="8713535243933137493" datatype="html">
         <source>Fri</source>
-        <target state="new">Fri</target>
+        <target state="translated">P</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">25</context>
@@ -11314,7 +11313,7 @@
       </trans-unit>
       <trans-unit id="3547824477629753314" datatype="html">
         <source>Sat</source>
-        <target state="new">Sat</target>
+        <target state="translated">Szo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">26</context>
@@ -11324,7 +11323,7 @@
       </trans-unit>
       <trans-unit id="6115403217651453591" datatype="html">
         <source>Su</source>
-        <target state="new">Su</target>
+        <target state="translated">V</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -11334,7 +11333,7 @@
       </trans-unit>
       <trans-unit id="3797918310510782582" datatype="html">
         <source>Mo</source>
-        <target state="new">Mo</target>
+        <target state="translated">H</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -11344,7 +11343,7 @@
       </trans-unit>
       <trans-unit id="8011371911136291436" datatype="html">
         <source>Tu</source>
-        <target state="new">Tu</target>
+        <target state="translated">K</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">32</context>
@@ -11354,7 +11353,7 @@
       </trans-unit>
       <trans-unit id="1673380870543456256" datatype="html">
         <source>We</source>
-        <target state="new">We</target>
+        <target state="translated">Sz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">33</context>
@@ -11364,7 +11363,7 @@
       </trans-unit>
       <trans-unit id="8502005439670299526" datatype="html">
         <source>Th</source>
-        <target state="new">Th</target>
+        <target state="translated">Cs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">34</context>
@@ -11374,7 +11373,7 @@
       </trans-unit>
       <trans-unit id="2800261787799336637" datatype="html">
         <source>Fr</source>
-        <target state="new">Fr</target>
+        <target state="translated">P</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">35</context>
@@ -11384,7 +11383,7 @@
       </trans-unit>
       <trans-unit id="2045915324506422459" datatype="html">
         <source>Sa</source>
-        <target state="new">Sa</target>
+        <target state="translated">Sz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">36</context>
@@ -11394,67 +11393,67 @@
       </trans-unit>
       <trans-unit id="3913843642962116845" datatype="html">
         <source>January</source>
-        <target state="translated">Január</target>
+        <target state="translated">január</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="6642324138857419870" datatype="html">
         <source>February</source>
-        <target state="translated">Február</target>
+        <target state="translated">február</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="7918954644624211958" datatype="html">
         <source>March</source>
-        <target state="translated">Március</target>
+        <target state="translated">március</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="1809521303476565743" datatype="html">
         <source>April</source>
-        <target state="translated">Április</target>
+        <target state="translated">április</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="8469692700277617405" datatype="html">
         <source>May</source>
-        <target state="translated">Május</target>
+        <target state="translated">május</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="9055297580745330415" datatype="html">
         <source>June</source>
-        <target state="translated">Június</target>
+        <target state="translated">június</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="9087113544612471348" datatype="html">
         <source>July</source>
-        <target state="translated">Július</target>
+        <target state="translated">július</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="3984618989093293779" datatype="html">
         <source>August</source>
-        <target state="translated">Augusztus</target>
+        <target state="translated">augusztus</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="5872622085239011307" datatype="html">
         <source>September</source>
-        <target state="translated">Szeptember</target>
+        <target state="translated">szeptember</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="1491482705364427867" datatype="html">
         <source>October</source>
-        <target state="translated">Október</target>
+        <target state="translated">október</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="1109977718843277527" datatype="html">
         <source>November</source>
-        <target state="translated">November</target>
+        <target state="translated">november</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="124191049522509365" datatype="html">
         <source>December</source>
-        <target state="translated">December</target>
+        <target state="translated">december</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="1799348348510504995" datatype="html">
         <source>Jan</source>
-        <target state="new">Jan</target>
+        <target state="translated">jan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">55</context>
@@ -11464,7 +11463,7 @@
       </trans-unit>
       <trans-unit id="2980544278361296608" datatype="html">
         <source>Feb</source>
-        <target state="new">Feb</target>
+        <target state="translated">feb.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">56</context>
@@ -11474,7 +11473,7 @@
       </trans-unit>
       <trans-unit id="3124926955462217092" datatype="html">
         <source>Mar</source>
-        <target state="new">Mar</target>
+        <target state="translated">már.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">57</context>
@@ -11484,7 +11483,7 @@
       </trans-unit>
       <trans-unit id="9658641661863772" datatype="html">
         <source>Apr</source>
-        <target state="new">Apr</target>
+        <target state="translated">ápr.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">58</context>
@@ -11494,7 +11493,7 @@
       </trans-unit>
       <trans-unit id="502512326533496869" datatype="html">
         <source>May</source>
-        <target state="new">May</target>
+        <target state="translated">máj.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">59</context>
@@ -11504,7 +11503,7 @@
       </trans-unit>
       <trans-unit id="3044090977322782161" datatype="html">
         <source>Jun</source>
-        <target state="new">Jun</target>
+        <target state="translated">jún.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">60</context>
@@ -11514,7 +11513,7 @@
       </trans-unit>
       <trans-unit id="8066434078267346927" datatype="html">
         <source>Jul</source>
-        <target state="new">Jul</target>
+        <target state="translated">júl.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">61</context>
@@ -11524,7 +11523,7 @@
       </trans-unit>
       <trans-unit id="1796563865253467834" datatype="html">
         <source>Aug</source>
-        <target state="new">Aug</target>
+        <target state="translated">aug.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">62</context>
@@ -11534,7 +11533,7 @@
       </trans-unit>
       <trans-unit id="5865190625753625986" datatype="html">
         <source>Sep</source>
-        <target state="new">Sep</target>
+        <target state="translated">szept.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">63</context>
@@ -11544,7 +11543,7 @@
       </trans-unit>
       <trans-unit id="4011114601374284323" datatype="html">
         <source>Oct</source>
-        <target state="new">Oct</target>
+        <target state="translated">okt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">64</context>
@@ -11554,7 +11553,7 @@
       </trans-unit>
       <trans-unit id="5063734982204786445" datatype="html">
         <source>Nov</source>
-        <target state="new">Nov</target>
+        <target state="translated">nov.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">65</context>
@@ -11564,7 +11563,7 @@
       </trans-unit>
       <trans-unit id="4789897150069082503" datatype="html">
         <source>Dec</source>
-        <target state="new">Dec</target>
+        <target state="translated">dec.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">66</context>
@@ -11612,27 +11611,27 @@
       </trans-unit>
       <trans-unit id="5769292297914455214" datatype="html">
         <source>Disabled</source>
-        <target state="new">Disabled</target>
+        <target state="translated">Letiltva</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="2684349290932402590" datatype="html">
         <source>Requires approval by moderators</source>
-        <target state="new">Requires approval by moderators</target>
+        <target state="translated">Moderátori jóváhagyást igényel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="4816216590591222133" datatype="html">
         <source>Enabled</source>
-        <target state="new">Enabled</target>
+        <target state="translated">Engedélyezve</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="3911025298999036211" datatype="html">
         <source>~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</source>
-        <target state="new">~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</target>
+        <target state="translated">~ {hours, plural, =1 {1} other {<x id="hours"/>}} óra</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="2819927377059070056" datatype="html">
         <source>~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</source>
-        <target state="new">~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</target>
+        <target state="translated">~ {minutes, plural, =1 {1} other {<x id="minutes"/>}} perc</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="6028521920505655348" datatype="html">
@@ -11658,17 +11657,17 @@
       </trans-unit>
       <trans-unit id="1792453450803202450" datatype="html">
         <source>Accepted follows</source>
-        <target state="new">Accepted follows</target>
+        <target state="translated">Elfogadott követések</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
       <trans-unit id="1745310805516417209" datatype="html">
         <source>Rejected follows</source>
-        <target state="new">Rejected follows</target>
+        <target state="translated">Elutasított követése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="1810206793608630396" datatype="html">
         <source>Pending follows</source>
-        <target state="new">Pending follows</target>
+        <target state="translated">Függőben lévő követések</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
@@ -11727,12 +11726,12 @@
       </trans-unit>
       <trans-unit id="2836537219160375057" datatype="html">
         <source>Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</source>
-        <target state="new">Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</target>
+        <target state="translated">{count, plural, =1 {1} other {<x id="count"/>}} felhasználó kitiltása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="8088707210191809175" datatype="html">
         <source>Ban "<x id="PH" equiv-text="this.usersToBan.username"/>"</source>
-        <target state="new">Ban "<x id="PH" equiv-text="this.usersToBan.username"/>"</target>
+        <target state="translated">„<x id="PH" equiv-text="this.usersToBan.username"/>” kitiltása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="8269144351796756896" datatype="html">
@@ -11747,7 +11746,7 @@
       </trans-unit>
       <trans-unit id="4350392487994839749" datatype="html">
         <source>If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</source>
-        <target state="new">If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</target>
+        <target state="translated">Ha törli ezt a felhasználót, akkor nem fog tudni létrehozni még egy felhasználót vagy csatornát ezzel a névvel: &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt;.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -11755,7 +11754,7 @@
       </trans-unit>
       <trans-unit id="6307826440781941134" datatype="html">
         <source>Delete <x id="PH" equiv-text="user.username"/></source>
-        <target state="new">Delete <x id="PH" equiv-text="user.username"/></target>
+        <target state="translated"><x id="PH" equiv-text="user.username"/> törlése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">105</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">236</context></context-group>
       </trans-unit>
@@ -11841,7 +11840,7 @@
       </trans-unit>
       <trans-unit id="4268530178786707817" datatype="html">
         <source>My account moderation</source>
-        <target state="new">My account moderation</target>
+        <target state="translated">Saját fiók moderálása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">291</context></context-group>
       </trans-unit>
       <trans-unit id="7187838764371214919" datatype="html">
@@ -11964,7 +11963,7 @@
       </trans-unit>
       <trans-unit id="8546847443058492245" datatype="html">
         <source>Block <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> videos</source>
-        <target state="new">Block <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> videos</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> videó blokkolása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">4</context>
@@ -12059,17 +12058,17 @@
       </trans-unit>
       <trans-unit id="7793333806747606771" datatype="html">
         <source>Server is unavailable. Please retry later.</source>
-        <target state="new">Server is unavailable. Please retry later.</target>
+        <target state="translated">A kiszolgáló nem érhető el. Próbálja újra később.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="7436975022198908854" datatype="html">
         <source>Unknown server error</source>
-        <target state="new">Unknown server error</target>
+        <target state="translated">Ismeretlen kiszolgálóhiba</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">144</context></context-group>
       </trans-unit>
       <trans-unit id="3779435129809850171" datatype="html">
         <source>Sort by this column</source>
-        <target state="new">Sort by this column</target>
+        <target state="translated">Rendezés ezen oszlop szerint</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-table.ts</context>
           <context context-type="linenumber">25</context>
@@ -12077,7 +12076,7 @@
       </trans-unit>
       <trans-unit id="6774469419636010791" datatype="html">
         <source>{first} - {last} of {totalRecords}</source>
-        <target state="new">{first} - {last} of {totalRecords}</target>
+        <target state="translated">{first} – {last} / {totalRecords}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-table.ts</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
@@ -12233,7 +12232,7 @@
       </trans-unit>
       <trans-unit id="8726695529938456424" datatype="html">
         <source>COPY</source>
-        <target state="new"> COPY </target>
+        <target state="translated">MÁSOLÁS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/input-text.component.html</context>
           <context context-type="linenumber">17,19</context>
