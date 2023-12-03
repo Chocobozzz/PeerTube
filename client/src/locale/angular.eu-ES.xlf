@@ -6266,7 +6266,7 @@
       </trans-unit>
       <trans-unit id="5417361655914085905" datatype="html">
         <source>Account page</source>
-        <target state="translated">Kontuaren orrialdea</target>
+        <target state="translated">Kontuaren orria</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">69</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
@@ -6480,7 +6480,7 @@
       </trans-unit>
       <trans-unit id="4000980858407872649" datatype="html">
         <source>Channel page</source>
-        <target state="translated">Kanalaren orrialdea</target>
+        <target state="translated">Kanalaren orria</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">34</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">20</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context><context context-type="linenumber">66</context></context-group>
@@ -6498,7 +6498,7 @@
       </trans-unit>
       <trans-unit id="228548407872312756" datatype="html">
         <source>Owner account page</source>
-        <target state="translated">Jabearen kontuaren orria</target>
+        <target state="translated">Kontu jabedunaren orria</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4781078006040259916" datatype="html">
@@ -7896,7 +7896,7 @@
       </trans-unit>
       <trans-unit id="1305357231288135414" datatype="html">
         <source>Homepage</source>
-        <target state="translated">Hasierako orrialdea</target>
+        <target state="translated">Hasiera-orria</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">12</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-homepage.component.html</context><context context-type="linenumber">13</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+home/home-routing.module.ts</context><context context-type="linenumber">11</context></context-group>
@@ -7918,7 +7918,7 @@
       </trans-unit>
       <trans-unit id="6920964195632624609" datatype="html">
         <source>INSTANCE HOMEPAGE</source>
-        <target state="translated">INSTANTZIAREN HASIERAKO ORRIALDEA</target>
+        <target state="translated">INSTANTZIAREN HASIERA-ORRIA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-homepage.component.html</context>
           <context context-type="linenumber">7</context>
@@ -9465,7 +9465,7 @@
       </trans-unit>
       <trans-unit id="5294742063044966238" datatype="html">
         <source>Follower page</source>
-        <target state="translated">Jarraitzaileen orrialdea</target>
+        <target state="translated">Jarraitzaileen orria</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">20</context>
@@ -9942,7 +9942,7 @@
       </trans-unit>
       <trans-unit id="5409372033656550095" datatype="html">
         <source>Go to the discover videos page</source>
-        <target state="translated">Joan bideoak aurkitzeko orrialdera</target>
+        <target state="translated">Joan bideoak aurkitzeko orrira</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">330</context></context-group>
       </trans-unit>
       <trans-unit id="4278050445961255445">
@@ -9957,12 +9957,12 @@
       </trans-unit>
       <trans-unit id="2887122197778293919">
         <source>Go to the local videos page</source>
-        <target state="translated">Joan bideo lokalen orrialdera</target>
+        <target state="translated">Joan bideo lokalen orrira</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">345</context></context-group>
       </trans-unit>
       <trans-unit id="8009065619559214982">
         <source>Go to the videos upload page</source>
-        <target state="translated">Joan bideoak igotzeko orrialdera</target>
+        <target state="translated">Joan bideoak igotzeko orrira</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">350</context></context-group>
       </trans-unit>
       <trans-unit id="3779524668013120370">
@@ -11664,14 +11664,14 @@
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
         <source><x id="PH"/> (channel page) </source>
-        <target state="translated"><x id="PH"/> (kanalaren orrialdea) </target>
+        <target state="translated"><x id="PH"/> (kanalaren orria) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">20</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="1209500590333005801" datatype="html">
         <source><x id="PH"/> (account page) </source>
-        <target state="translated"><x id="PH"/> (kontuaren orrialdea) </target>
+        <target state="translated"><x id="PH"/> (kontuaren orria) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">21</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
@@ -12747,7 +12747,7 @@
       </trans-unit>
       <trans-unit id="1219739004043110649">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
-        <target state="translated">Zure bideoa ez da igo oraindik, ziur zaude orrialde hau utzi nahi duzula?</target>
+        <target state="translated">Zure bideoa ez da igo oraindik, ziur zaude orri hau utzi nahi duzula?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="1830802698757049943" datatype="html">
