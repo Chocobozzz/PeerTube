@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  postgresql:
+    image: bitnami/postgresql:latest
+    environment:
+      - POSTGRESQL_USERNAME=peertube
+      - POSTGRESQL_PASSWORD=peertube
+      - POSTGRESQL_DATABASE=peertube_dev
+    volumes:
+      - postgresql_data:/bitnami/postgresql
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: bitnami/redis:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      #- REDIS_PASSWORD=my_redis_password
+    volumes:
+      - redis_data:/bitnami/redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgresql_data:
+    driver: local
+
+  redis_data:
+    driver: local
