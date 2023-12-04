@@ -12,6 +12,14 @@ services:
     ports:
       - "5432:5432"
 
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "8001:80"
+
   redis:
     image: bitnami/redis:latest
     environment:
@@ -21,6 +29,13 @@ services:
       - redis_data:/bitnami/redis
     ports:
       - "6379:6379"
+
+  redis-commander:
+    image: rediscommander/redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8002:8081"
 
 volumes:
   postgresql_data:
