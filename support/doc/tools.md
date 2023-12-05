@@ -185,7 +185,7 @@ peertube-runner list-registered
 
 ## Server tools
 
-Server tools are scripts that interect directly with the code of your PeerTube instance.
+Server tools are scripts that interact directly with the code of your PeerTube instance.
 They must be run on the server, in `peertube-latest` directory.
 
 ### Parse logs
