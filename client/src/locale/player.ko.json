@@ -24,7 +24,7 @@
     "Remaining Time": "남은 시간",
     "Stream Type": "스트림 종류",
     "LIVE": "라이브",
-    "Loaded": "로딩됨",
+    "Loaded": "로드됨",
     "Progress": "진행",
     "Progress Bar": "진행 바",
     "progress bar timing: currentTime={1} duration={2}": "전체 {2} 중의 현재 {1}",
