@@ -9766,10 +9766,10 @@ components:
           description: P2P peers connected (doesn't include WebSeed peers)
         resolutionChanges:
           type: number
-          description: How many resolution changes occured since the last metric creation
+          description: How many resolution changes occurred since the last metric creation
         errors:
           type: number
-          description: How many errors occured since the last metric creation
+          description: How many errors occurred since the last metric creation
         downloadedBytesP2P:
           type: number
           description: How many bytes were downloaded with P2P since the last metric creation

@@ -870,7 +870,7 @@ function register ({ registerClientRoute }) {
 }
 ```
 
-You can then access the page on `/p/my-super/route` (please note the additionnal `/p/` in the path).
+You can then access the page on `/p/my-super/route` (please note the additional `/p/` in the path).
 
 ### Publishing
 
