@@ -43,7 +43,7 @@ We have many important notes in this release. We know it's a pain for sysadmin, 
     * Directory on filesystem must be **renamed** from `videos/` to `web-videos/` to represent the value of `storage.web_videos`
       * Classic installation: `sudo -u peertube mv '/var/www/peertube/storage/videos/' '/var/www/peertube/storage/web-videos/'`
       * Docker installation: `mv '/path-to-docker-installation/docker-volume/data/videos/' '/path-to-docker-installation/docker-volume/data/web-videos/'`
-    * `transcoding.webtorrent` must be **renamed** to `transcoding.web_videos`: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L522
+    * `transcoding.webtorrent` must be **renamed** to `transcoding.web_videos`: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L532
     * `object_storage.videos` must be **renamed** to `object_storage.web_videos`. The value of `object_storage.web_videos.bucket_name` doesn't need to be changed: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L223
     * `storage.storyboards` must be **added**: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L157
 
@@ -61,7 +61,7 @@ We have many important notes in this release. We know it's a pain for sysadmin, 
     * `location ~ ^(/static/(webseed|streaming-playlists)/private/)|^/download {` must be updated to `location ~ ^(/static/(webseed|web-videos|streaming-playlists)/private/)|^/download {`
     * `location ~ ^/static/(webseed|redundancy|streaming-playlists)/ {` must be updated to `location ~ ^/static/(webseed|web-videos|redundancy|streaming-playlists)/ {`
 
-  * Tracing requires `--experimental-loader=@opentelemetry/instrumentation/hook.mjs` node option: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L263
+  * Tracing requires `--experimental-loader=@opentelemetry/instrumentation/hook.mjs` node option: https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L264
 
 #### Developers important notes
 
