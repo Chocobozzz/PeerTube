@@ -242,6 +242,29 @@ describe('Test id and pass auth plugins', function () {
     expect(laguna.pluginAuth).to.equal('peertube-plugin-test-id-pass-auth-two')
   })
 
+  it('Should not update a user if not owned by the plugin auth', async function () {
+    {
+      await server.users.update({ userId: lagunaId, videoQuota: 43000, password: 'coucou', pluginAuth: null })
+
+      const body = await server.users.get({ userId: lagunaId })
+      expect(body.videoQuota).to.equal(43000)
+      expect(body.pluginAuth).to.be.null
+    }
+
+    {
+      await server.login.login({
+        user: { username: 'laguna', password: 'laguna password' },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    }
+
+    {
+      const body = await server.users.get({ userId: lagunaId })
+      expect(body.videoQuota).to.equal(43000)
+      expect(body.pluginAuth).to.be.null
+    }
+  })
+
   after(async function () {
     await cleanupTests([ server ])
   })

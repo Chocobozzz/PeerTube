@@ -89,8 +89,11 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
 
     let user = await UserModel.loadByEmail(bypassLogin.user.email)
 
-    if (!user) user = await createUserFromExternal(bypassLogin.pluginName, bypassLogin.user)
-    else user = await updateUserFromExternal(user, bypassLogin.user, bypassLogin.userUpdater)
+    if (!user) {
+      user = await createUserFromExternal(bypassLogin.pluginName, bypassLogin.user)
+    } else if (user.pluginAuth === bypassLogin.pluginName) {
+      user = await updateUserFromExternal(user, bypassLogin.user, bypassLogin.userUpdater)
+    }
 
     // Cannot create a user
     if (!user) throw new AccessDeniedError('Cannot create such user: an actor with that name already exists.')

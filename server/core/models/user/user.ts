@@ -873,6 +873,8 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   }
 
   isPasswordMatch (password: string) {
+    if (!password || !this.password) return false
+
     return comparePassword(password, this.password)
   }
 
