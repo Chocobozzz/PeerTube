@@ -155,6 +155,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.first-aria" datatype="html">
         <source>First</source>
+        <target state="translated">Бірінші</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -271,6 +272,7 @@
       </trans-unit>
       <trans-unit id="8438752523256358076" datatype="html">
         <source>Show full list</source>
+        <target state="translated">Толық тізімді көрсету</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">13</context>
@@ -611,6 +613,7 @@
       </trans-unit>
       <trans-unit id="8203367621031610680" datatype="html">
         <source>Your name</source>
+        <target state="translated">Атыңыз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">14</context>
@@ -625,6 +628,7 @@
       </trans-unit>
       <trans-unit id="175344056589888866" datatype="html">
         <source>Example: john@example.com</source>
+        <target state="translated">Мысалы: john@example.com</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">28</context>
@@ -640,6 +644,7 @@
       </trans-unit>
       <trans-unit id="9127604588498960753" datatype="html">
         <source>Subject</source>
+        <target state="translated">Тақырып</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">34</context>
@@ -647,6 +652,7 @@
       </trans-unit>
       <trans-unit id="1391056849737890767" datatype="html">
         <source>Your message</source>
+        <target state="translated">Хатыңыз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">43</context>
@@ -749,6 +755,7 @@
       </trans-unit>
       <trans-unit id="935187492052582731" datatype="html">
         <source>Submit</source>
+        <target state="translated">Жіберу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">57</context>
@@ -779,6 +786,7 @@
       </trans-unit>
       <trans-unit id="6979021199788941693" datatype="html">
         <source>Your message has been sent.</source>
+        <target state="translated">Хатыңыз жіберілді.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.ts</context>
           <context context-type="linenumber">88</context>
@@ -807,6 +815,7 @@
       </trans-unit>
       <trans-unit id="1670306451865226564" datatype="html">
         <source>users</source>
+        <target state="translated">қолданушы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">11</context>
@@ -814,6 +823,7 @@
       </trans-unit>
       <trans-unit id="5178138591256693636" datatype="html">
         <source>videos</source>
+        <target state="translated">бейне</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">21</context>
@@ -825,6 +835,7 @@
       </trans-unit>
       <trans-unit id="1408045022812097780" datatype="html">
         <source>views</source>
+        <target state="translated">қаралым</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">31</context>
@@ -832,6 +843,7 @@
       </trans-unit>
       <trans-unit id="117954017715534854" datatype="html">
         <source>comments</source>
+        <target state="translated">пікір</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">41</context>
@@ -857,6 +869,7 @@
       </trans-unit>
       <trans-unit id="3541687134897970106" datatype="html">
         <source>followers</source>
+        <target state="translated">жазылушы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">85</context>
@@ -941,6 +954,7 @@
       </trans-unit>
       <trans-unit id="185970110822844952" datatype="html">
         <source>P2P &amp; Privacy</source>
+        <target state="translated">P2P &amp; Құпиялық</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">65</context>
