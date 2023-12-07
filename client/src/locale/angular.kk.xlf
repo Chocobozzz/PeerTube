@@ -4,6 +4,7 @@
     <body>
       <trans-unit id="ngb.alert.close" datatype="html">
         <source>Close</source>
+        <target state="translated">Жабу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -9341,6 +9342,7 @@
       </trans-unit>
       <trans-unit id="5478121364779850827" datatype="html">
         <source>Reset</source>
+        <target state="translated">Арылту</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">8,10</context>
@@ -9448,6 +9450,7 @@
       </trans-unit>
       <trans-unit id="2807800733729323332" datatype="html">
         <source>Yes</source>
+        <target state="translated">Иә</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">48</context>
@@ -9455,6 +9458,7 @@
       </trans-unit>
       <trans-unit id="3542042671420335679" datatype="html">
         <source>No</source>
+        <target state="translated">Жоқ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">53</context>
@@ -9545,6 +9549,7 @@
       </trans-unit>
       <trans-unit id="2826581353496868063" datatype="html">
         <source>Language</source>
+        <target state="translated">Тіл</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">147</context>
@@ -9620,6 +9625,7 @@
       </trans-unit>
       <trans-unit id="6048892649018070225" datatype="html">
         <source>Today</source>
+        <target state="translated">Бүгін</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">40</context>
