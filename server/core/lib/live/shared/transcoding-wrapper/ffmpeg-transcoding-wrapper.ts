@@ -68,7 +68,9 @@ export class FFmpegTranscodingWrapper extends AbstractTranscodingWrapper {
 
     logger.debug('Killing ffmpeg after live abort of ' + this.videoUUID, this.lTags())
 
-    this.ffmpegCommand.kill('SIGINT')
+    if (this.ffmpegCommand) {
+      this.ffmpegCommand.kill('SIGINT')
+    }
 
     this.aborted = true
     this.emit('end')

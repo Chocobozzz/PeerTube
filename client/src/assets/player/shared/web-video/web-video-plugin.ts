@@ -27,7 +27,8 @@ class WebVideoPlugin extends Plugin {
     this.videoFiles = options.videoFiles
     this.videoFileToken = options.videoFileToken
 
-    this.updateVideoFile({ videoFile: this.pickAverageVideoFile(), isUserResolutionChange: false })
+    const videoFile = this.pickAverageVideoFile()
+    if (videoFile) this.updateVideoFile({ videoFile, isUserResolutionChange: false })
 
     this.onLoadedMetadata = () => {
       player.trigger('video-ratio-changed', { ratio: this.player.videoWidth() / this.player.videoHeight() })
@@ -36,19 +37,19 @@ class WebVideoPlugin extends Plugin {
     player.on('loadedmetadata', this.onLoadedMetadata)
 
     player.ready(() => {
-      this.buildQualities()
-
-      this.setupNetworkInfoInterval()
-
       if (this.videoFiles.length === 0) {
         this.player.addClass('disabled')
         return
       }
+
+      this.buildQualities()
+
+      this.setupNetworkInfoInterval()
     })
   }
 
   dispose () {
-    clearInterval(this.networkInfoInterval)
+    if (this.networkInfoInterval) clearInterval(this.networkInfoInterval)
 
     if (this.onLoadedMetadata) this.player.off('loadedmetadata', this.onLoadedMetadata)
     if (this.onErrorHandler) this.player.off('error', this.onErrorHandler)
@@ -58,7 +59,7 @@ class WebVideoPlugin extends Plugin {
   }
 
   getCurrentResolutionId () {
-    return this.currentVideoFile.resolution.id
+    return this.currentVideoFile?.resolution.id
   }
 
   updateVideoFile (options: {
@@ -123,7 +124,7 @@ class WebVideoPlugin extends Plugin {
 
   private adaptPosterForAudioOnly () {
     // Audio-only (resolutionId === 0) gets special treatment
-    if (this.currentVideoFile.resolution.id === 0) {
+    if (this.currentVideoFile?.resolution.id === 0) {
       this.player.audioPosterMode(true)
     } else {
       this.player.audioPosterMode(false)
@@ -154,6 +155,7 @@ class WebVideoPlugin extends Plugin {
   }
 
   private pickAverageVideoFile () {
+    if (!this.videoFiles || this.videoFiles.length === 0) return undefined
     if (this.videoFiles.length === 1) return this.videoFiles[0]
 
     const files = this.videoFiles.filter(f => f.resolution.id !== 0)
@@ -165,7 +167,7 @@ class WebVideoPlugin extends Plugin {
       id: videoFile.resolution.id,
       label: this.buildQualityLabel(videoFile),
       height: videoFile.resolution.id,
-      selected: videoFile.id === this.currentVideoFile.id,
+      selected: videoFile.id === this.currentVideoFile?.id,
       selectCallback: () => this.updateVideoFile({ videoFile, isUserResolutionChange: true })
     }))
 
@@ -187,7 +189,7 @@ class WebVideoPlugin extends Plugin {
       return this.player.trigger('network-info', {
         source: 'web-video',
         http: {
-          downloaded: this.player.bufferedPercent() * this.currentVideoFile.size
+          downloaded: this.player.bufferedPercent() * this.currentVideoFile?.size
         }
       } as PlayerNetworkInfo)
     }, 1000)
