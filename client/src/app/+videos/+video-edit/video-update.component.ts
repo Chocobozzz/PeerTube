@@ -221,7 +221,12 @@ export class VideoUpdateComponent extends FormReactive implements OnInit, OnDest
         }
 
         // Don't update live attributes if they did not change
-        const baseVideo = pick(this.liveVideo, Object.keys(liveVideoUpdate) as (keyof LiveVideoUpdate)[])
+        const baseVideo = {
+          saveReplay: this.liveVideo.saveReplay,
+          replaySettings: this.liveVideo.replaySettings,
+          permanentLive: this.liveVideo.permanentLive,
+          latencyMode: this.liveVideo.latencyMode
+        }
         const liveChanged = !simpleObjectsDeepEqual(baseVideo, liveVideoUpdate)
         if (!liveChanged) return of(undefined)
 
