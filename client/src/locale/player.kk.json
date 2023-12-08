@@ -131,13 +131,13 @@
     "Proportional Serif": "",
     "Monospace Serif": "",
     "Casual": "",
-    "Script": "",
-    "Small Caps": "",
+    "Script": "Қолжазба",
+    "Small Caps": "Кішірейтілген бас әріптер",
     "Reset": "Арылту",
     "restore all settings to the default values": "",
     "Done": "Дайын",
     "Caption Settings Dialog": "",
-    "Beginning of dialog window. Escape will cancel and close the window.": "",
-    "End of dialog window.": "",
+    "Beginning of dialog window. Escape will cancel and close the window.": "Сұхбат терезесінің басы. Escape пернесі әрекетті тоқтатып, терезені жабады.",
+    "End of dialog window.": "Сұхбат терезесінің соңы.",
     "{1} is loading.": "{1} жүктелуде."
 }
