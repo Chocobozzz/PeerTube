@@ -967,7 +967,7 @@ const MEMOIZE_LENGTH = {
   VIDEO_DURATION: 200
 }
 
-const totalCPUs = cpus().length
+const totalCPUs = Math.max(cpus().length, 1)
 
 const WORKER_THREADS = {
   DOWNLOAD_IMAGE: {
