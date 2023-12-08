@@ -1,4 +1,4 @@
-import { ChartConfiguration, ChartData, PluginOptionsByType, Scale, TooltipItem } from 'chart.js'
+import { ChartConfiguration, ChartData, ChartOptions, PluginOptionsByType, Scale, TooltipItem } from 'chart.js'
 import zoomPlugin from 'chartjs-plugin-zoom'
 import { Observable, of } from 'rxjs'
 import { SelectOptionsItem } from 'src/types'
@@ -25,6 +25,9 @@ type CountryData = { name: string, viewers: number }[]
 type ChartIngestData = VideoStatsTimeserie | VideoStatsRetention | CountryData
 type ChartBuilderResult = {
   type: 'line' | 'bar'
+
+  options?: ChartOptions<'bar'>
+
   plugins: Partial<PluginOptionsByType<'line' | 'bar'>>
   data: ChartData<'line' | 'bar'>
   displayLegend: boolean
@@ -135,6 +138,12 @@ export class VideoStatsComponent implements OnInit {
 
   onChartChange (newActive: ActiveGraphId) {
     this.activeGraphId = newActive
+
+    if (newActive === 'countries') {
+      this.chartHeight = `${Math.max(this.countries.length * 20, 300)}px`
+    } else {
+      this.chartHeight = '300px'
+    }
 
     this.loadChart()
   }
@@ -333,7 +342,7 @@ export class VideoStatsComponent implements OnInit {
       countries: (rawData: CountryData) => this.buildCountryChartOptions(rawData)
     }
 
-    const { type, data, displayLegend, plugins } = dataBuilders[graphId](this.chartIngestData[graphId])
+    const { type, data, displayLegend, plugins, options } = dataBuilders[graphId](this.chartIngestData[graphId])
 
     const self = this
 
@@ -342,6 +351,8 @@ export class VideoStatsComponent implements OnInit {
       data,
 
       options: {
+        ...options,
+
         responsive: true,
 
         scales: {
@@ -366,7 +377,9 @@ export class VideoStatsComponent implements OnInit {
               : undefined,
 
             ticks: {
-              callback: value => this.formatYTick({ graphId, value })
+              callback: function (value) {
+                return self.formatYTick({ graphId, value, scale: this })
+              }
             }
           }
         },
@@ -489,6 +502,10 @@ export class VideoStatsComponent implements OnInit {
     return {
       type: 'bar' as 'bar',
 
+      options: {
+        indexAxis: 'y'
+      },
+
       displayLegend: true,
 
       plugins: {
@@ -547,11 +564,14 @@ export class VideoStatsComponent implements OnInit {
   private formatYTick (options: {
     graphId: ActiveGraphId
     value: number | string
+    scale?: Scale
   }) {
-    const { graphId, value } = options
+    const { graphId, value, scale } = options
 
     if (graphId === 'retention') return value + ' %'
     if (graphId === 'aggregateWatchTime') return secondsToTime(+value)
+    if (graphId === 'countries' && scale) return scale.getLabelForValue(value as number)
+
 
     return value.toLocaleString(this.localeId)
   }

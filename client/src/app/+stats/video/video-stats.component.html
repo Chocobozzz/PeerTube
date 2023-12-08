@@ -45,7 +45,7 @@
           </a>
 
           <ng-template ngbNavContent>
-            <div class="chart-container" [ngStyle]="{ 'min-height': chartHeight }">
+            <div class="chart-container">
               <p-chart
                 *ngIf="chartOptions[availableChart.id]"
                 [height]="chartHeight" [width]="chartWidth"
