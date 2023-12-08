@@ -11,9 +11,15 @@ type Tags = {
 
   url?: string
 
-  schemaType?: string
   ogType?: string
   twitterCard?: 'player' | 'summary' | 'summary_large_image'
+
+  schemaType?: string
+
+  jsonldProfile?: {
+    createdAt: Date
+    updatedAt: Date
+  }
 
   list?: {
     numberOfItems: number
@@ -194,6 +200,28 @@ export class TagsHtml {
 
   static generateSchemaTagsOptions (tags: Tags, context: HookContext) {
     if (!tags.schemaType) return
+
+    if (tags.schemaType === 'ProfilePage') {
+      if (!tags.jsonldProfile) throw new Error('Missing `jsonldProfile` with ProfilePage schema type')
+
+      const profilePageSchema = {
+        '@context': 'http://schema.org',
+        '@type': tags.schemaType,
+
+        'dateCreated': tags.jsonldProfile.createdAt.toISOString(),
+        'dateModified': tags.jsonldProfile.updatedAt.toISOString(),
+
+        'mainEntity': {
+          '@id': '#main-author',
+          '@type': 'Person',
+          'name': tags.escapedTitle,
+          'description': tags.escapedTruncatedDescription,
+          'image': tags.image.url
+        }
+      }
+
+      return Hooks.wrapObject(profilePageSchema, 'filter:html.client.json-ld.result', context)
+    }
 
     const schema = {
       '@context': 'http://schema.org',

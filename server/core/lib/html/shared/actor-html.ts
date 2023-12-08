@@ -80,6 +80,10 @@ export class ActorHtml {
       ogType,
       twitterCard,
       schemaType,
+      jsonldProfile: {
+        createdAt: entity.createdAt,
+        updatedAt: entity.updatedAt
+      },
 
       indexationPolicy: entity.Actor.isOwned()
         ? 'always'
