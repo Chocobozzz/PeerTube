@@ -21,7 +21,7 @@ import {
 } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { pick, simpleObjectsDeepEqual } from '@peertube/peertube-core-utils'
+import { simpleObjectsDeepEqual } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, LiveVideo, LiveVideoUpdate, VideoPrivacy, VideoSource, VideoState } from '@peertube/peertube-models'
 import { hydrateFormFromVideo } from './shared/video-edit-utils'
 import { VideoUploadService } from './shared/video-upload.service'

@@ -572,7 +572,6 @@ export class VideoStatsComponent implements OnInit {
     if (graphId === 'aggregateWatchTime') return secondsToTime(+value)
     if (graphId === 'countries' && scale) return scale.getLabelForValue(value as number)
 
-
     return value.toLocaleString(this.localeId)
   }
 
