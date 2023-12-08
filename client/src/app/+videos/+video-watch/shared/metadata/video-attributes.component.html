@@ -25,7 +25,7 @@
 
 <div *ngIf="!!video.originallyPublishedAt" class="attribute attribute-originally-published-at">
   <span i18n class="attribute-label">Originally published</span>
-  <span class="attribute-value">{{ video.originallyPublishedAt | date: 'dd MMMM yyyy' }}</span>
+  <span class="attribute-value">{{ video.originallyPublishedAt | date: 'shortDate' }}</span>
 </div>
 
 <div class="attribute attribute-category">
