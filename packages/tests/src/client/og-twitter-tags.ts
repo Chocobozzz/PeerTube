@@ -48,7 +48,7 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
       expect(text).to.contain(`<meta property="og:title" content="${account.displayName}" />`)
       expect(text).to.contain(`<meta property="og:description" content="${account.description}" />`)
       expect(text).to.contain('<meta property="og:type" content="website" />')
-      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/a/${servers[0].store.user.username}" />`)
+      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/a/${servers[0].store.user.username}/video-channels" />`)
     }
 
     async function channelPageTest (path: string) {
@@ -58,7 +58,7 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
       expect(text).to.contain(`<meta property="og:title" content="${servers[0].store.channel.displayName}" />`)
       expect(text).to.contain(`<meta property="og:description" content="${channelDescription}" />`)
       expect(text).to.contain('<meta property="og:type" content="website" />')
-      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/c/${servers[0].store.channel.name}" />`)
+      expect(text).to.contain(`<meta property="og:url" content="${servers[0].url}/c/${servers[0].store.channel.name}/videos" />`)
     }
 
     async function watchVideoPageTest (path: string) {
