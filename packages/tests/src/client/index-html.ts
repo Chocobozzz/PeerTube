@@ -103,7 +103,7 @@ describe('Test index HTML generation', function () {
 
     it('Should use the original account URL for the canonical tag', async function () {
       const accountURLtest = res => {
-        expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/a/root" />`)
+        expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/a/root/video-channels" />`)
       }
 
       accountURLtest(await makeHTMLRequest(servers[0].url, '/accounts/root@' + servers[0].host))
@@ -113,7 +113,7 @@ describe('Test index HTML generation', function () {
 
     it('Should use the original channel URL for the canonical tag', async function () {
       const channelURLtests = res => {
-        expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/c/root_channel" />`)
+        expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/c/root_channel/videos" />`)
       }
 
       channelURLtests(await makeHTMLRequest(servers[0].url, '/video-channels/root_channel@' + servers[0].host))

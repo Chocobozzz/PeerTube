@@ -457,7 +457,7 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
 
   // Avoid error when running this method on MAccount... | MChannel...
   getClientUrl (this: MAccountHost | MChannelHost) {
-    return WEBSERVER.URL + '/a/' + this.Actor.getIdentifier()
+    return WEBSERVER.URL + '/a/' + this.Actor.getIdentifier() + '/video-channels'
   }
 
   isBlocked () {

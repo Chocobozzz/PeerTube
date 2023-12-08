@@ -841,7 +841,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
 
   // Avoid error when running this method on MAccount... | MChannel...
   getClientUrl (this: MAccountHost | MChannelHost) {
-    return WEBSERVER.URL + '/c/' + this.Actor.getIdentifier()
+    return WEBSERVER.URL + '/c/' + this.Actor.getIdentifier() + '/videos'
   }
 
   getDisplayName () {
