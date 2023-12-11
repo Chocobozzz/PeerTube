@@ -1,5 +1,26 @@
 # Changelog
 
+## v6.0.2
+
+### IMPORTANT NOTES
+
+ * If you upgrade from PeerTube **< v6.0.0**, please follow v6.0.0 IMPORTANT NOTES
+ * If you upgrade from PeerTube **v6.0.0**, please follow v6.0.1 IMPORTANT NOTES
+
+### Bug fixes
+
+ * Fix upgrade.sh when Peertube is installed outside the standard path [#6064](https://github.com/Chocobozzz/PeerTube/pull/6064)
+ * Fix importing videos with too long chapter name
+ * Don't create chapters from description if there is only one
+ * Ensure user is owned by the auth plugin before updating its attributes
+ * Improve channels and accounts SEO by fixing structured JSON-LD data and canonical URLs
+ * Originally published and reupload date format consistency in watch page
+ * Fix cpu count when cpu info not available
+ * Fix embed when waiting for a live
+ * Fix updating already started live if live attributes don't change
+ * Fix displaying many countries in video stats
+
+
 ## v6.0.1
 
 ### IMPORTANT NOTES
