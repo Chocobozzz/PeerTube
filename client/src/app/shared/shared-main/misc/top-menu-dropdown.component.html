@@ -30,6 +30,7 @@
               *ngIf="isDisplayed(menuChild)" ngbDropdownItem
               [ngClass]="{ icon: hasIcons }" routerLinkActive="active" ariaCurrentWhenActive="page"
               [routerLink]="menuChild.routerLink" #routerLink (click)="onActiveLinkScrollToTop(routerLink)"
+              [queryParams]="menuChild.queryParams"
             >
               <my-global-icon *ngIf="menuChild.iconName" [iconName]="menuChild.iconName" aria-hidden="true"></my-global-icon>
 

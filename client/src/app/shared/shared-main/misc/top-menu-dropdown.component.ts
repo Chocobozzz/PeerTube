@@ -15,6 +15,7 @@ export type TopMenuDropdownParam = {
   children?: {
     label: string
     routerLink: string
+    queryParams?: { [id: string]: string }
     iconName?: GlobalIconName
 
     isDisplayed?: () => boolean // Default: () => true

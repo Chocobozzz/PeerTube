@@ -57,6 +57,9 @@ export class AdminComponent implements OnInit {
       overviewItems.children.push({
         label: $localize`Videos`,
         routerLink: '/admin/videos',
+        queryParams: {
+          search: 'isLocal:true'
+        },
         iconName: 'videos'
       })
     }
