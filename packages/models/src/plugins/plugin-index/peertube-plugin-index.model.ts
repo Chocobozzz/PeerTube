@@ -10,6 +10,7 @@ export interface PeerTubePluginIndex {
   latestVersion: string
 
   official: boolean
+  recommended: boolean
 
   name?: string
   installed?: boolean

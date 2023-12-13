@@ -124,7 +124,7 @@ const SORTABLE_COLUMNS = {
 
   PLUGINS: [ 'name', 'createdAt', 'updatedAt' ],
 
-  AVAILABLE_PLUGINS: [ 'npmName', 'popularity' ],
+  AVAILABLE_PLUGINS: [ 'npmName', 'popularity', 'trending' ],
 
   VIDEO_REDUNDANCIES: [ 'name' ]
 }

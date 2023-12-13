@@ -20,7 +20,7 @@ export class PluginSearchComponent implements OnInit {
     itemsPerPage: 10,
     totalItems: null
   }
-  sort = '-popularity'
+  sort = '-trending'
 
   search = ''
   isSearching = false
