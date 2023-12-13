@@ -6296,52 +6296,52 @@
       </trans-unit>
       <trans-unit id="4955509738673204025" datatype="html">
         <source>Add synchronization</source>
-        <target state="new">Add synchronization</target>
+        <target state="translated">Lägg till synkronisering</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="4570488343211069802" datatype="html">
         <source>External Channel <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;externalChannelUrl&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="new">External Channel <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;externalChannelUrl&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">Extern kanal <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;externalChannelUrl&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="2576202554023575152" datatype="html">
         <source>Channel <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;videoChannel&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="new">Channel <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;videoChannel&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">Kanal <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;videoChannel&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="858570813277742962" datatype="html">
         <source>Last synchronization at <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;lastSyncAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="new">Last synchronization at <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;lastSyncAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">Senast synkroniserad <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;lastSyncAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="2015493719998914454" datatype="html">
         <source>List imports</source>
-        <target state="new">List imports</target>
+        <target state="translated">Lista över importer</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="6587439290311664751" datatype="html">
         <source>Fully synchronize the channel</source>
-        <target state="new">Fully synchronize the channel</target>
+        <target state="translated">Synkronisera kanalen fullständigt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="2070181811140868440" datatype="html">
         <source>This fetches any missing videos on the local channel</source>
-        <target state="new">This fetches any missing videos on the local channel</target>
+        <target state="translated">Detta hämtar alla videor som saknas på den lokala kanalen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="3997040276213089746" datatype="html">
         <source>Synchronization removed successfully for <x id="PH" equiv-text="videoChannelSync.channel.displayName"/>.</source>
-        <target state="new">Synchronization removed successfully for <x id="PH" equiv-text="videoChannelSync.channel.displayName"/>.</target>
+        <target state="translated">Synkronisering borttagen för <x id="PH" equiv-text="videoChannelSync.channel.displayName"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="2933174785300975212" datatype="html">
         <source>Full synchronization requested successfully for <x id="PH" equiv-text="videoChannelSync.channel.displayName"/>.</source>
-        <target state="new">Full synchronization requested successfully for <x id="PH" equiv-text="videoChannelSync.channel.displayName"/>.</target>
+        <target state="translated">Fullständig synkronisering förfrågad för <x id="PH" equiv-text="videoChannelSync.channel.displayName"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="6985972846000785992" datatype="html">
         <source>NEW SYNCHRONIZATION</source>
-        <target state="new">NEW SYNCHRONIZATION</target>
+        <target state="translated">NY SYNKRONISERING</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">8</context>
@@ -6349,7 +6349,7 @@
       </trans-unit>
       <trans-unit id="5175196640561919257" datatype="html">
         <source>Remote channel URL</source>
-        <target state="new">Remote channel URL</target>
+        <target state="translated">URL till extern kanal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">13</context>
@@ -6357,7 +6357,7 @@
       </trans-unit>
       <trans-unit id="4025171182231078987" datatype="html">
         <source>Example: https://youtube.com/channel/UC_fancy_channel</source>
-        <target state="new">Example: https://youtube.com/channel/UC_fancy_channel</target>
+        <target state="translated">Exempel: https://youtube.com/channel/UC_fancy_channel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">20</context>
@@ -6365,7 +6365,7 @@
       </trans-unit>
       <trans-unit id="454806725275556650" datatype="html">
         <source>Video Channel</source>
-        <target state="new">Video Channel</target>
+        <target state="translated">Videokanal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">33</context>
@@ -6373,7 +6373,7 @@
       </trans-unit>
       <trans-unit id="8290237842846954767" datatype="html">
         <source>Options for existing videos on remote channel:</source>
-        <target state="new">Options for existing videos on remote channel:</target>
+        <target state="translated">Alternativ för befintliga videor på extern kanal:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">42</context>
@@ -6381,7 +6381,7 @@
       </trans-unit>
       <trans-unit id="1331848767706809293" datatype="html">
         <source>Import all and watch for new publications</source>
-        <target state="new">Import all and watch for new publications</target>
+        <target state="translated">Importera alla och bevaka nya uppladdningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">46</context>
@@ -6389,7 +6389,7 @@
       </trans-unit>
       <trans-unit id="1469193438847554223" datatype="html">
         <source>Only watch for new publications</source>
-        <target state="new">Only watch for new publications</target>
+        <target state="translated">Bevaka endast nya uppladdningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">51</context>
@@ -6397,7 +6397,7 @@
       </trans-unit>
       <trans-unit id="9049939123029212539" datatype="html">
         <source>Synchronization created successfully.</source>
-        <target state="new">Synchronization created successfully.</target>
+        <target state="translated">Synkronisering skapad.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -6410,7 +6410,7 @@
       </trans-unit>
       <trans-unit id="5863226045830598109" datatype="html">
         <source>Two factor authentication</source>
-        <target state="new">Two factor authentication</target>
+        <target state="translated">Tvåfaktorsautentisering</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context>
           <context context-type="linenumber">39</context>
@@ -6499,7 +6499,7 @@
       </trans-unit>
       <trans-unit id="6500762313951857695" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Inga visningar} =1 {1 visning} other {<x id="INTERPOLATION"/> visningar}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="9131836378905533756">
@@ -6524,7 +6524,7 @@
       </trans-unit>
       <trans-unit id="111295045776045026" datatype="html">
         <source>Video history is enabled</source>
-        <target state="new">Video history is enabled</target>
+        <target state="translated">Videohistorik aktiverad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">96,95</context>
@@ -6532,7 +6532,7 @@
       </trans-unit>
       <trans-unit id="1869266307786648674" datatype="html">
         <source>Video history is disabled</source>
-        <target state="new">Video history is disabled</target>
+        <target state="translated">Videohistorik avaktiverad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">97,95</context>
@@ -6540,7 +6540,7 @@
       </trans-unit>
       <trans-unit id="7505147502630555700" datatype="html">
         <source>Delete video history</source>
-        <target state="new">Delete video history</target>
+        <target state="translated">Radera videohistorik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -6548,7 +6548,7 @@
       </trans-unit>
       <trans-unit id="8676027102068252963" datatype="html">
         <source>Are you sure you want to delete all your video history?</source>
-        <target state="new">Are you sure you want to delete all your video history?</target>
+        <target state="translated">Vill du verkligen radera all din videohistorik?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -6556,7 +6556,7 @@
       </trans-unit>
       <trans-unit id="7708910304029766516" datatype="html">
         <source>Video history deleted</source>
-        <target state="new">Video history deleted</target>
+        <target state="translated">Videohistorik raderad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">129</context>
@@ -6564,7 +6564,7 @@
       </trans-unit>
       <trans-unit id="3343758569423394070" datatype="html">
         <source>No videos found for "<x id="PH" equiv-text="this.search"/>".</source>
-        <target state="new">No videos found for "<x id="PH" equiv-text="this.search"/>".</target>
+        <target state="translated">Inga videor hittades för ”<x id="PH" equiv-text="this.search"/>”.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">140</context>
@@ -6667,7 +6667,7 @@
       </trans-unit>
       <trans-unit id="6904641160356013310" datatype="html">
         <source>Account request sent</source>
-        <target state="new">Account request sent</target>
+        <target state="translated">Kontoförfrågan skickad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6675,7 +6675,7 @@
       </trans-unit>
       <trans-unit id="8479900728400966992" datatype="html">
         <source>Video stats</source>
-        <target state="new">Video stats</target>
+        <target state="translated">Videostatistik</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/stats-routing.module.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="2121875025429043110" datatype="html">
