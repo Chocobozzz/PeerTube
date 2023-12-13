@@ -164,7 +164,7 @@ export class VideoViewerStats {
 
           await this.deleteLocalVideoViewersKeys(key)
         } catch (err) {
-          logger.error('Cannot process viewer stats for Redis key %s.', key, { err, ...lTags() })
+          logger.error('Cannot process viewer stats for Redis key %s.', key, { err, stats, ...lTags() })
         }
       }
     } catch (err) {
