@@ -8126,6 +8126,36 @@ components:
             enabled:
               type: boolean
 
+        openTelemetry:
+          type: object
+          description: 'PeerTube >= 6.1'
+          properties:
+            metrics:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                playbackStatsInterval:
+                  type: number
+                  description: 'Milliseconds'
+
+        views:
+          type: object
+          description: 'PeerTube >= 6.1'
+          properties:
+            views:
+              type: object
+              properties:
+                watchingInterval:
+                  type: object
+                  properties:
+                    anonymous:
+                      type: number
+                      description: 'Milliseconds'
+                    users:
+                      type: number
+                      description: 'Milliseconds'
+
     SendClientLog:
       properties:
         message:

@@ -382,6 +382,7 @@ export class PeerTubePlayer {
         mode: () => this.currentLoadOptions.mode,
 
         metricsUrl: () => this.options.metricsUrl,
+        metricsInterval: () => this.options.metricsInterval,
         videoUUID: () => this.currentLoadOptions.videoUUID
       }
     }

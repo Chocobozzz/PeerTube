@@ -300,6 +300,27 @@ export interface ServerConfig {
   homepage: {
     enabled: boolean
   }
+
+  openTelemetry: {
+    metrics: {
+      enabled: boolean
+
+      // milliseconds
+      playbackStatsInterval: number
+    }
+  }
+
+  views: {
+    videos: {
+      watchingInterval: {
+        // milliseconds
+        anonymous: number
+
+        // milliseconds
+        users: number
+      }
+    }
+  }
 }
 
 export type HTMLServerConfig = Omit<ServerConfig, 'signup'>

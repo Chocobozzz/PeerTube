@@ -135,6 +135,7 @@ type PeerTubePluginOptions = {
 type MetricsPluginOptions = {
   mode: () => PlayerMode
   metricsUrl: () => string
+  metricsInterval: () => number
   videoUUID: () => string
 }
 

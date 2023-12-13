@@ -498,6 +498,16 @@ describe('Test config', function () {
     await setAccessTokensToServers([ server ])
   })
 
+  it('Should have the correct default config', async function () {
+    const data = await server.config.getConfig()
+
+    expect(data.openTelemetry.metrics.enabled).to.be.false
+    expect(data.openTelemetry.metrics.playbackStatsInterval).to.equal(15000)
+
+    expect(data.views.videos.watchingInterval.anonymous).to.equal(5000)
+    expect(data.views.videos.watchingInterval.users).to.equal(5000)
+  })
+
   it('Should have a correct config on a server with registration enabled', async function () {
     const data = await server.config.getConfig()
 

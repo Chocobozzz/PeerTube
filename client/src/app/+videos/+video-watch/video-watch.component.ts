@@ -113,8 +113,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private hotkeys: Hotkey[] = []
 
-  private static VIEW_VIDEO_INTERVAL_MS = 5000
-
   constructor (
     private route: ActivatedRoute,
     private router: Router,
@@ -625,9 +623,16 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       instanceName: this.serverConfig.instance.name,
       language: this.localeId,
-      metricsUrl: environment.apiUrl + '/api/v1/metrics/playback',
 
-      videoViewIntervalMs: VideoWatchComponent.VIEW_VIDEO_INTERVAL_MS,
+      metricsUrl: this.serverConfig.openTelemetry.metrics.enabled
+        ? environment.apiUrl + '/api/v1/metrics/playback'
+        : null,
+      metricsInterval: this.serverConfig.openTelemetry.metrics.playbackStatsInterval,
+
+      videoViewIntervalMs: this.isUserLoggedIn()
+        ? this.serverConfig.views.videos.watchingInterval.users
+        : this.serverConfig.views.videos.watchingInterval.anonymous,
+
       authorizationHeader: () => this.authService.getRequestHeaderValue(),
 
       serverUrl: environment.originServerUrl || window.location.origin,

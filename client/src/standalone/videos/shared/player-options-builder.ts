@@ -186,8 +186,13 @@ export class PlayerOptionsBuilder {
       playbackRate: this.playbackRate,
 
       inactivityTimeout: 2500,
-      videoViewIntervalMs: 5000,
-      metricsUrl: window.location.origin + '/api/v1/metrics/playback',
+
+      videoViewIntervalMs: serverConfig.views.videos.watchingInterval.anonymous,
+
+      metricsUrl: serverConfig.openTelemetry.metrics.enabled
+        ? window.location.origin + '/api/v1/metrics/playback'
+        : null,
+      metricsInterval: serverConfig.openTelemetry.metrics.playbackStatsInterval,
 
       authorizationHeader,
 

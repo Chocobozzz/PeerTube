@@ -30,6 +30,8 @@ export type PeerTubePlayerContructorOptions = {
   authorizationHeader: () => string
 
   metricsUrl: string
+  metricsInterval: number
+
   serverUrl: string
 
   errorNotifier: (message: string) => void

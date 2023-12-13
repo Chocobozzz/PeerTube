@@ -274,6 +274,22 @@ class ServerConfigManager {
 
       homepage: {
         enabled: this.homepageEnabled
+      },
+
+      openTelemetry: {
+        metrics: {
+          enabled: CONFIG.OPEN_TELEMETRY.METRICS.ENABLED,
+          playbackStatsInterval: CONFIG.OPEN_TELEMETRY.METRICS.PLAYBACK_STATS_INTERVAL
+        }
+      },
+
+      views: {
+        videos: {
+          watchingInterval: {
+            anonymous: CONFIG.VIEWS.VIDEOS.WATCHING_INTERVAL.ANONYMOUS,
+            users: CONFIG.VIEWS.VIDEOS.WATCHING_INTERVAL.USERS
+          }
+        }
       }
     }
   }

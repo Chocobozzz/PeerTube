@@ -254,6 +254,9 @@ open_telemetry:
   metrics:
     enabled: false
 
+    # How often viewers send playback stats to server
+    playback_stats_interval: '15 seconds'
+
     http_request_duration:
       # You can disable HTTP request duration metric that can have a high tag cardinality
       enabled: true
@@ -361,6 +364,17 @@ views:
     local_buffer_update_interval: '30 minutes'
 
     ip_view_expiration: '1 hour'
+
+    # How often the web browser sends "is watching" information to the server
+    # Increase the value or set null to disable it if you plan to have many viewers
+    watching_interval:
+      # Non logged-in viewers
+      anonymous: '5 seconds'
+
+      # Logged-in users of your instance
+      # Unlike anonymous viewers, this endpoint is also used to store the "last watched video timecode" for your users
+      # Increasing this value reduces the accuracy of the video resume
+      users: '5 seconds'
 
 # Used to get country location of views of local videos
 geo_ip:
