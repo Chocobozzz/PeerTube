@@ -38,6 +38,8 @@ class PeerTubePlugin extends Plugin {
 
   private errorModal: videojs.ModalDialog
 
+  private hasInitialSeek = false
+
   private videoViewOnPlayHandler: (...args: any[]) => void
   private videoViewOnSeekedHandler: (...args: any[]) => void
   private videoViewOnEndedHandler: (...args: any[]) => void
@@ -253,6 +255,12 @@ class PeerTubePlugin extends Plugin {
     }
 
     this.videoViewOnSeekedHandler = () => {
+      // Bypass the first initial seek
+      if (this.hasInitialSeek) {
+        this.hasInitialSeek = false
+        return
+      }
+
       const diff = Math.floor(this.player.currentTime()) - lastCurrentTime
 
       // Don't take into account small forwards
@@ -418,6 +426,7 @@ class PeerTubePlugin extends Plugin {
       if (startTime !== null && startTime !== undefined) {
         debugLogger('Start the video at ' + startTime)
 
+        this.hasInitialSeek = true
         this.player.currentTime(timeToInt(startTime))
       }
 
