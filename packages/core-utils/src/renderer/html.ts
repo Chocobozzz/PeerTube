@@ -69,3 +69,9 @@ export function escapeHTML (stringParam: string) {
 
   return String(stringParam).replace(/[&<>"'`=/]/g, s => entityMap[s])
 }
+
+export function escapeAttribute (value: string) {
+  if (!value) return ''
+
+  return String(value).replace(/"/g, '\\"')
+}

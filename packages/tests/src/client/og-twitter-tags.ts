@@ -265,6 +265,19 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
     })
   })
 
+  describe('Escaping', function () {
+
+    it('Should correctly escape values', async function () {
+      await servers[0].users.updateMe({ description: '<strong>"super description"</strong>' })
+
+      const res = await makeGetRequest({ url: servers[0].url, path: '/a/root', accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
+
+      expect(text).to.contain(`<meta property="twitter:description" content="\\"super description\\"" />`)
+      expect(text).to.contain(`<meta property="og:description" content="\\"super description\\"" />`)
+    })
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })

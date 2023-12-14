@@ -1,4 +1,4 @@
-import { escapeHTML } from '@peertube/peertube-core-utils'
+import { escapeAttribute, escapeHTML } from '@peertube/peertube-core-utils'
 import { CONFIG } from '../../../initializers/config.js'
 import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, WEBSERVER } from '../../../initializers/constants.js'
 import { MVideo, MVideoPlaylist } from '../../../types/models/index.js'
@@ -61,7 +61,7 @@ export class TagsHtml {
 
   static addDescriptionTag (htmlStringPage: string, escapedTruncatedDescription?: string) {
     const content = escapedTruncatedDescription || escapeHTML(CONFIG.INSTANCE.SHORT_DESCRIPTION)
-    const descriptionTag = `<meta name="description" content="${content}" />`
+    const descriptionTag = `<meta name="description" content="${escapeAttribute(content)}" />`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.DESCRIPTION, descriptionTag)
   }
@@ -93,7 +93,7 @@ export class TagsHtml {
       const tagValue = openGraphMetaTags[tagName]
       if (!tagValue) return
 
-      tagsStr += `<meta property="${tagName}" content="${tagValue}" />`
+      tagsStr += `<meta property="${tagName}" content="${escapeAttribute(tagValue)}" />`
     })
 
     // Standard
@@ -101,7 +101,7 @@ export class TagsHtml {
       const tagValue = standardMetaTags[tagName]
       if (!tagValue) return
 
-      tagsStr += `<meta property="${tagName}" content="${tagValue}" />`
+      tagsStr += `<meta property="${tagName}" content="${escapeAttribute(tagValue)}" />`
     })
 
     // Twitter card
@@ -109,12 +109,13 @@ export class TagsHtml {
       const tagValue = twitterCardMetaTags[tagName]
       if (!tagValue) return
 
-      tagsStr += `<meta property="${tagName}" content="${tagValue}" />`
+      tagsStr += `<meta property="${tagName}" content="${escapeAttribute(tagValue)}" />`
     })
 
     // OEmbed
     for (const oembedLinkTag of oembedLinkTags) {
-      tagsStr += `<link rel="alternate" type="${oembedLinkTag.type}" href="${oembedLinkTag.href}" title="${oembedLinkTag.escapedTitle}" />`
+      // eslint-disable-next-line max-len
+      tagsStr += `<link rel="alternate" type="${oembedLinkTag.type}" href="${oembedLinkTag.href}" title="${escapeAttribute(oembedLinkTag.escapedTitle)}" />`
     }
 
     // Schema.org
