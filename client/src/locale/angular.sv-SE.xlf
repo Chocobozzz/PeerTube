@@ -3939,13 +3939,13 @@
       </trans-unit>
       <trans-unit id="7217118144256898288" datatype="html">
         <source>This user has two factor authentication enabled</source>
-        <target state="new">This user has two factor authentication enabled</target>
+        <target state="translated">Den här användaren använder tvåfaktorsautentisering</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">232</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">232</context></context-group>
       </trans-unit>
       <trans-unit id="1636606892066514698" datatype="html">
         <source>Disable two factor authentication</source>
-        <target state="new">Disable two factor authentication</target>
+        <target state="translated">Avaktivera tvåfaktorsautentisering</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">233</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">233</context></context-group>
       </trans-unit>
@@ -4434,7 +4434,7 @@
       </trans-unit>
       <trans-unit id="2959657578684395250" datatype="html">
         <source>{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}</source>
-        <target state="new">{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}</target>
+        <target state="translated">{count, plural, =1 {Följförfrågan skickad!} other {Följförfrågningar skickade!}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.ts</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="4058814854824495833" datatype="html">
@@ -4890,7 +4890,7 @@
       </trans-unit>
       <trans-unit id="3646118928964436382" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="new"> Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </target>
+        <target state="translated">Aktivera detta för att låta andra administratörer veta att du huvudsakligen federerar känsligt innehåll.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Dessutom kommer kryssrutan för känsligt och oförbehållsamt innehåll vara förvald vid uppladdning av videor. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">93,96</context>
@@ -5226,7 +5226,7 @@
       </trans-unit>
       <trans-unit id="1140716714758760841" datatype="html">
         <source>Automatically enable video history for new users</source>
-        <target state="new">Automatically enable video history for new users</target>
+        <target state="translated">Aktivera visningshistorik automatiskt för nya användare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">254</context>
@@ -5239,12 +5239,12 @@
       </trans-unit>
       <trans-unit id="6801844913630625451" datatype="html">
         <source>⚠️ We don't recommend to enable this feature if you don't trust your users</source>
-        <target state="new">⚠️ We don't recommend to enable this feature if you don't trust your users</target>
+        <target state="translated">⚠️ Vi avråder användning av den här funktionen om du inte litar på dina användare</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">305</context></context-group>
       </trans-unit>
       <trans-unit id="3991697548652611331" datatype="html">
         <source>Allow channel synchronization with channel of other platforms like YouTube</source>
-        <target state="new">Allow channel synchronization with channel of other platforms like YouTube</target>
+        <target state="translated">Tillåt kanalsynkronisering med kanaler på andra plattformar som YouTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">316</context>
@@ -5252,7 +5252,7 @@
       </trans-unit>
       <trans-unit id="7404104645798703279" datatype="html">
         <source>⛔ You need to allow import with HTTP URL to be able to activate this feature.</source>
-        <target state="new"> ⛔ You need to allow import with HTTP URL to be able to activate this feature. </target>
+        <target state="translated">⛔ Du måste tillåta import med HTTP-URL för att kunna aktivera den här funktionen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">319</context></context-group>
       </trans-unit>
       <trans-unit id="3950258704315544174" datatype="html">
@@ -5437,7 +5437,7 @@
       </trans-unit>
       <trans-unit id="979787821649134273" datatype="html">
         <source>Instance allowed by Twitter/X</source>
-        <target state="new">Instance allowed by Twitter/X</target>
+        <target state="translated">Instans godkänd av Twitter/X</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">609</context>
@@ -5445,7 +5445,7 @@
       </trans-unit>
       <trans-unit id="8963664899094798549" datatype="html">
         <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/> If your instance is explicitly allowed by Twitter/X, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH_1" equiv-text="&lt;p&gt;"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/w/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to see if you instance is allowed. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="new"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/> If your instance is explicitly allowed by Twitter/X, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH_1" equiv-text="&lt;p&gt;"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/w/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to see if you instance is allowed. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/> Om din instans uttryckligen tillåts av Twitter/X kommer en videospelare bäddas in i Twitter-flödet när en PeerTube-video delas.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Om instansen inte är det använder vi ett bildlänkskort som omdirigerar till din PeerTube-instans. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH_1" equiv-text="&lt;p&gt;"/> Markera den här kryssrutan, spara inställningarna och testa med en video-URL från din instans (https://example.com/w/blabla) på <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> för att se om din instans är tillåten. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">614,623</context>
@@ -5487,12 +5487,12 @@
       </trans-unit>
       <trans-unit id="6422195560028891534" datatype="html">
         <source>Small latency disables P2P and high latency can increase P2P ratio</source>
-        <target state="new"> Small latency disables P2P and high latency can increase P2P ratio </target>
+        <target state="translated">Med kort fördröjning avaktiveras P2P och med stor fördröjning kan P2P-förhållandet bli större</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="5191164170233238999" datatype="html">
         <source>Max simultaneous lives created on your instance</source>
-        <target state="new">Max simultaneous lives created on your instance</target>
+        <target state="translated">Största antal samtidiga direktsändningar på din instans</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="6830777508073747241" datatype="html">
@@ -5503,7 +5503,7 @@
       </trans-unit>
       <trans-unit id="1834362188086938736" datatype="html">
         <source>Max simultaneous lives created per user</source>
-        <target state="new">Max simultaneous lives created per user</target>
+        <target state="translated">Största antal samtidiga direktsändningar per användare</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="1521259619066122077" datatype="html">
@@ -5662,7 +5662,7 @@
       </trans-unit>
       <trans-unit id="4354548488369167450" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Kräver minst version 4.1 av ffmpeg<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Skapa HLS-spellistor och fragmenterade MP4-filer för bättre uppspelning än med Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Mjukare byten mellan upplösningar<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Stabilare uppspelning (färre buggar och evig buffring)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Om du även har Web Video-stöd aktiverat kommer videor kräva dubbelt lagringsutrymme<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">94,103</context>
@@ -5756,7 +5756,7 @@
       </trans-unit>
       <trans-unit id="5552130276182854923" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks. Remote runners has to register on your instance first. </target>
+        <target state="translated">Använd <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>fjärrarbetare<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> för att utföra omkodningsuppgifter från studion. Fjärrarbetare måste registrera sig på din instans först. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">240,243</context>
@@ -5919,7 +5919,7 @@
       </trans-unit>
       <trans-unit id="4309045590850686400" datatype="html">
         <source>Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</source>
-        <target state="new">Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</target>
+        <target state="translated">Tvåfaktorsautentisering innebär ytterligare ett skyddande skal för ditt konto genom att kräva en sifferkod från en annan enhet (vanligen en mobiltelefon) när du loggar in.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -6524,7 +6524,7 @@
       </trans-unit>
       <trans-unit id="111295045776045026" datatype="html">
         <source>Video history is enabled</source>
-        <target state="translated">Videohistorik aktiverad</target>
+        <target state="translated">Visningshistorik aktiverad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">96,95</context>
@@ -6532,7 +6532,7 @@
       </trans-unit>
       <trans-unit id="1869266307786648674" datatype="html">
         <source>Video history is disabled</source>
-        <target state="translated">Videohistorik avaktiverad</target>
+        <target state="translated">Visningshistorik avaktiverad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">97,95</context>
@@ -6540,7 +6540,7 @@
       </trans-unit>
       <trans-unit id="7505147502630555700" datatype="html">
         <source>Delete video history</source>
-        <target state="translated">Radera videohistorik</target>
+        <target state="translated">Radera visningshistorik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -6548,7 +6548,7 @@
       </trans-unit>
       <trans-unit id="8676027102068252963" datatype="html">
         <source>Are you sure you want to delete all your video history?</source>
-        <target state="translated">Vill du verkligen radera all din videohistorik?</target>
+        <target state="translated">Vill du verkligen radera all din visningshistorik?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -6556,7 +6556,7 @@
       </trans-unit>
       <trans-unit id="7708910304029766516" datatype="html">
         <source>Video history deleted</source>
-        <target state="translated">Videohistorik raderad</target>
+        <target state="translated">Visningshistorik raderad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">129</context>
@@ -6807,7 +6807,7 @@
       </trans-unit>
       <trans-unit id="3458449147454605646" datatype="html">
         <source>Request a new verification email</source>
-        <target state="new"> Request a new verification email </target>
+        <target state="translated">Begär en ny e-postbekräftelse</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">15,17</context>
@@ -9769,7 +9769,7 @@
       </trans-unit>
       <trans-unit id="5983006734882925930" datatype="html">
         <source>My video history</source>
-        <target state="translated">Min videohistorik</target>
+        <target state="translated">Min visningshistorik</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">129</context></context-group>
       </trans-unit>
       <trans-unit id="6328603643802633101" datatype="html">
