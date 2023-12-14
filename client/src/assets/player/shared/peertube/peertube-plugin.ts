@@ -244,6 +244,7 @@ class PeerTubePlugin extends Plugin {
 
     let lastCurrentTime = startTime
     let lastViewEvent: VideoViewEvent
+    let ended = false // player.ended() is too "slow", so handle ended manually
 
     if (this.videoViewInterval) clearInterval(this.videoViewInterval)
     if (this.videoViewOnPlayHandler) this.player.off('play', this.videoViewOnPlayHandler)
@@ -251,6 +252,8 @@ class PeerTubePlugin extends Plugin {
     if (this.videoViewOnEndedHandler) this.player.off('ended', this.videoViewOnEndedHandler)
 
     this.videoViewOnPlayHandler = () => {
+      debugLogger('Notify user is watching on play: ' + startTime)
+
       this.notifyUserIsWatching(startTime, lastViewEvent)
     }
 
@@ -266,12 +269,20 @@ class PeerTubePlugin extends Plugin {
       // Don't take into account small forwards
       if (diff > 0 && diff < 3) return
 
+      debugLogger('Detected seek event for user watching')
+
       lastViewEvent = 'seek'
     }
 
     this.videoViewOnEndedHandler = () => {
+      ended = true
+
+      if (this.options.isLive()) return
+
       const currentTime = Math.floor(this.player.duration())
       lastCurrentTime = currentTime
+
+      debugLogger('Notify user is watching on end: ' + currentTime)
 
       this.notifyUserIsWatching(currentTime, lastViewEvent)
 
@@ -283,10 +294,14 @@ class PeerTubePlugin extends Plugin {
     this.player.one('ended', this.videoViewOnEndedHandler)
 
     this.videoViewInterval = setInterval(() => {
+      if (ended) return
+
       const currentTime = Math.floor(this.player.currentTime())
 
       // No need to update
       if (currentTime === lastCurrentTime) return
+
+      debugLogger('Notify user is watching: ' + currentTime)
 
       lastCurrentTime = currentTime
 

@@ -50,8 +50,8 @@ export class LocalVideoViewerWatchSectionModel extends Model<Partial<AttributesO
 
     for (const section of watchSections) {
       const model = await this.create({
-        watchStart: section.start,
-        watchEnd: section.end,
+        watchStart: section.start || 0,
+        watchEnd: section.end || 0,
         localVideoViewerId
       }, { transaction })
 
