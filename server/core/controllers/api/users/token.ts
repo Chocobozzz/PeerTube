@@ -78,10 +78,11 @@ async function handleToken (req: express.Request, res: express.Response, next: e
       refresh_token_expires_in: token.refreshTokenExpiresIn
     })
   } catch (err) {
-    logger.warn('Login error', { err })
-
     if (err instanceof MissingTwoFactorError) {
       res.set(OTP.HEADER_NAME, OTP.HEADER_REQUIRED_VALUE)
+      logger.debug('Missing two factor error', { err })
+    } else {
+      logger.warn('Login error', { err })
     }
 
     return res.fail({
