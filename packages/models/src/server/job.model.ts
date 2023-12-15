@@ -269,7 +269,7 @@ export type NotifyPayload =
 
 export interface FederateVideoPayload {
   videoUUID: string
-  isNewVideo: boolean
+  isNewVideoForFederation: boolean
 }
 
 // ---------------------------------------------------------------------------

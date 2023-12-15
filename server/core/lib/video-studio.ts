@@ -118,7 +118,7 @@ export async function onVideoStudioEnded (options: {
       type: 'federate-video' as 'federate-video',
       payload: {
         videoUUID: video.uuid,
-        isNewVideo: false
+        isNewVideoForFederation: false
       }
     },
 

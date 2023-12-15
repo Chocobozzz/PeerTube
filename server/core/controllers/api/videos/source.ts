@@ -165,7 +165,7 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
       type: 'federate-video' as 'federate-video',
       payload: {
         videoUUID: video.uuid,
-        isNewVideo: false
+        isNewVideoForFederation: false
       }
     }
   ]

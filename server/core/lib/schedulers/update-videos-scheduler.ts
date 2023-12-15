@@ -58,7 +58,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
       logger.info('Executing scheduled video update on %s.', video.uuid)
 
       if (schedule.privacy) {
-        isNewVideo = video.isNewVideo(schedule.privacy)
+        isNewVideo = video.isNewVideoForFederation(schedule.privacy)
         oldPrivacy = video.privacy
 
         setVideoPrivacy(video, schedule.privacy)

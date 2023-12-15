@@ -64,7 +64,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const videoFileLockReleaser = await VideoPathManager.Instance.lockFiles(videoFromReq.uuid)
 
   try {
-    const { videoInstanceUpdated, isNewVideo } = await sequelizeTypescript.transaction(async t => {
+    const { videoInstanceUpdated, isNewVideoForFederation } = await sequelizeTypescript.transaction(async t => {
       // Refresh video since thumbnails to prevent concurrent updates
       const video = await VideoModel.loadFull(videoFromReq.id, t)
 
@@ -95,9 +95,15 @@ async function updateVideo (req: express.Request, res: express.Response) {
       }
 
       // Privacy update?
-      let isNewVideo = false
+      let isNewVideoForFederation = false
+
       if (videoInfoToUpdate.privacy !== undefined) {
-        isNewVideo = await updateVideoPrivacy({ videoInstance: video, videoInfoToUpdate, hadPrivacyForFederation, transaction: t })
+        isNewVideoForFederation = await updateVideoPrivacy({
+          videoInstance: video,
+          videoInfoToUpdate,
+          hadPrivacyForFederation,
+          transaction: t
+        })
       }
 
       // Force updatedAt attribute change
@@ -154,7 +160,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       )
       logger.info('Video with name %s and uuid %s updated.', video.name, video.uuid, lTags(video.uuid))
 
-      return { videoInstanceUpdated, isNewVideo }
+      return { videoInstanceUpdated, isNewVideoForFederation }
     })
 
     Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated, body: req.body, req, res })
@@ -163,7 +169,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       video: videoInstanceUpdated,
       nameChanged: !!videoInfoToUpdate.name,
       oldPrivacy,
-      isNewVideo
+      isNewVideoForFederation
     })
   } catch (err) {
     // If the transaction is retried, sequelize will think the object has not changed
@@ -180,6 +186,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
             .end()
 }
 
+// Return a boolean indicating if the video is considered as "new" for remote instances in the federation
 async function updateVideoPrivacy (options: {
   videoInstance: MVideoFullLight
   videoInfoToUpdate: VideoUpdate
@@ -187,7 +194,7 @@ async function updateVideoPrivacy (options: {
   transaction: Transaction
 }) {
   const { videoInstance, videoInfoToUpdate, hadPrivacyForFederation, transaction } = options
-  const isNewVideo = videoInstance.isNewVideo(videoInfoToUpdate.privacy)
+  const isNewVideoForFederation = videoInstance.isNewVideoForFederation(videoInfoToUpdate.privacy)
 
   const newPrivacy = forceNumber(videoInfoToUpdate.privacy) as VideoPrivacyType
   setVideoPrivacy(videoInstance, newPrivacy)
@@ -207,7 +214,7 @@ async function updateVideoPrivacy (options: {
     await VideoModel.sendDelete(videoInstance, { transaction })
   }
 
-  return isNewVideo
+  return isNewVideoForFederation
 }
 
 function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate: VideoUpdate, transaction: Transaction) {

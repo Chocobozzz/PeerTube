@@ -2004,7 +2004,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return isStateForFederation(this.state)
   }
 
-  isNewVideo (newPrivacy: VideoPrivacyType) {
+  isNewVideoForFederation (newPrivacy: VideoPrivacyType) {
     return this.hasPrivacyForFederation() === false && isPrivacyForFederation(newPrivacy) === true
   }
 

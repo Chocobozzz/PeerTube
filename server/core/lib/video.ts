@@ -137,12 +137,12 @@ export const getCachedVideoDuration = memoizee(getVideoDuration, {
 
 export async function addVideoJobsAfterUpdate (options: {
   video: MVideoFullLight
-  isNewVideo: boolean
+  isNewVideoForFederation: boolean
 
   nameChanged: boolean
   oldPrivacy: VideoPrivacyType
 }) {
-  const { video, nameChanged, oldPrivacy, isNewVideo } = options
+  const { video, nameChanged, oldPrivacy, isNewVideoForFederation } = options
   const jobs: CreateJobArgument[] = []
 
   const filePathChanged = await moveFilesIfPrivacyChanged(video, oldPrivacy)
@@ -167,7 +167,7 @@ export async function addVideoJobsAfterUpdate (options: {
     type: 'federate-video',
     payload: {
       videoUUID: video.uuid,
-      isNewVideo
+      isNewVideoForFederation
     }
   })
 
