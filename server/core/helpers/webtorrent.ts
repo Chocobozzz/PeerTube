@@ -36,7 +36,10 @@ async function downloadWebTorrentVideo (target: { uri: string, torrentName?: str
   await ensureDir(directoryPath)
 
   // eslint-disable-next-line new-cap
-  const webtorrent = new (await import('webtorrent')).default()
+  const webtorrent = new (await import('webtorrent')).default({
+    natUpnp: false,
+    natPmp: false
+  } as any)
 
   return new Promise<string>((res, rej) => {
     let file: TorrentFile

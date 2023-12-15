@@ -80,6 +80,7 @@ describe('Time to int', function () {
 
     expect(timeToInt('5h10m')).to.equal(5 * 3600 + 60 * 10)
     expect(timeToInt('5h10m0s')).to.equal(5 * 3600 + 60 * 10)
+    expect(timeToInt('5h10m0')).to.equal(5 * 3600 + 60 * 10)
 
     expect(timeToInt(3500)).to.equal(3500)
   })
