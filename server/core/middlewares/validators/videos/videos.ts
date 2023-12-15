@@ -231,7 +231,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     if (!isValidPasswordProtectedPrivacy(req, res)) return cleanUpReqFiles(req)
 
     const video = getVideoWithAttributes(res)
-    if (video.isLive && video.privacy !== req.body.privacy && video.state !== VideoState.WAITING_FOR_LIVE) {
+    if (exists(req.body.privacy) && video.isLive && video.privacy !== req.body.privacy && video.state !== VideoState.WAITING_FOR_LIVE) {
       return res.fail({ message: 'Cannot update privacy of a live that has already started' })
     }
 
