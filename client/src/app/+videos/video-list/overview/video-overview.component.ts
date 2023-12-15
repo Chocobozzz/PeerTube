@@ -1,5 +1,5 @@
-import { Subject } from 'rxjs'
-import { Component, OnInit } from '@angular/core'
+import { Subject, Subscription, switchMap } from 'rxjs'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Notifier, ScreenService, User, UserService } from '@app/core'
 import { Video } from '@app/shared/shared-main'
 import { OverviewService } from './overview.service'
@@ -10,7 +10,7 @@ import { VideosOverview } from './videos-overview.model'
   templateUrl: './video-overview.component.html',
   styleUrls: [ './video-overview.component.scss' ]
 })
-export class VideoOverviewComponent implements OnInit {
+export class VideoOverviewComponent implements OnInit, OnDestroy {
   onDataSubject = new Subject<any>()
 
   overviews: VideosOverview[] = []
@@ -23,6 +23,8 @@ export class VideoOverviewComponent implements OnInit {
   private maxPage = 20
   private lastWasEmpty = false
   private isLoading = false
+
+  private userSub: Subscription
 
   constructor (
     private notifier: Notifier,
@@ -37,8 +39,18 @@ export class VideoOverviewComponent implements OnInit {
     this.userService.getAnonymousOrLoggedUser()
       .subscribe(user => this.userMiniature = user)
 
-    this.userService.listenAnonymousUpdate()
-      .subscribe(user => this.userMiniature = user)
+    this.userSub = this.userService.listenAnonymousUpdate()
+      .pipe(switchMap(() => this.userService.getAnonymousOrLoggedUser()))
+      .subscribe(user => {
+        this.userMiniature = user
+
+        this.overviews = []
+        this.loadMoreResults()
+      })
+  }
+
+  ngOnDestroy () {
+    if (this.userSub) this.userSub.unsubscribe()
   }
 
   buildVideoChannelBy (object: { videos: Video[] }) {
