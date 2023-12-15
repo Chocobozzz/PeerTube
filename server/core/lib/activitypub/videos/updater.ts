@@ -53,6 +53,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
 
       this.checkChannelUpdateOrThrow(channelActor)
 
+      const oldState = this.video.state
       const videoUpdated = await this.updateVideo(channelActor.VideoChannel, undefined, overrideTo)
 
       if (thumbnailModel) await videoUpdated.addAndSaveThumbnail(thumbnailModel)
@@ -95,7 +96,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
         Notifier.Instance.notifyOnNewVideoIfNeeded(videoUpdated)
       }
 
-      if (videoUpdated.isLive) {
+      if (videoUpdated.isLive && oldState !== videoUpdated.state) {
         PeerTubeSocket.Instance.sendVideoLiveNewState(videoUpdated)
       }
 

@@ -48,7 +48,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
   private async updateAVideo (schedule: MScheduleVideoUpdate) {
     let oldPrivacy: VideoPrivacyType
-    let isNewVideo: boolean
+    let isNewVideoForFederation: boolean
     let published = false
 
     const video = await sequelizeTypescript.transaction(async t => {
@@ -58,7 +58,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
       logger.info('Executing scheduled video update on %s.', video.uuid)
 
       if (schedule.privacy) {
-        isNewVideo = video.isNewVideoForFederation(schedule.privacy)
+        isNewVideoForFederation = video.isNewVideoForFederation(schedule.privacy)
         oldPrivacy = video.privacy
 
         setVideoPrivacy(video, schedule.privacy)
@@ -78,7 +78,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
       return { video, published: false }
     }
 
-    await addVideoJobsAfterUpdate({ video, oldPrivacy, isNewVideo, nameChanged: false })
+    await addVideoJobsAfterUpdate({ video, oldPrivacy, isNewVideoForFederation, nameChanged: false })
 
     return { video, published }
   }

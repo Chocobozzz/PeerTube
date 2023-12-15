@@ -86,9 +86,13 @@ describe('Test live socket messages', function () {
       await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
       await waitJobs(servers)
 
+      // Ensure remote server doesn't send multiple times the state change event to viewers
+      await servers[0].videos.update({ id: liveVideoUUID, attributes: { name: 'my new live name' } })
+      await waitJobs(servers)
+
       for (const stateChanges of [ localStateChanges, remoteStateChanges ]) {
-        expect(stateChanges).to.have.length.at.least(1)
-        expect(stateChanges[stateChanges.length - 1]).to.equal(VideoState.PUBLISHED)
+        expect(stateChanges).to.have.lengthOf(1)
+        expect(stateChanges[0]).to.equal(VideoState.PUBLISHED)
       }
 
       await stopFfmpeg(ffmpegCommand)
