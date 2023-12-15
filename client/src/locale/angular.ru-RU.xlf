@@ -315,7 +315,7 @@
       </trans-unit>
       <trans-unit id="906167214730624194" datatype="html">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{views, plural, =0 {Нет просмотров} =1 {1 просмотр} other {<x id="views"/> просмотров}}</target>
+        <target state="translated">{views, plural, =0 {Нет просмотров} one {<x id="views"/> просмотр} few {<x id="views"/> просмотра} other {<x id="views"/> просмотров}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context><context context-type="linenumber">292</context></context-group>
       </trans-unit>
       <trans-unit id="1747775295354213975" datatype="html">
@@ -543,7 +543,7 @@
       </trans-unit>
       <trans-unit id="7688104409544625220" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 просмотр} other {<x id="INTERPOLATION"/> просмотров}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> просмотр} few {<x id="INTERPOLATION"/> просмотра} other {<x id="INTERPOLATION"/> просмотров}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="8562063050145802350" datatype="html">
@@ -3489,7 +3489,7 @@
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> and others </source>
-        <target state="translated">Просмотреть <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 ответ} other {{{ comment.totalReplies }} ответа(ов)}}"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'автора' }}"/> и другие </target>
+        <target state="translated">Просмотреть <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, one {{{ comment.totalReplies }} ответ} few {{{ comment.totalReplies }} ответа} other {{{ comment.totalReplies }} ответов}}"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'автора' }}"/> и другие </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="4036338619293319383" datatype="html">
@@ -10315,27 +10315,27 @@
       </trans-unit>
       <trans-unit id="8489397598480880903" datatype="html">
         <source>{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</source>
-        <target state="translated">{interval, plural, =1 {1 год назад} other {<x id="interval"/> лет назад}}</target>
+        <target state="translated">{interval, plural, one {<x id="interval"/> год назад} few {<x id="interval"/> года назад} other {<x id="interval"/> лет назад}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="599762045687999334" datatype="html">
         <source>{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</source>
-        <target state="translated">{interval, plural, =1 {1 месяц назад} other {<x id="interval"/> месяцев назад}}</target>
+        <target state="translated">{interval, plural, one {<x id="interval"/> месяц назад} few {<x id="interval"/> месяца назад} other {<x id="interval"/> месяцев назад}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="4951459525104027759" datatype="html">
         <source>{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</source>
-        <target state="translated">{interval, plural, =1 {1 неделю назад} other {<x id="interval"/> недель назад}}</target>
+        <target state="translated">{interval, plural, one {<x id="interval"/> неделя назад} few {<x id="interval"/> недели назад} other {<x id="interval"/> недель назад}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="2471141982657856893" datatype="html">
         <source>{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</source>
-        <target state="translated">{interval, plural, =1 {1 день назад} other {<x id="interval"/> дней назад}}</target>
+        <target state="translated">{interval, plural, one {<x id="interval"/> день назад} few {<x id="interval"/> дня назад} other {<x id="interval"/> дней назад}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="8562677309401914974" datatype="html">
         <source>{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</source>
-        <target state="translated">{interval, plural, =1 {1 час назад} other {<x id="interval"/> часов назад}}</target>
+        <target state="translated">{interval, plural, one {<x id="interval"/> час назад} few {<x id="interval"/> часа назад} other {<x id="interval"/> часов назад}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="6499699285816188400" datatype="html">
@@ -12493,7 +12493,7 @@
       </trans-unit>
       <trans-unit id="992317512448454409" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Нет комментариев} =1 {1 Комментарий} other {<x id="INTERPOLATION"/> Комментариев}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Нет комментариев} one {<x id="INTERPOLATION"/> Комментарий} few {<x id="INTERPOLATION"/> Комментария} other {<x id="INTERPOLATION"/> Комментариев}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="4903651219400691248" datatype="html">
