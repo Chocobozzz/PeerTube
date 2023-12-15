@@ -52,13 +52,13 @@ function timeToInt (time: number | string) {
   if (typeof time === 'number') return time
 
   // Try with 00h00m00s format first
-  const reg = new RegExp(`^(\\d+h)?(\\d+m)?(\\d+)s?$`)
+  const reg = new RegExp(`^((?<hours>\\d+)h)?((?<minutes>\\d+)m)?((?<seconds>\\d+)s?)?$`)
   const matches = time.match(reg)
 
   if (matches) {
-    const hours = parseInt(matches[1] || '0', 10)
-    const minutes = parseInt(matches[2] || '0', 10)
-    const seconds = parseInt(matches[3] || '0', 10)
+    const hours = parseInt(matches.groups['hours'] || '0', 10)
+    const minutes = parseInt(matches.groups['minutes'] || '0', 10)
+    const seconds = parseInt(matches.groups['seconds'] || '0', 10)
 
     return hours * 3600 + minutes * 60 + seconds
   }

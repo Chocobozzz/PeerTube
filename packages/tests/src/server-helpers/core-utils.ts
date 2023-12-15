@@ -78,6 +78,9 @@ describe('Time to int', function () {
     expect(timeToInt('02h02m03s')).to.equal(7323)
     expect(timeToInt('2:02:3')).to.equal(7323)
 
+    expect(timeToInt('5h10m')).to.equal(5 * 3600 + 60 * 10)
+    expect(timeToInt('5h10m0s')).to.equal(5 * 3600 + 60 * 10)
+
     expect(timeToInt(3500)).to.equal(3500)
   })
 })
