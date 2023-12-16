@@ -335,7 +335,7 @@
       </trans-unit>
       <trans-unit id="4873265433447388314" datatype="html">
         <source>{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</source>
-        <target state="translated">{viewers, plural, =0 {Нет зрителей} =1 {1 зритель} other {<x id="viewers"/> зрителей}}</target>
+        <target state="translated">{viewers, plural, =0 {Нет зрителей} one {<x id="viewers"/> зритель} few {<x id="viewers"/> зрителя} other {<x id="viewers"/> зрителей}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context><context context-type="linenumber">289</context></context-group>
       </trans-unit>
       <trans-unit id="3321250177023376249" datatype="html">
@@ -485,7 +485,7 @@
       </trans-unit>
       <trans-unit id="1080230904501320275" datatype="html">
         <source>{count, plural, =1 {1 user banned.} other {<x id="count"/> users banned.}}</source>
-        <target state="translated">{count, plural, =1 {1 пользователь заблокирован.} other {<x id="count"/> пользователи заблокированы.}}</target>
+        <target state="translated">{count, plural, one {<x id="count"/> пользователь заблокирован.} few {<x id="count"/> пользователя заблокированы.} other {<x id="count"/> пользователей заблокированы.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="2330577642930707695">
@@ -548,7 +548,7 @@
       </trans-unit>
       <trans-unit id="8562063050145802350" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 зритель} other {<x id="INTERPOLATION"/> зрителя(ей)}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> зритель} few {<x id="INTERPOLATION"/> зрителя} other {<x id="INTERPOLATION"/> зрителя(ей)}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">7</context>
@@ -588,7 +588,7 @@
       </trans-unit>
       <trans-unit id="6228449077605046873" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</source>
-        <target state="translated">Вы уверены, что хотите удалить {count, plural, =1 {1 HLS плейлист} other {<x id="count"/> HLS плейлистов}}?</target>
+        <target state="translated">Вы уверены, что хотите удалить {count, plural, one {<x id="count"/> HLS плейлист} few {<x id="count"/> HLS плейлиста} other {<x id="count"/> HLS плейлистов}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">271</context></context-group>
       </trans-unit>
       <trans-unit id="4435640428611044716" datatype="html">
@@ -1088,7 +1088,7 @@
       </trans-unit>
       <trans-unit id="901879091817013957" datatype="html">
         <source>{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> videos.}}</source>
-        <target state="translated">{count, plural, =1 {Заблокировано <x id="videoName"/>.} other {Заблокировано <x id="count"/> видео.}}</target>
+        <target state="translated">{count, plural, =1 {Заблокировано <x id="videoName"/>.} other {Заблокированы <x id="count"/> видео.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="1191071088182425837" datatype="html">
@@ -2459,12 +2459,12 @@
       </trans-unit>
       <trans-unit id="6096602245926393232" datatype="html">
         <source>Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</source>
-        <target state="translated">Вы действительно хотите удалить {count, plural, =1 {<x id="username"/> запрос на регистрацию?} other {<x id="count"/> запросов на регистрацию?}}</target>
+        <target state="translated">Вы действительно хотите удалить {count, plural, =1 {запрос от <x id="username"/>} one {<x id="count"/> запрос} few {<x id="count"/> запроса} other {<x id="count"/> запросов}} на регистрацию?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="9152096266184328708" datatype="html">
         <source>Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</source>
-        <target state="translated">Удалено {count, plural, =1 {<x id="username"/> запрос на регистрацию} other {<x id="count"/> запросов на регистрацию}}</target>
+        <target state="translated">{count, plural, =1 {Удален запрос от <x id="username"/>} one {Удален <x id="count"/> запрос} few {Удалено <x id="count"/> запроса} other {Удалено <x id="count"/> запросов}} на регистрацию</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
       <trans-unit id="2806917038528218276" datatype="html">
@@ -3489,24 +3489,24 @@
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> and others </source>
-        <target state="translated">Просмотреть <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, one {{{ comment.totalReplies }} ответ} few {{{ comment.totalReplies }} ответа} other {{{ comment.totalReplies }} ответов}}"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'автора' }}"/> и другие </target>
+        <target state="translated">Просмотреть <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, one {{{ comment.totalReplies }} ответ} few {{{ comment.totalReplies }} ответа} other {{{ comment.totalReplies }} ответов}}"/> от <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'автора' }}"/> и других </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="4036338619293319383" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 ответ} other {<x id="INTERPOLATION"/> ответа(ов)}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> ответ} few {<x id="INTERPOLATION"/> ответа} other {<x id="INTERPOLATION"/> ответов}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">77</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">80</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="translated">Просмотреть <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 ответ} other {{{ comment.totalReplies }} ответов}}"/> от<x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'автора' }}"/> </target>
+        <target state="translated">Просмотреть <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, one {{{ comment.totalReplies }} ответ} few {{{ comment.totalReplies }} ответа} other {{{ comment.totalReplies }} ответов}}"/> от<x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'автора' }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="5535545444690528619" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/></source>
-        <target state="translated">Просмотреть <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 ответ} other {{{ comment.totalReplies }} ответов}}"/></target>
+        <target state="translated">Просмотреть <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, one {{{ comment.totalReplies }} ответ} few {{{ comment.totalReplies }} ответа} other {{{ comment.totalReplies }} ответов}}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="1055254162789146714">
@@ -3805,7 +3805,7 @@
       </trans-unit>
       <trans-unit id="8168516547268350654" datatype="html">
         <source>Do you really want to unfollow {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> entries?}}</source>
-        <target state="translated">Вы действительно хотите отменить подписку на {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> записи?}}</target>
+        <target state="translated">Вы действительно хотите отменить подписку на {count, plural, =1 {<x id="entryName"/>?} one {<x id="count"/> запись?} few {<x id="count"/> записи?} other {<x id="count"/> записей?}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="9216117865911519658" datatype="html">
@@ -4279,7 +4279,7 @@
       </trans-unit>
       <trans-unit id="5026011498416291967" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></source>
-        <target state="translated"><x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></target>
+        <target state="translated"><x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, one {{{ abuse.countReportsForReporter }} отчёт} few {{{ abuse.countReportsForReporter }} отчёта} other {{{ abuse.countReportsForReporter }} отчётов}}"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">21,23</context>
@@ -4371,7 +4371,7 @@
       </trans-unit>
       <trans-unit id="6540177673229220400" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 отчёт} other {<x id="INTERPOLATION"/> отчётов}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> отчёт} few {<x id="INTERPOLATION"/> отчёта} other {<x id="INTERPOLATION"/> отчётов}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">22</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
@@ -4579,7 +4579,7 @@
       </trans-unit>
       <trans-unit id="1780056719120519633" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}" xid="3148804384763272950"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {результат} other {результатов}}"/> для "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, one {результат} few {результата} other {результатов}}"/> для "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="3148804384763272950" datatype="html">
@@ -4660,7 +4660,7 @@
       </trans-unit>
       <trans-unit id="1271241007621398467" datatype="html">
         <source>{count, plural, =1 {1 comment deleted.} other {<x id="count"/> comments deleted.}}</source>
-        <target state="translated">{count, plural, =1 {1 комментарий удален.} other {<x id="count"/> комментарии удалены.}}</target>
+        <target state="translated">{count, plural, one {<x id="count"/> комментарий удален.} few {<x id="count"/> комментария удалены.} other {<x id="count"/> комментариев удалены.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="379090446060940062" datatype="html">
@@ -5126,7 +5126,7 @@
       </trans-unit>
       <trans-unit id="8342879272354516454" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {year old} other {years old}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {год} other {лет}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {год} few {года} other {лет}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">209</context></context-group>
       </trans-unit>
       <trans-unit id="7456307533995141215" datatype="html">
@@ -5815,7 +5815,7 @@
       </trans-unit>
       <trans-unit id="224402797620080356" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached storyboard} other {cached storyboards}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {кешированный кадр} other {кешированных кадров}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {кешированный кадр} few {кешированных кадра} other {кешированных кадров}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">64</context>
@@ -6490,7 +6490,7 @@
       </trans-unit>
       <trans-unit id="6500762313951857695" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {No views} =1 {1 просмотр} other {<x id="INTERPOLATION"/> просмотров}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Нет просмотров} one {<x id="INTERPOLATION"/> просмотр} few {<x id="INTERPOLATION"/> просмотра} other {<x id="INTERPOLATION"/> просмотров}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="9131836378905533756">
@@ -6772,12 +6772,12 @@
       </trans-unit>
       <trans-unit id="3030338154442300172" datatype="html">
         <source>Created <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}" xid="498463490165953744"/> </source>
-        <target state="translated">Создан <x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, =1 {1 плейлист} other {{{ pagination.totalItems }} плейлистов}}"/> </target>
+        <target state="translated">Создан <x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, one {{{ pagination.totalItems }} плейлист} few {{{ pagination.totalItems }} плейлиста} other {{{ pagination.totalItems }} плейлистов}}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="3505845886770923767" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 плейлист} other {<x id="INTERPOLATION"/> плейлистов}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> плейлист} few {<x id="INTERPOLATION"/> плейлиста} other {<x id="INTERPOLATION"/> плейлистов}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6992,7 +6992,7 @@
       </trans-unit>
       <trans-unit id="403587185492002456" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 подписчик} other {<x id="INTERPOLATION"/> подписчиков}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> подписчик} few {<x id="INTERPOLATION"/> подписчика} other {<x id="INTERPOLATION"/> подписчиков}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="3068011377000255023" datatype="html">
@@ -7046,7 +7046,7 @@
       </trans-unit>
       <trans-unit id="6591746065516872491" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No subscribers} =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Нет подписчиков} =1 {1 подписчик} other {<x id="INTERPOLATION"/> подписчиков}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Нет подписчиков} one {<x id="INTERPOLATION"/> подписчик} few {<x id="INTERPOLATION"/> подписчика} other {<x id="INTERPOLATION"/> подписчиков}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">26</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">43</context></context-group>
@@ -7823,7 +7823,7 @@
       </trans-unit>
       <trans-unit id="5921284055608402352" datatype="html">
         <source>{value, plural, =1 {thread} other {threads}}</source>
-        <target state="translated">{value, plural, =1 {поток} other {потоков}}</target>
+        <target state="translated">{value, plural, one {поток} few {потока} other {потоков}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="3957742085471141221">
@@ -8134,17 +8134,17 @@
       </trans-unit>
       <trans-unit id="3145156821099755377" datatype="html">
         <source>Accepted {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">Принято {count, plural, =1 {<x id="followerName"/> запрос на отслеживание} other {<x id="count"/> запросов на отслеживание}}</target>
+        <target state="translated">{count, plural, =1 {Принят запрос от <x id="followerName"/>} one {Принят <x id="count"/> запрос} few {Принято <x id="count"/> запроса} other {Принято <x id="count"/> запросов}} на отслеживание</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="8823680466537853782" datatype="html">
         <source>Do you really want to reject {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
-        <target state="translated">Вы действительно хотите отклонить {count, plural, =1 {<x id="followerName"/> запрос на подписку?} other {<x id="count"/> запросов на подписку?}}</target>
+        <target state="translated">Вы действительно хотите отклонить {count, plural, =1 {запрос от <x id="followerName"/>} one {<x id="count"/> запрос} few {<x id="count"/> запроса} other {<x id="count"/> запросов}} на подписку?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="7182104881582756649" datatype="html">
         <source>Rejected {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">Отклонено {count, plural, =1 {<x id="followerName"/> запрос на подписку} other {<x id="count"/> запросов на подписку}}</target>
+        <target state="translated">{count, plural, =1 {Отклонен запрос от <x id="followerName"/>} one {Отклонен <x id="count"/> запрос} few {Отклонено <x id="count"/> запроса} other {Отклонено <x id="count"/> запросов}} на подписку</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="4309656190692990192" datatype="html">
@@ -8154,12 +8154,12 @@
       </trans-unit>
       <trans-unit id="4187075675930483010" datatype="html">
         <source>Do you really want to delete {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
-        <target state="translated">Вы действительно хотите удалить {count, plural, =1 {<x id="followerName"/> запрос на отслеживание?} other {<x id="count"/> запросов на отслеживание?}}</target>
+        <target state="translated">Вы действительно хотите удалить {count, plural, =1 {запрос от <x id="followerName"/>} one {<x id="followerName"/> запрос} few {<x id="followerName"/> запроса} other {<x id="count"/> запросов}} на отслеживание?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="805843790553313750" datatype="html">
         <source>Removed {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">Удалено {count, plural, =1 {<x id="followerName"/> запрос на отслеживание} other {<x id="count"/> запросов на отслеживание}}</target>
+        <target state="translated">{count, plural, =1 {Удален запрос от <x id="followerName"/>} one {Удален <x id="count"/> запрос} few {Удалено <x id="count"/> запроса} other {Удалено <x id="count"/> запросов}} на отслеживание</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="6018246591673612412" datatype="html">
@@ -8197,7 +8197,7 @@
       </trans-unit>
       <trans-unit id="1289115499993408300" datatype="html">
         <source>You are not following {count, plural, =1 {<x id="entryName"/> anymore.} other {these <x id="count"/> entries anymore.}}</source>
-        <target state="translated">Вы больше не подписаны на {count, plural, =1 {<x id="entryName"/> anymore.} other {these <x id="count"/> записи.}}</target>
+        <target state="translated">Вы больше не подписаны на {count, plural, =1 {<x id="entryName"/>} one {<x id="count"/> запись} few {<x id="count"/> записи} other {<x id="count"/> записей}}.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="397182597341363053" datatype="html">
@@ -8731,7 +8731,7 @@
       </trans-unit>
       <trans-unit id="7146070362549250677" datatype="html">
         <source>Completed jobs</source>
-        <target state="translated">Выполненные работы</target>
+        <target state="translated">Выполненные задания</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">30</context>
@@ -8739,7 +8739,7 @@
       </trans-unit>
       <trans-unit id="2841995988789172579" datatype="html">
         <source>Pending jobs</source>
-        <target state="translated">Ожидающие работы</target>
+        <target state="translated">Ожидающие задания</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -8768,7 +8768,7 @@
       </trans-unit>
       <trans-unit id="410829478323542752" datatype="html">
         <source>Delete this job</source>
-        <target state="translated">Удалить эту работу</target>
+        <target state="translated">Удалить это задание</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -8776,7 +8776,7 @@
       </trans-unit>
       <trans-unit id="693664545987486839" datatype="html">
         <source>Do you really want to cancel {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be cancelled.</source>
-        <target state="translated">Вы действительно хотите отменить {count, plural, =1 {задание} other {<x id="count"/> задания}}? Children jobs will also be cancelled.</target>
+        <target state="translated">Вы действительно хотите отменить {count, plural, one {<x id="count"/> задание} few {<x id="count"/> задания} other {<x id="count"/> заданий}}? Дочерние задания также будут отменены.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="8430670111153715725" datatype="html">
@@ -8786,7 +8786,7 @@
       </trans-unit>
       <trans-unit id="2175266358082397536" datatype="html">
         <source>Do you really want to remove {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be removed.</source>
-        <target state="translated">Вы действительно хотите удалить {count, plural, =1 {это задание} other {<x id="count"/> задания}}? Children jobs will also be removed.</target>
+        <target state="translated">Вы действительно хотите удалить {count, plural, =1 {это задание} one {<x id="count"/> задание} few {<x id="count"/> задания} other {<x id="count"/> задания}}? Дочерние задания также будут удалены.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">119</context>
@@ -9112,12 +9112,12 @@
       </trans-unit>
       <trans-unit id="7634059432691079352" datatype="html">
         <source>Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</source>
-        <target state="translated">Вы действительно хотите разблокировать {count, plural, =1 {1 пользователя} other {<x id="count"/> пользователей}}?</target>
+        <target state="translated">Вы действительно хотите разблокировать {count, plural, one {<x id="count"/> пользователя} few {<x id="count"/> пользователя} other {<x id="count"/> пользователей}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">214</context></context-group>
       </trans-unit>
       <trans-unit id="738031253894929036" datatype="html">
         <source>{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</source>
-        <target state="translated">{count, plural, =1 {1 пользователь разблокирован.} other {<x id="count"/> пользователей разблокированы.}}</target>
+        <target state="translated">{count, plural, one {<x id="count"/> пользователь разблокирован.} few {<x id="count"/> пользователя разблокированы.} other {<x id="count"/> пользователей разблокированы.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">227</context></context-group>
       </trans-unit>
       <trans-unit id="5325873477837320044">
@@ -9138,12 +9138,12 @@
       </trans-unit>
       <trans-unit id="1301767781765127363" datatype="html">
         <source>{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</source>
-        <target state="translated">{count, plural, =1 {1 пользователь удален.} other {<x id="count"/> пользователей удалены.}}</target>
+        <target state="translated">{count, plural, one {удален <x id="count"/> пользователь.} few {удалено <x id="count"/> пользователя.} other {удалено <x id="count"/> пользователей.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">256</context></context-group>
       </trans-unit>
       <trans-unit id="3104427236147521673" datatype="html">
         <source>{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</source>
-        <target state="translated">{count, plural, =1 {1 адрес электронной почты пользователя установлен как подтвержденный.} other {<x id="count"/> адресов электронной почты пользователей установлены как подтвержденные.}}</target>
+        <target state="translated">{count, plural, one {<x id="count"/> адрес электронной почты пользователя установлен как подтвержденный.} few {<x id="count"/> адреса электронной почты пользователя установлены как подтвержденные.} other {<x id="count"/> адресов электронной почты пользователей установлены как подтвержденные.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">274</context></context-group>
       </trans-unit>
       <trans-unit id="7390990800435887351">
@@ -9640,7 +9640,7 @@
       </trans-unit>
       <trans-unit id="8501241441398968873" datatype="html">
         <source>It will delete {count, plural, =1 {1 video} other {<x id="count"/> videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (<x id="PH" equiv-text="videoChannel.name"/>)!</source>
-        <target state="translated">Это приведет к удалению {count, plural, =1 {1 video} other {<x id="count"/> videos}} загруженных на этот канал, и вы не сможете создать другой канал или учетную запись с таким же именем (<x id="PH" equiv-text="videoChannel.name"/>)!</target>
+        <target state="translated">Это приведет к удалению {count, plural, =1 {1 видео} other {<x id="count"/> видео}} загруженных на этот канал, и вы не сможете создать другой канал или учетную запись с таким же именем (<x id="PH" equiv-text="videoChannel.name"/>)!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -10280,7 +10280,7 @@
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}" xid="3148804384763272950"/></source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {результат} other {результатов}}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, one {результат} few {результата} other {результатов}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">5</context>
@@ -11200,7 +11200,7 @@
       </trans-unit>
       <trans-unit id="8280589137189201687" datatype="html">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="translated">You can't select more than {maxItems, plural, =1 {1 элемент} other {<x id="maxItems"/> элементов}}</target>
+        <target state="translated">Вы не можете выбрать более {maxItems, plural, one {<x id="maxItems"/> элемента} other {<x id="maxItems"/> элементов}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="6708273825233539746" datatype="html">
@@ -11628,12 +11628,12 @@
       </trans-unit>
       <trans-unit id="3911025298999036211" datatype="html">
         <source>~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</source>
-        <target state="translated">~ {hours, plural, =1 {1 час} other {<x id="hours"/> часов}}</target>
+        <target state="translated">~ {hours, plural, one {<x id="hours"/> час} few {<x id="hours"/> часа} other {<x id="hours"/> часов}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="2819927377059070056" datatype="html">
         <source>~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</source>
-        <target state="translated">~ {minutes, plural, =1 {1 минута} other {<x id="minutes"/> минут}}</target>
+        <target state="translated">~ {minutes, plural, one {<x id="minutes"/> минута} few {<x id="minutes"/> минуты} other {<x id="minutes"/> минут}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="6028521920505655348" datatype="html">
@@ -11718,7 +11718,7 @@
       </trans-unit>
       <trans-unit id="2836537219160375057" datatype="html">
         <source>Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</source>
-        <target state="translated">Ban {count, plural, =1 {1 пользователь} other {<x id="count"/> пользователей}}</target>
+        <target state="translated">Заблокировать {count, plural, one {<x id="count"/> пользователя} other {<x id="count"/> пользователей}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="8088707210191809175" datatype="html">
@@ -12341,7 +12341,7 @@
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
-        <target state="translated">Вы уверены, что хотите удалить {count, plural, =1 {это видео} other {these <x id="count"/> видео}}?</target>
+        <target state="translated">Вы уверены, что хотите удалить {count, plural, =1 {это видео} other {эти <x id="count"/> видео}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">223</context></context-group>
       </trans-unit>
       <trans-unit id="1950057220179636309">
@@ -12372,7 +12372,7 @@
       </trans-unit>
       <trans-unit id="754514708851972720" datatype="html">
         <source>Job(s) removed.</source>
-        <target state="translated">Работы удалены.</target>
+        <target state="translated">Задания удалены.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">131</context>
