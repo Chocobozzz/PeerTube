@@ -100,10 +100,13 @@ body {
     }
   }
 
-  .vjs-control-bar,
-  .vjs-big-play-button,
-  .vjs-settings-dialog {
+  .vjs-big-play-button {
     background-color: pvar(--embedBigPlayBackgroundColor);
+  }
+
+  .vjs-settings-dialog,
+  .vjs-control-bar {
+    background-color: $primary-background-color;
   }
 
   .vjs-poster {
