@@ -1,7 +1,7 @@
 import { createWriteStream } from 'fs'
 import { remove } from 'fs-extra/esm'
-import { request as requestHTTP } from 'http'
-import { request as requestHTTPS, RequestOptions } from 'https'
+import { RequestOptions } from 'https'
+import { http, https } from 'follow-redirects'
 import { logger } from './logger.js'
 
 export function downloadFile (options: {
@@ -61,7 +61,7 @@ export function downloadFile (options: {
 // ---------------------------------------------------------------------------
 
 function getRequest (url: string) {
-  if (url.startsWith('https://')) return requestHTTPS
+  if (url.startsWith('https://')) return https.request
 
-  return requestHTTP
+  return http.request
 }
