@@ -36,25 +36,50 @@ export class FFmpegImage {
     return this.commandWrapper.runCommand()
   }
 
+  // ---------------------------------------------------------------------------
+
   async generateThumbnailFromVideo (options: {
     fromPath: string
     output: string
     framesToAnalyze: number
     ffprobe?: FfprobeData
   }) {
-    const { fromPath, output, ffprobe, framesToAnalyze } = options
+    const { fromPath, ffprobe } = options
 
     let duration = await getVideoStreamDuration(fromPath, ffprobe)
     if (isNaN(duration)) duration = 0
 
-    this.commandWrapper.buildCommand(fromPath)
+    this.buildGenerateThumbnailFromVideo(options)
       .seekInput(duration / 2)
+
+    try {
+      return await this.commandWrapper.runCommand()
+    } catch (err) {
+      this.commandWrapper.debugLog('Cannot generate thumbnail from video using seek input, fallback to no seek', { err })
+
+      this.commandWrapper.resetCommand()
+
+      this.buildGenerateThumbnailFromVideo(options)
+
+      return this.commandWrapper.runCommand()
+    }
+  }
+
+  private buildGenerateThumbnailFromVideo (options: {
+    fromPath: string
+    output: string
+    framesToAnalyze: number
+  }) {
+    const { fromPath, output, framesToAnalyze } = options
+
+    return this.commandWrapper.buildCommand(fromPath)
       .videoFilter('thumbnail=' + framesToAnalyze)
       .outputOption('-frames:v 1')
+      .outputOption('-abort_on empty_output')
       .output(output)
-
-    return this.commandWrapper.runCommand()
   }
+
+  // ---------------------------------------------------------------------------
 
   async generateStoryboardFromVideo (options: {
     path: string

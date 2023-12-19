@@ -79,6 +79,10 @@ export class FFmpegCommandWrapper {
 
   // ---------------------------------------------------------------------------
 
+  resetCommand () {
+    this.command = undefined
+  }
+
   buildCommand (input: string) {
     if (this.command) throw new Error('Command is already built')
 
