@@ -18,7 +18,7 @@ export async function generateWebVideoPresignedUrl (options: {
   const command = new GetObjectCommand({
     Bucket: CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME,
     Key: buildKey(key, CONFIG.OBJECT_STORAGE.WEB_VIDEOS),
-    ResponseContentDisposition: `attachment; filename=${downloadFilename}`
+    ResponseContentDisposition: `attachment; filename=${encodeURI(downloadFilename)}`
   })
 
   const url = await getSignedUrl(await getClient(), command, { expiresIn: 3600 * 24 })
@@ -41,7 +41,7 @@ export async function generateHLSFilePresignedUrl (options: {
   const command = new GetObjectCommand({
     Bucket: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME,
     Key: buildKey(key, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS),
-    ResponseContentDisposition: `attachment; filename=${downloadFilename}`
+    ResponseContentDisposition: `attachment; filename=${encodeURI(downloadFilename)}`
   })
 
   const url = await getSignedUrl(await getClient(), command, { expiresIn: 3600 * 24 })
