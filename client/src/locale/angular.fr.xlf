@@ -1340,7 +1340,7 @@
       </trans-unit>
       <trans-unit id="6360987759186261451" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>}.</source>
-        <target state="translated">PeerTube ne peut pas manipuler ce type de fichier. Les extensions acceptées sont <x id="PH" equiv-text="this.allowedExtensionsMessage"/>}.</target>
+        <target state="translated">PeerTube ne peut traiter ce genre de fichier. Les extensions acceptées sont <x id="PH" equiv-text="this.allowedExtensionsMessage"/>}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -10339,7 +10339,7 @@
       </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
         <source>Video redundancies</source>
-        <target state="translated">Redondances des vidéos</target>
+        <target state="translated">Redondances de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">39</context>
