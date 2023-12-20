@@ -4,7 +4,7 @@ import { HttpStatusCode } from '@peertube/peertube-models'
 import { isVideoTimeValid } from '@server/helpers/custom-validators/video-view.js'
 import { getCachedVideoDuration } from '@server/lib/video.js'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
-import { isIdValid, isIntOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
+import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
 
 const getVideoLocalViewerValidator = [
@@ -33,7 +33,7 @@ const videoViewValidator = [
 
   body('currentTime')
     .customSanitizer(toIntOrNull)
-    .custom(isIntOrNull),
+    .isInt(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

@@ -48,6 +48,7 @@ describe('Test videos views', function () {
     })
 
     it('Should fail with an invalid current time', async function () {
+      await servers[0].views.view({ id: videoId, currentTime: null, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       await servers[0].views.view({ id: videoId, currentTime: -1, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       await servers[0].views.view({ id: videoId, currentTime: 10, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
