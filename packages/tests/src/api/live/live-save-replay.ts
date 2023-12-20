@@ -440,8 +440,6 @@ describe('Save replay setting', function () {
       it('Should federate the replay after updating its privacy to public', async function () {
         this.timeout(120000)
 
-        console.log(lastReplayUUID)
-
         await servers[0].videos.update({ id: lastReplayUUID, attributes: { privacy: VideoPrivacy.PUBLIC } })
         await waitJobs(servers)
 
