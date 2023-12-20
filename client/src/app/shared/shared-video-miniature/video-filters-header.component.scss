@@ -1,6 +1,19 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
+@mixin pastille {
+  @include margin-right(15px);
+
+  border-radius: 24px;
+  padding: 4px 15px;
+  margin-bottom: 15px;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: pvar(--mainColor) auto 1px;
+  }
+}
+
 .root {
   margin-bottom: 45px;
 }
@@ -44,20 +57,12 @@
 }
 
 .pastille {
-  @include margin-right(15px);
-
-  border-radius: 24px;
-  padding: 4px 15px;
-  margin-bottom: 15px;
-  cursor: pointer;
-
-  &:focus-visible {
-    outline: pvar(--mainColor) auto 1px;
-  }
+  @include pastille();
 }
 
 .filters-toggle {
-  border: 2px solid pvar(--mainForegroundColor);
+  border: 1px solid;
+  border-color: #adadad #C6C6C6 lightgray;
 
   my-global-icon {
     @include margin-left(5px);
@@ -109,7 +114,9 @@
 
   ::ng-deep {
     .ng-select-container {
-      height: 33px !important;
+      @include pastille();
+      height: 37px !important;
+      margin-bottom: 0 !important;
     }
 
     .ng-value strong {

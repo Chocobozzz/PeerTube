@@ -1,10 +1,10 @@
 <ng-template #updateSettings let-fragment>
   <div class="label-description muted" i18n>
-    Update
+    Updates
     <a routerLink="/my-account/settings" [fragment]="fragment">
       <button class="button-unstyle" (click)="onAccountSettingsClick($event)">your settings</button>
-    </a
-  ></div>
+    </a>
+  </div>
 </ng-template>
 
 
@@ -28,7 +28,7 @@
         class="active-filter pastille button-unstyle" [ngClass]="{ 'can-remove': activeFilter.canRemove }" [title]="getFilterTitle(activeFilter.canRemove)"
       >
         <span>
-          {{ activeFilter.label }}
+          <span class="muted">{{ activeFilter.label }}</span>
 
           <ng-container *ngIf="activeFilter.value">: {{ activeFilter.value }}</ng-container>
         </span>
@@ -42,16 +42,22 @@
       formControlName="sort"
       [clearable]="false"
       [searchable]="false"
-      [bindValue]="null"
+      [items]="getSortOptions()"
+      bindLabel="label"
+      bindValue="value"
+      groupBy="group"
     >
-      <ng-option i18n value="-publishedAt">Sort by <strong>"Recently Added"</strong></ng-option>
-      <ng-option i18n value="-originallyPublishedAt">Sort by <strong>"Original Publication Date"</strong></ng-option>
-
-      <ng-option i18n value="name">Sort by <strong>"Name"</strong></ng-option>
-      <ng-option i18n *ngIf="isTrendingSortEnabled('most-viewed')" value="-trending">Sort by <strong>"Recent Views"</strong></ng-option>
-      <ng-option i18n *ngIf="isTrendingSortEnabled('hot')" value="-hot">Sort by <strong>"Hot"</strong></ng-option>
-      <ng-option i18n *ngIf="isTrendingSortEnabled('most-liked')" value="-likes">Sort by <strong>"Likes"</strong></ng-option>
-      <ng-option i18n value="-views">Sort by <strong>"Global Views"</strong></ng-option>
+      <ng-template ng-optgroup-tmp let-item="item" i18n>
+        {{ "Sort by " + item.group || 'Unnamed group'}}
+      </ng-template>
+      <ng-template ng-label-tmp let-item="item" i18n>
+        Sort by <strong>"{{item.label}}"</strong>
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item" i18n>
+        Sort by <strong>"{{item.label}}"</strong>
+        <br/>
+        <span class="muted">{{item.description}}</span>
+      </ng-template>
     </ng-select>
 
   </div>
@@ -83,12 +89,24 @@
       <div class="form-group" *ngIf="!hideScope" role="radiogroup">
         <label for="scope" i18n>Scope:</label>
 
-        <div class="peertube-radio-container">
+        <my-peertube-checkbox i18n-labelText labelText="Local" [disabled]="true" [checked]="true">
+          <ng-container ngProjectAs="description">
+            <span i18n>Videos from this instance.</span>
+          </ng-container>
+        </my-peertube-checkbox>
+
+        <my-peertube-checkbox inputName="scopeFederatedToggle" formControlName="scopeToggle" i18n-labelText labelText="Federated">
+          <ng-container ngProjectAs="description">
+            <span i18n>Videos from servers followed by this instance.</span>
+          </ng-container>
+        </my-peertube-checkbox>
+
+        <div class="peertube-radio-container" [hidden]="true">
           <input formControlName="scope" type="radio" name="scope" id="scopeLocal" value="local" />
           <label for="scopeLocal" i18n>Local videos (this instance)</label>
         </div>
 
-        <div class="peertube-radio-container">
+        <div class="peertube-radio-container" [hidden]="true">
           <input formControlName="scope" type="radio" name="scope" id="scopeFederated" value="federated" />
           <label for="scopeFederated" i18n>Federated videos (this instance + followed instances)</label>
         </div>
@@ -122,11 +140,11 @@
       <div class="form-group" *ngIf="canSeeAllVideos()">
         <label for="allVideos" i18n>Moderation:</label>
 
-        <my-peertube-checkbox
-          formControlName="allVideos"
-          inputName="allVideos"
-          i18n-labelText labelText="Display all videos (private, unlisted, password protected or not yet published)"
-        ></my-peertube-checkbox>
+        <my-peertube-checkbox formControlName="allVideos" inputName="allVideos" i18n-labelText labelText="Display all videos">
+          <ng-container ngProjectAs="description">
+            <span i18n>Even private, unlisted, password protected or not yet published.</span>
+          </ng-container>
+        </my-peertube-checkbox>
       </div>
     </div>
   </div>

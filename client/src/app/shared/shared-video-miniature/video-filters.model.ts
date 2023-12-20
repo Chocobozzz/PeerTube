@@ -30,6 +30,9 @@ export class VideoFilters {
 
   search: string
 
+  availableLanguages: { id: string, label: string }[] = []
+  availableCategories: { id: string, label: string }[] = []
+
   private defaultValues = new Map<keyof VideoFilters, any>([
     [ 'sort', '-publishedAt' ],
     [ 'nsfw', 'false' ],
@@ -146,7 +149,9 @@ export class VideoFilters {
         key: 'languageOneOf',
         canRemove: true,
         label: $localize`Languages`,
-        value: this.languageOneOf.map(l => l.toUpperCase()).join(', ')
+        value: this.languageOneOf.map(
+          l => this.availableLanguages.find(lang => lang.id === l)?.label || l.toUpperCase()
+        ).join(', ')
       })
     }
 
@@ -155,7 +160,9 @@ export class VideoFilters {
         key: 'categoryOneOf',
         canRemove: true,
         label: $localize`Categories`,
-        value: this.categoryOneOf.join(', ')
+        value: this.categoryOneOf.map(
+          c => this.availableCategories.find(cat => cat.id === c + '')?.label || c
+        ).join(', ')
       })
     }
 
@@ -243,9 +250,9 @@ export class VideoFilters {
   }
 
   getNSFWDisplayLabel () {
-    if (this.defaultNSFWPolicy === 'blur') return $localize`Blurred`
+    if (this.defaultNSFWPolicy === 'blur') return $localize`Blur`
 
-    return $localize`Displayed`
+    return $localize`Display`
   }
 
   private getNSFWValue () {

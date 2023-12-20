@@ -32,7 +32,8 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private serverService: ServerService,
     private fb: FormBuilder,
-    private modalService: PeertubeModalService
+    private modalService: PeertubeModalService,
+    private server: ServerService
   ) {
   }
 
@@ -42,6 +43,7 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
       nsfw: [ '' ],
       languageOneOf: [ '' ],
       categoryOneOf: [ '' ],
+      scopeToggle: [ '' ],
       scope: [ '' ],
       allVideos: [ '' ],
       live: [ '' ]
@@ -53,12 +55,37 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
       this.patchForm(false)
     })
 
+    this.form.controls.scopeToggle.valueChanges.subscribe(value => {
+      this.form.controls.scope.setValue(value ? 'federated' : 'local', { emitEvent: false })
+    })
+    this.form.controls.scope.valueChanges.subscribe(value => {
+      this.form.controls.scopeToggle.setValue(value === 'federated', { emitEvent: false })
+    })
+
     this.form.valueChanges.subscribe(values => {
       debugLogger('Loading values from form: %O', values)
 
       this.filters.load(values)
       this.filtersChanged.emit()
     })
+
+    this.server.getVideoLanguages()
+      .subscribe(
+        languages => {
+          this.filters.availableLanguages = languages.map(l => {
+            if (l.id === 'zxx') return { label: l.label, id: l.id }
+            return { label: l.label, id: l.id }
+          })
+          this.filters.buildActiveFilters()
+        }
+      )
+    this.server.getVideoCategories()
+      .subscribe(
+        categories => {
+          this.filters.availableCategories = categories.map(c => ({ label: c.label, id: c.id + '' }))
+          this.filters.buildActiveFilters()
+        }
+      )
   }
 
   ngOnDestroy () {
@@ -92,6 +119,57 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
     return ''
   }
 
+  getSortOptions () {
+    const options: { label: string, value: string, group: string, description?: string }[] = [
+      {
+        label: $localize`Recently Added`,
+        value: "-publishedAt",
+        group: $localize`date`,
+        description: $localize`Uses the effective publication date`
+      },
+      {
+        label: $localize`Original Publication`,
+        value: "-orginallyPublishedAt",
+        group: $localize`date`,
+        description: $localize`Uses the original publication date`
+      },
+      {
+        label: $localize`Name`,
+        value: "name",
+        group: $localize`text`,
+        description: $localize`Alphabetical order`
+      },
+    ]
+
+    if (this.isTrendingSortEnabled('hot')) options.push({
+      label: $localize`Hot`,
+      value: "-hot",
+      group: $localize`interactions`,
+      description: $localize`Most recent interactions`
+    })
+    if (this.isTrendingSortEnabled('most-liked')) options.push({
+      label: $localize`Likes`,
+      value: "-likes",
+      group: $localize`interactions`,
+      description: $localize`Most recent likes`
+    })
+    if (this.isTrendingSortEnabled('most-viewed')) options.push({
+      label: $localize`Recent Views`,
+      value: "-trending",
+      group: $localize`interactions`,
+      description: $localize`Most recent views over 7 days`
+    })
+
+    options.push({
+      label: $localize`Global Views`,
+      value: "-views",
+      group: $localize`interactions`,
+      description: $localize`Most absolute views`
+    })
+  
+    return options
+  }
+
   onAccountSettingsClick (event: Event) {
     if (this.auth.isLoggedIn()) return
 
@@ -102,7 +180,10 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
   }
 
   private patchForm (emitEvent: boolean) {
-    const defaultValues = this.filters.toFormObject()
+    let defaultValues = {
+      ...this.filters.toFormObject(),
+      scopeToggle: this.filters.scope === 'federated' ? true : false
+    }
     this.form.patchValue(defaultValues, { emitEvent })
 
     debugLogger('Patched form: %O', defaultValues)
