@@ -40,6 +40,9 @@
       }
     ],
     "quotes": "off",
+
+    "no-constant-binary-expression": "error",
+
     "@typescript-eslint/indent": [
       "error",
       2,

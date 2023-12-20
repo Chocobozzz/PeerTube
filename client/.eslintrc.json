@@ -159,7 +159,8 @@
         "quote-props": [
           "error",
           "consistent-as-needed"
-        ]
+        ],
+        "no-constant-binary-expression": "error"
       }
     },
     {
