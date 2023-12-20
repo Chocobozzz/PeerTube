@@ -66,7 +66,7 @@ describe('Save replay setting', function () {
     const liveDetails = await servers[0].videos.get({ id: liveVideoUUID })
 
     await waitJobs(servers)
-    await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
+    await checkVideosExist(liveVideoUUID, null, HttpStatusCode.OK_200)
 
     return { ffmpegCommand, liveDetails }
   }
@@ -105,13 +105,14 @@ describe('Save replay setting', function () {
     return { liveDetails }
   }
 
-  async function checkVideosExist (videoId: string, existsInList: boolean, expectedStatus?: HttpStatusCodeType) {
+  async function checkVideosExist (videoId: string, videosLength: number, expectedStatus?: HttpStatusCodeType) {
     for (const server of servers) {
-      const length = existsInList ? 1 : 0
-
       const { data, total } = await server.videos.list()
-      expect(data).to.have.lengthOf(length)
-      expect(total).to.equal(length)
+
+      if (videosLength !== null) {
+        expect(data).to.have.lengthOf(videosLength)
+        expect(total).to.equal(videosLength)
+      }
 
       if (expectedStatus) {
         await server.videos.get({ id: videoId, expectedStatus })
@@ -172,7 +173,7 @@ describe('Save replay setting', function () {
 
       await waitJobs(servers)
 
-      await checkVideosExist(liveVideoUUID, false, HttpStatusCode.OK_200)
+      await checkVideosExist(liveVideoUUID, 0, HttpStatusCode.OK_200)
       await checkVideoState(liveVideoUUID, VideoState.WAITING_FOR_LIVE)
     })
 
@@ -187,7 +188,7 @@ describe('Save replay setting', function () {
 
       await waitJobs(servers)
 
-      await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
+      await checkVideosExist(liveVideoUUID, 1, HttpStatusCode.OK_200)
       await checkVideoState(liveVideoUUID, VideoState.PUBLISHED)
     })
 
@@ -203,7 +204,7 @@ describe('Save replay setting', function () {
       await waitJobs(servers)
 
       // Live still exist, but cannot be played anymore
-      await checkVideosExist(liveVideoUUID, false, HttpStatusCode.OK_200)
+      await checkVideosExist(liveVideoUUID, 0, HttpStatusCode.OK_200)
       await checkVideoState(liveVideoUUID, VideoState.LIVE_ENDED)
 
       // No resolutions saved since we did not save replay
@@ -234,7 +235,7 @@ describe('Save replay setting', function () {
 
       await publishLiveAndBlacklist({ permanent: false, replay: false })
 
-      await checkVideosExist(liveVideoUUID, false)
+      await checkVideosExist(liveVideoUUID, 0)
 
       await servers[0].videos.get({ id: liveVideoUUID, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
       await servers[1].videos.get({ id: liveVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
@@ -258,7 +259,7 @@ describe('Save replay setting', function () {
 
       await publishLiveAndDelete({ permanent: false, replay: false })
 
-      await checkVideosExist(liveVideoUUID, false, HttpStatusCode.NOT_FOUND_404)
+      await checkVideosExist(liveVideoUUID, 0, HttpStatusCode.NOT_FOUND_404)
       await checkLiveCleanup({ server: servers[0], videoUUID: liveVideoUUID, permanent: false })
     })
   })
@@ -272,7 +273,7 @@ describe('Save replay setting', function () {
 
       await waitJobs(servers)
 
-      await checkVideosExist(liveVideoUUID, false, HttpStatusCode.OK_200)
+      await checkVideosExist(liveVideoUUID, 0, HttpStatusCode.OK_200)
       await checkVideoState(liveVideoUUID, VideoState.WAITING_FOR_LIVE)
       await checkVideoPrivacy(liveVideoUUID, VideoPrivacy.PUBLIC)
     })
@@ -285,7 +286,7 @@ describe('Save replay setting', function () {
 
       await waitJobs(servers)
 
-      await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
+      await checkVideosExist(liveVideoUUID, 1, HttpStatusCode.OK_200)
       await checkVideoState(liveVideoUUID, VideoState.PUBLISHED)
       await checkVideoPrivacy(liveVideoUUID, VideoPrivacy.PUBLIC)
     })
@@ -306,7 +307,7 @@ describe('Save replay setting', function () {
       await waitJobs(servers)
 
       // Live has been transcoded
-      await checkVideosExist(liveVideoUUID, false, HttpStatusCode.OK_200)
+      await checkVideosExist(liveVideoUUID, 0, HttpStatusCode.OK_200)
       await checkVideoState(liveVideoUUID, VideoState.PUBLISHED)
       await checkVideoPrivacy(liveVideoUUID, VideoPrivacy.UNLISTED)
     })
@@ -354,7 +355,7 @@ describe('Save replay setting', function () {
 
       await publishLiveAndBlacklist({ permanent: false, replay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC } })
 
-      await checkVideosExist(liveVideoUUID, false)
+      await checkVideosExist(liveVideoUUID, 0)
 
       await servers[0].videos.get({ id: liveVideoUUID, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
       await servers[1].videos.get({ id: liveVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
@@ -369,7 +370,7 @@ describe('Save replay setting', function () {
 
       await publishLiveAndDelete({ permanent: false, replay: true, replaySettings: { privacy: VideoPrivacy.PUBLIC } })
 
-      await checkVideosExist(liveVideoUUID, false, HttpStatusCode.NOT_FOUND_404)
+      await checkVideosExist(liveVideoUUID, 0, HttpStatusCode.NOT_FOUND_404)
       await checkLiveCleanup({ server: servers[0], videoUUID: liveVideoUUID, permanent: false })
     })
   })
@@ -379,6 +380,19 @@ describe('Save replay setting', function () {
 
     describe('With a first live and its replay', function () {
 
+      before(async function () {
+        this.timeout(120000)
+
+        await servers[0].kill()
+        await servers[0].run({
+          federation: {
+            videos: {
+              federate_unlisted: false
+            }
+          }
+        })
+      })
+
       it('Should correctly create and federate the "waiting for stream" live', async function () {
         this.timeout(120000)
 
@@ -386,7 +400,7 @@ describe('Save replay setting', function () {
 
         await waitJobs(servers)
 
-        await checkVideosExist(liveVideoUUID, false, HttpStatusCode.OK_200)
+        await checkVideosExist(liveVideoUUID, 0, HttpStatusCode.OK_200)
         await checkVideoState(liveVideoUUID, VideoState.WAITING_FOR_LIVE)
         await checkVideoPrivacy(liveVideoUUID, VideoPrivacy.PUBLIC)
       })
@@ -399,12 +413,12 @@ describe('Save replay setting', function () {
 
         await waitJobs(servers)
 
-        await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
+        await checkVideosExist(liveVideoUUID, 1, HttpStatusCode.OK_200)
         await checkVideoState(liveVideoUUID, VideoState.PUBLISHED)
         await checkVideoPrivacy(liveVideoUUID, VideoPrivacy.PUBLIC)
       })
 
-      it('Should correctly have saved the live and federated it after the streaming', async function () {
+      it('Should correctly have saved the live', async function () {
         this.timeout(120000)
 
         const liveDetails = await servers[0].videos.get({ id: liveVideoUUID })
@@ -417,11 +431,21 @@ describe('Save replay setting', function () {
         const video = await findExternalSavedVideo(servers[0], liveDetails)
         expect(video).to.exist
 
-        for (const server of servers) {
-          await server.videos.get({ id: video.uuid })
-        }
+        await servers[0].videos.get({ id: video.uuid })
+        await servers[1].videos.get({ id: video.uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
 
         lastReplayUUID = video.uuid
+      })
+
+      it('Should federate the replay after updating its privacy to public', async function () {
+        this.timeout(120000)
+
+        console.log(lastReplayUUID)
+
+        await servers[0].videos.update({ id: lastReplayUUID, attributes: { privacy: VideoPrivacy.PUBLIC } })
+        await waitJobs(servers)
+
+        await servers[1].videos.get({ id: lastReplayUUID, expectedStatus: HttpStatusCode.OK_200 })
       })
 
       it('Should have appropriate ended session and replay live session', async function () {
@@ -449,9 +473,9 @@ describe('Save replay setting', function () {
       })
 
       it('Should have the first live replay with correct settings', async function () {
-        await checkVideosExist(lastReplayUUID, false, HttpStatusCode.OK_200)
+        await checkVideosExist(lastReplayUUID, 1, HttpStatusCode.OK_200)
         await checkVideoState(lastReplayUUID, VideoState.PUBLISHED)
-        await checkVideoPrivacy(lastReplayUUID, VideoPrivacy.UNLISTED)
+        await checkVideoPrivacy(lastReplayUUID, VideoPrivacy.PUBLIC)
       })
     })
 
@@ -477,7 +501,7 @@ describe('Save replay setting', function () {
 
         await waitJobs(servers)
 
-        await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
+        await checkVideosExist(liveVideoUUID, 2, HttpStatusCode.OK_200)
         await checkVideoState(liveVideoUUID, VideoState.PUBLISHED)
         await checkVideoPrivacy(liveVideoUUID, VideoPrivacy.PUBLIC)
       })
@@ -527,7 +551,7 @@ describe('Save replay setting', function () {
       })
 
       it('Should have the first live replay with correct settings', async function () {
-        await checkVideosExist(lastReplayUUID, true, HttpStatusCode.OK_200)
+        await checkVideosExist(lastReplayUUID, 2, HttpStatusCode.OK_200)
         await checkVideoState(lastReplayUUID, VideoState.PUBLISHED)
         await checkVideoPrivacy(lastReplayUUID, VideoPrivacy.PUBLIC)
       })
@@ -550,7 +574,7 @@ describe('Save replay setting', function () {
         expect(replay).to.exist
 
         for (const videoId of [ liveVideoUUID, replay.uuid ]) {
-          await checkVideosExist(videoId, false)
+          await checkVideosExist(videoId, 1)
 
           await servers[0].videos.get({ id: videoId, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
           await servers[1].videos.get({ id: videoId, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
@@ -571,7 +595,7 @@ describe('Save replay setting', function () {
         const replay = await findExternalSavedVideo(servers[0], liveDetails)
         expect(replay).to.not.exist
 
-        await checkVideosExist(liveVideoUUID, false, HttpStatusCode.NOT_FOUND_404)
+        await checkVideosExist(liveVideoUUID, 1, HttpStatusCode.NOT_FOUND_404)
         await checkLiveCleanup({ server: servers[0], videoUUID: liveVideoUUID, permanent: false })
       })
     })
