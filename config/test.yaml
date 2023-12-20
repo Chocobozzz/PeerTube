@@ -141,7 +141,7 @@ plugins:
 
 federation:
   videos:
-    federate_unlisted: false
+    federate_unlisted: true
     cleanup_remote_interactions: false
 
 views:
