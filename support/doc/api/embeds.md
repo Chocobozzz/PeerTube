@@ -138,7 +138,7 @@ Default: `1`
 
 ### p2p
 
-Enable P2P.
+Enable/Disable P2P.
 
 Value must be `0` or `1`.
 Default: `1`
