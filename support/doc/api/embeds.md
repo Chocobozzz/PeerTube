@@ -170,7 +170,7 @@ Default: `p2p-media-loader` and fallback to `web-video` mode.
 
 ### api
 
-Enable embed JavaScript API (see methods below).
+Enable/Disable embed JavaScript API (see methods below).
 
 Value must be `0` or `1`.
 
