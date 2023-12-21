@@ -23,12 +23,19 @@ export interface RunnerJobVODWebVideoTranscodingPayload {
   }
 }
 
+export interface UploadUrlTranscodingResultPayload {
+  url: string
+  fields: { [key: string]: any } | undefined
+}
+
 export interface RunnerJobVODHLSTranscodingPayload {
   input: {
     videoFileUrl: string
   }
 
   output: {
+    videoFileUrl?: UploadUrlTranscodingResultPayload
+    playlistFileUrl?: UploadUrlTranscodingResultPayload
     resolution: number
     fps: number
   }
