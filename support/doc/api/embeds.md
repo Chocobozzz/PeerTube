@@ -124,14 +124,14 @@ Default: `1`
 
 ### title
 
-Show embed title.
+Show/Hide embed title.
 
 Value must be `0` or `1`.
 Default: `1`
 
 ### warningTitle
 
-Show P2P warning title.
+Show/Hide P2P warning title.
 
 Value must be `0` or `1`.
 Default: `1`
@@ -145,10 +145,10 @@ Default: `1`
 
 ### bigPlayBackgroundColor
 
-Customize settings menu background color.
+Customize big play button background color.
 
 Value must be a valid color (`red` or `rgba(100, 100, 100, 0.5)`).
-Default: ???
+Default: rgba(0, 0, 0, 0.8)
 
 ### foregroundColor
 
@@ -156,7 +156,7 @@ Customize embed font color.
 
 Value must be a valid color (`red` or `rgba(100, 100, 100, 0.5)`).
 
-Default: 'white'
+Default: `white`
 
 ### mode
 
@@ -164,7 +164,9 @@ Force a specific player engine.
 
 Value must be a valid mode (`web-video` or `p2p-media-loader`).
 
-Default: FIXME
+See behaviour description [here](https://docs.joinpeertube.org/admin/configuration#vod-transcoding)
+
+Default: `p2p-media-loader` and fallback to `web-video` mode.
 
 ### api
 
@@ -172,7 +174,7 @@ Enable embed JavaScript API (see methods below).
 
 Value must be `0` or `1`.
 
-Default: FIXME
+Default: `0`
 
 ### waitPasswordFromEmbedAPI
 
@@ -182,7 +184,10 @@ If the video requires a password, PeerTube will wait a password provided by `set
 
 Until you provide a password, `player.ready` is not resolved.
 
-Default: deactivated
+Value must be `0` or `1`.
+
+Default: `0`
+
 
 ## Embed attributes
 
