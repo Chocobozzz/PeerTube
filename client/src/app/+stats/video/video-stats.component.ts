@@ -1,4 +1,4 @@
-import { ChartConfiguration, ChartData, ChartOptions, PluginOptionsByType, Scale, TooltipItem } from 'chart.js'
+import { ChartConfiguration, ChartData, ChartOptions, PluginOptionsByType, Scale, TooltipItem, defaults as ChartJSDefaults } from 'chart.js'
 import zoomPlugin from 'chartjs-plugin-zoom'
 import { Observable, of } from 'rxjs'
 import { SelectOptionsItem } from 'src/types'
@@ -34,6 +34,10 @@ type ChartBuilderResult = {
 }
 
 type Card = { label: string, value: string | number, moreInfo?: string, help?: string }
+
+ChartJSDefaults.backgroundColor = getComputedStyle(document.body).getPropertyValue('--mainBackgroundColor')
+ChartJSDefaults.borderColor = getComputedStyle(document.body).getPropertyValue('--greySecondaryBackgroundColor')
+ChartJSDefaults.color = getComputedStyle(document.body).getPropertyValue('--mainForegroundColor')
 
 @Component({
   templateUrl: './video-stats.component.html',
