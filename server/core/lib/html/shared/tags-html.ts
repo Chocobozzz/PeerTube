@@ -245,7 +245,6 @@ export class TagsHtml {
       if (tags.embed.duration) schema['duration'] = tags.embed.duration
 
       schema['thumbnailUrl'] = tags.image.url
-      schema['contentUrl'] = tags.url
     }
 
     return Hooks.wrapObject(schema, 'filter:html.client.json-ld.result', context)
