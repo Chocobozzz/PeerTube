@@ -93,7 +93,7 @@ Default: `1`
 Mute the video by default.
 
 Value must be `0` or `1`.
-Default: `0`
+Default: tries to restore the last muted setting set by the user
 
 ### loop
 
@@ -107,7 +107,7 @@ Default: `0`
 Auto select a subtitle by default.
 
 Value must be a valid subtitle ISO code (`fr`, `en`, etc.).
-Default: no subtitle selected
+Default: no subtitle selected and then tries to restore the last subtitle set by the user
 
 ### autoplay
 
@@ -141,7 +141,7 @@ Default: `1`
 Enable/Disable P2P.
 
 Value must be `0` or `1`.
-Default: `1`
+Default: tries to use the user setting and fallbacks to instance setting if user setting is not found
 
 ### bigPlayBackgroundColor
 
