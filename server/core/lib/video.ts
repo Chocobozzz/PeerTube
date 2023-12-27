@@ -16,7 +16,7 @@ import { TagModel } from '@server/models/video/tag.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
-import { MThumbnail, MVideoFullLight, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models/index.js'
+import { MThumbnail, MVideo, MVideoFullLight, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models/index.js'
 import { CreateJobArgument, JobQueue } from './job-queue/job-queue.js'
 import { updateLocalVideoMiniatureFromExisting } from './thumbnail.js'
 import { moveFilesIfPrivacyChanged } from './video-privacy.js'
@@ -113,6 +113,37 @@ export async function buildMoveJob (options: {
       previousVideoState
     }
   }
+}
+
+// ---------------------------------------------------------------------------
+
+export function buildStoryboardJobIfNeeded (options: {
+  video: MVideo
+  federate: boolean
+}) {
+  const { video, federate } = options
+
+  if (CONFIG.STORYBOARDS.ENABLED) {
+    return {
+      type: 'generate-video-storyboard' as 'generate-video-storyboard',
+      payload: {
+        videoUUID: video.uuid,
+        federate
+      }
+    }
+  }
+
+  if (federate === true) {
+    return {
+      type: 'federate-video' as 'federate-video',
+      payload: {
+        videoUUID: video.uuid,
+        isNewVideoForFederation: false
+      }
+    }
+  }
+
+  return undefined
 }
 
 // ---------------------------------------------------------------------------

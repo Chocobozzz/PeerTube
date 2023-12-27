@@ -16,6 +16,7 @@ import { buildFileMetadata } from '../video-file.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
 import { buildOriginalFileResolution } from './transcoding-resolutions.js'
+import { buildStoryboardJobIfNeeded } from '../video.js'
 
 // Optimize the original video file and replace it. The resolution is not changed.
 export async function optimizeOriginalVideofile (options: {
@@ -247,14 +248,7 @@ export async function onWebVideoFileTranscoding (options: {
     video.VideoFiles = await video.$get('VideoFiles')
 
     if (wasAudioFile) {
-      await JobQueue.Instance.createJob({
-        type: 'generate-video-storyboard' as 'generate-video-storyboard',
-        payload: {
-          videoUUID: video.uuid,
-          // No need to federate, we process these jobs sequentially
-          federate: false
-        }
-      })
+      await JobQueue.Instance.createJob(buildStoryboardJobIfNeeded({ video, federate: false }))
     }
 
     return { video, videoFile }

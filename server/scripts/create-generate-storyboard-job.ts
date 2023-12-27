@@ -4,6 +4,7 @@ import { initDatabaseModels } from '@server/initializers/database.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoModel } from '@server/models/video/video.js'
+import { buildStoryboardJobIfNeeded } from '@server/lib/video.js'
 
 program
   .description('Generate videos storyboard')
@@ -60,13 +61,7 @@ async function run () {
 
     if (videoFull.isLive) continue
 
-    await JobQueue.Instance.createJob({
-      type: 'generate-video-storyboard',
-      payload: {
-        videoUUID: videoFull.uuid,
-        federate: true
-      }
-    })
+    await JobQueue.Instance.createJob(buildStoryboardJobIfNeeded({ video: videoFull, federate: true }))
 
     console.log(`Created generate-storyboard job for ${videoFull.name}.`)
   }

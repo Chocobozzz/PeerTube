@@ -209,6 +209,27 @@ describe('Test video storyboard', function () {
     }
   })
 
+  it('Should not generate storyboards if disabled by the admin', async function () {
+    this.timeout(60000)
+
+    await servers[0].config.updateExistingSubConfig({
+      newConfig: {
+        storyboards: {
+          enabled: false
+        }
+      }
+    })
+
+    const { uuid } = await servers[0].videos.quickUpload({ name: 'upload', fixture: 'video_short.webm' })
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const { storyboards } = await server.storyboard.list({ id: uuid })
+
+      expect(storyboards).to.have.lengthOf(0)
+    }
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })

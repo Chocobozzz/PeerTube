@@ -6,7 +6,7 @@ import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-queue/index.js'
 import { Redis } from '@server/lib/redis.js'
 import { uploadx } from '@server/lib/uploadx.js'
-import { buildLocalVideoFromReq, buildMoveJob, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video.js'
+import { buildLocalVideoFromReq, buildMoveJob, buildStoryboardJobIfNeeded, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video.js'
 import { buildNewFile } from '@server/lib/video-file.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
@@ -248,14 +248,7 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
       }
     },
 
-    {
-      type: 'generate-video-storyboard' as 'generate-video-storyboard',
-      payload: {
-        videoUUID: video.uuid,
-        // No need to federate, we process these jobs sequentially
-        federate: false
-      }
-    },
+    buildStoryboardJobIfNeeded({ video, federate: false }),
 
     {
       type: 'notify',

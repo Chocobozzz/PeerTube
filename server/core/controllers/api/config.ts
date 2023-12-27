@@ -355,6 +355,9 @@ function customConfig (): CustomConfig {
         disableLocalSearch: CONFIG.SEARCH.SEARCH_INDEX.DISABLE_LOCAL_SEARCH,
         isDefaultSearch: CONFIG.SEARCH.SEARCH_INDEX.IS_DEFAULT_SEARCH
       }
+    },
+    storyboards: {
+      enabled: CONFIG.STORYBOARDS.ENABLED
     }
   }
 }

@@ -290,6 +290,10 @@ class ServerConfigManager {
             users: CONFIG.VIEWS.VIDEOS.WATCHING_INTERVAL.USERS
           }
         }
+      },
+
+      storyboards: {
+        enabled: CONFIG.STORYBOARDS.ENABLED
       }
     }
   }

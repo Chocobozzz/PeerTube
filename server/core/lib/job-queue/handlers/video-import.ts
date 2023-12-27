@@ -25,7 +25,7 @@ import { createOptimizeOrMergeAudioJobs } from '@server/lib/transcoding/create-t
 import { isAbleToUploadVideo } from '@server/lib/user.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
-import { buildMoveJob } from '@server/lib/video.js'
+import { buildMoveJob, buildStoryboardJobIfNeeded } from '@server/lib/video.js'
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import { MVideoImport, MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import.js'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
@@ -307,13 +307,7 @@ async function afterImportSuccess (options: {
   }
 
   // Generate the storyboard in the job queue, and don't forget to federate an update after
-  await JobQueue.Instance.createJob({
-    type: 'generate-video-storyboard' as 'generate-video-storyboard',
-    payload: {
-      videoUUID: video.uuid,
-      federate: true
-    }
-  })
+  await JobQueue.Instance.createJob(buildStoryboardJobIfNeeded({ video, federate: true }))
 
   if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
     await JobQueue.Instance.createJob(

@@ -257,4 +257,8 @@ export interface CustomConfig {
     }
   }
 
+  storyboards: {
+    enabled: boolean
+  }
+
 }

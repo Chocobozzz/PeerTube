@@ -5,7 +5,7 @@ import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-q
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { regenerateMiniaturesIfNeeded } from '@server/lib/thumbnail.js'
 import { uploadx } from '@server/lib/uploadx.js'
-import { buildMoveJob } from '@server/lib/video.js'
+import { buildMoveJob, buildStoryboardJobIfNeeded } from '@server/lib/video.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { buildNewFile } from '@server/lib/video-file.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -152,14 +152,7 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
       }
     },
 
-    {
-      type: 'generate-video-storyboard' as 'generate-video-storyboard',
-      payload: {
-        videoUUID: video.uuid,
-        // No need to federate, we process these jobs sequentially
-        federate: false
-      }
-    },
+    buildStoryboardJobIfNeeded({ video, federate: false }),
 
     {
       type: 'federate-video' as 'federate-video',

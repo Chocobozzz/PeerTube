@@ -336,7 +336,9 @@ class JobQueue {
         .catch(err => logger.error('Cannot create job.', { err, options }))
   }
 
-  createJob (options: CreateJobArgument & CreateJobOptions) {
+  createJob (options: CreateJobArgument & CreateJobOptions | undefined) {
+    if (!options) return
+
     const queue: Queue = this.queues[options.type]
     if (queue === undefined) {
       logger.error('Unknown queue %s: cannot create job.', options.type)

@@ -274,6 +274,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
       instanceCustomHomepage: {
         content: null
+      },
+
+      storyboards: {
+        enabled: null
       }
     }
 

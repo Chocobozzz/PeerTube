@@ -16,6 +16,7 @@ describe('Test config API validators', function () {
   const path = '/api/v1/config/custom'
   let server: PeerTubeServer
   let userAccessToken: string
+
   const updateParams: CustomConfig = {
     instance: {
       name: 'PeerTube updated',
@@ -240,6 +241,9 @@ describe('Test config API validators', function () {
         disableLocalSearch: true,
         isDefaultSearch: true
       }
+    },
+    storyboards: {
+      enabled: false
     }
   }
 

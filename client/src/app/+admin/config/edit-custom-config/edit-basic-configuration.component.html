@@ -357,6 +357,20 @@
         </ng-container>
       </ng-container>
 
+      <ng-container formGroupName="storyboards">
+
+        <div class="form-group">
+          <my-peertube-checkbox
+            inputName="storyboardsEnabled" formControlName="enabled"
+            i18n-labelText labelText="Enable video storyboards"
+          >
+            <ng-container ngProjectAs="description">
+              <span i18n>Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video</span>
+            </ng-container>
+          </my-peertube-checkbox>
+        </div>
+
+      </ng-container>
     </div>
   </div>
 

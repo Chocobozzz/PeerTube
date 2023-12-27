@@ -123,6 +123,8 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.broadcastMessage.level).to.equal('info')
   expect(data.broadcastMessage.message).to.equal('')
   expect(data.broadcastMessage.dismissable).to.be.false
+
+  expect(data.storyboards.enabled).to.be.true
 }
 
 function checkUpdatedConfig (data: CustomConfig) {
@@ -236,6 +238,8 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.broadcastMessage.level).to.equal('error')
   expect(data.broadcastMessage.message).to.equal('super bad message')
   expect(data.broadcastMessage.dismissable).to.be.true
+
+  expect(data.storyboards.enabled).to.be.false
 }
 
 const newCustomConfig: CustomConfig = {
@@ -460,6 +464,9 @@ const newCustomConfig: CustomConfig = {
       disableLocalSearch: true,
       isDefaultSearch: true
     }
+  },
+  storyboards: {
+    enabled: false
   }
 }
 

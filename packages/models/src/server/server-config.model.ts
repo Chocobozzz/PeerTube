@@ -321,6 +321,10 @@ export interface ServerConfig {
       }
     }
   }
+
+  storyboards: {
+    enabled: boolean
+  }
 }
 
 export type HTMLServerConfig = Omit<ServerConfig, 'signup'>

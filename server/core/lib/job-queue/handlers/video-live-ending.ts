@@ -30,6 +30,7 @@ import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoS
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { JobQueue } from '../job-queue.js'
 import { isVideoInPublicDirectory } from '@server/lib/video-privacy.js'
+import { buildStoryboardJobIfNeeded } from '@server/lib/video.js'
 
 const lTags = loggerTagsFactory('live', 'job')
 
@@ -302,11 +303,5 @@ async function cleanupLiveAndFederate (options: {
 }
 
 function createStoryboardJob (video: MVideo) {
-  return JobQueue.Instance.createJob({
-    type: 'generate-video-storyboard' as 'generate-video-storyboard',
-    payload: {
-      videoUUID: video.uuid,
-      federate: true
-    }
-  })
+  return JobQueue.Instance.createJob(buildStoryboardJobIfNeeded({ video, federate: true }))
 }

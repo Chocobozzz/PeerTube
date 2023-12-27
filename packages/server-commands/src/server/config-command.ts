@@ -567,6 +567,9 @@ export class ConfigCommand extends AbstractCommand {
           disableLocalSearch: true,
           isDefaultSearch: true
         }
+      },
+      storyboards: {
+        enabled: true
       }
     }
 
