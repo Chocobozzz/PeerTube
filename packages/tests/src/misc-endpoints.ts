@@ -47,8 +47,12 @@ describe('Test misc endpoints', function () {
       })
 
       expect(res.body.links).to.be.an('array')
-      expect(res.body.links).to.have.lengthOf(1)
+      expect(res.body.links).to.have.lengthOf(2)
+
       expect(res.body.links[0].rel).to.equal('http://nodeinfo.diaspora.software/ns/schema/2.0')
+
+      expect(res.body.links[1].rel).to.equal('https://www.w3.org/ns/activitystreams#Application')
+      expect(res.body.links[1].href).to.equal(server.url + '/accounts/peertube')
     })
 
     it('Should get dnt policy text', async function () {
