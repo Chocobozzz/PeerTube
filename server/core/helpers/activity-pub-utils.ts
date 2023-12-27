@@ -1,7 +1,9 @@
 import { ContextType } from '@peertube/peertube-models'
-import { ACTIVITY_PUB } from '@server/initializers/constants.js'
+import { ACTIVITY_PUB, REMOTE_SCHEME } from '@server/initializers/constants.js'
 import { buildDigest } from './peertube-crypto.js'
 import type { signJsonLDObject } from './peertube-jsonld.js'
+import { doJSONRequest } from './requests.js'
+import { isArray } from './custom-validators/misc.js'
 
 export type ContextFilter = <T> (arg: T) => Promise<T>
 
@@ -34,6 +36,17 @@ export async function signAndContextify <T> (options: {
     : data
 
   return signerFunction({ byActor, data: activity })
+}
+
+export async function getApplicationActorOfHost (host: string) {
+  const url = REMOTE_SCHEME.HTTP + '://' + host + '/.well-known/nodeinfo'
+  const { body } = await doJSONRequest<{ links: { rel: string, href: string }[] }>(url)
+
+  if (!isArray(body.links)) return undefined
+
+  const found = body.links.find(l => l.rel === 'https://www.w3.org/ns/activitystreams#Application')
+
+  return found?.href || undefined
 }
 
 // ---------------------------------------------------------------------------

@@ -6,7 +6,13 @@ import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-queue/index.js'
 import { Redis } from '@server/lib/redis.js'
 import { uploadx } from '@server/lib/uploadx.js'
-import { buildLocalVideoFromReq, buildMoveJob, buildStoryboardJobIfNeeded, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video.js'
+import {
+  buildLocalVideoFromReq,
+  buildMoveJob,
+  buildStoryboardJobIfNeeded,
+  buildVideoThumbnailsFromReq,
+  setVideoTags
+} from '@server/lib/video.js'
 import { buildNewFile } from '@server/lib/video-file.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'

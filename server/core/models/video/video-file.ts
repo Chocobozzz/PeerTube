@@ -3,7 +3,7 @@ import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { logger } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { buildRemoteVideoBaseUrl } from '@server/lib/activitypub/url.js'
+import { buildRemoteUrl } from '@server/lib/activitypub/url.js'
 import {
   getHLSPrivateFileUrl,
   getHLSPublicFileUrl,
@@ -582,7 +582,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     if (video.isOwned()) return WEBSERVER.URL + path
 
     // FIXME: don't guess remote URL
-    return buildRemoteVideoBaseUrl(video, path)
+    return buildRemoteUrl(video, path)
   }
 
   getRemoteTorrentUrl (video: MVideo) {

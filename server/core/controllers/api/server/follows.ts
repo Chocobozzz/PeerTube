@@ -3,7 +3,6 @@ import { HttpStatusCode, ServerFollowCreate, UserRight } from '@peertube/peertub
 import { getServerActor } from '@server/models/application/application.js'
 import { logger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { SERVER_ACTOR_NAME } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { autoFollowBackIfNeeded } from '../../../lib/activitypub/follow.js'
 import { sendAccept, sendReject, sendUndoFollow } from '../../../lib/activitypub/send/index.js'
@@ -132,7 +131,6 @@ async function addFollow (req: express.Request, res: express.Response) {
   for (const host of hosts) {
     const payload = {
       host,
-      name: SERVER_ACTOR_NAME,
       followerActorId: follower.id
     }
 

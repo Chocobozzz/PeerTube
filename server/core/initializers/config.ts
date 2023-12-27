@@ -684,7 +684,7 @@ export function reloadConfig () {
       return process.env.NODE_CONFIG_DIR.split(':')
     }
 
-    return [join(root(), 'config')]
+    return [ join(root(), 'config') ]
   }
 
   function purge () {

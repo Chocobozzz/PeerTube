@@ -41,6 +41,10 @@ wellKnownRouter.use('/.well-known/nodeinfo',
         {
           rel: 'http://nodeinfo.diaspora.software/ns/schema/2.0',
           href: WEBSERVER.URL + '/nodeinfo/2.0.json'
+        },
+        {
+          rel: 'https://www.w3.org/ns/activitystreams#Application',
+          href: WEBSERVER.URL + '/accounts/peertube'
         }
       ]
     })

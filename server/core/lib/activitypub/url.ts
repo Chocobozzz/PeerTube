@@ -130,7 +130,7 @@ function getAbuseTargetUrl (abuse: MAbuseFull) {
 
 // ---------------------------------------------------------------------------
 
-function buildRemoteVideoBaseUrl (video: MVideoWithHost, path: string, scheme?: string) {
+function buildRemoteUrl (video: MVideoWithHost, path: string, scheme?: string) {
   if (!scheme) scheme = REMOTE_SCHEME.HTTP
 
   const host = video.VideoChannel.Actor.Server.host
@@ -178,5 +178,5 @@ export {
 
   getAbuseTargetUrl,
   checkUrlsSameHost,
-  buildRemoteVideoBaseUrl
+  buildRemoteUrl
 }

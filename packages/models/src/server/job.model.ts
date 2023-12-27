@@ -58,7 +58,7 @@ export type ActivitypubHttpBroadcastPayload = {
 
 export type ActivitypubFollowPayload = {
   followerActorId: number
-  name: string
+  name?: string
   host: string
   isAutoFollow?: boolean
   assertIsChannel?: boolean

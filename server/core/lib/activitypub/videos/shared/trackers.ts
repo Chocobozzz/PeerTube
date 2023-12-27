@@ -5,7 +5,7 @@ import { REMOTE_SCHEME } from '@server/initializers/constants.js'
 import { TrackerModel } from '@server/models/server/tracker.js'
 import { MVideo, MVideoWithHost } from '@server/types/models/index.js'
 import { ActivityTrackerUrlObject, VideoObject } from '@peertube/peertube-models'
-import { buildRemoteVideoBaseUrl } from '../../url.js'
+import { buildRemoteUrl } from '../../url.js'
 
 function getTrackerUrls (object: VideoObject, video: MVideoWithHost) {
   let wsFound = false
@@ -20,8 +20,8 @@ function getTrackerUrls (object: VideoObject, video: MVideoWithHost) {
   if (wsFound) return trackers
 
   return [
-    buildRemoteVideoBaseUrl(video, '/tracker/socket', REMOTE_SCHEME.WS),
-    buildRemoteVideoBaseUrl(video, '/tracker/announce')
+    buildRemoteUrl(video, '/tracker/socket', REMOTE_SCHEME.WS),
+    buildRemoteUrl(video, '/tracker/announce')
   ]
 }
 
