@@ -18,9 +18,8 @@ async function createOrUpdateLocalVideoViewer (watchAction: WatchActionObject, v
     startDate: new Date(watchAction.startTime),
     endDate: new Date(watchAction.endTime),
 
-    country: watchAction.location
-      ? watchAction.location.addressCountry
-      : null,
+    country: watchAction.location?.addressCountry || null,
+    subdivisionName: watchAction.location?.addressRegion || null,
 
     videoId: video.id
   }, { transaction: t })

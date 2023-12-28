@@ -54,6 +54,10 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
   @Column
   country: string
 
+  @AllowNull(true)
+  @Column
+  subdivisionName: string
+
   @AllowNull(false)
   @Default(DataType.UUIDV4)
   @IsUUID(4)
@@ -199,26 +203,27 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
       return LocalVideoViewerModel.sequelize.query<any>(watchPeakQuery, queryOptions)
     }
 
-    const buildCountriesPromise = () => {
-      let countryDateWhere = ''
+    const buildGeoPromise = (type: 'country' | 'subdivisionName') => {
+      let dateWhere = ''
 
-      if (startDate) countryDateWhere += ' AND "localVideoViewer"."endDate" >= :startDate'
-      if (endDate) countryDateWhere += ' AND "localVideoViewer"."startDate" <= :endDate'
+      if (startDate) dateWhere += ' AND "localVideoViewer"."endDate" >= :startDate'
+      if (endDate) dateWhere += ' AND "localVideoViewer"."startDate" <= :endDate'
 
-      const countriesQuery = `SELECT country, COUNT(country) as viewers ` +
+      const query = `SELECT "${type}", COUNT("${type}") as viewers ` +
         `FROM "localVideoViewer" ` +
-        `WHERE "videoId" = :videoId AND country IS NOT NULL ${countryDateWhere} ` +
-        `GROUP BY country ` +
-        `ORDER BY viewers DESC`
+        `WHERE "videoId" = :videoId AND "${type}" IS NOT NULL ${dateWhere} ` +
+        `GROUP BY "${type}" ` +
+        `ORDER BY "viewers" DESC`
 
-      return LocalVideoViewerModel.sequelize.query<any>(countriesQuery, queryOptions)
+      return LocalVideoViewerModel.sequelize.query<any>(query, queryOptions)
     }
 
-    const [ rowsTotalViewers, rowsWatchTime, rowsWatchPeak, rowsCountries ] = await Promise.all([
+    const [ rowsTotalViewers, rowsWatchTime, rowsWatchPeak, rowsCountries, rowsSubdivisions ] = await Promise.all([
       buildTotalViewersPromise(),
       buildWatchTimePromise(),
       buildWatchPeakPromise(),
-      buildCountriesPromise()
+      buildGeoPromise('country'),
+      buildGeoPromise('subdivisionName')
     ])
 
     const viewersPeak = rowsWatchPeak.length !== 0
@@ -244,6 +249,11 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
 
       countries: rowsCountries.map(r => ({
         isoCode: r.country,
+        viewers: r.viewers
+      })),
+
+      subdivisions: rowsSubdivisions.map(r => ({
+        name: r.subdivisionName,
         viewers: r.viewers
       }))
     }
@@ -347,7 +357,8 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
     const location = this.country
       ? {
         location: {
-          addressCountry: this.country
+          addressCountry: this.country,
+          addressRegion: this.subdivisionName
         }
       }
       : {}

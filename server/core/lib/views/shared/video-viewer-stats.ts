@@ -27,6 +27,7 @@ type LocalViewerStats = {
   watchTime: number
 
   country: string
+  subdivisionName: string
 
   videoId: number
 }
@@ -85,7 +86,7 @@ export class VideoViewerStats {
     }
 
     if (!stats) {
-      const country = await GeoIP.Instance.safeCountryISOLookup(ip)
+      const { country, subdivisionName } = await GeoIP.Instance.safeIPISOLookup(ip)
 
       stats = {
         firstUpdated: nowMs,
@@ -96,6 +97,8 @@ export class VideoViewerStats {
         watchTime: 0,
 
         country,
+        subdivisionName,
+
         videoId: video.id
       }
     }
@@ -180,6 +183,7 @@ export class VideoViewerStats {
       endDate: new Date(stats.lastUpdated),
       watchTime: stats.watchTime,
       country: stats.country,
+      subdivisionName: stats.subdivisionName,
       videoId: video.id
     })
 

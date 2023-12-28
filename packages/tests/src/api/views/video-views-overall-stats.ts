@@ -305,10 +305,10 @@ describe('Test views overall stats', function () {
     })
   })
 
-  describe('Test countries', function () {
+  describe('Test countries/subdivisions', function () {
     let videoUUID: string
 
-    it('Should not report countries if geoip is disabled', async function () {
+    it('Should not report countries/subdivisions if geoip is disabled', async function () {
       this.timeout(120000)
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
@@ -320,9 +320,33 @@ describe('Test views overall stats', function () {
 
       const stats = await servers[0].videoStats.getOverallStats({ videoId: uuid })
       expect(stats.countries).to.have.lengthOf(0)
+      expect(stats.subdivisions).to.have.lengthOf(0)
     })
 
-    it('Should report countries if geoip is enabled', async function () {
+    it('Should not report subdivisions if database URL is not provided in the configuration', async function () {
+      this.timeout(240000)
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video without subdivisions' })
+      await waitJobs(servers)
+
+      await Promise.all([ servers[0].kill(), servers[1].kill() ])
+
+      const config = { geo_ip: { enabled: true, city: { database_url: '' } } }
+      await Promise.all([ servers[0].run(config), servers[1].run(config) ])
+
+      await servers[0].views.view({ id: uuid, xForwardedFor: '8.8.8.8,127.0.0.1', currentTime: 1 })
+      await servers[1].views.view({ id: uuid, xForwardedFor: '8.8.8.4,127.0.0.1', currentTime: 3 })
+      await servers[1].views.view({ id: uuid, xForwardedFor: '80.67.169.12,127.0.0.1', currentTime: 2 })
+
+      await processViewersStats(servers)
+
+      const stats = await servers[0].videoStats.getOverallStats({ videoId: uuid })
+
+      expect(stats.countries).to.have.lengthOf(2)
+      expect(stats.subdivisions).to.have.lengthOf(0)
+    })
+
+    it('Should report countries/subdivisions if geoip is enabled', async function () {
       this.timeout(240000)
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
@@ -347,6 +371,7 @@ describe('Test views overall stats', function () {
       await processViewersStats(servers)
 
       const stats = await servers[0].videoStats.getOverallStats({ videoId: uuid })
+
       expect(stats.countries).to.have.lengthOf(2)
 
       expect(stats.countries[0].isoCode).to.equal('US')
@@ -354,11 +379,18 @@ describe('Test views overall stats', function () {
 
       expect(stats.countries[1].isoCode).to.equal('FR')
       expect(stats.countries[1].viewers).to.equal(1)
+
+      expect(stats.subdivisions[0].name).to.equal('California')
+      expect(stats.subdivisions[0].viewers).to.equal(2)
+
+      expect(stats.subdivisions[1].name).to.equal('Brittany')
+      expect(stats.subdivisions[1].viewers).to.equal(1)
     })
 
-    it('Should filter countries stats by date', async function () {
+    it('Should filter countries/subdivisions stats by date', async function () {
       const stats = await servers[0].videoStats.getOverallStats({ videoId: videoUUID, startDate: new Date().toISOString() })
       expect(stats.countries).to.have.lengthOf(0)
+      expect(stats.subdivisions).to.have.lengthOf(0)
     })
   })
 

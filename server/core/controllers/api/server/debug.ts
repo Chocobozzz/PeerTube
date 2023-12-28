@@ -48,6 +48,10 @@ async function runCommand (req: express.Request, res: express.Response) {
     'process-video-channel-sync-latest': () => VideoChannelSyncLatestScheduler.Instance.execute()
   }
 
+  if (!processors[body.command]) {
+    return res.fail({ message: 'Invalid command' })
+  }
+
   await processors[body.command]()
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()

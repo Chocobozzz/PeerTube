@@ -18,11 +18,11 @@ import {
 } from '@peertube/peertube-models'
 import { VideoStatsService } from './video-stats.service'
 
-type ActiveGraphId = VideoStatsTimeserieMetric | 'retention' | 'countries'
+type ActiveGraphId = VideoStatsTimeserieMetric | 'retention' | 'countries' | 'regions'
 
-type CountryData = { name: string, viewers: number }[]
+type GeoData = { name: string, viewers: number }[]
 
-type ChartIngestData = VideoStatsTimeserie | VideoStatsRetention | CountryData
+type ChartIngestData = VideoStatsTimeserie | VideoStatsRetention | GeoData
 type ChartBuilderResult = {
   type: 'line' | 'bar'
 
@@ -59,7 +59,8 @@ export class VideoStatsComponent implements OnInit {
 
   video: VideoDetails
 
-  countries: CountryData = []
+  countries: GeoData = []
+  regions: GeoData = []
 
   chartPlugins = [ zoomPlugin ]
 
@@ -104,6 +105,11 @@ export class VideoStatsComponent implements OnInit {
         id: 'countries',
         label: $localize`Countries`,
         zoomEnabled: false
+      },
+      {
+        id: 'regions',
+        label: $localize`Regions`,
+        zoomEnabled: false
       }
     ]
 
@@ -140,11 +146,17 @@ export class VideoStatsComponent implements OnInit {
     return this.countries.length !== 0
   }
 
+  hasRegions () {
+    return this.regions.length !== 0
+  }
+
   onChartChange (newActive: ActiveGraphId) {
     this.activeGraphId = newActive
 
     if (newActive === 'countries') {
       this.chartHeight = `${Math.max(this.countries.length * 20, 300)}px`
+    } else if (newActive === 'regions') {
+      this.chartHeight = `${Math.max(this.regions.length * 20, 300)}px`
     } else {
       this.chartHeight = '300px'
     }
@@ -192,6 +204,8 @@ export class VideoStatsComponent implements OnInit {
             name: this.countryCodeToName(c.isoCode),
             viewers: c.viewers
           }))
+
+          this.regions = res.subdivisions
 
           this.buildOverallStatCard(res)
         },
@@ -303,6 +317,13 @@ export class VideoStatsComponent implements OnInit {
         value: this.numberFormatter.transform(overallStats.countries.length)
       })
     }
+
+    if (overallStats.subdivisions.length !== 0) {
+      this.overallStatCards.push({
+        label: $localize`Regions`,
+        value: this.numberFormatter.transform(overallStats.subdivisions.length)
+      })
+    }
   }
 
   private loadChart () {
@@ -322,7 +343,9 @@ export class VideoStatsComponent implements OnInit {
         metric: 'viewers'
       }),
 
-      countries: of(this.countries)
+      countries: of(this.countries),
+
+      regions: of(this.regions)
     }
 
     obsBuilders[this.activeGraphId].subscribe({
@@ -343,7 +366,8 @@ export class VideoStatsComponent implements OnInit {
       retention: (rawData: VideoStatsRetention) => this.buildRetentionChartOptions(rawData),
       aggregateWatchTime: (rawData: VideoStatsTimeserie) => this.buildTimeserieChartOptions(rawData),
       viewers: (rawData: VideoStatsTimeserie) => this.buildTimeserieChartOptions(rawData),
-      countries: (rawData: CountryData) => this.buildCountryChartOptions(rawData)
+      countries: (rawData: GeoData) => this.buildGeoChartOptions(rawData),
+      regions: (rawData: GeoData) => this.buildGeoChartOptions(rawData)
     }
 
     const { type, data, displayLegend, plugins, options } = dataBuilders[graphId](this.chartIngestData[graphId])
@@ -494,7 +518,7 @@ export class VideoStatsComponent implements OnInit {
     }
   }
 
-  private buildCountryChartOptions (rawData: CountryData): ChartBuilderResult {
+  private buildGeoChartOptions (rawData: GeoData): ChartBuilderResult {
     const labels: string[] = []
     const data: number[] = []
 
@@ -574,7 +598,7 @@ export class VideoStatsComponent implements OnInit {
 
     if (graphId === 'retention') return value + ' %'
     if (graphId === 'aggregateWatchTime') return secondsToTime(+value)
-    if (graphId === 'countries' && scale) return scale.getLabelForValue(value as number)
+    if ((graphId === 'countries' || graphId === 'regions') && scale) return scale.getLabelForValue(value as number)
 
     return value.toLocaleString(this.localeId)
   }

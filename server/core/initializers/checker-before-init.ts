@@ -69,7 +69,7 @@ function checkMissedConfig () {
     'object_storage.web_videos.prefix', 'object_storage.web_videos.base_url',
     'theme.default',
     'feeds.videos.count', 'feeds.comments.count',
-    'geo_ip.enabled', 'geo_ip.country.database_url',
+    'geo_ip.enabled', 'geo_ip.country.database_url', 'geo_ip.city.database_url',
     'remote_redundancy.videos.accept_from',
     'federation.videos.federate_unlisted', 'federation.videos.cleanup_remote_interactions',
     'peertube.check_latest_version.enabled', 'peertube.check_latest_version.url',

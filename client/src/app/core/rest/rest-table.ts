@@ -52,8 +52,6 @@ export abstract class RestTable <T = unknown> {
   loadLazy (event: TableLazyLoadEvent) {
     debugLogger('Load lazy %o.', event)
 
-    this.router.navigate([ '.' ], { relativeTo: this.route, queryParams: { start: event.first } })
-
     this.sort = {
       order: event.sortOrder,
       field: event.sortField as string

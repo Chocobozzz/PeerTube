@@ -11,4 +11,9 @@ export interface VideoStatsOverall {
     isoCode: string
     viewers: number
   }[]
+
+  subdivisions: {
+    name: string
+    viewers: number
+  }[]
 }

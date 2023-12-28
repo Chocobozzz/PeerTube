@@ -307,6 +307,9 @@ const CONFIG = {
     ENABLED: config.get<boolean>('geo_ip.enabled'),
     COUNTRY: {
       DATABASE_URL: config.get<string>('geo_ip.country.database_url')
+    },
+    CITY: {
+      DATABASE_URL: config.get<string>('geo_ip.city.database_url')
     }
   },
   PLUGINS: {

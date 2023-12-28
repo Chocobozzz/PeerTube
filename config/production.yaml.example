@@ -381,6 +381,9 @@ geo_ip:
   country:
     database_url: 'https://dbip.mirror.framasoft.org/files/dbip-country-lite-latest.mmdb'
 
+  city:
+    database_url: 'https://dbip.mirror.framasoft.org/files/dbip-city-lite-latest.mmdb'
+
 plugins:
   # The website PeerTube will ask for available PeerTube plugins and themes
   # This is an unmoderated plugin index, so only install plugins/themes you trust

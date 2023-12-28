@@ -13,7 +13,7 @@ export class GeoIPUpdateScheduler extends AbstractScheduler {
   }
 
   protected internalExecute () {
-    return GeoIP.Instance.updateDatabase()
+    return GeoIP.Instance.updateDatabases()
   }
 
   static get Instance () {

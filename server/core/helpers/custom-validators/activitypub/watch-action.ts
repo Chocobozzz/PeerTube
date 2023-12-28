@@ -26,8 +26,12 @@ export {
 
 function isLocationValid (location: any) {
   if (!location) return true
+  if (typeof location !== 'object') return false
 
-  return typeof location === 'object' && typeof location.addressCountry === 'string'
+  if (location.addressCountry && typeof location.addressCountry !== 'string') return false
+  if (location.addressRegion && typeof location.addressRegion !== 'string') return false
+
+  return true
 }
 
 function isWatchSectionsValid (sections: WatchActionObject['watchSections']) {

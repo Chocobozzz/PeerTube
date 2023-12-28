@@ -7,6 +7,7 @@ export interface WatchActionObject {
 
   location?: {
     addressCountry: string
+    addressRegion: string
   }
 
   uuid: string

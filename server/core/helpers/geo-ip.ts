@@ -1,49 +1,96 @@
 import { pathExists } from 'fs-extra/esm'
 import { writeFile } from 'fs/promises'
-import maxmind, { CountryResponse, Reader } from 'maxmind'
+import maxmind, { CityResponse, CountryResponse, Reader } from 'maxmind'
 import { join } from 'path'
 import { CONFIG } from '@server/initializers/config.js'
 import { logger, loggerTagsFactory } from './logger.js'
 import { isBinaryResponse, peertubeGot } from './requests.js'
+import { isArray } from './custom-validators/misc.js'
 
 const lTags = loggerTagsFactory('geo-ip')
-
-const mmbdFilename = 'dbip-country-lite-latest.mmdb'
-const mmdbPath = join(CONFIG.STORAGE.BIN_DIR, mmbdFilename)
 
 export class GeoIP {
   private static instance: GeoIP
 
-  private reader: Reader<CountryResponse>
+  private countryReader: Reader<CountryResponse>
+  private cityReader: Reader<CityResponse>
+
+  private readonly countryDBPath = join(CONFIG.STORAGE.BIN_DIR, 'dbip-country-lite-latest.mmdb')
+  private readonly cityDBPath = join(CONFIG.STORAGE.BIN_DIR, 'dbip-city-lite-latest.mmdb')
 
   private constructor () {
   }
 
-  async safeCountryISOLookup (ip: string): Promise<string> {
-    if (CONFIG.GEO_IP.ENABLED === false) return null
+  async safeIPISOLookup (ip: string): Promise<{ country: string, subdivisionName: string }> {
+    const emptyResult = { country: null, subdivisionName: null }
+    if (CONFIG.GEO_IP.ENABLED === false) return emptyResult
 
-    await this.initReaderIfNeeded()
+    await this.initReadersIfNeeded()
 
     try {
-      const result = this.reader.get(ip)
-      if (!result) return null
+      const countryResult = this.countryReader?.get(ip)
+      const cityResult = this.cityReader?.get(ip)
 
-      return result.country.iso_code
+      return {
+        country: this.getISOCountry(countryResult),
+        subdivisionName: this.getISOSubdivision(cityResult)
+      }
     } catch (err) {
-      logger.error('Cannot get country from IP.', { err })
+      logger.error('Cannot get country/city information from IP.', { err })
 
-      return null
+      return emptyResult
     }
   }
 
-  async updateDatabase () {
+  // ---------------------------------------------------------------------------
+
+  private getISOCountry (countryResult: CountryResponse) {
+    return countryResult?.country?.iso_code || null
+  }
+
+  private getISOSubdivision (subdivisionResult: CityResponse) {
+    const subdivisions = subdivisionResult?.subdivisions
+    if (!isArray(subdivisions) || subdivisions.length === 0) return null
+
+    // The last subdivision is the more precise one
+    const subdivision = subdivisions[subdivisions.length - 1]
+
+    return subdivision.names?.en || null
+  }
+
+  // ---------------------------------------------------------------------------
+
+  async updateDatabases () {
     if (CONFIG.GEO_IP.ENABLED === false) return
 
-    const url = CONFIG.GEO_IP.COUNTRY.DATABASE_URL
+    await this.updateCountryDatabase()
+    await this.updateCityDatabase()
+  }
 
-    logger.info('Updating GeoIP database from %s.', url, lTags())
+  private async updateCountryDatabase () {
+    if (!CONFIG.GEO_IP.COUNTRY.DATABASE_URL) return false
 
-    const gotOptions = { context: { bodyKBLimit: 200_000 }, responseType: 'buffer' as 'buffer' }
+    await this.updateDatabaseFile(CONFIG.GEO_IP.COUNTRY.DATABASE_URL, this.countryDBPath)
+
+    this.countryReader = undefined
+
+    return true
+  }
+
+  private async updateCityDatabase () {
+    if (!CONFIG.GEO_IP.CITY.DATABASE_URL) return false
+
+    await this.updateDatabaseFile(CONFIG.GEO_IP.CITY.DATABASE_URL, this.cityDBPath)
+
+    this.cityReader = undefined
+
+    return true
+  }
+
+  private async updateDatabaseFile (url: string, destination: string) {
+    logger.info('Updating GeoIP databases from %s.', url, lTags())
+
+    const gotOptions = { context: { bodyKBLimit: 800_000 }, responseType: 'buffer' as 'buffer' }
 
     try {
       const gotResult = await peertubeGot(url, gotOptions)
@@ -52,26 +99,43 @@ export class GeoIP {
         throw new Error('Not a binary response')
       }
 
-      await writeFile(mmdbPath, gotResult.body)
+      await writeFile(destination, gotResult.body)
 
-      // Reinit reader
-      this.reader = undefined
-
-      logger.info('GeoIP database updated %s.', mmdbPath, lTags())
+      logger.info('GeoIP database updated %s.', destination, lTags())
     } catch (err) {
       logger.error('Cannot update GeoIP database from %s.', url, { err, ...lTags() })
     }
   }
 
-  private async initReaderIfNeeded () {
-    if (!this.reader) {
-      if (!await pathExists(mmdbPath)) {
-        await this.updateDatabase()
+  // ---------------------------------------------------------------------------
+
+  private async initReadersIfNeeded () {
+    if (!this.countryReader) {
+      let open = true
+
+      if (!await pathExists(this.countryDBPath)) {
+        open = await this.updateCountryDatabase()
       }
 
-      this.reader = await maxmind.open(mmdbPath)
+      if (open) {
+        this.countryReader = await maxmind.open(this.countryDBPath)
+      }
+    }
+
+    if (!this.cityReader) {
+      let open = true
+
+      if (!await pathExists(this.cityDBPath)) {
+        open = await this.updateCityDatabase()
+      }
+
+      if (open) {
+        this.cityReader = await maxmind.open(this.cityDBPath)
+      }
     }
   }
+
+  // ---------------------------------------------------------------------------
 
   static get Instance () {
     return this.instance || (this.instance = new this())
