@@ -83,29 +83,46 @@ function timeToInt (time: number | string) {
   return result
 }
 
-function secondsToTime (seconds: number, full = false, symbol?: string) {
+function secondsToTime (options: {
+  seconds: number
+  fullFormat?: boolean // default false
+  symbol?: string
+} | number) {
+  let seconds: number
+  let fullFormat = false
+  let symbol: string
+
+  if (typeof options === 'number') {
+    seconds = options
+  } else {
+    seconds = options.seconds
+    fullFormat = options.fullFormat ?? false
+    symbol = options.symbol
+  }
+
   let time = ''
 
-  if (seconds === 0 && !full) return '0s'
+  if (seconds === 0 && !fullFormat) return '0s'
 
   const hourSymbol = (symbol || 'h')
   const minuteSymbol = (symbol || 'm')
-  const secondsSymbol = full ? '' : 's'
+  const secondsSymbol = fullFormat ? '' : 's'
 
   const hours = Math.floor(seconds / 3600)
-  if (hours >= 1) time = hours + hourSymbol
-  else if (full) time = '0' + hourSymbol
+  if (hours >= 1 && hours < 10 && fullFormat) time = '0' + hours + hourSymbol
+  else if (hours >= 1) time = hours + hourSymbol
+  else if (fullFormat) time = '00' + hourSymbol
 
   seconds %= 3600
   const minutes = Math.floor(seconds / 60)
-  if (minutes >= 1 && minutes < 10 && full) time += '0' + minutes + minuteSymbol
+  if (minutes >= 1 && minutes < 10 && fullFormat) time += '0' + minutes + minuteSymbol
   else if (minutes >= 1) time += minutes + minuteSymbol
-  else if (full) time += '00' + minuteSymbol
+  else if (fullFormat) time += '00' + minuteSymbol
 
   seconds %= 60
-  if (seconds >= 1 && seconds < 10 && full) time += '0' + seconds + secondsSymbol
+  if (seconds >= 1 && seconds < 10 && fullFormat) time += '0' + seconds + secondsSymbol
   else if (seconds >= 1) time += seconds + secondsSymbol
-  else if (full) time += '00'
+  else if (fullFormat) time += '00'
 
   return time
 }
