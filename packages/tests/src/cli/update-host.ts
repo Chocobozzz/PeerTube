@@ -9,9 +9,11 @@ import {
   makeActivityPubGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { parseTorrentVideo } from '@tests/shared/webtorrent.js'
+import { VideoPlaylistPrivacy } from '@peertube/peertube-models'
 
 describe('Test update host scripts', function () {
   let server: PeerTubeServer
@@ -27,6 +29,7 @@ describe('Test update host scripts', function () {
     // Run server 2 to have transcoding enabled
     server = await createSingleServer(2, overrideConfig)
     await setAccessTokensToServers([ server ])
+    await setDefaultVideoChannel([ server ])
 
     // Upload two videos for our needs
     const { uuid: video1UUID } = await server.videos.upload()
@@ -46,6 +49,13 @@ describe('Test update host scripts', function () {
     // Create comments
     const text = 'my super first comment'
     await server.comments.createThread({ videoId: video1UUID, text })
+
+    // Playlist
+    {
+      const attributes = { displayName: 'playlist', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: server.store.channel.id }
+      const playlist = await server.playlists.create({ attributes })
+      await server.playlists.addElement({ playlistId: playlist.id, attributes: { videoId: video1UUID } })
+    }
 
     await waitJobs(server)
   })
@@ -97,6 +107,23 @@ describe('Test update host scripts', function () {
       const { body } = await makeActivityPubGetRequest(server.url, '/accounts/' + usernameWithDomain)
 
       expect(body.id).to.equal('http://127.0.0.1:9002/accounts/' + usernameWithDomain)
+    }
+  })
+
+  it('Should have updated playlist url', async function () {
+    const body = await server.playlists.list()
+    expect(body.total).to.equal(1)
+
+    for (const playlist of body.data) {
+      const { body } = await makeActivityPubGetRequest(server.url, '/video-playlists/' + playlist.uuid)
+      expect(body.id).to.equal('http://127.0.0.1:9002/video-playlists/' + playlist.uuid)
+
+      const { data: elements } = await server.playlists.listVideos({ playlistId: playlist.id })
+
+      for (const element of elements) {
+        const { body } = await makeActivityPubGetRequest(server.url, `/video-playlists/${playlist.uuid}/videos/${element.id}`)
+        expect(body.id).to.equal(`http://127.0.0.1:9002/video-playlists/${playlist.uuid}/videos/${element.id}`)
+      }
     }
   })
 
