@@ -229,7 +229,7 @@ class PeerTubePlugin extends Plugin {
       // In portrait screen mode, we allow player with bigger height size than width
       const portraitMode = getComputedStyle(el).getPropertyValue(this.options.autoPlayerRatio.cssPlayerPortraitModeVariable) === '1'
 
-      const currentRatio = !portraitMode && data.ratio < 1
+      const currentRatio = isNaN(data.ratio) || (!portraitMode && data.ratio < 1)
         ? defaultRatio
         : data.ratio
 

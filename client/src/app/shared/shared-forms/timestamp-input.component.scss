@@ -26,6 +26,8 @@ p-inputmask {
   &:not(.border-disabled) {
     ::ng-deep input {
       @include peertube-input-text(80px);
+
+      padding: 3px 10px;
     }
   }
 }
