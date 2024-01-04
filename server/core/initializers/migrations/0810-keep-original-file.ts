@@ -8,12 +8,21 @@ async function up (utils: {
   const { transaction } = utils
 
   {
-    const data = {
+    const dataKeptOriginalFile = {
+      type: Sequelize.BOOLEAN,
+      allowNull: false
+    }
+
+    await utils.queryInterface.addColumn('videoSource', 'keptOriginalFile', dataKeptOriginalFile, { transaction })
+  }
+
+  {
+    const dataKeptOriginalFileName = {
       type: Sequelize.STRING,
       allowNull: true
     }
 
-    await utils.queryInterface.addColumn('videoSource', 'filePath', data, { transaction })
+    await utils.queryInterface.addColumn('videoSource', 'keptOriginalFileName', dataKeptOriginalFileName, { transaction })
   }
 }
 

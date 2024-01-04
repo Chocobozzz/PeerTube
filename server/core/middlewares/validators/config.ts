@@ -42,6 +42,7 @@ const customConfigUpdateValidator = [
   body('videoChannels.maxPerUser').isInt(),
 
   body('transcoding.enabled').isBoolean(),
+  body('transcoding.keepOriginalFile').isBoolean(),
   body('transcoding.allowAdditionalExtensions').isBoolean(),
   body('transcoding.threads').isInt(),
   body('transcoding.concurrency').isInt({ min: 1 }),

@@ -163,6 +163,7 @@ export class ConfigCommand extends AbstractCommand {
       newConfig: {
         transcoding: {
           enabled: true,
+          keepOriginalFile: false,
 
           allowAudioFiles: true,
           allowAdditionalExtensions: true,
@@ -190,6 +191,7 @@ export class ConfigCommand extends AbstractCommand {
       newConfig: {
         transcoding: {
           enabled: true,
+          keepOriginalFile: false,
 
           allowAudioFiles: true,
           allowAdditionalExtensions: true,
@@ -436,6 +438,7 @@ export class ConfigCommand extends AbstractCommand {
       },
       transcoding: {
         enabled: true,
+        keepOriginalFile: false,
         remoteRunners: {
           enabled: false
         },

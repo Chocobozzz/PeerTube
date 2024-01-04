@@ -18,8 +18,6 @@ import { buildFFmpegVOD } from './shared/index.js'
 import { buildOriginalFileResolution } from './transcoding-resolutions.js'
 import { buildStoryboardJobIfNeeded } from '../video.js'
 
-import { logger } from '../../helpers/logger.js'
-
 // Optimize the original video file and replace it. The resolution is not changed.
 export async function optimizeOriginalVideofile (options: {
   video: MVideoFullLight
@@ -75,17 +73,11 @@ export async function optimizeOriginalVideofile (options: {
         videoFile: inputVideoFile,
         videoOutputPath
       })
-
-      logger.error('chagai uploading new options: %s ', JSON.stringify(options))
       
-      // TODO add config to determine if we want to keep old file or not
-      //await remove(videoInputPath)
-
-      // TODO write in db the path to the oldFile - videoSource, filePath (null or empty string when not existing)
-      // TODO do we need to upload this old file to a bucket or something?
-      // TODO support replacement of video file (list of all oldFiles??)
-      // Extra Feature, add this per file
-
+      // Remove the original video's file path if keep_original_file is set to false in the config.
+      if (!CONFIG.TRANSCODING.KEEP_ORIGINAL_FILE) {
+          await remove(videoInputPath)
+      }
 
       return { transcodeType, videoFile }
     })
@@ -252,10 +244,11 @@ export async function onWebVideoFileTranscoding (options: {
 
     await createTorrentAndSetInfoHash(video, videoFile)
 
-    // TODO add config to determine if we want to keep old file or not
-    // const oldFile = await VideoFileModel.loadWebVideoFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })
-    // if (oldFile) await video.removeWebVideoFile(oldFile)
-    // logger.info('original/old/source file removed')
+    // Remove the oldFile (aka original video file) if keep_original_file is set to false in the config.
+    if (!CONFIG.TRANSCODING.KEEP_ORIGINAL_FILE) {
+        const oldFile = await VideoFileModel.loadWebVideoFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })
+        if (oldFile) await video.removeWebVideoFile(oldFile)
+    }
 
     await VideoFileModel.customUpsert(videoFile, 'video', undefined)
     video.VideoFiles = await video.$get('VideoFiles')

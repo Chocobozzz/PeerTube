@@ -43,6 +43,7 @@ import { VideoModel } from '../../../models/video/video.js'
 import { ffprobePromise, getChaptersFromContainer } from '@peertube/peertube-ffmpeg'
 import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from '@server/lib/video-chapters.js'
 import { FfprobeData } from 'fluent-ffmpeg'
+import { CONFIG } from '@server/initializers/config.js'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -187,8 +188,12 @@ async function addVideo (options: {
 
     video.VideoFiles = [ videoFile ]
 
+    const originalFileName: string = CONFIG.TRANSCODING.KEEP_ORIGINAL_FILE ? videoPhysicalFile.path.split('/').pop() || '' : ''
+
     await VideoSourceModel.create({
       filename: originalFilename,
+      keptOriginalFile: CONFIG.TRANSCODING.KEEP_ORIGINAL_FILE,
+      keptOriginalFileName: originalFileName != '' ? originalFileName : null,
       videoId: video.id
     }, { transaction: t })
 
