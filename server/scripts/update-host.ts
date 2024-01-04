@@ -7,7 +7,9 @@ import {
   getLocalVideoActivityPubUrl,
   getLocalVideoAnnounceActivityPubUrl,
   getLocalVideoChannelActivityPubUrl,
-  getLocalVideoCommentActivityPubUrl
+  getLocalVideoCommentActivityPubUrl,
+  getLocalVideoPlaylistActivityPubUrl,
+  getLocalVideoPlaylistElementActivityPubUrl
 } from '@server/lib/activitypub/url.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
@@ -17,6 +19,8 @@ import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoShareModel } from '@server/models/video/video-share.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MActorAccount } from '@server/types/models/index.js'
+import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
+import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 
 run()
   .then(() => process.exit(0))
@@ -120,6 +124,44 @@ async function run () {
 
     comment.url = getLocalVideoCommentActivityPubUrl(comment.Video, comment)
     await comment.save()
+  }
+
+  console.log('Updating video playlists.')
+  const videoPlaylists: VideoPlaylistModel[] = await VideoPlaylistModel.findAll({
+    include: [
+      {
+        model: AccountModel.unscoped(),
+        required: true,
+        include: [
+          {
+            model: ActorModel.unscoped(),
+            where: {
+              serverId: null
+            },
+            required: true
+          }
+        ]
+      }
+    ]
+  })
+  for (const playlist of videoPlaylists) {
+    console.log('Updating video playlist ' + playlist.url)
+
+    playlist.url = getLocalVideoPlaylistActivityPubUrl(playlist)
+    await playlist.save()
+
+    const elements: VideoPlaylistElementModel[] = await VideoPlaylistElementModel.findAll({
+      where: {
+        videoPlaylistId: playlist.id
+      }
+    })
+
+    for (const element of elements) {
+      console.log('Updating video playlist element ' + element.url)
+
+      element.url = getLocalVideoPlaylistElementActivityPubUrl(playlist, element)
+      await element.save()
+    }
   }
 
   console.log('Updating video and torrent files.')

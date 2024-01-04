@@ -25,7 +25,7 @@ export class PlaylistsCommand extends AbstractCommand {
     count?: number
     sort?: string
     playlistType?: VideoPlaylistType_Type
-  }) {
+  } = {}) {
     const path = '/api/v1/video-playlists'
     const query = pick(options, [ 'start', 'count', 'sort', 'playlistType' ])
 
