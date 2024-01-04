@@ -144,8 +144,8 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     const start = playlistElement.startTimestamp
     const stop = playlistElement.stopTimestamp
 
-    const startFormatted = secondsToTime(start, true, ':')
-    const stopFormatted = secondsToTime(stop, true, ':')
+    const startFormatted = secondsToTime({ seconds: start, fullFormat: true, symbol: ':' })
+    const stopFormatted = secondsToTime({ seconds: stop, fullFormat: true, symbol: ':' })
 
     if (start === null && stop === null) return ''
 

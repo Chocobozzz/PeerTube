@@ -61,6 +61,12 @@ async function processVideoLiveEnding (job: Job) {
     return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
   }
 
+  if (await hasReplayFiles(payload.replayDirectory) !== true) {
+    logger.info(`No replay files found for live ${video.uuid}, skipping video replay creation.`, { ...lTags(video.uuid) })
+
+    return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
+  }
+
   if (permanentLive) {
     await saveReplayToExternalVideo({
       liveVideo: video,
@@ -304,4 +310,8 @@ async function cleanupLiveAndFederate (options: {
 
 function createStoryboardJob (video: MVideo) {
   return JobQueue.Instance.createJob(buildStoryboardJobIfNeeded({ video, federate: true }))
+}
+
+async function hasReplayFiles (replayDirectory: string) {
+  return (await readdir(replayDirectory)).length !== 0
 }
