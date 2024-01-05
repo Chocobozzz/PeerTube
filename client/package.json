@@ -126,12 +126,12 @@
     "ts-loader": "^9.3.0",
     "ts-node": "^10.9.1",
     "tslib": "^2.4.0",
-    "typescript": "~5.1.0",
+    "typescript": "~5.3.3",
     "video.js": "^7.19.2",
     "webpack": "^5.73.0",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^5.0.1",
-    "zone.js": "~0.13.0"
+    "zone.js": "~0.14.2"
   },
   "dependencies": {}
 }
