@@ -42,7 +42,7 @@
           type="text" id="name" i18n-placeholder placeholder="Example: sweetmelodies24"
           formControlName="name" [ngClass]="{ 'input-error': formErrors['name'] }"
         >
-        <div class="input-group-text">@{{ instanceHost }}</div>
+        <div class="input-group-text">&#64;{{ instanceHost }}</div>
       </div>
 
       <div *ngIf="formErrors.name" class="form-error" role="alert">{{ formErrors.name }}</div>

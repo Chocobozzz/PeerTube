@@ -36,7 +36,7 @@
           formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }"
           autocomplete="username"
         >
-        <span class="input-group-text">@{{ instanceHost }}</span>
+        <span class="input-group-text">&#64;{{ instanceHost }}</span>
       </div>
 
       <div *ngIf="formErrors.username" class="form-error" role="alert">{{ formErrors.username }}</div>
