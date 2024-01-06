@@ -5129,12 +5129,12 @@
       </trans-unit>
       <trans-unit id="4497115134891299867" datatype="html">
         <source>Signup requires email verification</source>
-        <target state="translated">การสมัครต้องมีการยืนยันอีเมล</target>
+        <target state="translated">การลงทะเบียนต้องมีการยืนยันอีเมล</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">181</context></context-group>
       </trans-unit>
       <trans-unit id="8133107840061687919" datatype="html">
         <source>Signup limit</source>
-        <target state="new">Signup limit</target>
+        <target state="translated">ขีดจำกัดการลงทะเบียน</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">186</context></context-group>
       </trans-unit>
       <trans-unit id="8497774075394617130" datatype="html">
@@ -5159,7 +5159,7 @@
       </trans-unit>
       <trans-unit id="7456307533995141215" datatype="html">
         <source>Enable Signup</source>
-        <target state="new">Enable Signup</target>
+        <target state="translated">เปิดการลงทะเบียน</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="4555457172864212828" datatype="html">
@@ -5401,7 +5401,7 @@
       </trans-unit>
       <trans-unit id="1206277798664538171" datatype="html">
         <source>Signup requires approval by moderators</source>
-        <target state="new">Signup requires approval by moderators</target>
+        <target state="translated">การลงทะเบียนต้องได้รับการอนุมัติจากผู้ดูแล</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">174</context></context-group>
       </trans-unit>
       <trans-unit id="1718269478813020014" datatype="html">
@@ -11734,7 +11734,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2684349290932402590" datatype="html">
         <source>Requires approval by moderators</source>
-        <target state="new">Requires approval by moderators</target>
+        <target state="translated">ต้องได้รับการอนุมัติจากผู้ดูแล</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="4816216590591222133" datatype="html">
