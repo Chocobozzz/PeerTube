@@ -5551,7 +5551,7 @@
       </trans-unit>
       <trans-unit id="2134381456844896041" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </target>
+        <target state="translated">Utiliser &lt;x id="START_LINK" ctype="x-a" equiv-text="&amp;lt ;a routerLink=&amp;quot ;/admin/system/runners/runners-list&amp;quot ;&amp;gt ;"/&gt;des encodeurs distants&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&amp;lt ;/a&amp;gt ;"/&gt; pour traiter les transcodages des flux en direct. Les encodeurs distants doivent s'inscrire au préalable sur votre instance. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="5975271795105968425" datatype="html">
@@ -5588,7 +5588,7 @@
       </trans-unit>
       <trans-unit id="8646250517331978259" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </target>
+        <target state="translated">Utiliser &lt;x id="START_LINK" ctype="x-a" equiv-text="&amp;lt ;a routerLink=&amp;quot ;/admin/system/runners/runners-list&amp;quot ;&amp;gt ;"/&gt;des encodeurs distants&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&amp;lt ;/a&amp;gt ;"/&gt; pour traiter les transcodages de la VOD. Les encodeurs distants doivent s'inscrire au préalable sur votre instance. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="7452751710576287271">
@@ -5736,7 +5736,7 @@
       </trans-unit>
       <trans-unit id="5552130276182854923" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks. Remote runners has to register on your instance first. </target>
+        <target state="translated">Utiliser &lt;x id="START_LINK" ctype="x-a" equiv-text="&amp;lt ;a routerLink=&amp;quot ;/admin/system/runners/runners-list&amp;quot ;&amp;gt ;"/&gt;des encodeurs distants&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&amp;lt ;/a&amp;gt ;"/&gt; pour traiter les transcodages du Studio. Les encodeurs distants doivent s'inscrire au préalable sur votre instance. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">240,243</context>
@@ -10060,7 +10060,7 @@
       </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html">
         <source>Registration approval has been rejected for this account.</source>
-        <target state="new">Registration approval has been rejected for this account.</target>
+        <target state="translated">L'approbation de l'inscription a été rejetée pour ce compte.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">228</context></context-group>
       </trans-unit>
       <trans-unit id="7939914198003891823" datatype="html">
@@ -11129,7 +11129,7 @@
       </trans-unit>
       <trans-unit id="3116180442048363146" datatype="html">
         <source>A password is required for password protected video.</source>
-        <target state="new">A password is required for password protected video.</target>
+        <target state="needs-translation">Un mot de passe est requis pour accéder aux vidéos protégées.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">34</context>
@@ -11902,7 +11902,7 @@
       </trans-unit>
       <trans-unit id="4024846984475742259" datatype="html">
         <source>Show back content from that instance for you.</source>
-        <target state="translated">Me ré-afficher tout contenu de cette instance.</target>
+        <target state="translated">Me ré-afficher tout le contenu de cette instance.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">315</context></context-group>
       </trans-unit>
       <trans-unit id="3108200185023875257" datatype="html">
@@ -12429,7 +12429,7 @@
       </trans-unit>
       <trans-unit id="1952170121636976975" datatype="html">
         <source>No registration token found for remote runners.</source>
-        <target state="new">No registration token found for remote runners.</target>
+        <target state="needs-translation">Aucun jeton d'enregistrement trouvé pour les encodeurs distants.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="8244506587463177080" datatype="html">
@@ -13061,7 +13061,7 @@
       </trans-unit>
       <trans-unit id="2587910160708766081" datatype="html">
         <source>Toggle this date format to "<x id="PH" equiv-text="target"/>"</source>
-        <target state="new">Toggle this date format to "<x id="PH" equiv-text="target"/>"</target>
+        <target state="needs-translation">Basculer ce format de date sur "<x id="PH" equiv-text="target"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-toggle.component.ts</context>
           <context context-type="linenumber">31</context>
