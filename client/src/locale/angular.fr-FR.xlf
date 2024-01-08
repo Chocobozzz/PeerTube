@@ -2680,7 +2680,7 @@
       </trans-unit>
       <trans-unit id="1952020204339597057" datatype="html">
         <source>Short text to tell people how they can support you (membership platform...).</source>
-        <target state="translated">Un court texte pour dire aux gens comment ils peuvent vous soutenir (plateforme d'adhésion...).</target>
+        <target state="translated">Un court texte expliquant à votre audience les options pour soutenir votre chaîne (plateforme d'adhésion...)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">388</context></context-group>
       </trans-unit>
       <trans-unit id="7003790776240394114" datatype="html">
@@ -5242,7 +5242,7 @@
       </trans-unit>
       <trans-unit id="7055002182446434458" datatype="html">
         <source>Allow users to upload a new version of their video</source>
-        <target state="new">Allow users to upload a new version of their video</target>
+        <target state="translated">Autoriser les utilisateurs à téléverser une nouvelle version de leur vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">353</context>
