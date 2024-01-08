@@ -264,8 +264,8 @@ export class UserNotification implements UserNotificationServer {
     return '/my-library/video-imports'
   }
 
-  private buildVideoImportIdentifier (videoImport: { targetUrl?: string, magnetUri?: string, torrentName?: string }) {
-    return videoImport.targetUrl || videoImport.magnetUri || videoImport.torrentName
+  private buildVideoImportIdentifier (videoImport: UserNotification['videoImport']) {
+    return videoImport.video?.name || videoImport.targetUrl || videoImport.magnetUri || videoImport.torrentName
   }
 
   private buildCommentUrl (comment: { video: { uuid: string }, threadId: number }) {
