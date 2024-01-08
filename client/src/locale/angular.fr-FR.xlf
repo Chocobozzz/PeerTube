@@ -593,7 +593,7 @@
       </trans-unit>
       <trans-unit id="4435640428611044716" datatype="html">
         <source>Are you sure you want to delete Web Video files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete Web Video files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</target>
+        <target state="needs-translation">Êtes-vous certain de vouloir supprimer les fichiers Web Vidéos de {count, plural, =1 {1 video} other {<x id="count"/> videos}} ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">277</context>
@@ -5618,7 +5618,7 @@
       </trans-unit>
       <trans-unit id="2093595615152706886" datatype="html">
         <source>Web Videos enabled</source>
-        <target state="new">Web Videos enabled</target>
+        <target state="needs-translation">Web Vidéos activé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">74</context>
@@ -5642,7 +5642,7 @@
       </trans-unit>
       <trans-unit id="4354548488369167450" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated">&lt;x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&amp;lt ;strong&amp;gt ;"/&gt;Nécessite ffmpeg &amp;gt ;= 4.1&lt;x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&amp;lt ;/strong&amp;gt ;"/&gt;&lt;x id="START_PARAGRAPH" ctype="x-p" equiv-text="&amp;lt ;p&amp;gt ;"/&gt;Génère des listes de lecture HLS et des fichiers MP4 fragmentés, ce qui permet une meilleure lecture qu'avec les fichiers Web Vidéos historiques :&lt;x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&amp;lt ;/p&amp;gt ;"/&gt;&lt;x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&amp;lt ;ul&amp;gt ;"/&gt;&lt;x id="START_LIST_ITEM" ctype="x-li" equiv-text="&amp;lt ;li&amp;gt ;"/&gt;Le changement de résolution est plus doux&lt;x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&amp;lt ;/li&amp;gt ;"/&gt;&lt;x id="START_LIST_ITEM" ctype="x-li" equiv-text="&amp;lt ;li&amp;gt ;"/&gt;Lecture plus rapide, notamment avec les longues vidéos&lt;x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&amp;lt ;/li&amp;gt ;"/&gt;&lt;x id="START_LIST_ITEM" ctype="x-li" equiv-text="&amp;lt ;li&amp;gt ;"/&gt;Lecture plus stable (moins de bugs/chargement infini)&lt;x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&amp;lt ;/li&amp;gt ;"/&gt;&lt;x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&amp;lt ;/ul&amp;gt ;"/&gt;&lt;x id="START_PARAGRAPH" ctype="x-p" equiv-text="&amp;lt ;p&amp;gt ;"/&gt;Si vous avez également activé la prise en charge du format Web Vidéos, le stockage des vidéos sera multiplié par 2&lt;x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&amp;lt ;/p&amp;gt ;"/&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">94,103</context>
@@ -9011,7 +9011,7 @@
       </trans-unit>
       <trans-unit id="1882931826815906053" datatype="html">
         <source>With Web Videos</source>
-        <target state="new">With Web Videos</target>
+        <target state="needs-translation">Avec Web Vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">63</context>
@@ -9019,7 +9019,7 @@
       </trans-unit>
       <trans-unit id="1590370632695044398" datatype="html">
         <source>Without Web Videos</source>
-        <target state="new">Without Web Videos</target>
+        <target state="needs-translation">Sans Web Vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">67</context>
