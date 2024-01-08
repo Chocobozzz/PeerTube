@@ -3388,7 +3388,7 @@
       </trans-unit>
       <trans-unit id="795485832100313" datatype="html">
         <source>Video re-upload</source>
-        <target state="new">Video re-upload</target>
+        <target state="translated">Vidéo remplacée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context>
           <context context-type="linenumber">22</context>
@@ -12296,7 +12296,7 @@
       </trans-unit>
       <trans-unit id="6726093171366409167" datatype="html">
         <source>Run Web Video transcoding</source>
-        <target state="new">Run Web Video transcoding</target>
+        <target state="translated">Exécuter le transcodage Web Vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">102</context>
