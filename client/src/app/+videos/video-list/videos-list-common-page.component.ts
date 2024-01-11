@@ -69,7 +69,7 @@ export class VideosListCommonPageComponent implements OnInit, OnDestroy, Disable
     const params = {
       ...filters.toVideosAPIObject(),
 
-      videoPagination: pagination,
+      videoPagination: { ...pagination },
       skipCount: true
     }
 
