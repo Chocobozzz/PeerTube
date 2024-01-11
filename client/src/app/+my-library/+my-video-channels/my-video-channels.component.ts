@@ -1,6 +1,6 @@
 import { ChartData, ChartOptions, TooltipItem, TooltipModel } from 'chart.js'
 import { max, maxBy, min, minBy } from 'lodash-es'
-import { Subject } from 'rxjs'
+import { Subject, first, map, switchMap } from 'rxjs'
 import { Component } from '@angular/core'
 import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, ScreenService } from '@app/core'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
@@ -11,8 +11,6 @@ import { formatICU } from '@app/helpers'
   styleUrls: [ './my-video-channels.component.scss' ]
 })
 export class MyVideoChannelsComponent {
-  totalItems: number
-
   videoChannels: VideoChannel[] = []
 
   videoChannelsChartData: ChartData[]
@@ -28,6 +26,8 @@ export class MyVideoChannelsComponent {
     itemsPerPage: 10,
     totalItems: null
   }
+
+  private pagesDone = new Set<number>()
 
   constructor (
     private authService: AuthService,
@@ -47,8 +47,7 @@ export class MyVideoChannelsComponent {
     this.pagination.currentPage = 1
     this.videoChannels = []
 
-    this.authService.userInformationLoaded
-      .subscribe(() => this.loadMoreVideoChannels())
+    this.loadMoreVideoChannels()
   }
 
   async deleteVideoChannel (videoChannel: VideoChannel) {
@@ -89,19 +88,24 @@ export class MyVideoChannelsComponent {
   }
 
   private loadMoreVideoChannels () {
-    const user = this.authService.getUser()
-    const options = {
-      account: user.account,
-      withStats: true,
-      search: this.search,
-      componentPagination: this.pagination,
-      sort: '-updatedAt'
-    }
+    if (this.pagesDone.has(this.pagination.currentPage)) return
+    this.pagesDone.add(this.pagination.currentPage)
 
-    return this.videoChannelService.listAccountVideoChannels(options)
+    return this.authService.userInformationLoaded
+      .pipe(
+        first(),
+        map(() => ({
+          account: this.authService.getUser().account,
+          withStats: true,
+          search: this.search,
+          componentPagination: this.pagination,
+          sort: '-updatedAt'
+        })),
+        switchMap(options => this.videoChannelService.listAccountVideoChannels(options))
+      )
       .subscribe(res => {
         this.videoChannels = this.videoChannels.concat(res.data)
-        this.totalItems = res.total
+        this.pagination.totalItems = res.total
 
         // chart data
         this.videoChannelsChartData = this.videoChannels.map(v => ({
