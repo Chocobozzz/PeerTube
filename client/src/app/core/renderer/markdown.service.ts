@@ -103,7 +103,7 @@ export class MarkdownService {
   // ---------------------------------------------------------------------------
 
   processVideoTimestamps (videoShortUUID: string, html: string) {
-    return html.replace(/((\d{1,2}):)?(\d{1,2}):(\d{1,2})/g, function (str, _, h, m, s) {
+    return html.replace(/\b((\d{1,2}):)?(\d{1,2}):(\d{1,2})\b/g, function (str, _, h, m, s) {
       const t = (3600 * +(h || 0)) + (60 * +(m || 0)) + (+(s || 0))
 
       const url = decorateVideoLink({
