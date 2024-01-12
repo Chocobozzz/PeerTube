@@ -167,7 +167,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   isVideoStatsAvailable () {
-    return this.video.isAccessibleBy(this.user)
+    return this.video.isOwnerOrHasSeeAllVideosRight(this.user)
   }
 
   isVideoRemovable () {
@@ -187,11 +187,14 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   isVideoDownloadable () {
-    return (this.video &&
+    if (this.video.isOwnerOrHasSeeAllVideosRight(this.user)) return true
+
+    return (
+      this.video &&
       this.video.isLive !== true &&
       this.video instanceof VideoDetails &&
-      this.video.downloadEnabled) ||
-      this.video.isAccessibleBy(this.user)
+      this.video.downloadEnabled
+    )
   }
 
   canVideoBeDuplicated () {
