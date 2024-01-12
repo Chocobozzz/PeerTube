@@ -232,7 +232,7 @@ export class Video implements VideoServerModel {
       this.isUpdatableBy(user)
   }
 
-  canSeeStats (user: AuthUser) {
+  isOwnerOrHasSeeAllVideosRight (user: AuthUser) {
     return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.SEE_ALL_VIDEOS))
   }
 
