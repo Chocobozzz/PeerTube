@@ -58,11 +58,13 @@ For example `https://my-instance.example.com/videos/embed/52a10666-3a18-4e73-93d
 
 Start the video at a specific time.
 Value must be raw seconds or a duration (`3m4s`)
+Default: starts at `0`
 
 ### stop
 
 Stop the video at a specific time.
 Value must be raw seconds or a duration (`54s`)
+Default: ends at content end
 
 ### controls
 
@@ -70,36 +72,42 @@ Mimics video HTML element `controls` attribute, meaning that all controls (inclu
 It can be useful if you want to have a full control of the PeerTube player.
 
 Value must be `0` or `1`.
+Default: `1`
 
 ### controlBar
 
 Hide control bar when the video is played.
 
 Value must be `0` or `1`.
+Default: `1`
 
 ### peertubeLink
 
 Hide PeerTube instance link in control bar.
 
 Value must be `0` or `1`.
+Default: `1`
 
 ### muted
 
 Mute the video by default.
 
 Value must be `0` or `1`.
+Default: tries to restore the last muted setting set by the user
 
 ### loop
 
 Automatically start again the video when it ends.
 
 Value must be `0` or `1`.
+Default: `0`
 
 ### subtitle
 
 Auto select a subtitle by default.
 
 Value must be a valid subtitle ISO code (`fr`, `en`, etc.).
+Default: no subtitle selected and then tries to restore the last subtitle set by the user
 
 ### autoplay
 
@@ -107,34 +115,40 @@ Try to automatically play the video.
 Most web browsers disable video autoplay if the user did not interact with the video. You can try to bypass this limitation by muting the video
 
 Value must be `0` or `1`.
+Default: `0`
 
 ### playbackRate
 
 Force the default playback rate (`0.75`, `1.5` etc).
+Default: `1`
 
 ### title
 
-Hide embed title.
+Show/Hide embed title.
 
 Value must be `0` or `1`.
+Default: `1`
 
 ### warningTitle
 
-Hide P2P warning title.
+Show/Hide P2P warning title.
 
 Value must be `0` or `1`.
+Default: `1`
 
 ### p2p
 
-Disable P2P.
+Enable/Disable P2P.
 
 Value must be `0` or `1`.
+Default: tries to use the user setting and fallbacks to instance setting if user setting is not found
 
 ### bigPlayBackgroundColor
 
 Customize big play button background color.
 
 Value must be a valid color (`red` or `rgba(100, 100, 100, 0.5)`).
+Default: rgba(0, 0, 0, 0.8)
 
 ### foregroundColor
 
@@ -142,17 +156,25 @@ Customize embed font color.
 
 Value must be a valid color (`red` or `rgba(100, 100, 100, 0.5)`).
 
+Default: `white`
+
 ### mode
 
 Force a specific player engine.
 
 Value must be a valid mode (`web-video` or `p2p-media-loader`).
 
+See behaviour description [here](https://docs.joinpeertube.org/admin/configuration#vod-transcoding)
+
+Default: `p2p-media-loader` and fallback to `web-video` mode.
+
 ### api
 
-Enable embed JavaScript API (see methods below).
+Enable/Disable embed JavaScript API (see methods below).
 
 Value must be `0` or `1`.
+
+Default: `0`
 
 ### waitPasswordFromEmbedAPI
 
@@ -161,6 +183,10 @@ Value must be `0` or `1`.
 If the video requires a password, PeerTube will wait a password provided by `setVideoPassword` method before loading the video.
 
 Until you provide a password, `player.ready` is not resolved.
+
+Value must be `0` or `1`.
+
+Default: `0`
 
 
 ## Embed attributes
