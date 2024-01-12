@@ -161,22 +161,24 @@ You need to run the runner in server mode first so it can run transcoding jobs o
 peertube-runner server
 ```
 
-#### As a SystemD service
+#### As a Systemd service
 
-If your OS uses systemd, you can also configure a service, so that the runner starts automatically.
+If your OS uses systemd, you can also configure a service so that the runner starts automatically.
 
 To do so, first create a dedicated user. Here, we are calling it `prunner`, but you can choose whatever name you want.
 We are using `/srv/prunner` as his home dir, but you can choose any other path.
-
-Note: if you want to use `/home/prunner`, you have to set `ProtectHome=false` in the systemd configuration (see below).
 
 ```bash
 useradd -m -d /srv/prunner -s /bin/bash -p prunner prunner
 ```
 
+::: info Note
+If you want to use `/home/prunner`, you have to set `ProtectHome=false` in the systemd configuration (see below).
+:::
+
 Now, you can create the `/etc/systemd/system/prunner.service` file (don't forget to adapt path and user/group names if you changed it):
 
-```SystemD
+```Systemd
 [Unit]
 Description=PeerTube runner daemon
 After=network.target
@@ -211,8 +213,10 @@ CapabilityBoundingSet=~CAP_SYS_ADMIN
 WantedBy=multi-user.target
 ```
 
-Note: you can add the parameter `--id instance-1` on the `ExecStart` line, if you want to have multiple instances.
+:::info Note
+You can add the parameter `--id instance-1` on the `ExecStart` line, if you want to have multiple instances.
 You can then create multiple separate services. They can use the same user and path.
+:::
 
 Finally, to enable the service for the first time:
 
@@ -241,17 +245,27 @@ and restart the service (this file will be created when the runner starts for th
 
 If you are using the `--id` parameter, you can change specific configuration by editing the file `/srv/prunner/.config/peertube-runner-nodejs/[id]/config.toml`.
 
-**IMPORTANT NOTE**: For every peertube-runner commands described below, you have to run them as the `prunner` user.
+::: info
+For every peertube-runner commands described below, you have to run them as the `prunner` user.
 So for example, to call the `list-registered` command: `sudo -u prunner peertube-runner list-registered`.
 Otherwise the script will read the wrong configuration and cache files, and won't work as expected.
+:::
 
 ### Register
 
 Then, you can register the runner to process transcoding job of a remote PeerTube instance:
 
-```bash
+::: code-group
+
+```bash [Shell]
 peertube-runner register --url http://peertube.example.com --registration-token ptrrt-... --runner-name my-runner-name
 ```
+
+```bash [Systemd]
+sudo -u prunner peertube-runner register --url http://peertube.example.com --registration-token ptrrt-... --runner-name my-runner-name
+```
+
+:::
 
 The runner will then use a websocket connection with the PeerTube instance to be notified about new available transcoding jobs.
 
@@ -259,15 +273,32 @@ The runner will then use a websocket connection with the PeerTube instance to be
 
 To unregister a PeerTube instance:
 
-```bash
+::: code-group
+
+
+```bash [Shell]
 peertube-runner unregister --url http://peertube.example.com --runner-name my-runner-name
 ```
 
+```bash [Systemd]
+sudo -u prunner peertube-runner unregister --url http://peertube.example.com --runner-name my-runner-name
+```
+
+:::
+
 ### List registered instances
 
-```bash
+::: code-group
+
+```bash [Shell]
 peertube-runner list-registered
 ```
+
+```bash [Systemd]
+sudo -u prunner peertube-runner list-registered
+```
+
+:::
 
 ### Update the runner package
 
@@ -275,6 +306,9 @@ You can check if there is a new runner version using:
 
 ```bash
 sudo npm outdated -g @peertube/peertube-runner
+```
+
+```
 Package                    Current  Wanted  Latest  Location                                Depended by
 @peertube/peertube-runner    0.0.6   0.0.7   0.0.7  node_modules/@peertube/peertube-runner  lib
 ```
@@ -282,13 +316,12 @@ Package                    Current  Wanted  Latest  Location                    
 To update the runner:
 
 ```bash
-# update the package:
+# Update the package
 sudo npm update -g @peertube/peertube-runner
-# check that the version changed (optional):
+# Check that the version changed (optional)
 sudo npm list -g @peertube/peertube-runner
-# restart the service (if you are using systemd):
+# Restart the service (if you are using systemd)
 sudo systemctl restart prunner.service
-# or just kill and launch the runner again (if you are not using systemd)
 ```
 
 ## Server tools
