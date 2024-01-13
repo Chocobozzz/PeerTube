@@ -228,6 +228,12 @@ object_storage:
     prefix: ''
     base_url: ''
 
+  # Same settings but for original video files
+  original_video_files:
+    bucket_name: 'original-video-files'
+    prefix: ''
+    base_url: ''
+
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
 

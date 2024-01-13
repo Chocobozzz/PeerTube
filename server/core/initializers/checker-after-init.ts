@@ -304,7 +304,7 @@ function checkLiveConfig () {
 
 function checkObjectStorageConfig () {
   if (CONFIG.OBJECT_STORAGE.ENABLED === true) {
-
+    
     if (!CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME) {
       throw new Error('videos_bucket should be set when object storage support is enabled.')
     }
@@ -312,7 +312,7 @@ function checkObjectStorageConfig () {
     if (!CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME) {
       throw new Error('streaming_playlists_bucket should be set when object storage support is enabled.')
     }
-
+    
     if (
       CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME &&
       CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX
@@ -324,6 +324,39 @@ function checkObjectStorageConfig () {
       throw new Error(
         'Object storage bucket prefixes should be set to different values when the same bucket is used for both types of video.'
       )
+    }
+
+    if (CONFIG.TRANSCODING.KEEP_ORIGINAL_FILE) {
+
+      if (!CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME) {
+        throw new Error('original_video_files_bucket should be set when object storage support is enabled.')
+      }
+
+      if (
+        CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME &&
+        CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.PREFIX
+      ) {
+        if (CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === '') {
+          throw new Error('Object storage bucket prefixes should be set when the same bucket is used for both types of video.')
+        }
+  
+        throw new Error(
+          'Object storage bucket prefixes should be set to different values when the same bucket is used for both types of video.'
+        )
+      }
+
+      if (
+        CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME &&
+        CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.PREFIX
+      ) {
+        if (CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX === '') {
+          throw new Error('Object storage bucket prefixes should be set when the same bucket is used for both types of video.')
+        }
+  
+        throw new Error(
+          'Object storage bucket prefixes should be set to different values when the same bucket is used for both types of video.'
+        )
+      }
     }
 
     if (CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART > parseBytes('250MB')) {

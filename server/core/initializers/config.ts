@@ -154,6 +154,11 @@ const CONFIG = {
       BUCKET_NAME: config.get<string>('object_storage.streaming_playlists.bucket_name'),
       PREFIX: config.get<string>('object_storage.streaming_playlists.prefix'),
       BASE_URL: config.get<string>('object_storage.streaming_playlists.base_url')
+    },
+    ORIGINAL_VIDEO_FILES: {
+      BUCKET_NAME: config.get<string>('object_storage.original_video_files.bucket_name'),
+      PREFIX: config.get<string>('object_storage.original_video_files.prefix'),
+      BASE_URL: config.get<string>('object_storage.original_video_files.base_url')
     }
   },
   WEBSERVER: {
