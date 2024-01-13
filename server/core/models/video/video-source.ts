@@ -27,13 +27,9 @@ export class VideoSourceModel extends Model<Partial<AttributesOnly<VideoSourceMo
   @Column
   filename: string
 
-  @AllowNull(false)
-  @Column
-  keptOriginalFile: boolean
-
   @AllowNull(true)
   @Column
-  keptOriginalFileName: string
+  keptOriginalFilename: string
 
   @ForeignKey(() => VideoModel)
   @Column

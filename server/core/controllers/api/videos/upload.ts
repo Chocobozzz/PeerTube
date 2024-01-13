@@ -188,12 +188,15 @@ async function addVideo (options: {
 
     video.VideoFiles = [ videoFile ]
 
-    const originalFileName: string = CONFIG.TRANSCODING.KEEP_ORIGINAL_FILE ? videoPhysicalFile.path.split('/').pop() || '' : ''
+    // keptOriginalFilename is the hashed filename of the uploaded video's filename as opposed to the originalFilename variable
+    // which stores the filename at the time of user upload (e.g. uploadedvideo.mp4).
+    // The keptOriginalFilename value (hashed) would be the true name of the existing (saved) original video file which gets saved 
+    // and stored in the DB in case KEEP_ORIGINAL_FILE is set to true.
+    const keptOriginalFilename: string = CONFIG.TRANSCODING.KEEP_ORIGINAL_FILE ? basename(videoPhysicalFile.path) : '';
 
     await VideoSourceModel.create({
       filename: originalFilename,
-      keptOriginalFile: CONFIG.TRANSCODING.KEEP_ORIGINAL_FILE,
-      keptOriginalFileName: originalFileName != '' ? originalFileName : null,
+      keptOriginalFilename: keptOriginalFilename != '' ? keptOriginalFilename : null,
       videoId: video.id
     }, { transaction: t })
 
