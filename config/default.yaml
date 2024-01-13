@@ -151,6 +151,7 @@ storage:
   bin: 'storage/bin/'
   avatars: 'storage/avatars/'
   web_videos: 'storage/web-videos/'
+  original_video_files: 'storage/original-video-files/'
   streaming_playlists: 'storage/streaming-playlists/'
   redundancy: 'storage/redundancy/'
   logs: 'storage/logs/'

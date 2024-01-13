@@ -74,9 +74,14 @@ export async function optimizeOriginalVideofile (options: {
         videoOutputPath
       })
       
-      // Remove the original video's file path if keep_original_file is set to false in the config.
-      if (!CONFIG.TRANSCODING.KEEP_ORIGINAL_FILE) {
-          await remove(videoInputPath)
+      // Keep the original video's file path if KEEP_ORIGINAL_FILE is set to true in the config, otherwise remove it.
+      if (CONFIG.TRANSCODING.KEEP_ORIGINAL_FILE) {
+        const destination = VideoPathManager.Instance.getFSOriginalVideoFileOutputPath(video, videoInputPath)
+        // Move the original video file (untranscoded) to the original-video-files directory.
+        await move(videoInputPath, destination)
+      } 
+      else {
+        await remove(videoInputPath)
       }
 
       return { transcodeType, videoFile }

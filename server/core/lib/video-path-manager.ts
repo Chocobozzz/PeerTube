@@ -1,6 +1,6 @@
 import { Mutex } from 'async-mutex'
 import { remove } from 'fs-extra/esm'
-import { extname, join } from 'path'
+import { basename, extname, join } from 'path'
 import { VideoStorage } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
@@ -60,6 +60,14 @@ class VideoPathManager {
     }
 
     return join(DIRECTORIES.VIDEOS.PUBLIC, videoFile.filename)
+  }
+
+  getFSOriginalVideoFileOutputPath (video: MVideo, videoInputPath: string) {
+    if (isVideoInPrivateDirectory(video.privacy)) {
+      return join(DIRECTORIES.ORIGINAL_VIDEOS.PRIVATE, basename(videoInputPath))
+    }
+
+    return join(DIRECTORIES.ORIGINAL_VIDEOS.PUBLIC, basename(videoInputPath))
   }
 
   async makeAvailableVideoFile <T> (videoFile: MVideoFileVideo | MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {

@@ -114,6 +114,7 @@ const CONFIG = {
     LOG_DIR: buildPath(config.get<string>('storage.logs')),
     WEB_VIDEOS_DIR: buildPath(config.get<string>('storage.web_videos')),
     STREAMING_PLAYLISTS_DIR: buildPath(config.get<string>('storage.streaming_playlists')),
+    ORIGINAL_VIDEO_FILES_DIR: buildPath(config.get<string>('storage.original_video_files')),
     REDUNDANCY_DIR: buildPath(config.get<string>('storage.redundancy')),
     THUMBNAILS_DIR: buildPath(config.get<string>('storage.thumbnails')),
     STORYBOARDS_DIR: buildPath(config.get<string>('storage.storyboards')),
