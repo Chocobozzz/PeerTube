@@ -33,7 +33,7 @@ smtp:
   password: null
 
 log:
-  level: 'error'
+  level: 'debug'
 
 open_telemetry:
   metrics:

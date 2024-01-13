@@ -75,7 +75,7 @@ database:
   ssl: false
   suffix: '_dev'
   username: 'peertube'
-  password: '1234'
+  password: 'peertube'
   pool:
     max: 5
 
