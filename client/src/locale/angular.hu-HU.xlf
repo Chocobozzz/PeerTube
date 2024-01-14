@@ -2964,7 +2964,7 @@
       </trans-unit>
       <trans-unit id="8675588963276687921" datatype="html">
         <source>Stream only once, replay will replace your live</source>
-        <target state="translated">Közvetités egyszer, a visszajátszás lecseréli a közvetítést</target>
+        <target state="translated">Közvetités csak egyszer, a visszajátszás lecseréli a közvetítést</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">183</context></context-group>
       </trans-unit>
       <trans-unit id="2360261543675520397" datatype="html">
@@ -3034,7 +3034,7 @@
       </trans-unit>
       <trans-unit id="1274250938669222125" datatype="html">
         <source>Toggle autoplay next video</source>
-        <target state="translated">Automatikus lejátszás kapcsolója</target>
+        <target state="translated">Automatikus lejátszás be/ki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">11</context>
@@ -3042,7 +3042,7 @@
       </trans-unit>
       <trans-unit id="2738123251363312498" datatype="html">
         <source>Next video to be played</source>
-        <target state="translated">Következő videó</target>
+        <target state="translated">Következő lejátszandó videó</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="4619111912751495491" datatype="html">
@@ -3105,7 +3105,7 @@
       </trans-unit>
       <trans-unit id="1097129970287496588" datatype="html">
         <source>This video is password protected, please note that recipients will require the corresponding password to access the content.</source>
-        <target state="translated">Ez a videó jelszóval védett, kérjük vegye figyelembe, hogy a címzetteknek meg kell adniuk a megfelelő jelszót a hozzáféréshez.</target>
+        <target state="translated">Ez a videó jelszóval védett, így a címzetteknek meg kell adniuk a megfelelő jelszót, hogy hozzáférjenek a tartalomhoz.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">110,112</context>
@@ -3196,7 +3196,7 @@
       </trans-unit>
       <trans-unit id="4583515246777381165" datatype="html">
         <source>Display player control bar</source>
-        <target state="translated">Lejátszó vezérlősáv megjelenítése</target>
+        <target state="translated">Lejátszásvezérlő sáv megjelenítése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">273</context></context-group>
       </trans-unit>
       <trans-unit id="805456636864344681" datatype="html">
@@ -3237,7 +3237,7 @@
       </trans-unit>
       <trans-unit id="5332079713007503082" datatype="html">
         <source>The video is being moved to server file system, it may not work properly</source>
-        <target state="translated">A videót éppen áthelyezzük a szerver fájlrendszerére, lehet, hogy nem működik megfelelően.</target>
+        <target state="translated">A videó épp áthelyezésre kerül a kiszolgáló fájlrendszerére, lehet, hogy nem működik megfelelően.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -3253,7 +3253,7 @@
       </trans-unit>
       <trans-unit id="8421704878620521033" datatype="html">
         <source>The video is being moved to an external server, it may not work properly.</source>
-        <target state="translated">A videót éppen áthelyezzük egy külső szerverre, lehet, hogy nem működik megfelelően.</target>
+        <target state="translated">A videó épp áthelyezésre kerül egy külső kiszolgálóra, lehet, hogy nem működik megfelelően.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -3261,7 +3261,7 @@
       </trans-unit>
       <trans-unit id="1832806861457762248" datatype="html">
         <source>Move to external storage failed, this video may not work properly.</source>
-        <target state="translated">Nem sikerült a külső tárhelyre mozgatás, lehet, hogy a videó nem működik megfelelően.</target>
+        <target state="translated">Nem sikerült a külső tárhelyre történő áthelyezés, lehet, hogy a videó nem működik megfelelően.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -3376,7 +3376,7 @@
       </trans-unit>
       <trans-unit id="795485832100313" datatype="html">
         <source>Video re-upload</source>
-        <target state="translated">Videó újrafeltöltés</target>
+        <target state="translated">Videó újrafeltöltése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context>
           <context context-type="linenumber">22</context>
@@ -3518,7 +3518,7 @@
       </trans-unit>
       <trans-unit id="723038562278401061" datatype="html">
         <source>Friendly Reminder:</source>
-        <target state="translated">Baráti Emlékeztető:</target>
+        <target state="translated">Baráti emlékeztető:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context>
           <context context-type="linenumber">4</context>
@@ -4464,7 +4464,7 @@
       </trans-unit>
       <trans-unit id="7186771264833643704" datatype="html">
         <source>This plugin is developed by Framasoft, the not-for-profit that develops PeerTube</source>
-        <target state="translated">Ezt a bővítményt a Framasoft fejleszti, az a non-profit, ami a PeerTube-ot is fejleszti</target>
+        <target state="translated">Ezt a bővítményt a Framasoft fejleszti, az a nonprofit szervezet, amely a PeerTube-ot fejleszti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">37</context>
@@ -4477,7 +4477,7 @@
       </trans-unit>
       <trans-unit id="5976946399792378437" datatype="html">
         <source>This plugin is recommended by Framasoft, the not-for-profit that develops PeerTube</source>
-        <target state="translated">Ezt a bővitményt a Framasoft javasolja, a non-profit, ami a PeerTube-ot is fejleszti</target>
+        <target state="translated">Ezt a bővítményt a Framasoft javasolja, az a nonprofit szervezet, amely a PeerTube-ot fejleszti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">41</context>
@@ -4499,7 +4499,7 @@
       </trans-unit>
       <trans-unit id="3981257963098530375" datatype="html">
         <source>Navigate between installed plugins and themes or find new ones</source>
-        <target state="translated">Váltás a feltelepített bővítmények és témák és az újak keresése között</target>
+        <target state="translated">Váltás a telepített bővítmények és témák, illetve az újak keresése között</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-navigation.component.html</context>
           <context context-type="linenumber">2</context>
@@ -4512,7 +4512,7 @@
       </trans-unit>
       <trans-unit id="3300472325769888962" datatype="html">
         <source>Plugins &amp; Themes</source>
-        <target state="translated">Bővítmények &amp; Témák</target>
+        <target state="translated">Bővítmények és témák</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
       <trans-unit id="1782375284146839174" datatype="html">
@@ -4976,7 +4976,7 @@
       </trans-unit>
       <trans-unit id="371306187337992930" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or add slight <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Használjon <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>bővítményeket &amp; témákat<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> az összetettebb módosításokhoz, vagy alkalmazzon kisebb <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>testreszabásokat<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Használjon <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>bővítményeket és témákat<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> az összetettebb módosításokhoz, vagy alkalmazzon kisebb <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>testreszabásokat<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -5014,7 +5014,7 @@
       </trans-unit>
       <trans-unit id="5862227717871131052" datatype="html">
         <source>Prefer author display name in video miniature</source>
-        <target state="translated">Szerző megjelenített nevének előnyben részesítése a videó miniatűrben</target>
+        <target state="translated">Szerző megjelenített nevének előnyben részesítése a videó miniatűrében</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="5444889468197427724" datatype="html">
@@ -5216,7 +5216,7 @@
       </trans-unit>
       <trans-unit id="7404104645798703279" datatype="html">
         <source>⛔ You need to allow import with HTTP URL to be able to activate this feature.</source>
-        <target state="translated">⛔ Engedélyeznie kell a HTTP URL importálást ahhoz, hogy ezt aktiválható legyen.</target>
+        <target state="translated">⛔ Engedélyeznie kell a webcím alapján történő HTTP importálást ahhoz, hogy ezt aktiválható legyen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">319</context></context-group>
       </trans-unit>
       <trans-unit id="3950258704315544174" datatype="html">
@@ -5226,7 +5226,7 @@
       </trans-unit>
       <trans-unit id="7055002182446434458" datatype="html">
         <source>Allow users to upload a new version of their video</source>
-        <target state="translated">A felhasználók feltölthetnek újabb videóverziókat a meglévő videóikhoz</target>
+        <target state="translated">A felhasználók tölthetnek fel újabb videóverziókat a meglévő videóikhoz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">353</context>
@@ -5582,7 +5582,7 @@
       </trans-unit>
       <trans-unit id="5698272164915890247" datatype="html">
         <source>Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</source>
-        <target state="translated">Lehetővé teszi a felhasználóknak, hogy további kiterjesztésekkel is tölthessenek fel videókat a .mp4, .ogv és .webm lehetőségeken felül (például: .avi, .mov, .mkv stb).</target>
+        <target state="translated">Lehetővé teszi a felhasználóknak, hogy további kiterjesztésekkel is tölthessenek fel videókat az .mp4, az .ogv és a .webm lehetőségeken felül (például: .avi, .mov, .mkv stb.).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="1823941382992046371" datatype="html">
@@ -10898,7 +10898,7 @@
       </trans-unit>
       <trans-unit id="7820654428820536159" datatype="html">
         <source>External channel URL must begin with "https://" or "http://"</source>
-        <target state="translated">A távoli csatorna címének "https://"-rel vagy "http://"-rel kell kezdődnie.</target>
+        <target state="translated">A távoli csatorna webcímének „https://” vagy „http://” szöveggel kell kezdődnie.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">60</context>
@@ -12688,7 +12688,7 @@
       </trans-unit>
       <trans-unit id="5622582942980351192" datatype="html">
         <source>Light/Orange</source>
-        <target state="translated">Világos/Narancssárga</target>
+        <target state="translated">Világos/narancssárga</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/theme/theme.service.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="1219783168145776019" datatype="html">
@@ -12952,42 +12952,42 @@
       </trans-unit>
       <trans-unit id="1363382131573461910" datatype="html">
         <source>Decrease the volume</source>
-        <target state="new">Decrease the volume</target>
+        <target state="translated">Hangerő csökkentése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">885</context></context-group>
       </trans-unit>
       <trans-unit id="2541031516422557760" datatype="html">
         <source>Seek the video forward</source>
-        <target state="new">Seek the video forward</target>
+        <target state="translated">A videó előre tekerése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">899</context></context-group>
       </trans-unit>
       <trans-unit id="8813023402019364882" datatype="html">
         <source>Seek the video backward</source>
-        <target state="new">Seek the video backward</target>
+        <target state="translated">A videó visszafelé tekerése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">900</context></context-group>
       </trans-unit>
       <trans-unit id="581757752202843950" datatype="html">
         <source>Increase playback rate</source>
-        <target state="new">Increase playback rate</target>
+        <target state="translated">Lejátszási sebesség növelése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">902</context></context-group>
       </trans-unit>
       <trans-unit id="5467642834854681120" datatype="html">
         <source>Decrease playback rate</source>
-        <target state="new">Decrease playback rate</target>
+        <target state="translated">Lejátszási sebesség csökkentése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">903</context></context-group>
       </trans-unit>
       <trans-unit id="3860402955823859506" datatype="html">
         <source>Navigate in the video to the previous frame</source>
-        <target state="new">Navigate in the video to the previous frame</target>
+        <target state="translated">Navigálás a videó előző képkockájára</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">905</context></context-group>
       </trans-unit>
       <trans-unit id="8232494782895420700" datatype="html">
         <source>Navigate in the video to the next frame</source>
-        <target state="new">Navigate in the video to the next frame</target>
+        <target state="translated">Navigálás a videó következő képkockájára</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">906</context></context-group>
       </trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
         <source>Toggle theater mode</source>
-        <target state="new">Toggle theater mode</target>
+        <target state="translated">Mozi mód be/ki</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">890</context></context-group>
       </trans-unit>
       <trans-unit id="8025996572234182184" datatype="html">
@@ -13002,7 +13002,7 @@
       </trans-unit>
       <trans-unit id="3093549590814158078" datatype="html">
         <source>You need to be logged in to rate this video.</source>
-        <target state="new">You need to be logged in to rate this video.</target>
+        <target state="translated">Be kell jelentkeznie a videó értékeléséhez.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="1729036051846673606" datatype="html">
@@ -13031,7 +13031,7 @@
       </trans-unit>
       <trans-unit id="186236568870281953" datatype="html">
         <source>History</source>
-        <target state="new">History</target>
+        <target state="translated">Előzmények</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">80</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
@@ -13045,7 +13045,7 @@
       </trans-unit>
       <trans-unit id="2587910160708766081" datatype="html">
         <source>Toggle this date format to "<x id="PH" equiv-text="target"/>"</source>
-        <target state="new">Toggle this date format to "<x id="PH" equiv-text="target"/>"</target>
+        <target state="translated">A dátumformátum bekapcsolása ehhez: „<x id="PH" equiv-text="target"/>”</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-toggle.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -13061,17 +13061,17 @@
       </trans-unit>
       <trans-unit id="5668077948386857930" datatype="html">
         <source>Exclude</source>
-        <target state="new">Exclude</target>
+        <target state="translated">Kihagyás</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="7147755274837297932" datatype="html">
         <source>Exclude muted accounts</source>
-        <target state="new">Exclude muted accounts</target>
+        <target state="translated">Némított fiókok kihagyása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="8397092871503752085" datatype="html">
         <source>Exclude public videos</source>
-        <target state="new">Exclude public videos</target>
+        <target state="translated">Nyilvános videók kihagyása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">103</context>
@@ -13110,7 +13110,7 @@
       </trans-unit>
       <trans-unit id="1914592173926880968" datatype="html">
         <source>Skip to main content</source>
-        <target state="new">Skip to main content</target>
+        <target state="translated">Ugrás a fő tartalomhoz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
           <context context-type="linenumber">3</context>
