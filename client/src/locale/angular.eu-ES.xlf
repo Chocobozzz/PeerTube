@@ -952,18 +952,18 @@
       </trans-unit>
       <trans-unit id="1408045022812097780" datatype="html">
         <source>views</source>
-        <target state="translated">bistaratzeak</target>
+        <target state="translated">ikustaldi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="117954017715534854" datatype="html">
         <source>comments</source>
-        <target state="translated">iruzkinak</target>
+        <target state="translated">iruzkin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="6090561122481711127" datatype="html">
         <source>hosted video</source>
-        <target state="translated">ostatatutako bideoa</target>
+        <target state="translated">ostatatutako bideotan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="6827125739942610231" datatype="html">
@@ -6556,7 +6556,7 @@
       </trans-unit>
       <trans-unit id="687236465759862933" datatype="html">
         <source>Open syndication dropdown</source>
-        <target state="translated">Ireki sindikatze-goitibeherako menua</target>
+        <target state="translated">Ireki sindikatzearen goitibeherako menua</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/feeds/feed.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="5511928240200239994" datatype="html">
