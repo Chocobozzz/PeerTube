@@ -315,7 +315,7 @@
       </trans-unit>
       <trans-unit id="906167214730624194" datatype="html">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{bistaratze, plural, =0 {Ikustaldirik ez} =1 {Ikustaldi bat} other {<x id="views"/> ikustaldi}}</target>
+        <target state="translated">{views, plural, =0 {Ikustaldirik ez} =1 {Ikustaldi bat} other {<x id="views"/> ikustaldi}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context><context context-type="linenumber">292</context></context-group>
       </trans-unit>
       <trans-unit id="1747775295354213975" datatype="html">
