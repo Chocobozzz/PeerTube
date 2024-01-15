@@ -312,7 +312,7 @@ describe('Test index search', function () {
     })
 
     it('Should make a search and have results', async function () {
-      await check({ search: 'Framasoft', sort: 'createdAt' }, true)
+      await check({ search: 'Framasoft vidéos', sort: 'createdAt' }, true)
     })
 
     it('Should make host search and have appropriate results', async function () {
