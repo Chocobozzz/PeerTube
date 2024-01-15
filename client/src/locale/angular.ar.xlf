@@ -157,11 +157,7 @@
         <target state="translated"><x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
-      <trans-unit id="ngb.timepicker.AM" datatype="html">
-        <source><x id="INTERPOLATION"/></source>
-        <target state="translated"><x id="INTERPOLATION"/></target>
-        <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
-      </trans-unit>
+      
       <trans-unit id="ngb.toast.close-aria" datatype="html">
         <source>Close</source>
         <target state="translated">أغلق</target>
@@ -290,12 +286,14 @@
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been published </source>
         <target>نُشر الفيديو الخاص بك <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">116</context></context-group>
+      </trans-unit><trans-unit id="3654484622885694263" datatype="html">
+        <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl || notification.videoImportUrl&quot;>"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> succeeded </source><target state="new"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl || notification.videoImportUrl&quot;>"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> succeeded </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
+          <context context-type="linenumber">125,126</context>
+        </context-group>
       </trans-unit>
-      <trans-unit id="7130219900907848048" datatype="html">
-        <source><x id="START_LINK"/>Your video import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> succeeded </source>
-        <target><x id="START_LINK"/>استيراد الفيديو <x id="CLOSE_LINK"/><x id="INTERPOLATION"/> تم بنجاح </target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">125</context></context-group>
-      </trans-unit>
+      
       <trans-unit id="2099623308096969132" datatype="html">
         <source><x id="START_LINK"/>Your video import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> failed </source>
         <target><x id="START_LINK"/>استيراد الفيديو <x id="CLOSE_LINK"/><x id="INTERPOLATION"/> فشل </target>
@@ -1225,9 +1223,9 @@
       <trans-unit id="4088311569349098646" datatype="html">
         <source>Stats</source>
         <target>الإحصائيات</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">168</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">353</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">168</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">364</context></context-group></trans-unit>
       <trans-unit id="8942351587754185907" datatype="html">
         <source>API</source>
         <target>API</target>
@@ -3160,10 +3158,10 @@
       <trans-unit id="2092224316392295720" datatype="html">
         <source>⚠️ This functionality requires a lot of attention and extra moderation.</source>
         <target state="translated">⚠️ تتطلب هذه الوظيفة الكثير من الاهتمام والإشراف الإضافي.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">165</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">513</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">526</context></context-group>
-      </trans-unit>
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">165</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">527</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">540</context></context-group></trans-unit>
       <trans-unit id="1206277798664538171" datatype="html">
         <source>Signup requires approval by moderators</source>
         <target state="translated">يتطلب التسجيل موافقة المشرفين</target>
@@ -3267,22 +3265,34 @@
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">353</context>
         </context-group>
+      </trans-unit><trans-unit id="6098767935728651255" datatype="html">
+        <source>Enable video storyboards</source><target state="new">Enable video storyboards</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
+          <context context-type="linenumber">365</context>
+        </context-group>
+      </trans-unit><trans-unit id="7773354014171617955" datatype="html">
+        <source>Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video</source><target state="new">Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
+          <context context-type="linenumber">368</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="424703522835656806" datatype="html">
         <source>VIDEO CHANNELS</source>
         <target state="translated">قناوات فيديو</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">365</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">379</context></context-group></trans-unit>
       <trans-unit id="7026684190224451991" datatype="html">
         <source>Max video channels per user</source>
         <target state="translated">الحد الأقصى لعدد القنوات لكل مستخدم</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">370</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">384</context></context-group></trans-unit>
       <trans-unit id="3840267063842708224" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {channel} other {channels}}</source>
         <target state="translated">{VAR_PLURAL, plural, =1 {قناة} other {قنوات}}</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">377</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">391</context></context-group></trans-unit>
       <trans-unit id="3428986951244800347" datatype="html">
         <source>Block new videos automatically</source>
         <target>احجب مقاطع الفيديو الجديدة تلقائيًا</target>
@@ -3291,118 +3301,118 @@
       <trans-unit id="2054846790157376783" datatype="html">
         <source>SEARCH</source>
         <target>بحث</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">387</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">401</context></context-group></trans-unit>
       <trans-unit id="3442084803796199253" datatype="html">
         <source>Allow users to do remote URI/handle search</source>
         <target>السماح للمستخدمين بالبحث عن بعد URI / مقبض</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">398</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">412</context></context-group></trans-unit>
       <trans-unit id="2258148539285928012" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>your users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</source>
         <target state="translated">السماح لـ <x id="START_TAG_STRONG"/>المستخدمين لديك<x id="CLOSE_TAG_STRONG"/> بالبحث عن مقاطع الفيديو/الممثلين البعيدين التي قد لا تكون موحدة مع نُسختك</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">401</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">415</context></context-group></trans-unit>
       <trans-unit id="7295422540935146771" datatype="html">
         <source>Allow anonymous to do remote URI/handle search</source>
         <target>السماح للمجهول بالقيام بالبحث عن بعد URI / مقبض</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">409</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">423</context></context-group></trans-unit>
       <trans-unit id="7305237807882754643" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>anonymous users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</source>
         <target state="translated">السماح <x id="START_TAG_STRONG"/>للمستخدمين المجهولين<x id="CLOSE_TAG_STRONG"/> بالبحث عن مقاطع الفيديو/الممثلين البعيدين التي قد لا تكون موحدة مع نُسختك</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">412</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">426</context></context-group></trans-unit>
       <trans-unit id="5273935530181504015" datatype="html">
         <source>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</source>
         <target state="translated">⚠️ تعتمد هذه الوظيفة بشكل كبير على اشراف المثيلات التي يتبعها فهرس البحث الذي تحدده.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">426</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">440</context></context-group></trans-unit>
       <trans-unit id="1886227550697837417" datatype="html">
         <source>You should only use moderated search indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;>"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>. </source>
         <target state="translated">يجب عليك فقط استخدام فهارس البحث الخاضعة للإشراف في الإنتاج، أو <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;>"/>استضافة فهارسك الخاصة<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>. </target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">428</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">442</context></context-group></trans-unit>
       <trans-unit id="2331464426553277323" datatype="html">
         <source>Search index URL</source>
         <target>عنوان URL لفهرس البحث</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">435</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">449</context></context-group></trans-unit>
       <trans-unit id="8524278911521465398" datatype="html">
         <source>Disable local search in search bar</source>
         <target>تعطيل البحث المحلي في شريط البحث</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">448</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">462</context></context-group></trans-unit>
       <trans-unit id="6568991917245875948" datatype="html">
         <source>Otherwise the local search stays used by default</source>
         <target>وإلا يبقى البحث المحلي مستخدمًا بشكل افتراضي</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">458</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">472</context></context-group></trans-unit>
       <trans-unit id="4444955208013675027" datatype="html">
         <source>Search bar uses the global search index by default</source>
         <target>يستخدم شريط البحث فهرس البحث العالمي افتراضيا</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">455</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">469</context></context-group></trans-unit>
       <trans-unit id="6476750382562952780" datatype="html">
         <source>Enable global search</source>
         <target>تمكين البحث العالمي</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">423</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">437</context></context-group></trans-unit>
       <trans-unit id="836183323506117145" datatype="html">
         <source>FEDERATION</source>
         <target state="translated">الفديرالية</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">476</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">490</context></context-group></trans-unit>
       <trans-unit id="252719899360434356" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/follows&quot;>"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a> "/> with other instances. </source>
         <target state="translated">إدارة <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/follows&quot;>"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a> "/> مع نٌسخ أخرى. </target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">477</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">491</context></context-group></trans-unit>
       <trans-unit id="9119248927271669654" datatype="html">
         <source>Other instances can follow yours</source>
         <target>يمكن أن تتابع مثيلات خادم أخرى مثيلك</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">490</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">504</context></context-group></trans-unit>
       <trans-unit id="7015551137649102649" datatype="html">
         <source>Manually approve new instance followers</source>
         <target>الموافقة يدويًا على متابعي المثيل الجدد</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">497</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">511</context></context-group></trans-unit>
       <trans-unit id="4803992993548153434" datatype="html">
         <source>Automatically follow back instances</source>
         <target>تابع المثيلات التي تتابعك تلقائيًا</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">510</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">524</context></context-group></trans-unit>
       <trans-unit id="1718269478813020014" datatype="html">
         <source>Index URL</source>
         <target>عنوان URL الفهرس</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">535</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">549</context></context-group></trans-unit>
       <trans-unit id="173263206605027981" datatype="html">
         <source>Automatically follow instances of a public index</source>
         <target>تابع مثيلات من فهرس عام تلقائيًا</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">523</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">537</context></context-group></trans-unit>
       <trans-unit id="9076632742417302918" datatype="html">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;>"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a> "/> for more information about the expected URL </source>
         <target state="translated">راجع <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;>"/>الوثائق<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a> "/> لمزيد من المعلومات حول عنوان URL المتوقع </target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">528</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">542</context></context-group></trans-unit>
       <trans-unit id="3946988229617310200" datatype="html">
         <source>ADMINISTRATORS</source>
         <target>المدراء</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">555</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">569</context></context-group></trans-unit>
       <trans-unit id="3171683206914962995" datatype="html">
         <source>Admin email</source>
         <target>البريد الإلكتروني للمدير</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">561</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">575</context></context-group></trans-unit>
       <trans-unit id="4722881456283329321" datatype="html">
         <source>Enable contact form</source>
         <target>تمكين نموذج الاتصال</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">574</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">588</context></context-group></trans-unit>
       <trans-unit id="5975271795105968425" datatype="html">
         <source>Live streaming</source>
         <target state="translated">بث مباشر</target>
@@ -3417,34 +3427,28 @@
       <trans-unit id="1765095834299337775" datatype="html">
         <source>TWITTER</source>
         <target>تويتر</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">583</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">597</context></context-group></trans-unit>
       <trans-unit id="3202133522706129143" datatype="html">
         <source>Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value.</source>
         <target state="translated">وفر حساب تويتر الذي يمثل نٌسختك لتحسين معاينات الارتباط. إذا لم يكن لديك حساب على تويتر، فما عليك سوى ترك القيمة الافتراضية.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">584</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">598</context></context-group></trans-unit>
       <trans-unit id="4087837092261487511" datatype="html">
         <source>Your Twitter username</source>
         <target>اسم المستخدِم الخاص بك على تويتر</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">596</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">610</context></context-group></trans-unit>
       <trans-unit id="979787821649134273" datatype="html">
         <source>Instance allowed by Twitter/X</source>
         <target state="translated">النُسْخَة مسموح بها بواسطة تويتر/X</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
-          <context context-type="linenumber">609</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">623</context></context-group></trans-unit>
       <trans-unit id="8963664899094798549" datatype="html">
         <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;>"/> If your instance is explicitly allowed by Twitter/X, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH_1" equiv-text="&lt;p>"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/w/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> to see if you instance is allowed. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
         <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;>"/> إذا كان تويتر/X يسمح بنُسْخَتك بشكل صريح، فسيتم تضمين مشغل فيديو في خلاصة تويتر على مشاركة فيديو PeerTube.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br />"/> إذا لم يكن النُسْخَة كذلك، فإننا نستخدم بطاقة رابط الصورة التي ستعيد التوجيه إلى نُسْخَة بييرتيوب الخاص بك. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH_1" equiv-text="&lt;p>"/> حدد مربع الاختيار هذا، واحفظ التكوين والاختبار باستخدام عنوان URL للفيديو الخاص بنُسْخَتك (https://example.com/w/blabla) على <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> لمعرفة ما إذا كان النُسْخَة مسموحًا بها. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
-          <context context-type="linenumber">614,623</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">628</context></context-group></trans-unit>
       <trans-unit id="493135676263039396" datatype="html">
         <source>LIVE</source>
         <target state="translated">مباشر</target>
@@ -4139,31 +4143,28 @@
       <trans-unit id="8023282004085823427" datatype="html">
         <source><x id="PH" equiv-text="this.video.name"/> will be duplicated by your instance.</source>
         <target state="translated"><x id="PH" equiv-text="this.video.name"/> سيكرره مثيلك.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">254</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">265</context></context-group></trans-unit>
       <trans-unit id="4140366911638662173" datatype="html">
         <source>Do you really want to remove "<x id="PH" equiv-text="this.video.name"/>" files?</source>
         <target state="translated">أتريد إزالة ملفات "<x id="PH" equiv-text="this.video.name"/>"؟</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">277</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">288</context></context-group></trans-unit>
       <trans-unit id="2955645766721124100" datatype="html">
         <source>Remove "<x id="PH" equiv-text="this.video.name"/>" files</source>
         <target state="translated">أزل ملفات "<x id="PH" equiv-text="this.video.name"/>"</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">279</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">290</context></context-group></trans-unit>
       <trans-unit id="7758350391886784213" datatype="html">
         <source>Removed files of <x id="PH" equiv-text="video.name"/>.</source>
         <target state="translated">أُزيلت ملفات <x id="PH" equiv-text="video.name"/></target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">285</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">296</context></context-group></trans-unit>
       <trans-unit id="1321621952409756532" datatype="html">
         <source>Transcoding jobs created for "<x id="PH" equiv-text="video.name"/>".</source>
         <target state="translated">تم إنشاء مهام تحويل الترميز لـ "<x id="PH" equiv-text="video.name"/>".</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
-          <context context-type="linenumber">297</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">308</context></context-group></trans-unit>
       <trans-unit id="2949829240129672512" datatype="html">
         <source>Using a syndication feed</source>
         <target state="translated">باستخدام تغذية النقابة</target>
@@ -4928,8 +4929,8 @@
       <trans-unit id="4433306639366959484" datatype="html">
         <source>Please type the name of the video channel (<x id="PH" equiv-text="videoChannel.name"/>) to confirm</source>
         <target state="translated">يرجى كتابة اسم القناة (<x id="PH" equiv-text="videoChannel.name"/>) للتأكيد</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">64</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">63</context></context-group></trans-unit>
       <trans-unit id="3428015997161360357" datatype="html">
         <source>NEW CHANNEL</source>
         <target>قناة جديدة</target>
@@ -4982,84 +4983,94 @@
         <source>Since the video publication</source>
         <target state="translated">منذ نشر الفيديو</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">66</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
       <trans-unit id="5864040054093006922" datatype="html">
         <source>Viewers</source>
         <target state="translated">مشاهدون</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">91</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">519</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">96</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">547</context></context-group></trans-unit>
       <trans-unit id="5691818894884119596" datatype="html">
         <source>Watch time</source>
         <target state="translated">وقت المشاهدة</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">96</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">101</context></context-group></trans-unit>
       <trans-unit id="683980015107026060" datatype="html">
         <source>Retention</source>
         <target state="translated">الاحتفاظ</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">109</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">119</context></context-group></trans-unit>
       <trans-unit id="2232536542109196600" datatype="html">
         <source>Viewers stats between <x id="PH" equiv-text="this.statsStartDate.toLocaleString()"/> and <x id="PH_1" equiv-text="this.statsEndDate.toLocaleString()"/></source>
         <target state="translated">إحصائيات المشاهدين بين <x id="PH" equiv-text="this.statsStartDate.toLocaleString()"/> و<x id="PH_1" equiv-text="this.statsEndDate.toLocaleString()"/></target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">162</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">178</context></context-group></trans-unit>
       <trans-unit id="5697131528899933134" datatype="html">
         <source>Viewers stats</source>
         <target state="translated">إحصائيات المشاهدين</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">165</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">181</context></context-group></trans-unit>
       <trans-unit id="8089238718524110373" datatype="html">
         <source>Live as of <x id="PH" equiv-text="this.toMediumDate(new Date(session.startDate))"/></source>
         <target state="translated">مباشر اعتبارًا من <x id="PH" equiv-text="this.toMediumDate(new Date(session.startDate))"/></target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">236</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">254</context></context-group></trans-unit>
       <trans-unit id="3249405667632600635" datatype="html">
         <source>Custom dates</source>
         <target state="translated">مواعيد مخصّصة</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">247</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">265</context></context-group></trans-unit>
       <trans-unit id="5382746022482410588" datatype="html">
         <source>A view means that someone watched the video for at least 30 seconds</source>
         <target state="translated">المشاهدة تعني أن شخصًا ما شاهد الفيديو لمدة 30 ثانية على الأقل</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">266</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">284</context></context-group></trans-unit>
       <trans-unit id="6782077395930235254" datatype="html">
         <source>Countries</source>
         <target state="translated">البلدان</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">101</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">298</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">106</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">316</context></context-group></trans-unit><trans-unit id="699590710757792843" datatype="html">
+        <source>Regions</source><target state="new">Regions</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
+          <context context-type="linenumber">323</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7112532281224432421" datatype="html">
         <source>Likes</source>
         <target state="translated">الإعجابات</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">269</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">287</context></context-group></trans-unit>
       <trans-unit id="1155438117303179048" datatype="html">
         <source>Average watch time</source>
         <target state="translated">متوسط الوقت المتابع</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">276</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">294</context></context-group></trans-unit>
       <trans-unit id="3457644129579531516" datatype="html">
         <source>Total watch time</source>
         <target state="translated">إجمالي وقت المشاهدة</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">280</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">298</context></context-group></trans-unit>
       <trans-unit id="7988517647183541852" datatype="html">
         <source>Peak viewers</source>
         <target state="translated">قمة المشاهدات</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">284</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">302</context></context-group></trans-unit>
       <trans-unit id="8536543691393468142" datatype="html">
         <source>at <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></source>
         <target state="translated">على <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">287</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">305</context></context-group></trans-unit>
       <trans-unit id="7299658893351817136" datatype="html">
         <source>Unique viewers</source>
         <target state="translated">المشاهدين فريدين</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">291</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">309</context></context-group></trans-unit>
       <trans-unit id="3030338154442300172" datatype="html">
         <source>Created <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}" xid="498463490165953744"/> </source>
         <target state="translated">أنشئت <x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, =1 {قائمة تشغيل} other {{{ pagination.totalItems }} قائمة تشغيل}}"/> </target>
@@ -7818,8 +7829,8 @@ The link will expire within 1 hour.</source>
       <trans-unit id="2060042292048624940" datatype="html">
         <source>Configuration updated.</source>
         <target>تم تحديث الإعدادات.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">341</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context><context context-type="linenumber">345</context></context-group></trans-unit>
       <trans-unit id="6920964195632624609" datatype="html">
         <source>INSTANCE HOMEPAGE</source>
         <target state="translated">الصفحة الرئيسية للمثيل</target>
@@ -7946,36 +7957,36 @@ The link will expire within 1 hour.</source>
       <trans-unit id="7022070615528435141" datatype="html">
         <source>Delete</source>
         <target state="translated">احذف</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">50</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">118</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">42</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">65</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">129</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">91</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">95</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">104</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">175</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">100</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">248</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">76</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">227</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">282</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">83</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">68</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">56</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">128</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context><context context-type="linenumber">35</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">51</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">191</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">196</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">183</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">132</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">373</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">408</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/delete-button.component.ts</context><context context-type="linenumber">21</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/delete-button.component.ts</context><context context-type="linenumber">26</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">377</context></context-group>
-      </trans-unit>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">50</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">118</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">42</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">65</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">129</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">91</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">95</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">104</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">175</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">100</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">248</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">76</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">227</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">282</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">83</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">67</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">56</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">128</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context><context context-type="linenumber">35</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">51</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">191</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">196</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">183</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">132</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">373</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">408</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/delete-button.component.ts</context><context context-type="linenumber">21</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/delete-button.component.ts</context><context context-type="linenumber">26</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">388</context></context-group></trans-unit>
       <trans-unit id="3145156821099755377" datatype="html">
         <source>Accepted {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
         <target state="new">Accepted {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</target>
@@ -8143,9 +8154,9 @@ The link will expire within 1 hour.</source>
       <trans-unit id="4903651219400691248" datatype="html">
         <source>Mute account</source>
         <target state="translated">أكتم حسابا</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">289</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">417</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">289</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">428</context></context-group></trans-unit>
       <trans-unit id="4021487547497211597" datatype="html">
         <source>Open video actions</source>
         <target state="translated">افتح إجراءات الفيديو</target>
@@ -8161,21 +8172,18 @@ The link will expire within 1 hour.</source>
       <trans-unit id="3076101305843397295" datatype="html">
         <source>Do you really want to unblock <x id="PH" equiv-text="this.video.name"/>? It will be available again in the videos list.</source>
         <target state="translated">أتريد فك حجب <x id="PH" equiv-text="this.video.name"/>؟ سيتوفر في قائمة الفيديوهات مجددًا.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">208</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">219</context></context-group></trans-unit>
       <trans-unit id="8359747231611535508" datatype="html">
         <source>Unblock <x id="PH" equiv-text="this.video.name"/></source>
         <target state="translated">فك حجب <x id="PH" equiv-text="this.video.name"/></target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">210</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">221</context></context-group></trans-unit>
       <trans-unit id="3143238830256588661" datatype="html">
         <source>The live stream will be automatically terminated and replays won't be saved.</source>
         <target state="translated">سيتم إنهاء البث المباشر تلقائيًا ولن يتم حفظ الإعادات.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
-          <context context-type="linenumber">233</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">244</context></context-group></trans-unit>
       <trans-unit id="3719503424625455635" datatype="html">
         <source>Mute server account</source>
         <target state="translated">اكتم حساب خادم</target>
@@ -8344,17 +8352,17 @@ The link will expire within 1 hour.</source>
       <trans-unit id="4859202148272511129" datatype="html">
         <source>Unblock</source>
         <target>ألغ الحجب</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">86</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">136</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">88</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">365</context></context-group>
-      </trans-unit>
+        
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">86</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">136</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">88</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">376</context></context-group></trans-unit>
       <trans-unit id="4922469417589203720" datatype="html">
         <source>Video <x id="PH"/> unblocked.</source>
         <target>ألغي حجب <x id="PH"/>.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">142</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">216</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">142</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">227</context></context-group></trans-unit>
       <trans-unit id="212615365039028546" datatype="html">
         <source>You don't have plugins installed yet.</source>
         <target>حاليا ليس لديك أية إضافة مثبتة.</target>
@@ -9135,13 +9143,13 @@ The link will expire within 1 hour.</source>
       <trans-unit id="624066830180032195" datatype="html">
         <source>Video channel <x id="PH"/> deleted.</source>
         <target>حُذفت قناة فيديو <x id="PH"/>.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">76</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">75</context></context-group></trans-unit>
       <trans-unit id="6450826648284332649" datatype="html">
         <source>Views for the day</source>
         <target>المشاهدات لهذا اليوم</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">111</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">115</context></context-group></trans-unit>
       <trans-unit id="7440637814928143808" datatype="html">
         <source>My followers</source>
         <target state="translated">متابعيني</target>
@@ -9529,30 +9537,27 @@ The link will expire within 1 hour.</source>
       <trans-unit id="2027805873922338635" datatype="html">
         <source>Do you really want to delete <x id="PH"/>? </source>
         <target>هل تريد حذف <x id="PH"/>؟ </target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">56</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">127</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context><context context-type="linenumber">34</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">231</context></context-group>
-      </trans-unit>
+        
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">55</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">127</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context><context context-type="linenumber">34</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">242</context></context-group></trans-unit>
       <trans-unit id="8501241441398968873" datatype="html">
         <source>It will delete {count, plural, =1 {1 video} other {<x id="count"/> videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (<x id="PH" equiv-text="videoChannel.name"/>)!</source>
         <target state="new">It will delete {count, plural, =1 {1 video} other {<x id="count"/> videos}} uploaded in this channel, and you will not be able to create another channel or account with the same name (<x id="PH" equiv-text="videoChannel.name"/>)!</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
-          <context context-type="linenumber">60</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">59</context></context-group></trans-unit>
       <trans-unit id="2767660806989176400" datatype="html">
         <source>Video <x id="PH"/> deleted.</source>
         <target>حُذف فيديو <x id="PH"/>.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">242</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">253</context></context-group></trans-unit>
       <trans-unit id="6389312883797462351" datatype="html">
         <source>Studio</source>
         <target state="translated">الاستوديو</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/video-studio-routing.module.ts</context><context context-type="linenumber">17</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">347</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/video-studio-routing.module.ts</context><context context-type="linenumber">17</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">358</context></context-group></trans-unit>
       <trans-unit id="6810714890760227072" datatype="html">
         <source>Ownership change request sent.</source>
         <target>تم إرسال طلب تغيير الملكية.</target>
@@ -9737,7 +9742,7 @@ The link will expire within 1 hour.</source>
         <target>عدد المشاهدات</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">82</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">264</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">82</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">282</context></context-group></trans-unit>
       <trans-unit id="3208627574396957172" datatype="html">
         <source>Search index is unavailable. Retrying with instance results instead.</source>
         <target>فهرس البحث غير متاح. بدلا من ذلك يعيد المحاولة باستخدام نتائج المثيل.</target>
@@ -10535,9 +10540,9 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1950057220179636309" datatype="html">
         <source>Save to playlist</source>
         <target>احفظ في قائمة التشغيل</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context><context context-type="linenumber">61</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">321</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context><context context-type="linenumber">61</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">332</context></context-group></trans-unit>
       <trans-unit id="961774488937452220" datatype="html">
         <source>This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH"/>"><x id="PH_1"/>&lt;/a>?</source>
         <target state="translated">هذا الفيديو ليس متوفرا على هذا المثيل. هل تريد التوجه المثيل الأصلي: &lt;a href="<x id="PH"/>"><x id="PH_1"/>&lt;/a> ؟</target>
@@ -12153,9 +12158,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="6307826440781941134" datatype="html">
         <source>Delete <x id="PH" equiv-text="user.username"/></source>
         <target state="translated">احذف <x id="PH" equiv-text="user.username"/></target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">105</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">236</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">105</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">247</context></context-group></trans-unit>
       <trans-unit id="6301381219225831298" datatype="html">
         <source>User <x id="PH"/> deleted.</source>
         <target>حُذف المستخدم <x id="PH"/>.</target>
@@ -12169,9 +12174,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="8150022485860412528" datatype="html">
         <source>Account <x id="PH"/> muted.</source>
         <target>كُتم حساب <x id="PH"/>.</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">135</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">268</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">135</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">279</context></context-group></trans-unit>
       <trans-unit id="1598375456114200087" datatype="html">
         <source>Instance <x id="PH"/> muted. </source>
         <target>كُتم مثيل <x id="PH"/>. </target>
@@ -12513,72 +12518,60 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="3099741642167775297" datatype="html">
         <source>Download</source>
         <target state="translated">نزّل</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">329</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">4</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">146</context></context-group>
-      </trans-unit>
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">340</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">4</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">146</context></context-group></trans-unit>
       <trans-unit id="7672331870004528654" datatype="html">
         <source>Display live information</source>
         <target state="translated">عرض معلومات البث المباشر</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">335</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">346</context></context-group></trans-unit>
       <trans-unit id="4021752662928002901" datatype="html">
         <source>Update</source>
         <target state="translated">حدّث</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context><context context-type="linenumber">194</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context><context context-type="linenumber">115</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">62</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">68</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">66</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">3</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">45</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/edit-button.component.ts</context><context context-type="linenumber">22</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/edit-button.component.ts</context><context context-type="linenumber">27</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">341</context></context-group>
-      </trans-unit>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context><context context-type="linenumber">194</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context><context context-type="linenumber">115</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">62</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">68</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">66</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context><context context-type="linenumber">45</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/edit-button.component.ts</context><context context-type="linenumber">22</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/edit-button.component.ts</context><context context-type="linenumber">27</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">352</context></context-group></trans-unit>
       <trans-unit id="420763834450076269" datatype="html">
         <source>Block</source>
         <target>أحجب</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">82</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">52</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">359</context></context-group>
-      </trans-unit>
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">82</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">52</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">370</context></context-group></trans-unit>
       <trans-unit id="6521421218398377925" datatype="html">
         <source>Run HLS transcoding</source>
         <target state="translated">تشغيل تحويل ترميز HLS</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">96</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">391</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">96</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">402</context></context-group></trans-unit>
       <trans-unit id="6726093171366409167" datatype="html">
         <source>Run Web Video transcoding</source>
         <target state="translated">تشغيل تحويل ترميز فيديو الويب</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
-          <context context-type="linenumber">102</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
-          <context context-type="linenumber">397</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">102</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">408</context></context-group></trans-unit>
       <trans-unit id="5972374600810542430" datatype="html">
         <source>Delete HLS files</source>
         <target state="translated">حذف ملفات HLS</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">108</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">403</context></context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">108</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">414</context></context-group></trans-unit>
       <trans-unit id="72391380513979568" datatype="html">
         <source>Delete Web Video files</source>
         <target state="translated">حذف ملفات فيديو الويب</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
-          <context context-type="linenumber">114</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
-          <context context-type="linenumber">409</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">114</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">420</context></context-group></trans-unit>
       <trans-unit id="8315587636588243636" datatype="html">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</source>
         <target state="translated">هل أنت متأكد من أنك تريد حذف هذا الملف <x id="PH" equiv-text="file.resolution.label"/>؟</target>
@@ -12602,8 +12595,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="4503408361537553733" datatype="html">
         <source>Mirror</source>
         <target>مرآة</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">371</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">382</context></context-group></trans-unit>
       <trans-unit id="2631340539474479416" datatype="html">
         <source>Subtitles</source>
         <target state="translated">ترجمات</target>
@@ -12615,10 +12608,10 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="7008439939460403347" datatype="html">
         <source>Report</source>
         <target state="translated">أبلغ</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">188</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">57</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">383</context></context-group>
-      </trans-unit>
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">188</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">57</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">394</context></context-group></trans-unit>
       <trans-unit id="4814285799071780083" datatype="html">
         <source>Remove</source>
         <target state="translated">أزل</target>
