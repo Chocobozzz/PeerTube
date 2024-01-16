@@ -992,7 +992,7 @@
       </trans-unit>
       <trans-unit id="6994936570572804302" datatype="html">
         <source>Request an account</source>
-        <target state="translated">Запрос регистрации</target>
+        <target state="translated">Заявка на регистрацию</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/signup-label.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1315,7 +1315,7 @@
       </trans-unit>
       <trans-unit id="8576568778101631795" datatype="html">
         <source>Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form. </source>
-        <target state="translated">Модераторы <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> должны одобрить ваш запрос на регистрацию после того, как вы закончите заполнение формы. </target>
+        <target state="translated">После заполнения формы модераторы <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> будут должны одобрить вашу заявку на регистрацию. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -2446,7 +2446,7 @@
       </trans-unit>
       <trans-unit id="5778734409199071482" datatype="html">
         <source>Remove the request from the list. The user can register again.</source>
-        <target state="translated">Удалить запрос из списка. Пользователь может зарегистрироваться снова.</target>
+        <target state="translated">Удалить заявку из списка. Пользователь может зарегистрироваться снова.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -2454,12 +2454,12 @@
       </trans-unit>
       <trans-unit id="6096602245926393232" datatype="html">
         <source>Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</source>
-        <target state="translated">Вы действительно хотите удалить {count, plural, =1 {запрос от <x id="username"/>} one {<x id="count"/> запрос} few {<x id="count"/> запроса} other {<x id="count"/> запросов}} на регистрацию?</target>
+        <target state="translated">Вы точно хотите удалить {count, plural, =1 {заявку от <x id="username"/>} one {<x id="count"/> заявку} few {<x id="count"/> заявки} other {<x id="count"/> заявок}} на регистрацию?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="9152096266184328708" datatype="html">
         <source>Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</source>
-        <target state="translated">{count, plural, =1 {Удален запрос от <x id="username"/>} one {Удален <x id="count"/> запрос} few {Удалено <x id="count"/> запроса} other {Удалено <x id="count"/> запросов}} на регистрацию</target>
+        <target state="translated">{count, plural, =1 {Удалена заявка от <x id="username"/>} one {Удалена <x id="count"/> заявка} few {Удалено <x id="count"/> заявки} other {Удалено <x id="count"/> заявок}} на регистрацию</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
       <trans-unit id="2806917038528218276" datatype="html">
@@ -5259,7 +5259,7 @@
       </trans-unit>
       <trans-unit id="7773354014171617955" datatype="html">
         <source>Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video</source>
-        <target state="translated">Создавайте раскадровки локальных видеороликов с помощью ffmpeg, чтобы пользователи могли просматривать предварительный просмотр видео в проигрывателе во время перемотки</target>
+        <target state="translated">Создавать раскадровки локальных видео с помощью ffmpeg, чтобы пользователи могли предварительно просматривать видео в проигрывателе при перемотке</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">368</context>
@@ -6733,7 +6733,7 @@
       </trans-unit>
       <trans-unit id="699590710757792843" datatype="html">
         <source>Regions</source>
-        <target state="translated">Регион</target>
+        <target state="translated">Регионы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">111</context>
@@ -6871,7 +6871,7 @@
       </trans-unit>
       <trans-unit id="4255980289409848252" datatype="html">
         <source>A moderator will check your registration request soon and you'll receive an email when it is accepted or rejected.</source>
-        <target state="translated">Модератор вскоре проверит ваш запрос на регистрацию, и вы получите электронное письмо, когда он будет принят или отклонен.</target>
+        <target state="translated">Скоро модератор проверит вашу заявку на регистрацию. Вы получите письмо, когда она будет принята или отклонена.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -6921,7 +6921,7 @@
       </trans-unit>
       <trans-unit id="7273859988396814188" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration request. </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Проверьте свою электронную почту<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, чтобы подтвердить свою учетную запись и заполнить запрос на регистрацию. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Проверьте свою электронную почту<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, чтобы подтвердить свою учетную запись и заполнить заявку на регистрацию. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">18,19</context>
@@ -8881,12 +8881,12 @@
       </trans-unit>
       <trans-unit id="908816482785584930" datatype="html">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. </source>
-        <target state="translated">Электронное письмо будет отправлено на <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> объяснив, что его запрос на регистрацию был <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>отклонен<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> с ответом модератора, который вы напишете ниже. </target>
+        <target state="translated">Письмо будет отправлено на <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> с объяснением, что заявка на регистрацию была <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>отклонена<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> с ответом модератора, указанным ниже. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="2693506849974732500" datatype="html">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been rejected. </source>
-        <target state="translated">Электронная почта в этом экземпляре не включена, поэтому PeerTube не сможет отправить электронное письмо на <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> с уведомлением, что его запрос на регистрацию был отклонен. </target>
+        <target state="translated">На этом сервере не включена эл. почта, поэтому PeerTube не сможет отправить письмо на <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> с уведомлением об отклонении заявки на регистрацию. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="8494092276635837685" datatype="html">
@@ -8945,7 +8945,7 @@
       </trans-unit>
       <trans-unit id="7060967501175301883" datatype="html">
         <source>Registration requests</source>
-        <target state="translated">Запросы на регистрацию</target>
+        <target state="translated">Заявки на регистрацию</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">3</context>
