@@ -8882,7 +8882,7 @@
       </trans-unit>
       <trans-unit id="608706297814044931" datatype="html">
         <source>Prevent email from being sent to the user</source>
-        <target state="translated">Ne küldjön emailt a felhasználónak</target>
+        <target state="translated">Ne küldjön e-mailt a felhasználónak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="1067821087200879310" datatype="html">
@@ -9074,7 +9074,7 @@
       </trans-unit>
       <trans-unit id="7210277223053877333" datatype="html">
         <source>Set Email as Verified</source>
-        <target state="translated">E-mail beállítása ellenőrzöttre</target>
+        <target state="translated">E-mail beállítása ellenőrzöttként</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">119</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">363</context></context-group>
       </trans-unit>
@@ -9132,7 +9132,7 @@
       </trans-unit>
       <trans-unit id="3104427236147521673" datatype="html">
         <source>{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</source>
-        <target state="translated">{count, plural, =1 {1 felhasználó emailje megerősítettre állítva.} other {<x id="count"/> felhasználó emailje megerősítettre állítva.}}</target>
+        <target state="translated">{count, plural, =1 {1 felhasználó e-mail-címe beállítva ellenőrzöttként.} other {<x id="count"/> felhasználó e-mail-címe beállítva ellenőrzöttként.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">274</context></context-group>
       </trans-unit>
       <trans-unit id="7390990800435887351" datatype="html">
@@ -9170,7 +9170,7 @@
       </trans-unit>
       <trans-unit id="6012072687166259654" datatype="html">
         <source>Please check your emails to verify your new email.</source>
-        <target state="translated">Nézze meg az e-mailjeit az új e-mailje ellenőrzéséhez.</target>
+        <target state="translated">Nézze meg a leveleit az új e-mail-címe ellenőrzéséhez.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="6585766371605707311" datatype="html">
@@ -9237,7 +9237,7 @@
       </trans-unit>
       <trans-unit id="5215550763077484072" datatype="html">
         <source>Allow email to be publicly displayed</source>
-        <target state="translated">Email nyilvános megjelenítésének engedélyezése</target>
+        <target state="translated">E-mail-cím nyilvános megjelenítésének engedélyezése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">6</context>
@@ -9706,7 +9706,7 @@
       </trans-unit>
       <trans-unit id="5603224609929994288" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is awaiting email verification </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> email megerősítésre vár </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> e-mail-ellenőrzésre vár </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">5,6</context>
@@ -9714,7 +9714,7 @@
       </trans-unit>
       <trans-unit id="4250548381153518208" datatype="html">
         <source>Change your email</source>
-        <target state="translated">Email cím megváltoztatása</target>
+        <target state="translated">E-mail-cím megváltoztatása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">11</context>
