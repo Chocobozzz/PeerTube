@@ -199,7 +199,7 @@ server {
     alias /var/www/peertube/peertube-latest/client/dist/$1;
   }
 
-  location ~ ^(/static/(webseed|web-videos|streaming-playlists)/private/)|^/download {
+  location ~ ^(/static/(webseed|web-videos|streaming-playlists/hls)/private/)|^/download {
     # We can't rate limit a try_files directive, so we need to duplicate @api
 
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
