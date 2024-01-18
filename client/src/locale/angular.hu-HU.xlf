@@ -9003,7 +9003,7 @@
       </trans-unit>
       <trans-unit id="545237611115823456" datatype="html">
         <source>Video files</source>
-        <target state="translated">Videó fájlok</target>
+        <target state="translated">Videófájlok</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="1882931826815906053" datatype="html">
@@ -9722,7 +9722,7 @@
       </trans-unit>
       <trans-unit id="3173210699559672958" datatype="html">
         <source>Your current email is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. It is never shown to the public. </source>
-        <target state="translated">A jelenlegi email címe: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">A jelenlegi e-mail-címe: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">13,16</context>
@@ -9796,7 +9796,7 @@
       </trans-unit>
       <trans-unit id="4227831333725112678" datatype="html">
         <source>Verify email</source>
-        <target state="translated">Email megerősítése</target>
+        <target state="translated">E-mail-cím megerősítése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -9908,7 +9908,7 @@
       </trans-unit>
       <trans-unit id="3541115907775840269" datatype="html">
         <source>Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</source>
-        <target state="translated">Biztosan szerkeszteni szeretné ezt: "<x id="PH" equiv-text="this.video.name"/>"?</target>
+        <target state="translated">Biztos, hogy szerkeszti ezt: „<x id="PH" equiv-text="this.video.name"/>”?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="3858880927114551513" datatype="html">
@@ -9993,7 +9993,7 @@
       </trans-unit>
       <trans-unit id="6667870723906986565" datatype="html">
         <source>Show / hide this help menu</source>
-        <target state="translated">Ez a súgómenü megjelenítése / elrejtése</target>
+        <target state="translated">E súgómenü megjelenítése/elrejtése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/hotkeys/hotkeys.service.ts</context>
           <context context-type="linenumber">33</context>
@@ -10242,7 +10242,7 @@
       </trans-unit>
       <trans-unit id="5378618511917875694" datatype="html">
         <source>User email has been verified</source>
-        <target state="translated">Felhasználói email megerősítve</target>
+        <target state="translated">Felhasználói e-mail-cím megerősítve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">15</context>
@@ -10250,7 +10250,7 @@
       </trans-unit>
       <trans-unit id="2754481302921121772" datatype="html">
         <source>User email hasn't been verified</source>
-        <target state="translated">Felhasználói email nincs megerősítve</target>
+        <target state="translated">A felhasználói e-mail-címe nincs megerősítve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-email-info.component.ts</context>
           <context context-type="linenumber">18</context>
@@ -10928,7 +10928,7 @@
       </trans-unit>
       <trans-unit id="1653315912561885898" datatype="html">
         <source>A chapter title is required.</source>
-        <target state="translated">Fejezeteim megadása kötelező.</target>
+        <target state="translated">A fejezetcím megadása kötelező.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -10936,7 +10936,7 @@
       </trans-unit>
       <trans-unit id="4021088770925947810" datatype="html">
         <source>A chapter title should be more than 2 characters long.</source>
-        <target state="translated">A fejezeteim hosszabb kell legyen, mint 2 karakter.</target>
+        <target state="translated">A fejezetcímnek 2 karakternél hosszabbnak kell lennie.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -10944,7 +10944,7 @@
       </trans-unit>
       <trans-unit id="5999631145853755676" datatype="html">
         <source>A chapter title should be less than 100 characters long.</source>
-        <target state="translated">A fejezeteimnek 100 karakternél rövidebbnek kell lennie.</target>
+        <target state="translated">A fejezetcímnek 100 karakternél rövidebbnek kell lennie.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -11677,7 +11677,7 @@
       </trans-unit>
       <trans-unit id="2516633974298697807" datatype="html">
         <source>Emphasis</source>
-        <target state="translated">Nyomaték</target>
+        <target state="translated">Kiemelés</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
@@ -12300,19 +12300,19 @@
       </trans-unit>
       <trans-unit id="5972374600810542430" datatype="html">
         <source>Delete HLS files</source>
-        <target state="translated">HLS fájlok törlése</target>
+        <target state="translated">HLS-fájlok törlése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">108</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">414</context></context-group>
       </trans-unit>
       <trans-unit id="72391380513979568" datatype="html">
         <source>Delete Web Video files</source>
-        <target state="translated">Webvideó fájlok törlése</target>
+        <target state="translated">Webvideófájlok törlése</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">114</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">420</context></context-group>
       </trans-unit>
       <trans-unit id="8315587636588243636" datatype="html">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</source>
-        <target state="translated">Biztosan törli ezt a <x id="PH" equiv-text="file.resolution.label"/> fájlt?</target>
+        <target state="translated">Biztos, hogy törli ezt a fájlt: <x id="PH" equiv-text="file.resolution.label"/>?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">187</context></context-group>
       </trans-unit>
       <trans-unit id="6693349469471580292" datatype="html">
@@ -12366,7 +12366,7 @@
       </trans-unit>
       <trans-unit id="8527948211896740910" datatype="html">
         <source>Do you really want to delete this runner? It won't be able to process jobs anymore.</source>
-        <target state="translated">Biztosan törli ezt a futtatót? Ez nem fog tudni több feladatot feldolgozni.</target>
+        <target state="translated">Biztos, hogy törli ezt a futtatót? Nem fog tudni több feladatot feldolgozni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -12400,7 +12400,7 @@
       </trans-unit>
       <trans-unit id="2344549567732505963" datatype="html">
         <source>Generate token</source>
-        <target state="translated">Token generálása</target>
+        <target state="translated">Token előállítása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="8075170500509574933" datatype="html">
@@ -12425,7 +12425,7 @@
       </trans-unit>
       <trans-unit id="1188547334387666210" datatype="html">
         <source>Registration token generated.</source>
-        <target state="translated">Regisztrációs token generálva.</target>
+        <target state="translated">Regisztrációs token előállítva.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="545462083274995239" datatype="html">
@@ -12502,7 +12502,7 @@
       </trans-unit>
       <trans-unit id="3076101305843397295" datatype="html">
         <source>Do you really want to unblock <x id="PH" equiv-text="this.video.name"/>? It will be available again in the videos list.</source>
-        <target state="translated">Biztosan feloldja a(z) <x id="PH" equiv-text="this.video.name"/> tiltását? Újra elérhető lesz a videólistában.</target>
+        <target state="translated">Biztos, hogy feloldja ennek a videónak a tiltását: <x id="PH" equiv-text="this.video.name"/>? Újra elérhető lesz a videólistában.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">219</context></context-group>
       </trans-unit>
       <trans-unit id="8359747231611535508" datatype="html">
