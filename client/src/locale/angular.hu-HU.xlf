@@ -12517,7 +12517,7 @@
       </trans-unit>
       <trans-unit id="3719503424625455635" datatype="html">
         <source>Mute server account</source>
-        <target state="translated">Kiszolgálófiók némítésa</target>
+        <target state="translated">Kiszolgálófiók némítása</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">295</context></context-group>
       </trans-unit>
       <trans-unit id="7008439939460403347">
