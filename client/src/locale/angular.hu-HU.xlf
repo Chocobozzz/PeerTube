@@ -1191,7 +1191,7 @@
       </trans-unit>
       <trans-unit id="3188014010833256853" datatype="html">
         <source>Enter your email address and we will send you a link to reset your password.</source>
-        <target state="translated">Adja meg az e-mail címét és küldünk egy hivatkozást a jelszó visszaállítására.</target>
+        <target state="translated">Adja meg az e-mail-címét és küldünk egy hivatkozást a jelszó visszaállításához.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
@@ -5069,7 +5069,7 @@
       </trans-unit>
       <trans-unit id="4497115134891299867">
         <source>Signup requires email verification</source>
-        <target>A regisztráció e-mail ellenőrzést igényel</target>
+        <target state="translated">A regisztráció e-mail-ellenőrzést igényel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">181</context></context-group>
       </trans-unit>
       <trans-unit id="8133107840061687919">
@@ -5382,7 +5382,7 @@
       </trans-unit>
       <trans-unit id="3171683206914962995">
         <source>Admin email</source>
-        <target>Rendszergazda e-mail</target>
+        <target state="translated">Rendszergazda e-mail-címe</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">575</context></context-group>
       </trans-unit>
       <trans-unit id="4722881456283329321">
@@ -6823,7 +6823,7 @@
       </trans-unit>
       <trans-unit id="8610022770999239699">
         <source>This instance does not require email verification.</source>
-        <target>Ez a példány nem igényel e-mail ellenőrzést.</target>
+        <target state="translated">Ez a példány nem igényel e-mail-ellenőrzést.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="248731258067914565" datatype="html">
@@ -8847,7 +8847,7 @@
       </trans-unit>
       <trans-unit id="2237982448344718491" datatype="html">
         <source>Registration email has not been verified. Email delivery has been disabled by default.</source>
-        <target state="translated">A regisztrált email nincs megerősítve. Az emailküldés alapértelmezés szerint ki van kapcsolva.</target>
+        <target state="translated">A regisztrált e-mail-cím nincs megerősítve. A levélküldés alapértelmezés szerint ki van kapcsolva.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="2884115244144130373" datatype="html">
@@ -8857,22 +8857,22 @@
       </trans-unit>
       <trans-unit id="4287036840463640002" datatype="html">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created with the moderation response you'll write below. </source>
-        <target state="translated">Egy emailt küldünk a <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> címre a fiók létrehozásáról az alább megadott moderátori válasszal együtt. </target>
+        <target state="translated">Egy e-mailt küldünk a(z) <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> címre a fiók létrehozásáról az alább megadott moderátori válasszal együtt. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="6252848909934071768" datatype="html">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created. </source>
-        <target state="translated">Az emailküldés nincs engedélyezve ezen a példányon, ezért a PeerTube nem fog tudni emailt küldeni a <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> címre a fiók létrejöttéről. </target>
+        <target state="translated">A levélküldés nincs engedélyezve ezen a példányon, ezért a PeerTube nem fog tudni e-mailt küldeni a(z) <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> címre a fiók létrejöttéről. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="908816482785584930" datatype="html">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. </source>
-        <target state="translated">Egy emailt küldünk a <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> címre a regisztrációs kérés <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>elutasításáról<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> az alábbi moderátori válasszal együtt. </target>
+        <target state="translated">Egy e-mailt küldünk a <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> címre a regisztrációs kérés <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>elutasításáról<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> az alábbi moderátori válasszal együtt. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="2693506849974732500" datatype="html">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been rejected. </source>
-        <target state="translated">Az emailküldés nincs engedélyezve ezen a példányon, ezért a PeerTube nem fog tudni emailt küldeni a <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> címre a regisztrációs kérés elutasításáról. </target>
+        <target state="translated">A levélküldés nincs engedélyezve ezen a példányon, ezért a PeerTube nem fog tudni e-mailt küldeni a <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> címre a regisztrációs kérés elutasításáról. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="8494092276635837685" datatype="html">
