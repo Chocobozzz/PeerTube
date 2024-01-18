@@ -1,5 +1,36 @@
 # Changelog
 
+## v6.0.3
+
+### IMPORTANT NOTES
+
+ * If you upgrade from PeerTube **< v6.0.0**, please follow v6.0.0 IMPORTANT NOTES
+ * If you upgrade from PeerTube **v6.0.0**, please follow v6.0.1 IMPORTANT NOTES
+
+### SECURITY
+
+ * Prevent nginx from serving private/internal/password protected HLS video static files
+   * You must update your nginx configuration like in [this commit](https://github.com/Chocobozzz/PeerTube/commit/12ea8f0dd11e3fb5fbb8955f5b7d52f27332d619#diff-be9f96b9b1de67284047e610821493f9a5bec86bfcdf81a7d8d6e7904474c186) (line `202` replace `location ~ ^(/static/(webseed|web-videos|streaming-playlists)/private/)|^/download {` by `location ~ ^(/static/(webseed|web-videos|streaming-playlists/hls)/private/)|^/download {`)
+
+### Bug fixes
+
+ * Fix HTML meta tags with attributes that contain quotes
+ * Fix time parsing resulting in broken video start time in some cases
+ * Fix WebTorrent video import crash
+ * Reload *Discover* page on logout
+ * Fix privacy error when updating a live, even if the privacy has not changed
+ * Fix invalid remote live state change notification that causes the player to reload
+ * Don't apply big play button skin to settings menu
+ * Fix downloading video files from object storage with some video names (that include emojis, quotes etc)
+ * Fix thumbnail generation when ffmpeg cannot seek the input
+ * Fix theme colors on stats page
+ * Fix input mask (used for chapters, playlist timecodes...) with 10h+ videos
+ * Fix chapter *position* width consistency
+ * Fix player ratio with audio only videos
+ * Also update video playlist URLs when using `update-host` script
+ * Fix upload/import/update of videos that contain multiple chapters with the same timecode
+
+
 ## v6.0.2
 
 ### IMPORTANT NOTES
