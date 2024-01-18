@@ -7607,7 +7607,7 @@
       </trans-unit>
       <trans-unit id="8656171949584591423" datatype="html">
         <source>This is the name that will be displayed in your profile URL.</source>
-        <target state="translated">Ez a név fog megjelenni az Ön profiljának URL-ében.</target>
+        <target state="translated">Ez a név fog megjelenni a profilja webcímében.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="9199457913561943854" datatype="html">
@@ -7617,12 +7617,12 @@
       </trans-unit>
       <trans-unit id="5856397248272246243" datatype="html">
         <source>This email address will be used to validate your account.</source>
-        <target state="translated">Ezzel az email címmel fogjuk megerősíteni az Ön fiókját.</target>
+        <target state="translated">Ezzel az e-mail-címmel lesz megerősítve a fiókja.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="1789116494691736014" datatype="html">
         <source>Request email for account verification</source>
-        <target state="translated">Megerősítő email kérése</target>
+        <target state="translated">Megerősítő e-mail kérése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context>
           <context context-type="linenumber">2</context>
