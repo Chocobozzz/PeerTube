@@ -4486,7 +4486,7 @@
       </trans-unit>
       <trans-unit id="7186771264833643704" datatype="html">
         <source>This plugin is developed by Framasoft, the not-for-profit that develops PeerTube</source>
-        <target state="new">This plugin is developed by Framasoft, the not-for-profit that develops PeerTube</target>
+        <target state="translated">Detta plugin är utvecklat av Framasoft, den icke-vinstdrivande organisationen som utvecklar PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">37</context>
@@ -4499,7 +4499,7 @@
       </trans-unit>
       <trans-unit id="5976946399792378437" datatype="html">
         <source>This plugin is recommended by Framasoft, the not-for-profit that develops PeerTube</source>
-        <target state="new">This plugin is recommended by Framasoft, the not-for-profit that develops PeerTube</target>
+        <target state="translated">Detta plugin rekommenderas av Framasoft, den icke-vinstdrivande organisationen som utvecklar PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">41</context>
@@ -4507,7 +4507,7 @@
       </trans-unit>
       <trans-unit id="4589839558448265597" datatype="html">
         <source>Recommended</source>
-        <target state="new"> Recommended </target>
+        <target state="translated">Rekommenderad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">41,43</context>
@@ -6742,7 +6742,7 @@
       </trans-unit>
       <trans-unit id="699590710757792843" datatype="html">
         <source>Regions</source>
-        <target state="new">Regions</target>
+        <target state="translated">Regioner</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">111</context>
@@ -6888,7 +6888,7 @@
       </trans-unit>
       <trans-unit id="4255980289409848252" datatype="html">
         <source>A moderator will check your registration request soon and you'll receive an email when it is accepted or rejected.</source>
-        <target state="new"> A moderator will check your registration request soon and you'll receive an email when it is accepted or rejected. </target>
+        <target state="translated">En moderator kommer att kontrollera din registreringsbegäran snart och du kommer att få e-post med besked om det har accepterats eller avslagits.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-after-email.component.html</context>
           <context context-type="linenumber">9,11</context>
