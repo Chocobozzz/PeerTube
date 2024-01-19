@@ -1,6 +1,6 @@
 import CliTable3 from 'cli-table3'
 import { ensureDir } from 'fs-extra/esm'
-import { Client as NetIPC } from 'net-ipc'
+import { Client as NetIPC } from '@peertube/net-ipc'
 import { ConfigManager } from '../config-manager.js'
 import { IPCReponse, IPCReponseData, IPCRequest } from './shared/index.js'
 
