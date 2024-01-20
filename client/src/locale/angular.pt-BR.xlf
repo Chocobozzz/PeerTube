@@ -3595,7 +3595,7 @@
       </trans-unit>
       <trans-unit id="3691787517663044217" datatype="html">
         <source>The deletion will be sent to remote instances so they can reflect the change.</source>
-        <target state="new"> The deletion will be sent to remote instances so they can reflect the change.</target>
+        <target state="translated">A exclusão será enviada às instâncias remotas para que elas reflitam esta alteração.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">187</context></context-group>
       </trans-unit>
       <trans-unit id="7321800851971795962" datatype="html">
@@ -4341,7 +4341,7 @@
       </trans-unit>
       <trans-unit id="1868606282505332204" datatype="html">
         <source>Reports</source>
-        <target state="new">Reports</target>
+        <target state="translated">Informes</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">121</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/abuse-list/abuse-list.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">35</context></context-group>
@@ -5292,7 +5292,7 @@
       </trans-unit>
       <trans-unit id="3008420115644088420" datatype="html">
         <source>Configuration</source>
-        <target state="new">Configuration</target>
+        <target state="translated">Configuração</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">156</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
@@ -6112,32 +6112,33 @@
       </trans-unit>
       <trans-unit id="1963136290621768454" datatype="html">
         <source>Resolution</source>
-        <target state="new">Resolution</target>
+        <target state="translated">Resolução</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">257</context></context-group>
       </trans-unit>
       <trans-unit id="7814358426066520520" datatype="html">
         <source>Aspect ratio</source>
-        <target state="new">Aspect ratio</target>
+        <target state="translated">Proporção da tela</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">258</context></context-group>
       </trans-unit>
       <trans-unit id="44862519224794374" datatype="html">
         <source>Average frame rate</source>
-        <target state="new">Average frame rate</target>
+        <target state="translated">Taxa de frames média
+Average frame rate</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">259</context></context-group>
       </trans-unit>
       <trans-unit id="5053683525387462246" datatype="html">
         <source>Pixel format</source>
-        <target state="new">Pixel format</target>
+        <target state="translated">Formato de pixeis</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">260</context></context-group>
       </trans-unit>
       <trans-unit id="7858676566953242358" datatype="html">
         <source>Sample rate</source>
-        <target state="new">Sample rate</target>
+        <target state="translated">Taxa de amostragem</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">264</context></context-group>
       </trans-unit>
       <trans-unit id="5403856660543890284" datatype="html">
         <source>Channel Layout</source>
-        <target state="new">Channel Layout</target>
+        <target state="translated">Layout do canal</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">265</context></context-group>
       </trans-unit>
       <trans-unit id="6875053727982162254" datatype="html">
@@ -8155,7 +8156,7 @@
       </trans-unit>
       <trans-unit id="5504952199515017930" datatype="html">
         <source>None - no upload possible</source>
-        <target state="new">None - no upload possible</target>
+        <target state="translated">Nenhum - sem carregamento possível</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">23</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
@@ -8377,7 +8378,7 @@
       </trans-unit>
       <trans-unit id="5875705095657098468" datatype="html">
         <source>Do you really want to remove this video redundancy?</source>
-        <target state="new">Do you really want to remove this video redundancy?</target>
+        <target state="translated">Quer realmente remover essa redundância de vídeo?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="9098272570113000349" datatype="html">
@@ -8455,7 +8456,7 @@
       </trans-unit>
       <trans-unit id="6907161397537530258" datatype="html">
         <source>Thumbnails</source>
-        <target state="new">Thumbnails</target>
+        <target state="translated">Miniaturas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context><context context-type="linenumber">26</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">161</context></context-group>
       </trans-unit>
@@ -8472,7 +8473,7 @@
       </trans-unit>
       <trans-unit id="5793550984155962433" datatype="html">
         <source>Actions for the flagged account</source>
-        <target state="new">Actions for the flagged account</target>
+        <target state="translated">Ações para a conta sinalizada</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">283</context></context-group>
       </trans-unit>
       <trans-unit id="1679841953757186358">
@@ -8487,7 +8488,7 @@
       </trans-unit>
       <trans-unit id="4175703770051343108" datatype="html">
         <source>Add internal note</source>
-        <target state="new">Add internal note</target>
+        <target state="translated">Adicionar nota interna</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">266</context></context-group>
       </trans-unit>
       <trans-unit id="296166371893775555" datatype="html">
