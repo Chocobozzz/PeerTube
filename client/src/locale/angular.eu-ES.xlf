@@ -250,7 +250,7 @@
       </trans-unit>
       <trans-unit id="3654484622885694263" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl || notification.videoImportUrl&quot;&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> succeeded </source>
-        <target state="translated">&lt;x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)="markAsRead(jakinarazpena)" [routerLink]="notification.videoUrl || notification.videoImportUrl"&gt;"/&gt;Zure bideo inportazioa&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/&gt; &lt;x id="START_TAG_STRONG" ctype="x-strong" equiv -text="&lt;strong&gt;"/&gt;&lt;x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/&gt;&lt;x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text= "&lt;/strong&gt;"/&gt; arrakastatsua izan da </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl || notification.videoImportUrl&quot;&gt;"/>Bideo-inportazioa<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> osatu da </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">125,126</context>
@@ -816,7 +816,7 @@
       </trans-unit>
       <trans-unit id="3805147953573030976" datatype="html">
         <source>Default NSFW/sensitive videos policy</source>
-        <target state="translated">NSDF/hunkigarriak diren bideoen gidalerro lehenetsia</target>
+        <target state="translated">NSFW/hunkigarriak diren bideoen gidalerro lehenetsia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">13</context>
@@ -6046,7 +6046,7 @@
       </trans-unit>
       <trans-unit id="7028708681117573961" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Recently Added"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">Ordenatu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Berriki gehituak"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> atalaren arabera</target>
+        <target state="translated">Ordenatu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Berriki gehituak"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> irizpidearen arabera</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="762510264401369759" datatype="html">
