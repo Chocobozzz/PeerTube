@@ -308,7 +308,7 @@
       </trans-unit>
       <trans-unit id="5421414445136873229" datatype="html">
         <source>The notification points to content now unavailable</source>
-        <target state="translated">A notificação aponta para conteúdo agora indisponível.</target>
+        <target state="translated">A notificação aponta para conteúdo agora indisponível</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">230</context></context-group>
       </trans-unit>
       <trans-unit id="906167214730624194" datatype="html">
@@ -396,12 +396,12 @@
       </trans-unit>
       <trans-unit id="5201790281220738609" datatype="html">
         <source>Search playlists</source>
-        <target state="translated">Buscar playlists</target>
+        <target state="translated">Buscar listas de reprodução</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="6056859576122955708" datatype="html">
         <source>Create a private playlist</source>
-        <target state="translated">Criar uma playlist privada</target>
+        <target state="translated">Criar uma lista de reprodução privada</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="2409672154570643758">
@@ -586,7 +586,7 @@
       </trans-unit>
       <trans-unit id="6228449077605046873" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</source>
-        <target state="translated">Tem certeza que deseja excluir {count, plural, =1 {1 playlist de streaming HLS} other {<x id="count"/> playlists de streaming HLS}}?</target>
+        <target state="translated">Tem certeza que deseja excluir {count, plural, =1 {1 lista de reprodução de streaming HLS} other {<x id="count"/> listas de reprodução de streaming HLS}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">271</context></context-group>
       </trans-unit>
       <trans-unit id="4435640428611044716" datatype="html">
@@ -743,17 +743,17 @@
       </trans-unit>
       <trans-unit id="3372646000533908418" datatype="html">
         <source>Subscribe with a remote account:</source>
-        <target state="translated">Inscrever com uma conta remota:</target>
+        <target state="translated">Assinar com uma conta remota:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="6691897331062834756" datatype="html">
         <source>Subscribe with an account on this instance</source>
-        <target state="translated">Registrar com uma conta nesta instância</target>
+        <target state="translated">Assinar com uma conta nesta instância</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="1740917574463702967">
         <source>Subscribe with your local account</source>
-        <target>Se inscreva com uma conta local</target>
+        <target state="translated">Assinar com sua conta local</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="8023282004085823427" datatype="html">
@@ -788,7 +788,7 @@
       </trans-unit>
       <trans-unit id="7695158742270602420">
         <source>Subscribe via RSS</source>
-        <target>Se inscreva via RSS</target>
+        <target state="translated">Assine via RSS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="6086125715086510222" datatype="html">
@@ -798,12 +798,12 @@
       </trans-unit>
       <trans-unit id="855178133027341271">
         <source><x id="START_TAG_SPAN"/>Remote subscribe<x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>Remote interact<x id="CLOSE_TAG_SPAN"/></source>
-        <target state="translated"><x id="START_TAG_SPAN"/>Inscrição remota<x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>Interação remota<x id="CLOSE_TAG_SPAN"/></target>
+        <target state="translated"><x id="START_TAG_SPAN"/>Assinatura remota<x id="CLOSE_TAG_SPAN"/><x id="START_TAG_SPAN_1"/>Interação remota<x id="CLOSE_TAG_SPAN"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="6462281745850371027" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="translated">Você pode se inscrever no canal via qualquer instância fediverse que usa ActivityPub (PeerTube, Mastodon ou Pleroma por exemplo).</target>
+        <target state="translated">Você pode assinar este canal através de qualquer instância do fediverso que use ActivityPub (PeerTube, Mastodon ou Pleroma por exemplo).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="20374890400263257" datatype="html">
@@ -928,7 +928,7 @@
       </trans-unit>
       <trans-unit id="5851173629316588976" datatype="html">
         <source>By users on this instance</source>
-        <target state="translated">Por usuários nesta instância.</target>
+        <target state="translated">Por usuários nesta instância</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="2906587845957718064">
@@ -1293,7 +1293,7 @@
       </trans-unit>
       <trans-unit id="6928511254538021087" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Subscribe<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to channels to be notified of new videos</source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Subscrever-se<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> em canais para ser notificado de novos vídeos</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Assine<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> canais para ser notificado de novos vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1406,7 +1406,7 @@
       </trans-unit>
       <trans-unit id="3848077896245199337" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="translated">Configurar sua conta, administrar playlists, descobrir aplicativos de terceiros...</target>
+        <target state="translated">Configurar sua conta, administrar listas de reprodução, descobrir aplicativos de terceiros...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="6284442506490785579" datatype="html">
@@ -1714,7 +1714,7 @@
       </trans-unit>
       <trans-unit id="949618577357088829" datatype="html">
         <source>Create a new playlist</source>
-        <target state="translated">Criar uma nova playlist</target>
+        <target state="translated">Criar uma nova lista de reprodução</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="2689878465089314112" datatype="html">
@@ -2320,7 +2320,7 @@
       </trans-unit>
       <trans-unit id="3059355667050002541" datatype="html">
         <source>Error in playlist miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="translated">Erro no componente miniatura da playlist: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Erro no componente miniatura da lista de reprodução: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/playlist-miniature-markup.component.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="863691161959989717" datatype="html">
@@ -3067,12 +3067,12 @@
       </trans-unit>
       <trans-unit id="6599497107591892109" datatype="html">
         <source>Share the playlist</source>
-        <target state="translated">Compartilhar as playlists</target>
+        <target state="translated">Compartilhar a lista de reprodução</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="937533808893845780" datatype="html">
         <source>This playlist is private so you won't be able to share it with external users</source>
-        <target state="translated">Esta lista de reprodução é privada, então você não será capaz de compartilhá-la com usuários externos</target>
+        <target state="translated">Como esta lista de reprodução é privada, você não poderá compartilhá-la com usuários externos</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="5806907163449517166" datatype="html">
@@ -3082,7 +3082,7 @@
       </trans-unit>
       <trans-unit id="6460270615876918310" datatype="html">
         <source>Share the playlist at this video position</source>
-        <target state="translated">Compartilhar a playlist na posição deste vídeo</target>
+        <target state="translated">Compartilhar a lista de reprodução na posição deste vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="8920371331444717794" datatype="html">
@@ -3342,22 +3342,22 @@
       </trans-unit>
       <trans-unit id="1144407473317535723" datatype="html">
         <source>Subscribe</source>
-        <target state="translated">Inscrever</target>
+        <target state="translated">Assinar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="5432070253720498105" datatype="html">
         <source>Subscribe to all channels</source>
-        <target state="translated">Inscrever em todos os canais</target>
+        <target state="translated">Assinar todos os canais</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="7542242186854344789" datatype="html">
         <source>channels subscribed</source>
-        <target state="translated">canais inscritos</target>
+        <target state="translated">canais assinados</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="8426539297729416784" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
-        <target state="translated">{VAR_SELECT, select, undefined {Desinscrever} other {Desinscrever de todos os canais} }</target>
+        <target state="translated">{VAR_SELECT, select, undefined {Cancelar assinatura} other {Cancela assinatura de todos os canais} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="7215101881367554791">
@@ -3654,7 +3654,7 @@
       </trans-unit>
       <trans-unit id="2645809032917283525" datatype="html">
         <source>Use third-party feed aggregators to retrieve the list of videos from channels you subscribed to.</source>
-        <target state="translated">Use agregadores de feed de terceiros para recuperar a lista de vídeos dos canais nos quais você se inscreveu.</target>
+        <target state="translated">Use agregadores de feed de terceiros para recuperar a lista de vídeos dos canais que você assina.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="7944777648309302794" datatype="html">
@@ -3715,10 +3715,7 @@
       </trans-unit>
       <trans-unit id="2092225601747599163">
         <source>Created <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target>Criado 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Criado <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">38</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">50</context></context-group>
@@ -3777,10 +3774,7 @@
       </trans-unit>
       <trans-unit id="6571718060636962350" datatype="html">
         <source>Redundancy allowed <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Redundância permitida 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Redundância permitida <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="8246779176913476983" datatype="html">
@@ -4041,7 +4035,7 @@
       </trans-unit>
       <trans-unit id="2343069726009080052" datatype="html">
         <source>Video <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Vídeo <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/> <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">Vídeo <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">32</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
@@ -4098,10 +4092,7 @@
       </trans-unit>
       <trans-unit id="7692347838587821095">
         <source>Date <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target>Data 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Data <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">32</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
@@ -4316,7 +4307,7 @@
       </trans-unit>
       <trans-unit id="5021295327106206941" datatype="html">
         <source>by <x id="INTERPOLATION"/> on <x id="INTERPOLATION_1"/> </source>
-        <target state="translated">por <x id="INTERPOLATION" equiv-text="{{ abuse.video.channel?.displayName }}"/> em <x id="INTERPOLATION_1" equiv-text="{{ abuse.video.channel?.host }}"/> </target>
+        <target state="translated">por <x id="INTERPOLATION"/> em <x id="INTERPOLATION_1"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="1443698606045744844" datatype="html">
@@ -4341,10 +4332,7 @@
       </trans-unit>
       <trans-unit id="3301856295120048857">
         <source>State <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target>Estado 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Estado <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context><context context-type="linenumber">44</context></context-group>
@@ -4364,10 +4352,7 @@
       </trans-unit>
       <trans-unit id="7418735164633152705" datatype="html">
         <source>Score <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Pontuação 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Pontuação <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3109314382334906782" datatype="html">
@@ -4402,10 +4387,7 @@
       </trans-unit>
       <trans-unit id="1300704815627663264">
         <source>Muted at <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target>Silenciado em 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Silenciado em <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">32</context></context-group>
@@ -4604,7 +4586,7 @@
       </trans-unit>
       <trans-unit id="1780056719120519633" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}" xid="3148804384763272950"/> for "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {resultado} other {resultados}}"/> para "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {resultado} other {resultados}}"/> para "<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>" </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="3148804384763272950" datatype="html">
@@ -4620,9 +4602,7 @@
       </trans-unit>
       <trans-unit id="2601639465696257054" datatype="html">
         <source>This <x id="INTERPOLATION"/> does not have settings. </source>
-        <target state="translated">Este 
-          <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> não têm configurações. 
-        </target>
+        <target state="translated">Este <x id="INTERPOLATION"/> não tem configurações. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="29832309535656200" datatype="html">
@@ -4939,7 +4919,7 @@
       </trans-unit>
       <trans-unit id="5056489767203690328" datatype="html">
         <source>Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</source>
-        <target state="translated">Quem modera a instância? Qual é a política em relação aos vídeos NSFW? Vídeos políticos? etc.</target>
+        <target state="translated">Quem modera a instância? Qual é a política em relação aos vídeos NSFW? Vídeos políticos? etc</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">144</context></context-group>
       </trans-unit>
       <trans-unit id="2047672753819413550" datatype="html">
@@ -5022,7 +5002,7 @@
       </trans-unit>
       <trans-unit id="2609416025385742456" datatype="html">
         <source>Default trending page</source>
-        <target state="new">Default trending page</target>
+        <target state="translated">Página Em alta padrão</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="554741830445276244" datatype="html">
@@ -6203,7 +6183,7 @@
       </trans-unit>
       <trans-unit id="1534085756270333258" datatype="html">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target state="translated">Nas páginas de Tendências, Locais, mais curtidos e procurados</target>
+        <target state="translated">Nas páginas Em alta, Locais, Mais curtidos e Procurados</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="2658703380934466003" datatype="html">
@@ -6280,12 +6260,7 @@
       </trans-unit>
       <trans-unit id="3963749584812225989">
         <source>Created <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target>
-        Criado
-        
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="translated">Criado <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="5611592591303869712">
@@ -6479,9 +6454,7 @@
       </trans-unit>
       <trans-unit id="5500467336262464724">
         <source><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> subscribers </source>
-        <target>
-          <x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> inscritos
-        </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> assinantes </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">25</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">58</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.html</context><context context-type="linenumber">36</context></context-group>
@@ -6522,9 +6495,7 @@
       </trans-unit>
       <trans-unit id="9131836378905533756">
         <source>Created by <x id="INTERPOLATION"/></source>
-        <target>Criado por 
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/>
-        </target>
+        <target state="translated">Criado por <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="228548407872312756" datatype="html">
@@ -6666,23 +6637,23 @@
       </trans-unit>
       <trans-unit id="3943893855105372623" datatype="html">
         <source>Playlist thumbnail</source>
-        <target state="translated">Miniatura de Playlist</target>
+        <target state="translated">Miniatura da lista de reprodução</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">76</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="7743343997362363486" datatype="html">
         <source>No videos in this playlist.</source>
-        <target state="translated">Não há vídeos na playlist.</target>
+        <target state="translated">Não há vídeos na lista de reprodução.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="2427149618141327033" datatype="html">
         <source>Browse videos on PeerTube to add them in your playlist.</source>
-        <target state="translated">Busque vídeos no PeerTube e adicione-os em sua lista de reprodução.</target>
+        <target state="translated">Navegue por vídeos no PeerTube e adicione-os em sua lista de reprodução.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="8901774330683812267" datatype="html">
         <source>See the <x id="START_LINK"/>documentation<x id="CLOSE_LINK"/> for more information. </source>
-        <target state="translated">Consulte a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>documentação<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> para mais informação. </target>
+        <target state="translated">Veja a <x id="START_LINK"/>documentação<x id="CLOSE_LINK"/> para mais informações. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="6904641160356013310" datatype="html">
@@ -6804,7 +6775,7 @@
       </trans-unit>
       <trans-unit id="3030338154442300172" datatype="html">
         <source>Created <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}" xid="498463490165953744"/> </source>
-        <target state="translated">Criada(s) <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 lista de reprodução} other {{{ pagination.totalItems }} listas de reprodução}}"/> </target>
+        <target state="translated">Criada <x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, =1 {1 lista de reprodução} other {{{ pagination.totalItems }} listas de reprodução}}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="3505845886770923767" datatype="html">
@@ -7032,9 +7003,7 @@
       </trans-unit>
       <trans-unit id="403587185492002456" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 subscriber} other {
-          <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> assinantes} }
-        </target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 assinante} other {<x id="INTERPOLATION"/> assinantes}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="3068011377000255023" datatype="html">
@@ -7060,7 +7029,7 @@
       </trans-unit>
       <trans-unit id="7766488542631150871" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Nenhum vídeo} =1 {1 vídeo} other { <x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> vídeos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Nenhum vídeo} =1 {1 vídeo} other {<x id="INTERPOLATION"/> vídeos}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">29</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">39</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">47</context></context-group>
@@ -7112,7 +7081,7 @@
       </trans-unit>
       <trans-unit id="4068658588793749132" datatype="html">
         <source>This channel does not have playlists.</source>
-        <target state="translated">Este canal não possui playlists.</target>
+        <target state="translated">Este canal não possui listas de reprodução.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="5066829276646988805">
@@ -7169,9 +7138,7 @@
       </trans-unit>
       <trans-unit id="3174354408404578867" datatype="html">
         <source>About <x id="INTERPOLATION"/></source>
-        <target state="translated">Sobre 
-          <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>
-        </target>
+        <target state="translated">Sobre <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="8525213662266893834" datatype="html">
@@ -7267,10 +7234,7 @@
       </trans-unit>
       <trans-unit id="7257048945916143687" datatype="html">
         <source>For more information, please visit <x id="START_LINK"/>joinpeertube.org<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Para mais informação, favor visitar 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. 
-        </target>
+        <target state="translated">Para mais informações, visite <x id="START_LINK"/>joinpeertube.org<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8205344394429673413" datatype="html">
@@ -7280,7 +7244,7 @@
       </trans-unit>
       <trans-unit id="8674693181203168033" datatype="html">
         <source>Discover how to setup your account, what is a channel, how to create a playlist and more!</source>
-        <target state="translated">Descubra como criar a sua conta, o que é um canal, como criar uma playlist e muito mais!</target>
+        <target state="translated">Descubra como criar a sua conta, o que é um canal, como criar uma lista de reprodução e muito mais!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="5336387229608682776" datatype="html">
@@ -8271,10 +8235,7 @@
       </trans-unit>
       <trans-unit id="135214224090612796">
         <source>Redundancy for <x id="PH"/> is <x id="PH_1"/></source>
-        <target>A redundância de 
-          <x id="PH"/> é 
-          <x id="PH_1"/>
-        </target>
+        <target state="translated">A redundância para <x id="PH"/> é <x id="PH_1"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="5875705095657098468" datatype="html">
@@ -8294,16 +8255,12 @@
       </trans-unit>
       <trans-unit id="8639315630141911544">
         <source>Account <x id="PH"/> unmuted by your instance.</source>
-        <target>Conta 
-          <x id="PH"/> teve seu silêncio removido por sua instância.
-        </target>
+        <target state="translated">Conta <x id="PH"/> teve seu silêncio removido por sua instância.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="3371601176452094961">
         <source>Instance <x id="PH"/> unmuted by your instance.</source>
-        <target>Instância 
-          <x id="PH"/> teve seu silêncio removido por sua instância.
-        </target>
+        <target state="translated">Instância <x id="PH"/> teve seu silêncio removido por sua instância.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="3096398988891996621" datatype="html">
@@ -8879,9 +8836,7 @@
       </trans-unit>
       <trans-unit id="1886888801485703107">
         <source>User <x id="PH"/> created.</source>
-        <target>Usuário 
-          <x id="PH"/> criado.
-        </target>
+        <target state="translated">Usuário <x id="PH"/> criado.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-create.component.ts</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="8286337167859377104" datatype="html">
@@ -9010,9 +8965,7 @@
       </trans-unit>
       <trans-unit id="5974506725502681113" datatype="html">
         <source>Password changed for user <x id="PH"/>.</source>
-        <target state="translated">Senha modificada para usuário 
-          <x id="PH"/>.
-        </target>
+        <target state="translated">Senha modificada para usuário <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-password.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="149953821752893163">
@@ -9032,9 +8985,7 @@
       </trans-unit>
       <trans-unit id="8819563010322372715">
         <source>An email asking for password reset has been sent to <x id="PH"/>.</source>
-        <target>Um e-mail pedindo redefinição de senha foi enviado para 
-          <x id="PH"/>.
-        </target>
+        <target state="translated">Um e-mail solicitando redefinição de senha foi enviado para <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-update.component.ts</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="5679185794144903715" datatype="html">
@@ -9212,17 +9163,13 @@
       </trans-unit>
       <trans-unit id="7390990800435887351">
         <source>Account <x id="PH"/> unmuted.</source>
-        <target>A conta 
-          <x id="PH"/> não será mais silenciada.
-        </target>
+        <target state="translated">A conta <x id="PH"/> não está mais silenciada.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.ts</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">149</context></context-group>
       </trans-unit>
       <trans-unit id="7246356397085094208">
         <source>Instance <x id="PH"/> unmuted.</source>
-        <target>A instância 
-          <x id="PH"/> não será mais silenciada.
-        </target>
+        <target state="translated">A instância <x id="PH"/> não está mais silenciada.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">45</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
@@ -9489,9 +9436,7 @@
       </trans-unit>
       <trans-unit id="1137937154872046253">
         <source>Video channel <x id="PH"/> created.</source>
-        <target>Canal de vídeo 
-          <x id="PH"/> criado.
-        </target>
+        <target state="translated">Canal de vídeo <x id="PH"/> criado.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-create.component.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="8723777130353305761">
@@ -9501,9 +9446,7 @@
       </trans-unit>
       <trans-unit id="7589345916094713536">
         <source>Video channel <x id="PH"/> updated.</source>
-        <target>Canal de vídeo 
-          <x id="PH"/> atualizado.
-        </target>
+        <target state="translated">Canal de vídeo <x id="PH"/> atualizado.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="8407755843502300957" datatype="html">
@@ -9523,9 +9466,7 @@
       </trans-unit>
       <trans-unit id="624066830180032195">
         <source>Video channel <x id="PH"/> deleted.</source>
-        <target>Canal de vídeo 
-          <x id="PH"/> excluído.
-        </target>
+        <target state="translated">Canal de vídeo <x id="PH"/> excluído.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="6450826648284332649" datatype="html">
@@ -9615,9 +9556,7 @@
       </trans-unit>
       <trans-unit id="5032453707232754344" datatype="html">
         <source>Playlist <x id="PH"/> created.</source>
-        <target state="translated">Playlist 
-          <x id="PH"/> criada.
-        </target>
+        <target state="translated">Lista de reprodução <x id="PH"/> criada.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-create.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="5674286808255988565" datatype="html">
@@ -9663,14 +9602,12 @@
       </trans-unit>
       <trans-unit id="104404386496394770" datatype="html">
         <source>Delete playlist</source>
-        <target state="translated">Apagar lista de reprodução</target>
+        <target state="translated">Excluir lista de reprodução</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="1431617394009162547" datatype="html">
         <source>Playlist <x id="PH"/> updated.</source>
-        <target state="translated">Playlist 
-          <x id="PH"/> atualizada.
-        </target>
+        <target state="translated">Lista de reprodução <x id="PH"/> atualizada.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="4844578664427956129" datatype="html">
@@ -9681,9 +9618,7 @@
       </trans-unit>
       <trans-unit id="3380608219513805292" datatype="html">
         <source>Playlist <x id="PH"/> deleted.</source>
-        <target state="translated">Playlist 
-          <x id="PH"/> apagada.
-        </target>
+        <target state="translated">Lista de reprodução <x id="PH"/> excluída.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">136</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
@@ -9725,9 +9660,7 @@
       </trans-unit>
       <trans-unit id="2767660806989176400">
         <source>Video <x id="PH"/> deleted.</source>
-        <target>Vídeo 
-          <x id="PH"/> excluído.
-        </target>
+        <target state="translated">Vídeo <x id="PH"/> excluído.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">253</context></context-group>
       </trans-unit>
       <trans-unit id="6389312883797462351" datatype="html">
@@ -9775,7 +9708,7 @@
       </trans-unit>
       <trans-unit id="7545420287297803988" datatype="html">
         <source>My playlists</source>
-        <target state="translated">Minhas playlists</target>
+        <target state="translated">Minhas listas de reprodução</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">95</context></context-group>
@@ -9902,7 +9835,7 @@
       </trans-unit>
       <trans-unit id="1783173774503340906">
         <source>Subscribe to the account</source>
-        <target>Inscreva-se na conta</target>
+        <target state="translated">Assine a conta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">84</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">917</context></context-group>
       </trans-unit>
@@ -11084,7 +11017,7 @@
       </trans-unit>
       <trans-unit id="1276238402004616037" datatype="html">
         <source>The channel is required when the playlist is public.</source>
-        <target state="translated">O canal é requerido quando a playlist é pública.</target>
+        <target state="translated">O canal é exigido quando a lista de reprodução é pública.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="5226261760726752768" datatype="html">
@@ -11799,9 +11732,7 @@
       </trans-unit>
       <trans-unit id="2448281151916042849">
         <source>User <x id="PH"/> banned.</source>
-        <target>Usuário 
-          <x id="PH"/> banido.
-        </target>
+        <target state="translated">Usuário <x id="PH"/> banido.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="2836537219160375057" datatype="html">
@@ -11821,9 +11752,7 @@
       </trans-unit>
       <trans-unit id="1794219875546376069">
         <source>User <x id="PH"/> unbanned.</source>
-        <target>Usuário 
-          <x id="PH"/> foi desbanido.
-        </target>
+        <target state="translated">Usuário <x id="PH"/> não está mais banido.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="4350392487994839749" datatype="html">
@@ -11842,23 +11771,17 @@
       </trans-unit>
       <trans-unit id="6301381219225831298">
         <source>User <x id="PH"/> deleted.</source>
-        <target>Usuário 
-          <x id="PH"/> excluído.
-        </target>
+        <target state="translated">Usuário <x id="PH"/> excluído.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="3896582359861826661">
         <source>User <x id="PH"/> email set as verified</source>
-        <target>Email do usuário 
-          <x id="PH"/> confirmado
-        </target>
+        <target state="translated">E-mail do usuário <x id="PH"/> definido como verificado</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="8150022485860412528">
         <source>Account <x id="PH"/> muted.</source>
-        <target>Conta 
-          <x id="PH"/> silenciada.
-        </target>
+        <target state="translated">Conta <x id="PH"/> silenciada.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">135</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">279</context></context-group>
       </trans-unit>
@@ -11872,9 +11795,7 @@
       </trans-unit>
       <trans-unit id="2558977494773636050">
         <source>Account <x id="PH"/> muted by the instance.</source>
-        <target>Conta 
-          <x id="PH"/> silenciada pela instância.
-        </target>
+        <target state="translated">Conta <x id="PH"/> silenciada pela instância.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">431</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">191</context></context-group>
       </trans-unit>
@@ -11900,23 +11821,17 @@
       </trans-unit>
       <trans-unit id="3085641638748358969">
         <source>Account <x id="PH"/> unmuted by the instance.</source>
-        <target>Conta 
-          <x id="PH"/> não será mais silenciada pela instância.
-        </target>
+        <target state="translated">Conta <x id="PH"/> não está mais silenciada pela instância.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">205</context></context-group>
       </trans-unit>
       <trans-unit id="4991892477258601737">
         <source>Instance <x id="PH"/> muted by the instance.</source>
-        <target>Instância 
-          <x id="PH"/> silenciada pela instância.
-        </target>
+        <target state="translated">Instância <x id="PH"/> silenciada pela instância.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">219</context></context-group>
       </trans-unit>
       <trans-unit id="4379430340167561220">
         <source>Instance <x id="PH"/> unmuted by the instance.</source>
-        <target>Conta 
-          <x id="PH"/> não será mais silenciada pela instância.
-        </target>
+        <target state="translated">Instância <x id="PH"/> não está mais silenciada pela instância.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">233</context></context-group>
       </trans-unit>
       <trans-unit id="8173437618471379044" datatype="html">
@@ -12139,9 +12054,7 @@
       </trans-unit>
       <trans-unit id="968295009933361070">
         <source>Too many attempts, please try again after <x id="PH"/> minutes.</source>
-        <target>Muitas tentativas, por favor tente novamente depois de 
-          <x id="PH"/> minutos.
-        </target>
+        <target state="translated">Muitas tentativas, por favor tente novamente depois de <x id="PH"/> minutos.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
       <trans-unit id="4965472196059235310">
@@ -12179,45 +12092,37 @@
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="translated">Inscrito em todos os canais atuais de 
-          <x id="PH"/>. Você será notificado sobre todos os seus novos vídeos.
-        </target>
+        <target state="translated">Assinante de todos os canais atuais de <x id="PH"/>. Você será notificado sobre todos os novos vídeos dele.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">112</context></context-group>
       </trans-unit>
       <trans-unit id="2780460651686172544" datatype="html">
         <source>Subscribed to <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="translated">Inscrito em 
-          <x id="PH"/>. Você irá ser notificado de todo os seus novos videos.
-        </target>
+        <target state="translated">Assinante de <x id="PH"/>. Você será notificado de todos os novos vídeos dele.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="7019115336138470191">
         <source>Subscribed</source>
-        <target>Inscrito</target>
+        <target state="translated">Assinado</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="7070823964189404459" datatype="html">
         <source>Unsubscribed from all channels of <x id="PH"/> </source>
-        <target state="translated">Retirada a inscrição de todos os canais de 
-          <x id="PH"/>
-        </target>
+        <target state="translated">Cancelada assinatura de todos os canais de <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">142</context></context-group>
       </trans-unit>
       <trans-unit id="9201562016527884133">
         <source>Unsubscribed from <x id="PH"/> </source>
-        <target>Desinscrito de 
-          <x id="PH"/>
-        </target>
+        <target state="translated">Cancelada assinatura de <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">143</context></context-group>
       </trans-unit>
       <trans-unit id="516954136005961440">
         <source>Unsubscribed</source>
-        <target>Desinscrito</target>
+        <target state="translated">Não assinante</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="1000724328916033777" datatype="html">
         <source>Multiple ways to subscribe to the current channel</source>
-        <target state="translated">Várias maneiras de se inscrever no canal</target>
+        <target state="translated">Várias maneiras de assinar o canal atual</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="363499678348067004" datatype="html">
@@ -12227,7 +12132,7 @@
       </trans-unit>
       <trans-unit id="2279527393438260622" datatype="html">
         <source>Search videos, playlists, channels…</source>
-        <target state="translated">Pesquise vídeos, playlists, canais…</target>
+        <target state="translated">Pesquise vídeos, listas de reprodução, canais…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">3</context>
@@ -12243,10 +12148,7 @@
       </trans-unit>
       <trans-unit id="1056145626640340519" datatype="html">
         <source>Video added in <x id="PH"/> at timestamps <x id="PH_1"/></source>
-        <target state="translated">Vídeo adicionado em 
-          <x id="PH"/> na marca de tempo 
-          <x id="PH_1"/>
-        </target>
+        <target state="translated">Vídeo adicionado em <x id="PH"/> na marca de tempo <x id="PH_1"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">379</context></context-group>
       </trans-unit>
       <trans-unit id="7754186870520534716" datatype="html">
@@ -12449,7 +12351,7 @@
       </trans-unit>
       <trans-unit id="1950057220179636309" datatype="html">
         <source>Save to playlist</source>
-        <target state="translated">Salvar na playlist</target>
+        <target state="translated">Salvar na lista de reprodução</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context><context context-type="linenumber">61</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">332</context></context-group>
       </trans-unit>
@@ -12756,7 +12658,7 @@
       </trans-unit>
       <trans-unit id="8492933894084361602" datatype="html">
         <source>Subscribe to RSS feed "<x id="INTERPOLATION" equiv-text="{{ title }}"/>"</source>
-        <target state="new">Subscribe to RSS feed "<x id="INTERPOLATION" equiv-text="{{ title }}"/>"</target>
+        <target state="translated">Assine o feed RSS "<x id="INTERPOLATION" equiv-text="{{ title }}"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.html</context>
           <context context-type="linenumber">8</context>
@@ -12963,12 +12865,12 @@
       </trans-unit>
       <trans-unit id="5870421136141540382" datatype="html">
         <source>Stop looping playlist videos</source>
-        <target state="translated">Parar o ciclo de vídeos da playlist</target>
+        <target state="translated">Parar o ciclar de vídeos da lista de reprodução</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/playlist/video-watch-playlist.component.ts</context><context context-type="linenumber">255</context></context-group>
       </trans-unit>
       <trans-unit id="1599585307037758139" datatype="html">
         <source>Loop playlist videos</source>
-        <target state="translated">Ciclo de videos da playlist</target>
+        <target state="translated">Ciclo de vídeos da lista de reprodução</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/playlist/video-watch-playlist.component.ts</context><context context-type="linenumber">256</context></context-group>
       </trans-unit>
       <trans-unit id="1254111869788332501" datatype="html">
@@ -13206,7 +13108,7 @@
       </trans-unit>
       <trans-unit id="8067135025051844577" datatype="html">
         <source>Trending videos</source>
-        <target state="translated">Vídeos populares</target>
+        <target state="translated">Vídeos em alta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="664221386829541948" datatype="html">
