@@ -298,6 +298,7 @@
       </trans-unit>
       <trans-unit id="3174354408404578867" datatype="html">
         <source>About <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> туралы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">5</context>
@@ -358,6 +359,7 @@
       </trans-unit>
       <trans-unit id="7707185552909365717" datatype="html">
         <source>INFORMATION</source>
+        <target state="translated">АҚПАРАТ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">100,102</context>
@@ -442,6 +444,7 @@
       </trans-unit>
       <trans-unit id="2544569632476723854" datatype="html">
         <source>Terms</source>
+        <target state="translated">Шарттар</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">169</context>
@@ -478,6 +481,7 @@
       </trans-unit>
       <trans-unit id="8932880935037645502" datatype="html">
         <source>STATISTICS</source>
+        <target state="translated">СТАТИСТИКА</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">220</context>
@@ -928,6 +932,7 @@
       </trans-unit>
       <trans-unit id="5336387229608682776" datatype="html">
         <source>PeerTube Applications</source>
+        <target state="translated">PeerTube қолданбалары</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">40</context>
