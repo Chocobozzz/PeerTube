@@ -10670,7 +10670,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="5621067256208426608">
         <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target>Gebruikersnaam moet alfanumeriek zijn in kleine letters; stippen en underscores zijn toegestaan.</target>
+        <target state="translated">Gebruikersnaam moet alfanumeriek zijn in kleine letters; punt en underscore zijn toegestaan.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
@@ -10913,7 +10913,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="7915656854942800659">
         <source>Name should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target>Naam moet alfanumeriek zijn in kleine letters; stippen en underscores zijn toegestaan.</target>
+        <target state="translated">Naam moet alfanumeriek zijn in kleine letters; punt en underscore zijn toegestaan.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="6880459830525364741">
