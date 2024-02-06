@@ -82,7 +82,7 @@ export class VideoFetcher {
   }
 
   getVideoViewsUrl (videoUUID: string, host: string) {
-    return this.getVideoUrl(videoUUID, host) + '/views'
+    return 'https://' + this.getVideoUrl(videoUUID, host) + '/views'
   }
 
   private loadVideoInfo (videoId: string, host: string): Promise<Response> {
