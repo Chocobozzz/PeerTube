@@ -1,6 +1,5 @@
 import express from 'express'
 import {
-  apiRateLimiter,
   asyncMiddleware,
   authenticate
 } from '../../../middlewares/index.js'
@@ -19,8 +18,6 @@ import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
 
 const userImportRouter = express.Router()
-
-userImportRouter.use(apiRateLimiter)
 
 userImportRouter.post('/:userId/imports/import-resumable',
   authenticate,

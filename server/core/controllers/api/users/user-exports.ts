@@ -1,7 +1,6 @@
 import express from 'express'
 import { FileStorage, HttpStatusCode, UserExportRequest, UserExportRequestResult, UserExportState } from '@peertube/peertube-models'
 import {
-  apiRateLimiter,
   asyncMiddleware,
   authenticate,
   userExportDeleteValidator,
@@ -15,8 +14,6 @@ import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { CONFIG } from '@server/initializers/config.js'
 
 const userExportsRouter = express.Router()
-
-userExportsRouter.use(apiRateLimiter)
 
 userExportsRouter.post('/:userId/exports/request',
   authenticate,
