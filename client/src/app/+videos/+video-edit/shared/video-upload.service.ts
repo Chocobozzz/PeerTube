@@ -1,10 +1,9 @@
-import { UploaderX, UploadState, UploadxOptions } from 'ngx-uploadx'
-import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
+import { UploaderX, UploadxOptions } from 'ngx-uploadx'
 import { Injectable } from '@angular/core'
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { BytesPipe, VideoService } from '@app/shared/shared-main'
-import { HttpStatusCode } from '@peertube/peertube-models'
 import { UploaderXFormData } from './uploaderx-form-data'
+import { getUploadXRetryConfig } from '@app/helpers'
 
 @Injectable()
 export class VideoUploadService {
@@ -73,31 +72,7 @@ export class VideoUploadService {
 
       uploaderClass,
 
-      retryConfig: {
-        maxAttempts: 30, // maximum attempts for 503 codes, otherwise set to 6, see below
-        maxDelay: 120_000, // 2 min
-        shouldRetry: (code: number, attempts: number) => {
-          return code === HttpStatusCode.SERVICE_UNAVAILABLE_503 || ((code < 400 || code > 500) && attempts < 6)
-        }
-      }
-    }
-  }
-
-  // ---------------------------------------------------------------------------
-
-  buildHTTPErrorResponse (state: UploadState): HttpErrorResponse {
-    const error = state.response?.error?.message || state.response?.error || 'Unknown error'
-
-    return {
-      error: new Error(error),
-      name: 'HttpErrorResponse',
-      message: error,
-      ok: false,
-      headers: new HttpHeaders(state.responseHeaders),
-      status: +state.responseStatus,
-      statusText: error,
-      type: HttpEventType.Response,
-      url: state.url
+      retryConfig: getUploadXRetryConfig()
     }
   }
 }

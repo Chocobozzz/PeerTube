@@ -5,7 +5,6 @@ import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedVideoLiveModule } from '@app/shared/shared-video-live'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
-import { UploadProgressComponent } from './upload-progress.component'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
 import { VideoCaptionEditModalContentComponent } from './video-caption-edit-modal-content/video-caption-edit-modal-content.component'
 import { VideoEditComponent } from './video-edit.component'
@@ -24,8 +23,7 @@ import { VideoUploadService } from './video-upload.service'
   declarations: [
     VideoEditComponent,
     VideoCaptionAddModalComponent,
-    VideoCaptionEditModalContentComponent,
-    UploadProgressComponent
+    VideoCaptionEditModalContentComponent
   ],
 
   exports: [
@@ -35,8 +33,7 @@ import { VideoUploadService } from './video-upload.service'
     SharedFormModule,
     SharedGlobalIconModule,
 
-    VideoEditComponent,
-    UploadProgressComponent
+    VideoEditComponent
   ],
 
   providers: [

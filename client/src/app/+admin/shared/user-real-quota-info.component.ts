@@ -18,7 +18,7 @@ export class UserRealQuotaInfoComponent implements OnInit {
   }
 
   isTranscodingInformationDisplayed () {
-    return this.serverConfig.transcoding.enabledResolutions.length !== 0 && this.getQuotaAsNumber() > 0
+    return this.serverConfig.transcoding.enabledResolutions.length !== 0
   }
 
   computeQuotaWithTranscoding () {
@@ -37,7 +37,7 @@ export class UserRealQuotaInfoComponent implements OnInit {
     return multiplier * this.getQuotaAsNumber()
   }
 
-  private getQuotaAsNumber () {
+  getQuotaAsNumber () {
     return parseInt(this.videoQuota + '', 10)
   }
 }

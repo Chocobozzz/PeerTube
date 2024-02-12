@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { LoginGuard } from '../core'
+import { CanDeactivateGuard, LoginGuard } from '../core'
 import { MyAccountAbusesListComponent } from './my-account-abuses/my-account-abuses-list.component'
 import { MyAccountApplicationsComponent } from './my-account-applications/my-account-applications.component'
 import { MyAccountBlocklistComponent } from './my-account-blocklist/my-account-blocklist.component'
@@ -8,6 +8,7 @@ import { MyAccountServerBlocklistComponent } from './my-account-blocklist/my-acc
 import { MyAccountNotificationsComponent } from './my-account-notifications/my-account-notifications.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
 import { MyAccountTwoFactorComponent } from './my-account-settings/my-account-two-factor'
+import { MyAccountImportExportComponent } from './my-account-import-export'
 import { MyAccountComponent } from './my-account.component'
 
 const myAccountRoutes: Routes = [
@@ -135,6 +136,16 @@ const myAccountRoutes: Routes = [
         data: {
           meta: {
             title: $localize`Applications`
+          }
+        }
+      },
+      {
+        path: 'import-export',
+        component: MyAccountImportExportComponent,
+        canDeactivate: [ CanDeactivateGuard ],
+        data: {
+          meta: {
+            title: $localize`Import/Export`
           }
         }
       }

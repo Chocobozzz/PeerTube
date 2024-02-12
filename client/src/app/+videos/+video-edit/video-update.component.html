@@ -5,7 +5,7 @@
   </div>
 
   <my-upload-progress
-    [isUploadingVideo]="isReplacingVideoFile" [videoUploadPercents]="videoUploadPercents" [error]="uploadError" [videoUploaded]="updateDone"
+    [isUploading]="isReplacingVideoFile" [uploadPercents]="videoUploadPercents" [error]="uploadError" [uploaded]="updateDone"
     [enableRetryAfterError]="false" (cancel)="cancelUpload()"
   >
   </my-upload-progress>

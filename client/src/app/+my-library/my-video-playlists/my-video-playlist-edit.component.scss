@@ -1,10 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.video-playlist-title {
-  @include settings-big-title;
-}
-
 input[type=text] {
   @include peertube-input-text(340px);
 

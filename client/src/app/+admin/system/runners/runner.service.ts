@@ -108,8 +108,6 @@ export class RunnerService {
       }
     })
 
-    console.log(filters)
-
     return this.restService.addObjectParams(params, filters)
   }
 

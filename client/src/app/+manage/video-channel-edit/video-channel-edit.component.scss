@@ -1,10 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.video-channel-title {
-  @include settings-big-title;
-}
-
 my-actor-banner-edit {
   max-width: 500px;
 }

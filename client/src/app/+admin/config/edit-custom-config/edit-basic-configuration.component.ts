@@ -21,6 +21,9 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   defaultLandingPageOptions: SelectOptionsItem[] = []
   availableThemes: SelectOptionsItem[]
 
+  exportExpirationOptions: SelectOptionsItem[] = []
+  exportMaxUserVideoQuotaOptions: SelectOptionsItem[] = []
+
   constructor (
     private configService: ConfigService,
     private menuService: MenuService,
@@ -33,6 +36,15 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
     this.checkImportSyncField()
 
     this.availableThemes = this.themeService.buildAvailableThemes()
+
+    this.exportExpirationOptions = [
+      { id: 1000 * 3600 * 24, label: $localize`1 day` },
+      { id: 1000 * 3600 * 24 * 2, label: $localize`2 days` },
+      { id: 1000 * 3600 * 24 * 7, label: $localize`7 days` },
+      { id: 1000 * 3600 * 24 * 30, label: $localize`30 days` }
+    ]
+
+    this.exportMaxUserVideoQuotaOptions = this.configService.videoQuotaOptions.filter(o => (o.id as number) >= 1)
   }
 
   ngOnChanges (changes: SimpleChanges) {
@@ -62,6 +74,14 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
 
   getUserVideoQuota () {
     return this.form.value['user']['videoQuota']
+  }
+
+  isExportUsersEnabled () {
+    return this.form.value['export']['users']['enabled'] === true
+  }
+
+  getDisabledExportUsersClass () {
+    return { 'disabled-checkbox-extra': !this.isExportUsersEnabled() }
   }
 
   isSignupEnabled () {

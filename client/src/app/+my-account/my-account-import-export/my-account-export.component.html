@@ -1,0 +1,120 @@
+<div class="row">
+
+  <div class="col-12 col-lg-4 col-xl-3">
+    <h2 i18n class="section-left-column-title">EXPORT</h2>
+  </div>
+
+  <div class="col-12 col-lg-8 col-xl-9">
+
+    @if (isExportEnabled()) {
+
+      <p i18n>You can request an archive of your account containing:</p>
+
+      <ul>
+        <li i18n>Your account settings with avatar file</li>
+        <li i18n>Your channels with banner and avatar files</li>
+        <li i18n>Your muted accounts and servers</li>
+        <li i18n>Your comments</li>
+        <li i18n>Your likes and dislikes</li>
+        <li i18n>Your subscriptions and followers</li>
+        <li i18n>Your video playlists with thumbnail files</li>
+        <li i18n>Your videos with thumbnail, caption files. Video files can also be included in the archive</li>
+      </ul>
+
+      <p i18n>The exported data will contain multiple directories:</p>
+
+      <ul>
+        <li i18n>A directory containing an export in ActivityPub format, readable by any compliant software</li>
+        <li i18n>A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</li>
+        <li i18n>A directory containing static files (thumbnails, avatars, video files etc.)</li>
+      </ul>
+
+      <p i18n>You can only request one archive at a time.</p>
+
+      @if (isEmailEnabled()) {
+        <p i18n>An email will be sent when the export archive is available.</p>
+      }
+
+      <table *ngIf="userExports && userExports.length !== 0">
+        <tr>
+          <th i18n scope="column">Date</th>
+          <th i18n scope="column">State</th>
+          <th i18n scope="column">Size</th>
+          <th i18n scope="column">Expires on</th>
+          <th></th>
+        </tr>
+
+        <tr *ngFor="let export of userExports">
+          <td>{{ export.createdAt | date: 'medium' }}</td>
+          <td>{{ export.state.label }}</td>
+
+          <td>
+            <ng-container *ngIf="export.size">{{ export.size | bytes }}</ng-container>
+          </td>
+
+          <td>
+            <ng-container *ngIf="export.expiresOn">{{ export.expiresOn | date: 'medium' }}</ng-container>
+          </td>
+
+          <td>
+            <a i18n *ngIf="export.privateDownloadUrl" [href]="export.privateDownloadUrl" class="peertube-button-link grey-button">Download your archive</a>
+          </td>
+        </tr>
+      </table>
+
+      <div class="mt-3">
+        <input
+          class="peertube-button orange-button"
+          [disabled]="isRequestArchiveDisabled()"
+          (click)="openNewArchiveModal()"
+          type="submit" i18n-value value="Request a new archive"
+        >
+      </div>
+    } @else {
+      <p i18n>User export is not enabled by your administrator.</p>
+    }
+
+  </div>
+</div>
+
+<ng-template #exportModal let-hide="close">
+  <div class="modal-header">
+    <h4 class="modal-title" i18n>Archive settings</h4>
+
+    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
+      <my-global-icon iconName="cross"></my-global-icon>
+    </button>
+  </div>
+
+  <div class="modal-body">
+
+    <div i18n class="alert alert-warning" *ngIf="hasAlreadyACompletedArchive()">
+      You already have an active archive. Requesting a new export archive will remove the current one.
+    </div>
+
+    <div *ngIf="errorInModal" class="alert alert-danger">{{ errorInModal }}</div>
+
+    <my-peertube-checkbox
+      inputName="exportWithVideos" [(ngModel)]="exportWithVideosFiles"
+      i18n-labelText labelText="Include video files in archive file"
+    >
+      <ng-container ngProjectAs="description">
+        <div i18n>Including video files is required if you want to re-import your videos on another PeerTube website</div>
+        <div *ngIf="archiveWeightEstimation" i18n>If you include video files, the archive file will weigh <strong>approximately {{ archiveWeightEstimation | bytes }}</strong></div>
+      </ng-container>
+    </my-peertube-checkbox>
+
+  </div>
+
+  <div class="modal-footer inputs">
+    <input
+      type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
+      (click)="hide()" (key.enter)="hide()"
+    >
+
+    <input
+      type="submit" i18n-value value="Request an archive" class="peertube-button orange-button"
+      (click)="requestNewArchive()"
+    />
+  </div>
+</ng-template>

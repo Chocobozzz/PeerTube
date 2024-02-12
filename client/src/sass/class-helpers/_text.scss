@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 @use '_badges' as *;
 @use '_icons' as *;
 @use '_variables' as *;
@@ -19,6 +21,20 @@
 .underline-orange {
   display: inline-block;
   border-bottom: 0.19em solid pvar(--mainColor);
+}
+
+// ---------------------------------------------------------------------------
+
+.section-left-column-title {
+  text-transform: uppercase;
+  color: pvar(--mainColor);
+  font-weight: $font-bold;
+  font-size: 1rem;
+  margin-bottom: 10px;
+
+  &.section-left-column-title-danger {
+    color: color.adjust($color: #c54130, $lightness: 10%);
+  }
 }
 
 // ---------------------------------------------------------------------------

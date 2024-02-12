@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AuthUser, ScreenService } from '@app/core'
+import { AuthUser, ScreenService, ServerService } from '@app/core'
 import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
 
 @Component({
@@ -12,7 +12,8 @@ export class MyAccountComponent implements OnInit {
   user: AuthUser
 
   constructor (
-    private screenService: ScreenService
+    private screenService: ScreenService,
+    private server: ServerService
   ) { }
 
   get isBroadcastMessageDisplayed () {
@@ -54,6 +55,11 @@ export class MyAccountComponent implements OnInit {
       {
         label: $localize`Notifications`,
         routerLink: '/my-account/notifications'
+      },
+
+      {
+        label: $localize`Import/Export`,
+        routerLink: '/my-account/import-export'
       },
 
       {

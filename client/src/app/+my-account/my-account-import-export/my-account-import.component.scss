@@ -1,0 +1,11 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.button-file {
+  @include peertube-button-file(max-content);
+  @include orange-button;
+}
+
+.pt-alert-primary {
+  width: fit-content;
+}

@@ -10,6 +10,8 @@ import {
   ADMIN_EMAIL_VALIDATOR,
   CACHE_SIZE_VALIDATOR,
   CONCURRENCY_VALIDATOR,
+  EXPORT_EXPIRATION_VALIDATOR,
+  EXPORT_MAX_USER_VIDEO_QUOTA_VALIDATOR,
   INDEX_URL_VALIDATOR,
   INSTANCE_NAME_VALIDATOR,
   INSTANCE_SHORT_DESCRIPTION_VALIDATOR,
@@ -149,6 +151,16 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         },
         videoChannelSynchronization: {
           enabled: null
+        },
+        users: {
+          enabled: null
+        }
+      },
+      export: {
+        users: {
+          enabled: null,
+          maxUserVideoQuota: EXPORT_MAX_USER_VIDEO_QUOTA_VALIDATOR,
+          exportExpiration: EXPORT_EXPIRATION_VALIDATOR
         }
       },
       trending: {
