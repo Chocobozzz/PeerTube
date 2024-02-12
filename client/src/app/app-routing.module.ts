@@ -64,7 +64,10 @@ const routes: Routes = [
   {
     path: 'p',
     loadChildren: () => import('./+plugin-pages/plugin-pages.module').then(m => m.PluginPagesModule),
-    canActivateChild: [ MetaGuard ]
+    canActivateChild: [ MetaGuard ],
+    data: {
+      parentRoute: '/'
+    }
   },
 
   {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AuthUser, ScreenService } from '@app/core'
+import { AuthUser, PluginService, ScreenService } from '@app/core'
 import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
 
 @Component({
@@ -12,6 +12,7 @@ export class MyAccountComponent implements OnInit {
   user: AuthUser
 
   constructor (
+    private pluginService: PluginService,
     private screenService: ScreenService
   ) { }
 
@@ -20,10 +21,13 @@ export class MyAccountComponent implements OnInit {
   }
 
   ngOnInit (): void {
+    this.pluginService.ensurePluginsAreLoaded('my-account')
+    .then(() => this.buildMenu())
     this.buildMenu()
   }
 
   private buildMenu () {
+    const clientRoutes = this.pluginService.getRegisteredClientRouteSForParent('/my-account') || {}
     const moderationEntries: TopMenuDropdownParam = {
       label: $localize`Moderation`,
       children: [
@@ -61,7 +65,14 @@ export class MyAccountComponent implements OnInit {
         routerLink: '/my-account/applications'
       },
 
-      moderationEntries
+      moderationEntries,
+
+      ...Object.values(clientRoutes)
+      .filter((clientRoute) => clientRoute.menuItem?.label)
+      .map((clientRoute) => ({
+        label: clientRoute.menuItem.label,
+        routerLink: '/my-account/p/' + clientRoute.route
+      }))
     ]
   }
 }

@@ -6,7 +6,7 @@ import { logger } from '@root-helpers/logger'
 @Component({
   templateUrl: './plugin-pages.component.html'
 })
-export class PluginPagesComponent implements AfterViewInit {
+export class SharedPluginPagesComponent implements AfterViewInit {
   @ViewChild('root') root: ElementRef
 
   constructor (
@@ -18,14 +18,14 @@ export class PluginPagesComponent implements AfterViewInit {
   }
 
   ngAfterViewInit () {
-    this.pluginService.ensurePluginsAreLoaded('common')
+    this.pluginService.ensurePluginsAreLoaded(this.route.snapshot.data.pluginScope || 'common')
       .then(() => this.loadRoute())
   }
 
   private loadRoute () {
     const path = '/' + this.route.snapshot.url.map(u => u.path).join('/')
 
-    const registered = this.pluginService.getRegisteredClientRoute(path)
+    const registered = this.pluginService.getRegisteredClientRoute(path, this.route.snapshot.data.parentRoute)
     if (!registered) {
       logger.info(`Could not find registered route ${path}`, this.pluginService.getAllRegisteredClientRoutes())
 

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { PluginPagesComponent } from './plugin-pages.component'
+import { SharedPluginPagesComponent } from '@app/shared/shared-plugin-pages/plugin-pages.component'
 
 const pluginPagesRoutes: Routes = [
   {
     path: '**',
-    component: PluginPagesComponent,
+    component: SharedPluginPagesComponent,
     data: {
       reloadOnSameNavigation: true
     }
