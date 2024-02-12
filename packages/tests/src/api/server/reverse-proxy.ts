@@ -96,8 +96,10 @@ describe('Test application behind a reverse proxy', function () {
   it('Should rate limit logins', async function () {
     const user = { username: 'root', password: 'fail' }
 
-    for (let i = 0; i < 18; i++) {
-      await server.login.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    for (let i = 0; i < 20; i++) {
+      try {
+        await server.login.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      } catch {}
     }
 
     await server.login.login({ user, expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429 })

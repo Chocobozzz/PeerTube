@@ -50,7 +50,13 @@ describe('Object storage for video static file privacy', function () {
     for (const file of getAllFiles(video)) {
       const internalFileUrl = await sqlCommand.getInternalFileUrl(file.id)
       expectStartWith(internalFileUrl, ObjectStorageCommand.getScalewayBaseUrl())
-      await makeRawRequest({ url: internalFileUrl, token: server.accessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+
+      const { text } = await makeRawRequest({
+        url: internalFileUrl,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+      expect(text).to.contain('Unsupported Authorization Type')
     }
 
     const hls = getHLS(video)
