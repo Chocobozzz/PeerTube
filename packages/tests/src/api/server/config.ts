@@ -112,6 +112,8 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.import.videos.concurrency).to.equal(2)
   expect(data.import.videos.http.enabled).to.be.true
   expect(data.import.videos.torrent.enabled).to.be.true
+  expect(data.import.videoChannelSynchronization.enabled).to.be.false
+  expect(data.import.users.enabled).to.be.true
   expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.false
 
   expect(data.followers.instance.enabled).to.be.true
@@ -127,6 +129,10 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.broadcastMessage.dismissable).to.be.false
 
   expect(data.storyboards.enabled).to.be.true
+
+  expect(data.export.users.enabled).to.be.true
+  expect(data.export.users.exportExpiration).to.equal(1000 * 3600 * 48)
+  expect(data.export.users.maxUserVideoQuota).to.equal(10737418240)
 }
 
 function checkUpdatedConfig (data: CustomConfig) {
@@ -227,6 +233,8 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.import.videos.concurrency).to.equal(4)
   expect(data.import.videos.http.enabled).to.be.false
   expect(data.import.videos.torrent.enabled).to.be.false
+  expect(data.import.videoChannelSynchronization.enabled).to.be.false
+  expect(data.import.users.enabled).to.be.false
   expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.true
 
   expect(data.followers.instance.enabled).to.be.false
@@ -242,6 +250,10 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.broadcastMessage.dismissable).to.be.true
 
   expect(data.storyboards.enabled).to.be.false
+
+  expect(data.export.users.enabled).to.be.false
+  expect(data.export.users.exportExpiration).to.equal(43)
+  expect(data.export.users.maxUserVideoQuota).to.equal(42)
 }
 
 const newCustomConfig: CustomConfig = {
@@ -415,6 +427,9 @@ const newCustomConfig: CustomConfig = {
     videoChannelSynchronization: {
       enabled: false,
       maxPerUser: 10
+    },
+    users: {
+      enabled: false
     }
   },
   trending: {
@@ -469,6 +484,13 @@ const newCustomConfig: CustomConfig = {
   },
   storyboards: {
     enabled: false
+  },
+  export: {
+    users: {
+      enabled: false,
+      exportExpiration: 43,
+      maxUserVideoQuota: 42
+    }
   }
 }
 

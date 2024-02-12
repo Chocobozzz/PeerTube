@@ -92,7 +92,7 @@ describe('Test channel synchronizations', function () {
         this.timeout(120_000)
 
         {
-          const { video } = await servers[0].imports.importVideo({
+          const { video } = await servers[0].videoImports.importVideo({
             attributes: {
               channelId: servers[0].store.channel.id,
               privacy: VideoPrivacy.PUBLIC,
@@ -210,7 +210,7 @@ describe('Test channel synchronizations', function () {
       })
 
       it('Should list imports of a channel synchronization', async function () {
-        const { total, data } = await servers[0].imports.getMyVideoImports({ videoChannelSyncId: rootChannelSyncId })
+        const { total, data } = await servers[0].videoImports.getMyVideoImports({ videoChannelSyncId: rootChannelSyncId })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)

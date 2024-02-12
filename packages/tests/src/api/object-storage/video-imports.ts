@@ -24,7 +24,7 @@ async function importVideo (server: PeerTubeServer) {
     targetUrl: FIXTURE_URLS.goodVideo720
   }
 
-  const { video: { uuid } } = await server.imports.importVideo({ attributes })
+  const { video: { uuid } } = await server.videoImports.importVideo({ attributes })
 
   return uuid
 }
@@ -45,7 +45,7 @@ describe('Object storage for video import', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    await server.config.enableImports()
+    await server.config.enableVideoImports()
   })
 
   describe('Without transcoding', async function () {

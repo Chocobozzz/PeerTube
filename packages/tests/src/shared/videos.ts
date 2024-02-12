@@ -113,6 +113,8 @@ async function completeVideoCheck (options: {
   server: PeerTubeServer
   originServer: PeerTubeServer
   videoUUID: string
+  objectStorageBaseUrl?: string
+
   attributes: {
     name: string
     category: number
@@ -150,7 +152,7 @@ async function completeVideoCheck (options: {
     previewfile?: string
   }
 }) {
-  const { attributes, originServer, server, videoUUID } = options
+  const { attributes, originServer, server, videoUUID, objectStorageBaseUrl } = options
 
   await loadLanguages()
 
@@ -215,7 +217,13 @@ async function completeVideoCheck (options: {
     await testImageGeneratedByFFmpeg(server.url, attributes.previewfile, video.previewPath)
   }
 
-  await completeWebVideoFilesCheck({ server, originServer, videoUUID: video.uuid, ...pick(attributes, [ 'fixture', 'files' ]) })
+  await completeWebVideoFilesCheck({
+    server,
+    originServer,
+    videoUUID: video.uuid,
+    objectStorageBaseUrl,
+    ...pick(attributes, [ 'fixture', 'files' ])
+  })
 }
 
 async function checkVideoFilesWereRemoved (options: {
@@ -290,9 +298,11 @@ function checkUploadVideoParam (options: {
 
   return mode === 'legacy'
     ? server.videos.buildLegacyUpload({ token, attributes, expectedStatus: expectedStatus || completedExpectedStatus })
-    : server.videos.buildResumeUpload({
+    : server.videos.buildResumeVideoUpload({
       token,
-      attributes,
+      fixture: attributes.fixture,
+      attaches: this.buildUploadAttaches(attributes),
+      fields: this.buildUploadFields(attributes),
       expectedStatus,
       completedExpectedStatus,
       path: '/api/v1/videos/upload-resumable'

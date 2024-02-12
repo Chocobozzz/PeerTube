@@ -2,7 +2,7 @@ import { HttpStatusCode, ResultList, VideoImport, VideoImportCreate } from '@pee
 import { unwrapBody } from '../requests/index.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
-export class ImportsCommand extends AbstractCommand {
+export class VideoImportsCommand extends AbstractCommand {
 
   importVideo (options: OverrideCommandOptions & {
     attributes: (VideoImportCreate | { torrentfile?: string, previewfile?: string, thumbnailfile?: string })

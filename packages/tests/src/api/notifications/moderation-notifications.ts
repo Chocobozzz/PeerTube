@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { AbuseState, CustomConfig, UserNotification, UserRole, VideoPrivacy } from '@peertube/peertube-models'
+import { AbuseState, UserNotification, UserRole, VideoPrivacy } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { cleanupTests, PeerTubeServer, waitJobs } from '@peertube/peertube-server-commands'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
@@ -425,7 +425,6 @@ describe('Test moderation notifications', function () {
     let uuid: string
     let shortUUID: string
     let videoName: string
-    let currentCustomConfig: CustomConfig
 
     before(async function () {
 
@@ -450,23 +449,7 @@ describe('Test moderation notifications', function () {
         token: userToken1
       }
 
-      currentCustomConfig = await servers[0].config.getCustomConfig()
-
-      const autoBlacklistTestsCustomConfig = {
-        ...currentCustomConfig,
-
-        autoBlacklist: {
-          videos: {
-            ofUsers: {
-              enabled: true
-            }
-          }
-        }
-      }
-
-      // enable transcoding otherwise own publish notification after transcoding not expected
-      autoBlacklistTestsCustomConfig.transcoding.enabled = true
-      await servers[0].config.updateCustomConfig({ newCustomConfig: autoBlacklistTestsCustomConfig })
+      await servers[0].config.enableAutoBlacklist()
 
       await servers[0].subscriptions.add({ targetUri: 'user_1_channel@' + servers[0].host })
       await servers[1].subscriptions.add({ targetUri: 'user_1_channel@' + servers[0].host })
@@ -594,8 +577,6 @@ describe('Test moderation notifications', function () {
     })
 
     after(async () => {
-      await servers[0].config.updateCustomConfig({ newCustomConfig: currentCustomConfig })
-
       await servers[0].subscriptions.remove({ uri: 'user_1_channel@' + servers[0].host })
       await servers[1].subscriptions.remove({ uri: 'user_1_channel@' + servers[0].host })
     })

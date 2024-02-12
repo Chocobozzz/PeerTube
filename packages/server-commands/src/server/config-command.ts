@@ -46,15 +46,15 @@ export class ConfigCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  disableImports () {
-    return this.setImportsEnabled(false)
+  disableVideoImports () {
+    return this.setVideoImportsEnabled(false)
   }
 
-  enableImports () {
-    return this.setImportsEnabled(true)
+  enableVideoImports () {
+    return this.setVideoImportsEnabled(true)
   }
 
-  private setImportsEnabled (enabled: boolean) {
+  private setVideoImportsEnabled (enabled: boolean) {
     return this.updateExistingSubConfig({
       newConfig: {
         import: {
@@ -109,6 +109,74 @@ export class ConfigCommand extends AbstractCommand {
       newConfig: {
         import: {
           videoChannelSynchronization: {
+            enabled
+          }
+        }
+      }
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  enableAutoBlacklist () {
+    return this.setAutoblacklistEnabled(true)
+  }
+
+  disableAutoBlacklist () {
+    return this.setAutoblacklistEnabled(false)
+  }
+
+  private setAutoblacklistEnabled (enabled: boolean) {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        autoBlacklist: {
+          videos: {
+            ofUsers: {
+              enabled
+            }
+          }
+        }
+      }
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  enableUserImport () {
+    return this.setUserImportEnabled(true)
+  }
+
+  disableUserImport () {
+    return this.setUserImportEnabled(false)
+  }
+
+  private setUserImportEnabled (enabled: boolean) {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        import: {
+          users: {
+            enabled
+          }
+        }
+      }
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  enableUserExport () {
+    return this.setUserExportEnabled(true)
+  }
+
+  disableUserExport () {
+    return this.setUserExportEnabled(false)
+  }
+
+  private setUserExportEnabled (enabled: boolean) {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        export: {
+          users: {
             enabled
           }
         }
@@ -552,6 +620,16 @@ export class ConfigCommand extends AbstractCommand {
         videoChannelSynchronization: {
           enabled: false,
           maxPerUser: 10
+        },
+        users: {
+          enabled: true
+        }
+      },
+      export: {
+        users: {
+          enabled: true,
+          maxUserVideoQuota: 5242881,
+          exportExpiration: 1000 * 3600
         }
       },
       trending: {

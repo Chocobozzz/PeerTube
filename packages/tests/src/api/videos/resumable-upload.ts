@@ -42,16 +42,22 @@ describe('Test resumable upload', function () {
 
     const size = await buildSize(defaultFixture, options.size)
 
-    const attributes = {
-      name: 'video',
-      channelId: options.channelId ?? server.store.channel.id,
-      privacy: VideoPrivacy.PUBLIC,
-      fixture: defaultFixture
-    }
-
     const mimetype = 'video/mp4'
 
-    const res = await server.videos.prepareResumableUpload({ path, token, attributes, size, mimetype, originalName, lastModified })
+    const res = await server.videos.prepareVideoResumableUpload({
+      path,
+      token,
+      fixture: defaultFixture,
+      fields: {
+        name: 'video',
+        channelId: options.channelId ?? server.store.channel.id,
+        privacy: VideoPrivacy.PUBLIC
+      },
+      size,
+      mimetype,
+      originalName,
+      lastModified
+    })
 
     return res.header['location'].split('?')[1]
   }
@@ -71,7 +77,7 @@ describe('Test resumable upload', function () {
     const size = await buildSize(defaultFixture, options.size)
     const absoluteFilePath = buildAbsoluteFixturePath(defaultFixture)
 
-    return server.videos.sendResumableChunks({
+    return server.videos.sendResumableVideoChunks({
       token,
       path,
       pathUploadId,
@@ -133,7 +139,7 @@ describe('Test resumable upload', function () {
     it('Should correctly delete files after an upload', async function () {
       const uploadId = await prepareUpload()
       await sendChunks({ pathUploadId: uploadId })
-      await server.videos.endResumableUpload({ path, pathUploadId: uploadId })
+      await server.videos.endVideoResumableUpload({ path, pathUploadId: uploadId })
 
       expect(await countResumableUploads()).to.equal(0)
     })
