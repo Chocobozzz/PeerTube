@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { PluginService } from '@app/core'
+import { MetaService, PluginService } from '@app/core'
 import { logger } from '@root-helpers/logger'
 
 @Component({
@@ -11,6 +11,7 @@ export class SharedPluginPagesComponent implements AfterViewInit {
   @ViewChild('root') root: ElementRef
 
   constructor (
+    private metaService: MetaService,
     private route: ActivatedRoute,
     private router: Router,
     private pluginService: PluginService
@@ -31,6 +32,10 @@ export class SharedPluginPagesComponent implements AfterViewInit {
       logger.info(`Could not find registered route ${path}`, this.pluginService.getAllRegisteredClientRoutes())
 
       return this.router.navigate([ '/404' ], { skipLocationChange: true })
+    }
+
+    if (registered.title) {
+      this.metaService.setTitle(registered.title)
     }
 
     registered.onMount({ rootEl: this.root.nativeElement })
