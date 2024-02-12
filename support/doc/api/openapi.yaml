@@ -172,6 +172,12 @@ tags:
       Using some features of PeerTube require authentication, for which User
       provide different levels of permission as well as associated user
       information. Each user has a corresponding local Account for federation.
+  - name: User Exports
+    description: >
+      To create an archive of user data.
+  - name: User Imports
+    description: >
+      To import an archive of user data.
   - name: My User
     description: >
       Operations related to your own User, when logged-in.
@@ -320,6 +326,8 @@ x-tagGroups:
     tags:
       - Accounts
       - Users
+      - User Exports
+      - User Imports
       - My User
       - My Subscriptions
       - My Notifications
@@ -1615,6 +1623,8 @@ paths:
       summary: Request two factor auth
       operationId: requestTwoFactor
       description: Request two factor authentication for a user
+      security:
+        - OAuth2: []
       tags:
         - Users
       parameters:
@@ -1647,6 +1657,8 @@ paths:
       summary: Confirm two factor auth
       operationId: confirmTwoFactorRequest
       description: Confirm a two factor authentication request
+      security:
+        - OAuth2: []
       tags:
         - Users
       parameters:
@@ -1679,6 +1691,8 @@ paths:
       summary: Disable two factor auth
       operationId: disableTwoFactor
       description: Disable two factor authentication of a user
+      security:
+        - OAuth2: []
       tags:
         - Users
       parameters:
@@ -1699,6 +1713,214 @@ paths:
           description: invalid password
         '404':
           description: user not found
+
+  /api/v1/users/{userId}/imports/import-resumable:
+    post:
+      summary: Initialize the resumable user import
+      description: "**PeerTube >= 6.1** Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to initialize the import of the archive"
+      operationId: userImportResumableInit
+      security:
+        - OAuth2: []
+      tags:
+        - User Imports
+      parameters:
+        - $ref: '#/components/parameters/resumableUploadInitContentLengthHeader'
+        - $ref: '#/components/parameters/resumableUploadInitContentTypeHeader'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserImportResumable'
+      responses:
+        '201':
+          description: created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: url
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+    put:
+      summary: Send chunk for the resumable user import
+      description: "**PeerTube >= 6.1** Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to continue, pause or resume the import of the archive"
+      operationId: userImportResumable
+      security:
+        - OAuth2: []
+      tags:
+        - User Imports
+      parameters:
+        - $ref: '#/components/parameters/resumableUploadId'
+        - $ref: '#/components/parameters/resumableUploadChunkContentRangeHeader'
+        - $ref: '#/components/parameters/resumableUploadChunkContentLengthHeader'
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '204':
+          description: 'last chunk received: successful operation'
+        '308':
+          description: resume incomplete
+          headers:
+            Range:
+              schema:
+                type: string
+                example: bytes=0-262143
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+    delete:
+      summary: Cancel the resumable user import
+      description: "**PeerTube >= 6.1** Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the resumable user import"
+      operationId: userImportResumableCancel
+      security:
+        - OAuth2: []
+      tags:
+        - User Imports
+      parameters:
+        - $ref: '#/components/parameters/resumableUploadId'
+        - name: Content-Length
+          in: header
+          required: true
+          schema:
+            type: number
+            example: 0
+      responses:
+        '204':
+          description: import cancelled
+          headers:
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+
+  /api/v1/users/{userId}/imports/latest:
+    get:
+      summary: Get latest user import
+      description: "**PeerTube >= 6.1**"
+      operationId: getLatestUserImport
+      security:
+        - OAuth2: []
+      tags:
+        - User Imports
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  state:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/UserImportState'
+                      label:
+                        type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+
+  /api/v1/users/{userId}/exports/request:
+    post:
+      summary: Request user export
+      operationId: requestUserExport
+      description: Request an archive of user data. An email is sent when the archive is ready.
+      security:
+        - OAuth2: []
+      tags:
+        - User Exports
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                withVideoFiles:
+                  type: boolean
+                  description: Whether to include video files in the archive
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  export:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+
+  /api/v1/users/{userId}/exports:
+    get:
+      summary: List user exports
+      description: "**PeerTube >= 6.1**"
+      operationId: listUserExports
+      security:
+        - OAuth2: []
+      tags:
+        - User Exports
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  state:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/UserExportState'
+                      label:
+                        type: string
+                  size:
+                    type: integer
+                    description: Size of the archive file in bytes
+                  privateDownloadUrl:
+                    type: string
+                    description: This URL already contains the JWT token, so no additional authentication credentials are required
+                  createdAt:
+                    type: string
+                    format: date-time
+                  expiresOn:
+                    type: string
+                    format: date-time
+  /api/v1/users/{userId}/exports/{id}:
+    delete:
+      summary: Delete a user export
+      description: "**PeerTube >= 6.1**"
+      operationId: deleteUserExport
+      security:
+        - OAuth2: []
+      tags:
+        - User Exports
+      parameters:
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: successful operation
 
   /api/v1/users/me:
     get:
@@ -6486,6 +6708,13 @@ components:
       description: Entity id
       schema:
         $ref: '#/components/schemas/id'
+    userId:
+      name: userId
+      in: path
+      required: true
+      description: User id
+      schema:
+        $ref: '#/components/schemas/id'
     registrationId:
       name: registrationId
       in: path
@@ -7129,6 +7358,34 @@ components:
             - `9`: To edit using studio edition feature
         label:
           type: string
+
+    UserExportState:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      description: |
+        The user export state:
+          - `1`: Pending
+          - `2`: Processing
+          - `3`: Completed
+          - `4`: Errored
+
+    UserImportState:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      description: |
+        The user import state:
+          - `1`: Pending
+          - `2`: Processing
+          - `3`: Completed
+          - `4`: Errored
 
     AbuseStateSet:
       type: integer
@@ -8079,6 +8336,25 @@ components:
               properties:
                 enabled:
                   type: boolean
+            users:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+        export:
+          type: object
+          properties:
+            users:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                exportExpiration:
+                  type: number
+                  description: In milliseconds
+                maxUserVideoQuota:
+                  type: number
+                  description: In bytes
         autoBlacklist:
           type: object
           properties:
@@ -8147,9 +8423,11 @@ components:
           properties:
             videoQuota:
               type: integer
+              description: In bytes
               example: 16810141515
             videoQuotaDaily:
               type: integer
+              description: In bytes
               example: 1681014151
         trending:
           type: object
@@ -8721,6 +8999,13 @@ components:
           type: string
           format: filename
           example: what_is_peertube.mp4
+    UserImportResumable:
+      properties:
+        filename:
+          description: Archive filename including extension
+          type: string
+          format: filename
+          example: "user-export-6-2024-02-09T10_12_11.682Z"
     CommentThreadResponse:
       properties:
         total:
