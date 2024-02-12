@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router'
-import { PluginPagesComponent } from './plugin-pages.component'
+import { SharedPluginPagesComponent } from './plugin-pages.component'
 
 export default [
   {
     path: '**',
-    component: PluginPagesComponent,
+    component: SharedPluginPagesComponent,
     data: {
       reloadOnSameNavigation: true
     }

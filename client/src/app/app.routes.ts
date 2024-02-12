@@ -62,8 +62,11 @@ const routes: Routes = [
   },
   {
     path: 'p',
-    loadChildren: () => import('./+plugin-pages/routes'),
-    canActivateChild: [ MetaGuard ]
+    loadChildren: () => import('./shared/shared-plugin-pages/routes'),
+    canActivateChild: [ MetaGuard ],
+    data: {
+      parentRoute: '/'
+    }
   },
 
   {
