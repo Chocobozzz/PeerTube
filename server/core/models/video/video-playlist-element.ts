@@ -271,7 +271,8 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
           model: VideoModel.unscoped(),
           required: true
         }
-      ]
+      ],
+      order: getSort('position')
     }
 
     return VideoPlaylistElementModel.findAll(query)

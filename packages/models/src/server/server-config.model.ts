@@ -213,7 +213,7 @@ export interface ServerConfig {
     }
 
     users: {
-      enabled:boolean
+      enabled: boolean
     }
   }
 

@@ -301,8 +301,8 @@ function checkUploadVideoParam (options: {
     : server.videos.buildResumeVideoUpload({
       token,
       fixture: attributes.fixture,
-      attaches: this.buildUploadAttaches(attributes),
-      fields: this.buildUploadFields(attributes),
+      attaches: server.videos.buildUploadAttaches(attributes, false),
+      fields: server.videos.buildUploadFields(attributes),
       expectedStatus,
       completedExpectedStatus,
       path: '/api/v1/videos/upload-resumable'

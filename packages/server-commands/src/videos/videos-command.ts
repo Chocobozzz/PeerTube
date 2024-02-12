@@ -4,8 +4,7 @@ import validator from 'validator'
 import { getAllPrivacies, omit, pick, wait } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
-  HttpStatusCodeType,
-  ResultList,
+  HttpStatusCodeType, ResultList,
   UserVideoRateType,
   Video,
   VideoCreate,
@@ -631,10 +630,12 @@ export class VideosCommand extends AbstractCommand {
     return super.sendResumableChunks<{ video: VideoCreateResult }>(options)
   }
 
-  async buildResumeVideoUpload (options: Parameters<AbstractCommand['buildResumeUpload']>[0]) {
+  async buildResumeVideoUpload (
+    options: Parameters<AbstractCommand['buildResumeUpload']>[0]
+  ): Promise<VideoCreateResult> {
     const result = await super.buildResumeUpload<{ video: VideoCreateResult }>(options)
 
-    return result?.video || undefined
+    return result?.video || result as any
   }
 
   prepareVideoResumableUpload (options: Parameters<AbstractCommand['prepareResumableUpload']>[0]) {
