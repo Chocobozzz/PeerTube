@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AuthUser, ScreenService, ServerService } from '@app/core'
+import { AuthUser, ScreenService } from '@app/core'
 import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
 
 @Component({
@@ -11,10 +11,7 @@ export class MyAccountComponent implements OnInit {
   menuEntries: TopMenuDropdownParam[] = []
   user: AuthUser
 
-  constructor (
-    private screenService: ScreenService,
-    private server: ServerService
-  ) { }
+  constructor (private screenService: ScreenService) { }
 
   get isBroadcastMessageDisplayed () {
     return this.screenService.isBroadcastMessageDisplayed

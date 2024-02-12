@@ -5,8 +5,7 @@ import { first } from 'rxjs'
 
 @Component({
   selector: 'my-account-import-export',
-  templateUrl: './my-account-import-export.component.html',
-  styleUrls: [ './my-account-import-export.component.scss' ]
+  templateUrl: './my-account-import-export.component.html'
 })
 export class MyAccountImportExportComponent implements OnInit, CanComponentDeactivate {
   @ViewChild('accountImport') accountImport: MyAccountImportComponent
@@ -20,11 +19,11 @@ export class MyAccountImportExportComponent implements OnInit, CanComponentDeact
 
   ngOnInit () {
     this.authService.userInformationLoaded
-    .pipe(first())
-    .subscribe(() => {
-      this.userService.getMyVideoQuotaUsed()
-        .subscribe(res => this.videoQuotaUsed = res.videoQuotaUsed)
-    })
+      .pipe(first())
+      .subscribe(() => {
+        this.userService.getMyVideoQuotaUsed()
+          .subscribe(res => this.videoQuotaUsed = res.videoQuotaUsed)
+      })
   }
 
   canDeactivate () {
