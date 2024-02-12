@@ -85,6 +85,13 @@ server {
     try_files /dev/null @api;
   }
 
+  location ~ ^/api/v1/users/[^/]+/imports/import-resumable$ {
+    client_max_body_size    0;
+    proxy_request_buffering off;
+
+    try_files /dev/null @api;
+  }
+
   location ~ ^/api/v1/videos/(upload|([^/]+/studio/edit))$ {
     limit_except POST HEAD { deny all; }
 
