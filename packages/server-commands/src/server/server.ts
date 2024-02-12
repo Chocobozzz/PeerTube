@@ -17,12 +17,14 @@ import { SocketIOCommand } from '../socket/index.js'
 import {
   AccountsCommand,
   BlocklistCommand,
+  UserExportsCommand,
   LoginCommand,
   NotificationsCommand,
   RegistrationsCommand,
   SubscriptionsCommand,
   TwoFactorCommand,
-  UsersCommand
+  UsersCommand,
+  UserImportsCommand
 } from '../users/index.js'
 import {
   BlacklistCommand,
@@ -33,7 +35,7 @@ import {
   ChaptersCommand,
   CommentsCommand,
   HistoryCommand,
-  ImportsCommand,
+  VideoImportsCommand,
   LiveCommand,
   PlaylistsCommand,
   ServicesCommand,
@@ -90,7 +92,6 @@ export class PeerTubeServer {
     user?: {
       username: string
       password: string
-      email?: string
     }
 
     channel?: VideoChannel
@@ -134,7 +135,7 @@ export class PeerTubeServer {
   changeOwnership?: ChangeOwnershipCommand
   playlists?: PlaylistsCommand
   history?: HistoryCommand
-  imports?: ImportsCommand
+  videoImports?: VideoImportsCommand
   channelSyncs?: ChannelSyncsCommand
   streamingPlaylists?: StreamingPlaylistsCommand
   channels?: ChannelsCommand
@@ -154,6 +155,9 @@ export class PeerTubeServer {
 
   storyboard?: StoryboardCommand
   chapters?: ChaptersCommand
+
+  userImports?: UserImportsCommand
+  userExports?: UserExportsCommand
 
   runners?: RunnersCommand
   runnerRegistrationTokens?: RunnerRegistrationTokensCommand
@@ -426,7 +430,7 @@ export class PeerTubeServer {
     this.changeOwnership = new ChangeOwnershipCommand(this)
     this.playlists = new PlaylistsCommand(this)
     this.history = new HistoryCommand(this)
-    this.imports = new ImportsCommand(this)
+    this.videoImports = new VideoImportsCommand(this)
     this.channelSyncs = new ChannelSyncsCommand(this)
     this.streamingPlaylists = new StreamingPlaylistsCommand(this)
     this.channels = new ChannelsCommand(this)
@@ -445,6 +449,9 @@ export class PeerTubeServer {
 
     this.storyboard = new StoryboardCommand(this)
     this.chapters = new ChaptersCommand(this)
+
+    this.userExports = new UserExportsCommand(this)
+    this.userImports = new UserImportsCommand(this)
 
     this.runners = new RunnersCommand(this)
     this.runnerRegistrationTokens = new RunnerRegistrationTokensCommand(this)

@@ -75,13 +75,13 @@ describe('Test upload quota', function () {
         channelId: server.store.channel.id,
         privacy: VideoPrivacy.PUBLIC
       }
-      await server.imports.importVideo({ attributes: { ...baseAttributes, targetUrl: FIXTURE_URLS.goodVideo } })
-      await server.imports.importVideo({ attributes: { ...baseAttributes, magnetUri: FIXTURE_URLS.magnet } })
-      await server.imports.importVideo({ attributes: { ...baseAttributes, torrentfile: 'video-720p.torrent' as any } })
+      await server.videoImports.importVideo({ attributes: { ...baseAttributes, targetUrl: FIXTURE_URLS.goodVideo } })
+      await server.videoImports.importVideo({ attributes: { ...baseAttributes, magnetUri: FIXTURE_URLS.magnet } })
+      await server.videoImports.importVideo({ attributes: { ...baseAttributes, torrentfile: 'video-720p.torrent' as any } })
 
       await waitJobs([ server ])
 
-      const { total, data: videoImports } = await server.imports.getMyVideoImports()
+      const { total, data: videoImports } = await server.videoImports.getMyVideoImports()
       expect(total).to.equal(3)
 
       expect(videoImports).to.have.lengthOf(3)

@@ -192,6 +192,16 @@ describe('Test config API validators', function () {
       videoChannelSynchronization: {
         enabled: false,
         maxPerUser: 10
+      },
+      users: {
+        enabled: false
+      }
+    },
+    export: {
+      users: {
+        enabled: false,
+        maxUserVideoQuota: 40,
+        exportExpiration: 10
       }
     },
     trending: {

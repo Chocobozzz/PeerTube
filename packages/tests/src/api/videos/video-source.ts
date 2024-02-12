@@ -263,20 +263,6 @@ describe('Test a video file replacement', function () {
 
     describe('Autoblacklist', function () {
 
-      function updateAutoBlacklist (enabled: boolean) {
-        return servers[0].config.updateExistingSubConfig({
-          newConfig: {
-            autoBlacklist: {
-              videos: {
-                ofUsers: {
-                  enabled
-                }
-              }
-            }
-          }
-        })
-      }
-
       async function expectBlacklist (uuid: string, value: boolean) {
         const video = await servers[0].videos.getWithToken({ id: uuid })
 
@@ -284,7 +270,7 @@ describe('Test a video file replacement', function () {
       }
 
       before(async function () {
-        await updateAutoBlacklist(true)
+        await servers[0].config.enableAutoBlacklist()
       })
 
       it('Should auto blacklist an unblacklisted video after file replacement', async function () {
@@ -326,7 +312,7 @@ describe('Test a video file replacement', function () {
         await servers[0].blacklist.remove({ videoId: uuid })
         await expectBlacklist(uuid, false)
 
-        await updateAutoBlacklist(false)
+        await servers[0].config.disableAutoBlacklist()
 
         await servers[0].videos.replaceSourceFile({ videoId: uuid, token: userToken, fixture: 'video_short1.webm' })
         await waitJobs(servers)

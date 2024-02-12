@@ -59,7 +59,7 @@ describe('Test config defaults', function () {
 
     before(async function () {
       await server.config.disableTranscoding()
-      await server.config.enableImports()
+      await server.config.enableVideoImports()
       await server.config.enableLive({ allowReplay: false, transcoding: false })
     })
 
@@ -82,7 +82,7 @@ describe('Test config defaults', function () {
     })
 
     it('Should respect default values when importing a video using URL', async function () {
-      const { video: { id } } = await server.imports.importVideo({
+      const { video: { id } } = await server.videoImports.importVideo({
         attributes: {
           ...attributes,
           channelId,
@@ -95,7 +95,7 @@ describe('Test config defaults', function () {
     })
 
     it('Should respect default values when importing a video using magnet URI', async function () {
-      const { video: { id } } = await server.imports.importVideo({
+      const { video: { id } } = await server.videoImports.importVideo({
         attributes: {
           ...attributes,
           channelId,

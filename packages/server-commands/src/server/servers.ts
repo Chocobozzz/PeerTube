@@ -21,7 +21,7 @@ function createMultipleServers (totalServers: number, configOverride?: object, o
 }
 
 function killallServers (servers: PeerTubeServer[]) {
-  return Promise.all(servers.map(s => s.kill()))
+  return Promise.all(servers.filter(s => !!s).map(s => s.kill()))
 }
 
 async function cleanupTests (servers: PeerTubeServer[]) {
@@ -33,6 +33,8 @@ async function cleanupTests (servers: PeerTubeServer[]) {
 
   let p: Promise<any>[] = []
   for (const server of servers) {
+    if (!server) continue
+
     p = p.concat(server.servers.cleanupTests())
   }
 

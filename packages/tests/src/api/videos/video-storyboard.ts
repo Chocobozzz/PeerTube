@@ -126,7 +126,7 @@ describe('Test video storyboard', function () {
     if (areHttpImportTestsDisabled()) return
 
     // 3s video
-    const { video } = await servers[0].imports.importVideo({
+    const { video } = await servers[0].videoImports.importVideo({
       attributes: {
         targetUrl: FIXTURE_URLS.goodVideo,
         channelId: servers[0].store.channel.id,
@@ -146,7 +146,7 @@ describe('Test video storyboard', function () {
     if (areHttpImportTestsDisabled()) return
 
     // 10s video
-    const { video } = await servers[0].imports.importVideo({
+    const { video } = await servers[0].videoImports.importVideo({
       attributes: {
         magnetUri: FIXTURE_URLS.magnet,
         channelId: servers[0].store.channel.id,
