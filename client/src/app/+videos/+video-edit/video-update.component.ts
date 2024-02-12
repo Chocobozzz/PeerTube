@@ -7,7 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, ConfirmService, Notifier, ServerService, UserService } from '@app/core'
-import { genericUploadErrorHandler } from '@app/helpers'
+import { buildHTTPErrorResponse, genericUploadErrorHandler } from '@app/helpers'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import {
   Video,
@@ -329,7 +329,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit, OnDest
           return this.refreshTokenAndRetryUpload()
         }
 
-        this.handleUploadError(this.videoUploadService.buildHTTPErrorResponse(state))
+        this.handleUploadError(buildHTTPErrorResponse(state))
         break
       }
 

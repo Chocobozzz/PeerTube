@@ -1,0 +1,9 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+table {
+  td,
+  th {
+    @include padding-right(1rem);
+  }
+}

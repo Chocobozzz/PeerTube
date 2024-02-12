@@ -1,7 +1,7 @@
 <ng-container [formGroup]="form">
   <div class="row mt-5"> <!-- appearance grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="inner-form-title">APPEARANCE</h2>
+      <h2 i18n class="section-left-column-title">APPEARANCE</h2>
       <div i18n class="inner-form-description">
         Use <a class="link-orange" routerLink="/admin/plugins">plugins & themes</a> for more involved changes, or add slight <a class="link-orange" routerLink="/admin/config/edit-custom" fragment="advanced-configuration">customizations</a>.
       </div>
@@ -91,7 +91,7 @@
 
   <div class="row mt-4"> <!-- broadcast grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="inner-form-title">BROADCAST MESSAGE</h2>
+      <h2 i18n class="section-left-column-title">BROADCAST MESSAGE</h2>
       <div i18n class="inner-form-description">
         Display a message on your instance
       </div>
@@ -147,7 +147,7 @@
 
   <div class="row mt-4"> <!-- new users grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="inner-form-title">NEW USERS</h2>
+      <h2 i18n class="section-left-column-title">NEW USERS</h2>
       <div i18n class="inner-form-description">
         Manage <a class="link-orange" routerLink="/admin/users">users</a> to set their quota individually.
       </div>
@@ -228,7 +228,7 @@
             [clearable]="false"
           ></my-select-custom-value>
 
-          <my-user-real-quota-info [videoQuota]="getUserVideoQuota()"></my-user-real-quota-info>
+          <my-user-real-quota-info class="mt-2 d-block small muted" [videoQuota]="getUserVideoQuota()"></my-user-real-quota-info>
 
           <div *ngIf="formErrors.user.videoQuota" class="form-error" role="alert">{{ formErrors.user.videoQuota }}</div>
         </div>
@@ -264,7 +264,7 @@
 
   <div class="row mt-4"> <!-- videos grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="inner-form-title">VIDEOS</h2>
+      <h2 i18n class="section-left-column-title">VIDEOS</h2>
     </div>
 
     <div class="col-12 col-lg-8 col-xl-9">
@@ -376,7 +376,7 @@
 
   <div class="row mt-4"> <!-- video channels grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="inner-form-title">VIDEO CHANNELS</h2>
+      <h2 i18n class="section-left-column-title">VIDEO CHANNELS</h2>
     </div>
 
     <div class="col-12 col-lg-8 col-xl-9">
@@ -398,7 +398,7 @@
 
   <div class="row mt-4"> <!-- search grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="inner-form-title">SEARCH</h2>
+      <h2 i18n class="section-left-column-title">SEARCH</h2>
     </div>
 
     <div class="col-12 col-lg-8 col-xl-9">
@@ -485,9 +485,85 @@
     </div>
   </div>
 
+  <div class="row mt-4"> <!-- import/export grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
+      <h2 i18n class="section-left-column-title">USER IMPORT/EXPORT</h2>
+    </div>
+
+    <div class="col-12 col-lg-8 col-xl-9">
+
+      <ng-container formGroupName="import">
+        <ng-container formGroupName="users">
+          <div class="form-group">
+            <my-peertube-checkbox
+              inputName="importUsersEnabled" formControlName="enabled"
+              i18n-labelText labelText="Allow your users to import a data archive"
+            >
+              <ng-container ngProjectAs="description">
+                <div i18n>Video quota is checked on import so the user doesn't upload a too big archive file</div>
+                <div i18n>Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import</div>
+              </ng-container>
+            </my-peertube-checkbox>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <ng-container formGroupName="export">
+
+        <ng-container formGroupName="users">
+
+          <div class="form-group">
+            <my-peertube-checkbox
+              inputName="exportUsersEnabled" formControlName="enabled"
+              i18n-labelText labelText="Allow your users to export their data"
+            >
+              <ng-container ngProjectAs="description">
+                <span i18n>Users can export their PeerTube data in a .zip for backup or re-import. Only one export at a time is allowed per user</span>
+              </ng-container>
+
+              <ng-container ngProjectAs="extra">
+
+                <div class="form-group" [ngClass]="getDisabledExportUsersClass()">
+                  <label i18n for="exportUsersMaxUserVideoQuota">Max user video quota allowed to generate the export</label>
+
+                  <span i18n class="ms-2 small muted">If the user decides to include the video files in the archive</span>
+
+                  <my-select-custom-value
+                    id="exportUsersMaxUserVideoQuota"
+                    [items]="exportMaxUserVideoQuotaOptions"
+                    formControlName="maxUserVideoQuota"
+                    i18n-inputSuffix inputSuffix="bytes" inputType="number"
+                    [clearable]="false"
+                  ></my-select-custom-value>
+
+                  <div *ngIf="formErrors.export.users.maxUserVideoQuota" class="form-error" role="alert">{{ formErrors.export.users.maxUserVideoQuota }}</div>
+                </div>
+
+                <div class="form-group" [ngClass]="getDisabledExportUsersClass()">
+                  <label i18n for="exportUsersExportExpiration">User export expiration</label>
+
+                  <my-select-options
+                    labelForId="exportUsersExportExpiration" [items]="exportExpirationOptions" formControlName="exportExpiration"
+                    bindLabel="label" bindValue="value" [clearable]="false" [searchable]="false"
+                  ></my-select-options>
+
+                  <div i18n class="mt-1 small muted">The archive file is deleted after this period.</div>
+
+                  <div *ngIf="formErrors.export.users.exportExpiration" class="form-error" role="alert">{{ formErrors.export.users.exportExpiration }}</div>
+                </div>
+
+              </ng-container>
+            </my-peertube-checkbox>
+          </div>
+
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+
   <div class="row mt-4"> <!-- federation grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="inner-form-title">FEDERATION</h2>
+      <h2 i18n class="section-left-column-title">FEDERATION</h2>
       <div i18n class="inner-form-description">
         Manage <a class="link-orange" routerLink="/admin/follows">relations</a> with other instances.
       </div>
@@ -566,7 +642,7 @@
 
   <div class="row mt-4"> <!-- administrators grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="inner-form-title">ADMINISTRATORS</h2>
+      <h2 i18n class="section-left-column-title">ADMINISTRATORS</h2>
     </div>
 
     <div class="col-12 col-lg-8 col-xl-9">
@@ -594,7 +670,7 @@
 
   <div class="row mt-4"> <!-- Twitter grid -->
     <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="inner-form-title">TWITTER</h2>
+      <h2 i18n class="section-left-column-title">TWITTER</h2>
       <div i18n class="inner-form-description">
         Provide the Twitter account representing your instance to improve link previews.
         If you don't have a Twitter account, just leave the default value.

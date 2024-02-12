@@ -6,7 +6,7 @@ import { getBytes } from '@root-helpers/bytes'
 @Pipe({ name: 'bytes' })
 export class BytesPipe implements PipeTransform {
 
-  transform (value: number, precision?: number | undefined): string | number {
+  transform (value: number, precision = 0): string | number {
     return getBytes(value, precision)
   }
 }

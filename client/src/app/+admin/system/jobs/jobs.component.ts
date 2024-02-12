@@ -33,6 +33,7 @@ export class JobsComponent extends RestTable implements OnInit {
     'activitypub-refresher',
     'actor-keys',
     'after-video-channel-import',
+    'create-user-export',
     'email',
     'federate-video',
     'generate-video-storyboard',

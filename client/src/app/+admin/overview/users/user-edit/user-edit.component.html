@@ -70,8 +70,8 @@
 <div class="row mt-4"> <!-- user grid -->
   <div class="col-12 col-lg-4 col-xl-3">
     <div class="anchor" id="user"></div> <!-- user anchor -->
-    <div *ngIf="isCreation()" class="account-title" i18n>NEW USER</div>
-    <div *ngIf="!isCreation() && user" class="account-title">
+    <div *ngIf="isCreation()" class="section-left-column-title" i18n>NEW USER</div>
+    <div *ngIf="!isCreation() && user" class="section-left-column-title">
       <my-actor-avatar-edit [actor]="user.account" [editable]="false" [displaySubscribers]="false" [displayUsername]="false"></my-actor-avatar-edit>
     </div>
   </div>
@@ -212,7 +212,7 @@
 <div *ngIf="displayDangerZone()" class="row mt-4"> <!-- danger zone grid -->
   <div class="col-12 col-lg-4 col-xl-3">
     <div class="anchor" id="danger"></div> <!-- danger zone anchor -->
-    <div i18n class="account-title account-title-danger">DANGER ZONE</div>
+    <div i18n class="section-left-column-title section-left-column-title-danger">DANGER ZONE</div>
   </div>
 
   <div class="col-12 col-lg-8 col-xl-9">

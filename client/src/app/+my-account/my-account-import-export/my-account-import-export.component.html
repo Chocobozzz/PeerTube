@@ -1,0 +1,8 @@
+<h1>
+  <my-global-icon iconName="cloud-download" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>Import/Export</ng-container>
+</h1>
+
+<my-account-import #accountImport [videoQuotaUsed]="videoQuotaUsed" class="d-block mb-5"></my-account-import>
+
+<my-account-export [videoQuotaUsed]="videoQuotaUsed"></my-account-export>

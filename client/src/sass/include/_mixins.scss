@@ -598,14 +598,6 @@
   font-size: 13px;
 }
 
-@mixin settings-big-title {
-  text-transform: uppercase;
-  color: pvar(--mainColor);
-  font-weight: $font-bold;
-  font-size: 1rem;
-  margin-bottom: 10px;
-}
-
 @mixin row-blocks ($column-responsive: true, $min-height: 130px, $separator: true) {
   display: flex;
   min-height: $min-height;

@@ -2,7 +2,8 @@ const dictionary: { max: number, type: string }[] = [
   { max: 1024, type: 'B' },
   { max: 1048576, type: 'KB' },
   { max: 1073741824, type: 'MB' },
-  { max: 1.0995116e12, type: 'GB' }
+  { max: 1.0995116e12, type: 'GB' },
+  { max: 1.125899906842624e15, type: 'TB' }
 ]
 
 function getBytes (value: number, precision?: number | undefined): string | number {

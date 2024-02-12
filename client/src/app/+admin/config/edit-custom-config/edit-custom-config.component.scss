@@ -79,10 +79,6 @@ input[type=submit] {
   }
 }
 
-.inner-form-title {
-  @include settings-big-title;
-}
-
 .inner-form-description {
   font-size: 15px;
   margin-bottom: 15px;
@@ -150,12 +146,6 @@ ngb-tabset:not(.previews) ::ng-deep {
     background-color: pvar(--mainBackgroundColor);
     padding: 0 .3em;
   }
-}
-
-my-user-real-quota-info {
-  display: block;
-  margin-top: 5px;
-  font-size: 11px;
 }
 
 my-actor-banner-edit {

@@ -8,6 +8,7 @@ import { VideoImportUrlComponent } from './video-add-components/video-import-url
 import { VideoUploadComponent } from './video-add-components/video-upload.component'
 import { VideoAddRoutingModule } from './video-add-routing.module'
 import { VideoAddComponent } from './video-add.component'
+import { UploadProgressComponent } from '@app/shared/standalone-upload'
 
 @NgModule({
   imports: [
@@ -15,7 +16,9 @@ import { VideoAddComponent } from './video-add.component'
 
     VideoEditModule,
 
-    UploadxModule
+    UploadxModule,
+
+    UploadProgressComponent
   ],
 
   declarations: [

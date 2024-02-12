@@ -37,7 +37,6 @@ export class TimestampInputComponent implements ControlValueAccessor, OnInit {
     this.timestamp = timestamp
 
     this.timestampString = secondsToTime({ seconds: this.timestamp, fullFormat: true, symbol: ':' })
-    console.log(this.timestampString)
   }
 
   registerOnChange (fn: (_: any) => void) {

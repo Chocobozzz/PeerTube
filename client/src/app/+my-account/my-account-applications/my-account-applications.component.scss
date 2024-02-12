@@ -1,10 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.applications-title {
-  @include settings-big-title;
-}
-
 .form-group {
   max-width: 500px;
 }

@@ -28,6 +28,13 @@ import { MyAccountProfileComponent } from './my-account-settings/my-account-prof
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
 import { MyAccountTwoFactorButtonComponent, MyAccountTwoFactorComponent } from './my-account-settings/my-account-two-factor'
 import { MyAccountComponent } from './my-account.component'
+import {
+  MyAccountImportExportComponent,
+  MyAccountExportComponent,
+  MyAccountImportComponent,
+  UserImportExportService
+} from './my-account-import-export'
+import { UploadProgressComponent } from '@app/shared/standalone-upload'
 
 @NgModule({
   imports: [
@@ -47,7 +54,9 @@ import { MyAccountComponent } from './my-account.component'
     SharedAbuseListModule,
     SharedShareModal,
     SharedActorImageModule,
-    SharedActorImageEditModule
+    SharedActorImageEditModule,
+
+    UploadProgressComponent
   ],
 
   declarations: [
@@ -68,14 +77,19 @@ import { MyAccountComponent } from './my-account.component'
     MyAccountNotificationsComponent,
     MyAccountNotificationPreferencesComponent,
 
-    MyAccountEmailPreferencesComponent
+    MyAccountEmailPreferencesComponent,
+    MyAccountImportExportComponent,
+    MyAccountExportComponent,
+    MyAccountImportComponent
   ],
 
   exports: [
     MyAccountComponent
   ],
 
-  providers: []
+  providers: [
+    UserImportExportService
+  ]
 })
 export class MyAccountModule {
 }

@@ -5,7 +5,7 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, MetaService, Notifier, ServerService, UserService } from '@app/core'
-import { genericUploadErrorHandler, scrollToTop } from '@app/helpers'
+import { buildHTTPErrorResponse, genericUploadErrorHandler, scrollToTop } from '@app/helpers'
 import { FormReactiveService } from '@app/shared/shared-forms'
 import { Video, VideoCaptionService, VideoChapterService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
@@ -140,7 +140,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           return this.refreshTokenAndRetryUpload()
         }
 
-        this.handleUploadError(this.videoUploadService.buildHTTPErrorResponse(state))
+        this.handleUploadError(buildHTTPErrorResponse(state))
         break
       }
 
