@@ -5,7 +5,7 @@ import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-q
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { regenerateMiniaturesIfNeeded } from '@server/lib/thumbnail.js'
 import { uploadx } from '@server/lib/uploadx.js'
-import { buildMoveJob, buildStoryboardJobIfNeeded } from '@server/lib/video.js'
+import { buildMoveJob, buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { buildNewFile } from '@server/lib/video-file.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'

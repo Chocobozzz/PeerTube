@@ -17,6 +17,10 @@ export type MVideoLiveVideo =
 
 // ############################################################################
 
+export type MVideoLiveWithSetting =
+  MVideoLive &
+  Use<'ReplaySetting', MLiveReplaySetting>
+
 export type MVideoLiveVideoWithSetting =
   MVideoLiveVideo &
   Use<'ReplaySetting', MLiveReplaySetting>

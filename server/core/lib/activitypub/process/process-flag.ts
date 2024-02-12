@@ -47,7 +47,7 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
       logger.debug('Reporting remote abuse for object %s.', uri)
 
       await sequelizeTypescript.transaction(async t => {
-        const video = await VideoModel.loadByUrlAndPopulateAccount(uri, t)
+        const video = await VideoModel.loadByUrlAndPopulateAccountAndFiles(uri, t)
         let videoComment: MCommentOwnerVideo
         let flaggedAccount: MAccountDefault
 

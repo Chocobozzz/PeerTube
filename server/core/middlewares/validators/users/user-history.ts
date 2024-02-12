@@ -1,7 +1,7 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { exists, isDateValid, isIdValid } from '../../helpers/custom-validators/misc.js'
-import { areValidationErrors } from './shared/index.js'
+import { exists, isDateValid, isIdValid } from '../../../helpers/custom-validators/misc.js'
+import { areValidationErrors } from '../shared/index.js'
 
 const userHistoryListValidator = [
   query('search')

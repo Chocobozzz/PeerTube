@@ -355,6 +355,16 @@ function customConfig (): CustomConfig {
       videoChannelSynchronization: {
         enabled: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED,
         maxPerUser: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.MAX_PER_USER
+      },
+      users: {
+        enabled: CONFIG.IMPORT.USERS.ENABLED
+      }
+    },
+    export: {
+      users: {
+        enabled: CONFIG.EXPORT.USERS.ENABLED,
+        exportExpiration: CONFIG.EXPORT.USERS.EXPORT_EXPIRATION,
+        maxUserVideoQuota: CONFIG.EXPORT.USERS.MAX_USER_VIDEO_QUOTA
       }
     },
     trending: {

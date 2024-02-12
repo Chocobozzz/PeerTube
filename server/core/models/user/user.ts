@@ -77,6 +77,7 @@ import { VideoLiveModel } from '../video/video-live.js'
 import { VideoPlaylistModel } from '../video/video-playlist.js'
 import { VideoModel } from '../video/video.js'
 import { UserNotificationSettingModel } from './user-notification-setting.js'
+import { UserExportModel } from './user-export.js'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',
@@ -166,7 +167,6 @@ enum ScopeNames {
           literal(
             '(' +
               UserModel.generateUserQuotaBaseSQL({
-                withSelect: false,
                 whereUserId: '"UserModel"."id"',
                 daily: false
               }) +
@@ -178,7 +178,6 @@ enum ScopeNames {
           literal(
             '(' +
               UserModel.generateUserQuotaBaseSQL({
-                withSelect: false,
                 whereUserId: '"UserModel"."id"',
                 daily: true
               }) +
@@ -452,6 +451,13 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   })
   OAuthTokens: Awaited<OAuthTokenModel>[]
 
+  @HasMany(() => UserExportModel, {
+    foreignKey: 'userId',
+    onDelete: 'cascade',
+    hooks: true
+  })
+  UserExports: Awaited<UserExportModel>[]
+
   // Used if we already set an encrypted password in user model
   skipPasswordEncryption = false
 
@@ -724,6 +730,23 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
     return UserModel.findOne(query)
   }
 
+  static loadByAccountId (accountId: number): Promise<MUserDefault> {
+    const query = {
+      include: [
+        {
+          required: true,
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          where: {
+            id: accountId
+          }
+        }
+      ]
+    }
+
+    return UserModel.findOne(query)
+  }
+
   static loadByAccountActorId (accountActorId: number): Promise<MUserDefault> {
     const query = {
       include: [
@@ -780,17 +803,18 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   }
 
   static generateUserQuotaBaseSQL (options: {
-    whereUserId: '$userId' | '"UserModel"."id"'
-    withSelect: boolean
     daily: boolean
+    whereUserId: '$userId' | '"UserModel"."id"'
   }) {
-    const andWhere = options.daily === true
+    const { daily, whereUserId } = options
+
+    const andWhere = daily === true
       ? 'AND "video"."createdAt" > now() - interval \'24 hours\''
       : ''
 
     const videoChannelJoin = 'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
       'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
-      `WHERE "account"."userId" = ${options.whereUserId} ${andWhere}`
+      `WHERE "account"."userId" = ${whereUserId} ${andWhere}`
 
     const webVideoFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
       'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" AND "video"."isLive" IS FALSE ' +
@@ -808,18 +832,23 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
       ') t2'
   }
 
-  static getTotalRawQuery (query: string, userId: number) {
-    const options = {
+  static async getUserQuota (options: {
+    userId: number
+    daily: boolean
+  }) {
+    const { daily, userId } = options
+
+    const sql = this.generateUserQuotaBaseSQL({ daily, whereUserId: '$userId' })
+
+    const queryOptions = {
       bind: { userId },
       type: QueryTypes.SELECT as QueryTypes.SELECT
     }
 
-    return UserModel.sequelize.query<{ total: string }>(query, options)
-                    .then(([ { total } ]) => {
-                      if (total === null) return 0
+    const [ { total } ] = await UserModel.sequelize.query<{ total: string }>(sql, queryOptions)
+    if (!total) return 0
 
-                      return parseInt(total, 10)
-                    })
+    return parseInt(total, 10)
   }
 
   static async getStats () {

@@ -63,6 +63,7 @@ import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoModel } from '../video/video.js'
 import { ActorFollowModel } from './actor-follow.js'
 import { ActorImageModel } from './actor-image.js'
+import maxBy from 'lodash-es/maxBy.js'
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -662,6 +663,10 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     return this.Server ? `${this.preferredUsername}@${this.Server.host}` : this.preferredUsername
   }
 
+  getFullIdentifier (this: MActorHost) {
+    return `${this.preferredUsername}@${this.getHost()}`
+  }
+
   getHost (this: MActorHostOnly) {
     return this.Server ? this.Server.host : WEBSERVER.HOST
   }
@@ -676,6 +681,16 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       : this.Banners
 
     return Array.isArray(images) && images.length !== 0
+  }
+
+  getMaxQualityImage (type: ActorImageType_Type) {
+    if (!this.hasImage(type)) return undefined
+
+    const images = type === ActorImageType.AVATAR
+      ? this.Avatars
+      : this.Banners
+
+    return maxBy(images, 'height')
   }
 
   isOutdated () {

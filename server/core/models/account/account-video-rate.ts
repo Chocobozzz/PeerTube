@@ -4,7 +4,8 @@ import {
   MAccountVideoRate,
   MAccountVideoRateAccountUrl,
   MAccountVideoRateAccountVideo,
-  MAccountVideoRateFormattable
+  MAccountVideoRateFormattable,
+  MAccountVideoRateVideoUrl
 } from '@server/types/models/index.js'
 import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
@@ -113,6 +114,59 @@ export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountV
     return AccountVideoRateModel.findOne(options)
   }
 
+  static loadLocalAndPopulateVideo (
+    rateType: VideoRateType,
+    accountName: string,
+    videoId: number,
+    t?: Transaction
+  ): Promise<MAccountVideoRateAccountVideo> {
+    const options: FindOptions = {
+      where: {
+        videoId,
+        type: rateType
+      },
+      include: [
+        {
+          model: AccountModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'id', 'url', 'followersUrl', 'preferredUsername' ],
+              model: ActorModel.unscoped(),
+              required: true,
+              where: {
+                [Op.and]: [
+                  ActorModel.wherePreferredUsername(accountName),
+                  { serverId: null }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          model: VideoModel.unscoped(),
+          required: true
+        }
+      ]
+    }
+    if (t) options.transaction = t
+
+    return AccountVideoRateModel.findOne(options)
+  }
+
+  static loadByUrl (url: string, transaction: Transaction) {
+    const options: FindOptions = {
+      where: {
+        url
+      }
+    }
+    if (transaction) options.transaction = transaction
+
+    return AccountVideoRateModel.findOne(options)
+  }
+
+  // ---------------------------------------------------------------------------
+
   static listByAccountForApi (options: {
     start: number
     count: number
@@ -168,57 +222,6 @@ export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountV
     }).then(rows => rows.map(r => r.url))
   }
 
-  static loadLocalAndPopulateVideo (
-    rateType: VideoRateType,
-    accountName: string,
-    videoId: number,
-    t?: Transaction
-  ): Promise<MAccountVideoRateAccountVideo> {
-    const options: FindOptions = {
-      where: {
-        videoId,
-        type: rateType
-      },
-      include: [
-        {
-          model: AccountModel.unscoped(),
-          required: true,
-          include: [
-            {
-              attributes: [ 'id', 'url', 'followersUrl', 'preferredUsername' ],
-              model: ActorModel.unscoped(),
-              required: true,
-              where: {
-                [Op.and]: [
-                  ActorModel.wherePreferredUsername(accountName),
-                  { serverId: null }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          model: VideoModel.unscoped(),
-          required: true
-        }
-      ]
-    }
-    if (t) options.transaction = t
-
-    return AccountVideoRateModel.findOne(options)
-  }
-
-  static loadByUrl (url: string, transaction: Transaction) {
-    const options: FindOptions = {
-      where: {
-        url
-      }
-    }
-    if (transaction) options.transaction = transaction
-
-    return AccountVideoRateModel.findOne(options)
-  }
-
   static listAndCountAccountUrlsByVideoId (rateType: VideoRateType, videoId: number, start: number, count: number, t?: Transaction) {
     const query = {
       offset: start,
@@ -249,6 +252,26 @@ export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountV
       AccountVideoRateModel.findAll<MAccountVideoRateAccountUrl>(query)
     ]).then(([ total, data ]) => ({ total, data }))
   }
+
+  static listRatesOfAccountId (accountId: number, rateType: VideoRateType): Promise<MAccountVideoRateVideoUrl[]> {
+    const query = {
+      where: {
+        accountId,
+        type: rateType
+      },
+      include: [
+        {
+          attributes: [ 'url' ],
+          model: VideoModel,
+          required: true
+        }
+      ]
+    }
+
+    return AccountVideoRateModel.findAll(query)
+  }
+
+  // ---------------------------------------------------------------------------
 
   toFormattedJSON (this: MAccountVideoRateFormattable): AccountVideoRate {
     return {

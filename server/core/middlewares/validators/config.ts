@@ -71,6 +71,11 @@ const customConfigUpdateValidator = [
   body('import.videos.torrent.enabled').isBoolean(),
 
   body('import.videoChannelSynchronization.enabled').isBoolean(),
+  body('import.users.enabled').isBoolean(),
+
+  body('export.users.enabled').isBoolean(),
+  body('export.users.maxUserVideoQuota').exists(),
+  body('export.users.exportExpiration').exists(),
 
   body('trending.videos.algorithms.default').exists(),
   body('trending.videos.algorithms.enabled').exists(),

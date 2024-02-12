@@ -18,7 +18,7 @@ export interface ActivityPubActor {
     sharedInbox: string
   }
   summary: string
-  attributedTo: ActivityPubAttributedTo[]
+  attributedTo?: ActivityPubAttributedTo[]
 
   support?: string
   publicKey: {
@@ -31,4 +31,8 @@ export interface ActivityPubActor {
   icon?: ActivityIconObject | ActivityIconObject[]
 
   published?: string
+
+  // For export
+  likes?: string
+  dislikes?: string
 }

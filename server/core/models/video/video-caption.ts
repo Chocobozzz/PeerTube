@@ -15,7 +15,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { VideoCaption } from '@peertube/peertube-models'
+import { ActivityIdentifierObject, VideoCaption } from '@peertube/peertube-models'
 import {
   MVideo,
   MVideoCaption,
@@ -220,6 +220,8 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
     return this.Video.remote === false
   }
 
+  // ---------------------------------------------------------------------------
+
   toFormattedJSON (this: MVideoCaptionFormattable): VideoCaption {
     return {
       language: {
@@ -231,12 +233,26 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
     }
   }
 
+  toActivityPubObject (this: MVideoCaptionLanguageUrl, video: MVideo): ActivityIdentifierObject {
+    return {
+      identifier: this.language,
+      name: VideoCaptionModel.getLanguageLabel(this.language),
+      url: this.getFileUrl(video)
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+
   getCaptionStaticPath (this: MVideoCaptionLanguageUrl) {
     return join(LAZY_STATIC_PATHS.VIDEO_CAPTIONS, this.filename)
   }
 
+  getFSPath () {
+    return join(CONFIG.STORAGE.CAPTIONS_DIR, this.filename)
+  }
+
   removeCaptionFile (this: MVideoCaption) {
-    return remove(CONFIG.STORAGE.CAPTIONS_DIR + this.filename)
+    return remove(this.getFSPath())
   }
 
   getFileUrl (this: MVideoCaptionLanguageUrl, video: MVideo) {

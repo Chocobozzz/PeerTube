@@ -1,0 +1,46 @@
+extends ../common/greetings
+include ../common/mixins.pug
+
+mixin displaySummary(stats)
+  ul
+    if stats.success
+      li Imported: #{stats.success}
+    if stats.duplicates
+      li Not imported as considered duplicate: #{stats.duplicates}
+    if stats.errors
+      li Not imported due to error: #{stats.errors}
+
+block title
+  | Your archive import has finished
+
+block content
+  p Your archive import has finished. Here is the summary of imported objects:
+
+  ul
+    li
+      strong User settings:
+      +displaySummary(resultStats.userSettings)
+    li
+      strong Account (name, description, avatar...):
+      +displaySummary(resultStats.account)
+    li
+      strong Blocklist:
+      +displaySummary(resultStats.blocklist)
+    li
+      strong Channels:
+      +displaySummary(resultStats.channels)
+    li
+      strong Likes:
+      +displaySummary(resultStats.likes)
+    li
+      strong Dislikes:
+      +displaySummary(resultStats.dislikes)
+    li
+      strong Subscriptions:
+      +displaySummary(resultStats.following)
+    li
+      strong Video Playlists:
+      +displaySummary(resultStats.videoPlaylists)
+    li
+      strong Videos:
+      +displaySummary(resultStats.videos)

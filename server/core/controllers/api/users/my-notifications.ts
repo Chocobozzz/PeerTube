@@ -16,7 +16,7 @@ import {
   listUserNotificationsValidator,
   markAsReadUserNotificationsValidator,
   updateNotificationSettingsValidator
-} from '../../../middlewares/validators/user-notifications.js'
+} from '../../../middlewares/validators/users/user-notifications.js'
 import { UserNotificationSettingModel } from '../../../models/user/user-notification-setting.js'
 import { meRouter } from './me.js'
 
@@ -59,12 +59,6 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
   const user = res.locals.oauth.token.User
   const body = req.body as UserNotificationSetting
 
-  const query = {
-    where: {
-      userId: user.id
-    }
-  }
-
   const values: UserNotificationSetting = {
     newVideoFromSubscription: body.newVideoFromSubscription,
     newCommentOnMyVideo: body.newCommentOnMyVideo,
@@ -85,9 +79,9 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
     myVideoStudioEditionFinished: body.myVideoStudioEditionFinished
   }
 
-  await UserNotificationSettingModel.update(values, query)
+  await UserNotificationSettingModel.updateUserSettings(values, user.id)
 
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function listUserNotifications (req: express.Request, res: express.Response) {
@@ -103,7 +97,7 @@ async function markAsReadUserNotifications (req: express.Request, res: express.R
 
   await UserNotificationModel.markAsRead(user.id, req.body.ids)
 
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function markAsReadAllUserNotifications (req: express.Request, res: express.Response) {
@@ -111,5 +105,5 @@ async function markAsReadAllUserNotifications (req: express.Request, res: expres
 
   await UserNotificationModel.markAllAsRead(user.id)
 
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

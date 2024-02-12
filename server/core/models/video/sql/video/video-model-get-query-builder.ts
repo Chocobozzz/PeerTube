@@ -15,6 +15,7 @@ export type GetType =
   'api' |
   'full' |
   'account-blacklist-files' |
+  'account' |
   'all-files' |
   'thumbnails' |
   'thumbnails-blacklist' |
@@ -100,7 +101,7 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideoQueryBuilder {
   private static readonly scheduleUpdateInclude = new Set<GetType>([ 'api', 'full' ])
   private static readonly tagsInclude = new Set<GetType>([ 'api', 'full' ])
   private static readonly userHistoryInclude = new Set<GetType>([ 'api', 'full' ])
-  private static readonly accountInclude = new Set<GetType>([ 'api', 'full', 'account-blacklist-files' ])
+  private static readonly accountInclude = new Set<GetType>([ 'api', 'full', 'account', 'account-blacklist-files' ])
   private static readonly ownerUserInclude = new Set<GetType>([ 'blacklist-rights' ])
 
   private static readonly blacklistedInclude = new Set<GetType>([

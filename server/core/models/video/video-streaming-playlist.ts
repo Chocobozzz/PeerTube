@@ -1,7 +1,7 @@
 import {
-  VideoStorage,
+  FileStorage,
   VideoStreamingPlaylistType,
-  type VideoStorageType,
+  type FileStorageType,
   type VideoStreamingPlaylistType_Type
 } from '@peertube/peertube-models'
 import { sha1 } from '@peertube/peertube-node-utils'
@@ -103,9 +103,9 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   videoId: number
 
   @AllowNull(false)
-  @Default(VideoStorage.FILE_SYSTEM)
+  @Default(FileStorage.FILE_SYSTEM)
   @Column
-  storage: VideoStorageType
+  storage: FileStorageType
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -222,7 +222,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
       playlist = new VideoStreamingPlaylistModel({
         p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
         type: VideoStreamingPlaylistType.HLS,
-        storage: VideoStorage.FILE_SYSTEM,
+        storage: FileStorage.FILE_SYSTEM,
         p2pMediaLoaderInfohashes: [],
         playlistFilename: generateHLSMasterPlaylistFilename(video.isLive),
         segmentsSha256Filename: generateHlsSha256SegmentsFilename(video.isLive),
@@ -239,7 +239,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
     const query = `SELECT 1 FROM "videoStreamingPlaylist" ` +
       `INNER JOIN "video" ON "video"."id" = "videoStreamingPlaylist"."videoId" ` +
       `AND "video"."remote" IS FALSE AND "video"."uuid" = $videoUUID ` +
-      `AND "storage" = ${VideoStorage.FILE_SYSTEM} LIMIT 1`
+      `AND "storage" = ${FileStorage.FILE_SYSTEM} LIMIT 1`
 
     return doesExist(this.sequelize, query, { videoUUID })
   }
@@ -254,7 +254,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
 
   getMasterPlaylistUrl (video: MVideo) {
     if (video.isOwned()) {
-      if (this.storage === VideoStorage.OBJECT_STORAGE) {
+      if (this.storage === FileStorage.OBJECT_STORAGE) {
         return this.getMasterPlaylistObjectStorageUrl(video)
       }
 
@@ -276,7 +276,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
 
   getSha256SegmentsUrl (video: MVideo) {
     if (video.isOwned()) {
-      if (this.storage === VideoStorage.OBJECT_STORAGE) {
+      if (this.storage === FileStorage.OBJECT_STORAGE) {
         return this.getSha256SegmentsObjectStorageUrl(video)
       }
 

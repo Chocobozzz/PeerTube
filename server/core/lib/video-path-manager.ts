@@ -1,7 +1,7 @@
 import { Mutex } from 'async-mutex'
 import { remove } from 'fs-extra/esm'
 import { extname, join } from 'path'
-import { VideoStorage } from '@peertube/peertube-models'
+import { FileStorage } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -63,7 +63,7 @@ class VideoPathManager {
   }
 
   async makeAvailableVideoFile <T> (videoFile: MVideoFileVideo | MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {
-    if (videoFile.storage === VideoStorage.FILE_SYSTEM) {
+    if (videoFile.storage === FileStorage.FILE_SYSTEM) {
       return this.makeAvailableFactory(
         () => this.getFSVideoFileOutputPath(videoFile.getVideoOrStreamingPlaylist(), videoFile),
         false,
@@ -93,7 +93,7 @@ class VideoPathManager {
   async makeAvailableResolutionPlaylistFile <T> (videoFile: MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {
     const filename = getHlsResolutionPlaylistFilename(videoFile.filename)
 
-    if (videoFile.storage === VideoStorage.FILE_SYSTEM) {
+    if (videoFile.storage === FileStorage.FILE_SYSTEM) {
       return this.makeAvailableFactory(
         () => join(getHLSDirectory(videoFile.getVideo()), filename),
         false,
@@ -110,7 +110,7 @@ class VideoPathManager {
   }
 
   async makeAvailablePlaylistFile <T> (playlist: MStreamingPlaylistVideo, filename: string, cb: MakeAvailableCB<T>) {
-    if (playlist.storage === VideoStorage.FILE_SYSTEM) {
+    if (playlist.storage === FileStorage.FILE_SYSTEM) {
       return this.makeAvailableFactory(
         () => join(getHLSDirectory(playlist.Video), filename),
         false,

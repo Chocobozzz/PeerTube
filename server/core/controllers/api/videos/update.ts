@@ -6,7 +6,7 @@ import { exists } from '@server/helpers/custom-validators/misc.js'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { setVideoPrivacy } from '@server/lib/video-privacy.js'
-import { addVideoJobsAfterUpdate, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video.js'
+import { buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
@@ -23,6 +23,7 @@ import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosU
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update.js'
 import { VideoModel } from '../../../models/video/video.js'
 import { replaceChaptersFromDescriptionIfNeeded } from '@server/lib/video-chapters.js'
+import { addVideoJobsAfterUpdate } from '@server/lib/video-jobs.js'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')

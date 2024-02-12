@@ -193,6 +193,16 @@ class ServerConfigManager {
         },
         videoChannelSynchronization: {
           enabled: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED
+        },
+        users: {
+          enabled: CONFIG.IMPORT.USERS.ENABLED
+        }
+      },
+      export: {
+        users: {
+          enabled: CONFIG.EXPORT.USERS.ENABLED,
+          exportExpiration: CONFIG.EXPORT.USERS.EXPORT_EXPIRATION,
+          maxUserVideoQuota: CONFIG.EXPORT.USERS.MAX_USER_VIDEO_QUOTA
         }
       },
       autoBlacklist: {

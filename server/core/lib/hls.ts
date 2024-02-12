@@ -1,6 +1,6 @@
 import { uniqify, uuidRegex } from '@peertube/peertube-core-utils'
 import { getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
-import { VideoStorage } from '@peertube/peertube-models'
+import { FileStorage } from '@peertube/peertube-models'
 import { sha256 } from '@peertube/peertube-node-utils'
 import { MStreamingPlaylist, MStreamingPlaylistFilesVideo, MVideo } from '@server/types/models/index.js'
 import { ensureDir, move, outputJSON, remove } from 'fs-extra/esm'
@@ -100,7 +100,7 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
 
     logger.info('Updating %s master playlist file of video %s', masterPlaylistPath, video.uuid, lTags(video.uuid))
 
-    if (playlist.storage === VideoStorage.OBJECT_STORAGE) {
+    if (playlist.storage === FileStorage.OBJECT_STORAGE) {
       playlist.playlistUrl = await storeHLSFileFromFilename(playlist, playlist.playlistFilename)
       await remove(masterPlaylistPath)
     }
@@ -151,7 +151,7 @@ function updateSha256VODSegments (video: MVideo, playlistArg: MStreamingPlaylist
     const outputPath = VideoPathManager.Instance.getFSHLSOutputPath(video, playlist.segmentsSha256Filename)
     await outputJSON(outputPath, json)
 
-    if (playlist.storage === VideoStorage.OBJECT_STORAGE) {
+    if (playlist.storage === FileStorage.OBJECT_STORAGE) {
       playlist.segmentsSha256Url = await storeHLSFileFromFilename(playlist, playlist.segmentsSha256Filename)
       await remove(outputPath)
     }

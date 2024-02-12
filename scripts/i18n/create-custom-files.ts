@@ -6,6 +6,7 @@ import {
   ABUSE_STATES,
   buildLanguages,
   RUNNER_JOB_STATES,
+  USER_EXPORT_STATES,
   USER_REGISTRATION_STATES,
   VIDEO_CATEGORIES,
   VIDEO_CHANNEL_SYNC_STATE,
@@ -14,6 +15,7 @@ import {
   VIDEO_PLAYLIST_PRIVACIES,
   VIDEO_PLAYLIST_TYPES,
   VIDEO_PRIVACIES,
+  USER_IMPORT_STATES,
   VIDEO_STATES
 } from '@peertube/peertube-server/core/initializers/constants.js'
 
@@ -96,6 +98,8 @@ Object.values(VIDEO_CATEGORIES)
   .concat(Object.values(ABUSE_STATES))
   .concat(Object.values(USER_REGISTRATION_STATES))
   .concat(Object.values(RUNNER_JOB_STATES))
+  .concat(Object.values(USER_EXPORT_STATES))
+  .concat(Object.values(USER_IMPORT_STATES))
   .concat([
     'This video does not exist.',
     'We cannot fetch the video. Please try again later.',

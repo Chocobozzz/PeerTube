@@ -1,0 +1,12 @@
+extends ../common/greetings
+include ../common/mixins.pug
+
+block title
+  | Failed to import your archive
+
+block content
+  p
+    | We are sorry but the import of your archive has failed:
+  blockquote !{errorMessage}
+  p
+    | Please contact your administrator if the problem occurs again.

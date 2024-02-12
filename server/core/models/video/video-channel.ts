@@ -39,7 +39,7 @@ import {
   MChannelFormattable,
   MChannelHost,
   MChannelSummaryFormattable,
-  type MChannel
+  type MChannel, MChannelDefault
 } from '../../types/models/video/index.js'
 import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account.js'
 import { ActorFollowModel } from '../actor/actor-follow.js'
@@ -655,7 +655,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
-  static listAllByAccount (accountId: number): Promise<MChannel[]> {
+  static listAllByAccount (accountId: number): Promise<MChannelDefault[]> {
     const query = {
       limit: CONFIG.VIDEO_CHANNELS.MAX_PER_USER,
       include: [

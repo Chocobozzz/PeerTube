@@ -9,4 +9,5 @@ export interface SendDebugCommand {
   | 'process-video-viewers'
   | 'process-video-channel-sync-latest'
   | 'process-update-videos-scheduler'
+  | 'remove-expired-user-exports'
 }

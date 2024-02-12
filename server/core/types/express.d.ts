@@ -1,6 +1,6 @@
 import { OutgoingHttpHeaders } from 'http'
 import { Writable } from 'stream'
-import { HttpMethodType, PeerTubeProblemDocumentData, ServerErrorCode, VideoCreate } from '@peertube/peertube-models'
+import { HttpMethodType, PeerTubeProblemDocumentData, VideoCreate } from '@peertube/peertube-models'
 import { RegisterServerAuthExternalOptions } from '@server/types/index.js'
 import {
   MAbuseMessage,
@@ -13,6 +13,7 @@ import {
   MRegistration,
   MStreamingPlaylist,
   MUserAccountUrl,
+  MUserExport,
   MVideoChangeOwnershipFull,
   MVideoFile,
   MVideoFormattableDetails,
@@ -87,7 +88,7 @@ declare module 'express' {
   export type CustomUploadXFile <T extends Metadata> = UploadXFile & { metadata: T }
 
   export type EnhancedUploadXFile = CustomUploadXFile<Metadata> & {
-    duration: number
+    duration?: number // If video file
     path: string
     filename: string
     originalname: string
@@ -143,6 +144,7 @@ declare module 'express' {
 
       uploadVideoFileResumable?: UploadNewVideoUploadXFile
       updateVideoFileResumable?: EnhancedUploadXFile
+      importUserFileResumable?: EnhancedUploadXFile
 
       videoImport?: MVideoImportDefault
 
@@ -217,6 +219,8 @@ declare module 'express' {
       runner?: MRunner
       runnerRegistrationToken?: MRunnerRegistrationToken
       runnerJob?: MRunnerJobRunner
+
+      userExport?: MUserExport
     }
   }
 }

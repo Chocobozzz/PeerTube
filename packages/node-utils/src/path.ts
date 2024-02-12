@@ -1,4 +1,4 @@
-import { basename, extname, isAbsolute, join, resolve } from 'path'
+import { basename, extname, isAbsolute, join, parse, resolve } from 'path'
 import { fileURLToPath } from 'url'
 
 let rootPath: string
@@ -47,4 +47,16 @@ export function buildAbsoluteFixturePath (path: string, customCIPath = false) {
   }
 
   return join(root(), 'packages', 'tests', 'fixtures', path)
+}
+
+export function getFilenameFromUrl (url: string) {
+  return getFilename(new URL(url).pathname)
+}
+
+export function getFilename (path: string) {
+  return parse(path).base
+}
+
+export function getFilenameWithoutExt (path: string) {
+  return parse(path).name
 }

@@ -13,8 +13,13 @@ function generateWebVideoObjectStorageKey (filename: string) {
   return filename
 }
 
+function generateUserExportObjectStorageKey (filename: string) {
+  return filename
+}
+
 export {
   generateHLSObjectStorageKey,
   generateHLSObjectBaseStorageKey,
-  generateWebVideoObjectStorageKey
+  generateWebVideoObjectStorageKey,
+  generateUserExportObjectStorageKey
 }

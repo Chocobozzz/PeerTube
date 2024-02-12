@@ -22,10 +22,10 @@ import { generateWebVideoFilename } from '@server/lib/paths.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { createOptimizeOrMergeAudioJobs } from '@server/lib/transcoding/create-transcoding-job.js'
-import { isAbleToUploadVideo } from '@server/lib/user.js'
+import { isUserQuotaValid } from '@server/lib/user.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
-import { buildMoveJob, buildStoryboardJobIfNeeded } from '@server/lib/video.js'
+import { buildMoveJob, buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import { MVideoImport, MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import.js'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
@@ -138,7 +138,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
     // Get information about this video
     const stats = await stat(tempVideoPath)
-    const isAble = await isAbleToUploadVideo(videoImport.User.id, stats.size)
+    const isAble = await isUserQuotaValid({ userId: videoImport.User.id, uploadSize: stats.size })
     if (isAble === false) {
       throw new Error('The user video quota is exceeded with this video to import.')
     }

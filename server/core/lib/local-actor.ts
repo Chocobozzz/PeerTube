@@ -30,13 +30,16 @@ export function buildActorInstance (type: ActivityPubActorType, url: string, pre
   }) as MActor
 }
 
-export async function updateLocalActorImageFiles (
-  accountOrChannel: MAccountDefault | MChannelDefault,
-  imagePhysicalFile: Express.Multer.File,
+export async function updateLocalActorImageFiles (options: {
+  accountOrChannel: MAccountDefault | MChannelDefault
+  imagePhysicalFile: { path: string }
   type: ActorImageType_Type
-) {
+  sendActorUpdate: boolean
+}) {
+  const { accountOrChannel, imagePhysicalFile, type, sendActorUpdate } = options
+
   const processImageSize = async (imageSize: { width: number, height: number }) => {
-    const extension = getLowercaseExtension(imagePhysicalFile.filename)
+    const extension = getLowercaseExtension(imagePhysicalFile.path)
 
     const imageName = buildUUID() + extension
     const destination = join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, imageName)
@@ -63,7 +66,9 @@ export async function updateLocalActorImageFiles (
     const updatedActor = await updateActorImages(accountOrChannel.Actor, type, actorImagesInfo, t)
     await updatedActor.save({ transaction: t })
 
-    await sendUpdateActor(accountOrChannel, t)
+    if (sendActorUpdate) {
+      await sendUpdateActor(accountOrChannel, t)
+    }
 
     return type === ActorImageType.AVATAR
       ? updatedActor.Avatars

@@ -4,7 +4,7 @@ import { join } from 'path'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles.js'
-import { isAbleToUploadVideo } from '@server/lib/user.js'
+import { isUserQuotaValid } from '@server/lib/user.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { approximateIntroOutroAdditionalSize, onVideoStudioEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio.js'
 import { UserModel } from '@server/models/user/user.js'
@@ -170,7 +170,7 @@ async function checkUserQuotaOrThrow (video: MVideoFullLight, payload: VideoStud
   const filePathFinder = (i: number) => (payload.tasks[i] as VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload).options.file
 
   const additionalBytes = await approximateIntroOutroAdditionalSize(video, payload.tasks, filePathFinder)
-  if (await isAbleToUploadVideo(user.id, additionalBytes) === false) {
+  if (await isUserQuotaValid({ userId: user.id, uploadSize: additionalBytes }) === false) {
     throw new Error('Quota exceeded for this user to edit the video')
   }
 }

@@ -207,8 +207,21 @@ export interface ServerConfig {
         enabled: boolean
       }
     }
+
     videoChannelSynchronization: {
       enabled: boolean
+    }
+
+    users: {
+      enabled:boolean
+    }
+  }
+
+  export: {
+    users: {
+      enabled: boolean
+      exportExpiration: number
+      maxUserVideoQuota: number
     }
   }
 

@@ -1,4 +1,4 @@
-import { VideoResolution, VideoStorage, type VideoStorageType } from '@peertube/peertube-models'
+import { ActivityVideoUrlObject, VideoResolution, FileStorage, type FileStorageType } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { logger } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
@@ -54,6 +54,7 @@ import { VideoRedundancyModel } from '../redundancy/video-redundancy.js'
 import { doesExist, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
 import { VideoModel } from './video.js'
+import { getVideoFileMimeType } from '@server/lib/video-file.js'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO',
@@ -223,9 +224,9 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   videoId: number
 
   @AllowNull(false)
-  @Default(VideoStorage.FILE_SYSTEM)
+  @Default(FileStorage.FILE_SYSTEM)
   @Column
-  storage: VideoStorageType
+  storage: FileStorageType
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -286,7 +287,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
 
   static async doesOwnedWebVideoFileExist (filename: string) {
     const query = 'SELECT 1 FROM "videoFile" INNER JOIN "video" ON "video"."id" = "videoFile"."videoId" AND "video"."remote" IS FALSE ' +
-                  `WHERE "filename" = $filename AND "storage" = ${VideoStorage.FILE_SYSTEM} LIMIT 1`
+                  `WHERE "filename" = $filename AND "storage" = ${FileStorage.FILE_SYSTEM} LIMIT 1`
 
     return doesExist(this.sequelize, query, { filename })
   }
@@ -538,7 +539,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
 
   getFileUrl (video: MVideo) {
     if (video.isOwned()) {
-      if (this.storage === VideoStorage.OBJECT_STORAGE) {
+      if (this.storage === FileStorage.OBJECT_STORAGE) {
         return this.getObjectStorageUrl(video)
       }
 
@@ -631,5 +632,20 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     if (isStreamingPlaylist(videoOrPlaylist)) return Object.assign(this, { VideoStreamingPlaylist: videoOrPlaylist })
 
     return Object.assign(this, { Video: videoOrPlaylist })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  toActivityPubObject (this: MVideoFile, video: MVideo): ActivityVideoUrlObject {
+    const mimeType = getVideoFileMimeType(this.extname, false)
+
+    return {
+      type: 'Link',
+      mediaType: mimeType as ActivityVideoUrlObject['mediaType'],
+      href: this.getFileUrl(video),
+      height: this.resolution,
+      size: this.size,
+      fps: this.fps
+    }
   }
 }

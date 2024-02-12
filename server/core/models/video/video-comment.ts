@@ -25,6 +25,7 @@ import {
   MComment,
   MCommentAdminFormattable,
   MCommentAP,
+  MCommentExport,
   MCommentFormattable,
   MCommentId,
   MCommentOwner,
@@ -459,6 +460,31 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     }
 
     return new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).listComments<MComment>()
+  }
+
+  static listForExport (ofAccountId: number): Promise<MCommentExport[]> {
+    const query = {
+      attributes: [ 'url', 'text', 'createdAt' ],
+      where: {
+        accountId: ofAccountId,
+        deletedAt: null
+      },
+      include: [
+        {
+          attributes: [ 'url' ],
+          required: true,
+          model: VideoModel.unscoped()
+        },
+        {
+          attributes: [ 'url' ],
+          required: false,
+          model: VideoCommentModel,
+          as: 'InReplyToVideoComment'
+        }
+      ]
+    }
+
+    return VideoCommentModel.findAll(query)
   }
 
   static async getStats () {

@@ -3,14 +3,10 @@ import { move } from 'fs-extra/esm'
 import { basename } from 'path'
 import { getResumableUploadPath } from '@server/helpers/upload.js'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
-import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-queue/index.js'
 import { Redis } from '@server/lib/redis.js'
 import { uploadx } from '@server/lib/uploadx.js'
 import {
-  buildLocalVideoFromReq,
-  buildMoveJob,
-  buildStoryboardJobIfNeeded,
-  buildVideoThumbnailsFromReq,
+  buildLocalVideoFromReq, buildVideoThumbnailsFromReq,
   setVideoTags
 } from '@server/lib/video.js'
 import { buildNewFile } from '@server/lib/video-file.js'
@@ -21,7 +17,7 @@ import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { MVideoFile, MVideoFullLight, MVideoThumbnail } from '@server/types/models/index.js'
 import { uuidToShort } from '@peertube/peertube-node-utils'
-import { HttpStatusCode, ThumbnailType, VideoCreate, VideoPrivacy, VideoState } from '@peertube/peertube-models'
+import { HttpStatusCode, ThumbnailType, VideoCreate, VideoPrivacy } from '@peertube/peertube-models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
 import { createReqFiles } from '../../../helpers/express-utils.js'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
@@ -43,6 +39,7 @@ import { VideoModel } from '../../../models/video/video.js'
 import { ffprobePromise, getChaptersFromContainer } from '@peertube/peertube-ffmpeg'
 import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from '@server/lib/video-chapters.js'
 import { FfprobeData } from 'fluent-ffmpeg'
+import { addVideoJobsAfterCreation } from '@server/lib/video-jobs.js'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -230,7 +227,7 @@ async function addVideo (options: {
   // Channel has a new content, set as updated
   await videoCreated.VideoChannel.setAsUpdated()
 
-  addVideoJobsAfterUpload(videoCreated, videoFile)
+  addVideoJobsAfterCreation({ video: videoCreated, videoFile })
     .catch(err => logger.error('Cannot build new video jobs of %s.', videoCreated.uuid, { err, ...lTags(videoCreated.uuid) }))
 
   Hooks.runAction('action:api.video.uploaded', { video: videoCreated, req, res })
@@ -242,55 +239,6 @@ async function addVideo (options: {
       uuid: videoCreated.uuid
     }
   }
-}
-
-async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVideoFile) {
-  const jobs: (CreateJobArgument & CreateJobOptions)[] = [
-    {
-      type: 'manage-video-torrent' as 'manage-video-torrent',
-      payload: {
-        videoId: video.id,
-        videoFileId: videoFile.id,
-        action: 'create'
-      }
-    },
-
-    buildStoryboardJobIfNeeded({ video, federate: false }),
-
-    {
-      type: 'notify',
-      payload: {
-        action: 'new-video',
-        videoUUID: video.uuid
-      }
-    },
-
-    {
-      type: 'federate-video' as 'federate-video',
-      payload: {
-        videoUUID: video.uuid,
-        isNewVideoForFederation: true
-      }
-    }
-  ]
-
-  if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-    jobs.push(await buildMoveJob({ video, previousVideoState: undefined, type: 'move-to-object-storage' }))
-  }
-
-  if (video.state === VideoState.TO_TRANSCODE) {
-    jobs.push({
-      type: 'transcoding-job-builder' as 'transcoding-job-builder',
-      payload: {
-        videoUUID: video.uuid,
-        optimizeJob: {
-          isNewVideo: true
-        }
-      }
-    })
-  }
-
-  return JobQueue.Instance.createSequentialJobFlow(...jobs)
 }
 
 async function deleteUploadResumableCache (req: express.Request, res: express.Response, next: express.NextFunction) {

@@ -192,7 +192,6 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
     const videoPlaylistCreated = await videoPlaylist.save({ transaction: t }) as MVideoPlaylistFull
 
     if (thumbnailModel) {
-      thumbnailModel.automaticallyGenerated = false
       await videoPlaylistCreated.setAndSaveThumbnail(thumbnailModel, t)
     }
 

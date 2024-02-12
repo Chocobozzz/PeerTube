@@ -7,7 +7,7 @@ import { forceNumber } from '@peertube/peertube-core-utils'
 
 type ActivityPubCollectionPaginationHandler = (start: number, count: number) => Bluebird<ResultList<any>> | Promise<ResultList<any>>
 
-async function activityPubCollectionPagination (
+export async function activityPubCollectionPagination (
   baseUrl: string,
   handler: ActivityPubCollectionPaginationHandler,
   page?: any,
@@ -56,8 +56,11 @@ async function activityPubCollectionPagination (
   }
 }
 
-// ---------------------------------------------------------------------------
-
-export {
-  activityPubCollectionPagination
+export function activityPubCollection <T> (baseUrl: string, items: T[]) {
+  return {
+    id: baseUrl,
+    type: 'OrderedCollection' as 'OrderedCollection',
+    totalItems: items.length,
+    orderedItems: items
+  }
 }

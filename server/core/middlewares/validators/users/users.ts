@@ -2,8 +2,8 @@ import express from 'express'
 import { body, param, query } from 'express-validator'
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserRight, UserRole } from '@peertube/peertube-models'
-import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc.js'
-import { isThemeNameValid } from '../../helpers/custom-validators/plugins.js'
+import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
+import { isThemeNameValid } from '../../../helpers/custom-validators/plugins.js'
 import {
   isUserAdminFlagsValid,
   isUserAutoPlayNextVideoValid,
@@ -23,12 +23,12 @@ import {
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid
-} from '../../helpers/custom-validators/users.js'
-import { isVideoChannelUsernameValid } from '../../helpers/custom-validators/video-channels.js'
-import { logger } from '../../helpers/logger.js'
-import { isThemeRegistered } from '../../lib/plugins/theme-utils.js'
-import { Redis } from '../../lib/redis.js'
-import { ActorModel } from '../../models/actor/actor.js'
+} from '../../../helpers/custom-validators/users.js'
+import { isVideoChannelUsernameValid } from '../../../helpers/custom-validators/video-channels.js'
+import { logger } from '../../../helpers/logger.js'
+import { isThemeRegistered } from '../../../lib/plugins/theme-utils.js'
+import { Redis } from '../../../lib/redis.js'
+import { ActorModel } from '../../../models/actor/actor.js'
 import {
   areValidationErrors,
   checkUserEmailExist,
@@ -37,7 +37,7 @@ import {
   doesVideoChannelIdExist,
   doesVideoExist,
   isValidVideoIdParam
-} from './shared/index.js'
+} from '../shared/index.js'
 
 const usersListValidator = [
   query('blocked')
