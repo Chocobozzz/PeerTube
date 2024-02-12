@@ -4,6 +4,7 @@ export interface RegisterClientRouteOptions {
   menuItem?: {
     label?: string
   }
+  title?: string
 
   onMount (options: {
     rootEl: HTMLElement
