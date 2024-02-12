@@ -29,7 +29,6 @@ export * from './video-rate.type.js'
 export * from './video-schedule-update.model.js'
 export * from './video-sort-field.type.js'
 export * from './video-state.enum.js'
-export * from './video-storage.enum.js'
 export * from './video-source.model.js'
 
 export * from './video-streaming-playlist.model.js'

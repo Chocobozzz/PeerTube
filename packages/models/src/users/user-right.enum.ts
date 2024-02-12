@@ -47,7 +47,10 @@ export const UserRight = {
 
   MANAGE_REGISTRATIONS: 28,
 
-  MANAGE_RUNNERS: 29
+  MANAGE_RUNNERS: 29,
+
+  MANAGE_USER_EXPORTS: 30,
+  MANAGE_USER_IMPORTS: 31
 } as const
 
 export type UserRightType = typeof UserRight[keyof typeof UserRight]

@@ -16,7 +16,7 @@ import { VideoBlacklistModel } from '@server/models/video/video-blacklist.js'
 import { MPlugin, MVideo, UserNotificationModelForApi } from '@server/types/models/index.js'
 import { PeerTubeHelpers } from '@server/types/plugins/index.js'
 import { ffprobePromise } from '@peertube/peertube-ffmpeg'
-import { VideoBlacklistCreate, VideoStorage } from '@peertube/peertube-models'
+import { VideoBlacklistCreate, FileStorage } from '@peertube/peertube-models'
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../blocklist.js'
 import { PeerTubeSocket } from '../peertube-socket.js'
 import { ServerConfigManager } from '../server-config-manager.js'
@@ -105,7 +105,7 @@ function buildVideosHelpers () {
       if (!video) return undefined
 
       const webVideoFiles = (video.VideoFiles || []).map(f => ({
-        path: f.storage === VideoStorage.FILE_SYSTEM
+        path: f.storage === FileStorage.FILE_SYSTEM
           ? VideoPathManager.Instance.getFSVideoFileOutputPath(video, f)
           : null,
         url: f.getFileUrl(video),
@@ -120,7 +120,7 @@ function buildVideosHelpers () {
       const hlsVideoFiles = hls
         ? (video.getHLSPlaylist().VideoFiles || []).map(f => {
           return {
-            path: f.storage === VideoStorage.FILE_SYSTEM
+            path: f.storage === FileStorage.FILE_SYSTEM
               ? VideoPathManager.Instance.getFSVideoFileOutputPath(hls, f)
               : null,
             url: f.getFileUrl(video),
@@ -160,8 +160,13 @@ function buildModerationHelpers () {
   return {
     blockServer: async (options: { byAccountId: number, hostToBlock: string }) => {
       const serverToBlock = await ServerModel.loadOrCreateByHost(options.hostToBlock)
+      const user = await UserModel.loadByAccountId(options.byAccountId)
 
-      await addServerInBlocklist(options.byAccountId, serverToBlock.id)
+      await addServerInBlocklist({
+        byAccountId: options.byAccountId,
+        targetServerId: serverToBlock.id,
+        removeNotificationOfUserId: user?.id
+      })
     },
 
     unblockServer: async (options: { byAccountId: number, hostToUnblock: string }) => {
@@ -175,7 +180,13 @@ function buildModerationHelpers () {
       const accountToBlock = await AccountModel.loadByNameWithHost(options.handleToBlock)
       if (!accountToBlock) return
 
-      await addAccountInBlocklist(options.byAccountId, accountToBlock.id)
+      const user = await UserModel.loadByAccountId(options.byAccountId)
+
+      await addAccountInBlocklist({
+        byAccountId: options.byAccountId,
+        targetAccountId: accountToBlock.id,
+        removeNotificationOfUserId: user?.id
+      })
     },
 
     unblockAccount: async (options: { byAccountId: number, handleToUnblock: string }) => {

@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize'
-import { VideoStorage } from '@peertube/peertube-models'
+import { FileStorage } from '@peertube/peertube-models'
 
 async function up (utils: {
   transaction: Sequelize.Transaction
@@ -27,7 +27,7 @@ async function up (utils: {
     await utils.queryInterface.addColumn('videoFile', 'storage', {
       type: Sequelize.INTEGER,
       allowNull: true,
-      defaultValue: VideoStorage.FILE_SYSTEM
+      defaultValue: FileStorage.FILE_SYSTEM
     })
     await utils.queryInterface.changeColumn('videoFile', 'storage', { type: Sequelize.INTEGER, allowNull: false, defaultValue: null })
   }
@@ -36,7 +36,7 @@ async function up (utils: {
     await utils.queryInterface.addColumn('videoStreamingPlaylist', 'storage', {
       type: Sequelize.INTEGER,
       allowNull: true,
-      defaultValue: VideoStorage.FILE_SYSTEM
+      defaultValue: FileStorage.FILE_SYSTEM
     })
     await utils.queryInterface.changeColumn('videoStreamingPlaylist', 'storage', {
       type: Sequelize.INTEGER,

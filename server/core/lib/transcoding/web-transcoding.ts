@@ -2,7 +2,7 @@ import { Job } from 'bullmq'
 import { move, remove } from 'fs-extra/esm'
 import { copyFile, stat } from 'fs/promises'
 import { basename, join } from 'path'
-import { VideoStorage } from '@peertube/peertube-models'
+import { FileStorage } from '@peertube/peertube-models'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -16,7 +16,7 @@ import { buildFileMetadata } from '../video-file.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
 import { buildOriginalFileResolution } from './transcoding-resolutions.js'
-import { buildStoryboardJobIfNeeded } from '../video.js'
+import { buildStoryboardJobIfNeeded } from '../video-jobs.js'
 
 // Optimize the original video file and replace it. The resolution is not changed.
 export async function optimizeOriginalVideofile (options: {
@@ -66,7 +66,7 @@ export async function optimizeOriginalVideofile (options: {
       inputVideoFile.resolution = resolution
       inputVideoFile.extname = newExtname
       inputVideoFile.filename = generateWebVideoFilename(resolution, newExtname)
-      inputVideoFile.storage = VideoStorage.FILE_SYSTEM
+      inputVideoFile.storage = FileStorage.FILE_SYSTEM
 
       const { videoFile } = await onWebVideoFileTranscoding({
         video,

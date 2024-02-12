@@ -8,6 +8,7 @@ import { ActorModel } from '../actor/actor.js'
 import { ServerModel } from '../server/server.js'
 import { createSafeIn, getSort, searchAttribute } from '../shared/index.js'
 import { AccountModel } from './account.js'
+import { WEBSERVER } from '@server/initializers/constants.js'
 
 @Table({
   tableName: 'accountBlocklist',
@@ -180,7 +181,7 @@ export class AccountBlocklistModel extends Model<Partial<AttributesOnly<AccountB
                 {
                   attributes: [ 'host' ],
                   model: ServerModel.unscoped(),
-                  required: true
+                  required: false
                 }
               ]
             }
@@ -190,7 +191,13 @@ export class AccountBlocklistModel extends Model<Partial<AttributesOnly<AccountB
     }
 
     return AccountBlocklistModel.findAll(query)
-      .then(entries => entries.map(e => `${e.BlockedAccount.Actor.preferredUsername}@${e.BlockedAccount.Actor.Server.host}`))
+      .then(entries => {
+        return entries.map(e => {
+          const host = e.BlockedAccount.Actor.Server?.host ?? WEBSERVER.HOST
+
+          return `${e.BlockedAccount.Actor.preferredUsername}@${host}`
+        })
+      })
   }
 
   static getBlockStatus (byAccountIds: number[], handles: string[]): Promise<{ name: string, host: string, accountId: number }[]> {

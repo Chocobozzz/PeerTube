@@ -1,14 +1,11 @@
 import { createReadStream, createWriteStream } from 'fs'
 import { move, remove } from 'fs-extra/esm'
-import { join } from 'path'
 import { Transform } from 'stream'
 import { MVideoCaption } from '@server/types/models/index.js'
-import { CONFIG } from '../initializers/config.js'
 import { pipelinePromise } from './core-utils.js'
 
-async function moveAndProcessCaptionFile (physicalFile: { filename: string, path: string }, videoCaption: MVideoCaption) {
-  const videoCaptionsDir = CONFIG.STORAGE.CAPTIONS_DIR
-  const destination = join(videoCaptionsDir, videoCaption.filename)
+async function moveAndProcessCaptionFile (physicalFile: { filename?: string, path: string }, videoCaption: MVideoCaption) {
+  const destination = videoCaption.getFSPath()
 
   // Convert this srt file to vtt
   if (physicalFile.path.endsWith('.srt')) {
@@ -19,7 +16,7 @@ async function moveAndProcessCaptionFile (physicalFile: { filename: string, path
   }
 
   // This is important in case if there is another attempt in the retry process
-  physicalFile.filename = videoCaption.filename
+  if (physicalFile.filename) physicalFile.filename = videoCaption.filename
   physicalFile.path = destination
 }
 

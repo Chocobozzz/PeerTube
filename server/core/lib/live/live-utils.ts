@@ -1,7 +1,7 @@
 import { pathExists, remove } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
 import { basename, join } from 'path'
-import { LiveVideoLatencyMode, LiveVideoLatencyModeType, VideoStorage } from '@peertube/peertube-models'
+import { LiveVideoLatencyMode, LiveVideoLatencyModeType, FileStorage } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { VIDEO_LIVE } from '@server/initializers/constants.js'
 import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo } from '@server/types/models/index.js'
@@ -24,7 +24,7 @@ async function cleanupUnsavedNormalLive (video: MVideo, streamingPlaylist: MStre
   const hlsDirectory = getLiveDirectory(video)
 
   // We uploaded files to object storage too, remove them
-  if (streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
+  if (streamingPlaylist.storage === FileStorage.OBJECT_STORAGE) {
     await removeHLSObjectStorage(streamingPlaylist.withVideo(video))
   }
 
@@ -86,7 +86,7 @@ async function cleanupTMPLiveFilesFromFilesystem (video: MVideo) {
 }
 
 async function cleanupTMPLiveFilesFromObjectStorage (streamingPlaylist: MStreamingPlaylistVideo) {
-  if (streamingPlaylist.storage !== VideoStorage.OBJECT_STORAGE) return
+  if (streamingPlaylist.storage !== FileStorage.OBJECT_STORAGE) return
 
   logger.info('Cleanup TMP live files from object storage for %s.', streamingPlaylist.Video.uuid)
 

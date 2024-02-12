@@ -45,3 +45,5 @@ export type DeepOmitArray<T extends any[], K> = {
 }
 
 export type Unpacked<T> = T extends (infer U)[] ? U : T
+
+export type Awaitable<T> = T | PromiseLike<T>

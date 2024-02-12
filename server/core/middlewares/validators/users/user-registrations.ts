@@ -5,11 +5,11 @@ import { isRegistrationModerationResponseValid, isRegistrationReasonValid } from
 import { CONFIG } from '@server/initializers/config.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { HttpStatusCode, UserRegister, UserRegistrationRequest, UserRegistrationState } from '@peertube/peertube-models'
-import { isUserDisplayNameValid, isUserPasswordValid, isUserUsernameValid } from '../../helpers/custom-validators/users.js'
-import { isVideoChannelDisplayNameValid, isVideoChannelUsernameValid } from '../../helpers/custom-validators/video-channels.js'
-import { isSignupAllowed, isSignupAllowedForCurrentIP, SignupMode } from '../../lib/signup.js'
-import { ActorModel } from '../../models/actor/actor.js'
-import { areValidationErrors, checkUserNameOrEmailDoNotAlreadyExist } from './shared/index.js'
+import { isUserDisplayNameValid, isUserPasswordValid, isUserUsernameValid } from '../../../helpers/custom-validators/users.js'
+import { isVideoChannelDisplayNameValid, isVideoChannelUsernameValid } from '../../../helpers/custom-validators/video-channels.js'
+import { isSignupAllowed, isSignupAllowedForCurrentIP, SignupMode } from '../../../lib/signup.js'
+import { ActorModel } from '../../../models/actor/actor.js'
+import { areValidationErrors, checkUserNameOrEmailDoNotAlreadyExist } from '../shared/index.js'
 import { checkRegistrationHandlesDoNotAlreadyExist, checkRegistrationIdExist } from './shared/user-registrations.js'
 
 const usersDirectRegistrationValidator = usersCommonRegistrationValidatorFactory()

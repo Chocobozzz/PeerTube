@@ -17,6 +17,7 @@ import {
   MCommentAbuseAccountVideo,
   MCommentOwnerVideo,
   MUser,
+  MUserDefault,
   MVideoAbuseVideoFull,
   MVideoAccountLightBlacklistAllFiles
 } from '@server/types/models/index.js'
@@ -38,7 +39,7 @@ export type AcceptResult = {
 function isLocalVideoFileAccepted (object: {
   videoBody: VideoCreate
   videoFile: VideoUploadFile
-  user: UserModel
+  user: MUserDefault
 }): AcceptResult {
   return { accepted: true }
 }

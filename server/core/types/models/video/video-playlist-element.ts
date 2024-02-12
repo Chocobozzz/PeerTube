@@ -17,9 +17,13 @@ export type MVideoPlaylistElementLight = Pick<MVideoPlaylistElement, 'id' | 'vid
 
 // ############################################################################
 
-export type MVideoPlaylistVideoThumbnail =
+export type MVideoPlaylistElementVideoThumbnail =
   MVideoPlaylistElement &
   Use<'Video', MVideoThumbnail>
+
+export type MVideoPlaylistElementVideoUrl =
+  MVideoPlaylistElement &
+  Use<'Video', MVideoUrl>
 
 export type MVideoPlaylistElementVideoUrlPlaylistPrivacy =
   MVideoPlaylistElement &

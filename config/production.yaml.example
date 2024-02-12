@@ -220,9 +220,13 @@ object_storage:
     # Useful when you want to use a CDN/external proxy
     base_url: '' # Example: 'https://mirror.example.com'
 
-  # Same settings but for web videos
   web_videos:
     bucket_name: 'web-videos'
+    prefix: ''
+    base_url: ''
+
+  user_exports:
+    bucket_name: 'user-exports'
     prefix: ''
     base_url: ''
 
@@ -492,11 +496,14 @@ user:
     videos:
       # Enable or disable video history by default for new users.
       enabled: true
-  # Default value of maximum video bytes the user can upload (does not take into account transcoded files)
+
+  # Default value of maximum video bytes the user can upload
+  # Does not take into account transcoded files or account export archives (that can include user uploaded files)
   # Byte format is supported ("1GB" etc)
   # -1 == unlimited
   video_quota: -1
   video_quota_daily: -1
+
   default_channel_name: 'Main $1 channel' # The placeholder $1 is used to represent the user's username
 
 video_channels:
@@ -717,6 +724,24 @@ import:
     # Max number of videos to import when the user asks for full sync
     full_sync_videos_limit: 1000
 
+  users:
+    # Video quota is checked on import so the user doesn't upload a too big archive file
+    # Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import
+    enabled: true
+
+export:
+  users:
+    # Allow users to export their PeerTube data in a .zip for backup or re-import
+    # Only one export at a time is allowed per user
+    enabled: true
+
+    # Max size of the current user quota to accept or not the export
+    # Goal of this setting is to not store too big archive file on your server disk
+    max_user_video_quota: 10GB
+
+    # How long PeerTube should keep the user export
+    export_expiration: '2 days'
+
 auto_blacklist:
   # New videos automatically blacklisted so moderators can review before publishing
   videos:
@@ -877,6 +902,7 @@ client:
       # By default PeerTube client displays author username
       prefer_author_display_name: false
       display_author_avatar: false
+
     resumable_upload:
       # Max size of upload chunks, e.g. '90MB'
       # If null, it will be calculated based on network speed

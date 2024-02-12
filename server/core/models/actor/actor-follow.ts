@@ -496,25 +496,97 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     return difference(hosts, followedHosts)
   }
 
+  // ---------------------------------------------------------------------------
+
   static listAcceptedFollowerUrlsForAP (actorIds: number[], t: Transaction, start?: number, count?: number) {
-    return ActorFollowModel.createListAcceptedFollowForApiQuery('followers', actorIds, t, start, count)
+    return ActorFollowModel.createListAcceptedFollowForApiQuery({ type: 'followers', actorIds, t, start, count })
+      .then(({ data, total }) => ({ total, data: data.map(d => d.selectionUrl) }))
   }
 
   static listAcceptedFollowerSharedInboxUrls (actorIds: number[], t: Transaction) {
-    return ActorFollowModel.createListAcceptedFollowForApiQuery(
-      'followers',
+    return ActorFollowModel.createListAcceptedFollowForApiQuery({
+      type: 'followers',
       actorIds,
       t,
-      undefined,
-      undefined,
-      'sharedInboxUrl',
-      true
-    )
+      columnUrl: 'sharedInboxUrl',
+      distinct: true
+    }).then(({ data, total }) => ({ total, data: data.map(d => d.selectionUrl) }))
   }
 
-  static listAcceptedFollowingUrlsForApi (actorIds: number[], t: Transaction, start?: number, count?: number) {
-    return ActorFollowModel.createListAcceptedFollowForApiQuery('following', actorIds, t, start, count)
+  static listAcceptedFollowersForExport (targetActorId: number) {
+    const query = {
+      where: {
+        state: 'accepted',
+        targetActorId
+      },
+      include: [
+        {
+          attributes: [ 'preferredUsername', 'url' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          as: 'ActorFollower',
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: false
+            }
+          ]
+        }
+      ]
+    }
+
+    return ActorFollowModel.findAll(query)
+      .then(data => {
+        return data.map(f => ({
+          createdAt: f.createdAt,
+          followerHandle: f.ActorFollower.getFullIdentifier(),
+          followerUrl: f.ActorFollower.url
+        }))
+      })
   }
+
+  // ---------------------------------------------------------------------------
+
+  static listAcceptedFollowingUrlsForApi (actorIds: number[], t: Transaction, start?: number, count?: number) {
+    return ActorFollowModel.createListAcceptedFollowForApiQuery({ type: 'following', actorIds, t, start, count })
+      .then(({ data, total }) => ({ total, data: data.map(d => d.selectionUrl) }))
+  }
+
+  static listAcceptedFollowingForExport (actorId: number) {
+    const query = {
+      where: {
+        state: 'accepted',
+        actorId
+      },
+      include: [
+        {
+          attributes: [ 'preferredUsername', 'url' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          as: 'ActorFollowing',
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: false
+            }
+          ]
+        }
+      ]
+    }
+
+    return ActorFollowModel.findAll(query)
+      .then(data => {
+        return data.map(f => ({
+          createdAt: f.createdAt,
+          followingHandle: f.ActorFollowing.getFullIdentifier(),
+          followingUrl: f.ActorFollowing.url
+        }))
+      })
+  }
+
+  // ---------------------------------------------------------------------------
 
   static async getStats () {
     const serverActor = await getServerActor()
@@ -577,15 +649,21 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     return ActorFollowModel.sequelize.query(query, options)
   }
 
-  private static async createListAcceptedFollowForApiQuery (
-    type: 'followers' | 'following',
-    actorIds: number[],
-    t: Transaction,
-    start?: number,
-    count?: number,
-    columnUrl = 'url',
-    distinct = false
-  ) {
+  private static async createListAcceptedFollowForApiQuery (options: {
+    type: 'followers' | 'following'
+    actorIds: number[]
+    t: Transaction
+
+    start?: number
+    count?: number
+
+    columnUrl?: string // Default 'url'
+    distinct?: boolean // Default false
+
+    selectTotal?: boolean // Default true
+  }) {
+    const { type, actorIds, t, start, count, columnUrl = 'url', distinct = false, selectTotal = true } = options
+
     let firstJoin: string
     let secondJoin: string
 
@@ -598,10 +676,14 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     }
 
     const selections: string[] = []
-    if (distinct === true) selections.push(`DISTINCT("Follows"."${columnUrl}") AS "selectionUrl"`)
-    else selections.push(`"Follows"."${columnUrl}" AS "selectionUrl"`)
 
-    selections.push('COUNT(*) AS "total"')
+    selections.push(
+      distinct === true
+        ? `DISTINCT("Follows"."${columnUrl}") AS "selectionUrl"`
+        : `"Follows"."${columnUrl}" AS "selectionUrl"`
+    )
+
+    if (selectTotal) selections.push('COUNT(*) AS "total"')
 
     const tasks: Promise<any>[] = []
 
@@ -622,12 +704,14 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
       tasks.push(ActorFollowModel.sequelize.query(query, options))
     }
 
-    const [ followers, [ dataTotal ] ] = await Promise.all(tasks)
-    const urls: string[] = followers.map(f => f.selectionUrl)
+    const [ followers, resDataTotal ] = await Promise.all(tasks)
 
     return {
-      data: urls,
-      total: dataTotal ? parseInt(dataTotal.total, 10) : 0
+      data: followers.map(f => ({ selectionUrl: f.selectionUrl, createdAt: f.createdAt })) as { selectionUrl: string, createdAt: string }[],
+
+      total: selectTotal
+        ? parseInt(resDataTotal?.dataTotal?.[0]?.total || 0, 10)
+        : undefined
     }
   }
 

@@ -30,7 +30,7 @@ import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoS
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { JobQueue } from '../job-queue.js'
 import { isVideoInPublicDirectory } from '@server/lib/video-privacy.js'
-import { buildStoryboardJobIfNeeded } from '@server/lib/video.js'
+import { buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 
 const lTags = loggerTagsFactory('live', 'job')
 

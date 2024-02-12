@@ -213,7 +213,12 @@ async function updateVideoChannelBanner (req: express.Request, res: express.Resp
   const videoChannel = res.locals.videoChannel
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
 
-  const banners = await updateLocalActorImageFiles(videoChannel, bannerPhysicalFile, ActorImageType.BANNER)
+  const banners = await updateLocalActorImageFiles({
+    accountOrChannel: videoChannel,
+    imagePhysicalFile: bannerPhysicalFile,
+    type: ActorImageType.BANNER,
+    sendActorUpdate: true
+  })
 
   auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
 
@@ -227,7 +232,13 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
   const videoChannel = res.locals.videoChannel
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
 
-  const avatars = await updateLocalActorImageFiles(videoChannel, avatarPhysicalFile, ActorImageType.AVATAR)
+  const avatars = await updateLocalActorImageFiles({
+    accountOrChannel: videoChannel,
+    imagePhysicalFile: avatarPhysicalFile,
+    type: ActorImageType.AVATAR,
+    sendActorUpdate: true
+  })
+
   auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
 
   return res.json({

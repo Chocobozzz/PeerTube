@@ -48,9 +48,9 @@ import {
 } from '../../initializers/constants.js'
 import { MThumbnail } from '../../types/models/video/thumbnail.js'
 import {
+  MVideoPlaylist,
   MVideoPlaylistAccountThumbnail,
-  MVideoPlaylistAP,
-  MVideoPlaylistFormattable,
+  MVideoPlaylistAP, MVideoPlaylistFormattable,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
   MVideoPlaylistSummaryWithElements
@@ -497,6 +497,20 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
     return VideoPlaylistModel.findAll(query)
   }
 
+  static listPlaylistForExport (accountId: number): Promise<MVideoPlaylistFull[]> {
+    const query = {
+      where: {
+        ownerAccountId: accountId
+      }
+    }
+
+    return VideoPlaylistModel
+      .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL, ScopeNames.WITH_VIDEOS_LENGTH, ScopeNames.WITH_THUMBNAIL ])
+      .findAll(query)
+  }
+
+  // ---------------------------------------------------------------------------
+
   static doesPlaylistExist (url: string) {
     const query = {
       attributes: [ 'id' ],
@@ -555,6 +569,32 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
 
     return VideoPlaylistModel
       .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL_SUMMARY, ScopeNames.WITH_VIDEOS_LENGTH, ScopeNames.WITH_THUMBNAIL ])
+      .findOne(query)
+  }
+
+  static loadWatchLaterOf (account: MAccountId): Promise<MVideoPlaylistFull> {
+    const query = {
+      where: {
+        type: VideoPlaylistType.WATCH_LATER,
+        ownerAccountId: account.id
+      }
+    }
+
+    return VideoPlaylistModel
+      .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL, ScopeNames.WITH_VIDEOS_LENGTH, ScopeNames.WITH_THUMBNAIL ])
+      .findOne(query)
+  }
+
+  static loadRegularByAccountAndName (account: MAccountId, name: string): Promise<MVideoPlaylist> {
+    const query = {
+      where: {
+        type: VideoPlaylistType.REGULAR,
+        name,
+        ownerAccountId: account.id
+      }
+    }
+
+    return VideoPlaylistModel
       .findOne(query)
   }
 

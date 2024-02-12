@@ -2,14 +2,30 @@ import cors from 'cors'
 import express from 'express'
 import { logger } from '@server/helpers/logger.js'
 import { VideoTorrentsSimpleFileCache } from '@server/lib/files-cache/index.js'
-import { generateHLSFilePresignedUrl, generateWebVideoPresignedUrl } from '@server/lib/object-storage/index.js'
+import {
+  generateHLSFilePresignedUrl,
+  generateUserExportPresignedUrl,
+  generateWebVideoPresignedUrl
+} from '@server/lib/object-storage/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
-import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import {
+  MStreamingPlaylist,
+  MStreamingPlaylistVideo,
+  MUserExport,
+  MVideo,
+  MVideoFile,
+  MVideoFullLight
+} from '@server/types/models/index.js'
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoStorage, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import { HttpStatusCode, FileStorage, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { STATIC_DOWNLOAD_PATHS } from '../initializers/constants.js'
-import { asyncMiddleware, optionalAuthenticate, videosDownloadValidator } from '../middlewares/index.js'
+import {
+  asyncMiddleware, optionalAuthenticate,
+  userExportDownloadValidator,
+  videosDownloadValidator
+} from '../middlewares/index.js'
+import { getFSUserExportFilePath } from '@server/lib/paths.js'
 
 const downloadRouter = express.Router()
 
@@ -32,6 +48,12 @@ downloadRouter.use(
   optionalAuthenticate,
   asyncMiddleware(videosDownloadValidator),
   asyncMiddleware(downloadHLSVideoFile)
+)
+
+downloadRouter.use(
+  STATIC_DOWNLOAD_PATHS.USER_EXPORT + ':filename',
+  asyncMiddleware(userExportDownloadValidator), // Include JWT token authentication
+  asyncMiddleware(downloadUserExport)
 )
 
 // ---------------------------------------------------------------------------
@@ -99,8 +121,8 @@ async function downloadVideoFile (req: express.Request, res: express.Response) {
   const videoName = video.name.replace(/[/\\]/g, '_')
   const downloadFilename = `${videoName}-${videoFile.resolution}p${videoFile.extname}`
 
-  if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
-    return redirectToObjectStorage({ req, res, video, file: videoFile, downloadFilename })
+  if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
+    return redirectVideoDownloadToObjectStorage({ res, video, file: videoFile, downloadFilename })
   }
 
   await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), path => {
@@ -140,14 +162,29 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
   const videoName = video.name.replace(/\//g, '_')
   const downloadFilename = `${videoName}-${videoFile.resolution}p-${streamingPlaylist.getStringType()}${videoFile.extname}`
 
-  if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
-    return redirectToObjectStorage({ req, res, video, streamingPlaylist, file: videoFile, downloadFilename })
+  if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
+    return redirectVideoDownloadToObjectStorage({ res, video, streamingPlaylist, file: videoFile, downloadFilename })
   }
 
   await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(streamingPlaylist), path => {
     return res.download(path, downloadFilename)
   })
 }
+
+function downloadUserExport (req: express.Request, res: express.Response) {
+  const userExport = res.locals.userExport
+
+  const downloadFilename = userExport.filename
+
+  if (userExport.storage === FileStorage.OBJECT_STORAGE) {
+    return redirectUserExportToObjectStorage({ res, userExport, downloadFilename })
+  }
+
+  res.download(getFSUserExportFilePath(userExport), downloadFilename)
+  return Promise.resolve()
+}
+
+// ---------------------------------------------------------------------------
 
 function getVideoFile (req: express.Request, files: MVideoFile[]) {
   const resolution = forceNumber(req.params.resolution)
@@ -194,8 +231,7 @@ function checkAllowResult (res: express.Response, allowParameters: any, result?:
   return true
 }
 
-async function redirectToObjectStorage (options: {
-  req: express.Request
+async function redirectVideoDownloadToObjectStorage (options: {
   res: express.Response
   video: MVideo
   file: MVideoFile
@@ -209,6 +245,20 @@ async function redirectToObjectStorage (options: {
     : await generateWebVideoPresignedUrl({ file, downloadFilename })
 
   logger.debug('Generating pre-signed URL %s for video %s', url, video.uuid)
+
+  return res.redirect(url)
+}
+
+async function redirectUserExportToObjectStorage (options: {
+  res: express.Response
+  downloadFilename: string
+  userExport: MUserExport
+}) {
+  const { res, downloadFilename, userExport } = options
+
+  const url = await generateUserExportPresignedUrl({ userExport, downloadFilename })
+
+  logger.debug('Generating pre-signed URL %s for user export %s', url, userExport.filename)
 
   return res.redirect(url)
 }

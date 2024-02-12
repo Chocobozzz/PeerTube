@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { HttpStatusCode, ServerErrorCode, UserRight, UserRightType, VideoPrivacy } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { loadVideo, VideoLoadType } from '@server/lib/model-loaders/index.js'
-import { isAbleToUploadVideo } from '@server/lib/user.js'
+import { isUserQuotaValid } from '@server/lib/user.js'
 import { VideoTokensManager } from '@server/lib/video-tokens-manager.js'
 import { authenticatePromise } from '@server/middlewares/auth.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
@@ -285,7 +285,7 @@ function checkUserCanManageVideo (user: MUser, video: MVideoAccountLight, right:
 // ---------------------------------------------------------------------------
 
 async function checkUserQuota (user: MUserId, videoFileSize: number, res: Response) {
-  if (await isAbleToUploadVideo(user.id, videoFileSize) === false) {
+  if (await isUserQuotaValid({ userId: user.id, uploadSize: videoFileSize }) === false) {
     res.fail({
       status: HttpStatusCode.PAYLOAD_TOO_LARGE_413,
       message: 'The user video quota is exceeded with this video.',

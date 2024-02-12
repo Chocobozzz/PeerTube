@@ -1,6 +1,6 @@
 import { Job } from 'bullmq'
 import { join } from 'path'
-import { MoveStoragePayload, VideoStateType, VideoStorage } from '@peertube/peertube-models'
+import { MoveStoragePayload, VideoStateType, FileStorage } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { updateTorrentMetadata } from '@server/helpers/webtorrent.js'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants.js'
@@ -52,7 +52,7 @@ export async function onMoveToFileSystemFailure (job: Job, err: any) {
 
 async function moveWebVideoFiles (video: MVideoWithAllFiles) {
   for (const file of video.VideoFiles) {
-    if (file.storage === VideoStorage.FILE_SYSTEM) continue
+    if (file.storage === FileStorage.FILE_SYSTEM) continue
 
     await makeWebVideoFileAvailable(file.filename, VideoPathManager.Instance.getFSVideoFileOutputPath(video, file))
     await onFileMoved({
@@ -68,7 +68,7 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
     const playlistWithVideo = playlist.withVideo(video)
 
     for (const file of playlist.VideoFiles) {
-      if (file.storage === VideoStorage.FILE_SYSTEM) continue
+      if (file.storage === FileStorage.FILE_SYSTEM) continue
 
       // Resolution playlist
       const playlistFilename = getHlsResolutionPlaylistFilename(file.filename)
@@ -97,7 +97,7 @@ async function onFileMoved (options: {
   const oldFileUrl = file.fileUrl
 
   file.fileUrl = null
-  file.storage = VideoStorage.FILE_SYSTEM
+  file.storage = FileStorage.FILE_SYSTEM
 
   await updateTorrentMetadata(videoOrPlaylist, file)
   await file.save()
@@ -114,7 +114,7 @@ async function doAfterLastMove (options: {
   const { video, previousVideoState, isNewVideo } = options
 
   for (const playlist of video.VideoStreamingPlaylists) {
-    if (playlist.storage === VideoStorage.FILE_SYSTEM) continue
+    if (playlist.storage === FileStorage.FILE_SYSTEM) continue
 
     const playlistWithVideo = playlist.withVideo(video)
 
@@ -124,7 +124,7 @@ async function doAfterLastMove (options: {
 
     playlist.playlistUrl = null
     playlist.segmentsSha256Url = null
-    playlist.storage = VideoStorage.FILE_SYSTEM
+    playlist.storage = FileStorage.FILE_SYSTEM
 
     playlist.assignP2PMediaLoaderInfoHashes(video, playlist.VideoFiles)
     playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION

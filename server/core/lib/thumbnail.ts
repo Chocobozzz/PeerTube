@@ -11,7 +11,7 @@ import { VideoPathManager } from './video-path-manager.js'
 import { downloadImageFromWorker, processImageFromWorker } from './worker/parent-process.js'
 import { generateThumbnailFromVideo } from '@server/helpers/ffmpeg/ffmpeg-image.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { remove } from 'fs-extra'
+import { remove } from 'fs-extra/esm'
 import { FfprobeData } from 'fluent-ffmpeg'
 import Bluebird from 'bluebird'
 

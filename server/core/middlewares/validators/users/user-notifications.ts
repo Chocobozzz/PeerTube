@@ -1,8 +1,8 @@
 import express from 'express'
 import { body, query } from 'express-validator'
-import { isNotEmptyIntArray, toBooleanOrNull } from '../../helpers/custom-validators/misc.js'
-import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications.js'
-import { areValidationErrors } from './shared/index.js'
+import { isNotEmptyIntArray, toBooleanOrNull } from '../../../helpers/custom-validators/misc.js'
+import { isUserNotificationSettingValid } from '../../../helpers/custom-validators/user-notifications.js'
+import { areValidationErrors } from '../shared/index.js'
 
 const listUserNotificationsValidator = [
   query('unread')

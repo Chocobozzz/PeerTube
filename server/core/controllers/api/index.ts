@@ -50,7 +50,6 @@ apiRouter.use('/custom-pages', customPageRouter)
 apiRouter.use('/blocklist', blocklistRouter)
 apiRouter.use('/runners', runnersRouter)
 
-// apiRouter.use(apiRateLimiter)
 apiRouter.use('/ping', pong)
 apiRouter.use('/*', badRequest)
 

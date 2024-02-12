@@ -19,8 +19,7 @@ export async function commonVideoFileChecks (options: {
   if (!isVideoFileMimeTypeValid(files)) {
     res.fail({
       status: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415,
-      message: 'This file is not supported. Please, make sure it is of the following type: ' +
-               CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
+      message: `This file is not supported. Please, make sure it is of the following type: ${CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')}`
     })
     return false
   }

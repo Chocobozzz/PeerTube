@@ -4,7 +4,7 @@ import { initDatabaseModels } from '@server/initializers/database.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { buildStoryboardJobIfNeeded } from '@server/lib/video.js'
+import { buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 
 program
   .description('Generate videos storyboard')

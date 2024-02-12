@@ -18,6 +18,10 @@ async function processActivityPubFollow (job: Job) {
   const payload = job.data as ActivitypubFollowPayload
   const host = payload.host
 
+  const handle = host
+    ? `${payload.name}@${host}`
+    : payload.name
+
   logger.info('Processing ActivityPub follow in job %s.', job.id)
 
   let targetActor: MActorFull
@@ -30,14 +34,24 @@ async function processActivityPubFollow (job: Job) {
 
     let actorUrl: string
 
-    if (!payload.name) actorUrl = await getApplicationActorOfHost(sanitizedHost)
-    if (!actorUrl) actorUrl = await loadActorUrlOrGetFromWebfinger((payload.name || SERVER_ACTOR_NAME) + '@' + sanitizedHost)
+    try {
+      if (!payload.name) actorUrl = await getApplicationActorOfHost(sanitizedHost)
+      if (!actorUrl) actorUrl = await loadActorUrlOrGetFromWebfinger((payload.name || SERVER_ACTOR_NAME) + '@' + sanitizedHost)
 
-    targetActor = await getOrCreateAPActor(actorUrl, 'all')
+      targetActor = await getOrCreateAPActor(actorUrl, 'all')
+    } catch (err) {
+      logger.warn(`Do not follow ${handle} because we could not find the actor URL (in database or using webfinger)`)
+      return
+    }
+  }
+
+  if (!targetActor) {
+    logger.warn(`Do not follow ${handle} because we could not fetch/load the actor`)
+    return
   }
 
   if (payload.assertIsChannel && !targetActor.VideoChannel) {
-    logger.warn('Do not follow %s@%s because it is not a channel.', payload.name, host)
+    logger.warn(`Do not follow ${handle} because it is not a channel.`)
     return
   }
 

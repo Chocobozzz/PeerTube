@@ -208,6 +208,16 @@ export class UserNotificationSettingModel extends Model<Partial<AttributesOnly<U
     return TokensCache.Instance.clearCacheByUserId(instance.userId)
   }
 
+  static updateUserSettings (settings: UserNotificationSetting, userId: number) {
+    const query = {
+      where: {
+        userId
+      }
+    }
+
+    return UserNotificationSettingModel.update(settings, query)
+  }
+
   toFormattedJSON (this: MNotificationSettingFormattable): UserNotificationSetting {
     return {
       newCommentOnMyVideo: this.newCommentOnMyVideo,

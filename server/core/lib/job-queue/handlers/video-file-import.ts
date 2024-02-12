@@ -1,13 +1,12 @@
 import { Job } from 'bullmq'
 import { copy } from 'fs-extra/esm'
 import { stat } from 'fs/promises'
-import { VideoFileImportPayload, VideoStorage } from '@peertube/peertube-models'
+import { VideoFileImportPayload, FileStorage } from '@peertube/peertube-models'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { generateWebVideoFilename } from '@server/lib/paths.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
-import { buildMoveJob } from '@server/lib/video.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFullLight } from '@server/types/models/index.js'
@@ -15,6 +14,7 @@ import { getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
 import { logger } from '../../../helpers/logger.js'
 import { JobQueue } from '../job-queue.js'
+import { buildMoveJob } from '@server/lib/video-jobs.js'
 
 async function processVideoFileImport (job: Job) {
   const payload = job.data as VideoFileImportPayload
@@ -68,7 +68,7 @@ async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
     resolution,
     extname: fileExt,
     filename: generateWebVideoFilename(resolution, fileExt),
-    storage: VideoStorage.FILE_SYSTEM,
+    storage: FileStorage.FILE_SYSTEM,
     size,
     fps,
     videoId: video.id

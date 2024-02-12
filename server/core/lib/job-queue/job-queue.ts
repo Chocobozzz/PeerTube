@@ -18,10 +18,12 @@ import {
   ActivitypubHttpUnicastPayload,
   ActorKeysPayload,
   AfterVideoChannelImportPayload,
+  CreateUserExportPayload,
   DeleteResumableUploadMetaFilePayload,
   EmailPayload,
   FederateVideoPayload,
   GenerateStoryboardPayload,
+  ImportUserArchivePayload,
   JobState,
   JobType,
   ManageVideoTorrentPayload,
@@ -71,6 +73,8 @@ import { processVideoStudioEdition } from './handlers/video-studio-edition.js'
 import { processVideoTranscoding } from './handlers/video-transcoding.js'
 import { processVideosViewsStats } from './handlers/video-views-stats.js'
 import { onMoveToFileSystemFailure, processMoveToFileSystem } from './handlers/move-to-file-system.js'
+import { processCreateUserExport } from './handlers/create-user-export.js'
+import { processImportUserArchive } from './handlers/import-user-archive.js'
 
 export type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -98,7 +102,9 @@ export type CreateJobArgument =
   { type: 'after-video-channel-import', payload: AfterVideoChannelImportPayload } |
   { type: 'notify', payload: NotifyPayload } |
   { type: 'federate-video', payload: FederateVideoPayload } |
-  { type: 'generate-video-storyboard', payload: GenerateStoryboardPayload }
+  { type: 'create-user-export', payload: CreateUserExportPayload } |
+  { type: 'generate-video-storyboard', payload: GenerateStoryboardPayload } |
+  { type: 'import-user-archive', payload: ImportUserArchivePayload }
 
 export type CreateJobOptions = {
   delay?: number
@@ -131,7 +137,9 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'video-studio-edition': processVideoStudioEdition,
   'video-transcoding': processVideoTranscoding,
   'videos-views-stats': processVideosViewsStats,
-  'generate-video-storyboard': processGenerateStoryboard
+  'generate-video-storyboard': processGenerateStoryboard,
+  'create-user-export': processCreateUserExport,
+  'import-user-archive': processImportUserArchive
 }
 
 const errorHandlers: { [id in JobType]?: (job: Job, err: any) => Promise<any> } = {
@@ -164,7 +172,9 @@ const jobTypes: JobType[] = [
   'video-redundancy',
   'video-studio-edition',
   'video-transcoding',
-  'videos-views-stats'
+  'videos-views-stats',
+  'create-user-export',
+  'import-user-archive'
 ]
 
 const silentFailure = new Set<JobType>([ 'activitypub-http-unicast' ])

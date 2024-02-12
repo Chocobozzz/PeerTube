@@ -14,14 +14,14 @@ import { removeHLSFileObjectStorageByPath, storeHLSFileFromContent, storeHLSFile
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models/index.js'
-import { LiveVideoError, VideoStorage, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import { LiveVideoError, FileStorage, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import {
   generateHLSMasterPlaylistFilename,
   generateHlsSha256SegmentsFilename,
   getLiveDirectory,
   getLiveReplayBaseDirectory
 } from '../../paths.js'
-import { isAbleToUploadVideo } from '../../user.js'
+import { isUserQuotaValid } from '../../user.js'
 import { LiveQuotaStore } from '../live-quota-store.js'
 import { LiveSegmentShaStore } from '../live-segment-sha-store.js'
 import { buildConcatenatedName, getLiveSegmentTime } from '../live-utils.js'
@@ -95,7 +95,7 @@ class MuxingSession extends EventEmitter {
   private aborted = false
 
   private readonly isAbleToUploadVideoWithCache = memoizee((userId: number) => {
-    return isAbleToUploadVideo(userId, 1000)
+    return isUserQuotaValid({ userId, uploadSize: 1000 })
   }, { maxAge: MEMOIZE_TTL.LIVE_ABLE_TO_UPLOAD })
 
   private readonly hasClientSocketInBadHealthWithCache = memoizee((sessionId: string) => {
@@ -186,7 +186,7 @@ class MuxingSession extends EventEmitter {
       if (this.masterPlaylistCreated === true) return
 
       try {
-        if (this.streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
+        if (this.streamingPlaylist.storage === FileStorage.OBJECT_STORAGE) {
           let masterContent = await readFile(path, 'utf-8')
 
           // If the disk sync is slow, don't upload an empty master playlist on object storage
@@ -260,7 +260,7 @@ class MuxingSession extends EventEmitter {
         logger.warn('Cannot remove segment sha %s from sha store', segmentPath, { err, ...this.lTags() })
       }
 
-      if (this.streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
+      if (this.streamingPlaylist.storage === FileStorage.OBJECT_STORAGE) {
         try {
           await removeHLSFileObjectStorageByPath(this.streamingPlaylist, segmentPath)
         } catch (err) {
@@ -345,7 +345,7 @@ class MuxingSession extends EventEmitter {
       await this.addSegmentToReplay(segmentPath)
     }
 
-    if (this.streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
+    if (this.streamingPlaylist.storage === FileStorage.OBJECT_STORAGE) {
       try {
         await storeHLSFileFromPath(this.streamingPlaylist, segmentPath)
 
@@ -464,8 +464,8 @@ class MuxingSession extends EventEmitter {
     playlist.type = VideoStreamingPlaylistType.HLS
 
     playlist.storage = CONFIG.OBJECT_STORAGE.ENABLED
-      ? VideoStorage.OBJECT_STORAGE
-      : VideoStorage.FILE_SYSTEM
+      ? FileStorage.OBJECT_STORAGE
+      : FileStorage.FILE_SYSTEM
 
     return playlist.save()
   }

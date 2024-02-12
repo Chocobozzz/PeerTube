@@ -29,7 +29,8 @@ import {
   MVideoPlaylistElementAP,
   MVideoPlaylistElementFormattable,
   MVideoPlaylistElementVideoUrlPlaylistPrivacy,
-  MVideoPlaylistVideoThumbnail
+  MVideoPlaylistElementVideoThumbnail,
+  MVideoPlaylistElementVideoUrl
 } from '@server/types/models/video/video-playlist-element.js'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
@@ -214,6 +215,26 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
     return VideoPlaylistElementModel.findOne(query)
   }
 
+  static loadFirstElementWithVideoThumbnail (videoPlaylistId: number): Promise<MVideoPlaylistElementVideoThumbnail> {
+    const query = {
+      order: getSort('position'),
+      where: {
+        videoPlaylistId
+      },
+      include: [
+        {
+          model: VideoModel.scope(VideoScopeNames.WITH_THUMBNAILS),
+          required: true
+        }
+      ]
+    }
+
+    return VideoPlaylistElementModel
+      .findOne(query)
+  }
+
+  // ---------------------------------------------------------------------------
+
   static listUrlsOfForAP (videoPlaylistId: number, start: number, count: number, t?: Transaction) {
     const getQuery = (forCount: boolean) => {
       return {
@@ -239,23 +260,24 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
     }))
   }
 
-  static loadFirstElementWithVideoThumbnail (videoPlaylistId: number): Promise<MVideoPlaylistVideoThumbnail> {
+  static listElementsForExport (videoPlaylistId: number): Promise<MVideoPlaylistElementVideoUrl[]> {
     const query = {
-      order: getSort('position'),
       where: {
         videoPlaylistId
       },
       include: [
         {
-          model: VideoModel.scope(VideoScopeNames.WITH_THUMBNAILS),
+          attributes: [ 'url' ],
+          model: VideoModel.unscoped(),
           required: true
         }
       ]
     }
 
-    return VideoPlaylistElementModel
-      .findOne(query)
+    return VideoPlaylistElementModel.findAll(query)
   }
+
+  // ---------------------------------------------------------------------------
 
   static getNextPositionOf (videoPlaylistId: number, transaction?: Transaction) {
     const query: AggregateOptions<number> = {

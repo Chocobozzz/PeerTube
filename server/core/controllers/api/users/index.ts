@@ -47,6 +47,8 @@ import { mySubscriptionsRouter } from './my-subscriptions.js'
 import { myVideoPlaylistsRouter } from './my-video-playlists.js'
 import { registrationsRouter } from './registrations.js'
 import { twoFactorRouter } from './two-factor.js'
+import { userExportsRouter } from './user-exports.js'
+import { userImportRouter } from './user-imports.js'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -55,6 +57,8 @@ const usersRouter = express.Router()
 usersRouter.use(apiRateLimiter)
 
 usersRouter.use('/', emailVerificationRouter)
+usersRouter.use('/', userExportsRouter)
+usersRouter.use('/', userImportRouter)
 usersRouter.use('/', registrationsRouter)
 usersRouter.use('/', twoFactorRouter)
 usersRouter.use('/', tokensRouter)

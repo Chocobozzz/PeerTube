@@ -2,10 +2,10 @@ import express from 'express'
 import { body, param, query } from 'express-validator'
 import { arrayify } from '@peertube/peertube-core-utils'
 import { FollowState, HttpStatusCode } from '@peertube/peertube-models'
-import { areValidActorHandles, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor.js'
-import { WEBSERVER } from '../../initializers/constants.js'
-import { ActorFollowModel } from '../../models/actor/actor-follow.js'
-import { areValidationErrors } from './shared/index.js'
+import { areValidActorHandles, isValidActorHandle } from '../../../helpers/custom-validators/activitypub/actor.js'
+import { WEBSERVER } from '../../../initializers/constants.js'
+import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
+import { areValidationErrors } from '../shared/index.js'
 
 const userSubscriptionListValidator = [
   query('search')

@@ -59,6 +59,16 @@ export interface VideoObject {
 
   to?: string[]
   cc?: string[]
+
+  // For export
+  attachment?: {
+    type: 'Video'
+    url: string
+    mediaType: string
+    height: number
+    size: number
+    fps: number
+  }[]
 }
 
 export interface ActivityPubStoryboard {

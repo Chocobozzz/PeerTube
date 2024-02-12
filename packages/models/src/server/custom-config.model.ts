@@ -193,9 +193,22 @@ export interface CustomConfig {
         enabled: boolean
       }
     }
+
     videoChannelSynchronization: {
       enabled: boolean
       maxPerUser: number
+    }
+
+    users: {
+      enabled: boolean
+    }
+  }
+
+  export: {
+    users: {
+      enabled: boolean
+      maxUserVideoQuota: number
+      exportExpiration: number
     }
   }
 
@@ -260,5 +273,4 @@ export interface CustomConfig {
   storyboards: {
     enabled: boolean
   }
-
 }
