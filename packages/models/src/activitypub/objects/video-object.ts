@@ -6,6 +6,7 @@ import {
   ActivityTagObject,
   ActivityUrlObject
 } from './common-objects.js'
+import { VideoChapterObject } from './video-chapters-object.js'
 
 export interface VideoObject {
   type: 'Video'
@@ -51,7 +52,7 @@ export interface VideoObject {
   dislikes: string
   shares: string
   comments: string
-  hasParts: string
+  hasParts: string | VideoChapterObject[]
 
   attributedTo: ActivityPubAttributedTo[]
 

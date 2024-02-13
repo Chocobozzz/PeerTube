@@ -2,20 +2,17 @@ import express from 'express'
 import {
   HttpStatusCode,
   LiveVideoCreate,
-  LiveVideoLatencyMode,
   LiveVideoUpdate,
+  ThumbnailType,
   UserRight,
-  VideoPrivacy,
   VideoState
 } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { createReqFiles } from '@server/helpers/express-utils.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants.js'
-import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video.js'
 import {
   videoLiveAddValidator,
   videoLiveFindReplaySessionValidator,
@@ -25,15 +22,14 @@ import {
 } from '@server/middlewares/validators/videos/video-live.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
-import { VideoLiveModel } from '@server/models/video/video-live.js'
-import { VideoPasswordModel } from '@server/models/video/video-password.js'
-import { MVideoDetails, MVideoFullLight, MVideoLive } from '@server/types/models/index.js'
-import { buildUUID, uuidToShort } from '@peertube/peertube-node-utils'
-import { logger } from '../../../helpers/logger.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
-import { updateLocalVideoMiniatureFromExisting } from '../../../lib/thumbnail.js'
+import { MVideoLive } from '@server/types/models/index.js'
+import { uuidToShort } from '@peertube/peertube-node-utils'
+import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, optionalAuthenticate } from '../../../middlewares/index.js'
-import { VideoModel } from '../../../models/video/video.js'
+import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
+import { pick } from '@peertube/peertube-core-utils'
+
+const lTags = loggerTagsFactory('api', 'live')
 
 const liveRouter = express.Router()
 
@@ -153,80 +149,59 @@ async function updateReplaySettings (videoLive: MVideoLive, body: LiveVideoUpdat
 async function addLiveVideo (req: express.Request, res: express.Response) {
   const videoInfo: LiveVideoCreate = req.body
 
-  // Prepare data so we don't block the transaction
-  let videoData = buildLocalVideoFromReq(videoInfo, res.locals.videoChannel.id)
-  videoData = await Hooks.wrapObject(videoData, 'filter:api.video.live.video-attribute.result')
+  const thumbnails = [ { type: ThumbnailType.MINIATURE, field: 'thumbnailfile' }, { type: ThumbnailType.PREVIEW, field: 'previewfile' } ]
+    .map(({ type, field }) => {
+      if (req.files?.[field]?.[0]) {
+        return {
+          path: req.files[field][0].path,
+          type,
+          automaticallyGenerated: false,
+          keepOriginal: false
+        }
+      }
 
-  videoData.isLive = true
-  videoData.state = VideoState.WAITING_FOR_LIVE
-  videoData.duration = 0
-
-  const video = new VideoModel(videoData) as MVideoDetails
-  video.url = getLocalVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
-
-  const videoLive = new VideoLiveModel()
-  videoLive.saveReplay = videoInfo.saveReplay || false
-  videoLive.permanentLive = videoInfo.permanentLive || false
-  videoLive.latencyMode = videoInfo.latencyMode || LiveVideoLatencyMode.DEFAULT
-  videoLive.streamKey = buildUUID()
-
-  const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
-    video,
-    files: req.files,
-    fallback: type => {
-      return updateLocalVideoMiniatureFromExisting({
-        inputPath: ASSETS_PATH.DEFAULT_LIVE_BACKGROUND,
-        video,
+      return {
+        path: ASSETS_PATH.DEFAULT_LIVE_BACKGROUND,
         type,
         automaticallyGenerated: true,
         keepOriginal: true
-      })
-    }
+      }
+    })
+
+  const localVideoCreator = new LocalVideoCreator({
+    channel: res.locals.videoChannel,
+    chapters: undefined,
+    fallbackChapters: {
+      fromDescription: false,
+      finalFallback: undefined
+    },
+    liveAttributes: pick(videoInfo, [ 'saveReplay', 'permanentLive', 'latencyMode', 'replaySettings' ]),
+    videoAttributeResultHook: 'filter:api.video.live.video-attribute.result',
+    lTags,
+    videoAttributes: {
+      ...videoInfo,
+
+      duration: 0,
+      state: VideoState.WAITING_FOR_LIVE,
+      isLive: true,
+      filename: null
+    },
+    videoFilePath: undefined,
+    user: res.locals.oauth.token.User,
+    thumbnails
   })
 
-  const { videoCreated } = await sequelizeTypescript.transaction(async t => {
-    const sequelizeOptions = { transaction: t }
+  const { video } = await localVideoCreator.create()
 
-    const videoCreated = await video.save(sequelizeOptions) as MVideoFullLight
+  logger.info('Video live %s with uuid %s created.', videoInfo.name, video.uuid, lTags())
 
-    if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
-    if (previewModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
-
-    // Do not forget to add video channel information to the created video
-    videoCreated.VideoChannel = res.locals.videoChannel
-
-    if (videoLive.saveReplay) {
-      const replaySettings = new VideoLiveReplaySettingModel({
-        privacy: videoInfo.replaySettings?.privacy ?? videoCreated.privacy
-      })
-      await replaySettings.save(sequelizeOptions)
-
-      videoLive.replaySettingId = replaySettings.id
-    }
-
-    videoLive.videoId = videoCreated.id
-    videoCreated.VideoLive = await videoLive.save(sequelizeOptions)
-
-    await setVideoTags({ video, tags: videoInfo.tags, transaction: t })
-
-    await federateVideoIfNeeded(videoCreated, true, t)
-
-    if (videoInfo.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
-      await VideoPasswordModel.addPasswords(videoInfo.videoPasswords, video.id, t)
-    }
-
-    logger.info('Video live %s with uuid %s created.', videoInfo.name, videoCreated.uuid)
-
-    return { videoCreated }
-  })
-
-  Hooks.runAction('action:api.live-video.created', { video: videoCreated, req, res })
+  Hooks.runAction('action:api.live-video.created', { video, req, res })
 
   return res.json({
     video: {
-      id: videoCreated.id,
-      shortUUID: uuidToShort(videoCreated.uuid),
-      uuid: videoCreated.uuid
+      id: video.id,
+      shortUUID: uuidToShort(video.uuid),
+      uuid: video.uuid
     }
   })
 }

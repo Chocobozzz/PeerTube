@@ -8,6 +8,7 @@ import {
 } from '@peertube/peertube-server-commands'
 import {
   HttpStatusCode,
+  LiveVideoLatencyMode,
   UserImportState,
   UserNotificationSettingValue,
   VideoCreateResult,
@@ -327,7 +328,7 @@ function runTest (withObjectStorage: boolean) {
 
   it('Should have correctly imported user videos', async function () {
     const { data } = await remoteServer.videos.listMyVideos({ token: remoteNoahToken })
-    expect(data).to.have.lengthOf(4)
+    expect(data).to.have.lengthOf(5)
 
     {
       const privateVideo = data.find(v => v.name === 'noah private video')
@@ -425,6 +426,29 @@ function runTest (withObjectStorage: boolean) {
       const source = await remoteServer.videos.getSource({ id: otherVideo.uuid })
       expect(source.filename).to.equal('video_short.webm')
     }
+
+    {
+      const liveVideo = data.find(v => v.name === 'noah live video')
+      expect(liveVideo).to.exist
+
+      await remoteServer.videos.get({ id: liveVideo.uuid, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      const video = await remoteServer.videos.getWithPassword({ id: liveVideo.uuid, password: 'password1' })
+      const live = await remoteServer.live.get({ videoId: liveVideo.uuid, token: remoteNoahToken })
+
+      expect(video.isLive).to.be.true
+      expect(live.latencyMode).to.equal(LiveVideoLatencyMode.SMALL_LATENCY)
+      expect(live.saveReplay).to.be.true
+      expect(live.permanentLive).to.be.true
+      expect(live.streamKey).to.exist
+      expect(live.replaySettings.privacy).to.equal(VideoPrivacy.PUBLIC)
+
+      expect(video.channel.name).to.equal('noah_second_channel')
+      expect(video.privacy.id).to.equal(VideoPrivacy.PASSWORD_PROTECTED)
+
+      expect(video.duration).to.equal(0)
+      expect(video.files).to.have.lengthOf(0)
+      expect(video.streamingPlaylists).to.have.lengthOf(0)
+    }
   })
 
   it('Should re-import the same file', async function () {
@@ -494,7 +518,7 @@ function runTest (withObjectStorage: boolean) {
     // Videos
     {
       const { data } = await remoteServer.videos.listMyVideos({ token: remoteNoahToken })
-      expect(data).to.have.lengthOf(4)
+      expect(data).to.have.lengthOf(5)
     }
   })
 
@@ -505,7 +529,7 @@ function runTest (withObjectStorage: boolean) {
     })
 
     expect(email).to.exist
-    expect(email['text']).to.contain('as considered duplicate: 4') // 4 videos are considered as duplicates
+    expect(email['text']).to.contain('as considered duplicate: 5') // 5 videos are considered as duplicates
   })
 
   it('Should auto blacklist imported videos if enabled by the administrator', async function () {
@@ -519,7 +543,7 @@ function runTest (withObjectStorage: boolean) {
 
     {
       const { data } = await blockedServer.videos.listMyVideos({ token })
-      expect(data).to.have.lengthOf(4)
+      expect(data).to.have.lengthOf(5)
 
       for (const video of data) {
         expect(video.blacklisted).to.be.true

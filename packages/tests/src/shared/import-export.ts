@@ -3,6 +3,7 @@ import {
   ActivityCreate,
   ActivityPubOrderedCollection,
   HttpStatusCode,
+  LiveVideoLatencyMode,
   UserExport,
   UserNotificationSettingValue,
   VideoCommentObject,
@@ -218,6 +219,15 @@ export async function prepareImportExportTests (options: {
   await server.captions.add({ language: 'ar', videoId: noahVideo.uuid, fixture: 'subtitle-good1.vtt' })
   await server.captions.add({ language: 'fr', videoId: noahVideo.uuid, fixture: 'subtitle-good1.vtt' })
 
+  // Chapters
+  await server.chapters.update({
+    videoId: noahVideo.uuid,
+    chapters: [
+      { timecode: 1, title: 'chapter 1' },
+      { timecode: 3, title: 'chapter 2' }
+    ]
+  })
+
   // My settings
   await server.users.updateMe({ token: noahToken, description: 'super noah description', p2pEnabled: false })
 
@@ -275,6 +285,26 @@ export async function prepareImportExportTests (options: {
   const remoteRootId = (await remoteServer.users.getMyInfo()).id
   const remoteNoahId = (await remoteServer.users.getMyInfo({ token: remoteNoahToken })).id
 
+  // Lives
+  await server.config.enableMinimumTranscoding()
+  await server.config.enableLive({ allowReplay: true })
+
+  const noahLive = await server.live.create({
+    fields: {
+      permanentLive: true,
+      saveReplay: true,
+      latencyMode: LiveVideoLatencyMode.SMALL_LATENCY,
+      replaySettings: {
+        privacy: VideoPrivacy.PUBLIC
+      },
+      videoPasswords: [ 'password1' ],
+      channelId: noahSecondChannelId,
+      name: 'noah live video',
+      privacy: VideoPrivacy.PASSWORD_PROTECTED
+    },
+    token: noahToken
+  })
+
   return {
     rootId,
 
@@ -292,6 +322,7 @@ export async function prepareImportExportTests (options: {
     noahPlaylist,
     noahPrivateVideo,
     noahVideo,
+    noahLive,
 
     server,
     remoteServer,

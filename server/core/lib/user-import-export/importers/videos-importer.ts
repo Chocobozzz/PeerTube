@@ -5,25 +5,14 @@ import { buildNextVideoState } from '@server/lib/video-state.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { pick } from '@peertube/peertube-core-utils'
 import { buildUUID, getFileSize } from '@peertube/peertube-node-utils'
-import { MChannelId, MThumbnail, MVideoCaption, MVideoFullLight } from '@server/types/models/index.js'
-import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
-import { buildNewFile } from '@server/lib/video-file.js'
+import { MChannelId, MVideoCaption, MVideoFullLight } from '@server/types/models/index.js'
 import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
-import { updateLocalVideoMiniatureFromExisting } from '@server/lib/thumbnail.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { setVideoTags } from '@server/lib/video.js'
-import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
-import { VideoPasswordModel } from '@server/models/video/video-password.js'
-import { addVideoJobsAfterCreation } from '@server/lib/video-jobs.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { moveAndProcessCaptionFile } from '@server/helpers/captions-utils.js'
-import { VideoLiveModel } from '@server/models/video/video-live.js'
-import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
 import { AbstractUserImporter } from './abstract-user-importer.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
-import { VideoPathManager } from '@server/lib/video-path-manager.js'
-import { move } from 'fs-extra'
 import {
   isPasswordValid,
   isVideoCategoryValid,
@@ -45,16 +34,17 @@ import { isArray, isBooleanValid, isUUIDValid } from '@server/helpers/custom-val
 import { CONFIG } from '@server/initializers/config.js'
 import { isVideoCaptionLanguageValid } from '@server/helpers/custom-validators/video-captions.js'
 import { isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
-import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { parse } from 'path'
 import { isLocalVideoFileAccepted } from '@server/lib/moderation.js'
+import { LocalVideoCreator, ThumbnailOptions } from '@server/lib/local-video-creator.js'
+import { isVideoChapterTimecodeValid, isVideoChapterTitleValid } from '@server/helpers/custom-validators/video-chapters.js'
 
 const lTags = loggerTagsFactory('user-import')
 
 type ImportObject = VideoExportJSON['videos'][0]
 type SanitizedObject = Pick<ImportObject, 'name' | 'duration' | 'channel' | 'privacy' | 'archiveFiles' | 'captions' | 'category' |
 'licence' | 'language' | 'description' | 'support' | 'nsfw' | 'isLive' | 'commentsEnabled' | 'downloadEnabled' | 'waitTranscoding' |
-'originallyPublishedAt' | 'tags' | 'live' | 'passwords' | 'source'>
+'originallyPublishedAt' | 'tags' | 'live' | 'passwords' | 'source' | 'chapters'>
 
 export class VideosImporter extends AbstractUserImporter <VideoExportJSON, ImportObject, SanitizedObject> {
 
@@ -67,7 +57,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
     if (!isVideoDurationValid(o.duration + '')) return undefined
     if (!isVideoChannelUsernameValid(o.channel?.name)) return undefined
     if (!isVideoPrivacyValid(o.privacy)) return undefined
-    if (!o.archiveFiles?.videoFile) return undefined
+    if (o.isLive !== true && !o.archiveFiles?.videoFile) return undefined
 
     if (!isVideoCategoryValid(o.category)) o.category = null
     if (!isVideoLicenceValid(o.licence)) o.licence = CONFIG.DEFAULTS.PUBLISH.LICENCE
@@ -87,9 +77,11 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
 
     if (!isArray(o.tags)) o.tags = []
     if (!isArray(o.captions)) o.captions = []
+    if (!isArray(o.chapters)) o.chapters = []
 
     o.tags = o.tags.filter(t => isVideoTagValid(t))
     o.captions = o.captions.filter(c => isVideoCaptionLanguageValid(c.language))
+    o.chapters = o.chapters.filter(c => isVideoChapterTimecodeValid(c.timecode) && isVideoChapterTitleValid(c.title))
 
     if (o.isLive) {
       if (!o.live) return undefined
@@ -131,17 +123,15 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
       'captions',
       'live',
       'passwords',
-      'source'
+      'source',
+      'chapters'
     ])
   }
 
   protected async importObject (videoImportData: SanitizedObject) {
-    const videoFilePath = this.getSafeArchivePathOrThrow(videoImportData.archiveFiles.videoFile)
-    const videoSize = await getFileSize(videoFilePath)
-
-    if (await isUserQuotaValid({ userId: this.user.id, uploadSize: videoSize, checkDaily: false }) === false) {
-      throw new Error(`Cannot import video ${videoImportData.name} for user ${this.user.username} because of exceeded quota`)
-    }
+    const videoFilePath = !videoImportData.isLive
+      ? this.getSafeArchivePathOrThrow(videoImportData.archiveFiles.videoFile)
+      : null
 
     const videoChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(videoImportData.channel.name)
     if (!videoChannel) throw new Error(`Channel ${videoImportData} not found`)
@@ -155,124 +145,85 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
       return { duplicate: true }
     }
 
-    const ffprobe = await ffprobePromise(videoFilePath)
-    const duration = await getVideoStreamDuration(videoFilePath, ffprobe)
-    const videoFile = await buildNewFile({ path: videoFilePath, mode: 'web-video', ffprobe })
+    const videoSize = videoFilePath
+      ? await getFileSize(videoFilePath)
+      : undefined
 
-    await this.checkVideoFileIsAcceptedOrThrow({ videoFilePath, size: videoFile.size, channel: videoChannel, videoImportData })
+    let duration = 0
 
-    let videoData = {
-      ...pick(videoImportData, [
-        'name',
-        'category',
-        'licence',
-        'language',
-        'privacy',
-        'description',
-        'support',
-        'isLive',
-        'nsfw',
-        'commentsEnabled',
-        'downloadEnabled',
-        'waitTranscoding'
-      ]),
+    if (videoFilePath) {
+      if (await isUserQuotaValid({ userId: this.user.id, uploadSize: videoSize, checkDaily: false }) === false) {
+        throw new Error(`Cannot import video ${videoImportData.name} for user ${this.user.username} because of exceeded quota`)
+      }
 
-      uuid: buildUUID(),
-      duration,
-      remote: false,
-      state: buildNextVideoState(),
-      channelId: videoChannel.id,
-      originallyPublishedAt: videoImportData.originallyPublishedAt
-        ? new Date(videoImportData.originallyPublishedAt)
-        : undefined
+      await this.checkVideoFileIsAcceptedOrThrow({ videoFilePath, size: videoSize, channel: videoChannel, videoImportData })
+
+      const ffprobe = await ffprobePromise(videoFilePath)
+      duration = await getVideoStreamDuration(videoFilePath, ffprobe)
     }
-
-    videoData = await Hooks.wrapObject(videoData, 'filter:api.video.user-import.video-attribute.result')
-
-    const video = new VideoModel(videoData) as MVideoFullLight
-    video.VideoChannel = videoChannel
-    video.url = getLocalVideoActivityPubUrl(video)
-
-    const destination = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
-    await move(videoFilePath, destination)
 
     const thumbnailPath = this.getSafeArchivePathOrThrow(videoImportData.archiveFiles.thumbnail)
 
-    const thumbnails: MThumbnail[] = []
+    const thumbnails: ThumbnailOptions = []
     for (const type of [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ]) {
       if (!await this.isFileValidOrLog(thumbnailPath, CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max)) continue
 
-      thumbnails.push(
-        await updateLocalVideoMiniatureFromExisting({
-          inputPath: thumbnailPath,
-          video,
-          type,
-          automaticallyGenerated: false,
-          keepOriginal: true
-        })
-      )
+      thumbnails.push({
+        path: thumbnailPath,
+        automaticallyGenerated: false,
+        keepOriginal: true,
+        type
+      })
     }
 
-    const { videoCreated } = await sequelizeTypescript.transaction(async t => {
-      const sequelizeOptions = { transaction: t }
+    const localVideoCreator = new LocalVideoCreator({
+      lTags,
+      videoFilePath,
+      user: this.user,
+      channel: videoChannel,
 
-      const videoCreated = await video.save(sequelizeOptions) as MVideoFullLight
+      chapters: videoImportData.chapters,
+      fallbackChapters: {
+        fromDescription: false,
+        finalFallback: undefined
+      },
 
-      for (const thumbnail of thumbnails) {
-        await videoCreated.addAndSaveThumbnail(thumbnail, t)
-      }
+      videoAttributes: {
+        ...pick(videoImportData, [
+          'name',
+          'category',
+          'licence',
+          'language',
+          'privacy',
+          'description',
+          'support',
+          'isLive',
+          'nsfw',
+          'tags',
+          'commentsEnabled',
+          'downloadEnabled',
+          'waitTranscoding',
+          'originallyPublishedAt'
+        ]),
 
-      videoFile.videoId = video.id
-      await videoFile.save(sequelizeOptions)
+        videoPasswords: videoImportData.passwords,
+        duration,
+        filename: videoImportData.source?.filename,
+        state: buildNextVideoState()
+      },
 
-      video.VideoFiles = [ videoFile ]
+      liveAttributes: videoImportData.live,
 
-      await setVideoTags({ video, tags: videoImportData.tags, transaction: t })
+      videoAttributeResultHook: 'filter:api.video.user-import.video-attribute.result',
 
-      await autoBlacklistVideoIfNeeded({
-        video,
-        user: this.user,
-        isRemote: false,
-        isNew: true,
-        isNewFile: true,
-        transaction: t
-      })
-
-      if (videoImportData.source?.filename) {
-        await VideoSourceModel.create({
-          filename: videoImportData.source.filename,
-          videoId: video.id
-        }, { transaction: t })
-      }
-
-      if (videoImportData.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
-        await VideoPasswordModel.addPasswords(videoImportData.passwords, video.id, t)
-      }
-
-      if (videoImportData.isLive) {
-        const videoLive = new VideoLiveModel(pick(videoImportData.live, [ 'saveReplay', 'permanentLive', 'latencyMode', 'streamKey' ]))
-
-        if (videoLive.saveReplay) {
-          const replaySettings = new VideoLiveReplaySettingModel({
-            privacy: videoImportData.live.replaySettings.privacy
-          })
-          await replaySettings.save(sequelizeOptions)
-
-          videoLive.replaySettingId = replaySettings.id
-        }
-
-        videoLive.videoId = videoCreated.id
-        videoCreated.VideoLive = await videoLive.save(sequelizeOptions)
-      }
-
-      return { videoCreated }
+      thumbnails
     })
 
-    await this.importCaptions(videoCreated, videoImportData)
+    const { video } = await localVideoCreator.create()
 
-    await addVideoJobsAfterCreation({ video: videoCreated, videoFile })
+    await this.importCaptions(video, videoImportData)
 
-    logger.info('Video %s imported.', video.name, lTags(videoCreated.uuid))
+    logger.info('Video %s imported.', video.name, lTags(video.uuid))
 
     return { duplicate: false }
   }
