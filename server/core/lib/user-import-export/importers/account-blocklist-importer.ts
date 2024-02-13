@@ -6,12 +6,13 @@ import { ServerModel } from '@server/models/server/server.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { isValidActorHandle } from '@server/helpers/custom-validators/activitypub/actor.js'
 import { isHostValid } from '@server/helpers/custom-validators/servers.js'
+import { pick } from '@peertube/peertube-core-utils'
 
 const lTags = loggerTagsFactory('user-import')
 
 type ImportObject = { handle: string | null, host: string | null, archiveFiles?: never }
 
-export class BlocklistImporter extends AbstractUserImporter <BlocklistExportJSON, ImportObject> {
+export class BlocklistImporter extends AbstractUserImporter <BlocklistExportJSON, ImportObject, ImportObject> {
 
   protected getImportObjects (json: BlocklistExportJSON) {
     return [
@@ -23,7 +24,7 @@ export class BlocklistImporter extends AbstractUserImporter <BlocklistExportJSON
   protected sanitize (blocklistImportData: ImportObject) {
     if (!isValidActorHandle(blocklistImportData.handle) && !isHostValid(blocklistImportData.host)) return undefined
 
-    return blocklistImportData
+    return pick(blocklistImportData, [ 'handle', 'host' ])
   }
 
   protected async importObject (blocklistImportData: ImportObject) {

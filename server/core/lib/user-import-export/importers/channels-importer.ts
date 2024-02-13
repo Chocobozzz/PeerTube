@@ -17,23 +17,25 @@ import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 
 const lTags = loggerTagsFactory('user-import')
 
-export class ChannelsImporter extends AbstractUserImporter <ChannelExportJSON, ChannelExportJSON['channels'][0]> {
+type SanitizedObject = Pick<ChannelExportJSON['channels'][0], 'name' | 'displayName' | 'description' | 'support' | 'archiveFiles'>
+
+export class ChannelsImporter extends AbstractUserImporter <ChannelExportJSON, ChannelExportJSON['channels'][0], SanitizedObject> {
 
   protected getImportObjects (json: ChannelExportJSON) {
     return json.channels
   }
 
-  protected sanitize (blocklistImportData: ChannelExportJSON['channels'][0]) {
-    if (!isVideoChannelUsernameValid(blocklistImportData.name)) return undefined
-    if (!isVideoChannelDisplayNameValid(blocklistImportData.name)) return undefined
+  protected sanitize (channelImportData: ChannelExportJSON['channels'][0]) {
+    if (!isVideoChannelUsernameValid(channelImportData.name)) return undefined
+    if (!isVideoChannelDisplayNameValid(channelImportData.displayName)) return undefined
 
-    if (!isVideoChannelDescriptionValid(blocklistImportData.description)) blocklistImportData.description = null
-    if (!isVideoChannelSupportValid(blocklistImportData.support)) blocklistImportData.description = null
+    if (!isVideoChannelDescriptionValid(channelImportData.description)) channelImportData.description = null
+    if (!isVideoChannelSupportValid(channelImportData.support)) channelImportData.support = null
 
-    return blocklistImportData
+    return pick(channelImportData, [ 'name', 'displayName', 'description', 'support', 'archiveFiles' ])
   }
 
-  protected async importObject (channelImportData: ChannelExportJSON['channels'][0]) {
+  protected async importObject (channelImportData: SanitizedObject) {
     const account = this.user.Account
     const existingChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(channelImportData.name)
 

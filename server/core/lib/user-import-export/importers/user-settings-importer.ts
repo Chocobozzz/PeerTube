@@ -16,10 +16,14 @@ import {
 import { isThemeNameValid } from '@server/helpers/custom-validators/plugins.js'
 import { isThemeRegistered } from '@server/lib/plugins/theme-utils.js'
 import { isUserNotificationSettingValid } from '@server/helpers/custom-validators/user-notifications.js'
+import { pick } from '@peertube/peertube-core-utils'
 
 const lTags = loggerTagsFactory('user-import')
 
-export class UserSettingsImporter extends AbstractUserImporter <UserSettingsExportJSON, UserSettingsExportJSON> {
+type SanitizedObject = Pick<UserSettingsExportJSON, 'nsfwPolicy' | 'autoPlayVideo' | 'autoPlayNextVideo' | 'autoPlayNextVideo' |
+'autoPlayNextVideoPlaylist' | 'p2pEnabled' | 'videosHistoryEnabled' | 'videoLanguages' | 'theme' | 'notificationSettings'>
+
+export class UserSettingsImporter extends AbstractUserImporter <UserSettingsExportJSON, UserSettingsExportJSON, SanitizedObject> {
 
   protected getImportObjects (json: UserSettingsExportJSON) {
     return [ json ]
@@ -27,7 +31,6 @@ export class UserSettingsImporter extends AbstractUserImporter <UserSettingsExpo
 
   protected sanitize (o: UserSettingsExportJSON) {
     if (!isUserNSFWPolicyValid(o.nsfwPolicy)) o.nsfwPolicy = undefined
-
     if (!isUserAutoPlayVideoValid(o.autoPlayVideo)) o.autoPlayVideo = undefined
     if (!isUserAutoPlayNextVideoValid(o.autoPlayNextVideo)) o.autoPlayNextVideo = undefined
     if (!isUserAutoPlayNextVideoPlaylistValid(o.autoPlayNextVideoPlaylist)) o.autoPlayNextVideoPlaylist = undefined
@@ -40,10 +43,20 @@ export class UserSettingsImporter extends AbstractUserImporter <UserSettingsExpo
       if (!isUserNotificationSettingValid(o.notificationSettings[key])) (o.notificationSettings[key] as any) = undefined
     }
 
-    return o
+    return pick(o, [
+      'nsfwPolicy',
+      'autoPlayVideo',
+      'autoPlayNextVideo',
+      'autoPlayNextVideoPlaylist',
+      'p2pEnabled',
+      'videosHistoryEnabled',
+      'videoLanguages',
+      'theme',
+      'notificationSettings'
+    ])
   }
 
-  protected async importObject (userImportData: UserSettingsExportJSON) {
+  protected async importObject (userImportData: SanitizedObject) {
     if (exists(userImportData.nsfwPolicy)) this.user.nsfwPolicy = userImportData.nsfwPolicy
     if (exists(userImportData.autoPlayVideo)) this.user.autoPlayVideo = userImportData.autoPlayVideo
     if (exists(userImportData.autoPlayNextVideo)) this.user.autoPlayNextVideo = userImportData.autoPlayNextVideo

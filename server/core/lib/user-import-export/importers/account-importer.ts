@@ -6,24 +6,27 @@ import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { MAccountDefault } from '@server/types/models/index.js'
 import { isUserDescriptionValid, isUserDisplayNameValid } from '@server/helpers/custom-validators/users.js'
+import { pick } from '@peertube/peertube-core-utils'
 
 const lTags = loggerTagsFactory('user-import')
 
-export class AccountImporter extends AbstractUserImporter <AccountExportJSON, AccountExportJSON> {
+type SanitizedObject = Pick<AccountExportJSON, 'description' | 'displayName' | 'archiveFiles'>
+
+export class AccountImporter extends AbstractUserImporter <AccountExportJSON, AccountExportJSON, SanitizedObject> {
 
   protected getImportObjects (json: AccountExportJSON) {
     return [ json ]
   }
 
   protected sanitize (blocklistImportData: AccountExportJSON) {
-    if (!isUserDisplayNameValid(blocklistImportData.name)) return undefined
+    if (!isUserDisplayNameValid(blocklistImportData.displayName)) return undefined
 
     if (!isUserDescriptionValid(blocklistImportData.description)) blocklistImportData.description = null
 
-    return blocklistImportData
+    return pick(blocklistImportData, [ 'displayName', 'description', 'archiveFiles' ])
   }
 
-  protected async importObject (accountImportData: AccountExportJSON) {
+  protected async importObject (accountImportData: SanitizedObject) {
     const account = this.user.Account
 
     account.name = accountImportData.displayName
@@ -38,7 +41,7 @@ export class AccountImporter extends AbstractUserImporter <AccountExportJSON, Ac
     return { duplicate: false }
   }
 
-  private async importAvatar (account: MAccountDefault, accountImportData: AccountExportJSON) {
+  private async importAvatar (account: MAccountDefault, accountImportData: SanitizedObject) {
     const avatarPath = this.getSafeArchivePathOrThrow(accountImportData.archiveFiles.avatar)
     if (!avatarPath) return undefined
 
