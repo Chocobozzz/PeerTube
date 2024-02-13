@@ -414,6 +414,9 @@ const CONSTRAINTS_FIELDS = {
     PARTIAL_UPLOAD_SIZE: { max: 50 * 1024 * 1024 * 1024 }, // 50GB
     URL: { min: 3, max: 2000 } // Length
   },
+  VIDEO_SOURCE: {
+    FILENAME: { min: 1, max: 1000 } // Length
+  },
   VIDEO_PLAYLISTS: {
     NAME: { min: 1, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 1000 }, // Length

@@ -7,7 +7,11 @@ import { dirname, resolve } from 'path'
 
 const lTags = loggerTagsFactory('user-import')
 
-export abstract class AbstractUserImporter <E, O extends { archiveFiles?: Record<string, string | Record<string, string>> }> {
+export abstract class AbstractUserImporter <
+  ROOT_OBJECT,
+  OBJECT extends { archiveFiles?: Record<string, string | Record<string, string>> },
+  SANITIZED_OBJECT
+> {
   protected user: MUserDefault
   protected extractedDirectory: string
   protected jsonFilePath: string
@@ -78,7 +82,7 @@ export abstract class AbstractUserImporter <E, O extends { archiveFiles?: Record
   }
 
   async import () {
-    const importData: E = await readJSON(this.jsonFilePath)
+    const importData: ROOT_OBJECT = await readJSON(this.jsonFilePath)
     const summary = {
       duplicates: 0,
       success: 0,
@@ -111,9 +115,9 @@ export abstract class AbstractUserImporter <E, O extends { archiveFiles?: Record
     return summary
   }
 
-  protected abstract getImportObjects (object: E): O[]
+  protected abstract getImportObjects (object: ROOT_OBJECT): OBJECT[]
 
-  protected abstract sanitize (object: O): O | undefined
+  protected abstract sanitize (object: OBJECT): SANITIZED_OBJECT | undefined
 
-  protected abstract importObject (object: O): Awaitable<{ duplicate: boolean }>
+  protected abstract importObject (object: SANITIZED_OBJECT): Awaitable<{ duplicate: boolean }>
 }

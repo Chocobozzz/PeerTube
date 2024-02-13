@@ -1,5 +1,5 @@
 import { LikesExportJSON } from '@peertube/peertube-models'
-import { AbstractRatesImporter } from './abstract-rates-importer.js'
+import { AbstractRatesImporter, SanitizedRateObject } from './abstract-rates-importer.js'
 
 export class LikesImporter extends AbstractRatesImporter <LikesExportJSON, LikesExportJSON['likes'][0]> {
 
@@ -11,7 +11,7 @@ export class LikesImporter extends AbstractRatesImporter <LikesExportJSON, Likes
     return this.sanitizeRate(o)
   }
 
-  protected async importObject (likesImportData: LikesExportJSON['likes'][0]) {
+  protected async importObject (likesImportData: SanitizedRateObject) {
     return this.importRate(likesImportData, 'like')
   }
 }

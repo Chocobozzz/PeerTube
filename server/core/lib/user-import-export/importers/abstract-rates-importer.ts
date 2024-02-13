@@ -4,16 +4,19 @@ import { loadOrCreateVideoIfAllowedForUser } from '@server/lib/model-loaders/vid
 import { userRateVideo } from '@server/lib/rate.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
+import { pick } from '@peertube/peertube-core-utils'
 
-export abstract class AbstractRatesImporter <E, O> extends AbstractUserImporter <E, O> {
+export type SanitizedRateObject = { videoUrl: string }
+
+export abstract class AbstractRatesImporter <ROOT_OBJECT, OBJECT> extends AbstractUserImporter <ROOT_OBJECT, OBJECT, SanitizedRateObject> {
 
   protected sanitizeRate <O extends { videoUrl: string }> (data: O) {
     if (!isUrlValid(data.videoUrl)) return undefined
 
-    return data
+    return pick(data, [ 'videoUrl' ])
   }
 
-  protected async importRate (data: { videoUrl: string }, rateType: VideoRateType) {
+  protected async importRate (data: SanitizedRateObject, rateType: VideoRateType) {
     const videoUrl = data.videoUrl
     const videoImmutable = await loadOrCreateVideoIfAllowedForUser(videoUrl)
 

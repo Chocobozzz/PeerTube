@@ -32,6 +32,7 @@ import {
   isVideoNameValid,
   isVideoOriginallyPublishedAtValid,
   isVideoPrivacyValid,
+  isVideoSourceFilenameValid,
   isVideoSupportValid
 } from '../../../helpers/custom-validators/videos.js'
 import { cleanUpReqFiles } from '../../../helpers/express-utils.js'
@@ -133,7 +134,7 @@ const videosAddResumableValidator = [
  */
 const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
   body('filename')
-    .exists(),
+    .custom(isVideoSourceFilenameValid),
   body('name')
     .trim()
     .custom(isVideoNameValid).withMessage(

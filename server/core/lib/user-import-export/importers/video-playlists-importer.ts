@@ -27,16 +27,21 @@ import { isActorPreferredUsernameValid } from '@server/helpers/custom-validators
 import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
+import { pick } from '@peertube/peertube-core-utils'
 
 const lTags = loggerTagsFactory('user-import')
 
-export class VideoPlaylistsImporter extends AbstractUserImporter <VideoPlaylistsExportJSON, VideoPlaylistsExportJSON['videoPlaylists'][0]> {
+type ImportObject = VideoPlaylistsExportJSON['videoPlaylists'][0]
+type SanitizedObject = Pick<ImportObject, 'type' | 'displayName' | 'privacy' | 'elements' | 'description' | 'elements' | 'channel' |
+'archiveFiles'>
+
+export class VideoPlaylistsImporter extends AbstractUserImporter <VideoPlaylistsExportJSON, ImportObject, SanitizedObject> {
 
   protected getImportObjects (json: VideoPlaylistsExportJSON) {
     return json.videoPlaylists
   }
 
-  protected sanitize (o: VideoPlaylistsExportJSON['videoPlaylists'][0]) {
+  protected sanitize (o: ImportObject) {
     if (!isVideoPlaylistTypeValid(o.type)) return undefined
     if (!isVideoPlaylistNameValid(o.displayName)) return undefined
     if (!isVideoPlaylistPrivacyValid(o.privacy)) return undefined
@@ -53,10 +58,10 @@ export class VideoPlaylistsImporter extends AbstractUserImporter <VideoPlaylists
       return true
     })
 
-    return o
+    return pick(o, [ 'type', 'displayName', 'privacy', 'elements', 'channel', 'description', 'archiveFiles' ])
   }
 
-  protected async importObject (playlistImportData: VideoPlaylistsExportJSON['videoPlaylists'][0]) {
+  protected async importObject (playlistImportData: SanitizedObject) {
     const existingPlaylist = await VideoPlaylistModel.loadRegularByAccountAndName(this.user.Account, playlistImportData.displayName)
 
     if (existingPlaylist) {
@@ -77,7 +82,7 @@ export class VideoPlaylistsImporter extends AbstractUserImporter <VideoPlaylists
     return { duplicate: false }
   }
 
-  private async createPlaylist (playlistImportData: VideoPlaylistsExportJSON['videoPlaylists'][0]) {
+  private async createPlaylist (playlistImportData: SanitizedObject) {
     let videoChannel: MChannelBannerAccountDefault
 
     if (playlistImportData.channel.name) {
@@ -115,7 +120,7 @@ export class VideoPlaylistsImporter extends AbstractUserImporter <VideoPlaylists
     return VideoPlaylistModel.loadWatchLaterOf(this.user.Account)
   }
 
-  private async createThumbnail (playlist: MVideoPlaylistThumbnail, playlistImportData: VideoPlaylistsExportJSON['videoPlaylists'][0]) {
+  private async createThumbnail (playlist: MVideoPlaylistThumbnail, playlistImportData: SanitizedObject) {
     const thumbnailPath = this.getSafeArchivePathOrThrow(playlistImportData.archiveFiles.thumbnail)
     if (!thumbnailPath) return undefined
 
@@ -130,7 +135,7 @@ export class VideoPlaylistsImporter extends AbstractUserImporter <VideoPlaylists
     await playlist.setAndSaveThumbnail(thumbnail, undefined)
   }
 
-  private async createElements (playlist: MVideoPlaylist, playlistImportData: VideoPlaylistsExportJSON['videoPlaylists'][0]) {
+  private async createElements (playlist: MVideoPlaylist, playlistImportData: SanitizedObject) {
     const elementsToCreate: { videoId: number, startTimestamp: number, stopTimestamp: number }[] = []
 
     for (const element of playlistImportData.elements.slice(0, USER_IMPORT.MAX_PLAYLIST_ELEMENTS)) {

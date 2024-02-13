@@ -35,6 +35,7 @@ import {
   isVideoOriginallyPublishedAtValid,
   isVideoPrivacyValid,
   isVideoReplayPrivacyValid,
+  isVideoSourceFilenameValid,
   isVideoSupportValid,
   isVideoTagValid
 } from '@server/helpers/custom-validators/videos.js'
@@ -50,13 +51,18 @@ import { isLocalVideoFileAccepted } from '@server/lib/moderation.js'
 
 const lTags = loggerTagsFactory('user-import')
 
-export class VideosImporter extends AbstractUserImporter <VideoExportJSON, VideoExportJSON['videos'][0]> {
+type ImportObject = VideoExportJSON['videos'][0]
+type SanitizedObject = Pick<ImportObject, 'name' | 'duration' | 'channel' | 'privacy' | 'archiveFiles' | 'captions' | 'category' |
+'licence' | 'language' | 'description' | 'support' | 'nsfw' | 'isLive' | 'commentsEnabled' | 'downloadEnabled' | 'waitTranscoding' |
+'originallyPublishedAt' | 'tags' | 'live' | 'passwords' | 'source'>
+
+export class VideosImporter extends AbstractUserImporter <VideoExportJSON, ImportObject, SanitizedObject> {
 
   protected getImportObjects (json: VideoExportJSON) {
     return json.videos
   }
 
-  protected sanitize (o: VideoExportJSON['videos'][0]) {
+  protected sanitize (o: ImportObject) {
     if (!isVideoNameValid(o.name)) return undefined
     if (!isVideoDurationValid(o.duration + '')) return undefined
     if (!isVideoChannelUsernameValid(o.channel?.name)) return undefined
@@ -74,6 +80,8 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Video
     if (!isBooleanValid(o.commentsEnabled)) o.commentsEnabled = CONFIG.DEFAULTS.PUBLISH.COMMENTS_ENABLED
     if (!isBooleanValid(o.downloadEnabled)) o.downloadEnabled = CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED
     if (!isBooleanValid(o.waitTranscoding)) o.waitTranscoding = true
+
+    if (!isVideoSourceFilenameValid(o.source?.filename)) o.source = undefined
 
     if (!isVideoOriginallyPublishedAtValid(o.originallyPublishedAt)) o.originallyPublishedAt = null
 
@@ -102,10 +110,32 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Video
       if (o.passwords.some(p => !isPasswordValid(p))) return undefined
     }
 
-    return o
+    return pick(o, [
+      'name',
+      'duration',
+      'channel',
+      'privacy',
+      'archiveFiles',
+      'category',
+      'licence',
+      'language',
+      'description',
+      'support',
+      'nsfw',
+      'isLive',
+      'commentsEnabled',
+      'downloadEnabled',
+      'waitTranscoding',
+      'originallyPublishedAt',
+      'tags',
+      'captions',
+      'live',
+      'passwords',
+      'source'
+    ])
   }
 
-  protected async importObject (videoImportData: VideoExportJSON['videos'][0]) {
+  protected async importObject (videoImportData: SanitizedObject) {
     const videoFilePath = this.getSafeArchivePathOrThrow(videoImportData.archiveFiles.videoFile)
     const videoSize = await getFileSize(videoFilePath)
 
@@ -247,7 +277,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Video
     return { duplicate: false }
   }
 
-  private async importCaptions (video: MVideoFullLight, videoImportData: VideoExportJSON['videos'][0]) {
+  private async importCaptions (video: MVideoFullLight, videoImportData: SanitizedObject) {
     const captionPaths: string[] = []
 
     for (const captionImport of videoImportData.captions) {
@@ -284,7 +314,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Video
     videoFilePath: string
     size: number
     channel: MChannelId
-    videoImportData: VideoExportJSON['videos'][0]
+    videoImportData: SanitizedObject
   }) {
     const { videoFilePath, size, videoImportData, channel } = options
 
