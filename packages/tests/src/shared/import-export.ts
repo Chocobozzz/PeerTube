@@ -127,11 +127,11 @@ export async function prepareImportExportTests (options: {
   const emailPort = await MockSmtpServer.Instance.collectEmails(emails)
 
   const [ server, remoteServer, blockedServer ] = await Promise.all([
-    await createSingleServer(1, { ...objectStorageConfig, ...ConfigCommand.getEmailOverrideConfig(emailPort) }),
-    await createSingleServer(2, { ...objectStorageConfig, ...ConfigCommand.getEmailOverrideConfig(emailPort) }),
+    createSingleServer(1, { ...objectStorageConfig, ...ConfigCommand.getEmailOverrideConfig(emailPort) }),
+    createSingleServer(2, { ...objectStorageConfig, ...ConfigCommand.getEmailOverrideConfig(emailPort) }),
 
     withBlockedServer
-      ? await createSingleServer(3)
+      ? createSingleServer(3)
       : Promise.resolve(undefined)
   ])
 
@@ -140,15 +140,17 @@ export async function prepareImportExportTests (options: {
   await setAccessTokensToServers(servers)
   await setDefaultVideoChannel(servers)
 
+  await remoteServer.config.enableMinimumTranscoding()
+
   await Promise.all([
-    await doubleFollow(server, remoteServer),
+    doubleFollow(server, remoteServer),
 
     withBlockedServer
-      ? await doubleFollow(server, blockedServer)
+      ? doubleFollow(server, blockedServer)
       : Promise.resolve(undefined),
 
     withBlockedServer
-      ? await doubleFollow(remoteServer, blockedServer)
+      ? doubleFollow(remoteServer, blockedServer)
       : Promise.resolve(undefined)
   ])
 

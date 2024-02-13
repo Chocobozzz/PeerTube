@@ -404,14 +404,6 @@ function runTest (withObjectStorage: boolean) {
                 size: 61000
               },
               {
-                resolution: 480,
-                size: 40000
-              },
-              {
-                resolution: 360,
-                size: 32000
-              },
-              {
                 resolution: 240,
                 size: 23000
               }
@@ -427,7 +419,7 @@ function runTest (withObjectStorage: boolean) {
         servers: [ remoteServer, server ],
         videoUUID: otherVideo.uuid,
         objectStorageBaseUrl: objectStorage?.getMockPlaylistBaseUrl(),
-        resolutions: [ 720, 480, 360, 240 ]
+        resolutions: [ 720, 240 ]
       })
 
       const source = await remoteServer.videos.getSource({ id: otherVideo.uuid })
