@@ -7,6 +7,7 @@ import {
   MStreamingPlaylistFiles,
   MThumbnail, MVideo, MVideoAP, MVideoCaption,
   MVideoCaptionLanguageUrl,
+  MVideoChapter,
   MVideoFile,
   MVideoFullLight, MVideoLiveWithSetting,
   MVideoPassword
@@ -25,6 +26,8 @@ import { pick } from '@peertube/peertube-core-utils'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
+import { VideoChapterModel } from '@server/models/video/video-chapter.js'
+import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
 
 export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
 
@@ -65,10 +68,11 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
   }
 
   private async exportVideo (videoId: number) {
-    const [ video, captions, source ] = await Promise.all([
+    const [ video, captions, source, chapters ] = await Promise.all([
       VideoModel.loadFull(videoId),
       VideoCaptionModel.listVideoCaptions(videoId),
-      VideoSourceModel.loadLatest(videoId)
+      VideoSourceModel.loadLatest(videoId),
+      VideoChapterModel.listChaptersOfVideo(videoId)
     ])
 
     const passwords = video.privacy === VideoPrivacy.PASSWORD_PROTECTED
@@ -87,10 +91,10 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
     const { relativePathsFromJSON, staticFiles } = this.exportVideoFiles({ video, captions })
 
     return {
-      json: this.exportVideoJSON({ video, captions, live, passwords, source, archiveFiles: relativePathsFromJSON }),
+      json: this.exportVideoJSON({ video, captions, live, passwords, source, chapters, archiveFiles: relativePathsFromJSON }),
       staticFiles,
       relativePathsFromJSON,
-      activityPubOutbox: await this.exportVideoAP(videoAP)
+      activityPubOutbox: await this.exportVideoAP(videoAP, chapters)
     }
   }
 
@@ -102,9 +106,10 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
     live: MVideoLiveWithSetting
     passwords: MVideoPassword[]
     source: MVideoSource
+    chapters: MVideoChapter[]
     archiveFiles: VideoExportJSON['videos'][0]['archiveFiles']
   }): VideoExportJSON['videos'][0] {
-    const { video, captions, live, passwords, source, archiveFiles } = options
+    const { video, captions, live, passwords, source, chapters, archiveFiles } = options
 
     return {
       uuid: video.uuid,
@@ -156,6 +161,7 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
       },
 
       captions: this.exportCaptionsJSON(video, captions),
+      chapters: this.exportChaptersJSON(chapters),
 
       files: this.exportFilesJSON(video, video.VideoFiles),
 
@@ -194,6 +200,13 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
     }))
   }
 
+  private exportChaptersJSON (chapters: MVideoChapter[]) {
+    return chapters.map(c => ({
+      timecode: c.timecode,
+      title: c.title
+    }))
+  }
+
   private exportFilesJSON (video: MVideo, files: MVideoFile[]) {
     return files.map(f => ({
       resolution: f.resolution,
@@ -216,11 +229,9 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
 
   // ---------------------------------------------------------------------------
 
-  private async exportVideoAP (video: MVideoAP): Promise<ActivityCreate<VideoObject>> {
+  private async exportVideoAP (video: MVideoAP, chapters: MVideoChapter[]): Promise<ActivityCreate<VideoObject>> {
     const videoFile = video.getMaxQualityFile()
     const icon = video.getPreview()
-
-    const videoFileAP = videoFile.toActivityPubObject(video)
 
     const audience = getAudience(video.VideoChannel.Account.Actor, video.privacy === VideoPrivacy.PUBLIC)
     const videoObject = {
@@ -240,13 +251,15 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
         url: join(this.options.relativeStaticDirPath, this.getArchiveCaptionFilePath(video, c))
       })),
 
-      attachment: this.options.withVideoFiles
+      hasParts: buildChaptersAPHasPart(video, chapters),
+
+      attachment: this.options.withVideoFiles && videoFile
         ? [
           {
             type: 'Video' as 'Video',
             url: join(this.options.relativeStaticDirPath, this.getArchiveVideoFilePath(video, videoFile)),
 
-            ...pick(videoFileAP, [ 'mediaType', 'height', 'size', 'fps' ])
+            ...pick(videoFile.toActivityPubObject(video), [ 'mediaType', 'height', 'size', 'fps' ])
           }
         ]
         : undefined

@@ -20,9 +20,11 @@ import {
   FollowingExportJSON,
   HttpStatusCode,
   LikesExportJSON,
+  LiveVideoLatencyMode,
   UserExportState,
   UserNotificationSettingValue,
   UserSettingsExportJSON,
+  VideoChapterObject,
   VideoCommentObject,
   VideoCreateResult,
   VideoExportJSON, VideoPlaylistCreateResult,
@@ -59,6 +61,7 @@ function runTest (withObjectStorage: boolean) {
   let externalVideo: VideoCreateResult
   let noahPrivateVideo: VideoCreateResult
   let noahVideo: VideoCreateResult
+  let noahLive: VideoCreateResult
   let mouskaVideo: VideoCreateResult
 
   let noahPlaylist: VideoPlaylistCreateResult
@@ -81,6 +84,7 @@ function runTest (withObjectStorage: boolean) {
       noahPrivateVideo,
       mouskaVideo,
       noahVideo,
+      noahLive,
       noahToken,
       server,
       remoteServer
@@ -249,29 +253,58 @@ function runTest (withObjectStorage: boolean) {
       expect(outbox.type).to.equal('OrderedCollection')
 
       // 3 videos and 2 comments
-      expect(outbox.totalItems).to.equal(5)
-      expect(outbox.orderedItems).to.have.lengthOf(5)
+      expect(outbox.totalItems).to.equal(6)
+      expect(outbox.orderedItems).to.have.lengthOf(6)
 
-      expect(outbox.orderedItems.filter(i => i.object.type === 'Video')).to.have.lengthOf(3)
+      expect(outbox.orderedItems.filter(i => i.object.type === 'Video')).to.have.lengthOf(4)
       expect(outbox.orderedItems.filter(i => i.object.type === 'Note')).to.have.lengthOf(2)
 
-      const { object: video } = findVideoObjectInOutbox(outbox, 'noah public video')
+      {
+        const { object: video } = findVideoObjectInOutbox(outbox, 'noah public video')
 
-      // Thumbnail
-      expect(video.icon).to.have.lengthOf(1)
-      expect(video.icon[0].url).to.equal('../files/videos/thumbnails/' + noahVideo.uuid + '.jpg')
+        // Thumbnail
+        expect(video.icon).to.have.lengthOf(1)
+        expect(video.icon[0].url).to.equal('../files/videos/thumbnails/' + noahVideo.uuid + '.jpg')
 
-      await checkFileExistsInZIP(zip, video.icon[0].url, '/activity-pub')
+        await checkFileExistsInZIP(zip, video.icon[0].url, '/activity-pub')
 
-      // Subtitles
-      expect(video.subtitleLanguage).to.have.lengthOf(2)
-      for (const subtitle of video.subtitleLanguage) {
-        await checkFileExistsInZIP(zip, subtitle.url, '/activity-pub')
+        // Subtitles
+        expect(video.subtitleLanguage).to.have.lengthOf(2)
+        for (const subtitle of video.subtitleLanguage) {
+          await checkFileExistsInZIP(zip, subtitle.url, '/activity-pub')
+        }
+
+        // Chapters
+        expect(video.hasParts).to.have.lengthOf(2)
+        const chapters = video.hasParts as VideoChapterObject[]
+
+        expect(chapters[0].name).to.equal('chapter 1')
+        expect(chapters[0].startOffset).to.equal(1)
+        expect(chapters[0].endOffset).to.equal(3)
+
+        expect(chapters[1].name).to.equal('chapter 2')
+        expect(chapters[1].startOffset).to.equal(3)
+        expect(chapters[1].endOffset).to.equal(5)
+
+        // Video file
+        expect(video.attachment).to.have.lengthOf(1)
+        expect(video.attachment[0].url).to.equal('../files/videos/video-files/' + noahVideo.uuid + '.webm')
+        await checkFileExistsInZIP(zip, video.attachment[0].url, '/activity-pub')
       }
 
-      expect(video.attachment).to.have.lengthOf(1)
-      expect(video.attachment[0].url).to.equal('../files/videos/video-files/' + noahVideo.uuid + '.webm')
-      await checkFileExistsInZIP(zip, video.attachment[0].url, '/activity-pub')
+      {
+        const { object: live } = findVideoObjectInOutbox(outbox, 'noah live video')
+
+        expect(live.isLiveBroadcast).to.be.true
+
+        // Thumbnail
+        expect(live.icon).to.have.lengthOf(1)
+        expect(live.icon[0].url).to.equal('../files/videos/thumbnails/' + noahLive.uuid + '.jpg')
+        await checkFileExistsInZIP(zip, live.icon[0].url, '/activity-pub')
+
+        expect(live.subtitleLanguage).to.have.lengthOf(0)
+        expect(live.attachment).to.not.exist
+      }
     }
   })
 
@@ -438,7 +471,7 @@ function runTest (withObjectStorage: boolean) {
     {
       const json = await parseZIPJSONFile<VideoExportJSON>(zip, 'peertube/videos.json')
 
-      expect(json.videos).to.have.lengthOf(3)
+      expect(json.videos).to.have.lengthOf(4)
 
       {
         const privateVideo = json.videos.find(v => v.name === 'noah private video')
@@ -460,6 +493,8 @@ function runTest (withObjectStorage: boolean) {
         expect(publicVideo.files).to.have.lengthOf(1)
         expect(publicVideo.streamingPlaylists).to.have.lengthOf(0)
 
+        expect(publicVideo.chapters).to.have.lengthOf(2)
+
         expect(publicVideo.captions).to.have.lengthOf(2)
 
         expect(publicVideo.captions.find(c => c.language === 'ar')).to.exist
@@ -474,6 +509,32 @@ function runTest (withObjectStorage: boolean) {
         for (const url of urls) {
           await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
         }
+      }
+
+      {
+        const liveVideo = json.videos.find(v => v.name === 'noah live video')
+        expect(liveVideo).to.exist
+
+        expect(liveVideo.isLive).to.be.true
+        expect(liveVideo.live.latencyMode).to.equal(LiveVideoLatencyMode.SMALL_LATENCY)
+        expect(liveVideo.live.saveReplay).to.be.true
+        expect(liveVideo.live.permanentLive).to.be.true
+        expect(liveVideo.live.streamKey).to.exist
+        expect(liveVideo.live.replaySettings.privacy).to.equal(VideoPrivacy.PUBLIC)
+
+        expect(liveVideo.channel.name).to.equal('noah_second_channel')
+        expect(liveVideo.privacy).to.equal(VideoPrivacy.PASSWORD_PROTECTED)
+        expect(liveVideo.passwords).to.deep.equal([ 'password1' ])
+
+        expect(liveVideo.duration).to.equal(0)
+        expect(liveVideo.captions).to.have.lengthOf(0)
+        expect(liveVideo.files).to.have.lengthOf(0)
+        expect(liveVideo.streamingPlaylists).to.have.lengthOf(0)
+        expect(liveVideo.source).to.not.exist
+
+        expect(liveVideo.archiveFiles.captions).to.deep.equal({})
+        expect(liveVideo.archiveFiles.thumbnail).to.exist
+        expect(liveVideo.archiveFiles.videoFile).to.not.exist
       }
 
       {
@@ -513,7 +574,7 @@ function runTest (withObjectStorage: boolean) {
 
     {
       const videoThumbnails = files.filter(f => f.startsWith('files/videos/thumbnails/'))
-      expect(videoThumbnails).to.have.lengthOf(3)
+      expect(videoThumbnails).to.have.lengthOf(4)
 
       const videoFiles = files.filter(f => f.startsWith('files/videos/video-files/'))
       expect(videoFiles).to.have.lengthOf(3)
@@ -620,9 +681,9 @@ function runTest (withObjectStorage: boolean) {
       expect(json.videos).to.have.lengthOf(1)
       const video = json.videos[0]
 
-      expect(video.files).to.have.lengthOf(4)
+      expect(video.files).to.have.lengthOf(2)
       expect(video.streamingPlaylists).to.have.lengthOf(1)
-      expect(video.streamingPlaylists[0].files).to.have.lengthOf(4)
+      expect(video.streamingPlaylists[0].files).to.have.lengthOf(2)
     }
 
     {

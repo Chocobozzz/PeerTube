@@ -1,31 +1,16 @@
-import express, { UploadFiles } from 'express'
-import { move } from 'fs-extra/esm'
-import { basename } from 'path'
+import express from 'express'
 import { getResumableUploadPath } from '@server/helpers/upload.js'
-import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { Redis } from '@server/lib/redis.js'
 import { uploadx } from '@server/lib/uploadx.js'
-import {
-  buildLocalVideoFromReq, buildVideoThumbnailsFromReq,
-  setVideoTags
-} from '@server/lib/video.js'
-import { buildNewFile } from '@server/lib/video-file.js'
-import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
-import { VideoPasswordModel } from '@server/models/video/video-password.js'
-import { VideoSourceModel } from '@server/models/video/video-source.js'
-import { MVideoFile, MVideoFullLight, MVideoThumbnail } from '@server/types/models/index.js'
 import { uuidToShort } from '@peertube/peertube-node-utils'
-import { HttpStatusCode, ThumbnailType, VideoCreate, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, ThumbnailType, VideoCreate } from '@peertube/peertube-models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
 import { createReqFiles } from '../../../helpers/express-utils.js'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { Hooks } from '../../../lib/plugins/hooks.js'
-import { generateLocalVideoMiniature } from '../../../lib/thumbnail.js'
-import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist.js'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -34,12 +19,8 @@ import {
   videosAddResumableInitValidator,
   videosAddResumableValidator
 } from '../../../middlewares/index.js'
-import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update.js'
-import { VideoModel } from '../../../models/video/video.js'
 import { ffprobePromise, getChaptersFromContainer } from '@peertube/peertube-ffmpeg'
-import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from '@server/lib/video-chapters.js'
-import { FfprobeData } from 'fluent-ffmpeg'
-import { addVideoJobsAfterCreation } from '@server/lib/video-jobs.js'
+import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -134,109 +115,65 @@ async function addVideo (options: {
   files: express.UploadFiles
 }) {
   const { req, res, videoPhysicalFile, videoInfo, files } = options
-  const videoChannel = res.locals.videoChannel
-  const user = res.locals.oauth.token.User
-
-  let videoData = buildLocalVideoFromReq(videoInfo, videoChannel.id)
-  videoData = await Hooks.wrapObject(videoData, 'filter:api.video.upload.video-attribute.result')
-
-  videoData.state = buildNextVideoState()
-  videoData.duration = videoPhysicalFile.duration // duration was added by a previous middleware
-
-  const video = new VideoModel(videoData) as MVideoFullLight
-  video.VideoChannel = videoChannel
-  video.url = getLocalVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
   const ffprobe = await ffprobePromise(videoPhysicalFile.path)
-
-  const videoFile = await buildNewFile({ path: videoPhysicalFile.path, mode: 'web-video', ffprobe })
-  const originalFilename = videoPhysicalFile.originalname
 
   const containerChapters = await getChaptersFromContainer({
     path: videoPhysicalFile.path,
     maxTitleLength: CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.TITLE.max,
     ffprobe
   })
-  logger.debug(`Got ${containerChapters.length} chapters from video "${video.name}" container`, { containerChapters, ...lTags(video.uuid) })
+  logger.debug(`Got ${containerChapters.length} chapters from video "${videoInfo.name}" container`, { containerChapters, ...lTags() })
 
-  // Move physical file
-  const destination = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
-  await move(videoPhysicalFile.path, destination)
-  // This is important in case if there is another attempt in the retry process
-  videoPhysicalFile.filename = basename(destination)
-  videoPhysicalFile.path = destination
+  const thumbnails = [ { type: ThumbnailType.MINIATURE, field: 'thumbnailfile' }, { type: ThumbnailType.PREVIEW, field: 'previewfile' } ]
+    .filter(({ field }) => !!files?.[field]?.[0])
+    .map(({ type, field }) => ({
+      path: files[field][0].path,
+      type,
+      automaticallyGenerated: false,
+      keepOriginal: false
+    }))
 
-  const thumbnails = await createThumbnailFiles({ video, files, videoFile, ffprobe })
+  const localVideoCreator = new LocalVideoCreator({
+    lTags,
+    videoFilePath: videoPhysicalFile.path,
+    user: res.locals.oauth.token.User,
+    channel: res.locals.videoChannel,
 
-  const { videoCreated } = await sequelizeTypescript.transaction(async t => {
-    const sequelizeOptions = { transaction: t }
+    chapters: undefined,
+    fallbackChapters: {
+      fromDescription: true,
+      finalFallback: containerChapters
+    },
 
-    const videoCreated = await video.save(sequelizeOptions) as MVideoFullLight
+    videoAttributes: {
+      ...videoInfo,
 
-    for (const thumbnail of thumbnails) {
-      await videoCreated.addAndSaveThumbnail(thumbnail, t)
-    }
+      duration: videoPhysicalFile.duration,
+      filename: videoPhysicalFile.originalname,
+      state: buildNextVideoState(),
+      isLive: false
+    },
 
-    // Do not forget to add video channel information to the created video
-    videoCreated.VideoChannel = res.locals.videoChannel
+    liveAttributes: undefined,
 
-    videoFile.videoId = video.id
-    await videoFile.save(sequelizeOptions)
+    videoAttributeResultHook: 'filter:api.video.upload.video-attribute.result',
 
-    video.VideoFiles = [ videoFile ]
-
-    await VideoSourceModel.create({
-      filename: originalFilename,
-      videoId: video.id
-    }, { transaction: t })
-
-    await setVideoTags({ video, tags: videoInfo.tags, transaction: t })
-
-    // Schedule an update in the future?
-    if (videoInfo.scheduleUpdate) {
-      await ScheduleVideoUpdateModel.create({
-        videoId: video.id,
-        updateAt: new Date(videoInfo.scheduleUpdate.updateAt),
-        privacy: videoInfo.scheduleUpdate.privacy || null
-      }, sequelizeOptions)
-    }
-
-    if (!await replaceChaptersFromDescriptionIfNeeded({ newDescription: video.description, video, transaction: t })) {
-      await replaceChapters({ video, chapters: containerChapters, transaction: t })
-    }
-
-    await autoBlacklistVideoIfNeeded({
-      video,
-      user,
-      isRemote: false,
-      isNew: true,
-      isNewFile: true,
-      transaction: t
-    })
-
-    if (videoInfo.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
-      await VideoPasswordModel.addPasswords(videoInfo.videoPasswords, video.id, t)
-    }
-
-    auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
-    logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid, lTags(videoCreated.uuid))
-
-    return { videoCreated }
+    thumbnails
   })
 
-  // Channel has a new content, set as updated
-  await videoCreated.VideoChannel.setAsUpdated()
+  const { video } = await localVideoCreator.create()
 
-  addVideoJobsAfterCreation({ video: videoCreated, videoFile })
-    .catch(err => logger.error('Cannot build new video jobs of %s.', videoCreated.uuid, { err, ...lTags(videoCreated.uuid) }))
+  auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(video.toFormattedDetailsJSON()))
+  logger.info('Video with name %s and uuid %s created.', videoInfo.name, video.uuid, lTags(video.uuid))
 
-  Hooks.runAction('action:api.video.uploaded', { video: videoCreated, req, res })
+  Hooks.runAction('action:api.video.uploaded', { video, req, res })
 
   return {
     video: {
-      id: videoCreated.id,
-      shortUUID: uuidToShort(videoCreated.uuid),
-      uuid: videoCreated.uuid
+      id: video.id,
+      shortUUID: uuidToShort(video.uuid),
+      uuid: video.uuid
     }
   }
 }
@@ -245,28 +182,4 @@ async function deleteUploadResumableCache (req: express.Request, res: express.Re
   await Redis.Instance.deleteUploadSession(req.query.upload_id)
 
   return next()
-}
-
-async function createThumbnailFiles (options: {
-  video: MVideoThumbnail
-  files: UploadFiles
-  videoFile: MVideoFile
-  ffprobe?: FfprobeData
-}) {
-  const { video, videoFile, files, ffprobe } = options
-
-  const models = await buildVideoThumbnailsFromReq({
-    video,
-    files,
-    fallback: () => Promise.resolve(undefined)
-  })
-
-  const filteredModels = models.filter(m => !!m)
-
-  const thumbnailsToGenerate = [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ].filter(type => {
-    // Generate missing thumbnail types
-    return !filteredModels.some(m => m.type === type)
-  })
-
-  return [ ...filteredModels, ...await generateLocalVideoMiniature({ video, videoFile, types: thumbnailsToGenerate, ffprobe }) ]
 }

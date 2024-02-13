@@ -70,6 +70,11 @@ export interface VideoExportJSON {
       fileUrl: string
     }[]
 
+    chapters: {
+      timecode: number
+      title: string
+    }[]
+
     files: VideoFileExportJSON[]
 
     streamingPlaylists: {
