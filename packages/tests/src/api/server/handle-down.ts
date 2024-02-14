@@ -44,8 +44,37 @@ describe('Test handle downs', function () {
 
   const unlistedVideoAttributes = { ...videoAttributes, privacy: VideoPrivacy.UNLISTED }
 
-  let checkAttributes: any
-  let unlistedCheckAttributes: any
+  const checkAttributes = {
+    name: 'my super name for server 1',
+    category: 5,
+    licence: 4,
+    language: 'ja',
+    nsfw: true,
+    description: 'my super description for server 1',
+    support: 'my super support text for server 1',
+    account: {
+      name: 'root',
+      host: ''
+    },
+    duration: 10,
+    tags: [ 'tag1p1', 'tag2p1' ],
+    privacy: VideoPrivacy.PUBLIC,
+    commentsEnabled: true,
+    downloadEnabled: true,
+    channel: {
+      name: 'root_channel',
+      displayName: 'Main root channel',
+      description: ''
+    },
+    fixture: 'video_short1.webm',
+    files: [
+      {
+        resolution: 720,
+        size: 572456
+      }
+    ]
+  }
+  const unlistedCheckAttributes = { ...checkAttributes, privacy: VideoPrivacy.UNLISTED }
 
   let commentCommands: CommentsCommand[]
 
@@ -55,39 +84,8 @@ describe('Test handle downs', function () {
     servers = await createMultipleServers(3)
     commentCommands = servers.map(s => s.comments)
 
-    checkAttributes = {
-      name: 'my super name for server 1',
-      category: 5,
-      licence: 4,
-      language: 'ja',
-      nsfw: true,
-      description: 'my super description for server 1',
-      support: 'my super support text for server 1',
-      account: {
-        name: 'root',
-        host: servers[0].host
-      },
-      isLocal: false,
-      duration: 10,
-      tags: [ 'tag1p1', 'tag2p1' ],
-      privacy: VideoPrivacy.PUBLIC,
-      commentsEnabled: true,
-      downloadEnabled: true,
-      channel: {
-        name: 'root_channel',
-        displayName: 'Main root channel',
-        description: '',
-        isLocal: false
-      },
-      fixture: 'video_short1.webm',
-      files: [
-        {
-          resolution: 720,
-          size: 572456
-        }
-      ]
-    }
-    unlistedCheckAttributes = { ...checkAttributes, privacy: VideoPrivacy.UNLISTED }
+    checkAttributes.account.host = servers[0].host
+    unlistedCheckAttributes.account.host = servers[0].host
 
     // Get the access tokens
     await setAccessTokensToServers(servers)

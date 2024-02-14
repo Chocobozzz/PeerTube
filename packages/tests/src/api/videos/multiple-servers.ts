@@ -90,7 +90,6 @@ describe('Test multiple servers', function () {
       // All servers should have this video
       let publishedAt: string = null
       for (const server of servers) {
-        const isLocal = server.port === servers[0].port
         const checkAttributes = {
           name: 'my super name for server 1',
           category: 5,
@@ -104,7 +103,6 @@ describe('Test multiple servers', function () {
             name: 'root',
             host: servers[0].host
           },
-          isLocal,
           publishedAt,
           duration: 10,
           tags: [ 'tag1p1', 'tag2p1' ],
@@ -114,8 +112,7 @@ describe('Test multiple servers', function () {
           channel: {
             displayName: 'my channel',
             name: 'super_channel_name',
-            description: 'super channel',
-            isLocal
+            description: 'super channel'
           },
           fixture: 'video_short1.webm',
           files: [
@@ -182,7 +179,6 @@ describe('Test multiple servers', function () {
 
       // All servers should have this video
       for (const server of servers) {
-        const isLocal = server.url === servers[1].url
         const checkAttributes = {
           name: 'my super name for server 2',
           category: 4,
@@ -195,7 +191,6 @@ describe('Test multiple servers', function () {
             name: 'user1',
             host: servers[1].host
           },
-          isLocal,
           commentsEnabled: true,
           downloadEnabled: true,
           duration: 5,
@@ -204,8 +199,7 @@ describe('Test multiple servers', function () {
           channel: {
             displayName: 'Main user1 channel',
             name: 'user1_channel',
-            description: 'super channel',
-            isLocal
+            description: 'super channel'
           },
           fixture: 'video_short2.webm',
           files: [
@@ -276,7 +270,6 @@ describe('Test multiple servers', function () {
 
       // All servers should have this video
       for (const server of servers) {
-        const isLocal = server.url === servers[2].url
         const { data } = await server.videos.list()
 
         expect(data).to.be.an('array')
@@ -305,7 +298,6 @@ describe('Test multiple servers', function () {
             name: 'root',
             host: servers[2].host
           },
-          isLocal,
           duration: 5,
           commentsEnabled: true,
           downloadEnabled: true,
@@ -314,8 +306,7 @@ describe('Test multiple servers', function () {
           channel: {
             displayName: 'Main root channel',
             name: 'root_channel',
-            description: '',
-            isLocal
+            description: ''
           },
           fixture: 'video_short3.webm',
           files: [
@@ -341,15 +332,13 @@ describe('Test multiple servers', function () {
           },
           commentsEnabled: true,
           downloadEnabled: true,
-          isLocal,
           duration: 5,
           tags: [ 'tag2p3', 'tag3p3', 'tag4p3' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
             displayName: 'Main root channel',
             name: 'root_channel',
-            description: '',
-            isLocal
+            description: ''
           },
           fixture: 'video_short.webm',
           files: [
@@ -638,7 +627,6 @@ describe('Test multiple servers', function () {
 
         expect(new Date(videoUpdated.updatedAt)).to.be.greaterThan(updatedAtMin)
 
-        const isLocal = server.url === servers[2].url
         const checkAttributes = {
           name: 'my super video updated',
           category: 10,
@@ -652,7 +640,6 @@ describe('Test multiple servers', function () {
             name: 'root',
             host: servers[2].host
           },
-          isLocal,
           duration: 5,
           commentsEnabled: true,
           downloadEnabled: true,
@@ -661,8 +648,7 @@ describe('Test multiple servers', function () {
           channel: {
             displayName: 'Main root channel',
             name: 'root_channel',
-            description: '',
-            isLocal
+            description: ''
           },
           fixture: 'video_short3.webm',
           files: [

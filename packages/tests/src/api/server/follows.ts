@@ -451,7 +451,6 @@ describe('Test follows', function () {
         expect(video4).to.not.be.undefined
         expect(video6).to.not.be.undefined
 
-        const isLocal = false
         const checkAttributes = {
           name: 'server3-4',
           category: 2,
@@ -464,7 +463,6 @@ describe('Test follows', function () {
             name: 'root',
             host: servers[2].host
           },
-          isLocal,
           commentsEnabled: true,
           downloadEnabled: true,
           duration: 5,
@@ -475,8 +473,7 @@ describe('Test follows', function () {
           channel: {
             displayName: 'Main root channel',
             name: 'root_channel',
-            description: '',
-            isLocal
+            description: ''
           },
           fixture: 'video_short.webm',
           files: [

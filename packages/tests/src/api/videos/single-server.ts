@@ -36,7 +36,6 @@ describe('Test a single server', function () {
         name: 'root',
         host: server.host
       },
-      isLocal: true,
       duration: 5,
       tags: [ 'tag1', 'tag2', 'tag3' ],
       privacy: VideoPrivacy.PUBLIC,
@@ -45,8 +44,7 @@ describe('Test a single server', function () {
       channel: {
         displayName: 'Main root channel',
         name: 'root_channel',
-        description: '',
-        isLocal: true
+        description: ''
       },
       fixture: 'video_short.webm',
       files: [
@@ -69,7 +67,6 @@ describe('Test a single server', function () {
         name: 'root',
         host: server.host
       },
-      isLocal: true,
       tags: [ 'tagup1', 'tagup2' ],
       privacy: VideoPrivacy.PUBLIC,
       duration: 5,
@@ -78,8 +75,7 @@ describe('Test a single server', function () {
       channel: {
         name: 'root_channel',
         displayName: 'Main root channel',
-        description: '',
-        isLocal: true
+        description: ''
       },
       fixture: 'video_short3.webm',
       files: [
