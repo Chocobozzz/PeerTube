@@ -78,7 +78,7 @@ videoPlaylistRouter.post('/',
   authenticate,
   reqThumbnailFile,
   asyncMiddleware(videoPlaylistsAddValidator),
-  asyncRetryTransactionMiddleware(addVideoPlaylist)
+  asyncRetryTransactionMiddleware(createVideoPlaylist)
 )
 
 videoPlaylistRouter.put('/:playlistId',
@@ -159,7 +159,7 @@ function getVideoPlaylist (req: express.Request, res: express.Response) {
   return res.json(videoPlaylist.toFormattedJSON())
 }
 
-async function addVideoPlaylist (req: express.Request, res: express.Response) {
+async function createVideoPlaylist (req: express.Request, res: express.Response) {
   const videoPlaylistInfo: VideoPlaylistCreate = req.body
   const user = res.locals.oauth.token.User
 

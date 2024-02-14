@@ -60,7 +60,10 @@ export type BuildVideosListQueryOptions = {
   trendingAlgorithm?: string // best, hot, or any other algorithm implemented
   trendingDays?: number
 
+  // Used to include user history information, exclude blocked videos, include internal videos, adapt hot algorithm...
   user?: MUserAccountId
+
+  // Only list videos watched by this user
   historyOfUser?: MUserId
 
   startDate?: string // ISO 8601

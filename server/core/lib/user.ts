@@ -24,7 +24,7 @@ import { Emailer } from './emailer.js'
 import { LiveQuotaStore } from './live/live-quota-store.js'
 import { buildActorInstance, findAvailableLocalActorName } from './local-actor.js'
 import { Redis } from './redis.js'
-import { createLocalVideoChannel } from './video-channel.js'
+import { createLocalVideoChannelWithoutKeys } from './video-channel.js'
 import { createWatchLaterPlaylist } from './video-playlist.js'
 
 type ChannelNames = { name: string, displayName: string }
@@ -107,7 +107,7 @@ async function createUserAccountAndChannelAndPlaylist (parameters: {
     userCreated.Account = accountCreated
 
     const channelAttributes = await buildChannelAttributes({ user: userCreated, transaction: t, channelNames })
-    const videoChannel = await createLocalVideoChannel(channelAttributes, accountCreated, t)
+    const videoChannel = await createLocalVideoChannelWithoutKeys(channelAttributes, accountCreated, t)
 
     const videoPlaylist = await createWatchLaterPlaylist(accountCreated, t)
 

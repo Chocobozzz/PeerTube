@@ -7,7 +7,7 @@ import { getLocalVideoChannelActivityPubUrl } from './activitypub/url.js'
 import { federateVideoIfNeeded } from './activitypub/videos/index.js'
 import { buildActorInstance } from './local-actor.js'
 
-async function createLocalVideoChannel (videoChannelInfo: VideoChannelCreate, account: MAccountId, t: Sequelize.Transaction) {
+async function createLocalVideoChannelWithoutKeys (videoChannelInfo: VideoChannelCreate, account: MAccountId, t: Sequelize.Transaction) {
   const url = getLocalVideoChannelActivityPubUrl(videoChannelInfo.name)
   const actorInstance = buildActorInstance('Group', url, videoChannelInfo.name)
 
@@ -45,6 +45,6 @@ async function federateAllVideosOfChannel (videoChannel: MChannelId) {
 // ---------------------------------------------------------------------------
 
 export {
-  createLocalVideoChannel,
+  createLocalVideoChannelWithoutKeys,
   federateAllVideosOfChannel
 }

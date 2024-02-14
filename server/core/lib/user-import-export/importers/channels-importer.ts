@@ -3,7 +3,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { pick } from '@peertube/peertube-core-utils'
 import { AbstractUserImporter } from './abstract-user-importer.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { createLocalVideoChannel } from '@server/lib/video-channel.js'
+import { createLocalVideoChannelWithoutKeys } from '@server/lib/video-channel.js'
 import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { updateLocalActorImageFiles } from '@server/lib/local-actor.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
@@ -43,7 +43,7 @@ export class ChannelsImporter extends AbstractUserImporter <ChannelExportJSON, C
       logger.info(`Do not import channel ${existingChannel.name} that already exists on this PeerTube instance`, lTags())
     } else {
       const videoChannelCreated = await sequelizeTypescript.transaction(async t => {
-        return createLocalVideoChannel(pick(channelImportData, [ 'displayName', 'name', 'description', 'support' ]), account, t)
+        return createLocalVideoChannelWithoutKeys(pick(channelImportData, [ 'displayName', 'name', 'description', 'support' ]), account, t)
       })
 
       await JobQueue.Instance.createJob({ type: 'actor-keys', payload: { actorId: videoChannelCreated.actorId } })
