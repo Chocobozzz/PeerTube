@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import { pathExists } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
 import { basename, join } from 'path'
-import { pick, uuidRegex } from '@peertube/peertube-core-utils'
+import { uuidRegex } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType, VideoCaption, VideoDetails, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import {
   loadLanguages,
@@ -17,8 +17,9 @@ import { getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { makeRawRequest, PeerTubeServer, VideoEdit, waitJobs } from '@peertube/peertube-server-commands'
 import { dateIsValid, expectStartWith, testImageGeneratedByFFmpeg } from './checks.js'
 import { checkWebTorrentWorks } from './webtorrent.js'
+import { completeCheckHlsPlaylist } from './streaming-playlists.js'
 
-async function completeWebVideoFilesCheck (options: {
+export async function completeWebVideoFilesCheck (options: {
   server: PeerTubeServer
   originServer: PeerTubeServer
   videoUUID: string
@@ -109,10 +110,12 @@ async function completeWebVideoFilesCheck (options: {
   }
 }
 
-async function completeVideoCheck (options: {
+export async function completeVideoCheck (options: {
   server: PeerTubeServer
   originServer: PeerTubeServer
+
   videoUUID: string
+
   objectStorageBaseUrl?: string
 
   attributes: {
@@ -124,32 +127,41 @@ async function completeVideoCheck (options: {
     commentsEnabled: boolean
     downloadEnabled: boolean
     description: string
-    publishedAt?: string
     support: string
+    duration: number
+    tags: string[]
+    privacy: number
+
+    publishedAt?: string
     originallyPublishedAt?: string
+
     account: {
       name: string
       host: string
     }
-    isLocal: boolean
-    tags: string[]
-    privacy: number
+
     likes?: number
     dislikes?: number
-    duration: number
+
     channel: {
       displayName: string
       name: string
       description: string
-      isLocal: boolean
     }
     fixture: string
-    files: {
+
+    thumbnailfile?: string
+    previewfile?: string
+
+    files?: {
       resolution: number
       size: number
     }[]
-    thumbnailfile?: string
-    previewfile?: string
+
+    hls?: {
+      hlsOnly: boolean
+      resolutions: number[]
+    }
   }
 }) {
   const { attributes, originServer, server, videoUUID, objectStorageBaseUrl } = options
@@ -164,24 +176,30 @@ async function completeVideoCheck (options: {
   expect(video.name).to.equal(attributes.name)
   expect(video.category.id).to.equal(attributes.category)
   expect(video.category.label).to.equal(attributes.category !== null ? VIDEO_CATEGORIES[attributes.category] : 'Unknown')
+
   expect(video.licence.id).to.equal(attributes.licence)
   expect(video.licence.label).to.equal(attributes.licence !== null ? VIDEO_LICENCES[attributes.licence] : 'Unknown')
+
   expect(video.language.id).to.equal(attributes.language)
   expect(video.language.label).to.equal(attributes.language !== null ? VIDEO_LANGUAGES[attributes.language] : 'Unknown')
+
   expect(video.privacy.id).to.deep.equal(attributes.privacy)
   expect(video.privacy.label).to.deep.equal(VIDEO_PRIVACIES[attributes.privacy])
+
   expect(video.nsfw).to.equal(attributes.nsfw)
   expect(video.description).to.equal(attributes.description)
-  expect(video.account.id).to.be.a('number')
-  expect(video.account.host).to.equal(attributes.account.host)
-  expect(video.account.name).to.equal(attributes.account.name)
-  expect(video.channel.displayName).to.equal(attributes.channel.displayName)
-  expect(video.channel.name).to.equal(attributes.channel.name)
+
   expect(video.likes).to.equal(attributes.likes)
   expect(video.dislikes).to.equal(attributes.dislikes)
-  expect(video.isLocal).to.equal(attributes.isLocal)
+
+  expect(video.isLocal).to.equal(server.url === originServer.url)
   expect(video.duration).to.equal(attributes.duration)
   expect(video.url).to.contain(originServer.host)
+  expect(video.tags).to.deep.equal(attributes.tags)
+
+  expect(video.commentsEnabled).to.equal(attributes.commentsEnabled)
+  expect(video.downloadEnabled).to.equal(attributes.downloadEnabled)
+
   expect(dateIsValid(video.createdAt)).to.be.true
   expect(dateIsValid(video.publishedAt)).to.be.true
   expect(dateIsValid(video.updatedAt)).to.be.true
@@ -196,18 +214,16 @@ async function completeVideoCheck (options: {
     expect(video.originallyPublishedAt).to.be.null
   }
 
-  expect(video.files).to.have.lengthOf(attributes.files.length)
-  expect(video.tags).to.deep.equal(attributes.tags)
+  expect(video.account.id).to.be.a('number')
   expect(video.account.name).to.equal(attributes.account.name)
   expect(video.account.host).to.equal(attributes.account.host)
+
   expect(video.channel.displayName).to.equal(attributes.channel.displayName)
   expect(video.channel.name).to.equal(attributes.channel.name)
   expect(video.channel.host).to.equal(attributes.account.host)
-  expect(video.channel.isLocal).to.equal(attributes.channel.isLocal)
+  expect(video.channel.isLocal).to.equal(server.url === originServer.url)
   expect(video.channel.createdAt).to.exist
   expect(dateIsValid(video.channel.updatedAt.toString())).to.be.true
-  expect(video.commentsEnabled).to.equal(attributes.commentsEnabled)
-  expect(video.downloadEnabled).to.equal(attributes.downloadEnabled)
 
   expect(video.thumbnailPath).to.exist
   await testImageGeneratedByFFmpeg(server.url, attributes.thumbnailfile || attributes.fixture, video.thumbnailPath)
@@ -217,16 +233,30 @@ async function completeVideoCheck (options: {
     await testImageGeneratedByFFmpeg(server.url, attributes.previewfile, video.previewPath)
   }
 
-  await completeWebVideoFilesCheck({
-    server,
-    originServer,
-    videoUUID: video.uuid,
-    objectStorageBaseUrl,
-    ...pick(attributes, [ 'fixture', 'files' ])
-  })
+  if (attributes.files) {
+    await completeWebVideoFilesCheck({
+      server,
+      originServer,
+      videoUUID: video.uuid,
+      objectStorageBaseUrl,
+
+      files: attributes.files,
+      fixture: attributes.fixture
+    })
+  }
+
+  if (attributes.hls) {
+    await completeCheckHlsPlaylist({
+      objectStorageBaseUrl,
+      servers: [ server ],
+      videoUUID: video.uuid,
+      hlsOnly: attributes.hls.hlsOnly,
+      resolutions: attributes.hls.resolutions
+    })
+  }
 }
 
-async function checkVideoFilesWereRemoved (options: {
+export async function checkVideoFilesWereRemoved (options: {
   server: PeerTubeServer
   video: VideoDetails
   captions?: VideoCaption[]
@@ -280,13 +310,13 @@ async function checkVideoFilesWereRemoved (options: {
   }
 }
 
-async function saveVideoInServers (servers: PeerTubeServer[], uuid: string) {
+export async function saveVideoInServers (servers: PeerTubeServer[], uuid: string) {
   for (const server of servers) {
     server.store.videoDetails = await server.videos.get({ id: uuid })
   }
 }
 
-function checkUploadVideoParam (options: {
+export function checkUploadVideoParam (options: {
   server: PeerTubeServer
   token: string
   attributes: Partial<VideoEdit>
@@ -310,7 +340,7 @@ function checkUploadVideoParam (options: {
 }
 
 // serverNumber starts from 1
-async function uploadRandomVideoOnServers (
+export async function uploadRandomVideoOnServers (
   servers: PeerTubeServer[],
   serverNumber: number,
   additionalParams?: VideoEdit & { prefixName?: string }
@@ -321,15 +351,4 @@ async function uploadRandomVideoOnServers (
   await waitJobs(servers)
 
   return res
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  completeVideoCheck,
-  completeWebVideoFilesCheck,
-  checkUploadVideoParam,
-  uploadRandomVideoOnServers,
-  checkVideoFilesWereRemoved,
-  saveVideoInServers
 }

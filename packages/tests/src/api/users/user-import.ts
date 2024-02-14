@@ -388,15 +388,13 @@ function runTest (withObjectStorage: boolean) {
               name: 'noah_remote',
               host: remoteServer.host
             },
-            isLocal: checkServer === remoteServer,
             likes: 0,
             dislikes: 0,
             duration: 5,
             channel: {
               displayName: 'noah display name',
               name: 'noah_second_channel',
-              description: 'noah description',
-              isLocal: checkServer === remoteServer
+              description: 'noah description'
             },
             fixture: 'video_short.webm',
             files: [
