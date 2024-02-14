@@ -1,4 +1,4 @@
-import express, { VideoUploadFile } from 'express'
+import express, { VideoLegacyUploadFile } from 'express'
 import { PathLike } from 'fs-extra/esm'
 import { Transaction } from 'sequelize'
 import { AbuseAuditView, auditLoggerFactory } from '@server/helpers/audit-logger.js'
@@ -38,7 +38,7 @@ export type AcceptResult = {
 // Stub function that can be filtered by plugins
 function isLocalVideoFileAccepted (object: {
   videoBody: VideoCreate
-  videoFile: VideoUploadFile
+  videoFile: VideoLegacyUploadFile
   user: MUserDefault
 }): AcceptResult {
   return { accepted: true }

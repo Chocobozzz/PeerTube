@@ -47,12 +47,12 @@ async function listVideoCaptions (req: express.Request, res: express.Response) {
 }
 
 async function createVideoCaption (req: express.Request, res: express.Response) {
-  const videoCaptionPhysicalFile = req.files['captionfile'][0]
+  const videoCaptionPhysicalFile: Express.Multer.File = req.files['captionfile'][0]
   const video = res.locals.videoAll
 
   const captionLanguage = req.params.captionLanguage
 
-  const videoCaption = await createLocalCaption({ video, language: captionLanguage, path: videoCaptionPhysicalFile })
+  const videoCaption = await createLocalCaption({ video, language: captionLanguage, path: videoCaptionPhysicalFile.path })
 
   await sequelizeTypescript.transaction(async t => {
     await federateVideoIfNeeded(video, false, t)

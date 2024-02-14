@@ -1,7 +1,7 @@
 import express from 'express'
 import { getResumableUploadPath } from '@server/helpers/upload.js'
 import { Redis } from '@server/lib/redis.js'
-import { uploadx } from '@server/lib/uploadx.js'
+import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { uuidToShort } from '@peertube/peertube-node-utils'
@@ -45,27 +45,25 @@ uploadRouter.post('/upload',
   asyncRetryTransactionMiddleware(addVideoLegacy)
 )
 
-uploadRouter.post('/upload-resumable',
-  openapiOperationDoc({ operationId: 'uploadResumableInit' }),
-  authenticate,
-  reqVideoFileAddResumable,
-  asyncMiddleware(videosAddResumableInitValidator),
-  (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitely tell to uploadx it's the end
-)
+setupUploadResumableRoutes({
+  routePath: '/upload-resumable',
+  router: uploadRouter,
 
-uploadRouter.delete('/upload-resumable',
-  authenticate,
-  asyncMiddleware(deleteUploadResumableCache),
-  (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitely tell to uploadx it's the end
-)
+  uploadInitBeforeMiddlewares: [
+    openapiOperationDoc({ operationId: 'uploadResumableInit' }),
+    reqVideoFileAddResumable
+  ],
 
-uploadRouter.put('/upload-resumable',
-  openapiOperationDoc({ operationId: 'uploadResumable' }),
-  authenticate,
-  uploadx.upload, // uploadx doesn't next() before the file upload completes
-  asyncMiddleware(videosAddResumableValidator),
-  asyncMiddleware(addVideoResumable)
-)
+  uploadInitAfterMiddlewares: [ asyncMiddleware(videosAddResumableInitValidator) ],
+
+  uploadDeleteMiddlewares: [ asyncMiddleware(deleteUploadResumableCache) ],
+
+  uploadedMiddlewares: [
+    openapiOperationDoc({ operationId: 'uploadResumable' }),
+    asyncMiddleware(videosAddResumableValidator)
+  ],
+  uploadedController: asyncMiddleware(addVideoResumable)
+})
 
 // ---------------------------------------------------------------------------
 
@@ -110,7 +108,7 @@ async function addVideoResumable (req: express.Request, res: express.Response) {
 async function addVideo (options: {
   req: express.Request
   res: express.Response
-  videoPhysicalFile: express.VideoUploadFile
+  videoPhysicalFile: express.VideoLegacyUploadFile
   videoInfo: VideoCreate
   files: express.UploadFiles
 }) {
