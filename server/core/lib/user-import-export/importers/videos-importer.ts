@@ -5,12 +5,9 @@ import { buildNextVideoState } from '@server/lib/video-state.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { pick } from '@peertube/peertube-core-utils'
 import { buildUUID, getFileSize } from '@peertube/peertube-node-utils'
-import { MChannelId, MVideoCaption, MVideoFullLight } from '@server/types/models/index.js'
+import { MChannelId, MVideoFullLight } from '@server/types/models/index.js'
 import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
-import { VideoCaptionModel } from '@server/models/video/video-caption.js'
-import { moveAndProcessCaptionFile } from '@server/helpers/captions-utils.js'
 import { AbstractUserImporter } from './abstract-user-importer.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
 import {
@@ -38,6 +35,7 @@ import { parse } from 'path'
 import { isLocalVideoFileAccepted } from '@server/lib/moderation.js'
 import { LocalVideoCreator, ThumbnailOptions } from '@server/lib/local-video-creator.js'
 import { isVideoChapterTimecodeValid, isVideoChapterTitleValid } from '@server/helpers/custom-validators/video-chapters.js'
+import { createLocalCaption } from '@server/lib/video-captions.js'
 
 const lTags = loggerTagsFactory('user-import')
 
@@ -243,17 +241,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
 
       if (!await this.isFileValidOrLog(absoluteFilePath, CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max)) continue
 
-      const videoCaption = new VideoCaptionModel({
-        videoId: video.id,
-        filename: VideoCaptionModel.generateCaptionName(captionImport.language),
-        language: captionImport.language
-      }) as MVideoCaption
-
-      await moveAndProcessCaptionFile({ path: absoluteFilePath }, videoCaption)
-
-      await sequelizeTypescript.transaction(async (t) => {
-        await VideoCaptionModel.insertOrReplaceLanguage(videoCaption, t)
-      })
+      await createLocalCaption({ video, language: captionImport.language, path: absoluteFilePath })
 
       captionPaths.push(absoluteFilePath)
     }

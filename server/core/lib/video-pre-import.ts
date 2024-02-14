@@ -8,7 +8,6 @@ import {
   VideoPrivacy,
   VideoState
 } from '@peertube/peertube-models'
-import { moveAndProcessCaptionFile } from '@server/helpers/captions-utils.js'
 import { isVTTFileValid } from '@server/helpers/custom-validators/video-captions.js'
 import { isVideoFileExtnameValid } from '@server/helpers/custom-validators/videos.js'
 import { isResolvingToUnicastOnly } from '@server/helpers/dns.js'
@@ -20,7 +19,6 @@ import { Hooks } from '@server/lib/plugins/hooks.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { setVideoTags } from '@server/lib/video.js'
-import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoImportModel } from '@server/models/video/video-import.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -30,9 +28,8 @@ import {
   MChannelSync,
   MThumbnail,
   MUser,
-  MVideoAccountDefault,
-  MVideoCaption,
-  MVideoImportFormattable,
+  MVideo,
+  MVideoAccountDefault, MVideoImportFormattable,
   MVideoTag,
   MVideoThumbnail,
   MVideoWithBlacklistLight
@@ -40,6 +37,7 @@ import {
 import { getLocalVideoActivityPubUrl } from './activitypub/url.js'
 import { updateLocalVideoMiniatureFromExisting, updateLocalVideoMiniatureFromUrl } from './thumbnail.js'
 import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
+import { createLocalCaption } from './video-captions.js'
 
 class YoutubeDlImportError extends Error {
   code: YoutubeDlImportError.CODE
@@ -252,7 +250,7 @@ async function buildYoutubeDLImport (options: {
   })
 
   // Get video subtitles
-  await processYoutubeSubtitles(youtubeDL, targetUrl, video.id)
+  await processYoutubeSubtitles(youtubeDL, targetUrl, video)
 
   let fileExt = `.${youtubeDLInfo.ext}`
   if (!isVideoFileExtnameValid(fileExt)) fileExt = '.mp4'
@@ -308,7 +306,7 @@ async function forgeThumbnail ({ inputPath, video, downloadUrl, type }: {
   return null
 }
 
-async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: string, videoId: number) {
+async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: string, video: MVideo) {
   try {
     const subtitles = await youtubeDL.getSubtitles()
 
@@ -321,18 +319,7 @@ async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: 
         continue
       }
 
-      const videoCaption = new VideoCaptionModel({
-        videoId,
-        language: subtitle.language,
-        filename: VideoCaptionModel.generateCaptionName(subtitle.language)
-      }) as MVideoCaption
-
-      // Move physical file
-      await moveAndProcessCaptionFile(subtitle, videoCaption)
-
-      await sequelizeTypescript.transaction(async t => {
-        await VideoCaptionModel.insertOrReplaceLanguage(videoCaption, t)
-      })
+      await createLocalCaption({ language: subtitle.language, path: subtitle.path, video })
 
       logger.info('Added %s youtube-dl subtitle', subtitle.path)
     }

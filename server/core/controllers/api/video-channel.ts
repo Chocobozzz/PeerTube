@@ -21,7 +21,7 @@ import { sequelizeTypescript } from '../../initializers/database.js'
 import { sendUpdateActor } from '../../lib/activitypub/send/index.js'
 import { JobQueue } from '../../lib/job-queue/index.js'
 import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '../../lib/local-actor.js'
-import { createLocalVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel.js'
+import { createLocalVideoChannelWithoutKeys, federateAllVideosOfChannel } from '../../lib/video-channel.js'
 import {
   apiRateLimiter,
   asyncMiddleware,
@@ -77,7 +77,7 @@ videoChannelRouter.get('/',
 videoChannelRouter.post('/',
   authenticate,
   asyncMiddleware(videoChannelsAddValidator),
-  asyncRetryTransactionMiddleware(addVideoChannel)
+  asyncRetryTransactionMiddleware(createVideoChannel)
 )
 
 videoChannelRouter.post('/:nameWithHost/avatar/pick',
@@ -262,17 +262,19 @@ async function deleteVideoChannelBanner (req: express.Request, res: express.Resp
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
-async function addVideoChannel (req: express.Request, res: express.Response) {
+async function createVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInfo: VideoChannelCreate = req.body
 
   const videoChannelCreated = await sequelizeTypescript.transaction(async t => {
     const account = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
 
-    return createLocalVideoChannel(videoChannelInfo, account, t)
+    return createLocalVideoChannelWithoutKeys(videoChannelInfo, account, t)
   })
 
-  const payload = { actorId: videoChannelCreated.actorId }
-  await JobQueue.Instance.createJob({ type: 'actor-keys', payload })
+  await JobQueue.Instance.createJob({
+    type: 'actor-keys',
+    payload: { actorId: videoChannelCreated.actorId }
+  })
 
   auditLogger.create(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelCreated.toFormattedJSON()))
   logger.info('Video channel %s created.', videoChannelCreated.Actor.url)
