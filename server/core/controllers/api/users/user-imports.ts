@@ -3,7 +3,7 @@ import {
   asyncMiddleware,
   authenticate
 } from '../../../middlewares/index.js'
-import { uploadx } from '@server/lib/uploadx.js'
+import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
 import {
   getLatestImportStatusValidator,
   userImportRequestResumableInitValidator,
@@ -19,29 +19,21 @@ import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
 
 const userImportRouter = express.Router()
 
-userImportRouter.post('/:userId/imports/import-resumable',
-  authenticate,
-  asyncMiddleware(userImportRequestResumableInitValidator),
-  (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitely tell to uploadx it's the end
-)
-
-userImportRouter.delete('/:userId/imports/import-resumable',
-  authenticate,
-  (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitely tell to uploadx it's the end
-)
-
-userImportRouter.put('/:userId/imports/import-resumable',
-  authenticate,
-  uploadx.upload, // uploadx doesn't next() before the file upload completes
-  asyncMiddleware(userImportRequestResumableValidator),
-  asyncMiddleware(addUserImportResumable)
-)
-
 userImportRouter.get('/:userId/imports/latest',
   authenticate,
   asyncMiddleware(getLatestImportStatusValidator),
   asyncMiddleware(getLatestImport)
 )
+
+setupUploadResumableRoutes({
+  routePath: '/:userId/imports/import-resumable',
+  router: userImportRouter,
+
+  uploadInitAfterMiddlewares: [ asyncMiddleware(userImportRequestResumableInitValidator) ],
+
+  uploadedMiddlewares: [ asyncMiddleware(userImportRequestResumableValidator) ],
+  uploadedController: asyncMiddleware(addUserImportResumable)
+})
 
 // ---------------------------------------------------------------------------
 

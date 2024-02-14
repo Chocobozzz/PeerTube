@@ -4,7 +4,7 @@ import { sequelizeTypescript } from '@server/initializers/database.js'
 import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-queue/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { regenerateMiniaturesIfNeeded } from '@server/lib/thumbnail.js'
-import { uploadx } from '@server/lib/uploadx.js'
+import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
 import { buildMoveJob, buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { buildNewFile } from '@server/lib/video-file.js'
@@ -35,23 +35,14 @@ videoSourceRouter.get('/:id/source',
   getVideoLatestSource
 )
 
-videoSourceRouter.post('/:id/source/replace-resumable',
-  authenticate,
-  asyncMiddleware(replaceVideoSourceResumableInitValidator),
-  (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitely tell to uploadx it's the end
-)
+setupUploadResumableRoutes({
+  routePath: '/:id/source/replace-resumable',
+  router: videoSourceRouter,
 
-videoSourceRouter.delete('/:id/source/replace-resumable',
-  authenticate,
-  (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitely tell to uploadx it's the end
-)
-
-videoSourceRouter.put('/:id/source/replace-resumable',
-  authenticate,
-  uploadx.upload, // uploadx doesn't next() before the file upload completes
-  asyncMiddleware(replaceVideoSourceResumableValidator),
-  asyncMiddleware(replaceVideoSourceResumable)
-)
+  uploadInitAfterMiddlewares: [ asyncMiddleware(replaceVideoSourceResumableInitValidator) ],
+  uploadedMiddlewares: [ asyncMiddleware(replaceVideoSourceResumableValidator) ],
+  uploadedController: asyncMiddleware(replaceVideoSourceResumable)
+})
 
 // ---------------------------------------------------------------------------
 

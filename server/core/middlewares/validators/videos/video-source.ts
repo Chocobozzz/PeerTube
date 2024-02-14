@@ -1,14 +1,11 @@
 import express from 'express'
-import { body, header } from 'express-validator'
-import { getResumableUploadPath } from '@server/helpers/upload.js'
 import { getVideoWithAttributes } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { uploadx } from '@server/lib/uploadx.js'
+import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { MVideoFullLight } from '@server/types/models/index.js'
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { Metadata as UploadXMetadata } from '@uploadx/core'
-import { logger } from '../../../helpers/logger.js'
 import { areValidationErrors, checkUserCanManageVideo, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
 import { addDurationToVideoFileIfNeeded, checkVideoFileCanBeEdited, commonVideoFileChecks, isVideoFileAccepted } from './shared/index.js'
 
@@ -39,9 +36,8 @@ export const videoSourceGetLatestValidator = [
 
 export const replaceVideoSourceResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const body: express.CustomUploadXFile<UploadXMetadata> = req.body
-    const file = { ...body, duration: undefined, path: getResumableUploadPath(body.name), filename: body.metadata.filename }
-    const cleanup = () => uploadx.storage.delete(file).catch(err => logger.error('Cannot delete the file %s', file.name, { err }))
+    const file = buildUploadXFile(req.body as express.CustomUploadXFile<UploadXMetadata>)
+    const cleanup = () => safeUploadXCleanup(file)
 
     if (!await checkCanUpdateVideoFile({ req, res })) {
       return cleanup()
@@ -62,38 +58,14 @@ export const replaceVideoSourceResumableValidator = [
 ]
 
 export const replaceVideoSourceResumableInitValidator = [
-  body('filename')
-    .exists(),
-
-  header('x-upload-content-length')
-    .isNumeric()
-    .exists()
-    .withMessage('Should specify the file length'),
-  header('x-upload-content-type')
-    .isString()
-    .exists()
-    .withMessage('Should specify the file mimetype'),
-
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
 
-    logger.debug('Checking updateVideoFileResumableInitValidator parameters and headers', {
-      parameters: req.body,
-      headers: req.headers
-    })
-
-    if (areValidationErrors(req, res, { omitLog: true })) return
-
     if (!await checkCanUpdateVideoFile({ req, res })) return
 
-    const videoFileMetadata = {
-      mimetype: req.headers['x-upload-content-type'] as string,
-      size: +req.headers['x-upload-content-length'],
-      originalname: req.body.filename
-    }
-
-    const files = { videofile: [ videoFileMetadata ] }
-    if (await commonVideoFileChecks({ res, user, videoFileSize: videoFileMetadata.size, files }) === false) return
+    const fileMetadata = res.locals.uploadVideoFileResumableMetadata
+    const files = { videofile: [ fileMetadata ] }
+    if (await commonVideoFileChecks({ res, user, videoFileSize: fileMetadata.size, files }) === false) return
 
     return next()
   }

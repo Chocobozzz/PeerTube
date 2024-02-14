@@ -1,9 +1,7 @@
 import express from 'express'
-import { body, header, param } from 'express-validator'
-import { getResumableUploadPath } from '@server/helpers/upload.js'
-import { uploadx } from '@server/lib/uploadx.js'
+import { param } from 'express-validator'
+import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
 import { Metadata as UploadXMetadata } from '@uploadx/core'
-import { logger } from '../../../helpers/logger.js'
 import { areValidationErrors, checkUserIdExist } from '../shared/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { HttpStatusCode, ServerErrorCode, UserImportState, UserRight } from '@peertube/peertube-models'
@@ -15,9 +13,8 @@ export const userImportRequestResumableValidator = [
     .isInt().not().isEmpty().withMessage('Should have a valid userId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const body: express.CustomUploadXFile<UploadXMetadata> = req.body
-    const file = { ...body, path: getResumableUploadPath(body.name), filename: body.metadata.filename }
-    const cleanup = () => uploadx.storage.delete(file).catch(err => logger.error('Cannot delete the file %s', file.name, { err }))
+    const file = buildUploadXFile(req.body as express.CustomUploadXFile<UploadXMetadata>)
+    const cleanup = () => safeUploadXCleanup(file)
 
     if (!await checkUserIdRight(req.params.userId, res)) return cleanup()
 
@@ -40,25 +37,8 @@ export const userImportRequestResumableInitValidator = [
   param('userId')
     .isInt().not().isEmpty().withMessage('Should have a valid userId'),
 
-  body('filename')
-    .exists(),
-
-  header('x-upload-content-length')
-    .isNumeric()
-    .exists()
-    .withMessage('Should specify the file length'),
-  header('x-upload-content-type')
-    .isString()
-    .exists()
-    .withMessage('Should specify the file mimetype'),
-
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking userImportRequestResumableInitValidator parameters and headers', {
-      parameters: req.body,
-      headers: req.headers
-    })
-
-    if (areValidationErrors(req, res, { omitLog: true })) return
+    if (areValidationErrors(req, res)) return
 
     if (CONFIG.IMPORT.USERS.ENABLED !== true) {
       return res.fail({
@@ -76,8 +56,9 @@ export const userImportRequestResumableInitValidator = [
 
     if (!await checkUserIdRight(req.params.userId, res)) return
 
+    const fileMetadata = res.locals.uploadVideoFileResumableMetadata
     const user = res.locals.user
-    if (await isUserQuotaValid({ userId: user.id, uploadSize: +req.headers['x-upload-content-length'] }) === false) {
+    if (await isUserQuotaValid({ userId: user.id, uploadSize: fileMetadata.size }) === false) {
       return res.fail({
         message: 'User video quota is exceeded with this import',
         status: HttpStatusCode.PAYLOAD_TOO_LARGE_413,

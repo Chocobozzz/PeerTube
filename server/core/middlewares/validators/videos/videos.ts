@@ -1,10 +1,9 @@
 import express from 'express'
-import { body, header, param, query, ValidationChain } from 'express-validator'
+import { body, param, query, ValidationChain } from 'express-validator'
 import { arrayify } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ServerErrorCode, UserRight, VideoState } from '@peertube/peertube-models'
-import { getResumableUploadPath } from '@server/helpers/upload.js'
 import { Redis } from '@server/lib/redis.js'
-import { uploadx } from '@server/lib/uploadx.js'
+import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { ExpressPromiseHandler } from '@server/types/express-handler.js'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models/index.js'
@@ -74,7 +73,7 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
-    const videoFile: express.VideoUploadFile = req.files['videofile'][0]
+    const videoFile: express.VideoLegacyUploadFile = req.files['videofile'][0]
     const user = res.locals.oauth.token.User
 
     if (
@@ -96,9 +95,8 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
 const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
-    const body: express.CustomUploadXFile<express.UploadXFileMetadata> = req.body
-    const file = { ...body, duration: undefined, path: getResumableUploadPath(body.name), filename: body.metadata.filename }
-    const cleanup = () => uploadx.storage.delete(file).catch(err => logger.error('Cannot delete the file %s', file.name, { err }))
+    const file = buildUploadXFile(req.body as express.CustomUploadXFile<express.UploadNewVideoXFileMetadata>)
+    const cleanup = () => safeUploadXCleanup(file)
 
     const uploadId = req.query.upload_id
     const sessionExists = await Redis.Instance.doesUploadSessionExist(uploadId)
@@ -148,22 +146,7 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     .isArray()
     .withMessage('Video passwords should be an array.'),
 
-  header('x-upload-content-length')
-    .isNumeric()
-    .exists()
-    .withMessage('Should specify the file length'),
-  header('x-upload-content-type')
-    .isString()
-    .exists()
-    .withMessage('Should specify the file mimetype'),
-
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const videoFileMetadata = {
-      mimetype: req.headers['x-upload-content-type'] as string,
-      size: +req.headers['x-upload-content-length'],
-      originalname: req.body.filename
-    }
-
     const user = res.locals.oauth.token.User
     const cleanup = () => cleanUpReqFiles(req)
 
@@ -175,8 +158,9 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
 
     if (areValidationErrors(req, res, { omitLog: true })) return cleanup()
 
-    const files = { videofile: [ videoFileMetadata ] }
-    if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFileMetadata.size, files })) return cleanup()
+    const fileMetadata = res.locals.uploadVideoFileResumableMetadata
+    const files = { videofile: [ fileMetadata ] }
+    if (!await commonVideoChecksPass({ req, res, user, videoFileSize: fileMetadata.size, files })) return cleanup()
 
     if (!isValidPasswordProtectedPrivacy(req, res)) return cleanup()
 
