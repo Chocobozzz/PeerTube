@@ -238,9 +238,6 @@ describe('Test user notifications', function () {
       }
 
       await servers[0].config.enableLive({ allowReplay: false })
-
-      await servers[0].subscriptions.add({ token: userAccessToken, targetUri: 'root_channel@' + servers[0].host })
-      await waitJobs(servers)
     })
 
     it('Should not send a notification when a live is created', async function () {
