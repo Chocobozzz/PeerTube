@@ -55,7 +55,7 @@
   }
 
   .description-html {
-    @include fade-text(30px, pvar(--channelBackgroundColor));
+    @include fade-text(50px, pvar(--channelBackgroundColor));
 
     grid-column: 2 / 4;
     grid-row: 2;
@@ -87,7 +87,7 @@ my-subscribe-button {
 
 .videos-overflow-workaround {
   @include margin-top(2rem);
-  
+
   overflow-x: hidden;
 }
 
