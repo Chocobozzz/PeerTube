@@ -445,7 +445,7 @@ class JobQueue {
   }
 
   async count (state: JobState, jobType?: JobType): Promise<number> {
-    const states = state ? [ state ] : jobStates
+    const states = this.buildStateFilter(state)
     const filteredJobTypes = this.buildTypeFilter(jobType)
 
     let total = 0
