@@ -7,6 +7,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { MStreamingPlaylistVideo } from '@server/types/models/index.js'
 import { buildSha256Segment } from '../hls.js'
 import { storeHLSFileFromPath } from '../object-storage/index.js'
+import { JFWriteOptions } from 'jsonfile'
 
 const lTags = loggerTagsFactory('live')
 
@@ -76,7 +77,7 @@ class LiveSegmentShaStore {
       logger.debug(`Writing segment sha JSON ${this.sha256Path} of ${this.videoUUID} on disk.`, lTags(this.videoUUID))
 
       // Atomic write: use rename instead of move that is not atomic
-      await writeJson(this.sha256PathTMP, mapToJSON(this.segmentsSha256))
+      await writeJson(this.sha256PathTMP, mapToJSON(this.segmentsSha256), { flush: true } as JFWriteOptions) // FIXME: jsonfile typings
       await rename(this.sha256PathTMP, this.sha256Path)
 
       if (this.sendToObjectStorage) {
