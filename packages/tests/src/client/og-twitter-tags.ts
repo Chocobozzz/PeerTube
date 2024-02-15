@@ -273,8 +273,8 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
       const res = await makeGetRequest({ url: servers[0].url, path: '/a/root', accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
       const text = res.text
 
-      expect(text).to.contain(`<meta property="twitter:description" content="\\"super description\\"" />`)
-      expect(text).to.contain(`<meta property="og:description" content="\\"super description\\"" />`)
+      expect(text).to.contain(`<meta property="twitter:description" content="&quot;super description&quot;" />`)
+      expect(text).to.contain(`<meta property="og:description" content="&quot;super description&quot;" />`)
     })
   })
 
