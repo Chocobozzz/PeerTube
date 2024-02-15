@@ -304,6 +304,8 @@ cd /var/www/peertube/peertube-latest/scripts && sudo -H -u peertube ./upgrade.sh
 sudo systemctl restart peertube # Or use your OS command to restart PeerTube if you don't use systemd
 ```
 
+You may want to run `sudo -u peertube yarn cache clean` after several upgrades to free up disk space.
+
 <details>
 <summary><strong>Prefer manual upgrade?</strong></summary>
 
