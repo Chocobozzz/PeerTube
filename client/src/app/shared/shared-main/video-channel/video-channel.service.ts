@@ -57,7 +57,7 @@ export class VideoChannelService {
   }): Observable<ResultList<VideoChannel>> {
     const { account, componentPagination, withStats = false, sort, search } = options
 
-    const defaultCount = this.serverService.getHTMLConfig().videoChannels.maxPerUser
+    const defaultCount = Math.min(this.serverService.getHTMLConfig().videoChannels.maxPerUser, 100) // 100 is the max count on server side
 
     const pagination = componentPagination
       ? this.restService.componentToRestPagination(componentPagination)
