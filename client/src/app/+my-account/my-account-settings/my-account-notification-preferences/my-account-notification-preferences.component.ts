@@ -75,14 +75,14 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
           'abuseStateChange',
           'abuseNewMessage',
           'abuseAsModerator',
-          'videoAutoBlacklistAsModerator'
+          'videoAutoBlacklistAsModerator',
+          'newUserRegistration'
         ]
       },
 
       {
         label: $localize`Administration`,
         keys: [
-          'newUserRegistration',
           'newInstanceFollower',
           'autoInstanceFollowing',
           'newPeerTubeVersion',
