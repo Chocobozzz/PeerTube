@@ -116,6 +116,10 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     return this.user.hasRight(rightToHave)
   }
 
+  hasNotificationsInGroup (group: { keys: (keyof UserNotificationSetting)[] }) {
+    return group.keys.some(k => this.hasUserRight(k))
+  }
+
   getWebLabel (notificationType: keyof UserNotificationSetting) {
     return `Toggle web notification for "${this.labelNotifications[notificationType]}"`
   }
