@@ -3232,6 +3232,8 @@ paths:
     get:
       summary: Get video source file metadata
       operationId: getVideoSource
+      security:
+        - OAuth2: []
       tags:
         - Video
       parameters:
