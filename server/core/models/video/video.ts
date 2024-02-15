@@ -1729,6 +1729,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     this.Thumbnails.push(savedThumbnail)
   }
 
+  // ---------------------------------------------------------------------------
+
+  hasMiniature () {
+    return !!this.getMiniature()
+  }
+
   getMiniature () {
     if (Array.isArray(this.Thumbnails) === false) return undefined
 
@@ -1744,6 +1750,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     return this.Thumbnails.find(t => t.type === ThumbnailType.PREVIEW)
   }
+
+  // ---------------------------------------------------------------------------
 
   isOwned () {
     return this.remote === false
