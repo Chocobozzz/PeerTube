@@ -150,6 +150,7 @@ export class UserNotification implements UserNotificationServer {
 
       switch (this.type) {
         case UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION:
+        case UserNotificationType.NEW_LIVE_FROM_SUBSCRIPTION:
           this.videoUrl = this.buildVideoUrl(this.video)
           break
 

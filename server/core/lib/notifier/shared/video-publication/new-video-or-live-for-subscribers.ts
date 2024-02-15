@@ -6,7 +6,7 @@ import { MUserWithNotificationSetting, MVideoAccountLight, UserNotificationModel
 import { UserNotificationType, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { AbstractNotification } from '../common/abstract-notification.js'
 
-export class NewVideoForSubscribers extends AbstractNotification <MVideoAccountLight> {
+export class NewVideoOrLiveForSubscribers extends AbstractNotification <MVideoAccountLight> {
   private users: MUserWithNotificationSetting[]
 
   async prepare () {
@@ -32,7 +32,10 @@ export class NewVideoForSubscribers extends AbstractNotification <MVideoAccountL
 
   createNotification (user: MUserWithNotificationSetting) {
     const notification = UserNotificationModel.build<UserNotificationModelForApi>({
-      type: UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION,
+      type: this.payload.isLive
+        ? UserNotificationType.NEW_LIVE_FROM_SUBSCRIPTION
+        : UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION,
+
       userId: user.id,
       videoId: this.payload.id
     })
@@ -41,14 +44,37 @@ export class NewVideoForSubscribers extends AbstractNotification <MVideoAccountL
     return notification
   }
 
+  // ---------------------------------------------------------------------------
+
   createEmail (to: string) {
     const channelName = this.payload.VideoChannel.getDisplayName()
     const videoUrl = WEBSERVER.URL + this.payload.getWatchStaticPath()
 
+    if (this.payload.isLive) return this.createLiveEmail(to, channelName, videoUrl)
+
+    return this.createVideoEmail(to, channelName, videoUrl)
+  }
+
+  private createVideoEmail (to: string, channelName: string, videoUrl: string) {
     return {
       to,
       subject: channelName + ' just published a new video',
       text: `Your subscription ${channelName} just published a new video: "${this.payload.name}".`,
+      locals: {
+        title: 'New content ',
+        action: {
+          text: 'View video',
+          url: videoUrl
+        }
+      }
+    }
+  }
+
+  private createLiveEmail (to: string, channelName: string, videoUrl: string) {
+    return {
+      to,
+      subject: channelName + ' is live streaming',
+      text: `Your subscription ${channelName} is live streaming in "${this.payload.name}".`,
       locals: {
         title: 'New content ',
         action: {

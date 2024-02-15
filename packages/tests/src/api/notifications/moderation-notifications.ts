@@ -18,7 +18,7 @@ import {
   checkNewInstanceFollower,
   checkAutoInstanceFollowing,
   checkVideoAutoBlacklistForModerators,
-  checkVideoIsPublished,
+  checkMyVideoIsPublished,
   checkNewVideoFromSubscription
 } from '@tests/shared/notifications.js'
 
@@ -487,7 +487,7 @@ describe('Test moderation notifications', function () {
     it('Should not send video publish notification if auto-blacklisted', async function () {
       this.timeout(120000)
 
-      await checkVideoIsPublished({ ...userBaseParams, videoName, shortUUID, checkType: 'absence' })
+      await checkMyVideoIsPublished({ ...userBaseParams, videoName, shortUUID, checkType: 'absence' })
     })
 
     it('Should not send a local user subscription notification if auto-blacklisted', async function () {
@@ -576,7 +576,7 @@ describe('Test moderation notifications', function () {
       const { shortUUID } = await servers[0].videos.upload({ token: userToken1, attributes })
 
       await wait(6000)
-      await checkVideoIsPublished({ ...userBaseParams, videoName: name, shortUUID, checkType: 'absence' })
+      await checkMyVideoIsPublished({ ...userBaseParams, videoName: name, shortUUID, checkType: 'absence' })
       await checkNewVideoFromSubscription({ ...adminBaseParamsServer1, videoName: name, shortUUID, checkType: 'absence' })
       await checkNewVideoFromSubscription({ ...adminBaseParamsServer2, videoName: name, shortUUID, checkType: 'absence' })
     })

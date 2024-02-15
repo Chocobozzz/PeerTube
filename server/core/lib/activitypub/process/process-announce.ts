@@ -61,5 +61,5 @@ async function processVideoShare (actorAnnouncer: MActorSignature, activity: Act
     return undefined
   })
 
-  if (videoCreated && notify) Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+  if (videoCreated && notify) Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(video)
 }

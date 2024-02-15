@@ -73,7 +73,7 @@ async function processCreateVideo (videoToCreateData: VideoObject, notify: boole
   const syncParam = { rates: false, shares: false, comments: false, refreshVideo: false }
   const { video, created } = await getOrCreateAPVideo({ videoObject: videoToCreateData, syncParam })
 
-  if (created && notify) Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+  if (created && notify) Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(video)
 
   return video
 }

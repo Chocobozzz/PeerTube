@@ -35,6 +35,7 @@ import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolu
 import { LiveQuotaStore } from './live-quota-store.js'
 import { cleanupAndDestroyPermanentLive, getLiveSegmentTime } from './live-utils.js'
 import { MuxingSession } from './shared/index.js'
+import { Notifier } from '../notifier/notifier.js'
 
 // Disable node media server logs
 nodeMediaServerLogger.setLogType(0)
@@ -417,6 +418,7 @@ class LiveManager {
         logger.error('Cannot federate live video %s.', video.url, { err, ...localLTags })
       }
 
+      Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(video)
       PeerTubeSocket.Instance.sendVideoLiveNewState(video)
 
       Hooks.runAction('action:live.video.state.updated', { video })

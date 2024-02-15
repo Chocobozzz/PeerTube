@@ -303,7 +303,7 @@ async function afterImportSuccess (options: {
 
     Notifier.Instance.notifyOnVideoAutoBlacklist(videoBlacklist)
   } else {
-    Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+    Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(video)
   }
 
   // Generate the storyboard in the job queue, and don't forget to federate an update after

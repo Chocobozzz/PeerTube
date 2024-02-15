@@ -6,9 +6,7 @@
 
     <ng-container [ngSwitch]="notification.type">
       <ng-container *ngSwitchCase="1"> <!-- UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION -->
-        <ng-container *ngIf="notification.video; then hasVideo; else noVideo"></ng-container>
-
-        <ng-template #hasVideo>
+        @if (notification.video) {
           <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
             <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.video.channel.avatarUrl" />
           </a>
@@ -16,15 +14,13 @@
           <div class="message" i18n>
             {{ notification.video.channel.displayName }} published a new video: <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a>
           </div>
-        </ng-template>
-
-        <ng-template #noVideo>
+        } @else {
           <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
 
           <div class="message" i18n>
             The notification concerns a video now unavailable
           </div>
-        </ng-template>
+        }
       </ng-container>
 
       <ng-container *ngSwitchCase="5"> <!-- UserNotificationType.UNBLACKLIST_ON_MY_VIDEO -->
@@ -222,6 +218,24 @@
         <div class="message" i18n>
           User <a (click)="markAsRead(notification)" [routerLink]="notification.registrationsUrl">{{ notification.registration.username }}</a> wants to register on your instance
         </div>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="21"> <!-- UserNotificationType.NEW_LIVE_FROM_SUBSCRIPTION -->
+        @if (notification.video) {
+          <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
+            <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.video.channel.avatarUrl" />
+          </a>
+
+          <div class="message" i18n>
+            {{ notification.video.channel.displayName }} is live streaming in <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a>
+          </div>
+        } @else {
+          <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
+
+          <div class="message" i18n>
+            The notification concerns a video now unavailable
+          </div>
+        }
       </ng-container>
 
       <ng-container *ngSwitchDefault>

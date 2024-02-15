@@ -119,12 +119,13 @@ export class LiveCommand extends AbstractCommand {
   }
 
   async quickCreate (options: OverrideCommandOptions & {
+    name: string
     saveReplay: boolean
     permanentLive: boolean
     privacy?: VideoPrivacyType
     videoPasswords?: string[]
   }) {
-    const { saveReplay, permanentLive, privacy = VideoPrivacy.PUBLIC, videoPasswords } = options
+    const { name = 'live', saveReplay, permanentLive, privacy = VideoPrivacy.PUBLIC, videoPasswords } = options
 
     const replaySettings = privacy === VideoPrivacy.PASSWORD_PROTECTED
       ? { privacy: VideoPrivacy.PRIVATE }
@@ -134,7 +135,7 @@ export class LiveCommand extends AbstractCommand {
       ...options,
 
       fields: {
-        name: 'live',
+        name,
         permanentLive,
         saveReplay,
         replaySettings,

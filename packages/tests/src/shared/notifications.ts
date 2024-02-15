@@ -7,7 +7,8 @@ import {
   UserNotification,
   UserNotificationSetting,
   UserNotificationSettingValue,
-  UserNotificationType
+  UserNotificationType,
+  UserNotificationType_Type
 } from '@peertube/peertube-models'
 import {
   ConfigCommand,
@@ -17,11 +18,13 @@ import {
   setAccessTokensToServers,
   setDefaultAccountAvatar,
   setDefaultChannelAvatar,
-  setDefaultVideoChannel
+  setDefaultVideoChannel,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 import { inspect } from 'util'
 import { MockSmtpServer } from './mock-servers/index.js'
+import { wait } from '@peertube/peertube-core-utils'
 
 type CheckerBaseParams = {
   server: PeerTubeServer
@@ -55,6 +58,24 @@ function getAllNotificationsSettings (): UserNotificationSetting {
   }
 }
 
+async function waitUntilNotification (options: {
+  server: PeerTubeServer
+  notificationType: UserNotificationType_Type
+  token: string
+  fromDate: Date
+}) {
+  const { server, fromDate, notificationType, token } = options
+
+  do {
+    const { data } = await server.notifications.list({ start: 0, count: 5, token })
+    if (data.some(n => n.type === notificationType && new Date(n.createdAt) >= fromDate)) break
+
+    await wait(500)
+  } while (true)
+
+  await waitJobs([ server ])
+}
+
 async function checkNewVideoFromSubscription (options: CheckerBaseParams & {
   videoName: string
   shortUUID: string
@@ -85,7 +106,37 @@ async function checkNewVideoFromSubscription (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkVideoIsPublished (options: CheckerBaseParams & {
+async function checkNewLiveFromSubscription (options: CheckerBaseParams & {
+  videoName: string
+  shortUUID: string
+  checkType: CheckerType
+}) {
+  const { videoName, shortUUID } = options
+  const notificationType = UserNotificationType.NEW_LIVE_FROM_SUBSCRIPTION
+
+  function notificationChecker (notification: UserNotification, checkType: CheckerType) {
+    if (checkType === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      checkVideo(notification.video, videoName, shortUUID)
+      checkActor(notification.video.channel)
+    } else {
+      expect(notification).to.satisfy((n: UserNotification) => {
+        return n === undefined || n.type !== UserNotificationType.NEW_LIVE_FROM_SUBSCRIPTION || n.video.name !== videoName
+      })
+    }
+  }
+
+  function emailNotificationFinder (email: object) {
+    const text = email['text']
+    return text.indexOf(shortUUID) !== -1 && text.indexOf('Your subscription') !== -1
+  }
+
+  await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
+}
+
+async function checkMyVideoIsPublished (options: CheckerBaseParams & {
   videoName: string
   shortUUID: string
   checkType: CheckerType
@@ -780,10 +831,13 @@ export {
 
   getAllNotificationsSettings,
 
+  waitUntilNotification,
+
   checkMyVideoImportIsFinished,
   checkUserRegistered,
   checkAutoInstanceFollowing,
-  checkVideoIsPublished,
+  checkMyVideoIsPublished,
+  checkNewLiveFromSubscription,
   checkNewVideoFromSubscription,
   checkNewActorFollow,
   checkNewCommentOnMyVideo,
@@ -841,10 +895,9 @@ async function checkNotification (options: CheckerBaseParams & {
 
   if (check.mail) {
     // Last email
-    const email = emails
-                      .slice()
-                      .reverse()
-                      .find(e => emailNotificationFinder(e))
+    const email = emails.slice()
+      .reverse()
+      .find(e => emailNotificationFinder(e))
 
     if (checkType === 'presence') {
       const texts = emails.map(e => e.text)

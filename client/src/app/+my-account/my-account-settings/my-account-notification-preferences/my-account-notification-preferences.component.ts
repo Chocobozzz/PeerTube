@@ -30,7 +30,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     private notifier: Notifier
   ) {
     this.labelNotifications = {
-      newVideoFromSubscription: $localize`New video from your subscriptions`,
+      newVideoFromSubscription: $localize`New video or live from your subscriptions`,
       newCommentOnMyVideo: $localize`New comment on your video`,
       abuseAsModerator: $localize`New abuse`,
       videoAutoBlacklistAsModerator: $localize`An automatically blocked video is awaiting review`,

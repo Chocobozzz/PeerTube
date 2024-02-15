@@ -93,11 +93,12 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
 
       // Notify our users?
       if (this.wasPrivateVideo || this.wasUnlistedVideo) {
-        Notifier.Instance.notifyOnNewVideoIfNeeded(videoUpdated)
+        Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(videoUpdated)
       }
 
       if (videoUpdated.isLive && oldState !== videoUpdated.state) {
         PeerTubeSocket.Instance.sendVideoLiveNewState(videoUpdated)
+        Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(videoUpdated)
       }
 
       Hooks.runAction('action:activity-pub.remote-video.updated', { video: videoUpdated, videoAPObject: this.videoObject })

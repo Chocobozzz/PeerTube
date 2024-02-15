@@ -185,7 +185,7 @@ async function moveToPublishedState (options: {
   }
 
   if (isNewVideo) {
-    Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+    Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(video)
 
     if (previousState === VideoState.TO_TRANSCODE) {
       Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(video)
