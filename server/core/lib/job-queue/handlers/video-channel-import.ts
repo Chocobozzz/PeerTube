@@ -26,7 +26,7 @@ export async function processVideoChannelImport (job: Job) {
     channelSync = await VideoChannelSyncModel.loadWithChannel(payload.partOfChannelSyncId)
 
     if (!channelSync) {
-      throw new Error('Unlnown channel sync specified in videos channel import')
+      throw new Error('Unknown channel sync specified in videos channel import')
     }
   }
 

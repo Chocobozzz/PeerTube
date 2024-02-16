@@ -61,7 +61,7 @@ export class VideoImportService {
     }
 
     return this.authHttp
-               .get<ResultList<VideoImport>>(UserService.BASE_USERS_URL + '/me/videos/imports', { params })
+               .get<ResultList<VideoImport>>(UserService.BASE_USERS_URL + 'me/videos/imports', { params })
                .pipe(
                  switchMap(res => this.extractVideoImports(res)),
                  catchError(err => this.restExtractor.handleError(err))

@@ -1,4 +1,4 @@
-import { logger } from '@server/helpers/logger.js'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { buildYoutubeDLImport } from '@server/lib/video-pre-import.js'
@@ -8,6 +8,8 @@ import { MChannel, MChannelAccountDefault, MChannelSync } from '@server/types/mo
 import { VideoChannelSyncState, VideoPrivacy } from '@peertube/peertube-models'
 import { CreateJobArgument, JobQueue } from './job-queue/index.js'
 import { ServerConfigManager } from './server-config-manager.js'
+
+const lTags = loggerTagsFactory('channel-synchronization')
 
 export async function synchronizeChannel (options: {
   channel: MChannelAccountDefault
@@ -36,7 +38,7 @@ export async function synchronizeChannel (options: {
 
     logger.info(
       'Fetched %d candidate URLs for sync channel %s.',
-      targetUrls.length, channel.Actor.preferredUsername, { targetUrls }
+      targetUrls.length, channel.Actor.preferredUsername, { targetUrls, ...lTags() }
     )
 
     if (targetUrls.length === 0) {
@@ -51,19 +53,25 @@ export async function synchronizeChannel (options: {
     const children: CreateJobArgument[] = []
 
     for (const targetUrl of targetUrls) {
-      if (await skipImport(channel, targetUrl, onlyAfter)) continue
+      logger.debug(`Import candidate: ${targetUrl}`, lTags())
 
-      const { job } = await buildYoutubeDLImport({
-        user,
-        channel,
-        targetUrl,
-        channelSync,
-        importDataOverride: {
-          privacy: VideoPrivacy.PUBLIC
-        }
-      })
+      try {
+        if (await skipImport(channel, targetUrl, onlyAfter)) continue
 
-      children.push(job)
+        const { job } = await buildYoutubeDLImport({
+          user,
+          channel,
+          targetUrl,
+          channelSync,
+          importDataOverride: {
+            privacy: VideoPrivacy.PUBLIC
+          }
+        })
+
+        children.push(job)
+      } catch (err) {
+        logger.error(`Cannot build import for ${targetUrl} in channel ${channel.name}`, { err, ...lTags() })
+      }
     }
 
     // Will update the channel sync status
@@ -76,7 +84,7 @@ export async function synchronizeChannel (options: {
 
     await JobQueue.Instance.createJobWithChildren(parent, children)
   } catch (err) {
-    logger.error(`Failed to import ${externalChannelUrl} in channel ${channel.name}`, { err })
+    logger.error(`Failed to import ${externalChannelUrl} in channel ${channel.name}`, { err, ...lTags() })
     channelSync.state = VideoChannelSyncState.FAILED
     await channelSync.save()
   }
@@ -86,7 +94,7 @@ export async function synchronizeChannel (options: {
 
 async function skipImport (channel: MChannel, targetUrl: string, onlyAfter?: Date) {
   if (await VideoImportModel.urlAlreadyImported(channel.id, targetUrl)) {
-    logger.debug('%s is already imported for channel %s, skipping video channel synchronization.', targetUrl, channel.name)
+    logger.debug('%s is already imported for channel %s, skipping video channel synchronization.', targetUrl, channel.name, lTags())
     return true
   }
 

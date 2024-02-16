@@ -159,7 +159,7 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
   }) {
     const { userId, start, count, sort, targetUrl, videoChannelSyncId, search } = options
 
-    const where: WhereOptions = { userId }
+    const where: WhereOptions = [ { userId } ]
     const include: IncludeOptions[] = [
       {
         attributes: [ 'id' ],
@@ -172,14 +172,22 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
       }
     ]
 
-    if (targetUrl) where['targetUrl'] = targetUrl
-    if (videoChannelSyncId) where['videoChannelSyncId'] = videoChannelSyncId
+    if (targetUrl) where.push({ targetUrl })
+    if (videoChannelSyncId) where.push({ videoChannelSyncId })
 
     if (search) {
       include.push({
         model: defaultVideoScope(),
-        required: true,
-        where: searchAttribute(search, 'name')
+        required: false
+      })
+
+      where.push({
+        [Op.or]: [
+          searchAttribute(search, '$Video.name$'),
+          searchAttribute(search, 'targetUrl'),
+          searchAttribute(search, 'torrentName'),
+          searchAttribute(search, 'magnetUri')
+        ]
       })
     } else {
       include.push({
