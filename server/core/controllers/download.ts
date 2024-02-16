@@ -137,7 +137,8 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
 
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
-  const downloadFilename = `${video.name}-${videoFile.resolution}p-${streamingPlaylist.getStringType()}${videoFile.extname}`
+  const videoName = video.name.replace(/\//g, '_')
+  const downloadFilename = `${videoName}-${videoFile.resolution}p-${streamingPlaylist.getStringType()}${videoFile.extname}`
 
   if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
     return redirectToObjectStorage({ req, res, video, streamingPlaylist, file: videoFile, downloadFilename })
