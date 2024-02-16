@@ -74,5 +74,6 @@ function getEndpoint () {
     ? CONFIG.OBJECT_STORAGE.ENDPOINT
     : 'https://' + CONFIG.OBJECT_STORAGE.ENDPOINT
 
+
   return endpoint
 }

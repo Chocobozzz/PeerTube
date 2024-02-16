@@ -1,0 +1,7 @@
+;FFMETADATA1
+major_brand=mp42
+minor_version=0
+compatible_brands=isommp42
+com.android.capture.fps=30.000000
+com.android.version=14
+encoder=Lavf60.16.100

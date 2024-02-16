@@ -3,6 +3,7 @@ import { Emailer } from '@server/lib/emailer.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { pick } from '@peertube/peertube-core-utils'
+
 import {
   HttpStatusCode,
   UserRegister,
@@ -102,7 +103,7 @@ export {
 
 async function requestRegistration (req: express.Request, res: express.Response) {
   const body: UserRegistrationRequest = req.body
-
+ 
   const registration = new UserRegistrationModel({
     ...pick(body, [ 'username', 'password', 'email', 'registrationReason' ]),
 
@@ -124,8 +125,9 @@ async function requestRegistration (req: express.Request, res: express.Response)
   Notifier.Instance.notifyOnNewRegistrationRequest(registration)
 
   Hooks.runAction('action:api.user.requested-registration', { body, registration, req, res })
-
+  
   return res.json(registration.toFormattedJSON())
+
 }
 
 // ---------------------------------------------------------------------------

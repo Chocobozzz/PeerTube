@@ -1,14 +1,12 @@
-# /!\ YOU SHOULD NOT UPDATE THIS FILE, USE production.yaml instead /!\ #
-
 listen:
   hostname: '127.0.0.1'
   port: 9000
 
 # Correspond to your reverse proxy server_name/listen configuration (i.e., your public PeerTube instance URL)
 webserver:
-  https: false
-  hostname: 'localhost'
-  port: 9000
+  https: true
+  hostname: 'example.com'
+  port: 443
 
 # Secrets you need to generate the first time you run PeerTube
 secrets:
@@ -73,7 +71,7 @@ database:
   hostname: '127.0.0.1'
   port: 5432
   ssl: false
-  suffix: '_dev'
+  suffix: '_prod'
   username: 'peertube'
   password: 'peertube'
   pool:
@@ -146,22 +144,22 @@ defaults:
 
 # From the project root directory
 storage:
-  tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
-  tmp_persistent: 'storage/tmp-persistent/' # As tmp but the directory is not cleaned up between PeerTube restarts
-  bin: 'storage/bin/'
-  avatars: 'storage/avatars/'
-  web_videos: 'storage/web-videos/'
-  streaming_playlists: 'storage/streaming-playlists/'
-  redundancy: 'storage/redundancy/'
-  logs: 'storage/logs/'
-  previews: 'storage/previews/'
-  thumbnails: 'storage/thumbnails/'
-  storyboards: 'storage/storyboards/'
-  torrents: 'storage/torrents/'
-  captions: 'storage/captions/'
-  cache: 'storage/cache/'
-  plugins: 'storage/plugins/'
-  well_known: 'storage/well-known/'
+  tmp: '/var/www/peertube/storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
+  tmp_persistent: '/var/www/peertube/storage/tmp-persistent/' # As tmp but the directory is not cleaned up between PeerTube restarts
+  bin: '/var/www/peertube/storage/bin/'
+  avatars: '/var/www/peertube/storage/avatars/'
+  web_videos: '/var/www/peertube/storage/web-videos/'
+  streaming_playlists: '/var/www/peertube/storage/streaming-playlists/'
+  redundancy: '/var/www/peertube/storage/redundancy/'
+  logs: '/var/www/peertube/storage/logs/'
+  previews: '/var/www/peertube/storage/previews/'
+  thumbnails: '/var/www/peertube/storage/thumbnails/'
+  storyboards: '/var/www/peertube/storage/storyboards/'
+  torrents: '/var/www/peertube/storage/torrents/'
+  captions: '/var/www/peertube/storage/captions/'
+  cache: '/var/www/peertube/storage/cache/'
+  plugins: '/var/www/peertube/storage/plugins/'
+  well_known: '/var/www/peertube/storage/well-known/'
   # Overridable client files in client/dist/assets/images:
   # - logo.svg
   # - favicon.png
@@ -172,28 +170,28 @@ storage:
   # Could contain for example assets/images/favicon.png
   # If the file exists, peertube will serve it
   # If not, peertube will fallback to the default file
-  client_overrides: 'storage/client-overrides/'
+  client_overrides: '/var/www/peertube/storage/client-overrides/'
 
 static_files:
   # Require and check user authentication when accessing private files (internal/private video files)
   private_files_require_auth: true
 
 object_storage:
-  enabled: false
+  enabled: true
 
   # Without protocol, will default to HTTPS
-  endpoint: '' # 's3.amazonaws.com' or 's3.fr-par.scw.cloud' for example
+  endpoint: 'storage.googleapis.com' # 's3.amazonaws.com' or 's3.fr-par.scw.cloud' for example
 
-  region: 'us-east-1'
+  region: 'asia-southeast1'
 
   upload_acl:
     # Set this ACL on each uploaded object of public/unlisted videos
     # Use null if your S3 provider does not support object ACL
-    public: 'public-read'
+    public: null
     # Set this ACL on each uploaded object of private/internal videos
     # PeerTube can proxify requests to private objects so your users can access them
     # Use null if your S3 provider does not support object ACL
-    private: 'private'
+    private: null
 
   proxy:
     # If private files (private/internal video files) have a private ACL, users can't access directly the ressource
@@ -204,28 +202,28 @@ object_storage:
 
   credentials:
     # You can also use AWS_ACCESS_KEY_ID env variable
-    access_key_id: ''
+    access_key_id: 'GOOG1EHDHI4G6TE5KSGBFHQAHOKH3ETSBIDY37BWDRDRZQBJTVJ77U5HPSF3V'
     # You can also use AWS_SECRET_ACCESS_KEY env variable
-    secret_access_key: ''
+    secret_access_key: 'e2bTFj31PkUamL54wEvsDihKCyCxibJzgt3yS4Sq'
 
   # Maximum amount to upload in one request to object storage
   max_upload_part: 100MB
 
   streaming_playlists:
-    bucket_name: 'streaming-playlists'
+    bucket_name: 'meshminds'
 
     # Allows setting all buckets to the same value but with a different prefix
-    prefix: '' # Example: 'streaming-playlists:'
+    prefix: 'streaming-playlists/' # Example: 'streaming-playlists:'
 
     # Base url for object URL generation, scheme and host will be replaced by this URL
     # Useful when you want to use a CDN/external proxy
-    base_url: '' # Example: 'https://mirror.example.com'
+    base_url: 'http://34.49.197.126' # Example: 'https://mirror.example.com'
 
   # Same settings but for web videos
   web_videos:
-    bucket_name: 'web-videos'
-    prefix: ''
-    base_url: ''
+    bucket_name: 'meshminds'
+    prefix: 'web-videos/'
+    base_url: 'http://34.49.197.126'
 
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
@@ -441,6 +439,18 @@ thumbnails:
     # Increasing this value will increase CPU and memory usage when generating the thumbnail, especially for high video resolution
     # Minimum value is 2
     frames_to_analyze: 50
+
+###############################################################################
+#
+# From this point, almost all following keys can be overridden by the web interface
+# (local-production.json file). If you need to change some values, prefer to
+# use the web interface because the configuration will be automatically
+# reloaded without any need to restart PeerTube
+#
+# /!\ If you already have a local-production.json file, modification of some of
+# the following keys will have no effect /!\
+#
+###############################################################################
 
 cache:
   previews:
