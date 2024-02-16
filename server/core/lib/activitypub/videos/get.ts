@@ -62,7 +62,7 @@ export async function getOrCreateAPVideo (
   const { videoObject } = await fetchRemoteVideo(videoUrl)
   if (!videoObject) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
 
-  // videoUrl is just an alias/rediraction, so process object id instead
+  // videoUrl is just an alias/redirection, so process object id instead
   if (videoObject.id !== videoUrl) return getOrCreateAPVideo({ ...options, fetchType: 'all', videoObject })
 
   try {
