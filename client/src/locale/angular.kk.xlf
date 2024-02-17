@@ -26,6 +26,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.first" datatype="html">
         <source>««</source>
+        <target state="translated">««</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -77,6 +78,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.previous" datatype="html">
         <source>«</source>
+        <target state="translated">«</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -98,6 +100,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.next" datatype="html">
         <source>»</source>
+        <target state="translated">»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -141,6 +144,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.last" datatype="html">
         <source>»»</source>
+        <target state="translated">»»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -627,6 +631,7 @@
       </trans-unit>
       <trans-unit id="1769661379068269645" datatype="html">
         <source>Your email</source>
+        <target state="translated">Эл. поштаңыз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">24</context>
@@ -807,6 +812,7 @@
       </trans-unit>
       <trans-unit id="4603134051700562542" datatype="html">
         <source>Loading instance statistics...</source>
+        <target state="translated">Сервер статистикасы жүктелуде...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1116,6 +1122,7 @@
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
         <source>About this instance</source>
+        <target state="translated">Бұл сервер туралы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">24</context>
@@ -1149,6 +1156,7 @@
       </trans-unit>
       <trans-unit id="2381859602529023966" datatype="html">
         <source>Instance</source>
+        <target state="translated">Сервер</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.html</context>
           <context context-type="linenumber">3</context>
@@ -1377,6 +1385,7 @@
       </trans-unit>
       <trans-unit id="25349740244798533" datatype="html">
         <source>Username copied</source>
+        <target state="translated">Қолданушы аты көшірілді</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">30</context>
@@ -1402,6 +1411,7 @@
       </trans-unit>
       <trans-unit id="9098920722959201547" datatype="html">
         <source>Show more...</source>
+        <target state="translated">Тағы көрсету...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">54,56</context>
@@ -1668,6 +1678,7 @@
       </trans-unit>
       <trans-unit id="29832309535656200" datatype="html">
         <source>System</source>
+        <target state="translated">Жүйе</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">165</context>
@@ -1825,6 +1836,7 @@
       </trans-unit>
       <trans-unit id="6180346896314915203" datatype="html">
         <source>JavaScript</source>
+        <target state="translated">JavaScript</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">87</context>
@@ -1860,6 +1872,7 @@
       </trans-unit>
       <trans-unit id="7103588127254721505" datatype="html">
         <source>Theme</source>
+        <target state="translated">Кейіп</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">14</context>
@@ -2073,6 +2086,7 @@
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
         <source>error</source>
+        <target state="translated">қате</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">125</context>
@@ -2550,6 +2564,7 @@
       </trans-unit>
       <trans-unit id="7756250490108954499" datatype="html">
         <source>144p</source>
+        <target state="translated">144p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">23</context>
@@ -2557,6 +2572,7 @@
       </trans-unit>
       <trans-unit id="3768852440495368591" datatype="html">
         <source>240p</source>
+        <target state="translated">240p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">27</context>
@@ -2564,6 +2580,7 @@
       </trans-unit>
       <trans-unit id="6824490596490222280" datatype="html">
         <source>360p</source>
+        <target state="translated">360p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -2571,6 +2588,7 @@
       </trans-unit>
       <trans-unit id="4039682741786530029" datatype="html">
         <source>480p</source>
+        <target state="translated">480p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">35</context>
@@ -2578,6 +2596,7 @@
       </trans-unit>
       <trans-unit id="5165245100010036661" datatype="html">
         <source>720p</source>
+        <target state="translated">720p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">39</context>
@@ -2585,6 +2604,7 @@
       </trans-unit>
       <trans-unit id="7709767791012306261" datatype="html">
         <source>1080p</source>
+        <target state="translated">1080p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">43</context>
@@ -2592,6 +2612,7 @@
       </trans-unit>
       <trans-unit id="3671005503070777897" datatype="html">
         <source>1440p</source>
+        <target state="translated">1440p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">47</context>
@@ -2599,6 +2620,7 @@
       </trans-unit>
       <trans-unit id="597839553814574067" datatype="html">
         <source>2160p</source>
+        <target state="translated">2160p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">51</context>
@@ -2716,6 +2738,7 @@
       </trans-unit>
       <trans-unit id="7396175500300709096" datatype="html">
         <source>INSTANCE</source>
+        <target state="translated">СЕРВЕР</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">7</context>
@@ -2842,6 +2865,7 @@
       </trans-unit>
       <trans-unit id="8461609631969932886" datatype="html">
         <source>Hide</source>
+        <target state="translated">Жасыру</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">115</context>
@@ -2876,6 +2900,7 @@
       </trans-unit>
       <trans-unit id="6812930637022637485" datatype="html">
         <source>Display</source>
+        <target state="translated">Көрсету</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">117</context>
@@ -2982,6 +3007,7 @@
       </trans-unit>
       <trans-unit id="493135676263039396" datatype="html">
         <source>LIVE</source>
+        <target state="translated">ЭФИР</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3180,6 +3206,7 @@
       </trans-unit>
       <trans-unit id="931255636742351800" datatype="html">
         <source>No limit</source>
+        <target state="translated">Шексіз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -3187,6 +3214,7 @@
       </trans-unit>
       <trans-unit id="5250062810079582285" datatype="html">
         <source>1 hour</source>
+        <target state="translated">1 сағат</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -3194,6 +3222,7 @@
       </trans-unit>
       <trans-unit id="8662356672298904015" datatype="html">
         <source>3 hours</source>
+        <target state="translated">3 сағат</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -3201,6 +3230,7 @@
       </trans-unit>
       <trans-unit id="1794624538833178491" datatype="html">
         <source>5 hours</source>
+        <target state="translated">5 сағат</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -3208,6 +3238,7 @@
       </trans-unit>
       <trans-unit id="4941148355486671862" datatype="html">
         <source>10 hours</source>
+        <target state="translated">10 сағат</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context>
           <context context-type="linenumber">37</context>
@@ -3964,6 +3995,7 @@
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
         <source>Delete</source>
+        <target state="translated">Жою</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -4125,6 +4157,7 @@
       </trans-unit>
       <trans-unit id="6018246591673612412" datatype="html">
         <source>Follow</source>
+        <target state="translated">Жазылу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -4168,6 +4201,7 @@
       </trans-unit>
       <trans-unit id="9216117865911519658" datatype="html">
         <source>Action</source>
+        <target state="translated">Әрекет</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">39</context>
