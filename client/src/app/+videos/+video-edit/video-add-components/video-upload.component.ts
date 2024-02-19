@@ -93,7 +93,11 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   ngOnDestroy () {
-    this.resumableUploadService.disconnect()
+    if (this.videoUploaded) {
+      this.resumableUploadService.control({ action: 'cancel' })
+    } else {
+      this.resumableUploadService.disconnect()
+    }
 
     if (this.uploadServiceSubscription) this.uploadServiceSubscription.unsubscribe()
   }
