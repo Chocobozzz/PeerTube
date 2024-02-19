@@ -10,6 +10,7 @@ import {
   getStoredVolume,
   saveLastSubtitle,
   saveMuteInStore,
+  savePreferredSubtitle,
   saveVideoWatchHistory,
   saveVolumeInStore
 } from '../../peertube-player-local-storage'
@@ -113,6 +114,7 @@ class PeerTubePlugin extends Plugin {
 
         this.currentSubtitle = showing.language
         saveLastSubtitle(showing.language)
+        savePreferredSubtitle(showing.language)
       })
 
       this.player.on('video-change', () => {
@@ -382,6 +384,8 @@ class PeerTubePlugin extends Plugin {
 
     this.player.tech(true).clearTracks('text')
 
+    this.player.removeClass('vjs-has-captions')
+
     for (const caption of this.options.videoCaptions()) {
       this.player.addRemoteTextTrack({
         kind: 'captions',
@@ -391,6 +395,8 @@ class PeerTubePlugin extends Plugin {
         src: caption.src,
         default: this.currentSubtitle === caption.language
       }, true)
+
+      this.player.addClass('vjs-has-captions')
     }
 
     this.player.trigger('captions-changed')
