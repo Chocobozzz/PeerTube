@@ -2,7 +2,6 @@ import express from 'express'
 import { body, header, param, query, ValidationChain } from 'express-validator'
 import { arrayify } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ServerErrorCode, UserRight, VideoState } from '@peertube/peertube-models'
-import { isTestInstance } from '@peertube/peertube-node-utils'
 import { getResumableUploadPath } from '@server/helpers/upload.js'
 import { Redis } from '@server/lib/redis.js'
 import { uploadx } from '@server/lib/uploadx.js'
@@ -104,26 +103,12 @@ const videosAddResumableValidator = [
     const sessionExists = await Redis.Instance.doesUploadSessionExist(uploadId)
 
     if (sessionExists) {
-      const sessionResponse = await Redis.Instance.getUploadSession(uploadId)
+      res.setHeader('Retry-After', 300) // ask to retry after 5 min, knowing the upload_id is kept for up to 15 min after completion
 
-      if (!sessionResponse) {
-        res.setHeader('Retry-After', 300) // ask to retry after 5 min, knowing the upload_id is kept for up to 15 min after completion
-
-        return res.fail({
-          status: HttpStatusCode.SERVICE_UNAVAILABLE_503,
-          message: 'The upload is already being processed'
-        })
-      }
-
-      const videoStillExists = await VideoModel.load(sessionResponse.video.id)
-
-      if (videoStillExists) {
-        if (isTestInstance()) {
-          res.setHeader('x-resumable-upload-cached', 'true')
-        }
-
-        return res.json(sessionResponse)
-      }
+      return res.fail({
+        status: HttpStatusCode.SERVICE_UNAVAILABLE_503,
+        message: 'The upload is already being processed'
+      })
     }
 
     await Redis.Instance.setUploadSession(uploadId)

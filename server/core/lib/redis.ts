@@ -307,26 +307,12 @@ class Redis {
 
   /* ************ Resumable uploads final responses ************ */
 
-  setUploadSession (uploadId: string, response?: { video: { id: number, shortUUID: string, uuid: string } }) {
-    return this.setValue(
-      'resumable-upload-' + uploadId,
-      response
-        ? JSON.stringify(response)
-        : '',
-      RESUMABLE_UPLOAD_SESSION_LIFETIME
-    )
+  setUploadSession (uploadId: string) {
+    return this.setValue('resumable-upload-' + uploadId, '', RESUMABLE_UPLOAD_SESSION_LIFETIME)
   }
 
   doesUploadSessionExist (uploadId: string) {
     return this.exists('resumable-upload-' + uploadId)
-  }
-
-  async getUploadSession (uploadId: string) {
-    const value = await this.getValue('resumable-upload-' + uploadId)
-
-    return value
-      ? JSON.parse(value) as { video: { id: number, shortUUID: string, uuid: string } }
-      : undefined
   }
 
   deleteUploadSession (uploadId: string) {
