@@ -50,7 +50,11 @@ export class PluginService implements ClientHook {
     video: []
   }
   private settingsScripts: { [ npmName: string ]: RegisterClientSettingsScriptOptions } = {}
-  private clientRoutes: { [ route: string ]: RegisterClientRouteOptions } = {}
+  private clientRoutes: {
+    [ parentRoute: string ]: {
+      [ route: string ]: RegisterClientRouteOptions
+    }
+  } = {}
 
   private pluginsManager: PluginsManager
 
@@ -126,12 +130,24 @@ export class PluginService implements ClientHook {
     return this.settingsScripts[npmName]
   }
 
-  getRegisteredClientRoute (route: string) {
-    return this.clientRoutes[route]
+  getRegisteredClientRoute (route: string, parentRoute: string) {
+    if (!this.clientRoutes[parentRoute]) {
+      return undefined
+    }
+
+    return this.clientRoutes[parentRoute][route]
+  }
+
+  getRegisteredClientRouteSForParent (parentRoute: string) {
+    return this.clientRoutes[parentRoute]
   }
 
   getAllRegisteredClientRoutes () {
     return Object.keys(this.clientRoutes)
+    .map((parentRoute) =>
+      Object.keys(this.clientRoutes[parentRoute]).map((route) => parentRoute === '/' ? route : parentRoute + route)
+    )
+    .flat()
   }
 
   async translateSetting (npmName: string, setting: RegisterClientFormFieldOptions) {
@@ -183,8 +199,13 @@ export class PluginService implements ClientHook {
     const route = options.route.startsWith('/')
       ? options.route
       : `/${options.route}`
+    const parentRoute = options.parentRoute || '/'
 
-    this.clientRoutes[route] = options
+    if (!this.clientRoutes[parentRoute]) {
+      this.clientRoutes[parentRoute] = {}
+    }
+
+    this.clientRoutes[parentRoute][route] = options
   }
 
   private buildPeerTubeHelpers (pluginInfo: PluginInfo): RegisterClientHelpers {

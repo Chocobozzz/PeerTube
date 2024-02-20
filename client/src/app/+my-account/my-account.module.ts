@@ -28,6 +28,7 @@ import { MyAccountProfileComponent } from './my-account-settings/my-account-prof
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
 import { MyAccountTwoFactorButtonComponent, MyAccountTwoFactorComponent } from './my-account-settings/my-account-two-factor'
 import { MyAccountComponent } from './my-account.component'
+import { SharedPluginPagesModule } from '@app/shared/shared-plugin-pages/shared-plugin-pages.module'
 
 @NgModule({
   imports: [
@@ -47,7 +48,8 @@ import { MyAccountComponent } from './my-account.component'
     SharedAbuseListModule,
     SharedShareModal,
     SharedActorImageModule,
-    SharedActorImageEditModule
+    SharedActorImageEditModule,
+    SharedPluginPagesModule
   ],
 
   declarations: [

@@ -1,18 +1,11 @@
+import { SharedPluginPagesModule } from './../shared/shared-plugin-pages/shared-plugin-pages.module'
 import { NgModule } from '@angular/core'
 import { PluginPagesRoutingModule } from './plugin-pages-routing.module'
-import { PluginPagesComponent } from './plugin-pages.component'
 
 @NgModule({
   imports: [
-    PluginPagesRoutingModule
-  ],
-
-  declarations: [
-    PluginPagesComponent
-  ],
-
-  exports: [
-    PluginPagesComponent
+    PluginPagesRoutingModule,
+    SharedPluginPagesModule
   ],
 
   providers: [

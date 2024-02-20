@@ -9,6 +9,7 @@ import { MyAccountNotificationsComponent } from './my-account-notifications/my-a
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
 import { MyAccountTwoFactorComponent } from './my-account-settings/my-account-two-factor'
 import { MyAccountComponent } from './my-account.component'
+import { SharedPluginPagesComponent } from '@app/shared/shared-plugin-pages/plugin-pages.component'
 
 const myAccountRoutes: Routes = [
   {
@@ -137,6 +138,19 @@ const myAccountRoutes: Routes = [
             title: $localize`Applications`
           }
         }
+      },
+      {
+        path: 'p',
+        children: [
+          {
+            path: '**',
+            component: SharedPluginPagesComponent,
+            data: {
+              parentRoute: '/my-account',
+              pluginScope: 'my-account'
+            }
+          }
+        ]
       }
     ]
   }
