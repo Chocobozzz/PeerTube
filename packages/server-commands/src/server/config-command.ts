@@ -295,6 +295,42 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
+  // ---------------------------------------------------------------------------
+
+  updateInstanceBanner (options: OverrideCommandOptions & {
+    fixture: string
+  }) {
+    const { fixture } = options
+
+    const path = `/api/v1/config/instance-banner/pick`
+
+    return this.updateImageRequest({
+      ...options,
+
+      path,
+      fixture,
+      fieldname: 'bannerfile',
+
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  deleteInstanceBanner (options: OverrideCommandOptions = {}) {
+    const path = `/api/v1/config/instance-banner`
+
+    return this.deleteRequest({
+      ...options,
+
+      path,
+
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   getCustomConfig (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/config/custom'
 

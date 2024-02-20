@@ -7,6 +7,7 @@ import {
   ChannelMiniatureMarkupData,
   ContainerMarkupData,
   EmbedMarkupData,
+  InstanceBannerMarkupData,
   PlaylistMiniatureMarkupData,
   VideoMiniatureMarkupData,
   VideosListMarkupData
@@ -16,6 +17,7 @@ import {
   ButtonMarkupComponent,
   ChannelMiniatureMarkupComponent,
   EmbedMarkupComponent,
+  InstanceBannerMarkupComponent,
   PlaylistMiniatureMarkupComponent,
   VideoMiniatureMarkupComponent,
   VideosListMarkupComponent
@@ -28,6 +30,7 @@ type HTMLBuilderFunction = (el: HTMLElement) => HTMLElement
 @Injectable()
 export class CustomMarkupService {
   private angularBuilders: { [ selector: string ]: AngularBuilderFunction } = {
+    'peertube-instance-banner': el => this.instanceBannerBuilder(el),
     'peertube-button': el => this.buttonBuilder(el),
     'peertube-video-embed': el => this.embedBuilder(el, 'video'),
     'peertube-playlist-embed': el => this.embedBuilder(el, 'playlist'),
@@ -155,6 +158,19 @@ export class CustomMarkupService {
       label: data.label,
       blankTarget: this.buildBoolean(data.blankTarget) ?? false
     }
+    this.dynamicElementService.setModel(component, model)
+
+    return component
+  }
+
+  private instanceBannerBuilder (el: HTMLElement) {
+    const data = el.dataset as InstanceBannerMarkupData
+    const component = this.dynamicElementService.createElement(InstanceBannerMarkupComponent)
+
+    const model = {
+      revertHomePaddingTop: this.buildBoolean(data.revertHomePaddingTop) ?? true
+    }
+
     this.dynamicElementService.setModel(component, model)
 
     return component

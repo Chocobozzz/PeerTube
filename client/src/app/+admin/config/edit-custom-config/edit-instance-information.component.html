@@ -8,6 +8,11 @@
       </div>
 
       <div class="col-12 col-lg-8 col-xl-9">
+        <my-actor-banner-edit
+          [previewImage]="false" class="d-block mb-4"
+          [bannerUrl]="instanceBannerUrl" (bannerChange)="onBannerChange($event)" (bannerDelete)="onBannerDelete()"
+        ></my-actor-banner-edit>
+
         <div class="form-group">
           <label i18n for="instanceName">Name</label>
 

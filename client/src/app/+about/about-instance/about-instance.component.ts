@@ -20,6 +20,8 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   aboutHTML: AboutHTML
   descriptionElement: HTMLDivElement
 
+  instanceBannerUrl: string
+
   languages: string[] = []
   categories: string[] = []
   shortDescription = ''
@@ -63,6 +65,10 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
     this.categories = categories
 
     this.shortDescription = about.instance.shortDescription
+
+    this.instanceBannerUrl = about.instance.banners.length !== 0
+      ? about.instance.banners[0].path
+      : undefined
 
     this.serverConfig = this.serverService.getHTMLConfig()
 

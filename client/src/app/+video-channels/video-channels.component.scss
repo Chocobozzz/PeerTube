@@ -11,10 +11,6 @@
   --myGreyOwnerFontSize: 14px;
 }
 
-.banner {
-  @include block-ratio('img', $banner-inverted-ratio);
-}
-
 .section-label {
   @include section-label-responsive;
 }

@@ -1,7 +1,7 @@
 import { ActivityIconObject, ActorImage, ActorImageType, type ActorImageType_Type } from '@peertube/peertube-models'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
-import { MActorImage, MActorImageFormattable } from '@server/types/models/index.js'
+import { MActorId, MActorImage, MActorImageFormattable } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import {
@@ -113,6 +113,17 @@ export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageMode
     }
 
     return ActorImageModel.findOne(query)
+  }
+
+  static listByActor (actor: MActorId, type: ActorImageType_Type) {
+    const query = {
+      where: {
+        actorId: actor.id,
+        type
+      }
+    }
+
+    return ActorImageModel.findAll(query)
   }
 
   static getImageUrl (image: MActorImage) {

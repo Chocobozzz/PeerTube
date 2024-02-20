@@ -1,7 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { SafeResourceUrl } from '@angular/platform-browser'
 import { Notifier, ServerService } from '@app/core'
-import { VideoChannel } from '@app/shared/shared-main'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { getBytes } from '@root-helpers/bytes'
 import { imageToDataURL } from '@root-helpers/images'
@@ -18,7 +17,7 @@ export class ActorBannerEditComponent implements OnInit {
   @ViewChild('bannerfileInput') bannerfileInput: ElementRef<HTMLInputElement>
   @ViewChild('bannerPopover') bannerPopover: NgbPopover
 
-  @Input() actor: VideoChannel
+  @Input() bannerUrl: string
   @Input() previewImage = false
 
   @Output() bannerChange = new EventEmitter<FormData>()
@@ -69,6 +68,6 @@ export class ActorBannerEditComponent implements OnInit {
   }
 
   hasBanner () {
-    return !!this.preview || !!this.actor.bannerUrl
+    return !!this.preview || !!this.bannerUrl
   }
 }

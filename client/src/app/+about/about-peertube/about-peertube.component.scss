@@ -1,9 +1,10 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.root {
+.margin-content {
   max-width: 1200px;
-  margin: auto;
+  margin-inline-start: auto;
+  margin-inline-end: auto;
 }
 
 .card {

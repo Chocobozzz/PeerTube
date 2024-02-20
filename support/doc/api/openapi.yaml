@@ -936,6 +936,60 @@ paths:
         '200':
           description: successful operation
 
+  /api/v1/config/instance-banner/pick:
+    post:
+      summary: Update instance banner
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Config
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  banners:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ActorImage'
+        '413':
+          description: image file too large
+          headers:
+            X-File-Maximum-Size:
+              schema:
+                type: string
+                format: Nginx size
+              description: Maximum file size for the banner
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                bannerfile:
+                  description: The file to upload.
+                  type: string
+                  format: binary
+            encoding:
+              bannerfile:
+                contentType: image/png, image/jpeg
+
+  '/api/v1/config/instance-banner':
+    delete:
+      summary: Delete instance banner
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Config
+      responses:
+        '204':
+          description: successful operation
+
   /api/v1/custom-pages/homepage/instance:
     get:
       summary: Get instance custom homepage

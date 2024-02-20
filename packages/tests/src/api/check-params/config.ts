@@ -8,9 +8,11 @@ import {
   makeDeleteRequest,
   makeGetRequest,
   makePutBodyRequest,
+  makeUploadRequest,
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
+import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 
 describe('Test config API validators', function () {
   const path = '/api/v1/config/custom'
@@ -424,6 +426,82 @@ describe('Test config API validators', function () {
         token: userAccessToken,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
+    })
+  })
+
+  describe('Updating instance banner', function () {
+    const path = '/api/v1/config/instance-banner/pick'
+
+    it('Should fail with an incorrect input file', async function () {
+      const attaches = { bannerfile: buildAbsoluteFixturePath('video_short.mp4') }
+
+      await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields: {}, attaches })
+    })
+
+    it('Should fail with a big file', async function () {
+      const attaches = { bannerfile: buildAbsoluteFixturePath('avatar-big.png') }
+
+      await makeUploadRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields: {},
+        attaches,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail without token', async function () {
+      const attaches = { bannerfile: buildAbsoluteFixturePath('avatar.png') }
+
+      await makeUploadRequest({
+        url: server.url,
+        path,
+        fields: {},
+        attaches,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail without the appropriate rights', async function () {
+      const attaches = { bannerfile: buildAbsoluteFixturePath('avatar.png') }
+
+      await makeUploadRequest({
+        url: server.url,
+        path,
+        token: userAccessToken,
+        fields: {},
+        attaches,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      const attaches = { bannerfile: buildAbsoluteFixturePath('avatar.png') }
+
+      await makeUploadRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields: {},
+        attaches,
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+    })
+  })
+
+  describe('Deleting instance banner', function () {
+
+    it('Should fail without token', async function () {
+      await server.config.deleteInstanceBanner({ token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should fail without the appropriate rights', async function () {
+      await server.config.deleteInstanceBanner({ token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await server.config.deleteInstanceBanner()
     })
   })
 

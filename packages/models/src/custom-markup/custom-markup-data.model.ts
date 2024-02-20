@@ -1,3 +1,5 @@
+type StringBoolean = 'true' | 'false'
+
 export type EmbedMarkupData = {
   // Video or playlist uuid
   uuid: string
@@ -7,7 +9,7 @@ export type VideoMiniatureMarkupData = {
   // Video uuid
   uuid: string
 
-  onlyDisplayTitle?: string // boolean
+  onlyDisplayTitle?: StringBoolean
 }
 
 export type PlaylistMiniatureMarkupData = {
@@ -19,12 +21,12 @@ export type ChannelMiniatureMarkupData = {
   // Channel name (username)
   name: string
 
-  displayLatestVideo?: string // boolean
-  displayDescription?: string // boolean
+  displayLatestVideo?: StringBoolean
+  displayDescription?: StringBoolean
 }
 
 export type VideosListMarkupData = {
-  onlyDisplayTitle?: string // boolean
+  onlyDisplayTitle?: StringBoolean
   maxRows?: string // number
 
   sort?: string
@@ -38,14 +40,14 @@ export type VideosListMarkupData = {
 
   isLive?: string // number
 
-  onlyLocal?: string // boolean
+  onlyLocal?: StringBoolean
 }
 
 export type ButtonMarkupData = {
   theme: 'primary' | 'secondary'
   href: string
   label: string
-  blankTarget?: string // boolean
+  blankTarget?: StringBoolean
 }
 
 export type ContainerMarkupData = {
@@ -55,4 +57,8 @@ export type ContainerMarkupData = {
   layout?: 'row' | 'column'
 
   justifyContent?: 'space-between' | 'normal' // default to 'space-between'
+}
+
+export type InstanceBannerMarkupData = {
+  revertHomePaddingTop?: StringBoolean // default to 'true'
 }

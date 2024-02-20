@@ -178,14 +178,6 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
                             })
   }
 
-  get maxAvatarSize () {
-    return this.serverConfig.avatar.file.size.max
-  }
-
-  get avatarExtensions () {
-    return this.serverConfig.avatar.file.extensions.join(',')
-  }
-
   isCreation () {
     return false
   }

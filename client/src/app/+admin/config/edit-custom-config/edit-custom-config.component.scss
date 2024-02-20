@@ -2,6 +2,7 @@
 @use '_mixins' as *;
 
 $form-base-input-width: 340px;
+$form-max-width: 500px;
 
 form {
   padding-bottom: 1.5rem;
@@ -9,7 +10,7 @@ form {
 
 my-markdown-textarea {
   display: block;
-  max-width: 500px;
+  max-width: $form-max-width;
 }
 
 .homepage my-markdown-textarea {
@@ -155,4 +156,8 @@ my-user-real-quota-info {
   display: block;
   margin-top: 5px;
   font-size: 11px;
+}
+
+my-actor-banner-edit {
+  max-width: $form-max-width;
 }

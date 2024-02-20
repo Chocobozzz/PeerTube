@@ -14,6 +14,7 @@ import {
   ButtonMarkupComponent,
   ChannelMiniatureMarkupComponent,
   EmbedMarkupComponent,
+  InstanceBannerMarkupComponent,
   PlaylistMiniatureMarkupComponent,
   VideoMiniatureMarkupComponent,
   VideosListMarkupComponent
@@ -39,7 +40,8 @@ import {
     VideosListMarkupComponent,
     ButtonMarkupComponent,
     CustomMarkupHelpComponent,
-    CustomMarkupContainerComponent
+    CustomMarkupContainerComponent,
+    InstanceBannerMarkupComponent
   ],
 
   exports: [
@@ -50,7 +52,8 @@ import {
     EmbedMarkupComponent,
     ButtonMarkupComponent,
     CustomMarkupHelpComponent,
-    CustomMarkupContainerComponent
+    CustomMarkupContainerComponent,
+    InstanceBannerMarkupComponent
   ],
 
   providers: [

@@ -3,13 +3,25 @@ import { remove, writeJSON } from 'fs-extra/esm'
 import snakeCase from 'lodash-es/snakeCase.js'
 import validator from 'validator'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
-import { About, CustomConfig, UserRight } from '@peertube/peertube-models'
+import { About, ActorImageType, CustomConfig, HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '../../helpers/audit-logger.js'
 import { objectConverter } from '../../helpers/core-utils.js'
 import { CONFIG, reloadConfig } from '../../initializers/config.js'
 import { ClientHtml } from '../../lib/html/client-html.js'
-import { apiRateLimiter, asyncMiddleware, authenticate, ensureUserHasRight, openapiOperationDoc } from '../../middlewares/index.js'
+import {
+  apiRateLimiter,
+  asyncMiddleware,
+  authenticate,
+  ensureUserHasRight,
+  openapiOperationDoc,
+  updateBannerValidator
+} from '../../middlewares/index.js'
 import { customConfigUpdateValidator, ensureConfigIsEditable } from '../../middlewares/validators/config.js'
+import { createReqFiles } from '@server/helpers/express-utils.js'
+import { MIMETYPES } from '@server/initializers/constants.js'
+import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '@server/lib/local-actor.js'
+import { getServerActor } from '@server/models/application/application.js'
+import { ActorImageModel } from '@server/models/actor/actor-image.js'
 
 const configRouter = express.Router()
 
@@ -24,7 +36,7 @@ configRouter.get('/',
 
 configRouter.get('/about',
   openapiOperationDoc({ operationId: 'getAbout' }),
-  getAbout
+  asyncMiddleware(getAbout)
 )
 
 configRouter.get('/custom',
@@ -51,13 +63,31 @@ configRouter.delete('/custom',
   asyncMiddleware(deleteCustomConfig)
 )
 
+configRouter.post('/instance-banner/pick',
+  authenticate,
+  createReqFiles([ 'bannerfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  updateBannerValidator,
+  asyncMiddleware(updateInstanceBanner)
+)
+
+configRouter.delete('/instance-banner',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  asyncMiddleware(deleteInstanceBanner)
+)
+
+// ---------------------------------------------------------------------------
+
 async function getConfig (req: express.Request, res: express.Response) {
   const json = await ServerConfigManager.Instance.getServerConfig(req.ip)
 
   return res.json(json)
 }
 
-function getAbout (req: express.Request, res: express.Response) {
+async function getAbout (req: express.Request, res: express.Response) {
+  const banners = await ActorImageModel.listByActor(await getServerActor(), ActorImageType.BANNER)
+
   const about: About = {
     instance: {
       name: CONFIG.INSTANCE.NAME,
@@ -75,7 +105,9 @@ function getAbout (req: express.Request, res: express.Response) {
       businessModel: CONFIG.INSTANCE.BUSINESS_MODEL,
 
       languages: CONFIG.INSTANCE.LANGUAGES,
-      categories: CONFIG.INSTANCE.CATEGORIES
+      categories: CONFIG.INSTANCE.CATEGORIES,
+
+      banners: banners.map(b => b.toFormattedJSON())
     }
   }
 
@@ -121,6 +153,23 @@ async function updateCustomConfig (req: express.Request, res: express.Response) 
   )
 
   return res.json(data)
+}
+
+async function updateInstanceBanner (req: express.Request, res: express.Response) {
+  const bannerPhysicalFile = req.files['bannerfile'][0]
+
+  const accountServer = (await getServerActor()).Account
+  await updateLocalActorImageFiles(accountServer, bannerPhysicalFile, ActorImageType.BANNER)
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+async function deleteInstanceBanner (req: express.Request, res: express.Response) {
+  const accountServer = (await getServerActor()).Account
+
+  await deleteLocalActorImageFile(accountServer, ActorImageType.BANNER)
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 // ---------------------------------------------------------------------------

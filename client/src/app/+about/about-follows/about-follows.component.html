@@ -1,28 +1,30 @@
-<div class="row">
-  <h1 class="visually-hidden" i18n>Follows</h1>
+<div class="margin-content mt-4">
+  <div class="row">
+    <h1 class="visually-hidden" i18n>Follows</h1>
 
-  <div class="col-xl-6 col-md-12">
-    <h2 i18n class="fs-5-5 mb-4 fw-semibold">Followers of {{ instanceName }} ({{ followersPagination.totalItems }})</h2>
+    <div class="col-xl-6 col-md-12">
+      <h2 i18n class="fs-5-5 mb-4 fw-semibold">Followers of {{ instanceName }} ({{ followersPagination.totalItems }})</h2>
 
-    <div i18n class="no-results" *ngIf="followersPagination.totalItems === 0">{{ instanceName }} does not have followers.</div>
+      <div i18n class="no-results" *ngIf="followersPagination.totalItems === 0">{{ instanceName }} does not have followers.</div>
 
-    <a *ngFor="let follower of followers" [href]="follower.url" target="_blank" rel="noopener noreferrer">
-      {{ follower.name }}
-    </a>
+      <a *ngFor="let follower of followers" [href]="follower.url" target="_blank" rel="noopener noreferrer">
+        {{ follower.name }}
+      </a>
 
-    <button i18n class="peertube-button-link grey-button mt-1" *ngIf="!loadedAllFollowers && canLoadMoreFollowers()" (click)="loadAllFollowers()">Show full list</button>
+      <button i18n class="peertube-button-link grey-button mt-1" *ngIf="!loadedAllFollowers && canLoadMoreFollowers()" (click)="loadAllFollowers()">Show full list</button>
+    </div>
+
+    <div class="col-xl-6 col-md-12">
+      <h2 i18n class="fs-5-5 mb-4 fw-semibold">Subscriptions of {{ instanceName }} ({{ followingsPagination.totalItems }})</h2>
+
+      <div i18n class="no-results" *ngIf="followingsPagination.totalItems === 0">{{ instanceName }} does not have subscriptions.</div>
+
+      <a *ngFor="let following of followings" [href]="following.url" target="_blank" rel="noopener noreferrer">
+        {{ following.name }}
+      </a>
+
+      <button i18n class="peertube-button-link grey-button mt-1" *ngIf="!loadedAllFollowings && canLoadMoreFollowings()" (click)="loadAllFollowings()">Show full list</button>
+    </div>
+
   </div>
-
-  <div class="col-xl-6 col-md-12">
-    <h2 i18n class="fs-5-5 mb-4 fw-semibold">Subscriptions of {{ instanceName }} ({{ followingsPagination.totalItems }})</h2>
-
-    <div i18n class="no-results" *ngIf="followingsPagination.totalItems === 0">{{ instanceName }} does not have subscriptions.</div>
-
-    <a *ngFor="let following of followings" [href]="following.url" target="_blank" rel="noopener noreferrer">
-      {{ following.name }}
-    </a>
-
-    <button i18n class="peertube-button-link grey-button mt-1" *ngIf="!loadedAllFollowings && canLoadMoreFollowings()" (click)="loadAllFollowings()">Show full list</button>
-  </div>
-
 </div>

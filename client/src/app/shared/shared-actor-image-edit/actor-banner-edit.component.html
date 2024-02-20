@@ -1,7 +1,7 @@
-<div class="actor" *ngIf="actor">
+<div class="actor">
   <div class="actor-img-edit-container">
     <div class="banner-placeholder">
-      <img *ngIf="hasBanner()" [src]="preview || actor.bannerUrl" alt="Banner" />
+      <img *ngIf="hasBanner()" [src]="preview || bannerUrl" alt="Banner" />
     </div>
 
     <div *ngIf="!hasBanner()" class="actor-img-edit-button button-focus-within" [ngbTooltip]="bannerFormat" placement="right" container="body">

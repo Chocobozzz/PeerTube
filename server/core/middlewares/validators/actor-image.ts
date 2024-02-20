@@ -18,10 +18,5 @@ const updateActorImageValidatorFactory = (fieldname: string) => ([
   }
 ])
 
-const updateAvatarValidator = updateActorImageValidatorFactory('avatarfile')
-const updateBannerValidator = updateActorImageValidatorFactory('bannerfile')
-
-export {
-  updateAvatarValidator,
-  updateBannerValidator
-}
+export const updateAvatarValidator = updateActorImageValidatorFactory('avatarfile')
+export const updateBannerValidator = updateActorImageValidatorFactory('bannerfile')

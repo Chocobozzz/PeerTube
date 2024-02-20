@@ -11,6 +11,8 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
+import { testFileExistsOrNot, testImage } from '@tests/shared/checks.js'
+import { basename } from 'path'
 
 function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.instance.name).to.equal('PeerTube')
@@ -496,7 +498,8 @@ describe('Test static config', function () {
 })
 
 describe('Test config', function () {
-  let server: PeerTubeServer = null
+  let server: PeerTubeServer
+  let bannerPath: string
 
   before(async function () {
     this.timeout(30000)
@@ -595,23 +598,47 @@ describe('Test config', function () {
   })
 
   it('Should fetch the about information', async function () {
-    const data = await server.config.getAbout()
+    const { instance } = await server.config.getAbout()
 
-    expect(data.instance.name).to.equal('PeerTube updated')
-    expect(data.instance.shortDescription).to.equal('my short description')
-    expect(data.instance.description).to.equal('my super description')
-    expect(data.instance.terms).to.equal('my super terms')
-    expect(data.instance.codeOfConduct).to.equal('my super coc')
+    expect(instance.name).to.equal('PeerTube updated')
+    expect(instance.shortDescription).to.equal('my short description')
+    expect(instance.description).to.equal('my super description')
+    expect(instance.terms).to.equal('my super terms')
+    expect(instance.codeOfConduct).to.equal('my super coc')
 
-    expect(data.instance.creationReason).to.equal('my super creation reason')
-    expect(data.instance.moderationInformation).to.equal('my super moderation information')
-    expect(data.instance.administrator).to.equal('Kuja')
-    expect(data.instance.maintenanceLifetime).to.equal('forever')
-    expect(data.instance.businessModel).to.equal('my super business model')
-    expect(data.instance.hardwareInformation).to.equal('2vCore 3GB RAM')
+    expect(instance.creationReason).to.equal('my super creation reason')
+    expect(instance.moderationInformation).to.equal('my super moderation information')
+    expect(instance.administrator).to.equal('Kuja')
+    expect(instance.maintenanceLifetime).to.equal('forever')
+    expect(instance.businessModel).to.equal('my super business model')
+    expect(instance.hardwareInformation).to.equal('2vCore 3GB RAM')
 
-    expect(data.instance.languages).to.deep.equal([ 'en', 'es' ])
-    expect(data.instance.categories).to.deep.equal([ 1, 2 ])
+    expect(instance.languages).to.deep.equal([ 'en', 'es' ])
+    expect(instance.categories).to.deep.equal([ 1, 2 ])
+
+    expect(instance.banners).to.have.lengthOf(0)
+  })
+
+  it('Should update instance banner', async function () {
+    await server.config.updateInstanceBanner({ fixture: 'banner.jpg' })
+
+    const { instance } = await server.config.getAbout()
+
+    expect(instance.banners).to.have.lengthOf(1)
+
+    bannerPath = instance.banners[0].path
+    await testImage(server.url, 'banner-resized', bannerPath)
+    await testFileExistsOrNot(server, 'avatars', basename(bannerPath), true)
+  })
+
+  it('Should remove instance banner', async function () {
+    await server.config.deleteInstanceBanner()
+
+    const { instance } = await server.config.getAbout()
+
+    expect(instance.banners).to.have.lengthOf(0)
+
+    await testFileExistsOrNot(server, 'avatars', basename(bannerPath), false)
   })
 
   it('Should remove the custom configuration', async function () {
