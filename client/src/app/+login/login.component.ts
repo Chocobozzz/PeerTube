@@ -32,6 +32,8 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   externalAuthError = false
   externalLogins: string[] = []
 
+  instanceBannerUrl: string
+
   instanceInformationPanels = {
     terms: true,
     administrators: false,
@@ -118,6 +120,10 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
 
   getExternalLogins () {
     return this.serverConfig.plugin.registeredExternalAuths
+  }
+
+  hasExternalLogins () {
+    return this.getExternalLogins().length !== 0
   }
 
   getAuthHref (auth: RegisteredExternalAuthConfig) {

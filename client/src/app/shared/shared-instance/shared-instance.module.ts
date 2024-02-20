@@ -7,6 +7,7 @@ import { InstanceAboutAccordionComponent } from './instance-about-accordion.comp
 import { InstanceFeaturesTableComponent } from './instance-features-table.component'
 import { InstanceFollowService } from './instance-follow.service'
 import { InstanceService } from './instance.service'
+import { InstanceBannerComponent } from './instance-banner.component'
 
 @NgModule({
   imports: [
@@ -18,13 +19,15 @@ import { InstanceService } from './instance.service'
   declarations: [
     FeatureBooleanComponent,
     InstanceAboutAccordionComponent,
-    InstanceFeaturesTableComponent
+    InstanceFeaturesTableComponent,
+    InstanceBannerComponent
   ],
 
   exports: [
     FeatureBooleanComponent,
     InstanceAboutAccordionComponent,
-    InstanceFeaturesTableComponent
+    InstanceFeaturesTableComponent,
+    InstanceBannerComponent
   ],
 
   providers: [

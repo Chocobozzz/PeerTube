@@ -25,12 +25,10 @@ export class InstanceBannerMarkupComponent implements OnInit, CustomMarkupCompon
   ) {}
 
   ngOnInit () {
-    this.instance.getAbout()
+    this.instance.getInstanceBannerUrl()
       .pipe(finalize(() => this.loaded.emit(true)))
-      .subscribe(about => {
-        if (about.instance.banners.length === 0) return
-
-        this.instanceBannerUrl = about.instance.banners[0].path
+      .subscribe(instanceBannerUrl => {
+        this.instanceBannerUrl = instanceBannerUrl
         this.cd.markForCheck()
       })
   }

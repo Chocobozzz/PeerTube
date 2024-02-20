@@ -2,7 +2,6 @@ import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, Input, OnInit } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { CustomMarkupService } from '@app/shared/shared-custom-markup'
-import { ConfigService } from '../shared/config.service'
 import { Notifier } from '@app/core'
 import { HttpErrorResponse } from '@angular/common/http'
 import { genericUploadErrorHandler } from '@app/helpers'
@@ -24,9 +23,8 @@ export class EditInstanceInformationComponent implements OnInit {
 
   constructor (
     private customMarkup: CustomMarkupService,
-    private configService: ConfigService,
     private notifier: Notifier,
-    private instance: InstanceService
+    private instanceService: InstanceService
   ) {
 
   }
@@ -40,9 +38,9 @@ export class EditInstanceInformationComponent implements OnInit {
   }
 
   onBannerChange (formData: FormData) {
-    this.configService.updateInstanceBanner(formData)
+    this.instanceService.updateInstanceBanner(formData)
         .subscribe({
-          next: data => {
+          next: () => {
             this.notifier.success($localize`Banner changed.`)
 
             this.resetBannerUrl()
@@ -53,7 +51,7 @@ export class EditInstanceInformationComponent implements OnInit {
   }
 
   onBannerDelete () {
-    this.configService.deleteInstanceBanner()
+    this.instanceService.deleteInstanceBanner()
       .subscribe({
         next: () => {
           this.notifier.success($localize`Banner deleted.`)
@@ -66,15 +64,9 @@ export class EditInstanceInformationComponent implements OnInit {
   }
 
   private resetBannerUrl () {
-    this.instance.getAbout()
-      .subscribe(about => {
-        const banners = about.instance.banners
-        if (banners.length === 0) {
-          this.instanceBannerUrl = undefined
-          return
-        }
-
-        this.instanceBannerUrl = banners[0].path
+    this.instanceService.getInstanceBannerUrl()
+      .subscribe(instanceBannerUrl => {
+        this.instanceBannerUrl = instanceBannerUrl
       })
   }
 }

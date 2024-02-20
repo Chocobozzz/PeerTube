@@ -67,20 +67,4 @@ export class ConfigService {
     return this.authHttp.put<CustomConfig>(ConfigService.BASE_APPLICATION_URL + '/custom', data)
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
-
-  // ---------------------------------------------------------------------------
-
-  updateInstanceBanner (formData: FormData) {
-    const url = ConfigService.BASE_APPLICATION_URL + '/instance-banner/pick'
-
-    return this.authHttp.post(url, formData)
-      .pipe(catchError(err => this.restExtractor.handleError(err)))
-  }
-
-  deleteInstanceBanner () {
-    const url = ConfigService.BASE_APPLICATION_URL + '/instance-banner'
-
-    return this.authHttp.delete(url)
-      .pipe(catchError(err => this.restExtractor.handleError(err)))
-  }
 }

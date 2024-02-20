@@ -95,7 +95,7 @@
           </div>
         </form>
 
-        <div class="external-login-blocks" *ngIf="getExternalLogins().length !== 0">
+        <div class="external-login-blocks" *ngIf="hasExternalLogins()">
           <div class="fw-semibold" i18n>Or sign in with</div>
 
           <div>
@@ -107,6 +107,8 @@
       </div>
 
       <div #instanceInformation class="instance-information">
+        <my-instance-banner class="rounded"></my-instance-banner>
+
         <my-instance-about-accordion
           #instanceAboutAccordion
           [displayInstanceName]="false"
