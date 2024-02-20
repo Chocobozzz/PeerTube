@@ -370,12 +370,12 @@
     @include disable-outline;
 
     cursor: pointer;
-    width: $control-bar-button-width - 5px;
+    width: $control-bar-button-width - 4px;
 
     .vjs-icon-placeholder {
       display: inline-block;
-      height: $control-bar-icon-size - 5px;
-      width: $control-bar-icon-size - 5px;
+      height: $control-bar-icon-size - 4px;
+      width: $control-bar-icon-size - 4px;
       vertical-align: middle;
       background: url('#{$assets-path}/player/images/settings.svg') no-repeat;
       background-size: contain;
@@ -440,7 +440,7 @@
 
     > .vjs-icon-placeholder::before {
       font-size: 2.3em;
-      line-height: 1.3;
+      line-height: 38px;
     }
   }
 
