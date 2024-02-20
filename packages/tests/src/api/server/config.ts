@@ -631,6 +631,10 @@ describe('Test config', function () {
     await testFileExistsOrNot(server, 'avatars', basename(bannerPath), true)
   })
 
+  it('Should re-update an existing instance banner', async function () {
+    await server.config.updateInstanceBanner({ fixture: 'banner.jpg' })
+  })
+
   it('Should remove instance banner', async function () {
     await server.config.deleteInstanceBanner()
 

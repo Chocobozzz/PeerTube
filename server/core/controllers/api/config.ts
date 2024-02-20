@@ -158,16 +158,19 @@ async function updateCustomConfig (req: express.Request, res: express.Response) 
 async function updateInstanceBanner (req: express.Request, res: express.Response) {
   const bannerPhysicalFile = req.files['bannerfile'][0]
 
-  const accountServer = (await getServerActor()).Account
-  await updateLocalActorImageFiles(accountServer, bannerPhysicalFile, ActorImageType.BANNER)
+  const serverActor = await getServerActor()
+  serverActor.Banners = await ActorImageModel.listByActor(serverActor, ActorImageType.BANNER) // Reload banners from DB
+
+  await updateLocalActorImageFiles(serverActor.Account, bannerPhysicalFile, ActorImageType.BANNER)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function deleteInstanceBanner (req: express.Request, res: express.Response) {
-  const accountServer = (await getServerActor()).Account
+  const serverActor = await getServerActor()
+  serverActor.Banners = await ActorImageModel.listByActor(serverActor, ActorImageType.BANNER) // Reload banners from DB
 
-  await deleteLocalActorImageFile(accountServer, ActorImageType.BANNER)
+  await deleteLocalActorImageFile(serverActor.Account, ActorImageType.BANNER)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
