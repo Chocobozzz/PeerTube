@@ -6,7 +6,7 @@ import { InstanceService } from './instance.service'
   templateUrl: './instance-banner.component.html'
 })
 export class InstanceBannerComponent implements OnInit {
-  @Input({ transform: booleanAttribute }) rounded: boolean
+  @Input({ transform: booleanAttribute }) rounded = false
 
   instanceBannerUrl: string
 
