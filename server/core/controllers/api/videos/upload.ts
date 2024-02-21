@@ -1,7 +1,7 @@
 import express from 'express'
 import { getResumableUploadPath } from '@server/helpers/upload.js'
 import { Redis } from '@server/lib/redis.js'
-import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
+import { setupUploadResumableRoutes, uploadx } from '@server/lib/uploadx.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { uuidToShort } from '@peertube/peertube-node-utils'
