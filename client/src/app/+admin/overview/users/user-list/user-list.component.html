@@ -68,6 +68,7 @@
       <th scope="col" *ngIf="isSelected('email')">{{ getColumn('email').label }}</th>
       <th scope="col" *ngIf="isSelected('quota')" style="width: 160px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="videoQuotaUsed">{{ getColumn('quota').label }} <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
       <th scope="col" *ngIf="isSelected('quotaDaily')" style="width: 160px;">{{ getColumn('quotaDaily').label }}</th>
+      <th scope="col" *ngIf="isSelected('totalVideoFileSize')" style="width: 100px;">{{ getColumn('totalVideoFileSize').label }}</th>
       <th scope="col" *ngIf="isSelected('pluginAuth')" style="width: 140px;" pResizableColumn >{{ getColumn('pluginAuth').label }}</th>
       <th scope="col" *ngIf="isSelected('createdAt')" style="width: 150px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th scope="col" *ngIf="isSelected('lastLoginDate')" style="width: 150px;" [ngbTooltip]="sortTooltip" container="body" pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
@@ -138,6 +139,10 @@
           <span>{{ user.videoQuotaUsedDaily }}</span>
           <span>{{ user.videoQuotaDaily }}</span>
         </div>
+      </td>
+
+      <td *ngIf="isSelected('totalVideoFileSize')">
+        {{ user.totalVideoFileSize | bytes }}
       </td>
 
       <td *ngIf="isSelected('pluginAuth')">

@@ -37,6 +37,8 @@ export interface User {
   videoQuotaUsed?: number
   videoQuotaUsedDaily?: number
 
+  totalVideoFileSize?: number
+
   videosCount?: number
 
   abusesCount?: number

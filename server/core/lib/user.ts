@@ -198,14 +198,14 @@ async function sendVerifyRegistrationEmail (registration: MRegistration) {
 async function getOriginalVideoFileTotalFromUser (user: MUserId) {
   const base = await UserModel.getUserQuota({ userId: user.id, daily: false })
 
-  return base + LiveQuotaStore.Instance.getLiveQuotaOf(user.id)
+  return base + LiveQuotaStore.Instance.getLiveQuotaOfUser(user.id)
 }
 
 // Returns cumulative size of all video files uploaded in the last 24 hours.
 async function getOriginalVideoFileTotalDailyFromUser (user: MUserId) {
   const base = await UserModel.getUserQuota({ userId: user.id, daily: true })
 
-  return base + LiveQuotaStore.Instance.getLiveQuotaOf(user.id)
+  return base + LiveQuotaStore.Instance.getLiveQuotaOfUser(user.id)
 }
 
 async function isUserQuotaValid (options: {

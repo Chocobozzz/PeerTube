@@ -131,6 +131,7 @@ export class UserListComponent extends RestTable <User> implements OnInit {
       { id: 'role', label: $localize`Role` },
       { id: 'email', label: $localize`Email` },
       { id: 'quota', label: $localize`Video quota` },
+      { id: 'totalVideoFileSize', label: $localize`Total size` },
       { id: 'createdAt', label: $localize`Created` },
       { id: 'lastLoginDate', label: $localize`Last login` },
 
@@ -154,7 +155,7 @@ export class UserListComponent extends RestTable <User> implements OnInit {
     }
 
     // Default behaviour
-    this.selectedColumns = [ 'username', 'role', 'email', 'quota', 'createdAt', 'lastLoginDate' ]
+    this.selectedColumns = [ 'username', 'role', 'email', 'quota', 'totalVideoFileSize', 'createdAt', 'lastLoginDate' ]
     return
   }
 

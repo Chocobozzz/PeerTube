@@ -90,6 +90,8 @@ describe('Test users', function () {
       expect(user.email).to.equal('user_1@example.com')
       expect(user.nsfwPolicy).to.equal('display')
 
+      expect(user.totalVideoFileSize).to.equal(0)
+
       const rootUser = data[1]
       expect(rootUser.username).to.equal('root')
       expect(rootUser.email).to.equal('admin' + server.internalServerNumber + '@example.com')
@@ -484,6 +486,7 @@ describe('Test users', function () {
       expect(user.abusesCount).to.equal(0)
       expect(user.abusesCreatedCount).to.equal(0)
       expect(user.abusesAcceptedCount).to.equal(0)
+      expect(user.totalVideoFileSize).to.equal(0)
     })
 
     it('Should report correct videos count', async function () {
@@ -495,6 +498,7 @@ describe('Test users', function () {
 
       const user = await server.users.get({ userId: user17Id, withStats: true })
       expect(user.videosCount).to.equal(1)
+      expect(user.totalVideoFileSize).to.not.equal(0)
     })
 
     it('Should report correct video comments for user', async function () {
