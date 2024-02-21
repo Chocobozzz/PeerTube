@@ -9,7 +9,7 @@ import { isVideoChannelDisplayNameValid } from '@server/helpers/custom-validator
 import { cryptPassword } from '@server/helpers/peertube-crypto.js'
 import { USER_REGISTRATION_STATES } from '@server/initializers/constants.js'
 import { MRegistration, MRegistrationFormattable } from '@server/types/models/index.js'
-import { FindOptions, Op, WhereOptions } from 'sequelize'
+import { FindOptions, Op, QueryTypes, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeCreate,
@@ -25,8 +25,9 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { isUserDisplayNameValid, isUserEmailVerifiedValid, isUserPasswordValid } from '../../helpers/custom-validators/users.js'
-import { getSort, throwIfNotValid } from '../shared/index.js'
+import { getSort, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
 import { UserModel } from './user.js'
+import { forceNumber } from '@peertube/peertube-core-utils'
 
 @Table({
   tableName: 'userRegistration',
@@ -99,6 +100,10 @@ export class UserRegistrationModel extends Model<Partial<AttributesOnly<UserRegi
   @Is('ChannelDisplayName', value => throwIfNotValid(value, isVideoChannelDisplayNameValid, 'channel display name', true))
   @Column
   channelDisplayName: string
+
+  @AllowNull(true)
+  @Column
+  processedAt: Date
 
   @CreatedAt
   createdAt: Date
@@ -223,6 +228,33 @@ export class UserRegistrationModel extends Model<Partial<AttributesOnly<UserRegi
       UserRegistrationModel.count(query),
       UserRegistrationModel.findAll<MRegistrationFormattable>(query)
     ]).then(([ total, data ]) => ({ total, data }))
+  }
+
+  // ---------------------------------------------------------------------------
+
+  static getStats () {
+    const query = `SELECT ` +
+      `AVG(EXTRACT(EPOCH FROM ("processedAt" - "createdAt") * 1000)) ` +
+        `FILTER (WHERE "processedAt" IS NOT NULL AND "createdAt" > CURRENT_DATE - INTERVAL '3 months')` +
+        `AS "avgResponseTime", ` +
+      `COUNT(*) FILTER (WHERE "processedAt" IS NOT NULL) AS "processedRequests", ` +
+      `COUNT(*) AS "totalRequests" ` +
+      `FROM "userRegistration"`
+
+    return UserRegistrationModel.sequelize.query<any>(query, {
+      type: QueryTypes.SELECT,
+      raw: true
+    }).then(([ row ]) => {
+      return {
+        totalRegistrationRequests: parseAggregateResult(row.totalRequests),
+
+        totalRegistrationRequestsProcessed: parseAggregateResult(row.processedRequests),
+
+        averageRegistrationRequestResponseTimeMs: row?.avgResponseTime
+          ? forceNumber(row.avgResponseTime)
+          : null
+      }
+    })
   }
 
   // ---------------------------------------------------------------------------

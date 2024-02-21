@@ -363,6 +363,14 @@ const CONFIG = {
       FRAMES_TO_ANALYZE: config.get<number>('thumbnails.generation_from_video.frames_to_analyze')
     }
   },
+  STATS: {
+    REGISTRATION_REQUESTS: {
+      ENABLED: config.get<boolean>('stats.registration_requests.enabled')
+    },
+    ABUSES: {
+      ENABLED: config.get<boolean>('stats.abuses.enabled')
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },

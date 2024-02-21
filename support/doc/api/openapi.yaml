@@ -8580,6 +8580,26 @@ components:
         totalActivityPubMessagesWaiting:
           type: number
 
+        averageRegistrationRequestResponseTimeMs:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled registration requests stats"
+        totalRegistrationRequestsProcessed:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled registration requests stats"
+        totalRegistrationRequests:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled registration requests stats"
+
+        averageAbuseResponseTimeMs:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled abuses stats"
+        totalAbusesProcessed:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled abuses stats"
+        totalAbuses:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled abuses stats"
+
     ServerConfigAbout:
       properties:
         instance:

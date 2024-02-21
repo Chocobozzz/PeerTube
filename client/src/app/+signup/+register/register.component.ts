@@ -2,10 +2,10 @@ import { CdkStep } from '@angular/cdk/stepper'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService } from '@app/core'
+import { AuthService, ServerService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
-import { ServerConfig, UserRegister } from '@peertube/peertube-models'
+import { ServerConfig, ServerStats, UserRegister } from '@peertube/peertube-models'
 import { SignupService } from '../shared/signup.service'
 
 @Component({
@@ -45,12 +45,15 @@ export class RegisterComponent implements OnInit {
 
   signupDisabled = false
 
+  serverStats: ServerStats
+
   private serverConfig: ServerConfig
 
   constructor (
     private route: ActivatedRoute,
     private authService: AuthService,
     private signupService: SignupService,
+    private server: ServerService,
     private hooks: HooksService
   ) { }
 
@@ -85,8 +88,10 @@ export class RegisterComponent implements OnInit {
       ? $localize`:Button on the registration form to finalize the account and channel creation:Signup`
       : this.defaultNextStepButtonLabel
 
-    this.hooks.runAction('action:signup.register.init', 'signup')
+    this.server.getServerStats()
+      .subscribe(stats => this.serverStats = stats)
 
+    this.hooks.runAction('action:signup.register.init', 'signup')
   }
 
   hasSameChannelAndAccountNames () {

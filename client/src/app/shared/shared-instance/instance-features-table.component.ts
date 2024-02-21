@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
-import { ServerConfig } from '@peertube/peertube-models'
+import { ServerConfig, ServerStats } from '@peertube/peertube-models'
+import { DaysDurationFormatterPipe } from '../shared-main'
 
 @Component({
   selector: 'my-instance-features-table',
@@ -11,6 +12,7 @@ import { ServerConfig } from '@peertube/peertube-models'
 export class InstanceFeaturesTableComponent implements OnInit {
   quotaHelpIndication = ''
   serverConfig: ServerConfig
+  serverStats: ServerStats
 
   constructor (
     private serverService: ServerService
@@ -42,8 +44,12 @@ export class InstanceFeaturesTableComponent implements OnInit {
     this.serverService.getConfig()
         .subscribe(config => {
           this.serverConfig = config
+
           this.buildQuotaHelpIndication()
         })
+
+    this.serverService.getServerStats()
+      .subscribe(stats => this.serverStats = stats)
   }
 
   buildNSFWLabel () {
@@ -58,7 +64,17 @@ export class InstanceFeaturesTableComponent implements OnInit {
     const config = this.serverConfig.signup
 
     if (config.allowed !== true) return $localize`Disabled`
-    if (config.requiresApproval === true) return $localize`Requires approval by moderators`
+
+    if (config.requiresApproval === true) {
+      const responseTimeMS = this.serverStats?.averageRegistrationRequestResponseTimeMs
+
+      if (!responseTimeMS) {
+        return $localize`Requires approval by moderators`
+      }
+
+      const responseTime = new DaysDurationFormatterPipe().transform(responseTimeMS)
+      return $localize`Requires approval by moderators (~ ${responseTime})`
+    }
 
     return $localize`Enabled`
   }

@@ -9,6 +9,9 @@ import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { ActivityType, ServerStats, VideoRedundancyStrategyWithManual } from '@peertube/peertube-models'
+import { UserRegistrationModel } from '@server/models/user/user-registration.js'
+import { AbuseModel } from '@server/models/abuse/abuse.js'
+import { pick } from '@peertube/peertube-core-utils'
 
 class StatsManager {
 
@@ -84,6 +87,9 @@ class StatsManager {
       totalInstanceFollowing,
 
       videosRedundancy: videosRedundancyStats,
+
+      ...await this.buildAbuseStats(),
+      ...await this.buildRegistrationRequestsStats(),
 
       ...this.buildAPStats()
     }
@@ -168,6 +174,34 @@ class StatsManager {
       activityPubMessagesProcessedPerSecond: this.buildActivityPubMessagesProcessedPerSecond(),
       totalActivityPubMessagesWaiting: this.inboxMessages.waiting
     }
+  }
+
+  private async buildRegistrationRequestsStats () {
+    if (!CONFIG.STATS.REGISTRATION_REQUESTS.ENABLED) {
+      return {
+        averageRegistrationRequestResponseTimeMs: null,
+        totalRegistrationRequests: null,
+        totalRegistrationRequestsProcessed: null
+      }
+    }
+
+    const res = await UserRegistrationModel.getStats()
+
+    return pick(res, [ 'averageRegistrationRequestResponseTimeMs', 'totalRegistrationRequests', 'totalRegistrationRequestsProcessed' ])
+  }
+
+  private async buildAbuseStats () {
+    if (!CONFIG.STATS.ABUSES.ENABLED) {
+      return {
+        averageAbuseResponseTimeMs: null,
+        totalAbuses: null,
+        totalAbusesProcessed: null
+      }
+    }
+
+    const res = await AbuseModel.getStats()
+
+    return pick(res, [ 'averageAbuseResponseTimeMs', 'totalAbuses', 'totalAbusesProcessed' ])
   }
 
   static get Instance () {

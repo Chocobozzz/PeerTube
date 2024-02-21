@@ -23,7 +23,7 @@
             <div i18n>on {{ instanceName }}</div>
           </my-signup-step-title>
 
-          <my-register-step-about [requiresApproval]="requiresApproval" [videoUploadDisabled]="videoUploadDisabled"></my-register-step-about>
+          <my-register-step-about [serverStats]="serverStats" [requiresApproval]="requiresApproval" [videoUploadDisabled]="videoUploadDisabled"></my-register-step-about>
 
           <div class="step-buttons">
             <a i18n class="skip-step underline-orange" routerLink="/login">

@@ -131,6 +131,10 @@ async function updateAbuse (req: express.Request, res: express.Response) {
 
   if (req.body.state !== undefined) {
     abuse.state = req.body.state
+
+    // We consider the abuse has been processed when its state change
+    if (!abuse.processedAt) abuse.processedAt = new Date()
+
     stateUpdated = true
   }
 
@@ -229,13 +233,20 @@ async function listAbuseMessages (req: express.Request, res: express.Response) {
 async function addAbuseMessage (req: express.Request, res: express.Response) {
   const abuse = res.locals.abuse
   const user = res.locals.oauth.token.user
+  const byModerator = abuse.reporterAccountId !== user.Account.id
 
   const abuseMessage = await AbuseMessageModel.create({
     message: req.body.message,
-    byModerator: abuse.reporterAccountId !== user.Account.id,
+    byModerator,
     accountId: user.Account.id,
     abuseId: abuse.id
   })
+
+  // If a moderator created an abuse message, we consider it as processed
+  if (byModerator && !abuse.processedAt) {
+    abuse.processedAt = new Date()
+    await abuse.save()
+  }
 
   AbuseModel.loadFull(abuse.id)
     .then(abuseFull => Notifier.Instance.notifyOnAbuseMessage(abuseFull, abuseMessage))

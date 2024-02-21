@@ -445,6 +445,15 @@ thumbnails:
     # Minimum value is 2
     frames_to_analyze: 50
 
+stats:
+  # Display registration requests stats (average response time, total requests...)
+  registration_requests:
+    enabled: true
+
+  # Display abuses stats (average response time, total abuses...)
+  abuses:
+    enabled: true
+
 ###############################################################################
 #
 # From this point, almost all following keys can be overridden by the web interface

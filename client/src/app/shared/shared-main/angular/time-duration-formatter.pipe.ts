@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core'
 
 @Pipe({
-  name: 'myDurationFormatter'
+  name: 'myTimeDurationFormatter'
 })
-export class DurationFormatterPipe implements PipeTransform {
+export class TimeDurationFormatterPipe implements PipeTransform {
 
   transform (value: number): string {
     const hours = Math.floor(value / 3600)

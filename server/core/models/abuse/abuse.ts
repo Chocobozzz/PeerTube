@@ -1,4 +1,4 @@
-import { abusePredefinedReasonsMap } from '@peertube/peertube-core-utils'
+import { abusePredefinedReasonsMap, forceNumber } from '@peertube/peertube-core-utils'
 import {
   AbuseFilter,
   AbuseObject,
@@ -41,7 +41,7 @@ import {
   MUserAccountId
 } from '../../types/models/index.js'
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account.js'
-import { getSort, throwIfNotValid } from '../shared/index.js'
+import { getSort, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
 import { ThumbnailModel } from '../video/thumbnail.js'
 import { VideoBlacklistModel } from '../video/video-blacklist.js'
 import { SummaryOptions as ChannelSummaryOptions, VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel.js'
@@ -219,6 +219,10 @@ export class AbuseModel extends Model<Partial<AttributesOnly<AbuseModel>>> {
   @Default(null)
   @Column(DataType.ARRAY(DataType.INTEGER))
   predefinedReasons: AbusePredefinedReasonsType[]
+
+  @AllowNull(true)
+  @Column
+  processedAt: Date
 
   @CreatedAt
   createdAt: Date
@@ -440,6 +444,35 @@ export class AbuseModel extends Model<Partial<AttributesOnly<AbuseModel>>> {
 
     return { total, data }
   }
+
+  // ---------------------------------------------------------------------------
+
+  static getStats () {
+    const query = `SELECT ` +
+      `AVG(EXTRACT(EPOCH FROM ("processedAt" - "createdAt") * 1000)) ` +
+        `FILTER (WHERE "processedAt" IS NOT NULL AND "createdAt" > CURRENT_DATE - INTERVAL '3 months')` +
+        `AS "avgResponseTime", ` +
+      `COUNT(*) FILTER (WHERE "processedAt" IS NOT NULL) AS "processedAbuses", ` +
+      `COUNT(*) AS "totalAbuses" ` +
+      `FROM "abuse"`
+
+    return AbuseModel.sequelize.query<any>(query, {
+      type: QueryTypes.SELECT,
+      raw: true
+    }).then(([ row ]) => {
+      return {
+        totalAbuses: parseAggregateResult(row.totalAbuses),
+
+        totalAbusesProcessed: parseAggregateResult(row.processedAbuses),
+
+        averageAbuseResponseTimeMs: row?.avgResponseTime
+          ? forceNumber(row.avgResponseTime)
+          : null
+      }
+    })
+  }
+
+  // ---------------------------------------------------------------------------
 
   buildBaseVideoCommentAbuse (this: MAbuseUserFormattable) {
     // Associated video comment could have been destroyed if the video has been deleted

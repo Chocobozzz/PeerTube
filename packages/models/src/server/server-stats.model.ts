@@ -36,6 +36,14 @@ export interface ServerStats extends ActivityPubMessagesSuccess, ActivityPubMess
 
   activityPubMessagesProcessedPerSecond: number
   totalActivityPubMessagesWaiting: number
+
+  averageRegistrationRequestResponseTimeMs: number
+  totalRegistrationRequestsProcessed: number
+  totalRegistrationRequests: number
+
+  averageAbuseResponseTimeMs: number
+  totalAbusesProcessed: number
+  totalAbuses: number
 }
 
 export interface VideosRedundancyStats {
