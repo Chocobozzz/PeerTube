@@ -161,7 +161,12 @@ async function updateInstanceBanner (req: express.Request, res: express.Response
   const serverActor = await getServerActor()
   serverActor.Banners = await ActorImageModel.listByActor(serverActor, ActorImageType.BANNER) // Reload banners from DB
 
-  await updateLocalActorImageFiles(serverActor.Account, bannerPhysicalFile, ActorImageType.BANNER)
+  await updateLocalActorImageFiles({
+    accountOrChannel: serverActor.Account,
+    imagePhysicalFile: bannerPhysicalFile,
+    type: ActorImageType.BANNER,
+    sendActorUpdate: false
+  })
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
