@@ -11,7 +11,7 @@ import { getInternalUrl } from '../urls.js'
 import { getClient } from './client.js'
 import { lTags } from './logger.js'
 
-import type { _Object, CompleteMultipartUploadCommandOutput, PutObjectCommandInput, S3Client } from '@aws-sdk/client-s3'
+import type { _Object, CompleteMultipartUploadCommandOutput, ObjectCannedACL, PutObjectCommandInput, S3Client } from '@aws-sdk/client-s3'
 
 type BucketInfo = {
   BUCKET_NAME: string
@@ -377,6 +377,6 @@ async function applyOnPrefix (options: {
 
 function getACL (isPrivate: boolean) {
   return isPrivate
-    ? CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PRIVATE
-    : CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PUBLIC
+    ? CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PRIVATE as ObjectCannedACL
+    : CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PUBLIC as ObjectCannedACL
 }

@@ -1,5 +1,5 @@
 import MarkdownItClass from 'markdown-it'
-import markdownItEmoji from 'markdown-it-emoji/light.js'
+import markdownItEmoji from 'markdown-it-emoji/lib/light.mjs'
 import sanitizeHtml from 'sanitize-html'
 import { getDefaultSanitizeOptions, getTextOnlySanitizeOptions, TEXT_WITH_HTML_RULES } from '@peertube/peertube-core-utils'
 
