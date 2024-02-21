@@ -131,10 +131,10 @@ export class MarkdownService {
 
       if (withEmoji) {
         if (!this.emojiModule) {
-          this.emojiModule = (await import('markdown-it-emoji/light')).default
+          this.emojiModule = (await import('markdown-it-emoji/lib/light.mjs')).default
         }
 
-        this.markdownParsers[name].use(this.emojiModule)
+        this.markdownParsers[name].use(this.emojiModule as MarkdownIt.PluginSimple)
       }
     }
 
