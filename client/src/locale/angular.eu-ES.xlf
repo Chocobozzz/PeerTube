@@ -6003,65 +6003,65 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6339334908260162420" datatype="html">
+      <trans-unit id="6339334908260162420" datatype="html" xml:space="preserve">
         <source>Your videos with thumbnail, caption files. Video files can also be included in the archive</source>
-        <target state="new">Your videos with thumbnail, caption files. Video files can also be included in the archive</target>
+        <target state="translated">Zure bideoak miniatura eta azpitituluen fitxategiekin. Bideo-fitxategiak artxiboan gehi daitezke ere.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4333560211154634761" datatype="html">
+      <trans-unit id="4333560211154634761" datatype="html" xml:space="preserve">
         <source>The exported data will contain multiple directories:</source>
-        <target state="new">The exported data will contain multiple directories:</target>
+        <target state="translated">Esportatutako datuek hainbat direktorio izango dituzte:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3192985534238875835" datatype="html">
+      <trans-unit id="3192985534238875835" datatype="html" xml:space="preserve">
         <source>A directory containing an export in ActivityPub format, readable by any compliant software</source>
-        <target state="new">A directory containing an export in ActivityPub format, readable by any compliant software</target>
+        <target state="translated">Esportazio bat ActivityPub formatuan duen direktorio bat, bateragarria den edozein softwarek irakur dezakeena</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="896330674868470367" datatype="html">
+      <trans-unit id="896330674868470367" datatype="html" xml:space="preserve">
         <source>A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</source>
-        <target state="new">A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</target>
+        <target state="translated">Esportazio bat pertsonalizatutako PeerTube-ren JSON formatuan duen direktorio bat, zure kontua beste PeerTube instantzia batean berriro inportatzeko erabil daitekeena</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7743206617778542802" datatype="html">
+      <trans-unit id="7743206617778542802" datatype="html" xml:space="preserve">
         <source>A directory containing static files (thumbnails, avatars, video files etc.)</source>
-        <target state="new">A directory containing static files (thumbnails, avatars, video files etc.)</target>
+        <target state="translated">Fitxategi estatikoak dituen direktorio bat (miniaturak, abatarrak, bideo-fitxategiak etab.)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5507694448548293913" datatype="html">
+      <trans-unit id="5507694448548293913" datatype="html" xml:space="preserve">
         <source>You can only request one archive at a time.</source>
-        <target state="new">You can only request one archive at a time.</target>
+        <target state="translated">Artxibo bakarra eska dezakezu aldi bakoitzean.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6448402358500159809" datatype="html">
+      <trans-unit id="6448402358500159809" datatype="html" xml:space="preserve">
         <source>An email will be sent when the export archive is available.</source>
-        <target state="new">An email will be sent when the export archive is available.</target>
+        <target state="translated">Mezu bat bidaliko da esportazioaren artxiboa erabilgarri dagoenean.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3973931101896534797" datatype="html">
+      <trans-unit id="3973931101896534797" datatype="html" xml:space="preserve">
         <source>Date</source>
-        <target state="new">Date</target>
+        <target state="translated">Data</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">40</context>
@@ -8282,9 +8282,9 @@
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1243134386580173960" datatype="html">
+      <trans-unit id="1243134386580173960" datatype="html" xml:space="preserve">
         <source>Save video settings</source>
-        <target state="new">Save video settings</target>
+        <target state="translated">Gorde bideo-ezarpenak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">72</context>
@@ -9110,81 +9110,81 @@
           <context context-type="linenumber">472</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6117138245696620472" datatype="html">
+      <trans-unit id="6117138245696620472" datatype="html" xml:space="preserve">
         <source>USER IMPORT/EXPORT</source>
-        <target state="new">USER IMPORT/EXPORT</target>
+        <target state="translated">ERABILTZAILEAREN INPORTAZIOA/ESPORTAZIOA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">490</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6056998652615283808" datatype="html">
+      <trans-unit id="6056998652615283808" datatype="html" xml:space="preserve">
         <source>Allow your users to import a data archive</source>
-        <target state="new">Allow your users to import a data archive</target>
+        <target state="translated">Baimendu erabiltzaileei datu-artxibo bat inportatzea</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">500</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4091781230315618850" datatype="html">
+      <trans-unit id="4091781230315618850" datatype="html" xml:space="preserve">
         <source>Video quota is checked on import so the user doesn't upload a too big archive file</source>
-        <target state="new">Video quota is checked on import so the user doesn't upload a too big archive file</target>
+        <target state="translated">Bideo-kuota inportatzean egiaztatzen da, erabiltzaileak artxibo-fitxategi handiegi bat igo ez dezan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">503</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3112747752460656486" datatype="html">
+      <trans-unit id="3112747752460656486" datatype="html" xml:space="preserve">
         <source>Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import</source>
-        <target state="new">Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import</target>
+        <target state="translated">Bideo-kuota (eguneko kuota ez da aintzat hartzen) ere bideo bakoitzeko egiaztatzen da PeerTube-k inportazioa prozesatzen duenean</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">504</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4793397386811591255" datatype="html">
+      <trans-unit id="4793397386811591255" datatype="html" xml:space="preserve">
         <source>Allow your users to export their data</source>
-        <target state="new">Allow your users to export their data</target>
+        <target state="translated">Baimendu erabiltzaileei beren datuak esportatzea</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">518</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="74636758368624456" datatype="html">
+      <trans-unit id="74636758368624456" datatype="html" xml:space="preserve">
         <source>Users can export their PeerTube data in a .zip for backup or re-import. Only one export at a time is allowed per user</source>
-        <target state="new">Users can export their PeerTube data in a .zip for backup or re-import. Only one export at a time is allowed per user</target>
+        <target state="translated">Erabiltzaileek beren PeerTube-ko datuak .zip formatuan esporta ditzakete babeskopiarako edo berriro inportatzeko. Soilik esportazio bakarra onartzen da aldi bakoitzean erabiltzaile bakoitzerako.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">521</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7396688046674522189" datatype="html">
+      <trans-unit id="7396688046674522189" datatype="html" xml:space="preserve">
         <source>Max user video quota allowed to generate the export</source>
-        <target state="new">Max user video quota allowed to generate the export</target>
+        <target state="translated">Onartutako erabiltzailearen gehieneko bideo-kuota esportazioa sortzeko</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">527</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1967420418158999705" datatype="html">
+      <trans-unit id="1967420418158999705" datatype="html" xml:space="preserve">
         <source>If the user decides to include the video files in the archive</source>
-        <target state="new">If the user decides to include the video files in the archive</target>
+        <target state="translated">Erabiltzaileak bideo-fitxategiak artxiboan gehitzea erabakitzen badu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">529</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8092614302698579026" datatype="html">
+      <trans-unit id="8092614302698579026" datatype="html" xml:space="preserve">
         <source>User export expiration</source>
-        <target state="new">User export expiration</target>
+        <target state="translated">Erabiltzaile-esportazioaren iraungitze-data</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">543</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5226878764906871194" datatype="html">
+      <trans-unit id="5226878764906871194" datatype="html" xml:space="preserve">
         <source>The archive file is deleted after this period.</source>
-        <target state="new">The archive file is deleted after this period.</target>
+        <target state="translated">Artxibo-fitxategia aldi honen ondoren ezabatzen da.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">550</context>
@@ -9366,9 +9366,9 @@
           <context context-type="linenumber">704</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4776429682428363094" datatype="html">
+      <trans-unit id="4776429682428363094" datatype="html" xml:space="preserve">
         <source>1 day</source>
-        <target state="new">1 day</target>
+        <target state="translated">Egun 1</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -9378,25 +9378,25 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5730801210509951539" datatype="html">
+      <trans-unit id="5730801210509951539" datatype="html" xml:space="preserve">
         <source>2 days</source>
-        <target state="new">2 days</target>
+        <target state="translated">2 egun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8542568275115626925" datatype="html">
+      <trans-unit id="8542568275115626925" datatype="html" xml:space="preserve">
         <source>7 days</source>
-        <target state="new">7 days</target>
+        <target state="translated">7 egun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7152095234138763013" datatype="html">
+      <trans-unit id="7152095234138763013" datatype="html" xml:space="preserve">
         <source>30 days</source>
-        <target state="new">30 days</target>
+        <target state="translated">30 egun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -11084,9 +11084,9 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1295676134074258121" datatype="html">
+      <trans-unit id="1295676134074258121" datatype="html" xml:space="preserve">
         <source>New video or live from your subscriptions</source>
-        <target state="new">New video or live from your subscriptions</target>
+        <target state="translated">Harpidetzetako bideo edo zuzeneko berria</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -15302,9 +15302,9 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4422757693184001803" datatype="html">
+      <trans-unit id="4422757693184001803" datatype="html" xml:space="preserve">
         <source>Save email settings</source>
-        <target state="new">Save email settings</target>
+        <target state="translated">Gorde postaren ezarpenak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">14</context>
@@ -15490,9 +15490,9 @@
           <context context-type="linenumber">11,13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6328734173672096825" datatype="html">
+      <trans-unit id="6328734173672096825" datatype="html" xml:space="preserve">
         <source>Save profile</source>
-        <target state="new">Save profile</target>
+        <target state="translated">Gorde profila</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">38</context>
@@ -16972,17 +16972,17 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6180920471345723927" datatype="html">
+      <trans-unit id="6180920471345723927" datatype="html" xml:space="preserve">
         <source>The video quota only takes into account the size of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>uploaded<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos, not transcoded files or user export archives (which may contain video files). </source>
-        <target state="new"> The video quota only takes into account the size of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>uploaded<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos, not transcoded files or user export archives (which may contain video files). </target>
+        <target state="translated">Bideo-kuotak soilik <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>igotako<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> bideoen tamaina hartzen du aintzat, ez transkodetutako fitxategiak edo erabiltzaile-esportazioko artxiboak (zeinak bideo-fitxategiak izan baititzakete). </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">3,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1623552341334328156" datatype="html">
+      <trans-unit id="1623552341334328156" datatype="html" xml:space="preserve">
         <source>Transcoding is enabled so videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target state="new"> Transcoding is enabled so videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
+        <target state="translated">Transkodetzea gaituta dago, bideoen tamaina gehienez ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/> izan dadin. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -17170,9 +17170,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8232112521354108802" datatype="html">
+      <trans-unit id="8232112521354108802" datatype="html" xml:space="preserve">
         <source>Short description must not be longer than 250 characters.</source>
-        <target state="new">Short description must not be longer than 250 characters.</target>
+        <target state="translated">Azalpen laburra ezin da izan 250 karaktere baino luzeagoa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -17298,9 +17298,9 @@
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="977908106285712483" datatype="html">
+      <trans-unit id="977908106285712483" datatype="html" xml:space="preserve">
         <source>Max live duration must be greater or equal to -1.</source>
-        <target state="new">Max live duration must be greater or equal to -1.</target>
+        <target state="translated">Zuzenekoaren gehieneko iraupena -1 balioaren berdina edo handiagoa izan behar da.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">72</context>
