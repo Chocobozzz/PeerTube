@@ -1,5 +1,4 @@
 import { AccountVideoRate, type VideoRateType } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import {
   MAccountVideoRate,
   MAccountVideoRateAccountUrl,
@@ -8,11 +7,11 @@ import {
   MAccountVideoRateVideoUrl
 } from '@server/types/models/index.js'
 import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers/constants.js'
 import { ActorModel } from '../actor/actor.js'
-import { getSort, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
 import { SummaryOptions, VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel.js'
 import { VideoModel } from '../video/video.js'
 import { AccountModel } from './account.js'
@@ -42,7 +41,7 @@ import { AccountModel } from './account.js'
     }
   ]
 })
-export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountVideoRateModel>>> {
+export class AccountVideoRateModel extends SequelizeModel<AccountVideoRateModel> {
 
   @AllowNull(false)
   @Column(DataType.ENUM(...Object.values(VIDEO_RATE_TYPES)))

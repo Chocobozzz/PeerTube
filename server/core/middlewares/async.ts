@@ -15,7 +15,7 @@ function asyncMiddleware (fun: RequestPromiseHandler | RequestPromiseHandler[]) 
     }
 
     try {
-      for (const f of (fun as RequestPromiseHandler[])) {
+      for (const f of fun) {
         await new Promise<void>((resolve, reject) => {
           return asyncMiddleware(f)(req, res, err => {
             if (err) return reject(err)

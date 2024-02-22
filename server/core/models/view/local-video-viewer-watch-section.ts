@@ -1,8 +1,8 @@
 import { Transaction } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Table } from 'sequelize-typescript'
 import { MLocalVideoViewerWatchSection } from '@server/types/models/index.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { LocalVideoViewerModel } from './local-video-viewer.js'
+import { SequelizeModel } from '../shared/index.js'
 
 @Table({
   tableName: 'localVideoViewerWatchSection',
@@ -13,7 +13,7 @@ import { LocalVideoViewerModel } from './local-video-viewer.js'
     }
   ]
 })
-export class LocalVideoViewerWatchSectionModel extends Model<Partial<AttributesOnly<LocalVideoViewerWatchSectionModel>>> {
+export class LocalVideoViewerWatchSectionModel extends SequelizeModel<LocalVideoViewerWatchSectionModel> {
   @CreatedAt
   createdAt: Date
 

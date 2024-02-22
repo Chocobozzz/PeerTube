@@ -11,7 +11,7 @@ import { getInternalUrl } from '../urls.js'
 import { getClient } from './client.js'
 import { lTags } from './logger.js'
 
-import type { _Object, CompleteMultipartUploadCommandOutput, ObjectCannedACL, PutObjectCommandInput, S3Client } from '@aws-sdk/client-s3'
+import type { _Object, ObjectCannedACL, PutObjectCommandInput, S3Client } from '@aws-sdk/client-s3'
 
 type BucketInfo = {
   BUCKET_NAME: string
@@ -317,7 +317,7 @@ async function uploadToStorage (options: {
     params: input
   })
 
-  const response = (await parallelUploads3.done()) as CompleteMultipartUploadCommandOutput
+  const response = await parallelUploads3.done()
   // Check is needed even if the HTTP status code is 200 OK
   // For more information, see https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html
   if (!response.Bucket) {

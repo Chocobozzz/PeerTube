@@ -472,7 +472,7 @@ async function getVideoPlaylistVideos (req: express.Request, res: express.Respon
   }, 'filter:api.video-playlist.videos.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
-    VideoPlaylistElementModel.listForApi,
+    VideoPlaylistElementModel.listForApi.bind(VideoPlaylistElementModel),
     apiOptions,
     'filter:api.video-playlist.videos.list.result'
   )

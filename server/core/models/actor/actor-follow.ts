@@ -1,5 +1,4 @@
 import { ActorFollow, type FollowState } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -27,16 +26,14 @@ import {
   ForeignKey,
   Is,
   IsInt,
-  Max,
-  Model,
-  Table,
+  Max, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { logger } from '../../helpers/logger.js'
 import { ACTOR_FOLLOW_SCORE, CONSTRAINTS_FIELDS, FOLLOW_STATES, SERVER_ACTOR_NAME, SORTABLE_COLUMNS } from '../../initializers/constants.js'
 import { AccountModel } from '../account/account.js'
 import { ServerModel } from '../server/server.js'
-import { buildSQLAttributes, createSafeIn, getSort, searchAttribute, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, buildSQLAttributes, createSafeIn, getSort, searchAttribute, throwIfNotValid } from '../shared/index.js'
 import { doesExist } from '../shared/query.js'
 import { VideoChannelModel } from '../video/video-channel.js'
 import { ActorModel, unusedActorAttributesForAPI } from './actor.js'
@@ -65,7 +62,7 @@ import { InstanceListFollowingQueryBuilder, ListFollowingOptions } from './sql/i
     }
   ]
 })
-export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowModel>>> {
+export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
 
   @AllowNull(false)
   @Column(DataType.ENUM(...Object.values(FOLLOW_STATES)))

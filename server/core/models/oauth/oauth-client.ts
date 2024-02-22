@@ -1,6 +1,6 @@
-import { AllowNull, Column, CreatedAt, DataType, HasMany, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import { AllowNull, Column, CreatedAt, DataType, HasMany, Table, UpdatedAt } from 'sequelize-typescript'
 import { OAuthTokenModel } from './oauth-token.js'
+import { SequelizeModel } from '../shared/index.js'
 
 @Table({
   tableName: 'oAuthClient',
@@ -15,7 +15,7 @@ import { OAuthTokenModel } from './oauth-token.js'
     }
   ]
 })
-export class OAuthClientModel extends Model<Partial<AttributesOnly<OAuthClientModel>>> {
+export class OAuthClientModel extends SequelizeModel<OAuthClientModel> {
 
   @AllowNull(false)
   @Column

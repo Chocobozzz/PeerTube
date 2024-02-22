@@ -118,6 +118,8 @@
     "@typescript-eslint/consistent-type-exports": "off",
     "@typescript-eslint/key-spacing": "off",
 
+    "@typescript-eslint/no-unsafe-argument": "off",
+
     "@typescript-eslint/ban-types": [
       "error",
       {

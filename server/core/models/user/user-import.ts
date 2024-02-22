@@ -1,6 +1,6 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { MUserImport } from '@server/types/models/index.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import { SequelizeModel } from '../shared/index.js'
 import { UserModel } from './user.js'
 import type { UserImportResultSummary, UserImportStateType } from '@peertube/peertube-models'
 import { getSort } from '../shared/sort.js'
@@ -18,7 +18,7 @@ import { USER_IMPORT_STATES } from '@server/initializers/constants.js'
     }
   ]
 })
-export class UserImportModel extends Model<Partial<AttributesOnly<UserImportModel>>> {
+export class UserImportModel extends SequelizeModel<UserImportModel> {
   @CreatedAt
   createdAt: Date
 

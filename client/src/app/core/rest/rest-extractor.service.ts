@@ -32,7 +32,7 @@ export class RestExtractor {
     fieldsToConvert: string[] = [ 'createdAt' ],
     format?: DateFormat
   ): ResultList<T> {
-    return this.applyToResultListData(result, this.convertDateToHuman, [ fieldsToConvert, format ])
+    return this.applyToResultListData(result, this.convertDateToHuman.bind(this), [ fieldsToConvert, format ])
   }
 
   convertDateToHuman (target: any, fieldsToConvert: string[], format?: DateFormat) {

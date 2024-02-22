@@ -244,8 +244,10 @@ export class MenuComponent implements OnInit, OnDestroy {
     if (opened) {
       window.addEventListener('scroll', onWindowScroll)
       document.querySelector('nav').scrollTo(0, 0) // Reset menu scroll to easy lock
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       document.querySelector('nav').addEventListener('scroll', this.onMenuScrollEvent)
     } else {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       document.querySelector('nav').removeEventListener('scroll', this.onMenuScrollEvent)
     }
   }

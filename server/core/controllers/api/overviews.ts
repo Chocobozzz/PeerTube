@@ -130,7 +130,7 @@ async function getVideos (
   }, 'filter:api.overviews.videos.list.params')
 
   const { data } = await Hooks.wrapPromiseFun(
-    VideoModel.listForApi,
+    VideoModel.listForApi.bind(VideoModel),
     query,
     'filter:api.overviews.videos.list.result'
   )

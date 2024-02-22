@@ -5,7 +5,6 @@ import {
   type VideoStreamingPlaylistType_Type
 } from '@peertube/peertube-models'
 import { sha1 } from '@peertube/peertube-node-utils'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { CONFIG } from '@server/initializers/config.js'
 import { getHLSPrivateFileUrl, getHLSPublicFileUrl } from '@server/lib/object-storage/index.js'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename } from '@server/lib/paths.js'
@@ -24,9 +23,7 @@ import {
   Default,
   ForeignKey,
   HasMany,
-  Is,
-  Model,
-  Table,
+  Is, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
@@ -41,7 +38,7 @@ import {
   WEBSERVER
 } from '../../initializers/constants.js'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy.js'
-import { doesExist, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, doesExist, throwIfNotValid } from '../shared/index.js'
 import { VideoModel } from './video.js'
 
 @Table({
@@ -60,7 +57,7 @@ import { VideoModel } from './video.js'
     }
   ]
 })
-export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<VideoStreamingPlaylistModel>>> {
+export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPlaylistModel> {
   @CreatedAt
   createdAt: Date
 
@@ -132,7 +129,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   })
   RedundancyVideos: Awaited<VideoRedundancyModel>[]
 
-  static doesInfohashExistCached = memoizee(VideoStreamingPlaylistModel.doesInfohashExist, {
+  static doesInfohashExistCached = memoizee(VideoStreamingPlaylistModel.doesInfohashExist.bind(VideoStreamingPlaylistModel), {
     promise: true,
     max: MEMOIZE_LENGTH.INFO_HASH_EXISTS,
     maxAge: MEMOIZE_TTL.INFO_HASH_EXISTS

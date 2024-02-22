@@ -1,10 +1,9 @@
 import { Op, QueryTypes } from 'sequelize'
-import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { BelongsTo, Column, CreatedAt, ForeignKey, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { MServerBlocklist, MServerBlocklistAccountServer, MServerBlocklistFormattable } from '@server/types/models/index.js'
 import { ServerBlock } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { AccountModel } from '../account/account.js'
-import { createSafeIn, getSort, searchAttribute } from '../shared/index.js'
+import { SequelizeModel, createSafeIn, getSort, searchAttribute } from '../shared/index.js'
 import { ServerModel } from './server.js'
 
 enum ScopeNames {
@@ -43,7 +42,7 @@ enum ScopeNames {
     }
   ]
 })
-export class ServerBlocklistModel extends Model<Partial<AttributesOnly<ServerBlocklistModel>>> {
+export class ServerBlocklistModel extends SequelizeModel<ServerBlocklistModel> {
 
   @CreatedAt
   createdAt: Date

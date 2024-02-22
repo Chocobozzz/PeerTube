@@ -189,9 +189,9 @@ export class ApiCache {
     const self = this
 
     res.locals.apicache = {
-      write: res.write,
-      writeHead: res.writeHead,
-      end: res.end,
+      write: res.write.bind(res),
+      writeHead: res.writeHead.bind(res),
+      end: res.end.bind(res),
       cacheable: true,
       content: undefined,
       headers: undefined

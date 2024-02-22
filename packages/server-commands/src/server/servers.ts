@@ -35,6 +35,7 @@ async function cleanupTests (servers: PeerTubeServer[]) {
   for (const server of servers) {
     if (!server) continue
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     p = p.concat(server.servers.cleanupTests())
   }
 

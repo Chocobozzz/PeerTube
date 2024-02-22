@@ -1,4 +1,4 @@
-import { FindOptions, Op, Order, QueryTypes, Sequelize, Transaction } from 'sequelize'
+import { Op, Order, QueryTypes, Sequelize, Transaction } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -7,9 +7,7 @@ import {
   DataType,
   ForeignKey,
   HasMany,
-  Is,
-  Model,
-  Scopes,
+  Is, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -18,7 +16,6 @@ import { ActivityTagObject, ActivityTombstoneObject, VideoComment, VideoCommentA
 import { extractMentions } from '@server/helpers/mentions.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MAccount, MAccountId, MUserAccountId } from '@server/types/models/index.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
 import {
@@ -38,7 +35,7 @@ import {
 import { VideoCommentAbuseModel } from '../abuse/video-comment-abuse.js'
 import { AccountModel } from '../account/account.js'
 import { ActorModel } from '../actor/actor.js'
-import { buildLocalAccountIdsIn, buildSQLAttributes, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, buildLocalAccountIdsIn, buildSQLAttributes, throwIfNotValid } from '../shared/index.js'
 import { ListVideoCommentsOptions, VideoCommentListQueryBuilder } from './sql/comment/video-comment-list-query-builder.js'
 import { VideoChannelModel } from './video-channel.js'
 import { VideoModel } from './video.js'
@@ -123,7 +120,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoCommentModel>>> {
+export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
   @CreatedAt
   createdAt: Date
 
@@ -216,46 +213,43 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
 
   // ---------------------------------------------------------------------------
 
-  static loadById (id: number, t?: Transaction): Promise<MComment> {
-    const query: FindOptions = {
+  static loadById (id: number, transaction?: Transaction): Promise<MComment> {
+    const query = {
       where: {
         id
-      }
+      },
+      transaction
     }
-
-    if (t !== undefined) query.transaction = t
 
     return VideoCommentModel.findOne(query)
   }
 
-  static loadByIdAndPopulateVideoAndAccountAndReply (id: number, t?: Transaction): Promise<MCommentOwnerVideoReply> {
-    const query: FindOptions = {
+  static loadByIdAndPopulateVideoAndAccountAndReply (id: number, transaction?: Transaction): Promise<MCommentOwnerVideoReply> {
+    const query = {
       where: {
         id
-      }
+      },
+      transaction
     }
-
-    if (t !== undefined) query.transaction = t
 
     return VideoCommentModel
       .scope([ ScopeNames.WITH_VIDEO, ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_IN_REPLY_TO ])
       .findOne(query)
   }
 
-  static loadByUrlAndPopulateAccountAndVideo (url: string, t?: Transaction): Promise<MCommentOwnerVideo> {
-    const query: FindOptions = {
+  static loadByUrlAndPopulateAccountAndVideo (url: string, transaction?: Transaction): Promise<MCommentOwnerVideo> {
+    const query = {
       where: {
         url
-      }
+      },
+      transaction
     }
-
-    if (t !== undefined) query.transaction = t
 
     return VideoCommentModel.scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEO ]).findOne(query)
   }
 
-  static loadByUrlAndPopulateReplyAndVideoUrlAndAccount (url: string, t?: Transaction): Promise<MCommentOwnerReplyVideoLight> {
-    const query: FindOptions = {
+  static loadByUrlAndPopulateReplyAndVideoUrlAndAccount (url: string, transaction?: Transaction): Promise<MCommentOwnerReplyVideoLight> {
+    const query = {
       where: {
         url
       },
@@ -264,10 +258,9 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
           attributes: [ 'id', 'url' ],
           model: VideoModel.unscoped()
         }
-      ]
+      ],
+      transaction
     }
-
-    if (t !== undefined) query.transaction = t
 
     return VideoCommentModel.scope([ ScopeNames.WITH_IN_REPLY_TO, ScopeNames.WITH_ACCOUNT ]).findOne(query)
   }

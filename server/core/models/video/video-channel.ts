@@ -1,6 +1,5 @@
 import { forceNumber, pick } from '@peertube/peertube-core-utils'
 import { ActivityPubActor, VideoChannel, VideoChannelSummary } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { CONFIG } from '@server/initializers/config.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { MAccountHost } from '@server/types/models/index.js'
@@ -19,9 +18,7 @@ import {
   DefaultScope,
   ForeignKey,
   HasMany,
-  Is,
-  Model,
-  Scopes,
+  Is, Scopes,
   Sequelize,
   Table,
   UpdatedAt
@@ -47,6 +44,7 @@ import { ActorImageModel } from '../actor/actor-image.js'
 import { ActorModel, unusedActorAttributesForAPI } from '../actor/actor.js'
 import { ServerModel } from '../server/server.js'
 import {
+  SequelizeModel,
   buildServerIdsFollowedBy,
   buildTrigramSearchIndex,
   createSimilarityAttribute,
@@ -352,7 +350,7 @@ export type SummaryOptions = {
     }
   ]
 })
-export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannelModel>>> {
+export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
 
   @AllowNull(false)
   @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelDisplayNameValid, 'name'))

@@ -85,7 +85,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   getEmojiMarkupList () {
     if (this.emojiMarkupList) return this.emojiMarkupList
 
-    const emojiMarkupObjectList = require('markdown-it-emoji/lib/data/light.json')
+    const emojiMarkupObjectList = require('markdown-it-emoji/lib/data/light.mjs').default
 
     this.emojiMarkupList = []
     for (const name of Object.keys(emojiMarkupObjectList)) {

@@ -149,7 +149,7 @@ describe('Test my user API validators', function () {
       await makePutBodyRequest({
         url: server.url,
         path: path + 'me',
-        token: 'super token',
+        token: 'supertoken',
         fields,
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })

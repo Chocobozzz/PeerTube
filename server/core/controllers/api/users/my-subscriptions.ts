@@ -184,7 +184,7 @@ async function getUserSubscriptionVideos (req: express.Request, res: express.Res
   }, 'filter:api.user.me.subscription-videos.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
-    VideoModel.listForApi,
+    VideoModel.listForApi.bind(VideoModel),
     apiOptions,
     'filter:api.user.me.subscription-videos.list.result'
   )

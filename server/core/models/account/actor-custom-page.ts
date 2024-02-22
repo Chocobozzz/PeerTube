@@ -1,7 +1,8 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { CustomPage } from '@peertube/peertube-models'
 import { ActorModel } from '../actor/actor.js'
 import { getServerActor } from '../application/application.js'
+import { SequelizeModel } from '../shared/index.js'
 
 @Table({
   tableName: 'actorCustomPage',
@@ -12,7 +13,7 @@ import { getServerActor } from '../application/application.js'
     }
   ]
 })
-export class ActorCustomPageModel extends Model {
+export class ActorCustomPageModel extends SequelizeModel<ActorCustomPageModel> {
 
   @AllowNull(true)
   @Column(DataType.TEXT)

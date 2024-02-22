@@ -109,6 +109,7 @@
     "linkifyjs": "^4.0.2",
     "lodash-es": "^4.17.4",
     "markdown-it": "14.0.0",
+    "markdown-it-emoji": "^3.0.0",
     "mini-css-extract-plugin": "^2.2.0",
     "ngx-uploadx": "^6.1.0",
     "path-browserify": "^1.0.0",

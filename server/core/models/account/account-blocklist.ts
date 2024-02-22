@@ -1,12 +1,11 @@
 import { FindOptions, Op, QueryTypes } from 'sequelize'
-import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { BelongsTo, Column, CreatedAt, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountBlock } from '@peertube/peertube-models'
 import { handlesToNameAndHost } from '@server/helpers/actors.js'
 import { MAccountBlocklist, MAccountBlocklistFormattable } from '@server/types/models/index.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { ActorModel } from '../actor/actor.js'
 import { ServerModel } from '../server/server.js'
-import { createSafeIn, getSort, searchAttribute } from '../shared/index.js'
+import { SequelizeModel, createSafeIn, getSort, searchAttribute } from '../shared/index.js'
 import { AccountModel } from './account.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 
@@ -22,7 +21,7 @@ import { WEBSERVER } from '@server/initializers/constants.js'
     }
   ]
 })
-export class AccountBlocklistModel extends Model<Partial<AttributesOnly<AccountBlocklistModel>>> {
+export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel> {
 
   @CreatedAt
   createdAt: Date

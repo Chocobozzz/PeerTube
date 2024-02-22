@@ -1,7 +1,6 @@
 import { FindOptions, Op } from 'sequelize'
-import { AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { MUserAccountId, MUserExport } from '@server/types/models/index.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { UserModel } from './user.js'
 import { getSort } from '../shared/sort.js'
 import { UserExportState, type UserExport, type UserExportStateType, type FileStorageType, FileStorage } from '@peertube/peertube-models'
@@ -18,6 +17,7 @@ import { join } from 'path'
 import jwt from 'jsonwebtoken'
 import { CONFIG } from '@server/initializers/config.js'
 import { removeUserExportObjectStorage } from '@server/lib/object-storage/user-export.js'
+import { SequelizeModel } from '../shared/sequelize-type.js'
 
 @Table({
   tableName: 'userExport',
@@ -31,7 +31,7 @@ import { removeUserExportObjectStorage } from '@server/lib/object-storage/user-e
     }
   ]
 })
-export class UserExportModel extends Model<Partial<AttributesOnly<UserExportModel>>> {
+export class UserExportModel extends SequelizeModel<UserExportModel> {
   @CreatedAt
   createdAt: Date
 

@@ -18,8 +18,8 @@ async function waitJobs (
 
   let servers: PeerTubeServer[]
 
-  if (Array.isArray(serversArg) === false) servers = [ serversArg as PeerTubeServer ]
-  else servers = serversArg as PeerTubeServer[]
+  if (Array.isArray(serversArg) === false) servers = [ serversArg ]
+  else servers = serversArg
 
   const states: JobState[] = [ 'waiting', 'active' ]
   if (!skipDelayed) states.push('delayed')

@@ -1,10 +1,9 @@
 import { col, fn, QueryTypes, Transaction } from 'sequelize'
-import { AllowNull, BelongsToMany, Column, CreatedAt, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsToMany, Column, CreatedAt, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import { VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { MTag } from '@server/types/models/index.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isVideoTagValid } from '../../helpers/custom-validators/videos.js'
-import { throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { VideoTagModel } from './video-tag.js'
 import { VideoModel } from './video.js'
 
@@ -22,7 +21,7 @@ import { VideoModel } from './video.js'
     }
   ]
 })
-export class TagModel extends Model<Partial<AttributesOnly<TagModel>>> {
+export class TagModel extends SequelizeModel<TagModel> {
 
   @AllowNull(false)
   @Is('VideoTag', value => throwIfNotValid(value, isVideoTagValid, 'tag'))

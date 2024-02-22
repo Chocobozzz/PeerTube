@@ -244,6 +244,7 @@ class SettingsButton extends Button {
 
     // Hide children to avoid sub menus stacking on top of each other
     // or having multiple menus open
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     settingsMenuItem.on('click', videojs.bind(this, this.hideChildren))
 
     // Whether to add or remove selected class on the settings sub menu element

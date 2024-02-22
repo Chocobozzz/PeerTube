@@ -67,6 +67,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.opened = true
 
     document.querySelector('nav').scrollTo(0, 0) // Reset menu scroll to easy lock
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     document.querySelector('nav').addEventListener('scroll', this.onMenuScrollEvent)
   }
 
@@ -74,6 +75,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.loaded = false
     this.opened = false
 
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     document.querySelector('nav').removeEventListener('scroll', this.onMenuScrollEvent)
   }
 

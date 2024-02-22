@@ -10,7 +10,6 @@ import {
   type UserAdminFlagType,
   type UserRoleType
 } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { TokensCache } from '@server/lib/auth/tokens-cache.js'
 import { LiveQuotaStore } from '@server/lib/live/index.js'
 import {
@@ -37,9 +36,7 @@ import {
   HasOne,
   Is,
   IsEmail,
-  IsUUID,
-  Model,
-  Scopes,
+  IsUUID, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -70,7 +67,7 @@ import { ActorFollowModel } from '../actor/actor-follow.js'
 import { ActorImageModel } from '../actor/actor-image.js'
 import { ActorModel } from '../actor/actor.js'
 import { OAuthTokenModel } from '../oauth/oauth-token.js'
-import { getAdminUsersSort, throwIfNotValid } from '../shared/index.js'
+import { getAdminUsersSort, SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoImportModel } from '../video/video-import.js'
 import { VideoLiveModel } from '../video/video-live.js'
@@ -278,7 +275,7 @@ enum ScopeNames {
     }
   ]
 })
-export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
+export class UserModel extends SequelizeModel<UserModel> {
 
   @AllowNull(true)
   @Is('UserPassword', value => throwIfNotValid(value, isUserPasswordValid, 'user password', true))

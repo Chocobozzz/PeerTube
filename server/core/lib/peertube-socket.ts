@@ -42,14 +42,16 @@ class PeerTubeSocket {
 
     this.liveVideosNamespace = io.of('/live-videos')
       .on('connection', socket => {
-        socket.on('subscribe', ({ videoId }) => {
+        socket.on('subscribe', params => {
+          const videoId = params.videoId + ''
           if (!isIdValid(videoId)) return
 
           /* eslint-disable @typescript-eslint/no-floating-promises */
           socket.join(videoId)
         })
 
-        socket.on('unsubscribe', ({ videoId }) => {
+        socket.on('unsubscribe', params => {
+          const videoId = params.videoId + ''
           if (!isIdValid(videoId)) return
 
           /* eslint-disable @typescript-eslint/no-floating-promises */
@@ -93,7 +95,7 @@ class PeerTubeSocket {
     logger.debug('Sending video live new state notification of %s.', video.url, { state: video.state })
 
     this.liveVideosNamespace
-      .in(video.id)
+      .in(video.id + '')
       .emit(type, data)
   }
 
@@ -104,7 +106,7 @@ class PeerTubeSocket {
     logger.debug('Sending video live views update notification of %s.', video.url, { viewers: numViewers })
 
     this.liveVideosNamespace
-      .in(video.id)
+      .in(video.id + '')
       .emit(type, data)
   }
 

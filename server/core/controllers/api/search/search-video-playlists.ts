@@ -93,7 +93,7 @@ async function searchVideoPlaylistsDB (query: VideoPlaylistsSearchQueryAfterSani
   }, 'filter:api.search.video-playlists.local.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
-    VideoPlaylistModel.searchForApi,
+    VideoPlaylistModel.searchForApi.bind(VideoPlaylistModel),
     apiOptions,
     'filter:api.search.video-playlists.local.list.result'
   )

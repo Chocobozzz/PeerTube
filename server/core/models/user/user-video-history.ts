@@ -1,10 +1,10 @@
 import { DestroyOptions, Op, Transaction } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, IsInt, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, IsInt, Table, UpdatedAt } from 'sequelize-typescript'
 import { ResultList } from '@peertube/peertube-models'
 import { MUserAccountId, MUserId } from '@server/types/models/index.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { VideoModel } from '../video/video.js'
 import { UserModel } from './user.js'
+import { SequelizeModel } from '../shared/sequelize-type.js'
 
 @Table({
   tableName: 'userVideoHistory',
@@ -21,7 +21,7 @@ import { UserModel } from './user.js'
     }
   ]
 })
-export class UserVideoHistoryModel extends Model<Partial<AttributesOnly<UserVideoHistoryModel>>> {
+export class UserVideoHistoryModel extends SequelizeModel<UserVideoHistoryModel> {
   @CreatedAt
   createdAt: Date
 

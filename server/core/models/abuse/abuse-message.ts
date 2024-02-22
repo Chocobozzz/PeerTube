@@ -1,11 +1,10 @@
 import { FindOptions } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import { isAbuseMessageValid } from '@server/helpers/custom-validators/abuses.js'
 import { MAbuseMessage, MAbuseMessageFormattable } from '@server/types/models/index.js'
 import { AbuseMessage } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account.js'
-import { getSort, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
 import { AbuseModel } from './abuse.js'
 
 @Table({
@@ -19,7 +18,7 @@ import { AbuseModel } from './abuse.js'
     }
   ]
 })
-export class AbuseMessageModel extends Model<Partial<AttributesOnly<AbuseMessageModel>>> {
+export class AbuseMessageModel extends SequelizeModel<AbuseMessageModel> {
 
   @AllowNull(false)
   @Is('AbuseMessage', value => throwIfNotValid(value, isAbuseMessageValid, 'message'))

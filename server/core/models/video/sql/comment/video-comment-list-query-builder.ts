@@ -23,7 +23,7 @@ export interface ListVideoCommentsOptions {
   isLocal?: boolean
   onLocalVideo?: boolean
   onPublicVideo?: boolean
-  videoAccountOwnerId?: boolean
+  videoAccountOwnerId?: number
 
   search?: string
   searchAccount?: string

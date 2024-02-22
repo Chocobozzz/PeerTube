@@ -104,22 +104,22 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
 
   private setRating (nextRating: UserVideoRateType) {
     const ratingMethods: { [id in UserVideoRateType]: (id: string, videoPassword: string) => Observable<any> } = {
-      like: this.videoService.setVideoLike,
-      dislike: this.videoService.setVideoDislike,
-      none: this.videoService.unsetVideoLike
+      like: this.videoService.setVideoLike.bind(this.videoService),
+      dislike: this.videoService.setVideoDislike.bind(this.videoService),
+      none: this.videoService.unsetVideoLike.bind(this.videoService)
     }
 
-    ratingMethods[nextRating].call(this.videoService, this.video.uuid, this.videoPassword)
-          .subscribe({
-            next: () => {
-              // Update the video like attribute
-              this.updateVideoRating(this.userRating, nextRating)
-              this.userRating = nextRating
-              this.rateUpdated.emit(this.userRating)
-            },
+    ratingMethods[nextRating](this.video.uuid, this.videoPassword)
+      .subscribe({
+        next: () => {
+          // Update the video like attribute
+          this.updateVideoRating(this.userRating, nextRating)
+          this.userRating = nextRating
+          this.rateUpdated.emit(this.userRating)
+        },
 
-            error: err => this.notifier.error(err.message)
-          })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private updateVideoRating (oldRating: UserVideoRateType, newRating: UserVideoRateType) {

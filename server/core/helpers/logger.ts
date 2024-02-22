@@ -121,10 +121,10 @@ const bunyanLogger = {
 
 // ---------------------------------------------------------------------------
 
-type LoggerTags = { tags: string[] }
-type LoggerTagsFn = (...tags: string[]) => LoggerTags
-function loggerTagsFactory (...defaultTags: string[]): LoggerTagsFn {
-  return (...tags: string[]) => {
+type LoggerTags = { tags: (string | number)[] }
+type LoggerTagsFn = (...tags: (string | number)[]) => LoggerTags
+function loggerTagsFactory (...defaultTags: (string | number)[]): LoggerTagsFn {
+  return (...tags: (string | number)[]) => {
     return { tags: defaultTags.concat(tags) }
   }
 }

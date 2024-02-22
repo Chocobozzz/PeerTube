@@ -2,13 +2,14 @@ import { type VideoPrivacyType } from '@peertube/peertube-models'
 import { isVideoPrivacyValid } from '@server/helpers/custom-validators/videos.js'
 import { MLiveReplaySetting } from '@server/types/models/video/video-live-replay-setting.js'
 import { Transaction } from 'sequelize'
-import { AllowNull, Column, CreatedAt, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, Column, CreatedAt, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import { throwIfNotValid } from '../shared/sequelize-helpers.js'
+import { SequelizeModel } from '../shared/index.js'
 
 @Table({
   tableName: 'videoLiveReplaySetting'
 })
-export class VideoLiveReplaySettingModel extends Model<VideoLiveReplaySettingModel> {
+export class VideoLiveReplaySettingModel extends SequelizeModel<VideoLiveReplaySettingModel> {
 
   @CreatedAt
   createdAt: Date

@@ -128,7 +128,7 @@ async function listVideoThreads (req: express.Request, res: express.Response) {
     }, 'filter:api.video-threads.list.params')
 
     resultList = await Hooks.wrapPromiseFun(
-      VideoCommentModel.listThreadsForApi,
+      VideoCommentModel.listThreadsForApi.bind(VideoCommentModel),
       apiOptions,
       'filter:api.video-threads.list.result'
     )
@@ -160,7 +160,7 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
     }, 'filter:api.video-thread-comments.list.params')
 
     resultList = await Hooks.wrapPromiseFun(
-      VideoCommentModel.listThreadCommentsForApi,
+      VideoCommentModel.listThreadCommentsForApi.bind(VideoCommentModel),
       apiOptions,
       'filter:api.video-thread-comments.list.result'
     )

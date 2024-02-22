@@ -1,5 +1,5 @@
 import { QueryTypes } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, HasMany, IsUUID, Model, Table } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, HasMany, IsUUID, Table } from 'sequelize-typescript'
 import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
 import { buildGroupByAndBoundaries } from '@server/lib/timeserie.js'
 import { MLocalVideoViewer, MLocalVideoViewerWithWatchSections, MVideo } from '@server/types/models/index.js'
@@ -10,9 +10,9 @@ import {
   VideoStatsTimeserieMetric,
   WatchActionObject
 } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { VideoModel } from '../video/video.js'
 import { LocalVideoViewerWatchSectionModel } from './local-video-viewer-watch-section.js'
+import { SequelizeModel } from '../shared/index.js'
 
 /**
  *
@@ -34,7 +34,7 @@ import { LocalVideoViewerWatchSectionModel } from './local-video-viewer-watch-se
     }
   ]
 })
-export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVideoViewerModel>>> {
+export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel> {
   @CreatedAt
   createdAt: Date
 

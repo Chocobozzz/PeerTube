@@ -86,7 +86,7 @@ class LiveManager {
         .catch(err => logger.error('Cannot handle sessions.', { err, ...lTags(sessionId) }))
     })
 
-    events.on('donePublish', sessionId => {
+    events.on('donePublish', (sessionId: string) => {
       logger.info('Live session ended.', { sessionId, ...lTags(sessionId) })
 
       // Force session aborting, so we kill ffmpeg even if it still has data to process (slow CPU)
@@ -405,7 +405,7 @@ class LiveManager {
       })
   }
 
-  private async publishAndFederateLive (live: MVideoLiveVideo, localLTags: { tags: string[] }) {
+  private async publishAndFederateLive (live: MVideoLiveVideo, localLTags: { tags: (string | number)[] }) {
     const videoId = live.videoId
 
     try {

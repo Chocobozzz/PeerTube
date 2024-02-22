@@ -1,8 +1,7 @@
 import { Transaction } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { VideoSource } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
-import { getSort } from '../shared/index.js'
+import { SequelizeModel, getSort } from '../shared/index.js'
 import { VideoModel } from './video.js'
 
 @Table({
@@ -16,7 +15,7 @@ import { VideoModel } from './video.js'
     }
   ]
 })
-export class VideoSourceModel extends Model<Partial<AttributesOnly<VideoSourceModel>>> {
+export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
   @CreatedAt
   createdAt: Date
 

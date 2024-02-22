@@ -19,7 +19,6 @@ import {
   type VideoStateType
 } from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { LiveManager } from '@server/lib/live/live-manager.js'
@@ -58,9 +57,7 @@ import {
   Is,
   IsInt,
   IsUUID,
-  Min,
-  Model,
-  Scopes,
+  Min, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -118,7 +115,15 @@ import { VideoRedundancyModel } from '../redundancy/video-redundancy.js'
 import { ServerModel } from '../server/server.js'
 import { TrackerModel } from '../server/tracker.js'
 import { VideoTrackerModel } from '../server/video-tracker.js'
-import { buildTrigramSearchIndex, buildWhereIdOrUUID, getVideoSort, isOutdated, setAsUpdated, throwIfNotValid } from '../shared/index.js'
+import {
+  SequelizeModel,
+  buildTrigramSearchIndex,
+  buildWhereIdOrUUID,
+  getVideoSort,
+  isOutdated,
+  setAsUpdated,
+  throwIfNotValid
+} from '../shared/index.js'
 import { UserVideoHistoryModel } from '../user/user-video-history.js'
 import { UserModel } from '../user/user.js'
 import { VideoViewModel } from '../view/video-view.js'
@@ -452,7 +457,7 @@ export type ForAPIOptions = {
     }
   ]
 })
-export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
+export class VideoModel extends SequelizeModel<VideoModel> {
 
   @AllowNull(false)
   @Default(DataType.UUIDV4)

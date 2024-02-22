@@ -200,7 +200,7 @@ async function listVideoChannels (req: express.Request, res: express.Response) {
   }, 'filter:api.video-channels.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
-    VideoChannelModel.listForApi,
+    VideoChannelModel.listForApi.bind(VideoChannelModel),
     apiOptions,
     'filter:api.video-channels.list.result'
   )
@@ -409,7 +409,7 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
   }, 'filter:api.video-channels.videos.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
-    VideoModel.listForApi,
+    VideoModel.listForApi.bind(VideoModel),
     apiOptions,
     'filter:api.video-channels.videos.list.result'
   )

@@ -7,7 +7,7 @@ import { MVideoWithAllFiles } from '@server/types/models/index.js'
 export async function moveToJob (options: {
   jobId: string
   videoUUID: string
-  loggerTags: string[]
+  loggerTags: (number | string)[]
 
   moveWebVideoFiles: (video: MVideoWithAllFiles) => Promise<void>
   moveHLSFiles: (video: MVideoWithAllFiles) => Promise<void>

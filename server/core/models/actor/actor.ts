@@ -17,9 +17,7 @@ import {
   ForeignKey,
   HasMany,
   HasOne,
-  Is,
-  Model,
-  Scopes,
+  Is, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -58,7 +56,7 @@ import {
 import { AccountModel } from '../account/account.js'
 import { getServerActor } from '../application/application.js'
 import { ServerModel } from '../server/server.js'
-import { buildSQLAttributes, isOutdated, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, buildSQLAttributes, isOutdated, throwIfNotValid } from '../shared/index.js'
 import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoModel } from '../video/video.js'
 import { ActorFollowModel } from './actor-follow.js'
@@ -165,7 +163,7 @@ export const unusedActorAttributesForAPI: (keyof AttributesOnly<ActorModel>)[] =
     }
   ]
 })
-export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
+export class ActorModel extends SequelizeModel<ActorModel> {
 
   @AllowNull(false)
   @Column(DataType.ENUM(...Object.values(ACTIVITY_PUB_ACTOR_TYPES)))

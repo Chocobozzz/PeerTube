@@ -12,7 +12,6 @@ import {
   UserVideoAbuse,
   type AbuseStateType
 } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isAbuseModerationCommentValid, isAbuseReasonValid, isAbuseStateValid } from '@server/helpers/custom-validators/abuses.js'
 import invert from 'lodash-es/invert.js'
 import { Op, QueryTypes, literal } from 'sequelize'
@@ -25,9 +24,7 @@ import {
   Default,
   ForeignKey,
   HasOne,
-  Is,
-  Model,
-  Scopes,
+  Is, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -41,7 +38,7 @@ import {
   MUserAccountId
 } from '../../types/models/index.js'
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account.js'
-import { getSort, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, getSort, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
 import { ThumbnailModel } from '../video/thumbnail.js'
 import { VideoBlacklistModel } from '../video/video-blacklist.js'
 import { SummaryOptions as ChannelSummaryOptions, VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel.js'
@@ -195,7 +192,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class AbuseModel extends Model<Partial<AttributesOnly<AbuseModel>>> {
+export class AbuseModel extends SequelizeModel<AbuseModel> {
 
   @AllowNull(false)
   @Default(null)

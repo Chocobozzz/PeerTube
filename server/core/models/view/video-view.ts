@@ -1,7 +1,7 @@
 import { literal, Op } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table } from 'sequelize-typescript'
 import { VideoModel } from '../video/video.js'
+import { SequelizeModel } from '../shared/index.js'
 
 /**
  *
@@ -22,7 +22,7 @@ import { VideoModel } from '../video/video.js'
     }
   ]
 })
-export class VideoViewModel extends Model<Partial<AttributesOnly<VideoViewModel>>> {
+export class VideoViewModel extends SequelizeModel<VideoViewModel> {
   @CreatedAt
   createdAt: Date
 

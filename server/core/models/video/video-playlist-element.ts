@@ -9,9 +9,7 @@ import {
   ForeignKey,
   Is,
   IsInt,
-  Min,
-  Model,
-  Table,
+  Min, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import validator from 'validator'
@@ -32,11 +30,10 @@ import {
   MVideoPlaylistElementVideoThumbnail,
   MVideoPlaylistElementVideoUrl
 } from '@server/types/models/video/video-playlist-element.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
 import { AccountModel } from '../account/account.js'
-import { getSort, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
 import { VideoPlaylistModel } from './video-playlist.js'
 import { ForAPIOptions, ScopeNames as VideoScopeNames, VideoModel } from './video.js'
 
@@ -55,7 +52,7 @@ import { ForAPIOptions, ScopeNames as VideoScopeNames, VideoModel } from './vide
     }
   ]
 })
-export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<VideoPlaylistElementModel>>> {
+export class VideoPlaylistElementModel extends SequelizeModel<VideoPlaylistElementModel> {
   @CreatedAt
   createdAt: Date
 

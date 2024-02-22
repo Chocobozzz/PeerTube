@@ -1,14 +1,14 @@
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
-import { AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { CONFIG } from '@server/initializers/config.js'
 import { MStoryboard, MStoryboardVideo, MVideo } from '@server/types/models/index.js'
 import { Storyboard } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { logger } from '../../helpers/logger.js'
 import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
 import { VideoModel } from './video.js'
 import { Transaction } from 'sequelize'
+import { SequelizeModel } from '../shared/index.js'
 
 @Table({
   tableName: 'storyboard',
@@ -23,7 +23,7 @@ import { Transaction } from 'sequelize'
     }
   ]
 })
-export class StoryboardModel extends Model<Partial<AttributesOnly<StoryboardModel>>> {
+export class StoryboardModel extends SequelizeModel<StoryboardModel> {
 
   @AllowNull(false)
   @Column

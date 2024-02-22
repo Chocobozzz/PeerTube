@@ -102,7 +102,7 @@ async function searchVideoChannelsDB (query: VideoChannelsSearchQueryAfterSaniti
   }, 'filter:api.search.video-channels.local.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
-    VideoChannelModel.searchForApi,
+    VideoChannelModel.searchForApi.bind(VideoChannelModel),
     apiOptions,
     'filter:api.search.video-channels.local.list.result'
   )

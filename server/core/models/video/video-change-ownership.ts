@@ -1,9 +1,8 @@
 import { VideoChangeOwnership, type VideoChangeOwnershipStatusType } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { MVideoChangeOwnershipFormattable, MVideoChangeOwnershipFull } from '@server/types/models/video/video-change-ownership.js'
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from '../account/account.js'
-import { getSort } from '../shared/index.js'
+import { SequelizeModel, getSort } from '../shared/index.js'
 import { VideoModel, ScopeNames as VideoScopeNames } from './video.js'
 
 enum ScopeNames {
@@ -54,7 +53,7 @@ enum ScopeNames {
     ]
   }
 }))
-export class VideoChangeOwnershipModel extends Model<Partial<AttributesOnly<VideoChangeOwnershipModel>>> {
+export class VideoChangeOwnershipModel extends SequelizeModel<VideoChangeOwnershipModel> {
   @CreatedAt
   createdAt: Date
 

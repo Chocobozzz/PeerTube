@@ -10,15 +10,12 @@ import {
   DefaultScope,
   ForeignKey,
   HasMany,
-  Is,
-  Model,
-  Scopes,
+  Is, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { Account, AccountSummary } from '@peertube/peertube-models'
 import { ModelCache } from '@server/models/shared/model-cache.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts.js'
 import { CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants.js'
 import { sendDeleteActor } from '../../lib/activitypub/send/send-delete.js'
@@ -36,7 +33,7 @@ import { ActorModel } from '../actor/actor.js'
 import { ApplicationModel } from '../application/application.js'
 import { ServerBlocklistModel } from '../server/server-blocklist.js'
 import { ServerModel } from '../server/server.js'
-import { buildSQLAttributes, getSort, throwIfNotValid } from '../shared/index.js'
+import { buildSQLAttributes, getSort, SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { UserModel } from '../user/user.js'
 import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoCommentModel } from '../video/video-comment.js'
@@ -144,7 +141,7 @@ export type SummaryOptions = {
     }
   ]
 })
-export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
+export class AccountModel extends SequelizeModel<AccountModel> {
 
   @AllowNull(false)
   @Column

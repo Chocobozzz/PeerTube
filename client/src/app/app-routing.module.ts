@@ -200,7 +200,7 @@ routes.push({
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-      useHash: Boolean(history.pushState) === false,
+      useHash: false,
       // Redefined in app component
       scrollPositionRestoration: 'disabled',
       preloadingStrategy: PreloadSelectedModulesList,

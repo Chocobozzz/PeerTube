@@ -1,11 +1,10 @@
 import { VideoBlacklist, type VideoBlacklistType_Type } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { MVideoBlacklist, MVideoBlacklistFormattable } from '@server/types/models/index.js'
 import { FindOptions } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist.js'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
-import { getBlacklistSort, searchAttribute, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, getBlacklistSort, searchAttribute, throwIfNotValid } from '../shared/index.js'
 import { ThumbnailModel } from './thumbnail.js'
 import { SummaryOptions, VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel.js'
 import { VideoModel } from './video.js'
@@ -19,7 +18,7 @@ import { VideoModel } from './video.js'
     }
   ]
 })
-export class VideoBlacklistModel extends Model<Partial<AttributesOnly<VideoBlacklistModel>>> {
+export class VideoBlacklistModel extends SequelizeModel<VideoBlacklistModel> {
 
   @AllowNull(true)
   @Is('VideoBlacklistReason', value => throwIfNotValid(value, isVideoBlacklistReasonValid, 'reason', true))

@@ -95,7 +95,7 @@ type TaskProcessorOptions <T extends VideoStudioTaskPayload = VideoStudioTaskPay
   outputPath: string
   video: MVideo
   task: T
-  lTags: { tags: string[] }
+  lTags: { tags: (string | number)[] }
 }
 
 const taskProcessors: { [id in VideoStudioTask['name']]: (options: TaskProcessorOptions) => Promise<any> } = {

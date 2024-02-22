@@ -9,7 +9,6 @@ import {
   type VideoPlaylistType_Type
 } from '@peertube/peertube-models'
 import { buildUUID, uuidToShort } from '@peertube/peertube-node-utils'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
 import { MAccountId, MChannelId } from '@server/types/models/index.js'
 import { join } from 'path'
@@ -25,9 +24,7 @@ import {
   HasMany,
   HasOne,
   Is,
-  IsUUID,
-  Model,
-  Scopes,
+  IsUUID, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -58,6 +55,7 @@ import {
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account.js'
 import { ActorModel } from '../actor/actor.js'
 import {
+  SequelizeModel,
   buildServerIdsFollowedBy,
   buildTrigramSearchIndex,
   buildWhereIdOrUUID,
@@ -287,7 +285,7 @@ function getVideoLengthSelect () {
     }
   ]
 })
-export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlaylistModel>>> {
+export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   @CreatedAt
   createdAt: Date
 

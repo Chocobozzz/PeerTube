@@ -133,7 +133,7 @@ async function downloadVideoFile (req: express.Request, res: express.Response) {
 async function downloadHLSVideoFile (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
   const streamingPlaylist = getHLSPlaylist(video)
-  if (!streamingPlaylist) return res.status(HttpStatusCode.NOT_FOUND_404).end
+  if (!streamingPlaylist) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
   const videoFile = getVideoFile(req, streamingPlaylist.VideoFiles)
   if (!videoFile) {

@@ -1,5 +1,4 @@
 import { UserRegistration, type UserRegistrationStateType } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import {
   isRegistrationModerationResponseValid,
   isRegistrationReasonValid,
@@ -19,13 +18,11 @@ import {
   DataType,
   ForeignKey,
   Is,
-  IsEmail,
-  Model,
-  Table,
+  IsEmail, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { isUserDisplayNameValid, isUserEmailVerifiedValid, isUserPasswordValid } from '../../helpers/custom-validators/users.js'
-import { getSort, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, getSort, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
 import { UserModel } from './user.js'
 import { forceNumber } from '@peertube/peertube-core-utils'
 
@@ -50,7 +47,7 @@ import { forceNumber } from '@peertube/peertube-core-utils'
     }
   ]
 })
-export class UserRegistrationModel extends Model<Partial<AttributesOnly<UserRegistrationModel>>> {
+export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel> {
 
   @AllowNull(false)
   @Is('RegistrationState', value => throwIfNotValid(value, isRegistrationStateValid, 'state'))

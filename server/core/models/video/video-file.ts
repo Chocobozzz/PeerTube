@@ -1,5 +1,4 @@
 import { ActivityVideoUrlObject, VideoResolution, FileStorage, type FileStorageType } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { logger } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -27,9 +26,7 @@ import {
   DefaultScope,
   ForeignKey,
   HasMany,
-  Is,
-  Model,
-  Scopes,
+  Is, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -51,7 +48,7 @@ import {
 } from '../../initializers/constants.js'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../types/models/video/video-file.js'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy.js'
-import { doesExist, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, doesExist, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
 import { VideoModel } from './video.js'
 import { getVideoFileMimeType } from '@server/lib/video-file.js'
@@ -158,7 +155,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>>> {
+export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   @CreatedAt
   createdAt: Date
 
@@ -257,7 +254,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   })
   RedundancyVideos: Awaited<VideoRedundancyModel>[]
 
-  static doesInfohashExistCached = memoizee(VideoFileModel.doesInfohashExist, {
+  static doesInfohashExistCached = memoizee(VideoFileModel.doesInfohashExist.bind(VideoFileModel), {
     promise: true,
     max: MEMOIZE_LENGTH.INFO_HASH_EXISTS,
     maxAge: MEMOIZE_TTL.INFO_HASH_EXISTS
