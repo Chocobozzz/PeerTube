@@ -210,7 +210,13 @@ export class PluginManager implements ServerHook {
         return true
       }
     }
+    console.log('auth token external : ' , token)
+    return true
+  }
 
+  async isTokenValidNinjacart (token: string) {
+   
+    console.log('auth token external : ' , token)
     return true
   }
 

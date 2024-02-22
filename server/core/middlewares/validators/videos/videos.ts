@@ -235,7 +235,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
       return res.fail({ message: 'Cannot update privacy of a live that has already started' })
     }
 
-    // Check if the user who did the request is able to update the video
+    //  Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
     if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
 

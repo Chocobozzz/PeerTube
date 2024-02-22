@@ -202,9 +202,9 @@ object_storage:
 
   credentials:
     # You can also use AWS_ACCESS_KEY_ID env variable
-    access_key_id: 'GOOG1EHDHI4G6TE5KSGBFHQAHOKH3ETSBIDY37BWDRDRZQBJTVJ77U5HPSF3V'
+    access_key_id: ''
     # You can also use AWS_SECRET_ACCESS_KEY env variable
-    secret_access_key: 'e2bTFj31PkUamL54wEvsDihKCyCxibJzgt3yS4Sq'
+    secret_access_key: ''
 
   # Maximum amount to upload in one request to object storage
   max_upload_part: 100MB
@@ -217,13 +217,13 @@ object_storage:
 
     # Base url for object URL generation, scheme and host will be replaced by this URL
     # Useful when you want to use a CDN/external proxy
-    base_url: 'http://34.49.197.126' # Example: 'https://mirror.example.com'
+    base_url: 'http://34.49.197.12' # Example: 'https://mirror.example.com'
 
   # Same settings but for web videos
   web_videos:
     bucket_name: 'meshminds'
     prefix: 'web-videos/'
-    base_url: 'http://34.49.197.126'
+    base_url: 'http://34.49.197.12'
 
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'

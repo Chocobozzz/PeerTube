@@ -14,19 +14,19 @@ import { Emailer } from '../../../lib/emailer.js'
 import { Redis } from '../../../lib/redis.js'
 import { buildUser, createUserAccountAndChannelAndPlaylist } from '../../../lib/user.js'
 import {
-  adminUsersSortValidator,
+  // adminUsersSortValidator,
   apiRateLimiter,
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
   ensureUserHasRight,
-  paginationValidator,
+  // paginationValidator,
   setDefaultPagination,
   setDefaultSort,
   userAutocompleteValidator,
   usersAddValidator,
   usersGetValidator,
-  usersListValidator,
+  // usersListValidator,
   usersRemoveValidator,
   usersUpdateValidator
 } from '../../../middlewares/index.js'
@@ -73,12 +73,12 @@ usersRouter.get('/autocomplete',
 
 usersRouter.get('/',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_USERS),
-  paginationValidator,
-  adminUsersSortValidator,
+  //ensureUserHasRight(UserRight.MANAGE_USERS),
+  //paginationValidator,
+  //adminUsersSortValidator,
   setDefaultSort,
   setDefaultPagination,
-  usersListValidator,
+  //usersListValidator,
   asyncMiddleware(listUsers)
 )
 
