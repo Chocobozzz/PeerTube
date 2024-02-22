@@ -2247,9 +2247,9 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1257029815550886575" datatype="html">
+      <trans-unit id="1257029815550886575" datatype="html" xml:space="preserve">
         <source>You can already follow <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> using your favorite tool.</source>
-        <target state="new">You can already follow <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> using your favorite tool.</target>
+        <target state="translated">您已經可以使用您最愛的工具來追蹤 <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">29</context>
@@ -4078,9 +4078,9 @@
           <context context-type="linenumber">172</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7099354443826169799" datatype="html">
+      <trans-unit id="7099354443826169799" datatype="html" xml:space="preserve">
         <source>powered by PeerTube - CopyLeft 2015-2024</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2024</target>
+        <target state="translated">威力本源 PeerTube - 著作傳 2015-2024</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">181</context>
@@ -5911,137 +5911,137 @@
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7996232964209657116" datatype="html">
+      <trans-unit id="7996232964209657116" datatype="html" xml:space="preserve">
         <source>EXPORT</source>
-        <target state="new">EXPORT</target>
+        <target state="translated">匯出</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6327599466774745087" datatype="html">
+      <trans-unit id="6327599466774745087" datatype="html" xml:space="preserve">
         <source>You can request an archive of your account containing:</source>
-        <target state="new">You can request an archive of your account containing:</target>
+        <target state="translated">您可以請求您帳號的封存檔，其中包含了：</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5215128747477502320" datatype="html">
+      <trans-unit id="5215128747477502320" datatype="html" xml:space="preserve">
         <source>Your account settings with avatar file</source>
-        <target state="new">Your account settings with avatar file</target>
+        <target state="translated">您的帳號設定與大頭照檔案</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4189339781940878663" datatype="html">
+      <trans-unit id="4189339781940878663" datatype="html" xml:space="preserve">
         <source>Your channels with banner and avatar files</source>
-        <target state="new">Your channels with banner and avatar files</target>
+        <target state="translated">您的頻道，包含橫幅與大頭照檔案</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3569169060435002504" datatype="html">
+      <trans-unit id="3569169060435002504" datatype="html" xml:space="preserve">
         <source>Your muted accounts and servers</source>
-        <target state="new">Your muted accounts and servers</target>
+        <target state="translated">您的靜音帳號與伺服器</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2084686551517263033" datatype="html">
+      <trans-unit id="2084686551517263033" datatype="html" xml:space="preserve">
         <source>Your comments</source>
-        <target state="new">Your comments</target>
+        <target state="translated">您的留言</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="511089124158737322" datatype="html">
+      <trans-unit id="511089124158737322" datatype="html" xml:space="preserve">
         <source>Your likes and dislikes</source>
-        <target state="new">Your likes and dislikes</target>
+        <target state="translated">您的喜歡與不喜歡</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6661432123838461687" datatype="html">
+      <trans-unit id="6661432123838461687" datatype="html" xml:space="preserve">
         <source>Your subscriptions and followers</source>
-        <target state="new">Your subscriptions and followers</target>
+        <target state="translated">您的訂閱與追蹤者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8728252018840518768" datatype="html">
+      <trans-unit id="8728252018840518768" datatype="html" xml:space="preserve">
         <source>Your video playlists with thumbnail files</source>
-        <target state="new">Your video playlists with thumbnail files</target>
+        <target state="translated">包含縮圖檔案的影片播放清單</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6339334908260162420" datatype="html">
+      <trans-unit id="6339334908260162420" datatype="html" xml:space="preserve">
         <source>Your videos with thumbnail, caption files. Video files can also be included in the archive</source>
-        <target state="new">Your videos with thumbnail, caption files. Video files can also be included in the archive</target>
+        <target state="translated">包含縮圖、字幕檔案的影片。影片檔案也可以包含在封存檔中</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4333560211154634761" datatype="html">
+      <trans-unit id="4333560211154634761" datatype="html" xml:space="preserve">
         <source>The exported data will contain multiple directories:</source>
-        <target state="new">The exported data will contain multiple directories:</target>
+        <target state="translated">匯出的資料將會包含多個目錄：</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3192985534238875835" datatype="html">
+      <trans-unit id="3192985534238875835" datatype="html" xml:space="preserve">
         <source>A directory containing an export in ActivityPub format, readable by any compliant software</source>
-        <target state="new">A directory containing an export in ActivityPub format, readable by any compliant software</target>
+        <target state="translated">包含 ActivityPub 格式匯出的目錄，可由任何相容軟體讀取</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="896330674868470367" datatype="html">
+      <trans-unit id="896330674868470367" datatype="html" xml:space="preserve">
         <source>A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</source>
-        <target state="new">A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</target>
+        <target state="translated">包含自訂 PeerTube JSON 格式的匯出的目錄，可用於在另一個 PeerTube 站台上重新匯入您的帳號</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7743206617778542802" datatype="html">
+      <trans-unit id="7743206617778542802" datatype="html" xml:space="preserve">
         <source>A directory containing static files (thumbnails, avatars, video files etc.)</source>
-        <target state="new">A directory containing static files (thumbnails, avatars, video files etc.)</target>
+        <target state="translated">包含靜態檔案（縮圖、大頭照、影片檔案等）的目錄</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5507694448548293913" datatype="html">
+      <trans-unit id="5507694448548293913" datatype="html" xml:space="preserve">
         <source>You can only request one archive at a time.</source>
-        <target state="new">You can only request one archive at a time.</target>
+        <target state="translated">您一次只能請求一個封存檔。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6448402358500159809" datatype="html">
+      <trans-unit id="6448402358500159809" datatype="html" xml:space="preserve">
         <source>An email will be sent when the export archive is available.</source>
-        <target state="new">An email will be sent when the export archive is available.</target>
+        <target state="translated">當匯出的封存檔可供使用時，將會傳送電子郵件給您。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3973931101896534797" datatype="html">
+      <trans-unit id="3973931101896534797" datatype="html" xml:space="preserve">
         <source>Date</source>
-        <target state="new">Date</target>
+        <target state="translated">日期</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">40</context>
@@ -8264,9 +8264,9 @@
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1243134386580173960" datatype="html">
+      <trans-unit id="1243134386580173960" datatype="html" xml:space="preserve">
         <source>Save video settings</source>
-        <target state="new">Save video settings</target>
+        <target state="translated">儲存影片設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">72</context>
@@ -9092,81 +9092,81 @@
           <context context-type="linenumber">472</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6117138245696620472" datatype="html">
+      <trans-unit id="6117138245696620472" datatype="html" xml:space="preserve">
         <source>USER IMPORT/EXPORT</source>
-        <target state="new">USER IMPORT/EXPORT</target>
+        <target state="translated">使用者匯入/匯出</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">490</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6056998652615283808" datatype="html">
+      <trans-unit id="6056998652615283808" datatype="html" xml:space="preserve">
         <source>Allow your users to import a data archive</source>
-        <target state="new">Allow your users to import a data archive</target>
+        <target state="translated">允許您的使用者匯入資料封存檔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">500</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4091781230315618850" datatype="html">
+      <trans-unit id="4091781230315618850" datatype="html" xml:space="preserve">
         <source>Video quota is checked on import so the user doesn't upload a too big archive file</source>
-        <target state="new">Video quota is checked on import so the user doesn't upload a too big archive file</target>
+        <target state="translated">匯入時會檢查影片配額，因此使用者無法上傳太大的封存檔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">503</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3112747752460656486" datatype="html">
+      <trans-unit id="3112747752460656486" datatype="html" xml:space="preserve">
         <source>Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import</source>
-        <target state="new">Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import</target>
+        <target state="translated">PeerTube 處理匯入時也會檢查每個影片的影片配額（不考慮每日配額）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">504</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4793397386811591255" datatype="html">
+      <trans-unit id="4793397386811591255" datatype="html" xml:space="preserve">
         <source>Allow your users to export their data</source>
-        <target state="new">Allow your users to export their data</target>
+        <target state="translated">允許您的使用者匯出他們的資料</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">518</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="74636758368624456" datatype="html">
+      <trans-unit id="74636758368624456" datatype="html" xml:space="preserve">
         <source>Users can export their PeerTube data in a .zip for backup or re-import. Only one export at a time is allowed per user</source>
-        <target state="new">Users can export their PeerTube data in a .zip for backup or re-import. Only one export at a time is allowed per user</target>
+        <target state="translated">使用者可以以 .zip 格式匯出 PeerTube 資料以進行備份或重新匯入。每個使用者一次僅允許一個匯出</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">521</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7396688046674522189" datatype="html">
+      <trans-unit id="7396688046674522189" datatype="html" xml:space="preserve">
         <source>Max user video quota allowed to generate the export</source>
-        <target state="new">Max user video quota allowed to generate the export</target>
+        <target state="translated">允許產生匯出的最大使用者影片配額</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">527</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1967420418158999705" datatype="html">
+      <trans-unit id="1967420418158999705" datatype="html" xml:space="preserve">
         <source>If the user decides to include the video files in the archive</source>
-        <target state="new">If the user decides to include the video files in the archive</target>
+        <target state="translated">若使用者決定將影片檔案包含在封存檔中</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">529</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8092614302698579026" datatype="html">
+      <trans-unit id="8092614302698579026" datatype="html" xml:space="preserve">
         <source>User export expiration</source>
-        <target state="new">User export expiration</target>
+        <target state="translated">使用者匯出過期</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">543</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5226878764906871194" datatype="html">
+      <trans-unit id="5226878764906871194" datatype="html" xml:space="preserve">
         <source>The archive file is deleted after this period.</source>
-        <target state="new">The archive file is deleted after this period.</target>
+        <target state="translated">在此期限後，封存檔將會被刪除。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">550</context>
@@ -9348,9 +9348,9 @@
           <context context-type="linenumber">704</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4776429682428363094" datatype="html">
+      <trans-unit id="4776429682428363094" datatype="html" xml:space="preserve">
         <source>1 day</source>
-        <target state="new">1 day</target>
+        <target state="translated">1天</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -9360,25 +9360,25 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5730801210509951539" datatype="html">
+      <trans-unit id="5730801210509951539" datatype="html" xml:space="preserve">
         <source>2 days</source>
-        <target state="new">2 days</target>
+        <target state="translated">2天</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8542568275115626925" datatype="html">
+      <trans-unit id="8542568275115626925" datatype="html" xml:space="preserve">
         <source>7 days</source>
-        <target state="new">7 days</target>
+        <target state="translated">7天</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7152095234138763013" datatype="html">
+      <trans-unit id="7152095234138763013" datatype="html" xml:space="preserve">
         <source>30 days</source>
-        <target state="new">30 days</target>
+        <target state="translated">30天</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -11066,9 +11066,9 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1295676134074258121" datatype="html">
+      <trans-unit id="1295676134074258121" datatype="html" xml:space="preserve">
         <source>New video or live from your subscriptions</source>
-        <target state="new">New video or live from your subscriptions</target>
+        <target state="translated">來自您訂閱的新影片或直播</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -12630,9 +12630,9 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="603966779971722604" datatype="html">
+      <trans-unit id="603966779971722604" datatype="html" xml:space="preserve">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </source>
-        <target state="translated">我至少 <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> 歲，且同意 <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> 的 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>條款<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/>與<x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>行為守則<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> </target>
+        <target state="translated">我至少 <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> 歲，且同意<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>使用條款<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/>與<x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>行為準則<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of <x id="INTERPOLATION_1" equiv-text="{{ instanceName }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-terms.component.html</context>
           <context context-type="linenumber">17,22</context>
@@ -14716,9 +14716,9 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="908816482785584930" datatype="html">
+      <trans-unit id="908816482785584930" datatype="html" xml:space="preserve">
         <source>An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. </source>
-        <target state="translated">解釋其註冊請求已使用您將在下面編寫的審核回覆<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>被拒絕<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>的電子郵件將會傳送至 <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>。 </target>
+        <target state="translated">電子郵件將傳送至 <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>，解釋其註冊請求已<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>被拒絕<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>，您將在下方寫下審核回應。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">36</context>
@@ -15312,9 +15312,9 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4422757693184001803" datatype="html">
+      <trans-unit id="4422757693184001803" datatype="html" xml:space="preserve">
         <source>Save email settings</source>
-        <target state="new">Save email settings</target>
+        <target state="translated">儲存電子郵件設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">14</context>
@@ -15500,9 +15500,9 @@
           <context context-type="linenumber">11,13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6328734173672096825" datatype="html">
+      <trans-unit id="6328734173672096825" datatype="html" xml:space="preserve">
         <source>Save profile</source>
-        <target state="new">Save profile</target>
+        <target state="translated">儲存個人檔案</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">38</context>
@@ -16982,17 +16982,17 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6180920471345723927" datatype="html">
+      <trans-unit id="6180920471345723927" datatype="html" xml:space="preserve">
         <source>The video quota only takes into account the size of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>uploaded<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos, not transcoded files or user export archives (which may contain video files). </source>
-        <target state="new"> The video quota only takes into account the size of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>uploaded<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos, not transcoded files or user export archives (which may contain video files). </target>
+        <target state="translated">影片配額僅考慮<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>上傳的<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>影片，而不包含轉換編碼的檔案或使用者匯出封存檔（可能包含影片檔）。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">3,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1623552341334328156" datatype="html">
+      <trans-unit id="1623552341334328156" datatype="html" xml:space="preserve">
         <source>Transcoding is enabled so videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target state="new"> Transcoding is enabled so videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
+        <target state="translated">已啟用轉換編碼，因此影片大小最多為約 <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -17182,9 +17182,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8232112521354108802" datatype="html">
+      <trans-unit id="8232112521354108802" datatype="html" xml:space="preserve">
         <source>Short description must not be longer than 250 characters.</source>
-        <target state="new">Short description must not be longer than 250 characters.</target>
+        <target state="translated">簡短描述不得超過 250 個字元。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -17310,9 +17310,9 @@
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="977908106285712483" datatype="html">
+      <trans-unit id="977908106285712483" datatype="html" xml:space="preserve">
         <source>Max live duration must be greater or equal to -1.</source>
-        <target state="new">Max live duration must be greater or equal to -1.</target>
+        <target state="translated">最大直播持續時間必須大於等於 -1。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">72</context>
@@ -17326,9 +17326,9 @@
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8156930104143421972" datatype="html">
+      <trans-unit id="8156930104143421972" datatype="html" xml:space="preserve">
         <source>Max instance lives must be greater or equal to -1.</source>
-        <target state="new">Max instance lives must be greater or equal to -1.</target>
+        <target state="translated">最大站台直播數必須大於等於 -1。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">80</context>
@@ -17342,9 +17342,9 @@
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6094685877052448543" datatype="html">
+      <trans-unit id="6094685877052448543" datatype="html" xml:space="preserve">
         <source>Max user lives must be greater or equal to -1.</source>
-        <target state="new">Max user lives must be greater or equal to -1.</target>
+        <target state="translated">最大使用者直播數必須大於等於 -1。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">88</context>
@@ -17382,57 +17382,57 @@
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5727962096948024837" datatype="html">
+      <trans-unit id="5727962096948024837" datatype="html" xml:space="preserve">
         <source>Concurrency must be greater or equal to 1.</source>
-        <target state="new">Concurrency must be greater or equal to 1.</target>
+        <target state="translated">並行數必須大於等於 1。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6912757266988770184" datatype="html">
+      <trans-unit id="6912757266988770184" datatype="html" xml:space="preserve">
         <source>Index URL must be a URL</source>
-        <target state="new">Index URL must be a URL</target>
+        <target state="translated">索引 URL 必須為 URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3256383206363817433" datatype="html">
+      <trans-unit id="3256383206363817433" datatype="html" xml:space="preserve">
         <source>Search index URL must be a URL</source>
-        <target state="new">Search index URL must be a URL</target>
+        <target state="translated">搜尋索引 URL 必須為 URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4327605300509435150" datatype="html">
+      <trans-unit id="4327605300509435150" datatype="html" xml:space="preserve">
         <source>Export expiration is required.</source>
-        <target state="new">Export expiration is required.</target>
+        <target state="translated">匯出有限期限為必填。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8101376384086436513" datatype="html">
+      <trans-unit id="8101376384086436513" datatype="html" xml:space="preserve">
         <source>Export expiration must be greater or equal to 1.</source>
-        <target state="new">Export expiration must be greater or equal to 1.</target>
+        <target state="translated">匯出有效期限必須大於等於 1。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7568988728218416870" datatype="html">
+      <trans-unit id="7568988728218416870" datatype="html" xml:space="preserve">
         <source>Max user video quota is required.</source>
-        <target state="new">Max user video quota is required.</target>
+        <target state="translated">需要最大使用者影片配額。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6536118679588615245" datatype="html">
+      <trans-unit id="6536118679588615245" datatype="html" xml:space="preserve">
         <source>Max user video video quota must be greater or equal to 1.</source>
-        <target state="new">Max user video video quota must be greater or equal to 1.</target>
+        <target state="translated">最大使用者影片配額必須大於等於 1。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">134</context>
@@ -18963,9 +18963,9 @@
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6263183216314915807" datatype="html">
+      <trans-unit id="6263183216314915807" datatype="html" xml:space="preserve">
         <source>Requires approval by moderators (~ <x id="PH" equiv-text="responseTime"/>)</source>
-        <target state="new">Requires approval by moderators (~ <x id="PH" equiv-text="responseTime"/>)</target>
+        <target state="translated">需要管理員核准（約<x id="PH" equiv-text="responseTime"/>）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -19925,97 +19925,97 @@
           <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4332428159510983797" datatype="html">
+      <trans-unit id="4332428159510983797" datatype="html" xml:space="preserve">
         <source>Expires on</source>
-        <target state="new">Expires on</target>
+        <target state="translated">到期於</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8931356925707804915" datatype="html">
+      <trans-unit id="8931356925707804915" datatype="html" xml:space="preserve">
         <source>Download your archive</source>
-        <target state="new">Download your archive</target>
+        <target state="translated">下載您的封存檔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3427300811638138150" datatype="html">
+      <trans-unit id="3427300811638138150" datatype="html" xml:space="preserve">
         <source>Request a new archive</source>
-        <target state="new">Request a new archive</target>
+        <target state="translated">請求新的封存檔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3628699893924130182" datatype="html">
+      <trans-unit id="3628699893924130182" datatype="html" xml:space="preserve">
         <source>User export is not enabled by your administrator.</source>
-        <target state="new">User export is not enabled by your administrator.</target>
+        <target state="translated">您的管理員並未啟用使用者匯出。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3775513643932382075" datatype="html">
+      <trans-unit id="3775513643932382075" datatype="html" xml:space="preserve">
         <source>Archive settings</source>
-        <target state="new">Archive settings</target>
+        <target state="translated">封存檔設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1215687357804737187" datatype="html">
+      <trans-unit id="1215687357804737187" datatype="html" xml:space="preserve">
         <source>You already have an active archive. Requesting a new export archive will remove the current one.</source>
-        <target state="new"> You already have an active archive. Requesting a new export archive will remove the current one. </target>
+        <target state="translated">您已有作用中的封存檔。請求新的匯出封存檔將會移除目前的。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">91,93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1865500141682414508" datatype="html">
+      <trans-unit id="1865500141682414508" datatype="html" xml:space="preserve">
         <source>Include video files in archive file</source>
-        <target state="new">Include video files in archive file</target>
+        <target state="translated">將影片檔包含在封存檔中</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8386580266736130510" datatype="html">
+      <trans-unit id="8386580266736130510" datatype="html" xml:space="preserve">
         <source>Including video files is required if you want to re-import your videos on another PeerTube website</source>
-        <target state="new">Including video files is required if you want to re-import your videos on another PeerTube website</target>
+        <target state="translated">若您想在另一個 PeerTube 網站上重新匯入影片，則必須包含影片檔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1795389819769599474" datatype="html">
+      <trans-unit id="1795389819769599474" datatype="html" xml:space="preserve">
         <source>If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">若您包含影片檔，則封存檔的大小將約為 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1662178629537553910" datatype="html">
+      <trans-unit id="1662178629537553910" datatype="html" xml:space="preserve">
         <source>Request an archive</source>
-        <target state="new">Request an archive</target>
+        <target state="translated">請求封存檔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6258670465000264011" datatype="html">
+      <trans-unit id="6258670465000264011" datatype="html" xml:space="preserve">
         <source>Video files cannot be included in the export because you have exceeded the maximum video quota allowed by your administrator to export this archive.</source>
-        <target state="new">Video files cannot be included in the export because you have exceeded the maximum video quota allowed by your administrator to export this archive.</target>
+        <target state="translated">影片檔案無法包含在匯出中，因為您已超出管理員允許匯出此檔案的最大影片配額。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.ts</context>
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1930863079234861089" datatype="html">
+      <trans-unit id="1930863079234861089" datatype="html" xml:space="preserve">
         <source>Import/Export</source>
-        <target state="new">Import/Export</target>
+        <target state="translated">匯入/匯出</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import-export.component.html</context>
           <context context-type="linenumber">3</context>
@@ -20029,193 +20029,193 @@
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2611126741793124345" datatype="html">
+      <trans-unit id="2611126741793124345" datatype="html" xml:space="preserve">
         <source>IMPORT</source>
-        <target state="new">IMPORT</target>
+        <target state="translated">匯入</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4737947753130898543" datatype="html">
+      <trans-unit id="4737947753130898543" datatype="html" xml:space="preserve">
         <source>You can import an archive created by another PeerTube website.</source>
-        <target state="new">You can import an archive created by another PeerTube website.</target>
+        <target state="translated">您可以匯入其他 PeerTube 網站建立的封存檔。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7544701838241243416" datatype="html">
+      <trans-unit id="7544701838241243416" datatype="html" xml:space="preserve">
         <source>This is an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>import<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tool and not a migration tool. It's the reason why data (like channels or videos) is duplicated and not moved from your previous PeerTube website. </source>
-        <target state="new"> This is an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>import<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tool and not a migration tool. It's the reason why data (like channels or videos) is duplicated and not moved from your previous PeerTube website. </target>
+        <target state="translated">這是<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>匯入<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>工具而非遷移工具。這就是為什麼資料（例如頻道或影片）會重複並且不會從您之前的 PeerTube 網站中移出的原因。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">12,15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2367276729368583390" datatype="html">
+      <trans-unit id="2367276729368583390" datatype="html" xml:space="preserve">
         <source>The import process will automatically:</source>
-        <target state="new">The import process will automatically:</target>
+        <target state="translated">匯入流程將自動：</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3383933587008035091" datatype="html">
+      <trans-unit id="3383933587008035091" datatype="html" xml:space="preserve">
         <source>Update your account metadata (display name, description, avatar...)</source>
-        <target state="new">Update your account metadata (display name, description, avatar...)</target>
+        <target state="translated">更新您的帳號詮釋資料（顯示名稱、描述、大頭照……）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2996238463588374734" datatype="html">
+      <trans-unit id="2996238463588374734" datatype="html" xml:space="preserve">
         <source>Update your user settings (autoplay or P2P policy, notification settings...). It does not update your user email, username or password.</source>
-        <target state="new">Update your user settings (autoplay or P2P policy, notification settings...). It does not update your user email, username or password.</target>
+        <target state="translated">更新您的使用者設定（自動播放或 P2P 政策、通知設定……）。其不會更新您的使用者電子郵件、使用者名稱或密碼。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2439199866127869675" datatype="html">
+      <trans-unit id="2439199866127869675" datatype="html" xml:space="preserve">
         <source>Add accounts/server in your mute list</source>
-        <target state="new">Add accounts/server in your mute list</target>
+        <target state="translated">在您的靜音清單中新增帳號/伺服器</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="737889420694273353" datatype="html">
+      <trans-unit id="737889420694273353" datatype="html" xml:space="preserve">
         <source>Add likes/dislikes</source>
-        <target state="new">Add likes/dislikes</target>
+        <target state="translated">新增喜歡/不喜歡</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6841230785530859987" datatype="html">
+      <trans-unit id="6841230785530859987" datatype="html" xml:space="preserve">
         <source>Send a follow request to your subscriptions</source>
-        <target state="new">Send a follow request to your subscriptions</target>
+        <target state="translated">向您的訂閱傳送追蹤請求</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6364930312790587948" datatype="html">
+      <trans-unit id="6364930312790587948" datatype="html" xml:space="preserve">
         <source>Create channels if they do not already exist</source>
-        <target state="new">Create channels if they do not already exist</target>
+        <target state="translated">若頻道尚不存在，則建立頻道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3590744729573065939" datatype="html">
+      <trans-unit id="3590744729573065939" datatype="html" xml:space="preserve">
         <source>Create playlists if they do not already exist</source>
-        <target state="new">Create playlists if they do not already exist</target>
+        <target state="translated">若播放清單尚不存在，則建立播放清單</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8379828414303668485" datatype="html">
+      <trans-unit id="8379828414303668485" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>If the archive contains video files<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, create videos if they do not already exist</source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>If the archive contains video files<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, create videos if they do not already exist</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>若封存檔包含影片檔<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>，則會在影片不存在時建立影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3920743519289818329" datatype="html">
+      <trans-unit id="3920743519289818329" datatype="html" xml:space="preserve">
         <source>The following data objects are not imported:</source>
-        <target state="new">The following data objects are not imported:</target>
+        <target state="translated">不會匯入以下資料物件：</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4177382096054023179" datatype="html">
+      <trans-unit id="4177382096054023179" datatype="html" xml:space="preserve">
         <source>Followers (accounts will need to re-follow your channels)</source>
-        <target state="new">Followers (accounts will need to re-follow your channels)</target>
+        <target state="translated">追蹤者（帳號將必須重新追蹤您的頻道）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="558490183395886693" datatype="html">
+      <trans-unit id="558490183395886693" datatype="html" xml:space="preserve">
         <source>An email will be sent when the import process is complete.</source>
-        <target state="new">An email will be sent when the import process is complete.</target>
+        <target state="translated">匯入流程完成後，將會寄送一封電子郵件。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5245328363134510565" datatype="html">
+      <trans-unit id="5245328363134510565" datatype="html" xml:space="preserve">
         <source>You can't re-import an archive because you already have an import that is currently being processed by PeerTube.</source>
-        <target state="new"> You can't re-import an archive because you already have an import that is currently being processed by PeerTube. </target>
+        <target state="translated">您無法重新匯入封存檔，因為您已有一個目前正在由 PeerTube 處理的匯入。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">50,52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1473104874710475790" datatype="html">
+      <trans-unit id="1473104874710475790" datatype="html" xml:space="preserve">
         <source>Upload completed. Your archive import will be processed as soon as possible.</source>
-        <target state="new"> Upload completed. Your archive import will be processed as soon as possible. </target>
+        <target state="translated">上傳完成。您的封存檔匯入將會盡快處理。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">60,62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2723142545112770414" datatype="html">
+      <trans-unit id="2723142545112770414" datatype="html" xml:space="preserve">
         <source>(extension: .zip)</source>
-        <target state="new">(extension: .zip)</target>
+        <target state="translated">（副檔名：.zip）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7690080704928394942" datatype="html">
+      <trans-unit id="7690080704928394942" datatype="html" xml:space="preserve">
         <source>Select the archive file to import</source>
-        <target state="new">Select the archive file to import</target>
+        <target state="translated">選取要匯入的封存檔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2185709317252805927" datatype="html">
+      <trans-unit id="2185709317252805927" datatype="html" xml:space="preserve">
         <source>Select the file to import</source>
-        <target state="new">Select the file to import</target>
+        <target state="translated">選取要匯入的檔案</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3349672451992350883" datatype="html">
+      <trans-unit id="3349672451992350883" datatype="html" xml:space="preserve">
         <source>User import is not enabled by your administrator.</source>
-        <target state="new">User import is not enabled by your administrator.</target>
+        <target state="translated">您的管理員並未啟用使用者匯入。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1842877412269588224" datatype="html">
+      <trans-unit id="1842877412269588224" datatype="html" xml:space="preserve">
         <source>Your archive file is not uploaded yet, are you sure you want to leave this page?</source>
-        <target state="new">Your archive file is not uploaded yet, are you sure you want to leave this page?</target>
+        <target state="translated">您的封存檔尚未上傳，您確定您想要離開此頁面嗎？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1335600007725669502" datatype="html">
+      <trans-unit id="1335600007725669502" datatype="html" xml:space="preserve">
         <source>Cannot import this file as your video quota would be exceeded (import size: <x id="PH" equiv-text="fileSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="new">Cannot import this file as your video quota would be exceeded (import size: <x id="PH" equiv-text="fileSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
+        <target state="translated">無法匯入此檔案，因為將會超過您的影片配額（匯入大小：<x id="PH" equiv-text="fileSizeBytes"/>，已使用：<x id="PH_1" equiv-text="videoQuotaUsedBytes"/>，配額：<x id="PH_2" equiv-text="videoQuotaBytes"/>）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
           <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2956881256361598032" datatype="html">
+      <trans-unit id="2956881256361598032" datatype="html" xml:space="preserve">
         <source>archive</source>
-        <target state="new">archive</target>
+        <target state="translated">封存檔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
           <context context-type="linenumber">180</context>
@@ -21025,9 +21025,9 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5240556993302961443" datatype="html">
+      <trans-unit id="5240556993302961443" datatype="html" xml:space="preserve">
         <source>Save interface settings</source>
-        <target state="new">Save interface settings</target>
+        <target state="translated">儲存介面設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">16</context>
