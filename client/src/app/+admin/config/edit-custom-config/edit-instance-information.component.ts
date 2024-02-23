@@ -2,10 +2,11 @@ import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, Input, OnInit } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { CustomMarkupService } from '@app/shared/shared-custom-markup'
-import { Notifier } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 import { HttpErrorResponse } from '@angular/common/http'
 import { genericUploadErrorHandler } from '@app/helpers'
 import { InstanceService } from '@app/shared/shared-instance'
+import { ActorImage, HTMLServerConfig } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-edit-instance-information',
@@ -20,17 +21,27 @@ export class EditInstanceInformationComponent implements OnInit {
   @Input() categoryItems: SelectOptionsItem[] = []
 
   instanceBannerUrl: string
+  instanceAvatars: ActorImage[] = []
+
+  private serverConfig: HTMLServerConfig
 
   constructor (
     private customMarkup: CustomMarkupService,
     private notifier: Notifier,
-    private instanceService: InstanceService
+    private instanceService: InstanceService,
+    private server: ServerService
   ) {
 
   }
 
+  get instanceName () {
+    return this.server.getHTMLConfig().instance.name
+  }
+
   ngOnInit () {
-    this.resetBannerUrl()
+    this.serverConfig = this.server.getHTMLConfig()
+
+    this.updateActorImages()
   }
 
   getCustomMarkdownRenderer () {
@@ -39,15 +50,15 @@ export class EditInstanceInformationComponent implements OnInit {
 
   onBannerChange (formData: FormData) {
     this.instanceService.updateInstanceBanner(formData)
-        .subscribe({
-          next: () => {
-            this.notifier.success($localize`Banner changed.`)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Banner changed.`)
 
-            this.resetBannerUrl()
-          },
+          this.resetActorImages()
+        },
 
-          error: (err: HttpErrorResponse) => genericUploadErrorHandler({ err, name: $localize`banner`, notifier: this.notifier })
-        })
+        error: (err: HttpErrorResponse) => genericUploadErrorHandler({ err, name: $localize`banner`, notifier: this.notifier })
+      })
   }
 
   onBannerDelete () {
@@ -56,17 +67,51 @@ export class EditInstanceInformationComponent implements OnInit {
         next: () => {
           this.notifier.success($localize`Banner deleted.`)
 
-          this.resetBannerUrl()
+          this.resetActorImages()
         },
 
         error: err => this.notifier.error(err.message)
       })
   }
 
-  private resetBannerUrl () {
-    this.instanceService.getInstanceBannerUrl()
-      .subscribe(instanceBannerUrl => {
-        this.instanceBannerUrl = instanceBannerUrl
+  onAvatarChange (formData: FormData) {
+    this.instanceService.updateInstanceAvatar(formData)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Avatar changed.`)
+
+          this.resetActorImages()
+        },
+
+        error: (err: HttpErrorResponse) => genericUploadErrorHandler({ err, name: $localize`avatar`, notifier: this.notifier })
       })
   }
+
+  onAvatarDelete () {
+    this.instanceService.deleteInstanceAvatar()
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Avatar deleted.`)
+
+          this.resetActorImages()
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  private updateActorImages () {
+    this.instanceBannerUrl = this.serverConfig.instance.banners?.[0]?.path
+    this.instanceAvatars = this.serverConfig.instance.avatars
+  }
+
+  private resetActorImages () {
+    this.server.resetConfig()
+      .subscribe(config => {
+        this.serverConfig = config
+
+        this.updateActorImages()
+      })
+  }
+
 }

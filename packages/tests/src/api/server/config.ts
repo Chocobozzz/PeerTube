@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { parallelTests } from '@peertube/peertube-node-utils'
-import { CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
+import { ActorImageType, CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -11,7 +11,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { testFileExistsOrNot, testImage } from '@tests/shared/checks.js'
+import { testFileExistsOrNot, testImage, testImageSize } from '@tests/shared/checks.js'
 import { basename } from 'path'
 
 function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
@@ -521,7 +521,6 @@ describe('Test static config', function () {
 
 describe('Test config', function () {
   let server: PeerTubeServer
-  let bannerPath: string
 
   before(async function () {
     this.timeout(30000)
@@ -530,184 +529,237 @@ describe('Test config', function () {
     await setAccessTokensToServers([ server ])
   })
 
-  it('Should have the correct default config', async function () {
-    const data = await server.config.getConfig()
+  describe('Config keys', function () {
 
-    expect(data.openTelemetry.metrics.enabled).to.be.false
-    expect(data.openTelemetry.metrics.playbackStatsInterval).to.equal(15000)
+    it('Should have the correct default config', async function () {
+      const data = await server.config.getConfig()
 
-    expect(data.views.videos.watchingInterval.anonymous).to.equal(5000)
-    expect(data.views.videos.watchingInterval.users).to.equal(5000)
-  })
+      expect(data.openTelemetry.metrics.enabled).to.be.false
+      expect(data.openTelemetry.metrics.playbackStatsInterval).to.equal(15000)
 
-  it('Should have a correct config on a server with registration enabled', async function () {
-    const data = await server.config.getConfig()
+      expect(data.views.videos.watchingInterval.anonymous).to.equal(5000)
+      expect(data.views.videos.watchingInterval.users).to.equal(5000)
+    })
 
-    expect(data.signup.allowed).to.be.true
-  })
+    it('Should have a correct config on a server with registration enabled', async function () {
+      const data = await server.config.getConfig()
 
-  it('Should have a correct config on a server with registration enabled and a users limit', async function () {
-    this.timeout(5000)
+      expect(data.signup.allowed).to.be.true
+    })
 
-    await Promise.all([
-      server.registrations.register({ username: 'user1' }),
-      server.registrations.register({ username: 'user2' }),
-      server.registrations.register({ username: 'user3' })
-    ])
+    it('Should have a correct config on a server with registration enabled and a users limit', async function () {
+      this.timeout(5000)
 
-    const data = await server.config.getConfig()
+      await Promise.all([
+        server.registrations.register({ username: 'user1' }),
+        server.registrations.register({ username: 'user2' }),
+        server.registrations.register({ username: 'user3' })
+      ])
 
-    expect(data.signup.allowed).to.be.false
-  })
+      const data = await server.config.getConfig()
 
-  it('Should have the correct video allowed extensions', async function () {
-    const data = await server.config.getConfig()
+      expect(data.signup.allowed).to.be.false
+    })
 
-    expect(data.video.file.extensions).to.have.lengthOf(3)
-    expect(data.video.file.extensions).to.contain('.mp4')
-    expect(data.video.file.extensions).to.contain('.webm')
-    expect(data.video.file.extensions).to.contain('.ogv')
+    it('Should have the correct video allowed extensions', async function () {
+      const data = await server.config.getConfig()
 
-    await server.videos.upload({ attributes: { fixture: 'video_short.mkv' }, expectedStatus: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 })
-    await server.videos.upload({ attributes: { fixture: 'sample.ogg' }, expectedStatus: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 })
+      expect(data.video.file.extensions).to.have.lengthOf(3)
+      expect(data.video.file.extensions).to.contain('.mp4')
+      expect(data.video.file.extensions).to.contain('.webm')
+      expect(data.video.file.extensions).to.contain('.ogv')
 
-    expect(data.contactForm.enabled).to.be.true
-  })
+      await server.videos.upload({ attributes: { fixture: 'video_short.mkv' }, expectedStatus: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 })
+      await server.videos.upload({ attributes: { fixture: 'sample.ogg' }, expectedStatus: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415 })
 
-  it('Should get the customized configuration', async function () {
-    const data = await server.config.getCustomConfig()
+      expect(data.contactForm.enabled).to.be.true
+    })
 
-    checkInitialConfig(server, data)
-  })
+    it('Should get the customized configuration', async function () {
+      const data = await server.config.getCustomConfig()
 
-  it('Should update the customized configuration', async function () {
-    await server.config.updateCustomConfig({ newCustomConfig })
+      checkInitialConfig(server, data)
+    })
 
-    const data = await server.config.getCustomConfig()
-    checkUpdatedConfig(data)
-  })
+    it('Should update the customized configuration', async function () {
+      await server.config.updateCustomConfig({ newCustomConfig })
 
-  it('Should have the correct updated video allowed extensions', async function () {
-    this.timeout(30000)
+      const data = await server.config.getCustomConfig()
+      checkUpdatedConfig(data)
+    })
 
-    const data = await server.config.getConfig()
+    it('Should have the correct updated video allowed extensions', async function () {
+      this.timeout(30000)
 
-    expect(data.video.file.extensions).to.have.length.above(4)
-    expect(data.video.file.extensions).to.contain('.mp4')
-    expect(data.video.file.extensions).to.contain('.webm')
-    expect(data.video.file.extensions).to.contain('.ogv')
-    expect(data.video.file.extensions).to.contain('.flv')
-    expect(data.video.file.extensions).to.contain('.wmv')
-    expect(data.video.file.extensions).to.contain('.mkv')
-    expect(data.video.file.extensions).to.contain('.mp3')
-    expect(data.video.file.extensions).to.contain('.ogg')
-    expect(data.video.file.extensions).to.contain('.flac')
+      const data = await server.config.getConfig()
 
-    await server.videos.upload({ attributes: { fixture: 'video_short.mkv' }, expectedStatus: HttpStatusCode.OK_200 })
-    await server.videos.upload({ attributes: { fixture: 'sample.ogg' }, expectedStatus: HttpStatusCode.OK_200 })
-  })
+      expect(data.video.file.extensions).to.have.length.above(4)
+      expect(data.video.file.extensions).to.contain('.mp4')
+      expect(data.video.file.extensions).to.contain('.webm')
+      expect(data.video.file.extensions).to.contain('.ogv')
+      expect(data.video.file.extensions).to.contain('.flv')
+      expect(data.video.file.extensions).to.contain('.wmv')
+      expect(data.video.file.extensions).to.contain('.mkv')
+      expect(data.video.file.extensions).to.contain('.mp3')
+      expect(data.video.file.extensions).to.contain('.ogg')
+      expect(data.video.file.extensions).to.contain('.flac')
 
-  it('Should have the configuration updated after a restart', async function () {
-    this.timeout(30000)
+      await server.videos.upload({ attributes: { fixture: 'video_short.mkv' }, expectedStatus: HttpStatusCode.OK_200 })
+      await server.videos.upload({ attributes: { fixture: 'sample.ogg' }, expectedStatus: HttpStatusCode.OK_200 })
+    })
 
-    await killallServers([ server ])
+    it('Should have the configuration updated after a restart', async function () {
+      this.timeout(30000)
 
-    await server.run()
+      await killallServers([ server ])
 
-    const data = await server.config.getCustomConfig()
+      await server.run()
 
-    checkUpdatedConfig(data)
-  })
+      const data = await server.config.getCustomConfig()
 
-  it('Should fetch the about information', async function () {
-    const { instance } = await server.config.getAbout()
+      checkUpdatedConfig(data)
+    })
 
-    expect(instance.name).to.equal('PeerTube updated')
-    expect(instance.shortDescription).to.equal('my short description')
-    expect(instance.description).to.equal('my super description')
-    expect(instance.terms).to.equal('my super terms')
-    expect(instance.codeOfConduct).to.equal('my super coc')
+    it('Should fetch the about information', async function () {
+      const { instance } = await server.config.getAbout()
 
-    expect(instance.creationReason).to.equal('my super creation reason')
-    expect(instance.moderationInformation).to.equal('my super moderation information')
-    expect(instance.administrator).to.equal('Kuja')
-    expect(instance.maintenanceLifetime).to.equal('forever')
-    expect(instance.businessModel).to.equal('my super business model')
-    expect(instance.hardwareInformation).to.equal('2vCore 3GB RAM')
+      expect(instance.name).to.equal('PeerTube updated')
+      expect(instance.shortDescription).to.equal('my short description')
+      expect(instance.description).to.equal('my super description')
+      expect(instance.terms).to.equal('my super terms')
+      expect(instance.codeOfConduct).to.equal('my super coc')
 
-    expect(instance.languages).to.deep.equal([ 'en', 'es' ])
-    expect(instance.categories).to.deep.equal([ 1, 2 ])
+      expect(instance.creationReason).to.equal('my super creation reason')
+      expect(instance.moderationInformation).to.equal('my super moderation information')
+      expect(instance.administrator).to.equal('Kuja')
+      expect(instance.maintenanceLifetime).to.equal('forever')
+      expect(instance.businessModel).to.equal('my super business model')
+      expect(instance.hardwareInformation).to.equal('2vCore 3GB RAM')
 
-    expect(instance.banners).to.have.lengthOf(0)
-  })
+      expect(instance.languages).to.deep.equal([ 'en', 'es' ])
+      expect(instance.categories).to.deep.equal([ 1, 2 ])
 
-  it('Should update instance banner', async function () {
-    await server.config.updateInstanceBanner({ fixture: 'banner.jpg' })
+      expect(instance.banners).to.have.lengthOf(0)
+    })
 
-    const { instance } = await server.config.getAbout()
+    it('Should remove the custom configuration', async function () {
+      await server.config.deleteCustomConfig()
 
-    expect(instance.banners).to.have.lengthOf(1)
+      const data = await server.config.getCustomConfig()
+      checkInitialConfig(server, data)
+    })
 
-    bannerPath = instance.banners[0].path
-    await testImage(server.url, 'banner-resized', bannerPath)
-    await testFileExistsOrNot(server, 'avatars', basename(bannerPath), true)
-  })
+    it('Should enable/disable security headers', async function () {
+      this.timeout(25000)
 
-  it('Should re-update an existing instance banner', async function () {
-    await server.config.updateInstanceBanner({ fixture: 'banner.jpg' })
-  })
+      {
+        const res = await makeGetRequest({
+          url: server.url,
+          path: '/api/v1/config',
+          expectedStatus: 200
+        })
 
-  it('Should remove instance banner', async function () {
-    await server.config.deleteInstanceBanner()
-
-    const { instance } = await server.config.getAbout()
-
-    expect(instance.banners).to.have.lengthOf(0)
-
-    await testFileExistsOrNot(server, 'avatars', basename(bannerPath), false)
-  })
-
-  it('Should remove the custom configuration', async function () {
-    await server.config.deleteCustomConfig()
-
-    const data = await server.config.getCustomConfig()
-    checkInitialConfig(server, data)
-  })
-
-  it('Should enable/disable security headers', async function () {
-    this.timeout(25000)
-
-    {
-      const res = await makeGetRequest({
-        url: server.url,
-        path: '/api/v1/config',
-        expectedStatus: 200
-      })
-
-      expect(res.headers['x-frame-options']).to.exist
-      expect(res.headers['x-powered-by']).to.equal('PeerTube')
-    }
-
-    await killallServers([ server ])
-
-    const config = {
-      security: {
-        frameguard: { enabled: false },
-        powered_by_header: { enabled: false }
+        expect(res.headers['x-frame-options']).to.exist
+        expect(res.headers['x-powered-by']).to.equal('PeerTube')
       }
-    }
-    await server.run(config)
 
-    {
-      const res = await makeGetRequest({
-        url: server.url,
-        path: '/api/v1/config',
-        expectedStatus: 200
+      await killallServers([ server ])
+
+      const config = {
+        security: {
+          frameguard: { enabled: false },
+          powered_by_header: { enabled: false }
+        }
+      }
+      await server.run(config)
+
+      {
+        const res = await makeGetRequest({
+          url: server.url,
+          path: '/api/v1/config',
+          expectedStatus: 200
+        })
+
+        expect(res.headers['x-frame-options']).to.not.exist
+        expect(res.headers['x-powered-by']).to.not.exist
+      }
+    })
+  })
+
+  describe('Image files', function () {
+
+    async function checkAndGetServerImages () {
+      const { instance } = await server.config.getAbout()
+      const htmlConfig = await server.config.getIndexHTMLConfig()
+      const serverConfig = await server.config.getIndexHTMLConfig()
+
+      expect(instance.avatars).to.deep.equal(htmlConfig.instance.avatars)
+      expect(serverConfig.instance.avatars).to.deep.equal(htmlConfig.instance.avatars)
+
+      expect(instance.banners).to.deep.equal(htmlConfig.instance.banners)
+      expect(serverConfig.instance.banners).to.deep.equal(htmlConfig.instance.banners)
+
+      return htmlConfig.instance
+    }
+
+    describe('Banner', function () {
+      let bannerPath: string
+
+      it('Should update instance banner', async function () {
+        await server.config.updateInstanceImage({ type: ActorImageType.BANNER, fixture: 'banner.jpg' })
+
+        const { banners } = await checkAndGetServerImages()
+
+        expect(banners).to.have.lengthOf(1)
+
+        bannerPath = banners[0].path
+        await testImage(server.url, 'banner-resized', bannerPath)
+        await testFileExistsOrNot(server, 'avatars', basename(bannerPath), true)
       })
 
-      expect(res.headers['x-frame-options']).to.not.exist
-      expect(res.headers['x-powered-by']).to.not.exist
-    }
+      it('Should re-update an existing instance banner', async function () {
+        await server.config.updateInstanceImage({ type: ActorImageType.BANNER, fixture: 'banner.jpg' })
+      })
+
+      it('Should remove instance banner', async function () {
+        await server.config.deleteInstanceImage({ type: ActorImageType.BANNER })
+
+        const { banners } = await checkAndGetServerImages()
+        expect(banners).to.have.lengthOf(0)
+
+        await testFileExistsOrNot(server, 'avatars', basename(bannerPath), false)
+      })
+    })
+
+    describe('Avatar', function () {
+      let avatarPath: string
+
+      it('Should update instance avatar', async function () {
+        for (const extension of [ '.png', '.gif' ]) {
+          const fixture = 'avatar' + extension
+
+          await server.config.updateInstanceImage({ type: ActorImageType.AVATAR, fixture })
+
+          const { avatars } = await checkAndGetServerImages()
+
+          for (const avatar of avatars) {
+            await testImageSize(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, extension)
+          }
+
+          avatarPath = avatars[0].path
+          await testFileExistsOrNot(server, 'avatars', basename(avatarPath), true)
+        }
+      })
+
+      it('Should remove instance banner', async function () {
+        await server.config.deleteInstanceImage({ type: ActorImageType.AVATAR })
+
+        const { avatars } = await checkAndGetServerImages()
+        expect(avatars).to.have.lengthOf(0)
+
+        await testFileExistsOrNot(server, 'avatars', basename(avatarPath), false)
+      })
+    })
   })
 
   after(async function () {

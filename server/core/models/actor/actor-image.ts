@@ -20,6 +20,7 @@ import { CONFIG } from '../../initializers/config.js'
 import { LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants.js'
 import { SequelizeModel, buildSQLAttributes, throwIfNotValid } from '../shared/index.js'
 import { ActorModel } from './actor.js'
+import { getServerActor } from '../application/application.js'
 
 @Table({
   tableName: 'actorImage',
@@ -121,6 +122,15 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
     }
 
     return ActorImageModel.findAll(query)
+  }
+
+  static async listServerActorImages () {
+    const serverActor = await getServerActor()
+    const promises = [ ActorImageType.AVATAR, ActorImageType.BANNER ].map(type => ActorImageModel.listByActor(serverActor, type))
+
+    const [ avatars, banners ] = await Promise.all(promises)
+
+    return { avatars, banners }
   }
 
   static getImageUrl (image: MActorImage) {

@@ -1,5 +1,5 @@
 import merge from 'lodash-es/merge.js'
-import { About, CustomConfig, HttpStatusCode, ServerConfig } from '@peertube/peertube-models'
+import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, ServerConfig } from '@peertube/peertube-models'
 import { DeepPartial } from '@peertube/peertube-typescript-utils'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/abstract-command.js'
 
@@ -365,27 +365,38 @@ export class ConfigCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  updateInstanceBanner (options: OverrideCommandOptions & {
+  updateInstanceImage (options: OverrideCommandOptions & {
     fixture: string
+    type: ActorImageType_Type
   }) {
-    const { fixture } = options
+    const { fixture, type } = options
 
-    const path = `/api/v1/config/instance-banner/pick`
+    const path = type === ActorImageType.BANNER
+      ? `/api/v1/config/instance-banner/pick`
+      : `/api/v1/config/instance-avatar/pick`
 
     return this.updateImageRequest({
       ...options,
 
       path,
       fixture,
-      fieldname: 'bannerfile',
+      fieldname: type === ActorImageType.BANNER
+        ? 'bannerfile'
+        : 'avatarfile',
 
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
 
-  deleteInstanceBanner (options: OverrideCommandOptions = {}) {
-    const path = `/api/v1/config/instance-banner`
+  deleteInstanceImage (options: OverrideCommandOptions & {
+    type: ActorImageType_Type
+  }) {
+    const suffix = options.type === ActorImageType.BANNER
+      ? 'instance-banner'
+      : 'instance-avatar'
+
+    const path = `/api/v1/config/${suffix}`
 
     return this.deleteRequest({
       ...options,

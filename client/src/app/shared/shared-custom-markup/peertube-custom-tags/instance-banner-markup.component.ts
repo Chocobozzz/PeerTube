@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core'
 import { CustomMarkupComponent } from './shared'
-import { InstanceService } from '@app/shared/shared-instance'
-import { finalize } from 'rxjs'
+import { ServerService } from '@app/core'
 
 /*
  * Markup component that creates the img HTML element containing the instance banner
@@ -15,21 +14,18 @@ import { finalize } from 'rxjs'
 export class InstanceBannerMarkupComponent implements OnInit, CustomMarkupComponent {
   @Input() revertHomePaddingTop: boolean
 
-  @Output() loaded = new EventEmitter<boolean>()
-
   instanceBannerUrl: string
+  loaded: undefined
 
   constructor (
     private cd: ChangeDetectorRef,
-    private instance: InstanceService
+    private server: ServerService
   ) {}
 
   ngOnInit () {
-    this.instance.getInstanceBannerUrl()
-      .pipe(finalize(() => this.loaded.emit(true)))
-      .subscribe(instanceBannerUrl => {
-        this.instanceBannerUrl = instanceBannerUrl
-        this.cd.markForCheck()
-      })
+    const { instance } = this.server.getHTMLConfig()
+
+    this.instanceBannerUrl = instance.banners?.[0]?.path
+    this.cd.markForCheck()
   }
 }

@@ -70,10 +70,18 @@
 <div class="row mt-4"> <!-- user grid -->
   <div class="col-12 col-lg-4 col-xl-3">
     <div class="anchor" id="user"></div> <!-- user anchor -->
-    <div *ngIf="isCreation()" class="section-left-column-title" i18n>NEW USER</div>
-    <div *ngIf="!isCreation() && user" class="section-left-column-title">
-      <my-actor-avatar-edit [actor]="user.account" [editable]="false" [displaySubscribers]="false" [displayUsername]="false"></my-actor-avatar-edit>
-    </div>
+
+    @if (isCreation()) {
+      <div class="section-left-column-title" i18n>NEW USER</div>
+    } @else if (user) {
+      <div class="section-left-column-title">
+        <my-actor-avatar-edit
+          actorType="account" [displayName]="user.account.displayName" [avatars]="user.account.avatars"
+          editable="false" [username]="user.username" displayUsername="false"
+        ></my-actor-avatar-edit>
+      </div>
+    }
+
   </div>
 
   <div class="col-12 col-lg-8 col-xl-9">

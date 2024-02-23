@@ -4,7 +4,11 @@
   <div class="col-12 col-lg-4 col-xl-3"></div>
 
   <div class="col-12 col-lg-8 col-xl-9">
-    <my-actor-avatar-edit [actor]="user.account" (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"></my-actor-avatar-edit>
+    <my-actor-avatar-edit
+      actorType="account" [avatars]="user.account.avatars"
+      [displayName]="user.account.displayName" [username]="user.username" [subscribers]="user.account.followersCount"
+      (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
+    ></my-actor-avatar-edit>
   </div>
 </div>
 

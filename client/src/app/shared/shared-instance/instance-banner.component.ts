@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, booleanAttribute } from '@angular/core'
-import { InstanceService } from './instance.service'
+import { ServerService } from '@app/core'
 
 @Component({
   selector: 'my-instance-banner',
@@ -10,12 +10,13 @@ export class InstanceBannerComponent implements OnInit {
 
   instanceBannerUrl: string
 
-  constructor (private instanceService: InstanceService) {
+  constructor (private server: ServerService) {
 
   }
 
   ngOnInit () {
-    this.instanceService.getInstanceBannerUrl()
-      .subscribe(instanceBannerUrl => this.instanceBannerUrl = instanceBannerUrl)
+    const { instance } = this.server.getHTMLConfig()
+
+    this.instanceBannerUrl = instance.banners?.[0]?.path
   }
 }

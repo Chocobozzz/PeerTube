@@ -20,5 +20,6 @@ export interface About {
     categories: number[]
 
     banners: ActorImage[]
+    avatars: ActorImage[]
   }
 }

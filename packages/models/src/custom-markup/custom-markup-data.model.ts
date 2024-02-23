@@ -62,3 +62,7 @@ export type ContainerMarkupData = {
 export type InstanceBannerMarkupData = {
   revertHomePaddingTop?: StringBoolean // default to 'true'
 }
+
+export type InstanceAvatarMarkupData = {
+  size: string // size in pixels
+}

@@ -3,7 +3,7 @@ import { remove, writeJSON } from 'fs-extra/esm'
 import snakeCase from 'lodash-es/snakeCase.js'
 import validator from 'validator'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
-import { About, ActorImageType, CustomConfig, HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '../../helpers/audit-logger.js'
 import { objectConverter } from '../../helpers/core-utils.js'
 import { CONFIG, reloadConfig } from '../../initializers/config.js'
@@ -14,6 +14,7 @@ import {
   authenticate,
   ensureUserHasRight,
   openapiOperationDoc,
+  updateAvatarValidator,
   updateBannerValidator
 } from '../../middlewares/index.js'
 import { customConfigUpdateValidator, ensureConfigIsEditable } from '../../middlewares/validators/config.js'
@@ -63,18 +64,36 @@ configRouter.delete('/custom',
   asyncMiddleware(deleteCustomConfig)
 )
 
+// ---------------------------------------------------------------------------
+
 configRouter.post('/instance-banner/pick',
   authenticate,
   createReqFiles([ 'bannerfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   updateBannerValidator,
-  asyncMiddleware(updateInstanceBanner)
+  asyncMiddleware(updateInstanceImageFactory(ActorImageType.BANNER))
 )
 
 configRouter.delete('/instance-banner',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
-  asyncMiddleware(deleteInstanceBanner)
+  asyncMiddleware(deleteInstanceImageFactory(ActorImageType.BANNER))
+)
+
+// ---------------------------------------------------------------------------
+
+configRouter.post('/instance-avatar/pick',
+  authenticate,
+  createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  updateAvatarValidator,
+  asyncMiddleware(updateInstanceImageFactory(ActorImageType.AVATAR))
+)
+
+configRouter.delete('/instance-avatar',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  asyncMiddleware(deleteInstanceImageFactory(ActorImageType.AVATAR))
 )
 
 // ---------------------------------------------------------------------------
@@ -86,7 +105,7 @@ async function getConfig (req: express.Request, res: express.Response) {
 }
 
 async function getAbout (req: express.Request, res: express.Response) {
-  const banners = await ActorImageModel.listByActor(await getServerActor(), ActorImageType.BANNER)
+  const { avatars, banners } = await ActorImageModel.listServerActorImages()
 
   const about: About = {
     instance: {
@@ -107,7 +126,8 @@ async function getAbout (req: express.Request, res: express.Response) {
       languages: CONFIG.INSTANCE.LANGUAGES,
       categories: CONFIG.INSTANCE.CATEGORIES,
 
-      banners: banners.map(b => b.toFormattedJSON())
+      banners: banners.map(b => b.toFormattedJSON()),
+      avatars: avatars.map(a => a.toFormattedJSON())
     }
   }
 
@@ -155,29 +175,47 @@ async function updateCustomConfig (req: express.Request, res: express.Response) 
   return res.json(data)
 }
 
-async function updateInstanceBanner (req: express.Request, res: express.Response) {
-  const bannerPhysicalFile = req.files['bannerfile'][0]
+// ---------------------------------------------------------------------------
 
-  const serverActor = await getServerActor()
-  serverActor.Banners = await ActorImageModel.listByActor(serverActor, ActorImageType.BANNER) // Reload banners from DB
+function updateInstanceImageFactory (imageType: ActorImageType_Type) {
+  return async (req: express.Request, res: express.Response) => {
+    const field = imageType === ActorImageType.BANNER
+      ? 'bannerfile'
+      : 'avatarfile'
 
-  await updateLocalActorImageFiles({
-    accountOrChannel: serverActor.Account,
-    imagePhysicalFile: bannerPhysicalFile,
-    type: ActorImageType.BANNER,
-    sendActorUpdate: false
-  })
+    const imagePhysicalFile = req.files[field][0]
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    await updateLocalActorImageFiles({
+      accountOrChannel: (await getServerActorWithUpdatedImages(imageType)).Account,
+      imagePhysicalFile,
+      type: imageType,
+      sendActorUpdate: false
+    })
+
+    ClientHtml.invalidateCache()
+
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  }
 }
 
-async function deleteInstanceBanner (req: express.Request, res: express.Response) {
+function deleteInstanceImageFactory (imageType: ActorImageType_Type) {
+  return async (req: express.Request, res: express.Response) => {
+    await deleteLocalActorImageFile((await getServerActorWithUpdatedImages(imageType)).Account, imageType)
+
+    ClientHtml.invalidateCache()
+
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  }
+}
+
+async function getServerActorWithUpdatedImages (imageType: ActorImageType_Type) {
   const serverActor = await getServerActor()
-  serverActor.Banners = await ActorImageModel.listByActor(serverActor, ActorImageType.BANNER) // Reload banners from DB
+  const updatedImages = await ActorImageModel.listByActor(serverActor, imageType) // Reload images from DB
 
-  await deleteLocalActorImageFile(serverActor.Account, ActorImageType.BANNER)
+  if (imageType === ActorImageType.BANNER) serverActor.Banners = updatedImages
+  else serverActor.Avatars = updatedImages
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return serverActor
 }
 
 // ---------------------------------------------------------------------------

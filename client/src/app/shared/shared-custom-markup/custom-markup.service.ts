@@ -6,6 +6,7 @@ import {
   ChannelMiniatureMarkupData,
   ContainerMarkupData,
   EmbedMarkupData,
+  InstanceAvatarMarkupData,
   InstanceBannerMarkupData,
   PlaylistMiniatureMarkupData,
   VideoMiniatureMarkupData,
@@ -16,6 +17,7 @@ import {
   ButtonMarkupComponent,
   ChannelMiniatureMarkupComponent,
   EmbedMarkupComponent,
+  InstanceAvatarMarkupComponent,
   InstanceBannerMarkupComponent,
   PlaylistMiniatureMarkupComponent,
   VideoMiniatureMarkupComponent,
@@ -30,6 +32,7 @@ type HTMLBuilderFunction = (el: HTMLElement) => HTMLElement
 export class CustomMarkupService {
   private angularBuilders: { [ selector: string ]: AngularBuilderFunction } = {
     'peertube-instance-banner': el => this.instanceBannerBuilder(el),
+    'peertube-instance-avatar': el => this.instanceAvatarBuilder(el),
     'peertube-button': el => this.buttonBuilder(el),
     'peertube-video-embed': el => this.embedBuilder(el, 'video'),
     'peertube-playlist-embed': el => this.embedBuilder(el, 'playlist'),
@@ -164,6 +167,19 @@ export class CustomMarkupService {
 
     const model = {
       revertHomePaddingTop: this.buildBoolean(data.revertHomePaddingTop) ?? true
+    }
+
+    this.dynamicElementService.setModel(component, model)
+
+    return { component, loadedPromise }
+  }
+
+  private instanceAvatarBuilder (el: HTMLElement) {
+    const data = el.dataset as InstanceAvatarMarkupData
+    const { component, loadedPromise } = this.dynamicElementService.createElement(InstanceAvatarMarkupComponent)
+
+    const model = {
+      size: this.buildNumber(data.size)
     }
 
     this.dynamicElementService.setModel(component, model)

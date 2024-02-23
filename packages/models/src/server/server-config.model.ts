@@ -1,3 +1,4 @@
+import { ActorImage } from '../index.js'
 import { ClientScriptJSON } from '../plugins/plugin-package-json.model.js'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type.js'
 import { VideoPrivacyType } from '../videos/video-privacy.enum.js'
@@ -90,6 +91,9 @@ export interface ServerConfig {
       javascript: string
       css: string
     }
+
+    avatars: ActorImage[]
+    banners: ActorImage[]
   }
 
   search: {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 import merge from 'lodash-es/merge.js'
 import { omit } from '@peertube/peertube-core-utils'
-import { CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
+import { ActorImageType, CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -421,6 +421,7 @@ describe('Test config API validators', function () {
   })
 
   describe('When deleting the configuration', function () {
+
     it('Should fail without token', async function () {
       await makeDeleteRequest({
         url: server.url,
@@ -439,79 +440,99 @@ describe('Test config API validators', function () {
     })
   })
 
-  describe('Updating instance banner', function () {
-    const path = '/api/v1/config/instance-banner/pick'
+  describe('Updating instance image', function () {
+    const toTest = [
+      { path: '/api/v1/config/instance-banner/pick', attachName: 'bannerfile' },
+      { path: '/api/v1/config/instance-avatar/pick', attachName: 'avatarfile' }
+    ]
 
     it('Should fail with an incorrect input file', async function () {
-      const attaches = { bannerfile: buildAbsoluteFixturePath('video_short.mp4') }
+      for (const { attachName, path } of toTest) {
+        const attaches = { [attachName]: buildAbsoluteFixturePath('video_short.mp4') }
 
-      await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields: {}, attaches })
+        await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields: {}, attaches })
+      }
     })
 
     it('Should fail with a big file', async function () {
-      const attaches = { bannerfile: buildAbsoluteFixturePath('avatar-big.png') }
+      for (const { attachName, path } of toTest) {
+        const attaches = { [attachName]: buildAbsoluteFixturePath('avatar-big.png') }
 
-      await makeUploadRequest({
-        url: server.url,
-        path,
-        token: server.accessToken,
-        fields: {},
-        attaches,
-        expectedStatus: HttpStatusCode.BAD_REQUEST_400
-      })
+        await makeUploadRequest({
+          url: server.url,
+          path,
+          token: server.accessToken,
+          fields: {},
+          attaches,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
     })
 
     it('Should fail without token', async function () {
-      const attaches = { bannerfile: buildAbsoluteFixturePath('avatar.png') }
+      for (const { attachName, path } of toTest) {
+        const attaches = { [attachName]: buildAbsoluteFixturePath('avatar.png') }
 
-      await makeUploadRequest({
-        url: server.url,
-        path,
-        fields: {},
-        attaches,
-        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
-      })
+        await makeUploadRequest({
+          url: server.url,
+          path,
+          fields: {},
+          attaches,
+          expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+        })
+      }
     })
 
     it('Should fail without the appropriate rights', async function () {
-      const attaches = { bannerfile: buildAbsoluteFixturePath('avatar.png') }
+      for (const { attachName, path } of toTest) {
+        const attaches = { [attachName]: buildAbsoluteFixturePath('avatar.png') }
 
-      await makeUploadRequest({
-        url: server.url,
-        path,
-        token: userAccessToken,
-        fields: {},
-        attaches,
-        expectedStatus: HttpStatusCode.FORBIDDEN_403
-      })
+        await makeUploadRequest({
+          url: server.url,
+          path,
+          token: userAccessToken,
+          fields: {},
+          attaches,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+      }
     })
 
     it('Should succeed with the correct params', async function () {
-      const attaches = { bannerfile: buildAbsoluteFixturePath('avatar.png') }
+      for (const { attachName, path } of toTest) {
+        const attaches = { [attachName]: buildAbsoluteFixturePath('avatar.png') }
 
-      await makeUploadRequest({
-        url: server.url,
-        path,
-        token: server.accessToken,
-        fields: {},
-        attaches,
-        expectedStatus: HttpStatusCode.NO_CONTENT_204
-      })
+        await makeUploadRequest({
+          url: server.url,
+          path,
+          token: server.accessToken,
+          fields: {},
+          attaches,
+          expectedStatus: HttpStatusCode.NO_CONTENT_204
+        })
+      }
     })
   })
 
-  describe('Deleting instance banner', function () {
+  describe('Deleting instance image', function () {
+    const types = [ ActorImageType.BANNER, ActorImageType.AVATAR ]
 
     it('Should fail without token', async function () {
-      await server.config.deleteInstanceBanner({ token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      for (const type of types) {
+        await server.config.deleteInstanceImage({ type, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      }
     })
 
     it('Should fail without the appropriate rights', async function () {
-      await server.config.deleteInstanceBanner({ token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      for (const type of types) {
+        await server.config.deleteInstanceImage({ type, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      }
     })
 
     it('Should succeed with the correct params', async function () {
-      await server.config.deleteInstanceBanner()
+      for (const type of types) {
+        await server.config.deleteInstanceImage({ type })
+      }
     })
   })
 

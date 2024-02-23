@@ -8,12 +8,12 @@ import {
   Input,
   LOCALE_ID,
   OnInit,
-  Output
+  Output,
+  numberAttribute
 } from '@angular/core'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { HTMLServerConfig, VideoExistInPlaylist, VideoPlaylistType, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { LinkType } from '../../../types/link.type'
-import { ActorAvatarSize } from '../shared-actor-image/actor-avatar.component'
 import { Video, VideoService } from '../shared-main'
 import { VideoPlaylistService } from '../shared-video-playlist'
 import { VideoActionsDisplayType } from './video-actions-dropdown.component'
@@ -68,7 +68,7 @@ export class VideoMiniatureComponent implements OnInit {
     stats: false
   }
 
-  @Input() actorImageSize: ActorAvatarSize = '40'
+  @Input({ transform: numberAttribute }) actorImageSize = 40
 
   @Input() displayAsRow = false
 

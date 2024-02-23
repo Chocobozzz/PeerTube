@@ -15,6 +15,7 @@ import { Hooks } from './plugins/hooks.js'
 import { PluginManager } from './plugins/plugin-manager.js'
 import { getThemeOrDefault } from './plugins/theme-utils.js'
 import { VideoTranscodingProfilesManager } from './transcoding/default-transcoding-profiles.js'
+import { ActorImageModel } from '@server/models/actor/actor-image.js'
 
 /**
  *
@@ -47,6 +48,8 @@ class ServerConfigManager {
     if (this.serverCommit === undefined) this.serverCommit = await getServerCommit()
 
     const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
+
+    const { avatars, banners } = await ActorImageModel.listServerActorImages()
 
     return {
       client: {
@@ -100,7 +103,9 @@ class ServerConfigManager {
         customizations: {
           javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
           css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
-        }
+        },
+        avatars: avatars.map(a => a.toFormattedJSON()),
+        banners: banners.map(b => b.toFormattedJSON())
       },
       search: {
         remoteUri: {
