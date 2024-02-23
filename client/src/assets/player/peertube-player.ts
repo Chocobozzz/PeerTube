@@ -335,7 +335,7 @@ export class PeerTubePlayer {
   }
 
   private async maybeFallbackToWebVideo () {
-    if (this.currentLoadOptions.webVideo.videoFiles.length === 0 || this.currentLoadOptions.mode === 'web-video') {
+    if (this.currentLoadOptions.mode === 'web-video') {
       this.player.peertube().displayFatalError()
       return
     }
