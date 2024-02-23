@@ -10,6 +10,9 @@ export interface ServerStats extends ActivityPubMessagesSuccess, ActivityPubMess
   totalWeeklyActiveUsers: number
   totalMonthlyActiveUsers: number
 
+  totalModerators: number
+  totalAdmins: number
+
   totalLocalVideos: number
   totalLocalVideoViews: number
   totalLocalVideoComments: number

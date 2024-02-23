@@ -56,7 +56,11 @@ describe('Test stats (excluding redundancy)', function () {
       expect(data.totalLocalVideos).to.equal(1)
       expect(data.totalLocalVideoViews).to.equal(1)
       expect(data.totalLocalVideoFilesSize).to.equal(218910)
+
       expect(data.totalUsers).to.equal(2)
+      expect(data.totalModerators).to.equal(0)
+      expect(data.totalAdmins).to.equal(1)
+
       expect(data.totalVideoComments).to.equal(1)
       expect(data.totalVideos).to.equal(1)
       expect(data.totalInstanceFollowers).to.equal(2)
@@ -71,7 +75,11 @@ describe('Test stats (excluding redundancy)', function () {
       expect(data.totalLocalVideos).to.equal(0)
       expect(data.totalLocalVideoViews).to.equal(0)
       expect(data.totalLocalVideoFilesSize).to.equal(0)
+
       expect(data.totalUsers).to.equal(1)
+      expect(data.totalModerators).to.equal(0)
+      expect(data.totalAdmins).to.equal(1)
+
       expect(data.totalVideoComments).to.equal(1)
       expect(data.totalVideos).to.equal(1)
       expect(data.totalInstanceFollowers).to.equal(1)
@@ -85,7 +93,11 @@ describe('Test stats (excluding redundancy)', function () {
       expect(data.totalLocalVideoComments).to.equal(0)
       expect(data.totalLocalVideos).to.equal(0)
       expect(data.totalLocalVideoViews).to.equal(0)
+
       expect(data.totalUsers).to.equal(1)
+      expect(data.totalModerators).to.equal(0)
+      expect(data.totalAdmins).to.equal(1)
+
       expect(data.totalVideoComments).to.equal(1)
       expect(data.totalVideos).to.equal(1)
       expect(data.totalInstanceFollowing).to.equal(1)
@@ -420,7 +432,9 @@ describe('Test stats (excluding redundancy)', function () {
       await servers[0].run({
         stats: {
           registration_requests: { enabled: false },
-          abuses: { enabled: false }
+          abuses: { enabled: false },
+          total_admins: { enabled: false },
+          total_moderators: { enabled: false }
         }
       })
 
@@ -433,6 +447,9 @@ describe('Test stats (excluding redundancy)', function () {
       expect(data.totalAbuses).to.be.null
       expect(data.totalAbusesProcessed).to.be.null
       expect(data.averageAbuseResponseTimeMs).to.be.null
+
+      expect(data.totalAdmins).to.be.null
+      expect(data.totalModerators).to.be.null
     })
   })
 

@@ -8,7 +8,8 @@ import {
   VideoPlaylistType,
   type NSFWPolicyType,
   type UserAdminFlagType,
-  type UserRoleType
+  type UserRoleType,
+  UserRole
 } from '@peertube/peertube-models'
 import { TokensCache } from '@server/lib/auth/tokens-cache.js'
 import { LiveQuotaStore } from '@server/lib/live/index.js'
@@ -67,7 +68,7 @@ import { ActorFollowModel } from '../actor/actor-follow.js'
 import { ActorImageModel } from '../actor/actor-image.js'
 import { ActorModel } from '../actor/actor.js'
 import { OAuthTokenModel } from '../oauth/oauth-token.js'
-import { getAdminUsersSort, SequelizeModel, throwIfNotValid } from '../shared/index.js'
+import { getAdminUsersSort, parseAggregateResult, SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoImportModel } from '../video/video-import.js'
 import { VideoLiveModel } from '../video/video-live.js'
@@ -875,32 +876,31 @@ export class UserModel extends SequelizeModel<UserModel> {
     return parseInt(total, 10)
   }
 
-  static async getStats () {
-    function getActiveUsers (days: number) {
-      const query = {
-        where: {
-          [Op.and]: [
-            literal(`"lastLoginDate" > NOW() - INTERVAL '${days}d'`)
-          ]
-        }
+  static getStats () {
+    const query = `SELECT ` +
+      `COUNT(*) AS "totalUsers", ` +
+      `COUNT(*) FILTER (WHERE "lastLoginDate" > NOW() - INTERVAL '1d') AS "totalDailyActiveUsers", ` +
+      `COUNT(*) FILTER (WHERE "lastLoginDate" > NOW() - INTERVAL '7d') AS "totalWeeklyActiveUsers", ` +
+      `COUNT(*) FILTER (WHERE "lastLoginDate" > NOW() - INTERVAL '30d') AS "totalMonthlyActiveUsers", ` +
+      `COUNT(*) FILTER (WHERE "lastLoginDate" > NOW() - INTERVAL '180d') AS "totalHalfYearActiveUsers", ` +
+      `COUNT(*) FILTER (WHERE "role" = ${UserRole.MODERATOR}) AS "totalModerators", ` +
+      `COUNT(*) FILTER (WHERE "role" = ${UserRole.ADMINISTRATOR}) AS "totalAdmins" ` +
+      `FROM "user"`
+
+    return UserModel.sequelize.query<any>(query, {
+      type: QueryTypes.SELECT,
+      raw: true
+    }).then(([ row ]) => {
+      return {
+        totalUsers: parseAggregateResult(row.totalUsers),
+        totalDailyActiveUsers: parseAggregateResult(row.totalDailyActiveUsers),
+        totalWeeklyActiveUsers: parseAggregateResult(row.totalWeeklyActiveUsers),
+        totalMonthlyActiveUsers: parseAggregateResult(row.totalMonthlyActiveUsers),
+        totalHalfYearActiveUsers: parseAggregateResult(row.totalHalfYearActiveUsers),
+        totalModerators: parseAggregateResult(row.totalModerators),
+        totalAdmins: parseAggregateResult(row.totalAdmins)
       }
-
-      return UserModel.unscoped().count(query)
-    }
-
-    const totalUsers = await UserModel.unscoped().count()
-    const totalDailyActiveUsers = await getActiveUsers(1)
-    const totalWeeklyActiveUsers = await getActiveUsers(7)
-    const totalMonthlyActiveUsers = await getActiveUsers(30)
-    const totalHalfYearActiveUsers = await getActiveUsers(180)
-
-    return {
-      totalUsers,
-      totalDailyActiveUsers,
-      totalWeeklyActiveUsers,
-      totalMonthlyActiveUsers,
-      totalHalfYearActiveUsers
-    }
+    })
   }
 
   static autoComplete (search: string) {

@@ -456,6 +456,12 @@ stats:
   abuses:
     enabled: true
 
+  total_moderators:
+    enabled: true
+
+  total_admins:
+    enabled: true
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache

@@ -454,6 +454,12 @@ stats:
   abuses:
     enabled: true
 
+  total_moderators:
+    enabled: true
+
+  total_admins:
+    enabled: true
+
 ###############################################################################
 #
 # From this point, almost all following keys can be overridden by the web interface

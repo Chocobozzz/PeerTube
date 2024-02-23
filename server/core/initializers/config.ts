@@ -369,6 +369,12 @@ const CONFIG = {
     },
     ABUSES: {
       ENABLED: config.get<boolean>('stats.abuses.enabled')
+    },
+    TOTAL_MODERATORS: {
+      ENABLED: config.get<boolean>('stats.total_moderators.enabled')
+    },
+    TOTAL_ADMINS: {
+      ENABLED: config.get<boolean>('stats.total_admins.enabled')
     }
   },
   ADMIN: {

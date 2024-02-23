@@ -8569,6 +8569,12 @@ components:
           type: number
         totalMonthlyActiveUsers:
           type: number
+        totalModerators:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled total moderators stats"
+        totalAdmins:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled total admins stats"
         totalLocalVideos:
           type: number
         totalLocalVideoViews:

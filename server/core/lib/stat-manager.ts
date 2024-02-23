@@ -49,7 +49,14 @@ class StatsManager {
   async getStats () {
     const { totalLocalVideos, totalLocalVideoViews, totalVideos } = await VideoModel.getStats()
     const { totalLocalVideoComments, totalVideoComments } = await VideoCommentModel.getStats()
-    const { totalUsers, totalDailyActiveUsers, totalWeeklyActiveUsers, totalMonthlyActiveUsers } = await UserModel.getStats()
+    const {
+      totalUsers,
+      totalDailyActiveUsers,
+      totalWeeklyActiveUsers,
+      totalMonthlyActiveUsers,
+      totalAdmins,
+      totalModerators
+    } = await UserModel.getStats()
     const { totalInstanceFollowers, totalInstanceFollowing } = await ActorFollowModel.getStats()
     const { totalLocalVideoFilesSize } = await VideoFileModel.getStats()
     const {
@@ -67,6 +74,14 @@ class StatsManager {
       totalDailyActiveUsers,
       totalWeeklyActiveUsers,
       totalMonthlyActiveUsers,
+
+      totalModerators: CONFIG.STATS.TOTAL_MODERATORS.ENABLED
+        ? totalModerators
+        : null,
+
+      totalAdmins: CONFIG.STATS.TOTAL_ADMINS.ENABLED
+        ? totalAdmins
+        : null,
 
       totalLocalVideos,
       totalLocalVideoViews,
