@@ -20098,9 +20098,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4737947753130898543" datatype="html">
+      <trans-unit id="4737947753130898543" datatype="html" xml:space="preserve">
         <source>You can import an archive created by another PeerTube website.</source>
-        <target state="new">You can import an archive created by another PeerTube website.</target>
+        <target state="translated">Du kannst ein Archiv importieren, das von einer anderen PeerTube-Webseite erstellt wurde.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">10</context>
