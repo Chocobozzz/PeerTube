@@ -1,6 +1,6 @@
 {
   "name": "@peertube/peertube-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "main": "dist/peertube.js",
   "bin": "dist/peertube.js",
