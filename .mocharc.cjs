@@ -2,7 +2,7 @@ process.env.TSX_TSCONFIG_PATH = './packages/tests/tsconfig.json'
 
 module.exports = {
   "node-option": [
-    "loader=tsx",
+    "import=tsx",
     "no-warnings",
     "conditions=peertube:tsx"
   ],

@@ -244,7 +244,7 @@
     "swagger-cli": "^4.0.2",
     "tsc-watch": "^6.0.0",
     "tsx": "^4.7.1",
-    "typescript": "~5.3.3"
+    "typescript": "~5.2"
   },
   "bundlewatch": {
     "files": [
