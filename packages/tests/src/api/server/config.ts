@@ -690,14 +690,10 @@ describe('Test config', function () {
 
     async function checkAndGetServerImages () {
       const { instance } = await server.config.getAbout()
-      const htmlConfig = await server.config.getIndexHTMLConfig()
-      const serverConfig = await server.config.getIndexHTMLConfig()
+      const htmlConfig = await server.config.getConfig()
 
       expect(instance.avatars).to.deep.equal(htmlConfig.instance.avatars)
-      expect(serverConfig.instance.avatars).to.deep.equal(htmlConfig.instance.avatars)
-
       expect(instance.banners).to.deep.equal(htmlConfig.instance.banners)
-      expect(serverConfig.instance.banners).to.deep.equal(htmlConfig.instance.banners)
 
       return htmlConfig.instance
     }
