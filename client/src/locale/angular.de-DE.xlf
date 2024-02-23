@@ -20122,9 +20122,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3383933587008035091" datatype="html">
+      <trans-unit id="3383933587008035091" datatype="html" xml:space="preserve">
         <source>Update your account metadata (display name, description, avatar...)</source>
-        <target state="new">Update your account metadata (display name, description, avatar...)</target>
+        <target state="translated">Aktualisiere deine Kontometadaten (Anzeigename, Beschreibung, Avatar...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">20</context>
@@ -20138,9 +20138,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2439199866127869675" datatype="html">
+      <trans-unit id="2439199866127869675" datatype="html" xml:space="preserve">
         <source>Add accounts/server in your mute list</source>
-        <target state="new">Add accounts/server in your mute list</target>
+        <target state="translated">Konten/Server zu deiner Stummschaltungsliste hinzufügen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">22</context>
@@ -20154,25 +20154,25 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6841230785530859987" datatype="html">
+      <trans-unit id="6841230785530859987" datatype="html" xml:space="preserve">
         <source>Send a follow request to your subscriptions</source>
-        <target state="new">Send a follow request to your subscriptions</target>
+        <target state="translated">Eine Folgeanfrage an deine Abonnements senden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6364930312790587948" datatype="html">
+      <trans-unit id="6364930312790587948" datatype="html" xml:space="preserve">
         <source>Create channels if they do not already exist</source>
-        <target state="new">Create channels if they do not already exist</target>
+        <target state="translated">Kanäle erstellen, wenn sie noch nicht vorhanden sind</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3590744729573065939" datatype="html">
+      <trans-unit id="3590744729573065939" datatype="html" xml:space="preserve">
         <source>Create playlists if they do not already exist</source>
-        <target state="new">Create playlists if they do not already exist</target>
+        <target state="translated">Wiedergabelisten erstellen, wenn sie noch nicht vorhanden sind</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">26</context>
@@ -20186,9 +20186,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3920743519289818329" datatype="html">
+      <trans-unit id="3920743519289818329" datatype="html" xml:space="preserve">
         <source>The following data objects are not imported:</source>
-        <target state="new">The following data objects are not imported:</target>
+        <target state="translated">Die folgenden Datenobjekte werden nicht importiert:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">30</context>
@@ -20202,9 +20202,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="558490183395886693" datatype="html">
+      <trans-unit id="558490183395886693" datatype="html" xml:space="preserve">
         <source>An email will be sent when the import process is complete.</source>
-        <target state="new">An email will be sent when the import process is complete.</target>
+        <target state="translated">Sobald der Importvorgang abgeschlossen ist, erhältst du eine E-Mail.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">37</context>
@@ -20218,49 +20218,49 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">50,52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1473104874710475790" datatype="html">
+      <trans-unit id="1473104874710475790" datatype="html" xml:space="preserve">
         <source>Upload completed. Your archive import will be processed as soon as possible.</source>
-        <target state="new"> Upload completed. Your archive import will be processed as soon as possible. </target>
+        <target state="translated">Hochladen abgeschlossen. Dein Archivimport wird so schnell wie möglich bearbeitet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">60,62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2723142545112770414" datatype="html">
+      <trans-unit id="2723142545112770414" datatype="html" xml:space="preserve">
         <source>(extension: .zip)</source>
-        <target state="new">(extension: .zip)</target>
+        <target state="translated">(Erweiterung: .zip)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7690080704928394942" datatype="html">
+      <trans-unit id="7690080704928394942" datatype="html" xml:space="preserve">
         <source>Select the archive file to import</source>
-        <target state="new">Select the archive file to import</target>
+        <target state="translated">Wähle die zu importierende Archivdatei aus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2185709317252805927" datatype="html">
+      <trans-unit id="2185709317252805927" datatype="html" xml:space="preserve">
         <source>Select the file to import</source>
-        <target state="new">Select the file to import</target>
+        <target state="translated">Wähle die zu importierende Datei aus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3349672451992350883" datatype="html">
+      <trans-unit id="3349672451992350883" datatype="html" xml:space="preserve">
         <source>User import is not enabled by your administrator.</source>
-        <target state="new">User import is not enabled by your administrator.</target>
+        <target state="translated">Der Benutzerimport wurde von deinem Administrator nicht aktiviert.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1842877412269588224" datatype="html">
+      <trans-unit id="1842877412269588224" datatype="html" xml:space="preserve">
         <source>Your archive file is not uploaded yet, are you sure you want to leave this page?</source>
-        <target state="new">Your archive file is not uploaded yet, are you sure you want to leave this page?</target>
+        <target state="translated">Deine Archivdatei ist noch nicht hochgeladen. Bist du sicher, dass du diese Seite verlassen willst?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -20274,9 +20274,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2956881256361598032" datatype="html">
+      <trans-unit id="2956881256361598032" datatype="html" xml:space="preserve">
         <source>archive</source>
-        <target state="new">archive</target>
+        <target state="translated">Archiv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
           <context context-type="linenumber">180</context>
@@ -21086,9 +21086,9 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5240556993302961443" datatype="html">
+      <trans-unit id="5240556993302961443" datatype="html" xml:space="preserve">
         <source>Save interface settings</source>
-        <target state="new">Save interface settings</target>
+        <target state="translated">Schnittstelleneinstellungen speichern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">16</context>
