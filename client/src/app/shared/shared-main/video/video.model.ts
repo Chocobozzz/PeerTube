@@ -67,6 +67,8 @@ export class Video implements VideoServerModel {
   dislikes: number
   nsfw: boolean
 
+  shortVideo: boolean
+
   originInstanceUrl: string
   originInstanceHost: string
 
@@ -165,6 +167,8 @@ export class Video implements VideoServerModel {
     this.dislikes = hash.dislikes
 
     this.nsfw = hash.nsfw
+
+    this.shortVideo = hash.nsfw
 
     this.account = hash.account
     this.channel = hash.channel

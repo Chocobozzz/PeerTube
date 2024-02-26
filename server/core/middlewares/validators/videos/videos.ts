@@ -33,7 +33,8 @@ import {
   isVideoNameValid,
   isVideoOriginallyPublishedAtValid,
   isVideoPrivacyValid,
-  isVideoSupportValid
+  isVideoSupportValid,
+  isDurationValid
 } from '../../../helpers/custom-validators/videos.js'
 import { cleanUpReqFiles } from '../../../helpers/express-utils.js'
 import { logger } from '../../../helpers/logger.js'
@@ -54,6 +55,9 @@ import {
 } from '../shared/index.js'
 import { addDurationToVideoFileIfNeeded, commonVideoFileChecks, isVideoFileAccepted } from './shared/index.js'
 
+
+// let duration: number
+
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
     .custom((_, { req }) => isFileValid({ files: req.files, field: 'videofile', mimeTypeRegex: null, maxSize: null }))
@@ -71,6 +75,8 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
     .isArray()
     .withMessage('Video passwords should be an array.'),
 
+
+
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
@@ -81,13 +87,15 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
       !await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files }) ||
       !isValidPasswordProtectedPrivacy(req, res) ||
       !await addDurationToVideoFileIfNeeded({ videoFile, res, middlewareName: 'videosAddvideosAddLegacyValidatorResumableValidator' }) ||
-      !await isVideoFileAccepted({ req, res, videoFile, hook: 'filter:api.video.upload.accept.result' })
-    ) {
+      !await isVideoFileAccepted({ req, res, videoFile, hook: 'filter:api.video.upload.accept.result' }) ) {
       return cleanUpReqFiles(req)
     }
 
     return next()
-  }
+  },
+
+
+
 ])
 
 /**
@@ -353,8 +361,46 @@ const videosOverviewValidator = [
   }
 ]
 
+
+
 function getCommonVideoEditAttributes () {
+
+async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+   if (areValidationErrors(req, res)) return cleanUpReqFiles(req);
+
+   const videoFile: express.VideoUploadFile = req.files['videofile'][0];
+   const user = res.locals.oauth.token.User;
+
+   if (
+     !await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files }) ||
+     !isValidPasswordProtectedPrivacy(req, res) ||
+     !await addDurationToVideoFileIfNeeded({ videoFile, res, middlewareName: 'videosAddvideosAddLegacyValidatorResumableValidator' }) ||
+     !await isVideoFileAccepted({ req, res, videoFile, hook: 'filter:api.video.upload.accept.result' })
+   ) {
+     return cleanUpReqFiles(req);
+   }
+
+ };
   return [
+
+ async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return cleanUpReqFiles(req);
+
+    const videoFile: express.VideoUploadFile = req.files['videofile'][0];
+    const user = res.locals.oauth.token.User;
+
+    if (
+      !await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files }) ||
+      !isValidPasswordProtectedPrivacy(req, res) ||
+      !await addDurationToVideoFileIfNeeded({ videoFile, res, middlewareName: 'videosAddvideosAddLegacyValidatorResumableValidator' }) ||
+      !await isVideoFileAccepted({ req, res, videoFile, hook: 'filter:api.video.upload.accept.result' })
+    ) {
+      return cleanUpReqFiles(req);
+    }
+
+    return next();
+  },
+
     body('thumbnailfile')
       .custom((value, { req }) => isVideoImageValid(req.files, 'thumbnailfile')).withMessage(
         'This thumbnail file is not supported or too large. Please, make sure it is of the following type: ' +
@@ -427,7 +473,29 @@ function getCommonVideoEditAttributes () {
     body('scheduleUpdate.privacy')
       .optional()
       .customSanitizer(toIntOrNull)
-      .custom(isScheduleVideoUpdatePrivacyValid)
+      .custom(isScheduleVideoUpdatePrivacyValid),
+
+
+    body('shortVideo')
+      .optional()
+      .customSanitizer(toBooleanOrNull)
+      .custom(() => true).withMessage('Should have shortVideo boolean'),
+
+       body('shortVideo')
+        .optional()
+              .customSanitizer(toBooleanOrNull)
+
+        .custom((value, { req }) => {
+          if (value) {
+                const videoFile: express.VideoUploadFile = req.files['videofile'][0]
+
+            return isDurationValid(videoFile.duration, 20);
+          }
+          return true;
+        })
+        .withMessage('Video duration must be less than 60 seconds for short videos'),
+
+
   ] as (ValidationChain | ExpressPromiseHandler)[]
 }
 
@@ -459,6 +527,14 @@ const commonVideosFiltersValidator = [
   query('nsfw')
     .optional()
     .custom(isBooleanBothQueryValid),
+
+
+
+   query('shortVideo')
+      .optional()
+      .customSanitizer(toBooleanOrNull)
+      .custom(isBooleanValid).withMessage('Should have a valid shortVideo boolean'),
+
   query('isLive')
     .optional()
     .customSanitizer(toBooleanOrNull)

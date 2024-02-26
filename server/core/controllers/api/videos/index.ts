@@ -176,9 +176,11 @@ async function getVideoDescription (req: express.Request, res: express.Response)
 }
 
 async function listVideos (req: express.Request, res: express.Response) {
+
   const serverActor = await getServerActor()
 
   const query = pickCommonVideoQuery(req.query)
+
   const countVideos = getCountVideos(req)
 
   const apiOptions = await Hooks.wrapObject({

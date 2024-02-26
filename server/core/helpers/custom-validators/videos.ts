@@ -185,6 +185,12 @@ function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
   return true
 }
 
+
+function isDurationValid(currDuration : number, requiredDuration: number){
+
+    return currDuration<= requiredDuration;
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -214,5 +220,6 @@ export {
   isVideoImageValid,
   isVideoSupportValid,
   isPasswordValid,
-  isValidPasswordProtectedPrivacy
+  isValidPasswordProtectedPrivacy,
+  isDurationValid
 }

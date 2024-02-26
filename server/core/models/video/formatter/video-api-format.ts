@@ -114,6 +114,8 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
     // Can be added by external plugins
     pluginData: (video as any).pluginData,
 
+    shortVideo : video.shortVideo,
+
     ...buildAdditionalAttributes(video, options)
   }
 

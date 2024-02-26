@@ -100,6 +100,9 @@ export {
 async function addVideoLegacy (req: express.Request, res: express.Response) {
   // Uploading the video could be long
   // Set timeout to 10 minutes, as Express's default is 2 minutes
+
+
+
   req.setTimeout(1000 * 60 * 10, () => {
     logger.error('Video upload has timed out.')
     return res.fail({
@@ -141,6 +144,7 @@ async function addVideo (options: {
 
   let videoData = buildLocalVideoFromReq(videoInfo, videoChannel.id)
   videoData = await Hooks.wrapObject(videoData, 'filter:api.video.upload.video-attribute.result')
+
 
   videoData.state = buildNextVideoState()
   videoData.duration = videoPhysicalFile.duration // duration was added by a previous middleware

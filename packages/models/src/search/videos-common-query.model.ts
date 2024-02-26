@@ -36,6 +36,9 @@ export interface VideosCommonQuery {
   search?: string
 
   excludeAlreadyWatched?: boolean
+
+  durationMax?: number  /*EDITED*/
+  shortVideo?: boolean
 }
 
 export interface VideosCommonQueryAfterSanitize extends VideosCommonQuery {

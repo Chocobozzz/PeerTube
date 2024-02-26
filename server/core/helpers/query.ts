@@ -26,7 +26,9 @@ function pickCommonVideoQuery (query: VideosCommonQueryAfterSanitize) {
     'hasWebtorrentFiles', // TODO: Remove in v7
     'hasWebVideoFiles',
     'search',
-    'excludeAlreadyWatched'
+    'excludeAlreadyWatched',
+    'durationMax',
+    'shortVideo'
   ])
 }
 

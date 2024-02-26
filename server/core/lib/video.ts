@@ -38,7 +38,9 @@ export function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: numbe
     channelId,
     originallyPublishedAt: videoInfo.originallyPublishedAt
       ? new Date(videoInfo.originallyPublishedAt)
-      : null
+      : null,
+
+     shortVideo: videoInfo.shortVideo || false
   }
 }
 

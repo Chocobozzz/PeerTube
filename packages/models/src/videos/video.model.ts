@@ -57,6 +57,8 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
   }
 
   pluginData?: any
+
+  shortVideo: boolean
 }
 
 // Not included by default, needs query params

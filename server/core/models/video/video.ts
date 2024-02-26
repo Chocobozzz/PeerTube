@@ -430,6 +430,15 @@ export type ForAPIOptions = {
         nsfw: true
       }
     },
+
+     {
+          fields: [ 'shortVideo' ],
+          where: {
+            shortVideo: false
+          }
+        },
+
+
     {
       fields: [ 'isLive' ], // Most of the videos are VOD
       where: {
@@ -549,6 +558,10 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   @AllowNull(false)
   @Column
   downloadEnabled: boolean
+
+   @AllowNull(true)
+   @Column
+   shortVideo: boolean
 
   @AllowNull(false)
   @Column
@@ -1157,6 +1170,10 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     search?: string
 
     excludeAlreadyWatched?: boolean
+
+    durationMax?:number
+
+    shortVideo? : boolean
   }) {
     VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
     VideoModel.throwIfPrivacyOneOfWithoutUser(options.privacyOneOf, options.user)
@@ -1197,7 +1214,9 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'hasWebtorrentFiles',
         'hasWebVideoFiles',
         'search',
-        'excludeAlreadyWatched'
+        'excludeAlreadyWatched',
+        'durationMax',
+        'shortVideo'
       ]),
 
       serverAccountIdForBlock: serverActor.Account.id,
@@ -1249,6 +1268,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     excludeAlreadyWatched?: boolean
 
     countVideos?: boolean
+
+    shortVideo?: boolean
   }) {
     VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
     VideoModel.throwIfPrivacyOneOfWithoutUser(options.privacyOneOf, options.user)
@@ -1284,7 +1305,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'uuids',
         'search',
         'displayOnlyForFollower',
-        'excludeAlreadyWatched'
+        'excludeAlreadyWatched',
+        'shortVideo'
       ]),
       serverAccountIdForBlock: serverActor.Account.id
     }
@@ -1624,6 +1646,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     options: BuildVideosListQueryOptions,
     countVideos = true
   ): Promise<ResultList<VideoModel>> {
+
     const span = tracer.startSpan('peertube.VideoModel.getAvailableForApi')
 
     function getCount () {

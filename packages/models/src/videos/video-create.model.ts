@@ -22,4 +22,6 @@ export interface VideoCreate {
 
   thumbnailfile?: Blob | string
   previewfile?: Blob | string
+
+  shortVideo?: boolean
 }

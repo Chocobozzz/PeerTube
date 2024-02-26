@@ -32,6 +32,9 @@ export type BuildVideosListQueryOptions = {
   sort: string
 
   nsfw?: boolean
+
+  shortVideo?: boolean
+
   host?: string
   isLive?: boolean
   isLocal?: boolean
@@ -211,6 +214,14 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       this.whereSFW()
     }
 
+    if(options.shortVideo === true){
+      this.whereShortVideo()
+    }
+    else if(options.shortVideo == false){
+      this.whereLongVideo()
+    }
+
+
     if (options.isLive === true) {
       this.whereLive()
     } else if (options.isLive === false) {
@@ -305,6 +316,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       this.sort + ' ' +
       this.limit + ' ' +
       this.offset
+
   }
 
   private setCountAttribute () {
@@ -512,6 +524,14 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private whereSFW () {
     this.and.push('"video"."nsfw" IS FALSE')
   }
+
+  private whereShortVideo(){
+    this.and.push('"video"."shortVideo" IS TRUE')
+  }
+
+   private whereLongVideo(){
+      this.and.push('"video"."shortVideo" IS FALSE')
+    }
 
   private whereLive () {
     this.and.push('"video"."isLive" IS TRUE')
