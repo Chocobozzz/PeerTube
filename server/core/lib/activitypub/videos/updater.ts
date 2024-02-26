@@ -49,14 +49,10 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     try {
       const channelActor = await this.getOrCreateVideoChannelFromVideoObject()
 
-      const thumbnailModel = await this.setThumbnail(this.video)
-
       this.checkChannelUpdateOrThrow(channelActor)
 
       const oldState = this.video.state
       const videoUpdated = await this.updateVideo(channelActor.VideoChannel, undefined, overrideTo)
-
-      if (thumbnailModel) await videoUpdated.addAndSaveThumbnail(thumbnailModel)
 
       await runInReadCommittedTransaction(async t => {
         await this.setWebVideoFiles(videoUpdated, t)
