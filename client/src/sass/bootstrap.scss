@@ -144,6 +144,8 @@ body {
     margin-bottom: 5px;
 
     .modal-title {
+      @include margin-right(auto);
+
       font-size: 20px;
       font-weight: $font-semibold;
     }
