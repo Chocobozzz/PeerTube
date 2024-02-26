@@ -25,9 +25,7 @@ export async function parseTorrentVideo (server: PeerTubeServer, file: VideoFile
 
   const data = await readFile(torrentPath)
 
-  // FIXME: use classic import, on node 18.18 we have an error
-  // "[ERR_PACKAGE_PATH_NOT_EXPORTED]: No "exports" main defined in .../node_modules/parse-torrent/package.json"
-  return require('parse-torrent')(data)
+  return (await import('parse-torrent')).default(data)
 }
 
 // ---------------------------------------------------------------------------
