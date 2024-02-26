@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { testImageSize } from '@tests/shared/checks.js'
+import { testAvatarSize } from '@tests/shared/checks.js'
 import { AbuseState, HttpStatusCode, UserAdminFlag, UserRole, VideoPlaylistType } from '@peertube/peertube-models'
-import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@peertube/peertube-server-commands'
+import {
+  cleanupTests,
+  createSingleServer, PeerTubeServer,
+  setAccessTokensToServers
+} from '@peertube/peertube-server-commands'
 
 describe('Test users', function () {
   let server: PeerTubeServer
@@ -264,7 +268,7 @@ describe('Test users', function () {
 
       const user = await server.users.getMyInfo({ token: userToken })
       for (const avatar of user.account.avatars) {
-        await testImageSize(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, '.gif')
+        await testAvatarSize({ url: server.url, avatar, imageName: `avatar-resized-${avatar.width}x${avatar.width}` })
       }
     })
 
@@ -276,7 +280,7 @@ describe('Test users', function () {
 
         const user = await server.users.getMyInfo({ token: userToken })
         for (const avatar of user.account.avatars) {
-          await testImageSize(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, extension)
+          await testAvatarSize({ url: server.url, avatar, imageName: `avatar-resized-${avatar.width}x${avatar.width}` })
         }
       }
     })

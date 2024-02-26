@@ -883,6 +883,14 @@ const PREVIEWS_SIZE = {
 const ACTOR_IMAGES_SIZE: { [key in ActorImageType_Type]: { width: number, height: number }[] } = {
   [ActorImageType.AVATAR]: [
     {
+      width: 1500,
+      height: 1500
+    },
+    {
+      width: 600,
+      height: 600
+    },
+    {
       width: 120,
       height: 120
     },

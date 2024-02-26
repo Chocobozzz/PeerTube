@@ -31,7 +31,7 @@ export async function processImage (options: {
   if (extension === '.gif') {
     await processGIF({ path, destination, newSize })
   } else {
-    await jimpProcessor(path, destination, newSize, extension)
+    await jimpProcessor({ path, destination, newSize, inputExt: extension })
   }
 
   if (keepOriginal !== true) await remove(path)
@@ -56,7 +56,17 @@ export async function getImageSize (path: string) {
 // Private
 // ---------------------------------------------------------------------------
 
-async function jimpProcessor (path: string, destination: string, newSize: { width: number, height: number }, inputExt: string) {
+async function jimpProcessor (options: {
+  path: string
+  destination: string
+  newSize: {
+    width: number
+    height: number
+  }
+  inputExt: string
+}) {
+  const { path, destination, newSize, inputExt } = options
+
   let sourceImage: Jimp
   const inputBuffer = await readFile(path)
 
@@ -125,7 +135,7 @@ function skipProcessing (options: {
   const { width, height } = newSize
 
   if (hasExif(sourceImage)) return false
-  if (sourceImage.getWidth() > width || sourceImage.getHeight() > height) return false
+  if (sourceImage.getWidth() !== width || sourceImage.getHeight() !== height) return false
   if (inputExt !== outputExt) return false
 
   const kB = 1000

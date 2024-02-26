@@ -127,9 +127,15 @@ export async function prepareImportExportTests (options: {
 
   const emailPort = await MockSmtpServer.Instance.collectEmails(emails)
 
+  const overrideConfig = {
+    ...objectStorageConfig,
+    ...ConfigCommand.getEmailOverrideConfig(emailPort),
+    ...ConfigCommand.getDisableRatesLimitOverrideConfig()
+  }
+
   const [ server, remoteServer, blockedServer ] = await Promise.all([
-    createSingleServer(1, { ...objectStorageConfig, ...ConfigCommand.getEmailOverrideConfig(emailPort) }),
-    createSingleServer(2, { ...objectStorageConfig, ...ConfigCommand.getEmailOverrideConfig(emailPort) }),
+    createSingleServer(1, overrideConfig),
+    createSingleServer(2, overrideConfig),
 
     withBlockedServer
       ? createSingleServer(3)

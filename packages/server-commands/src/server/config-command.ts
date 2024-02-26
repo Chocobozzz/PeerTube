@@ -30,6 +30,16 @@ export class ConfigCommand extends AbstractCommand {
     }
   }
 
+  static getDisableRatesLimitOverrideConfig () {
+    return {
+      rates_limit: {
+        api: {
+          max: 5000
+        }
+      }
+    }
+  }
+
   // ---------------------------------------------------------------------------
 
   enableSignup (requiresApproval: boolean, limit = -1) {

@@ -21,7 +21,7 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
 
   @Input() previewImage: string
 
-  @Input({ transform: numberAttribute }) size: number
+  @Input({ transform: numberAttribute }) size = 120
 
   // Use an external link
   @Input() href: string

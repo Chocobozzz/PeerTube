@@ -1,5 +1,5 @@
 import './oauth.js'
-import './registrations`.js'
+import './registrations.js'
 import './two-factor.js'
 import './user-export.js'
 import './user-import.js'

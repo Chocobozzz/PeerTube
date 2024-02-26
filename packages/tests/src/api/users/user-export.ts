@@ -435,7 +435,7 @@ function runTest (withObjectStorage: boolean) {
         expect(secondaryChannel.description).to.equal('noah description')
         expect(secondaryChannel.support).to.equal('noah support')
 
-        expect(secondaryChannel.avatars).to.have.lengthOf(2)
+        expect(secondaryChannel.avatars).to.have.lengthOf(4)
         expect(secondaryChannel.banners).to.have.lengthOf(1)
 
         const urls = [ ...secondaryChannel.avatars, ...secondaryChannel.banners ].map(a => a.url)
@@ -627,7 +627,7 @@ function runTest (withObjectStorage: boolean) {
     // PeerTube format
     {
       const json = await parseZIPJSONFile<AccountExportJSON>(zip, 'peertube/account.json')
-      expect(json.avatars).to.have.lengthOf(2)
+      expect(json.avatars).to.have.lengthOf(4)
 
       for (const avatar of json.avatars) {
         await makeRawRequest({ url: avatar.url, expectedStatus: HttpStatusCode.OK_200 })

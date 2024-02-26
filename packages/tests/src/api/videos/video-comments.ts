@@ -257,7 +257,7 @@ describe('Test video comments', function () {
         expect(data[0].text).to.equal('my second answer to thread 4')
         expect(data[0].account.name).to.equal('root')
         expect(data[0].account.displayName).to.equal('root')
-        expect(data[0].account.avatars).to.have.lengthOf(2)
+        expect(data[0].account.avatars).to.have.lengthOf(4)
       }
 
       {
@@ -266,8 +266,8 @@ describe('Test video comments', function () {
         expect(total).to.equal(7)
         expect(data).to.have.lengthOf(2)
 
-        expect(data[0].account.avatars).to.have.lengthOf(2)
-        expect(data[1].account.avatars).to.have.lengthOf(2)
+        expect(data[0].account.avatars).to.have.lengthOf(4)
+        expect(data[1].account.avatars).to.have.lengthOf(4)
       }
     })
 

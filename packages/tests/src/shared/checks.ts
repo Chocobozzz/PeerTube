@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { pathExists } from 'fs-extra/esm'
 import { readFile } from 'fs/promises'
-import { join } from 'path'
+import { join, parse } from 'path'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { makeGetRequest, PeerTubeServer } from '@peertube/peertube-server-commands'
@@ -42,14 +42,25 @@ async function expectLogContain (server: PeerTubeServer, str: string) {
   expect(content.toString()).to.contain(str)
 }
 
-async function testImageSize (url: string, imageName: string, imageHTTPPath: string, extension = '.jpg') {
-  const res = await makeGetRequest({
+async function testAvatarSize (options: {
+  url: string
+  imageName: string
+  avatar: {
+    width: number
+    path: string
+  }
+}) {
+  const { url, imageName, avatar } = options
+
+  const { body } = await makeGetRequest({
     url,
-    path: imageHTTPPath,
+    path: avatar.path,
     expectedStatus: HttpStatusCode.OK_200
   })
 
-  const body = res.body
+  const extension = parse(avatar.path).ext
+  // We don't test big GIF avatars
+  if (extension === '.gif' && avatar.width > 150) return
 
   const data = await readFile(buildAbsoluteFixturePath(imageName + extension))
   const minLength = data.length - ((40 * data.length) / 100)
@@ -162,7 +173,7 @@ async function checkVideoDuration (server: PeerTubeServer, videoUUID: string, du
 export {
   dateIsValid,
   testImageGeneratedByFFmpeg,
-  testImageSize,
+  testAvatarSize,
   testImage,
   expectLogDoesNotContain,
   testFileExistsOrNot,

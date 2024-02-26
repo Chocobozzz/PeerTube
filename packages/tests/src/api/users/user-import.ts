@@ -21,7 +21,7 @@ import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils
 import { writeFile } from 'fs/promises'
 import { join } from 'path'
 import { expect } from 'chai'
-import { testImage, testImageSize } from '@tests/shared/checks.js'
+import { testImage, testAvatarSize } from '@tests/shared/checks.js'
 import { completeVideoCheck } from '@tests/shared/videos.js'
 import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
 
@@ -84,7 +84,7 @@ function runTest (withObjectStorage: boolean) {
     }
 
     // Add avatars
-    await server.users.updateMyAvatar({ token: noahToken, fixture: 'avatar.gif' })
+    await server.users.updateMyAvatar({ token: noahToken, fixture: 'avatar.png' })
 
     // Add password protected video
     await server.videos.upload({
@@ -168,9 +168,10 @@ function runTest (withObjectStorage: boolean) {
     expect(me.account.displayName).to.equal('noah')
     expect(me.username).to.equal('noah_remote')
     expect(me.account.description).to.equal('super noah description')
+    expect(me.account.avatars).to.have.lengthOf(4)
 
     for (const avatar of me.account.avatars) {
-      await testImageSize(remoteServer.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, '.gif')
+      await testAvatarSize({ url: remoteServer.url, avatar, imageName: `avatar-resized-${avatar.width}x${avatar.width}` })
     }
   })
 
@@ -482,7 +483,7 @@ function runTest (withObjectStorage: boolean) {
     // My avatars
     {
       const me = await remoteServer.users.getMyInfo({ token: remoteNoahToken })
-      expect(me.account.avatars).to.have.lengthOf(2)
+      expect(me.account.avatars).to.have.lengthOf(4)
     }
 
     // Channels

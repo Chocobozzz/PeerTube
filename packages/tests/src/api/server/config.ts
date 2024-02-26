@@ -11,7 +11,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { testFileExistsOrNot, testImage, testImageSize } from '@tests/shared/checks.js'
+import { testFileExistsOrNot, testImage, testAvatarSize } from '@tests/shared/checks.js'
 import { basename } from 'path'
 
 function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
@@ -739,7 +739,7 @@ describe('Test config', function () {
           const { avatars } = await checkAndGetServerImages()
 
           for (const avatar of avatars) {
-            await testImageSize(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, extension)
+            await testAvatarSize({ url: server.url, avatar, imageName: `avatar-resized-${avatar.width}x${avatar.width}` })
           }
 
           avatarPath = avatars[0].path

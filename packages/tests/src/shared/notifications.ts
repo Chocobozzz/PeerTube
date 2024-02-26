@@ -933,7 +933,7 @@ function checkActor (actor: any, options: { withAvatar?: boolean } = {}) {
 
   if (withAvatar) {
     expect(actor.avatars).to.be.an('array')
-    expect(actor.avatars).to.have.lengthOf(2)
+    expect(actor.avatars).to.have.lengthOf(4)
     expect(actor.avatars[0].path).to.exist.and.not.empty
   }
 }

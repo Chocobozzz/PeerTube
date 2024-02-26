@@ -131,13 +131,13 @@ describe('Test multiple servers', function () {
         await completeVideoCheck({ server, originServer: servers[0], videoUUID: video.uuid, attributes: checkAttributes })
         publishedAt = video.publishedAt as string
 
-        expect(video.channel.avatars).to.have.lengthOf(2)
-        expect(video.account.avatars).to.have.lengthOf(2)
+        expect(video.channel.avatars).to.have.lengthOf(4)
+        expect(video.account.avatars).to.have.lengthOf(4)
 
         for (const image of [ ...video.channel.avatars, ...video.account.avatars ]) {
           expect(image.createdAt).to.exist
           expect(image.updatedAt).to.exist
-          expect(image.width).to.be.above(20).and.below(1000)
+          expect(image.width).to.be.above(20).and.below(2000)
           expect(image.path).to.exist
 
           await makeGetRequest({
