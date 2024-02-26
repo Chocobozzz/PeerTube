@@ -305,6 +305,49 @@ describe('Object storage for lives', function () {
     })
   })
 
+  describe('With live stream to object storage disabled', function () {
+    let videoUUID: string
+
+    before(async function () {
+      await servers[0].kill()
+      await servers[0].run(objectStorage.getDefaultMockConfig({ storeLiveStreams: false }))
+      await servers[0].config.enableLive({ transcoding: false })
+
+      videoUUID = await createLive(servers[0], false)
+    })
+
+    it('Should create a live and keep it on file system', async function () {
+      this.timeout(220000)
+
+      const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUID })
+      await waitUntilLivePublishedOnAllServers(servers, videoUUID)
+
+      await testLiveVideoResolutions({
+        originServer: servers[0],
+        sqlCommand: sqlCommandServer1,
+        servers,
+        liveVideoId: videoUUID,
+        resolutions: [ 720 ],
+        transcoded: false,
+        objectStorage: undefined
+      })
+
+      // Should not have files on object storage
+      await checkFilesCleanup({ server: servers[0], videoUUID, resolutions: [ 720 ], objectStorage })
+
+      await stopFfmpeg(ffmpegCommand)
+    })
+
+    it('Should have saved the replay on object storage', async function () {
+      this.timeout(220000)
+
+      await waitUntilLiveReplacedByReplayOnAllServers(servers, videoUUID)
+      await waitJobs(servers)
+
+      await checkFilesExist({ servers, videoUUID, numberOfFiles: 1, objectStorage })
+    })
+  })
+
   after(async function () {
     await sqlCommandServer1.cleanup()
     await objectStorage.cleanupMock()

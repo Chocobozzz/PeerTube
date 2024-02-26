@@ -29,7 +29,11 @@ export class ObjectStorageCommand {
     return 'us-east-1'
   }
 
-  getDefaultMockConfig () {
+  getDefaultMockConfig (options: {
+    storeLiveStreams?: boolean // default true
+  } = {}) {
+    const { storeLiveStreams = true } = options
+
     return {
       object_storage: {
         enabled: true,
@@ -39,7 +43,9 @@ export class ObjectStorageCommand {
         credentials: ObjectStorageCommand.getMockCredentialsConfig(),
 
         streaming_playlists: {
-          bucket_name: this.getMockStreamingPlaylistsBucketName()
+          bucket_name: this.getMockStreamingPlaylistsBucketName(),
+
+          store_live_streams: storeLiveStreams
         },
 
         web_videos: {

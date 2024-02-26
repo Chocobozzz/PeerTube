@@ -152,7 +152,8 @@ const CONFIG = {
     STREAMING_PLAYLISTS: {
       BUCKET_NAME: config.get<string>('object_storage.streaming_playlists.bucket_name'),
       PREFIX: config.get<string>('object_storage.streaming_playlists.prefix'),
-      BASE_URL: config.get<string>('object_storage.streaming_playlists.base_url')
+      BASE_URL: config.get<string>('object_storage.streaming_playlists.base_url'),
+      STORE_LIVE_STREAMS: config.get<string>('object_storage.streaming_playlists.store_live_streams')
     },
     USER_EXPORTS: {
       BUCKET_NAME: config.get<string>('object_storage.user_exports.bucket_name'),
