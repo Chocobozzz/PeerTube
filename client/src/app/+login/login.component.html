@@ -1,3 +1,9 @@
+<ng-template #uppercaseWarning>
+  <div i18n class="form-warning">
+    ⚠️ Most email addresses do not include capital letters.
+  </div>
+</ng-template>
+
 <h1 class="title-page-v2">
   <strong class="underline-orange">{{ instanceName }}</strong>
 
@@ -54,16 +60,14 @@
 
               <div *ngIf="formErrors.username" class="form-error" role="alert">{{ formErrors.username }}</div>
 
-              <div *ngIf="hasUsernameUppercase()" i18n class="form-warning">
-                ⚠️ Most email addresses do not include capital letters.
-              </div>
+              <ng-template *ngIf="hasUsernameUppercase()" [ngTemplateOutlet]="uppercaseWarning"></ng-template>
             </div>
 
             <div class="form-group">
               <label i18n for="password">Password</label>
 
               <my-input-text
-                formControlName="password" inputId="password" i18n-placeholder placeholder="Password"
+                formControlName=  "password" inputId="password" i18n-placeholder placeholder="Password"
                 [formError]="formErrors['password']" autocomplete="current-password" [tabindex]="2"
               ></my-input-text>
             </div>
@@ -145,6 +149,8 @@
         type="email" id="forgot-password-email" i18n-placeholder placeholder="Email address" required
         [(ngModel)]="forgotPasswordEmail" #forgotPasswordEmailInput
       >
+
+      <ng-template *ngIf="hasForgotPasswordEmailUppercase()" [ngTemplateOutlet]="uppercaseWarning"></ng-template>
     </div>
   </div>
 
