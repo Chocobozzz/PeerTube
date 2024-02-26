@@ -1,4 +1,4 @@
-<div class="root" [ngClass]="{ 'theater-enabled': theaterEnabled }">
+<div class="root" [ngClass]="{ 'theater-enabled': theaterEnabled }" [hidden]="!playlist && !video">
   <!-- We need the video container for videojs so we just hide it -->
   <div id="video-wrapper">
     <div *ngIf="remoteServerDown" class="remote-server-down">
