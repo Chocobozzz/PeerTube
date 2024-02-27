@@ -1,4 +1,4 @@
-import { UserRegistration, type UserRegistrationStateType } from '@peertube/peertube-models'
+import { UserRegistration, UserRegistrationState, type UserRegistrationStateType } from '@peertube/peertube-models'
 import {
   isRegistrationModerationResponseValid,
   isRegistrationReasonValid,
@@ -234,7 +234,8 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
       `AVG(EXTRACT(EPOCH FROM ("processedAt" - "createdAt") * 1000)) ` +
         `FILTER (WHERE "processedAt" IS NOT NULL AND "createdAt" > CURRENT_DATE - INTERVAL '3 months')` +
         `AS "avgResponseTime", ` +
-      `COUNT(*) FILTER (WHERE "processedAt" IS NOT NULL) AS "processedRequests", ` +
+      // "processedAt" has been introduced in PeerTube 6.1 so also check the abuse state to check processed abuses
+      `COUNT(*) FILTER (WHERE "processedAt" IS NOT NULL OR "state" != ${UserRegistrationState.PENDING}) AS "processedRequests", ` +
       `COUNT(*) AS "totalRequests" ` +
       `FROM "userRegistration"`
 

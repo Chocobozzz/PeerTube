@@ -10,7 +10,8 @@ import {
   AdminVideoCommentAbuse,
   UserAbuse,
   UserVideoAbuse,
-  type AbuseStateType
+  type AbuseStateType,
+  AbuseState
 } from '@peertube/peertube-models'
 import { isAbuseModerationCommentValid, isAbuseReasonValid, isAbuseStateValid } from '@server/helpers/custom-validators/abuses.js'
 import invert from 'lodash-es/invert.js'
@@ -449,7 +450,8 @@ export class AbuseModel extends SequelizeModel<AbuseModel> {
       `AVG(EXTRACT(EPOCH FROM ("processedAt" - "createdAt") * 1000)) ` +
         `FILTER (WHERE "processedAt" IS NOT NULL AND "createdAt" > CURRENT_DATE - INTERVAL '3 months')` +
         `AS "avgResponseTime", ` +
-      `COUNT(*) FILTER (WHERE "processedAt" IS NOT NULL) AS "processedAbuses", ` +
+      // "processedAt" has been introduced in PeerTube 6.1 so also check the abuse state to check processed abuses
+      `COUNT(*) FILTER (WHERE "processedAt" IS NOT NULL OR "state" != ${AbuseState.PENDING}) AS "processedAbuses", ` +
       `COUNT(*) AS "totalAbuses" ` +
       `FROM "abuse"`
 
