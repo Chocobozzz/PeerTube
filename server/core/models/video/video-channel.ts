@@ -825,16 +825,19 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
   async toActivityPubObject (this: MChannelAP): Promise<ActivityPubActor> {
     const obj = await this.Actor.toActivityPubObject(this.name)
 
-    return Object.assign(obj, {
+    return {
+      ...obj,
+
       summary: this.description,
       support: this.support,
+      postingRestrictedToMods: true,
       attributedTo: [
         {
           type: 'Person' as 'Person',
           id: this.Account.Actor.url
         }
       ]
-    })
+    }
   }
 
   // Avoid error when running this method on MAccount... | MChannel...

@@ -192,6 +192,9 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
       '@id': 'pt:support'
     },
 
+    lemmy: 'https://join-lemmy.org/ns#',
+    postingRestrictedToMods: 'lemmy:postingRestrictedToMods',
+
     // TODO: remove in a few versions, introduced in 4.2
     icons: 'as:icon'
   }),

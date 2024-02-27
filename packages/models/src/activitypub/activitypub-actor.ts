@@ -27,6 +27,9 @@ export interface ActivityPubActor {
     publicKeyPem: string
   }
 
+  // Lemmy attribute for groups
+  postingRestrictedToMods?: boolean
+
   image?: ActivityIconObject | ActivityIconObject[]
   icon?: ActivityIconObject | ActivityIconObject[]
 
