@@ -102,6 +102,18 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
     return this.screenService.isInSmallView()
   }
 
+  getAccountAvatarSize () {
+    if (this.isInSmallView()) return 64
+
+    return 48
+  }
+
+  getChannelAvatarSize () {
+    if (this.isInSmallView()) return 80
+
+    return 120
+  }
+
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
   }

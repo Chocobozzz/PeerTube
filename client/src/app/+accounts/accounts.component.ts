@@ -101,6 +101,12 @@ export class AccountsComponent implements OnInit, OnDestroy {
     return this.screenService.isInSmallView()
   }
 
+  getAccountAvatarSize () {
+    if (this.isInSmallView()) return 80
+
+    return 120
+  }
+
   isManageable () {
     if (!this.isUserLoggedIn()) return false
 

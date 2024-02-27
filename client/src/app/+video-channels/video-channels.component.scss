@@ -123,10 +123,6 @@
       font-size: var(--myGreyOwnerFontSize);
       color: pvar(--greyForegroundColor);
     }
-
-    .account-avatar {
-      @include actor-avatar-size(48px);
-    }
   }
 
   .owner-description {
@@ -287,8 +283,7 @@ my-copy-button {
       }
 
       .account-avatar {
-        @include actor-avatar-size(64px);
-
+        // Resized to 64px by JS component
         margin: -30px 0 0 15px;
       }
     }

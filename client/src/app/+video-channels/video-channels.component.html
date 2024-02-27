@@ -23,7 +23,10 @@
         <div class="section-label" i18n>OWNER ACCOUNT</div>
 
         <div class="avatar-row">
-          <my-actor-avatar class="account-avatar" [actor]="ownerAccount" actorType="account" [internalHref]="getAccountUrl()"></my-actor-avatar>
+          <my-actor-avatar
+            class="account-avatar" [size]="getAccountAvatarSize()"
+            [actor]="ownerAccount" actorType="account" [internalHref]="getAccountUrl()"
+          ></my-actor-avatar>
 
           <div class="actor-info">
             <h4>
@@ -51,7 +54,7 @@
     </ng-template>
 
     <div class="channel-avatar-row">
-      <my-actor-avatar class="main-avatar" [actor]="videoChannel" actorType="channel"></my-actor-avatar>
+      <my-actor-avatar [size]="getChannelAvatarSize()" [actor]="videoChannel" actorType="channel"></my-actor-avatar>
 
       <div>
         <div class="section-label" i18n>VIDEO CHANNEL</div>
