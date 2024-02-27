@@ -58,7 +58,6 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
       }
     }
 
-    let finalRes = this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include })
     return this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include })
   }
 
