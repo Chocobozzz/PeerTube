@@ -11,7 +11,7 @@ import { Video } from '@peertube/peertube-models'
   templateUrl: './embed.component.html'
 })
 export class EmbedComponent implements OnInit {
-  @Input() video: Pick<Video, 'name' | 'uuid'>
+  @Input({ required: true }) video: Pick<Video, 'name' | 'uuid'> & Partial<Pick<Video, 'aspectRatio'>>
 
   embedHTML: SafeHtml
 
@@ -27,7 +27,8 @@ export class EmbedComponent implements OnInit {
         title: false,
         warningTitle: false
       }),
-      embedTitle: this.video.name
+      embedTitle: this.video.name,
+      aspectRatio: this.video.aspectRatio
     })
 
     this.embedHTML = this.sanitizer.bypassSecurityTrustHtml(html)

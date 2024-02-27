@@ -155,6 +155,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
         title: false,
         warningTitle: false
       }),
+      aspectRatio: entry.video.aspectRatio,
       embedTitle: entry.video.name
     })
   }

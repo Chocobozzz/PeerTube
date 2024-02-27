@@ -158,7 +158,7 @@ export class VideoShareComponent {
     const { responsive } = options
     return this.hooks.wrapFun(
       buildVideoOrPlaylistEmbed,
-      { embedUrl: await this.getVideoEmbedUrl(), embedTitle: this.video.name, responsive },
+      { embedUrl: await this.getVideoEmbedUrl(), embedTitle: this.video.name, responsive, aspectRatio: this.video.aspectRatio },
       'video-watch',
       'filter:share.video-embed-code.build.params',
       'filter:share.video-embed-code.build.result'
@@ -193,7 +193,12 @@ export class VideoShareComponent {
     const { responsive } = options
     return this.hooks.wrapFun(
       buildVideoOrPlaylistEmbed,
-      { embedUrl: await this.getPlaylistEmbedUrl(), embedTitle: this.playlist.displayName, responsive },
+      {
+        embedUrl: await this.getPlaylistEmbedUrl(),
+        embedTitle: this.playlist.displayName,
+        responsive,
+        aspectRatio: this.video.aspectRatio
+      },
       'video-watch',
       'filter:share.video-playlist-embed-code.build.params',
       'filter:share.video-playlist-embed-code.build.result'
