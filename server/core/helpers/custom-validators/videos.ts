@@ -185,10 +185,9 @@ function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
   return true
 }
 
+function isDurationValid (currDuration: number, requiredDuration: number) {
 
-function isDurationValid(currDuration : number, requiredDuration: number){
-
-    return currDuration<= requiredDuration;
+  return currDuration <= requiredDuration
 }
 
 // ---------------------------------------------------------------------------

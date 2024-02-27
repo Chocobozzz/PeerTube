@@ -266,7 +266,8 @@ export class VideoTableAttributes {
       'channelId',
       'createdAt',
       'updatedAt',
-      'moveJobsRunning'
+      'moveJobsRunning',
+      'shortVideo'
     ]
   }
 }

@@ -214,13 +214,11 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       this.whereSFW()
     }
 
-    if(options.shortVideo === true){
+    if (options.shortVideo === true) {
       this.whereShortVideo()
-    }
-    else if(options.shortVideo == false){
+    } else if (options.shortVideo === false) {
       this.whereLongVideo()
     }
-
 
     if (options.isLive === true) {
       this.whereLive()
@@ -525,13 +523,13 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.and.push('"video"."nsfw" IS FALSE')
   }
 
-  private whereShortVideo(){
+  private whereShortVideo () {
     this.and.push('"video"."shortVideo" IS TRUE')
   }
 
-   private whereLongVideo(){
-      this.and.push('"video"."shortVideo" IS FALSE')
-    }
+  private whereLongVideo () {
+    this.and.push('"video"."shortVideo" IS FALSE')
+  }
 
   private whereLive () {
     this.and.push('"video"."isLive" IS TRUE')

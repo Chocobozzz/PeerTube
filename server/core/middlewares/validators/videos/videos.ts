@@ -55,7 +55,6 @@ import {
 } from '../shared/index.js'
 import { addDurationToVideoFileIfNeeded, commonVideoFileChecks, isVideoFileAccepted } from './shared/index.js'
 
-
 // let duration: number
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
@@ -75,8 +74,6 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
     .isArray()
     .withMessage('Video passwords should be an array.'),
 
-
-
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
@@ -87,14 +84,12 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
       !await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files }) ||
       !isValidPasswordProtectedPrivacy(req, res) ||
       !await addDurationToVideoFileIfNeeded({ videoFile, res, middlewareName: 'videosAddvideosAddLegacyValidatorResumableValidator' }) ||
-      !await isVideoFileAccepted({ req, res, videoFile, hook: 'filter:api.video.upload.accept.result' }) ) {
+      !await isVideoFileAccepted({ req, res, videoFile, hook: 'filter:api.video.upload.accept.result' })) {
       return cleanUpReqFiles(req)
     }
 
     return next()
-  },
-
-
+  }
 
 ])
 
@@ -361,45 +356,27 @@ const videosOverviewValidator = [
   }
 ]
 
-
-
 function getCommonVideoEditAttributes () {
 
-async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-   if (areValidationErrors(req, res)) return cleanUpReqFiles(req);
-
-   const videoFile: express.VideoUploadFile = req.files['videofile'][0];
-   const user = res.locals.oauth.token.User;
-
-   if (
-     !await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files }) ||
-     !isValidPasswordProtectedPrivacy(req, res) ||
-     !await addDurationToVideoFileIfNeeded({ videoFile, res, middlewareName: 'videosAddvideosAddLegacyValidatorResumableValidator' }) ||
-     !await isVideoFileAccepted({ req, res, videoFile, hook: 'filter:api.video.upload.accept.result' })
-   ) {
-     return cleanUpReqFiles(req);
-   }
-
- };
   return [
 
- async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return cleanUpReqFiles(req);
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
-    const videoFile: express.VideoUploadFile = req.files['videofile'][0];
-    const user = res.locals.oauth.token.User;
+      const videoFile: express.VideoUploadFile = req.files['videofile'][0]
+      const user = res.locals.oauth.token.User
 
-    if (
-      !await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files }) ||
+      if (
+        !await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files }) ||
       !isValidPasswordProtectedPrivacy(req, res) ||
       !await addDurationToVideoFileIfNeeded({ videoFile, res, middlewareName: 'videosAddvideosAddLegacyValidatorResumableValidator' }) ||
       !await isVideoFileAccepted({ req, res, videoFile, hook: 'filter:api.video.upload.accept.result' })
-    ) {
-      return cleanUpReqFiles(req);
-    }
+      ) {
+        return cleanUpReqFiles(req)
+      }
 
-    return next();
-  },
+      return next()
+    },
 
     body('thumbnailfile')
       .custom((value, { req }) => isVideoImageValid(req.files, 'thumbnailfile')).withMessage(
@@ -474,27 +451,19 @@ async (req: express.Request, res: express.Response, next: express.NextFunction) 
       .optional()
       .customSanitizer(toIntOrNull)
       .custom(isScheduleVideoUpdatePrivacyValid),
-
-
     body('shortVideo')
       .optional()
       .customSanitizer(toBooleanOrNull)
-      .custom(() => true).withMessage('Should have shortVideo boolean'),
+      .custom(isBooleanValid).withMessage('Should have shortVideo boolean'),
+    body('shortVideo')
+      .custom((value, { req }) => {
+        if (value) {
+          const videoFile: express.VideoUploadFile = req.files['videofile'][0]
 
-       body('shortVideo')
-        .optional()
-              .customSanitizer(toBooleanOrNull)
-
-        .custom((value, { req }) => {
-          if (value) {
-                const videoFile: express.VideoUploadFile = req.files['videofile'][0]
-
-            return isDurationValid(videoFile.duration, 20);
-          }
-          return true;
-        })
-        .withMessage('Video duration must be less than 60 seconds for short videos'),
-
+          return isDurationValid(videoFile.duration, 60)
+        }
+        return true
+      }).withMessage('Video duration must be less than 60 seconds for short videos')
 
   ] as (ValidationChain | ExpressPromiseHandler)[]
 }
@@ -528,9 +497,7 @@ const commonVideosFiltersValidator = [
     .optional()
     .custom(isBooleanBothQueryValid),
 
-
-
-   query('shortVideo')
+  query('shortVideo')
       .optional()
       .customSanitizer(toBooleanOrNull)
       .custom(isBooleanValid).withMessage('Should have a valid shortVideo boolean'),

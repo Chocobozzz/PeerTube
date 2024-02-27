@@ -27,7 +27,6 @@ function pickCommonVideoQuery (query: VideosCommonQueryAfterSanitize) {
     'hasWebVideoFiles',
     'search',
     'excludeAlreadyWatched',
-    'durationMax',
     'shortVideo'
   ])
 }

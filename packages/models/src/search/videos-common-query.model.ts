@@ -37,7 +37,6 @@ export interface VideosCommonQuery {
 
   excludeAlreadyWatched?: boolean
 
-  durationMax?: number  /*EDITED*/
   shortVideo?: boolean
 }
 

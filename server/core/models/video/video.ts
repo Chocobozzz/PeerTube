@@ -431,13 +431,12 @@ export type ForAPIOptions = {
       }
     },
 
-     {
-          fields: [ 'shortVideo' ],
-          where: {
-            shortVideo: false
-          }
-        },
-
+    {
+      fields: [ 'shortVideo' ],
+      where: {
+        shortVideo: false
+      }
+    },
 
     {
       fields: [ 'isLive' ], // Most of the videos are VOD
@@ -1171,9 +1170,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     excludeAlreadyWatched?: boolean
 
-    durationMax?:number
-
-    shortVideo? : boolean
+    shortVideo?: boolean
   }) {
     VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
     VideoModel.throwIfPrivacyOneOfWithoutUser(options.privacyOneOf, options.user)
@@ -1215,7 +1212,6 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'hasWebVideoFiles',
         'search',
         'excludeAlreadyWatched',
-        'durationMax',
         'shortVideo'
       ]),
 
@@ -1646,6 +1642,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     options: BuildVideosListQueryOptions,
     countVideos = true
   ): Promise<ResultList<VideoModel>> {
+
 
     const span = tracer.startSpan('peertube.VideoModel.getAvailableForApi')
 

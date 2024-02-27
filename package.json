@@ -66,6 +66,7 @@
     "tsc": "tsc",
     "commander": "commander",
     "lint": "npm run ci -- lint",
+
     "ng": "ng",
     "tsx": "tsx",
     "eslint": "eslint",
