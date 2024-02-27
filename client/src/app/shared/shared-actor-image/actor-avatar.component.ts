@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild, numberAttribute } from '@angular/core'
+import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild, booleanAttribute, numberAttribute } from '@angular/core'
 import { VideoChannel } from '../shared-main'
 import { Account } from '../shared-main/account/account.model'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
@@ -22,6 +22,7 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
   @Input() previewImage: string
 
   @Input({ transform: numberAttribute }) size = 120
+  @Input({ transform: booleanAttribute }) responseSize = false
 
   // Use an external link
   @Input() href: string
@@ -68,7 +69,7 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
 
     this.classes = [ 'avatar' ]
 
-    if (this.size) {
+    if (this.size && !this.responseSize) {
       avatarSize = `${this.size}px`
 
       if (this.size <= 18) {

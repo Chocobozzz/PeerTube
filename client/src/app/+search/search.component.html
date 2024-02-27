@@ -37,7 +37,7 @@
     <div *ngIf="isVideoChannel(result)" class="entry video-channel">
 
       <my-actor-avatar
-        [actor]="result" actorType="channel"
+        [actor]="result" actorType="channel" responseSize="true"
         [internalHref]="getInternalChannelUrl(result)" [href]="getExternalChannelUrl(result)" size="120"
       ></my-actor-avatar>
 
