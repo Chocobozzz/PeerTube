@@ -571,14 +571,6 @@
   }
 }
 
-@mixin actor-avatar-size ($size) {
-  display: inline-block;
-  width: $size;
-  height: $size;
-  min-width: $size;
-  min-height: $size;
-}
-
 @mixin actor-counters ($separator-margin: 10px) {
   color: pvar(--greyForegroundColor);
   display: flex;
