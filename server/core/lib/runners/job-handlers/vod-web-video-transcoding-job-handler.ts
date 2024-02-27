@@ -75,7 +75,7 @@ export class VODWebVideoTranscodingJobHandler extends AbstractVODTranscodingJobH
 
     const videoFilePath = resultPayload.videoFile as string
 
-    await onVODWebVideoOrAudioMergeTranscodingJob({ video, videoFilePath, privatePayload })
+    await onVODWebVideoOrAudioMergeTranscodingJob({ video, videoFilePath, privatePayload, wasAudioFile: false })
 
     logger.info(
       'Runner VOD web video transcoding job %s for %s ended.',

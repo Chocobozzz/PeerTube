@@ -118,6 +118,8 @@ describe('Test multiple servers', function () {
           files: [
             {
               resolution: 720,
+              height: 720,
+              width: 1280,
               size: 572456
             }
           ]
@@ -205,18 +207,26 @@ describe('Test multiple servers', function () {
           files: [
             {
               resolution: 240,
+              height: 240,
+              width: 426,
               size: 270000
             },
             {
               resolution: 360,
+              height: 360,
+              width: 640,
               size: 359000
             },
             {
               resolution: 480,
+              height: 480,
+              width: 854,
               size: 465000
             },
             {
               resolution: 720,
+              height: 720,
+              width: 1280,
               size: 750000
             }
           ],
@@ -312,6 +322,8 @@ describe('Test multiple servers', function () {
           files: [
             {
               resolution: 720,
+              height: 720,
+              width: 1280,
               size: 292677
             }
           ]
@@ -344,6 +356,8 @@ describe('Test multiple servers', function () {
           files: [
             {
               resolution: 720,
+              height: 720,
+              width: 1280,
               size: 218910
             }
           ]
@@ -654,6 +668,8 @@ describe('Test multiple servers', function () {
           files: [
             {
               resolution: 720,
+              height: 720,
+              width: 1280,
               size: 292677
             }
           ],
@@ -1061,18 +1077,26 @@ describe('Test multiple servers', function () {
           files: [
             {
               resolution: 720,
+              height: 720,
+              width: 1280,
               size: 61000
             },
             {
               resolution: 480,
+              height: 480,
+              width: 854,
               size: 40000
             },
             {
               resolution: 360,
+              height: 360,
+              width: 640,
               size: 32000
             },
             {
               resolution: 240,
+              height: 240,
+              width: 426,
               size: 23000
             }
           ]

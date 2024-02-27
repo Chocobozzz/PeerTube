@@ -2086,7 +2086,7 @@ paths:
 
   /api/v1/users/me/videos:
     get:
-      summary: Get videos of my user
+      summary: List videos of my user
       security:
         - OAuth2:
           - user
@@ -7560,6 +7560,12 @@ components:
         fps:
           type: number
           description: Frames per second of the video file
+        width:
+          type: number
+          description: "**PeerTube >= 6.1** Video stream width"
+        height:
+          type: number
+          description: "**PeerTube >= 6.1** Video stream height"
         metadataUrl:
           type: string
           format: url
@@ -7676,6 +7682,11 @@ components:
           example: 1419
           format: seconds
           description: duration of the video in seconds
+        aspectRatio:
+          type: number
+          format: float
+          example: 1.778
+          description: "**PeerTube >= 6.1** Aspect ratio of the video stream"
         isLocal:
           type: boolean
         name:

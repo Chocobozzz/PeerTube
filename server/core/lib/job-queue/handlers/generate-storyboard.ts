@@ -51,10 +51,10 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
 
       if (videoStreamInfo.isPortraitMode) {
         spriteHeight = STORYBOARD.SPRITE_MAX_SIZE
-        spriteWidth = Math.round(STORYBOARD.SPRITE_MAX_SIZE / videoStreamInfo.ratio)
+        spriteWidth = Math.round(spriteHeight * videoStreamInfo.ratio)
       } else {
-        spriteHeight = Math.round(STORYBOARD.SPRITE_MAX_SIZE / videoStreamInfo.ratio)
         spriteWidth = STORYBOARD.SPRITE_MAX_SIZE
+        spriteHeight = Math.round(spriteWidth / videoStreamInfo.ratio)
       }
 
       const ffmpeg = new FFmpegImage(getFFmpegCommandWrapperOptions('thumbnail'))

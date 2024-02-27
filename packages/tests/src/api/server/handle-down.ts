@@ -69,6 +69,8 @@ describe('Test handle downs', function () {
     fixture: 'video_short1.webm',
     files: [
       {
+        height: 720,
+        width: 1280,
         resolution: 720,
         size: 572456
       }

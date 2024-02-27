@@ -50,6 +50,8 @@ describe('Test a single server', function () {
       files: [
         {
           resolution: 720,
+          height: 720,
+          width: 1280,
           size: 218910
         }
       ]
@@ -81,6 +83,8 @@ describe('Test a single server', function () {
       files: [
         {
           resolution: 720,
+          height: 720,
+          width: 1280,
           size: 292677
         }
       ]

@@ -10,8 +10,8 @@ export interface ActivityIconObject {
   type: 'Image'
   url: string
   mediaType: string
-  width?: number
-  height?: number
+  width: number
+  height: number | null
 }
 
 export type ActivityVideoUrlObject = {
@@ -19,6 +19,7 @@ export type ActivityVideoUrlObject = {
   mediaType: 'video/mp4' | 'video/webm' | 'video/ogg' | 'audio/mp4'
   href: string
   height: number
+  width: number | null
   size: number
   fps: number
 }
@@ -35,6 +36,7 @@ export type ActivityVideoFileMetadataUrlObject = {
   rel: [ 'metadata', any ]
   mediaType: 'application/json'
   height: number
+  width: number | null
   href: string
   fps: number
 }
@@ -63,6 +65,8 @@ export type ActivityBitTorrentUrlObject = {
   mediaType: 'application/x-bittorrent' | 'application/x-bittorrent;x-scheme-handler/magnet'
   href: string
   height: number
+  width: number | null
+  fps: number | null
 }
 
 export type ActivityMagnetUrlObject = {
@@ -70,6 +74,8 @@ export type ActivityMagnetUrlObject = {
   mediaType: 'application/x-bittorrent;x-scheme-handler/magnet'
   href: string
   height: number
+  width: number | null
+  fps: number | null
 }
 
 export type ActivityHtmlUrlObject = {

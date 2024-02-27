@@ -479,6 +479,8 @@ describe('Test follows', function () {
           files: [
             {
               resolution: 720,
+              width: 1280,
+              height: 720,
               size: 218910
             }
           ]

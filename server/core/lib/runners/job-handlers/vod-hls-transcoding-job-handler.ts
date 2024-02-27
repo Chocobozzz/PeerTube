@@ -1,11 +1,7 @@
-import { move } from 'fs-extra/esm'
-import { dirname, join } from 'path'
 import { logger } from '@server/helpers/logger.js'
-import { renameVideoFileInPlaylist } from '@server/lib/hls.js'
-import { getHlsResolutionPlaylistFilename } from '@server/lib/paths.js'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js'
 import { onHLSVideoFileTranscoding } from '@server/lib/transcoding/hls-transcoding.js'
-import { buildNewFile, removeAllWebVideoFiles } from '@server/lib/video-file.js'
+import { removeAllWebVideoFiles } from '@server/lib/video-file.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { MVideo } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
@@ -84,21 +80,10 @@ export class VODHLSTranscodingJobHandler extends AbstractVODTranscodingJobHandle
     const videoFilePath = resultPayload.videoFile as string
     const resolutionPlaylistFilePath = resultPayload.resolutionPlaylistFile as string
 
-    const videoFile = await buildNewFile({ path: videoFilePath, mode: 'hls' })
-    const newVideoFilePath = join(dirname(videoFilePath), videoFile.filename)
-    await move(videoFilePath, newVideoFilePath)
-
-    const resolutionPlaylistFilename = getHlsResolutionPlaylistFilename(videoFile.filename)
-    const newResolutionPlaylistFilePath = join(dirname(resolutionPlaylistFilePath), resolutionPlaylistFilename)
-    await move(resolutionPlaylistFilePath, newResolutionPlaylistFilePath)
-
-    await renameVideoFileInPlaylist(newResolutionPlaylistFilePath, videoFile.filename)
-
     await onHLSVideoFileTranscoding({
       video,
-      videoFile,
-      m3u8OutputPath: newResolutionPlaylistFilePath,
-      videoOutputPath: newVideoFilePath
+      m3u8OutputPath: resolutionPlaylistFilePath,
+      videoOutputPath: videoFilePath
     })
 
     await onTranscodingEnded({ isNewVideo: privatePayload.isNewVideo, moveVideoToNextState: true, video })

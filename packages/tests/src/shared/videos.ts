@@ -26,6 +26,8 @@ export async function completeWebVideoFilesCheck (options: {
   fixture: string
   files: {
     resolution: number
+    width?: number
+    height?: number
     size?: number
   }[]
   objectStorageBaseUrl?: string
@@ -84,7 +86,9 @@ export async function completeWebVideoFilesCheck (options: {
         makeRawRequest({
           url: file.fileDownloadUrl,
           token,
-          expectedStatus: objectStorageBaseUrl ? HttpStatusCode.FOUND_302 : HttpStatusCode.OK_200
+          expectedStatus: objectStorageBaseUrl
+            ? HttpStatusCode.FOUND_302
+            : HttpStatusCode.OK_200
         })
       ])
     }
@@ -96,6 +100,12 @@ export async function completeWebVideoFilesCheck (options: {
     } else {
       expect(file.resolution.label).to.equal(attributeFile.resolution + 'p')
     }
+
+    if (attributeFile.width !== undefined) expect(file.width).to.equal(attributeFile.width)
+    if (attributeFile.height !== undefined) expect(file.height).to.equal(attributeFile.height)
+
+    expect(Math.min(file.height, file.width)).to.equal(file.resolution.id)
+    expect(Math.max(file.height, file.width)).to.be.greaterThan(file.resolution.id)
 
     if (attributeFile.size) {
       const minSize = attributeFile.size - ((10 * attributeFile.size) / 100)
@@ -156,6 +166,8 @@ export async function completeVideoCheck (options: {
     files?: {
       resolution: number
       size: number
+      width: number
+      height: number
     }[]
 
     hls?: {

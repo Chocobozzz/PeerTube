@@ -103,9 +103,14 @@ function calculateBitrate (options: {
     VideoResolution.H_NOVIDEO
   ]
 
+  const size1 = resolution
+  const size2 = ratio < 1 && ratio > 0
+    ? resolution / ratio // Portrait mode
+    : resolution * ratio
+
   for (const toTestResolution of resolutionsOrder) {
     if (toTestResolution <= resolution) {
-      return Math.floor(resolution * resolution * ratio * fps * bitPerPixel[toTestResolution])
+      return Math.floor(size1 * size2 * fps * bitPerPixel[toTestResolution])
     }
   }
 

@@ -1,5 +1,5 @@
 import ffmpeg, { FfprobeData } from 'fluent-ffmpeg'
-import { forceNumber } from '@peertube/peertube-core-utils'
+import { buildAspectRatio, forceNumber } from '@peertube/peertube-core-utils'
 import { VideoResolution } from '@peertube/peertube-models'
 
 /**
@@ -123,7 +123,7 @@ async function getVideoStreamDimensionsInfo (path: string, existingProbe?: Ffpro
   return {
     width: videoStream.width,
     height: videoStream.height,
-    ratio: Math.max(videoStream.height, videoStream.width) / Math.min(videoStream.height, videoStream.width),
+    ratio: buildAspectRatio({ width: videoStream.width, height: videoStream.height }),
     resolution: Math.min(videoStream.height, videoStream.width),
     isPortraitMode: videoStream.height > videoStream.width
   }

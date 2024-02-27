@@ -4,6 +4,7 @@ import { basename, join } from 'path'
 import type { Instance, Torrent } from 'webtorrent'
 import { VideoFile } from '@peertube/peertube-models'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'
+import type { Instance as MagnetUriInstance } from 'magnet-uri'
 
 let webtorrent: Instance
 
@@ -26,6 +27,14 @@ export async function parseTorrentVideo (server: PeerTubeServer, file: VideoFile
   const data = await readFile(torrentPath)
 
   return (await import('parse-torrent')).default(data)
+}
+
+export async function magnetUriDecode (data: string) {
+  return (await import('magnet-uri')).decode(data)
+}
+
+export async function magnetUriEncode (data: MagnetUriInstance) {
+  return (await import('magnet-uri')).encode(data)
 }
 
 // ---------------------------------------------------------------------------

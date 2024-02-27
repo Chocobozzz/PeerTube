@@ -328,7 +328,7 @@ class LiveManager {
     allResolutions: number[]
     hasAudio: boolean
   }) {
-    const { sessionId, videoLive, user } = options
+    const { sessionId, videoLive, user, ratio } = options
     const videoUUID = videoLive.Video.uuid
     const localLTags = lTags(sessionId, videoUUID)
 
@@ -345,7 +345,7 @@ class LiveManager {
       ...pick(options, [ 'inputLocalUrl', 'inputPublicUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio' ])
     })
 
-    muxingSession.on('live-ready', () => this.publishAndFederateLive(videoLive, localLTags))
+    muxingSession.on('live-ready', () => this.publishAndFederateLive({ live: videoLive, ratio, localLTags }))
 
     muxingSession.on('bad-socket-health', ({ videoUUID }) => {
       logger.error(
@@ -405,7 +405,13 @@ class LiveManager {
       })
   }
 
-  private async publishAndFederateLive (live: MVideoLiveVideo, localLTags: { tags: (string | number)[] }) {
+  private async publishAndFederateLive (options: {
+    live: MVideoLiveVideo
+    ratio: number
+    localLTags: { tags: (string | number)[] }
+  }) {
+    const { live, ratio, localLTags } = options
+
     const videoId = live.videoId
 
     try {
@@ -415,6 +421,7 @@ class LiveManager {
 
       video.state = VideoState.PUBLISHED
       video.publishedAt = new Date()
+      video.aspectRatio = ratio
       await video.save()
 
       live.Video = video

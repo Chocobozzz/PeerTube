@@ -401,10 +401,14 @@ function runTest (withObjectStorage: boolean) {
             files: [
               {
                 resolution: 720,
+                height: 720,
+                width: 1280,
                 size: 61000
               },
               {
                 resolution: 240,
+                height: 240,
+                width: 426,
                 size: 23000
               }
             ],

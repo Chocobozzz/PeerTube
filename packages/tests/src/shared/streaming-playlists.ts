@@ -145,6 +145,9 @@ async function completeCheckHlsPlaylist (options: {
         expect(file.resolution.label).to.equal(resolution + 'p')
       }
 
+      expect(Math.min(file.height, file.width)).to.equal(resolution)
+      expect(Math.max(file.height, file.width)).to.be.greaterThan(resolution)
+
       expect(file.magnetUri).to.have.lengthOf.above(2)
       await checkWebTorrentWorks(file.magnetUri)
 

@@ -50,6 +50,8 @@ export class Video implements VideoServerModel {
   thumbnailPath: string
   thumbnailUrl: string
 
+  aspectRatio: number
+
   isLive: boolean
 
   previewPath: string
@@ -197,6 +199,8 @@ export class Video implements VideoServerModel {
     this.originInstanceUrl = 'https://' + this.originInstanceHost
 
     this.pluginData = hash.pluginData
+
+    this.aspectRatio = hash.aspectRatio
   }
 
   isVideoNSFWForUser (user: User, serverConfig: HTMLServerConfig) {

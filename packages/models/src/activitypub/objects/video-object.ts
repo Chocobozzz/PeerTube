@@ -44,6 +44,8 @@ export interface VideoObject {
 
   support: string
 
+  aspectRatio: number
+
   icon: ActivityIconObject[]
 
   url: ActivityUrlObject[]

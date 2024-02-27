@@ -55,7 +55,6 @@ function getFileAttributesFromUrl (
   urls: (ActivityTagObject | ActivityUrlObject)[]
 ) {
   const fileUrls = urls.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
-
   if (fileUrls.length === 0) return []
 
   const attributes: FilteredModelAttributes<VideoFileModel>[] = []
@@ -95,6 +94,9 @@ function getFileAttributesFromUrl (
       size: fileUrl.size,
       fps: fileUrl.fps || -1,
       metadataUrl: metadata?.href,
+
+      width: fileUrl.width,
+      height: fileUrl.height,
 
       // Use the name of the remote file because we don't proxify video file requests
       filename: basename(fileUrl.href),
@@ -223,6 +225,7 @@ function getVideoAttributesFromObject (videoChannel: MChannelId, videoObject: Vi
     waitTranscoding: videoObject.waitTranscoding,
     isLive: videoObject.isLiveBroadcast,
     state: videoObject.state,
+    aspectRatio: videoObject.aspectRatio,
     channelId: videoChannel.id,
     duration: getDurationFromActivityStream(videoObject.duration),
     createdAt: new Date(videoObject.published),

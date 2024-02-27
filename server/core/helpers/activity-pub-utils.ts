@@ -94,6 +94,10 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
       '@type': 'sc:Number',
       '@id': 'pt:tileDuration'
     },
+    aspectRatio: {
+      '@type': 'sc:Float',
+      '@id': 'pt:aspectRatio'
+    },
 
     originallyPublishedAt: 'sc:datePublished',
 

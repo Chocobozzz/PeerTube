@@ -1,10 +1,10 @@
 import { VideoDetails, VideoPrivacy, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 
-function getAllPrivacies () {
+export function getAllPrivacies () {
   return [ VideoPrivacy.PUBLIC, VideoPrivacy.INTERNAL, VideoPrivacy.PRIVATE, VideoPrivacy.UNLISTED, VideoPrivacy.PASSWORD_PROTECTED ]
 }
 
-function getAllFiles (video: Partial<Pick<VideoDetails, 'files' | 'streamingPlaylists'>>) {
+export function getAllFiles (video: Partial<Pick<VideoDetails, 'files' | 'streamingPlaylists'>>) {
   const files = video.files
 
   const hls = getHLS(video)
@@ -13,12 +13,13 @@ function getAllFiles (video: Partial<Pick<VideoDetails, 'files' | 'streamingPlay
   return files
 }
 
-function getHLS (video: Partial<Pick<VideoDetails, 'streamingPlaylists'>>) {
+export function getHLS (video: Partial<Pick<VideoDetails, 'streamingPlaylists'>>) {
   return video.streamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
 }
 
-export {
-  getAllPrivacies,
-  getAllFiles,
-  getHLS
+export function buildAspectRatio (options: { width: number, height: number }) {
+  const { width, height } = options
+  if (!width || !height) return null
+
+  return Math.round((width / height) * 10000) / 10000 // 4 decimals precision
 }

@@ -89,6 +89,8 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
     isLocal: video.isOwned(),
     duration: video.duration,
 
+    aspectRatio: video.aspectRatio,
+
     views: video.views,
     viewers: VideoViewsManager.Instance.getTotalViewersOf(video),
 
@@ -213,6 +215,9 @@ export function videoFilesModelToFormattedJSON (
             ? 'Audio'
             : `${videoFile.resolution}p`
         },
+
+        width: videoFile.width,
+        height: videoFile.height,
 
         magnetUri: includeMagnet && videoFile.hasTorrent()
           ? generateMagnetUri(video, videoFile, trackerUrls)

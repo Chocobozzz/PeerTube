@@ -33,6 +33,7 @@ import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video
 import { LoggerTagsFn, logger } from '@server/helpers/logger.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { federateVideoIfNeeded } from './activitypub/videos/federate.js'
+import { buildAspectRatio } from '@peertube/peertube-core-utils'
 
 type VideoAttributes = Omit<VideoCreate, 'channelId'> & {
   duration: number
@@ -116,6 +117,8 @@ export class LocalVideoCreator {
 
       const destination = VideoPathManager.Instance.getFSVideoFileOutputPath(this.video, this.videoFile)
       await move(this.videoFilePath, destination)
+
+      this.video.aspectRatio = buildAspectRatio({ width: this.videoFile.width, height: this.videoFile.height })
     }
 
     const thumbnails = await this.createThumbnails()

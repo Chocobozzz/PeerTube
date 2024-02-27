@@ -103,9 +103,15 @@ async function testImage (url: string, imageName: string, imageHTTPPath: string,
     ? PNG.sync.read(data)
     : JPEG.decode(data)
 
-  const result = pixelmatch(img1.data, img2.data, null, img1.width, img1.height, { threshold: 0.1 })
+  const errorMsg = `${imageHTTPPath} image is not the same as ${imageName}${extension}`
 
-  expect(result).to.equal(0, `${imageHTTPPath} image is not the same as ${imageName}${extension}`)
+  try {
+    const result = pixelmatch(img1.data, img2.data, null, img1.width, img1.height, { threshold: 0.1 })
+
+    expect(result).to.equal(0, errorMsg)
+  } catch (err) {
+    throw new Error(`${errorMsg}: ${err.message}`)
+  }
 }
 
 async function testFileExistsOrNot (server: PeerTubeServer, directory: string, filePath: string, exist: boolean) {

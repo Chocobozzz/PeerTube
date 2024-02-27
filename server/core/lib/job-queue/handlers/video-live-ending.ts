@@ -125,6 +125,7 @@ async function saveReplayToExternalVideo (options: {
     waitTranscoding: true,
     nsfw: liveVideo.nsfw,
     description: liveVideo.description,
+    aspectRatio: liveVideo.aspectRatio,
     support: liveVideo.support,
     privacy: replaySettings.privacy,
     channelId: liveVideo.channelId

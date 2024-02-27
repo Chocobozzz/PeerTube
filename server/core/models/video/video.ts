@@ -565,6 +565,10 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @Column
   state: VideoStateType
 
+  @AllowNull(true)
+  @Column(DataType.FLOAT)
+  aspectRatio: number
+
   // We already have the information in videoSource table for local videos, but we prefer to normalize it for performance
   // And also to store the info from remote instances
   @AllowNull(true)

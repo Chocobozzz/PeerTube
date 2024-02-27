@@ -3,7 +3,13 @@
 import { expect } from 'chai'
 import snakeCase from 'lodash-es/snakeCase.js'
 import validator from 'validator'
-import { getAverageTheoreticalBitrate, getMaxTheoreticalBitrate, parseChapters, timeToInt } from '@peertube/peertube-core-utils'
+import {
+  buildAspectRatio,
+  getAverageTheoreticalBitrate,
+  getMaxTheoreticalBitrate,
+  parseChapters,
+  timeToInt
+} from '@peertube/peertube-core-utils'
 import { VideoResolution } from '@peertube/peertube-models'
 import { objectConverter, parseBytes, parseDurationToMs, parseSemVersion } from '@peertube/peertube-server/core/helpers/core-utils.js'
 
@@ -168,6 +174,18 @@ describe('Bitrate', function () {
     for (const test of tests) {
       expect(getAverageTheoreticalBitrate(test)).to.be.above(test.min * 1000).and.below(test.max * 1000)
     }
+  })
+
+  describe('Ratio', function () {
+
+    it('Should have the correct aspect ratio in landscape', function () {
+      expect(buildAspectRatio({ width: 1920, height: 1080 })).to.equal(1.7778)
+      expect(buildAspectRatio({ width: 1000, height: 1000 })).to.equal(1)
+    })
+
+    it('Should have the correct aspect ratio in portrait', function () {
+      expect(buildAspectRatio({ width: 1080, height: 1920 })).to.equal(0.5625)
+    })
   })
 })
 

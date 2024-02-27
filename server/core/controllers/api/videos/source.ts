@@ -23,6 +23,7 @@ import {
   replaceVideoSourceResumableValidator,
   videoSourceGetLatestValidator
 } from '../../../middlewares/index.js'
+import { buildAspectRatio } from '@peertube/peertube-core-utils'
 
 const lTags = loggerTagsFactory('api', 'video')
 
@@ -96,6 +97,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
       video.state = buildNextVideoState()
       video.duration = videoPhysicalFile.duration
       video.inputFileUpdatedAt = inputFileUpdatedAt
+      video.aspectRatio = buildAspectRatio({ width: videoFile.width, height: videoFile.height })
       await video.save({ transaction })
 
       await autoBlacklistVideoIfNeeded({

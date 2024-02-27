@@ -10,15 +10,12 @@ import {
   VideoImportTorrentPayload,
   VideoImportTorrentPayloadType,
   VideoImportYoutubeDLPayload,
-  VideoImportYoutubeDLPayloadType,
-  VideoResolution,
-  VideoState
+  VideoImportYoutubeDLPayloadType, VideoState
 } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { isPostImportVideoAccepted } from '@server/lib/moderation.js'
-import { generateWebVideoFilename } from '@server/lib/paths.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { createOptimizeOrMergeAudioJobs } from '@server/lib/transcoding/create-transcoding-job.js'
@@ -28,14 +25,9 @@ import { buildNextVideoState } from '@server/lib/video-state.js'
 import { buildMoveJob, buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import { MVideoImport, MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import.js'
-import { getLowercaseExtension } from '@peertube/peertube-node-utils'
 import {
   ffprobePromise,
-  getChaptersFromContainer,
-  getVideoStreamDimensionsInfo,
-  getVideoStreamDuration,
-  getVideoStreamFPS,
-  isAudioFile
+  getChaptersFromContainer, getVideoStreamDuration
 } from '@peertube/peertube-ffmpeg'
 import { logger } from '../../../helpers/logger.js'
 import { getSecureTorrentName } from '../../../helpers/utils.js'
@@ -51,6 +43,8 @@ import { generateLocalVideoMiniature } from '../../thumbnail.js'
 import { JobQueue } from '../job-queue.js'
 import { replaceChaptersIfNotExist } from '@server/lib/video-chapters.js'
 import { FfprobeData } from 'fluent-ffmpeg'
+import { buildNewFile } from '@server/lib/video-file.js'
+import { buildAspectRatio } from '@peertube/peertube-core-utils'
 
 async function processVideoImport (job: Job): Promise<VideoImportPreventExceptionResult> {
   const payload = job.data as VideoImportPayload
@@ -129,46 +123,31 @@ type ProcessFileOptions = {
   videoImportId: number
 }
 async function processFile (downloader: () => Promise<string>, videoImport: MVideoImportDefault, options: ProcessFileOptions) {
-  let tempVideoPath: string
+  let tmpVideoPath: string
   let videoFile: VideoFileModel
 
   try {
     // Download video from youtubeDL
-    tempVideoPath = await downloader()
+    tmpVideoPath = await downloader()
 
     // Get information about this video
-    const stats = await stat(tempVideoPath)
+    const stats = await stat(tmpVideoPath)
     const isAble = await isUserQuotaValid({ userId: videoImport.User.id, uploadSize: stats.size })
     if (isAble === false) {
       throw new Error('The user video quota is exceeded with this video to import.')
     }
 
-    const ffprobe = await ffprobePromise(tempVideoPath)
-
-    const { resolution } = await isAudioFile(tempVideoPath, ffprobe)
-      ? { resolution: VideoResolution.H_NOVIDEO }
-      : await getVideoStreamDimensionsInfo(tempVideoPath, ffprobe)
-
-    const fps = await getVideoStreamFPS(tempVideoPath, ffprobe)
-    const duration = await getVideoStreamDuration(tempVideoPath, ffprobe)
+    const ffprobe = await ffprobePromise(tmpVideoPath)
+    const duration = await getVideoStreamDuration(tmpVideoPath, ffprobe)
 
     const containerChapters = await getChaptersFromContainer({
-      path: tempVideoPath,
+      path: tmpVideoPath,
       maxTitleLength: CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.TITLE.max,
       ffprobe
     })
 
-    // Prepare video file object for creation in database
-    const fileExt = getLowercaseExtension(tempVideoPath)
-    const videoFileData = {
-      extname: fileExt,
-      resolution,
-      size: stats.size,
-      filename: generateWebVideoFilename(resolution, fileExt),
-      fps,
-      videoId: videoImport.videoId
-    }
-    videoFile = new VideoFileModel(videoFileData)
+    videoFile = await buildNewFile({ mode: 'web-video', ffprobe, path: tmpVideoPath })
+    videoFile.videoId = videoImport.videoId
 
     const hookName = options.type === 'youtube-dl'
       ? 'filter:api.video.post-import-url.accept.result'
@@ -178,7 +157,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     const acceptParameters = {
       videoImport,
       video: videoImport.Video,
-      videoFilePath: tempVideoPath,
+      videoFilePath: tmpVideoPath,
       videoFile,
       user: videoImport.User
     }
@@ -201,9 +180,9 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
       // Move file
       const videoDestFile = VideoPathManager.Instance.getFSVideoFileOutputPath(videoImportWithFiles.Video, videoFile)
-      await move(tempVideoPath, videoDestFile)
+      await move(tmpVideoPath, videoDestFile)
 
-      tempVideoPath = null // This path is not used anymore
+      tmpVideoPath = null // This path is not used anymore
 
       const thumbnails = await generateMiniature({ videoImportWithFiles, videoFile, ffprobe })
 
@@ -221,6 +200,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
           // Update video DB object
           video.duration = duration
           video.state = buildNextVideoState(video.state)
+          video.aspectRatio = buildAspectRatio({ width: videoFile.width, height: videoFile.height })
           await video.save({ transaction: t })
 
           for (const thumbnail of thumbnails) {
@@ -248,7 +228,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
       videoFileLockReleaser()
     }
   } catch (err) {
-    await onImportError(err, tempVideoPath, videoImport)
+    await onImportError(err, tmpVideoPath, videoImport)
 
     throw err
   }

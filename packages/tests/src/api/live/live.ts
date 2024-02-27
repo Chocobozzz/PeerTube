@@ -115,6 +115,8 @@ describe('Test live', function () {
 
         expect(video.isLive).to.be.true
 
+        expect(video.aspectRatio).to.not.exist
+
         expect(video.nsfw).to.be.false
         expect(video.waitTranscoding).to.be.false
         expect(video.name).to.equal('my super live')
@@ -552,6 +554,7 @@ describe('Test live', function () {
 
         expect(video.state.id).to.equal(VideoState.PUBLISHED)
         expect(video.duration).to.be.greaterThan(1)
+        expect(video.aspectRatio).to.equal(1.7778)
         expect(video.files).to.have.lengthOf(0)
 
         const hlsPlaylist = video.streamingPlaylists.find(s => s.type === VideoStreamingPlaylistType.HLS)

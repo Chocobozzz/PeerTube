@@ -167,6 +167,14 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   @Column
   resolution: number
 
+  @AllowNull(true)
+  @Column
+  width: number
+
+  @AllowNull(true)
+  @Column
+  height: number
+
   @AllowNull(false)
   @Is('VideoFileSize', value => throwIfNotValid(value, isVideoFileSizeValid, 'size'))
   @Column(DataType.BIGINT)
@@ -640,7 +648,8 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
       type: 'Link',
       mediaType: mimeType as ActivityVideoUrlObject['mediaType'],
       href: this.getFileUrl(video),
-      height: this.resolution,
+      height: this.height || this.resolution,
+      width: this.width,
       size: this.size,
       fps: this.fps
     }

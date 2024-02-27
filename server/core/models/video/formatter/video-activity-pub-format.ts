@@ -88,6 +88,8 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
 
     preview: buildPreviewAPAttribute(video),
 
+    aspectRatio: video.aspectRatio,
+
     url,
 
     likes: getLocalVideoLikesActivityPubUrl(video),
@@ -185,7 +187,8 @@ function buildVideoFileUrls (options: {
       rel: [ 'metadata', fileAP.mediaType ],
       mediaType: 'application/json' as 'application/json',
       href: getLocalVideoFileMetadataUrl(video, file),
-      height: file.resolution,
+      height: file.height || file.resolution,
+      width: file.width,
       fps: file.fps
     })
 
@@ -194,14 +197,18 @@ function buildVideoFileUrls (options: {
         type: 'Link',
         mediaType: 'application/x-bittorrent' as 'application/x-bittorrent',
         href: file.getTorrentUrl(),
-        height: file.resolution
+        height: file.height || file.resolution,
+        width: file.width,
+        fps: file.fps
       })
 
       urls.push({
         type: 'Link',
         mediaType: 'application/x-bittorrent;x-scheme-handler/magnet' as 'application/x-bittorrent;x-scheme-handler/magnet',
         href: generateMagnetUri(video, file, trackerUrls),
-        height: file.resolution
+        height: file.height || file.resolution,
+        width: file.width,
+        fps: file.fps
       })
     }
   }

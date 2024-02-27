@@ -2,7 +2,6 @@
 
 import { expect } from 'chai'
 import { readdir } from 'fs/promises'
-import { decode as magnetUriDecode } from 'magnet-uri'
 import { basename, join } from 'path'
 import { wait } from '@peertube/peertube-core-utils'
 import {
@@ -25,12 +24,13 @@ import {
 } from '@peertube/peertube-server-commands'
 import { checkSegmentHash } from '@tests/shared/streaming-playlists.js'
 import { checkVideoFilesWereRemoved, saveVideoInServers } from '@tests/shared/videos.js'
+import { magnetUriDecode } from '@tests/shared/webtorrent.js'
 
 let servers: PeerTubeServer[] = []
 let video1Server2: VideoDetails
 
 async function checkMagnetWebseeds (file: VideoFile, baseWebseeds: string[], server: PeerTubeServer) {
-  const parsed = magnetUriDecode(file.magnetUri)
+  const parsed = await magnetUriDecode(file.magnetUri)
 
   for (const ws of baseWebseeds) {
     const found = parsed.urlList.find(url => url === `${ws}${basename(file.fileUrl)}`)

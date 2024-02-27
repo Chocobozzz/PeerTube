@@ -29,8 +29,11 @@ async function buildNewFile (options: {
   if (await isAudioFile(path, probe)) {
     videoFile.resolution = VideoResolution.H_NOVIDEO
   } else {
+    const dimensions = await getVideoStreamDimensionsInfo(path, probe)
     videoFile.fps = await getVideoStreamFPS(path, probe)
-    videoFile.resolution = (await getVideoStreamDimensionsInfo(path, probe)).resolution
+    videoFile.resolution = dimensions.resolution
+    videoFile.width = dimensions.width
+    videoFile.height = dimensions.height
   }
 
   videoFile.filename = mode === 'web-video'
