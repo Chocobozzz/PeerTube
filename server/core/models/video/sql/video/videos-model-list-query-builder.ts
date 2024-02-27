@@ -38,8 +38,6 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
     const rows = await this.runQuery()
 
 
-    console.log("🍙🍙🍙🍙", rows);
-
     if (options.include & VideoInclude.FILES) {
       const videoIds = Array.from(new Set(rows.map(r => r.id)))
 
@@ -61,8 +59,6 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
     }
 
     let finalRes = this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include })
-
-    console.log("🧀🧀🧀🧀🧀", finalRes);
     return this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include })
   }
 
