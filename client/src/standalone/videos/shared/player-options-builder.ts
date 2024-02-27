@@ -290,6 +290,7 @@ export class PlayerOptionsBuilder {
       videoUUID: video.uuid,
 
       duration: video.duration,
+      videoRatio: video.aspectRatio,
 
       poster: window.location.origin + video.previewPath,
 

@@ -77,6 +77,7 @@ export type PeerTubePlayerLoadOptions = {
   videoShortUUID: string
 
   duration: number
+  videoRatio: number
 
   requiresUserAuth: boolean
   videoFileToken: () => string

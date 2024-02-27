@@ -225,18 +225,31 @@ class PeerTubePlugin extends Plugin {
 
     const defaultRatio = getComputedStyle(this.player.el()).getPropertyValue(this.options.autoPlayerRatio.cssRatioVariable)
 
+    if (this.options.videoRatio()) {
+      this.adaptPlayerFromRatio({ ratio: this.options.videoRatio(), defaultRatio })
+    }
+
     this.player.on('video-ratio-changed', (_event, data: { ratio: number }) => {
-      const el = this.player.el() as HTMLElement
-
-      // In portrait screen mode, we allow player with bigger height size than width
-      const portraitMode = getComputedStyle(el).getPropertyValue(this.options.autoPlayerRatio.cssPlayerPortraitModeVariable) === '1'
-
-      const currentRatio = isNaN(data.ratio) || (!portraitMode && data.ratio < 1)
-        ? defaultRatio
-        : data.ratio
-
-      el.style.setProperty('--player-ratio', currentRatio + '')
+      this.adaptPlayerFromRatio({ ratio: data.ratio, defaultRatio })
     })
+  }
+
+  private adaptPlayerFromRatio (options: {
+    ratio: number
+    defaultRatio: string
+  }) {
+    const { ratio, defaultRatio } = options
+
+    const el = this.player.el() as HTMLElement
+
+    // In portrait screen mode, we allow player with bigger height size than width
+    const portraitMode = getComputedStyle(el).getPropertyValue(this.options.autoPlayerRatio.cssPlayerPortraitModeVariable) === '1'
+
+    const currentRatio = isNaN(ratio) || (!portraitMode && ratio < 1)
+      ? defaultRatio
+      : ratio
+
+    el.style.setProperty('--player-ratio', currentRatio + '')
   }
 
   // ---------------------------------------------------------------------------

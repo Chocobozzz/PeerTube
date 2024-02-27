@@ -778,6 +778,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       videoShortUUID: video.shortUUID,
       videoUUID: video.uuid,
 
+      videoRatio: video.aspectRatio,
+
       previousVideo: {
         enabled: this.playlist && this.videoWatchPlaylist.hasPreviousVideo(),
 
