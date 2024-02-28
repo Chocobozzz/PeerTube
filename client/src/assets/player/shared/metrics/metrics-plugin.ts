@@ -150,11 +150,11 @@ class MetricsPlugin extends Plugin {
   }
 
   private trackResolutionChange () {
-    this.player.on('engine-resolution-change', () => {
-      this.resolutionChanges++
-    })
+    this.player.on('resolution-change', (_: any, { initResolutionChange }: { initResolutionChange: boolean }) => {
+      if (initResolutionChange === true) return
 
-    this.player.on('user-resolution-change', () => {
+      debugLogger('Adding resolution change')
+
       this.resolutionChanges++
     })
   }

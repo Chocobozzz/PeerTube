@@ -97,10 +97,12 @@ class WebVideoPlugin extends Plugin {
       this.player.playbackRate(playbackRate)
       this.player.currentTime(currentTime)
 
-      this.adaptPosterForAudioOnly()
+      this.player.trigger('resolution-change', {
+        resolution: this.currentVideoFile?.resolution.id,
+        initResolutionChange: !options.isUserResolutionChange
+      })
 
       if (options.isUserResolutionChange) {
-        this.player.trigger('user-resolution-change')
         this.player.trigger('web-video-source-change')
 
         this.tryToPlay()
@@ -117,15 +119,6 @@ class WebVideoPlugin extends Plugin {
 
   getCurrentVideoFile () {
     return this.currentVideoFile
-  }
-
-  private adaptPosterForAudioOnly () {
-    // Audio-only (resolutionId === 0) gets special treatment
-    if (this.currentVideoFile?.resolution.id === 0) {
-      this.player.audioPosterMode(true)
-    } else {
-      this.player.audioPosterMode(false)
-    }
   }
 
   private tryToPlay () {

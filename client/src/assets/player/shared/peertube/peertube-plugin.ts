@@ -124,6 +124,10 @@ class PeerTubePlugin extends Plugin {
       })
     })
 
+    this.player.on('resolution-change', (_: any, { resolution }: { resolution: number }) => {
+      this.adaptPosterForAudioOnly(resolution)
+    })
+
     this.initOnRatioChange()
   }
 
@@ -353,6 +357,21 @@ class PeerTubePlugin extends Plugin {
     if (this.authorizationHeader()) headers.set('Authorization', this.authorizationHeader())
 
     return fetch(this.videoViewUrl(), { method: 'POST', body: JSON.stringify(body), headers })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  private adaptPosterForAudioOnly (resolution: number) {
+    debugLogger('Check if we need to adapt player for audio only', resolution)
+
+    if (resolution === 0) {
+      this.player.audioPosterMode(true)
+      this.player.poster(this.options.poster())
+      return
+    }
+
+    this.player.audioPosterMode(false)
+    this.player.poster('')
   }
 
   // ---------------------------------------------------------------------------
