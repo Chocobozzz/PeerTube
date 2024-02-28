@@ -462,83 +462,6 @@
       }
     }
   }
-
-  @media screen and (max-width: $screen-width-750) {
-    .vjs-theater-control {
-      display: none;
-    }
-
-    .vjs-peertube {
-      .icon,
-      .download-speed-text,
-      .upload-speed-text {
-        display: none !important;
-      }
-    }
-  }
-
-  @media screen and (max-width: $screen-width-570) {
-    .vjs-volume-control {
-      display: none;
-    }
-
-    .vjs-mute-control {
-      @include margin(0, 5px, 0, 5px);
-    }
-
-    .vjs-peertube {
-      padding: 0 !important;
-
-      .vjs-peertube-displayed {
-        display: none !important;
-      }
-    }
-
-    .vjs-peertube-link {
-      max-width: 100px;
-    }
-
-    &.vjs-live {
-      .vjs-duration {
-        display: none !important;
-      }
-
-      .vjs-peertube {
-        display: none !important;
-      }
-    }
-  }
-
-  @media screen and (max-width: $screen-width-350) {
-    .vjs-next-video,
-    .vjs-previous-video {
-      display: none !important;
-    }
-
-    .vjs-peertube-link {
-      padding: 0 !important;
-    }
-
-    > button:first-child {
-      @include margin-left($first-control-bar-element-margin-left-small-width);
-    }
-
-    > button:last-child {
-      @include margin-right($first-control-bar-element-margin-left-small-width);
-    }
-
-    .vjs-play-control {
-      @include margin-left(0);
-
-      width: 30px;
-    }
-
-    &.vjs-live {
-      .vjs-current-time {
-        display: none !important;
-      }
-    }
-  }
 }
 
 .vjs-marker {
@@ -552,4 +475,85 @@
 
 .vjs-peertube-skin.vjs-has-captions .vjs-caption-toggle-control {
   display: block !important;
+}
+
+// ---------------------------------------------------------------------------
+// Custom media queries
+// ---------------------------------------------------------------------------
+
+.video-js.vjs-peertube-skin.vjs-size-750 .vjs-control-bar {
+  .vjs-theater-control {
+    display: none;
+  }
+
+  .vjs-peertube {
+    .icon,
+    .download-speed-text,
+    .upload-speed-text {
+      display: none !important;
+    }
+  }
+}
+
+.video-js.vjs-peertube-skin.vjs-size-570 .vjs-control-bar {
+  .vjs-volume-control {
+    display: none;
+  }
+
+  .vjs-mute-control {
+    @include margin(0, 5px, 0, 5px);
+  }
+
+  .vjs-peertube {
+    padding: 0 !important;
+
+    .vjs-peertube-displayed {
+      display: none !important;
+    }
+  }
+
+  .vjs-peertube-link {
+    max-width: 100px;
+  }
+
+  &.vjs-live {
+    .vjs-duration {
+      display: none !important;
+    }
+
+    .vjs-peertube {
+      display: none !important;
+    }
+  }
+}
+
+.video-js.vjs-peertube-skin.vjs-size-350 .vjs-control-bar {
+  .vjs-next-video,
+  .vjs-previous-video {
+    display: none !important;
+  }
+
+  .vjs-peertube-link {
+    padding: 0 !important;
+  }
+
+  > button:first-child {
+    @include margin-left($first-control-bar-element-margin-left-small-width);
+  }
+
+  > button:last-child {
+    @include margin-right($first-control-bar-element-margin-left-small-width);
+  }
+
+  .vjs-play-control {
+    @include margin-left(0);
+
+    width: 30px;
+  }
+
+  &.vjs-live {
+    .vjs-current-time {
+      display: none !important;
+    }
+  }
 }

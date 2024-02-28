@@ -124,6 +124,7 @@ export class PeerTubePlayer {
 
   setPoster (url: string) {
     this.player?.poster(url)
+    this.options.playerElement().poster = ''
   }
 
   enable () {

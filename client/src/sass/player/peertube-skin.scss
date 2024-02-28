@@ -114,39 +114,6 @@ body {
     background-size: cover;
   }
 
-  @media screen and (max-width: $screen-width-750) {
-    .vjs-big-play-button {
-      font-size: 5em;
-      border-width: 3px;
-
-      .vjs-icon-placeholder::before {
-        @include big-play-button-triangle-size(32px);
-      }
-    }
-  }
-
-  @media screen and (max-width: $screen-width-570) {
-    .vjs-big-play-button {
-      font-size: 4.5em;
-      border-width: 2.5px;
-
-      .vjs-icon-placeholder::before {
-        @include big-play-button-triangle-size(27px);
-      }
-    }
-  }
-
-  @media screen and (max-width: $screen-width-350) {
-    .vjs-big-play-button {
-      font-size: 3em;
-      border-width: 2px;
-
-      .vjs-icon-placeholder::before {
-        @include big-play-button-triangle-size(20px);
-      }
-    }
-  }
-
   // Theater mode is enabled
   &.vjs-theater-enabled {
     .vjs-theater-control {
@@ -227,5 +194,32 @@ body {
 .vjs-error.vjs-error-display-enabled {
   .vjs-custom-error-display {
     display: block;
+  }
+}
+
+
+// ---------------------------------------------------------------------------
+// Custom media queries
+// ---------------------------------------------------------------------------
+
+.video-js.vjs-peertube-skin.vjs-size-570 {
+  .vjs-big-play-button {
+    font-size: 5em;
+    border-width: 3px;
+
+    .vjs-icon-placeholder::before {
+      @include big-play-button-triangle-size(32px);
+    }
+  }
+}
+
+.video-js.vjs-peertube-skin.vjs-size-350 {
+  .vjs-big-play-button {
+    font-size: 3em;
+    border-width: 2px;
+
+    .vjs-icon-placeholder::before {
+      @include big-play-button-triangle-size(20px);
+    }
   }
 }

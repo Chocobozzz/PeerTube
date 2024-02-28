@@ -71,42 +71,43 @@
     }
   }
 
-  @media screen and (max-width: $screen-width-750) {
-    .peertube-dock-avatar {
-      --avatarSize: 40px;
-    }
-
-    .peertube-dock {
-      font-size: 16px;
-    }
-
-    .peertube-dock-description {
-      font-size: 9px;
-    }
-  }
-
-  @media screen and (max-width: $screen-width-570) {
-    .peertube-dock-avatar {
-      --avatarSize: 35px;
-    }
-
-    .peertube-dock {
-      font-size: 14px;
-    }
-  }
-
-  @media screen and (max-width: $screen-width-350) {
-    .peertube-dock-avatar {
-      --avatarSize: 30px;
-    }
-
-    .peertube-dock {
-      font-size: 13px;
-    }
-  }
-
   &.vjs-playing.vjs-user-inactive .peertube-dock {
     opacity: 0;
     transition: opacity 1s;
+  }
+}
+
+.video-js.vjs-peertube-skin.vjs-size-750 {
+  .peertube-dock-avatar {
+    --avatarSize: 40px;
+  }
+
+  .peertube-dock {
+    font-size: 16px;
+  }
+
+  .peertube-dock-description {
+    font-size: 9px;
+  }
+}
+
+
+.video-js.vjs-peertube-skin.vjs-size-570 {
+  .peertube-dock-avatar {
+    --avatarSize: 35px;
+  }
+
+  .peertube-dock {
+    font-size: 14px;
+  }
+}
+
+.video-js.vjs-peertube-skin.vjs-size-350 {
+  .peertube-dock-avatar {
+    --avatarSize: 30px;
+  }
+
+  .peertube-dock {
+    font-size: 13px;
   }
 }
