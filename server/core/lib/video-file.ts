@@ -27,7 +27,10 @@ async function buildNewFile (options: {
   })
 
   if (await isAudioFile(path, probe)) {
+    videoFile.fps = 0
     videoFile.resolution = VideoResolution.H_NOVIDEO
+    videoFile.width = 0
+    videoFile.height = 0
   } else {
     const dimensions = await getVideoStreamDimensionsInfo(path, probe)
     videoFile.fps = await getVideoStreamFPS(path, probe)

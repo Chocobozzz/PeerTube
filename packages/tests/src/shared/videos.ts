@@ -104,8 +104,13 @@ export async function completeWebVideoFilesCheck (options: {
     if (attributeFile.width !== undefined) expect(file.width).to.equal(attributeFile.width)
     if (attributeFile.height !== undefined) expect(file.height).to.equal(attributeFile.height)
 
-    expect(Math.min(file.height, file.width)).to.equal(file.resolution.id)
-    expect(Math.max(file.height, file.width)).to.be.greaterThan(file.resolution.id)
+    if (file.resolution.id === VideoResolution.H_NOVIDEO) {
+      expect(file.height).to.equal(0)
+      expect(file.width).to.equal(0)
+    } else {
+      expect(Math.min(file.height, file.width)).to.equal(file.resolution.id)
+      expect(Math.max(file.height, file.width)).to.be.greaterThan(file.resolution.id)
+    }
 
     if (attributeFile.size) {
       const minSize = attributeFile.size - ((10 * attributeFile.size) / 100)
