@@ -28,6 +28,7 @@ import { MVideoSource } from '@server/types/models/video/video-source.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
+import { USER_EXPORT_MAX_ITEMS } from '@server/initializers/constants.js'
 
 export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
 
@@ -45,7 +46,7 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
     const channels = await VideoChannelModel.listAllByAccount(this.user.Account.id)
 
     for (const channel of channels) {
-      const videoIds = await VideoModel.getAllIdsFromChannel(channel)
+      const videoIds = await VideoModel.getAllIdsFromChannel(channel, USER_EXPORT_MAX_ITEMS)
 
       await Bluebird.map(videoIds, async id => {
         try {

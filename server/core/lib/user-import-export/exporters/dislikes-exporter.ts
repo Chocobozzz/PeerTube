@@ -9,7 +9,7 @@ import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
 export class DislikesExporter extends AbstractUserExporter <DislikesExportJSON> {
 
   async export () {
-    const dislikes = await AccountVideoRateModel.listRatesOfAccountId(this.user.Account.id, 'dislike')
+    const dislikes = await AccountVideoRateModel.listRatesOfAccountIdForExport(this.user.Account.id, 'dislike')
 
     return {
       json: {

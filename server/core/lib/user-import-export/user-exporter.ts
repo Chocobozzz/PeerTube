@@ -11,7 +11,8 @@ import {
   LikesExporter, AbstractUserExporter,
   UserSettingsExporter,
   VideoPlaylistsExporter,
-  VideosExporter
+  VideosExporter,
+  UserVideoHistoryExporter
 } from './exporters/index.js'
 import { MUserDefault, MUserExport } from '@server/types/models/index.js'
 import archiver, { Archiver } from 'archiver'
@@ -236,6 +237,10 @@ export class UserExporter {
 
           relativeStaticDirPath: '../files/video-playlists'
         })
+      },
+      {
+        jsonFilename: 'video-history.json',
+        exporter: new UserVideoHistoryExporter(options)
       }
     ] as { jsonFilename: string, exporter: AbstractUserExporter<any> }[]
   }

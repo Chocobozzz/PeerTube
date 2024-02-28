@@ -30,7 +30,14 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { logger } from '../../helpers/logger.js'
-import { ACTOR_FOLLOW_SCORE, CONSTRAINTS_FIELDS, FOLLOW_STATES, SERVER_ACTOR_NAME, SORTABLE_COLUMNS } from '../../initializers/constants.js'
+import {
+  ACTOR_FOLLOW_SCORE,
+  CONSTRAINTS_FIELDS,
+  FOLLOW_STATES,
+  SERVER_ACTOR_NAME,
+  SORTABLE_COLUMNS,
+  USER_EXPORT_MAX_ITEMS
+} from '../../initializers/constants.js'
 import { AccountModel } from '../account/account.js'
 import { ServerModel } from '../server/server.js'
 import { SequelizeModel, buildSQLAttributes, createSafeIn, getSort, searchAttribute, throwIfNotValid } from '../shared/index.js'
@@ -510,8 +517,8 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
     }).then(({ data, total }) => ({ total, data: data.map(d => d.selectionUrl) }))
   }
 
-  static listAcceptedFollowersForExport (targetActorId: number) {
-    const query = {
+  static async listAcceptedFollowersForExport (targetActorId: number) {
+    const data = await ActorFollowModel.findAll({
       where: {
         state: 'accepted',
         targetActorId
@@ -530,17 +537,15 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
             }
           ]
         }
-      ]
-    }
+      ],
+      limit: USER_EXPORT_MAX_ITEMS
+    })
 
-    return ActorFollowModel.findAll(query)
-      .then(data => {
-        return data.map(f => ({
-          createdAt: f.createdAt,
-          followerHandle: f.ActorFollower.getFullIdentifier(),
-          followerUrl: f.ActorFollower.url
-        }))
-      })
+    return data.map(f => ({
+      createdAt: f.createdAt,
+      followerHandle: f.ActorFollower.getFullIdentifier(),
+      followerUrl: f.ActorFollower.url
+    }))
   }
 
   // ---------------------------------------------------------------------------
@@ -550,8 +555,8 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
       .then(({ data, total }) => ({ total, data: data.map(d => d.selectionUrl) }))
   }
 
-  static listAcceptedFollowingForExport (actorId: number) {
-    const query = {
+  static async listAcceptedFollowingForExport (actorId: number) {
+    const data = await ActorFollowModel.findAll({
       where: {
         state: 'accepted',
         actorId
@@ -570,17 +575,15 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
             }
           ]
         }
-      ]
-    }
+      ],
+      limit: USER_EXPORT_MAX_ITEMS
+    })
 
-    return ActorFollowModel.findAll(query)
-      .then(data => {
-        return data.map(f => ({
-          createdAt: f.createdAt,
-          followingHandle: f.ActorFollowing.getFullIdentifier(),
-          followingUrl: f.ActorFollowing.url
-        }))
-      })
+    return data.map(f => ({
+      createdAt: f.createdAt,
+      followingHandle: f.ActorFollowing.getFullIdentifier(),
+      followingUrl: f.ActorFollowing.url
+    }))
   }
 
   // ---------------------------------------------------------------------------

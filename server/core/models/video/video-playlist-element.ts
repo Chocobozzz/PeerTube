@@ -31,7 +31,7 @@ import {
   MVideoPlaylistElementVideoUrl
 } from '@server/types/models/video/video-playlist-element.js'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
-import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, USER_EXPORT_MAX_ITEMS } from '../../initializers/constants.js'
 import { AccountModel } from '../account/account.js'
 import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
 import { VideoPlaylistModel } from './video-playlist.js'
@@ -258,7 +258,7 @@ export class VideoPlaylistElementModel extends SequelizeModel<VideoPlaylistEleme
   }
 
   static listElementsForExport (videoPlaylistId: number): Promise<MVideoPlaylistElementVideoUrl[]> {
-    const query = {
+    return VideoPlaylistElementModel.findAll({
       where: {
         videoPlaylistId
       },
@@ -269,10 +269,9 @@ export class VideoPlaylistElementModel extends SequelizeModel<VideoPlaylistEleme
           required: true
         }
       ],
-      order: getSort('position')
-    }
-
-    return VideoPlaylistElementModel.findAll(query)
+      order: getSort('position'),
+      limit: USER_EXPORT_MAX_ITEMS
+    })
   }
 
   // ---------------------------------------------------------------------------

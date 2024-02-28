@@ -330,6 +330,18 @@ function runTest (withObjectStorage: boolean) {
     }
   })
 
+  it('Should have correctly imported user video history', async function () {
+    const { data } = await remoteServer.history.list({ token: remoteNoahToken })
+
+    expect(data).to.have.lengthOf(2)
+
+    expect(data[0].userHistory.currentTime).to.equal(2)
+    expect(data[0].url).to.equal(remoteServer.url + '/videos/watch/' + externalVideo.uuid)
+
+    expect(data[1].userHistory.currentTime).to.equal(4)
+    expect(data[1].url).to.equal(server.url + '/videos/watch/' + noahVideo.uuid)
+  })
+
   it('Should have correctly imported user videos', async function () {
     const { data } = await remoteServer.videos.listMyVideos({ token: remoteNoahToken })
     expect(data).to.have.lengthOf(5)

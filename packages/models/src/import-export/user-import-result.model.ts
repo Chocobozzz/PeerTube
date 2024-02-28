@@ -16,5 +16,7 @@ export interface UserImportResultSummary {
 
     account: Summary
     userSettings: Summary
+
+    userVideoHistory: Summary
   }
 }

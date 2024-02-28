@@ -9,7 +9,7 @@ import { getContextFilter } from '@server/lib/activitypub/context.js'
 export class LikesExporter extends AbstractUserExporter <LikesExportJSON> {
 
   async export () {
-    const likes = await AccountVideoRateModel.listRatesOfAccountId(this.user.Account.id, 'like')
+    const likes = await AccountVideoRateModel.listRatesOfAccountIdForExport(this.user.Account.id, 'like')
 
     return {
       json: {

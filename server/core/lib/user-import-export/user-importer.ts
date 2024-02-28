@@ -17,6 +17,7 @@ import { FollowingImporter } from './importers/following-importer.js'
 import { LikesImporter } from './importers/likes-importer.js'
 import { DislikesImporter } from './importers/dislikes-importer.js'
 import { VideoPlaylistsImporter } from './importers/video-playlists-importer.js'
+import { UserVideoHistoryImporter } from './importers/user-video-history-importer.js'
 
 const lTags = loggerTagsFactory('user-import')
 
@@ -34,7 +35,8 @@ export class UserImporter {
         videoPlaylists: this.buildSummary(),
         videos: this.buildSummary(),
         account: this.buildSummary(),
-        userSettings: this.buildSummary()
+        userSettings: this.buildSummary(),
+        userVideoHistory: this.buildSummary()
       }
     }
 
@@ -127,6 +129,10 @@ export class UserImporter {
       {
         name: 'videoPlaylists' as 'videoPlaylists',
         importer: new VideoPlaylistsImporter(this.buildImporterOptions(user, 'video-playlists.json'))
+      },
+      {
+        name: 'userVideoHistory' as 'userVideoHistory',
+        importer: new UserVideoHistoryImporter(this.buildImporterOptions(user, 'video-history.json'))
       }
     ]
   }

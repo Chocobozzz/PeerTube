@@ -39,6 +39,7 @@ import {
   CONSTRAINTS_FIELDS,
   LAZY_STATIC_PATHS,
   THUMBNAILS_SIZE,
+  USER_EXPORT_MAX_ITEMS,
   VIDEO_PLAYLIST_PRIVACIES,
   VIDEO_PLAYLIST_TYPES,
   WEBSERVER
@@ -496,15 +497,14 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   }
 
   static listPlaylistForExport (accountId: number): Promise<MVideoPlaylistFull[]> {
-    const query = {
-      where: {
-        ownerAccountId: accountId
-      }
-    }
-
     return VideoPlaylistModel
       .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL, ScopeNames.WITH_VIDEOS_LENGTH, ScopeNames.WITH_THUMBNAIL ])
-      .findAll(query)
+      .findAll({
+        where: {
+          ownerAccountId: accountId
+        },
+        limit: USER_EXPORT_MAX_ITEMS
+      })
   }
 
   // ---------------------------------------------------------------------------

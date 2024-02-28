@@ -5,6 +5,8 @@ import { MUserAccountId, MUserId } from '@server/types/models/index.js'
 import { VideoModel } from '../video/video.js'
 import { UserModel } from './user.js'
 import { SequelizeModel } from '../shared/sequelize-type.js'
+import { USER_EXPORT_MAX_ITEMS } from '@server/initializers/constants.js'
+import { getSort } from '../shared/sort.js'
 
 @Table({
   tableName: 'userVideoHistory',
@@ -69,6 +71,26 @@ export class UserVideoHistoryModel extends SequelizeModel<UserVideoHistoryModel>
       user,
       historyOfUser: user
     })
+  }
+
+  static async listForExport (user: MUserId) {
+    const rows = await UserVideoHistoryModel.findAll({
+      attributes: [ 'createdAt', 'updatedAt', 'currentTime' ],
+      where: {
+        userId: user.id
+      },
+      limit: USER_EXPORT_MAX_ITEMS,
+      include: [
+        {
+          attributes: [ 'url' ],
+          model: VideoModel.unscoped(),
+          required: true
+        }
+      ],
+      order: getSort('updatedAt')
+    })
+
+    return rows.map(r => ({ createdAt: r.createdAt, updatedAt: r.updatedAt, currentTime: r.currentTime, videoUrl: r.Video.url }))
   }
 
   static removeUserHistoryElement (user: MUserId, videoId: number) {

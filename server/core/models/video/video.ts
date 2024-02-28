@@ -1593,16 +1593,16 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return VideoModel.update({ support: ofChannel.support }, options)
   }
 
-  static getAllIdsFromChannel (videoChannel: MChannelId): Promise<number[]> {
-    const query = {
+  static async getAllIdsFromChannel (videoChannel: MChannelId, limit?: number): Promise<number[]> {
+    const videos = await VideoModel.findAll({
       attributes: [ 'id' ],
       where: {
         channelId: videoChannel.id
-      }
-    }
+      },
+      limit
+    })
 
-    return VideoModel.findAll(query)
-                     .then(videos => videos.map(v => v.id))
+    return videos.map(v => v.id)
   }
 
   // threshold corresponds to how many video the field should have to be returned

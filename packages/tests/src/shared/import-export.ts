@@ -311,6 +311,10 @@ export async function prepareImportExportTests (options: {
     token: noahToken
   })
 
+  // Views
+  await server.views.view({ id: noahVideo.uuid, token: noahToken, currentTime: 4 })
+  await server.views.view({ id: externalVideo.uuid, token: noahToken, currentTime: 2 })
+
   return {
     rootId,
 

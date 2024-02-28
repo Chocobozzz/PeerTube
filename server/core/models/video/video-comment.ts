@@ -17,7 +17,7 @@ import { extractMentions } from '@server/helpers/mentions.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MAccount, MAccountId, MUserAccountId } from '@server/types/models/index.js'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
-import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, USER_EXPORT_MAX_ITEMS } from '../../initializers/constants.js'
 import {
   MComment,
   MCommentAdminFormattable,
@@ -456,7 +456,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
   }
 
   static listForExport (ofAccountId: number): Promise<MCommentExport[]> {
-    const query = {
+    return VideoCommentModel.findAll({
       attributes: [ 'url', 'text', 'createdAt' ],
       where: {
         accountId: ofAccountId,
@@ -474,10 +474,9 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
           model: VideoCommentModel,
           as: 'InReplyToVideoComment'
         }
-      ]
-    }
-
-    return VideoCommentModel.findAll(query)
+      ],
+      limit: USER_EXPORT_MAX_ITEMS
+    })
   }
 
   static async getStats () {

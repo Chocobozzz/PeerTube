@@ -9,7 +9,7 @@ import {
 import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
-import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, USER_EXPORT_MAX_ITEMS, VIDEO_RATE_TYPES } from '../../initializers/constants.js'
 import { ActorModel } from '../actor/actor.js'
 import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
 import { SummaryOptions, VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel.js'
@@ -252,8 +252,8 @@ export class AccountVideoRateModel extends SequelizeModel<AccountVideoRateModel>
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
-  static listRatesOfAccountId (accountId: number, rateType: VideoRateType): Promise<MAccountVideoRateVideoUrl[]> {
-    const query = {
+  static listRatesOfAccountIdForExport (accountId: number, rateType: VideoRateType): Promise<MAccountVideoRateVideoUrl[]> {
+    return AccountVideoRateModel.findAll({
       where: {
         accountId,
         type: rateType
@@ -264,10 +264,9 @@ export class AccountVideoRateModel extends SequelizeModel<AccountVideoRateModel>
           model: VideoModel,
           required: true
         }
-      ]
-    }
-
-    return AccountVideoRateModel.findAll(query)
+      ],
+      limit: USER_EXPORT_MAX_ITEMS
+    })
   }
 
   // ---------------------------------------------------------------------------

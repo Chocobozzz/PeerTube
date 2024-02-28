@@ -817,6 +817,10 @@ const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
 
 // ---------------------------------------------------------------------------
 
+const USER_EXPORT_MAX_ITEMS = 1000
+
+// ---------------------------------------------------------------------------
+
 // Express static paths (router)
 const STATIC_PATHS = {
   // TODO: deprecated in v6, to remove
@@ -1255,6 +1259,7 @@ export {
   STATIC_MAX_AGE,
   VIEWER_SYNC_REDIS,
   STATIC_PATHS,
+  USER_EXPORT_MAX_ITEMS,
   VIDEO_IMPORT_TIMEOUT,
   VIDEO_PLAYLIST_TYPES,
   MAX_LOGS_OUTPUT_CHARACTERS,

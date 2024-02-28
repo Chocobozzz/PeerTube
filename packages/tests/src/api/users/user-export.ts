@@ -24,6 +24,7 @@ import {
   UserExportState,
   UserNotificationSettingValue,
   UserSettingsExportJSON,
+  UserVideoHistoryExportJSON,
   VideoChapterObject,
   VideoCommentObject,
   VideoCreateResult,
@@ -466,6 +467,22 @@ function runTest (withObjectStorage: boolean) {
         const { body } = await makeActivityPubRawRequest(reply.inReplyToCommentUrl)
         expect((body as VideoCommentObject).content).to.equal('local comment')
       }
+    }
+
+    {
+      const json = await parseZIPJSONFile<UserVideoHistoryExportJSON>(zip, 'peertube/video-history.json')
+
+      expect(json.watchedVideos).to.have.lengthOf(2)
+
+      expect(json.watchedVideos[0].createdAt).to.exist
+      expect(json.watchedVideos[0].updatedAt).to.exist
+      expect(json.watchedVideos[0].lastTimecode).to.equal(4)
+      expect(json.watchedVideos[0].videoUrl).to.equal(server.url + '/videos/watch/' + noahVideo.uuid)
+
+      expect(json.watchedVideos[1].createdAt).to.exist
+      expect(json.watchedVideos[1].updatedAt).to.exist
+      expect(json.watchedVideos[1].lastTimecode).to.equal(2)
+      expect(json.watchedVideos[1].videoUrl).to.equal(remoteServer.url + '/videos/watch/' + externalVideo.uuid)
     }
 
     {
