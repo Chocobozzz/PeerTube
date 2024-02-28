@@ -225,11 +225,19 @@ class PeerTubePlugin extends Plugin {
 
     const defaultRatio = getComputedStyle(this.player.el()).getPropertyValue(this.options.autoPlayerRatio.cssRatioVariable)
 
-    if (this.options.videoRatio()) {
+    const updateFromOptions = () => {
+      if (!this.options.videoRatio()) return
+
       this.adaptPlayerFromRatio({ ratio: this.options.videoRatio(), defaultRatio })
     }
 
+    updateFromOptions()
+
+    this.player.on('video-change', () => updateFromOptions())
+
     this.player.on('video-ratio-changed', (_event, data: { ratio: number }) => {
+      if (this.options.videoRatio()) return
+
       this.adaptPlayerFromRatio({ ratio: data.ratio, defaultRatio })
     })
   }
