@@ -7,7 +7,9 @@ import {
   cleanupTests,
   createSingleServer,
   killallServers,
+  makeActivityPubGetRequest,
   makeGetRequest,
+  makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
@@ -747,13 +749,31 @@ describe('Test config', function () {
         }
       })
 
-      it('Should remove instance banner', async function () {
+      it('Should have the avatars in the AP representation of the instance', async function () {
+        const res = await makeActivityPubGetRequest(server.url, '/accounts/peertube')
+        const object = res.body
+
+        expect(object.icon).to.have.lengthOf(4)
+
+        for (const icon of object.icon) {
+          await makeRawRequest({ url: icon.url, expectedStatus: HttpStatusCode.OK_200 })
+        }
+      })
+
+      it('Should remove instance avatar', async function () {
         await server.config.deleteInstanceImage({ type: ActorImageType.AVATAR })
 
         const { avatars } = await checkAndGetServerImages()
         expect(avatars).to.have.lengthOf(0)
 
         await testFileExistsOrNot(server, 'avatars', basename(avatarPath), false)
+      })
+
+      it('Should not have the avatars anymore in the AP representation of the instance', async function () {
+        const res = await makeActivityPubGetRequest(server.url, '/accounts/peertube')
+        const object = res.body
+
+        expect(object.icon).to.not.exist
       })
     })
   })

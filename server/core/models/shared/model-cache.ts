@@ -2,7 +2,7 @@ import { Model } from 'sequelize-typescript'
 import { logger } from '@server/helpers/logger.js'
 
 type ModelCacheType =
-  'local-account-name'
+  'server-account'
   | 'local-actor-name'
   | 'local-actor-url'
   | 'load-video-immutable-id'
@@ -16,7 +16,7 @@ class ModelCache {
   private static instance: ModelCache
 
   private readonly localCache: { [id in ModelCacheType]: Map<string, any> } = {
-    'local-account-name': new Map(),
+    'server-account': new Map(),
     'local-actor-name': new Map(),
     'local-actor-url': new Map(),
     'load-video-immutable-id': new Map(),
@@ -82,6 +82,10 @@ class ModelCache {
     }
 
     map.delete(modelId)
+  }
+
+  clearCache (cacheType: ModelCacheType) {
+    this.localCache[cacheType] = new Map()
   }
 }
 

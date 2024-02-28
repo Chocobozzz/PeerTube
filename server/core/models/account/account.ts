@@ -301,7 +301,7 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     }
 
     return ModelCache.Instance.doCache({
-      cacheType: 'local-account-name',
+      cacheType: 'server-account',
       key: name,
       fun,
       // The server actor never change, so we can easily cache it

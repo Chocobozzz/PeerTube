@@ -23,6 +23,7 @@ import { MIMETYPES } from '@server/initializers/constants.js'
 import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '@server/lib/local-actor.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
+import { ModelCache } from '@server/models/shared/model-cache.js'
 
 const configRouter = express.Router()
 
@@ -193,6 +194,7 @@ function updateInstanceImageFactory (imageType: ActorImageType_Type) {
     })
 
     ClientHtml.invalidateCache()
+    ModelCache.Instance.clearCache('server-account')
 
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   }
@@ -203,6 +205,7 @@ function deleteInstanceImageFactory (imageType: ActorImageType_Type) {
     await deleteLocalActorImageFile((await getServerActorWithUpdatedImages(imageType)).Account, imageType)
 
     ClientHtml.invalidateCache()
+    ModelCache.Instance.clearCache('server-account')
 
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   }
