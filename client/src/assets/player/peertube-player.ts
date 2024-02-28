@@ -124,7 +124,6 @@ export class PeerTubePlayer {
 
   setPoster (url: string) {
     this.player?.poster(url)
-    this.options.playerElement().poster = url
   }
 
   enable () {
@@ -209,7 +208,8 @@ export class PeerTubePlayer {
         }
       }
 
-      this.player.one('error', () => handleError())
+      this.player.on('video-change', () => alreadyFallback = false)
+      this.player.on('error', () => handleError())
 
       this.player.on('network-info', (_, data: PlayerNetworkInfo) => {
         if (data.source !== 'p2p-media-loader' || isNaN(data.bandwidthEstimate)) return

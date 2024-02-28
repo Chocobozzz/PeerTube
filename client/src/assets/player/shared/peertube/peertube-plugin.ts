@@ -187,6 +187,10 @@ class PeerTubePlugin extends Plugin {
     this.player.removeChild(this.errorModal)
     this.errorModal.close()
     this.errorModal = undefined
+
+    if (this.player.loadingSpinner) {
+      this.player.loadingSpinner.show()
+    }
   }
 
   private initializePlayer () {
