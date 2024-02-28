@@ -14,6 +14,7 @@ import {
   VideoPlaylistPrivacy,
   VideoPlaylistPrivacyType,
   VideoPlaylistReorder,
+  VideoPlaylistType,
   VideoPlaylistType_Type,
   VideoPlaylistUpdate
 } from '@peertube/peertube-models'
@@ -82,6 +83,8 @@ export class PlaylistsCommand extends AbstractCommand {
     })
   }
 
+  // ---------------------------------------------------------------------------
+
   get (options: OverrideCommandOptions & {
     playlistId: number | string
   }) {
@@ -96,6 +99,20 @@ export class PlaylistsCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
+
+  async getWatchLater (options: OverrideCommandOptions & {
+    handle: string
+  }) {
+    const { data: playlists } = await this.listByAccount({
+      ...options,
+
+      playlistType: VideoPlaylistType.WATCH_LATER
+    })
+
+    return playlists[0]
+  }
+
+  // ---------------------------------------------------------------------------
 
   listVideos (options: OverrideCommandOptions & {
     playlistId: number | string

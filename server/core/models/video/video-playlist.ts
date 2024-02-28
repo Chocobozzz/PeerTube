@@ -10,7 +10,7 @@ import {
 } from '@peertube/peertube-models'
 import { buildUUID, uuidToShort } from '@peertube/peertube-node-utils'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
-import { MAccountId, MChannelId } from '@server/types/models/index.js'
+import { MAccountId, MChannelId, MVideoPlaylistElement } from '@server/types/models/index.js'
 import { join } from 'path'
 import { FindOptions, Includeable, literal, Op, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
@@ -627,6 +627,13 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
 
   hasGeneratedThumbnail () {
     return this.hasThumbnail() && this.Thumbnail.automaticallyGenerated === true
+  }
+
+  shouldGenerateThumbnailWithNewElement (newElement: MVideoPlaylistElement) {
+    if (this.hasThumbnail() === false) return true
+    if (newElement.position === 1 && this.hasGeneratedThumbnail()) return true
+
+    return false
   }
 
   generateThumbnailName () {

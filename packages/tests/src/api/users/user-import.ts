@@ -97,15 +97,14 @@ function runTest (withObjectStorage: boolean) {
     })
 
     // Add a video in watch later playlist
-    const { data: playlists } = await server.playlists.listByAccount({
-      token: noahToken,
-      handle: 'noah',
-      playlistType: VideoPlaylistType.WATCH_LATER
+    await server.playlists.addElement({
+      playlistId: (await server.playlists.getWatchLater({ token: noahToken, handle: 'noah' })).id,
+      attributes: { videoId: noahVideo.uuid }
     })
 
-    await server.playlists.addElement({
-      playlistId: playlists[0].id,
-      attributes: { videoId: noahVideo.uuid }
+    await remoteServer.playlists.addElement({
+      playlistId: (await remoteServer.playlists.getWatchLater({ token: remoteNoahToken, handle: 'noah_remote' })).id,
+      attributes: { videoId: mouskaVideo.uuid }
     })
 
     await waitJobs([ server, remoteServer, blockedServer ])
@@ -285,11 +284,15 @@ function runTest (withObjectStorage: boolean) {
       expect(watchLater.privacy.id).to.equal(VideoPlaylistPrivacy.PRIVATE)
 
       // Playlists were merged
-      expect(watchLater.videosLength).to.equal(1)
+      expect(watchLater.videosLength).to.equal(2)
 
       const { data: videos } = await remoteServer.playlists.listVideos({ playlistId: watchLater.id, token: remoteNoahToken })
+
       expect(videos[0].position).to.equal(1)
-      expect(videos[0].video.uuid).to.equal(noahVideo.uuid)
+      // Mouska is muted
+      expect(videos[0].video).to.not.exist
+      expect(videos[1].position).to.equal(2)
+      expect(videos[1].video.uuid).to.equal(noahVideo.uuid)
 
       // Not federated
       await server.playlists.get({ playlistId: watchLater.uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })

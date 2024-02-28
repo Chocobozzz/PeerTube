@@ -13,10 +13,9 @@ import {
   VideoPlaylistUpdate
 } from '@peertube/peertube-models'
 import { scheduleRefreshIfNeeded } from '@server/lib/activitypub/playlists/index.js'
-import { VideoMiniaturePermanentFileCache } from '@server/lib/files-cache/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { getServerActor } from '@server/models/application/application.js'
-import { MVideoPlaylistFull, MVideoPlaylistThumbnail, MVideoThumbnail } from '@server/types/models/index.js'
+import { MVideoPlaylistFull, MVideoPlaylistThumbnail } from '@server/types/models/index.js'
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { resetSequelizeInstance } from '../../helpers/database-utils.js'
 import { createReqFiles } from '../../helpers/express-utils.js'
@@ -51,6 +50,7 @@ import {
 import { AccountModel } from '../../models/account/account.js'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element.js'
 import { VideoPlaylistModel } from '../../models/video/video-playlist.js'
+import { generateThumbnailForPlaylist } from '@server/lib/video-playlist.js'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
@@ -329,7 +329,7 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
   })
 
   // If the user did not set a thumbnail, automatically take the video thumbnail
-  if (videoPlaylist.hasThumbnail() === false || (videoPlaylist.hasGeneratedThumbnail() && playlistElement.position === 1)) {
+  if (videoPlaylist.shouldGenerateThumbnailWithNewElement(playlistElement)) {
     await generateThumbnailForPlaylist(videoPlaylist, video)
   }
 
@@ -487,31 +487,4 @@ async function regeneratePlaylistThumbnail (videoPlaylist: MVideoPlaylistThumbna
 
   const firstElement = await VideoPlaylistElementModel.loadFirstElementWithVideoThumbnail(videoPlaylist.id)
   if (firstElement) await generateThumbnailForPlaylist(videoPlaylist, firstElement.Video)
-}
-
-async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbnail, video: MVideoThumbnail) {
-  logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
-
-  const videoMiniature = video.getMiniature()
-  if (!videoMiniature) {
-    logger.info('Cannot generate thumbnail for playlist %s because video %s does not have any.', videoPlaylist.url, video.url)
-    return
-  }
-
-  // Ensure the file is on disk
-  const videoMiniaturePermanentFileCache = new VideoMiniaturePermanentFileCache()
-  const inputPath = videoMiniature.isOwned()
-    ? videoMiniature.getPath()
-    : await videoMiniaturePermanentFileCache.downloadRemoteFile(videoMiniature)
-
-  const thumbnailModel = await updateLocalPlaylistMiniatureFromExisting({
-    inputPath,
-    playlist: videoPlaylist,
-    automaticallyGenerated: true,
-    keepOriginal: true
-  })
-
-  thumbnailModel.videoPlaylistId = videoPlaylist.id
-
-  videoPlaylist.Thumbnail = await thumbnailModel.save()
 }

@@ -2,8 +2,7 @@ import { VideoPlaylistPrivacy, VideoPlaylistType, VideoPlaylistsExportJSON } fro
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import {
-  MChannelBannerAccountDefault, MVideoPlaylist,
-  MVideoPlaylistFull,
+  MChannelBannerAccountDefault, MVideoPlaylistFull,
   MVideoPlaylistThumbnail
 } from '@server/types/models/index.js'
 import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '@server/lib/activitypub/url.js'
@@ -28,6 +27,8 @@ import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { pick } from '@peertube/peertube-core-utils'
+import { VideoModel } from '@server/models/video/video.js'
+import { generateThumbnailForPlaylist } from '@server/lib/video-playlist.js'
 
 const lTags = loggerTagsFactory('user-import')
 
@@ -135,7 +136,7 @@ export class VideoPlaylistsImporter extends AbstractUserImporter <VideoPlaylists
     await playlist.setAndSaveThumbnail(thumbnail, undefined)
   }
 
-  private async createElements (playlist: MVideoPlaylist, playlistImportData: SanitizedObject) {
+  private async createElements (playlist: MVideoPlaylistThumbnail, playlistImportData: SanitizedObject) {
     const elementsToCreate: { videoId: number, startTimestamp: number, stopTimestamp: number }[] = []
 
     for (const element of playlistImportData.elements.slice(0, USER_IMPORT.MAX_PLAYLIST_ELEMENTS)) {
@@ -154,9 +155,9 @@ export class VideoPlaylistsImporter extends AbstractUserImporter <VideoPlaylists
     }
 
     await sequelizeTypescript.transaction(async t => {
-      for (let position = 1; position <= elementsToCreate.length; position++) {
-        const elementToCreate = elementsToCreate[position - 1]
+      let position = await VideoPlaylistElementModel.getNextPositionOf(playlist.id, t)
 
+      for (const elementToCreate of elementsToCreate) {
         const playlistElement = new VideoPlaylistElementModel({
           position,
           startTimestamp: elementToCreate.startTimestamp,
@@ -168,6 +169,15 @@ export class VideoPlaylistsImporter extends AbstractUserImporter <VideoPlaylists
 
         playlistElement.url = getLocalVideoPlaylistElementActivityPubUrl(playlist, playlistElement)
         await playlistElement.save({ transaction: t })
+
+        if (playlist.shouldGenerateThumbnailWithNewElement(playlistElement)) {
+          const video = await VideoModel.loadFull(elementToCreate.videoId)
+
+          generateThumbnailForPlaylist(playlist, video)
+            .catch(err => logger.error('Cannot generate thumbnail from playlist', { err }))
+        }
+
+        position++
       }
     })
   }
