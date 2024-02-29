@@ -54,6 +54,7 @@ import {
   isValidVideoPasswordHeader
 } from '../shared/index.js'
 import { addDurationToVideoFileIfNeeded, commonVideoFileChecks, isVideoFileAccepted } from './shared/index.js'
+import { getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 
 // let duration: number
 
@@ -360,24 +361,6 @@ function getCommonVideoEditAttributes () {
 
   return [
 
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
-
-      const videoFile: express.VideoUploadFile = req.files['videofile'][0]
-      const user = res.locals.oauth.token.User
-
-      if (
-        !await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files }) ||
-      !isValidPasswordProtectedPrivacy(req, res) ||
-      !await addDurationToVideoFileIfNeeded({ videoFile, res, middlewareName: 'videosAddvideosAddLegacyValidatorResumableValidator' }) ||
-      !await isVideoFileAccepted({ req, res, videoFile, hook: 'filter:api.video.upload.accept.result' })
-      ) {
-        return cleanUpReqFiles(req)
-      }
-
-      return next()
-    },
-
     body('thumbnailfile')
       .custom((value, { req }) => isVideoImageValid(req.files, 'thumbnailfile')).withMessage(
         'This thumbnail file is not supported or too large. Please, make sure it is of the following type: ' +
@@ -456,12 +439,14 @@ function getCommonVideoEditAttributes () {
       .customSanitizer(toBooleanOrNull)
       .custom(isBooleanValid).withMessage('Should have shortVideo boolean'),
     body('shortVideo')
-      .custom((value, { req }) => {
-        if (value) {
-          const videoFile: express.VideoUploadFile = req.files['videofile'][0]
+      .custom(async (value, { req }) => {
+          if (value) {
+              const videoFile: express.VideoUploadFile = req.files['videofile'][0]
+              const duration = await getVideoStreamDuration(videoFile.path)
+              if(!isDurationValid(duration, 20))
+                  throw new Error();
 
-          return isDurationValid(videoFile.duration, 60)
-        }
+                  }
         return true
       }).withMessage('Video duration must be less than 60 seconds for short videos')
 
