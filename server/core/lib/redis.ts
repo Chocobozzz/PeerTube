@@ -341,7 +341,9 @@ class Redis {
   generateLocalVideoViewerKeys (ip: string, videoId: number): { setKey: string, viewerKey: string }
   generateLocalVideoViewerKeys (): { setKey: string }
   generateLocalVideoViewerKeys (ip?: string, videoId?: number) {
-    return { setKey: `local-video-viewer-stats-keys`, viewerKey: `local-video-viewer-stats-${ip}-${videoId}` }
+    const anonymousIP = sha256(CONFIG.SECRETS + '-' + ip)
+
+    return { setKey: `local-video-viewer-stats-keys`, viewerKey: `local-video-viewer-stats-${anonymousIP}-${videoId}` }
   }
 
   private generateVideoViewStatsKeys (options: { videoId?: number, hour?: number }) {
@@ -369,11 +371,11 @@ class Redis {
   }
 
   generateIPViewKey (ip: string, videoUUID: string) {
-    return `views-${videoUUID}-${ip}`
+    return `views-${videoUUID}-${sha256(CONFIG.SECRETS.PEERTUBE + '-' + ip)}`
   }
 
   private generateContactFormKey (ip: string) {
-    return 'contact-form-' + ip
+    return 'contact-form-' + sha256(CONFIG.SECRETS.PEERTUBE + '-' + ip)
   }
 
   private generateAPUnavailabilityKey (url: string) {

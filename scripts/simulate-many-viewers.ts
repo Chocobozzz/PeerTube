@@ -1,4 +1,3 @@
-import Bluebird from 'bluebird'
 import { wait } from '@peertube/peertube-core-utils'
 import {
   createSingleServer,
@@ -8,15 +7,27 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { isMainThread } from 'worker_threads'
+import Piscina from 'piscina'
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
+
+const THOUSAND_VIEWERS = 2
+const TOTAL_THREADS = 20
 
 let servers: PeerTubeServer[]
 const viewers: { xForwardedFor: string }[] = []
 let videoId: string
+let pool: Piscina
 
-run()
-  .then(() => process.exit(0))
-  .catch(err => console.error(err))
-  .finally(() => killallServers(servers))
+if (isMainThread) {
+  run()
+    .then(() => process.exit(0))
+    .catch(err => console.error(err))
+    .finally(() => killallServers(servers))
+}
+
+// ---------------------------------------------------------------------------
 
 async function run () {
   await prepare()
@@ -27,6 +38,12 @@ async function run () {
 }
 
 async function prepare () {
+  pool = new Piscina({
+    filename: join(dirname(fileURLToPath(import.meta.url)), 'simulate-many-viewers-worker.js'),
+    minThreads: 20,
+    maxThreads: 20
+  })
+
   console.log('Preparing servers...')
 
   const config = {
@@ -64,8 +81,6 @@ async function prepare () {
 
   await waitJobs(servers)
 
-  const THOUSAND_VIEWERS = 2
-
   for (let i = 2; i < 252; i++) {
     for (let j = 2; j < 6; j++) {
       for (let k = 2; k < THOUSAND_VIEWERS + 2; k++) {
@@ -82,9 +97,18 @@ async function runViewers () {
 
   const before = new Date().getTime()
 
-  await Bluebird.map(viewers, viewer => {
-    return servers[0].views.simulateView({ id: videoId, xForwardedFor: viewer.xForwardedFor })
-  }, { concurrency: 500 })
+  const promises: Promise<any>[] = []
+
+  for (let i = 0; i < TOTAL_THREADS; i++) {
+    const start = i * THOUSAND_VIEWERS * 1000 / TOTAL_THREADS
+    const end = (i + 1) * THOUSAND_VIEWERS * 1000 / TOTAL_THREADS
+
+    console.log(`Sending viewers ${start} to ${end}`)
+
+    promises.push(pool.run({ url: servers[0].url, viewers: viewers.slice(start, end), videoId }))
+  }
+
+  await Promise.all(promises)
 
   console.log('Finished to run views in %d seconds.', (new Date().getTime() - before) / 1000)
 
