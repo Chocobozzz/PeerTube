@@ -1,5 +1,13 @@
 # REST API quick start
 
+## Detect a PeerTube instance
+
+There are several ways to know if a website uses the PeerTube software:
+
+ * The server exposes NodeInfo information: https://peertube2.cpy.re/nodeinfo/2.0.json
+ * The server sends a `x-powered-by: PeerTube` header response to API requests
+ * HTML pages include a `<meta property="og:platform" content="PeerTube">` tag
+
 ## Authentication
 
 ### Get client
