@@ -4,8 +4,7 @@ import { Component, Input, OnInit } from '@angular/core'
   selector: 'my-edit-button',
   template: `
     <my-button
-      icon="edit" className="grey-button-link"
-      [label]="label" [title]="title" [responsiveLabel]="responsiveLabel"
+      icon="edit" [label]="label" [title]="title" [responsiveLabel]="responsiveLabel"
       [ptRouterLink]="ptRouterLink"
     ></my-button>
   `

@@ -46,13 +46,7 @@
       </div>
 
       <div class="form-group upload-audio-button">
-        <my-button
-          className="orange-button"
-          [label]="getAudioUploadLabel()"
-          icon="upload"
-          (click)="uploadAudio()"
-        >
-        </my-button>
+        <my-button theme="orange" [label]="getAudioUploadLabel()" icon="upload" (click)="uploadAudio()"></my-button>
       </div>
     </ng-container>
   </div>
@@ -80,9 +74,9 @@
   <div class="submit-container">
     <div i18n *ngIf="videoUploaded === false" class="message-submit">Publish will be available when upload is finished</div>
 
-    <my-button className="orange-button" i18n-label label="Publish" icon="circle-tick"
-               (click)="updateSecondStep()" (keydown.enter)="updateSecondStep()"
-               [disabled]="isPublishingButtonDisabled()"
+    <my-button
+      theme="orange" i18n-label label="Publish" icon="circle-tick"
+      (click)="updateSecondStep()" (keydown.enter)="updateSecondStep()" [disabled]="isPublishingButtonDisabled()"
     ></my-button>
   </div>
 </form>

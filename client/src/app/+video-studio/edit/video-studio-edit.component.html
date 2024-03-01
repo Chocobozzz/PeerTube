@@ -63,7 +63,7 @@
       </div>
 
       <my-button
-        className="orange-button" i18n-label label="Run video edition" icon="circle-tick"
+        theme="orange" i18n-label label="Run video edition" icon="circle-tick"
         (click)="runEdition()" (keydown.enter)="runEdition()"
         [disabled]="!form.valid || isRunningEdition || noEdition()"
       ></my-button>

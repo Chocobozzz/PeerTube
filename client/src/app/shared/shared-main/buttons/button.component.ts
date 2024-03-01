@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, booleanAttribute } from '@angular/core'
 import { GlobalIconName } from '@app/shared/shared-icons'
 
 @Component({
@@ -10,13 +10,13 @@ import { GlobalIconName } from '@app/shared/shared-icons'
 
 export class ButtonComponent implements OnInit, OnChanges {
   @Input() label = ''
-  @Input() className = 'grey-button'
-  @Input() icon: GlobalIconName = undefined
+  @Input() theme: 'orange' | 'grey' = 'grey'
+  @Input() icon: GlobalIconName
   @Input() ptRouterLink: string[] | string
-  @Input() title: string = undefined
-  @Input() loading = false
-  @Input() disabled = false
-  @Input() responsiveLabel = false
+  @Input() title: string
+  @Input({ transform: booleanAttribute }) loading = false
+  @Input({ transform: booleanAttribute }) disabled = false
+  @Input({ transform: booleanAttribute }) responsiveLabel = false
 
   classes: { [id: string]: boolean } = {}
 
@@ -30,7 +30,10 @@ export class ButtonComponent implements OnInit, OnChanges {
 
   private buildClasses () {
     this.classes = {
-      [this.className]: true,
+      'peertube-button': !this.ptRouterLink,
+      'peertube-button-link': !!this.ptRouterLink,
+      'orange-button': this.theme === 'orange',
+      'grey-button': this.theme === 'grey',
       'disabled': this.disabled,
       'icon-only': !this.label,
       'has-icon': !!this.icon,

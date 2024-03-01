@@ -46,26 +46,6 @@ span[class$=-button] {
   }
 }
 
-.orange-button,
-.grey-button {
-  @include peertube-button;
-}
-
-.orange-button-link,
-.grey-button-link {
-  @include peertube-button-link;
-}
-
-.orange-button,
-.orange-button-link {
-  @include orange-button;
-}
-
-.grey-button,
-.grey-button-link {
-  @include grey-button;
-}
-
 .button-label {
   @include ellipsis;
 }
