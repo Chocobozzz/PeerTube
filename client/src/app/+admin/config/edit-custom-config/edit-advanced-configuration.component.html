@@ -1,15 +1,15 @@
 <ng-container [formGroup]="form">
 
-  <div class="row mt-5"> <!-- cache grid -->
+  <div class="pt-two-cols mt-5"> <!-- cache grid -->
 
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="section-left-column-title">CACHE</h2>
+    <div class="title-col">
+      <h2 i18n>CACHE</h2>
       <div i18n class="inner-form-description">
         Some files are not federated, and fetched when necessary. Define their caching policies.
       </div>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
       <ng-container formGroupName="cache">
         <div class="form-group" formGroupName="previews">
           <label i18n for="cachePreviewsSize">Number of previews to keep in cache</label>
@@ -71,16 +71,16 @@
     </div>
   </div>
 
-  <div class="row mt-4"> <!-- cache grid -->
-    <div class="col-12 col-lg-4 col-xl-3">
+  <div class="pt-two-cols mt-4"> <!-- cache grid -->
+    <div class="title-col">
       <div class="anchor" id="customizations"></div> <!-- customizations anchor -->
-      <h2 i18n class="section-left-column-title">CUSTOMIZATIONS</h2>
+      <h2 i18n>CUSTOMIZATIONS</h2>
       <div i18n class="inner-form-description">
         Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.
       </div>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
       <ng-container formGroupName="instance">
         <ng-container formGroupName="customizations">
           <div class="form-group">

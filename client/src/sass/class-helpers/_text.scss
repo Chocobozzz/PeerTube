@@ -25,20 +25,6 @@
 
 // ---------------------------------------------------------------------------
 
-.section-left-column-title {
-  text-transform: uppercase;
-  color: pvar(--mainColor);
-  font-weight: $font-bold;
-  font-size: 1rem;
-  margin-bottom: 10px;
-
-  &.section-left-column-title-danger {
-    color: color.adjust($color: #c54130, $lightness: 10%);
-  }
-}
-
-// ---------------------------------------------------------------------------
-
 .muted {
   @include muted;
 }

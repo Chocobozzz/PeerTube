@@ -25,6 +25,6 @@ my-markdown-textarea {
   @include peertube-select-container(340px);
 }
 
-.breadcrumb {
-  @include breadcrumb;
+.pt-two-cols .content-col {
+  max-width: 500px;
 }

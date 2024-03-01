@@ -1,9 +1,6 @@
-@use 'sass:color';
-
 @use '_variables' as *;
 @use '_mixins' as *;
-@use 'bootstrap/scss/functions' as *;
 
-.row > div {
-  max-width: 500px;
+.content-col {
+  max-width: 500px;;
 }

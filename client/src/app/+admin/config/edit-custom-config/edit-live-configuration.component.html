@@ -1,14 +1,15 @@
 <ng-container [formGroup]="form">
 
-  <div class="row mt-5">
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="section-left-column-title">LIVE</h2>
+  <div class="pt-two-cols mt-5">
+    <div class="title-col">
+      <h2 i18n>LIVE</h2>
+
       <div i18n class="inner-form-description">
         Enable users of your instance to stream live.
       </div>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
 
       <ng-container formGroupName="live">
 
@@ -87,15 +88,15 @@
     </div>
   </div>
 
-  <div class="row"> <!-- transcoding live streams grid -->
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="section-left-column-title">TRANSCODING</h2>
+  <div class="pt-two-cols"> <!-- transcoding live streams grid -->
+    <div class="title-col">
+      <h2 i18n>TRANSCODING</h2>
       <div i18n class="inner-form-description">
         Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some.
       </div>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
 
       <ng-container formGroupName="live">
         <ng-container formGroupName="transcoding">

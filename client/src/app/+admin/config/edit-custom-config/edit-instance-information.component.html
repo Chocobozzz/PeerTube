@@ -2,12 +2,12 @@
 
   <ng-container formGroupName="instance">
 
-    <div class="row mt-5"> <!-- instance grid -->
-      <div class="col-12 col-lg-4 col-xl-3">
-        <h2 i18n class="section-left-column-title">INSTANCE</h2>
+    <div class="pt-two-cols mt-5"> <!-- instance grid -->
+      <div class="title-col">
+        <h2 i18n>INSTANCE</h2>
       </div>
 
-      <div class="col-12 col-lg-8 col-xl-9">
+      <div class="content-col">
         <div class="form-group">
           <label i18n for="avatarfile">Square icon</label>
 
@@ -102,15 +102,15 @@
       </div>
     </div>
 
-    <div class="row mt-4"> <!-- moderation & nsfw grid -->
-      <div class="col-12 col-lg-4 col-xl-3">
-        <h2 i18n class="section-left-column-title">MODERATION & NSFW</h2>
+    <div class="pt-two-cols mt-4"> <!-- moderation & nsfw grid -->
+      <div class="title-col">
+        <h2 i18n>MODERATION & NSFW</h2>
         <div i18n class="inner-form-description">
           Manage <a class="link-orange" routerLink="/admin/users">users</a> to build a moderation team.
         </div>
       </div>
 
-      <div class="col-12 col-lg-8 col-xl-9">
+      <div class="content-col">
         <div class="form-group">
           <my-peertube-checkbox inputName="instanceIsNSFW" formControlName="isNSFW">
             <ng-template ptTemplate="label">
@@ -180,12 +180,12 @@
       </div>
     </div>
 
-    <div class="row mt-4"> <!-- you and your instance grid -->
-      <div class="col-12 col-lg-4 col-xl-3">
-        <h2 i18n class="section-left-column-title">YOU AND YOUR INSTANCE</h2>
+    <div class="pt-two-cols mt-4"> <!-- you and your instance grid -->
+      <div class="title-col">
+        <h2 i18n>YOU AND YOUR INSTANCE</h2>
       </div>
 
-      <div class="col-12 col-lg-8 col-xl-9">
+      <div class="content-col">
 
         <div class="form-group">
           <label i18n for="instanceAdministrator">Who is behind the instance?</label><my-help helpType="markdownText"></my-help>
@@ -230,12 +230,12 @@
       </div>
     </div>
 
-    <div class="row mt-4"> <!-- other information grid -->
-      <div class="col-12 col-lg-4 col-xl-3">
-        <h2 i18n class="section-left-column-title">OTHER INFORMATION</h2>
+    <div class="pt-two-cols mt-4"> <!-- other information grid -->
+      <div class="title-col">
+        <h2 i18n>OTHER INFORMATION</h2>
       </div>
 
-      <div class="col-12 col-lg-8 col-xl-9">
+      <div class="content-col">
 
         <div class="form-group">
           <label i18n for="instanceHardwareInformation">What server/hardware does the instance run on?</label>

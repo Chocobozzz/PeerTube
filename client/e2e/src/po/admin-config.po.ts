@@ -10,7 +10,7 @@ export class AdminConfigPage {
     }
     await go('/admin/config/edit-custom#' + tab)
 
-    await $('.section-left-column-title=' + waitTitles[tab]).waitForDisplayed()
+    await $('h2=' + waitTitles[tab]).waitForDisplayed()
   }
 
   async updateNSFWSetting (newValue: 'do_not_list' | 'blur' | 'display') {

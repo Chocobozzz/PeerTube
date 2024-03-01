@@ -3,17 +3,17 @@
   <ng-container i18n>Applications</ng-container>
 </h1>
 
-<div class="row"> <!-- built-in token grid -->
+<div class="pt-two-cols"> <!-- built-in token grid -->
 
-  <div class="col-12 col-lg-4 col-xl-3">
-    <h2 i18n class="section-left-column-title">SUBSCRIPTION FEED</h2>
+  <div class="title-col">
+    <h2 i18n>SUBSCRIPTION FEED</h2>
 
     <div i18n class="applications-description">
       Use third-party feed aggregators to retrieve the list of videos from channels you subscribed to.
     </div>
   </div>
 
-  <div class="col-12 col-lg-8 col-xl-9">
+  <div class="content-col">
 
     <div class="form-group">
       <label i18n for="feed-url">Feed URL</label>
@@ -27,12 +27,7 @@
       <div class="form-group-description" i18n>⚠️ Never share your feed token with anyone.</div>
     </div>
 
-  </div>
-</div>
+    <input (click)="renewToken()" class="peertube-button orange-button mt-4" type="submit" i18n-value value="Renew token">
 
-<div class="row mt-4"> <!-- submit placement block -->
-  <div class="col-md-7 col-xl-5"></div>
-  <div class="col-md-5 col-xl-5">
-    <input (click)="renewToken()" type="submit" i18n-value value="Renew token">
   </div>
 </div>

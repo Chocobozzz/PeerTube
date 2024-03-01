@@ -1,0 +1,46 @@
+@use 'sass:color';
+
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.pt-two-cols {
+  @include make-row();
+
+  .title-col {
+    @include make-col-ready();
+    @include make-col(12);
+
+    @include media-breakpoint-up(lg) {
+      @include make-col(4);
+    }
+
+    @include media-breakpoint-up(xl) {
+      @include make-col(3);
+    }
+
+    h2 {
+      text-transform: uppercase;
+      color: pvar(--mainColor);
+      font-weight: $font-bold;
+      font-size: 1rem;
+      margin-bottom: 10px;
+
+      &.pt-title-danger {
+        color: color.adjust($color: #c54130, $lightness: 10%);
+      }
+    }
+  }
+
+  .content-col {
+    @include make-col-ready();
+    @include make-col(12);
+
+    @include media-breakpoint-up(lg) {
+      @include make-col(8);
+    }
+
+    @include media-breakpoint-up(xl) {
+      @include make-col(9);
+    }
+  }
+}

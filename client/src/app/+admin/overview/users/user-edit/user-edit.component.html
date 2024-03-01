@@ -1,18 +1,18 @@
 <nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
+  <ol class="pt-breadcrumb">
     <li class="breadcrumb-item">
       <a routerLink="/admin/users" i18n>Users</a>
     </li>
 
-    <ng-container *ngIf="isCreation()">
+    @if (isCreation()) {
       <li class="breadcrumb-item active" i18n>Create</li>
-    </ng-container>
-    <ng-container *ngIf="!isCreation()">
+    } @else {
       <li class="breadcrumb-item active" i18n>Edit</li>
+
       <li class="breadcrumb-item active" aria-current="page">
         <a *ngIf="user" [routerLink]="[ '/a', user?.username ]">{{ user?.username }}</a>
       </li>
-    </ng-container>
+    }
   </ol>
 </nav>
 
@@ -57,34 +57,33 @@
   </div>
 </ng-template>
 
-<div class="row d-xxl-none"> <!-- hidden on large screens, as it is then displayed on the right side of the form -->
-  <div class="col-12 col-xl-3"></div>
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<div class="pt-two-cols d-xxl-none"> <!-- hidden on large screens, as it is then displayed on the right side of the form -->
+  <div class="col-0 col-xl-3"></div>
 
   <div class="col-12 col-xl-9">
     <ng-template *ngTemplateOutlet="dashboard"></ng-template>
   </div>
 </div>
 
-<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-
-<div class="row mt-4"> <!-- user grid -->
-  <div class="col-12 col-lg-4 col-xl-3">
+<div class="pt-two-cols mt-4"> <!-- user grid -->
+  <div class="title-col">
     <div class="anchor" id="user"></div> <!-- user anchor -->
 
     @if (isCreation()) {
-      <div class="section-left-column-title" i18n>NEW USER</div>
+      <h2 i18n>NEW USER</h2>
     } @else if (user) {
-      <div class="section-left-column-title">
-        <my-actor-avatar-edit
-          actorType="account" [displayName]="user.account.displayName" [avatars]="user.account.avatars"
-          editable="false" [username]="user.username" displayUsername="false"
-        ></my-actor-avatar-edit>
-      </div>
-    }
+      <h2 class="visually-hidden">EDIT USER {{ user.username }}</h2>
 
+      <my-actor-avatar-edit
+        actorType="account" [displayName]="user.account.displayName" [avatars]="user.account.avatars"
+        editable="false" [username]="user.username" displayUsername="false"
+      ></my-actor-avatar-edit>
+    }
   </div>
 
-  <div class="col-12 col-lg-8 col-xl-9">
+  <div class="content-col">
     <div class="row">
       <form class="col" role="form" (ngSubmit)="formValidated()" [formGroup]="form">
         <div class="form-group" *ngIf="isCreation()">
@@ -206,7 +205,7 @@
           </my-peertube-checkbox>
         </div>
 
-        <input type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
+        <input class="peertube-button orange-button" type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
       </form>
 
       <div class="d-none d-xxl-block col-7">
@@ -217,18 +216,18 @@
 </div>
 
 
-<div *ngIf="displayDangerZone()" class="row mt-4"> <!-- danger zone grid -->
-  <div class="col-12 col-lg-4 col-xl-3">
+<div *ngIf="displayDangerZone()" class="pt-two-cols mt-5"> <!-- danger zone grid -->
+  <div class="title-col">
     <div class="anchor" id="danger"></div> <!-- danger zone anchor -->
-    <div i18n class="section-left-column-title section-left-column-title-danger">DANGER ZONE</div>
+    <h2 i18n class="pt-title-danger">DANGER ZONE</h2>
   </div>
 
-  <div class="col-12 col-lg-8 col-xl-9">
+  <div class="content-col">
 
     <div class="danger-zone">
       <div class="form-group">
         <div class="mb-1 fw-bold" i18n>Send a link to reset the password by email to the user</div>
-        <button (click)="resetPassword()" i18n>Ask for new password</button>
+        <button class="peertube-button" (click)="resetPassword()" i18n>Ask for new password</button>
       </div>
 
       <div class="form-group">
@@ -238,7 +237,7 @@
 
       <div *ngIf="user.twoFactorEnabled" class="form-group">
         <div class="mb-1 fw-bold" i18n>This user has two factor authentication enabled</div>
-        <button (click)="disableTwoFactorAuth()" i18n>Disable two factor authentication</button>
+        <button class="peertube-button" (click)="disableTwoFactorAuth()" i18n>Disable two factor authentication</button>
       </div>
     </div>
 

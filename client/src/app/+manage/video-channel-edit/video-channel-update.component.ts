@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs'
 import { HttpErrorResponse } from '@angular/common/http'
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, HooksService, Notifier, RedirectService, ServerService } from '@app/core'
+import { AuthService, HooksService, Notifier, RedirectService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
 import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
@@ -11,7 +11,7 @@ import {
 } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactiveService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
-import { HTMLServerConfig, VideoChannelUpdate } from '@peertube/peertube-models'
+import { VideoChannelUpdate } from '@peertube/peertube-models'
 import { VideoChannelEdit } from './video-channel-edit'
 import { shallowCopy } from '@peertube/peertube-core-utils'
 
@@ -26,7 +26,6 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
 
   private paramsSub: Subscription
   private oldSupportField: string
-  private serverConfig: HTMLServerConfig
 
   constructor (
     protected formReactiveService: FormReactiveService,
@@ -34,7 +33,6 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
     private notifier: Notifier,
     private route: ActivatedRoute,
     private videoChannelService: VideoChannelService,
-    private serverService: ServerService,
     private redirectService: RedirectService,
     private hooks: HooksService
   ) {
@@ -42,8 +40,6 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getHTMLConfig()
-
     this.buildForm({
       'display-name': VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
       'description': VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
@@ -183,7 +179,7 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
   }
 
   getFormButtonTitle () {
-    return $localize`Update`
+    return $localize`Update ${this.videoChannel.name}`
   }
 
   isBulkUpdateVideosDisplayed () {

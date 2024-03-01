@@ -16,11 +16,6 @@ my-select-channel {
   max-width: 340px;
 }
 
-input[type=submit] {
-  @include peertube-button;
-  @include orange-button;
-}
-
-.breadcrumb {
-  @include breadcrumb;
+.content-col {
+  max-width: 500px;;
 }

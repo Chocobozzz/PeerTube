@@ -26,30 +26,62 @@ my-select-custom-value {
   display: block;
 }
 
-input[type=submit],
-button {
-  @include peertube-button;
-  @include orange-button;
-
-  margin-top: 10px;
-}
-
 .danger-zone {
   button {
-    @include peertube-button;
     @include danger-button;
     @include disable-outline;
-
-    display: block;
-    margin-top: 0;
   }
 }
 
-.breadcrumb {
-  @include breadcrumb;
-}
-
 .dashboard {
-  @include dashboard;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -5px;
   max-width: 900px;
+
+  > div {
+    box-sizing: border-box;
+    flex: 0 0 math.percentage(math.div(1, 3));
+    padding: 0 5px;
+    margin-bottom: 10px;
+
+    > a {
+      @include disable-default-a-behaviour;
+
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      font-size: 18px;
+
+      &:active,
+      &:focus,
+      &:hover {
+        opacity: .8;
+      }
+    }
+
+    > a,
+    > div {
+      padding: 20px;
+      background: pvar(--submenuBackgroundColor);
+      border-radius: 4px;
+      box-sizing: border-box;
+      height: 100%;
+    }
+  }
+
+  .dashboard-num,
+  .dashboard-text {
+    text-align: center;
+    font-size: 130%;
+    color: pvar(--mainForegroundColor);
+    line-height: 30px;
+    margin-bottom: 20px;
+  }
+
+  .dashboard-label {
+    font-size: 90%;
+    color: pvar(--inputPlaceholderColor);
+    text-align: center;
+  }
 }

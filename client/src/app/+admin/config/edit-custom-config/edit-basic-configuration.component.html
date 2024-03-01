@@ -1,13 +1,14 @@
 <ng-container [formGroup]="form">
-  <div class="row mt-5"> <!-- appearance grid -->
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="section-left-column-title">APPEARANCE</h2>
+  <div class="pt-two-cols mt-5"> <!-- appearance grid -->
+    <div class="title-col">
+      <h2 i18n>APPEARANCE</h2>
+
       <div i18n class="inner-form-description">
         Use <a class="link-orange" routerLink="/admin/plugins">plugins & themes</a> for more involved changes, or add slight <a class="link-orange" routerLink="/admin/config/edit-custom" fragment="advanced-configuration">customizations</a>.
       </div>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
 
       <ng-container formGroupName="theme">
         <div class="form-group">
@@ -90,14 +91,14 @@
   </div>
 
   <div class="row mt-4"> <!-- broadcast grid -->
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="section-left-column-title">BROADCAST MESSAGE</h2>
+    <div class="title-col">
+      <h2 i18n>BROADCAST MESSAGE</h2>
       <div i18n class="inner-form-description">
         Display a message on your instance
       </div>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
 
       <ng-container formGroupName="broadcastMessage">
 
@@ -146,14 +147,14 @@
   </div>
 
   <div class="row mt-4"> <!-- new users grid -->
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="section-left-column-title">NEW USERS</h2>
+    <div class="title-col">
+      <h2 i18n>NEW USERS</h2>
       <div i18n class="inner-form-description">
         Manage <a class="link-orange" routerLink="/admin/users">users</a> to set their quota individually.
       </div>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
 
       <ng-container formGroupName="signup">
         <div class="form-group">
@@ -263,11 +264,11 @@
   </div>
 
   <div class="row mt-4"> <!-- videos grid -->
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="section-left-column-title">VIDEOS</h2>
+    <div class="title-col">
+      <h2 i18n>VIDEOS</h2>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
 
       <ng-container formGroupName="import">
 
@@ -375,11 +376,11 @@
   </div>
 
   <div class="row mt-4"> <!-- video channels grid -->
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="section-left-column-title">VIDEO CHANNELS</h2>
+    <div class="title-col">
+      <h2 i18n>VIDEO CHANNELS</h2>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
       <div class="form-group" formGroupName="videoChannels">
         <label i18n for="videoChannelsMaxPerUser">Max video channels per user</label>
 
@@ -397,11 +398,11 @@
   </div>
 
   <div class="row mt-4"> <!-- search grid -->
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="section-left-column-title">SEARCH</h2>
+    <div class="title-col">
+      <h2 i18n>SEARCH</h2>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
 
       <ng-container formGroupName="search">
         <ng-container formGroupName="remoteUri">
@@ -486,11 +487,11 @@
   </div>
 
   <div class="row mt-4"> <!-- import/export grid -->
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="section-left-column-title">USER IMPORT/EXPORT</h2>
+    <div class="title-col">
+      <h2 i18n>USER IMPORT/EXPORT</h2>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
 
       <ng-container formGroupName="import">
         <ng-container formGroupName="users">
@@ -562,14 +563,14 @@
   </div>
 
   <div class="row mt-4"> <!-- federation grid -->
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="section-left-column-title">FEDERATION</h2>
+    <div class="title-col">
+      <h2 i18n>FEDERATION</h2>
       <div i18n class="inner-form-description">
         Manage <a class="link-orange" routerLink="/admin/follows">relations</a> with other instances.
       </div>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
 
       <ng-container formGroupName="followers">
         <ng-container formGroupName="instance">
@@ -641,11 +642,11 @@
   </div>
 
   <div class="row mt-4"> <!-- administrators grid -->
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="section-left-column-title">ADMINISTRATORS</h2>
+    <div class="title-col">
+      <h2 i18n>ADMINISTRATORS</h2>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
 
       <div class="form-group" formGroupName="admin">
         <label i18n for="adminEmail">Admin email</label>
@@ -669,15 +670,15 @@
   </div>
 
   <div class="row mt-4"> <!-- Twitter grid -->
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="section-left-column-title">TWITTER</h2>
+    <div class="title-col">
+      <h2 i18n>TWITTER</h2>
       <div i18n class="inner-form-description">
         Provide the Twitter account representing your instance to improve link previews.
         If you don't have a Twitter account, just leave the default value.
       </div>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
 
       <ng-container formGroupName="services">
         <ng-container formGroupName="twitter">

@@ -1,99 +1,94 @@
 <h1 class="visually-hidden" i18n>Settings</h1>
 
-<div class="row"> <!-- preview -->
-  <div class="col-12 col-lg-4 col-xl-3"></div>
+<div class="pt-two-cols mt-3"> <!-- profile settings grid -->
+  <div class="title-col">
+    <h2 i18n>PROFILE SETTINGS</h2>
+  </div>
 
-  <div class="col-12 col-lg-8 col-xl-9">
+  <div class="content-col">
     <my-actor-avatar-edit
+      class="d-block mb-3"
       actorType="account" [avatars]="user.account.avatars"
       [displayName]="user.account.displayName" [username]="user.username" [subscribers]="user.account.followersCount"
       (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
     ></my-actor-avatar-edit>
-  </div>
-</div>
 
-<div class="row mt-3"> <!-- profile settings grid -->
-  <div class="col-12 col-lg-4 col-xl-3">
-    <h2 i18n class="section-left-column-title">PROFILE SETTINGS</h2>
-  </div>
-
-  <div class="col-12 col-lg-8 col-xl-9">
     <my-user-quota [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-quota>
 
     <my-account-profile [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-profile>
   </div>
 </div>
 
-<div class="row mt-5"> <!-- interface grid -->
-  <div class="col-12 col-lg-4 col-xl-3">
-    <h2 i18n class="section-left-column-title">INTERFACE</h2>
+<div class="pt-two-cols mt-5"> <!-- interface grid -->
+  <div class="title-col">
+    <h2 i18n>INTERFACE</h2>
   </div>
 
-  <div class="col-12 col-lg-8 col-xl-9">
+  <div class="content-col">
     <my-user-interface-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-interface-settings>
   </div>
 </div>
 
-<div class="row mt-5"> <!-- video settings grid -->
-  <div class="col-12 col-lg-4 col-xl-3">
+<div class="pt-two-cols mt-5"> <!-- video settings grid -->
+  <div class="title-col">
     <div class="anchor" id="video-settings"></div> <!-- video settings anchor -->
-    <h2 i18n class="section-left-column-title">VIDEO SETTINGS</h2>
+    <h2 i18n>VIDEO SETTINGS</h2>
   </div>
 
-  <div class="col-12 col-lg-8 col-xl-9">
+  <div class="content-col">
     <my-user-video-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-video-settings>
   </div>
 </div>
 
-<div class="row mt-5"> <!-- notifications grid -->
-  <div class="col-12 col-lg-4 col-xl-3">
+<div class="pt-two-cols mt-5"> <!-- notifications grid -->
+  <div class="title-col">
     <div class="anchor" id="notifications"></div> <!-- notifications anchor -->
-    <h2 i18n class="section-left-column-title">NOTIFICATIONS</h2>
+    <h2 i18n>NOTIFICATIONS</h2>
   </div>
 
-  <div class="col-12 col-lg-8 col-xl-9">
+  <div class="content-col">
     <my-account-notification-preferences [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-notification-preferences>
   </div>
 </div>
 
-<div class="row mt-5" *ngIf="user.pluginAuth === null"> <!-- password grid -->
-  <div class="col-12 col-lg-4 col-xl-3">
-    <h2 i18n class="section-left-column-title">PASSWORD</h2>
+<div class="pt-two-cols mt-5" *ngIf="user.pluginAuth === null"> <!-- password grid -->
+  <div class="title-col">
+    <h2 i18n>PASSWORD</h2>
   </div>
 
-  <div class="col-12 col-lg-8 col-xl-9">
+  <div class="content-col">
     <my-account-change-password></my-account-change-password>
   </div>
 </div>
 
-<div class="row mt-5" *ngIf="user.pluginAuth === null"> <!-- two factor auth grid -->
-  <div class="col-12 col-lg-4 col-xl-3">
-    <h2 i18n class="section-left-column-title">Two-factor authentication</h2>
+<div class="pt-two-cols mt-5" *ngIf="user.pluginAuth === null"> <!-- two factor auth grid -->
+  <div class="title-col">
+    <h2 i18n>Two-factor authentication</h2>
   </div>
 
-  <div class="col-12 col-lg-8 col-xl-9">
+  <div class="content-col">
     <my-account-two-factor-button [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-two-factor-button>
   </div>
 </div>
 
-<div class="row mt-5" *ngIf="user.pluginAuth === null"> <!-- email grid -->
-  <div class="col-12 col-lg-4 col-xl-3">
-    <h2 i18n class="section-left-column-title">EMAIL</h2>
+<div class="pt-two-cols mt-5" *ngIf="user.pluginAuth === null"> <!-- email grid -->
+  <div class="title-col">
+    <h2 i18n>EMAIL</h2>
   </div>
 
-  <div class="col-12 col-lg-8 col-xl-9">
+  <div class="content-col">
     <my-account-email-preferences class="d-block mb-5" [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-email-preferences>
 
     <my-account-change-email></my-account-change-email>
   </div>
 </div>
 
-<div class="row mt-5"> <!-- danger zone grid -->
-  <div class="col-12 col-lg-4 col-xl-3">
-    <h2 i18n class="section-left-column-title section-left-column-title-danger">DANGER ZONE</h2>
+<div class="pt-two-cols mt-5"> <!-- danger zone grid -->
+  <div class="title-col">
+    <h2 i18n class="pt-title-danger">DANGER ZONE</h2>
   </div>
 
-  <div class="col-12 col-lg-8 col-xl-9">
+  <div class="content-col">
     <my-account-danger-zone [user]="user"></my-account-danger-zone>
   </div>
 </div>

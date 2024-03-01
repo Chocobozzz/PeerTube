@@ -3,13 +3,16 @@
 <div class="margin-content pt-4">
   <form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
 
-    <div class="row"> <!-- channel grid -->
-      <div class="col-12 col-lg-4 col-xl-3">
-        <div *ngIf="isCreation()" class="section-left-column-title" i18n>NEW CHANNEL</div>
-        <div *ngIf="!isCreation() && videoChannel" class="section-left-column-title" i18n>CHANNEL</div>
+    <div class="pt-two-cols"> <!-- channel grid -->
+      <div class="title-col">
+        @if (isCreation()) {
+          <h2 i18n>NEW CHANNEL</h2>
+        } @else {
+          <h2 i18n>UPDATE CHANNEL</h2>
+        }
       </div>
 
-      <div class="col-12 col-lg-8 col-xl-9">
+      <div class="content-col">
         <my-actor-banner-edit
           *ngIf="videoChannel" [previewImage]="isCreation()" class="d-block mb-4"
           [bannerUrl]="videoChannel?.bannerUrl" (bannerChange)="onBannerChange($event)" (bannerDelete)="onBannerDelete()"
@@ -79,13 +82,7 @@
           ></my-peertube-checkbox>
         </div>
 
-      </div>
-    </div>
-
-    <div class="row"> <!-- submit placement block -->
-      <div class="col-md-7 col-xl-5"></div>
-      <div class="col-md-5 col-xl-5 d-inline-flex">
-        <input type="submit" class="peertube-button orange-button" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
+        <input type="submit" class="peertube-button orange-button mt-4" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
       </div>
     </div>
   </form>

@@ -104,7 +104,7 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
   }
 
   getFormButtonTitle () {
-    return $localize`Create`
+    return $localize`Create your channel`
   }
 
   getUsername () {
