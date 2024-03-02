@@ -2301,9 +2301,9 @@
           <context context-type="linenumber">518</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="74636758368624456" datatype="html">
+      <trans-unit id="74636758368624456" datatype="html" xml:space="preserve">
         <source>Users can export their PeerTube data in a .zip for backup or re-import. Only one export at a time is allowed per user</source>
-        <target state="new">Users can export their PeerTube data in a .zip for backup or re-import. Only one export at a time is allowed per user</target>
+        <target state="translated">Korisnici mogu izvesti svoje PeerTube podatkeu .zip formatu kao sigurnosnu kopiju ili za ponovni uvoz podataka. Istodobno je moguć samo jedan izvoz po korisniku</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">521</context>
@@ -2317,17 +2317,17 @@
           <context context-type="linenumber">527</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1967420418158999705" datatype="html">
+      <trans-unit id="1967420418158999705" datatype="html" xml:space="preserve">
         <source>If the user decides to include the video files in the archive</source>
-        <target state="new">If the user decides to include the video files in the archive</target>
+        <target state="translated">Ako korisnik odluči uključiti video datoteke u arhivu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">529</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8092614302698579026" datatype="html">
+      <trans-unit id="8092614302698579026" datatype="html" xml:space="preserve">
         <source>User export expiration</source>
-        <target state="new">User export expiration</target>
+        <target state="translated">Istek korisničkog izvoza</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">543</context>
@@ -2335,7 +2335,7 @@
       </trans-unit>
       <trans-unit id="5226878764906871194" datatype="html" xml:space="preserve">
         <source>The archive file is deleted after this period.</source>
-        <target state="translated">Datoteka arhive se briše nakon ovog razdoblja.</target>
+        <target state="translated">Arhivska datoteka se briše nakon ovog razdoblja.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">550</context>
@@ -2653,9 +2653,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5926348345797688952" datatype="html">
+      <trans-unit id="5926348345797688952" datatype="html" xml:space="preserve">
         <source>VOD Transcoding</source>
-        <target state="translated">Prekodiranje videa na zahtjev</target>
+        <target state="translated">Transkodiranje videa na zahtjev</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">38</context>
@@ -2689,9 +2689,9 @@
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="283725429207896837" datatype="html">
+      <trans-unit id="283725429207896837" datatype="html" xml:space="preserve">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
-        <target state="translated">Ne možeš dozvoliti reprizu uživo ako ne uključiš prekodiranje.</target>
+        <target state="translated">Ne možeš dozvoliti reprizu uživo ako ne aktiviraš transkodiranje.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">81</context>
@@ -2885,9 +2885,9 @@
           <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7350483582490037954" datatype="html">
+      <trans-unit id="7350483582490037954" datatype="html" xml:space="preserve">
         <source>With <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Hide<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video. </source>
-        <target state="translated">Pomoću oznake <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Sakrij<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ili <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Zamuti sličice<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, zatražit će se potvrda za gledanje videa. </target>
+        <target state="translated">Pomoću oznake <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Sakrij<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ili <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Zamuti minijature<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, zatražit će se potvrda za gledanje videa. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">134</context>
@@ -2909,9 +2909,9 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8930852890861583005" datatype="html">
+      <trans-unit id="8930852890861583005" datatype="html" xml:space="preserve">
         <source>Blur thumbnails</source>
-        <target state="translated">Zamuti sličice</target>
+        <target state="translated">Zamuti minijature</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">144</context>
@@ -3145,9 +3145,9 @@
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7911929966701561067" datatype="html">
+      <trans-unit id="7911929966701561067" datatype="html" xml:space="preserve">
         <source>TRANSCODING</source>
-        <target state="translated">PREKODIRANJE</target>
+        <target state="translated">TRANSKODIRANJE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">92</context>
@@ -3157,25 +3157,25 @@
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8212237880239644112" datatype="html">
+      <trans-unit id="8212237880239644112" datatype="html" xml:space="preserve">
         <source>Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some.</source>
-        <target state="translated">Isto kao prekodiranje videa na zahtjev, prijenosi uživo se prekodiraju tako da budu u obliku koji se može reproducirati na bilo kojem uređaju. Zahtijeva moćan procesor i još još više.</target>
+        <target state="translated">Isto kao transkodiranje videa na zahtjev, transkodiraju se i prijenosi uživo kako bi se mogli reproducirati na bilo kojem uređaju. Zahtijeva moćan procesor i još više.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6759167469686242835" datatype="html">
+      <trans-unit id="6759167469686242835" datatype="html" xml:space="preserve">
         <source>Transcoding enabled for live streams</source>
-        <target state="translated">Prekodiranje uključeno za prijenose uživo</target>
+        <target state="translated">Transkodiranje je aktivirano za prijenose uživo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2134381456844896041" datatype="html">
+      <trans-unit id="2134381456844896041" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </source>
-        <target state="translated">Koristi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>eksterne pokretače<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> za obradu prekodiranja uživo. Eksterni pokretači se najprije moraju registrirati na tvojoj instanci. </target>
+        <target state="translated">Koristi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>eksterne pokretače<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> za obradu transkodiranja uživo. Eksterni pokretači se najprije moraju registrirati na tvojoj instanci. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">154</context>
@@ -3189,9 +3189,9 @@
           <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="594064951138382358" datatype="html">
+      <trans-unit id="594064951138382358" datatype="html" xml:space="preserve">
         <source>Also transcode original resolution</source>
-        <target state="translated">Također prekodiraj izvornu rezoluciju</target>
+        <target state="translated">Također transkodiraj izvornu rezoluciju</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">137</context>
@@ -7195,33 +7195,33 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6327599466774745087" datatype="html">
+      <trans-unit id="6327599466774745087" datatype="html" xml:space="preserve">
         <source>You can request an archive of your account containing:</source>
-        <target state="new">You can request an archive of your account containing:</target>
+        <target state="translated">Možeš zatražiti arhivu tvog računa koja sadrži:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5215128747477502320" datatype="html">
+      <trans-unit id="5215128747477502320" datatype="html" xml:space="preserve">
         <source>Your account settings with avatar file</source>
-        <target state="new">Your account settings with avatar file</target>
+        <target state="translated">Postavke tvog računa s datotekom avatara</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4189339781940878663" datatype="html">
+      <trans-unit id="4189339781940878663" datatype="html" xml:space="preserve">
         <source>Your channels with banner and avatar files</source>
-        <target state="new">Your channels with banner and avatar files</target>
+        <target state="translated">Tvoji kanali s datotekama natpisa i avatara</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3569169060435002504" datatype="html">
+      <trans-unit id="3569169060435002504" datatype="html" xml:space="preserve">
         <source>Your muted accounts and servers</source>
-        <target state="new">Your muted accounts and servers</target>
+        <target state="translated">Tvoji isključeni računi i serveri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">16</context>
@@ -7253,39 +7253,39 @@
       </trans-unit>
       <trans-unit id="8728252018840518768" datatype="html" xml:space="preserve">
         <source>Your video playlists with thumbnail files</source>
-        <target state="translated">Tvoje playliste s datotekama minijatura</target>
+        <target state="translated">Tvoje video playliste s datotekama minijatura</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6339334908260162420" datatype="html">
+      <trans-unit id="6339334908260162420" datatype="html" xml:space="preserve">
         <source>Your videos with thumbnail, caption files. Video files can also be included in the archive</source>
-        <target state="new">Your videos with thumbnail, caption files. Video files can also be included in the archive</target>
+        <target state="translated">Tvoja videa s datotekama minijatura, titlova. Video datoteke se mogu uključiti i u arhivu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4333560211154634761" datatype="html">
+      <trans-unit id="4333560211154634761" datatype="html" xml:space="preserve">
         <source>The exported data will contain multiple directories:</source>
-        <target state="new">The exported data will contain multiple directories:</target>
+        <target state="translated">Izvezeni podaci će sadržati više mapa:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3192985534238875835" datatype="html">
+      <trans-unit id="3192985534238875835" datatype="html" xml:space="preserve">
         <source>A directory containing an export in ActivityPub format, readable by any compliant software</source>
-        <target state="new">A directory containing an export in ActivityPub format, readable by any compliant software</target>
+        <target state="translated">Mapa koja sadrži izvoz u ActivityPub formatu, čitljiv s bilo kojim kompatibilnim softverom</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="896330674868470367" datatype="html">
+      <trans-unit id="896330674868470367" datatype="html" xml:space="preserve">
         <source>A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</source>
-        <target state="new">A directory containing an export in custom PeerTube JSON format that can be used to re-import your account on another PeerTube instance</target>
+        <target state="translated">Mapa koja sadrži izvoz u prilagođenom PeerTube JSON formatu koji se može koristiti za ponovni uvoz tvog računa na jednoj drugoj PeerTube instanci</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">28</context>
@@ -7299,25 +7299,25 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5507694448548293913" datatype="html">
+      <trans-unit id="5507694448548293913" datatype="html" xml:space="preserve">
         <source>You can only request one archive at a time.</source>
-        <target state="new">You can only request one archive at a time.</target>
+        <target state="translated">Istodobno možeš zatražiti samo jednu arhivu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6448402358500159809" datatype="html">
+      <trans-unit id="6448402358500159809" datatype="html" xml:space="preserve">
         <source>An email will be sent when the export archive is available.</source>
-        <target state="new">An email will be sent when the export archive is available.</target>
+        <target state="translated">E-mail će se poslati kada arhiva za izvoz bude dostupna.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3973931101896534797" datatype="html">
+      <trans-unit id="3973931101896534797" datatype="html" xml:space="preserve">
         <source>Date</source>
-        <target state="new">Date</target>
+        <target state="translated">Datum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">40</context>
@@ -7639,9 +7639,9 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4422757693184001803" datatype="html">
+      <trans-unit id="4422757693184001803" datatype="html" xml:space="preserve">
         <source>Save email settings</source>
-        <target state="new">Save email settings</target>
+        <target state="translated">Spremi postavke za e-mail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-email-preferences/my-account-email-preferences.component.html</context>
           <context context-type="linenumber">14</context>
@@ -7823,9 +7823,9 @@
           <context context-type="linenumber">11,13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6328734173672096825" datatype="html">
+      <trans-unit id="6328734173672096825" datatype="html" xml:space="preserve">
         <source>Save profile</source>
-        <target state="new">Save profile</target>
+        <target state="translated">Spremi profil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">38</context>
@@ -9047,9 +9047,9 @@
           <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3943893855105372623" datatype="html">
+      <trans-unit id="3943893855105372623" datatype="html" xml:space="preserve">
         <source>Playlist thumbnail</source>
-        <target state="translated">Sličice payliste</target>
+        <target state="translated">Minijatura payliste</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context>
           <context context-type="linenumber">76</context>
@@ -15018,9 +15018,9 @@
           <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1039157642448320025" datatype="html">
+      <trans-unit id="1039157642448320025" datatype="html" xml:space="preserve">
         <source>FAQ (Frequently Asked Questions) - about PeerTube</source>
-        <target state="new">FAQ (Frequently Asked Questions) - about PeerTube</target>
+        <target state="translated">ČPP (Često postavljena pitanja) – PeerTube informacije</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">164</context>
@@ -15062,17 +15062,17 @@
           <context context-type="linenumber">172</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7099354443826169799" datatype="html">
+      <trans-unit id="7099354443826169799" datatype="html" xml:space="preserve">
         <source>powered by PeerTube - CopyLeft 2015-2024</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2024</target>
+        <target state="translated">omogućuje PeerTube – CopyLeft 2015. – 2024.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2497681082724639563" datatype="html">
+      <trans-unit id="2497681082724639563" datatype="html" xml:space="preserve">
         <source>powered by PeerTube</source>
-        <target state="translated">pokreće PeerTube</target>
+        <target state="translated">omogućuje PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">183</context>
@@ -15130,9 +15130,9 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8278995041812548563" datatype="html">
+      <trans-unit id="8278995041812548563" datatype="html" xml:space="preserve">
         <source>Update your notification preferences</source>
-        <target state="translated">Aktualiziraj svoje postavke obavijesti</target>
+        <target state="translated">Aktualiziraj tvoje postavke obavijesti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/notification.component.html</context>
           <context context-type="linenumber">40</context>
@@ -15842,9 +15842,9 @@
           <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5832601947705094130" datatype="html">
+      <trans-unit id="5832601947705094130" datatype="html" xml:space="preserve">
         <source>Concurrency is required.</source>
-        <target state="translated">Istovremenost se mora navesti.</target>
+        <target state="needs-translation">Istovremenost se mora navesti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">104</context>
@@ -15874,17 +15874,17 @@
           <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4327605300509435150" datatype="html">
+      <trans-unit id="4327605300509435150" datatype="html" xml:space="preserve">
         <source>Export expiration is required.</source>
-        <target state="new">Export expiration is required.</target>
+        <target state="translated">Istek izvoza se mora navesti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8101376384086436513" datatype="html">
+      <trans-unit id="8101376384086436513" datatype="html" xml:space="preserve">
         <source>Export expiration must be greater or equal to 1.</source>
-        <target state="new">Export expiration must be greater or equal to 1.</target>
+        <target state="translated">Istek izvoza mora bit veći ili jednak 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">127</context>
@@ -16826,9 +16826,9 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6907161397537530258" datatype="html">
+      <trans-unit id="6907161397537530258" datatype="html" xml:space="preserve">
         <source>Thumbnails</source>
-        <target state="translated">Sličice</target>
+        <target state="translated">Minijature</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">26</context>
@@ -18746,9 +18746,9 @@
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6374940465448453212" datatype="html">
+      <trans-unit id="6374940465448453212" datatype="html" xml:space="preserve">
         <source>Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</source>
-        <target state="translated">Sadrži marketing, neželjenu poštu, namjerno lažne vijesti ili na neki drugi način obmanjujuće sličice/tekst/oznake. Navedi pouzdane izvore za prijavu prijevara.</target>
+        <target state="translated">Sadrži marketing, neželjenu poštu, namjerno lažne vijesti ili na neki drugi način obmanjujuće minijature/tekst/oznake. Navedi pouzdane izvore za prijavljivanje prijevara.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">136</context>
@@ -18794,9 +18794,9 @@
           <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8700771664729810984" datatype="html">
+      <trans-unit id="8700771664729810984" datatype="html" xml:space="preserve">
         <source>The above can only be seen in thumbnails.</source>
-        <target state="translated">Navedeno se može vidjeti samo u minijaturama.</target>
+        <target state="translated">Gore navedeno se može vidjeti samo u minijaturama.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">162</context>
@@ -19906,9 +19906,9 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5240556993302961443" datatype="html">
+      <trans-unit id="5240556993302961443" datatype="html" xml:space="preserve">
         <source>Save interface settings</source>
-        <target state="new">Save interface settings</target>
+        <target state="translated">Spremi postavke sučelja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">16</context>
