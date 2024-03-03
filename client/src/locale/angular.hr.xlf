@@ -2263,7 +2263,7 @@
       </trans-unit>
       <trans-unit id="6117138245696620472" datatype="html" xml:space="preserve">
         <source>USER IMPORT/EXPORT</source>
-        <target state="translated">UVOZ/IZVOZ KORISNIKA</target>
+        <target state="translated">KORISNIČKI UVOZ/IZVOZ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">490</context>
@@ -17676,7 +17676,7 @@
       </trans-unit>
       <trans-unit id="4229153235358296216" datatype="html" xml:space="preserve">
         <source>User Import/Export</source>
-        <target state="translated">Uvoz/Izvoz korisnika</target>
+        <target state="translated">Korisnički uvoz/izvoz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">116</context>
@@ -20874,41 +20874,41 @@
           <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4332428159510983797" datatype="html">
+      <trans-unit id="4332428159510983797" datatype="html" xml:space="preserve">
         <source>Expires on</source>
-        <target state="new">Expires on</target>
+        <target state="translated">Isteče</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8931356925707804915" datatype="html">
+      <trans-unit id="8931356925707804915" datatype="html" xml:space="preserve">
         <source>Download your archive</source>
-        <target state="new">Download your archive</target>
+        <target state="translated">Preuzmi svoju archivu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3427300811638138150" datatype="html">
+      <trans-unit id="3427300811638138150" datatype="html" xml:space="preserve">
         <source>Request a new archive</source>
-        <target state="new">Request a new archive</target>
+        <target state="translated">Zatraži novu archivu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3628699893924130182" datatype="html">
+      <trans-unit id="3628699893924130182" datatype="html" xml:space="preserve">
         <source>User export is not enabled by your administrator.</source>
-        <target state="new">User export is not enabled by your administrator.</target>
+        <target state="translated">Tvoj administrator nije aktivirao korisnički izvoz.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3775513643932382075" datatype="html">
+      <trans-unit id="3775513643932382075" datatype="html" xml:space="preserve">
         <source>Archive settings</source>
-        <target state="new">Archive settings</target>
+        <target state="translated">Postavke arhive</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">82</context>
@@ -20962,9 +20962,9 @@
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1930863079234861089" datatype="html">
+      <trans-unit id="1930863079234861089" datatype="html" xml:space="preserve">
         <source>Import/Export</source>
-        <target state="new">Import/Export</target>
+        <target state="translated">Uvoz/Izvoz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import-export.component.html</context>
           <context context-type="linenumber">3</context>
