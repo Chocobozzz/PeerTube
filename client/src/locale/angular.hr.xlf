@@ -20914,41 +20914,41 @@
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1215687357804737187" datatype="html">
+      <trans-unit id="1215687357804737187" datatype="html" xml:space="preserve">
         <source>You already have an active archive. Requesting a new export archive will remove the current one.</source>
-        <target state="new"> You already have an active archive. Requesting a new export archive will remove the current one. </target>
+        <target state="translated">Već imaš aktivnu arhivu. Zahtjev za novu arhivu izvoza će ukloniti aktualnu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">91,93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1865500141682414508" datatype="html">
+      <trans-unit id="1865500141682414508" datatype="html" xml:space="preserve">
         <source>Include video files in archive file</source>
-        <target state="new">Include video files in archive file</target>
+        <target state="translated">Uključi video datoteke u arhivsku datoteku</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8386580266736130510" datatype="html">
+      <trans-unit id="8386580266736130510" datatype="html" xml:space="preserve">
         <source>Including video files is required if you want to re-import your videos on another PeerTube website</source>
-        <target state="new">Including video files is required if you want to re-import your videos on another PeerTube website</target>
+        <target state="translated">Uključivanje video datoteka je potrebno ako želiš ponovo uvesti svoja videa na jednu drugu PeerTube web stranicu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1795389819769599474" datatype="html">
+      <trans-unit id="1795389819769599474" datatype="html" xml:space="preserve">
         <source>If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Ako uključiš video datoteke, arhivska datoteka će imati <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>otprilike <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bajtova }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1662178629537553910" datatype="html">
+      <trans-unit id="1662178629537553910" datatype="html" xml:space="preserve">
         <source>Request an archive</source>
-        <target state="new">Request an archive</target>
+        <target state="translated">Zatraži arhivu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">116</context>
@@ -20978,33 +20978,33 @@
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2611126741793124345" datatype="html">
+      <trans-unit id="2611126741793124345" datatype="html" xml:space="preserve">
         <source>IMPORT</source>
-        <target state="new">IMPORT</target>
+        <target state="translated">UVOZ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4737947753130898543" datatype="html">
+      <trans-unit id="4737947753130898543" datatype="html" xml:space="preserve">
         <source>You can import an archive created by another PeerTube website.</source>
-        <target state="new">You can import an archive created by another PeerTube website.</target>
+        <target state="translated">Možeš uvesti arhivu koju je stvorila jedna druga PeerTube web stranica.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7544701838241243416" datatype="html">
+      <trans-unit id="7544701838241243416" datatype="html" xml:space="preserve">
         <source>This is an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>import<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tool and not a migration tool. It's the reason why data (like channels or videos) is duplicated and not moved from your previous PeerTube website. </source>
-        <target state="new"> This is an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>import<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tool and not a migration tool. It's the reason why data (like channels or videos) is duplicated and not moved from your previous PeerTube website. </target>
+        <target state="translated">Ovo je alat za <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>uvoz<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a ne alat za migraciju. To je razlog zašto se podaci (poput kanala ili videa) dupliciraju ali ne premještaju s tvoje prethodne PeerTube web stranice. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">12,15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2367276729368583390" datatype="html">
+      <trans-unit id="2367276729368583390" datatype="html" xml:space="preserve">
         <source>The import process will automatically:</source>
-        <target state="new">The import process will automatically:</target>
+        <target state="translated">Proces uvoza će automatski:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">17</context>
