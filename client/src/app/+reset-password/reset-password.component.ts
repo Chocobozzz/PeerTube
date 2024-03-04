@@ -4,13 +4,15 @@ import { Notifier, UserService } from '@app/core'
 import { RESET_PASSWORD_CONFIRM_VALIDATOR } from '@app/shared/form-validators/reset-password-validators'
 import { USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
+import { InputTextComponent } from '../shared/shared-forms/input-text.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 @Component({
-  selector: 'my-login',
   templateUrl: './reset-password.component.html',
-  styleUrls: [ './reset-password.component.scss' ]
+  styleUrls: [ './reset-password.component.scss' ],
+  standalone: true,
+  imports: [ FormsModule, ReactiveFormsModule, InputTextComponent ]
 })
-
 export class ResetPasswordComponent extends FormReactive implements OnInit {
   private userId: number
   private verificationString: string

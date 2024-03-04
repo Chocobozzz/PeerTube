@@ -2,7 +2,7 @@ import { uniqBy } from 'lodash-es'
 import { concat, Observable } from 'rxjs'
 import { tap, toArray } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService, User } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { immutableAssign, formatICU } from '@app/helpers'
@@ -18,10 +18,30 @@ import {
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { VideoChannel, VideoExistInPlaylist, VideosExistInPlaylists, VideoSortField } from '@peertube/peertube-models'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
+import { VideoActionsDropdownComponent } from '../../shared/shared-video-miniature/video-actions-dropdown.component'
+import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
+import { PeerTubeTemplateDirective } from '../../shared/shared-main/angular/peertube-template.directive'
+import { FormsModule } from '@angular/forms'
+import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { NgIf } from '@angular/common'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 
 @Component({
   templateUrl: './my-videos.component.html',
-  styleUrls: [ './my-videos.component.scss' ]
+  styleUrls: [ './my-videos.component.scss' ],
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    NgIf,
+    RouterLink,
+    AdvancedInputFilterComponent,
+    FormsModule,
+    VideosSelectionComponent,
+    PeerTubeTemplateDirective,
+    EditButtonComponent,
+    VideoActionsDropdownComponent,
+    VideoChangeOwnershipComponent
+  ]
 })
 export class MyVideosComponent implements OnInit, DisableForReuseHook {
   @ViewChild('videosSelection', { static: true }) videosSelection: VideosSelectionComponent

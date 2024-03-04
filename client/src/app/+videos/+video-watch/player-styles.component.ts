@@ -9,7 +9,8 @@ import { Component, ViewEncapsulation } from '@angular/core'
   template: '',
   styleUrls: [ './player-styles.component.scss' ],
   /* eslint-disable @angular-eslint/use-component-view-encapsulation */
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true
 })
 export class PlayerStylesComponent {
 }

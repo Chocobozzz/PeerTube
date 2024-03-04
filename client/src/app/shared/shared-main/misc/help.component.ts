@@ -2,11 +2,16 @@ import { AfterContentInit, Component, ContentChildren, Input, OnChanges, OnInit,
 import { GlobalIconName } from '@app/shared/shared-icons'
 import { ENHANCED_RULES, TEXT_RULES } from '@peertube/peertube-core-utils'
 import { PeerTubeTemplateDirective } from '../angular'
+import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
+import { NgIf, NgTemplateOutlet } from '@angular/common'
 
 @Component({
   selector: 'my-help',
   styleUrls: [ './help.component.scss' ],
-  templateUrl: './help.component.html'
+  templateUrl: './help.component.html',
+  standalone: true,
+  imports: [ NgIf, NgTemplateOutlet, NgbPopover, GlobalIconComponent ]
 })
 
 export class HelpComponent implements OnInit, OnChanges, AfterContentInit {

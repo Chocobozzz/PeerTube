@@ -5,10 +5,17 @@ import { AuthService, ComponentPagination, Notifier } from '@app/core'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
 import { ActorFollow } from '@peertube/peertube-models'
+import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
+import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { NgIf, NgFor } from '@angular/common'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 
 @Component({
   templateUrl: './my-followers.component.html',
-  styleUrls: [ './my-followers.component.scss' ]
+  styleUrls: [ './my-followers.component.scss' ],
+  standalone: true,
+  imports: [ GlobalIconComponent, NgIf, AdvancedInputFilterComponent, InfiniteScrollerDirective, NgFor, ActorAvatarComponent ]
 })
 export class MyFollowersComponent implements OnInit {
   follows: ActorFollow[] = []

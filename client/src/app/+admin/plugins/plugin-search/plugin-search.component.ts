@@ -6,11 +6,31 @@ import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService } from '@app/core'
 import { PeerTubePluginIndex, PluginType, PluginType_Type } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { EditButtonComponent } from '../../../shared/shared-main/buttons/edit-button.component'
+import { PluginCardComponent } from '../shared/plugin-card.component'
+import { InfiniteScrollerDirective } from '../../../shared/shared-main/angular/infinite-scroller.directive'
+import { AutofocusDirective } from '../../../shared/shared-main/angular/autofocus.directive'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { NgIf, NgFor } from '@angular/common'
+import { PluginNavigationComponent } from '../shared/plugin-navigation.component'
 
 @Component({
   selector: 'my-plugin-search',
   templateUrl: './plugin-search.component.html',
-  styleUrls: [ './plugin-search.component.scss' ]
+  styleUrls: [ './plugin-search.component.scss' ],
+  standalone: true,
+  imports: [
+    PluginNavigationComponent,
+    NgIf,
+    GlobalIconComponent,
+    AutofocusDirective,
+    InfiniteScrollerDirective,
+    NgFor,
+    PluginCardComponent,
+    EditButtonComponent,
+    ButtonComponent
+  ]
 })
 export class PluginSearchComponent implements OnInit {
   pluginType: PluginType_Type

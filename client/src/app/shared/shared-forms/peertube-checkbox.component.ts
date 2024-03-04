@@ -1,6 +1,8 @@
 import { AfterContentInit, Component, ContentChildren, forwardRef, Input, QueryList, TemplateRef } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { PeerTubeTemplateDirective } from '@app/shared/shared-main'
+import { HelpComponent } from '../shared-main/misc/help.component'
+import { NgIf, NgTemplateOutlet } from '@angular/common'
 
 @Component({
   selector: 'my-peertube-checkbox',
@@ -12,7 +14,9 @@ import { PeerTubeTemplateDirective } from '@app/shared/shared-main'
       useExisting: forwardRef(() => PeertubeCheckboxComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: true,
+  imports: [ FormsModule, NgIf, NgTemplateOutlet, HelpComponent, PeerTubeTemplateDirective ]
 })
 export class PeertubeCheckboxComponent implements ControlValueAccessor, AfterContentInit {
   @Input() checked = false

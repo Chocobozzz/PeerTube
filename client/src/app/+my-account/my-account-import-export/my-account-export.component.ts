@@ -4,11 +4,18 @@ import { PeerTubeProblemDocument, ServerErrorCode, UserExport, UserExportState }
 import { UserImportExportService } from './user-import-export.service'
 import { concatMap, first, from, of, switchMap, toArray } from 'rxjs'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { BytesPipe } from '../../shared/shared-main/angular/bytes.pipe'
+import { FormsModule } from '@angular/forms'
+import { PeertubeCheckboxComponent } from '../../shared/shared-forms/peertube-checkbox.component'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { NgIf, NgFor, DatePipe } from '@angular/common'
 
 @Component({
   selector: 'my-account-export',
   templateUrl: './my-account-export.component.html',
-  styleUrls: [ './my-account-export.component.scss' ]
+  styleUrls: [ './my-account-export.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, NgFor, GlobalIconComponent, PeertubeCheckboxComponent, FormsModule, DatePipe, BytesPipe ]
 })
 export class MyAccountExportComponent implements OnInit {
   @ViewChild('exportModal', { static: true }) exportModal: NgbModal

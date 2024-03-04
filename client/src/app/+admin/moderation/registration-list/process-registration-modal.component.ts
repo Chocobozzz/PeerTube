@@ -6,10 +6,16 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { UserRegistration } from '@peertube/peertube-models'
 import { AdminRegistrationService } from './admin-registration.service'
 import { REGISTRATION_MODERATION_RESPONSE_VALIDATOR } from './process-registration-validators'
+import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { NgIf, NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-process-registration-modal',
-  templateUrl: './process-registration-modal.component.html'
+  templateUrl: './process-registration-modal.component.html',
+  standalone: true,
+  imports: [ NgIf, GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, PeertubeCheckboxComponent ]
 })
 export class ProcessRegistrationModalComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal

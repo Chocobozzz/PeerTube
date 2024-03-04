@@ -6,6 +6,10 @@ import { FindInBulkService } from '@app/shared/shared-search'
 import { VideoSortField } from '@peertube/peertube-models'
 import { Video, VideoChannel, VideoService } from '../../shared-main'
 import { CustomMarkupComponent } from './shared'
+import { VideoMiniatureMarkupComponent } from './video-miniature-markup.component'
+import { RouterLink } from '@angular/router'
+import { ActorAvatarComponent } from '../../shared-actor-image/actor-avatar.component'
+import { NgIf } from '@angular/common'
 
 /*
  * Markup component that creates a channel miniature only
@@ -15,7 +19,9 @@ import { CustomMarkupComponent } from './shared'
   selector: 'my-channel-miniature-markup',
   templateUrl: 'channel-miniature-markup.component.html',
   styleUrls: [ 'channel-miniature-markup.component.scss' ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [ NgIf, ActorAvatarComponent, RouterLink, VideoMiniatureMarkupComponent ]
 })
 export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() name: string

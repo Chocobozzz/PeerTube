@@ -5,10 +5,14 @@ import { ComponentPaginationLight, DisableForReuseHook, ScreenService } from '@a
 import { Account, AccountService, VideoService } from '@app/shared/shared-main'
 import { VideoFilters } from '@app/shared/shared-video-miniature'
 import { VideoSortField } from '@peertube/peertube-models'
+import { VideosListComponent } from '../../shared/shared-video-miniature/videos-list.component'
+import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-account-videos',
-  templateUrl: './account-videos.component.html'
+  templateUrl: './account-videos.component.html',
+  standalone: true,
+  imports: [ NgIf, VideosListComponent ]
 })
 export class AccountVideosComponent implements OnInit, OnDestroy, DisableForReuseHook {
   getVideosObservableFunction = this.getVideosObservable.bind(this)

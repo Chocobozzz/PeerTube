@@ -3,10 +3,13 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Video, VideoChannel } from '@app/shared/shared-main'
 import { SearchService } from '@app/shared/shared-search'
+import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-remote-interaction',
-  templateUrl: './remote-interaction.component.html'
+  templateUrl: './remote-interaction.component.html',
+  standalone: true,
+  imports: [ NgIf ]
 })
 export class RemoteInteractionComponent implements OnInit {
   error = ''

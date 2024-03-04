@@ -3,7 +3,8 @@ import { CustomMarkupService } from './custom-markup.service'
 
 @Component({
   selector: 'my-custom-markup-container',
-  templateUrl: './custom-markup-container.component.html'
+  templateUrl: './custom-markup-container.component.html',
+  standalone: true
 })
 export class CustomMarkupContainerComponent implements OnChanges {
   @ViewChild('contentWrapper', { static: true }) contentWrapper: ElementRef<HTMLInputElement>

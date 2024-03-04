@@ -3,11 +3,15 @@ import { Component, Input, OnInit } from '@angular/core'
 import { Notifier, User, UserService } from '@app/core'
 import { USER_DESCRIPTION_VALIDATOR, USER_DISPLAY_NAME_REQUIRED_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgIf, NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-account-profile',
   templateUrl: './my-account-profile.component.html',
-  styleUrls: [ './my-account-profile.component.scss' ]
+  styleUrls: [ './my-account-profile.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass ]
 })
 export class MyAccountProfileComponent extends FormReactive implements OnInit {
   @Input() user: User = null

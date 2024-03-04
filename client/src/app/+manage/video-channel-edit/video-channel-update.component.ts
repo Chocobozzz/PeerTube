@@ -14,11 +14,30 @@ import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { VideoChannelUpdate } from '@peertube/peertube-models'
 import { VideoChannelEdit } from './video-channel-edit'
 import { shallowCopy } from '@peertube/peertube-core-utils'
+import { PeertubeCheckboxComponent } from '../../shared/shared-forms/peertube-checkbox.component'
+import { MarkdownTextareaComponent } from '../../shared/shared-forms/markdown-textarea.component'
+import { HelpComponent } from '../../shared/shared-main/misc/help.component'
+import { ActorAvatarEditComponent } from '../../shared/shared-actor-image-edit/actor-avatar-edit.component'
+import { ActorBannerEditComponent } from '../../shared/shared-actor-image-edit/actor-banner-edit.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgIf, NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-video-channel-update',
   templateUrl: './video-channel-edit.component.html',
-  styleUrls: [ './video-channel-edit.component.scss' ]
+  styleUrls: [ './video-channel-edit.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    FormsModule,
+    ReactiveFormsModule,
+    ActorBannerEditComponent,
+    ActorAvatarEditComponent,
+    NgClass,
+    HelpComponent,
+    MarkdownTextareaComponent,
+    PeertubeCheckboxComponent
+  ]
 })
 export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnInit, AfterViewInit, OnDestroy {
   error: string
@@ -179,7 +198,7 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
   }
 
   getFormButtonTitle () {
-    return $localize`Update ${this.videoChannel.name}`
+    return $localize`Update ${this.videoChannel?.name}`
   }
 
   isBulkUpdateVideosDisplayed () {

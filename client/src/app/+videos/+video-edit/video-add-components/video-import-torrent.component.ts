@@ -10,6 +10,17 @@ import { logger } from '@root-helpers/logger'
 import { PeerTubeProblemDocument, ServerErrorCode, VideoUpdate } from '@peertube/peertube-models'
 import { hydrateFormFromVideo } from '../shared/video-edit-utils'
 import { VideoSend } from './video-send'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { VideoEditComponent } from '../shared/video-edit.component'
+import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
+import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
+import { HelpComponent } from '../../../shared/shared-main/misc/help.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { DragDropDirective } from './drag-drop.directive'
+import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-video-import-torrent',
@@ -18,6 +29,21 @@ import { VideoSend } from './video-send'
     '../shared/video-edit.component.scss',
     './video-import-torrent.component.scss',
     './video-send.scss'
+  ],
+  standalone: true,
+  imports: [
+    NgIf,
+    DragDropDirective,
+    GlobalIconComponent,
+    NgbTooltip,
+    HelpComponent,
+    PeerTubeTemplateDirective,
+    FormsModule,
+    SelectChannelComponent,
+    SelectOptionsComponent,
+    ReactiveFormsModule,
+    VideoEditComponent,
+    ButtonComponent
   ]
 })
 export class VideoImportTorrentComponent extends VideoSend implements OnInit, AfterViewInit, CanComponentDeactivate {

@@ -3,11 +3,28 @@ import { Video } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { LiveVideo, LiveVideoError, LiveVideoErrorType, LiveVideoSession } from '@peertube/peertube-models'
 import { LiveVideoService } from './live-video.service'
+import { EditButtonComponent } from '../shared-main/buttons/edit-button.component'
+import { RouterLink } from '@angular/router'
+import { InputTextComponent } from '../shared-forms/input-text.component'
+import { LiveDocumentationLinkComponent } from './live-documentation-link.component'
+import { NgIf, NgFor, DatePipe } from '@angular/common'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-live-stream-information',
   templateUrl: './live-stream-information.component.html',
-  styleUrls: [ './live-stream-information.component.scss' ]
+  styleUrls: [ './live-stream-information.component.scss' ],
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    NgIf,
+    LiveDocumentationLinkComponent,
+    InputTextComponent,
+    NgFor,
+    RouterLink,
+    EditButtonComponent,
+    DatePipe
+  ]
 })
 export class LiveStreamInformationComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef

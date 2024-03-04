@@ -1,11 +1,16 @@
 import { Subscription } from 'rxjs'
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 import { LocalStorageService, HotkeysService, Hotkey } from '@app/core'
+import { FormsModule } from '@angular/forms'
+import { PeertubeCheckboxComponent } from '../shared/shared-forms/peertube-checkbox.component'
+import { NgClass, NgFor } from '@angular/common'
 
 @Component({
   selector: 'my-hotkeys-cheat-sheet',
   templateUrl: './hotkeys-cheat-sheet.component.html',
-  styleUrls: [ './hotkeys-cheat-sheet.component.scss' ]
+  styleUrls: [ './hotkeys-cheat-sheet.component.scss' ],
+  standalone: true,
+  imports: [ NgClass, PeertubeCheckboxComponent, FormsModule, NgFor ]
 })
 export class HotkeysCheatSheetComponent implements OnInit, OnDestroy {
   @Input() title = $localize`Keyboard Shortcuts`

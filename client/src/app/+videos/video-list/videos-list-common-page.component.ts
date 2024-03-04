@@ -6,6 +6,7 @@ import { VideoService } from '@app/shared/shared-main'
 import { VideoFilters, VideoFilterScope } from '@app/shared/shared-video-miniature/video-filters.model'
 import { ClientFilterHookName, VideoSortField } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
+import { VideosListComponent } from '../../shared/shared-video-miniature/videos-list.component'
 
 export type VideosListCommonPageRouteData = {
   sort: VideoSortField
@@ -16,7 +17,9 @@ export type VideosListCommonPageRouteData = {
 }
 
 @Component({
-  templateUrl: './videos-list-common-page.component.html'
+  templateUrl: './videos-list-common-page.component.html',
+  standalone: true,
+  imports: [ VideosListComponent ]
 })
 export class VideosListCommonPageComponent implements OnInit, OnDestroy, DisableForReuseHook {
   getVideosObservableFunction = this.getVideosObservable.bind(this)

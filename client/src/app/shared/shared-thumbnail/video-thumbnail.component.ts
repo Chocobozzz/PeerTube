@@ -2,11 +2,17 @@ import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { ScreenService } from '@app/core'
 import { VideoState } from '@peertube/peertube-models'
 import { Video } from '../shared-main'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { RouterLink } from '@angular/router'
+import { NgIf, NgTemplateOutlet, NgClass, NgStyle } from '@angular/common'
 
 @Component({
   selector: 'my-video-thumbnail',
   styleUrls: [ './video-thumbnail.component.scss' ],
-  templateUrl: './video-thumbnail.component.html'
+  templateUrl: './video-thumbnail.component.html',
+  standalone: true,
+  imports: [ NgIf, RouterLink, NgTemplateOutlet, NgClass, NgbTooltip, GlobalIconComponent, NgStyle ]
 })
 export class VideoThumbnailComponent {
   @Input() video: Video

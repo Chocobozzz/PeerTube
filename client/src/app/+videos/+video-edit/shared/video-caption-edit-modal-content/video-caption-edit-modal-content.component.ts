@@ -5,6 +5,9 @@ import { VideoCaptionEdit, VideoCaptionService, VideoCaptionWithPathEdit } from 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig, VideoConstant } from '@peertube/peertube-models'
 import { ServerService } from '../../../../core'
+import { NgClass, NgIf } from '@angular/common'
+import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 /**
  * https://github.com/valor-software/ngx-bootstrap/issues/3825
@@ -14,7 +17,9 @@ import { ServerService } from '../../../../core'
 @Component({
   selector: 'my-video-caption-edit-modal-content',
   styleUrls: [ './video-caption-edit-modal-content.component.scss' ],
-  templateUrl: './video-caption-edit-modal-content.component.html'
+  templateUrl: './video-caption-edit-modal-content.component.html',
+  standalone: true,
+  imports: [ FormsModule, ReactiveFormsModule, GlobalIconComponent, NgClass, NgIf ]
 })
 
 export class VideoCaptionEditModalContentComponent extends FormReactive implements OnInit {

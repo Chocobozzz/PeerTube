@@ -2,6 +2,8 @@ import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild, booleanAttr
 import { VideoChannel } from '../shared-main'
 import { Account } from '../shared-main/account/account.model'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
+import { RouterLink } from '@angular/router'
+import { NgIf, NgClass, NgTemplateOutlet } from '@angular/common'
 
 export type ActorAvatarInput = {
   name: string
@@ -11,7 +13,9 @@ export type ActorAvatarInput = {
 @Component({
   selector: 'my-actor-avatar',
   styleUrls: [ './actor-avatar.component.scss' ],
-  templateUrl: './actor-avatar.component.html'
+  templateUrl: './actor-avatar.component.html',
+  standalone: true,
+  imports: [ NgIf, NgClass, NgTemplateOutlet, RouterLink ]
 })
 export class ActorAvatarComponent implements OnInit, OnChanges {
   @ViewChild('avatarEl') avatarEl: ElementRef

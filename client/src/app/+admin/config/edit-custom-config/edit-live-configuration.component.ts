@@ -1,14 +1,33 @@
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
-import { FormGroup } from '@angular/forms'
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HTMLServerConfig } from '@peertube/peertube-models'
 import { ConfigService } from '../shared/config.service'
 import { EditConfigurationService, ResolutionOption } from './edit-configuration.service'
+import { SelectCustomValueComponent } from '../../../shared/shared-forms/select/select-custom-value.component'
+import { RouterLink } from '@angular/router'
+import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
+import { NgClass, NgIf, NgFor } from '@angular/common'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
+import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 
 @Component({
   selector: 'my-edit-live-configuration',
   templateUrl: './edit-live-configuration.component.html',
-  styleUrls: [ './edit-custom-config.component.scss' ]
+  styleUrls: [ './edit-custom-config.component.scss' ],
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    PeertubeCheckboxComponent,
+    PeerTubeTemplateDirective,
+    NgClass,
+    NgIf,
+    SelectOptionsComponent,
+    NgFor,
+    RouterLink,
+    SelectCustomValueComponent
+  ]
 })
 export class EditLiveConfigurationComponent implements OnInit, OnChanges {
   @Input() form: FormGroup

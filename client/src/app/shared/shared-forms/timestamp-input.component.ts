@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { secondsToTime, timeToInt } from '@peertube/peertube-core-utils'
+import { NgClass } from '@angular/common'
+import { InputMaskModule } from 'primeng/inputmask'
 
 @Component({
   selector: 'my-timestamp-input',
@@ -12,7 +14,9 @@ import { secondsToTime, timeToInt } from '@peertube/peertube-core-utils'
       useExisting: forwardRef(() => TimestampInputComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: true,
+  imports: [ InputMaskModule, FormsModule, NgClass ]
 })
 export class TimestampInputComponent implements ControlValueAccessor, OnInit {
   @Input() maxTimestamp: number

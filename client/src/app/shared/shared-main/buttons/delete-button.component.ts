@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core'
+import { ButtonComponent } from './button.component'
 
 @Component({
   selector: 'my-delete-button',
@@ -8,7 +9,9 @@ import { Component, Input, OnInit } from '@angular/core'
       [disabled]="disabled" [label]="label" [title]="title"
       [responsiveLabel]="responsiveLabel"
     ></my-button>
-  `
+  `,
+  standalone: true,
+  imports: [ ButtonComponent ]
 })
 export class DeleteButtonComponent implements OnInit {
   @Input() label: string

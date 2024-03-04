@@ -1,8 +1,9 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 import { ItemSelectCheckboxValue } from './select-checkbox.component'
+import { SelectCheckboxAllComponent } from './select-checkbox-all.component'
 
 @Component({
   selector: 'my-select-languages',
@@ -14,7 +15,9 @@ import { ItemSelectCheckboxValue } from './select-checkbox.component'
       useExisting: forwardRef(() => SelectLanguagesComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: true,
+  imports: [ SelectCheckboxAllComponent, FormsModule ]
 })
 export class SelectLanguagesComponent implements ControlValueAccessor, OnInit {
   @Input() maxLanguages: number

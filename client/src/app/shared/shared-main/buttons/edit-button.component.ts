@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core'
+import { ButtonComponent } from './button.component'
 
 @Component({
   selector: 'my-edit-button',
@@ -7,7 +8,9 @@ import { Component, Input, OnInit } from '@angular/core'
       icon="edit" [label]="label" [title]="title" [responsiveLabel]="responsiveLabel"
       [ptRouterLink]="ptRouterLink"
     ></my-button>
-  `
+  `,
+  standalone: true,
+  imports: [ ButtonComponent ]
 })
 export class EditButtonComponent implements OnInit {
   @Input() label: string

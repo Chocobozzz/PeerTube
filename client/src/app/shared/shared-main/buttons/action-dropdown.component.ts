@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
-import { Params } from '@angular/router'
+import { Params, RouterLink } from '@angular/router'
 import { GlobalIconName } from '@app/shared/shared-icons'
+import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
+import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
+import { NgIf, NgClass, NgFor, NgTemplateOutlet } from '@angular/common'
 
 export type DropdownAction<T> = {
   label?: string
@@ -26,7 +29,9 @@ export type DropdownDirection = 'horizontal' | 'vertical'
   selector: 'my-action-dropdown',
   styleUrls: [ './action-dropdown.component.scss' ],
   templateUrl: './action-dropdown.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [ NgIf, NgbDropdown, NgbDropdownToggle, NgClass, GlobalIconComponent, NgbDropdownMenu, NgFor, RouterLink, NgTemplateOutlet ]
 })
 
 export class ActionDropdownComponent<T> {

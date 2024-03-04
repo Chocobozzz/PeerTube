@@ -4,7 +4,8 @@ import { AfterViewChecked, Directive, ElementRef, EventEmitter, Input, OnDestroy
 import { PeerTubeRouterService, RouterSetting } from '@app/core'
 
 @Directive({
-  selector: '[myInfiniteScroller]'
+  selector: '[myInfiniteScroller]',
+  standalone: true
 })
 export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterViewChecked {
   @Input() percentLimit = 70

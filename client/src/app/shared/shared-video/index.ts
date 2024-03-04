@@ -1,1 +1,1 @@
-export * from './shared-video.module'
+export * from './video-views-counter.component'

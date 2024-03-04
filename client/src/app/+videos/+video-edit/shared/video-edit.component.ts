@@ -2,7 +2,7 @@ import { forkJoin } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { SelectChannelItem, SelectOptionsItem } from 'src/types/select-options-item.model'
 import { ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
-import { AbstractControl, FormArray, FormGroup, Validators } from '@angular/forms'
+import { AbstractControl, FormArray, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HooksService, PluginService, ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
 import { BuildFormArgument, BuildFormValidator } from '@app/shared/form-validators'
@@ -22,9 +22,15 @@ import {
 } from '@app/shared/form-validators/video-validators'
 import { VIDEO_CHAPTERS_ARRAY_VALIDATOR, VIDEO_CHAPTER_TITLE_VALIDATOR } from '@app/shared/form-validators/video-chapter-validators'
 import { FormReactiveErrors, FormReactiveValidationMessages, FormValidatorService } from '@app/shared/shared-forms'
-import { InstanceService } from '@app/shared/shared-instance'
-import { VideoCaptionEdit, VideoCaptionWithPathEdit, VideoChaptersEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import {
+  InstanceService,
+  VideoCaptionEdit,
+  VideoCaptionWithPathEdit,
+  VideoChaptersEdit,
+  VideoEdit,
+  VideoService
+} from '@app/shared/shared-main'
+import { NgbModal, NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
 import {
   HTMLServerConfig,
   LiveVideo,
@@ -44,6 +50,23 @@ import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
 import { VideoCaptionEditModalContentComponent } from './video-caption-edit-modal-content/video-caption-edit-modal-content.component'
 import { VideoEditType } from './video-edit.type'
+import { PreviewUploadComponent } from '../../../shared/shared-forms/preview-upload.component'
+import { LiveDocumentationLinkComponent } from '../../../shared/shared-video-live/live-documentation-link.component'
+import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
+import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
+import { TimestampInputComponent } from '../../../shared/shared-forms/timestamp-input.component'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
+import { CalendarModule } from 'primeng/calendar'
+import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
+import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
+import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
+import { SelectTagsComponent } from '../../../shared/shared-forms/select/select-tags.component'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
+import { HelpComponent } from '../../../shared/shared-main/misc/help.component'
+import { NgIf, NgFor, NgTemplateOutlet, NgClass, DatePipe } from '@angular/common'
+import { DynamicFormFieldComponent } from '../../../shared/shared-forms/dynamic-form-field.component'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
 type PluginField = {
@@ -55,7 +78,40 @@ type PluginField = {
 @Component({
   selector: 'my-video-edit',
   styleUrls: [ './video-edit.component.scss' ],
-  templateUrl: './video-edit.component.html'
+  templateUrl: './video-edit.component.html',
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgbNav,
+    DynamicFormFieldComponent,
+    NgbNavItem,
+    NgbNavLink,
+    NgbNavLinkBase,
+    NgbNavContent,
+    NgIf,
+    HelpComponent,
+    PeerTubeTemplateDirective,
+    SelectTagsComponent,
+    MarkdownTextareaComponent,
+    SelectChannelComponent,
+    SelectOptionsComponent,
+    InputTextComponent,
+    CalendarModule,
+    PeertubeCheckboxComponent,
+    NgFor,
+    NgTemplateOutlet,
+    GlobalIconComponent,
+    NgClass,
+    TimestampInputComponent,
+    DeleteButtonComponent,
+    EmbedComponent,
+    LiveDocumentationLinkComponent,
+    PreviewUploadComponent,
+    NgbNavOutlet,
+    VideoCaptionAddModalComponent,
+    DatePipe
+  ]
 })
 export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup

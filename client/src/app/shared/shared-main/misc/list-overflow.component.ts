@@ -14,8 +14,10 @@ import {
   ViewChildren
 } from '@angular/core'
 import { ScreenService } from '@app/core'
-import { NgbDropdown, NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDropdown, NgbModal, NgbDropdownAnchor, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
 import * as debug from 'debug'
+import { RouterLinkActive, RouterLink } from '@angular/router'
+import { NgFor, NgTemplateOutlet, NgIf, NgClass, SlicePipe } from '@angular/common'
 
 const debugLogger = debug('peertube:main:ListOverflowItem')
 
@@ -28,7 +30,20 @@ export interface ListOverflowItem {
   selector: 'my-list-overflow',
   templateUrl: './list-overflow.component.html',
   styleUrls: [ './list-overflow.component.scss' ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgFor,
+    NgTemplateOutlet,
+    NgIf,
+    NgbDropdown,
+    NgbDropdownAnchor,
+    NgClass,
+    NgbDropdownMenu,
+    RouterLinkActive,
+    RouterLink,
+    SlicePipe
+  ]
 })
 export class ListOverflowComponent<T extends ListOverflowItem> implements AfterViewInit {
   @Input() items: T[]

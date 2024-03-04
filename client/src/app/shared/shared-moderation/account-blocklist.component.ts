@@ -4,7 +4,9 @@ import { Notifier, RestPagination, RestTable } from '@app/core'
 import { AccountBlock } from './account-block.model'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
-@Directive()
+@Directive({
+  providers: [ BlocklistService ]
+})
 // eslint-disable-next-line @angular-eslint/directive-class-suffix
 export class GenericAccountBlocklistComponent extends RestTable implements OnInit {
   // @ts-expect-error: "Abstract methods can only appear within an abstract class"

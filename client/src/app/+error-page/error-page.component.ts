@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core'
 import { Title } from '@angular/platform-browser'
 import { Router } from '@angular/router'
 import { HttpStatusCode, HttpStatusCodeType } from '@peertube/peertube-models'
+import { LoginLinkComponent } from '../shared/shared-main/angular/login-link.component'
+import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-error-page',
   templateUrl: './error-page.component.html',
-  styleUrls: [ './error-page.component.scss' ]
+  styleUrls: [ './error-page.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, LoginLinkComponent ]
 })
 export class ErrorPageComponent implements OnInit {
   status: HttpStatusCodeType = HttpStatusCode.NOT_FOUND_404

@@ -10,11 +10,18 @@ import { USER_BAN_REASON_VALIDATOR } from '../form-validators/user-validators'
 import { Account } from '../shared-main'
 import { UserAdminService } from '../shared-users'
 import { BlocklistService } from './blocklist.service'
+import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
+import { NgClass, NgIf } from '@angular/common'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-user-ban-modal',
   templateUrl: './user-ban-modal.component.html',
-  styleUrls: [ './user-ban-modal.component.scss' ]
+  styleUrls: [ './user-ban-modal.component.scss' ],
+  standalone: true,
+  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf, PeertubeCheckboxComponent ],
+  providers: [ UserAdminService, BlocklistService ]
 })
 export class UserBanModalComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal

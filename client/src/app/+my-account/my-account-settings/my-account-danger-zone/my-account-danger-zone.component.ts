@@ -4,7 +4,8 @@ import { AuthService, ConfirmService, Notifier, RedirectService, User, UserServi
 @Component({
   selector: 'my-account-danger-zone',
   templateUrl: './my-account-danger-zone.component.html',
-  styleUrls: [ './my-account-danger-zone.component.scss' ]
+  styleUrls: [ './my-account-danger-zone.component.scss' ],
+  standalone: true
 })
 export class MyAccountDangerZoneComponent {
   @Input() user: User = null

@@ -1,12 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { FormGroup } from '@angular/forms'
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { REGISTER_REASON_VALIDATOR, REGISTER_TERMS_VALIDATOR } from '../shared'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
+import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
+import { NgIf, NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-register-step-terms',
   templateUrl: './register-step-terms.component.html',
-  styleUrls: [ './step.component.scss' ]
+  styleUrls: [ './step.component.scss' ],
+  standalone: true,
+  imports: [ FormsModule, ReactiveFormsModule, NgIf, NgClass, PeertubeCheckboxComponent, PeerTubeTemplateDirective ]
 })
 export class RegisterStepTermsComponent extends FormReactive implements OnInit {
   @Input() hasCodeOfConduct = false

@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core'
 import { AuthUser, ScreenService } from '@app/core'
-import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
+import { TopMenuDropdownParam, TopMenuDropdownComponent } from '../shared/shared-main/misc/top-menu-dropdown.component'
+import { RouterOutlet } from '@angular/router'
+import { NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-my-account',
   templateUrl: './my-account.component.html',
-  styleUrls: [ './my-account.component.scss' ]
+  styleUrls: [ './my-account.component.scss' ],
+  standalone: true,
+  imports: [ TopMenuDropdownComponent, NgClass, RouterOutlet ]
 })
 export class MyAccountComponent implements OnInit {
   menuEntries: TopMenuDropdownParam[] = []

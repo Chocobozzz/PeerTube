@@ -8,7 +8,8 @@ import { Video } from '@peertube/peertube-models'
 @Component({
   selector: 'my-embed',
   styleUrls: [ './embed.component.scss' ],
-  templateUrl: './embed.component.html'
+  templateUrl: './embed.component.html',
+  standalone: true
 })
 export class EmbedComponent implements OnInit {
   @Input({ required: true }) video: Pick<Video, 'name' | 'uuid'> & Partial<Pick<Video, 'aspectRatio'>>

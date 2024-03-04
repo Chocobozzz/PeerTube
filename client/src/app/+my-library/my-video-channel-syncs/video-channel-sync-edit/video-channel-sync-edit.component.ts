@@ -8,11 +8,16 @@ import { VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR } from '@app/shared/form-validator
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { VideoChannelService, VideoChannelSyncService } from '@app/shared/shared-main'
 import { VideoChannelSyncCreate } from '@peertube/peertube-models'
+import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgIf, NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-video-channel-sync-edit',
   templateUrl: './video-channel-sync-edit.component.html',
-  styleUrls: [ './video-channel-sync-edit.component.scss' ]
+  styleUrls: [ './video-channel-sync-edit.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, SelectChannelComponent ]
 })
 export class VideoChannelSyncEditComponent extends FormReactive implements OnInit {
   error: string

@@ -4,11 +4,15 @@ import { USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-valida
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { UserAdminService } from '@app/shared/shared-users'
 import { UserUpdate } from '@peertube/peertube-models'
+import { NgClass, NgIf } from '@angular/common'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 @Component({
   selector: 'my-user-password',
   templateUrl: './user-password.component.html',
-  styleUrls: [ './user-password.component.scss' ]
+  styleUrls: [ './user-password.component.scss' ],
+  standalone: true,
+  imports: [ FormsModule, ReactiveFormsModule, NgClass, NgIf ]
 })
 export class UserPasswordComponent extends FormReactive implements OnInit {
   @Input() userId: number

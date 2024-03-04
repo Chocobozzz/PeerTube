@@ -1,17 +1,40 @@
 import { Subscription } from 'rxjs'
 import { catchError, distinctUntilChanged, map, switchMap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
 import { AuthService, MarkdownService, Notifier, RestExtractor, ScreenService, Hotkey, HotkeysService } from '@app/core'
 import { Account, ListOverflowItem, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 import { BlocklistService } from '@app/shared/shared-moderation'
 import { SupportModalComponent } from '@app/shared/shared-support-modal'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import { ListOverflowComponent } from '../shared/shared-main/misc/list-overflow.component'
+import { CopyButtonComponent } from '../shared/shared-main/buttons/copy-button.component'
+import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account-block-badges.component'
+import { ActorAvatarComponent } from '../shared/shared-actor-image/actor-avatar.component'
+import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
+import { NgIf, NgTemplateOutlet, NgClass, DatePipe } from '@angular/common'
 
 @Component({
   templateUrl: './video-channels.component.html',
-  styleUrls: [ './video-channels.component.scss' ]
+  styleUrls: [ './video-channels.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    RouterLink,
+    SubscribeButtonComponent,
+    GlobalIconComponent,
+    ActorAvatarComponent,
+    AccountBlockBadgesComponent,
+    CopyButtonComponent,
+    NgTemplateOutlet,
+    NgClass,
+    RouterLinkActive,
+    ListOverflowComponent,
+    RouterOutlet,
+    SupportModalComponent,
+    DatePipe
+  ]
 })
 export class VideoChannelsComponent implements OnInit, OnDestroy {
   @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent

@@ -7,11 +7,17 @@ import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { VideoOwnershipService } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoChangeOwnership } from '@peertube/peertube-models'
+import { NgIf } from '@angular/common'
+import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-accept-ownership',
   templateUrl: './my-accept-ownership.component.html',
-  styleUrls: [ './my-accept-ownership.component.scss' ]
+  styleUrls: [ './my-accept-ownership.component.scss' ],
+  standalone: true,
+  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, SelectChannelComponent, NgIf ]
 })
 export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
   @Output() accepted = new EventEmitter<void>()

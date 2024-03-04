@@ -8,11 +8,16 @@ import {
 } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { HttpStatusCode, User } from '@peertube/peertube-models'
+import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-account-change-password',
   templateUrl: './my-account-change-password.component.html',
-  styleUrls: [ './my-account-change-password.component.scss' ]
+  styleUrls: [ './my-account-change-password.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, InputTextComponent ]
 })
 export class MyAccountChangePasswordComponent extends FormReactive implements OnInit {
   error: string = null

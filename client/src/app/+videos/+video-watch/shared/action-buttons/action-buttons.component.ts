@@ -6,11 +6,34 @@ import { SupportModalComponent } from '@app/shared/shared-support-modal'
 import { VideoActionsDisplayType, VideoDownloadComponent } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { UserVideoRateType, VideoCaption, VideoPrivacy } from '@peertube/peertube-models'
+import { VideoActionsDropdownComponent } from '../../../../shared/shared-video-miniature/video-actions-dropdown.component'
+import { VideoAddToPlaylistComponent } from '../../../../shared/shared-video-playlist/video-add-to-playlist.component'
+import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+import { NgbTooltip, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
+import { NgIf, NgClass, NgStyle } from '@angular/common'
+import { VideoRateComponent } from './video-rate.component'
 
 @Component({
   selector: 'my-action-buttons',
   templateUrl: './action-buttons.component.html',
-  styleUrls: [ './action-buttons.component.scss' ]
+  styleUrls: [ './action-buttons.component.scss' ],
+  standalone: true,
+  imports: [
+    VideoRateComponent,
+    NgIf,
+    NgbTooltip,
+    GlobalIconComponent,
+    NgbDropdown,
+    NgbDropdownToggle,
+    NgbDropdownMenu,
+    VideoAddToPlaylistComponent,
+    VideoDownloadComponent,
+    VideoActionsDropdownComponent,
+    NgClass,
+    NgStyle,
+    SupportModalComponent,
+    VideoShareComponent
+  ]
 })
 export class ActionButtonsComponent implements OnInit, OnChanges {
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent

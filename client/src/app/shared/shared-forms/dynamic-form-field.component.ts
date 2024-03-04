@@ -1,11 +1,27 @@
 import { Component, Input } from '@angular/core'
-import { FormGroup } from '@angular/forms'
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RegisterClientFormFieldOptions } from '@peertube/peertube-models'
+import { MarkdownTextareaComponent } from './markdown-textarea.component'
+import { HelpComponent } from '../shared-main/misc/help.component'
+import { InputTextComponent } from './input-text.component'
+import { PeertubeCheckboxComponent } from './peertube-checkbox.component'
+import { NgIf, NgFor } from '@angular/common'
 
 @Component({
   selector: 'my-dynamic-form-field',
   templateUrl: './dynamic-form-field.component.html',
-  styleUrls: [ './dynamic-form-field.component.scss' ]
+  styleUrls: [ './dynamic-form-field.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    FormsModule,
+    ReactiveFormsModule,
+    PeertubeCheckboxComponent,
+    NgFor,
+    InputTextComponent,
+    HelpComponent,
+    MarkdownTextareaComponent
+  ]
 })
 
 export class DynamicFormFieldComponent {

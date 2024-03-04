@@ -3,7 +3,10 @@ import { Inject, LOCALE_ID, Pipe, PipeTransform } from '@angular/core'
 
 // Thanks: https://github.com/danrevah/ngx-pipes/blob/master/src/ng-pipes/pipes/math/bytes.ts
 
-@Pipe({ name: 'myNumberFormatter' })
+@Pipe({
+  name: 'myNumberFormatter',
+  standalone: true
+})
 export class NumberFormatterPipe implements PipeTransform {
 
   /**

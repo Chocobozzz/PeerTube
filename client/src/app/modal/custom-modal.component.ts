@@ -1,11 +1,15 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { logger } from '@root-helpers/logger'
+import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
+import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-custom-modal',
   templateUrl: './custom-modal.component.html',
-  styleUrls: [ './custom-modal.component.scss' ]
+  styleUrls: [ './custom-modal.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, GlobalIconComponent ]
 })
 export class CustomModalComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef

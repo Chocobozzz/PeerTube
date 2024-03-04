@@ -5,11 +5,18 @@ import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { VideoCaptionEdit } from '@app/shared/shared-main'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig, VideoConstant } from '@peertube/peertube-models'
+import { ReactiveFileComponent } from '../../../shared/shared-forms/reactive-file.component'
+import { NgIf } from '@angular/common'
+import { NgSelectModule } from '@ng-select/ng-select'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 @Component({
   selector: 'my-video-caption-add-modal',
   styleUrls: [ './video-caption-add-modal.component.scss' ],
-  templateUrl: './video-caption-add-modal.component.html'
+  templateUrl: './video-caption-add-modal.component.html',
+  standalone: true,
+  imports: [ FormsModule, ReactiveFormsModule, GlobalIconComponent, NgSelectModule, NgIf, ReactiveFileComponent ]
 })
 
 export class VideoCaptionAddModalComponent extends FormReactive implements OnInit {

@@ -1,11 +1,18 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, booleanAttribute } from '@angular/core'
 import { GlobalIconName } from '@app/shared/shared-icons'
+import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
+import { LoaderComponent } from '../loaders/loader.component'
+import { RouterLink } from '@angular/router'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { NgIf, NgClass, NgTemplateOutlet } from '@angular/common'
 
 @Component({
   selector: 'my-button',
   styleUrls: [ './button.component.scss' ],
   templateUrl: './button.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [ NgIf, NgClass, NgbTooltip, NgTemplateOutlet, RouterLink, LoaderComponent, GlobalIconComponent ]
 })
 
 export class ButtonComponent implements OnInit, OnChanges {

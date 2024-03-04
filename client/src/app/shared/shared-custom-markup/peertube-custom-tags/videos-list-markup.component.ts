@@ -7,6 +7,8 @@ import { Video, VideoService } from '../../shared-main'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { CustomMarkupComponent } from './shared'
 import { Observable } from 'rxjs'
+import { VideoMiniatureComponent } from '../../shared-video-miniature/video-miniature.component'
+import { NgStyle, NgFor } from '@angular/common'
 
 /*
  * Markup component list videos depending on criteria
@@ -16,7 +18,9 @@ import { Observable } from 'rxjs'
   selector: 'my-videos-list-markup',
   templateUrl: 'videos-list-markup.component.html',
   styleUrls: [ 'videos-list-markup.component.scss' ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [ NgStyle, NgFor, VideoMiniatureComponent ]
 })
 export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() sort: string

@@ -1,6 +1,8 @@
 import { Component, forwardRef, Input, OnChanges } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
+import { NgIf } from '@angular/common'
+import { SelectOptionsComponent } from './select-options.component'
 
 @Component({
   selector: 'my-select-custom-value',
@@ -12,7 +14,9 @@ import { SelectOptionsItem } from '../../../../types/select-options-item.model'
       useExisting: forwardRef(() => SelectCustomValueComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: true,
+  imports: [ SelectOptionsComponent, FormsModule, NgIf ]
 })
 export class SelectCustomValueComponent implements ControlValueAccessor, OnChanges {
   @Input() items: SelectOptionsItem[] = []

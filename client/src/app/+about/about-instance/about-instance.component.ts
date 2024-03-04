@@ -1,17 +1,32 @@
-import { ViewportScroller } from '@angular/common'
+import { ViewportScroller, NgIf, NgFor } from '@angular/common'
 import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, RouterLink } from '@angular/router'
 import { Notifier, ServerService } from '@app/core'
-import { AboutHTML } from '@app/shared/shared-instance'
 import { HTMLServerConfig, ServerStats } from '@peertube/peertube-models'
 import { copyToClipboard } from '@root-helpers/utils'
 import { ResolverData } from './about-instance.resolver'
 import { ContactAdminModalComponent } from './contact-admin-modal.component'
+import { InstanceStatisticsComponent } from './instance-statistics.component'
+import { InstanceFeaturesTableComponent } from '../../shared/shared-instance/instance-features-table.component'
+import { PluginSelectorDirective } from '../../shared/shared-main/plugins/plugin-selector.directive'
+import { CustomMarkupContainerComponent } from '../../shared/shared-custom-markup/custom-markup-container.component'
+import { AboutHTML } from '@app/shared/shared-main'
 
 @Component({
   selector: 'my-about-instance',
   templateUrl: './about-instance.component.html',
-  styleUrls: [ './about-instance.component.scss' ]
+  styleUrls: [ './about-instance.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    RouterLink,
+    NgFor,
+    CustomMarkupContainerComponent,
+    PluginSelectorDirective,
+    InstanceFeaturesTableComponent,
+    InstanceStatisticsComponent,
+    ContactAdminModalComponent
+  ]
 })
 export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   @ViewChild('descriptionWrapper') descriptionWrapper: ElementRef<HTMLInputElement>

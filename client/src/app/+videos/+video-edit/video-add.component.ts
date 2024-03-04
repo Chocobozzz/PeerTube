@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import {
   AuthService,
   AuthUser,
@@ -14,11 +14,34 @@ import { VideoGoLiveComponent } from './video-add-components/video-go-live.compo
 import { VideoImportTorrentComponent } from './video-add-components/video-import-torrent.component'
 import { VideoImportUrlComponent } from './video-add-components/video-import-url.component'
 import { VideoUploadComponent } from './video-add-components/video-upload.component'
+import { NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
+import { ChannelsSetupMessageComponent } from '../../shared/shared-main/misc/channels-setup-message.component'
+import { UserQuotaComponent } from '../../shared/shared-main/users/user-quota.component'
+import { NgIf, NgTemplateOutlet, NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-videos-add',
   templateUrl: './video-add.component.html',
-  styleUrls: [ './video-add.component.scss' ]
+  styleUrls: [ './video-add.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    RouterLink,
+    NgTemplateOutlet,
+    UserQuotaComponent,
+    ChannelsSetupMessageComponent,
+    NgbNav,
+    NgClass,
+    NgbNavItem,
+    NgbNavLink,
+    NgbNavLinkBase,
+    NgbNavContent,
+    VideoUploadComponent,
+    VideoImportUrlComponent,
+    VideoImportTorrentComponent,
+    VideoGoLiveComponent,
+    NgbNavOutlet
+  ]
 })
 export class VideoAddComponent implements OnInit, CanComponentDeactivate {
   @ViewChild('videoUpload') videoUpload: VideoUploadComponent

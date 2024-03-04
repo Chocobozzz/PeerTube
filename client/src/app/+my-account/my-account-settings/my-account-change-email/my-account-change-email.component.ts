@@ -5,11 +5,16 @@ import { AuthService, Notifier, ServerService, UserService } from '@app/core'
 import { USER_EMAIL_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { HttpStatusCode, User } from '@peertube/peertube-models'
+import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgIf, NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-account-change-email',
   templateUrl: './my-account-change-email.component.html',
-  styleUrls: [ './my-account-change-email.component.scss' ]
+  styleUrls: [ './my-account-change-email.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent ]
 })
 export class MyAccountChangeEmailComponent extends FormReactive implements OnInit {
   error: string = null

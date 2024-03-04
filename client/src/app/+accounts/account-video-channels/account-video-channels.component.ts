@@ -6,11 +6,19 @@ import { SimpleMemoize } from '@app/helpers'
 import { Account, AccountService, Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
 import { NSFWPolicyType, VideoSortField } from '@peertube/peertube-models'
+import { VideoMiniatureComponent } from '../../shared/shared-video-miniature/video-miniature.component'
+import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/subscribe-button.component'
+import { RouterLink } from '@angular/router'
+import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
+import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { NgIf, NgFor } from '@angular/common'
 
 @Component({
   selector: 'my-account-video-channels',
   templateUrl: './account-video-channels.component.html',
-  styleUrls: [ './account-video-channels.component.scss' ]
+  styleUrls: [ './account-video-channels.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, InfiniteScrollerDirective, NgFor, ActorAvatarComponent, RouterLink, SubscribeButtonComponent, VideoMiniatureComponent ]
 })
 export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
   account: Account

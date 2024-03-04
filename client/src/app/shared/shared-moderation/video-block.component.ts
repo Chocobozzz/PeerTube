@@ -7,11 +7,18 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { VIDEO_BLOCK_REASON_VALIDATOR } from '../form-validators/video-block-validators'
 import { VideoBlockService } from './video-block.service'
+import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { NgIf, NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-video-block',
   templateUrl: './video-block.component.html',
-  styleUrls: [ './video-block.component.scss' ]
+  styleUrls: [ './video-block.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, PeertubeCheckboxComponent ],
+  providers: [ VideoBlockService ]
 })
 export class VideoBlockComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core'
 import { CustomMarkupComponent } from './shared'
 import { ServerService } from '@app/core'
+import { NgIf, NgClass } from '@angular/common'
 
 /*
  * Markup component that creates the img HTML element containing the instance banner
@@ -9,7 +10,9 @@ import { ServerService } from '@app/core'
 @Component({
   selector: 'my-instance-banner-markup',
   templateUrl: 'instance-banner-markup.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [ NgIf, NgClass ]
 })
 export class InstanceBannerMarkupComponent implements OnInit, CustomMarkupComponent {
   @Input() revertHomePaddingTop: boolean

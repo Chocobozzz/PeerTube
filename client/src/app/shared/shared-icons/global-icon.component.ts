@@ -86,7 +86,8 @@ export type GlobalIconName = keyof typeof icons
   selector: 'my-global-icon',
   template: '',
   styleUrls: [ './global-icon.component.scss' ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true
 })
 export class GlobalIconComponent implements OnInit {
   @Input() iconName: GlobalIconName

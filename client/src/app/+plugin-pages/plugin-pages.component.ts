@@ -4,7 +4,8 @@ import { PluginService } from '@app/core'
 import { logger } from '@root-helpers/logger'
 
 @Component({
-  templateUrl: './plugin-pages.component.html'
+  templateUrl: './plugin-pages.component.html',
+  standalone: true
 })
 export class PluginPagesComponent implements AfterViewInit {
   @ViewChild('root') root: ElementRef

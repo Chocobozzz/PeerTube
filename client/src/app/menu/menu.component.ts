@@ -3,7 +3,7 @@ import { forkJoin, Subscription } from 'rxjs'
 import { first, switchMap } from 'rxjs/operators'
 import { CommonModule, ViewportScroller } from '@angular/common'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { Router } from '@angular/router'
+import { Router, RouterLink } from '@angular/router'
 import {
   AuthService,
   AuthStatus,
@@ -19,16 +19,15 @@ import {
 } from '@app/core'
 import { scrollToTop } from '@app/helpers'
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
-import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig, ServerConfig, UserRight, UserRightType, VideoConstant } from '@peertube/peertube-models'
 import { NotificationComponent } from './notification.component'
-import { SharedMainModule } from '@app/shared/shared-main'
-import { SharedGlobalIconModule } from '@app/shared/shared-icons'
-import { SharedUserInterfaceSettingsModule } from '@app/shared/shared-user-settings'
-import { SharedFormModule } from '@app/shared/shared-forms'
-import { SharedActorImageModule } from '@app/shared/shared-actor-image/shared-actor-image.module'
 import { LanguageChooserComponent } from './language-chooser.component'
 import { QuickSettingsModalComponent } from './quick-settings-modal.component'
+import { GlobalIconComponent } from '@app/shared/shared-icons'
+import { ActorAvatarComponent } from '@app/shared/shared-actor-image/actor-avatar.component'
+import { InputSwitchComponent } from '@app/shared/shared-forms'
+import { LoginLinkComponent, SignupLabelComponent } from '@app/shared/shared-main'
 
 const debugLogger = debug('peertube:menu:MenuComponent')
 
@@ -39,14 +38,16 @@ const debugLogger = debug('peertube:menu:MenuComponent')
   standalone: true,
   imports: [
     CommonModule,
-    SharedActorImageModule,
     NotificationComponent,
-    SharedMainModule,
-    SharedGlobalIconModule,
-    SharedUserInterfaceSettingsModule,
-    SharedFormModule,
+    ActorAvatarComponent,
+    InputSwitchComponent,
+    SignupLabelComponent,
+    LoginLinkComponent,
     LanguageChooserComponent,
-    QuickSettingsModalComponent
+    QuickSettingsModalComponent,
+    GlobalIconComponent,
+    RouterLink,
+    NgbDropdownModule
   ]
 })
 export class MenuComponent implements OnInit, OnDestroy {

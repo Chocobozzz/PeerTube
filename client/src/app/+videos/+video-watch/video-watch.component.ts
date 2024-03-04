@@ -1,7 +1,7 @@
 import { forkJoin, map, Observable, of, Subscription, switchMap } from 'rxjs'
-import { PlatformLocation } from '@angular/common'
+import { PlatformLocation, NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import {
   AuthService,
   AuthUser,
@@ -51,6 +51,18 @@ import {
 import { cleanupVideoWatch, getStoredTheater, getStoredVideoWatchHistory } from '../../../assets/player/peertube-player-local-storage'
 import { environment } from '../../../environments/environment'
 import { VideoWatchPlaylistComponent } from './shared'
+import { PlayerStylesComponent } from './player-styles.component'
+import { PrivacyConcernsComponent } from './shared/information/privacy-concerns.component'
+import { RecommendedVideosComponent } from './shared/recommendations/recommended-videos.component'
+import { VideoCommentsComponent } from './shared/comment/video-comments.component'
+import { VideoAttributesComponent } from './shared/metadata/video-attributes.component'
+import { VideoDescriptionComponent } from './shared/metadata/video-description.component'
+import { VideoAvatarChannelComponent } from './shared/metadata/video-avatar-channel.component'
+import { ActionButtonsComponent } from './shared/action-buttons/action-buttons.component'
+import { VideoViewsCounterComponent } from '../../shared/shared-video/video-views-counter.component'
+import { DateToggleComponent } from '../../shared/shared-main/date/date-toggle.component'
+import { VideoAlertComponent } from './shared/information/video-alert.component'
+import { PluginPlaceholderComponent } from '../../shared/shared-main/plugins/plugin-placeholder.component'
 
 type URLOptions = {
   playerMode: PlayerMode
@@ -74,7 +86,28 @@ type URLOptions = {
 @Component({
   selector: 'my-video-watch',
   templateUrl: './video-watch.component.html',
-  styleUrls: [ './video-watch.component.scss' ]
+  styleUrls: [ './video-watch.component.scss' ],
+  standalone: true,
+  imports: [
+    NgClass,
+    NgIf,
+    VideoWatchPlaylistComponent,
+    PluginPlaceholderComponent,
+    VideoAlertComponent,
+    DateToggleComponent,
+    VideoViewsCounterComponent,
+    NgTemplateOutlet,
+    ActionButtonsComponent,
+    VideoAvatarChannelComponent,
+    RouterLink,
+    SubscribeButtonComponent,
+    VideoDescriptionComponent,
+    VideoAttributesComponent,
+    VideoCommentsComponent,
+    RecommendedVideosComponent,
+    PrivacyConcernsComponent,
+    PlayerStylesComponent
+  ]
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoWatchPlaylist', { static: true }) videoWatchPlaylist: VideoWatchPlaylistComponent

@@ -5,11 +5,16 @@ import { Notifier, ServerService, User } from '@app/core'
 import { UserNotificationService } from '@app/shared/shared-main'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { UserNotificationSetting, UserNotificationSettingValue, UserRight, UserRightType } from '@peertube/peertube-models'
+import { FormsModule } from '@angular/forms'
+import { InputSwitchComponent } from '../../../shared/shared-forms/input-switch.component'
+import { NgIf, NgFor } from '@angular/common'
 
 @Component({
   selector: 'my-account-notification-preferences',
   templateUrl: './my-account-notification-preferences.component.html',
-  styleUrls: [ './my-account-notification-preferences.component.scss' ]
+  styleUrls: [ './my-account-notification-preferences.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, NgFor, InputSwitchComponent, FormsModule ]
 })
 export class MyAccountNotificationPreferencesComponent implements OnInit {
   @Input() user: User

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScreenService, ServerService } from '@app/core'
 import { BlocklistService, VideoBlockComponent, VideoBlockService, VideoReportComponent } from '@app/shared/shared-moderation'
-import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDropdown, NgbDropdownAnchor, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@peertube/peertube-models'
 import {
   Actor,
@@ -17,6 +17,8 @@ import { LiveStreamInformationComponent } from '../shared-video-live'
 import { VideoAddToPlaylistComponent } from '../shared-video-playlist'
 import { VideoDownloadComponent } from './video-download.component'
 import { of } from 'rxjs'
+import { ActionDropdownComponent } from '../shared-main/buttons/action-dropdown.component'
+import { NgIf } from '@angular/common'
 
 export type VideoActionsDisplayType = {
   playlist?: boolean
@@ -37,7 +39,20 @@ export type VideoActionsDisplayType = {
 @Component({
   selector: 'my-video-actions-dropdown',
   templateUrl: './video-actions-dropdown.component.html',
-  styleUrls: [ './video-actions-dropdown.component.scss' ]
+  styleUrls: [ './video-actions-dropdown.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    NgbDropdown,
+    NgbDropdownAnchor,
+    NgbDropdownMenu,
+    VideoAddToPlaylistComponent,
+    ActionDropdownComponent,
+    VideoDownloadComponent,
+    VideoReportComponent,
+    VideoBlockComponent,
+    LiveStreamInformationComponent
+  ]
 })
 export class VideoActionsDropdownComponent implements OnChanges {
   @ViewChild('playlistDropdown') playlistDropdown: NgbDropdown

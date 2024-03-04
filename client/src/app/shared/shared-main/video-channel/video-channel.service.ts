@@ -16,7 +16,7 @@ import { Account } from '../account'
 import { AccountService } from '../account/account.service'
 import { VideoChannel } from './video-channel.model'
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class VideoChannelService {
   static BASE_VIDEO_CHANNEL_URL = environment.apiUrl + '/api/v1/video-channels/'
 

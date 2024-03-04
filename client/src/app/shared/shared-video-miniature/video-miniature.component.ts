@@ -16,7 +16,14 @@ import { HTMLServerConfig, VideoExistInPlaylist, VideoPlaylistType, VideoPrivacy
 import { LinkType } from '../../../types/link.type'
 import { Video, VideoService } from '../shared-main'
 import { VideoPlaylistService } from '../shared-video-playlist'
-import { VideoActionsDisplayType } from './video-actions-dropdown.component'
+import { VideoActionsDisplayType, VideoActionsDropdownComponent } from './video-actions-dropdown.component'
+import { RouterLink } from '@angular/router'
+import { VideoViewsCounterComponent } from '../shared-video/video-views-counter.component'
+import { DateToggleComponent } from '../shared-main/date/date-toggle.component'
+import { LinkComponent } from '../shared-main/angular/link.component'
+import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
+import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.component'
+import { NgClass, NgIf, NgFor } from '@angular/common'
 
 export type MiniatureDisplayOptions = {
   date?: boolean
@@ -35,7 +42,20 @@ export type MiniatureDisplayOptions = {
   selector: 'my-video-miniature',
   styleUrls: [ './video-miniature.component.scss' ],
   templateUrl: './video-miniature.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgClass,
+    VideoThumbnailComponent,
+    NgIf,
+    ActorAvatarComponent,
+    LinkComponent,
+    DateToggleComponent,
+    VideoViewsCounterComponent,
+    RouterLink,
+    NgFor,
+    VideoActionsDropdownComponent
+  ]
 })
 export class VideoMiniatureComponent implements OnInit {
   @Input() user: User

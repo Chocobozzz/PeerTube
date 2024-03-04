@@ -17,6 +17,15 @@ import {
   VideoStatsTimeserieMetric
 } from '@peertube/peertube-models'
 import { VideoStatsService } from './video-stats.service'
+import { ButtonComponent } from '../../shared/shared-main/buttons/button.component'
+import { ChartModule } from 'primeng/chart'
+import { NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
+import { FormsModule } from '@angular/forms'
+import { SelectOptionsComponent } from '../../shared/shared-forms/select/select-options.component'
+import { EmbedComponent } from '../../shared/shared-main/video/embed.component'
+import { PeerTubeTemplateDirective } from '../../shared/shared-main/angular/peertube-template.directive'
+import { HelpComponent } from '../../shared/shared-main/misc/help.component'
+import { NgFor, NgIf } from '@angular/common'
 
 type ActiveGraphId = VideoStatsTimeserieMetric | 'retention' | 'countries' | 'regions'
 
@@ -42,7 +51,25 @@ ChartJSDefaults.color = getComputedStyle(document.body).getPropertyValue('--main
 @Component({
   templateUrl: './video-stats.component.html',
   styleUrls: [ './video-stats.component.scss' ],
-  providers: [ NumberFormatterPipe ]
+  providers: [ NumberFormatterPipe ],
+  standalone: true,
+  imports: [
+    NgFor,
+    NgIf,
+    HelpComponent,
+    PeerTubeTemplateDirective,
+    EmbedComponent,
+    SelectOptionsComponent,
+    FormsModule,
+    NgbNav,
+    NgbNavItem,
+    NgbNavLink,
+    NgbNavLinkBase,
+    NgbNavContent,
+    ChartModule,
+    ButtonComponent,
+    NgbNavOutlet
+  ]
 })
 export class VideoStatsComponent implements OnInit {
   // Cannot handle date filters

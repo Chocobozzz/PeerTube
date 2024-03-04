@@ -1,17 +1,45 @@
-import { CdkStep } from '@angular/cdk/stepper'
+import { CdkStep, CdkStepperNext, CdkStepperPrevious } from '@angular/cdk/stepper'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { FormGroup } from '@angular/forms'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, RouterLink } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 import { ServerConfig, ServerStats, UserRegister } from '@peertube/peertube-models'
 import { SignupService } from '../shared/signup.service'
+import { SignupSuccessBeforeEmailComponent } from '../shared/signup-success-before-email.component'
+import { LoaderComponent } from '../../shared/shared-main/loaders/loader.component'
+import { RegisterStepChannelComponent } from './steps/register-step-channel.component'
+import { RegisterStepUserComponent } from './steps/register-step-user.component'
+import { RegisterStepTermsComponent } from './steps/register-step-terms.component'
+import { RegisterStepAboutComponent } from './steps/register-step-about.component'
+import { SignupStepTitleComponent } from '../shared/signup-step-title.component'
+import { CustomStepperComponent } from './custom-stepper.component'
+import { SignupLabelComponent } from '../../shared/shared-main/account/signup-label.component'
+import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-register',
   templateUrl: './register.component.html',
-  styleUrls: [ './register.component.scss' ]
+  styleUrls: [ './register.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    SignupLabelComponent,
+    CustomStepperComponent,
+    CdkStep,
+    SignupStepTitleComponent,
+    RegisterStepAboutComponent,
+    RouterLink,
+    CdkStepperNext,
+    InstanceAboutAccordionComponent,
+    RegisterStepTermsComponent,
+    CdkStepperPrevious,
+    RegisterStepUserComponent,
+    RegisterStepChannelComponent,
+    LoaderComponent,
+    SignupSuccessBeforeEmailComponent
+  ]
 })
 export class RegisterComponent implements OnInit {
   @ViewChild('lastStep') lastStep: CdkStep

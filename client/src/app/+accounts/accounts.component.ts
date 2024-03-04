@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs'
 import { catchError, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
 import { AuthService, MarkdownService, Notifier, RedirectService, RestExtractor, ScreenService, UserService } from '@app/core'
 import {
   Account,
@@ -14,10 +14,37 @@ import {
 } from '@app/shared/shared-main'
 import { AccountReportComponent, BlocklistService } from '@app/shared/shared-moderation'
 import { HttpStatusCode, User, UserRight } from '@peertube/peertube-models'
+import { SimpleSearchInputComponent } from '../shared/shared-main/misc/simple-search-input.component'
+import { ListOverflowComponent } from '../shared/shared-main/misc/list-overflow.component'
+import { SubscribeButtonComponent } from '../shared/shared-user-subscription/subscribe-button.component'
+import { CopyButtonComponent } from '../shared/shared-main/buttons/copy-button.component'
+import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account-block-badges.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { UserModerationDropdownComponent } from '../shared/shared-moderation/user-moderation-dropdown.component'
+import { ActorAvatarComponent } from '../shared/shared-actor-image/actor-avatar.component'
+import { NgIf, NgClass, DatePipe } from '@angular/common'
 
 @Component({
   templateUrl: './accounts.component.html',
-  styleUrls: [ './accounts.component.scss' ]
+  styleUrls: [ './accounts.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    ActorAvatarComponent,
+    UserModerationDropdownComponent,
+    NgbTooltip,
+    AccountBlockBadgesComponent,
+    CopyButtonComponent,
+    NgClass,
+    RouterLink,
+    SubscribeButtonComponent,
+    RouterLinkActive,
+    ListOverflowComponent,
+    SimpleSearchInputComponent,
+    RouterOutlet,
+    AccountReportComponent,
+    DatePipe
+  ]
 })
 export class AccountsComponent implements OnInit, OnDestroy {
   @ViewChild('accountReportModal') accountReportModal: AccountReportComponent

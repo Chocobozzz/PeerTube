@@ -6,6 +6,8 @@ import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { Video } from '../../shared-main'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { CustomMarkupComponent } from './shared'
+import { VideoMiniatureComponent } from '../../shared-video-miniature/video-miniature.component'
+import { NgIf } from '@angular/common'
 
 /*
  * Markup component that creates a video miniature only
@@ -15,7 +17,9 @@ import { CustomMarkupComponent } from './shared'
   selector: 'my-video-miniature-markup',
   templateUrl: 'video-miniature-markup.component.html',
   styleUrls: [ 'video-miniature-markup.component.scss' ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [ NgIf, VideoMiniatureComponent ]
 })
 export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() uuid: string

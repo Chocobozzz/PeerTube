@@ -2,8 +2,11 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
 import { Notifier, ServerService } from '@app/core'
 import { getBytes } from '@root-helpers/bytes'
 import { imageToDataURL } from '@root-helpers/images'
-import { ActorAvatarInput } from '../shared-actor-image/actor-avatar.component'
+import { ActorAvatarInput, ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
 import { ActorImage } from '@peertube/peertube-models'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { NgbTooltip, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
+import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-actor-avatar-edit',
@@ -11,7 +14,9 @@ import { ActorImage } from '@peertube/peertube-models'
   styleUrls: [
     './actor-image-edit.scss',
     './actor-avatar-edit.component.scss'
-  ]
+  ],
+  standalone: true,
+  imports: [ NgIf, ActorAvatarComponent, NgbTooltip, GlobalIconComponent, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu ]
 })
 export class ActorAvatarEditComponent implements OnInit, OnChanges {
   @ViewChild('avatarfileInput') avatarfileInput: ElementRef<HTMLInputElement>

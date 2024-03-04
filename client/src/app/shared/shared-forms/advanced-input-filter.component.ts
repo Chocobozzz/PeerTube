@@ -4,6 +4,10 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { RestService } from '@app/core'
+import { FormsModule } from '@angular/forms'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { NgIf, NgFor, NgClass } from '@angular/common'
+import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
 
 export type AdvancedInputFilter = {
   title: string
@@ -21,7 +25,9 @@ const debugLogger = debug('peertube:AdvancedInputFilterComponent')
 @Component({
   selector: 'my-advanced-input-filter',
   templateUrl: './advanced-input-filter.component.html',
-  styleUrls: [ './advanced-input-filter.component.scss' ]
+  styleUrls: [ './advanced-input-filter.component.scss' ],
+  standalone: true,
+  imports: [ NgbDropdown, NgIf, NgbDropdownToggle, NgbDropdownMenu, NgFor, GlobalIconComponent, NgClass, FormsModule ]
 })
 export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   @Input() filters: AdvancedInputFilter[] = []

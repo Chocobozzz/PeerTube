@@ -5,6 +5,8 @@ import { FindInBulkService } from '@app/shared/shared-search'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { VideoPlaylist } from '../../shared-video-playlist'
 import { CustomMarkupComponent } from './shared'
+import { VideoPlaylistMiniatureComponent } from '../../shared-video-playlist/video-playlist-miniature.component'
+import { NgIf } from '@angular/common'
 
 /*
  * Markup component that creates a playlist miniature only
@@ -14,7 +16,9 @@ import { CustomMarkupComponent } from './shared'
   selector: 'my-playlist-miniature-markup',
   templateUrl: 'playlist-miniature-markup.component.html',
   styleUrls: [ 'playlist-miniature-markup.component.scss' ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [ NgIf, VideoPlaylistMiniatureComponent ]
 })
 export class PlaylistMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() uuid: string

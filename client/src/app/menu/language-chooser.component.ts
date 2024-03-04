@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core'
 import { getDevLocale, isOnDevLocale } from '@app/helpers'
-import { SharedGlobalIconModule } from '@app/shared/shared-icons'
+import { GlobalIconComponent } from '@app/shared/shared-icons'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { getCompleteLocale, getShortLocale, I18N_LOCALES, objectKeysTyped, sortBy } from '@peertube/peertube-core-utils'
 
@@ -10,7 +10,7 @@ import { getCompleteLocale, getShortLocale, I18N_LOCALES, objectKeysTyped, sortB
   templateUrl: './language-chooser.component.html',
   styleUrls: [ './language-chooser.component.scss' ],
   standalone: true,
-  imports: [ CommonModule, SharedGlobalIconModule ]
+  imports: [ CommonModule, GlobalIconComponent ]
 })
 export class LanguageChooserComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef

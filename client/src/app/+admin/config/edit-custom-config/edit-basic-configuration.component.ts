@@ -1,15 +1,40 @@
 import { pairwise } from 'rxjs/operators'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
-import { FormGroup } from '@angular/forms'
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { MenuService, ThemeService } from '@app/core'
 import { HTMLServerConfig } from '@peertube/peertube-models'
 import { ConfigService } from '../shared/config.service'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
+import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
+import { UserRealQuotaInfoComponent } from '../../shared/user-real-quota-info.component'
+import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
+import { HelpComponent } from '../../../shared/shared-main/misc/help.component'
+import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
+import { SelectCustomValueComponent } from '../../../shared/shared-forms/select/select-custom-value.component'
+import { NgFor, NgIf, NgClass } from '@angular/common'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'my-edit-basic-configuration',
   templateUrl: './edit-basic-configuration.component.html',
-  styleUrls: [ './edit-custom-config.component.scss' ]
+  styleUrls: [ './edit-custom-config.component.scss' ],
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    RouterLink,
+    NgFor,
+    SelectCustomValueComponent,
+    NgIf,
+    PeertubeCheckboxComponent,
+    HelpComponent,
+    MarkdownTextareaComponent,
+    NgClass,
+    UserRealQuotaInfoComponent,
+    SelectOptionsComponent,
+    PeerTubeTemplateDirective
+  ]
 })
 export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   @Input() form: FormGroup

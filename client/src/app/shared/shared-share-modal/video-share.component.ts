@@ -3,10 +3,28 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { HooksService, ServerService } from '@app/core'
 import { VideoDetails } from '@app/shared/shared-main'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import {
+  NgbModal,
+  NgbNav,
+  NgbNavItem,
+  NgbNavLink,
+  NgbNavLinkBase,
+  NgbNavContent,
+  NgbNavOutlet,
+  NgbCollapse
+} from '@ng-bootstrap/ng-bootstrap'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { buildPlaylistLink, buildVideoLink, decoratePlaylistLink, decorateVideoLink } from '@peertube/peertube-core-utils'
 import { VideoCaption, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
+import { TimestampInputComponent } from '../shared-forms/timestamp-input.component'
+import { PluginPlaceholderComponent } from '../shared-main/plugins/plugin-placeholder.component'
+import { FormsModule } from '@angular/forms'
+import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
+import { QRCodeModule } from 'angularx-qrcode'
+import { InputTextComponent } from '../shared-forms/input-text.component'
+import { RouterLink } from '@angular/router'
+import { NgIf, NgClass, NgFor } from '@angular/common'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 
 type Customizations = {
   startAtCheckbox: boolean
@@ -39,7 +57,28 @@ type TabId = 'url' | 'qrcode' | 'embed'
 @Component({
   selector: 'my-video-share',
   templateUrl: './video-share.component.html',
-  styleUrls: [ './video-share.component.scss' ]
+  styleUrls: [ './video-share.component.scss' ],
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    NgIf,
+    RouterLink,
+    NgbNav,
+    NgbNavItem,
+    NgbNavLink,
+    NgbNavLinkBase,
+    NgbNavContent,
+    InputTextComponent,
+    QRCodeModule,
+    NgbNavOutlet,
+    PeertubeCheckboxComponent,
+    FormsModule,
+    PluginPlaceholderComponent,
+    TimestampInputComponent,
+    NgClass,
+    NgFor,
+    NgbCollapse
+  ]
 })
 export class VideoShareComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef

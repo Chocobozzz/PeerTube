@@ -3,11 +3,18 @@ import { ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { ServerConfig, ServerStats } from '@peertube/peertube-models'
 import { DaysDurationFormatterPipe } from '../shared-main'
+import { BytesPipe } from '../shared-main/angular/bytes.pipe'
+import { PeerTubeTemplateDirective } from '../shared-main/angular/peertube-template.directive'
+import { HelpComponent } from '../shared-main/misc/help.component'
+import { FeatureBooleanComponent } from './feature-boolean.component'
+import { NgIf, NgFor } from '@angular/common'
 
 @Component({
   selector: 'my-instance-features-table',
   templateUrl: './instance-features-table.component.html',
-  styleUrls: [ './instance-features-table.component.scss' ]
+  styleUrls: [ './instance-features-table.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, FeatureBooleanComponent, HelpComponent, PeerTubeTemplateDirective, NgFor, BytesPipe ]
 })
 export class InstanceFeaturesTableComponent implements OnInit {
   quotaHelpIndication = ''

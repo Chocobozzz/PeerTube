@@ -5,10 +5,38 @@ import { Component } from '@angular/core'
 import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, ScreenService } from '@app/core'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { formatICU } from '@app/helpers'
+import { NumberFormatterPipe } from '../../shared/shared-main/angular/number-formatter.pipe'
+import { ChartModule } from 'primeng/chart'
+import { DeferLoadingDirective } from '../../shared/shared-main/angular/defer-loading.directive'
+import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
+import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
+import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
+import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { ChannelsSetupMessageComponent } from '../../shared/shared-main/misc/channels-setup-message.component'
+import { RouterLink } from '@angular/router'
+import { NgIf, NgFor } from '@angular/common'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 
 @Component({
   templateUrl: './my-video-channels.component.html',
-  styleUrls: [ './my-video-channels.component.scss' ]
+  styleUrls: [ './my-video-channels.component.scss' ],
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    NgIf,
+    RouterLink,
+    ChannelsSetupMessageComponent,
+    AdvancedInputFilterComponent,
+    InfiniteScrollerDirective,
+    NgFor,
+    ActorAvatarComponent,
+    EditButtonComponent,
+    DeleteButtonComponent,
+    DeferLoadingDirective,
+    ChartModule,
+    NumberFormatterPipe
+  ]
 })
 export class MyVideoChannelsComponent {
   videoChannels: VideoChannel[] = []

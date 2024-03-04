@@ -6,6 +6,8 @@ import { UserAdminService } from '../shared-users'
 import { BlocklistService } from './blocklist.service'
 import { BulkService } from './bulk.service'
 import { UserBanModalComponent } from './user-ban-modal.component'
+import { ActionDropdownComponent } from '../shared-main/buttons/action-dropdown.component'
+import { NgIf } from '@angular/common'
 
 export type AccountMutedStatus =
   Pick<Account, 'id' | 'nameWithHost' | 'host' | 'userId' |
@@ -19,7 +21,10 @@ export type UserModerationDisplayType = {
 
 @Component({
   selector: 'my-user-moderation-dropdown',
-  templateUrl: './user-moderation-dropdown.component.html'
+  templateUrl: './user-moderation-dropdown.component.html',
+  standalone: true,
+  imports: [ NgIf, UserBanModalComponent, ActionDropdownComponent ],
+  providers: [ UserAdminService, BlocklistService, BulkService ]
 })
 export class UserModerationDropdownComponent implements OnInit, OnChanges {
   @ViewChild('userBanModal') userBanModal: UserBanModalComponent

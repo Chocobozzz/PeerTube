@@ -1,9 +1,12 @@
 import { Component, Input, OnInit, booleanAttribute } from '@angular/core'
 import { ServerService } from '@app/core'
+import { NgIf, NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-instance-banner',
-  templateUrl: './instance-banner.component.html'
+  templateUrl: './instance-banner.component.html',
+  standalone: true,
+  imports: [ NgIf, NgClass ]
 })
 export class InstanceBannerComponent implements OnInit {
   @Input({ transform: booleanAttribute }) rounded = false

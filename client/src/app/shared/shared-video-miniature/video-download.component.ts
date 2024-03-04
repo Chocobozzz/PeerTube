@@ -3,12 +3,26 @@ import { firstValueFrom } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { Component, ElementRef, Inject, Input, LOCALE_ID, ViewChild } from '@angular/core'
 import { HooksService } from '@app/core'
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import {
+  NgbModal,
+  NgbModalRef,
+  NgbNav,
+  NgbNavItem,
+  NgbNavLink,
+  NgbNavLinkBase,
+  NgbNavContent,
+  NgbNavOutlet,
+  NgbCollapse
+} from '@ng-bootstrap/ng-bootstrap'
 import { logger } from '@root-helpers/logger'
 import { videoRequiresFileToken } from '@root-helpers/video'
 import { objectKeysTyped, pick } from '@peertube/peertube-core-utils'
 import { VideoCaption, VideoFile } from '@peertube/peertube-models'
 import { BytesPipe, NumberFormatterPipe, VideoDetails, VideoFileTokenService, VideoService } from '../shared-main'
+import { InputTextComponent } from '../shared-forms/input-text.component'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { FormsModule } from '@angular/forms'
+import { NgIf, NgFor, KeyValuePipe } from '@angular/common'
 
 type DownloadType = 'video' | 'subtitles'
 type FileMetadata = { [key: string]: { label: string, value: string | number } }
@@ -16,7 +30,23 @@ type FileMetadata = { [key: string]: { label: string, value: string | number } }
 @Component({
   selector: 'my-video-download',
   templateUrl: './video-download.component.html',
-  styleUrls: [ './video-download.component.scss' ]
+  styleUrls: [ './video-download.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    FormsModule,
+    GlobalIconComponent,
+    NgbNav,
+    NgFor,
+    NgbNavItem,
+    NgbNavLink,
+    NgbNavLinkBase,
+    NgbNavContent,
+    InputTextComponent,
+    NgbNavOutlet,
+    NgbCollapse,
+    KeyValuePipe
+  ]
 })
 export class VideoDownloadComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef

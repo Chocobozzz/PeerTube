@@ -4,7 +4,8 @@ import { ViewportScroller } from '@angular/common'
 @Component({
   selector: 'my-about-peertube',
   templateUrl: './about-peertube.component.html',
-  styleUrls: [ './about-peertube.component.scss' ]
+  styleUrls: [ './about-peertube.component.scss' ],
+  standalone: true
 })
 
 export class AboutPeertubeComponent implements AfterViewChecked {

@@ -1,4 +1,4 @@
-import { SortMeta } from 'primeng/api'
+import { SortMeta, SharedModule } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { escapeHTML } from '@peertube/peertube-core-utils'
@@ -7,11 +7,31 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { JobStateClient } from '../../../../types/job-state-client.type'
 import { JobTypeClient } from '../../../../types/job-type-client.type'
 import { JobService } from './job.service'
+import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { TableModule } from 'primeng/table'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { NgSelectModule } from '@ng-select/ng-select'
+import { NgFor, NgClass, NgIf } from '@angular/common'
+import { FormsModule } from '@angular/forms'
 
 @Component({
   selector: 'my-jobs',
   templateUrl: './jobs.component.html',
-  styleUrls: [ './jobs.component.scss' ]
+  styleUrls: [ './jobs.component.scss' ],
+  standalone: true,
+  imports: [
+    FormsModule,
+    NgFor,
+    NgSelectModule,
+    NgClass,
+    ButtonComponent,
+    TableModule,
+    SharedModule,
+    NgIf,
+    NgbTooltip,
+    TableExpanderIconComponent
+  ]
 })
 export class JobsComponent extends RestTable implements OnInit {
   private static LOCAL_STORAGE_STATE = 'jobs-list-state'

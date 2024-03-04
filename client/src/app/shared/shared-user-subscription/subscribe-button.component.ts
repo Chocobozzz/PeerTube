@@ -4,11 +4,26 @@ import { AuthService, Notifier, RedirectService } from '@app/core'
 import { Account, VideoChannel, VideoService } from '@app/shared/shared-main'
 import { FeedFormat } from '@peertube/peertube-models'
 import { UserSubscriptionService } from './user-subscription.service'
+import { NumberFormatterPipe } from '../shared-main/angular/number-formatter.pipe'
+import { RemoteSubscribeComponent } from './remote-subscribe.component'
+import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
+import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
 
 @Component({
   selector: 'my-subscribe-button',
   templateUrl: './subscribe-button.component.html',
-  styleUrls: [ './subscribe-button.component.scss' ]
+  styleUrls: [ './subscribe-button.component.scss' ],
+  standalone: true,
+  imports: [
+    NgClass,
+    NgIf,
+    NgTemplateOutlet,
+    NgbDropdown,
+    NgbDropdownToggle,
+    NgbDropdownMenu,
+    RemoteSubscribeComponent,
+    NumberFormatterPipe
+  ]
 })
 export class SubscribeButtonComponent implements OnInit, OnChanges {
   /**

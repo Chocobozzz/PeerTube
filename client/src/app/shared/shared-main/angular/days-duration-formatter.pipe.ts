@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core'
 
 @Pipe({
-  name: 'myDaysDurationFormatter'
+  name: 'myDaysDurationFormatter',
+  standalone: true
 })
 export class DaysDurationFormatterPipe implements PipeTransform {
 

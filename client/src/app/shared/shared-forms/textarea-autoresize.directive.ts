@@ -2,7 +2,8 @@
 import { AfterViewInit, Directive, ElementRef, HostBinding, HostListener } from '@angular/core'
 
 @Directive({
-  selector: 'textarea[myAutoResize]'
+  selector: 'textarea[myAutoResize]',
+  standalone: true
 })
 export class TextareaAutoResizeDirective implements AfterViewInit {
   @HostBinding('attr.rows') rows = '1'

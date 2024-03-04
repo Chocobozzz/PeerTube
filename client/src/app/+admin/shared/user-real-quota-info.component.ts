@@ -1,10 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { HTMLServerConfig, VideoResolution } from '@peertube/peertube-models'
+import { BytesPipe } from '../../shared/shared-main/angular/bytes.pipe'
+import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-user-real-quota-info',
-  templateUrl: './user-real-quota-info.component.html'
+  templateUrl: './user-real-quota-info.component.html',
+  standalone: true,
+  imports: [ NgIf, BytesPipe ]
 })
 export class UserRealQuotaInfoComponent implements OnInit {
   @Input() videoQuota: number | string

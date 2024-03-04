@@ -6,11 +6,33 @@ import { HooksService } from '@app/core/plugins/hooks.service'
 import { Syndication, VideoDetails } from '@app/shared/shared-main'
 import { VideoComment, VideoCommentService, VideoCommentThreadTree } from '@app/shared/shared-video-comment'
 import { PeerTubeProblemDocument, ServerErrorCode } from '@peertube/peertube-models'
+import { LoaderComponent } from '../../../../shared/shared-main/loaders/loader.component'
+import { VideoCommentComponent } from './video-comment.component'
+import { InfiniteScrollerDirective } from '../../../../shared/shared-main/angular/infinite-scroller.directive'
+import { VideoCommentAddComponent } from './video-comment-add.component'
+import { NgIf, NgFor } from '@angular/common'
+import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownButtonItem, NgbDropdownItem } from '@ng-bootstrap/ng-bootstrap'
+import { FeedComponent } from '../../../../shared/shared-main/feeds/feed.component'
 
 @Component({
   selector: 'my-video-comments',
   templateUrl: './video-comments.component.html',
-  styleUrls: [ './video-comments.component.scss' ]
+  styleUrls: [ './video-comments.component.scss' ],
+  standalone: true,
+  imports: [
+    FeedComponent,
+    NgbDropdown,
+    NgbDropdownToggle,
+    NgbDropdownMenu,
+    NgbDropdownButtonItem,
+    NgbDropdownItem,
+    NgIf,
+    VideoCommentAddComponent,
+    InfiniteScrollerDirective,
+    VideoCommentComponent,
+    NgFor,
+    LoaderComponent
+  ]
 })
 export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('commentHighlightBlock') commentHighlightBlock: ElementRef

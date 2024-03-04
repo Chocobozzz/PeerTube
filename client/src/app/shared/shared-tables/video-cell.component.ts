@@ -4,7 +4,8 @@ import { Video } from '@app/shared/shared-main'
 @Component({
   selector: 'my-video-cell',
   styleUrls: [ 'video-cell.component.scss' ],
-  templateUrl: 'video-cell.component.html'
+  templateUrl: 'video-cell.component.html',
+  standalone: true
 })
 export class VideoCellComponent {
   @Input() video: Video

@@ -3,10 +3,13 @@ import { MarkdownService } from '@app/core'
 import { VideoDetails } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoChannel } from '@peertube/peertube-models'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-support-modal',
-  templateUrl: './support-modal.component.html'
+  templateUrl: './support-modal.component.html',
+  standalone: true,
+  imports: [ GlobalIconComponent ]
 })
 export class SupportModalComponent {
   @Input() video: VideoDetails = null

@@ -1,6 +1,9 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Input, ViewChild } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { FormReactiveErrors } from './form-reactive.service'
+import { CopyButtonComponent } from '../shared-main/buttons/copy-button.component'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { NgClass, NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-input-text',
@@ -12,7 +15,9 @@ import { FormReactiveErrors } from './form-reactive.service'
       useExisting: forwardRef(() => InputTextComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: true,
+  imports: [ FormsModule, NgClass, NgIf, GlobalIconComponent, CopyButtonComponent ]
 })
 export class InputTextComponent implements ControlValueAccessor, AfterViewInit {
   @ViewChild('input') inputElement: ElementRef

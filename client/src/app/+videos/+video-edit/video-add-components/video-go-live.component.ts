@@ -18,6 +18,14 @@ import {
   VideoPrivacy
 } from '@peertube/peertube-models'
 import { VideoSend } from './video-send'
+import { TimeDurationFormatterPipe } from '../../../shared/shared-main/angular/time-duration-formatter.pipe'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { VideoEditComponent } from '../shared/video-edit.component'
+import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-video-go-live',
@@ -26,6 +34,18 @@ import { VideoSend } from './video-send'
     '../shared/video-edit.component.scss',
     './video-go-live.component.scss',
     './video-send.scss'
+  ],
+  standalone: true,
+  imports: [
+    NgIf,
+    GlobalIconComponent,
+    SelectChannelComponent,
+    FormsModule,
+    SelectOptionsComponent,
+    ReactiveFormsModule,
+    VideoEditComponent,
+    ButtonComponent,
+    TimeDurationFormatterPipe
   ]
 })
 export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterViewInit, CanComponentDeactivate {

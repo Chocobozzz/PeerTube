@@ -6,11 +6,18 @@ import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { RecommendationInfo } from './recommendation-info.model'
 import { RecommendedVideosStore } from './recommended-videos.store'
+import { VideoMiniatureComponent } from '../../../../shared/shared-video-miniature/video-miniature.component'
+import { FormsModule } from '@angular/forms'
+import { InputSwitchComponent } from '../../../../shared/shared-forms/input-switch.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { NgClass, NgIf, NgFor, AsyncPipe } from '@angular/common'
 
 @Component({
   selector: 'my-recommended-videos',
   templateUrl: './recommended-videos.component.html',
-  styleUrls: [ './recommended-videos.component.scss' ]
+  styleUrls: [ './recommended-videos.component.scss' ],
+  standalone: true,
+  imports: [ NgClass, NgIf, NgbTooltip, InputSwitchComponent, FormsModule, NgFor, VideoMiniatureComponent, AsyncPipe ]
 })
 export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy {
   @Input() inputRecommendation: RecommendationInfo

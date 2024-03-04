@@ -4,7 +4,8 @@ import { FromNowPipe } from '../angular/from-now.pipe'
 @Component({
   selector: 'my-date-toggle',
   templateUrl: './date-toggle.component.html',
-  styleUrls: [ './date-toggle.component.scss' ]
+  styleUrls: [ './date-toggle.component.scss' ],
+  standalone: true
 })
 export class DateToggleComponent implements OnChanges {
   @Input() date: Date

@@ -5,15 +5,15 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, AuthStatus, LocalStorageService, User, UserService } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { SharedUserInterfaceSettingsModule } from '@app/shared/shared-user-settings'
-import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { CommonModule } from '@angular/common'
+import { GlobalIconComponent } from '@app/shared/shared-icons'
+import { UserInterfaceSettingsComponent, UserVideoSettingsComponent } from '@app/shared/shared-user-settings'
 
 @Component({
   selector: 'my-quick-settings',
   templateUrl: './quick-settings-modal.component.html',
   standalone: true,
-  imports: [ CommonModule, SharedGlobalIconModule, SharedUserInterfaceSettingsModule ]
+  imports: [ CommonModule, GlobalIconComponent, UserVideoSettingsComponent, UserInterfaceSettingsComponent ]
 })
 export class QuickSettingsModalComponent implements OnInit, OnDestroy {
   private static readonly QUERY_MODAL_NAME = 'quick-settings'

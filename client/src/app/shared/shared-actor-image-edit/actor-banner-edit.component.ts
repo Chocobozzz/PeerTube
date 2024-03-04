@@ -1,9 +1,11 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { SafeResourceUrl } from '@angular/platform-browser'
 import { Notifier, ServerService } from '@app/core'
-import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
+import { NgbPopover, NgbTooltip, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
 import { getBytes } from '@root-helpers/bytes'
 import { imageToDataURL } from '@root-helpers/images'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { NgIf, NgTemplateOutlet } from '@angular/common'
 
 @Component({
   selector: 'my-actor-banner-edit',
@@ -11,7 +13,9 @@ import { imageToDataURL } from '@root-helpers/images'
   styleUrls: [
     './actor-image-edit.scss',
     './actor-banner-edit.component.scss'
-  ]
+  ],
+  standalone: true,
+  imports: [ NgIf, NgbTooltip, NgTemplateOutlet, NgbDropdown, NgbDropdownToggle, GlobalIconComponent, NgbDropdownMenu ]
 })
 export class ActorBannerEditComponent implements OnInit {
   @ViewChild('bannerfileInput') bannerfileInput: ElementRef<HTMLInputElement>

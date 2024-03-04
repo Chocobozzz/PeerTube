@@ -1,10 +1,13 @@
 import { Component, Input } from '@angular/core'
 import { User, UserRegistration } from '@peertube/peertube-models'
+import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-user-email-info',
   templateUrl: './user-email-info.component.html',
-  styleUrls: [ './user-email-info.component.scss' ]
+  styleUrls: [ './user-email-info.component.scss' ],
+  standalone: true,
+  imports: [ NgIf ]
 })
 export class UserEmailInfoComponent {
   @Input() entry: User | UserRegistration

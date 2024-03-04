@@ -30,6 +30,15 @@ import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { CustomPageService } from '@app/shared/shared-main/custom-page'
 import { CustomConfig, CustomPage, HTMLServerConfig } from '@peertube/peertube-models'
 import { EditConfigurationService } from './edit-configuration.service'
+import { EditAdvancedConfigurationComponent } from './edit-advanced-configuration.component'
+import { EditLiveConfigurationComponent } from './edit-live-configuration.component'
+import { EditVODTranscodingComponent } from './edit-vod-transcoding.component'
+import { EditBasicConfigurationComponent } from './edit-basic-configuration.component'
+import { EditInstanceInformationComponent } from './edit-instance-information.component'
+import { EditHomepageComponent } from './edit-homepage.component'
+import { NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgIf, NgFor } from '@angular/common'
 
 type ComponentCustomConfig = CustomConfig & {
   instanceCustomHomepage: CustomPage
@@ -38,7 +47,26 @@ type ComponentCustomConfig = CustomConfig & {
 @Component({
   selector: 'my-edit-custom-config',
   templateUrl: './edit-custom-config.component.html',
-  styleUrls: [ './edit-custom-config.component.scss' ]
+  styleUrls: [ './edit-custom-config.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    FormsModule,
+    ReactiveFormsModule,
+    NgbNav,
+    NgbNavItem,
+    NgbNavLink,
+    NgbNavLinkBase,
+    NgbNavContent,
+    EditHomepageComponent,
+    EditInstanceInformationComponent,
+    EditBasicConfigurationComponent,
+    EditVODTranscodingComponent,
+    EditLiveConfigurationComponent,
+    EditAdvancedConfigurationComponent,
+    NgbNavOutlet,
+    NgFor
+  ]
 })
 export class EditCustomConfigComponent extends FormReactive implements OnInit {
   activeNav: string

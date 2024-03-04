@@ -1,5 +1,5 @@
 import * as debug from 'debug'
-import { SortMeta } from 'primeng/api'
+import { SortMeta, SharedModule } from 'primeng/api'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
@@ -12,13 +12,43 @@ import { AdvancedInputFilter } from '../shared-forms'
 import { AbuseMessageModalComponent } from './abuse-message-modal.component'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
 import { ProcessedAbuse } from './processed-abuse.model'
+import { AbuseDetailsComponent } from './abuse-details.component'
+import { AutoColspanDirective } from '../shared-main/angular/auto-colspan.directive'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { VideoCellComponent } from '../shared-tables/video-cell.component'
+import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
+import { ActionDropdownComponent } from '../shared-main/buttons/action-dropdown.component'
+import { TableExpanderIconComponent } from '../shared-tables/table-expander-icon.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { NgIf, NgClass, DatePipe } from '@angular/common'
+import { AdvancedInputFilterComponent } from '../shared-forms/advanced-input-filter.component'
+import { TableModule } from 'primeng/table'
 
 const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
 
 @Component({
   selector: 'my-abuse-list-table',
   templateUrl: './abuse-list-table.component.html',
-  styleUrls: [ '../shared-moderation/moderation.scss', './abuse-list-table.component.scss' ]
+  styleUrls: [ '../shared-moderation/moderation.scss', './abuse-list-table.component.scss' ],
+  standalone: true,
+  imports: [
+    TableModule,
+    SharedModule,
+    AdvancedInputFilterComponent,
+    NgIf,
+    NgbTooltip,
+    TableExpanderIconComponent,
+    ActionDropdownComponent,
+    NgClass,
+    ActorAvatarComponent,
+    VideoCellComponent,
+    GlobalIconComponent,
+    AutoColspanDirective,
+    AbuseDetailsComponent,
+    ModerationCommentModalComponent,
+    AbuseMessageModalComponent,
+    DatePipe
+  ]
 })
 export class AbuseListTableComponent extends RestTable implements OnInit {
   @Input() viewType: 'admin' | 'user'

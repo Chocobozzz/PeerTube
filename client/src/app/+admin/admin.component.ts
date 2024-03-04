@@ -3,10 +3,15 @@ import { AuthService, ScreenService, ServerService } from '@app/core'
 import { ListOverflowItem } from '@app/shared/shared-main'
 import { TopMenuDropdownParam } from '@app/shared/shared-main/misc/top-menu-dropdown.component'
 import { UserRight } from '@peertube/peertube-models'
+import { RouterOutlet } from '@angular/router'
+import { NgClass } from '@angular/common'
+import { TopMenuDropdownComponent } from '../shared/shared-main/misc/top-menu-dropdown.component'
 
 @Component({
   templateUrl: './admin.component.html',
-  styleUrls: [ './admin.component.scss' ]
+  styleUrls: [ './admin.component.scss' ],
+  standalone: true,
+  imports: [ TopMenuDropdownComponent, NgClass, RouterOutlet ]
 })
 export class AdminComponent implements OnInit {
   items: ListOverflowItem[] = []

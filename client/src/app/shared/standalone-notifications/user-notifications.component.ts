@@ -2,16 +2,17 @@ import { Subject } from 'rxjs'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ComponentPagination, hasMoreItems, Notifier } from '@app/core'
 import { AbuseState } from '@peertube/peertube-models'
-import { SharedMainModule, UserNotification, UserNotificationService } from '../shared-main'
+import { FromNowPipe, InfiniteScrollerDirective, UserNotification, UserNotificationService } from '../shared-main'
 import { CommonModule } from '@angular/common'
-import { SharedGlobalIconModule } from '../shared-icons'
+import { GlobalIconComponent } from '../shared-icons'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'my-user-notifications',
   templateUrl: 'user-notifications.component.html',
   styleUrls: [ 'user-notifications.component.scss' ],
   standalone: true,
-  imports: [ CommonModule, SharedMainModule, SharedGlobalIconModule ]
+  imports: [ CommonModule, GlobalIconComponent, RouterLink, FromNowPipe, InfiniteScrollerDirective ]
 })
 export class UserNotificationsComponent implements OnInit {
   @Input() ignoreLoadingBar = false

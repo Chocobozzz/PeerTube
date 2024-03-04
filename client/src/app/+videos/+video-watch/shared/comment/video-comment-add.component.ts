@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs'
-import { getLocaleDirection } from '@angular/common'
+import { getLocaleDirection, NgClass, NgIf, NgFor } from '@angular/common'
 import {
   Component,
   ElementRef,
@@ -20,11 +20,34 @@ import { Video } from '@app/shared/shared-main'
 import { VideoComment, VideoCommentService } from '@app/shared/shared-video-comment'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCommentCreate } from '@peertube/peertube-models'
+import { LoginLinkComponent } from '../../../../shared/shared-main/angular/login-link.component'
+import { RemoteSubscribeComponent } from '../../../../shared/shared-user-subscription/remote-subscribe.component'
+import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+import { PeerTubeTemplateDirective } from '../../../../shared/shared-main/angular/peertube-template.directive'
+import { HelpComponent } from '../../../../shared/shared-main/misc/help.component'
+import { TextareaAutoResizeDirective } from '../../../../shared/shared-forms/textarea-autoresize.directive'
+import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 @Component({
   selector: 'my-video-comment-add',
   templateUrl: './video-comment-add.component.html',
-  styleUrls: [ './video-comment-add.component.scss' ]
+  styleUrls: [ './video-comment-add.component.scss' ],
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    ActorAvatarComponent,
+    TextareaAutoResizeDirective,
+    NgClass,
+    HelpComponent,
+    PeerTubeTemplateDirective,
+    NgIf,
+    GlobalIconComponent,
+    RemoteSubscribeComponent,
+    LoginLinkComponent,
+    NgFor
+  ]
 })
 export class VideoCommentAddComponent extends FormReactive implements OnChanges, OnInit {
   @Input() user: User

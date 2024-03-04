@@ -13,6 +13,17 @@ import { logger } from '@root-helpers/logger'
 import { HttpStatusCode, VideoCreateResult } from '@peertube/peertube-models'
 import { VideoUploadService } from '../shared/video-upload.service'
 import { VideoSend } from './video-send'
+import { VideoEditComponent } from '../shared/video-edit.component'
+import { UploadProgressComponent } from '../../../shared/standalone-upload/upload-progress.component'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { PreviewUploadComponent } from '../../../shared/shared-forms/preview-upload.component'
+import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { DragDropDirective } from './drag-drop.directive'
+import { NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-video-upload',
@@ -21,6 +32,21 @@ import { VideoSend } from './video-send'
     '../shared/video-edit.component.scss',
     './video-upload.component.scss',
     './video-send.scss'
+  ],
+  standalone: true,
+  imports: [
+    NgIf,
+    DragDropDirective,
+    GlobalIconComponent,
+    NgbTooltip,
+    SelectChannelComponent,
+    FormsModule,
+    SelectOptionsComponent,
+    PreviewUploadComponent,
+    ButtonComponent,
+    UploadProgressComponent,
+    ReactiveFormsModule,
+    VideoEditComponent
   ]
 })
 export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, AfterViewInit, CanComponentDeactivate {

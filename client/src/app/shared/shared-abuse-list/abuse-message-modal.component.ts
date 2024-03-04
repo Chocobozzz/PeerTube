@@ -7,11 +7,16 @@ import { logger } from '@root-helpers/logger'
 import { AbuseMessage, UserAbuse } from '@peertube/peertube-models'
 import { ABUSE_MESSAGE_VALIDATOR } from '../form-validators/abuse-validators'
 import { AbuseService } from '../shared-moderation'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { NgIf, NgFor, NgClass, DatePipe } from '@angular/common'
 
 @Component({
   selector: 'my-abuse-message-modal',
   templateUrl: './abuse-message-modal.component.html',
-  styleUrls: [ './abuse-message-modal.component.scss' ]
+  styleUrls: [ './abuse-message-modal.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, GlobalIconComponent, NgFor, NgClass, FormsModule, ReactiveFormsModule, DatePipe ]
 })
 export class AbuseMessageModalComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal

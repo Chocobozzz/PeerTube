@@ -3,11 +3,14 @@ import { Component, OnInit } from '@angular/core'
 import { ComponentPagination, hasMoreItems, Notifier, RestService, ServerService } from '@app/core'
 import { InstanceFollowService } from '@app/shared/shared-instance'
 import { Actor } from '@peertube/peertube-models'
+import { NgIf, NgFor } from '@angular/common'
 
 @Component({
   selector: 'my-about-follows',
   templateUrl: './about-follows.component.html',
-  styleUrls: [ './about-follows.component.scss' ]
+  styleUrls: [ './about-follows.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, NgFor ]
 })
 
 export class AboutFollowsComponent implements OnInit {

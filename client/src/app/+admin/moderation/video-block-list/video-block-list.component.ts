@@ -1,4 +1,4 @@
-import { SortMeta } from 'primeng/api'
+import { SortMeta, SharedModule } from 'primeng/api'
 import { switchMap } from 'rxjs/operators'
 import { environment } from 'src/environments/environment'
 import { Component, OnInit } from '@angular/core'
@@ -10,11 +10,37 @@ import { VideoBlockService } from '@app/shared/shared-moderation'
 import { buildVideoEmbedLink, decorateVideoLink } from '@peertube/peertube-core-utils'
 import { VideoBlacklist, VideoBlacklistType, VideoBlacklistType_Type } from '@peertube/peertube-models'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
+import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
+import { AutoColspanDirective } from '../../../shared/shared-main/angular/auto-colspan.directive'
+import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.component'
+import { ActionDropdownComponent } from '../../../shared/shared-main/buttons/action-dropdown.component'
+import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
+import { NgIf, NgClass, DatePipe } from '@angular/common'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { TableModule } from 'primeng/table'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-video-block-list',
   templateUrl: './video-block-list.component.html',
-  styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './video-block-list.component.scss' ]
+  styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './video-block-list.component.scss' ],
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    TableModule,
+    SharedModule,
+    AdvancedInputFilterComponent,
+    NgbTooltip,
+    NgIf,
+    TableExpanderIconComponent,
+    ActionDropdownComponent,
+    NgClass,
+    VideoCellComponent,
+    AutoColspanDirective,
+    EmbedComponent,
+    DatePipe
+  ]
 })
 export class VideoBlockListComponent extends RestTable implements OnInit {
   blocklist: (VideoBlacklist & { reasonHtml?: string })[] = []

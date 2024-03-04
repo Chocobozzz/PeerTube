@@ -3,11 +3,16 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } 
 import { Notifier, ScreenService, Hotkey, HotkeysService } from '@app/core'
 import { VideoDetails, VideoService } from '@app/shared/shared-main'
 import { UserVideoRateType } from '@peertube/peertube-models'
+import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+import { NgClass, NgIf } from '@angular/common'
+import { NgbPopover, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-video-rate',
   templateUrl: './video-rate.component.html',
-  styleUrls: [ './video-rate.component.scss' ]
+  styleUrls: [ './video-rate.component.scss' ],
+  standalone: true,
+  imports: [ NgbPopover, NgClass, NgbTooltip, GlobalIconComponent, NgIf ]
 })
 export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
   @Input() video: VideoDetails

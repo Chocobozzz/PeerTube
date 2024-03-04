@@ -1,5 +1,5 @@
 import { Subject, Subscription } from 'rxjs'
-import { CdkDragDrop } from '@angular/cdk/drag-drop'
+import { CdkDragDrop, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ComponentPagination, ConfirmService, HooksService, Notifier, ScreenService } from '@app/core'
@@ -7,10 +7,29 @@ import { DropdownAction } from '@app/shared/shared-main'
 import { VideoShareComponent } from '@app/shared/shared-share-modal'
 import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { VideoPlaylistType } from '@peertube/peertube-models'
+import { VideoPlaylistElementMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-element-miniature.component'
+import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { ActionDropdownComponent } from '../../shared/shared-main/buttons/action-dropdown.component'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-miniature.component'
+import { NgIf, NgFor } from '@angular/common'
 
 @Component({
   templateUrl: './my-video-playlist-elements.component.html',
-  styleUrls: [ './my-video-playlist-elements.component.scss' ]
+  styleUrls: [ './my-video-playlist-elements.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    VideoPlaylistMiniatureComponent,
+    GlobalIconComponent,
+    ActionDropdownComponent,
+    InfiniteScrollerDirective,
+    CdkDropList,
+    NgFor,
+    CdkDrag,
+    VideoPlaylistElementMiniatureComponent,
+    VideoShareComponent
+  ]
 })
 export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
