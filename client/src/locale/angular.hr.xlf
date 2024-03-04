@@ -10513,7 +10513,7 @@
       </trans-unit>
       <trans-unit id="120411744458604130" datatype="html" xml:space="preserve">
         <source>Moderators of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will have to approve your registration request once you have finished to fill the form. <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;averageResponseTime&quot;&gt;"/>They usually respond within <x id="INTERPOLATION_1" equiv-text="{{ averageResponseTime | myDaysDurationFormatter }}"/>.<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></source>
-        <target state="translated">Moderatori instance &lt;x id="INTERPOLATION" equiv-text="{{ instanceName }}"/&gt; će morati odobriti tvoj zahtjev za registraciju nakon što ispuniš obrazac.  &lt;x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf="averageResponseTime"&gt;"/&gt;Moderatori obično odgovaraju u roku od &lt;x id="INTERPOLATION_1" equiv-text ="{{ averageResponseTime | myDaysDurationFormatter }}"/&gt;.&lt;x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/&gt;</target>
+        <target state="translated">Moderatori instance <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> će morati odobriti tvoj zahtjev za registraciju nakon što ispuniš obrazac. <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;averageResponseTime&quot;&gt;"/>Moderatori obično odgovaraju u roku od <x id="INTERPOLATION_1" equiv-text="{{ averageResponseTime | myDaysDurationFormatter }}"/>.<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">19,22</context>
@@ -13329,9 +13329,9 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1274250938669222125" datatype="html">
+      <trans-unit id="1274250938669222125" datatype="html" xml:space="preserve">
         <source>Toggle autoplay next video</source>
-        <target state="new">Toggle autoplay next video</target>
+        <target state="translated">Uklj./Isklj. automatsku reprodukciju sljedećeg videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">11</context>
@@ -13449,65 +13449,65 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4659739156309424184" datatype="html">
+      <trans-unit id="4659739156309424184" datatype="html" xml:space="preserve">
         <source>The video is being transcoded, it may not work properly.</source>
-        <target state="new">The video is being transcoded, it may not work properly.</target>
+        <target state="translated">Video se transkodira, možda neće ispravno raditi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1380062134054846433" datatype="html">
+      <trans-unit id="1380062134054846433" datatype="html" xml:space="preserve">
         <source>The video is being imported, it will be available when the import is finished.</source>
-        <target state="new">The video is being imported, it will be available when the import is finished.</target>
+        <target state="translated">Video se uvozi, bit će dostupan kada uvoz završi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5332079713007503082" datatype="html">
+      <trans-unit id="5332079713007503082" datatype="html" xml:space="preserve">
         <source>The video is being moved to server file system, it may not work properly</source>
-        <target state="new">The video is being moved to server file system, it may not work properly</target>
+        <target state="translated">Video se premješta u datotečni sustav servera, možda neće ispravno raditi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1670226671143418566" datatype="html">
+      <trans-unit id="1670226671143418566" datatype="html" xml:space="preserve">
         <source>Move to file system failed, this video may not work properly.</source>
-        <target state="new">Move to file system failed, this video may not work properly.</target>
+        <target state="translated">Premještanje u datotečni sustav nije uspjelo, ovaj video možda neće ispravno raditi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8421704878620521033" datatype="html">
+      <trans-unit id="8421704878620521033" datatype="html" xml:space="preserve">
         <source>The video is being moved to an external server, it may not work properly.</source>
-        <target state="new">The video is being moved to an external server, it may not work properly.</target>
+        <target state="translated">Video se premješta na eksterni server, možda neće ispravno raditi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1832806861457762248" datatype="html">
+      <trans-unit id="1832806861457762248" datatype="html" xml:space="preserve">
         <source>Move to external storage failed, this video may not work properly.</source>
-        <target state="new">Move to external storage failed, this video may not work properly.</target>
+        <target state="translated">Premještanje u eksternu memoriju nije uspjelo, ovaj video možda neće ispravno raditi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4982143979847413207" datatype="html">
+      <trans-unit id="4982143979847413207" datatype="html" xml:space="preserve">
         <source>The video is being edited, it may not work properly.</source>
-        <target state="new">The video is being edited, it may not work properly.</target>
+        <target state="translated">Video se uređuje, možda neće ispravno raditi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6421273530586507643" datatype="html">
+      <trans-unit id="6421273530586507643" datatype="html" xml:space="preserve">
         <source>Transcoding failed, this video may not work properly.</source>
-        <target state="new">Transcoding failed, this video may not work properly.</target>
+        <target state="translated">Transkodiranje nije uspjelo, ovaj video možda neće ispravno raditi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -14261,9 +14261,9 @@
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1914592173926880968" datatype="html">
+      <trans-unit id="1914592173926880968" datatype="html" xml:space="preserve">
         <source>Skip to main content</source>
-        <target state="new">Skip to main content</target>
+        <target state="translated">Prijeđi na glavni sadržaj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
           <context context-type="linenumber">3</context>
@@ -14409,9 +14409,9 @@
           <context context-type="linenumber">233</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6667870723906986565" datatype="html">
+      <trans-unit id="6667870723906986565" datatype="html" xml:space="preserve">
         <source>Show / hide this help menu</source>
-        <target state="new">Show / hide this help menu</target>
+        <target state="translated">Prikaži/sakrij ovaj izbornik pomoći</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/hotkeys/hotkeys.service.ts</context>
           <context context-type="linenumber">33</context>
@@ -14557,9 +14557,9 @@
           <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3779435129809850171" datatype="html">
+      <trans-unit id="3779435129809850171" datatype="html" xml:space="preserve">
         <source>Sort by this column</source>
-        <target state="new">Sort by this column</target>
+        <target state="translated">Razvrstaj po ovom stupcu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-table.ts</context>
           <context context-type="linenumber">25</context>
@@ -14761,17 +14761,17 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4892001398723483418" datatype="html">
+      <trans-unit id="4892001398723483418" datatype="html" xml:space="preserve">
         <source>Enable hotkeys in this web browser</source>
-        <target state="new">Enable hotkeys in this web browser</target>
+        <target state="translated">Aktiviraj prečace u ovom web pregledniku</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/hotkeys/hotkeys-cheat-sheet.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4831075576673859232" datatype="html">
+      <trans-unit id="4831075576673859232" datatype="html" xml:space="preserve">
         <source>Keyboard Shortcuts</source>
-        <target state="new">Keyboard Shortcuts</target>
+        <target state="translated">Tipkovni prečaci</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/hotkeys/hotkeys-cheat-sheet.component.ts</context>
           <context context-type="linenumber">11</context>
@@ -15857,17 +15857,17 @@
           <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6912757266988770184" datatype="html">
+      <trans-unit id="6912757266988770184" datatype="html" xml:space="preserve">
         <source>Index URL must be a URL</source>
-        <target state="new">Index URL must be a URL</target>
+        <target state="translated">URL indeksa mora biti URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3256383206363817433" datatype="html">
+      <trans-unit id="3256383206363817433" datatype="html" xml:space="preserve">
         <source>Search index URL must be a URL</source>
-        <target state="new">Search index URL must be a URL</target>
+        <target state="translated">URL pretrage indeksa mora biti URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">119</context>
@@ -18033,9 +18033,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3242255798983858463" datatype="html">
+      <trans-unit id="3242255798983858463" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="days"/> days</source>
-        <target state="new"><x id="PH" equiv-text="days"/> days</target>
+        <target state="translated"><x id="PH" equiv-text="days"/> dana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/days-duration-formatter.pipe.ts</context>
           <context context-type="linenumber">13</context>
@@ -18085,17 +18085,17 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1330168808014223711" datatype="html">
+      <trans-unit id="1330168808014223711" datatype="html" xml:space="preserve">
         <source>max size: 192*192px, <x id="PH" equiv-text="getBytes(this.maxAvatarSize)"/> extensions: <x id="PH_1" equiv-text="this.avatarExtensions"/></source>
-        <target state="new">max size: 192*192px, <x id="PH" equiv-text="getBytes(this.maxAvatarSize)"/> extensions: <x id="PH_1" equiv-text="this.avatarExtensions"/></target>
+        <target state="translated">maks. veličina: 192 × 192 px, <x id="PH" equiv-text="getBytes(this.maxAvatarSize)"/> proširenja: <x id="PH_1" equiv-text="this.avatarExtensions"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context>
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8054921481196967348" datatype="html">
+      <trans-unit id="8054921481196967348" datatype="html" xml:space="preserve">
         <source>This image is too large.</source>
-        <target state="translated">Slika je prevelika.</target>
+        <target state="translated">Ova slika je prevelika.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -18289,9 +18289,9 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2587910160708766081" datatype="html">
+      <trans-unit id="2587910160708766081" datatype="html" xml:space="preserve">
         <source>Toggle this date format to "<x id="PH" equiv-text="target"/>"</source>
-        <target state="new">Toggle this date format to "<x id="PH" equiv-text="target"/>"</target>
+        <target state="translated">Prebaci ovaj format datuma u "<x id="PH" equiv-text="target"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-toggle.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -18521,9 +18521,9 @@
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3654484622885694263" datatype="html">
+      <trans-unit id="3654484622885694263" datatype="html" xml:space="preserve">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl || notification.videoImportUrl&quot;&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> succeeded </source>
-        <target state="new"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl || notification.videoImportUrl&quot;&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> succeeded </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl || notification.videoImportUrl&quot;&gt;"/>Tvoj uvoz videa<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je uspio </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">121</context>
@@ -18609,9 +18609,9 @@
           <context context-type="linenumber">218</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1023647542221598730" datatype="html">
+      <trans-unit id="1023647542221598730" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> is live streaming in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> is live streaming in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> se prenosi uživo u <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">229,230</context>
@@ -19997,9 +19997,9 @@
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1243134386580173960" datatype="html">
+      <trans-unit id="1243134386580173960" datatype="html" xml:space="preserve">
         <source>Save video settings</source>
-        <target state="new">Save video settings</target>
+        <target state="translated">Spremi postavke za video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">72</context>
@@ -20349,17 +20349,17 @@
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2657043015926552641" datatype="html">
+      <trans-unit id="2657043015926552641" datatype="html" xml:space="preserve">
         <source>Unknown error</source>
-        <target state="new">Unknown error</target>
+        <target state="translated">Nepoznata greška</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1439766333173070230" datatype="html">
+      <trans-unit id="1439766333173070230" datatype="html" xml:space="preserve">
         <source>Invalid input video stream</source>
-        <target state="new">Invalid input video stream</target>
+        <target state="translated">Nevažeći ulazni video prijenos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -21469,25 +21469,25 @@
           <context context-type="linenumber">192</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1831940730037919560" datatype="html">
+      <trans-unit id="1831940730037919560" datatype="html" xml:space="preserve">
         <source>Moving to file system</source>
-        <target state="new">Moving to file system</target>
+        <target state="translated">Premještanje u datotečni sustav</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4707274274243790782" datatype="html">
+      <trans-unit id="4707274274243790782" datatype="html" xml:space="preserve">
         <source>Moving to file system failed</source>
-        <target state="new">Moving to file system failed</target>
+        <target state="translated">Premještanje u datotečni sustav nije uspjelo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">198</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1792259951302458040" datatype="html">
+      <trans-unit id="1792259951302458040" datatype="html" xml:space="preserve">
         <source>Moving to external storage</source>
-        <target state="new">Moving to external storage</target>
+        <target state="translated">Premještanje u eksternu memoriju</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">201</context>
@@ -21533,9 +21533,9 @@
           <context context-type="linenumber">215</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="76275487642696165" datatype="html">
+      <trans-unit id="76275487642696165" datatype="html" xml:space="preserve">
         <source>Watch video <x id="PH" equiv-text="this.video.name"/></source>
-        <target state="new">Watch video <x id="PH" equiv-text="this.video.name"/></target>
+        <target state="translated">Gledaj video <x id="PH" equiv-text="this.video.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">222</context>
@@ -21737,9 +21737,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="459680083614731900" datatype="html">
+      <trans-unit id="459680083614731900" datatype="html" xml:space="preserve">
         <source>Total uploaded</source>
-        <target state="new">Total uploaded</target>
+        <target state="translated">Ukupno preneseno</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-upload/upload-progress.component.html</context>
           <context context-type="linenumber">3</context>
