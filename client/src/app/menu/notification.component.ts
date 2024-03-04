@@ -3,13 +3,17 @@ import { filter } from 'rxjs/operators'
 import { Component, EventEmitter, Output, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
 import { Notifier, PeerTubeSocket, ScreenService } from '@app/core'
-import { UserNotificationService } from '@app/shared/shared-main'
+import { SharedMainModule, UserNotificationService } from '@app/shared/shared-main'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
+import { UserNotificationsComponent } from '@app/shared/standalone-notifications/user-notifications.component'
+import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 
 @Component({
   selector: 'my-notification',
   templateUrl: './notification.component.html',
-  styleUrls: [ './notification.component.scss' ]
+  styleUrls: [ './notification.component.scss' ],
+  standalone: true,
+  imports: [ UserNotificationsComponent, SharedMainModule, SharedGlobalIconModule ]
 })
 export class NotificationComponent implements OnInit, OnDestroy {
   @ViewChild('popover', { static: true }) popover: NgbPopover

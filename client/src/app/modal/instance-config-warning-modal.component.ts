@@ -1,6 +1,8 @@
-import { Location } from '@angular/common'
+import { CommonModule, Location } from '@angular/common'
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { Notifier, User, UserService } from '@app/core'
+import { SharedFormModule } from '@app/shared/shared-forms'
+import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { About, ServerConfig } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
@@ -9,7 +11,9 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 @Component({
   selector: 'my-instance-config-warning-modal',
   templateUrl: './instance-config-warning-modal.component.html',
-  styleUrls: [ './instance-config-warning-modal.component.scss' ]
+  styleUrls: [ './instance-config-warning-modal.component.scss' ],
+  standalone: true,
+  imports: [ CommonModule, SharedGlobalIconModule, SharedFormModule ]
 })
 export class InstanceConfigWarningModalComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef

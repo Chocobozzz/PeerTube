@@ -46,7 +46,7 @@ import {
 } from './misc'
 import { PluginPlaceholderComponent, PluginSelectorDirective } from './plugins'
 import { ActorRedirectGuard } from './router'
-import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
+import { UserHistoryService, UserNotificationService, UserQuotaComponent } from './users'
 import {
   EmbedComponent,
   RedundancyService,
@@ -120,7 +120,6 @@ import { VideoChannelService } from './video-channel'
     SimpleSearchInputComponent,
 
     UserQuotaComponent,
-    UserNotificationsComponent,
 
     SignupLabelComponent,
 
@@ -184,7 +183,6 @@ import { VideoChannelService } from './video-channel'
     SimpleSearchInputComponent,
 
     UserQuotaComponent,
-    UserNotificationsComponent,
 
     SignupLabelComponent,
 

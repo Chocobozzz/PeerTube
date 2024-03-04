@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core'
-import { UserNotificationsComponent } from '@app/shared/shared-main'
+import { UserNotificationsComponent } from '@app/shared/standalone-notifications/user-notifications.component'
 
 type NotificationSortType = 'createdAt' | 'read'
 

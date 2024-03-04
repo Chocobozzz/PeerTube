@@ -1,5 +1,8 @@
+import { CommonModule } from '@angular/common'
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { Notifier, ServerService, User, UserService } from '@app/core'
+import { SharedFormModule } from '@app/shared/shared-forms'
+import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
@@ -7,7 +10,9 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 @Component({
   selector: 'my-account-setup-warning-modal',
   templateUrl: './account-setup-warning-modal.component.html',
-  styleUrls: [ './account-setup-warning-modal.component.scss' ]
+  styleUrls: [ './account-setup-warning-modal.component.scss' ],
+  standalone: true,
+  imports: [ CommonModule, SharedGlobalIconModule, SharedFormModule ]
 })
 export class AccountSetupWarningModalComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef

@@ -78,7 +78,9 @@
             </div>
           </div>
 
-          <my-notification (navigate)="onActiveLinkScrollToAnchor($event)"></my-notification>
+          @defer (when isLoggedIn) {
+            <my-notification (navigate)="onActiveLinkScrollToAnchor($event)"></my-notification>
+          }
         </div>
 
         <ul class="logged-in-menu">

@@ -13,13 +13,9 @@ import { EmptyComponent } from './empty.component'
 import { HeaderComponent, SearchTypeaheadComponent, SuggestionComponent } from './header'
 import { HighlightPipe } from './header/highlight.pipe'
 import { polyfillICU } from './helpers'
-import { LanguageChooserComponent, MenuComponent, NotificationComponent } from './menu'
-import { AccountSetupWarningModalComponent } from './modal/account-setup-warning-modal.component'
-import { AdminWelcomeModalComponent } from './modal/admin-welcome-modal.component'
+import { MenuComponent } from './menu'
 import { ConfirmComponent } from './modal/confirm.component'
 import { CustomModalComponent } from './modal/custom-modal.component'
-import { InstanceConfigWarningModalComponent } from './modal/instance-config-warning-modal.component'
-import { QuickSettingsModalComponent } from './modal/quick-settings-modal.component'
 import { SharedActorImageModule } from './shared/shared-actor-image/shared-actor-image.module'
 import { SharedFormModule } from './shared/shared-forms'
 import { SharedGlobalIconModule } from './shared/shared-icons'
@@ -27,6 +23,9 @@ import { SharedInstanceModule } from './shared/shared-instance'
 import { SharedMainModule } from './shared/shared-main'
 import { SharedUserInterfaceSettingsModule } from './shared/shared-user-settings'
 import { HotkeysCheatSheetComponent } from './hotkeys'
+import { InstanceConfigWarningModalComponent } from './modal/instance-config-warning-modal.component'
+import { AdminWelcomeModalComponent } from './modal/admin-welcome-modal.component'
+import { AccountSetupWarningModalComponent } from './modal/account-setup-warning-modal.component'
 
 registerLocaleData(localeOc, 'oc')
 
@@ -51,19 +50,12 @@ export function loadConfigFactory (server: ServerService, pluginService: PluginS
     AppComponent,
     EmptyComponent,
 
-    MenuComponent,
-    LanguageChooserComponent,
-    QuickSettingsModalComponent,
-    NotificationComponent,
     HeaderComponent,
     SearchTypeaheadComponent,
     SuggestionComponent,
     HighlightPipe,
 
-    AccountSetupWarningModalComponent,
     CustomModalComponent,
-    AdminWelcomeModalComponent,
-    InstanceConfigWarningModalComponent,
     ConfirmComponent,
 
     HotkeysCheatSheetComponent
@@ -80,6 +72,12 @@ export function loadConfigFactory (server: ServerService, pluginService: PluginS
     SharedGlobalIconModule,
     SharedInstanceModule,
     SharedActorImageModule,
+
+    MenuComponent,
+
+    InstanceConfigWarningModalComponent,
+    AdminWelcomeModalComponent,
+    AccountSetupWarningModalComponent,
 
     AppRoutingModule // Put it after all the module because it has the 404 route
   ],

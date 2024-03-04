@@ -35,6 +35,7 @@ import {
   UserImportExportService
 } from './my-account-import-export'
 import { UploadProgressComponent } from '@app/shared/standalone-upload'
+import { UserNotificationsComponent } from '@app/shared/standalone-notifications/user-notifications.component'
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { UploadProgressComponent } from '@app/shared/standalone-upload'
     SharedActorImageModule,
     SharedActorImageEditModule,
 
-    UploadProgressComponent
+    UploadProgressComponent,
+    UserNotificationsComponent
   ],
 
   declarations: [
