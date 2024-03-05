@@ -1,27 +1,27 @@
+import { NgIf } from '@angular/common'
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScreenService, ServerService } from '@app/core'
 import { NgbDropdown, NgbDropdownAnchor, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@peertube/peertube-models'
-import { VideoDownloadComponent } from './video-download.component'
 import { of } from 'rxjs'
+import { Actor } from '../shared-main/account/actor.model'
 import {
   ActionDropdownComponent,
   DropdownAction,
   DropdownButtonSize,
   DropdownDirection
 } from '../shared-main/buttons/action-dropdown.component'
-import { NgIf } from '@angular/common'
+import { RedundancyService } from '../shared-main/video/redundancy.service'
 import { VideoDetails } from '../shared-main/video/video-details.model'
 import { Video } from '../shared-main/video/video.model'
-import { RedundancyService } from '../shared-main/video/redundancy.service'
 import { VideoService } from '../shared-main/video/video.service'
-import { Actor } from '../shared-main/account/actor.model'
 import { BlocklistService } from '../shared-moderation/blocklist.service'
 import { VideoReportComponent } from '../shared-moderation/report-modals'
 import { VideoBlockComponent } from '../shared-moderation/video-block.component'
 import { VideoBlockService } from '../shared-moderation/video-block.service'
 import { LiveStreamInformationComponent } from '../shared-video-live/live-stream-information.component'
 import { VideoAddToPlaylistComponent } from '../shared-video-playlist/video-add-to-playlist.component'
+import { VideoDownloadComponent } from './video-download.component'
 
 export type VideoActionsDisplayType = {
   playlist?: boolean
@@ -104,6 +104,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   videoActions: DropdownAction<{ video: Video }>[][] = []
 
   private loaded = false
+  private hasMutedAccount = false
 
   constructor (
     private authService: AuthService,
@@ -295,7 +296,22 @@ export class VideoActionsDropdownComponent implements OnChanges {
         .subscribe({
           next: () => {
             this.notifier.success($localize`Account ${params.nameWithHost} muted.`)
+            this.hasMutedAccount = true
             this.videoAccountMuted.emit()
+          },
+
+          error: err => this.notifier.error(err.message)
+        })
+  }
+
+  unmuteVideoAccount () {
+    const params = { nameWithHost: Actor.CREATE_BY_STRING(this.video.account.name, this.video.account.host) }
+
+    this.blocklistService.unblockAccountByUser(params)
+        .subscribe({
+          next: () => {
+            this.hasMutedAccount = false
+            this.notifier.success($localize`Account ${params.nameWithHost} unmuted.`)
           },
 
           error: err => this.notifier.error(err.message)
@@ -447,6 +463,14 @@ export class VideoActionsDropdownComponent implements OnChanges {
           handler: () => this.muteVideoAccount(),
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.mute && this.isVideoAccountMutable(),
           iconName: 'no'
+        },
+        {
+          label: $localize`Unmute account`,
+          handler: () => this.unmuteVideoAccount(),
+          isDisplayed: () => {
+            return this.authService.isLoggedIn() && this.displayOptions.mute && this.isVideoAccountMutable() && this.hasMutedAccount
+          },
+          iconName: 'undo'
         }
       ]
     ]
