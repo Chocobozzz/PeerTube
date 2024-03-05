@@ -44,7 +44,7 @@ export class VideoPlaylistMiniatureComponent implements OnInit {
 
   buildPlaylistUrl () {
     if (this.toManage) {
-      this.routerLink = [ '/my-library/video-playlists', this.playlist.uuid ]
+      this.routerLink = [ '/my-library/video-playlists', this.playlist.shortUUID ]
       return
     }
 

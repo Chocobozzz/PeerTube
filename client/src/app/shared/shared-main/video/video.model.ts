@@ -115,8 +115,8 @@ export class Video implements VideoServerModel {
     return buildVideoWatchPath({ shortUUID: video.shortUUID || video.uuid })
   }
 
-  static buildUpdateUrl (video: Pick<Video, 'uuid'>) {
-    return '/videos/update/' + video.uuid
+  static buildUpdateUrl (video: Partial<Pick<Video, 'uuid' | 'shortUUID'>>) {
+    return '/videos/update/' + (video.shortUUID || video.uuid)
   }
 
   constructor (hash: VideoServerModel, translations: { [ id: string ]: string } = {}) {

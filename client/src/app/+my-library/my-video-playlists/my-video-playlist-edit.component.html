@@ -14,7 +14,9 @@
             <li class="breadcrumb-item active" i18n>Edit</li>
 
             <li class="breadcrumb-item active" aria-current="page">
-              <a *ngIf="videoPlaylistToUpdate" [routerLink]="[ '/my-library/video-playlists/update', videoPlaylistToUpdate?.uuid ]">{{ videoPlaylistToUpdate?.displayName }}</a>
+              <a *ngIf="videoPlaylistToUpdate" [routerLink]="[ '/my-library/video-playlists/update', videoPlaylistToUpdate?.shortUUID]">
+                {{ videoPlaylistToUpdate?.displayName }}
+              </a>
             </li>
           }
         </ol>

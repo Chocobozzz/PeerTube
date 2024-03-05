@@ -67,7 +67,7 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
         {
           label: $localize`Update playlist`,
           iconName: 'edit',
-          linkBuilder: playlist => [ '/my-library', 'video-playlists', 'update', playlist.uuid ]
+          linkBuilder: playlist => [ '/my-library', 'video-playlists', 'update', playlist.shortUUID ]
         },
         {
           label: $localize`Delete playlist`,

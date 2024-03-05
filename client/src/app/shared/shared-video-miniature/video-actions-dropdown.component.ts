@@ -368,19 +368,19 @@ export class VideoActionsDropdownComponent implements OnChanges {
         },
         {
           label: $localize`Update`,
-          linkBuilder: ({ video }) => [ '/videos/update', video.uuid ],
+          linkBuilder: ({ video }) => [ '/videos/update', video.shortUUID ],
           iconName: 'edit',
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.update && this.isVideoUpdatable()
         },
         {
           label: $localize`Studio`,
-          linkBuilder: ({ video }) => [ '/studio/edit', video.uuid ],
+          linkBuilder: ({ video }) => [ '/studio/edit', video.shortUUID ],
           iconName: 'film',
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.studio && this.isVideoEditable()
         },
         {
           label: $localize`Stats`,
-          linkBuilder: ({ video }) => [ '/stats/videos', video.uuid ],
+          linkBuilder: ({ video }) => [ '/stats/videos', video.shortUUID ],
           iconName: 'stats',
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.stats && this.isVideoStatsAvailable()
         },
