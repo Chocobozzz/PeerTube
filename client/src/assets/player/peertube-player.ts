@@ -123,6 +123,13 @@ export class PeerTubePlayer {
   }
 
   setPoster (url: string) {
+    // Use HTML video element to display poster
+    if (!this.player) {
+      this.options.playerElement().poster = url
+      return
+    }
+
+    // Prefer using player poster API
     this.player?.poster(url)
     this.options.playerElement().poster = ''
   }
