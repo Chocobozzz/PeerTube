@@ -9,7 +9,8 @@ import {
   USER_PASSWORD_VALIDATOR,
   USER_USERNAME_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
 import { NgIf, NgClass } from '@angular/common'
 

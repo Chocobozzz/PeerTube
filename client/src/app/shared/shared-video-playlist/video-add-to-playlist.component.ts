@@ -3,7 +3,6 @@ import { Subject, Subscription } from 'rxjs'
 import { debounceTime, filter } from 'rxjs/operators'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { AuthService, DisableForReuseHook, Notifier } from '@app/core'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { secondsToTime } from '@peertube/peertube-core-utils'
 import {
   CachedVideoExistInPlaylist,
@@ -20,6 +19,8 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { NgFor, NgClass, NgIf } from '@angular/common'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 
 const debugLogger = debug('peertube:playlists:VideoAddToPlaylistComponent')
 

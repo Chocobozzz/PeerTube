@@ -4,8 +4,6 @@ import { environment } from './environments/environment'
 import { logger } from './root-helpers'
 import { AppComponent } from './app/app.component'
 import routes from './app/app.routes'
-import { getFormProviders } from './app/shared/shared-forms'
-import { getMainProviders } from './app/shared/shared-main'
 import { ServiceWorkerModule } from '@angular/service-worker'
 import { polyfillICU } from './app/helpers'
 import { tap } from 'rxjs/operators'
@@ -26,6 +24,8 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { ToastModule } from 'primeng/toast'
+import { getMainProviders } from './app/shared/shared-main/main-providers'
+import { getFormProviders } from '@app/shared/shared-forms/shared-form-providers'
 
 registerLocaleData(localeOc, 'oc')
 

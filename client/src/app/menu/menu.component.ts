@@ -24,10 +24,11 @@ import { HTMLServerConfig, ServerConfig, UserRight, UserRightType, VideoConstant
 import { NotificationComponent } from './notification.component'
 import { LanguageChooserComponent } from './language-chooser.component'
 import { QuickSettingsModalComponent } from './quick-settings-modal.component'
-import { GlobalIconComponent } from '@app/shared/shared-icons'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { ActorAvatarComponent } from '@app/shared/shared-actor-image/actor-avatar.component'
-import { InputSwitchComponent } from '@app/shared/shared-forms'
-import { LoginLinkComponent, SignupLabelComponent } from '@app/shared/shared-main'
+import { InputSwitchComponent } from '@app/shared/shared-forms/input-switch.component'
+import { SignupLabelComponent } from '@app/shared/shared-main/account/signup-label.component'
+import { LoginLinkComponent } from '@app/shared/shared-main/angular/login-link.component'
 
 const debugLogger = debug('peertube:menu:MenuComponent')
 

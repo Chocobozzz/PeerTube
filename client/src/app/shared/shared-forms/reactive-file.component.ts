@@ -1,7 +1,7 @@
 import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
-import { GlobalIconName } from '@app/shared/shared-icons'
+import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { NgClass, NgIf } from '@angular/common'

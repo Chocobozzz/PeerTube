@@ -1,7 +1,6 @@
 import { SortMeta, SharedModule } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
-import { Account, VideoOwnershipService } from '@app/shared/shared-main'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus, VideoChangeOwnershipStatusType } from '@peertube/peertube-models'
 import { MyAcceptOwnershipComponent } from './my-accept-ownership/my-accept-ownership.component'
 import { AutoColspanDirective } from '../../shared/shared-main/angular/auto-colspan.directive'
@@ -11,6 +10,8 @@ import { NgIf, NgClass, DatePipe } from '@angular/common'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { TableModule } from 'primeng/table'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
+import { Account } from '@app/shared/shared-main/account/account.model'
 
 @Component({
   templateUrl: './my-ownership.component.html',

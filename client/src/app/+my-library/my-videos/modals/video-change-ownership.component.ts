@@ -1,13 +1,15 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { Notifier, UserService } from '@app/core'
 import { OWNERSHIP_CHANGE_USERNAME_VALIDATOR } from '@app/shared/form-validators/video-ownership-change-validators'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { Video, VideoOwnershipService } from '@app/shared/shared-main'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgIf } from '@angular/common'
 import { AutoCompleteModule } from 'primeng/autocomplete'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { VideoOwnershipService } from '@app/shared/shared-main/video/video-ownership.service'
+import { Video } from '@app/shared/shared-main/video/video.model'
 
 @Component({
   selector: 'my-video-change-ownership',

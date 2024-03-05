@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router'
 import { LoginGuard } from '@app/core'
-import { VideoResolver } from '@app/shared/shared-main'
 import { VideoStudioEditComponent } from './edit'
 import { VideoStudioService } from './shared'
+import { VideoResolver } from '@app/shared/shared-main/video/video.resolver'
 
 export default [
   {

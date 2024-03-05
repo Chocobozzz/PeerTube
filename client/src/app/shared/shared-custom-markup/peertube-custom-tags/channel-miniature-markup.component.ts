@@ -2,14 +2,16 @@ import { from } from 'rxjs'
 import { finalize, map, switchMap, tap } from 'rxjs/operators'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { MarkdownService, Notifier, UserService } from '@app/core'
-import { FindInBulkService } from '@app/shared/shared-search'
 import { VideoSortField } from '@peertube/peertube-models'
-import { Video, VideoChannel, VideoService } from '../../shared-main'
 import { CustomMarkupComponent } from './shared'
 import { VideoMiniatureMarkupComponent } from './video-miniature-markup.component'
 import { RouterLink } from '@angular/router'
 import { ActorAvatarComponent } from '../../shared-actor-image/actor-avatar.component'
 import { NgIf } from '@angular/common'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { FindInBulkService } from '@app/shared/shared-search/find-in-bulk.service'
 
 /*
  * Markup component that creates a channel miniature only

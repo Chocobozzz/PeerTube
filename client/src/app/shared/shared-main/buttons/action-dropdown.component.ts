@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { Params, RouterLink } from '@angular/router'
-import { GlobalIconName } from '@app/shared/shared-icons'
+import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
 import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
 import { NgIf, NgClass, NgFor, NgTemplateOutlet } from '@angular/common'

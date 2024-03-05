@@ -18,7 +18,7 @@ import {
 import { environment } from '../../../environments/environment'
 import { VideoCommentThreadTree } from './video-comment-thread-tree.model'
 import { VideoComment } from './video-comment.model'
-import { VideoPasswordService } from '../shared-main'
+import { VideoPasswordService } from '../shared-main/video/video-password.service'
 
 @Injectable()
 export class VideoCommentService {

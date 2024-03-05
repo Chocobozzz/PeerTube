@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { CustomMarkupService } from '@app/shared/shared-custom-markup'
 import { NgIf } from '@angular/common'
 import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
 import { CustomMarkupHelpComponent } from '../../../shared/shared-custom-markup/custom-markup-help.component'
+import { CustomMarkupService } from '@app/shared/shared-custom-markup/custom-markup.service'
 
 @Component({
   selector: 'my-edit-homepage',

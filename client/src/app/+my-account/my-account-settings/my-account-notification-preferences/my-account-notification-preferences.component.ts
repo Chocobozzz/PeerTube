@@ -2,12 +2,12 @@ import { debounce } from 'lodash-es'
 import { Subject } from 'rxjs'
 import { Component, Input, OnInit } from '@angular/core'
 import { Notifier, ServerService, User } from '@app/core'
-import { UserNotificationService } from '@app/shared/shared-main'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { UserNotificationSetting, UserNotificationSettingValue, UserRight, UserRightType } from '@peertube/peertube-models'
 import { FormsModule } from '@angular/forms'
 import { InputSwitchComponent } from '../../../shared/shared-forms/input-switch.component'
 import { NgIf, NgFor } from '@angular/common'
+import { UserNotificationService } from '@app/shared/shared-main/users/user-notification.service'
 
 @Component({
   selector: 'my-account-notification-preferences',

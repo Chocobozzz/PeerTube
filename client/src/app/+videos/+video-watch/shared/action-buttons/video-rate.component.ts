@@ -1,11 +1,12 @@
 import { Observable } from 'rxjs'
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core'
 import { Notifier, ScreenService, Hotkey, HotkeysService } from '@app/core'
-import { VideoDetails, VideoService } from '@app/shared/shared-main'
 import { UserVideoRateType } from '@peertube/peertube-models'
 import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
 import { NgClass, NgIf } from '@angular/common'
 import { NgbPopover, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 
 @Component({
   selector: 'my-video-rate',

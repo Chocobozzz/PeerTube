@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { VideoChannel } from '@app/shared/shared-main'
-import { SearchService } from '@app/shared/shared-search'
 import { AbstractLazyLoadResolver } from './abstract-lazy-load.resolver'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { SearchService } from '@app/shared/shared-search/search.service'
 
 @Injectable()
 export class ChannelLazyLoadResolver extends AbstractLazyLoadResolver<VideoChannel> {

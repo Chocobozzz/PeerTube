@@ -1,5 +1,5 @@
 import { Validators } from '@angular/forms'
-import { BuildFormValidator } from '@app/shared/form-validators'
+import { BuildFormValidator } from '@app/shared/form-validators/form-validator.model'
 
 export const REGISTRATION_MODERATION_RESPONSE_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, Validators.minLength(2), Validators.maxLength(3000) ],

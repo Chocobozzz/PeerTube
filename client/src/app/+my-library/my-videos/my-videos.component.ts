@@ -6,25 +6,25 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService, User } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { immutableAssign, formatICU } from '@app/helpers'
-import { AdvancedInputFilter } from '@app/shared/shared-forms'
-import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
-import { LiveStreamInformationComponent } from '@app/shared/shared-video-live'
-import {
-  MiniatureDisplayOptions,
-  SelectionType,
-  VideoActionsDisplayType,
-  VideosSelectionComponent
-} from '@app/shared/shared-video-miniature'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { VideoChannel, VideoExistInPlaylist, VideosExistInPlaylists, VideoSortField } from '@peertube/peertube-models'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
-import { VideoActionsDropdownComponent } from '../../shared/shared-video-miniature/video-actions-dropdown.component'
+import {
+  VideoActionsDisplayType,
+  VideoActionsDropdownComponent
+} from '../../shared/shared-video-miniature/video-actions-dropdown.component'
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
 import { PeerTubeTemplateDirective } from '../../shared/shared-main/angular/peertube-template.directive'
 import { FormsModule } from '@angular/forms'
-import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { NgIf } from '@angular/common'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { LiveStreamInformationComponent } from '@app/shared/shared-video-live/live-stream-information.component'
+import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature/video-miniature.component'
+import { VideosSelectionComponent, SelectionType } from '@app/shared/shared-video-miniature/videos-selection.component'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 
 @Component({
   templateUrl: './my-videos.component.html',

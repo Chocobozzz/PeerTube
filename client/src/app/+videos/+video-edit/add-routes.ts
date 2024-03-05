@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router'
 import { CanDeactivateGuard, LoginGuard } from '@app/core'
 import { VideoAddComponent } from './video-add.component'
-import { LiveVideoService } from '@app/shared/shared-video-live'
 import { I18nPrimengCalendarService } from './shared/i18n-primeng-calendar.service'
 import { VideoUploadService } from './shared/video-upload.service'
+import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 
 export default [
   {

@@ -10,7 +10,7 @@ import { InstanceStatisticsComponent } from './instance-statistics.component'
 import { InstanceFeaturesTableComponent } from '../../shared/shared-instance/instance-features-table.component'
 import { PluginSelectorDirective } from '../../shared/shared-main/plugins/plugin-selector.directive'
 import { CustomMarkupContainerComponent } from '../../shared/shared-custom-markup/custom-markup-container.component'
-import { AboutHTML } from '@app/shared/shared-main'
+import { AboutHTML } from '@app/shared/shared-main/instance/instance.service'
 
 @Component({
   selector: 'my-about-instance',

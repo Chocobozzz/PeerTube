@@ -3,9 +3,11 @@ import { LoginGuard } from '@app/core'
 import { OverviewService, VideosListCommonPageComponent } from './video-list'
 import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
 import { VideoUserSubscriptionsComponent } from './video-list/video-user-subscriptions.component'
-import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
-import { BlocklistService, VideoBlockService } from '@app/shared/shared-moderation'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist'
+import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
+import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
+import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
+import { AbuseService } from '@app/shared/shared-moderation/abuse.service'
 
 export default [
   {
@@ -15,7 +17,8 @@ export default [
       UserSubscriptionService,
       VideoPlaylistService,
       BlocklistService,
-      VideoBlockService
+      VideoBlockService,
+      AbuseService
     ],
     children: [
       {

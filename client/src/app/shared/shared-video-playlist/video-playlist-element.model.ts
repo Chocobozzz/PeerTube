@@ -1,4 +1,4 @@
-import { Video } from '@app/shared/shared-main'
+import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoPlaylistElement as ServerVideoPlaylistElement, VideoPlaylistElementType_Type } from '@peertube/peertube-models'
 
 export class VideoPlaylistElement implements ServerVideoPlaylistElement {

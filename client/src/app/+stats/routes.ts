@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router'
 import { LoginGuard } from '@app/core'
-import { VideoResolver } from '@app/shared/shared-main'
 import { VideoStatsComponent, VideoStatsService } from './video'
-import { LiveVideoService } from '@app/shared/shared-video-live'
+import { VideoResolver } from '@app/shared/shared-main/video/video.resolver'
+import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 
 export default [
   {

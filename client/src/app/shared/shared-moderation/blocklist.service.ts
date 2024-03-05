@@ -7,7 +7,7 @@ import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { arrayify } from '@peertube/peertube-core-utils'
 import { AccountBlock as AccountBlockServer, BlockStatus, ResultList, ServerBlock } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
-import { Account } from '../shared-main'
+import { Account } from '../shared-main/account/account.model'
 import { AccountBlock } from './account-block.model'
 
 export enum BlocklistComponentType { Account, Instance }

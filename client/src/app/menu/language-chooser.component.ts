@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core'
 import { getDevLocale, isOnDevLocale } from '@app/helpers'
-import { GlobalIconComponent } from '@app/shared/shared-icons'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { getCompleteLocale, getShortLocale, I18N_LOCALES, objectKeysTyped, sortBy } from '@peertube/peertube-core-utils'
 

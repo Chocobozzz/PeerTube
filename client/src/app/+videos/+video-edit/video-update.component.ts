@@ -8,18 +8,8 @@ import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, CanComponentDeactivate, ConfirmService, Notifier, ServerService, UserService } from '@app/core'
 import { buildHTTPErrorResponse, genericUploadErrorHandler } from '@app/helpers'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import {
-  Video,
-  VideoCaptionEdit,
-  VideoCaptionService,
-  VideoChapterService,
-  VideoChaptersEdit,
-  VideoDetails,
-  VideoEdit,
-  VideoService
-} from '@app/shared/shared-main'
-import { LiveVideoService } from '@app/shared/shared-video-live'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { simpleObjectsDeepEqual } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, LiveVideo, LiveVideoUpdate, VideoPrivacy, VideoSource, VideoState } from '@peertube/peertube-models'
@@ -31,6 +21,15 @@ import { ReactiveFileComponent } from '../../shared/shared-forms/reactive-file.c
 import { NgIf } from '@angular/common'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { UploadProgressComponent } from '../../shared/standalone-upload/upload-progress.component'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
+import { VideoEdit } from '@app/shared/shared-main/video/video-edit.model'
+import { VideoCaptionEdit } from '@app/shared/shared-main/video-caption/video-caption-edit.model'
+import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
+import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
+import { VideoChaptersEdit } from '@app/shared/shared-main/video/video-chapters-edit.model'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 
 const debugLogger = debug('peertube:video-update')
 

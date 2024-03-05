@@ -13,10 +13,12 @@ import { MyVideoPlaylistElementsComponent } from './my-video-playlists/my-video-
 import { MyVideoPlaylistUpdateComponent } from './my-video-playlists/my-video-playlist-update.component'
 import { MyVideoPlaylistsComponent } from './my-video-playlists/my-video-playlists.component'
 import { MyVideosComponent } from './my-videos/my-videos.component'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist'
-import { BlocklistService, VideoBlockService } from '@app/shared/shared-moderation'
-import { LiveVideoService } from '@app/shared/shared-video-live'
-import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
+import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
+import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
+import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
+import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
+import { AbuseService } from '@app/shared/shared-moderation/abuse.service'
 
 export default [
   {
@@ -26,6 +28,7 @@ export default [
       VideoPlaylistService,
       BlocklistService,
       VideoBlockService,
+      AbuseService,
       LiveVideoService,
       UserSubscriptionService
     ],

@@ -1,9 +1,9 @@
 import { Component, forwardRef, Input, OnChanges } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
-import { VideoChannel } from '@app/shared/shared-main'
 import { SelectChannelItem } from '../../../../types/select-options-item.model'
 import { NgFor } from '@angular/common'
 import { NgSelectModule } from '@ng-select/ng-select'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 
 @Component({
   selector: 'my-select-channel',

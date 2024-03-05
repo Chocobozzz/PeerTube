@@ -6,10 +6,10 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { buildHTTPErrorResponse, genericUploadErrorHandler, getUploadXRetryConfig } from '@app/helpers'
 import { HttpStatusCode, UserImport, UserImportState } from '@peertube/peertube-models'
 import { UploadxService, UploadState, UploaderX } from 'ngx-uploadx'
-import { BytesPipe } from '@app/shared/shared-main'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { UploadProgressComponent } from '../../shared/standalone-upload/upload-progress.component'
 import { NgIf, DatePipe } from '@angular/common'
+import { BytesPipe } from '@app/shared/shared-main/angular/bytes.pipe'
 
 @Component({
   selector: 'my-account-import',

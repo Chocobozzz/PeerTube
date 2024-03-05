@@ -1,7 +1,7 @@
 import { Subject, Subscription, switchMap } from 'rxjs'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Notifier, ScreenService, User, UserService } from '@app/core'
-import { Video } from '@app/shared/shared-main'
+import { Video } from '@app/shared/shared-main/video/video.model'
 import { OverviewService } from './overview.service'
 import { VideosOverview } from './videos-overview.model'
 import { ActorAvatarComponent } from '../../../shared/shared-actor-image/actor-avatar.component'

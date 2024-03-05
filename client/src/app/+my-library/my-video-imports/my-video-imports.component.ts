@@ -1,7 +1,6 @@
 import { SortMeta, SharedModule } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
-import { Video, VideoImportService } from '@app/shared/shared-main'
 import { VideoImport, VideoImportState, VideoImportStateType } from '@peertube/peertube-models'
 import { AutoColspanDirective } from '../../shared/shared-main/angular/auto-colspan.directive'
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
@@ -14,6 +13,8 @@ import { TableModule } from 'primeng/table'
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { RouterLink } from '@angular/router'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { VideoImportService } from '@app/shared/shared-main/video/video-import.service'
+import { Video } from '@app/shared/shared-main/video/video.model'
 
 @Component({
   templateUrl: './my-video-imports.component.html',

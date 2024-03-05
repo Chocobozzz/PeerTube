@@ -2,7 +2,6 @@ import { Subject } from 'rxjs'
 import { mergeMap } from 'rxjs/operators'
 import { Component } from '@angular/core'
 import { AuthService, ComponentPagination, ConfirmService, Notifier } from '@app/core'
-import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { VideoPlaylistType } from '@peertube/peertube-models'
 import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
 import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
@@ -13,6 +12,8 @@ import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced
 import { ChannelsSetupMessageComponent } from '../../shared/shared-main/misc/channels-setup-message.component'
 import { NgIf, NgFor } from '@angular/common'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 
 @Component({
   templateUrl: './my-video-playlists.component.html',

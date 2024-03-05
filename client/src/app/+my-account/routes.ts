@@ -6,12 +6,14 @@ import { MyAccountBlocklistComponent } from './my-account-blocklist/my-account-b
 import { MyAccountServerBlocklistComponent } from './my-account-blocklist/my-account-server-blocklist.component'
 import { MyAccountNotificationsComponent } from './my-account-notifications/my-account-notifications.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
-import { MyAccountTwoFactorComponent } from './my-account-settings/my-account-two-factor'
 import { MyAccountImportExportComponent, UserImportExportService } from './my-account-import-export'
 import { MyAccountComponent } from './my-account.component'
-import { TwoFactorService } from '@app/shared/shared-users'
-import { AbuseService, BlocklistService, VideoBlockService } from '@app/shared/shared-moderation'
-import { VideoCommentService } from '@app/shared/shared-video-comment'
+import { MyAccountTwoFactorComponent } from './my-account-settings/my-account-two-factor/my-account-two-factor.component'
+import { AbuseService } from '@app/shared/shared-moderation/abuse.service'
+import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
+import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
+import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
+import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
 
 export default [
   {

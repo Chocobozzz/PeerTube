@@ -3,7 +3,6 @@ import { max, maxBy, min, minBy } from 'lodash-es'
 import { Subject, first, map, switchMap } from 'rxjs'
 import { Component } from '@angular/core'
 import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, ScreenService } from '@app/core'
-import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { formatICU } from '@app/helpers'
 import { NumberFormatterPipe } from '../../shared/shared-main/angular/number-formatter.pipe'
 import { ChartModule } from 'primeng/chart'
@@ -17,6 +16,8 @@ import { ChannelsSetupMessageComponent } from '../../shared/shared-main/misc/cha
 import { RouterLink } from '@angular/router'
 import { NgIf, NgFor } from '@angular/common'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
 
 @Component({
   templateUrl: './my-video-channels.component.html',

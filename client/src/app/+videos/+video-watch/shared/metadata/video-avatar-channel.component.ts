@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { Video } from '@app/shared/shared-main/video'
 import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
 import { NgIf } from '@angular/common'
+import { Video } from '@app/shared/shared-main/video/video.model'
 
 @Component({
   selector: 'my-video-avatar-channel',

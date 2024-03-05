@@ -5,7 +5,7 @@ import { MetaGuard } from './core'
 import { EmptyComponent } from './empty.component'
 import { HomepageRedirectComponent } from './homepage-redirect.component'
 import { USER_USERNAME_REGEX_CHARACTERS } from './shared/form-validators/user-validators'
-import { ActorRedirectGuard } from './shared/shared-main'
+import { ActorRedirectGuard } from './shared/shared-main/router/actor-redirect-guard.service'
 
 const routes: Routes = [
   {

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { HooksService } from '@app/core'
-import { VideoDetails } from '@app/shared/shared-main'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { TimeDurationFormatterPipe } from '../../../../shared/shared-main/angular/time-duration-formatter.pipe'
 import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
 import { RouterLink } from '@angular/router'

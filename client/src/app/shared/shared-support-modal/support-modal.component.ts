@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core'
 import { MarkdownService } from '@app/core'
-import { VideoDetails } from '@app/shared/shared-main'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoChannel } from '@peertube/peertube-models'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'

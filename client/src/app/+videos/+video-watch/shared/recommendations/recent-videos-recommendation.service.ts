@@ -2,11 +2,13 @@ import { Observable, of } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { ServerService, UserService } from '@app/core'
-import { Video, VideoService } from '@app/shared/shared-main'
-import { AdvancedSearch, SearchService } from '@app/shared/shared-search'
 import { HTMLServerConfig } from '@peertube/peertube-models'
 import { RecommendationInfo } from './recommendation-info.model'
 import { RecommendationService } from './recommendations.service'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { SearchService } from '@app/shared/shared-search/search.service'
+import { AdvancedSearch } from '@app/shared/shared-search/advanced-search.model'
 
 /**
  * Provides "recommendations" by providing the most recently uploaded videos.

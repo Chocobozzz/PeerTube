@@ -2,9 +2,11 @@ import { Routes } from '@angular/router'
 import { AccountVideoChannelsComponent } from './account-video-channels/account-video-channels.component'
 import { AccountVideosComponent } from './account-videos/account-videos.component'
 import { AccountsComponent } from './accounts.component'
-import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
-import { BlocklistService, VideoBlockService } from '@app/shared/shared-moderation'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist'
+import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
+import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
+import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
+import { AbuseService } from '@app/shared/shared-moderation/abuse.service'
 
 export default [
   {
@@ -18,7 +20,8 @@ export default [
       UserSubscriptionService,
       BlocklistService,
       VideoPlaylistService,
-      VideoBlockService
+      VideoBlockService,
+      AbuseService
     ],
     children: [
       {

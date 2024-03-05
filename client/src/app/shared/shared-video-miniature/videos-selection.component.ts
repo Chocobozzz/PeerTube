@@ -4,12 +4,13 @@ import { ComponentPagination, Notifier, User } from '@app/core'
 import { logger } from '@root-helpers/logger'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { ResultList, VideosExistInPlaylists, VideoSortField } from '@peertube/peertube-models'
-import { PeerTubeTemplateDirective, Video } from '../shared-main'
 import { MiniatureDisplayOptions, VideoMiniatureComponent } from './video-miniature.component'
 import { FormsModule } from '@angular/forms'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { InfiniteScrollerDirective } from '../shared-main/angular/infinite-scroller.directive'
 import { NgIf, NgFor, NgTemplateOutlet } from '@angular/common'
+import { Video } from '../shared-main/video/video.model'
+import { PeerTubeTemplateDirective } from '../shared-main/angular/peertube-template.directive'
 
 export type SelectionType = { [ id: number ]: boolean }
 

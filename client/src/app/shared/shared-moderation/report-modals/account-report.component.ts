@@ -2,8 +2,8 @@ import { mapValues, pickBy } from 'lodash-es'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { ABUSE_REASON_VALIDATOR } from '@app/shared/form-validators/abuse-validators'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { Account } from '@app/shared/shared-main'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { abusePredefinedReasonsMap } from '@peertube/peertube-core-utils'
@@ -14,6 +14,7 @@ import { PeertubeCheckboxComponent } from '../../shared-forms/peertube-checkbox.
 import { NgFor, NgIf, NgClass } from '@angular/common'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
+import { Account } from '@app/shared/shared-main/account/account.model'
 
 @Component({
   selector: 'my-account-report',
@@ -29,8 +30,7 @@ import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
     NgIf,
     PeerTubeTemplateDirective,
     NgClass
-  ],
-  providers: [ AbuseService ]
+  ]
 })
 export class AccountReportComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal

@@ -1,8 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { HooksService, ServerService } from '@app/core'
-import { VideoDetails } from '@app/shared/shared-main'
-import { VideoPlaylist } from '@app/shared/shared-video-playlist'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import {
   NgbModal,
   NgbNav,
@@ -25,6 +24,7 @@ import { InputTextComponent } from '../shared-forms/input-text.component'
 import { RouterLink } from '@angular/router'
 import { NgIf, NgClass, NgFor } from '@angular/common'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { VideoPlaylist } from '../shared-video-playlist/video-playlist.model'
 
 type Customizations = {
   startAtCheckbox: boolean

@@ -1,9 +1,9 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ComponentPagination, hasMoreItems, Notifier, RestService, ServerService } from '@app/core'
-import { InstanceFollowService } from '@app/shared/shared-instance'
 import { Actor } from '@peertube/peertube-models'
 import { NgIf, NgFor } from '@angular/common'
+import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
 
 @Component({
   selector: 'my-about-follows',

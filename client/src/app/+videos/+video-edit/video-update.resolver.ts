@@ -4,9 +4,13 @@ import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot } from '@angular/router'
 import { AuthService } from '@app/core'
 import { listUserChannelsForSelect } from '@app/helpers'
-import { VideoCaptionService, VideoChapterService, VideoDetails, VideoPasswordService, VideoService } from '@app/shared/shared-main'
-import { LiveVideoService } from '@app/shared/shared-video-live'
 import { VideoPrivacy } from '@peertube/peertube-models'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
+import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
+import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
+import { VideoPasswordService } from '@app/shared/shared-main/video/video-password.service'
+import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 
 @Injectable()
 export class VideoUpdateResolver {

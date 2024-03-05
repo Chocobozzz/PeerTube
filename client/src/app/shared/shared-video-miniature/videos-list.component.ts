@@ -13,11 +13,10 @@ import {
   User,
   UserService
 } from '@app/core'
-import { GlobalIconName } from '@app/shared/shared-icons'
+import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { logger } from '@root-helpers/logger'
 import { isLastMonth, isLastWeek, isThisMonth, isToday, isYesterday } from '@peertube/peertube-core-utils'
 import { ResultList, UserRight, VideoSortField } from '@peertube/peertube-models'
-import { Syndication, Video } from '../shared-main'
 import { VideoFilters, VideoFilterScope } from './video-filters.model'
 import { MiniatureDisplayOptions, VideoMiniatureComponent } from './video-miniature.component'
 import { InfiniteScrollerDirective } from '../shared-main/angular/infinite-scroller.directive'
@@ -26,6 +25,8 @@ import { ButtonComponent } from '../shared-main/buttons/button.component'
 import { FeedComponent } from '../shared-main/feeds/feed.component'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { NgIf, NgClass, NgFor, NgTemplateOutlet } from '@angular/common'
+import { Video } from '../shared-main/video/video.model'
+import { Syndication } from '../shared-main/feeds/syndication.model'
 
 const debugLogger = debug('peertube:videos:VideosListComponent')
 

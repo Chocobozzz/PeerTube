@@ -9,8 +9,7 @@ import {
   VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR,
   VIDEO_PLAYLIST_PRIVACY_VALIDATOR
 } from '@app/shared/form-validators/video-playlist-validators'
-import { FormReactiveService } from '@app/shared/shared-forms'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { VideoPlaylistCreate, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
 import { SelectChannelComponent } from '../../shared/shared-forms/select/select-channel.component'
@@ -20,6 +19,7 @@ import { HelpComponent } from '../../shared/shared-main/misc/help.component'
 import { PreviewUploadComponent } from '../../shared/shared-forms/preview-upload.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgIf, NgClass } from '@angular/common'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 
 @Component({
   templateUrl: './my-video-playlist-edit.component.html',

@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core'
-import { Video } from '@app/shared/shared-main'
+import { Video } from '@app/shared/shared-main/video/video.model'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { LiveVideo, LiveVideoError, LiveVideoErrorType, LiveVideoSession } from '@peertube/peertube-models'
 import { LiveVideoService } from './live-video.service'
@@ -24,7 +24,8 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
     RouterLink,
     EditButtonComponent,
     DatePipe
-  ]
+  ],
+  providers: [ LiveVideoService ]
 })
 export class LiveStreamInformationComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef

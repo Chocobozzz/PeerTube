@@ -7,14 +7,15 @@ import {
   FROM_NAME_VALIDATOR,
   SUBJECT_VALIDATOR
 } from '@app/shared/form-validators/instance-validators'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { InstanceService } from '@app/shared/shared-main'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { HTMLServerConfig, HttpStatusCode } from '@peertube/peertube-models'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgIf, NgClass } from '@angular/common'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { InstanceService } from '@app/shared/shared-main/instance/instance.service'
 
 type Prefill = {
   subject?: string

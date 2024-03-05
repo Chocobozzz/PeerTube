@@ -15,9 +15,8 @@ import {
 } from '@angular/core'
 import { Notifier, User } from '@app/core'
 import { VIDEO_COMMENT_TEXT_VALIDATOR } from '@app/shared/form-validators/video-comment-validators'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { Video } from '@app/shared/shared-main'
-import { VideoComment, VideoCommentService } from '@app/shared/shared-video-comment'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCommentCreate } from '@peertube/peertube-models'
 import { LoginLinkComponent } from '../../../../shared/shared-main/angular/login-link.component'
@@ -28,6 +27,9 @@ import { HelpComponent } from '../../../../shared/shared-main/misc/help.componen
 import { TextareaAutoResizeDirective } from '../../../../shared/shared-forms/textarea-autoresize.directive'
 import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoComment } from '@app/shared/shared-video-comment/video-comment.model'
+import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
 
 @Component({
   selector: 'my-video-comment-add',

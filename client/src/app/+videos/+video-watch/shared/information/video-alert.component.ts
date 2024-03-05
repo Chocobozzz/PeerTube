@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { AuthUser } from '@app/core'
-import { VideoDetails } from '@app/shared/shared-main'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { NgIf, DatePipe } from '@angular/common'
 

@@ -5,9 +5,12 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
 import { buildBulkObservable } from '@app/helpers'
-import { Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 import { ActorFollow, ResultList, VideoChannel as VideoChannelServer, VideoSortField } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
+import { Video } from '../shared-main/video/video.model'
+import { VideoChannel } from '../shared-main/video-channel/video-channel.model'
+import { VideoService } from '../shared-main/video/video.service'
+import { VideoChannelService } from '../shared-main/video-channel/video-channel.service'
 
 const debugLogger = debug('peertube:subscriptions:UserSubscriptionService')
 

@@ -5,9 +5,7 @@ import { BatchDomainsModalComponent } from '@app/shared/shared-moderation/batch-
 import { ServerBlock } from '@peertube/peertube-models'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
-@Directive({
-  providers: [ BlocklistService ]
-})
+@Directive()
 // eslint-disable-next-line @angular-eslint/directive-class-suffix
 export class GenericServerBlocklistComponent extends RestTable implements OnInit {
   @ViewChild('batchDomainsModal') batchDomainsModal: BatchDomainsModalComponent

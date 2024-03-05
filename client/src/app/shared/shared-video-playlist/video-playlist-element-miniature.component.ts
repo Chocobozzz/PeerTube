@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { AuthService, Notifier, ServerService } from '@app/core'
-import { Video, VideoService } from '@app/shared/shared-main'
 import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownButtonItem, NgbDropdownItem } from '@ng-bootstrap/ng-bootstrap'
 import { secondsToTime } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig, VideoPlaylistElementType, VideoPlaylistElementUpdate, VideoPrivacy } from '@peertube/peertube-models'
@@ -17,6 +16,8 @@ import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.com
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { RouterLink } from '@angular/router'
 import { NgClass, NgIf } from '@angular/common'
+import { Video } from '../shared-main/video/video.model'
+import { VideoService } from '../shared-main/video/video.service'
 
 @Component({
   selector: 'my-video-playlist-element-miniature',

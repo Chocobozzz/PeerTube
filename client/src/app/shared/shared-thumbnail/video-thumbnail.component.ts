@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { ScreenService } from '@app/core'
 import { VideoState } from '@peertube/peertube-models'
-import { Video } from '../shared-main'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { RouterLink } from '@angular/router'
 import { NgIf, NgTemplateOutlet, NgClass, NgStyle } from '@angular/common'
+import { Video } from '../shared-main/video/video.model'
 
 @Component({
   selector: 'my-video-thumbnail',

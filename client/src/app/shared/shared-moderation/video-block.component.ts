@@ -1,8 +1,9 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { Video } from '@app/shared/shared-main'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { Video } from '@app/shared/shared-main/video/video.model'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { VIDEO_BLOCK_REASON_VALIDATOR } from '../form-validators/video-block-validators'
@@ -17,8 +18,7 @@ import { NgIf, NgClass } from '@angular/common'
   templateUrl: './video-block.component.html',
   styleUrls: [ './video-block.component.scss' ],
   standalone: true,
-  imports: [ NgIf, GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, PeertubeCheckboxComponent ],
-  providers: [ VideoBlockService ]
+  imports: [ NgIf, GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, PeertubeCheckboxComponent ]
 })
 export class VideoBlockComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal

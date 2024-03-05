@@ -1,13 +1,12 @@
 import { finalize } from 'rxjs/operators'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
-import { FindInBulkService } from '@app/shared/shared-search'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
-import { Video } from '../../shared-main'
-import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { CustomMarkupComponent } from './shared'
-import { VideoMiniatureComponent } from '../../shared-video-miniature/video-miniature.component'
+import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../../shared-video-miniature/video-miniature.component'
 import { NgIf } from '@angular/common'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { FindInBulkService } from '@app/shared/shared-search/find-in-bulk.service'
 
 /*
  * Markup component that creates a video miniature only

@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild, ElementRef } from '@angular/core'
 import { MarkdownService } from '@app/core'
-import { VideoDetails } from '@app/shared/shared-main'
 import { NgClass, NgIf } from '@angular/common'
 import { TimestampRouteTransformerDirective } from '../timestamp-route-transformer.directive'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 
 @Component({
   selector: 'my-video-description',

@@ -14,8 +14,6 @@ import {
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { HTMLServerConfig, VideoExistInPlaylist, VideoPlaylistType, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { LinkType } from '../../../types/link.type'
-import { Video, VideoService } from '../shared-main'
-import { VideoPlaylistService } from '../shared-video-playlist'
 import { VideoActionsDisplayType, VideoActionsDropdownComponent } from './video-actions-dropdown.component'
 import { RouterLink } from '@angular/router'
 import { VideoViewsCounterComponent } from '../shared-video/video-views-counter.component'
@@ -24,6 +22,9 @@ import { LinkComponent } from '../shared-main/angular/link.component'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
 import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.component'
 import { NgClass, NgIf, NgFor } from '@angular/common'
+import { Video } from '../shared-main/video/video.model'
+import { VideoService } from '../shared-main/video/video.service'
+import { VideoPlaylistService } from '../shared-video-playlist/video-playlist.service'
 
 export type MiniatureDisplayOptions = {
   date?: boolean

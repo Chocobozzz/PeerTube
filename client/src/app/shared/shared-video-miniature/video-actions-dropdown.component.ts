@@ -1,24 +1,27 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScreenService, ServerService } from '@app/core'
-import { BlocklistService, VideoBlockComponent, VideoBlockService, VideoReportComponent } from '@app/shared/shared-moderation'
 import { NgbDropdown, NgbDropdownAnchor, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@peertube/peertube-models'
-import {
-  Actor,
-  DropdownAction,
-  DropdownButtonSize,
-  DropdownDirection,
-  RedundancyService,
-  Video,
-  VideoDetails,
-  VideoService
-} from '../shared-main'
-import { LiveStreamInformationComponent } from '../shared-video-live'
-import { VideoAddToPlaylistComponent } from '../shared-video-playlist'
 import { VideoDownloadComponent } from './video-download.component'
 import { of } from 'rxjs'
-import { ActionDropdownComponent } from '../shared-main/buttons/action-dropdown.component'
+import {
+  ActionDropdownComponent,
+  DropdownAction,
+  DropdownButtonSize,
+  DropdownDirection
+} from '../shared-main/buttons/action-dropdown.component'
 import { NgIf } from '@angular/common'
+import { VideoDetails } from '../shared-main/video/video-details.model'
+import { Video } from '../shared-main/video/video.model'
+import { RedundancyService } from '../shared-main/video/redundancy.service'
+import { VideoService } from '../shared-main/video/video.service'
+import { Actor } from '../shared-main/account/actor.model'
+import { BlocklistService } from '../shared-moderation/blocklist.service'
+import { VideoReportComponent } from '../shared-moderation/report-modals'
+import { VideoBlockComponent } from '../shared-moderation/video-block.component'
+import { VideoBlockService } from '../shared-moderation/video-block.service'
+import { LiveStreamInformationComponent } from '../shared-video-live/live-stream-information.component'
+import { VideoAddToPlaylistComponent } from '../shared-video-playlist/video-add-to-playlist.component'
 
 export type VideoActionsDisplayType = {
   playlist?: boolean

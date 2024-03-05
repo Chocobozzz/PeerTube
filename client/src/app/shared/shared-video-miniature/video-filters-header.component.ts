@@ -5,7 +5,6 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { AuthService } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
 import { UserRight } from '@peertube/peertube-models'
-import { PeertubeModalService } from '../shared-main'
 import { VideoFilters } from './video-filters.model'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { SelectCategoriesComponent } from '../shared-forms/select/select-categories.component'
@@ -15,6 +14,7 @@ import { NgSelectModule } from '@ng-select/ng-select'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { NgClass, NgIf, NgFor, NgTemplateOutlet } from '@angular/common'
 import { RouterLink } from '@angular/router'
+import { PeertubeModalService } from '../shared-main/peertube-modal/peertube-modal.service'
 
 const debugLogger = debug('peertube:videos:VideoFiltersHeaderComponent')
 

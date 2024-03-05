@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, ComponentPagination, HooksService, Notifier, SessionStorageService, UserService } from '@app/core'
 import { isInViewport } from '@app/helpers'
-import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { getBoolOrDefault } from '@root-helpers/local-storage-utils'
 import { peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
 import { VideoPlaylistPrivacy } from '@peertube/peertube-models'
@@ -11,6 +10,9 @@ import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { InfiniteScrollerDirective } from '../../../../shared/shared-main/angular/infinite-scroller.directive'
 import { NgIf, NgClass, NgFor } from '@angular/common'
+import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
+import { VideoPlaylistElement } from '@app/shared/shared-video-playlist/video-playlist-element.model'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 
 @Component({
   selector: 'my-video-watch-playlist',

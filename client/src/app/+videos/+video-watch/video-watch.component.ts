@@ -20,10 +20,6 @@ import {
 } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { isXPercentInViewport, scrollToTop, toBoolean } from '@app/helpers'
-import { Video, VideoCaptionService, VideoChapterService, VideoDetails, VideoFileTokenService, VideoService } from '@app/shared/shared-main'
-import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
-import { LiveVideoService } from '@app/shared/shared-video-live'
-import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { timeToInt } from '@peertube/peertube-core-utils'
 import {
   HTMLServerConfig,
@@ -63,6 +59,16 @@ import { VideoViewsCounterComponent } from '../../shared/shared-video/video-view
 import { DateToggleComponent } from '../../shared/shared-main/date/date-toggle.component'
 import { VideoAlertComponent } from './shared/information/video-alert.component'
 import { PluginPlaceholderComponent } from '../../shared/shared-main/plugins/plugin-placeholder.component'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
+import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
+import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
+import { VideoFileTokenService } from '@app/shared/shared-main/video/video-file-token.service'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
+import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription/subscribe-button.component'
+import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 
 type URLOptions = {
   playerMode: PlayerMode

@@ -3,11 +3,12 @@ import { filter } from 'rxjs/operators'
 import { Component, EventEmitter, Output, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
 import { Notifier, PeerTubeSocket, ScreenService } from '@app/core'
-import { LoaderComponent, UserNotificationService } from '@app/shared/shared-main'
 import { NgbPopover, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap'
 import { UserNotificationsComponent } from '@app/shared/standalone-notifications/user-notifications.component'
-import { GlobalIconComponent } from '@app/shared/shared-icons'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { CommonModule } from '@angular/common'
+import { LoaderComponent } from '@app/shared/shared-main/loaders/loader.component'
+import { UserNotificationService } from '@app/shared/shared-main/users/user-notification.service'
 
 @Component({
   selector: 'my-notification',

@@ -6,7 +6,8 @@ import {
   USER_EXISTING_PASSWORD_VALIDATOR,
   USER_PASSWORD_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { HttpStatusCode, User } from '@peertube/peertube-models'
 import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'

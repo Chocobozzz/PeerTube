@@ -1,9 +1,10 @@
 import { forkJoin } from 'rxjs'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Video, VideoChannel } from '@app/shared/shared-main'
-import { SearchService } from '@app/shared/shared-search'
 import { NgIf } from '@angular/common'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { SearchService } from '@app/shared/shared-search/search.service'
 
 @Component({
   selector: 'my-remote-interaction',

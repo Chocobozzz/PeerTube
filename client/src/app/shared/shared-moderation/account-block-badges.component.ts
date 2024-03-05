@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
-import { Account } from '../shared-main'
 import { NgIf } from '@angular/common'
+import { Account } from '../shared-main/account/account.model'
 
 @Component({
   selector: 'my-account-block-badges',

@@ -5,8 +5,6 @@ import { SelectOptionsItem } from 'src/types'
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { Notifier, PeerTubeRouterService } from '@app/core'
-import { NumberFormatterPipe, VideoDetails } from '@app/shared/shared-main'
-import { LiveVideoService } from '@app/shared/shared-video-live'
 import { secondsToTime } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
@@ -26,6 +24,9 @@ import { EmbedComponent } from '../../shared/shared-main/video/embed.component'
 import { PeerTubeTemplateDirective } from '../../shared/shared-main/angular/peertube-template.directive'
 import { HelpComponent } from '../../shared/shared-main/misc/help.component'
 import { NgFor, NgIf } from '@angular/common'
+import { NumberFormatterPipe } from '@app/shared/shared-main/angular/number-formatter.pipe'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
+import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 
 type ActiveGraphId = VideoStatsTimeserieMetric | 'retention' | 'countries' | 'regions'
 

@@ -3,12 +3,12 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { AuthService, Notifier } from '@app/core'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { ResultList, VideoSortField } from '@peertube/peertube-models'
-import { Video, VideoService } from '../../shared-main'
-import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { CustomMarkupComponent } from './shared'
 import { Observable } from 'rxjs'
-import { VideoMiniatureComponent } from '../../shared-video-miniature/video-miniature.component'
+import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../../shared-video-miniature/video-miniature.component'
 import { NgStyle, NgFor } from '@angular/common'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
 
 /*
  * Markup component list videos depending on criteria

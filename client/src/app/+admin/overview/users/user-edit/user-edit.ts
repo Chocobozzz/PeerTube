@@ -1,10 +1,10 @@
 import { Directive, OnInit } from '@angular/core'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
-import { FormReactive } from '@app/shared/shared-forms'
 import { peertubeTranslate, USER_ROLE_LABELS } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig, UserAdminFlag, UserRole } from '@peertube/peertube-models'
 import { SelectOptionsItem } from '../../../../../types/select-options-item.model'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 
 @Directive()
 // eslint-disable-next-line @angular-eslint/directive-class-suffix

@@ -2,8 +2,6 @@ import { tap } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { AuthService, ComponentPagination, ConfirmService, DisableForReuseHook, Notifier, User, UserService } from '@app/core'
 import { immutableAssign } from '@app/helpers'
-import { UserHistoryService, Video } from '@app/shared/shared-main'
-import { MiniatureDisplayOptions, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
 import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
 import { PeerTubeTemplateDirective } from '../../shared/shared-main/angular/peertube-template.directive'
 import { FormsModule } from '@angular/forms'
@@ -11,6 +9,10 @@ import { InputSwitchComponent } from '../../shared/shared-forms/input-switch.com
 import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { NgIf } from '@angular/common'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { UserHistoryService } from '@app/shared/shared-main/users/user-history.service'
+import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature/video-miniature.component'
+import { VideosSelectionComponent } from '@app/shared/shared-video-miniature/videos-selection.component'
 
 @Component({
   templateUrl: './my-history.component.html',

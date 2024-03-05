@@ -1,5 +1,4 @@
 import { Component } from '@angular/core'
-import { BlocklistComponentType, GenericServerBlocklistComponent } from '@app/shared/shared-moderation'
 import { BatchDomainsModalComponent } from '../../shared/shared-moderation/batch-domains-modal.component'
 import { NgIf, DatePipe } from '@angular/common'
 import { AutoColspanDirective } from '../../shared/shared-main/angular/auto-colspan.directive'
@@ -8,6 +7,8 @@ import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced
 import { SharedModule } from 'primeng/api'
 import { TableModule } from 'primeng/table'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { BlocklistComponentType } from '@app/shared/shared-moderation/blocklist.service'
+import { GenericServerBlocklistComponent } from '@app/shared/shared-moderation/server-blocklist.component'
 
 @Component({
   selector: 'my-account-server-blocklist',

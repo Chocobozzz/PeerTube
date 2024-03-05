@@ -4,8 +4,9 @@ import { AboutInstanceComponent } from '@app/+about/about-instance/about-instanc
 import { AboutInstanceResolver } from '@app/+about/about-instance/about-instance.resolver'
 import { AboutPeertubeComponent } from '@app/+about/about-peertube/about-peertube.component'
 import { AboutComponent } from './about.component'
-import { InstanceFollowService } from '@app/shared/shared-instance'
-import { CustomMarkupService, DynamicElementService } from '@app/shared/shared-custom-markup'
+import { CustomMarkupService } from '@app/shared/shared-custom-markup/custom-markup.service'
+import { DynamicElementService } from '@app/shared/shared-custom-markup/dynamic-element.service'
+import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
 
 export default [
   {

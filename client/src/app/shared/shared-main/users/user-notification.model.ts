@@ -14,7 +14,7 @@ import {
   VideoInfo
 } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { Video } from '../video'
+import { Video } from '../video/video.model'
 
 export class UserNotification implements UserNotificationServer {
   id: number

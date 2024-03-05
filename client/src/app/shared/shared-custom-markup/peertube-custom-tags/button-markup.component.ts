@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
-import { VideoChannel } from '../../shared-main'
 import { CustomMarkupComponent } from './shared'
 import { NgClass } from '@angular/common'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 
 /*
  * Markup component that creates a button

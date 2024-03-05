@@ -4,7 +4,6 @@ import { FormGroup } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
-import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 import { ServerConfig, ServerStats, UserRegister } from '@peertube/peertube-models'
 import { SignupService } from '../shared/signup.service'
 import { SignupSuccessBeforeEmailComponent } from '../shared/signup-success-before-email.component'
@@ -17,6 +16,7 @@ import { SignupStepTitleComponent } from '../shared/signup-step-title.component'
 import { CustomStepperComponent } from './custom-stepper.component'
 import { SignupLabelComponent } from '../../shared/shared-main/account/signup-label.component'
 import { NgIf } from '@angular/common'
+import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance/instance-about-accordion.component'
 
 @Component({
   selector: 'my-register',

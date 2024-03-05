@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
-import { Account, DropdownAction } from '@app/shared/shared-main'
 import { BulkRemoveCommentsOfBody, User, UserRight } from '@peertube/peertube-models'
-import { UserAdminService } from '../shared-users'
 import { BlocklistService } from './blocklist.service'
 import { BulkService } from './bulk.service'
 import { UserBanModalComponent } from './user-ban-modal.component'
-import { ActionDropdownComponent } from '../shared-main/buttons/action-dropdown.component'
+import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
 import { NgIf } from '@angular/common'
+import { Account } from '../shared-main/account/account.model'
+import { UserAdminService } from '../shared-users/user-admin.service'
 
 export type AccountMutedStatus =
   Pick<Account, 'id' | 'nameWithHost' | 'host' | 'userId' |
@@ -23,8 +23,7 @@ export type UserModerationDisplayType = {
   selector: 'my-user-moderation-dropdown',
   templateUrl: './user-moderation-dropdown.component.html',
   standalone: true,
-  imports: [ NgIf, UserBanModalComponent, ActionDropdownComponent ],
-  providers: [ UserAdminService, BlocklistService, BulkService ]
+  imports: [ NgIf, UserBanModalComponent, ActionDropdownComponent ]
 })
 export class UserModerationDropdownComponent implements OnInit, OnChanges {
   @ViewChild('userBanModal') userBanModal: UserBanModalComponent

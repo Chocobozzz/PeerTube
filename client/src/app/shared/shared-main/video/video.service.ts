@@ -32,11 +32,12 @@ import {
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account/account.model'
 import { AccountService } from '../account/account.service'
-import { VideoChannel, VideoChannelService } from '../video-channel'
 import { VideoDetails } from './video-details.model'
 import { VideoEdit } from './video-edit.model'
 import { VideoPasswordService } from './video-password.service'
 import { Video } from './video.model'
+import { VideoChannel } from '../video-channel/video-channel.model'
+import { VideoChannelService } from '../video-channel/video-channel.service'
 
 export type CommonVideoParams = {
   videoPagination?: ComponentPaginationLight

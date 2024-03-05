@@ -9,8 +9,7 @@ import {
   USER_VIDEO_QUOTA_DAILY_VALIDATOR,
   USER_VIDEO_QUOTA_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
-import { FormReactiveService } from '@app/shared/shared-forms'
-import { TwoFactorService, UserAdminService } from '@app/shared/shared-users'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { User as UserType, UserAdminFlag, UserRole, UserUpdate } from '@peertube/peertube-models'
 import { UserEdit } from './user-edit'
 import { BytesPipe } from '../../../../shared/shared-main/angular/bytes.pipe'
@@ -24,6 +23,8 @@ import { HelpComponent } from '../../../../shared/shared-main/misc/help.componen
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActorAvatarEditComponent } from '../../../../shared/shared-actor-image-edit/actor-avatar-edit.component'
 import { NgIf, NgTemplateOutlet, NgClass, NgFor } from '@angular/common'
+import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
+import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
 
 @Component({
   selector: 'my-user-update',

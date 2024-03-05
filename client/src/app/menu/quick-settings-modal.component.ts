@@ -6,8 +6,9 @@ import { AuthService, AuthStatus, LocalStorageService, User, UserService } from 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { CommonModule } from '@angular/common'
-import { GlobalIconComponent } from '@app/shared/shared-icons'
-import { UserInterfaceSettingsComponent, UserVideoSettingsComponent } from '@app/shared/shared-user-settings'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
+import { UserInterfaceSettingsComponent } from '@app/shared/shared-user-settings/user-interface-settings.component'
+import { UserVideoSettingsComponent } from '@app/shared/shared-user-settings/user-video-settings.component'
 
 @Component({
   selector: 'my-quick-settings',

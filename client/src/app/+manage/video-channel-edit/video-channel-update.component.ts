@@ -9,8 +9,7 @@ import {
   VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
   VIDEO_CHANNEL_SUPPORT_VALIDATOR
 } from '@app/shared/form-validators/video-channel-validators'
-import { FormReactiveService } from '@app/shared/shared-forms'
-import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { VideoChannelUpdate } from '@peertube/peertube-models'
 import { VideoChannelEdit } from './video-channel-edit'
 import { shallowCopy } from '@peertube/peertube-core-utils'
@@ -21,6 +20,8 @@ import { ActorAvatarEditComponent } from '../../shared/shared-actor-image-edit/a
 import { ActorBannerEditComponent } from '../../shared/shared-actor-image-edit/actor-banner-edit.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgIf, NgClass } from '@angular/common'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
 
 @Component({
   selector: 'my-video-channel-update',

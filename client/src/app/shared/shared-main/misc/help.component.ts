@@ -1,10 +1,10 @@
 import { AfterContentInit, Component, ContentChildren, Input, OnChanges, OnInit, QueryList, TemplateRef } from '@angular/core'
-import { GlobalIconName } from '@app/shared/shared-icons'
+import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { ENHANCED_RULES, TEXT_RULES } from '@peertube/peertube-core-utils'
-import { PeerTubeTemplateDirective } from '../angular'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { NgIf, NgTemplateOutlet } from '@angular/common'
+import { PeerTubeTemplateDirective } from '../angular/peertube-template.directive'
 
 @Component({
   selector: 'my-help',

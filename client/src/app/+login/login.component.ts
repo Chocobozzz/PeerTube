@@ -5,8 +5,6 @@ import { AuthService, Notifier, RedirectService, SessionStorageService, UserServ
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/form-validators/login-validators'
 import { USER_OTP_TOKEN_VALIDATOR } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormReactiveService, InputTextComponent } from '@app/shared/shared-forms'
-import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 import { NgbAccordionDirective, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { getExternalAuthHref } from '@peertube/peertube-core-utils'
 import { RegisteredExternalAuthConfig, ServerConfig, ServerErrorCode } from '@peertube/peertube-models'
@@ -16,6 +14,10 @@ import { AutofocusDirective } from '../shared/shared-main/angular/autofocus.dire
 import { PluginSelectorDirective } from '../shared/shared-main/plugins/plugin-selector.directive'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgIf, NgClass, NgTemplateOutlet, NgFor } from '@angular/common'
+import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance/instance-about-accordion.component'
+import { InputTextComponent } from '@app/shared/shared-forms/input-text.component'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 
 @Component({
   selector: 'my-login',

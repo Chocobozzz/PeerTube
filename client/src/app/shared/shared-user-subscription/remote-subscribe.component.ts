@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { Notifier } from '@app/core'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { logger } from '@root-helpers/logger'
 import { USER_HANDLE_VALIDATOR } from '../form-validators/user-validators'
 import { PeerTubeTemplateDirective } from '../shared-main/angular/peertube-template.directive'

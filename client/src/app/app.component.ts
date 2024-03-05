@@ -32,15 +32,14 @@ import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { MenuService } from './core/menu/menu.service'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
-import { GlobalIconName } from './shared/shared-icons'
 import { SharedModule } from 'primeng/api'
 import { ToastModule } from 'primeng/toast'
 import { ConfirmComponent } from './modal/confirm.component'
-import { GlobalIconComponent } from './shared/shared-icons/global-icon.component'
+import { GlobalIconComponent, GlobalIconName } from './shared/shared-icons/global-icon.component'
 import { MenuComponent } from './menu/menu.component'
 import { HeaderComponent } from './header/header.component'
 import { HotkeysCheatSheetComponent } from './hotkeys/hotkeys-cheat-sheet.component'
-import { InstanceService } from './shared/shared-main'
+import { InstanceService } from './shared/shared-main/instance/instance.service'
 
 @Component({
   selector: 'my-app',

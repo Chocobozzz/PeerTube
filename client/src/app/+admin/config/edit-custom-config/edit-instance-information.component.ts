@@ -1,11 +1,9 @@
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, Input, OnInit } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { CustomMarkupService } from '@app/shared/shared-custom-markup'
 import { Notifier, ServerService } from '@app/core'
 import { HttpErrorResponse } from '@angular/common/http'
 import { genericUploadErrorHandler } from '@app/helpers'
-import { InstanceService } from '@app/shared/shared-main'
 import { ActorImage, HTMLServerConfig } from '@peertube/peertube-models'
 import { HelpComponent } from '../../../shared/shared-main/misc/help.component'
 import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
@@ -17,6 +15,8 @@ import { CustomMarkupHelpComponent } from '../../../shared/shared-custom-markup/
 import { NgClass, NgIf } from '@angular/common'
 import { ActorBannerEditComponent } from '../../../shared/shared-actor-image-edit/actor-banner-edit.component'
 import { ActorAvatarEditComponent } from '../../../shared/shared-actor-image-edit/actor-avatar-edit.component'
+import { InstanceService } from '@app/shared/shared-main/instance/instance.service'
+import { CustomMarkupService } from '@app/shared/shared-custom-markup/custom-markup.service'
 
 @Component({
   selector: 'my-edit-instance-information',

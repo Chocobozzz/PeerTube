@@ -2,10 +2,13 @@ import { Subject } from 'rxjs'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ComponentPagination, hasMoreItems, Notifier } from '@app/core'
 import { AbuseState } from '@peertube/peertube-models'
-import { FromNowPipe, InfiniteScrollerDirective, UserNotification, UserNotificationService } from '../shared-main'
 import { CommonModule } from '@angular/common'
-import { GlobalIconComponent } from '../shared-icons'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { RouterLink } from '@angular/router'
+import { FromNowPipe } from '../shared-main/angular/from-now.pipe'
+import { InfiniteScrollerDirective } from '../shared-main/angular/infinite-scroller.directive'
+import { UserNotificationService } from '../shared-main/users/user-notification.service'
+import { UserNotification } from '../shared-main/users/user-notification.model'
 
 @Component({
   selector: 'my-user-notifications',

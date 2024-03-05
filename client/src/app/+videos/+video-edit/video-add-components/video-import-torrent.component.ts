@@ -3,8 +3,7 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, Vie
 import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
-import { FormReactiveService } from '@app/shared/shared-forms'
-import { VideoCaptionService, VideoChapterService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
 import { PeerTubeProblemDocument, ServerErrorCode, VideoUpdate } from '@peertube/peertube-models'
@@ -21,6 +20,11 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { DragDropDirective } from './drag-drop.directive'
 import { NgIf } from '@angular/common'
+import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
+import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
+import { VideoEdit } from '@app/shared/shared-main/video/video-edit.model'
+import { VideoImportService } from '@app/shared/shared-main/video/video-import.service'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
 
 @Component({
   selector: 'my-video-import-torrent',
