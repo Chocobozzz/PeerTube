@@ -88,7 +88,7 @@
           <input type="submit" class="peertube-button orange-button w-100" i18n-value value="Login" [disabled]="!form.valid">
 
           <div *ngIf="!otpStep" class="additional-links d-flex justify-content-center mt-4 mb-5">
-            <button i18n class="button-unstyle link-orange mx-3" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">
+            <button type="button" i18n class="button-unstyle link-orange mx-3" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">
               I forgot my password
             </button>
 
@@ -128,7 +128,7 @@
   <div class="modal-header">
     <h4 i18n class="modal-title">Forgot your password</h4>
 
-    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hideForgotPasswordModal()">
+    <button type="button" class="border-0 p-0" title="Close this modal" i18n-title (click)="hideForgotPasswordModal()">
       <my-global-icon iconName="cross"></my-global-icon>
     </button>
   </div>
