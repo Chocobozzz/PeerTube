@@ -236,8 +236,18 @@ export class Video implements VideoServerModel {
       this.isUpdatableBy(user)
   }
 
+  // ---------------------------------------------------------------------------
+
+  isOwner (user: AuthUser) {
+    return user && this.isLocal === true && this.account.name === user.username
+  }
+
+  hasSeeAllVideosRight (user: AuthUser) {
+    return user && user.hasRight(UserRight.SEE_ALL_VIDEOS)
+  }
+
   isOwnerOrHasSeeAllVideosRight (user: AuthUser) {
-    return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.SEE_ALL_VIDEOS))
+    return this.isOwner(user) || this.hasSeeAllVideosRight(user)
   }
 
   canRemoveOneFile (user: AuthUser) {

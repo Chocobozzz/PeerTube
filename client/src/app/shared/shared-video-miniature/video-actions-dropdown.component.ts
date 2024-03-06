@@ -205,9 +205,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     return this.video.isLiveInfoAvailableBy(this.user)
   }
 
-  isVideoDownloadable () {
-    if (this.video.isOwnerOrHasSeeAllVideosRight(this.user)) return true
-
+  isVideoDownloadableByAnonymous () {
     return (
       this.video &&
       this.video.isLive !== true &&
@@ -373,8 +371,17 @@ export class VideoActionsDropdownComponent implements OnChanges {
         {
           label: $localize`Download`,
           handler: () => this.showDownloadModal(),
-          isDisplayed: () => this.displayOptions.download && this.isVideoDownloadable(),
-          iconName: 'download'
+          isDisplayed: () => {
+            if (!this.displayOptions.download) return false
+
+            return this.isVideoDownloadableByAnonymous() || this.video.isOwnerOrHasSeeAllVideosRight(this.user)
+          },
+          iconName: 'download',
+          ownerOrModeratorPrivilege: () => {
+            if (this.isVideoDownloadableByAnonymous()) return undefined
+
+            return $localize`This option is visible only to you`
+          }
         },
         {
           label: $localize`Display live information`,

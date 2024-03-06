@@ -19,7 +19,16 @@
             <my-global-icon *ngIf="action.iconName" [iconName]="action.iconName" [ngClass]="'icon-' + action.iconName" aria-hidden="true"></my-global-icon>
 
             <div class="item-label">
-              <span i18n>{{ action.label }}</span>
+              <span>
+                {{ action.label }}
+
+                <my-global-icon
+                  *ngIf="action.ownerOrModeratorPrivilege && action.ownerOrModeratorPrivilege()" iconName="shield"
+                  class="owner-moderator-privilege"
+                  [ngbTooltip]="action.ownerOrModeratorPrivilege()"
+                ></my-global-icon>
+              </span>
+
               <small class="muted" *ngIf="action.description">{{ action.description }}</small>
             </div>
           </ng-template>

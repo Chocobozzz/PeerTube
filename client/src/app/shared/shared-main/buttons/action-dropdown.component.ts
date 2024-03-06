@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { Params, RouterLink } from '@angular/router'
 import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
-import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { NgIf, NgClass, NgFor, NgTemplateOutlet } from '@angular/common'
 
 export type DropdownAction<T> = {
@@ -19,6 +19,8 @@ export type DropdownAction<T> = {
 
   class?: string[]
   isHeader?: boolean
+
+  ownerOrModeratorPrivilege?: () => string
 }
 
 export type DropdownButtonSize = 'normal' | 'small'
@@ -31,7 +33,18 @@ export type DropdownDirection = 'horizontal' | 'vertical'
   templateUrl: './action-dropdown.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [ NgIf, NgbDropdown, NgbDropdownToggle, NgClass, GlobalIconComponent, NgbDropdownMenu, NgFor, RouterLink, NgTemplateOutlet ]
+  imports: [
+    NgIf,
+    NgbTooltip,
+    NgbDropdown,
+    NgbDropdownToggle,
+    NgClass,
+    GlobalIconComponent,
+    NgbDropdownMenu,
+    NgFor,
+    RouterLink,
+    NgTemplateOutlet
+  ]
 })
 
 export class ActionDropdownComponent<T> {
