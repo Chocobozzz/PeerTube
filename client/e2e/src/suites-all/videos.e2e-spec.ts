@@ -176,7 +176,7 @@ describe('Videos all workflow', () => {
     await videoWatchPage.waitUntilVideoName(video2Name, 40 * 1000)
   })
 
-  it('Should watch the WEB VIDEO playlist in the embed', async () => {
+  it('Should watch the Web Video playlist in the embed', async () => {
     if (isUploadUnsupported()) return
 
     const accessToken = await browser.execute(`return window.localStorage.getItem('access_token');`)

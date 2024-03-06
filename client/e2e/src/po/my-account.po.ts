@@ -56,7 +56,7 @@ export class MyAccountPage {
   async removeVideo (name: string) {
     const container = await this.getVideoElement(name)
 
-    await container.$('.dropdown-toggle').click()
+    await container.$('my-action-dropdown .dropdown-toggle').click()
 
     const deleteItem = () => {
       return $$('.dropdown-menu .dropdown-item').find<WebdriverIO.Element>(async v => {
@@ -120,9 +120,7 @@ export class MyAccountPage {
   async updatePlaylistPrivacy (playlistUUID: string, privacy: 'Public' | 'Private' | 'Unlisted') {
     go('/my-library/video-playlists/update/' + playlistUUID)
 
-    await browser.waitUntil(async () => {
-      return (await $('form .video-playlist-title').getText() === 'PLAYLIST')
-    })
+    await $('a[href*="/my-library/video-playlists/update/"]').waitForDisplayed()
 
     await selectCustomSelect('videoChannelId', 'Main root channel')
     await selectCustomSelect('privacy', privacy)

@@ -398,6 +398,8 @@ class PeerTubePlugin extends Plugin {
 
   private updatePlayerSizeClasses () {
     requestAnimationFrame(() => {
+      if (!this.player) return
+
       debugLogger('Updating player size classes')
 
       const width = this.player.currentWidth()

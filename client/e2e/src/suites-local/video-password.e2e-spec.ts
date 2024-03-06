@@ -130,9 +130,11 @@ describe('Password protected videos', () => {
 
     it('Should update the playlist to public', async () => {
       const url = await browser.getUrl()
-      const regex = /\/([a-f0-9-]+)$/i
+      const regex = /\/my-library\/video-playlists\/([^/]+)/i
       const match = url.match(regex)
       const uuid = match ? match[1] : null
+
+      expect(uuid).not.toBeNull()
 
       await myAccountPage.updatePlaylistPrivacy(uuid, 'Public')
     })
