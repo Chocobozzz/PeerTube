@@ -1,33 +1,33 @@
-import { SortMeta, SharedModule } from 'primeng/api'
+import { DatePipe, NgClass, NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { AuthService, ConfirmService, LocalStorageService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { AuthService, ConfirmService, LocalStorageService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU, getAPIHost } from '@app/helpers'
+import { Actor } from '@app/shared/shared-main/account/actor.model'
+import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
+import { UserBanModalComponent } from '@app/shared/shared-moderation/user-ban-modal.component'
+import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
+import { NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { User, UserRole, UserRoleType } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { BytesPipe } from '../../../../shared/shared-main/angular/bytes.pipe'
-import { AutoColspanDirective } from '../../../../shared/shared-main/angular/auto-colspan.directive'
-import { UserEmailInfoComponent } from '../../../shared/user-email-info.component'
+import { SharedModule, SortMeta } from 'primeng/api'
+import { TableModule } from 'primeng/table'
 import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../../shared/shared-forms/advanced-input-filter.component'
+import { PeertubeCheckboxComponent } from '../../../../shared/shared-forms/peertube-checkbox.component'
+import { SelectCheckboxComponent } from '../../../../shared/shared-forms/select/select-checkbox.component'
+import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+import { AutoColspanDirective } from '../../../../shared/shared-main/angular/auto-colspan.directive'
+import { BytesPipe } from '../../../../shared/shared-main/angular/bytes.pipe'
+import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
 import {
   AccountMutedStatus,
   UserModerationDisplayType,
   UserModerationDropdownComponent
 } from '../../../../shared/shared-moderation/user-moderation-dropdown.component'
 import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
-import { PeertubeCheckboxComponent } from '../../../../shared/shared-forms/peertube-checkbox.component'
-import { FormsModule } from '@angular/forms'
-import { SelectCheckboxComponent } from '../../../../shared/shared-forms/select/select-checkbox.component'
-import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownItem, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../../shared/shared-forms/advanced-input-filter.component'
-import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
-import { NgIf, NgClass, DatePipe } from '@angular/common'
-import { TableModule } from 'primeng/table'
-import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
-import { Actor } from '@app/shared/shared-main/account/actor.model'
-import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
-import { UserBanModalComponent } from '@app/shared/shared-moderation/user-ban-modal.component'
-import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
+import { UserEmailInfoComponent } from '../../../shared/user-email-info.component'
 
 type UserForList = User & {
   rawVideoQuota: number
@@ -102,8 +102,6 @@ export class UserListComponent extends RestTable <User> implements OnInit {
     myAccount: false
   }
 
-  requiresEmailVerification = false
-
   private _selectedColumns: string[] = []
 
   constructor (
@@ -111,7 +109,6 @@ export class UserListComponent extends RestTable <User> implements OnInit {
     protected router: Router,
     private notifier: Notifier,
     private confirmService: ConfirmService,
-    private serverService: ServerService,
     private auth: AuthService,
     private blocklist: BlocklistService,
     private userAdminService: UserAdminService,
@@ -135,9 +132,6 @@ export class UserListComponent extends RestTable <User> implements OnInit {
   }
 
   ngOnInit () {
-    this.serverService.getConfig()
-        .subscribe(config => this.requiresEmailVerification = config.signup.requiresEmailVerification)
-
     this.initialize()
 
     this.bulkActions = [
@@ -165,8 +159,7 @@ export class UserListComponent extends RestTable <User> implements OnInit {
           label: $localize`Set Email as Verified`,
           handler: users => this.setEmailsAsVerified(users),
           isDisplayed: users => {
-            return this.requiresEmailVerification &&
-              users.every(u => this.authUser.canManage(u) && !u.blocked && u.emailVerified === false)
+            return users.every(u => this.authUser.canManage(u) && !u.blocked && u.emailVerified !== true)
           }
         }
       ]
