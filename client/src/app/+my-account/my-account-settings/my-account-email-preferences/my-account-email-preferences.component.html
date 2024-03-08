@@ -6,7 +6,13 @@
       i18n-labelText labelText="Allow email to be publicly displayed"
     >
       <ng-container ngProjectAs="description">
-        <span i18n>Necessary to claim podcast RSS feeds.</span>
+        <p class="mb-0">
+          @if (user.emailVerified) {
+            <ng-container i18n>Necessary to claim podcast RSS feeds.</ng-container>
+          } @else {
+            <ng-container i18n>⚠️ Your email cannot be used in podcast RSS feeds because it has not yet been verified.</ng-container>
+          }
+          </p>
       </ng-container>
     </my-peertube-checkbox>
   </div>

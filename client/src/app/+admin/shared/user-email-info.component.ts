@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, booleanAttribute } from '@angular/core'
 import { User, UserRegistration } from '@peertube/peertube-models'
 import { NgIf } from '@angular/common'
 
@@ -11,7 +11,7 @@ import { NgIf } from '@angular/common'
 })
 export class UserEmailInfoComponent {
   @Input() entry: User | UserRegistration
-  @Input() requiresEmailVerification: boolean
+  @Input({ transform: booleanAttribute }) showEmailVerifyInformation: boolean
 
   getTitle () {
     if (this.entry.emailVerified) {

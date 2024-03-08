@@ -114,7 +114,7 @@
       </td>
 
       <td *ngIf="isSelected('email')">
-        <my-user-email-info [entry]="user" [requiresEmailVerification]="requiresEmailVerification"></my-user-email-info>
+        <my-user-email-info [entry]="user" showEmailVerifyInformation="true"></my-user-email-info>
       </td>
 
       <td *ngIf="isSelected('quota')">

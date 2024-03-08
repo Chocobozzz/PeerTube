@@ -7,7 +7,7 @@
 
   <div class="content-col">
     <my-actor-avatar-edit
-      class="d-block mb-3"
+      *ngIf="user?.account" class="d-block mb-3"
       actorType="account" [avatars]="user.account.avatars"
       [displayName]="user.account.displayName" [username]="user.username" [subscribers]="user.account.followersCount"
       (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"

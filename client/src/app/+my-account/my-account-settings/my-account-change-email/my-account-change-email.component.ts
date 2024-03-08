@@ -1,14 +1,14 @@
-import { forkJoin } from 'rxjs'
-import { tap } from 'rxjs/operators'
+import { NgClass, NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
-import { AuthService, Notifier, ServerService, UserService } from '@app/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { AuthService, ServerService, UserService } from '@app/core'
 import { USER_EMAIL_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { HttpStatusCode, User } from '@peertube/peertube-models'
+import { forkJoin } from 'rxjs'
+import { tap } from 'rxjs/operators'
 import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { NgIf, NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-account-change-email',
@@ -26,8 +26,7 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
     protected formReactiveService: FormReactiveService,
     private authService: AuthService,
     private userService: UserService,
-    private serverService: ServerService,
-    private notifier: Notifier
+    private serverService: ServerService
   ) {
     super()
   }
