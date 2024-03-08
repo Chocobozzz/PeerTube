@@ -1,9 +1,6 @@
-import * as debug from 'debug'
-import { forkJoin, Subscription } from 'rxjs'
-import { first, switchMap } from 'rxjs/operators'
 import { CommonModule, ViewportScroller } from '@angular/common'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { Router, RouterLink } from '@angular/router'
+import { Router, RouterLink, RouterLinkActive } from '@angular/router'
 import {
   AuthService,
   AuthStatus,
@@ -18,17 +15,20 @@ import {
   UserService
 } from '@app/core'
 import { scrollToTop } from '@app/helpers'
+import { ActorAvatarComponent } from '@app/shared/shared-actor-image/actor-avatar.component'
+import { InputSwitchComponent } from '@app/shared/shared-forms/input-switch.component'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
+import { SignupLabelComponent } from '@app/shared/shared-main/account/signup-label.component'
+import { LoginLinkComponent } from '@app/shared/shared-main/angular/login-link.component'
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
 import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig, ServerConfig, UserRight, UserRightType, VideoConstant } from '@peertube/peertube-models'
-import { NotificationComponent } from './notification.component'
+import * as debug from 'debug'
+import { forkJoin, Subscription } from 'rxjs'
+import { first, switchMap } from 'rxjs/operators'
 import { LanguageChooserComponent } from './language-chooser.component'
+import { NotificationComponent } from './notification.component'
 import { QuickSettingsModalComponent } from './quick-settings-modal.component'
-import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
-import { ActorAvatarComponent } from '@app/shared/shared-actor-image/actor-avatar.component'
-import { InputSwitchComponent } from '@app/shared/shared-forms/input-switch.component'
-import { SignupLabelComponent } from '@app/shared/shared-main/account/signup-label.component'
-import { LoginLinkComponent } from '@app/shared/shared-main/angular/login-link.component'
 
 const debugLogger = debug('peertube:menu:MenuComponent')
 
@@ -48,6 +48,7 @@ const debugLogger = debug('peertube:menu:MenuComponent')
     QuickSettingsModalComponent,
     GlobalIconComponent,
     RouterLink,
+    RouterLinkActive,
     NgbDropdownModule
   ]
 })
