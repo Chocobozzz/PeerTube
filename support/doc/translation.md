@@ -6,6 +6,9 @@ Please do not edit translation files directly from Git, you have to use Weblate!
 If you don't see your locale in the platform you can add it directly in the Weblate interface.
 Then, if you think there are enough translated strings, please [create an issue](https://github.com/Chocobozzz/PeerTube/issues) so we add the new locale in PeerTube!
 
+Translations are manually pulled and merged in PeerTube software and are publicly available in the next official release.
+You can get a chance to see translations before the official release by going to https://peertube2.cpy.re which is updated every night with the latest PeerTube changes.
+
 
 ## How to
 
