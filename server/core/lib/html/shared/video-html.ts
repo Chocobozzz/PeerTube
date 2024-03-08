@@ -1,6 +1,7 @@
 import { escapeHTML } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
+import { Memoize } from '@server/helpers/memoize.js'
 import express from 'express'
 import validator from 'validator'
 import { CONFIG } from '../../../initializers/config.js'
@@ -9,10 +10,9 @@ import { VideoModel } from '../../../models/video/video.js'
 import { MVideo, MVideoThumbnailBlacklist } from '../../../types/models/index.js'
 import { getActivityStreamDuration } from '../../activitypub/activity.js'
 import { isVideoInPrivateDirectory } from '../../video-privacy.js'
-import { Memoize } from '@server/helpers/memoize.js'
-import { TagsHtml } from './tags-html.js'
-import { PageHtml } from './page-html.js'
 import { CommonEmbedHtml } from './common-embed-html.js'
+import { PageHtml } from './page-html.js'
+import { TagsHtml } from './tags-html.js'
 
 export class VideoHtml {
 
@@ -99,12 +99,9 @@ export class VideoHtml {
       ? 'video' as 'video'
       : undefined
 
-    let twitterCard: 'player' | 'summary_large_image'
-    if (addTwitterCard) {
-      twitterCard = CONFIG.SERVICES.TWITTER.WHITELISTED
-        ? 'player'
-        : 'summary_large_image'
-    }
+    const twitterCard = addTwitterCard
+      ? 'player'
+      : undefined
 
     const schemaType = 'VideoObject'
 

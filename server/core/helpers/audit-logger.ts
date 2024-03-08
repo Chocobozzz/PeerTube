@@ -243,7 +243,6 @@ const customConfigKeysToKeep = new Set([
   'instance-customizations-javascript',
   'instance-customizations-css',
   'services-twitter-username',
-  'services-twitter-whitelisted',
   'cache-previews-size',
   'cache-captions-size',
   'signup-enabled',

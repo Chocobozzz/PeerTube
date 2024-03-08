@@ -596,8 +596,7 @@ const CONFIG = {
   },
   SERVICES: {
     TWITTER: {
-      get USERNAME () { return config.get<string>('services.twitter.username') },
-      get WHITELISTED () { return config.get<boolean>('services.twitter.whitelisted') }
+      get USERNAME () { return config.get<string>('services.twitter.username') }
     }
   },
   FOLLOWERS: {

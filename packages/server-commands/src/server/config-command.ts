@@ -503,8 +503,7 @@ export class ConfigCommand extends AbstractCommand {
       },
       services: {
         twitter: {
-          username: '@MySuperUsername',
-          whitelisted: true
+          username: '@MySuperUsername'
         }
       },
       client: {

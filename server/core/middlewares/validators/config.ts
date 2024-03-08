@@ -19,7 +19,6 @@ const customConfigUpdateValidator = [
   body('instance.customizations.javascript').exists(),
 
   body('services.twitter.username').exists(),
-  body('services.twitter.whitelisted').isBoolean(),
 
   body('cache.previews.size').isInt(),
   body('cache.captions.size').isInt(),

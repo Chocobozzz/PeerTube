@@ -48,7 +48,6 @@ export interface CustomConfig {
   services: {
     twitter: {
       username: string
-      whitelisted: boolean
     }
   }
 

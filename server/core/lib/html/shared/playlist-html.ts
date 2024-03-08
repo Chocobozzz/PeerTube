@@ -87,12 +87,9 @@ export class PlaylistHtml {
     const list = { numberOfItems: playlist.get('videosLength') as number }
     const schemaType = 'ItemList'
 
-    let twitterCard: 'player' | 'summary'
-    if (addTwitterCard) {
-      twitterCard = CONFIG.SERVICES.TWITTER.WHITELISTED
-        ? 'player'
-        : 'summary'
-    }
+    const twitterCard = addTwitterCard
+      ? 'player'
+      : undefined
 
     const ogType = addOG
       ? 'video' as 'video'

@@ -8743,8 +8743,6 @@ components:
               properties:
                 username:
                   type: string
-                whitelisted:
-                  type: boolean
         cache:
           type: object
           properties:

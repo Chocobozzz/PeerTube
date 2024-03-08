@@ -52,8 +52,7 @@ describe('Test config API validators', function () {
     },
     services: {
       twitter: {
-        username: '@MySuperUsername',
-        whitelisted: true
+        username: '@MySuperUsername'
       }
     },
     client: {

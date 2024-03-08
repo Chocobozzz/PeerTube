@@ -263,8 +263,7 @@ function customConfig (): CustomConfig {
     },
     services: {
       twitter: {
-        username: CONFIG.SERVICES.TWITTER.USERNAME,
-        whitelisted: CONFIG.SERVICES.TWITTER.WHITELISTED
+        username: CONFIG.SERVICES.TWITTER.USERNAME
       }
     },
     client: {

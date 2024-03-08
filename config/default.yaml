@@ -841,13 +841,12 @@ instance:
     Expires: 2025-12-31T11:00:00.000Z'
 
 services:
-  # Cards configuration to format video in Twitter
+  # Cards configuration to format video in Twitter/X
+  # All other social media (Facebook, Mastodon, etc.) are supported out of the box
   twitter:
-    username: '@Chocobozzz' # Indicates the Twitter account for the website or platform on which the content was published
-    # If true, a video player will be embedded in the Twitter feed on PeerTube video share
-    # If false, we use an image link card that will redirect on your PeerTube instance
-    # Change it to `true`, and then test on https://cards-dev.twitter.com/validator to see if you are whitelisted
-    whitelisted: false
+    # Indicates the Twitter account for the website or platform where the content was published
+    # This is just an information injected in HTML that is required by Twitter/X
+    username: '@Chocobozzz'
 
 followers:
   instance:

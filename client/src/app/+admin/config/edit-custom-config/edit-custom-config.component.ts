@@ -131,8 +131,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       },
       services: {
         twitter: {
-          username: SERVICES_TWITTER_USERNAME_VALIDATOR,
-          whitelisted: null
+          username: SERVICES_TWITTER_USERNAME_VALIDATOR
         }
       },
       client: {

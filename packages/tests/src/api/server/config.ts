@@ -42,7 +42,6 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.instance.customizations.javascript).to.be.empty
 
   expect(data.services.twitter.username).to.equal('@Chocobozzz')
-  expect(data.services.twitter.whitelisted).to.be.false
 
   expect(data.client.videos.miniature.preferAuthorDisplayName).to.be.false
   expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.false
@@ -161,7 +160,6 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.instance.customizations.css).to.equal('body { background-color: red; }')
 
   expect(data.services.twitter.username).to.equal('@Kuja')
-  expect(data.services.twitter.whitelisted).to.be.true
 
   expect(data.client.videos.miniature.preferAuthorDisplayName).to.be.true
   expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.true
@@ -291,8 +289,7 @@ const newCustomConfig: CustomConfig = {
   },
   services: {
     twitter: {
-      username: '@Kuja',
-      whitelisted: true
+      username: '@Kuja'
     }
   },
   client: {

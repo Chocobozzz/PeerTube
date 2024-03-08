@@ -120,148 +120,73 @@ describe('Test Open Graph and Twitter cards HTML tags', function () {
 
   describe('Twitter card', async function () {
 
-    describe('Not whitelisted', function () {
-
-      async function accountPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
-        const text = res.text
-
-        expect(text).to.contain('<meta property="twitter:card" content="summary" />')
-        expect(text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
-        expect(text).to.contain(`<meta property="twitter:title" content="${account.name}" />`)
-        expect(text).to.contain(`<meta property="twitter:description" content="${account.description}" />`)
+    before(async function () {
+      const config = await servers[0].config.getCustomConfig()
+      config.services.twitter = {
+        username: '@Kuja'
       }
 
-      async function channelPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
-        const text = res.text
-
-        expect(text).to.contain('<meta property="twitter:card" content="summary" />')
-        expect(text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
-        expect(text).to.contain(`<meta property="twitter:title" content="${servers[0].store.channel.displayName}" />`)
-        expect(text).to.contain(`<meta property="twitter:description" content="${channelDescription}" />`)
-      }
-
-      async function watchVideoPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
-        const text = res.text
-
-        expect(text).to.contain('<meta property="twitter:card" content="summary_large_image" />')
-        expect(text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
-        expect(text).to.contain(`<meta property="twitter:title" content="${videoName}" />`)
-        expect(text).to.contain(`<meta property="twitter:description" content="${videoDescriptionPlainText}" />`)
-      }
-
-      async function watchPlaylistPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
-        const text = res.text
-
-        expect(text).to.contain('<meta property="twitter:card" content="summary" />')
-        expect(text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
-        expect(text).to.contain(`<meta property="twitter:title" content="${playlistName}" />`)
-        expect(text).to.contain(`<meta property="twitter:description" content="${playlistDescription}" />`)
-      }
-
-      it('Should have valid twitter card on the watch video page', async function () {
-        for (const path of getWatchVideoBasePaths()) {
-          for (const id of videoIds) {
-            await watchVideoPageTest(path + id)
-          }
-        }
-      })
-
-      it('Should have valid twitter card on the watch playlist page', async function () {
-        for (const path of getWatchPlaylistBasePaths()) {
-          for (const id of playlistIds) {
-            await watchPlaylistPageTest(path + id)
-          }
-        }
-      })
-
-      it('Should have valid twitter card on the account page', async function () {
-        await accountPageTest('/accounts/' + account.name)
-        await accountPageTest('/a/' + account.name)
-        await accountPageTest('/@' + account.name)
-      })
-
-      it('Should have valid twitter card on the channel page', async function () {
-        await channelPageTest('/video-channels/' + servers[0].store.channel.name)
-        await channelPageTest('/c/' + servers[0].store.channel.name)
-        await channelPageTest('/@' + servers[0].store.channel.name)
-      })
+      await servers[0].config.updateCustomConfig({ newCustomConfig: config })
     })
 
-    describe('Whitelisted', function () {
+    async function accountPageTest (path: string) {
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
 
-      before(async function () {
-        const config = await servers[0].config.getCustomConfig()
-        config.services.twitter = {
-          username: '@Kuja',
-          whitelisted: true
+      expect(text).to.contain('<meta property="twitter:card" content="summary" />')
+      expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+    }
+
+    async function channelPageTest (path: string) {
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
+
+      expect(text).to.contain('<meta property="twitter:card" content="summary" />')
+      expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+    }
+
+    async function watchVideoPageTest (path: string) {
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
+
+      expect(text).to.contain('<meta property="twitter:card" content="player" />')
+      expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+    }
+
+    async function watchPlaylistPageTest (path: string) {
+      const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+      const text = res.text
+
+      expect(text).to.contain('<meta property="twitter:card" content="player" />')
+      expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+    }
+
+    it('Should have valid twitter card on the watch video page', async function () {
+      for (const path of getWatchVideoBasePaths()) {
+        for (const id of videoIds) {
+          await watchVideoPageTest(path + id)
         }
-
-        await servers[0].config.updateCustomConfig({ newCustomConfig: config })
-      })
-
-      async function accountPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
-        const text = res.text
-
-        expect(text).to.contain('<meta property="twitter:card" content="summary" />')
-        expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
       }
+    })
 
-      async function channelPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
-        const text = res.text
-
-        expect(text).to.contain('<meta property="twitter:card" content="summary" />')
-        expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
-      }
-
-      async function watchVideoPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
-        const text = res.text
-
-        expect(text).to.contain('<meta property="twitter:card" content="player" />')
-        expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
-      }
-
-      async function watchPlaylistPageTest (path: string) {
-        const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
-        const text = res.text
-
-        expect(text).to.contain('<meta property="twitter:card" content="player" />')
-        expect(text).to.contain('<meta property="twitter:site" content="@Kuja" />')
-      }
-
-      it('Should have valid twitter card on the watch video page', async function () {
-        for (const path of getWatchVideoBasePaths()) {
-          for (const id of videoIds) {
-            await watchVideoPageTest(path + id)
-          }
+    it('Should have valid twitter card on the watch playlist page', async function () {
+      for (const path of getWatchPlaylistBasePaths()) {
+        for (const id of playlistIds) {
+          await watchPlaylistPageTest(path + id)
         }
-      })
+      }
+    })
 
-      it('Should have valid twitter card on the watch playlist page', async function () {
-        for (const path of getWatchPlaylistBasePaths()) {
-          for (const id of playlistIds) {
-            await watchPlaylistPageTest(path + id)
-          }
-        }
-      })
+    it('Should have valid twitter card on the account page', async function () {
+      await accountPageTest('/accounts/' + account.name)
+      await accountPageTest('/a/' + account.name)
+      await accountPageTest('/@' + account.name)
+    })
 
-      it('Should have valid twitter card on the account page', async function () {
-        await accountPageTest('/accounts/' + account.name)
-        await accountPageTest('/a/' + account.name)
-        await accountPageTest('/@' + account.name)
-      })
-
-      it('Should have valid twitter card on the channel page', async function () {
-        await channelPageTest('/video-channels/' + servers[0].store.channel.name)
-        await channelPageTest('/c/' + servers[0].store.channel.name)
-        await channelPageTest('/@' + servers[0].store.channel.name)
-      })
+    it('Should have valid twitter card on the channel page', async function () {
+      await channelPageTest('/video-channels/' + servers[0].store.channel.name)
+      await channelPageTest('/c/' + servers[0].store.channel.name)
+      await channelPageTest('/@' + servers[0].store.channel.name)
     })
   })
 
