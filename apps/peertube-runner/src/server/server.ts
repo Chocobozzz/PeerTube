@@ -26,6 +26,7 @@ export class RunnerServer {
   private checkingAvailableJobs = false
 
   private cleaningUp = false
+  private initialized = false
 
   private readonly sockets = new Map<PeerTubeServer, Socket>()
 
@@ -70,6 +71,7 @@ export class RunnerServer {
 
     logger.info(`Using ${ConfigManager.Instance.getTranscodingDirectory()} for transcoding directory`)
 
+    this.initialized = true
     await this.checkAvailableJobs()
   }
 
@@ -98,8 +100,6 @@ export class RunnerServer {
     await this.saveRegisteredInstancesInConf()
 
     logger.info(`Registered runner ${runnerName} on ${url}`)
-
-    await this.checkAvailableJobs()
   }
 
   private loadServer (server: PeerTubeServer) {
@@ -114,8 +114,14 @@ export class RunnerServer {
     })
 
     socket.on('connect_error', err => logger.warn({ err }, `Cannot connect to ${url} socket`))
-    socket.on('connect', () => logger.info(`Connected to ${url} socket`))
-    socket.on('available-jobs', () => this.checkAvailableJobs())
+    socket.on('available-jobs', () => this.safeAsyncCheckAvailableJobs())
+
+    socket.on('connect', () => {
+      logger.info(`Connected to ${url} socket`)
+
+      this.safeAsyncCheckAvailableJobs()
+    })
+    socket.on('disconnect', () => logger.warn(`Disconnected from ${url} socket`))
 
     this.sockets.set(server, socket)
   }
@@ -169,7 +175,13 @@ export class RunnerServer {
 
   // ---------------------------------------------------------------------------
 
+  private safeAsyncCheckAvailableJobs () {
+    this.checkAvailableJobs()
+      .catch(err => logger.error({ err }, `Cannot check available jobs`))
+  }
+
   private async checkAvailableJobs () {
+    if (!this.initialized) return
     if (this.checkingAvailableJobs) return
 
     this.checkingAvailableJobs = true
