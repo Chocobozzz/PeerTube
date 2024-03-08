@@ -42,7 +42,7 @@ try {
 // ----------- Database -----------
 
 // Initialize database and models
-import { initDatabaseModels, checkDatabaseConnectionOrDie } from './core/initializers/database.js'
+import { initDatabaseModels, checkDatabaseConnectionOrDie, sequelizeTypescript } from './core/initializers/database.js'
 checkDatabaseConnectionOrDie()
 
 import { migrate } from './core/initializers/migrator.js'
@@ -374,6 +374,9 @@ async function startApplication () {
   })
 
   process.on('exit', () => {
+    sequelizeTypescript.close()
+      .catch(err => logger.error('Cannot close database connection.', { err }))
+
     JobQueue.Instance.terminate()
       .catch(err => logger.error('Cannot terminate job queue.', { err }))
   })
