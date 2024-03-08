@@ -110,7 +110,19 @@ const SORTABLE_COLUMNS = {
   RUNNER_REGISTRATION_TOKENS: [ 'createdAt' ],
   RUNNER_JOBS: [ 'updatedAt', 'createdAt', 'priority', 'state', 'progress' ],
 
-  VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'trending', 'hot', 'best' ],
+  VIDEOS: [
+    'name',
+    'duration',
+    'createdAt',
+    'publishedAt',
+    'originallyPublishedAt',
+    'views',
+    'likes',
+    'trending',
+    'hot',
+    'best',
+    'localVideoFilesSize'
+  ],
 
   // Don't forget to update peertube-search-index with the same values
   VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'match' ],

@@ -1,25 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import request from 'supertest'
 import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoCommentThreadTree, VideoPrivacy } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
+  PeerTubeServer,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   makeGetRequest,
-  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
   setDefaultChannelAvatar,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { testImageGeneratedByFFmpeg, dateIsValid } from '@tests/shared/checks.js'
+import { dateIsValid, testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { checkTmpIsEmpty } from '@tests/shared/directories.js'
-import { completeVideoCheck, saveVideoInServers, checkVideoFilesWereRemoved } from '@tests/shared/videos.js'
+import { checkVideoFilesWereRemoved, completeVideoCheck, saveVideoInServers } from '@tests/shared/videos.js'
 import { checkWebTorrentWorks } from '@tests/shared/webtorrent.js'
+import { expect } from 'chai'
+import request from 'supertest'
 
 describe('Test multiple servers', function () {
   let servers: PeerTubeServer[] = []
@@ -367,7 +367,8 @@ describe('Test multiple servers', function () {
     })
   })
 
-  describe('It should list local videos', function () {
+  describe('Local videos listing', function () {
+
     it('Should list only local videos on server 1', async function () {
       const { data, total } = await servers[0].videos.list({ isLocal: true })
 
@@ -394,6 +395,21 @@ describe('Test multiple servers', function () {
       expect(data.length).to.equal(2)
       expect(data[0].name).to.equal('my super name for server 3')
       expect(data[1].name).to.equal('my super name for server 3-2')
+    })
+  })
+
+  describe('All videos listing', function () {
+
+    it('Should list and sort by "localVideoFilesSize"', async function () {
+      const { data, total } = await servers[2].videos.list({ sort: '-localVideoFilesSize' })
+
+      expect(total).to.equal(4)
+      expect(data).to.be.an('array')
+      expect(data.length).to.equal(4)
+      expect(data[0].name).to.equal('my super name for server 3')
+      expect(data[1].name).to.equal('my super name for server 3-2')
+      expect(data[2].isLocal).to.be.false
+      expect(data[3].isLocal).to.be.false
     })
   })
 
