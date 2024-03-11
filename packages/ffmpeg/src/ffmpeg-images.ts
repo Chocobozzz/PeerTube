@@ -119,8 +119,10 @@ export class FFmpegImage {
     const command = this.commandWrapper.buildCommand(path)
 
     const filter = [
+      // Fix "t" variable with some videos
       `setpts=N/round(FRAME_RATE)/TB`,
-      `select='not(mod(t,${options.sprites.duration}))'`,
+      // First frame or the time difference between the last and the current frame is enough for our sprite interval
+      `select='isnan(prev_selected_t)+gte(t-prev_selected_t,${options.sprites.duration})'`,
       `scale=${sprites.size.width}:${sprites.size.height}`,
       `tile=layout=${sprites.count.width}x${sprites.count.height}`
     ].join(',')
