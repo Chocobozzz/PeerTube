@@ -26,8 +26,9 @@ async function checkStoryboard (options: {
   spriteWidth?: number
   tilesCount?: number
   minSize?: number
+  spriteDuration?: number
 }) {
-  const { server, uuid, tilesCount, spriteHeight = 108, spriteWidth = 192, minSize = 1000 } = options
+  const { server, uuid, tilesCount, spriteDuration = 1, spriteHeight = 108, spriteWidth = 192, minSize = 1000 } = options
 
   const { storyboards } = await server.storyboard.list({ id: uuid })
 
@@ -35,7 +36,7 @@ async function checkStoryboard (options: {
 
   const storyboard = storyboards[0]
 
-  expect(storyboard.spriteDuration).to.equal(1)
+  expect(storyboard.spriteDuration).to.equal(spriteDuration)
   expect(storyboard.spriteHeight).to.equal(spriteHeight)
   expect(storyboard.spriteWidth).to.equal(spriteWidth)
   expect(storyboard.storyboardPath).to.exist
@@ -85,7 +86,7 @@ describe('Test video storyboard', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      await checkStoryboard({ server, uuid, spriteHeight: 154, tilesCount: 100 })
+      await checkStoryboard({ server, uuid, spriteDuration: 2, spriteHeight: 154, tilesCount: 60 })
     }
   })
 

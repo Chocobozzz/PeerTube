@@ -1,5 +1,5 @@
-import { Job } from 'bullmq'
-import { join } from 'path'
+import { FFmpegImage, ffprobePromise, getVideoStreamDimensionsInfo, isAudioFile } from '@peertube/peertube-ffmpeg'
+import { GenerateStoryboardPayload } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
 import { generateImageFilename } from '@server/helpers/image-utils.js'
@@ -10,12 +10,12 @@ import { STORYBOARD } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
+import { getImageSizeFromWorker } from '@server/lib/worker/parent-process.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo } from '@server/types/models/index.js'
-import { FFmpegImage, ffprobePromise, getVideoStreamDimensionsInfo, isAudioFile } from '@peertube/peertube-ffmpeg'
-import { GenerateStoryboardPayload } from '@peertube/peertube-models'
-import { getImageSizeFromWorker } from '@server/lib/worker/parent-process.js'
+import { Job } from 'bullmq'
+import { join } from 'path'
 
 const lTagsBase = loggerTagsFactory('storyboard')
 
@@ -62,13 +62,11 @@ async function processGenerateStoryboard (job: Job): Promise<void> {
       const filename = generateImageFilename()
       const destination = join(CONFIG.STORAGE.STORYBOARDS_DIR, filename)
 
-      const totalSprites = buildTotalSprites({ video, spriteHeight, spriteWidth })
+      const { totalSprites, spriteDuration } = buildSpritesMetadata({ video })
       if (totalSprites === 0) {
         logger.info('Do not generate a storyboard of %s because the video is not long enough', payload.videoUUID, lTags)
         return
       }
-
-      const spriteDuration = Math.round(video.duration / totalSprites)
 
       const spritesCount = findGridSize({
         toFind: totalSprites,
@@ -136,20 +134,22 @@ export {
   processGenerateStoryboard
 }
 
-function buildTotalSprites (options: {
+function buildSpritesMetadata (options: {
   video: MVideo
-  spriteHeight: number
-  spriteWidth: number
 }) {
-  const { video, spriteHeight, spriteWidth } = options
+  const { video } = options
 
-  const maxSprites = spriteHeight * spriteWidth
-  const totalSprites = Math.min(Math.ceil(video.duration), maxSprites)
+  if (video.duration < 3) return { spriteDuration: undefined, totalSprites: 0 }
 
-  // We can generate a single line
-  if (totalSprites <= STORYBOARD.SPRITES_MAX_EDGE_COUNT) return totalSprites
+  const maxSprites = Math.min(Math.ceil(video.duration), STORYBOARD.SPRITES_MAX_EDGE_COUNT * STORYBOARD.SPRITES_MAX_EDGE_COUNT)
 
-  return findGridFit(totalSprites, STORYBOARD.SPRITES_MAX_EDGE_COUNT)
+  const spriteDuration = Math.ceil(video.duration / maxSprites)
+  const totalSprites = Math.ceil(video.duration / spriteDuration)
+
+  // We can generate a single line so we don't need a prime number
+  if (totalSprites <= STORYBOARD.SPRITES_MAX_EDGE_COUNT) return { spriteDuration, totalSprites }
+
+  return { spriteDuration, totalSprites: findNearestGridPrime(totalSprites, STORYBOARD.SPRITES_MAX_EDGE_COUNT) }
 }
 
 function findGridSize (options: {
@@ -167,7 +167,7 @@ function findGridSize (options: {
   throw new Error(`Could not find grid size (to find: ${toFind}, max edge count: ${maxEdgeCount}`)
 }
 
-function findGridFit (value: number, maxMultiplier: number) {
+function findNearestGridPrime (value: number, maxMultiplier: number) {
   for (let i = value; i--; i > 0) {
     if (!isPrimeWithin(i, maxMultiplier)) return i
   }
