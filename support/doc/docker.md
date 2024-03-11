@@ -152,6 +152,13 @@ Stop, delete the containers and internal volumes (to invalidate static client fi
 docker compose down -v
 ```
 
+Update the nginx configuration:
+
+```shell
+mv docker-volume/nginx/peertube docker-volume/nginx/peertube.bak
+curl https://raw.githubusercontent.com/Chocobozzz/PeerTube/master/support/nginx/peertube > docker-volume/nginx/peertube
+```
+
 Rerun PeerTube:
 
 ```shell
