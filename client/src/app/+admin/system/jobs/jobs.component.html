@@ -1,17 +1,23 @@
 <div class="admin-sub-header">
   <div class="select-filter-block">
     <label for="jobType" i18n>Job type</label>
-    <div class="peertube-select-container">
-      <select id="jobType" name="jobType" [(ngModel)]="jobType" (ngModelChange)="onJobStateOrTypeChanged()" class="form-control">
-        <option *ngFor="let jobType of jobTypes" [value]="jobType">{{ jobType }}</option>
-      </select>
-    </div>
+
+    <ng-select
+      class="select-job-type"
+      labelForId="jobType"
+      [(ngModel)]="jobType" (ngModelChange)="onJobStateOrTypeChanged()"
+      [searchable]="true"
+      [clearable]="false"
+    >
+      <ng-option *ngFor="let jobType of jobTypes" [value]="jobType">{{ jobType }}</ng-option>
+    </ng-select>
   </div>
 
   <div class="select-filter-block">
     <label for="jobState" i18n>Job state</label>
     <ng-select
       class="select-job-state"
+      labelForId="jobState"
       [(ngModel)]="jobState"
       (ngModelChange)="onJobStateOrTypeChanged()"
       [clearable]="false"

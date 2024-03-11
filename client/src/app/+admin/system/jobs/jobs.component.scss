@@ -5,6 +5,16 @@
   min-width: 120px;
 }
 
+.select-job-type {
+  min-width: 240px;
+
+  ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items {
+    @media screen and (min-height: 500px) {
+      max-height: calc(90vh - 250px);
+    }
+  }
+}
+
 @media screen and (min-width: $primeng-breakpoint) {
   .job-id {
     max-width: 30vw !important;
