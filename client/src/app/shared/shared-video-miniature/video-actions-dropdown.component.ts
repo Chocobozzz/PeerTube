@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild, booleanAttribute } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScreenService, ServerService } from '@app/core'
 import { NgbDropdown, NgbDropdownAnchor, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@peertube/peertube-models'
@@ -86,10 +86,11 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
   @Input() placement = 'left'
   @Input() moreActions: DropdownAction<{ video: Video }>[][] = []
+  @Input({ transform: booleanAttribute }) actionAvailabilityHint = false
 
   @Input() label: string
 
-  @Input() buttonStyled = false
+  @Input({ transform: booleanAttribute }) buttonStyled = false
   @Input() buttonSize: DropdownButtonSize = 'normal'
   @Input() buttonDirection: DropdownDirection = 'vertical'
 
@@ -378,6 +379,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           },
           iconName: 'download',
           ownerOrModeratorPrivilege: () => {
+            if (!this.actionAvailabilityHint) return undefined
             if (this.isVideoDownloadableByAnonymous()) return undefined
 
             return $localize`This option is visible only to you`
