@@ -1,6 +1,6 @@
-import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
 import { pick, promisify0 } from '@peertube/peertube-core-utils'
 import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptionsBuilderParams, EncoderProfile } from '@peertube/peertube-models'
+import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
 
 type FFmpegLogger = {
   info: (msg: string, obj?: any) => void
