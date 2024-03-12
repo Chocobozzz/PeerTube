@@ -1,6 +1,6 @@
+import { HttpStatusCode, Job, JobState, JobType, ResultList, UserRight } from '@peertube/peertube-models'
 import { Job as BullJob } from 'bullmq'
 import express from 'express'
-import { HttpStatusCode, Job, JobState, JobType, ResultList, UserRight } from '@peertube/peertube-models'
 import { isArray } from '../../helpers/custom-validators/misc.js'
 import { JobQueue } from '../../lib/job-queue/index.js'
 import {
@@ -87,10 +87,6 @@ async function listJobs (req: express.Request, res: express.Response) {
 }
 
 async function formatJob (job: BullJob, state?: JobState): Promise<Job> {
-  const error = isArray(job.stacktrace) && job.stacktrace.length !== 0
-    ? job.stacktrace[0]
-    : null
-
   return {
     id: job.id,
     state: state || await job.getState(),
@@ -101,9 +97,16 @@ async function formatJob (job: BullJob, state?: JobState): Promise<Job> {
       : undefined,
     progress: job.progress as number,
     priority: job.opts.priority,
-    error,
+    error: getJobError(job),
     createdAt: new Date(job.timestamp),
     finishedOn: new Date(job.finishedOn),
     processedOn: new Date(job.processedOn)
   }
+}
+
+function getJobError (job: BullJob) {
+  if (isArray(job.stacktrace) && job.stacktrace.length !== 0) return job.stacktrace[0]
+  if (job.failedReason) return job.failedReason
+
+  return null
 }
