@@ -373,7 +373,7 @@ async function generateImageFromVideoFile (options: {
   folder: string
   imageName: string
   size: { width: number, height: number }
-  ffprobe?: FfprobeData,
+  ffprobe?: FfprobeData
   timecode?: number
 }) {
   const { fromPath, folder, imageName, size, ffprobe, timecode } = options
