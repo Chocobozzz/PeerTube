@@ -1,0 +1,30 @@
+<div class="root">
+  <div *ngIf="!selectingFromVideo" class="preview-container">
+
+    <img *ngIf="imageSrc" [ngStyle]="{ width: previewWidth, height: previewHeight }" [src]="imageSrc" class="preview"
+      alt="Preview" i18n-alt />
+    <div *ngIf="!imageSrc" [ngStyle]="{ width: previewWidth, height: previewHeight }" class="preview no-image"></div>
+
+  </div>
+
+  <my-frame-selector *ngIf="selectingFromVideo && source" [source]="source"
+    (timeChanged)="setCurrentTime($event)"></my-frame-selector>
+
+  <div class="inputs">
+    <my-reactive-file *ngIf="!selectingFromVideo" inputName="uploadNewThumbnail" inputLabel="Upload image"
+      [extensions]="videoImageExtensions" [maxFileSize]="maxVideoImageSize" placement="right" icon="upload"
+      (fileChanged)="onFileChanged($event)" [buttonTooltip]="getReactiveFileButtonTooltip()">
+    </my-reactive-file>
+
+    <input type="button" *ngIf="!selectingFromVideo" i18n class="peertube-button grey-button"
+      (click)="selectFromVideo()" value="Select from video" />
+
+    <input type="button" *ngIf="selectingFromVideo" i18n class="peertube-button orange-button" (click)="selectFrame()"
+      value="Use frame" />
+
+    <input type="button" *ngIf="selectingFromVideo" i18n class="peertube-button grey-button"
+      (click)="resetSelectFromVideo()" value="Cancel" />
+
+  </div>
+
+</div>

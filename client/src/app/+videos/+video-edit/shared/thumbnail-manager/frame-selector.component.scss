@@ -1,0 +1,76 @@
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use 'node_modules/video.js/dist/video-js';
+
+$assets-path: '../../../../../assets/';
+
+@use '../../../../../sass/player/index';
+
+
+$video-default-height: 20vh;
+$video-max-height: 20vh;
+
+.video-wrapper {
+    background-color: #000;
+    // display: flex;
+    justify-content: center;
+
+    .videojs-wrapper {
+        // display: flex;
+        justify-content: center;
+        flex-grow: 1;
+    }
+
+    ::ng-deep .video-js {
+        --player-height: #{$video-default-height};
+        --player-portrait-mode: 0;
+        // Default player ratio, redefined by the player to automatically adapt player size
+        --player-ratio: #{math.div(16, 9)};
+
+        width: 400px;
+        height: var(--player-height);
+
+        // Can be recalculated by the player depending on video ratio
+        max-width: calc(var(--player-height) * var(--player-ratio));
+
+        // VideoJS create an inner video player
+        video {
+            outline: 0;
+            // position: relative !important;
+        }
+    }
+}
+
+// Use the same breakpoint than in the typescript component to display the other video miniatures as row
+@media screen and (max-width: 1100px) {
+    .videojs-wrapper {
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .videojs-wrapper {
+        // Reset height
+        height: initial !important;
+
+        ::ng-deep .video-js {
+            --player-portrait-mode: 1;
+            --player-height: calc(100vw / var(--player-ratio)) !important;
+
+            max-height: calc(100vh - #{$header-height} - #{$player-portrait-bottom-space});
+        }
+    }
+
+}
+
+// Special case for iOS, that takes into account the width for fullscreens
+.video-wrapper ::ng-deep .video-js.vjs-fullscreen {
+    max-width: unset;
+}
+
+// Hiding unnecessary controls
+.vjs-volume-panel, .vjs-picture-in-picture-control {
+    display: none !important;
+}
