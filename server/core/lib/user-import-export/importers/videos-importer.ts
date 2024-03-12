@@ -1,4 +1,4 @@
-import { LiveVideoLatencyMode, ThumbnailType, VideoExportJSON, VideoPrivacy } from '@peertube/peertube-models'
+import { LiveVideoLatencyMode, ThumbnailType, VideoExportJSON, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
@@ -207,7 +207,9 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
         videoPasswords: videoImportData.passwords,
         duration,
         filename: videoImportData.source?.filename,
-        state: buildNextVideoState()
+        state: videoImportData.isLive
+          ? VideoState.WAITING_FOR_LIVE
+          : buildNextVideoState()
       },
 
       liveAttributes: videoImportData.live,

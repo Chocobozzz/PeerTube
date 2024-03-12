@@ -14,7 +14,8 @@ import {
   VideoCreateResult,
   VideoPlaylistPrivacy,
   VideoPlaylistType,
-  VideoPrivacy
+  VideoPrivacy,
+  VideoState
 } from '@peertube/peertube-models'
 import { prepareImportExportTests } from '@tests/shared/import-export.js'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
@@ -466,6 +467,8 @@ function runTest (withObjectStorage: boolean) {
       expect(video.duration).to.equal(0)
       expect(video.files).to.have.lengthOf(0)
       expect(video.streamingPlaylists).to.have.lengthOf(0)
+
+      expect(video.state.id).to.equal(VideoState.WAITING_FOR_LIVE)
     }
   })
 
