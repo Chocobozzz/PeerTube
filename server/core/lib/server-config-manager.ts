@@ -10,12 +10,12 @@ import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '@server/initializers/constants.js'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '@server/lib/signup.js'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page.js'
+import { getServerActor } from '@server/models/application/application.js'
 import { PluginModel } from '@server/models/server/plugin.js'
 import { Hooks } from './plugins/hooks.js'
 import { PluginManager } from './plugins/plugin-manager.js'
 import { getThemeOrDefault } from './plugins/theme-utils.js'
 import { VideoTranscodingProfilesManager } from './transcoding/default-transcoding-profiles.js'
-import { ActorImageModel } from '@server/models/actor/actor-image.js'
 
 /**
  *
@@ -47,9 +47,9 @@ class ServerConfigManager {
   async getHTMLServerConfig (): Promise<HTMLServerConfig> {
     if (this.serverCommit === undefined) this.serverCommit = await getServerCommit()
 
-    const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
+    const serverActor = await getServerActor()
 
-    const { avatars, banners } = await ActorImageModel.listServerActorImages()
+    const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
 
     return {
       client: {
@@ -104,8 +104,8 @@ class ServerConfigManager {
           javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
           css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
         },
-        avatars: avatars.map(a => a.toFormattedJSON()),
-        banners: banners.map(b => b.toFormattedJSON())
+        avatars: serverActor.Avatars.map(a => a.toFormattedJSON()),
+        banners: serverActor.Banners.map(b => b.toFormattedJSON())
       },
       search: {
         remoteUri: {
