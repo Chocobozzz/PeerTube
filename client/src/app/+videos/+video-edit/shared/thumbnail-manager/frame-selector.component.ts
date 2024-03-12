@@ -13,6 +13,7 @@ import videojs from 'video.js';
   `,
   styleUrls: ['./frame-selector.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: true
 })
 
 export class FrameSelectorComponent implements OnInit, OnDestroy {

@@ -101,8 +101,9 @@ function generateLocalVideoMiniature (options: {
   videoFile: MVideoFile
   types: ThumbnailType_Type[]
   ffprobe?: FfprobeData
+  timecode?: number
 }): Promise<MThumbnail[]> {
-  const { video, videoFile, types, ffprobe } = options
+  const { video, videoFile, types, ffprobe, timecode } = options
 
   if (types.length === 0) return Promise.resolve([])
 
@@ -141,7 +142,8 @@ function generateLocalVideoMiniature (options: {
           folder: basePath,
           imageName: filename,
           size: { height, width },
-          ffprobe
+          ffprobe,
+          timecode
         })
       }
 
@@ -371,16 +373,17 @@ async function generateImageFromVideoFile (options: {
   folder: string
   imageName: string
   size: { width: number, height: number }
-  ffprobe?: FfprobeData
+  ffprobe?: FfprobeData,
+  timecode?: number
 }) {
-  const { fromPath, folder, imageName, size, ffprobe } = options
+  const { fromPath, folder, imageName, size, ffprobe, timecode } = options
 
   const pendingImageName = 'pending-' + imageName
   const pendingImagePath = join(folder, pendingImageName)
 
   try {
     const framesToAnalyze = CONFIG.THUMBNAILS.GENERATION_FROM_VIDEO.FRAMES_TO_ANALYZE
-    await generateThumbnailFromVideo({ fromPath, output: pendingImagePath, framesToAnalyze, ffprobe, scale: size })
+    await generateThumbnailFromVideo({ fromPath, output: pendingImagePath, framesToAnalyze, ffprobe, scale: size, timecode })
 
     const destination = join(folder, imageName)
     await processImageFromWorker({ path: pendingImagePath, destination, newSize: size })

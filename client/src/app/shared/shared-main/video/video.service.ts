@@ -583,4 +583,11 @@ export class VideoService {
                .put(url, body, { headers })
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
+
+  setThumbnailAtTimecode (id: string, timecode: string): Observable<string> {
+    const url = `${VideoService.BASE_VIDEO_URL}/${id}/thumbnail/${timecode}`
+
+    return this.authHttp.put<string>(url, '')
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
 }

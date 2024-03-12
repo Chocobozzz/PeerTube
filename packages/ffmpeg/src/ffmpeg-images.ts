@@ -47,14 +47,23 @@ export class FFmpegImage {
       height: number
     }
     ffprobe?: FfprobeData
+    timecode?: number
   }) {
-    const { fromPath, ffprobe } = options
+    const { fromPath, ffprobe, timecode } = options
 
     let duration = await getVideoStreamDuration(fromPath, ffprobe)
     if (isNaN(duration)) duration = 0
 
+    let seekPosition = duration / 2
+
+    if (timecode !== undefined) {
+      if (timecode >= 0) {
+        seekPosition = timecode
+      }
+    }
+
     this.buildGenerateThumbnailFromVideo(options)
-      .seekInput(duration / 2)
+      .seekInput(seekPosition)
 
     try {
       return await this.commandWrapper.runCommand()

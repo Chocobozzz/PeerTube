@@ -1,6 +1,7 @@
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { CommonModule } from '@angular/common';
 import { imageToDataURL } from '../../../../../root-helpers/images'
-import { BytesPipe } from '../../../../shared/shared-main'
+import { BytesPipe } from '../../../../shared/shared-main/angular/bytes.pipe'
 
 import { addQueryParams } from '@peertube/peertube-core-utils'
 
@@ -18,11 +19,9 @@ import {
   RestExtractor,
   ServerService,
 } from '../../../../core'
-import {
-  VideoDetails,
-  VideoFileTokenService,
-  VideoService
-} from '../../../../shared/shared-main'
+import { VideoDetails } from '../../../../shared/shared-main/video/video-details.model'
+import { VideoFileTokenService } from '../../../../shared/shared-main/video/video-file-token.service'
+import { VideoService } from '../../../../shared/shared-main/video/video.service'
 import {
   HTMLServerConfig,
   HttpStatusCode,
@@ -30,13 +29,15 @@ import {
   ServerErrorCode
 } from '@peertube/peertube-models'
 import { videoRequiresFileToken } from '../../../../../root-helpers/video'
-
-
+import { FrameSelectorComponent } from './frame-selector.component';
+import { ReactiveFileComponent } from '@app/shared/shared-forms/reactive-file.component';
 
 @Component({
   selector: 'my-thumbnail-manager',
   styleUrls: ['./thumbnail-manager.component.scss'],
   templateUrl: './thumbnail-manager.component.html',
+  standalone: true,
+  imports: [ CommonModule, FrameSelectorComponent, ReactiveFileComponent ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -103,10 +104,6 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
     this.serverConfig = this.serverService.getHTMLConfig()
 
     this.allowedExtensionsMessage = this.videoImageExtensions.join(', ')
-  }
-
-  ngOnDestroy() {
-    // if (this.player) this.player.dispose()
   }
 
   onFileChanged(file: Blob) {

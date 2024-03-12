@@ -1,0 +1,37 @@
+
+.root {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+
+  .preview-container {
+    position: relative;
+
+    .preview {
+      object-fit: cover;
+      border-radius: 4px;
+      max-width: 100%;
+
+      &.no-image {
+        border: 2px solid #808080;
+        background-color: pvar(--mainBackgroundColor);
+      }
+    }
+  }
+
+  .inputs {
+
+    margin-top: 10px;
+
+    my-reactive-file {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    input {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+  }
+}
