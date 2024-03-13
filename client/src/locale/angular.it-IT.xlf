@@ -515,9 +515,9 @@
           <context context-type="linenumber">244</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="906167214730624194" datatype="html">
+      <trans-unit id="906167214730624194" datatype="html" xml:space="preserve">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{spettatori, plural, =0 {Nessuno spettatore} =1 {1 spettatore} other {<x id="viewers"/> spettatori}}</target>
+        <target state="translated">{views, plural, =0 {Nessuno spettatore} =1 {1 spettatore} other {<x id="viewers"/> spettatori}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">306</context>
@@ -547,9 +547,9 @@
           <context context-type="linenumber">355</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4873265433447388314" datatype="html">
+      <trans-unit id="4873265433447388314" datatype="html" xml:space="preserve">
         <source>{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</source>
-        <target state="translated">{spettatori, plural, =0 {Nessuno spettatore} =1 {1 spettatore} other {<x id="viewers"/> spettatori}}</target>
+        <target state="translated">{viewers, plural, =0 {Nessuno spettatore} =1 {1 spettatore} other {<x id="viewers"/> spettatori}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">303</context>
