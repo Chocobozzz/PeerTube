@@ -4,7 +4,6 @@ import { MVideo } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { pick } from '@peertube/peertube-core-utils'
 import { buildUUID } from '@peertube/peertube-node-utils'
-import { getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import {
   RunnerJobUpdatePayload,
   RunnerJobVODAudioMergeTranscodingPayload,
@@ -77,12 +76,7 @@ export class VODAudioMergeTranscodingJobHandler extends AbstractVODTranscodingJo
 
     const videoFilePath = resultPayload.videoFile as string
 
-    // ffmpeg generated a new video file, so update the video duration
-    // See https://trac.ffmpeg.org/ticket/5456
-    video.duration = await getVideoStreamDuration(videoFilePath)
-    await video.save()
-
-    await onVODWebVideoOrAudioMergeTranscodingJob({ video, videoFilePath, privatePayload })
+    await onVODWebVideoOrAudioMergeTranscodingJob({ video, videoFilePath, privatePayload, wasAudioFile: true })
 
     logger.info(
       'Runner VOD audio merge transcoding job %s for %s ended.',

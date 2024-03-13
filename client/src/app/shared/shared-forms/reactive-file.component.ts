@@ -1,7 +1,10 @@
 import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
-import { GlobalIconName } from '@app/shared/shared-icons'
+import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { NgClass, NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-reactive-file',
@@ -13,7 +16,9 @@ import { GlobalIconName } from '@app/shared/shared-icons'
       useExisting: forwardRef(() => ReactiveFileComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: true,
+  imports: [ NgClass, NgbTooltip, NgIf, GlobalIconComponent, FormsModule ]
 })
 export class ReactiveFileComponent implements OnInit, OnChanges, ControlValueAccessor {
   @Input() theme: 'primary' | 'secondary' = 'secondary'

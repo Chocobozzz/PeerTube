@@ -1,5 +1,4 @@
 import { getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
-import { Actor } from '@app/shared/shared-main'
 import { buildPlaylistWatchPath, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
   AccountSummary,
@@ -10,6 +9,7 @@ import {
   VideoPlaylistType,
   VideoPlaylistType_Type
 } from '@peertube/peertube-models'
+import { Actor } from '../shared-main/account/actor.model'
 
 export class VideoPlaylist implements ServerVideoPlaylist {
   id: number

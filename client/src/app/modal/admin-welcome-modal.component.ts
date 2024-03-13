@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { Notifier, User, UserService } from '@app/core'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
@@ -7,7 +8,9 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 @Component({
   selector: 'my-admin-welcome-modal',
   templateUrl: './admin-welcome-modal.component.html',
-  styleUrls: [ './admin-welcome-modal.component.scss' ]
+  styleUrls: [ './admin-welcome-modal.component.scss' ],
+  standalone: true,
+  imports: [ GlobalIconComponent ]
 })
 export class AdminWelcomeModalComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef

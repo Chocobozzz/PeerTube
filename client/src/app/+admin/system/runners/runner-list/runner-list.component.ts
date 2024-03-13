@@ -1,13 +1,30 @@
-import { SortMeta } from 'primeng/api'
+import { SortMeta, SharedModule } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
-import { DropdownAction } from '@app/shared/shared-main'
 import { Runner } from '@peertube/peertube-models'
 import { RunnerService } from '../runner.service'
+import { DatePipe } from '@angular/common'
+import { AutoColspanDirective } from '../../../../shared/shared-main/angular/auto-colspan.directive'
+import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { TableModule } from 'primeng/table'
+import { RouterLink } from '@angular/router'
+import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-runner-list',
-  templateUrl: './runner-list.component.html'
+  templateUrl: './runner-list.component.html',
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    RouterLink,
+    TableModule,
+    SharedModule,
+    NgbTooltip,
+    ActionDropdownComponent,
+    AutoColspanDirective,
+    DatePipe
+  ]
 })
 export class RunnerListComponent extends RestTable <Runner> implements OnInit {
   runners: Runner[] = []

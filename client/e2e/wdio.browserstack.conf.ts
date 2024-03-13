@@ -10,7 +10,7 @@ if (!key) throw new Error('Miss browser stack key')
 function buildMainOptions (sessionName: string) {
   return {
     projectName: 'PeerTube',
-    buildName: 'Main E2E - ' + new Date().toISOString().split('T')[0],
+    buildName: 'Main E2E - ' + new Date().toISOString(),
     sessionName,
     consoleLogs: 'info',
     networkLogs: true
@@ -100,7 +100,7 @@ module.exports = {
       {
         browserName: 'Safari',
 
-        ...buildBStackMobileOptions({ sessionName: 'Safari iPhone', deviceName: 'iPhone 8 Plus', osVersion: '12.4' })
+        ...buildBStackMobileOptions({ sessionName: 'Safari iPhone', deviceName: 'iPhone 8', osVersion: '13' })
       },
       {
         browserName: 'Safari',

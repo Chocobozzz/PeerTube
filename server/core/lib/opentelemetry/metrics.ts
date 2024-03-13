@@ -51,13 +51,14 @@ class OpenTelemetryMetrics {
     const provider = new MeterProvider({
       views: [
         ...NodeJSObserversBuilder.getViews()
+      ],
+      readers: [
+        new PrometheusExporter({
+          host: CONFIG.OPEN_TELEMETRY.METRICS.PROMETHEUS_EXPORTER.HOSTNAME,
+          port: CONFIG.OPEN_TELEMETRY.METRICS.PROMETHEUS_EXPORTER.PORT
+        })
       ]
     })
-
-    provider.addMetricReader(new PrometheusExporter({
-      host: CONFIG.OPEN_TELEMETRY.METRICS.PROMETHEUS_EXPORTER.HOSTNAME,
-      port: CONFIG.OPEN_TELEMETRY.METRICS.PROMETHEUS_EXPORTER.PORT
-    }))
 
     metrics.setGlobalMeterProvider(provider)
 

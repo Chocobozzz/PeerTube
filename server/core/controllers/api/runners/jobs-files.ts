@@ -9,7 +9,7 @@ import {
   runnerJobGetVideoStudioTaskFileValidator,
   runnerJobGetVideoTranscodingFileValidator
 } from '@server/middlewares/validators/runners/job-files.js'
-import { RunnerJobState, VideoStorage } from '@peertube/peertube-models'
+import { RunnerJobState, FileStorage } from '@peertube/peertube-models'
 
 const lTags = loggerTagsFactory('api', 'runner')
 
@@ -57,7 +57,7 @@ async function getMaxQualityVideoFile (req: express.Request, res: express.Respon
 
   const file = video.getMaxQualityFile()
 
-  if (file.storage === VideoStorage.OBJECT_STORAGE) {
+  if (file.storage === FileStorage.OBJECT_STORAGE) {
     if (file.isHLS()) {
       return proxifyHLS({
         req,

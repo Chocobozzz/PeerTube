@@ -1,20 +1,44 @@
 import { environment } from 'src/environments/environment'
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, RedirectService, SessionStorageService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/form-validators/login-validators'
 import { USER_OTP_TOKEN_VALIDATOR } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormReactiveService, InputTextComponent } from '@app/shared/shared-forms'
-import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 import { NgbAccordionDirective, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { getExternalAuthHref } from '@peertube/peertube-core-utils'
 import { RegisteredExternalAuthConfig, ServerConfig, ServerErrorCode } from '@peertube/peertube-models'
+import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
+import { InstanceBannerComponent } from '../shared/shared-instance/instance-banner.component'
+import { AutofocusDirective } from '../shared/shared-main/angular/autofocus.directive'
+import { PluginSelectorDirective } from '../shared/shared-main/plugins/plugin-selector.directive'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgIf, NgClass, NgTemplateOutlet, NgFor } from '@angular/common'
+import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance/instance-about-accordion.component'
+import { InputTextComponent } from '@app/shared/shared-forms/input-text.component'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 
 @Component({
   selector: 'my-login',
   templateUrl: './login.component.html',
-  styleUrls: [ './login.component.scss' ]
+  styleUrls: [ './login.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    RouterLink,
+    FormsModule,
+    PluginSelectorDirective,
+    ReactiveFormsModule,
+    AutofocusDirective,
+    NgClass,
+    NgTemplateOutlet,
+    InputTextComponent,
+    NgFor,
+    InstanceBannerComponent,
+    InstanceAboutAccordionComponent,
+    GlobalIconComponent
+  ]
 })
 
 export class LoginComponent extends FormReactive implements OnInit, AfterViewInit {
@@ -31,6 +55,8 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   isAuthenticatedWithExternalAuth = false
   externalAuthError = false
   externalLogins: string[] = []
+
+  instanceBannerUrl: string
 
   instanceInformationPanels = {
     terms: true,
@@ -120,6 +146,10 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     return this.serverConfig.plugin.registeredExternalAuths
   }
 
+  hasExternalLogins () {
+    return this.getExternalLogins().length !== 0
+  }
+
   getAuthHref (auth: RegisteredExternalAuthConfig) {
     return getExternalAuthHref(environment.apiUrl, auth)
   }
@@ -172,7 +202,16 @@ The link will expire within 1 hour.`
   }
 
   hasUsernameUppercase () {
-    return this.form.value['username'].match(/[A-Z]/)
+    const username = this.form.value['username']
+    if (!username) return false
+
+    return username.match(/[A-Z]/)
+  }
+
+  hasForgotPasswordEmailUppercase () {
+    if (!this.forgotPasswordEmail) return false
+
+    return this.forgotPasswordEmail.match(/[A-Z]/)
   }
 
   private loadExternalAuthToken (username: string, token: string) {

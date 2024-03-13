@@ -1,7 +1,6 @@
-import { ThumbnailType, type ThumbnailType_Type } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import { ActivityIconObject, ThumbnailType, type ThumbnailType_Type } from '@peertube/peertube-models'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
-import { MThumbnail, MThumbnailVideo, MVideo } from '@server/types/models/index.js'
+import { MThumbnail, MThumbnailVideo, MVideo, MVideoPlaylist } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import {
@@ -14,9 +13,7 @@ import {
   CreatedAt,
   DataType,
   Default,
-  ForeignKey,
-  Model,
-  Table,
+  ForeignKey, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { logger } from '../../helpers/logger.js'
@@ -24,6 +21,7 @@ import { CONFIG } from '../../initializers/config.js'
 import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
 import { VideoPlaylistModel } from './video-playlist.js'
 import { VideoModel } from './video.js'
+import { SequelizeModel } from '../shared/sequelize-type.js'
 
 @Table({
   tableName: 'thumbnail',
@@ -41,7 +39,7 @@ import { VideoModel } from './video.js'
     }
   ]
 })
-export class ThumbnailModel extends Model<Partial<AttributesOnly<ThumbnailModel>>> {
+export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
 
   @AllowNull(false)
   @Column
@@ -168,10 +166,10 @@ export class ThumbnailModel extends Model<Partial<AttributesOnly<ThumbnailModel>
     return join(directory, filename)
   }
 
-  getOriginFileUrl (video: MVideo) {
+  getOriginFileUrl (videoOrPlaylist: MVideo | MVideoPlaylist) {
     const staticPath = ThumbnailModel.types[this.type].staticPath + this.filename
 
-    if (video.isOwned()) return WEBSERVER.URL + staticPath
+    if (videoOrPlaylist.isOwned()) return WEBSERVER.URL + staticPath
 
     return this.fileUrl
   }
@@ -204,5 +202,17 @@ export class ThumbnailModel extends Model<Partial<AttributesOnly<ThumbnailModel>
 
   isOwned () {
     return !this.fileUrl
+  }
+
+  // ---------------------------------------------------------------------------
+
+  toActivityPubObject (this: MThumbnail, video: MVideo): ActivityIconObject {
+    return {
+      type: 'Image',
+      url: this.getOriginFileUrl(video),
+      mediaType: 'image/jpeg',
+      width: this.width,
+      height: this.height
+    }
   }
 }

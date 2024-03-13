@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { HooksService } from '@app/core'
-import { VideoDetails } from '@app/shared/shared-main'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
+import { TimeDurationFormatterPipe } from '../../../../shared/shared-main/angular/time-duration-formatter.pipe'
+import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+import { RouterLink } from '@angular/router'
+import { NgIf, NgFor, DatePipe } from '@angular/common'
 
 type PluginMetadata = {
   label: string
@@ -12,7 +16,9 @@ type PluginMetadata = {
 @Component({
   selector: 'my-video-attributes',
   templateUrl: './video-attributes.component.html',
-  styleUrls: [ './video-attributes.component.scss' ]
+  styleUrls: [ './video-attributes.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, RouterLink, GlobalIconComponent, NgFor, DatePipe, TimeDurationFormatterPipe ]
 })
 export class VideoAttributesComponent implements OnInit {
   @Input() video: VideoDetails

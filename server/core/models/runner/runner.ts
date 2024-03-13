@@ -1,9 +1,8 @@
 import { FindOptions } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { MRunner } from '@server/types/models/runners/index.js'
 import { Runner } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
-import { getSort } from '../shared/index.js'
+import { SequelizeModel, getSort } from '../shared/index.js'
 import { RunnerRegistrationTokenModel } from './runner-registration-token.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 
@@ -23,7 +22,7 @@ import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
     }
   ]
 })
-export class RunnerModel extends Model<Partial<AttributesOnly<RunnerModel>>> {
+export class RunnerModel extends SequelizeModel<RunnerModel> {
 
   // Used to identify the appropriate runner when it uses the runner REST API
   @AllowNull(false)

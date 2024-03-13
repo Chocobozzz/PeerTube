@@ -1,8 +1,9 @@
-import { HttpErrorResponse } from '@angular/common/http'
+import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 import { Notifier } from '@app/core'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { UploadState } from 'ngx-uploadx'
 
-function genericUploadErrorHandler (options: {
+export function genericUploadErrorHandler (options: {
   err: Pick<HttpErrorResponse, 'message' | 'status' | 'headers'>
   name: string
   notifier?: Notifier
@@ -17,8 +18,30 @@ function genericUploadErrorHandler (options: {
   return message
 }
 
-export {
-  genericUploadErrorHandler
+export function getUploadXRetryConfig () {
+  return {
+    maxAttempts: 30, // maximum attempts for 503 codes, otherwise set to 6, see below
+    maxDelay: 120_000, // 2 min
+    shouldRetry: (code: number, attempts: number) => {
+      return code === HttpStatusCode.SERVICE_UNAVAILABLE_503 || ((code < 400 || code > 500) && attempts < 6)
+    }
+  }
+}
+
+export function buildHTTPErrorResponse (state: UploadState): HttpErrorResponse {
+  const error = state.response?.error?.message || state.response?.error || 'Unknown error'
+
+  return {
+    error: new Error(error),
+    name: 'HttpErrorResponse',
+    message: error,
+    ok: false,
+    headers: new HttpHeaders(state.responseHeaders),
+    status: +state.responseStatus,
+    statusText: error,
+    type: HttpEventType.Response,
+    url: state.url
+  }
 }
 
 // ---------------------------------------------------------------------------

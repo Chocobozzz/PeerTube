@@ -1,3 +1,4 @@
+export * from './caption-toggle-button'
 export * from './chapters-plugin'
 export * from './next-previous-video-button'
 export * from './p2p-info-button'

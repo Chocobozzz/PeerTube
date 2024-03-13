@@ -2,13 +2,20 @@ import { Subscription } from 'rxjs'
 import { first } from 'rxjs/operators'
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
 import { ComponentPaginationLight, DisableForReuseHook, HooksService, ScreenService } from '@app/core'
-import { VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
-import { MiniatureDisplayOptions, VideoFilters } from '@app/shared/shared-video-miniature'
 import { Video, VideoSortField } from '@peertube/peertube-models'
+import { VideosListComponent } from '../../shared/shared-video-miniature/videos-list.component'
+import { NgIf } from '@angular/common'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature/video-miniature.component'
+import { VideoFilters } from '@app/shared/shared-video-miniature/video-filters.model'
 
 @Component({
   selector: 'my-video-channel-videos',
-  templateUrl: './video-channel-videos.component.html'
+  templateUrl: './video-channel-videos.component.html',
+  standalone: true,
+  imports: [ NgIf, VideosListComponent ]
 })
 export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDestroy, DisableForReuseHook {
   getVideosObservableFunction = this.getVideosObservable.bind(this)

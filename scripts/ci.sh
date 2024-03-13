@@ -59,7 +59,7 @@ elif [ "$1" = "client" ]; then
 
     feedsFiles=$(findTestFiles ./packages/tests/dist/feeds)
     clientFiles=$(findTestFiles ./packages/tests/dist/client)
-    miscFiles="./packages/tests/dist/misc-endpoints.js"
+    miscFiles="./packages/tests/dist/misc-endpoints.js ./packages/tests/dist/nginx.js"
     # Not in their own task, they need an index.html
     pluginFiles="./packages/tests/dist/plugins/html-injection.js ./packages/tests/dist/api/server/plugins.js"
 

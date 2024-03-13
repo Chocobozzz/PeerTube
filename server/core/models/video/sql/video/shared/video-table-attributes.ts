@@ -88,6 +88,8 @@ export class VideoTableAttributes {
       'metadataUrl',
       'videoStreamingPlaylistId',
       'videoId',
+      'width',
+      'height',
       'storage'
     ]
   }
@@ -255,6 +257,7 @@ export class VideoTableAttributes {
       'dislikes',
       'remote',
       'isLive',
+      'aspectRatio',
       'url',
       'commentsEnabled',
       'downloadEnabled',

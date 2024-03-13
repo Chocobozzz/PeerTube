@@ -1,8 +1,7 @@
 import { LiveVideo, VideoState, type LiveVideoLatencyModeType } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
-import { MVideoLive, MVideoLiveVideoWithSetting } from '@server/types/models/index.js'
+import { MVideoLive, MVideoLiveVideoWithSetting, MVideoLiveWithSetting } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import {
   AllowNull,
@@ -12,14 +11,13 @@ import {
   CreatedAt,
   DataType,
   DefaultScope,
-  ForeignKey,
-  Model,
-  Table,
+  ForeignKey, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { VideoBlacklistModel } from './video-blacklist.js'
 import { VideoLiveReplaySettingModel } from './video-live-replay-setting.js'
 import { VideoModel } from './video.js'
+import { SequelizeModel } from '../shared/index.js'
 
 @DefaultScope(() => ({
   include: [
@@ -52,7 +50,7 @@ import { VideoModel } from './video.js'
     }
   ]
 })
-export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>>> {
+export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
 
   @AllowNull(true)
   @Column(DataType.STRING)
@@ -147,6 +145,22 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
     }
 
     return VideoLiveModel.findOne<MVideoLive>(query)
+  }
+
+  static loadByVideoIdWithSettings (videoId: number) {
+    const query = {
+      where: {
+        videoId
+      },
+      include: [
+        {
+          model: VideoLiveReplaySettingModel.unscoped(),
+          required: false
+        }
+      ]
+    }
+
+    return VideoLiveModel.findOne<MVideoLiveWithSetting>(query)
   }
 
   toFormattedJSON (canSeePrivateInformation: boolean): LiveVideo {

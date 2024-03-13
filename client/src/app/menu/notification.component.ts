@@ -3,13 +3,19 @@ import { filter } from 'rxjs/operators'
 import { Component, EventEmitter, Output, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
 import { Notifier, PeerTubeSocket, ScreenService } from '@app/core'
-import { UserNotificationService } from '@app/shared/shared-main'
-import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
+import { NgbPopover, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap'
+import { UserNotificationsComponent } from '@app/shared/standalone-notifications/user-notifications.component'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
+import { CommonModule } from '@angular/common'
+import { LoaderComponent } from '@app/shared/shared-main/loaders/loader.component'
+import { UserNotificationService } from '@app/shared/shared-main/users/user-notification.service'
 
 @Component({
   selector: 'my-notification',
   templateUrl: './notification.component.html',
-  styleUrls: [ './notification.component.scss' ]
+  styleUrls: [ './notification.component.scss' ],
+  standalone: true,
+  imports: [ CommonModule, NgbPopoverModule, UserNotificationsComponent, GlobalIconComponent, LoaderComponent ]
 })
 export class NotificationComponent implements OnInit, OnDestroy {
   @ViewChild('popover', { static: true }) popover: NgbPopover
@@ -67,6 +73,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.opened = true
 
     document.querySelector('nav').scrollTo(0, 0) // Reset menu scroll to easy lock
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     document.querySelector('nav').addEventListener('scroll', this.onMenuScrollEvent)
   }
 
@@ -74,6 +81,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.loaded = false
     this.opened = false
 
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     document.querySelector('nav').removeEventListener('scroll', this.onMenuScrollEvent)
   }
 

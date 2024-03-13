@@ -105,7 +105,8 @@ describe('Test videos files', function () {
       const video = await servers[0].videos.get({ id: webVideoId })
       const files = video.files
 
-      await servers[0].videos.removeWebVideoFile({ videoId: webVideoId, fileId: files[0].id })
+      const toDelete = files[0]
+      await servers[0].videos.removeWebVideoFile({ videoId: webVideoId, fileId: toDelete.id })
 
       await waitJobs(servers)
 
@@ -113,7 +114,7 @@ describe('Test videos files', function () {
         const video = await server.videos.get({ id: webVideoId })
 
         expect(video.files).to.have.lengthOf(files.length - 1)
-        expect(video.files.find(f => f.id === files[0].id)).to.not.exist
+        expect(video.files.find(f => f.resolution.id === toDelete.resolution.id)).to.not.exist
       }
     })
 
@@ -151,7 +152,7 @@ describe('Test videos files', function () {
         const video = await server.videos.get({ id: hlsId })
 
         expect(video.streamingPlaylists[0].files).to.have.lengthOf(files.length - 1)
-        expect(video.streamingPlaylists[0].files.find(f => f.id === toDelete.id)).to.not.exist
+        expect(video.streamingPlaylists[0].files.find(f => f.resolution.id === toDelete.resolution.id)).to.not.exist
 
         const { text } = await makeRawRequest({ url: video.streamingPlaylists[0].playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
 

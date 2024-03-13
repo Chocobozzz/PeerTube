@@ -79,12 +79,18 @@ async function createChapters (options: {
 }) {
   const { chapters, transaction, videoId } = options
 
+  const existingTimecodes = new Set<number>()
+
   for (const chapter of chapters) {
+    if (existingTimecodes.has(chapter.timecode)) continue
+
     await VideoChapterModel.create({
       title: chapter.title,
       timecode: chapter.timecode,
       videoId
     }, { transaction })
+
+    existingTimecodes.add(chapter.timecode)
   }
 }
 

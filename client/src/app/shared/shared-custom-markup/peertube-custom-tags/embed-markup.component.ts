@@ -6,7 +6,8 @@ import { CustomMarkupComponent } from './shared'
 
 @Component({
   selector: 'my-embed-markup',
-  template: ''
+  template: '',
+  standalone: true
 })
 export class EmbedMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() uuid: string

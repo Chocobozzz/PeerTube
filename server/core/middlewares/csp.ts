@@ -9,6 +9,7 @@ const baseDirectives = Object.assign({},
     fontSrc: [ '\'self\'', 'data:' ],
     imgSrc: [ '\'self\'', 'data:', 'blob:' ],
     scriptSrc: [ '\'self\' \'unsafe-inline\' \'unsafe-eval\'', 'blob:' ],
+    scriptSrcAttr: [ '\'unsafe-inline\'' ],
     styleSrc: [ '\'self\' \'unsafe-inline\'' ],
     objectSrc: [ '\'none\'' ], // only define to allow plugins, else let defaultSrc 'none' block it
     formAction: [ '\'self\'' ],
@@ -18,8 +19,14 @@ const baseDirectives = Object.assign({},
     frameSrc: [ '\'self\'' ], // instead of deprecated child-src / self because of test-embed
     workerSrc: [ '\'self\'', 'blob:' ] // instead of deprecated child-src
   },
-  CONFIG.CSP.REPORT_URI ? { reportUri: CONFIG.CSP.REPORT_URI } : {},
-  CONFIG.WEBSERVER.SCHEME === 'https' ? { upgradeInsecureRequests: [] } : {}
+
+  CONFIG.CSP.REPORT_URI
+    ? { reportUri: CONFIG.CSP.REPORT_URI }
+    : {},
+
+  CONFIG.WEBSERVER.SCHEME === 'https'
+    ? { upgradeInsecureRequests: [] }
+    : {}
 )
 
 const baseCSP = contentSecurityPolicy({

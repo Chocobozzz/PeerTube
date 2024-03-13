@@ -160,7 +160,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       response_type: 'code',
       grant_type: 'password',
       scope: 'upload',
-      username,
+      username: (username || '').trim(),
       password
     }
 

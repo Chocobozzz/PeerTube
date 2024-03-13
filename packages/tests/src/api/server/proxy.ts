@@ -85,7 +85,7 @@ describe('Test proxy', function () {
   describe('Videos import', async function () {
 
     function quickImport (expectedStatus: HttpStatusCodeType = HttpStatusCode.OK_200) {
-      return servers[0].imports.importVideo({
+      return servers[0].videoImports.importVideo({
         attributes: {
           name: 'video import',
           channelId: servers[0].store.channel.id,

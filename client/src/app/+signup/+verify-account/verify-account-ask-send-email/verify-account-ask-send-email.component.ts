@@ -2,12 +2,17 @@ import { Component, OnInit } from '@angular/core'
 import { SignupService } from '@app/+signup/shared/signup.service'
 import { Notifier, RedirectService, ServerService } from '@app/core'
 import { USER_EMAIL_VALIDATOR } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgIf, NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-verify-account-ask-send-email',
   templateUrl: './verify-account-ask-send-email.component.html',
-  styleUrls: [ './verify-account-ask-send-email.component.scss' ]
+  styleUrls: [ './verify-account-ask-send-email.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass ]
 })
 
 export class VerifyAccountAskSendEmailComponent extends FormReactive implements OnInit {

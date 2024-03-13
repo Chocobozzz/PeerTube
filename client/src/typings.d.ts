@@ -6,4 +6,4 @@ interface NodeModule {
   id: string
 }
 
-declare module 'markdown-it-emoji/light'
+declare module 'markdown-it-emoji/lib/light.mjs'

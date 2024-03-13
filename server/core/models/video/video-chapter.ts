@@ -1,10 +1,10 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { MVideo, MVideoChapter } from '@server/types/models/index.js'
 import { VideoChapter, VideoChapterObject } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { VideoModel } from './video.js'
 import { Transaction } from 'sequelize'
 import { getSort } from '../shared/sort.js'
+import { SequelizeModel } from '../shared/sequelize-type.js'
 
 @Table({
   tableName: 'videoChapter',
@@ -15,7 +15,7 @@ import { getSort } from '../shared/sort.js'
     }
   ]
 })
-export class VideoChapterModel extends Model<Partial<AttributesOnly<VideoChapterModel>>> {
+export class VideoChapterModel extends SequelizeModel<VideoChapterModel> {
 
   @AllowNull(false)
   @Column

@@ -1,5 +1,5 @@
 import merge from 'lodash-es/merge.js'
-import { About, CustomConfig, HttpStatusCode, ServerConfig } from '@peertube/peertube-models'
+import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, ServerConfig } from '@peertube/peertube-models'
 import { DeepPartial } from '@peertube/peertube-typescript-utils'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/abstract-command.js'
 
@@ -30,6 +30,16 @@ export class ConfigCommand extends AbstractCommand {
     }
   }
 
+  static getDisableRatesLimitOverrideConfig () {
+    return {
+      rates_limit: {
+        api: {
+          max: 5000
+        }
+      }
+    }
+  }
+
   // ---------------------------------------------------------------------------
 
   enableSignup (requiresApproval: boolean, limit = -1) {
@@ -46,15 +56,15 @@ export class ConfigCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  disableImports () {
-    return this.setImportsEnabled(false)
+  disableVideoImports () {
+    return this.setVideoImportsEnabled(false)
   }
 
-  enableImports () {
-    return this.setImportsEnabled(true)
+  enableVideoImports () {
+    return this.setVideoImportsEnabled(true)
   }
 
-  private setImportsEnabled (enabled: boolean) {
+  private setVideoImportsEnabled (enabled: boolean) {
     return this.updateExistingSubConfig({
       newConfig: {
         import: {
@@ -96,6 +106,19 @@ export class ConfigCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
+  keepSourceFile () {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        transcoding: {
+          originalFile: {
+            keep: true
+          }
+        }
+      }
+    })
+  }
+  // ---------------------------------------------------------------------------
+
   enableChannelSync () {
     return this.setChannelSyncEnabled(true)
   }
@@ -109,6 +132,74 @@ export class ConfigCommand extends AbstractCommand {
       newConfig: {
         import: {
           videoChannelSynchronization: {
+            enabled
+          }
+        }
+      }
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  enableAutoBlacklist () {
+    return this.setAutoblacklistEnabled(true)
+  }
+
+  disableAutoBlacklist () {
+    return this.setAutoblacklistEnabled(false)
+  }
+
+  private setAutoblacklistEnabled (enabled: boolean) {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        autoBlacklist: {
+          videos: {
+            ofUsers: {
+              enabled
+            }
+          }
+        }
+      }
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  enableUserImport () {
+    return this.setUserImportEnabled(true)
+  }
+
+  disableUserImport () {
+    return this.setUserImportEnabled(false)
+  }
+
+  private setUserImportEnabled (enabled: boolean) {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        import: {
+          users: {
+            enabled
+          }
+        }
+      }
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  enableUserExport () {
+    return this.setUserExportEnabled(true)
+  }
+
+  disableUserExport () {
+    return this.setUserExportEnabled(false)
+  }
+
+  private setUserExportEnabled (enabled: boolean) {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        export: {
+          users: {
             enabled
           }
         }
@@ -156,14 +247,17 @@ export class ConfigCommand extends AbstractCommand {
     webVideo?: boolean // default true
     hls?: boolean // default true
     with0p?: boolean // default false
+    keepOriginal?: boolean // default false
   } = {}) {
-    const { webVideo = true, hls = true, with0p = false } = options
+    const { webVideo = true, hls = true, with0p = false, keepOriginal = false } = options
 
     return this.updateExistingSubConfig({
       newConfig: {
         transcoding: {
           enabled: true,
-          keepOriginalFile: false,
+          originalFile: {
+            keep: keepOriginal
+          },
 
           allowAudioFiles: true,
           allowAdditionalExtensions: true,
@@ -184,14 +278,17 @@ export class ConfigCommand extends AbstractCommand {
   enableMinimumTranscoding (options: {
     webVideo?: boolean // default true
     hls?: boolean // default true
+    keepOriginal?: boolean // default false
   } = {}) {
-    const { webVideo = true, hls = true } = options
+    const { webVideo = true, hls = true, keepOriginal = false } = options
 
     return this.updateExistingSubConfig({
       newConfig: {
         transcoding: {
           enabled: true,
-          keepOriginalFile: false,
+          originalFile: {
+            keep: keepOriginal
+          },
 
           allowAudioFiles: true,
           allowAdditionalExtensions: true,
@@ -297,6 +394,53 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
+  // ---------------------------------------------------------------------------
+
+  updateInstanceImage (options: OverrideCommandOptions & {
+    fixture: string
+    type: ActorImageType_Type
+  }) {
+    const { fixture, type } = options
+
+    const path = type === ActorImageType.BANNER
+      ? `/api/v1/config/instance-banner/pick`
+      : `/api/v1/config/instance-avatar/pick`
+
+    return this.updateImageRequest({
+      ...options,
+
+      path,
+      fixture,
+      fieldname: type === ActorImageType.BANNER
+        ? 'bannerfile'
+        : 'avatarfile',
+
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  deleteInstanceImage (options: OverrideCommandOptions & {
+    type: ActorImageType_Type
+  }) {
+    const suffix = options.type === ActorImageType.BANNER
+      ? 'instance-banner'
+      : 'instance-avatar'
+
+    const path = `/api/v1/config/${suffix}`
+
+    return this.deleteRequest({
+      ...options,
+
+      path,
+
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   getCustomConfig (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/config/custom'
 
@@ -380,8 +524,7 @@ export class ConfigCommand extends AbstractCommand {
       },
       services: {
         twitter: {
-          username: '@MySuperUsername',
-          whitelisted: true
+          username: '@MySuperUsername'
         }
       },
       client: {
@@ -438,7 +581,9 @@ export class ConfigCommand extends AbstractCommand {
       },
       transcoding: {
         enabled: true,
-        keepOriginalFile: false,
+        originalFile: {
+          keep: false
+        },
         remoteRunners: {
           enabled: false
         },
@@ -519,6 +664,16 @@ export class ConfigCommand extends AbstractCommand {
         videoChannelSynchronization: {
           enabled: false,
           maxPerUser: 10
+        },
+        users: {
+          enabled: true
+        }
+      },
+      export: {
+        users: {
+          enabled: true,
+          maxUserVideoQuota: 5242881,
+          exportExpiration: 1000 * 3600
         }
       },
       trending: {

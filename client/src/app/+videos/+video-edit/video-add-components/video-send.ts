@@ -3,18 +3,16 @@ import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { Directive, EventEmitter, OnInit } from '@angular/core'
 import { AuthService, CanComponentDeactivateResult, Notifier, ServerService } from '@app/core'
 import { listUserChannelsForSelect } from '@app/helpers'
-import { FormReactive } from '@app/shared/shared-forms'
-import {
-  VideoCaptionEdit,
-  VideoCaptionService,
-  VideoChapterService,
-  VideoChaptersEdit,
-  VideoEdit,
-  VideoService
-} from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { HTMLServerConfig, VideoConstant, VideoPrivacyType } from '@peertube/peertube-models'
 import { of } from 'rxjs'
+import { VideoCaptionEdit } from '@app/shared/shared-main/video-caption/video-caption-edit.model'
+import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
+import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
+import { VideoChaptersEdit } from '@app/shared/shared-main/video/video-chapters-edit.model'
+import { VideoEdit } from '@app/shared/shared-main/video/video-edit.model'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 
 @Directive()
 // eslint-disable-next-line @angular-eslint/directive-class-suffix

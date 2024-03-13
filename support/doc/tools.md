@@ -121,7 +121,7 @@ peertube-cli redundancy remove --video 823
 
 PeerTube >= 5.2 supports VOD or Live transcoding by a remote PeerTube runner.
 
-### Installation
+### Runner installation
 
 Ensure you have `node`, `ffmpeg` and `ffprobe` installed on your system:
 
@@ -153,19 +153,119 @@ You can change the runner configuration (jobs concurrency, ffmpeg threads/nice e
 
 ### Run the server
 
+#### In a shell
+
 You need to run the runner in server mode first so it can run transcoding jobs of registered PeerTube instances:
 
 ```bash
 peertube-runner server
 ```
 
+#### As a Systemd service
+
+If your OS uses systemd, you can also configure a service so that the runner starts automatically.
+
+To do so, first create a dedicated user. Here, we are calling it `prunner`, but you can choose whatever name you want.
+We are using `/srv/prunner` as his home dir, but you can choose any other path.
+
+```bash
+useradd -m -d /srv/prunner -s /bin/bash -p prunner prunner
+```
+
+::: info Note
+If you want to use `/home/prunner`, you have to set `ProtectHome=false` in the systemd configuration (see below).
+:::
+
+Now, you can create the `/etc/systemd/system/prunner.service` file (don't forget to adapt path and user/group names if you changed it):
+
+```Systemd
+[Unit]
+Description=PeerTube runner daemon
+After=network.target
+
+[Service]
+Type=simple
+Environment=NODE_ENV=production
+User=prunner
+Group=prunner
+ExecStart=peertube-runner server
+WorkingDirectory=/srv/prunner
+SyslogIdentifier=prunner
+Restart=always
+
+; Some security directives.
+; Mount /usr, /boot, and /etc as read-only for processes invoked by this service.
+ProtectSystem=full
+; Sets up a new /dev mount for the process and only adds API pseudo devices
+; like /dev/null, /dev/zero or /dev/random but not physical devices. Disabled
+; by default because it may not work on devices like the Raspberry Pi.
+PrivateDevices=false
+; Ensures that the service process and all its children can never gain new
+; privileges through execve().
+NoNewPrivileges=true
+; This makes /home, /root, and /run/user inaccessible and empty for processes invoked
+; by this unit. Make sure that you do not depend on data inside these folders.
+ProtectHome=true
+; Drops the sys admin capability from the daemon.
+CapabilityBoundingSet=~CAP_SYS_ADMIN
+
+[Install]
+WantedBy=multi-user.target
+```
+
+:::info Note
+You can add the parameter `--id instance-1` on the `ExecStart` line, if you want to have multiple instances.
+You can then create multiple separate services. They can use the same user and path.
+:::
+
+Finally, to enable the service for the first time:
+
+```bash
+systemctl daemon-reload
+systemctl enable prunner.service
+systemctl restart prunner.service
+```
+
+Next time, if you need to start/stop/restart the service:
+
+```bash
+systemctl stop prunner.service
+systemctl start prunner.service
+systemctl restart prunner.service
+```
+
+You can also check the status (and last logs):
+
+```bash
+systemctl status prunner.service
+```
+
+To edit the runner configuration: juste edit the `/srv/prunner/.config/peertube-runner-nodejs/default/config.toml` file,
+and restart the service (this file will be created when the runner starts for the first time).
+
+If you are using the `--id` parameter, you can change specific configuration by editing the file `/srv/prunner/.config/peertube-runner-nodejs/[id]/config.toml`.
+
+::: info
+For every peertube-runner commands described below, you have to run them as the `prunner` user.
+So for example, to call the `list-registered` command: `sudo -u prunner peertube-runner list-registered`.
+Otherwise the script will read the wrong configuration and cache files, and won't work as expected.
+:::
+
 ### Register
 
 Then, you can register the runner to process transcoding job of a remote PeerTube instance:
 
-```bash
+::: code-group
+
+```bash [Shell]
 peertube-runner register --url http://peertube.example.com --registration-token ptrrt-... --runner-name my-runner-name
 ```
+
+```bash [Systemd]
+sudo -u prunner peertube-runner register --url http://peertube.example.com --registration-token ptrrt-... --runner-name my-runner-name
+```
+
+:::
 
 The runner will then use a websocket connection with the PeerTube instance to be notified about new available transcoding jobs.
 
@@ -173,14 +273,55 @@ The runner will then use a websocket connection with the PeerTube instance to be
 
 To unregister a PeerTube instance:
 
-```bash
+::: code-group
+
+
+```bash [Shell]
 peertube-runner unregister --url http://peertube.example.com --runner-name my-runner-name
 ```
 
+```bash [Systemd]
+sudo -u prunner peertube-runner unregister --url http://peertube.example.com --runner-name my-runner-name
+```
+
+:::
+
 ### List registered instances
 
-```bash
+::: code-group
+
+```bash [Shell]
 peertube-runner list-registered
+```
+
+```bash [Systemd]
+sudo -u prunner peertube-runner list-registered
+```
+
+:::
+
+### Update the runner package
+
+You can check if there is a new runner version using:
+
+```bash
+sudo npm outdated -g @peertube/peertube-runner
+```
+
+```
+Package                    Current  Wanted  Latest  Location                                Depended by
+@peertube/peertube-runner    0.0.6   0.0.7   0.0.7  node_modules/@peertube/peertube-runner  lib
+```
+
+To update the runner:
+
+```bash
+# Update the package
+sudo npm update -g @peertube/peertube-runner
+# Check that the version changed (optional)
+sudo npm list -g @peertube/peertube-runner
+# Restart the service (if you are using systemd)
+sudo systemctl restart prunner.service
 ```
 
 ## Server tools

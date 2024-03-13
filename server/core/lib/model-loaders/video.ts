@@ -1,3 +1,4 @@
+import { CONFIG } from '@server/initializers/config.js'
 import { VideoModel } from '@server/models/video/video.js'
 import {
   MVideoAccountLightBlacklistAllFiles,
@@ -7,6 +8,7 @@ import {
   MVideoImmutable,
   MVideoThumbnail
 } from '@server/types/models/index.js'
+import { getOrCreateAPVideo } from '../activitypub/videos/get.js'
 
 type VideoLoadType = 'for-api' | 'all' | 'only-video' | 'id' | 'none' | 'only-immutable-attributes'
 
@@ -50,11 +52,29 @@ function loadVideoByUrl (
   url: string,
   fetchType: VideoLoadByUrlType
 ): Promise<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable> {
-  if (fetchType === 'all') return VideoModel.loadByUrlAndPopulateAccount(url)
+  if (fetchType === 'all') return VideoModel.loadByUrlAndPopulateAccountAndFiles(url)
 
   if (fetchType === 'only-immutable-attributes') return VideoModel.loadByUrlImmutableAttributes(url)
 
   if (fetchType === 'only-video') return VideoModel.loadByUrl(url)
+}
+
+async function loadOrCreateVideoIfAllowedForUser (videoUrl: string) {
+  if (CONFIG.SEARCH.REMOTE_URI.USERS) {
+    try {
+      const res = await getOrCreateAPVideo({
+        videoObject: videoUrl,
+        fetchType: 'only-immutable-attributes',
+        allowRefresh: false
+      })
+
+      return res?.video
+    } catch {
+      return undefined
+    }
+  }
+
+  return VideoModel.loadByUrlImmutableAttributes(videoUrl)
 }
 
 export {
@@ -62,5 +82,6 @@ export {
   type VideoLoadByUrlType,
 
   loadVideo,
-  loadVideoByUrl
+  loadVideoByUrl,
+  loadOrCreateVideoIfAllowedForUser
 }

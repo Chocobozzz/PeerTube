@@ -34,7 +34,9 @@ export const UserNotificationType = {
 
   MY_VIDEO_STUDIO_EDITION_FINISHED: 19,
 
-  NEW_USER_REGISTRATION_REQUEST: 20
+  NEW_USER_REGISTRATION_REQUEST: 20,
+
+  NEW_LIVE_FROM_SUBSCRIPTION: 21
 } as const
 
 export type UserNotificationType_Type = typeof UserNotificationType[keyof typeof UserNotificationType]

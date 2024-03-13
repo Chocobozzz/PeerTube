@@ -115,6 +115,8 @@ describe('Test live', function () {
 
         expect(video.isLive).to.be.true
 
+        expect(video.aspectRatio).to.not.exist
+
         expect(video.nsfw).to.be.false
         expect(video.waitTranscoding).to.be.false
         expect(video.name).to.equal('my super live')
@@ -286,15 +288,16 @@ describe('Test live', function () {
       rtmpUrl = 'rtmp://' + servers[0].hostname + ':' + servers[0].rtmpPort + ''
     })
 
-    async function createLiveWrapper () {
-      const liveAttributes = {
-        name: 'user live',
-        channelId: servers[0].store.channel.id,
-        privacy: VideoPrivacy.PUBLIC,
-        saveReplay: false
-      }
-
-      const { uuid } = await commands[0].create({ fields: liveAttributes })
+    async function createLiveWrapper (token?: string, channelId?: number) {
+      const { uuid } = await commands[0].create({
+        token,
+        fields: {
+          name: 'user live',
+          channelId: channelId ?? servers[0].store.channel.id,
+          privacy: VideoPrivacy.PUBLIC,
+          saveReplay: false
+        }
+      })
 
       const live = await commands[0].get({ videoId: uuid })
       const video = await servers[0].videos.get({ id: uuid })
@@ -344,6 +347,18 @@ describe('Test live', function () {
       liveVideo = await createLiveWrapper()
 
       await servers[0].blacklist.add({ videoId: liveVideo.uuid })
+
+      const command = sendRTMPStream({ rtmpBaseUrl: rtmpUrl + '/live', streamKey: liveVideo.streamKey })
+      await testFfmpegStreamError(command, true)
+    })
+
+    it('Should not allow a stream on if the owner has been blocked', async function () {
+      this.timeout(60000)
+
+      const { token, userId, userChannelId } = await servers[0].users.generate('user1')
+      liveVideo = await createLiveWrapper(token, userChannelId)
+
+      await servers[0].users.banUser({ userId })
 
       const command = sendRTMPStream({ rtmpBaseUrl: rtmpUrl + '/live', streamKey: liveVideo.streamKey })
       await testFfmpegStreamError(command, true)
@@ -539,6 +554,7 @@ describe('Test live', function () {
 
         expect(video.state.id).to.equal(VideoState.PUBLISHED)
         expect(video.duration).to.be.greaterThan(1)
+        expect(video.aspectRatio).to.equal(1.7778)
         expect(video.files).to.have.lengthOf(0)
 
         const hlsPlaylist = video.streamingPlaylists.find(s => s.type === VideoStreamingPlaylistType.HLS)

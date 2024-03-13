@@ -9,13 +9,11 @@ import {
   CreatedAt,
   DataType,
   ForeignKey,
-  Is,
-  Model,
-  Scopes,
+  Is, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { VideoCaption } from '@peertube/peertube-models'
+import { ActivityIdentifierObject, VideoCaption } from '@peertube/peertube-models'
 import {
   MVideo,
   MVideoCaption,
@@ -24,12 +22,11 @@ import {
   MVideoCaptionVideo
 } from '@server/types/models/index.js'
 import { buildUUID } from '@peertube/peertube-node-utils'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, VIDEO_LANGUAGES, WEBSERVER } from '../../initializers/constants.js'
-import { buildWhereIdOrUUID, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, buildWhereIdOrUUID, throwIfNotValid } from '../shared/index.js'
 import { VideoModel } from './video.js'
 
 export enum ScopeNames {
@@ -64,7 +61,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaptionModel>>> {
+export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
   @CreatedAt
   createdAt: Date
 
@@ -220,6 +217,8 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
     return this.Video.remote === false
   }
 
+  // ---------------------------------------------------------------------------
+
   toFormattedJSON (this: MVideoCaptionFormattable): VideoCaption {
     return {
       language: {
@@ -231,12 +230,26 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
     }
   }
 
+  toActivityPubObject (this: MVideoCaptionLanguageUrl, video: MVideo): ActivityIdentifierObject {
+    return {
+      identifier: this.language,
+      name: VideoCaptionModel.getLanguageLabel(this.language),
+      url: this.getFileUrl(video)
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+
   getCaptionStaticPath (this: MVideoCaptionLanguageUrl) {
     return join(LAZY_STATIC_PATHS.VIDEO_CAPTIONS, this.filename)
   }
 
+  getFSPath () {
+    return join(CONFIG.STORAGE.CAPTIONS_DIR, this.filename)
+  }
+
   removeCaptionFile (this: MVideoCaption) {
-    return remove(CONFIG.STORAGE.CAPTIONS_DIR + this.filename)
+    return remove(this.getFSPath())
   }
 
   getFileUrl (this: MVideoCaptionLanguageUrl, video: MVideo) {

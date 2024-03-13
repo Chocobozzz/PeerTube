@@ -13,6 +13,7 @@ const videoUpdateRateValidator = [
 
   body('rating')
     .custom(isVideoRatingTypeValid),
+
   isValidVideoPasswordHeader(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {

@@ -1,20 +1,26 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
+import { NgIf } from '@angular/common'
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild, booleanAttribute } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScreenService, ServerService } from '@app/core'
-import { BlocklistService, VideoBlockComponent, VideoBlockService, VideoReportComponent } from '@app/shared/shared-moderation'
-import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDropdown, NgbDropdownAnchor, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@peertube/peertube-models'
+import { of } from 'rxjs'
+import { Actor } from '../shared-main/account/actor.model'
 import {
-  Actor,
+  ActionDropdownComponent,
   DropdownAction,
   DropdownButtonSize,
-  DropdownDirection,
-  RedundancyService,
-  Video,
-  VideoDetails,
-  VideoService
-} from '../shared-main'
-import { LiveStreamInformationComponent } from '../shared-video-live'
-import { VideoAddToPlaylistComponent } from '../shared-video-playlist'
+  DropdownDirection
+} from '../shared-main/buttons/action-dropdown.component'
+import { RedundancyService } from '../shared-main/video/redundancy.service'
+import { VideoDetails } from '../shared-main/video/video-details.model'
+import { Video } from '../shared-main/video/video.model'
+import { VideoService } from '../shared-main/video/video.service'
+import { BlocklistService } from '../shared-moderation/blocklist.service'
+import { VideoReportComponent } from '../shared-moderation/report-modals'
+import { VideoBlockComponent } from '../shared-moderation/video-block.component'
+import { VideoBlockService } from '../shared-moderation/video-block.service'
+import { LiveStreamInformationComponent } from '../shared-video-live/live-stream-information.component'
+import { VideoAddToPlaylistComponent } from '../shared-video-playlist/video-add-to-playlist.component'
 import { VideoDownloadComponent } from './video-download.component'
 
 export type VideoActionsDisplayType = {
@@ -36,7 +42,20 @@ export type VideoActionsDisplayType = {
 @Component({
   selector: 'my-video-actions-dropdown',
   templateUrl: './video-actions-dropdown.component.html',
-  styleUrls: [ './video-actions-dropdown.component.scss' ]
+  styleUrls: [ './video-actions-dropdown.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    NgbDropdown,
+    NgbDropdownAnchor,
+    NgbDropdownMenu,
+    VideoAddToPlaylistComponent,
+    ActionDropdownComponent,
+    VideoDownloadComponent,
+    VideoReportComponent,
+    VideoBlockComponent,
+    LiveStreamInformationComponent
+  ]
 })
 export class VideoActionsDropdownComponent implements OnChanges {
   @ViewChild('playlistDropdown') playlistDropdown: NgbDropdown
@@ -67,10 +86,11 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
   @Input() placement = 'left'
   @Input() moreActions: DropdownAction<{ video: Video }>[][] = []
+  @Input({ transform: booleanAttribute }) actionAvailabilityHint = false
 
   @Input() label: string
 
-  @Input() buttonStyled = false
+  @Input({ transform: booleanAttribute }) buttonStyled = false
   @Input() buttonSize: DropdownButtonSize = 'normal'
   @Input() buttonDirection: DropdownDirection = 'vertical'
 
@@ -85,6 +105,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   videoActions: DropdownAction<{ video: Video }>[][] = []
 
   private loaded = false
+  private hasMutedAccount = false
 
   constructor (
     private authService: AuthService,
@@ -128,7 +149,13 @@ export class VideoActionsDropdownComponent implements OnChanges {
   showDownloadModal () {
     this.modalOpened.emit()
 
-    this.videoDownloadModal.show(this.video as VideoDetails, this.videoCaptions)
+    const obs = this.video instanceof VideoDetails
+      ? of(this.video)
+      : this.videoService.getVideo({ videoId: this.video.uuid })
+
+    obs.subscribe((videoDetails: VideoDetails) => {
+      this.videoDownloadModal.show(videoDetails, this.videoCaptions)
+    })
   }
 
   showReportModal () {
@@ -160,7 +187,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   isVideoStatsAvailable () {
-    return this.video.canSeeStats(this.user)
+    return this.video.isOwnerOrHasSeeAllVideosRight(this.user)
   }
 
   isVideoRemovable () {
@@ -179,11 +206,13 @@ export class VideoActionsDropdownComponent implements OnChanges {
     return this.video.isLiveInfoAvailableBy(this.user)
   }
 
-  isVideoDownloadable () {
-    return this.video &&
+  isVideoDownloadableByAnonymous () {
+    return (
+      this.video &&
       this.video.isLive !== true &&
       this.video instanceof VideoDetails &&
       this.video.downloadEnabled
+    )
   }
 
   canVideoBeDuplicated () {
@@ -266,7 +295,22 @@ export class VideoActionsDropdownComponent implements OnChanges {
         .subscribe({
           next: () => {
             this.notifier.success($localize`Account ${params.nameWithHost} muted.`)
+            this.hasMutedAccount = true
             this.videoAccountMuted.emit()
+          },
+
+          error: err => this.notifier.error(err.message)
+        })
+  }
+
+  unmuteVideoAccount () {
+    const params = { nameWithHost: Actor.CREATE_BY_STRING(this.video.account.name, this.video.account.host) }
+
+    this.blocklistService.unblockAccountByUser(params)
+        .subscribe({
+          next: () => {
+            this.hasMutedAccount = false
+            this.notifier.success($localize`Account ${params.nameWithHost} unmuted.`)
           },
 
           error: err => this.notifier.error(err.message)
@@ -328,8 +372,18 @@ export class VideoActionsDropdownComponent implements OnChanges {
         {
           label: $localize`Download`,
           handler: () => this.showDownloadModal(),
-          isDisplayed: () => this.displayOptions.download && this.isVideoDownloadable(),
-          iconName: 'download'
+          isDisplayed: () => {
+            if (!this.displayOptions.download) return false
+
+            return this.isVideoDownloadableByAnonymous() || this.video.isOwnerOrHasSeeAllVideosRight(this.user)
+          },
+          iconName: 'download',
+          ownerOrModeratorPrivilege: () => {
+            if (!this.actionAvailabilityHint) return undefined
+            if (this.isVideoDownloadableByAnonymous()) return undefined
+
+            return $localize`This option is visible only to you`
+          }
         },
         {
           label: $localize`Display live information`,
@@ -339,19 +393,19 @@ export class VideoActionsDropdownComponent implements OnChanges {
         },
         {
           label: $localize`Update`,
-          linkBuilder: ({ video }) => [ '/videos/update', video.uuid ],
+          linkBuilder: ({ video }) => [ '/videos/update', video.shortUUID ],
           iconName: 'edit',
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.update && this.isVideoUpdatable()
         },
         {
           label: $localize`Studio`,
-          linkBuilder: ({ video }) => [ '/studio/edit', video.uuid ],
+          linkBuilder: ({ video }) => [ '/studio/edit', video.shortUUID ],
           iconName: 'film',
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.studio && this.isVideoEditable()
         },
         {
           label: $localize`Stats`,
-          linkBuilder: ({ video }) => [ '/stats/videos', video.uuid ],
+          linkBuilder: ({ video }) => [ '/stats/videos', video.shortUUID ],
           iconName: 'stats',
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.stats && this.isVideoStatsAvailable()
         },
@@ -418,6 +472,14 @@ export class VideoActionsDropdownComponent implements OnChanges {
           handler: () => this.muteVideoAccount(),
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.mute && this.isVideoAccountMutable(),
           iconName: 'no'
+        },
+        {
+          label: $localize`Unmute account`,
+          handler: () => this.unmuteVideoAccount(),
+          isDisplayed: () => {
+            return this.authService.isLoggedIn() && this.displayOptions.mute && this.isVideoAccountMutable() && this.hasMutedAccount
+          },
+          iconName: 'undo'
         }
       ]
     ]

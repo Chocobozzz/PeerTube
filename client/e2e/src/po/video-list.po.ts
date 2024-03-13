@@ -67,7 +67,7 @@ export class VideoListPage {
 
   async getVideosListName () {
     const elems = await $$('.videos .video-miniature .video-miniature-name')
-    const texts = await Promise.all(elems.map(e => e.getText()))
+    const texts = await elems.map(e => e.getText())
 
     return texts.map(t => t.trim())
   }

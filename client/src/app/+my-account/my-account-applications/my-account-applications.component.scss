@@ -1,24 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.applications-title {
-  @include settings-big-title;
-}
-
-.form-group {
+.pt-two-cols .content-col {
   max-width: 500px;
-}
-
-input[type=submit] {
-  @include peertube-button;
-  @include orange-button;
-  @include margin-left(auto);
-
-  display: flex;
-
-  + .form-error {
-    @include margin-left(5px);
-
-    display: inline;
-  }
 }

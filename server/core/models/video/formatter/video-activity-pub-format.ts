@@ -8,9 +8,7 @@ import {
   ActivityPubStoryboard,
   ActivityTagObject,
   ActivityTrackerUrlObject,
-  ActivityUrlObject,
-  ActivityVideoUrlObject,
-  VideoObject
+  ActivityUrlObject, VideoObject
 } from '@peertube/peertube-models'
 import { WEBSERVER } from '../../../initializers/constants.js'
 import {
@@ -21,10 +19,8 @@ import {
   getLocalVideoSharesActivityPubUrl
 } from '../../../lib/activitypub/url.js'
 import { MStreamingPlaylistFiles, MUserId, MVideo, MVideoAP, MVideoFile } from '../../../types/models/index.js'
-import { VideoCaptionModel } from '../video-caption.js'
 import { sortByResolutionDesc } from './shared/index.js'
 import { getCategoryLabel, getLanguageLabel, getLicenceLabel } from './video-api-format.js'
-import { getVideoFileMimeType } from '@server/lib/video-file.js'
 
 export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
   const language = video.language
@@ -91,6 +87,8 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     icon: buildIcon(video),
 
     preview: buildPreviewAPAttribute(video),
+
+    aspectRatio: video.aspectRatio,
 
     url,
 
@@ -181,24 +179,16 @@ function buildVideoFileUrls (options: {
     .sort(sortByResolutionDesc)
 
   for (const file of sortedFiles) {
-    // FIXME: Replace false by file.isAudio(), federation breaking change correctly handled in 6.0
-    const mimeType = getVideoFileMimeType(file.extname, false)
+    const fileAP = file.toActivityPubObject(video)
+    urls.push(fileAP)
 
     urls.push({
       type: 'Link',
-      mediaType: mimeType,
-      href: file.getFileUrl(video),
-      height: file.resolution,
-      size: file.size,
-      fps: file.fps
-    } as ActivityVideoUrlObject)
-
-    urls.push({
-      type: 'Link',
-      rel: [ 'metadata', mimeType ],
+      rel: [ 'metadata', fileAP.mediaType ],
       mediaType: 'application/json' as 'application/json',
       href: getLocalVideoFileMetadataUrl(video, file),
-      height: file.resolution,
+      height: file.height || file.resolution,
+      width: file.width,
       fps: file.fps
     })
 
@@ -207,14 +197,18 @@ function buildVideoFileUrls (options: {
         type: 'Link',
         mediaType: 'application/x-bittorrent' as 'application/x-bittorrent',
         href: file.getTorrentUrl(),
-        height: file.resolution
+        height: file.height || file.resolution,
+        width: file.width,
+        fps: file.fps
       })
 
       urls.push({
         type: 'Link',
         mediaType: 'application/x-bittorrent;x-scheme-handler/magnet' as 'application/x-bittorrent;x-scheme-handler/magnet',
         href: generateMagnetUri(video, file, trackerUrls),
-        height: file.resolution
+        height: file.height || file.resolution,
+        width: file.width,
+        fps: file.fps
       })
     }
   }
@@ -282,22 +276,12 @@ function buildTags (video: MVideoAP) {
 
 function buildIcon (video: MVideoAP): ActivityIconObject[] {
   return [ video.getMiniature(), video.getPreview() ]
-    .map(i => ({
-      type: 'Image',
-      url: i.getOriginFileUrl(video),
-      mediaType: 'image/jpeg',
-      width: i.width,
-      height: i.height
-    }))
+    .map(i => i.toActivityPubObject(video))
 }
 
 function buildSubtitleLanguage (video: MVideoAP) {
   if (!isArray(video.VideoCaptions)) return []
 
   return video.VideoCaptions
-    .map(caption => ({
-      identifier: caption.language,
-      name: VideoCaptionModel.getLanguageLabel(caption.language),
-      url: caption.getFileUrl(video)
-    }))
+    .map(caption => caption.toActivityPubObject(video))
 }

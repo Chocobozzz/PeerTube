@@ -42,7 +42,7 @@ export function getCommonVideoFeedAttributes (video: VideoModel) {
 
   const thumbnailModels: MThumbnail[] = []
   if (video.hasPreview()) thumbnailModels.push(video.getPreview())
-  thumbnailModels.push(video.getMiniature())
+  if (video.hasMiniature()) thumbnailModels.push(video.getMiniature())
 
   return {
     title: video.name,

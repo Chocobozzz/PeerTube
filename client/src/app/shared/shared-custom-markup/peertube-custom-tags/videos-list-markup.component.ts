@@ -3,10 +3,12 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { AuthService, Notifier } from '@app/core'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { ResultList, VideoSortField } from '@peertube/peertube-models'
-import { Video, VideoService } from '../../shared-main'
-import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { CustomMarkupComponent } from './shared'
 import { Observable } from 'rxjs'
+import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../../shared-video-miniature/video-miniature.component'
+import { NgStyle, NgFor } from '@angular/common'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
 
 /*
  * Markup component list videos depending on criteria
@@ -16,7 +18,9 @@ import { Observable } from 'rxjs'
   selector: 'my-videos-list-markup',
   templateUrl: 'videos-list-markup.component.html',
   styleUrls: [ 'videos-list-markup.component.scss' ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [ NgStyle, NgFor, VideoMiniatureComponent ]
 })
 export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() sort: string

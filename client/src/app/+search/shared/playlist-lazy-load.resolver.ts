@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { SearchService } from '@app/shared/shared-search'
-import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { AbstractLazyLoadResolver } from './abstract-lazy-load.resolver'
+import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
+import { SearchService } from '@app/shared/shared-search/search.service'
 
 @Injectable()
 export class PlaylistLazyLoadResolver extends AbstractLazyLoadResolver<VideoPlaylist> {

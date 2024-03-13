@@ -1,20 +1,45 @@
 import { forkJoin, Subject, Subscription } from 'rxjs'
 import { LinkType } from 'src/types/link.type'
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, HooksService, MetaService, Notifier, ServerService, User, UserService } from '@app/core'
 import { immutableAssign, SimpleMemoize } from '@app/helpers'
 import { validateHost } from '@app/shared/form-validators/host-validators'
-import { Video, VideoChannel } from '@app/shared/shared-main'
-import { AdvancedSearch, SearchService } from '@app/shared/shared-search'
-import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
-import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { HTMLServerConfig, SearchTargetType } from '@peertube/peertube-models'
+import { NumberFormatterPipe } from '../shared/shared-main/angular/number-formatter.pipe'
+import { VideoPlaylistMiniatureComponent } from '../shared/shared-video-playlist/video-playlist-miniature.component'
+import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../shared/shared-video-miniature/video-miniature.component'
+import { SubscribeButtonComponent } from '../shared/shared-user-subscription/subscribe-button.component'
+import { ActorAvatarComponent } from '../shared/shared-actor-image/actor-avatar.component'
+import { SearchFiltersComponent } from './search-filters.component'
+import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap'
+import { NgIf, NgFor, NgTemplateOutlet } from '@angular/common'
+import { InfiniteScrollerDirective } from '../shared/shared-main/angular/infinite-scroller.directive'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
+import { AdvancedSearch } from '@app/shared/shared-search/advanced-search.model'
+import { SearchService } from '@app/shared/shared-search/search.service'
 
 @Component({
   selector: 'my-search',
   styleUrls: [ './search.component.scss' ],
-  templateUrl: './search.component.html'
+  templateUrl: './search.component.html',
+  standalone: true,
+  imports: [
+    InfiniteScrollerDirective,
+    NgIf,
+    NgbCollapse,
+    SearchFiltersComponent,
+    NgFor,
+    ActorAvatarComponent,
+    RouterLink,
+    NgTemplateOutlet,
+    SubscribeButtonComponent,
+    VideoMiniatureComponent,
+    VideoPlaylistMiniatureComponent,
+    NumberFormatterPipe
+  ]
 })
 export class SearchComponent implements OnInit, OnDestroy {
   error: string

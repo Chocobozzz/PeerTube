@@ -46,7 +46,7 @@ async function assertCountAreOkay (servers: PeerTubeServer[]) {
     expect(thumbnailsCount).to.equal(5) // 3 local videos, 1 local playlist, 2 remotes videos (lazy downloaded) and 1 remote playlist
 
     const avatarsCount = await server.servers.countFiles('avatars')
-    expect(avatarsCount).to.equal(4)
+    expect(avatarsCount).to.equal(8)
 
     const hlsRootCount = await server.servers.countFiles(join('streaming-playlists', 'hls'))
     expect(hlsRootCount).to.equal(3) // 2 videos + private directory

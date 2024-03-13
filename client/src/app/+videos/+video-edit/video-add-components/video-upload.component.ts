@@ -5,14 +5,29 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, MetaService, Notifier, ServerService, UserService } from '@app/core'
-import { genericUploadErrorHandler, scrollToTop } from '@app/helpers'
-import { FormReactiveService } from '@app/shared/shared-forms'
-import { Video, VideoCaptionService, VideoChapterService, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { buildHTTPErrorResponse, genericUploadErrorHandler, scrollToTop } from '@app/helpers'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
 import { HttpStatusCode, VideoCreateResult } from '@peertube/peertube-models'
 import { VideoUploadService } from '../shared/video-upload.service'
 import { VideoSend } from './video-send'
+import { VideoEditComponent } from '../shared/video-edit.component'
+import { UploadProgressComponent } from '../../../shared/standalone-upload/upload-progress.component'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { PreviewUploadComponent } from '../../../shared/shared-forms/preview-upload.component'
+import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { DragDropDirective } from './drag-drop.directive'
+import { NgIf } from '@angular/common'
+import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
+import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
+import { VideoEdit } from '@app/shared/shared-main/video/video-edit.model'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 
 @Component({
   selector: 'my-video-upload',
@@ -21,6 +36,21 @@ import { VideoSend } from './video-send'
     '../shared/video-edit.component.scss',
     './video-upload.component.scss',
     './video-send.scss'
+  ],
+  standalone: true,
+  imports: [
+    NgIf,
+    DragDropDirective,
+    GlobalIconComponent,
+    NgbTooltip,
+    SelectChannelComponent,
+    FormsModule,
+    SelectOptionsComponent,
+    PreviewUploadComponent,
+    ButtonComponent,
+    UploadProgressComponent,
+    ReactiveFormsModule,
+    VideoEditComponent
   ]
 })
 export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, AfterViewInit, CanComponentDeactivate {
@@ -140,7 +170,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           return this.refreshTokenAndRetryUpload()
         }
 
-        this.handleUploadError(this.videoUploadService.buildHTTPErrorResponse(state))
+        this.handleUploadError(buildHTTPErrorResponse(state))
         break
       }
 

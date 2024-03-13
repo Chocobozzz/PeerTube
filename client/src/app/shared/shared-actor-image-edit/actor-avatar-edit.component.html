@@ -1,6 +1,6 @@
 <div class="actor" *ngIf="actor">
   <div class="position-relative me-3">
-    <my-actor-avatar [actor]="actor" [actorType]="getActorType()" [previewImage]="preview" size="100"></my-actor-avatar>
+    <my-actor-avatar [actor]="actor" [actorType]="actorType" [previewImage]="preview" size="100"></my-actor-avatar>
 
     <div *ngIf="editable && !hasAvatar()" class="actor-img-edit-button button-focus-within" [ngbTooltip]="avatarFormat" placement="right" container="body">
       <my-global-icon iconName="upload"></my-global-icon>
@@ -31,8 +31,8 @@
   </div>
 
   <div class="actor-info">
-    <div class="actor-info-display-name">{{ actor.displayName }}</div>
-    <div *ngIf="displayUsername" class="actor-info-username">{{ actor.name }}</div>
-    <div *ngIf="displaySubscribers" i18n class="actor-info-followers">{{ actor.followersCount }} subscribers</div>
+    <div *ngIf="displayName" class="actor-info-display-name">{{ displayName }}</div>
+    <div *ngIf="displayUsername && username" class="actor-info-username">{{ username }}</div>
+    <div *ngIf="subscribers" i18n class="actor-info-followers">{{ subscribers }} subscribers</div>
   </div>
 </div>

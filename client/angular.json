@@ -279,25 +279,25 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "PeerTube:build",
-            "proxyConfig": "proxy.config.json"
+            "proxyConfig": "proxy.config.json",
+            "buildTarget": "PeerTube:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "PeerTube:build:production"
+              "buildTarget": "PeerTube:build:production"
             },
             "hmr": {
-              "browserTarget": "PeerTube:build:hmr"
+              "buildTarget": "PeerTube:build:hmr"
             },
             "ar-locale": {
-              "browserTarget": "PeerTube:build:ar-locale"
+              "buildTarget": "PeerTube:build:ar-locale"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "PeerTube:build"
+            "buildTarget": "PeerTube:build"
           }
         },
         "lint": {

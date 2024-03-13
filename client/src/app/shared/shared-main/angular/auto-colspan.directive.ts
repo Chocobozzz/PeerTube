@@ -1,7 +1,8 @@
 import { AfterViewInit, Directive, ElementRef, Renderer2 } from '@angular/core'
 
 @Directive({
-  selector: '[myAutoColspan]'
+  selector: '[myAutoColspan]',
+  standalone: true
 })
 export class AutoColspanDirective implements AfterViewInit {
 

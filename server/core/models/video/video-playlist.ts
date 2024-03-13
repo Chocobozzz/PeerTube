@@ -9,9 +9,8 @@ import {
   type VideoPlaylistType_Type
 } from '@peertube/peertube-models'
 import { buildUUID, uuidToShort } from '@peertube/peertube-node-utils'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
-import { MAccountId, MChannelId } from '@server/types/models/index.js'
+import { MAccountId, MChannelId, MVideoPlaylistElement } from '@server/types/models/index.js'
 import { join } from 'path'
 import { FindOptions, Includeable, literal, Op, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
@@ -25,9 +24,7 @@ import {
   HasMany,
   HasOne,
   Is,
-  IsUUID,
-  Model,
-  Scopes,
+  IsUUID, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -42,15 +39,16 @@ import {
   CONSTRAINTS_FIELDS,
   LAZY_STATIC_PATHS,
   THUMBNAILS_SIZE,
+  USER_EXPORT_MAX_ITEMS,
   VIDEO_PLAYLIST_PRIVACIES,
   VIDEO_PLAYLIST_TYPES,
   WEBSERVER
 } from '../../initializers/constants.js'
 import { MThumbnail } from '../../types/models/video/thumbnail.js'
 import {
+  MVideoPlaylist,
   MVideoPlaylistAccountThumbnail,
-  MVideoPlaylistAP,
-  MVideoPlaylistFormattable,
+  MVideoPlaylistAP, MVideoPlaylistFormattable,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
   MVideoPlaylistSummaryWithElements
@@ -58,6 +56,7 @@ import {
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account.js'
 import { ActorModel } from '../actor/actor.js'
 import {
+  SequelizeModel,
   buildServerIdsFollowedBy,
   buildTrigramSearchIndex,
   buildWhereIdOrUUID,
@@ -287,7 +286,7 @@ function getVideoLengthSelect () {
     }
   ]
 })
-export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlaylistModel>>> {
+export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   @CreatedAt
   createdAt: Date
 
@@ -497,6 +496,19 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
     return VideoPlaylistModel.findAll(query)
   }
 
+  static listPlaylistForExport (accountId: number): Promise<MVideoPlaylistFull[]> {
+    return VideoPlaylistModel
+      .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL, ScopeNames.WITH_VIDEOS_LENGTH, ScopeNames.WITH_THUMBNAIL ])
+      .findAll({
+        where: {
+          ownerAccountId: accountId
+        },
+        limit: USER_EXPORT_MAX_ITEMS
+      })
+  }
+
+  // ---------------------------------------------------------------------------
+
   static doesPlaylistExist (url: string) {
     const query = {
       attributes: [ 'id' ],
@@ -558,6 +570,32 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
       .findOne(query)
   }
 
+  static loadWatchLaterOf (account: MAccountId): Promise<MVideoPlaylistFull> {
+    const query = {
+      where: {
+        type: VideoPlaylistType.WATCH_LATER,
+        ownerAccountId: account.id
+      }
+    }
+
+    return VideoPlaylistModel
+      .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL, ScopeNames.WITH_VIDEOS_LENGTH, ScopeNames.WITH_THUMBNAIL ])
+      .findOne(query)
+  }
+
+  static loadRegularByAccountAndName (account: MAccountId, name: string): Promise<MVideoPlaylist> {
+    const query = {
+      where: {
+        type: VideoPlaylistType.REGULAR,
+        name,
+        ownerAccountId: account.id
+      }
+    }
+
+    return VideoPlaylistModel
+      .findOne(query)
+  }
+
   static getPrivacyLabel (privacy: VideoPlaylistPrivacyType) {
     return VIDEO_PLAYLIST_PRIVACIES[privacy] || 'Unknown'
   }
@@ -589,6 +627,13 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
 
   hasGeneratedThumbnail () {
     return this.hasThumbnail() && this.Thumbnail.automaticallyGenerated === true
+  }
+
+  shouldGenerateThumbnailWithNewElement (newElement: MVideoPlaylistElement) {
+    if (this.hasThumbnail() === false) return true
+    if (newElement.position === 1 && this.hasGeneratedThumbnail()) return true
+
+    return false
   }
 
   generateThumbnailName () {

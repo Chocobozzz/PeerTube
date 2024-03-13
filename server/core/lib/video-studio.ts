@@ -11,7 +11,8 @@ import { VideoStudioTranscodingJobHandler } from './runners/index.js'
 import { getTranscodingJobPriority } from './transcoding/transcoding-priority.js'
 import { buildNewFile, removeHLSPlaylist, removeWebVideoFile } from './video-file.js'
 import { VideoPathManager } from './video-path-manager.js'
-import { buildStoryboardJobIfNeeded } from './video.js'
+import { buildStoryboardJobIfNeeded } from './video-jobs.js'
+import { buildAspectRatio } from '@peertube/peertube-core-utils'
 
 const lTags = loggerTagsFactory('video-studio')
 
@@ -104,6 +105,7 @@ export async function onVideoStudioEnded (options: {
   await newFile.save()
 
   video.duration = await getVideoStreamDuration(outputPath)
+  video.aspectRatio = buildAspectRatio({ width: newFile.width, height: newFile.height })
   await video.save()
 
   return JobQueue.Instance.createSequentialJobFlow(

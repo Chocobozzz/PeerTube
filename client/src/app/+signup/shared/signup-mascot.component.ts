@@ -15,7 +15,8 @@ export type MascotImageName = keyof typeof images
   selector: 'my-signup-mascot',
   styleUrls: [ './signup-mascot.component.scss' ],
   template: `<div class="root" [innerHTML]="html"></div>`,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true
 })
 export class SignupMascotComponent {
   @Input() imageName: MascotImageName

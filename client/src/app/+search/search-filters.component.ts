@@ -1,14 +1,19 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ServerService } from '@app/core'
-import { AdvancedSearch } from '@app/shared/shared-search'
 import { HTMLServerConfig, VideoConstant } from '@peertube/peertube-models'
+import { SelectTagsComponent } from '../shared/shared-forms/select/select-tags.component'
+import { NgIf, NgFor } from '@angular/common'
+import { FormsModule } from '@angular/forms'
+import { AdvancedSearch } from '@app/shared/shared-search/advanced-search.model'
 
 type FormOption = { id: string, label: string }
 
 @Component({
   selector: 'my-search-filters',
   styleUrls: [ './search-filters.component.scss' ],
-  templateUrl: './search-filters.component.html'
+  templateUrl: './search-filters.component.html',
+  standalone: true,
+  imports: [ FormsModule, NgIf, NgFor, SelectTagsComponent ]
 })
 export class SearchFiltersComponent implements OnInit {
   @Input() advancedSearch: AdvancedSearch = new AdvancedSearch()

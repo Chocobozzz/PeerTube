@@ -3,10 +3,17 @@ import { LocalStorageService, Notifier } from '@app/core'
 import { ServerLogLevel } from '@peertube/peertube-models'
 import { LogRow } from './log-row.model'
 import { LogsService } from './logs.service'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { SelectTagsComponent } from '../../../shared/shared-forms/select/select-tags.component'
+import { NgSelectModule } from '@ng-select/ng-select'
+import { NgFor, NgIf, NgClass, DatePipe } from '@angular/common'
+import { FormsModule } from '@angular/forms'
 
 @Component({
   templateUrl: './logs.component.html',
-  styleUrls: [ './logs.component.scss' ]
+  styleUrls: [ './logs.component.scss' ],
+  standalone: true,
+  imports: [ FormsModule, NgFor, NgSelectModule, NgIf, NgClass, SelectTagsComponent, ButtonComponent, DatePipe ]
 })
 export class LogsComponent implements OnInit {
   private static LOCAL_STORAGE_LOG_TYPE_CHOICE_KEY = 'admin-logs-log-type-choice'

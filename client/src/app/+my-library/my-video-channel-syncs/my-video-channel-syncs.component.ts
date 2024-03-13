@@ -1,13 +1,34 @@
-import { SortMeta } from 'primeng/api'
+import { SortMeta, SharedModule } from 'primeng/api'
 import { mergeMap } from 'rxjs'
 import { Component, OnInit } from '@angular/core'
 import { AuthService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
-import { DropdownAction, VideoChannelService, VideoChannelSyncService } from '@app/shared/shared-main'
 import { HTMLServerConfig, VideoChannelSync, VideoChannelSyncState, VideoChannelSyncStateType } from '@peertube/peertube-models'
+import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
+import { ActionDropdownComponent, DropdownAction } from '../../shared/shared-main/buttons/action-dropdown.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { RouterLink } from '@angular/router'
+import { TableModule } from 'primeng/table'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { NgIf, NgClass, DatePipe } from '@angular/common'
+import { VideoChannelSyncService } from '@app/shared/shared-main/video-channel-sync/video-channel-sync.service'
+import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
 
 @Component({
   templateUrl: './my-video-channel-syncs.component.html',
-  styleUrls: [ './my-video-channel-syncs.component.scss' ]
+  styleUrls: [ './my-video-channel-syncs.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    GlobalIconComponent,
+    TableModule,
+    SharedModule,
+    RouterLink,
+    NgbTooltip,
+    ActionDropdownComponent,
+    ActorAvatarComponent,
+    NgClass,
+    DatePipe
+  ]
 })
 export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
   error: string

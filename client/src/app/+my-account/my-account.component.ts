@@ -1,19 +1,21 @@
 import { Component, OnInit } from '@angular/core'
 import { AuthUser, ScreenService } from '@app/core'
-import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
+import { TopMenuDropdownParam, TopMenuDropdownComponent } from '../shared/shared-main/misc/top-menu-dropdown.component'
+import { RouterOutlet } from '@angular/router'
+import { NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-my-account',
   templateUrl: './my-account.component.html',
-  styleUrls: [ './my-account.component.scss' ]
+  styleUrls: [ './my-account.component.scss' ],
+  standalone: true,
+  imports: [ TopMenuDropdownComponent, NgClass, RouterOutlet ]
 })
 export class MyAccountComponent implements OnInit {
   menuEntries: TopMenuDropdownParam[] = []
   user: AuthUser
 
-  constructor (
-    private screenService: ScreenService
-  ) { }
+  constructor (private screenService: ScreenService) { }
 
   get isBroadcastMessageDisplayed () {
     return this.screenService.isBroadcastMessageDisplayed
@@ -54,6 +56,11 @@ export class MyAccountComponent implements OnInit {
       {
         label: $localize`Notifications`,
         routerLink: '/my-account/notifications'
+      },
+
+      {
+        label: $localize`Import/Export`,
+        routerLink: '/my-account/import-export'
       },
 
       {

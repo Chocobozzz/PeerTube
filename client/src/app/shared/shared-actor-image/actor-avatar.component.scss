@@ -2,9 +2,7 @@
 @use '_mixins' as *;
 
 .avatar {
-  --avatarSize: 100%;
-  --initialFontSize: 22px;
-
+  // Defined in component
   width: var(--avatarSize);
   height: var(--avatarSize);
   min-width: var(--avatarSize);
@@ -18,26 +16,6 @@
   &.channel {
     border-radius: 5px;
   }
-}
-
-$sizes: '18', '25', '28', '32', '34', '35', '36', '40', '48', '75', '80', '100', '120';
-
-@each $size in $sizes {
-  .avatar-#{$size} {
-    --avatarSize: #{$size}px;
-  }  
-}
-
-.avatar-18 {
-  --initialFontSize: 13px;
-}
-
-.avatar-100 {
-  --initialFontSize: 40px;
-}
-
-.avatar-120 {
-  --initialFontSize: 46px;
 }
 
 a:hover {

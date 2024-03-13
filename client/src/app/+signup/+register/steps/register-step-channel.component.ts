@@ -1,15 +1,20 @@
 import { concat, of } from 'rxjs'
 import { pairwise } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { FormGroup } from '@angular/forms'
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { SignupService } from '@app/+signup/shared/signup.service'
 import { VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR, VIDEO_CHANNEL_NAME_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { BytesPipe } from '../../../shared/shared-main/angular/bytes.pipe'
+import { NgIf, NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-register-step-channel',
   templateUrl: './register-step-channel.component.html',
-  styleUrls: [ './step.component.scss' ]
+  styleUrls: [ './step.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, BytesPipe ]
 })
 export class RegisterStepChannelComponent extends FormReactive implements OnInit {
   @Input() username: string

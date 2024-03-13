@@ -14,7 +14,7 @@ import {
   VideoInfo
 } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { Video } from '../video'
+import { Video } from '../video/video.model'
 
 export class UserNotification implements UserNotificationServer {
   id: number
@@ -150,6 +150,7 @@ export class UserNotification implements UserNotificationServer {
 
       switch (this.type) {
         case UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION:
+        case UserNotificationType.NEW_LIVE_FROM_SUBSCRIPTION:
           this.videoUrl = this.buildVideoUrl(this.video)
           break
 
@@ -264,8 +265,8 @@ export class UserNotification implements UserNotificationServer {
     return '/my-library/video-imports'
   }
 
-  private buildVideoImportIdentifier (videoImport: { targetUrl?: string, magnetUri?: string, torrentName?: string }) {
-    return videoImport.targetUrl || videoImport.magnetUri || videoImport.torrentName
+  private buildVideoImportIdentifier (videoImport: UserNotification['videoImport']) {
+    return videoImport.video?.name || videoImport.targetUrl || videoImport.magnetUri || videoImport.torrentName
   }
 
   private buildCommentUrl (comment: { video: { uuid: string }, threadId: number }) {

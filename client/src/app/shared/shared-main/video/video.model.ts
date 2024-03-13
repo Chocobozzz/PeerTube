@@ -50,6 +50,8 @@ export class Video implements VideoServerModel {
   thumbnailPath: string
   thumbnailUrl: string
 
+  aspectRatio: number
+
   isLive: boolean
 
   previewPath: string
@@ -113,8 +115,8 @@ export class Video implements VideoServerModel {
     return buildVideoWatchPath({ shortUUID: video.shortUUID || video.uuid })
   }
 
-  static buildUpdateUrl (video: Pick<Video, 'uuid'>) {
-    return '/videos/update/' + video.uuid
+  static buildUpdateUrl (video: Partial<Pick<Video, 'uuid' | 'shortUUID'>>) {
+    return '/videos/update/' + (video.shortUUID || video.uuid)
   }
 
   constructor (hash: VideoServerModel, translations: { [ id: string ]: string } = {}) {
@@ -197,6 +199,8 @@ export class Video implements VideoServerModel {
     this.originInstanceUrl = 'https://' + this.originInstanceHost
 
     this.pluginData = hash.pluginData
+
+    this.aspectRatio = hash.aspectRatio
   }
 
   isVideoNSFWForUser (user: User, serverConfig: HTMLServerConfig) {
@@ -232,8 +236,18 @@ export class Video implements VideoServerModel {
       this.isUpdatableBy(user)
   }
 
-  canSeeStats (user: AuthUser) {
-    return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.SEE_ALL_VIDEOS))
+  // ---------------------------------------------------------------------------
+
+  isOwner (user: AuthUser) {
+    return user && this.isLocal === true && this.account.name === user.username
+  }
+
+  hasSeeAllVideosRight (user: AuthUser) {
+    return user && user.hasRight(UserRight.SEE_ALL_VIDEOS)
+  }
+
+  isOwnerOrHasSeeAllVideosRight (user: AuthUser) {
+    return this.isOwner(user) || this.hasSeeAllVideosRight(user)
   }
 
   canRemoveOneFile (user: AuthUser) {

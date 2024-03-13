@@ -8,9 +8,7 @@ import {
   CreatedAt,
   DataType,
   ForeignKey,
-  Is,
-  Model,
-  Scopes,
+  Is, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -26,7 +24,6 @@ import {
   VideoRedundancyStrategyWithManual
 } from '@peertube/peertube-models'
 import { isTestInstance } from '@peertube/peertube-node-utils'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { getServerActor } from '@server/models/application/application.js'
 import { MActor, MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/types/models/index.js'
 import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
@@ -35,7 +32,7 @@ import { CONFIG } from '../../initializers/config.js'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
 import { ActorModel } from '../actor/actor.js'
 import { ServerModel } from '../server/server.js'
-import { getSort, getVideoSort, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
+import { getSort, getVideoSort, parseAggregateResult, SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { ScheduleVideoUpdateModel } from '../video/schedule-video-update.js'
 import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoFileModel } from '../video/video-file.js'
@@ -92,7 +89,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class VideoRedundancyModel extends Model<Partial<AttributesOnly<VideoRedundancyModel>>> {
+export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
 
   @CreatedAt
   createdAt: Date

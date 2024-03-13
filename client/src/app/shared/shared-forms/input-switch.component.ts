@@ -11,7 +11,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
       useExisting: forwardRef(() => InputSwitchComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: true
 })
 export class InputSwitchComponent implements ControlValueAccessor {
   @Input() checked = false

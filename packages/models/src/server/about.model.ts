@@ -1,3 +1,5 @@
+import { ActorImage } from '../index.js'
+
 export interface About {
   instance: {
     name: string
@@ -16,5 +18,8 @@ export interface About {
 
     languages: string[]
     categories: number[]
+
+    banners: ActorImage[]
+    avatars: ActorImage[]
   }
 }

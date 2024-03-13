@@ -1,8 +1,6 @@
 import 'multer'
 import express from 'express'
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
-import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import {
   addAccountInBlocklist,
@@ -97,15 +95,9 @@ async function blockAccount (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
   const accountToBlock = res.locals.account
 
-  await addAccountInBlocklist(user.Account.id, accountToBlock.id)
+  await addAccountInBlocklist({ byAccountId: user.Account.id, targetAccountId: accountToBlock.id, removeNotificationOfUserId: user.id })
 
-  UserNotificationModel.removeNotificationsOf({
-    id: accountToBlock.id,
-    type: 'account',
-    forUserId: user.id
-  }).catch(err => logger.error('Cannot remove notifications after an account mute.', { err }))
-
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function unblockAccount (req: express.Request, res: express.Response) {
@@ -134,15 +126,13 @@ async function blockServer (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
   const serverToBlock = res.locals.server
 
-  await addServerInBlocklist(user.Account.id, serverToBlock.id)
+  await addServerInBlocklist({
+    byAccountId: user.Account.id,
+    targetServerId: serverToBlock.id,
+    removeNotificationOfUserId: user.id
+  })
 
-  UserNotificationModel.removeNotificationsOf({
-    id: serverToBlock.id,
-    type: 'server',
-    forUserId: user.id
-  }).catch(err => logger.error('Cannot remove notifications after a server mute.', { err }))
-
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function unblockServer (req: express.Request, res: express.Response) {
@@ -150,5 +140,5 @@ async function unblockServer (req: express.Request, res: express.Response) {
 
   await removeServerFromBlocklist(serverBlock)
 
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

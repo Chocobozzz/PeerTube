@@ -3,13 +3,27 @@ import { remove, writeJSON } from 'fs-extra/esm'
 import snakeCase from 'lodash-es/snakeCase.js'
 import validator from 'validator'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
-import { About, CustomConfig, UserRight } from '@peertube/peertube-models'
+import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '../../helpers/audit-logger.js'
 import { objectConverter } from '../../helpers/core-utils.js'
 import { CONFIG, reloadConfig } from '../../initializers/config.js'
 import { ClientHtml } from '../../lib/html/client-html.js'
-import { apiRateLimiter, asyncMiddleware, authenticate, ensureUserHasRight, openapiOperationDoc } from '../../middlewares/index.js'
+import {
+  apiRateLimiter,
+  asyncMiddleware,
+  authenticate,
+  ensureUserHasRight,
+  openapiOperationDoc,
+  updateAvatarValidator,
+  updateBannerValidator
+} from '../../middlewares/index.js'
 import { customConfigUpdateValidator, ensureConfigIsEditable } from '../../middlewares/validators/config.js'
+import { createReqFiles } from '@server/helpers/express-utils.js'
+import { MIMETYPES } from '@server/initializers/constants.js'
+import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '@server/lib/local-actor.js'
+import { getServerActor } from '@server/models/application/application.js'
+import { ActorImageModel } from '@server/models/actor/actor-image.js'
+import { ModelCache } from '@server/models/shared/model-cache.js'
 
 const configRouter = express.Router()
 
@@ -24,7 +38,7 @@ configRouter.get('/',
 
 configRouter.get('/about',
   openapiOperationDoc({ operationId: 'getAbout' }),
-  getAbout
+  asyncMiddleware(getAbout)
 )
 
 configRouter.get('/custom',
@@ -51,13 +65,49 @@ configRouter.delete('/custom',
   asyncMiddleware(deleteCustomConfig)
 )
 
+// ---------------------------------------------------------------------------
+
+configRouter.post('/instance-banner/pick',
+  authenticate,
+  createReqFiles([ 'bannerfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  updateBannerValidator,
+  asyncMiddleware(updateInstanceImageFactory(ActorImageType.BANNER))
+)
+
+configRouter.delete('/instance-banner',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  asyncMiddleware(deleteInstanceImageFactory(ActorImageType.BANNER))
+)
+
+// ---------------------------------------------------------------------------
+
+configRouter.post('/instance-avatar/pick',
+  authenticate,
+  createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  updateAvatarValidator,
+  asyncMiddleware(updateInstanceImageFactory(ActorImageType.AVATAR))
+)
+
+configRouter.delete('/instance-avatar',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  asyncMiddleware(deleteInstanceImageFactory(ActorImageType.AVATAR))
+)
+
+// ---------------------------------------------------------------------------
+
 async function getConfig (req: express.Request, res: express.Response) {
   const json = await ServerConfigManager.Instance.getServerConfig(req.ip)
 
   return res.json(json)
 }
 
-function getAbout (req: express.Request, res: express.Response) {
+async function getAbout (req: express.Request, res: express.Response) {
+  const serverActor = await getServerActor()
+
   const about: About = {
     instance: {
       name: CONFIG.INSTANCE.NAME,
@@ -75,7 +125,10 @@ function getAbout (req: express.Request, res: express.Response) {
       businessModel: CONFIG.INSTANCE.BUSINESS_MODEL,
 
       languages: CONFIG.INSTANCE.LANGUAGES,
-      categories: CONFIG.INSTANCE.CATEGORIES
+      categories: CONFIG.INSTANCE.CATEGORIES,
+
+      banners: serverActor.Banners.map(b => b.toFormattedJSON()),
+      avatars: serverActor.Avatars.map(a => a.toFormattedJSON())
     }
   }
 
@@ -125,6 +178,51 @@ async function updateCustomConfig (req: express.Request, res: express.Response) 
 
 // ---------------------------------------------------------------------------
 
+function updateInstanceImageFactory (imageType: ActorImageType_Type) {
+  return async (req: express.Request, res: express.Response) => {
+    const field = imageType === ActorImageType.BANNER
+      ? 'bannerfile'
+      : 'avatarfile'
+
+    const imagePhysicalFile = req.files[field][0]
+
+    await updateLocalActorImageFiles({
+      accountOrChannel: (await getServerActorWithUpdatedImages(imageType)).Account,
+      imagePhysicalFile,
+      type: imageType,
+      sendActorUpdate: false
+    })
+
+    ClientHtml.invalidateCache()
+    ModelCache.Instance.clearCache('server-account')
+
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  }
+}
+
+function deleteInstanceImageFactory (imageType: ActorImageType_Type) {
+  return async (req: express.Request, res: express.Response) => {
+    await deleteLocalActorImageFile((await getServerActorWithUpdatedImages(imageType)).Account, imageType)
+
+    ClientHtml.invalidateCache()
+    ModelCache.Instance.clearCache('server-account')
+
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  }
+}
+
+async function getServerActorWithUpdatedImages (imageType: ActorImageType_Type) {
+  const serverActor = await getServerActor()
+  const updatedImages = await ActorImageModel.listByActor(serverActor, imageType) // Reload images from DB
+
+  if (imageType === ActorImageType.BANNER) serverActor.Banners = updatedImages
+  else serverActor.Avatars = updatedImages
+
+  return serverActor
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   configRouter
 }
@@ -165,8 +263,7 @@ function customConfig (): CustomConfig {
     },
     services: {
       twitter: {
-        username: CONFIG.SERVICES.TWITTER.USERNAME,
-        whitelisted: CONFIG.SERVICES.TWITTER.WHITELISTED
+        username: CONFIG.SERVICES.TWITTER.USERNAME
       }
     },
     client: {
@@ -223,7 +320,9 @@ function customConfig (): CustomConfig {
     },
     transcoding: {
       enabled: CONFIG.TRANSCODING.ENABLED,
-      keepOriginalFile: CONFIG.TRANSCODING.KEEP_ORIGINAL_FILE,
+      originalFile: {
+        keep: CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP
+      },
       remoteRunners: {
         enabled: CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED
       },
@@ -304,6 +403,16 @@ function customConfig (): CustomConfig {
       videoChannelSynchronization: {
         enabled: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED,
         maxPerUser: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.MAX_PER_USER
+      },
+      users: {
+        enabled: CONFIG.IMPORT.USERS.ENABLED
+      }
+    },
+    export: {
+      users: {
+        enabled: CONFIG.EXPORT.USERS.ENABLED,
+        exportExpiration: CONFIG.EXPORT.USERS.EXPORT_EXPIRATION,
+        maxUserVideoQuota: CONFIG.EXPORT.USERS.MAX_USER_VIDEO_QUOTA
       }
     },
     trending: {

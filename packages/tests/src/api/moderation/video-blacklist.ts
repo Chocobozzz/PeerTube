@@ -8,9 +8,7 @@ import {
   BlacklistCommand,
   cleanupTests,
   createMultipleServers,
-  doubleFollow,
-  killallServers,
-  PeerTubeServer,
+  doubleFollow, PeerTubeServer,
   setAccessTokensToServers,
   setDefaultChannelAvatar,
   waitJobs
@@ -321,18 +319,7 @@ describe('Test video blacklist', function () {
     before(async function () {
       this.timeout(20000)
 
-      await killallServers([ servers[0] ])
-
-      const config = {
-        auto_blacklist: {
-          videos: {
-            of_users: {
-              enabled: true
-            }
-          }
-        }
-      }
-      await servers[0].run(config)
+      await servers[0].config.enableAutoBlacklist()
 
       {
         const user = { username: 'user_without_flag', password: 'password' }
@@ -380,7 +367,7 @@ describe('Test video blacklist', function () {
         name: 'URL import',
         channelId: channelOfUserWithoutFlag
       }
-      await servers[0].imports.importVideo({ token: userWithoutFlag, attributes })
+      await servers[0].videoImports.importVideo({ token: userWithoutFlag, attributes })
 
       const body = await command.list({ sort: 'createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
       expect(body.total).to.equal(2)
@@ -393,7 +380,7 @@ describe('Test video blacklist', function () {
         name: 'Torrent import',
         channelId: channelOfUserWithoutFlag
       }
-      await servers[0].imports.importVideo({ token: userWithoutFlag, attributes })
+      await servers[0].videoImports.importVideo({ token: userWithoutFlag, attributes })
 
       const body = await command.list({ sort: 'createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
       expect(body.total).to.equal(3)

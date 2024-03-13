@@ -1,18 +1,45 @@
-import { SortMeta } from 'primeng/api'
+import { SortMeta, SharedModule } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
-import { AdvancedInputFilter } from '@app/shared/shared-forms'
-import { DropdownAction } from '@app/shared/shared-main'
-import { BulkService } from '@app/shared/shared-moderation'
-import { VideoCommentAdmin, VideoCommentService } from '@app/shared/shared-video-comment'
 import { FeedFormat, UserRight } from '@peertube/peertube-models'
 import { formatICU } from '@app/helpers'
+import { AutoColspanDirective } from '../../../shared/shared-main/angular/auto-colspan.directive'
+import { ActorAvatarComponent } from '../../../shared/shared-actor-image/actor-avatar.component'
+import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
+import { NgIf, NgClass, DatePipe } from '@angular/common'
+import { TableModule } from 'primeng/table'
+import { FeedComponent } from '../../../shared/shared-main/feeds/feed.component'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { VideoCommentAdmin } from '@app/shared/shared-video-comment/video-comment.model'
+import { BulkService } from '@app/shared/shared-moderation/bulk.service'
+import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
 
 @Component({
   selector: 'my-video-comment-list',
   templateUrl: './video-comment-list.component.html',
-  styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './video-comment-list.component.scss' ]
+  styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './video-comment-list.component.scss' ],
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    FeedComponent,
+    TableModule,
+    SharedModule,
+    NgIf,
+    ActionDropdownComponent,
+    AdvancedInputFilterComponent,
+    ButtonComponent,
+    NgbTooltip,
+    TableExpanderIconComponent,
+    NgClass,
+    ActorAvatarComponent,
+    AutoColspanDirective,
+    DatePipe
+  ]
 })
 export class VideoCommentListComponent extends RestTable <VideoCommentAdmin> implements OnInit {
   comments: VideoCommentAdmin[]

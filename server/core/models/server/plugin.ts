@@ -6,10 +6,9 @@ import {
   SettingValue,
   type PluginType_Type
 } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { MPlugin, MPluginFormattable } from '@server/types/models/index.js'
 import { FindAndCountOptions, json, QueryTypes } from 'sequelize'
-import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import {
   isPluginDescriptionValid,
   isPluginHomepage,
@@ -18,7 +17,8 @@ import {
   isPluginStableVersionValid,
   isPluginTypeValid
 } from '../../helpers/custom-validators/plugins.js'
-import { getSort, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
+import { logger } from '@server/helpers/logger.js'
 
 @DefaultScope(() => ({
   attributes: {
@@ -35,7 +35,7 @@ import { getSort, throwIfNotValid } from '../shared/index.js'
     }
   ]
 })
-export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
+export class PluginModel extends SequelizeModel<PluginModel> {
 
   @AllowNull(false)
   @Is('PluginName', value => throwIfNotValid(value, isPluginNameValid, 'name'))
@@ -174,6 +174,7 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
             result[name] = p.settings[name]
           }
         }
+        logger.error('internal', { result })
 
         return result
       })

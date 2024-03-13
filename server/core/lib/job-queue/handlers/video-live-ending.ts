@@ -30,7 +30,7 @@ import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoS
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { JobQueue } from '../job-queue.js'
 import { isVideoInPublicDirectory } from '@server/lib/video-privacy.js'
-import { buildStoryboardJobIfNeeded } from '@server/lib/video.js'
+import { buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 
 const lTags = loggerTagsFactory('live', 'job')
 
@@ -125,6 +125,7 @@ async function saveReplayToExternalVideo (options: {
     waitTranscoding: true,
     nsfw: liveVideo.nsfw,
     description: liveVideo.description,
+    aspectRatio: liveVideo.aspectRatio,
     support: liveVideo.support,
     privacy: replaySettings.privacy,
     channelId: liveVideo.channelId
@@ -165,7 +166,8 @@ async function saveReplayToExternalVideo (options: {
   const thumbnails = await generateLocalVideoMiniature({
     video: replayVideo,
     videoFile: replayVideo.getMaxQualityFile(),
-    types: [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ]
+    types: [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ],
+    ffprobe: undefined
   })
 
   for (const thumbnail of thumbnails) {
@@ -237,7 +239,7 @@ async function replaceLiveByReplay (options: {
   }
 
   // Regenerate the thumbnail & preview?
-  await regenerateMiniaturesIfNeeded(videoWithFiles)
+  await regenerateMiniaturesIfNeeded(videoWithFiles, undefined)
 
   // We consider this is a new video
   await moveToNextState({ video: videoWithFiles, isNewVideo: true })

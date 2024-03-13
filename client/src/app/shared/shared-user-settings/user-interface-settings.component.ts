@@ -1,14 +1,19 @@
 import { Subject, Subscription } from 'rxjs'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { AuthService, Notifier, ServerService, ThemeService, UserService } from '@app/core'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { HTMLServerConfig, User, UserUpdateMe } from '@peertube/peertube-models'
 import { SelectOptionsItem } from 'src/types'
+import { NgFor, NgIf } from '@angular/common'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 @Component({
   selector: 'my-user-interface-settings',
   templateUrl: './user-interface-settings.component.html',
-  styleUrls: [ './user-interface-settings.component.scss' ]
+  styleUrls: [ './user-interface-settings.component.scss' ],
+  standalone: true,
+  imports: [ FormsModule, ReactiveFormsModule, NgFor, NgIf ]
 })
 export class UserInterfaceSettingsComponent extends FormReactive implements OnInit, OnDestroy {
   @Input() user: User = null

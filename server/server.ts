@@ -42,7 +42,7 @@ try {
 // ----------- Database -----------
 
 // Initialize database and models
-import { initDatabaseModels, checkDatabaseConnectionOrDie } from './core/initializers/database.js'
+import { initDatabaseModels, checkDatabaseConnectionOrDie, sequelizeTypescript } from './core/initializers/database.js'
 checkDatabaseConnectionOrDie()
 
 import { migrate } from './core/initializers/migrator.js'
@@ -147,6 +147,7 @@ import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics.js'
 import { ApplicationModel } from '@server/models/application/application.js'
 import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler.js'
+import { RemoveExpiredUserExportsScheduler } from '@server/lib/schedulers/remove-expired-user-exports-scheduler.js'
 
 // ----------- Command line -----------
 
@@ -326,6 +327,7 @@ async function startApplication () {
   VideoViewsBufferScheduler.Instance.enable()
   GeoIPUpdateScheduler.Instance.enable()
   RunnerJobWatchDogScheduler.Instance.enable()
+  RemoveExpiredUserExportsScheduler.Instance.enable()
 
   OpenTelemetryMetrics.Instance.registerMetrics({ trackerServer })
 
@@ -372,6 +374,9 @@ async function startApplication () {
   })
 
   process.on('exit', () => {
+    sequelizeTypescript.close()
+      .catch(err => logger.error('Cannot close database connection.', { err }))
+
     JobQueue.Instance.terminate()
       .catch(err => logger.error('Cannot terminate job queue.', { err }))
   })

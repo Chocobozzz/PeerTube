@@ -1,5 +1,5 @@
 import { Validators } from '@angular/forms'
-import { BuildFormValidator } from '@app/shared/form-validators'
+import { BuildFormValidator } from '@app/shared/form-validators/form-validator.model'
 
 export const REGISTER_TERMS_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.requiredTrue ],

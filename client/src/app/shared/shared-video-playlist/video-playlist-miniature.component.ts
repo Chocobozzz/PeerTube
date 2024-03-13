@@ -2,11 +2,17 @@ import { LinkType } from 'src/types/link.type'
 import { Component, Input, OnInit } from '@angular/core'
 import { VideoPlaylist } from './video-playlist.model'
 import { MarkdownService } from '@app/core'
+import { FromNowPipe } from '../shared-main/angular/from-now.pipe'
+import { RouterLink } from '@angular/router'
+import { LinkComponent } from '../shared-main/angular/link.component'
+import { NgClass, NgIf } from '@angular/common'
 
 @Component({
   selector: 'my-video-playlist-miniature',
   styleUrls: [ './video-playlist-miniature.component.scss' ],
-  templateUrl: './video-playlist-miniature.component.html'
+  templateUrl: './video-playlist-miniature.component.html',
+  standalone: true,
+  imports: [ NgClass, LinkComponent, NgIf, RouterLink, FromNowPipe ]
 })
 export class VideoPlaylistMiniatureComponent implements OnInit {
   @Input() playlist: VideoPlaylist
@@ -38,7 +44,7 @@ export class VideoPlaylistMiniatureComponent implements OnInit {
 
   buildPlaylistUrl () {
     if (this.toManage) {
-      this.routerLink = [ '/my-library/video-playlists', this.playlist.uuid ]
+      this.routerLink = [ '/my-library/video-playlists', this.playlist.shortUUID ]
       return
     }
 

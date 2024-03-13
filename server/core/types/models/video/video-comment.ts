@@ -12,6 +12,13 @@ export type MCommentTotalReplies = MComment & { totalReplies?: number }
 export type MCommentId = Pick<MComment, 'id'>
 export type MCommentUrl = Pick<MComment, 'url'>
 
+// ---------------------------------------------------------------------------
+
+export type MCommentExport =
+  Pick<MComment, 'url' | 'text' | 'createdAt'> &
+  Use<'Video', MVideoAccountLight> &
+  Use<'InReplyToVideoComment', MCommentUrl>
+
 // ############################################################################
 
 export type MCommentOwner =

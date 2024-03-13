@@ -73,5 +73,5 @@ export function escapeHTML (stringParam: string) {
 export function escapeAttribute (value: string) {
   if (!value) return ''
 
-  return String(value).replace(/"/g, '\\"')
+  return String(value).replace(/"/g, '&quot;')
 }

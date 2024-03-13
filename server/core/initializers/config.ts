@@ -153,7 +153,13 @@ const CONFIG = {
     STREAMING_PLAYLISTS: {
       BUCKET_NAME: config.get<string>('object_storage.streaming_playlists.bucket_name'),
       PREFIX: config.get<string>('object_storage.streaming_playlists.prefix'),
-      BASE_URL: config.get<string>('object_storage.streaming_playlists.base_url')
+      BASE_URL: config.get<string>('object_storage.streaming_playlists.base_url'),
+      STORE_LIVE_STREAMS: config.get<string>('object_storage.streaming_playlists.store_live_streams')
+    },
+    USER_EXPORTS: {
+      BUCKET_NAME: config.get<string>('object_storage.user_exports.bucket_name'),
+      PREFIX: config.get<string>('object_storage.user_exports.prefix'),
+      BASE_URL: config.get<string>('object_storage.user_exports.base_url')
     },
     ORIGINAL_VIDEO_FILES: {
       BUCKET_NAME: config.get<string>('object_storage.original_video_files.bucket_name'),
@@ -364,6 +370,20 @@ const CONFIG = {
       FRAMES_TO_ANALYZE: config.get<number>('thumbnails.generation_from_video.frames_to_analyze')
     }
   },
+  STATS: {
+    REGISTRATION_REQUESTS: {
+      ENABLED: config.get<boolean>('stats.registration_requests.enabled')
+    },
+    ABUSES: {
+      ENABLED: config.get<boolean>('stats.abuses.enabled')
+    },
+    TOTAL_MODERATORS: {
+      ENABLED: config.get<boolean>('stats.total_moderators.enabled')
+    },
+    TOTAL_ADMINS: {
+      ENABLED: config.get<boolean>('stats.total_admins.enabled')
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },
@@ -398,7 +418,9 @@ const CONFIG = {
   },
   TRANSCODING: {
     get ENABLED () { return config.get<boolean>('transcoding.enabled') },
-    get KEEP_ORIGINAL_FILE () { return config.get<boolean>('transcoding.keep_original_file') },
+    ORIGINAL_FILE: {
+      get KEEP () { return config.get<boolean>('transcoding.original_file.keep') }
+    },
     get ALLOW_ADDITIONAL_EXTENSIONS () { return config.get<boolean>('transcoding.allow_additional_extensions') },
     get ALLOW_AUDIO_FILES () { return config.get<boolean>('transcoding.allow_audio_files') },
     get THREADS () { return config.get<number>('transcoding.threads') },
@@ -518,6 +540,16 @@ const CONFIG = {
       get FULL_SYNC_VIDEOS_LIMIT () {
         return config.get<number>('import.video_channel_synchronization.full_sync_videos_limit')
       }
+    },
+    USERS: {
+      get ENABLED () { return config.get<boolean>('import.users.enabled') }
+    }
+  },
+  EXPORT: {
+    USERS: {
+      get ENABLED () { return config.get<boolean>('export.users.enabled') },
+      get MAX_USER_VIDEO_QUOTA () { return parseBytes(config.get<string>('export.users.max_user_video_quota')) },
+      get EXPORT_EXPIRATION () { return parseDurationToMs(config.get<string>('export.users.export_expiration')) }
     }
   },
   AUTO_BLACKLIST: {
@@ -573,8 +605,7 @@ const CONFIG = {
   },
   SERVICES: {
     TWITTER: {
-      get USERNAME () { return config.get<string>('services.twitter.username') },
-      get WHITELISTED () { return config.get<boolean>('services.twitter.whitelisted') }
+      get USERNAME () { return config.get<string>('services.twitter.username') }
     }
   },
   FOLLOWERS: {

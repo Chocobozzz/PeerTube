@@ -3,10 +3,13 @@
 @use '_mixins' as *;
 
 @mixin build-channel-img-size ($video-img-width) {
-  $image-size: min(130px, $video-img-width);
+  $image-size: min(120px, $video-img-width);
   $margin-size: math.div(($video-img-width - $image-size), 2); // So we have the same width as the video miniature
 
-  @include actor-avatar-size($image-size);
+  width: $image-size;
+  height: $image-size;
+  min-height: $image-size;
+  min-width: $image-size;
 
   margin: 0 calc($margin-size + 1rem) 0 $margin-size;
 }
@@ -59,7 +62,7 @@
 
 .video-channel {
   my-actor-avatar {
-    @include margin-right(1rem);
+    @include build-channel-img-size($video-thumbnail-width);
   }
 }
 
@@ -88,7 +91,7 @@
   color: pvar(--greyForegroundColor);
 }
 
-// Use the same breakpoints than in video-miniature
+// Use the same breakpoints as in video-miniature
 @include on-small-main-col {
   .video-channel {
     display: grid;

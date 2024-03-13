@@ -1,8 +1,8 @@
 import { Op, QueryTypes, Transaction } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, IsInt, Model, Table, Unique, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, IsInt, Table, Unique, UpdatedAt } from 'sequelize-typescript'
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { VideoModel } from './video.js'
+import { SequelizeModel } from '../shared/sequelize-type.js'
 
 export type VideoJobInfoColumnType = 'pendingMove' | 'pendingTranscode'
 
@@ -20,7 +20,7 @@ export type VideoJobInfoColumnType = 'pendingMove' | 'pendingTranscode'
   ]
 })
 
-export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfoModel>>> {
+export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
   @CreatedAt
   createdAt: Date
 

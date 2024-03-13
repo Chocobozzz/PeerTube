@@ -2,15 +2,21 @@ import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/cor
 import { Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { splitAndGetNotEmpty, UNIQUE_HOSTS_OR_HANDLE_VALIDATOR } from '@app/shared/form-validators/host-validators'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { InstanceFollowService } from '@app/shared/shared-instance'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { NgClass, NgIf } from '@angular/common'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
 
 @Component({
   selector: 'my-follow-modal',
   templateUrl: './follow-modal.component.html',
-  styleUrls: [ './follow-modal.component.scss' ]
+  styleUrls: [ './follow-modal.component.scss' ],
+  standalone: true,
+  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf ]
 })
 export class FollowModalComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal

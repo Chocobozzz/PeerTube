@@ -121,7 +121,7 @@ async function searchVideosDB (query: VideosSearchQueryAfterSanitize, req: expre
   }, 'filter:api.search.videos.local.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
-    VideoModel.searchAndPopulateAccountAndServer,
+    VideoModel.searchAndPopulateAccountAndServer.bind(VideoModel),
     apiOptions,
     'filter:api.search.videos.local.list.result'
   )
@@ -151,7 +151,7 @@ async function searchVideoURI (url: string, res: express.Response) {
       logger.info('Cannot search remote video %s.', url, { err })
     }
   } else {
-    video = await searchLocalUrl(sanitizeLocalUrl(url), url => VideoModel.loadByUrlAndPopulateAccount(url))
+    video = await searchLocalUrl(sanitizeLocalUrl(url), url => VideoModel.loadByUrlAndPopulateAccountAndFiles(url))
   }
 
   return res.json({

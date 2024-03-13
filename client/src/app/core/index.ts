@@ -13,4 +13,4 @@ export * from './theme'
 export * from './users'
 export * from './wrappers'
 
-export * from './core.module'
+export * from './core-providers'

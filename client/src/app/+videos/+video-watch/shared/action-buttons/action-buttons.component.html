@@ -49,7 +49,8 @@
 
     <ng-container *ngIf="isUserLoggedIn">
       <my-video-actions-dropdown
-        placement="bottom auto" buttonDirection="horizontal" [buttonStyled]="true" [video]="video" [videoCaptions]="videoCaptions"
+        placement="bottom auto" buttonDirection="horizontal" buttonStyled="true" [video]="video" [videoCaptions]="videoCaptions"
+        actionAvailabilityHint="true"
         [displayOptions]="videoActionsOptions" (videoRemoved)="onVideoRemoved()"
       ></my-video-actions-dropdown>
     </ng-container>

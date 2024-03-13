@@ -131,7 +131,7 @@ async function getUserVideos (req: express.Request, res: express.Response) {
   }, 'filter:api.user.me.videos.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
-    VideoModel.listUserVideosForApi,
+    VideoModel.listUserVideosForApi.bind(VideoModel),
     apiOptions,
     'filter:api.user.me.videos.list.result'
   )
@@ -262,11 +262,12 @@ async function updateMyAvatar (req: express.Request, res: express.Response) {
 
   const userAccount = await AccountModel.load(user.Account.id)
 
-  const avatars = await updateLocalActorImageFiles(
-    userAccount,
-    avatarPhysicalFile,
-    ActorImageType.AVATAR
-  )
+  const avatars = await updateLocalActorImageFiles({
+    accountOrChannel: userAccount,
+    imagePhysicalFile: avatarPhysicalFile,
+    type: ActorImageType.AVATAR,
+    sendActorUpdate: true
+  })
 
   return res.json({
     avatars: avatars.map(avatar => avatar.toFormattedJSON())

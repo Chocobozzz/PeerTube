@@ -6,6 +6,7 @@ import {
   ActivityTagObject,
   ActivityUrlObject
 } from './common-objects.js'
+import { VideoChapterObject } from './video-chapters-object.js'
 
 export interface VideoObject {
   type: 'Video'
@@ -43,6 +44,8 @@ export interface VideoObject {
 
   support: string
 
+  aspectRatio: number
+
   icon: ActivityIconObject[]
 
   url: ActivityUrlObject[]
@@ -51,7 +54,7 @@ export interface VideoObject {
   dislikes: string
   shares: string
   comments: string
-  hasParts: string
+  hasParts: string | VideoChapterObject[]
 
   attributedTo: ActivityPubAttributedTo[]
 
@@ -59,6 +62,16 @@ export interface VideoObject {
 
   to?: string[]
   cc?: string[]
+
+  // For export
+  attachment?: {
+    type: 'Video'
+    url: string
+    mediaType: string
+    height: number
+    size: number
+    fps: number
+  }[]
 }
 
 export interface ActivityPubStoryboard {

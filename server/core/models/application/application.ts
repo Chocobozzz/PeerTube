@@ -1,8 +1,9 @@
-import memoizee from 'memoizee'
-import { AllowNull, Column, Default, DefaultScope, HasOne, IsInt, Model, Table } from 'sequelize-typescript'
 import { getNodeABIVersion } from '@server/helpers/version.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import memoizee from 'memoizee'
+import { AllowNull, Column, Default, DefaultScope, HasOne, IsInt, Table } from 'sequelize-typescript'
 import { AccountModel } from '../account/account.js'
+import { ActorImageModel } from '../actor/actor-image.js'
+import { SequelizeModel } from '../shared/index.js'
 
 export const getServerActor = memoizee(async function () {
   const application = await ApplicationModel.load()
@@ -10,6 +11,10 @@ export const getServerActor = memoizee(async function () {
 
   const actor = application.Account.Actor
   actor.Account = application.Account
+
+  const { avatars, banners } = await ActorImageModel.listActorImages(actor)
+  actor.Avatars = avatars
+  actor.Banners = banners
 
   return actor
 }, { promise: true })
@@ -26,7 +31,7 @@ export const getServerActor = memoizee(async function () {
   tableName: 'application',
   timestamps: false
 })
-export class ApplicationModel extends Model<Partial<AttributesOnly<ApplicationModel>>> {
+export class ApplicationModel extends SequelizeModel<ApplicationModel> {
 
   @AllowNull(false)
   @Default(0)

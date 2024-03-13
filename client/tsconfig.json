@@ -62,8 +62,10 @@
     "src/polyfills.ts"
   ],
   "include": [
+    "src/polyfills.ts",
     "src/main*.ts",
     "src/**/*.d.ts",
+    "src/app/**/*.ts",
     "src/shims/*.ts"
   ],
   "angularCompilerOptions": {

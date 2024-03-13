@@ -1,18 +1,45 @@
 import { ChartData, ChartOptions, TooltipItem, TooltipModel } from 'chart.js'
 import { max, maxBy, min, minBy } from 'lodash-es'
-import { Subject } from 'rxjs'
+import { Subject, first, map, switchMap } from 'rxjs'
 import { Component } from '@angular/core'
 import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, ScreenService } from '@app/core'
-import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { formatICU } from '@app/helpers'
+import { NumberFormatterPipe } from '../../shared/shared-main/angular/number-formatter.pipe'
+import { ChartModule } from 'primeng/chart'
+import { DeferLoadingDirective } from '../../shared/shared-main/angular/defer-loading.directive'
+import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
+import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
+import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
+import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { ChannelsSetupMessageComponent } from '../../shared/shared-main/misc/channels-setup-message.component'
+import { RouterLink } from '@angular/router'
+import { NgIf, NgFor } from '@angular/common'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
 
 @Component({
   templateUrl: './my-video-channels.component.html',
-  styleUrls: [ './my-video-channels.component.scss' ]
+  styleUrls: [ './my-video-channels.component.scss' ],
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    NgIf,
+    RouterLink,
+    ChannelsSetupMessageComponent,
+    AdvancedInputFilterComponent,
+    InfiniteScrollerDirective,
+    NgFor,
+    ActorAvatarComponent,
+    EditButtonComponent,
+    DeleteButtonComponent,
+    DeferLoadingDirective,
+    ChartModule,
+    NumberFormatterPipe
+  ]
 })
 export class MyVideoChannelsComponent {
-  totalItems: number
-
   videoChannels: VideoChannel[] = []
 
   videoChannelsChartData: ChartData[]
@@ -28,6 +55,8 @@ export class MyVideoChannelsComponent {
     itemsPerPage: 10,
     totalItems: null
   }
+
+  private pagesDone = new Set<number>()
 
   constructor (
     private authService: AuthService,
@@ -47,8 +76,7 @@ export class MyVideoChannelsComponent {
     this.pagination.currentPage = 1
     this.videoChannels = []
 
-    this.authService.userInformationLoaded
-      .subscribe(() => this.loadMoreVideoChannels())
+    this.loadMoreVideoChannels()
   }
 
   async deleteVideoChannel (videoChannel: VideoChannel) {
@@ -89,19 +117,24 @@ export class MyVideoChannelsComponent {
   }
 
   private loadMoreVideoChannels () {
-    const user = this.authService.getUser()
-    const options = {
-      account: user.account,
-      withStats: true,
-      search: this.search,
-      componentPagination: this.pagination,
-      sort: '-updatedAt'
-    }
+    if (this.pagesDone.has(this.pagination.currentPage)) return
+    this.pagesDone.add(this.pagination.currentPage)
 
-    return this.videoChannelService.listAccountVideoChannels(options)
+    return this.authService.userInformationLoaded
+      .pipe(
+        first(),
+        map(() => ({
+          account: this.authService.getUser().account,
+          withStats: true,
+          search: this.search,
+          componentPagination: this.pagination,
+          sort: '-updatedAt'
+        })),
+        switchMap(options => this.videoChannelService.listAccountVideoChannels(options))
+      )
       .subscribe(res => {
         this.videoChannels = this.videoChannels.concat(res.data)
-        this.totalItems = res.total
+        this.pagination.totalItems = res.total
 
         // chart data
         this.videoChannelsChartData = this.videoChannels.map(v => ({

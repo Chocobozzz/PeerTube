@@ -1,17 +1,29 @@
 import { forkJoin } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
-import { Router } from '@angular/router'
+import { Router, RouterLink } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
-import { FormReactiveService } from '@app/shared/shared-forms'
-import { VideoCaptionService, VideoChapterService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
 import { VideoUpdate } from '@peertube/peertube-models'
 import { hydrateFormFromVideo } from '../shared/video-edit-utils'
 import { VideoSend } from './video-send'
 import { VideoEditComponent } from '../shared/video-edit.component'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
+import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
+import { HelpComponent } from '../../../shared/shared-main/misc/help.component'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { NgIf } from '@angular/common'
+import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
+import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
+import { VideoEdit } from '@app/shared/shared-main/video/video-edit.model'
+import { VideoImportService } from '@app/shared/shared-main/video/video-import.service'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
 
 @Component({
   selector: 'my-video-import-url',
@@ -19,6 +31,20 @@ import { VideoEditComponent } from '../shared/video-edit.component'
   styleUrls: [
     '../shared/video-edit.component.scss',
     './video-send.scss'
+  ],
+  standalone: true,
+  imports: [
+    NgIf,
+    GlobalIconComponent,
+    HelpComponent,
+    PeerTubeTemplateDirective,
+    FormsModule,
+    RouterLink,
+    SelectChannelComponent,
+    SelectOptionsComponent,
+    ReactiveFormsModule,
+    VideoEditComponent,
+    ButtonComponent
   ]
 })
 export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterViewInit, CanComponentDeactivate {

@@ -10,7 +10,7 @@ import { MVideo, MVideoFullLight, MVideoUUID } from '@server/types/models/index.
 import { federateVideoIfNeeded } from './activitypub/videos/index.js'
 import { JobQueue } from './job-queue/index.js'
 import { Notifier } from './notifier/index.js'
-import { buildMoveJob } from './video.js'
+import { buildMoveJob } from './video-jobs.js'
 
 function buildNextVideoState (currentState?: VideoStateType) {
   if (currentState === VideoState.PUBLISHED) {
@@ -185,7 +185,7 @@ async function moveToPublishedState (options: {
   }
 
   if (isNewVideo) {
-    Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+    Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(video)
 
     if (previousState === VideoState.TO_TRANSCODE) {
       Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(video)

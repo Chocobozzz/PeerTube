@@ -19,7 +19,6 @@
       "es2018",
       "es2019"
     ],
-    "baseUrl": "./",
     "resolveJsonModule": true,
     "strict": false,
     "strictBindCallApply": true,

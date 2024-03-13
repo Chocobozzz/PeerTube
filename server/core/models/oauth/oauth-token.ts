@@ -6,21 +6,19 @@ import {
   BelongsTo,
   Column,
   CreatedAt,
-  ForeignKey,
-  Model,
-  Scopes,
+  ForeignKey, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { TokensCache } from '@server/lib/auth/tokens-cache.js'
 import { MUserAccountId } from '@server/types/models/index.js'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { logger } from '../../helpers/logger.js'
 import { AccountModel } from '../account/account.js'
 import { ActorModel } from '../actor/actor.js'
 import { UserModel } from '../user/user.js'
 import { OAuthClientModel } from './oauth-client.js'
+import { SequelizeModel } from '../shared/index.js'
 
 export type OAuthTokenInfo = {
   refreshToken: string
@@ -80,7 +78,7 @@ enum ScopeNames {
     }
   ]
 })
-export class OAuthTokenModel extends Model<Partial<AttributesOnly<OAuthTokenModel>>> {
+export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
 
   @AllowNull(false)
   @Column

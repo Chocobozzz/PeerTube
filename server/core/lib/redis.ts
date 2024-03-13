@@ -307,26 +307,12 @@ class Redis {
 
   /* ************ Resumable uploads final responses ************ */
 
-  setUploadSession (uploadId: string, response?: { video: { id: number, shortUUID: string, uuid: string } }) {
-    return this.setValue(
-      'resumable-upload-' + uploadId,
-      response
-        ? JSON.stringify(response)
-        : '',
-      RESUMABLE_UPLOAD_SESSION_LIFETIME
-    )
+  setUploadSession (uploadId: string) {
+    return this.setValue('resumable-upload-' + uploadId, '', RESUMABLE_UPLOAD_SESSION_LIFETIME)
   }
 
   doesUploadSessionExist (uploadId: string) {
     return this.exists('resumable-upload-' + uploadId)
-  }
-
-  async getUploadSession (uploadId: string) {
-    const value = await this.getValue('resumable-upload-' + uploadId)
-
-    return value
-      ? JSON.parse(value) as { video: { id: number, shortUUID: string, uuid: string } }
-      : undefined
   }
 
   deleteUploadSession (uploadId: string) {
@@ -355,7 +341,9 @@ class Redis {
   generateLocalVideoViewerKeys (ip: string, videoId: number): { setKey: string, viewerKey: string }
   generateLocalVideoViewerKeys (): { setKey: string }
   generateLocalVideoViewerKeys (ip?: string, videoId?: number) {
-    return { setKey: `local-video-viewer-stats-keys`, viewerKey: `local-video-viewer-stats-${ip}-${videoId}` }
+    const anonymousIP = sha256(CONFIG.SECRETS + '-' + ip)
+
+    return { setKey: `local-video-viewer-stats-keys`, viewerKey: `local-video-viewer-stats-${anonymousIP}-${videoId}` }
   }
 
   private generateVideoViewStatsKeys (options: { videoId?: number, hour?: number }) {
@@ -383,11 +371,11 @@ class Redis {
   }
 
   generateIPViewKey (ip: string, videoUUID: string) {
-    return `views-${videoUUID}-${ip}`
+    return `views-${videoUUID}-${sha256(CONFIG.SECRETS.PEERTUBE + '-' + ip)}`
   }
 
   private generateContactFormKey (ip: string) {
-    return 'contact-form-' + ip
+    return 'contact-form-' + sha256(CONFIG.SECRETS.PEERTUBE + '-' + ip)
   }
 
   private generateAPUnavailabilityKey (url: string) {

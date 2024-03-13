@@ -1,5 +1,4 @@
 import { VideoChannelSync, VideoChannelSyncState, type VideoChannelSyncStateType } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { isVideoChannelSyncStateValid } from '@server/helpers/custom-validators/video-channel-syncs.js'
 import { CONSTRAINTS_FIELDS, VIDEO_CHANNEL_SYNC_STATE } from '@server/initializers/constants.js'
@@ -14,13 +13,11 @@ import {
   Default,
   DefaultScope,
   ForeignKey,
-  Is,
-  Model,
-  Table,
+  Is, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { AccountModel } from '../account/account.js'
-import { getChannelSyncSort, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, getChannelSyncSort, throwIfNotValid } from '../shared/index.js'
 import { UserModel } from '../user/user.js'
 import { VideoChannelModel } from './video-channel.js'
 
@@ -40,7 +37,7 @@ import { VideoChannelModel } from './video-channel.js'
     }
   ]
 })
-export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoChannelSyncModel>>> {
+export class VideoChannelSyncModel extends SequelizeModel<VideoChannelSyncModel> {
 
   @AllowNull(false)
   @Default(null)

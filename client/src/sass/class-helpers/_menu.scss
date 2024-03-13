@@ -80,3 +80,36 @@
     flex-direction: column;
   }
 }
+
+.pt-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  margin-bottom: 1rem;
+  list-style: none;
+  font-weight: $font-semibold;
+
+  .breadcrumb-item {
+    display: flex;
+
+    a {
+      color: pvar(--mainColor);
+    }
+
+    + .breadcrumb-item {
+      @include padding-left(0.5rem);
+
+      &::before {
+        @include padding-right(0.5rem);
+
+        display: inline-block;
+        color: #6c757d;
+        content: '/';
+      }
+    }
+
+    &.active {
+      color: #6c757d;
+    }
+  }
+}

@@ -60,7 +60,10 @@ export type BuildVideosListQueryOptions = {
   trendingAlgorithm?: string // best, hot, or any other algorithm implemented
   trendingDays?: number
 
+  // Used to include user history information, exclude blocked videos, include internal videos, adapt hot algorithm...
   user?: MUserAccountId
+
+  // Only list videos watched by this user
   historyOfUser?: MUserId
 
   startDate?: string // ISO 8601
@@ -690,6 +693,23 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       this.attributes.push('COALESCE("video"."originallyPublishedAt", "video"."publishedAt") AS "publishedAtForOrder"')
     }
 
+    if (sort === '-localVideoFilesSize' || sort === 'localVideoFilesSize') {
+      this.attributes.push(
+        '(' +
+          'CASE ' +
+            'WHEN "video"."remote" IS TRUE THEN 0 ' + // Consider remote videos with size of 0
+            'ELSE (' +
+              '(SELECT COALESCE(SUM(size), 0) FROM "videoFile" WHERE "videoFile"."videoId" = "video"."id")' +
+              ' + ' +
+              '(SELECT COALESCE(SUM(size), 0) FROM "videoFile" ' +
+                'INNER JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
+                'AND "videoStreamingPlaylist"."videoId" = "video"."id"' +
+              ')' +
+            ') END' +
+        ') AS "localVideoFilesSize"'
+      )
+    }
+
     this.sort = this.buildOrder(sort)
   }
 
@@ -709,6 +729,8 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       firstSort = '"similarity"'
     } else if (field === 'originallyPublishedAt') {
       firstSort = '"publishedAtForOrder"'
+    } else if (field === 'localVideoFilesSize') {
+      firstSort = '"localVideoFilesSize"'
     } else if (field.includes('.')) {
       firstSort = field
     } else {

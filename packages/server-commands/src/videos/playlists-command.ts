@@ -11,7 +11,10 @@ import {
   VideoPlaylistElementCreate,
   VideoPlaylistElementCreateResult,
   VideoPlaylistElementUpdate,
+  VideoPlaylistPrivacy,
+  VideoPlaylistPrivacyType,
   VideoPlaylistReorder,
+  VideoPlaylistType,
   VideoPlaylistType_Type,
   VideoPlaylistUpdate
 } from '@peertube/peertube-models'
@@ -80,6 +83,8 @@ export class PlaylistsCommand extends AbstractCommand {
     })
   }
 
+  // ---------------------------------------------------------------------------
+
   get (options: OverrideCommandOptions & {
     playlistId: number | string
   }) {
@@ -94,6 +99,20 @@ export class PlaylistsCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
+
+  async getWatchLater (options: OverrideCommandOptions & {
+    handle: string
+  }) {
+    const { data: playlists } = await this.listByAccount({
+      ...options,
+
+      playlistType: VideoPlaylistType.WATCH_LATER
+    })
+
+    return playlists[0]
+  }
+
+  // ---------------------------------------------------------------------------
 
   listVideos (options: OverrideCommandOptions & {
     playlistId: number | string
@@ -154,6 +173,27 @@ export class PlaylistsCommand extends AbstractCommand {
     }))
 
     return body.videoPlaylist
+  }
+
+  async quickCreate (options: OverrideCommandOptions & {
+    displayName: string
+    privacy?: VideoPlaylistPrivacyType
+  }) {
+    const { displayName, privacy = VideoPlaylistPrivacy.PUBLIC } = options
+
+    const { videoChannels } = await this.server.users.getMyInfo({ token: options.token })
+
+    return this.create({
+      ...options,
+
+      attributes: {
+        displayName,
+        privacy,
+        videoChannelId: privacy === VideoPlaylistPrivacy.PUBLIC
+          ? videoChannels[0].id
+          : undefined
+      }
+    })
   }
 
   update (options: OverrideCommandOptions & {

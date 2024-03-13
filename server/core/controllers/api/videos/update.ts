@@ -1,16 +1,16 @@
-import express from 'express'
+import express, { UploadFiles } from 'express'
 import { Transaction } from 'sequelize'
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoPrivacy, VideoPrivacyType, VideoUpdate } from '@peertube/peertube-models'
+import { HttpStatusCode, ThumbnailType, VideoPrivacy, VideoPrivacyType, VideoUpdate } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { setVideoPrivacy } from '@server/lib/video-privacy.js'
-import { addVideoJobsAfterUpdate, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video.js'
+import { setVideoTags } from '@server/lib/video.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
-import { MVideoFullLight } from '@server/types/models/index.js'
+import { MVideoFullLight, MVideoThumbnail } from '@server/types/models/index.js'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
 import { resetSequelizeInstance } from '../../../helpers/database-utils.js'
 import { createReqFiles } from '../../../helpers/express-utils.js'
@@ -23,6 +23,8 @@ import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosU
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update.js'
 import { VideoModel } from '../../../models/video/video.js'
 import { replaceChaptersFromDescriptionIfNeeded } from '@server/lib/video-chapters.js'
+import { addVideoJobsAfterUpdate } from '@server/lib/video-jobs.js'
+import { updateLocalVideoMiniatureFromExisting } from '@server/lib/thumbnail.js'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -54,13 +56,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const hadPrivacyForFederation = videoFromReq.hasPrivacyForFederation()
   const oldPrivacy = videoFromReq.privacy
 
-  const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({
-    video: videoFromReq,
-    files: req.files,
-    fallback: () => Promise.resolve(undefined),
-    automaticallyGenerated: false
-  })
-
+  const thumbnails = await buildVideoThumbnailsFromReq(videoFromReq, req.files)
   const videoFileLockReleaser = await VideoPathManager.Instance.lockFiles(videoFromReq.uuid)
 
   try {
@@ -114,8 +110,9 @@ async function updateVideo (req: express.Request, res: express.Response) {
       const videoInstanceUpdated = await video.save({ transaction: t }) as MVideoFullLight
 
       // Thumbnail & preview updates?
-      if (thumbnailModel) await videoInstanceUpdated.addAndSaveThumbnail(thumbnailModel, t)
-      if (previewModel) await videoInstanceUpdated.addAndSaveThumbnail(previewModel, t)
+      for (const thumbnail of thumbnails) {
+        await videoInstanceUpdated.addAndSaveThumbnail(thumbnail, t)
+      }
 
       // Video tags update?
       if (videoInfoToUpdate.tags !== undefined) {
@@ -227,4 +224,31 @@ function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate: Vide
   } else if (videoInfoToUpdate.scheduleUpdate === null) {
     return ScheduleVideoUpdateModel.deleteByVideoId(videoInstance.id, transaction)
   }
+}
+
+async function buildVideoThumbnailsFromReq (video: MVideoThumbnail, files: UploadFiles) {
+  const promises = [
+    {
+      type: ThumbnailType.MINIATURE,
+      fieldName: 'thumbnailfile'
+    },
+    {
+      type: ThumbnailType.PREVIEW,
+      fieldName: 'previewfile'
+    }
+  ].map(p => {
+    const fields = files?.[p.fieldName]
+    if (!fields) return undefined
+
+    return updateLocalVideoMiniatureFromExisting({
+      inputPath: fields[0].path,
+      video,
+      type: p.type,
+      automaticallyGenerated: false
+    })
+  })
+
+  const thumbnailsOrUndefined = await Promise.all(promises)
+
+  return thumbnailsOrUndefined.filter(t => !!t)
 }

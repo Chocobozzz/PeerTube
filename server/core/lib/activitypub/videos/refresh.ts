@@ -18,7 +18,7 @@ async function refreshVideoIfNeeded (options: {
   // We need more attributes if the argument video was fetched with not enough joints
   const video = options.fetchedType === 'all'
     ? options.video as MVideoAccountLightBlacklistAllFiles
-    : await VideoModel.loadByUrlAndPopulateAccount(options.video.url)
+    : await VideoModel.loadByUrlAndPopulateAccountAndFiles(options.video.url)
 
   const lTags = loggerTagsFactory('ap', 'video', 'refresh', video.uuid, video.url)
 

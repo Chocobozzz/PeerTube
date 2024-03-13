@@ -13,8 +13,11 @@ export class VideoWatchPage {
     const index = this.isMobileDevice ? 0 : 1
 
     return browser.waitUntil(async () => {
-      return await $('.video-info .video-info-name').isExisting() &&
-        (await $$('.video-info .video-info-name')[index].getText()).includes(videoName)
+      if (!await $('.video-info .video-info-name').isExisting()) return false
+
+      const elem = await $$('.video-info .video-info-name')[index]
+
+      return (await elem.getText()).includes(videoName) && elem.isDisplayed()
     })
   }
 
@@ -31,9 +34,13 @@ export class VideoWatchPage {
   }
 
   async isDownloadEnabled () {
-    await this.clickOnMoreDropdownIcon()
+    try {
+      await this.clickOnMoreDropdownIcon()
 
-    return $('.dropdown-item .icon-download').isExisting()
+      return await $('.dropdown-item .icon-download').isExisting()
+    } catch {
+      return $('.action-button-download').isDisplayed()
+    }
   }
 
   areCommentsEnabled () {

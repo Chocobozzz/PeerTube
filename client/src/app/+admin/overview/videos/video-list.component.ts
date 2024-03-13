@@ -1,21 +1,58 @@
-import { SortMeta } from 'primeng/api'
+import { SortMeta, SharedModule } from 'primeng/api'
 import { finalize } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU, getAbsoluteAPIUrl } from '@app/helpers'
-import { AdvancedInputFilter } from '@app/shared/shared-forms'
-import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
-import { VideoBlockComponent, VideoBlockService } from '@app/shared/shared-moderation'
-import { VideoActionsDisplayType } from '@app/shared/shared-video-miniature'
 import { getAllFiles } from '@peertube/peertube-core-utils'
 import { UserRight, VideoFile, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { VideoAdminService } from './video-admin.service'
+import { BytesPipe } from '../../../shared/shared-main/angular/bytes.pipe'
+import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
+import { AutoColspanDirective } from '../../../shared/shared-main/angular/auto-colspan.directive'
+import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.component'
+import {
+  VideoActionsDisplayType,
+  VideoActionsDropdownComponent
+} from '../../../shared/shared-video-miniature/video-actions-dropdown.component'
+import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
+import { NgClass, NgIf, NgFor, DatePipe } from '@angular/common'
+import { TableModule } from 'primeng/table'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoBlockComponent } from '@app/shared/shared-moderation/video-block.component'
+import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 
 @Component({
   selector: 'my-video-list',
   templateUrl: './video-list.component.html',
-  styleUrls: [ './video-list.component.scss' ]
+  styleUrls: [ './video-list.component.scss' ],
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    TableModule,
+    NgClass,
+    SharedModule,
+    NgIf,
+    ActionDropdownComponent,
+    AdvancedInputFilterComponent,
+    ButtonComponent,
+    NgbTooltip,
+    TableExpanderIconComponent,
+    VideoActionsDropdownComponent,
+    VideoCellComponent,
+    AutoColspanDirective,
+    NgFor,
+    EmbedComponent,
+    VideoBlockComponent,
+    DatePipe,
+    BytesPipe
+  ]
 })
 export class VideoListComponent extends RestTable <Video> implements OnInit {
   @ViewChild('videoBlockModal') videoBlockModal: VideoBlockComponent

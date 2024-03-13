@@ -1,6 +1,8 @@
 import { Component, forwardRef, HostListener, Input } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
+import { NgIf } from '@angular/common'
+import { NgSelectModule } from '@ng-select/ng-select'
 
 @Component({
   selector: 'my-select-options',
@@ -12,7 +14,9 @@ import { SelectOptionsItem } from '../../../../types/select-options-item.model'
       useExisting: forwardRef(() => SelectOptionsComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: true,
+  imports: [ NgSelectModule, FormsModule, NgIf ]
 })
 export class SelectOptionsComponent implements ControlValueAccessor {
   @Input() items: SelectOptionsItem[] = []

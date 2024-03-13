@@ -1,12 +1,14 @@
 import { Subject } from 'rxjs'
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
-import { ViewportScroller } from '@angular/common'
+import { ViewportScroller, NgClass, NgIf } from '@angular/common'
 import { Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { SafeHtml } from '@angular/platform-browser'
 import { MarkdownService, ScreenService } from '@app/core'
 import { Video } from '@peertube/peertube-models'
 import { FormReactiveErrors } from './form-reactive.service'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbTooltip, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-markdown-textarea',
@@ -18,6 +20,20 @@ import { FormReactiveErrors } from './form-reactive.service'
       useExisting: forwardRef(() => MarkdownTextareaComponent),
       multi: true
     }
+  ],
+  standalone: true,
+  imports: [
+    NgClass,
+    FormsModule,
+    NgbNav,
+    NgIf,
+    NgbNavItem,
+    NgbNavLink,
+    NgbNavLinkBase,
+    NgbNavContent,
+    GlobalIconComponent,
+    NgbTooltip,
+    NgbNavOutlet
   ]
 })
 

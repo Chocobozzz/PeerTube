@@ -5,7 +5,7 @@ import { initDatabaseModels } from '@server/initializers/database.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { moveToExternalStorageState, moveToFileSystemState } from '@server/lib/video-state.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { VideoState, VideoStorage } from '@peertube/peertube-models'
+import { VideoState, FileStorage } from '@peertube/peertube-models'
 import { MStreamingPlaylist, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 
 program
@@ -84,7 +84,7 @@ async function run () {
         video: videoFull,
         type: 'to object storage',
         canProcessVideo: (files, hls) => {
-          return files.some(f => f.storage === VideoStorage.FILE_SYSTEM) || hls?.storage === VideoStorage.FILE_SYSTEM
+          return files.some(f => f.storage === FileStorage.FILE_SYSTEM) || hls?.storage === FileStorage.FILE_SYSTEM
         },
         handler: () => moveToExternalStorageState({ video: videoFull, isNewVideo: false, transaction: undefined })
       })
@@ -98,7 +98,7 @@ async function run () {
         type: 'to file system',
 
         canProcessVideo: (files, hls) => {
-          return files.some(f => f.storage === VideoStorage.OBJECT_STORAGE) || hls?.storage === VideoStorage.OBJECT_STORAGE
+          return files.some(f => f.storage === FileStorage.OBJECT_STORAGE) || hls?.storage === FileStorage.OBJECT_STORAGE
         },
         handler: () => moveToFileSystemState({ video: videoFull, isNewVideo: false, transaction: undefined })
       })

@@ -1,8 +1,9 @@
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoSource } from '@peertube/peertube-models'
 import {
+  PeerTubeServer,
   cleanupTests,
   createSingleServer,
-  PeerTubeServer,
+  makeRawRequest,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
@@ -145,6 +146,66 @@ describe('Test video sources API validator', function () {
 
       await server.users.update({ userId, videoQuota: 1000 * 1000 * 1000 })
       await server.videos.replaceSourceFile({ videoId: userVideoId, fixture: 'video_short.mp4' })
+    })
+  })
+
+  describe('When downloading the source file', function () {
+    let videoFileToken: string
+    let videoId: string
+    let source: VideoSource
+    let user3: string
+    let user4: string
+
+    before(async function () {
+      this.timeout(60000)
+
+      user3 = await server.users.generateUserAndToken('user3')
+      user4 = await server.users.generateUserAndToken('user4')
+
+      await server.config.enableMinimumTranscoding({ hls: true, keepOriginal: true, webVideo: true })
+
+      const { uuid } = await server.videos.quickUpload({ name: 'video', token: user3 })
+
+      videoId = uuid
+      videoFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid, token: user3 })
+
+      await waitJobs([ server ])
+
+      source = await server.videos.getSource({ id: videoId, token: user3 })
+    })
+
+    it('Should fail with an invalid filename', async function () {
+      await makeRawRequest({ url: server.url + '/download/original-video-files/hello.mp4', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should fail without header token or video file token', async function () {
+      await makeRawRequest({ url: source.fileDownloadUrl, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail with an invalid header token', async function () {
+      await makeRawRequest({ url: source.fileDownloadUrl, token: 'toto', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should fail with an invalid video file token', async function () {
+      await makeRawRequest({ url: source.fileDownloadUrl, query: { videoFileToken: 'toto' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail with header token of another user', async function () {
+      await makeRawRequest({ url: source.fileDownloadUrl, token: user4, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail with video file token of another user', async function () {
+      const videoFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid, token: user4 })
+
+      await makeRawRequest({ url: source.fileDownloadUrl, query: { videoFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should succeed with a valid header token', async function () {
+      await makeRawRequest({ url: source.fileDownloadUrl, token: user3, expectedStatus: HttpStatusCode.OK_200 })
+    })
+
+    it('Should succeed with a valid header token', async function () {
+      await makeRawRequest({ url: source.fileDownloadUrl, query: { videoFileToken }, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 

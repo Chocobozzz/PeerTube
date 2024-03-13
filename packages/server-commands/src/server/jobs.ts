@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { wait } from '@peertube/peertube-core-utils'
+import { arrayify, wait } from '@peertube/peertube-core-utils'
 import { JobState, JobType, RunnerJobState } from '@peertube/peertube-models'
 import { PeerTubeServer } from './server.js'
 
@@ -16,10 +16,7 @@ async function waitJobs (
     ? parseInt(process.env.NODE_PENDING_JOB_WAIT, 10)
     : 250
 
-  let servers: PeerTubeServer[]
-
-  if (Array.isArray(serversArg) === false) servers = [ serversArg as PeerTubeServer ]
-  else servers = serversArg as PeerTubeServer[]
+  const servers = arrayify(serversArg)
 
   const states: JobState[] = [ 'waiting', 'active' ]
   if (!skipDelayed) states.push('delayed')

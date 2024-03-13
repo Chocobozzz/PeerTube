@@ -1,12 +1,30 @@
 import { Subject } from 'rxjs'
 import { Component } from '@angular/core'
 import { ComponentPagination, Notifier } from '@app/core'
-import { VideoChannel } from '@app/shared/shared-main'
-import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
+import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/subscribe-button.component'
+import { RouterLink } from '@angular/router'
+import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
+import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { NgIf, NgFor } from '@angular/common'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
 
 @Component({
   templateUrl: './my-subscriptions.component.html',
-  styleUrls: [ './my-subscriptions.component.scss' ]
+  styleUrls: [ './my-subscriptions.component.scss' ],
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    NgIf,
+    AdvancedInputFilterComponent,
+    InfiniteScrollerDirective,
+    NgFor,
+    ActorAvatarComponent,
+    RouterLink,
+    SubscribeButtonComponent
+  ]
 })
 export class MySubscriptionsComponent {
   videoChannels: VideoChannel[] = []

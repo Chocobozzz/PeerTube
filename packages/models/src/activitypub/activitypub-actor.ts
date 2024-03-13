@@ -18,7 +18,7 @@ export interface ActivityPubActor {
     sharedInbox: string
   }
   summary: string
-  attributedTo: ActivityPubAttributedTo[]
+  attributedTo?: ActivityPubAttributedTo[]
 
   support?: string
   publicKey: {
@@ -27,8 +27,15 @@ export interface ActivityPubActor {
     publicKeyPem: string
   }
 
+  // Lemmy attribute for groups
+  postingRestrictedToMods?: boolean
+
   image?: ActivityIconObject | ActivityIconObject[]
   icon?: ActivityIconObject | ActivityIconObject[]
 
   published?: string
+
+  // For export
+  likes?: string
+  dislikes?: string
 }

@@ -1,10 +1,9 @@
 import { Transaction } from 'sequelize'
-import { AllowNull, Column, CreatedAt, Default, HasMany, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, Column, CreatedAt, Default, HasMany, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import { MServer, MServerFormattable } from '@server/types/models/server/index.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isHostValid } from '../../helpers/custom-validators/servers.js'
 import { ActorModel } from '../actor/actor.js'
-import { buildSQLAttributes, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, buildSQLAttributes, throwIfNotValid } from '../shared/index.js'
 import { ServerBlocklistModel } from './server-blocklist.js'
 
 @Table({
@@ -16,7 +15,7 @@ import { ServerBlocklistModel } from './server-blocklist.js'
     }
   ]
 })
-export class ServerModel extends Model<Partial<AttributesOnly<ServerModel>>> {
+export class ServerModel extends SequelizeModel<ServerModel> {
 
   @AllowNull(false)
   @Is('Host', value => throwIfNotValid(value, isHostValid, 'valid host'))

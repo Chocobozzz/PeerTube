@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { LiveVideo, LiveVideoCreate, LiveVideoSession, LiveVideoUpdate, ResultList, VideoCreateResult } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
-import { VideoService } from '../shared-main'
+import { VideoService } from '../shared-main/video/video.service'
 
 @Injectable()
 export class LiveVideoService {

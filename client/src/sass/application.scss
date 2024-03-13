@@ -140,7 +140,8 @@ code {
 }
 
 .main-col {
-  @include margin-left($menu-width);
+  // Don't use rfs to get exact pixels
+  margin-inline-start: $menu-width;
 
   width: calc(100% - #{$menu-width});
   outline: none;
@@ -148,6 +149,10 @@ code {
   .margin-content {
     margin: 0 pvar(--horizontalMarginContent);
     flex-grow: 1;
+  }
+
+  .revert-margin-content {
+    margin: 0 calc(#{pvar(--horizontalMarginContent)} * -1);
   }
 
   .sub-menu {
@@ -168,8 +173,12 @@ code {
   }
 
   // Use an appropriate offset top when sub-menu fixed
-  .margin-content.offset-content {
+  .sub-menu-offset-content {
     padding-top: $sub-menu-height + $sub-menu-margin-bottom;
+  }
+
+  .sub-menu.mb-0 + .sub-menu-offset-content {
+    padding-top: $sub-menu-height;
   }
 
   // Override some properties if the main content is expanded (no menu on the left)
@@ -271,7 +280,7 @@ my-global-icon[iconName=external-link] {
     }
 
     // Use an appropriate offset top when sub-menu fixed
-    .margin-content.offset-content {
+    .sub-menu-offset-content {
       padding-top: $sub-menu-height + $sub-menu-margin-bottom-small-view;
     }
 

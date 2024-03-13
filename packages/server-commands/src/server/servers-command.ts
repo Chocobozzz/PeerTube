@@ -1,10 +1,10 @@
-import { exec } from 'child_process'
-import { copy, ensureDir, remove } from 'fs-extra/esm'
-import { readdir, readFile } from 'fs/promises'
-import { basename, join } from 'path'
 import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { getFileSize, isGithubCI, root } from '@peertube/peertube-node-utils'
+import { isGithubCI, root } from '@peertube/peertube-node-utils'
+import { exec } from 'child_process'
+import { copy, ensureDir, remove } from 'fs-extra/esm'
+import { readFile, readdir } from 'fs/promises'
+import { basename, join } from 'path'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class ServersCommand extends AbstractCommand {
@@ -84,6 +84,8 @@ export class ServersCommand extends AbstractCommand {
     return files.length
   }
 
+  // ---------------------------------------------------------------------------
+
   buildWebVideoFilePath (fileUrl: string) {
     return this.buildDirectory(join('web-videos', basename(fileUrl)))
   }
@@ -92,13 +94,9 @@ export class ServersCommand extends AbstractCommand {
     return this.buildDirectory(join('streaming-playlists', 'hls', videoUUID, basename(fileUrl)))
   }
 
+  // ---------------------------------------------------------------------------
+
   getLogContent () {
     return readFile(this.buildDirectory('logs/peertube.log'))
-  }
-
-  async getServerFileSize (subPath: string) {
-    const path = this.server.servers.buildDirectory(subPath)
-
-    return getFileSize(path)
   }
 }

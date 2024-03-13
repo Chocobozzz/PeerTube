@@ -1,8 +1,6 @@
 import express from 'express'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { MVideoCaption } from '@server/types/models/index.js'
-import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils.js'
 import { createReqFiles } from '../../../helpers/express-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
@@ -12,6 +10,7 @@ import { federateVideoIfNeeded } from '../../../lib/activitypub/videos/index.js'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate } from '../../../middlewares/index.js'
 import { addVideoCaptionValidator, deleteVideoCaptionValidator, listVideoCaptionsValidator } from '../../../middlewares/validators/index.js'
 import { VideoCaptionModel } from '../../../models/video/video-caption.js'
+import { createLocalCaption } from '@server/lib/video-captions.js'
 
 const reqVideoCaptionAdd = createReqFiles([ 'captionfile' ], MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT)
 
@@ -25,7 +24,7 @@ videoCaptionsRouter.put('/:videoId/captions/:captionLanguage',
   authenticate,
   reqVideoCaptionAdd,
   asyncMiddleware(addVideoCaptionValidator),
-  asyncRetryTransactionMiddleware(addVideoCaption)
+  asyncRetryTransactionMiddleware(createVideoCaption)
 )
 videoCaptionsRouter.delete('/:videoId/captions/:captionLanguage',
   authenticate,
@@ -47,25 +46,15 @@ async function listVideoCaptions (req: express.Request, res: express.Response) {
   return res.json(getFormattedObjects(data, data.length))
 }
 
-async function addVideoCaption (req: express.Request, res: express.Response) {
-  const videoCaptionPhysicalFile = req.files['captionfile'][0]
+async function createVideoCaption (req: express.Request, res: express.Response) {
+  const videoCaptionPhysicalFile: Express.Multer.File = req.files['captionfile'][0]
   const video = res.locals.videoAll
 
   const captionLanguage = req.params.captionLanguage
 
-  const videoCaption = new VideoCaptionModel({
-    videoId: video.id,
-    filename: VideoCaptionModel.generateCaptionName(captionLanguage),
-    language: captionLanguage
-  }) as MVideoCaption
-
-  // Move physical file
-  await moveAndProcessCaptionFile(videoCaptionPhysicalFile, videoCaption)
+  const videoCaption = await createLocalCaption({ video, language: captionLanguage, path: videoCaptionPhysicalFile.path })
 
   await sequelizeTypescript.transaction(async t => {
-    await VideoCaptionModel.insertOrReplaceLanguage(videoCaption, t)
-
-    // Update video update
     await federateVideoIfNeeded(video, false, t)
   })
 

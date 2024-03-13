@@ -1,6 +1,5 @@
 import { forceNumber, pick } from '@peertube/peertube-core-utils'
 import { ActivityPubActor, VideoChannel, VideoChannelSummary } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { CONFIG } from '@server/initializers/config.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { MAccountHost } from '@server/types/models/index.js'
@@ -19,9 +18,7 @@ import {
   DefaultScope,
   ForeignKey,
   HasMany,
-  Is,
-  Model,
-  Scopes,
+  Is, Scopes,
   Sequelize,
   Table,
   UpdatedAt
@@ -39,7 +36,7 @@ import {
   MChannelFormattable,
   MChannelHost,
   MChannelSummaryFormattable,
-  type MChannel
+  type MChannel, MChannelDefault
 } from '../../types/models/video/index.js'
 import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account.js'
 import { ActorFollowModel } from '../actor/actor-follow.js'
@@ -47,6 +44,7 @@ import { ActorImageModel } from '../actor/actor-image.js'
 import { ActorModel, unusedActorAttributesForAPI } from '../actor/actor.js'
 import { ServerModel } from '../server/server.js'
 import {
+  SequelizeModel,
   buildServerIdsFollowedBy,
   buildTrigramSearchIndex,
   createSimilarityAttribute,
@@ -352,7 +350,7 @@ export type SummaryOptions = {
     }
   ]
 })
-export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannelModel>>> {
+export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
 
   @AllowNull(false)
   @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelDisplayNameValid, 'name'))
@@ -655,7 +653,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
-  static listAllByAccount (accountId: number): Promise<MChannel[]> {
+  static listAllByAccount (accountId: number): Promise<MChannelDefault[]> {
     const query = {
       limit: CONFIG.VIDEO_CHANNELS.MAX_PER_USER,
       include: [
@@ -827,16 +825,19 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
   async toActivityPubObject (this: MChannelAP): Promise<ActivityPubActor> {
     const obj = await this.Actor.toActivityPubObject(this.name)
 
-    return Object.assign(obj, {
+    return {
+      ...obj,
+
       summary: this.description,
       support: this.support,
+      postingRestrictedToMods: true,
       attributedTo: [
         {
           type: 'Person' as 'Person',
           id: this.Account.Actor.url
         }
       ]
-    })
+    }
   }
 
   // Avoid error when running this method on MAccount... | MChannel...

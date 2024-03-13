@@ -150,6 +150,7 @@ storage:
   avatars: '/var/www/peertube/storage/avatars/'
   web_videos: '/var/www/peertube/storage/web-videos/'
   streaming_playlists: '/var/www/peertube/storage/streaming-playlists/'
+  original_video_files: '/var/www/peertube/storage/original-video-files/'
   redundancy: '/var/www/peertube/storage/redundancy/'
   logs: '/var/www/peertube/storage/logs/'
   previews: '/var/www/peertube/storage/previews/'
@@ -180,6 +181,7 @@ object_storage:
   enabled: false
 
   # Without protocol, will default to HTTPS
+  # Your S3 provider must support virtual hosting of buckets as PeerTube doesn't support path style requests
   endpoint: '' # 's3.amazonaws.com' or 's3.fr-par.scw.cloud' for example
 
   region: 'us-east-1'
@@ -219,9 +221,25 @@ object_storage:
     # Useful when you want to use a CDN/external proxy
     base_url: '' # Example: 'https://mirror.example.com'
 
-  # Same settings but for web videos
+    # PeerTube makes many small requests to the object storage provider to upload/delete/update live chunks
+    # which can be a problem depending on your object storage provider
+    # You can also choose to disable this feature to reduce live streams latency
+    # Live stream replays are not affected by this setting, so they are uploaded in object storage as regular VOD videos
+    store_live_streams: true
+
   web_videos:
     bucket_name: 'web-videos'
+    prefix: ''
+    base_url: ''
+
+  user_exports:
+    bucket_name: 'user-exports'
+    prefix: ''
+    base_url: ''
+
+  # Same settings but for original video files
+  original_video_files:
+    bucket_name: 'original-video-files'
     prefix: ''
     base_url: ''
 
@@ -440,6 +458,21 @@ thumbnails:
     # Minimum value is 2
     frames_to_analyze: 50
 
+stats:
+  # Display registration requests stats (average response time, total requests...)
+  registration_requests:
+    enabled: true
+
+  # Display abuses stats (average response time, total abuses...)
+  abuses:
+    enabled: true
+
+  total_moderators:
+    enabled: true
+
+  total_admins:
+    enabled: true
+
 ###############################################################################
 #
 # From this point, almost all following keys can be overridden by the web interface
@@ -491,11 +524,14 @@ user:
     videos:
       # Enable or disable video history by default for new users.
       enabled: true
-  # Default value of maximum video bytes the user can upload (does not take into account transcoded files)
+
+  # Default value of maximum video bytes the user can upload
+  # Does not take into account transcoded files or account export archives (that can include user uploaded files)
   # Byte format is supported ("1GB" etc)
   # -1 == unlimited
   video_quota: -1
   video_quota_daily: -1
+
   default_channel_name: 'Main $1 channel' # The placeholder $1 is used to represent the user's username
 
 video_channels:
@@ -506,6 +542,11 @@ video_channels:
 # Please, do not disable transcoding since many uploaded videos will not work
 transcoding:
   enabled: true
+
+  original_file:
+    # If false the uploaded file is deleted after transcoding
+    # If yes it is not deleted but moved in a dedicated folder or object storage
+    keep: false
 
   # Allow your users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos
   allow_additional_extensions: true
@@ -716,6 +757,24 @@ import:
     # Max number of videos to import when the user asks for full sync
     full_sync_videos_limit: 1000
 
+  users:
+    # Video quota is checked on import so the user doesn't upload a too big archive file
+    # Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import
+    enabled: true
+
+export:
+  users:
+    # Allow users to export their PeerTube data in a .zip for backup or re-import
+    # Only one export at a time is allowed per user
+    enabled: true
+
+    # Max size of the current user quota to accept or not the export
+    # Goal of this setting is to not store too big archive file on your server disk
+    max_user_video_quota: 10GB
+
+    # How long PeerTube should keep the user export
+    export_expiration: '2 days'
+
 auto_blacklist:
   # New videos automatically blacklisted so moderators can review before publishing
   videos:
@@ -804,13 +863,12 @@ instance:
     Expires: 2025-12-31T11:00:00.000Z'
 
 services:
-  # Cards configuration to format video in Twitter
+  # Cards configuration to format video in Twitter/X
+  # All other social media (Facebook, Mastodon, etc.) are supported out of the box
   twitter:
-    username: '@Chocobozzz' # Indicates the Twitter account for the website or platform on which the content was published
-    # If true, a video player will be embedded in the Twitter feed on PeerTube video share
-    # If false, we use an image link card that will redirect on your PeerTube instance
-    # Change it to `true`, and then test on https://cards-dev.twitter.com/validator to see if you are whitelisted
-    whitelisted: false
+    # Indicates the Twitter/X account for the website or platform where the content was published
+    # This is just an information injected in HTML that is required by Twitter/X
+    username: '@Chocobozzz'
 
 followers:
   instance:
@@ -876,6 +934,7 @@ client:
       # By default PeerTube client displays author username
       prefer_author_display_name: false
       display_author_avatar: false
+
     resumable_upload:
       # Max size of upload chunks, e.g. '90MB'
       # If null, it will be calculated based on network speed

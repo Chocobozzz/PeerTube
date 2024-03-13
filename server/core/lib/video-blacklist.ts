@@ -110,7 +110,7 @@ async function unblacklistVideo (videoBlacklist: MVideoBlacklist, video: MVideoF
 
     // Delete on object so new video notifications will send
     delete video.VideoBlacklist
-    Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+    Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(video)
   }
 }
 

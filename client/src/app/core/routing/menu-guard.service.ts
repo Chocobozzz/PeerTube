@@ -3,7 +3,7 @@ import { MenuService } from '../menu'
 import { ScreenService } from '../wrappers'
 
 abstract class MenuGuard {
-  canDeactivate = this.canActivate
+  canDeactivate = this.canActivate.bind(this)
 
   constructor (protected menu: MenuService, protected screen: ScreenService, protected display: boolean) {
 

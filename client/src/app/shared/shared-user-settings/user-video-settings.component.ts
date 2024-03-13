@@ -3,13 +3,32 @@ import { Subject, Subscription } from 'rxjs'
 import { first } from 'rxjs/operators'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { AuthService, Notifier, ServerService, User, UserService } from '@app/core'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { NSFWPolicyType, UserUpdateMe } from '@peertube/peertube-models'
+import { NgIf } from '@angular/common'
+import { RouterLink } from '@angular/router'
+import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
+import { SelectLanguagesComponent } from '../shared-forms/select/select-languages.component'
+import { PeerTubeTemplateDirective } from '../shared-main/angular/peertube-template.directive'
+import { HelpComponent } from '../shared-main/misc/help.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 @Component({
   selector: 'my-user-video-settings',
   templateUrl: './user-video-settings.component.html',
-  styleUrls: [ './user-video-settings.component.scss' ]
+  styleUrls: [ './user-video-settings.component.scss' ],
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    HelpComponent,
+    PeerTubeTemplateDirective,
+    SelectLanguagesComponent,
+    PeertubeCheckboxComponent,
+    RouterLink,
+    NgIf
+  ]
 })
 export class UserVideoSettingsComponent extends FormReactive implements OnInit, OnDestroy {
   @Input() user: User = null

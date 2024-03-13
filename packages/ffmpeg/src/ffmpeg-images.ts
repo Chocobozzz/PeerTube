@@ -42,6 +42,10 @@ export class FFmpegImage {
     fromPath: string
     output: string
     framesToAnalyze: number
+    scale?: {
+      width: number
+      height: number
+    }
     ffprobe?: FfprobeData
   }) {
     const { fromPath, ffprobe } = options
@@ -69,14 +73,25 @@ export class FFmpegImage {
     fromPath: string
     output: string
     framesToAnalyze: number
+    scale?: {
+      width: number
+      height: number
+    }
   }) {
-    const { fromPath, output, framesToAnalyze } = options
+    const { fromPath, output, framesToAnalyze, scale } = options
 
-    return this.commandWrapper.buildCommand(fromPath)
+    const command = this.commandWrapper.buildCommand(fromPath)
       .videoFilter('thumbnail=' + framesToAnalyze)
       .outputOption('-frames:v 1')
+      .outputOption('-q:v 5')
       .outputOption('-abort_on empty_output')
       .output(output)
+
+    if (scale) {
+      command.videoFilter(`scale=${scale.width}x${scale.height}:force_original_aspect_ratio=decrease`)
+    }
+
+    return command
   }
 
   // ---------------------------------------------------------------------------
@@ -104,8 +119,10 @@ export class FFmpegImage {
     const command = this.commandWrapper.buildCommand(path)
 
     const filter = [
+      // Fix "t" variable with some videos
       `setpts=N/round(FRAME_RATE)/TB`,
-      `select='not(mod(t,${options.sprites.duration}))'`,
+      // First frame or the time difference between the last and the current frame is enough for our sprite interval
+      `select='isnan(prev_selected_t)+gte(t-prev_selected_t,${options.sprites.duration})'`,
       `scale=${sprites.size.width}:${sprites.size.height}`,
       `tile=layout=${sprites.count.width}x${sprites.count.height}`
     ].join(',')

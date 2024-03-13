@@ -30,14 +30,21 @@ describe('Custom server defaults', () => {
 
       await videoWatchPage.waitWatchVideoName('video')
 
-      expect(await videoWatchPage.getPrivacy()).toBe('Internal')
-      expect(await videoWatchPage.getLicence()).toBe('Attribution - Non Commercial')
-      expect(await videoWatchPage.isDownloadEnabled()).toBeFalsy()
-      expect(await videoWatchPage.areCommentsEnabled()).toBeFalsy()
-    })
+      const videoUrl = await browser.getUrl()
 
-    after(async function () {
+      expect(await videoWatchPage.getPrivacy()).toBe('Unlisted')
+      expect(await videoWatchPage.getLicence()).toBe('Attribution - Non Commercial')
+      expect(await videoWatchPage.areCommentsEnabled()).toBeFalsy()
+
+      // Owners can download their videos
+      expect(await videoWatchPage.isDownloadEnabled()).toBeTruthy()
+
+      // Logout to see if the download enabled is correct for anonymous users
       await loginPage.logout()
+      await browser.url(videoUrl)
+      await videoWatchPage.waitWatchVideoName('video')
+
+      expect(await videoWatchPage.isDownloadEnabled()).toBeFalsy()
     })
   })
 

@@ -1,7 +1,7 @@
 import { forkJoin, map, Observable, of, Subscription, switchMap } from 'rxjs'
-import { PlatformLocation } from '@angular/common'
+import { PlatformLocation, NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
 import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import {
   AuthService,
   AuthUser,
@@ -20,10 +20,6 @@ import {
 } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { isXPercentInViewport, scrollToTop, toBoolean } from '@app/helpers'
-import { Video, VideoCaptionService, VideoChapterService, VideoDetails, VideoFileTokenService, VideoService } from '@app/shared/shared-main'
-import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
-import { LiveVideoService } from '@app/shared/shared-video-live'
-import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { timeToInt } from '@peertube/peertube-core-utils'
 import {
   HTMLServerConfig,
@@ -51,6 +47,28 @@ import {
 import { cleanupVideoWatch, getStoredTheater, getStoredVideoWatchHistory } from '../../../assets/player/peertube-player-local-storage'
 import { environment } from '../../../environments/environment'
 import { VideoWatchPlaylistComponent } from './shared'
+import { PlayerStylesComponent } from './player-styles.component'
+import { PrivacyConcernsComponent } from './shared/information/privacy-concerns.component'
+import { RecommendedVideosComponent } from './shared/recommendations/recommended-videos.component'
+import { VideoCommentsComponent } from './shared/comment/video-comments.component'
+import { VideoAttributesComponent } from './shared/metadata/video-attributes.component'
+import { VideoDescriptionComponent } from './shared/metadata/video-description.component'
+import { VideoAvatarChannelComponent } from './shared/metadata/video-avatar-channel.component'
+import { ActionButtonsComponent } from './shared/action-buttons/action-buttons.component'
+import { VideoViewsCounterComponent } from '../../shared/shared-video/video-views-counter.component'
+import { DateToggleComponent } from '../../shared/shared-main/date/date-toggle.component'
+import { VideoAlertComponent } from './shared/information/video-alert.component'
+import { PluginPlaceholderComponent } from '../../shared/shared-main/plugins/plugin-placeholder.component'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
+import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
+import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
+import { VideoFileTokenService } from '@app/shared/shared-main/video/video-file-token.service'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
+import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription/subscribe-button.component'
+import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 
 type URLOptions = {
   playerMode: PlayerMode
@@ -74,7 +92,28 @@ type URLOptions = {
 @Component({
   selector: 'my-video-watch',
   templateUrl: './video-watch.component.html',
-  styleUrls: [ './video-watch.component.scss' ]
+  styleUrls: [ './video-watch.component.scss' ],
+  standalone: true,
+  imports: [
+    NgClass,
+    NgIf,
+    VideoWatchPlaylistComponent,
+    PluginPlaceholderComponent,
+    VideoAlertComponent,
+    DateToggleComponent,
+    VideoViewsCounterComponent,
+    NgTemplateOutlet,
+    ActionButtonsComponent,
+    VideoAvatarChannelComponent,
+    RouterLink,
+    SubscribeButtonComponent,
+    VideoDescriptionComponent,
+    VideoAttributesComponent,
+    VideoCommentsComponent,
+    RecommendedVideosComponent,
+    PrivacyConcernsComponent,
+    PlayerStylesComponent
+  ]
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoWatchPlaylist', { static: true }) videoWatchPlaylist: VideoWatchPlaylistComponent
@@ -777,6 +816,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       videoShortUUID: video.shortUUID,
       videoUUID: video.uuid,
+
+      videoRatio: video.aspectRatio,
 
       previousVideo: {
         enabled: this.playlist && this.videoWatchPlaylist.hasPreviousVideo(),

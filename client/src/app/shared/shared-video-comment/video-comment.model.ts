@@ -1,10 +1,11 @@
 import { getAbsoluteAPIUrl } from '@app/helpers'
-import { Actor, Video } from '@app/shared/shared-main'
 import {
   Account as AccountInterface,
   VideoComment as VideoCommentServerModel,
   VideoCommentAdmin as VideoCommentAdminServerModel
 } from '@peertube/peertube-models'
+import { Actor } from '../shared-main/account/actor.model'
+import { Video } from '../shared-main/video/video.model'
 
 export class VideoComment implements VideoCommentServerModel {
   id: number

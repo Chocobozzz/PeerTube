@@ -5,7 +5,8 @@ import { DebugService } from './debug.service'
 
 @Component({
   templateUrl: './debug.component.html',
-  styleUrls: [ './debug.component.scss' ]
+  styleUrls: [ './debug.component.scss' ],
+  standalone: true
 })
 export class DebugComponent implements OnInit {
   debug: Debug

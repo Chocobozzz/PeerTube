@@ -2,14 +2,19 @@ import { debounce } from 'lodash-es'
 import { Subject } from 'rxjs'
 import { Component, Input, OnInit } from '@angular/core'
 import { Notifier, ServerService, User } from '@app/core'
-import { UserNotificationService } from '@app/shared/shared-main'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { UserNotificationSetting, UserNotificationSettingValue, UserRight, UserRightType } from '@peertube/peertube-models'
+import { FormsModule } from '@angular/forms'
+import { InputSwitchComponent } from '../../../shared/shared-forms/input-switch.component'
+import { NgIf, NgFor } from '@angular/common'
+import { UserNotificationService } from '@app/shared/shared-main/users/user-notification.service'
 
 @Component({
   selector: 'my-account-notification-preferences',
   templateUrl: './my-account-notification-preferences.component.html',
-  styleUrls: [ './my-account-notification-preferences.component.scss' ]
+  styleUrls: [ './my-account-notification-preferences.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, NgFor, InputSwitchComponent, FormsModule ]
 })
 export class MyAccountNotificationPreferencesComponent implements OnInit {
   @Input() user: User
@@ -30,7 +35,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     private notifier: Notifier
   ) {
     this.labelNotifications = {
-      newVideoFromSubscription: $localize`New video from your subscriptions`,
+      newVideoFromSubscription: $localize`New video or live from your subscriptions`,
       newCommentOnMyVideo: $localize`New comment on your video`,
       abuseAsModerator: $localize`New abuse`,
       videoAutoBlacklistAsModerator: $localize`An automatically blocked video is awaiting review`,
@@ -75,14 +80,14 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
           'abuseStateChange',
           'abuseNewMessage',
           'abuseAsModerator',
-          'videoAutoBlacklistAsModerator'
+          'videoAutoBlacklistAsModerator',
+          'newUserRegistration'
         ]
       },
 
       {
         label: $localize`Administration`,
         keys: [
-          'newUserRegistration',
           'newInstanceFollower',
           'autoInstanceFollowing',
           'newPeerTubeVersion',
@@ -114,6 +119,10 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     if (!rightToHave) return true // No rights needed
 
     return this.user.hasRight(rightToHave)
+  }
+
+  hasNotificationsInGroup (group: { keys: (keyof UserNotificationSetting)[] }) {
+    return group.keys.some(k => this.hasUserRight(k))
   }
 
   getWebLabel (notificationType: keyof UserNotificationSetting) {

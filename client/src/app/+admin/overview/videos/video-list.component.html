@@ -42,7 +42,7 @@
       </th>
       <th scope="col" i18n>Video</th>
       <th scope="col" i18n>Info</th>
-      <th scope="col" i18n>Files</th>
+      <th scope="col" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="localVideoFilesSize">Files <p-sortIcon field="localVideoFilesSize"></p-sortIcon></th>
       <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="publishedAt">Published <p-sortIcon field="publishedAt"></p-sortIcon></th>
     </tr>
   </ng-template>
@@ -60,7 +60,7 @@
 
       <td class="action-cell">
         <my-video-actions-dropdown
-          placement="bottom auto" buttonDirection="horizontal" [buttonStyled]="true" [video]="video" [displayOptions]="videoActionsOptions"
+          placement="bottom auto" buttonDirection="horizontal" buttonStyled="true" [video]="video" [displayOptions]="videoActionsOptions"
           (videoRemoved)="reloadData()" (videoFilesRemoved)="reloadData()" (transcodingCreated)="reloadData()"
         ></my-video-actions-dropdown>
       </td>

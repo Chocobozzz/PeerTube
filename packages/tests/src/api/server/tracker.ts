@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await,@typescript-eslint/no-floating-promises */
 
-import { decode as magnetUriDecode, encode as magnetUriEncode } from 'magnet-uri'
 import WebTorrent from 'webtorrent'
 import {
   cleanupTests,
@@ -9,6 +8,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
+import { magnetUriDecode, magnetUriEncode } from '@tests/shared/webtorrent.js'
 
 describe('Test tracker', function () {
   let server: PeerTubeServer
@@ -25,10 +25,10 @@ describe('Test tracker', function () {
       const video = await server.videos.get({ id: uuid })
       goodMagnet = video.files[0].magnetUri
 
-      const parsed = magnetUriDecode(goodMagnet)
+      const parsed = await magnetUriDecode(goodMagnet)
       parsed.infoHash = '010597bb88b1968a5693a4fa8267c592ca65f2e9'
 
-      badMagnet = magnetUriEncode(parsed)
+      badMagnet = await magnetUriEncode(parsed)
     }
   })
 

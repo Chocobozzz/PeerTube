@@ -9,7 +9,7 @@ function areValidationErrors (
   options: {
     omitLog?: boolean
     omitBodyLog?: boolean
-    tags?: string[]
+    tags?: (number | string)[]
   } = {}) {
   const { omitLog = false, omitBodyLog = false, tags = [] } = options
 

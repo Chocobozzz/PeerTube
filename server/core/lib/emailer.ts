@@ -1,5 +1,5 @@
 import { arrayify } from '@peertube/peertube-core-utils'
-import { EmailPayload, SendEmailDefaultOptions, UserRegistrationState } from '@peertube/peertube-models'
+import { EmailPayload, SendEmailDefaultOptions, UserExportState, UserRegistrationState } from '@peertube/peertube-models'
 import { isTestOrDevInstance, root } from '@peertube/peertube-node-utils'
 import { readFileSync } from 'fs'
 import merge from 'lodash-es/merge.js'
@@ -8,8 +8,9 @@ import { join } from 'path'
 import { bunyanLogger, logger } from '../helpers/logger.js'
 import { CONFIG, isEmailEnabled } from '../initializers/config.js'
 import { WEBSERVER } from '../initializers/constants.js'
-import { MRegistration, MUser } from '../types/models/index.js'
+import { MRegistration, MUser, MUserExport, MUserImport } from '../types/models/index.js'
 import { JobQueue } from './job-queue/index.js'
+import { UserModel } from '@server/models/user/user.js'
 
 class Emailer {
 
@@ -51,6 +52,8 @@ class Emailer {
       this.warnOnConnectionFailure(err)
     }
   }
+
+  // ---------------------------------------------------------------------------
 
   addPasswordResetEmailJob (username: string, to: string, resetPasswordUrl: string) {
     const emailPayload: EmailPayload = {
@@ -160,12 +163,81 @@ class Emailer {
       locals: {
         username: registration.username,
         moderationResponse: registration.moderationResponse,
-        loginLink: WEBSERVER.URL + '/login'
+        loginLink: WEBSERVER.URL + '/login',
+
+        hideNotificationPreferencesLink: true
       }
     }
 
     return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
+
+  // ---------------------------------------------------------------------------
+
+  async addUserExportCompletedOrErroredJob (userExport: MUserExport) {
+    let template: string
+    let subject: string
+
+    if (userExport.state === UserExportState.COMPLETED) {
+      template = 'user-export-completed'
+      subject = `Your export archive has been created`
+    } else {
+      template = 'user-export-errored'
+      subject = `Failed to create your export archive`
+    }
+
+    const user = await UserModel.loadById(userExport.userId)
+
+    const emailPayload: EmailPayload = {
+      to: [ user.email ],
+      template,
+      subject,
+      locals: {
+        exportsUrl: WEBSERVER.URL + '/my-account/import-export',
+        errorMessage: userExport.error,
+
+        hideNotificationPreferencesLink: true
+      }
+    }
+
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
+  }
+
+  async addUserImportErroredJob (userImport: MUserImport) {
+    const user = await UserModel.loadById(userImport.userId)
+
+    const emailPayload: EmailPayload = {
+      to: [ user.email ],
+      template: 'user-import-errored',
+      subject: 'Failed to import your archive',
+      locals: {
+        errorMessage: userImport.error,
+
+        hideNotificationPreferencesLink: true
+      }
+    }
+
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
+  }
+
+  async addUserImportSuccessJob (userImport: MUserImport) {
+    const user = await UserModel.loadById(userImport.userId)
+
+    const emailPayload: EmailPayload = {
+      to: [ user.email ],
+      template: 'user-import-completed',
+      subject: 'Your archive import has finished',
+      locals: {
+        resultStats: userImport.resultSummary.stats,
+
+        hideNotificationPreferencesLink: true
+      }
+    }
+
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
+  }
+
+  // ---------------------------------------------------------------------------
 
   async sendMail (options: EmailPayload) {
     if (!isEmailEnabled()) {
@@ -233,14 +305,14 @@ class Emailer {
   private initSMTPTransport () {
     logger.info('Using %s:%s as SMTP server.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT)
 
-    let tls
+    let tls: { ca: [ Buffer ] }
     if (CONFIG.SMTP.CA_FILE) {
       tls = {
         ca: [ readFileSync(CONFIG.SMTP.CA_FILE) ]
       }
     }
 
-    let auth
+    let auth: { user: string, pass: string }
     if (CONFIG.SMTP.USERNAME && CONFIG.SMTP.PASSWORD) {
       auth = {
         user: CONFIG.SMTP.USERNAME,

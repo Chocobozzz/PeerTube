@@ -16,7 +16,7 @@ export class AccountService {
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor
-  ) {}
+  ) { }
 
   getAccount (id: number | string): Observable<Account> {
     return this.authHttp.get<ServerAccount>(AccountService.BASE_ACCOUNT_URL + id)

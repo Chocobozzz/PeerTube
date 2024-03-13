@@ -3,9 +3,7 @@ import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular
 import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
-import { FormReactiveService } from '@app/shared/shared-forms'
-import { Video, VideoCaptionService, VideoChapterService, VideoEdit, VideoService } from '@app/shared/shared-main'
-import { LiveVideoService } from '@app/shared/shared-video-live'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
 import {
@@ -18,6 +16,20 @@ import {
   VideoPrivacy
 } from '@peertube/peertube-models'
 import { VideoSend } from './video-send'
+import { TimeDurationFormatterPipe } from '../../../shared/shared-main/angular/time-duration-formatter.pipe'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { VideoEditComponent } from '../shared/video-edit.component'
+import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { NgIf } from '@angular/common'
+import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
+import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
+import { VideoEdit } from '@app/shared/shared-main/video/video-edit.model'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 
 @Component({
   selector: 'my-video-go-live',
@@ -26,6 +38,18 @@ import { VideoSend } from './video-send'
     '../shared/video-edit.component.scss',
     './video-go-live.component.scss',
     './video-send.scss'
+  ],
+  standalone: true,
+  imports: [
+    NgIf,
+    GlobalIconComponent,
+    SelectChannelComponent,
+    FormsModule,
+    SelectOptionsComponent,
+    ReactiveFormsModule,
+    VideoEditComponent,
+    ButtonComponent,
+    TimeDurationFormatterPipe
   ]
 })
 export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterViewInit, CanComponentDeactivate {

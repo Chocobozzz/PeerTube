@@ -1,9 +1,6 @@
-import * as debug from 'debug'
-import { forkJoin, Subscription } from 'rxjs'
-import { first, switchMap } from 'rxjs/operators'
-import { ViewportScroller } from '@angular/common'
+import { CommonModule, ViewportScroller } from '@angular/common'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { Router } from '@angular/router'
+import { Router, RouterLink, RouterLinkActive } from '@angular/router'
 import {
   AuthService,
   AuthStatus,
@@ -18,18 +15,42 @@ import {
   UserService
 } from '@app/core'
 import { scrollToTop } from '@app/helpers'
-import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
-import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
+import { ActorAvatarComponent } from '@app/shared/shared-actor-image/actor-avatar.component'
+import { InputSwitchComponent } from '@app/shared/shared-forms/input-switch.component'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
+import { SignupLabelComponent } from '@app/shared/shared-main/account/signup-label.component'
+import { LoginLinkComponent } from '@app/shared/shared-main/angular/login-link.component'
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
-import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig, ServerConfig, UserRight, UserRightType, VideoConstant } from '@peertube/peertube-models'
+import * as debug from 'debug'
+import { forkJoin, Subscription } from 'rxjs'
+import { first, switchMap } from 'rxjs/operators'
+import { LanguageChooserComponent } from './language-chooser.component'
+import { NotificationComponent } from './notification.component'
+import { QuickSettingsModalComponent } from './quick-settings-modal.component'
 
 const debugLogger = debug('peertube:menu:MenuComponent')
 
 @Component({
   selector: 'my-menu',
   templateUrl: './menu.component.html',
-  styleUrls: [ './menu.component.scss' ]
+  styleUrls: [ './menu.component.scss' ],
+  standalone: true,
+  imports: [
+    CommonModule,
+    NotificationComponent,
+    ActorAvatarComponent,
+    InputSwitchComponent,
+    SignupLabelComponent,
+    LoginLinkComponent,
+    LanguageChooserComponent,
+    QuickSettingsModalComponent,
+    GlobalIconComponent,
+    RouterLink,
+    RouterLinkActive,
+    NgbDropdownModule
+  ]
 })
 export class MenuComponent implements OnInit, OnDestroy {
   @ViewChild('languageChooserModal', { static: true }) languageChooserModal: LanguageChooserComponent
@@ -244,8 +265,10 @@ export class MenuComponent implements OnInit, OnDestroy {
     if (opened) {
       window.addEventListener('scroll', onWindowScroll)
       document.querySelector('nav').scrollTo(0, 0) // Reset menu scroll to easy lock
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       document.querySelector('nav').addEventListener('scroll', this.onMenuScrollEvent)
     } else {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       document.querySelector('nav').removeEventListener('scroll', this.onMenuScrollEvent)
     }
   }

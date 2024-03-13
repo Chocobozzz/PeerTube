@@ -1,7 +1,10 @@
 import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core'
 import { PluginSelectorId } from '@peertube/peertube-models'
 
-@Directive({ selector: '[myPluginSelector]' })
+@Directive({
+  selector: '[myPluginSelector]',
+  standalone: true
+})
 export class PluginSelectorDirective implements OnInit {
   @Input() pluginSelectorId: PluginSelectorId
 

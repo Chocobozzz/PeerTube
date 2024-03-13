@@ -2,13 +2,19 @@ import { Subscription } from 'rxjs'
 import { first } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ComponentPaginationLight, DisableForReuseHook, ScreenService } from '@app/core'
-import { Account, AccountService, VideoService } from '@app/shared/shared-main'
-import { VideoFilters } from '@app/shared/shared-video-miniature'
 import { VideoSortField } from '@peertube/peertube-models'
+import { VideosListComponent } from '../../shared/shared-video-miniature/videos-list.component'
+import { NgIf } from '@angular/common'
+import { AccountService } from '@app/shared/shared-main/account/account.service'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { Account } from '@app/shared/shared-main/account/account.model'
+import { VideoFilters } from '@app/shared/shared-video-miniature/video-filters.model'
 
 @Component({
   selector: 'my-account-videos',
-  templateUrl: './account-videos.component.html'
+  templateUrl: './account-videos.component.html',
+  standalone: true,
+  imports: [ NgIf, VideosListComponent ]
 })
 export class AccountVideosComponent implements OnInit, OnDestroy, DisableForReuseHook {
   getVideosObservableFunction = this.getVideosObservable.bind(this)

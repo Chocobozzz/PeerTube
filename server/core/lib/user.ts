@@ -24,7 +24,7 @@ import { Emailer } from './emailer.js'
 import { LiveQuotaStore } from './live/live-quota-store.js'
 import { buildActorInstance, findAvailableLocalActorName } from './local-actor.js'
 import { Redis } from './redis.js'
-import { createLocalVideoChannel } from './video-channel.js'
+import { createLocalVideoChannelWithoutKeys } from './video-channel.js'
 import { createWatchLaterPlaylist } from './video-playlist.js'
 
 type ChannelNames = { name: string, displayName: string }
@@ -107,7 +107,7 @@ async function createUserAccountAndChannelAndPlaylist (parameters: {
     userCreated.Account = accountCreated
 
     const channelAttributes = await buildChannelAttributes({ user: userCreated, transaction: t, channelNames })
-    const videoChannel = await createLocalVideoChannel(channelAttributes, accountCreated, t)
+    const videoChannel = await createLocalVideoChannelWithoutKeys(channelAttributes, accountCreated, t)
 
     const videoPlaylist = await createWatchLaterPlaylist(accountCreated, t)
 
@@ -196,33 +196,24 @@ async function sendVerifyRegistrationEmail (registration: MRegistration) {
 // ---------------------------------------------------------------------------
 
 async function getOriginalVideoFileTotalFromUser (user: MUserId) {
-  // Don't use sequelize because we need to use a sub query
-  const query = UserModel.generateUserQuotaBaseSQL({
-    withSelect: true,
-    whereUserId: '$userId',
-    daily: false
-  })
+  const base = await UserModel.getUserQuota({ userId: user.id, daily: false })
 
-  const base = await UserModel.getTotalRawQuery(query, user.id)
-
-  return base + LiveQuotaStore.Instance.getLiveQuotaOf(user.id)
+  return base + LiveQuotaStore.Instance.getLiveQuotaOfUser(user.id)
 }
 
 // Returns cumulative size of all video files uploaded in the last 24 hours.
 async function getOriginalVideoFileTotalDailyFromUser (user: MUserId) {
-  // Don't use sequelize because we need to use a sub query
-  const query = UserModel.generateUserQuotaBaseSQL({
-    withSelect: true,
-    whereUserId: '$userId',
-    daily: true
-  })
+  const base = await UserModel.getUserQuota({ userId: user.id, daily: true })
 
-  const base = await UserModel.getTotalRawQuery(query, user.id)
-
-  return base + LiveQuotaStore.Instance.getLiveQuotaOf(user.id)
+  return base + LiveQuotaStore.Instance.getLiveQuotaOfUser(user.id)
 }
 
-async function isAbleToUploadVideo (userId: number, newVideoSize: number) {
+async function isUserQuotaValid (options: {
+  userId: number
+  uploadSize: number
+  checkDaily?: boolean // default true
+}) {
+  const { userId, uploadSize, checkDaily = true } = options
   const user = await UserModel.loadById(userId)
 
   if (user.videoQuota === -1 && user.videoQuotaDaily === -1) return Promise.resolve(true)
@@ -232,18 +223,18 @@ async function isAbleToUploadVideo (userId: number, newVideoSize: number) {
     getOriginalVideoFileTotalDailyFromUser(user)
   ])
 
-  const uploadedTotal = newVideoSize + totalBytes
-  const uploadedDaily = newVideoSize + totalBytesDaily
+  const uploadedTotal = uploadSize + totalBytes
+  const uploadedDaily = uploadSize + totalBytesDaily
 
   logger.debug(
-    'Check user %d quota to upload another video.', userId,
-    { totalBytes, totalBytesDaily, videoQuota: user.videoQuota, videoQuotaDaily: user.videoQuotaDaily, newVideoSize }
+    'Check user %d quota to upload content.', userId,
+    { totalBytes, totalBytesDaily, videoQuota: user.videoQuota, videoQuotaDaily: user.videoQuotaDaily, uploadSize }
   )
 
-  if (user.videoQuotaDaily === -1) return uploadedTotal < user.videoQuota
-  if (user.videoQuota === -1) return uploadedDaily < user.videoQuotaDaily
+  if (checkDaily && user.videoQuotaDaily !== -1 && uploadedDaily >= user.videoQuotaDaily) return false
+  if (user.videoQuota !== -1 && uploadedTotal >= user.videoQuota) return false
 
-  return uploadedTotal < user.videoQuota && uploadedDaily < user.videoQuotaDaily
+  return true
 }
 
 // ---------------------------------------------------------------------------
@@ -258,7 +249,7 @@ export {
   sendVerifyUserEmail,
   sendVerifyRegistrationEmail,
 
-  isAbleToUploadVideo,
+  isUserQuotaValid,
   buildUser
 }
 

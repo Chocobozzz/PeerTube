@@ -5,7 +5,6 @@ import { HttpClient, HttpContext, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthService, AuthUser, ComponentPaginationLight, RestExtractor, RestService, ServerService } from '@app/core'
 import { buildBulkObservable, objectToFormData } from '@app/helpers'
-import { Account, AccountService, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { NGX_LOADING_BAR_IGNORED } from '@ngx-loading-bar/http-client'
 import {
   CachedVideoExistInPlaylist,
@@ -24,6 +23,10 @@ import {
 import { environment } from '../../../environments/environment'
 import { VideoPlaylistElement } from './video-playlist-element.model'
 import { VideoPlaylist } from './video-playlist.model'
+import { VideoChannel } from '../shared-main/video-channel/video-channel.model'
+import { VideoChannelService } from '../shared-main/video-channel/video-channel.service'
+import { AccountService } from '../shared-main/account/account.service'
+import { Account } from '../shared-main/account/account.model'
 
 const debugLogger = debug('peertube:playlists:VideoPlaylistService')
 

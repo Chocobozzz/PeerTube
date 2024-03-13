@@ -1,17 +1,17 @@
 import { AccountVideoRate, type VideoRateType } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import {
   MAccountVideoRate,
   MAccountVideoRateAccountUrl,
   MAccountVideoRateAccountVideo,
-  MAccountVideoRateFormattable
+  MAccountVideoRateFormattable,
+  MAccountVideoRateVideoUrl
 } from '@server/types/models/index.js'
 import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
-import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, USER_EXPORT_MAX_ITEMS, VIDEO_RATE_TYPES } from '../../initializers/constants.js'
 import { ActorModel } from '../actor/actor.js'
-import { getSort, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
 import { SummaryOptions, VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel.js'
 import { VideoModel } from '../video/video.js'
 import { AccountModel } from './account.js'
@@ -41,7 +41,7 @@ import { AccountModel } from './account.js'
     }
   ]
 })
-export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountVideoRateModel>>> {
+export class AccountVideoRateModel extends SequelizeModel<AccountVideoRateModel> {
 
   @AllowNull(false)
   @Column(DataType.ENUM(...Object.values(VIDEO_RATE_TYPES)))
@@ -113,6 +113,59 @@ export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountV
     return AccountVideoRateModel.findOne(options)
   }
 
+  static loadLocalAndPopulateVideo (
+    rateType: VideoRateType,
+    accountName: string,
+    videoId: number,
+    t?: Transaction
+  ): Promise<MAccountVideoRateAccountVideo> {
+    const options: FindOptions = {
+      where: {
+        videoId,
+        type: rateType
+      },
+      include: [
+        {
+          model: AccountModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'id', 'url', 'followersUrl', 'preferredUsername' ],
+              model: ActorModel.unscoped(),
+              required: true,
+              where: {
+                [Op.and]: [
+                  ActorModel.wherePreferredUsername(accountName),
+                  { serverId: null }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          model: VideoModel.unscoped(),
+          required: true
+        }
+      ]
+    }
+    if (t) options.transaction = t
+
+    return AccountVideoRateModel.findOne(options)
+  }
+
+  static loadByUrl (url: string, transaction: Transaction) {
+    const options: FindOptions = {
+      where: {
+        url
+      }
+    }
+    if (transaction) options.transaction = transaction
+
+    return AccountVideoRateModel.findOne(options)
+  }
+
+  // ---------------------------------------------------------------------------
+
   static listByAccountForApi (options: {
     start: number
     count: number
@@ -168,57 +221,6 @@ export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountV
     }).then(rows => rows.map(r => r.url))
   }
 
-  static loadLocalAndPopulateVideo (
-    rateType: VideoRateType,
-    accountName: string,
-    videoId: number,
-    t?: Transaction
-  ): Promise<MAccountVideoRateAccountVideo> {
-    const options: FindOptions = {
-      where: {
-        videoId,
-        type: rateType
-      },
-      include: [
-        {
-          model: AccountModel.unscoped(),
-          required: true,
-          include: [
-            {
-              attributes: [ 'id', 'url', 'followersUrl', 'preferredUsername' ],
-              model: ActorModel.unscoped(),
-              required: true,
-              where: {
-                [Op.and]: [
-                  ActorModel.wherePreferredUsername(accountName),
-                  { serverId: null }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          model: VideoModel.unscoped(),
-          required: true
-        }
-      ]
-    }
-    if (t) options.transaction = t
-
-    return AccountVideoRateModel.findOne(options)
-  }
-
-  static loadByUrl (url: string, transaction: Transaction) {
-    const options: FindOptions = {
-      where: {
-        url
-      }
-    }
-    if (transaction) options.transaction = transaction
-
-    return AccountVideoRateModel.findOne(options)
-  }
-
   static listAndCountAccountUrlsByVideoId (rateType: VideoRateType, videoId: number, start: number, count: number, t?: Transaction) {
     const query = {
       offset: start,
@@ -249,6 +251,25 @@ export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountV
       AccountVideoRateModel.findAll<MAccountVideoRateAccountUrl>(query)
     ]).then(([ total, data ]) => ({ total, data }))
   }
+
+  static listRatesOfAccountIdForExport (accountId: number, rateType: VideoRateType): Promise<MAccountVideoRateVideoUrl[]> {
+    return AccountVideoRateModel.findAll({
+      where: {
+        accountId,
+        type: rateType
+      },
+      include: [
+        {
+          attributes: [ 'url' ],
+          model: VideoModel,
+          required: true
+        }
+      ],
+      limit: USER_EXPORT_MAX_ITEMS
+    })
+  }
+
+  // ---------------------------------------------------------------------------
 
   toFormattedJSON (this: MAccountVideoRateFormattable): AccountVideoRate {
     return {

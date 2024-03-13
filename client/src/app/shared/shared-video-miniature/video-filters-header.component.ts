@@ -1,19 +1,43 @@
 import * as debug from 'debug'
 import { Subscription } from 'rxjs'
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
 import { UserRight } from '@peertube/peertube-models'
-import { PeertubeModalService } from '../shared-main'
 import { VideoFilters } from './video-filters.model'
+import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
+import { SelectCategoriesComponent } from '../shared-forms/select/select-categories.component'
+import { SelectLanguagesComponent } from '../shared-forms/select/select-languages.component'
+import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap'
+import { NgSelectModule } from '@ng-select/ng-select'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { NgClass, NgIf, NgFor, NgTemplateOutlet } from '@angular/common'
+import { RouterLink } from '@angular/router'
+import { PeertubeModalService } from '../shared-main/peertube-modal/peertube-modal.service'
 
 const debugLogger = debug('peertube:videos:VideoFiltersHeaderComponent')
 
 @Component({
   selector: 'my-video-filters-header',
   styleUrls: [ './video-filters-header.component.scss' ],
-  templateUrl: './video-filters-header.component.html'
+  templateUrl: './video-filters-header.component.html',
+  standalone: true,
+  imports: [
+    RouterLink,
+    FormsModule,
+    ReactiveFormsModule,
+    NgClass,
+    NgIf,
+    GlobalIconComponent,
+    NgFor,
+    NgSelectModule,
+    NgbCollapse,
+    NgTemplateOutlet,
+    SelectLanguagesComponent,
+    SelectCategoriesComponent,
+    PeertubeCheckboxComponent
+  ]
 })
 export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
   @Input() filters: VideoFilters

@@ -1,15 +1,21 @@
+import { NgClass, NgIf } from '@angular/common'
+import { Component, OnInit } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { AuthService, ServerService, UserService } from '@app/core'
+import { USER_EMAIL_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { HttpStatusCode, User } from '@peertube/peertube-models'
 import { forkJoin } from 'rxjs'
 import { tap } from 'rxjs/operators'
-import { Component, OnInit } from '@angular/core'
-import { AuthService, Notifier, ServerService, UserService } from '@app/core'
-import { USER_EMAIL_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { HttpStatusCode, User } from '@peertube/peertube-models'
+import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
 
 @Component({
   selector: 'my-account-change-email',
   templateUrl: './my-account-change-email.component.html',
-  styleUrls: [ './my-account-change-email.component.scss' ]
+  styleUrls: [ './my-account-change-email.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent ]
 })
 export class MyAccountChangeEmailComponent extends FormReactive implements OnInit {
   error: string = null
@@ -20,8 +26,7 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
     protected formReactiveService: FormReactiveService,
     private authService: AuthService,
     private userService: UserService,
-    private serverService: ServerService,
-    private notifier: Notifier
+    private serverService: ServerService
   ) {
     super()
   }

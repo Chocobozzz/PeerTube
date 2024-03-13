@@ -42,16 +42,22 @@ describe('Test resumable upload', function () {
 
     const size = await buildSize(defaultFixture, options.size)
 
-    const attributes = {
-      name: 'video',
-      channelId: options.channelId ?? server.store.channel.id,
-      privacy: VideoPrivacy.PUBLIC,
-      fixture: defaultFixture
-    }
-
     const mimetype = 'video/mp4'
 
-    const res = await server.videos.prepareResumableUpload({ path, token, attributes, size, mimetype, originalName, lastModified })
+    const res = await server.videos.prepareVideoResumableUpload({
+      path,
+      token,
+      fixture: defaultFixture,
+      fields: {
+        name: 'video',
+        channelId: options.channelId ?? server.store.channel.id,
+        privacy: VideoPrivacy.PUBLIC
+      },
+      size,
+      mimetype,
+      originalName,
+      lastModified
+    })
 
     return res.header['location'].split('?')[1]
   }
@@ -71,7 +77,7 @@ describe('Test resumable upload', function () {
     const size = await buildSize(defaultFixture, options.size)
     const absoluteFilePath = buildAbsoluteFixturePath(defaultFixture)
 
-    return server.videos.sendResumableChunks({
+    return server.videos.sendResumableVideoChunks({
       token,
       path,
       pathUploadId,
@@ -133,7 +139,7 @@ describe('Test resumable upload', function () {
     it('Should correctly delete files after an upload', async function () {
       const uploadId = await prepareUpload()
       await sendChunks({ pathUploadId: uploadId })
-      await server.videos.endResumableUpload({ path, pathUploadId: uploadId })
+      await server.videos.endVideoResumableUpload({ path, pathUploadId: uploadId })
 
       expect(await countResumableUploads()).to.equal(0)
     })
@@ -198,21 +204,6 @@ describe('Test resumable upload', function () {
       await checkFileSize(uploadId, 0)
     })
 
-    it('Should be able to accept 2 PUT requests', async function () {
-      const uploadId = await prepareUpload()
-
-      const result1 = await sendChunks({ pathUploadId: uploadId })
-      const result2 = await sendChunks({ pathUploadId: uploadId })
-
-      expect(result1.body.video.uuid).to.exist
-      expect(result1.body.video.uuid).to.equal(result2.body.video.uuid)
-
-      expect(result1.headers['x-resumable-upload-cached']).to.not.exist
-      expect(result2.headers['x-resumable-upload-cached']).to.equal('true')
-
-      await checkFileSize(uploadId, null)
-    })
-
     it('Should not have the same upload id with 2 different users', async function () {
       const originalName = 'toto.mp4'
       const lastModified = new Date().getTime()
@@ -241,39 +232,6 @@ describe('Test resumable upload', function () {
 
       await sendChunks({ pathUploadId: uploadId, token: server.accessToken })
       await sendChunks({ pathUploadId: uploadId, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-    })
-
-    it('Should not cache a request after a delete', async function () {
-      const originalName = 'toto.mp4'
-      const lastModified = new Date().getTime()
-      const uploadId1 = await prepareUpload({ originalName, lastModified, token: server.accessToken })
-
-      await sendChunks({ pathUploadId: uploadId1 })
-      await server.videos.endResumableUpload({ path, pathUploadId: uploadId1 })
-
-      const uploadId2 = await prepareUpload({ originalName, lastModified, token: server.accessToken })
-      expect(uploadId1).to.equal(uploadId2)
-
-      const result2 = await sendChunks({ pathUploadId: uploadId1 })
-      expect(result2.headers['x-resumable-upload-cached']).to.not.exist
-    })
-
-    it('Should not cache after video deletion', async function () {
-      const originalName = 'toto.mp4'
-      const lastModified = new Date().getTime()
-
-      const uploadId1 = await prepareUpload({ originalName, lastModified })
-      const result1 = await sendChunks({ pathUploadId: uploadId1 })
-      await server.videos.remove({ id: result1.body.video.uuid })
-
-      const uploadId2 = await prepareUpload({ originalName, lastModified })
-      const result2 = await sendChunks({ pathUploadId: uploadId2 })
-      expect(result1.body.video.uuid).to.not.equal(result2.body.video.uuid)
-
-      expect(result2.headers['x-resumable-upload-cached']).to.not.exist
-
-      await checkFileSize(uploadId1, null)
-      await checkFileSize(uploadId2, null)
     })
 
     it('Should refuse an invalid digest', async function () {

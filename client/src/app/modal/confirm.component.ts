@@ -4,11 +4,17 @@ import { ConfirmService } from '@app/core/confirm/confirm.service'
 import { POP_STATE_MODAL_DISMISS } from '@app/helpers'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { InputTextComponent } from '../shared/shared-forms/input-text.component'
+import { FormsModule } from '@angular/forms'
+import { NgIf } from '@angular/common'
+import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-confirm',
   templateUrl: './confirm.component.html',
-  styleUrls: [ './confirm.component.scss' ]
+  styleUrls: [ './confirm.component.scss' ],
+  standalone: true,
+  imports: [ GlobalIconComponent, NgIf, FormsModule, InputTextComponent ]
 })
 export class ConfirmComponent implements OnInit {
   @ViewChild('confirmModal', { static: true }) confirmModal: ElementRef

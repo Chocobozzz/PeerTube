@@ -34,8 +34,11 @@ export class ControlBarOptionsBuilder {
       ...this.getProgressControl(),
 
       p2PInfoButton: {},
+
       muteToggle: {},
       volumeControl: {},
+
+      captionToggleButton: {},
 
       ...this.getSettingsButton(),
 

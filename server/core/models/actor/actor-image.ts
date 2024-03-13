@@ -1,7 +1,6 @@
 import { ActivityIconObject, ActorImage, ActorImageType, type ActorImageType_Type } from '@peertube/peertube-models'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
-import { MActorImage, MActorImageFormattable } from '@server/types/models/index.js'
+import { MActorId, MActorImage, MActorImageFormattable } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import {
@@ -12,16 +11,14 @@ import {
   CreatedAt,
   Default,
   ForeignKey,
-  Is,
-  Model,
-  Table,
+  Is, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants.js'
-import { buildSQLAttributes, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, buildSQLAttributes, throwIfNotValid } from '../shared/index.js'
 import { ActorModel } from './actor.js'
 
 @Table({
@@ -37,7 +34,7 @@ import { ActorModel } from './actor.js'
     }
   ]
 })
-export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageModel>>> {
+export class ActorImageModel extends SequelizeModel<ActorImageModel> {
 
   @AllowNull(false)
   @Column
@@ -113,6 +110,25 @@ export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageMode
     }
 
     return ActorImageModel.findOne(query)
+  }
+
+  static listByActor (actor: MActorId, type: ActorImageType_Type) {
+    const query = {
+      where: {
+        actorId: actor.id,
+        type
+      }
+    }
+
+    return ActorImageModel.findAll(query)
+  }
+
+  static async listActorImages (actor: MActorId) {
+    const promises = [ ActorImageType.AVATAR, ActorImageType.BANNER ].map(type => ActorImageModel.listByActor(actor, type))
+
+    const [ avatars, banners ] = await Promise.all(promises)
+
+    return { avatars, banners }
   }
 
   static getImageUrl (image: MActorImage) {

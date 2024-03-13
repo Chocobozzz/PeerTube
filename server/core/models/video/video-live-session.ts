@@ -10,14 +10,13 @@ import {
   Column,
   CreatedAt,
   DataType,
-  ForeignKey,
-  Model,
-  Scopes,
+  ForeignKey, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { VideoLiveReplaySettingModel } from './video-live-replay-setting.js'
 import { VideoModel } from './video.js'
+import { SequelizeModel } from '../shared/index.js'
 
 export enum ScopeNames {
   WITH_REPLAY = 'WITH_REPLAY'
@@ -54,7 +53,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiveSessionModel>>> {
+export class VideoLiveSessionModel extends SequelizeModel<VideoLiveSessionModel> {
 
   @CreatedAt
   createdAt: Date

@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { objectToFormData } from '@app/helpers'
-import { VideoService } from '@app/shared/shared-main'
 import { VideoStudioCreateEdition, VideoStudioTask } from '@peertube/peertube-models'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
 
 @Injectable()
 export class VideoStudioService {

@@ -1,20 +1,20 @@
-import express from 'express'
-import { move } from 'fs-extra/esm'
+import { buildAspectRatio } from '@peertube/peertube-core-utils'
+import { VideoState } from '@peertube/peertube-models'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-queue/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { regenerateMiniaturesIfNeeded } from '@server/lib/thumbnail.js'
-import { uploadx } from '@server/lib/uploadx.js'
-import { buildMoveJob, buildStoryboardJobIfNeeded } from '@server/lib/video.js'
+import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
-import { buildNewFile } from '@server/lib/video-file.js'
+import { buildNewFile, createVideoSource } from '@server/lib/video-file.js'
+import { buildMoveJob, buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { MStreamingPlaylistFiles, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
-import { VideoState } from '@peertube/peertube-models'
+import express from 'express'
+import { move } from 'fs-extra/esm'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import {
   asyncMiddleware,
@@ -35,23 +35,14 @@ videoSourceRouter.get('/:id/source',
   getVideoLatestSource
 )
 
-videoSourceRouter.post('/:id/source/replace-resumable',
-  authenticate,
-  asyncMiddleware(replaceVideoSourceResumableInitValidator),
-  (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitely tell to uploadx it's the end
-)
+setupUploadResumableRoutes({
+  routePath: '/:id/source/replace-resumable',
+  router: videoSourceRouter,
 
-videoSourceRouter.delete('/:id/source/replace-resumable',
-  authenticate,
-  (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitely tell to uploadx it's the end
-)
-
-videoSourceRouter.put('/:id/source/replace-resumable',
-  authenticate,
-  uploadx.upload, // uploadx doesn't next() before the file upload completes
-  asyncMiddleware(replaceVideoSourceResumableValidator),
-  asyncMiddleware(replaceVideoSourceResumable)
-)
+  uploadInitAfterMiddlewares: [ asyncMiddleware(replaceVideoSourceResumableInitValidator) ],
+  uploadedMiddlewares: [ asyncMiddleware(replaceVideoSourceResumableValidator) ],
+  uploadedController: asyncMiddleware(replaceVideoSourceResumable)
+})
 
 // ---------------------------------------------------------------------------
 
@@ -69,7 +60,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
   const videoPhysicalFile = res.locals.updateVideoFileResumable
   const user = res.locals.oauth.token.User
 
-  const videoFile = await buildNewFile({ path: videoPhysicalFile.path, mode: 'web-video' })
+  const videoFile = await buildNewFile({ path: videoPhysicalFile.path, mode: 'web-video', ffprobe: res.locals.ffprobe })
   const originalFilename = videoPhysicalFile.originalname
 
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(res.locals.videoAll.uuid)
@@ -105,6 +96,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
       video.state = buildNextVideoState()
       video.duration = videoPhysicalFile.duration
       video.inputFileUpdatedAt = inputFileUpdatedAt
+      video.aspectRatio = buildAspectRatio({ width: videoFile.width, height: videoFile.height })
       await video.save({ transaction })
 
       await autoBlacklistVideoIfNeeded({
@@ -121,13 +113,15 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
 
     await removeOldFiles({ video, files: oldWebVideoFiles, playlists: oldStreamingPlaylists })
 
-    const source = await VideoSourceModel.create({
-      filename: originalFilename,
-      videoId: video.id,
+    const source = await createVideoSource({
+      inputFilename: originalFilename,
+      inputProbe: res.locals.ffprobe,
+      inputPath: destination,
+      video,
       createdAt: inputFileUpdatedAt
     })
 
-    await regenerateMiniaturesIfNeeded(video)
+    await regenerateMiniaturesIfNeeded(video, res.locals.ffprobe)
     await video.VideoChannel.setAsUpdated()
     await addVideoJobsAfterUpload(video, video.getMaxQualityFile())
 

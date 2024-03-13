@@ -17,48 +17,52 @@ import { exists, isArray, isDateValid, isFileValid } from './misc.js'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 
-function isVideoIncludeValid (include: VideoIncludeType) {
+export function isVideoIncludeValid (include: VideoIncludeType) {
   return exists(include) && validator.default.isInt('' + include)
 }
 
-function isVideoCategoryValid (value: any) {
+export function isVideoCategoryValid (value: any) {
   return value === null || VIDEO_CATEGORIES[value] !== undefined
 }
 
-function isVideoStateValid (value: any) {
+export function isVideoStateValid (value: any) {
   return exists(value) && VIDEO_STATES[value] !== undefined
 }
 
-function isVideoLicenceValid (value: any) {
+export function isVideoLicenceValid (value: any) {
   return value === null || VIDEO_LICENCES[value] !== undefined
 }
 
-function isVideoLanguageValid (value: any) {
+export function isVideoLanguageValid (value: any) {
   return value === null ||
     (typeof value === 'string' && validator.default.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.LANGUAGE))
 }
 
-function isVideoDurationValid (value: string) {
+export function isVideoDurationValid (value: string) {
   return exists(value) && validator.default.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)
 }
 
-function isVideoDescriptionValid (value: string) {
+export function isVideoDescriptionValid (value: string) {
   return value === null || (exists(value) && validator.default.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION))
 }
 
-function isVideoSupportValid (value: string) {
+export function isVideoSupportValid (value: string) {
   return value === null || (exists(value) && validator.default.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.SUPPORT))
 }
 
-function isVideoNameValid (value: string) {
+export function isVideoNameValid (value: string) {
   return exists(value) && validator.default.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.NAME)
 }
 
-function isVideoTagValid (tag: string) {
+export function isVideoSourceFilenameValid (value: string) {
+  return exists(value) && validator.default.isLength(value, CONSTRAINTS_FIELDS.VIDEO_SOURCE.FILENAME)
+}
+
+export function isVideoTagValid (tag: string) {
   return exists(tag) && validator.default.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)
 }
 
-function areVideoTagsValid (tags: string[]) {
+export function areVideoTagsValid (tags: string[]) {
   return tags === null || (
     isArray(tags) &&
     validator.default.isInt(tags.length.toString(), VIDEOS_CONSTRAINTS_FIELDS.TAGS) &&
@@ -66,20 +70,20 @@ function areVideoTagsValid (tags: string[]) {
   )
 }
 
-function isVideoViewsValid (value: string) {
+export function isVideoViewsValid (value: string) {
   return exists(value) && validator.default.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.VIEWS)
 }
 
 const ratingTypes = new Set(Object.values(VIDEO_RATE_TYPES))
-function isVideoRatingTypeValid (value: string) {
+export function isVideoRatingTypeValid (value: string) {
   return value === 'none' || ratingTypes.has(value as VideoRateType)
 }
 
-function isVideoFileExtnameValid (value: string) {
+export function isVideoFileExtnameValid (value: string) {
   return exists(value) && (value === VIDEO_LIVE.EXTENSION || MIMETYPES.VIDEO.EXT_MIMETYPE[value] !== undefined)
 }
 
-function isVideoFileMimeTypeValid (files: UploadFilesForCheck, field = 'videofile') {
+export function isVideoFileMimeTypeValid (files: UploadFilesForCheck, field = 'videofile') {
   return isFileValid({
     files,
     mimeTypeRegex: MIMETYPES.VIDEO.MIMETYPES_REGEX,
@@ -93,7 +97,7 @@ const videoImageTypes = CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME
                                           .join('|')
 const videoImageTypesRegex = `image/(${videoImageTypes})`
 
-function isVideoImageValid (files: UploadFilesForCheck, field: string, optional = true) {
+export function isVideoImageValid (files: UploadFilesForCheck, field: string, optional = true) {
   return isFileValid({
     files,
     mimeTypeRegex: videoImageTypesRegex,
@@ -103,51 +107,51 @@ function isVideoImageValid (files: UploadFilesForCheck, field: string, optional 
   })
 }
 
-function isVideoPrivacyValid (value: number) {
+export function isVideoPrivacyValid (value: number) {
   return VIDEO_PRIVACIES[value] !== undefined
 }
 
-function isVideoReplayPrivacyValid (value: number) {
+export function isVideoReplayPrivacyValid (value: number) {
   return VIDEO_PRIVACIES[value] !== undefined && value !== VideoPrivacy.PASSWORD_PROTECTED
 }
 
-function isScheduleVideoUpdatePrivacyValid (value: number) {
+export function isScheduleVideoUpdatePrivacyValid (value: number) {
   return value === VideoPrivacy.UNLISTED || value === VideoPrivacy.PUBLIC || value === VideoPrivacy.INTERNAL
 }
 
-function isVideoOriginallyPublishedAtValid (value: string | null) {
+export function isVideoOriginallyPublishedAtValid (value: string | null) {
   return value === null || isDateValid(value)
 }
 
-function isVideoFileInfoHashValid (value: string | null | undefined) {
+export function isVideoFileInfoHashValid (value: string | null | undefined) {
   return exists(value) && validator.default.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)
 }
 
-function isVideoFileResolutionValid (value: string) {
+export function isVideoFileResolutionValid (value: string) {
   return exists(value) && validator.default.isInt(value + '')
 }
 
-function isVideoFPSResolutionValid (value: string) {
+export function isVideoFPSResolutionValid (value: string) {
   return value === null || validator.default.isInt(value + '')
 }
 
-function isVideoFileSizeValid (value: string) {
+export function isVideoFileSizeValid (value: string) {
   return exists(value) && validator.default.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.FILE_SIZE)
 }
 
-function isVideoMagnetUriValid (value: string) {
+export function isVideoMagnetUriValid (value: string) {
   if (!exists(value)) return false
 
   const parsed = magnetUriDecode(value)
   return parsed && isVideoFileInfoHashValid(parsed.infoHash)
 }
 
-function isPasswordValid (password: string) {
+export function isPasswordValid (password: string) {
   return password.length >= CONSTRAINTS_FIELDS.VIDEO_PASSWORD.LENGTH.min &&
     password.length < CONSTRAINTS_FIELDS.VIDEO_PASSWORD.LENGTH.max
 }
 
-function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
+export function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
   const fail = (message: string) => {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
@@ -183,36 +187,4 @@ function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
   }
 
   return true
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  isVideoCategoryValid,
-  isVideoLicenceValid,
-  isVideoLanguageValid,
-  isVideoDescriptionValid,
-  isVideoFileInfoHashValid,
-  isVideoNameValid,
-  areVideoTagsValid,
-  isVideoFPSResolutionValid,
-  isScheduleVideoUpdatePrivacyValid,
-  isVideoOriginallyPublishedAtValid,
-  isVideoMagnetUriValid,
-  isVideoStateValid,
-  isVideoIncludeValid,
-  isVideoViewsValid,
-  isVideoRatingTypeValid,
-  isVideoFileExtnameValid,
-  isVideoFileMimeTypeValid,
-  isVideoDurationValid,
-  isVideoTagValid,
-  isVideoPrivacyValid,
-  isVideoReplayPrivacyValid,
-  isVideoFileResolutionValid,
-  isVideoFileSizeValid,
-  isVideoImageValid,
-  isVideoSupportValid,
-  isPasswordValid,
-  isValidPasswordProtectedPrivacy
 }

@@ -187,7 +187,7 @@ describe('Test users admin API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        token: 'super token',
+        token: 'supertoken',
         fields: baseCorrectParams,
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
@@ -309,7 +309,7 @@ describe('Test users admin API validators', function () {
       await makeGetRequest({
         url: server.url,
         path: path + userId,
-        token: 'super token',
+        token: 'supertoken',
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
@@ -383,7 +383,7 @@ describe('Test users admin API validators', function () {
       await makePutBodyRequest({
         url: server.url,
         path: path + userId,
-        token: 'super token',
+        token: 'supertoken',
         fields,
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })

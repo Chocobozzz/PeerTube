@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScopedTokensService } from '@app/core'
-import { VideoService } from '@app/shared/shared-main'
 import { FeedFormat, ScopedToken } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
+import { InputTextComponent } from '../../shared/shared-forms/input-text.component'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
 
 @Component({
   selector: 'my-account-applications',
   templateUrl: './my-account-applications.component.html',
-  styleUrls: [ './my-account-applications.component.scss' ]
+  styleUrls: [ './my-account-applications.component.scss' ],
+  standalone: true,
+  imports: [ GlobalIconComponent, InputTextComponent ]
 })
 export class MyAccountApplicationsComponent implements OnInit {
   feedUrl: string

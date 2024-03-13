@@ -88,7 +88,7 @@
     </tr>
 
     <tr>
-      <th i18n class="label" colspan="2">Import</th>
+      <th i18n class="label" colspan="2">Video Import</th>
     </tr>
 
     <tr>
@@ -109,6 +109,24 @@
       <th i18n class="sub-label" scope="row">Channel synchronization with other platforms (YouTube, Vimeo, ...)</th>
       <td>
         <my-feature-boolean [value]="serverConfig.import.videoChannelSynchronization.enabled"></my-feature-boolean>
+      </td>
+    </tr>
+
+    <tr>
+      <th i18n class="label" colspan="2">User Import/Export</th>
+    </tr>
+
+    <tr>
+      <th i18n class="sub-label" scope="row">Users can export their data</th>
+      <td>
+        <my-feature-boolean [value]="serverConfig.export.users.enabled"></my-feature-boolean>
+      </td>
+    </tr>
+
+    <tr>
+      <th i18n class="sub-label" scope="row">Users can import their data</th>
+      <td>
+        <my-feature-boolean [value]="serverConfig.import.users.enabled"></my-feature-boolean>
       </td>
     </tr>
 

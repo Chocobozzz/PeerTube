@@ -1,5 +1,4 @@
 import { type UserNotificationSetting, type UserNotificationSettingValueType } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { TokensCache } from '@server/lib/auth/tokens-cache.js'
 import { MNotificationSettingFormattable } from '@server/types/models/index.js'
 import {
@@ -11,13 +10,11 @@ import {
   CreatedAt,
   Default,
   ForeignKey,
-  Is,
-  Model,
-  Table,
+  Is, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications.js'
-import { throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { UserModel } from './user.js'
 
 @Table({
@@ -29,7 +26,7 @@ import { UserModel } from './user.js'
     }
   ]
 })
-export class UserNotificationSettingModel extends Model<Partial<AttributesOnly<UserNotificationSettingModel>>> {
+export class UserNotificationSettingModel extends SequelizeModel<UserNotificationSettingModel> {
 
   @AllowNull(false)
   @Default(null)
@@ -206,6 +203,16 @@ export class UserNotificationSettingModel extends Model<Partial<AttributesOnly<U
   @AfterDestroy
   static removeTokenCache (instance: UserNotificationSettingModel) {
     return TokensCache.Instance.clearCacheByUserId(instance.userId)
+  }
+
+  static updateUserSettings (settings: UserNotificationSetting, userId: number) {
+    const query = {
+      where: {
+        userId
+      }
+    }
+
+    return UserNotificationSettingModel.update(settings, query)
   }
 
   toFormattedJSON (this: MNotificationSettingFormattable): UserNotificationSetting {

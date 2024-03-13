@@ -1,15 +1,40 @@
 import { pairwise } from 'rxjs/operators'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
-import { FormGroup } from '@angular/forms'
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { MenuService, ThemeService } from '@app/core'
 import { HTMLServerConfig } from '@peertube/peertube-models'
 import { ConfigService } from '../shared/config.service'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
+import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
+import { UserRealQuotaInfoComponent } from '../../shared/user-real-quota-info.component'
+import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
+import { HelpComponent } from '../../../shared/shared-main/misc/help.component'
+import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
+import { SelectCustomValueComponent } from '../../../shared/shared-forms/select/select-custom-value.component'
+import { NgFor, NgIf, NgClass } from '@angular/common'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'my-edit-basic-configuration',
   templateUrl: './edit-basic-configuration.component.html',
-  styleUrls: [ './edit-custom-config.component.scss' ]
+  styleUrls: [ './edit-custom-config.component.scss' ],
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    RouterLink,
+    NgFor,
+    SelectCustomValueComponent,
+    NgIf,
+    PeertubeCheckboxComponent,
+    HelpComponent,
+    MarkdownTextareaComponent,
+    NgClass,
+    UserRealQuotaInfoComponent,
+    SelectOptionsComponent,
+    PeerTubeTemplateDirective
+  ]
 })
 export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   @Input() form: FormGroup
@@ -20,6 +45,9 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   signupAlertMessage: string
   defaultLandingPageOptions: SelectOptionsItem[] = []
   availableThemes: SelectOptionsItem[]
+
+  exportExpirationOptions: SelectOptionsItem[] = []
+  exportMaxUserVideoQuotaOptions: SelectOptionsItem[] = []
 
   constructor (
     private configService: ConfigService,
@@ -33,6 +61,15 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
     this.checkImportSyncField()
 
     this.availableThemes = this.themeService.buildAvailableThemes()
+
+    this.exportExpirationOptions = [
+      { id: 1000 * 3600 * 24, label: $localize`1 day` },
+      { id: 1000 * 3600 * 24 * 2, label: $localize`2 days` },
+      { id: 1000 * 3600 * 24 * 7, label: $localize`7 days` },
+      { id: 1000 * 3600 * 24 * 30, label: $localize`30 days` }
+    ]
+
+    this.exportMaxUserVideoQuotaOptions = this.configService.videoQuotaOptions.filter(o => (o.id as number) >= 1)
   }
 
   ngOnChanges (changes: SimpleChanges) {
@@ -62,6 +99,14 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
 
   getUserVideoQuota () {
     return this.form.value['user']['videoQuota']
+  }
+
+  isExportUsersEnabled () {
+    return this.form.value['export']['users']['enabled'] === true
+  }
+
+  getDisabledExportUsersClass () {
+    return { 'disabled-checkbox-extra': !this.isExportUsersEnabled() }
   }
 
   isSignupEnabled () {

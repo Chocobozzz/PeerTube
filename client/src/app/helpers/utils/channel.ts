@@ -40,5 +40,5 @@ export {
 function getAvatarPath (c: VideoChannel) {
   if (!c.avatars || c.avatars.length === 0) return undefined
 
-  return minBy(c.avatars, 'width').path
+  return minBy(c.avatars, 'width')?.path || c.avatars[0].path
 }

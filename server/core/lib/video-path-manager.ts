@@ -1,7 +1,5 @@
-import { Mutex } from 'async-mutex'
-import { remove } from 'fs-extra/esm'
-import { basename, extname, join } from 'path'
-import { VideoStorage } from '@peertube/peertube-models'
+import { FileStorage } from '@peertube/peertube-models'
+import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -13,7 +11,9 @@ import {
   MVideoFileStreamingPlaylistVideo,
   MVideoFileVideo
 } from '@server/types/models/index.js'
-import { buildUUID } from '@peertube/peertube-node-utils'
+import { Mutex } from 'async-mutex'
+import { remove } from 'fs-extra/esm'
+import { extname, join } from 'path'
 import { makeHLSFileAvailable, makeWebVideoFileAvailable } from './object-storage/index.js'
 import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from './paths.js'
 import { isVideoInPrivateDirectory } from './video-privacy.js'
@@ -56,22 +56,18 @@ class VideoPathManager {
     }
 
     if (isVideoInPrivateDirectory(video.privacy)) {
-      return join(DIRECTORIES.VIDEOS.PRIVATE, videoFile.filename)
+      return join(DIRECTORIES.WEB_VIDEOS.PRIVATE, videoFile.filename)
     }
 
-    return join(DIRECTORIES.VIDEOS.PUBLIC, videoFile.filename)
+    return join(DIRECTORIES.WEB_VIDEOS.PUBLIC, videoFile.filename)
   }
 
-  getFSOriginalVideoFileOutputPath (video: MVideo, videoInputPath: string) {
-    if (isVideoInPrivateDirectory(video.privacy)) {
-      return join(DIRECTORIES.ORIGINAL_VIDEOS.PRIVATE, basename(videoInputPath))
-    }
-
-    return join(DIRECTORIES.ORIGINAL_VIDEOS.PUBLIC, basename(videoInputPath))
+  getFSOriginalVideoFilePath (filename: string) {
+    return join(DIRECTORIES.ORIGINAL_VIDEOS, filename)
   }
 
   async makeAvailableVideoFile <T> (videoFile: MVideoFileVideo | MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {
-    if (videoFile.storage === VideoStorage.FILE_SYSTEM) {
+    if (videoFile.storage === FileStorage.FILE_SYSTEM) {
       return this.makeAvailableFactory(
         () => this.getFSVideoFileOutputPath(videoFile.getVideoOrStreamingPlaylist(), videoFile),
         false,
@@ -101,7 +97,7 @@ class VideoPathManager {
   async makeAvailableResolutionPlaylistFile <T> (videoFile: MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {
     const filename = getHlsResolutionPlaylistFilename(videoFile.filename)
 
-    if (videoFile.storage === VideoStorage.FILE_SYSTEM) {
+    if (videoFile.storage === FileStorage.FILE_SYSTEM) {
       return this.makeAvailableFactory(
         () => join(getHLSDirectory(videoFile.getVideo()), filename),
         false,
@@ -118,7 +114,7 @@ class VideoPathManager {
   }
 
   async makeAvailablePlaylistFile <T> (playlist: MStreamingPlaylistVideo, filename: string, cb: MakeAvailableCB<T>) {
-    if (playlist.storage === VideoStorage.FILE_SYSTEM) {
+    if (playlist.storage === FileStorage.FILE_SYSTEM) {
       return this.makeAvailableFactory(
         () => join(getHLSDirectory(playlist.Video), filename),
         false,

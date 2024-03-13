@@ -2,7 +2,6 @@
   "extends": "stylelint-config-sass-guidelines",
   "rules": {
     "scss/at-import-no-partial-leading-underscore": null,
-    "color-hex-case": null,
     "color-hex-length": null,
     "selector-pseudo-element-no-unknown": [
       true,
@@ -19,10 +18,10 @@
     "selector-max-compound-selectors": 9,
     "selector-no-qualifying-type": null,
     "scss/at-extend-no-missing-placeholder": null,
-    "number-leading-zero": null,
     "rule-empty-line-before": null,
     "selector-max-id": null,
     "scss/at-function-pattern": null,
+    "scss/load-no-partial-leading-underscore": null,
     "property-no-vendor-prefix": [
       true,
       {

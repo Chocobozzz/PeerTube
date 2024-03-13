@@ -3,10 +3,11 @@ import { catchError, switchMap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
-import { AdvancedInputFilter } from '@app/shared/shared-forms'
-import { CommonVideoParams, Video, VideoService } from '@app/shared/shared-main'
 import { ResultList, VideoInclude, VideoPrivacy } from '@peertube/peertube-models'
 import { getAllPrivacies } from '@peertube/peertube-core-utils'
+import { VideoService, CommonVideoParams } from '@app/shared/shared-main/video/video.service'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { AdvancedInputFilter } from '@app/shared/shared-forms/advanced-input-filter.component'
 
 @Injectable()
 export class VideoAdminService {

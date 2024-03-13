@@ -160,6 +160,8 @@ async function acceptRegistration (req: express.Request, res: express.Response) 
   registration.state = UserRegistrationState.ACCEPTED
   registration.moderationResponse = body.moderationResponse
 
+  if (!registration.processedAt) registration.processedAt = new Date()
+
   await registration.save()
 
   logger.info('Registration of %s accepted', registration.username)
@@ -177,6 +179,8 @@ async function rejectRegistration (req: express.Request, res: express.Response) 
 
   registration.state = UserRegistrationState.REJECTED
   registration.moderationResponse = body.moderationResponse
+
+  if (!registration.processedAt) registration.processedAt = new Date()
 
   await registration.save()
 

@@ -571,14 +571,6 @@
   }
 }
 
-@mixin actor-avatar-size ($size) {
-  display: inline-block;
-  width: $size;
-  height: $size;
-  min-width: $size;
-  min-height: $size;
-}
-
 @mixin actor-counters ($separator-margin: 10px) {
   color: pvar(--greyForegroundColor);
   display: flex;
@@ -596,14 +588,6 @@
   color: pvar(--mainColor);
   font-weight: $font-bold;
   font-size: 13px;
-}
-
-@mixin settings-big-title {
-  text-transform: uppercase;
-  color: pvar(--mainColor);
-  font-weight: $font-bold;
-  font-size: 1rem;
-  margin-bottom: 10px;
 }
 
 @mixin row-blocks ($column-responsive: true, $min-height: 130px, $separator: true) {
@@ -680,91 +664,6 @@
     &.red {
       background-color: color.adjust($color: #c54130, $lightness: 10%);
     }
-  }
-}
-
-@mixin breadcrumb {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0;
-  margin-bottom: 1rem;
-  list-style: none;
-  font-weight: $font-semibold;
-
-  .breadcrumb-item {
-    display: flex;
-
-    a {
-      color: pvar(--mainColor);
-    }
-
-    + .breadcrumb-item {
-      @include padding-left(0.5rem);
-
-      &::before {
-        @include padding-right(0.5rem);
-
-        display: inline-block;
-        color: #6c757d;
-        content: '/';
-      }
-    }
-
-    &.active {
-      color: #6c757d;
-    }
-  }
-}
-
-@mixin dashboard {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 -5px;
-
-  > div {
-    box-sizing: border-box;
-    flex: 0 0 math.percentage(math.div(1, 3));
-    padding: 0 5px;
-    margin-bottom: 10px;
-
-    > a {
-      @include disable-default-a-behaviour;
-
-      text-decoration: none;
-      color: inherit;
-      display: block;
-      font-size: 18px;
-
-      &:active,
-      &:focus,
-      &:hover {
-        opacity: .8;
-      }
-    }
-
-    > a,
-    > div {
-      padding: 20px;
-      background: pvar(--submenuBackgroundColor);
-      border-radius: 4px;
-      box-sizing: border-box;
-      height: 100%;
-    }
-  }
-
-  .dashboard-num,
-  .dashboard-text {
-    text-align: center;
-    font-size: 130%;
-    color: pvar(--mainForegroundColor);
-    line-height: 30px;
-    margin-bottom: 20px;
-  }
-
-  .dashboard-label {
-    font-size: 90%;
-    color: pvar(--inputPlaceholderColor);
-    text-align: center;
   }
 }
 

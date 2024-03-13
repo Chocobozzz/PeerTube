@@ -1,20 +1,19 @@
 import { MutexInterface } from 'async-mutex'
 import { Job } from 'bullmq'
 import { ensureDir, move } from 'fs-extra/esm'
-import { stat } from 'fs/promises'
-import { basename, extname as extnameUtil, join } from 'path'
+import { join } from 'path'
 import { pick } from '@peertube/peertube-core-utils'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { MVideo, MVideoFile } from '@server/types/models/index.js'
-import { getVideoStreamDuration, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
+import { MVideo } from '@server/types/models/index.js'
+import { getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import { CONFIG } from '../../initializers/config.js'
 import { VideoFileModel } from '../../models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist.js'
-import { updatePlaylistAfterFileChange } from '../hls.js'
+import { renameVideoFileInPlaylist, updatePlaylistAfterFileChange } from '../hls.js'
 import { generateHLSVideoFilename, getHlsResolutionPlaylistFilename } from '../paths.js'
-import { buildFileMetadata } from '../video-file.js'
+import { buildNewFile } from '../video-file.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
 
@@ -55,12 +54,11 @@ export function generateHlsPlaylistResolution (options: {
 
 export async function onHLSVideoFileTranscoding (options: {
   video: MVideo
-  videoFile: MVideoFile
   videoOutputPath: string
   m3u8OutputPath: string
   filesLockedInParent?: boolean // default false
 }) {
-  const { video, videoFile, videoOutputPath, m3u8OutputPath, filesLockedInParent = false } = options
+  const { video, videoOutputPath, m3u8OutputPath, filesLockedInParent = false } = options
 
   // Create or update the playlist
   const playlist = await retryTransactionWrapper(() => {
@@ -68,7 +66,9 @@ export async function onHLSVideoFileTranscoding (options: {
       return VideoStreamingPlaylistModel.loadOrGenerate(video, transaction)
     })
   })
-  videoFile.videoStreamingPlaylistId = playlist.id
+
+  const newVideoFile = await buildNewFile({ mode: 'hls', path: videoOutputPath })
+  newVideoFile.videoStreamingPlaylistId = playlist.id
 
   const mutexReleaser = !filesLockedInParent
     ? await VideoPathManager.Instance.lockFiles(video.uuid)
@@ -77,14 +77,20 @@ export async function onHLSVideoFileTranscoding (options: {
   try {
     await video.reload()
 
-    const videoFilePath = VideoPathManager.Instance.getFSVideoFileOutputPath(playlist, videoFile)
+    const videoFilePath = VideoPathManager.Instance.getFSVideoFileOutputPath(playlist, newVideoFile)
     await ensureDir(VideoPathManager.Instance.getFSHLSOutputPath(video))
 
     // Move playlist file
-    const resolutionPlaylistPath = VideoPathManager.Instance.getFSHLSOutputPath(video, basename(m3u8OutputPath))
+    const resolutionPlaylistPath = VideoPathManager.Instance.getFSHLSOutputPath(
+      video,
+      getHlsResolutionPlaylistFilename(newVideoFile.filename)
+    )
     await move(m3u8OutputPath, resolutionPlaylistPath, { overwrite: true })
+
     // Move video file
     await move(videoOutputPath, videoFilePath, { overwrite: true })
+
+    await renameVideoFileInPlaylist(resolutionPlaylistPath, newVideoFile.filename)
 
     // Update video duration if it was not set (in case of a live for example)
     if (!video.duration) {
@@ -92,18 +98,12 @@ export async function onHLSVideoFileTranscoding (options: {
       await video.save()
     }
 
-    const stats = await stat(videoFilePath)
-
-    videoFile.size = stats.size
-    videoFile.fps = await getVideoStreamFPS(videoFilePath)
-    videoFile.metadata = await buildFileMetadata(videoFilePath)
-
-    await createTorrentAndSetInfoHash(playlist, videoFile)
+    await createTorrentAndSetInfoHash(playlist, newVideoFile)
 
     const oldFile = await VideoFileModel.loadHLSFile({
       playlistId: playlist.id,
-      fps: videoFile.fps,
-      resolution: videoFile.resolution
+      fps: newVideoFile.fps,
+      resolution: newVideoFile.resolution
     })
 
     if (oldFile) {
@@ -111,7 +111,7 @@ export async function onHLSVideoFileTranscoding (options: {
       await oldFile.destroy()
     }
 
-    const savedVideoFile = await VideoFileModel.customUpsert(videoFile, 'streaming-playlist', undefined)
+    const savedVideoFile = await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', undefined)
 
     await updatePlaylistAfterFileChange(video, playlist)
 
@@ -171,17 +171,8 @@ async function generateHlsPlaylistCommon (options: {
 
   await buildFFmpegVOD(job).transcode(transcodeOptions)
 
-  const newVideoFile = new VideoFileModel({
-    resolution,
-    extname: extnameUtil(videoFilename),
-    size: 0,
-    filename: videoFilename,
-    fps: -1
-  })
-
   await onHLSVideoFileTranscoding({
     video,
-    videoFile: newVideoFile,
     videoOutputPath,
     m3u8OutputPath,
     filesLockedInParent: !inputFileMutexReleaser

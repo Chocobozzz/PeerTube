@@ -14,7 +14,7 @@ export abstract class AbstractSimpleFileCache <T> {
   protected abstract loadRemoteFile (key: string): Promise<GetFilePathResult>
 
   init (max: number, maxAge: number) {
-    this.getFilePath = memoizee(this.getFilePathImpl, {
+    this.getFilePath = memoizee(this.getFilePathImpl.bind(this), {
       maxAge,
       max,
       promise: true,

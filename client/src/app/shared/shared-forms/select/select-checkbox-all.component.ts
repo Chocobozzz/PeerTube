@@ -1,14 +1,13 @@
 import { Component, forwardRef, Input } from '@angular/core'
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
-import { ItemSelectCheckboxValue } from './select-checkbox.component'
+import { ItemSelectCheckboxValue, SelectCheckboxComponent } from './select-checkbox.component'
 
 @Component({
   selector: 'my-select-checkbox-all',
   styleUrls: [ './select-shared.component.scss' ],
-
   template: `
   <my-select-checkbox
     [(ngModel)]="selectedItems"
@@ -19,14 +18,15 @@ import { ItemSelectCheckboxValue } from './select-checkbox.component'
     (focusout)="onBlur()"
   >
   </my-select-checkbox>`,
-
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => SelectCheckboxAllComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: true,
+  imports: [ SelectCheckboxComponent, FormsModule ]
 })
 export class SelectCheckboxAllComponent implements ControlValueAccessor {
   @Input() availableItems: SelectOptionsItem[] = []

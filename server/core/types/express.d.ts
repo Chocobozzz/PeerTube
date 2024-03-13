@@ -1,6 +1,4 @@
-import { OutgoingHttpHeaders } from 'http'
-import { Writable } from 'stream'
-import { HttpMethodType, PeerTubeProblemDocumentData, ServerErrorCode, VideoCreate } from '@peertube/peertube-models'
+import { HttpMethodType, PeerTubeProblemDocumentData, VideoCreate } from '@peertube/peertube-models'
 import { RegisterServerAuthExternalOptions } from '@server/types/index.js'
 import {
   MAbuseMessage,
@@ -13,6 +11,7 @@ import {
   MRegistration,
   MStreamingPlaylist,
   MUserAccountUrl,
+  MUserExport,
   MVideoChangeOwnershipFull,
   MVideoFile,
   MVideoFormattableDetails,
@@ -28,7 +27,10 @@ import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server.
 import { MVideoImportDefault } from '@server/types/models/video/video-import.js'
 import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/types/models/video/video-playlist-element.js'
 import { MAccountVideoRateAccountVideo } from '@server/types/models/video/video-rate.js'
-import { File as UploadXFile, Metadata } from '@uploadx/core'
+import { Metadata, File as UploadXFile } from '@uploadx/core'
+import { FfprobeData } from 'fluent-ffmpeg'
+import { OutgoingHttpHeaders } from 'http'
+import { Writable } from 'stream'
 import { RegisteredPlugin } from '../../lib/plugins/plugin-manager.js'
 import {
   MAccountDefault,
@@ -54,12 +56,12 @@ declare module 'express' {
     method: HttpMethodType
   }
 
+  // ---------------------------------------------------------------------------
+
   // Upload using multer or uploadx middleware
   export type MulterOrUploadXFile = UploadXFile | Express.Multer.File
 
-  export type UploadFiles = {
-    [fieldname: string]: MulterOrUploadXFile[]
-  } | MulterOrUploadXFile[]
+  export type UploadFiles = { [fieldname: string]: MulterOrUploadXFile[] } | MulterOrUploadXFile[]
 
   // Partial object used by some functions to check the file mimetype/extension
   export type UploadFileForCheck = {
@@ -68,32 +70,32 @@ declare module 'express' {
     size: number
   }
 
-  export type UploadFilesForCheck = {
-    [fieldname: string]: UploadFileForCheck[]
-  } | UploadFileForCheck[]
+  export type UploadFilesForCheck = { [fieldname: string]: UploadFileForCheck[] } | UploadFileForCheck[]
+
+  // ---------------------------------------------------------------------------
 
   // Upload file with a duration added by our middleware
-  export type VideoUploadFile = Pick<Express.Multer.File, 'path' | 'filename' | 'size', 'originalname'> & {
+  export type VideoLegacyUploadFile = Pick<Express.Multer.File, 'path' | 'filename' | 'size', 'originalname'> & {
     duration: number
-  }
-
-  // Extends Metadata property of UploadX object
-  export type UploadXFileMetadata = Metadata & VideoCreate & {
-    previewfile: Express.Multer.File[]
-    thumbnailfile: Express.Multer.File[]
   }
 
   // Our custom UploadXFile object using our custom metadata
   export type CustomUploadXFile <T extends Metadata> = UploadXFile & { metadata: T }
 
   export type EnhancedUploadXFile = CustomUploadXFile<Metadata> & {
-    duration: number
+    duration?: number // If video file
     path: string
     filename: string
     originalname: string
   }
 
-  export type UploadNewVideoUploadXFile = EnhancedUploadXFile & CustomUploadXFile<UploadXFileMetadata>
+  // Extends Metadata property of UploadX object when uploading a video
+  export type UploadNewVideoXFileMetadata = Metadata & VideoCreate & {
+    previewfile: Express.Multer.File[]
+    thumbnailfile: Express.Multer.File[]
+  }
+
+  export type UploadNewVideoUploadXFile = EnhancedUploadXFile & CustomUploadXFile<UploadNewVideoXFileMetadata>
 
   // Extends Response with added functions and potential variables passed by middlewares
   interface Response {
@@ -126,6 +128,8 @@ declare module 'express' {
 
       docUrl?: string
 
+      ffprobe?: FfprobeData
+
       videoAPI?: MVideoFormattableDetails
       videoAll?: MVideoFullLight
       onlyImmutableVideo?: MVideoImmutable
@@ -141,8 +145,14 @@ declare module 'express' {
 
       videoFile?: MVideoFile
 
+      uploadVideoFileResumableMetadata?: {
+        mimetype: string
+        size: number
+        originalname: string
+      }
       uploadVideoFileResumable?: UploadNewVideoUploadXFile
       updateVideoFileResumable?: EnhancedUploadXFile
+      importUserFileResumable?: EnhancedUploadXFile
 
       videoImport?: MVideoImportDefault
 
@@ -217,6 +227,8 @@ declare module 'express' {
       runner?: MRunner
       runnerRegistrationToken?: MRunnerRegistrationToken
       runnerJob?: MRunnerJobRunner
+
+      userExport?: MUserExport
     }
   }
 }

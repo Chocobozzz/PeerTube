@@ -1,9 +1,9 @@
 import { Op, Transaction } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { VideoPrivacy } from '@peertube/peertube-models'
 import { MScheduleVideoUpdate, MScheduleVideoUpdateFormattable } from '@server/types/models/index.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { VideoModel } from './video.js'
+import { SequelizeModel } from '../shared/index.js'
 
 @Table({
   tableName: 'scheduleVideoUpdate',
@@ -17,7 +17,7 @@ import { VideoModel } from './video.js'
     }
   ]
 })
-export class ScheduleVideoUpdateModel extends Model<Partial<AttributesOnly<ScheduleVideoUpdateModel>>> {
+export class ScheduleVideoUpdateModel extends SequelizeModel<ScheduleVideoUpdateModel> {
 
   @AllowNull(false)
   @Default(null)

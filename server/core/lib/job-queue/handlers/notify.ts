@@ -23,5 +23,5 @@ async function doNotifyNewVideo (payload: NotifyPayload & { action: 'new-video' 
   const refreshedVideo = await VideoModel.loadFull(payload.videoUUID)
   if (!refreshedVideo) return
 
-  Notifier.Instance.notifyOnNewVideoIfNeeded(refreshedVideo)
+  Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(refreshedVideo)
 }

@@ -11,6 +11,8 @@ import {
   Type
 } from '@angular/core'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
+import { CustomMarkupComponent } from './peertube-custom-tags/shared'
+import { firstValueFrom } from 'rxjs'
 
 @Injectable()
 export class DynamicElementService {
@@ -20,7 +22,7 @@ export class DynamicElementService {
     private applicationRef: ApplicationRef
   ) { }
 
-  createElement <T> (ofComponent: Type<T>) {
+  createElement <T extends CustomMarkupComponent> (ofComponent: Type<T>) {
     const div = document.createElement('div')
 
     const component = createComponent(ofComponent, {
@@ -29,7 +31,11 @@ export class DynamicElementService {
       hostElement: div
     })
 
-    return component
+    const loadedPromise = component.instance.loaded
+      ? firstValueFrom(component.instance.loaded)
+      : undefined
+
+    return { component, loadedPromise }
   }
 
   injectElement <T> (wrapper: HTMLElement, componentRef: ComponentRef<T>) {

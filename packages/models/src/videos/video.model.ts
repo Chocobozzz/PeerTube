@@ -29,6 +29,8 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
   isLocal: boolean
   name: string
 
+  aspectRatio: number | null
+
   isLive: boolean
 
   thumbnailPath: string

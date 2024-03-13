@@ -1,7 +1,6 @@
 import { join } from 'path'
 import { logger } from '@server/helpers/logger.js'
 import { doRequestAndSaveToFile } from '@server/helpers/requests.js'
-import { CONFIG } from '../../initializers/config.js'
 import { FILES_CACHE } from '../../initializers/constants.js'
 import { VideoModel } from '../../models/video/video.js'
 import { VideoCaptionModel } from '../../models/video/video-caption.js'
@@ -24,7 +23,7 @@ class VideoCaptionsSimpleFileCache extends AbstractSimpleFileCache <string> {
     if (!videoCaption) return undefined
 
     if (videoCaption.isOwned()) {
-      return { isOwned: true, path: join(CONFIG.STORAGE.CAPTIONS_DIR, videoCaption.filename) }
+      return { isOwned: true, path: videoCaption.getFSPath() }
     }
 
     return this.loadRemoteFile(filename)

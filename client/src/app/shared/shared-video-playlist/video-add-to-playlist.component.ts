@@ -3,7 +3,6 @@ import { Subject, Subscription } from 'rxjs'
 import { debounceTime, filter } from 'rxjs/operators'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { AuthService, DisableForReuseHook, Notifier } from '@app/core'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { secondsToTime } from '@peertube/peertube-core-utils'
 import {
   CachedVideoExistInPlaylist,
@@ -15,6 +14,13 @@ import {
 } from '@peertube/peertube-models'
 import { VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR } from '../form-validators/video-playlist-validators'
 import { CachedPlaylist, VideoPlaylistService } from './video-playlist.service'
+import { TimestampInputComponent } from '../shared-forms/timestamp-input.component'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
+import { NgFor, NgClass, NgIf } from '@angular/common'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 
 const debugLogger = debug('peertube:playlists:VideoAddToPlaylistComponent')
 
@@ -37,7 +43,18 @@ type PlaylistSummary = {
   selector: 'my-video-add-to-playlist',
   styleUrls: [ './video-add-to-playlist.component.scss' ],
   templateUrl: './video-add-to-playlist.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FormsModule,
+    NgFor,
+    NgClass,
+    PeertubeCheckboxComponent,
+    GlobalIconComponent,
+    NgIf,
+    TimestampInputComponent,
+    ReactiveFormsModule
+  ]
 })
 export class VideoAddToPlaylistComponent extends FormReactive implements OnInit, OnChanges, OnDestroy, DisableForReuseHook {
   @Input() video: Video

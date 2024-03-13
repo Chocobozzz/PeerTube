@@ -1,18 +1,36 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, Notifier, ServerService } from '@app/core'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { VideoDetails } from '@app/shared/shared-main'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
 import { secondsToTime } from '@peertube/peertube-core-utils'
 import { VideoStudioTask, VideoStudioTaskCut } from '@peertube/peertube-models'
 import { VideoStudioService } from '../shared'
+import { NgIf, NgFor } from '@angular/common'
+import { EmbedComponent } from '../../shared/shared-main/video/embed.component'
+import { ButtonComponent } from '../../shared/shared-main/buttons/button.component'
+import { ReactiveFileComponent } from '../../shared/shared-forms/reactive-file.component'
+import { TimestampInputComponent } from '../../shared/shared-forms/timestamp-input.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 
 @Component({
   selector: 'my-video-studio-edit',
   templateUrl: './video-studio-edit.component.html',
-  styleUrls: [ './video-studio-edit.component.scss' ]
+  styleUrls: [ './video-studio-edit.component.scss' ],
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    TimestampInputComponent,
+    ReactiveFileComponent,
+    ButtonComponent,
+    EmbedComponent,
+    NgIf,
+    NgFor
+  ]
 })
 export class VideoStudioEditComponent extends FormReactive implements OnInit {
   isRunningEdition = false

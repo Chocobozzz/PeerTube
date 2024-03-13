@@ -7,7 +7,7 @@ import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { arrayify } from '@peertube/peertube-core-utils'
 import { ActivityPubActorType, ActorFollow, FollowState, ResultList, ServerFollowCreate } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
-import { AdvancedInputFilter } from '../shared-forms'
+import { AdvancedInputFilter } from '../shared-forms/advanced-input-filter.component'
 
 @Injectable()
 export class InstanceFollowService {

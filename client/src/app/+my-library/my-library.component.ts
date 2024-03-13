@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core'
 import { AuthService, AuthUser, ScreenService, ServerService } from '@app/core'
 import { HTMLServerConfig } from '@peertube/peertube-models'
-import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
+import { TopMenuDropdownParam, TopMenuDropdownComponent } from '../shared/shared-main/misc/top-menu-dropdown.component'
+import { RouterOutlet } from '@angular/router'
+import { NgClass } from '@angular/common'
 
 @Component({
   templateUrl: './my-library.component.html',
-  styleUrls: [ './my-library.component.scss' ]
+  styleUrls: [ './my-library.component.scss' ],
+  standalone: true,
+  imports: [ TopMenuDropdownComponent, NgClass, RouterOutlet ]
 })
 export class MyLibraryComponent implements OnInit {
   menuEntries: TopMenuDropdownParam[] = []

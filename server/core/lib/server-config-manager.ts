@@ -10,6 +10,7 @@ import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '@server/initializers/constants.js'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '@server/lib/signup.js'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page.js'
+import { getServerActor } from '@server/models/application/application.js'
 import { PluginModel } from '@server/models/server/plugin.js'
 import { Hooks } from './plugins/hooks.js'
 import { PluginManager } from './plugins/plugin-manager.js'
@@ -45,6 +46,8 @@ class ServerConfigManager {
 
   async getHTMLServerConfig (): Promise<HTMLServerConfig> {
     if (this.serverCommit === undefined) this.serverCommit = await getServerCommit()
+
+    const serverActor = await getServerActor()
 
     const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
 
@@ -100,7 +103,9 @@ class ServerConfigManager {
         customizations: {
           javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
           css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
-        }
+        },
+        avatars: serverActor.Avatars.map(a => a.toFormattedJSON()),
+        banners: serverActor.Banners.map(b => b.toFormattedJSON())
       },
       search: {
         remoteUri: {
@@ -193,6 +198,16 @@ class ServerConfigManager {
         },
         videoChannelSynchronization: {
           enabled: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED
+        },
+        users: {
+          enabled: CONFIG.IMPORT.USERS.ENABLED
+        }
+      },
+      export: {
+        users: {
+          enabled: CONFIG.EXPORT.USERS.ENABLED,
+          exportExpiration: CONFIG.EXPORT.USERS.EXPORT_EXPIRATION,
+          maxUserVideoQuota: CONFIG.EXPORT.USERS.MAX_USER_VIDEO_QUOTA
         }
       },
       autoBlacklist: {

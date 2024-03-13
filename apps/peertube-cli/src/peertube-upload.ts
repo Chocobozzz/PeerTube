@@ -38,7 +38,7 @@ export function defineUploadProgram () {
     .option('-U, --username <username>', 'Username')
     .option('-p, --password <token>', 'Password')
     .option('-b, --thumbnail <thumbnailPath>', 'Thumbnail path')
-    .option('-v, --preview <previewPath>', 'Preview path')
+    .option('--preview <previewPath>', 'Preview path')
     .option('-f, --file <file>', 'Video absolute file path')
     .option('-n, --video-name <name>', 'Video name')
     .option('-c, --category <category_number>', 'Category number')

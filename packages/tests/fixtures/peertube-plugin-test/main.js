@@ -212,6 +212,16 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     }
   })
 
+  registerHook({
+    target: 'filter:api.video.user-import.accept.result',
+    handler: ({ accepted }, { videoBody }) => {
+      if (!accepted) return { accepted: false }
+      if (videoBody.name === 'video 1') return { accepted: false, errorMessage: 'bad word' }
+
+      return { accepted: true }
+    }
+  })
+
   // ---------------------------------------------------------------------------
 
   registerHook({
@@ -402,7 +412,8 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     'filter:api.video.upload.video-attribute.result',
     'filter:api.video.import-url.video-attribute.result',
     'filter:api.video.import-torrent.video-attribute.result',
-    'filter:api.video.live.video-attribute.result'
+    'filter:api.video.live.video-attribute.result',
+    'filter:api.video.user-import.video-attribute.result'
   ]) {
     registerHook({
       target,

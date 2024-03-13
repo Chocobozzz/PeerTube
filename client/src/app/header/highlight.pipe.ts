@@ -2,7 +2,10 @@ import { PipeTransform, Pipe } from '@angular/core'
 import { SafeHtml } from '@angular/platform-browser'
 
 // Thanks https://gist.github.com/adamrecsko/0f28f474eca63e0279455476cc11eca7#gistcomment-2917369
-@Pipe({ name: 'highlight' })
+@Pipe({
+  name: 'highlight',
+  standalone: true
+})
 export class HighlightPipe implements PipeTransform {
   /* use this for single match search */
   static SINGLE_MATCH = 'Single-Match'

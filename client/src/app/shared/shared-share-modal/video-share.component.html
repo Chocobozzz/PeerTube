@@ -16,7 +16,7 @@
       <div *ngIf="isPrivatePlaylist()" class="alert-private alert alert-warning">
         <div i18n>This playlist is private so you won't be able to share it with external users</div>
 
-        <a i18n class="peertube-button-link orange-button" [routerLink]="[ '/my-library/video-playlists/update', playlist.uuid ]" target="_blank" rel="noopener noreferrer">
+        <a i18n class="peertube-button-link orange-button" [routerLink]="[ '/my-library/video-playlists/update', playlist.shortUUID ]" target="_blank" rel="noopener noreferrer">
           Update playlist privacy
         </a>
       </div>

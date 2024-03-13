@@ -1,5 +1,5 @@
-import { Account } from '@app/shared/shared-main'
 import { AdminAbuse } from '@peertube/peertube-models'
+import { Account } from '../shared-main/account/account.model'
 
 // Don't use an abuse model because we need external services to compute some properties
 // And this model is only used in this component

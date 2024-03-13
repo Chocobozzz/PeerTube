@@ -1,15 +1,42 @@
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js'
-import { SortMeta } from 'primeng/api'
+import { SortMeta, SharedModule } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
-import { BytesPipe, RedundancyService } from '@app/shared/shared-main'
 import { VideoRedundanciesTarget, VideoRedundancy, VideosRedundancyStats } from '@peertube/peertube-models'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import { ChartModule } from 'primeng/chart'
+import { VideoRedundancyInformationComponent } from './video-redundancy-information.component'
+import { AutoColspanDirective } from '../../../shared/shared-main/angular/auto-colspan.directive'
+import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
+import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { NgIf, NgFor } from '@angular/common'
+import { TableModule } from 'primeng/table'
+import { FormsModule } from '@angular/forms'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { BytesPipe } from '@app/shared/shared-main/angular/bytes.pipe'
+import { RedundancyService } from '@app/shared/shared-main/video/redundancy.service'
 
 @Component({
   selector: 'my-video-redundancies-list',
   templateUrl: './video-redundancies-list.component.html',
-  styleUrls: [ './video-redundancies-list.component.scss' ]
+  styleUrls: [ './video-redundancies-list.component.scss' ],
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    FormsModule,
+    TableModule,
+    SharedModule,
+    NgIf,
+    NgbTooltip,
+    TableExpanderIconComponent,
+    DeleteButtonComponent,
+    AutoColspanDirective,
+    NgFor,
+    VideoRedundancyInformationComponent,
+    ChartModule,
+    BytesPipe
+  ]
 })
 export class VideoRedundanciesListComponent extends RestTable implements OnInit {
   private static LOCAL_STORAGE_DISPLAY_TYPE = 'video-redundancies-list-display-type'

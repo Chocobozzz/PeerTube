@@ -1,12 +1,16 @@
 import { Subject } from 'rxjs'
 import { Component, Input, OnInit } from '@angular/core'
 import { User, UserService } from '@app/core'
-import { BytesPipe } from '../angular'
+import { NgIf } from '@angular/common'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { BytesPipe } from '../angular/bytes.pipe'
 
 @Component({
   selector: 'my-user-quota',
   templateUrl: './user-quota.component.html',
-  styleUrls: [ './user-quota.component.scss' ]
+  styleUrls: [ './user-quota.component.scss' ],
+  standalone: true,
+  imports: [ NgbTooltip, NgIf, BytesPipe ]
 })
 
 export class UserQuotaComponent implements OnInit {

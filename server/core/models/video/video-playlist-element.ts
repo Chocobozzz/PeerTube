@@ -9,9 +9,7 @@ import {
   ForeignKey,
   Is,
   IsInt,
-  Min,
-  Model,
-  Table,
+  Min, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import validator from 'validator'
@@ -29,13 +27,13 @@ import {
   MVideoPlaylistElementAP,
   MVideoPlaylistElementFormattable,
   MVideoPlaylistElementVideoUrlPlaylistPrivacy,
-  MVideoPlaylistVideoThumbnail
+  MVideoPlaylistElementVideoThumbnail,
+  MVideoPlaylistElementVideoUrl
 } from '@server/types/models/video/video-playlist-element.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
-import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, USER_EXPORT_MAX_ITEMS } from '../../initializers/constants.js'
 import { AccountModel } from '../account/account.js'
-import { getSort, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
 import { VideoPlaylistModel } from './video-playlist.js'
 import { ForAPIOptions, ScopeNames as VideoScopeNames, VideoModel } from './video.js'
 
@@ -54,7 +52,7 @@ import { ForAPIOptions, ScopeNames as VideoScopeNames, VideoModel } from './vide
     }
   ]
 })
-export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<VideoPlaylistElementModel>>> {
+export class VideoPlaylistElementModel extends SequelizeModel<VideoPlaylistElementModel> {
   @CreatedAt
   createdAt: Date
 
@@ -214,6 +212,26 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
     return VideoPlaylistElementModel.findOne(query)
   }
 
+  static loadFirstElementWithVideoThumbnail (videoPlaylistId: number): Promise<MVideoPlaylistElementVideoThumbnail> {
+    const query = {
+      order: getSort('position'),
+      where: {
+        videoPlaylistId
+      },
+      include: [
+        {
+          model: VideoModel.scope(VideoScopeNames.WITH_THUMBNAILS),
+          required: true
+        }
+      ]
+    }
+
+    return VideoPlaylistElementModel
+      .findOne(query)
+  }
+
+  // ---------------------------------------------------------------------------
+
   static listUrlsOfForAP (videoPlaylistId: number, start: number, count: number, t?: Transaction) {
     const getQuery = (forCount: boolean) => {
       return {
@@ -239,23 +257,24 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
     }))
   }
 
-  static loadFirstElementWithVideoThumbnail (videoPlaylistId: number): Promise<MVideoPlaylistVideoThumbnail> {
-    const query = {
-      order: getSort('position'),
+  static listElementsForExport (videoPlaylistId: number): Promise<MVideoPlaylistElementVideoUrl[]> {
+    return VideoPlaylistElementModel.findAll({
       where: {
         videoPlaylistId
       },
       include: [
         {
-          model: VideoModel.scope(VideoScopeNames.WITH_THUMBNAILS),
+          attributes: [ 'url' ],
+          model: VideoModel.unscoped(),
           required: true
         }
-      ]
-    }
-
-    return VideoPlaylistElementModel
-      .findOne(query)
+      ],
+      order: getSort('position'),
+      limit: USER_EXPORT_MAX_ITEMS
+    })
   }
+
+  // ---------------------------------------------------------------------------
 
   static getNextPositionOf (videoPlaylistId: number, transaction?: Transaction) {
     const query: AggregateOptions<number> = {

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "../dist/scripts",
     "paths": {
-      "@server/*": [ "./server/core/*" ]
+      "@server/*": [ "../server/core/*" ]
     }
   },
   "references": [

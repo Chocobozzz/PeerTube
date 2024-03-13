@@ -66,6 +66,8 @@ async function testLiveVideoResolutions (options: {
     expect(data.find(v => v.uuid === liveVideoId)).to.exist
 
     const video = await server.videos.get({ id: liveVideoId })
+
+    expect(video.aspectRatio).to.equal(1.7778)
     expect(video.streamingPlaylists).to.have.lengthOf(1)
 
     const hlsPlaylist = video.streamingPlaylists.find(s => s.type === VideoStreamingPlaylistType.HLS)

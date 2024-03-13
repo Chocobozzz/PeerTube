@@ -21,7 +21,7 @@ import { sequelizeTypescript } from '../../initializers/database.js'
 import { sendUpdateActor } from '../../lib/activitypub/send/index.js'
 import { JobQueue } from '../../lib/job-queue/index.js'
 import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '../../lib/local-actor.js'
-import { createLocalVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel.js'
+import { createLocalVideoChannelWithoutKeys, federateAllVideosOfChannel } from '../../lib/video-channel.js'
 import {
   apiRateLimiter,
   asyncMiddleware,
@@ -77,7 +77,7 @@ videoChannelRouter.get('/',
 videoChannelRouter.post('/',
   authenticate,
   asyncMiddleware(videoChannelsAddValidator),
-  asyncRetryTransactionMiddleware(addVideoChannel)
+  asyncRetryTransactionMiddleware(createVideoChannel)
 )
 
 videoChannelRouter.post('/:nameWithHost/avatar/pick',
@@ -200,7 +200,7 @@ async function listVideoChannels (req: express.Request, res: express.Response) {
   }, 'filter:api.video-channels.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
-    VideoChannelModel.listForApi,
+    VideoChannelModel.listForApi.bind(VideoChannelModel),
     apiOptions,
     'filter:api.video-channels.list.result'
   )
@@ -213,7 +213,12 @@ async function updateVideoChannelBanner (req: express.Request, res: express.Resp
   const videoChannel = res.locals.videoChannel
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
 
-  const banners = await updateLocalActorImageFiles(videoChannel, bannerPhysicalFile, ActorImageType.BANNER)
+  const banners = await updateLocalActorImageFiles({
+    accountOrChannel: videoChannel,
+    imagePhysicalFile: bannerPhysicalFile,
+    type: ActorImageType.BANNER,
+    sendActorUpdate: true
+  })
 
   auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
 
@@ -227,7 +232,13 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
   const videoChannel = res.locals.videoChannel
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
 
-  const avatars = await updateLocalActorImageFiles(videoChannel, avatarPhysicalFile, ActorImageType.AVATAR)
+  const avatars = await updateLocalActorImageFiles({
+    accountOrChannel: videoChannel,
+    imagePhysicalFile: avatarPhysicalFile,
+    type: ActorImageType.AVATAR,
+    sendActorUpdate: true
+  })
+
   auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
 
   return res.json({
@@ -251,17 +262,19 @@ async function deleteVideoChannelBanner (req: express.Request, res: express.Resp
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
-async function addVideoChannel (req: express.Request, res: express.Response) {
+async function createVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInfo: VideoChannelCreate = req.body
 
   const videoChannelCreated = await sequelizeTypescript.transaction(async t => {
     const account = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
 
-    return createLocalVideoChannel(videoChannelInfo, account, t)
+    return createLocalVideoChannelWithoutKeys(videoChannelInfo, account, t)
   })
 
-  const payload = { actorId: videoChannelCreated.actorId }
-  await JobQueue.Instance.createJob({ type: 'actor-keys', payload })
+  await JobQueue.Instance.createJob({
+    type: 'actor-keys',
+    payload: { actorId: videoChannelCreated.actorId }
+  })
 
   auditLogger.create(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelCreated.toFormattedJSON()))
   logger.info('Video channel %s created.', videoChannelCreated.Actor.url)
@@ -396,7 +409,7 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
   }, 'filter:api.video-channels.videos.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(
-    VideoModel.listForApi,
+    VideoModel.listForApi.bind(VideoModel),
     apiOptions,
     'filter:api.video-channels.videos.list.result'
   )

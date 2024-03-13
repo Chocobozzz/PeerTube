@@ -19,7 +19,6 @@ const customConfigUpdateValidator = [
   body('instance.customizations.javascript').exists(),
 
   body('services.twitter.username').exists(),
-  body('services.twitter.whitelisted').isBoolean(),
 
   body('cache.previews.size').isInt(),
   body('cache.captions.size').isInt(),
@@ -42,7 +41,7 @@ const customConfigUpdateValidator = [
   body('videoChannels.maxPerUser').isInt(),
 
   body('transcoding.enabled').isBoolean(),
-  body('transcoding.keepOriginalFile').isBoolean(),
+  body('transcoding.originalFile.keep').isBoolean(),
   body('transcoding.allowAdditionalExtensions').isBoolean(),
   body('transcoding.threads').isInt(),
   body('transcoding.concurrency').isInt({ min: 1 }),
@@ -72,6 +71,11 @@ const customConfigUpdateValidator = [
   body('import.videos.torrent.enabled').isBoolean(),
 
   body('import.videoChannelSynchronization.enabled').isBoolean(),
+  body('import.users.enabled').isBoolean(),
+
+  body('export.users.enabled').isBoolean(),
+  body('export.users.maxUserVideoQuota').exists(),
+  body('export.users.exportExpiration').exists(),
 
   body('trending.videos.algorithms.default').exists(),
   body('trending.videos.algorithms.enabled').exists(),

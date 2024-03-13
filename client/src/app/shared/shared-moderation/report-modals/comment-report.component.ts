@@ -2,18 +2,35 @@ import { mapValues, pickBy } from 'lodash-es'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { ABUSE_REASON_VALIDATOR } from '@app/shared/form-validators/abuse-validators'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { VideoComment } from '@app/shared/shared-video-comment'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { abusePredefinedReasonsMap } from '@peertube/peertube-core-utils'
 import { AbusePredefinedReasonsString } from '@peertube/peertube-models'
 import { AbuseService } from '../abuse.service'
+import { PeerTubeTemplateDirective } from '../../shared-main/angular/peertube-template.directive'
+import { PeertubeCheckboxComponent } from '../../shared-forms/peertube-checkbox.component'
+import { NgFor, NgIf, NgClass } from '@angular/common'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
+import { VideoComment } from '@app/shared/shared-video-comment/video-comment.model'
 
 @Component({
   selector: 'my-comment-report',
   templateUrl: './report.component.html',
-  styleUrls: [ './report.component.scss' ]
+  styleUrls: [ './report.component.scss' ],
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    NgFor,
+    PeertubeCheckboxComponent,
+    NgIf,
+    PeerTubeTemplateDirective,
+    NgClass
+  ]
 })
 export class CommentReportComponent extends FormReactive implements OnInit {
   @Input() comment: VideoComment = null

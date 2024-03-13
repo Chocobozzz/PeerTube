@@ -1,10 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { Video } from '@app/shared/shared-main/video'
+import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
+import { NgIf } from '@angular/common'
+import { Video } from '@app/shared/shared-main/video/video.model'
 
 @Component({
   selector: 'my-video-avatar-channel',
   templateUrl: './video-avatar-channel.component.html',
-  styleUrls: [ './video-avatar-channel.component.scss' ]
+  styleUrls: [ './video-avatar-channel.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, ActorAvatarComponent ]
 })
 export class VideoAvatarChannelComponent implements OnInit {
   @Input() video: Video

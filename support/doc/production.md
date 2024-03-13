@@ -137,16 +137,16 @@ Copy the nginx configuration template:
 sudo cp /var/www/peertube/peertube-latest/support/nginx/peertube /etc/nginx/sites-available/peertube
 ```
 
-Then set the domain for the webserver configuration file.
-Replace `[peertube-domain]` with the domain for the peertube server.
+Set the domain for the webserver configuration file by replacing `[peertube-domain]` with the domain for the peertube server:
 
 ```bash
 sudo sed -i 's/${WEBSERVER_HOST}/[peertube-domain]/g' /etc/nginx/sites-available/peertube
 sudo sed -i 's/${PEERTUBE_HOST}/127.0.0.1:9000/g' /etc/nginx/sites-available/peertube
 ```
 
-Then modify the webserver configuration file. Please pay attention to the `alias` keys of the static locations.
-It should correspond to the paths of your storage directories (set in the configuration file inside the `storage` key).
+Then modify the webserver configuration file. Please pay attention to:
+ * the `alias`, `root` and `rewrite` directives paths, the paths must correspond to your PeerTube filesystem location
+ * the `proxy_limit_rate` and `limit_rate` directives if you plan to stream high bitrate videos (like 4K at 60FPS)
 
 ```bash
 sudo vim /etc/nginx/sites-available/peertube
@@ -303,6 +303,8 @@ Run the upgrade script (the password it asks is PeerTube's database user passwor
 cd /var/www/peertube/peertube-latest/scripts && sudo -H -u peertube ./upgrade.sh
 sudo systemctl restart peertube # Or use your OS command to restart PeerTube if you don't use systemd
 ```
+
+You may want to run `sudo -u peertube yarn cache clean` after several upgrades to free up disk space.
 
 <details>
 <summary><strong>Prefer manual upgrade?</strong></summary>

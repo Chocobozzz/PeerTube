@@ -1,0 +1,12 @@
+extends ../common/greetings
+include ../common/mixins.pug
+
+block title
+  | Failed to create your export archive
+
+block content
+  p
+    | We are sorry but the generation of your export archive has failed:
+  blockquote !{errorMessage}
+  p
+    | Please contact your administrator if the problem occurs again.

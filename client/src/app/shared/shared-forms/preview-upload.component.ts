@@ -3,7 +3,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { imageToDataURL } from '@root-helpers/images'
 import { HTMLServerConfig } from '@peertube/peertube-models'
-import { BytesPipe } from '../shared-main'
+import { NgIf, NgStyle } from '@angular/common'
+import { ReactiveFileComponent } from './reactive-file.component'
+import { BytesPipe } from '../shared-main/angular/bytes.pipe'
 
 @Component({
   selector: 'my-preview-upload',
@@ -15,7 +17,9 @@ import { BytesPipe } from '../shared-main'
       useExisting: forwardRef(() => PreviewUploadComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: true,
+  imports: [ ReactiveFileComponent, NgIf, NgStyle ]
 })
 export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
   @Input() inputLabel: string

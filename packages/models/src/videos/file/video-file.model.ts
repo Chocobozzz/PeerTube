@@ -7,6 +7,9 @@ export interface VideoFile {
   resolution: VideoConstant<number>
   size: number // Bytes
 
+  width?: number
+  height?: number
+
   torrentUrl: string
   torrentDownloadUrl: string
 

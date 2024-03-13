@@ -1,9 +1,14 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { NgIf } from '@angular/common'
+import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
+import { FormsModule } from '@angular/forms'
 
 @Component({
   selector: 'my-simple-search-input',
   templateUrl: './simple-search-input.component.html',
-  styleUrls: [ './simple-search-input.component.scss' ]
+  styleUrls: [ './simple-search-input.component.scss' ],
+  standalone: true,
+  imports: [ FormsModule, GlobalIconComponent, NgIf ]
 })
 export class SimpleSearchInputComponent implements OnInit {
   @ViewChild('ref') input: ElementRef

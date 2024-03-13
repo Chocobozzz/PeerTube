@@ -1,3 +1,9 @@
+<ng-template #uppercaseWarning>
+  <div i18n class="form-warning">
+    ⚠️ Most email addresses do not include capital letters.
+  </div>
+</ng-template>
+
 <h1 class="title-page-v2">
   <strong class="underline-orange">{{ instanceName }}</strong>
 
@@ -54,16 +60,14 @@
 
               <div *ngIf="formErrors.username" class="form-error" role="alert">{{ formErrors.username }}</div>
 
-              <div *ngIf="hasUsernameUppercase()" i18n class="form-warning">
-                ⚠️ Most email addresses do not include capital letters.
-              </div>
+              <ng-template *ngIf="hasUsernameUppercase()" [ngTemplateOutlet]="uppercaseWarning"></ng-template>
             </div>
 
             <div class="form-group">
               <label i18n for="password">Password</label>
 
               <my-input-text
-                formControlName="password" inputId="password" i18n-placeholder placeholder="Password"
+                formControlName=  "password" inputId="password" i18n-placeholder placeholder="Password"
                 [formError]="formErrors['password']" autocomplete="current-password" [tabindex]="2"
               ></my-input-text>
             </div>
@@ -84,7 +88,7 @@
           <input type="submit" class="peertube-button orange-button w-100" i18n-value value="Login" [disabled]="!form.valid">
 
           <div *ngIf="!otpStep" class="additional-links d-flex justify-content-center mt-4 mb-5">
-            <button i18n class="button-unstyle link-orange mx-3" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">
+            <button type="button" i18n class="button-unstyle link-orange mx-3" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">
               I forgot my password
             </button>
 
@@ -95,7 +99,7 @@
           </div>
         </form>
 
-        <div class="external-login-blocks" *ngIf="getExternalLogins().length !== 0">
+        <div class="external-login-blocks" *ngIf="hasExternalLogins()">
           <div class="fw-semibold" i18n>Or sign in with</div>
 
           <div>
@@ -107,6 +111,8 @@
       </div>
 
       <div #instanceInformation class="instance-information">
+        <my-instance-banner rounded="true"></my-instance-banner>
+
         <my-instance-about-accordion
           #instanceAboutAccordion
           [displayInstanceName]="false"
@@ -122,7 +128,7 @@
   <div class="modal-header">
     <h4 i18n class="modal-title">Forgot your password</h4>
 
-    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hideForgotPasswordModal()">
+    <button type="button" class="border-0 p-0" title="Close this modal" i18n-title (click)="hideForgotPasswordModal()">
       <my-global-icon iconName="cross"></my-global-icon>
     </button>
   </div>
@@ -143,6 +149,8 @@
         type="email" id="forgot-password-email" i18n-placeholder placeholder="Email address" required
         [(ngModel)]="forgotPasswordEmail" #forgotPasswordEmailInput
       >
+
+      <ng-template *ngIf="hasForgotPasswordEmailUppercase()" [ngTemplateOutlet]="uppercaseWarning"></ng-template>
     </div>
   </div>
 

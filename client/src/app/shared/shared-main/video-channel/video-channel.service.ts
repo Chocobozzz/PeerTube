@@ -12,11 +12,11 @@ import {
   VideosImportInChannelCreate
 } from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
-import { Account } from '../account'
 import { AccountService } from '../account/account.service'
 import { VideoChannel } from './video-channel.model'
+import { Account } from '../account/account.model'
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class VideoChannelService {
   static BASE_VIDEO_CHANNEL_URL = environment.apiUrl + '/api/v1/video-channels/'
 
@@ -57,7 +57,7 @@ export class VideoChannelService {
   }): Observable<ResultList<VideoChannel>> {
     const { account, componentPagination, withStats = false, sort, search } = options
 
-    const defaultCount = this.serverService.getHTMLConfig().videoChannels.maxPerUser
+    const defaultCount = Math.min(this.serverService.getHTMLConfig().videoChannels.maxPerUser, 100) // 100 is the max count on server side
 
     const pagination = componentPagination
       ? this.restService.componentToRestPagination(componentPagination)

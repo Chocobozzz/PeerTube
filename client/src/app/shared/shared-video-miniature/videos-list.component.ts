@@ -2,7 +2,7 @@ import * as debug from 'debug'
 import { fromEvent, Observable, Subject, Subscription } from 'rxjs'
 import { concatMap, debounceTime, map, switchMap } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, RouterLinkActive, RouterLink } from '@angular/router'
 import {
   AuthService,
   ComponentPaginationLight,
@@ -13,13 +13,20 @@ import {
   User,
   UserService
 } from '@app/core'
-import { GlobalIconName } from '@app/shared/shared-icons'
+import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { logger } from '@root-helpers/logger'
 import { isLastMonth, isLastWeek, isThisMonth, isToday, isYesterday } from '@peertube/peertube-core-utils'
 import { ResultList, UserRight, VideoSortField } from '@peertube/peertube-models'
-import { Syndication, Video } from '../shared-main'
 import { VideoFilters, VideoFilterScope } from './video-filters.model'
-import { MiniatureDisplayOptions } from './video-miniature.component'
+import { MiniatureDisplayOptions, VideoMiniatureComponent } from './video-miniature.component'
+import { InfiniteScrollerDirective } from '../shared-main/angular/infinite-scroller.directive'
+import { VideoFiltersHeaderComponent } from './video-filters-header.component'
+import { ButtonComponent } from '../shared-main/buttons/button.component'
+import { FeedComponent } from '../shared-main/feeds/feed.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { NgIf, NgClass, NgFor, NgTemplateOutlet } from '@angular/common'
+import { Video } from '../shared-main/video/video.model'
+import { Syndication } from '../shared-main/feeds/syndication.model'
 
 const debugLogger = debug('peertube:videos:VideosListComponent')
 
@@ -45,7 +52,22 @@ enum GroupDate {
 @Component({
   selector: 'my-videos-list',
   templateUrl: './videos-list.component.html',
-  styleUrls: [ './videos-list.component.scss' ]
+  styleUrls: [ './videos-list.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    NgbTooltip,
+    NgClass,
+    FeedComponent,
+    NgFor,
+    RouterLinkActive,
+    RouterLink,
+    NgTemplateOutlet,
+    ButtonComponent,
+    VideoFiltersHeaderComponent,
+    InfiniteScrollerDirective,
+    VideoMiniatureComponent
+  ]
 })
 export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() getVideosObservableFunction: (pagination: ComponentPaginationLight, filters: VideoFilters) => Observable<ResultList<Video>>

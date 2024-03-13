@@ -3,22 +3,26 @@
 <div class="margin-content pt-4">
   <form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
 
-    <div class="row"> <!-- channel grid -->
-      <div class="col-12 col-lg-4 col-xl-3">
-        <div *ngIf="isCreation()" class="video-channel-title" i18n>NEW CHANNEL</div>
-        <div *ngIf="!isCreation() && videoChannel" class="video-channel-title" i18n>CHANNEL</div>
+    <div class="pt-two-cols"> <!-- channel grid -->
+      <div class="title-col">
+        @if (isCreation()) {
+          <h2 i18n>NEW CHANNEL</h2>
+        } @else {
+          <h2 i18n>UPDATE CHANNEL</h2>
+        }
       </div>
 
-      <div class="col-12 col-lg-8 col-xl-9">
+      <div class="content-col">
         <my-actor-banner-edit
           *ngIf="videoChannel" [previewImage]="isCreation()" class="d-block mb-4"
-          [actor]="videoChannel" (bannerChange)="onBannerChange($event)" (bannerDelete)="onBannerDelete()"
+          [bannerUrl]="videoChannel?.bannerUrl" (bannerChange)="onBannerChange($event)" (bannerDelete)="onBannerDelete()"
         ></my-actor-banner-edit>
 
         <my-actor-avatar-edit
-          *ngIf="videoChannel" [previewImage]="isCreation()" class="d-block mb-4"
-          [actor]="videoChannel" (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
-          [displayUsername]="!isCreation()" [displaySubscribers]="!isCreation()"
+          *ngIf="videoChannel" class="d-block mb-4" actorType="channel"
+          [displayName]="videoChannel.displayName" [previewImage]="isCreation()" [avatars]="videoChannel.avatars"
+          [username]="!isCreation() && videoChannel.displayName" [subscribers]="!isCreation() && videoChannel.followersCount"
+          (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
         ></my-actor-avatar-edit>
 
         <div class="form-group" *ngIf="isCreation()">
@@ -29,7 +33,7 @@
               type="text" id="name" i18n-placeholder placeholder="Example: my_channel"
               formControlName="name" [ngClass]="{ 'input-error': formErrors['name'] }" class="form-control w-auto flex-grow-1 d-block"
             >
-            <div class="input-group-text">@{{ instanceHost }}</div>
+            <div class="input-group-text">&#64;{{ instanceHost }}</div>
           </div>
           <div *ngIf="formErrors['name']" class="form-error" role="alert">
             {{ formErrors['name'] }}
@@ -78,13 +82,7 @@
           ></my-peertube-checkbox>
         </div>
 
-      </div>
-    </div>
-
-    <div class="row"> <!-- submit placement block -->
-      <div class="col-md-7 col-xl-5"></div>
-      <div class="col-md-5 col-xl-5 d-inline-flex">
-        <input type="submit" class="peertube-button orange-button" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
+        <input type="submit" class="peertube-button orange-button mt-4" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
       </div>
     </div>
   </form>

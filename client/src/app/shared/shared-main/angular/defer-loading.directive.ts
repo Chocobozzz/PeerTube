@@ -16,7 +16,8 @@ import {
 const debugLogger = debug('peertube:main:DeferLoadingDirective')
 
 @Directive({
-  selector: '[myDeferLoading]'
+  selector: '[myDeferLoading]',
+  standalone: true
 })
 export class DeferLoadingDirective implements AfterViewInit, OnDestroy {
   @ContentChild(TemplateRef) template: TemplateRef<any>

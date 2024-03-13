@@ -1,22 +1,22 @@
-import { Job } from 'bullmq'
-import { move, remove } from 'fs-extra/esm'
-import { copyFile, stat } from 'fs/promises'
-import { basename, join } from 'path'
-import { VideoStorage } from '@peertube/peertube-models'
+import { buildAspectRatio } from '@peertube/peertube-core-utils'
+import { TranscodeVODOptionsType, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
-import { ffprobePromise, getVideoStreamDuration, getVideoStreamFPS, TranscodeVODOptionsType } from '@peertube/peertube-ffmpeg'
+import { Job } from 'bullmq'
+import { move, remove } from 'fs-extra/esm'
+import { copyFile } from 'fs/promises'
+import { basename, join } from 'path'
 import { CONFIG } from '../../initializers/config.js'
 import { VideoFileModel } from '../../models/video/video-file.js'
 import { JobQueue } from '../job-queue/index.js'
 import { generateWebVideoFilename } from '../paths.js'
-import { buildFileMetadata } from '../video-file.js'
+import { buildNewFile, saveNewOriginalFileIfNeeded } from '../video-file.js'
+import { buildStoryboardJobIfNeeded } from '../video-jobs.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
 import { buildOriginalFileResolution } from './transcoding-resolutions.js'
-import { buildStoryboardJobIfNeeded } from '../video.js'
 
 // Optimize the original video file and replace it. The resolution is not changed.
 export async function optimizeOriginalVideofile (options: {
@@ -62,27 +62,7 @@ export async function optimizeOriginalVideofile (options: {
         fps
       })
 
-      // Important to do this before getVideoFilename() to take in account the new filename
-      inputVideoFile.resolution = resolution
-      inputVideoFile.extname = newExtname
-      inputVideoFile.filename = generateWebVideoFilename(resolution, newExtname)
-      inputVideoFile.storage = VideoStorage.FILE_SYSTEM
-
-      const { videoFile } = await onWebVideoFileTranscoding({
-        video,
-        videoFile: inputVideoFile,
-        videoOutputPath
-      })
-      
-      // Keep the original video's file path if KEEP_ORIGINAL_FILE is set to true in the config, otherwise remove it.
-      if (CONFIG.TRANSCODING.KEEP_ORIGINAL_FILE) {
-        const destination = VideoPathManager.Instance.getFSOriginalVideoFileOutputPath(video, videoInputPath)
-        // Move the original video file (untranscoded) to the original-video-files directory.
-        await move(videoInputPath, destination)
-      } 
-      else {
-        await remove(videoInputPath)
-      }
+      const { videoFile } = await onWebVideoFileTranscoding({ video, videoOutputPath, deleteWebInputVideoFile: inputVideoFile })
 
       return { transcodeType, videoFile }
     })
@@ -112,15 +92,8 @@ export async function transcodeNewWebVideoResolution (options: {
     const file = video.getMaxQualityFile().withVideoOrPlaylist(video)
 
     const result = await VideoPathManager.Instance.makeAvailableVideoFile(file, async videoInputPath => {
-      const newVideoFile = new VideoFileModel({
-        resolution,
-        extname: newExtname,
-        filename: generateWebVideoFilename(resolution, newExtname),
-        size: 0,
-        videoId: video.id
-      })
-
-      const videoOutputPath = join(transcodeDirectory, newVideoFile.filename)
+      const filename = generateWebVideoFilename(resolution, newExtname)
+      const videoOutputPath = join(transcodeDirectory, filename)
 
       const transcodeOptions = {
         type: 'video' as 'video',
@@ -136,7 +109,7 @@ export async function transcodeNewWebVideoResolution (options: {
 
       await buildFFmpegVOD(job).transcode(transcodeOptions)
 
-      return onWebVideoFileTranscoding({ video, videoFile: newVideoFile, videoOutputPath })
+      return onWebVideoFileTranscoding({ video, videoOutputPath })
     })
 
     return result
@@ -189,27 +162,16 @@ export async function mergeAudioVideofile (options: {
       try {
         await buildFFmpegVOD(job).transcode(transcodeOptions)
 
-        await remove(audioInputPath)
         await remove(tmpPreviewPath)
       } catch (err) {
         await remove(tmpPreviewPath)
         throw err
       }
 
-      // Important to do this before getVideoFilename() to take in account the new file extension
-      inputVideoFile.extname = newExtname
-      inputVideoFile.resolution = resolution
-      inputVideoFile.filename = generateWebVideoFilename(inputVideoFile.resolution, newExtname)
-
-      // ffmpeg generated a new video file, so update the video duration
-      // See https://trac.ffmpeg.org/ticket/5456
-      video.duration = await getVideoStreamDuration(videoOutputPath)
-      await video.save()
-
-      return onWebVideoFileTranscoding({
+      await onWebVideoFileTranscoding({
         video,
-        videoFile: inputVideoFile,
         videoOutputPath,
+        deleteWebInputVideoFile: inputVideoFile,
         wasAudioFile: true
       })
     })
@@ -222,38 +184,43 @@ export async function mergeAudioVideofile (options: {
 
 export async function onWebVideoFileTranscoding (options: {
   video: MVideoFullLight
-  videoFile: MVideoFile
   videoOutputPath: string
   wasAudioFile?: boolean // default false
+  deleteWebInputVideoFile?: MVideoFile
 }) {
-  const { video, videoFile, videoOutputPath, wasAudioFile } = options
+  const { video, videoOutputPath, wasAudioFile, deleteWebInputVideoFile } = options
 
   const mutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+
+  const videoFile = await buildNewFile({ mode: 'web-video', path: videoOutputPath })
+  videoFile.videoId = video.id
 
   try {
     await video.reload()
 
+    // ffmpeg generated a new video file, so update the video duration
+    // See https://trac.ffmpeg.org/ticket/5456
+    if (wasAudioFile) {
+      video.duration = await getVideoStreamDuration(videoOutputPath)
+      video.aspectRatio = buildAspectRatio({ width: videoFile.width, height: videoFile.height })
+      await video.save()
+    }
+
     const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
-
-    const stats = await stat(videoOutputPath)
-
-    const probe = await ffprobePromise(videoOutputPath)
-    const fps = await getVideoStreamFPS(videoOutputPath, probe)
-    const metadata = await buildFileMetadata(videoOutputPath, probe)
 
     await move(videoOutputPath, outputPath, { overwrite: true })
 
-    videoFile.size = stats.size
-    videoFile.fps = fps
-    videoFile.metadata = metadata
-
     await createTorrentAndSetInfoHash(video, videoFile)
 
-    // Remove the oldFile (aka original video file) if keep_original_file is set to false in the config.
-    if (!CONFIG.TRANSCODING.KEEP_ORIGINAL_FILE) {
-        const oldFile = await VideoFileModel.loadWebVideoFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })
-        if (oldFile) await video.removeWebVideoFile(oldFile)
+    if (deleteWebInputVideoFile) {
+      await saveNewOriginalFileIfNeeded(video, deleteWebInputVideoFile)
+
+      await video.removeWebVideoFile(deleteWebInputVideoFile)
+      await deleteWebInputVideoFile.destroy()
     }
+
+    const existingFile = await VideoFileModel.loadWebVideoFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })
+    if (existingFile) await video.removeWebVideoFile(existingFile)
 
     await VideoFileModel.customUpsert(videoFile, 'video', undefined)
     video.VideoFiles = await video.$get('VideoFiles')

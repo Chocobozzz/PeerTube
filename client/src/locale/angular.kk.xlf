@@ -26,6 +26,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.first" datatype="html">
         <source>««</source>
+        <target state="translated">««</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -77,6 +78,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.previous" datatype="html">
         <source>«</source>
+        <target state="translated">«</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -98,6 +100,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.next" datatype="html">
         <source>»</source>
+        <target state="translated">»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -141,6 +144,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.last" datatype="html">
         <source>»»</source>
+        <target state="translated">»»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/ngb-config.ts</context>
           <context context-type="linenumber">13</context>
@@ -298,6 +302,7 @@
       </trans-unit>
       <trans-unit id="3174354408404578867" datatype="html">
         <source>About <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> туралы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">5</context>
@@ -358,6 +363,7 @@
       </trans-unit>
       <trans-unit id="7707185552909365717" datatype="html">
         <source>INFORMATION</source>
+        <target state="translated">АҚПАРАТ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">100,102</context>
@@ -365,6 +371,7 @@
       </trans-unit>
       <trans-unit id="4902817035128594900" datatype="html">
         <source>Description</source>
+        <target state="translated">Сипаттама</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">113</context>
@@ -441,6 +448,7 @@
       </trans-unit>
       <trans-unit id="2544569632476723854" datatype="html">
         <source>Terms</source>
+        <target state="translated">Шарттар</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">169</context>
@@ -477,6 +485,7 @@
       </trans-unit>
       <trans-unit id="8932880935037645502" datatype="html">
         <source>STATISTICS</source>
+        <target state="translated">СТАТИСТИКА</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">220</context>
@@ -484,6 +493,7 @@
       </trans-unit>
       <trans-unit id="892073694820881630" datatype="html">
         <source>Link copied</source>
+        <target state="translated">Сілтеме көшірілді</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -621,6 +631,7 @@
       </trans-unit>
       <trans-unit id="1769661379068269645" datatype="html">
         <source>Your email</source>
+        <target state="translated">Эл. поштаңыз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">24</context>
@@ -801,6 +812,7 @@
       </trans-unit>
       <trans-unit id="4603134051700562542" datatype="html">
         <source>Loading instance statistics...</source>
+        <target state="translated">Сервер статистикасы жүктелуде...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">1</context>
@@ -926,6 +938,7 @@
       </trans-unit>
       <trans-unit id="5336387229608682776" datatype="html">
         <source>PeerTube Applications</source>
+        <target state="translated">PeerTube қолданбалары</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">40</context>
@@ -1109,6 +1122,7 @@
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
         <source>About this instance</source>
+        <target state="translated">Бұл сервер туралы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">24</context>
@@ -1127,6 +1141,7 @@
       </trans-unit>
       <trans-unit id="8773846522957677259" datatype="html">
         <source>About PeerTube</source>
+        <target state="translated">PeerTube туралы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">49</context>
@@ -1141,6 +1156,7 @@
       </trans-unit>
       <trans-unit id="2381859602529023966" datatype="html">
         <source>Instance</source>
+        <target state="translated">Сервер</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.html</context>
           <context context-type="linenumber">3</context>
@@ -1160,6 +1176,7 @@
       </trans-unit>
       <trans-unit id="5066829276646988805" datatype="html">
         <source>PeerTube</source>
+        <target state="translated">PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1368,6 +1385,7 @@
       </trans-unit>
       <trans-unit id="25349740244798533" datatype="html">
         <source>Username copied</source>
+        <target state="translated">Қолданушы аты көшірілді</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">30</context>
@@ -1393,6 +1411,7 @@
       </trans-unit>
       <trans-unit id="9098920722959201547" datatype="html">
         <source>Show more...</source>
+        <target state="translated">Тағы көрсету...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">54,56</context>
@@ -1659,6 +1678,7 @@
       </trans-unit>
       <trans-unit id="29832309535656200" datatype="html">
         <source>System</source>
+        <target state="translated">Жүйе</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">165</context>
@@ -1816,6 +1836,7 @@
       </trans-unit>
       <trans-unit id="6180346896314915203" datatype="html">
         <source>JavaScript</source>
+        <target state="translated">JavaScript</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">87</context>
@@ -1851,6 +1872,7 @@
       </trans-unit>
       <trans-unit id="7103588127254721505" datatype="html">
         <source>Theme</source>
+        <target state="translated">Кейіп</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">14</context>
@@ -2064,6 +2086,7 @@
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
         <source>error</source>
+        <target state="translated">қате</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">125</context>
@@ -2541,6 +2564,7 @@
       </trans-unit>
       <trans-unit id="7756250490108954499" datatype="html">
         <source>144p</source>
+        <target state="translated">144p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">23</context>
@@ -2548,6 +2572,7 @@
       </trans-unit>
       <trans-unit id="3768852440495368591" datatype="html">
         <source>240p</source>
+        <target state="translated">240p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">27</context>
@@ -2555,6 +2580,7 @@
       </trans-unit>
       <trans-unit id="6824490596490222280" datatype="html">
         <source>360p</source>
+        <target state="translated">360p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -2562,6 +2588,7 @@
       </trans-unit>
       <trans-unit id="4039682741786530029" datatype="html">
         <source>480p</source>
+        <target state="translated">480p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">35</context>
@@ -2569,6 +2596,7 @@
       </trans-unit>
       <trans-unit id="5165245100010036661" datatype="html">
         <source>720p</source>
+        <target state="translated">720p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">39</context>
@@ -2576,6 +2604,7 @@
       </trans-unit>
       <trans-unit id="7709767791012306261" datatype="html">
         <source>1080p</source>
+        <target state="translated">1080p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">43</context>
@@ -2583,6 +2612,7 @@
       </trans-unit>
       <trans-unit id="3671005503070777897" datatype="html">
         <source>1440p</source>
+        <target state="translated">1440p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">47</context>
@@ -2590,6 +2620,7 @@
       </trans-unit>
       <trans-unit id="597839553814574067" datatype="html">
         <source>2160p</source>
+        <target state="translated">2160p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">51</context>
@@ -2707,6 +2738,7 @@
       </trans-unit>
       <trans-unit id="7396175500300709096" datatype="html">
         <source>INSTANCE</source>
+        <target state="translated">СЕРВЕР</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">7</context>
@@ -2833,6 +2865,7 @@
       </trans-unit>
       <trans-unit id="8461609631969932886" datatype="html">
         <source>Hide</source>
+        <target state="translated">Жасыру</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">115</context>
@@ -2867,6 +2900,7 @@
       </trans-unit>
       <trans-unit id="6812930637022637485" datatype="html">
         <source>Display</source>
+        <target state="translated">Көрсету</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">117</context>
@@ -2973,6 +3007,7 @@
       </trans-unit>
       <trans-unit id="493135676263039396" datatype="html">
         <source>LIVE</source>
+        <target state="translated">ЭФИР</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3171,6 +3206,7 @@
       </trans-unit>
       <trans-unit id="931255636742351800" datatype="html">
         <source>No limit</source>
+        <target state="translated">Шексіз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -3178,6 +3214,7 @@
       </trans-unit>
       <trans-unit id="5250062810079582285" datatype="html">
         <source>1 hour</source>
+        <target state="translated">1 сағат</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -3185,6 +3222,7 @@
       </trans-unit>
       <trans-unit id="8662356672298904015" datatype="html">
         <source>3 hours</source>
+        <target state="translated">3 сағат</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -3192,6 +3230,7 @@
       </trans-unit>
       <trans-unit id="1794624538833178491" datatype="html">
         <source>5 hours</source>
+        <target state="translated">5 сағат</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -3199,6 +3238,7 @@
       </trans-unit>
       <trans-unit id="4941148355486671862" datatype="html">
         <source>10 hours</source>
+        <target state="translated">10 сағат</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context>
           <context context-type="linenumber">37</context>
@@ -3955,6 +3995,7 @@
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
         <source>Delete</source>
+        <target state="translated">Жою</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -4116,6 +4157,7 @@
       </trans-unit>
       <trans-unit id="6018246591673612412" datatype="html">
         <source>Follow</source>
+        <target state="translated">Жазылу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -4159,6 +4201,7 @@
       </trans-unit>
       <trans-unit id="9216117865911519658" datatype="html">
         <source>Action</source>
+        <target state="translated">Әрекет</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">39</context>
@@ -10419,6 +10462,7 @@
       </trans-unit>
       <trans-unit id="7112532281224432421" datatype="html">
         <source>Likes</source>
+        <target state="translated">Лүпілдер</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">260</context>
@@ -10781,6 +10825,7 @@
       </trans-unit>
       <trans-unit id="6950140976689343775" datatype="html">
         <source>Sunday</source>
+        <target state="translated">Жексенбі</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">10</context>
@@ -10788,6 +10833,7 @@
       </trans-unit>
       <trans-unit id="8739442281958563044" datatype="html">
         <source>Monday</source>
+        <target state="translated">Дүйсенбі</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">11</context>
@@ -10795,6 +10841,7 @@
       </trans-unit>
       <trans-unit id="9176037901730521018" datatype="html">
         <source>Tuesday</source>
+        <target state="translated">Сейсенбі</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">12</context>
@@ -10802,6 +10849,7 @@
       </trans-unit>
       <trans-unit id="8798932904948432529" datatype="html">
         <source>Wednesday</source>
+        <target state="translated">Сәрсенбі</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">13</context>
@@ -10809,6 +10857,7 @@
       </trans-unit>
       <trans-unit id="1433683192825895947" datatype="html">
         <source>Thursday</source>
+        <target state="translated">Бейсенбі</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">14</context>
@@ -10816,6 +10865,7 @@
       </trans-unit>
       <trans-unit id="3730139500618908668" datatype="html">
         <source>Friday</source>
+        <target state="translated">Жұма</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">15</context>
@@ -10823,6 +10873,7 @@
       </trans-unit>
       <trans-unit id="1830554030016307335" datatype="html">
         <source>Saturday</source>
+        <target state="translated">Сенбі</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">16</context>
@@ -10830,6 +10881,7 @@
       </trans-unit>
       <trans-unit id="1391351050292665308" datatype="html">
         <source>Sun</source>
+        <target state="translated">Жек</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">20</context>
@@ -10839,6 +10891,7 @@
       </trans-unit>
       <trans-unit id="7037142944838911104" datatype="html">
         <source>Mon</source>
+        <target state="translated">Дүй</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">21</context>
@@ -10848,6 +10901,7 @@
       </trans-unit>
       <trans-unit id="4051951828654963549" datatype="html">
         <source>Tue</source>
+        <target state="translated">Сей</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -10857,6 +10911,7 @@
       </trans-unit>
       <trans-unit id="5265738215297391426" datatype="html">
         <source>Wed</source>
+        <target state="translated">Сәр</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">23</context>
@@ -10866,6 +10921,7 @@
       </trans-unit>
       <trans-unit id="1370330981433231150" datatype="html">
         <source>Thu</source>
+        <target state="translated">Бей</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">24</context>
@@ -10875,6 +10931,7 @@
       </trans-unit>
       <trans-unit id="8713535243933137493" datatype="html">
         <source>Fri</source>
+        <target state="translated">Жұм</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">25</context>
@@ -10884,6 +10941,7 @@
       </trans-unit>
       <trans-unit id="3547824477629753314" datatype="html">
         <source>Sat</source>
+        <target state="translated">Сен</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">26</context>
@@ -10893,6 +10951,7 @@
       </trans-unit>
       <trans-unit id="6115403217651453591" datatype="html">
         <source>Su</source>
+        <target state="translated">Жс</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -10902,6 +10961,7 @@
       </trans-unit>
       <trans-unit id="3797918310510782582" datatype="html">
         <source>Mo</source>
+        <target state="translated">Дс</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -10911,6 +10971,7 @@
       </trans-unit>
       <trans-unit id="8011371911136291436" datatype="html">
         <source>Tu</source>
+        <target state="translated">Сс</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">32</context>
@@ -10920,6 +10981,7 @@
       </trans-unit>
       <trans-unit id="1673380870543456256" datatype="html">
         <source>We</source>
+        <target state="translated">Ср</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">33</context>
@@ -10929,6 +10991,7 @@
       </trans-unit>
       <trans-unit id="8502005439670299526" datatype="html">
         <source>Th</source>
+        <target state="translated">Бс</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">34</context>
@@ -10938,6 +11001,7 @@
       </trans-unit>
       <trans-unit id="2800261787799336637" datatype="html">
         <source>Fr</source>
+        <target state="translated">Жм</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">35</context>
@@ -10947,6 +11011,7 @@
       </trans-unit>
       <trans-unit id="2045915324506422459" datatype="html">
         <source>Sa</source>
+        <target state="translated">Сб</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">36</context>
@@ -10956,6 +11021,7 @@
       </trans-unit>
       <trans-unit id="3913843642962116845" datatype="html">
         <source>January</source>
+        <target state="translated">Қаңтар</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">40</context>
@@ -10963,6 +11029,7 @@
       </trans-unit>
       <trans-unit id="6642324138857419870" datatype="html">
         <source>February</source>
+        <target state="translated">Ақпан</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">41</context>
@@ -10970,6 +11037,7 @@
       </trans-unit>
       <trans-unit id="7918954644624211958" datatype="html">
         <source>March</source>
+        <target state="translated">Наурыз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">42</context>
@@ -10977,6 +11045,7 @@
       </trans-unit>
       <trans-unit id="1809521303476565743" datatype="html">
         <source>April</source>
+        <target state="translated">Сәуір</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">43</context>
@@ -10984,6 +11053,7 @@
       </trans-unit>
       <trans-unit id="8469692700277617405" datatype="html">
         <source>May</source>
+        <target state="translated">Мамыр</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">44</context>
@@ -10991,6 +11061,7 @@
       </trans-unit>
       <trans-unit id="9055297580745330415" datatype="html">
         <source>June</source>
+        <target state="translated">Маусым</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">45</context>
@@ -10998,6 +11069,7 @@
       </trans-unit>
       <trans-unit id="9087113544612471348" datatype="html">
         <source>July</source>
+        <target state="translated">Шілде</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">46</context>
@@ -11005,6 +11077,7 @@
       </trans-unit>
       <trans-unit id="3984618989093293779" datatype="html">
         <source>August</source>
+        <target state="translated">Тамыз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">47</context>
@@ -11012,6 +11085,7 @@
       </trans-unit>
       <trans-unit id="5872622085239011307" datatype="html">
         <source>September</source>
+        <target state="translated">Қыркүйек</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">48</context>
@@ -11019,6 +11093,7 @@
       </trans-unit>
       <trans-unit id="1491482705364427867" datatype="html">
         <source>October</source>
+        <target state="translated">Қазан</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">49</context>
@@ -11026,6 +11101,7 @@
       </trans-unit>
       <trans-unit id="1109977718843277527" datatype="html">
         <source>November</source>
+        <target state="translated">Қараша</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">50</context>
@@ -11033,6 +11109,7 @@
       </trans-unit>
       <trans-unit id="124191049522509365" datatype="html">
         <source>December</source>
+        <target state="translated">Желтоқсан</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">51</context>
@@ -11040,6 +11117,7 @@
       </trans-unit>
       <trans-unit id="1799348348510504995" datatype="html">
         <source>Jan</source>
+        <target state="translated">Қаң</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">55</context>
@@ -11049,6 +11127,7 @@
       </trans-unit>
       <trans-unit id="2980544278361296608" datatype="html">
         <source>Feb</source>
+        <target state="translated">Ақп</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">56</context>
@@ -11058,6 +11137,7 @@
       </trans-unit>
       <trans-unit id="3124926955462217092" datatype="html">
         <source>Mar</source>
+        <target state="translated">Нау</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">57</context>
@@ -11067,6 +11147,7 @@
       </trans-unit>
       <trans-unit id="9658641661863772" datatype="html">
         <source>Apr</source>
+        <target state="translated">Сәу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">58</context>
@@ -11076,6 +11157,7 @@
       </trans-unit>
       <trans-unit id="502512326533496869" datatype="html">
         <source>May</source>
+        <target state="translated">Мам</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">59</context>
@@ -11085,6 +11167,7 @@
       </trans-unit>
       <trans-unit id="3044090977322782161" datatype="html">
         <source>Jun</source>
+        <target state="translated">Мау</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">60</context>
@@ -11094,6 +11177,7 @@
       </trans-unit>
       <trans-unit id="8066434078267346927" datatype="html">
         <source>Jul</source>
+        <target state="translated">Шіл</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">61</context>
@@ -11103,6 +11187,7 @@
       </trans-unit>
       <trans-unit id="1796563865253467834" datatype="html">
         <source>Aug</source>
+        <target state="translated">Там</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">62</context>
@@ -11112,6 +11197,7 @@
       </trans-unit>
       <trans-unit id="5865190625753625986" datatype="html">
         <source>Sep</source>
+        <target state="translated">Қыр</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">63</context>
@@ -11121,6 +11207,7 @@
       </trans-unit>
       <trans-unit id="4011114601374284323" datatype="html">
         <source>Oct</source>
+        <target state="translated">Қаз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">64</context>
@@ -11130,6 +11217,7 @@
       </trans-unit>
       <trans-unit id="5063734982204786445" datatype="html">
         <source>Nov</source>
+        <target state="translated">Қар</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">65</context>
@@ -11139,6 +11227,7 @@
       </trans-unit>
       <trans-unit id="4789897150069082503" datatype="html">
         <source>Dec</source>
+        <target state="translated">Жел</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">66</context>
@@ -11575,6 +11664,7 @@
       </trans-unit>
       <trans-unit id="7003790776240394114" datatype="html">
         <source>Filename</source>
+        <target state="translated">Файл атауы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">404</context>
@@ -11610,6 +11700,7 @@
       </trans-unit>
       <trans-unit id="8896564060463626070" datatype="html">
         <source>Enable download</source>
+        <target state="translated">Жүктеп алуға рұқсат беру</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">448</context>
@@ -11818,6 +11909,7 @@
       </trans-unit>
       <trans-unit id="1071721880474488785" datatype="html">
         <source>Import</source>
+        <target state="translated">Импорттау</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">44</context>
@@ -11937,6 +12029,7 @@
       </trans-unit>
       <trans-unit id="7430416142942514215" datatype="html">
         <source>Publish</source>
+        <target state="translated">Жариялау</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">83</context>
@@ -11997,6 +12090,7 @@
       </trans-unit>
       <trans-unit id="5981816353437801748" datatype="html">
         <source>Video published.</source>
+        <target state="translated">Бейне жарияланды.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">255</context>
@@ -12004,6 +12098,7 @@
       </trans-unit>
       <trans-unit id="1006562256968398209" datatype="html">
         <source>video</source>
+        <target state="translated">бейне</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">298</context>
@@ -12103,6 +12198,7 @@
       </trans-unit>
       <trans-unit id="5757542293078916779" datatype="html">
         <source>Replace video file</source>
+        <target state="translated">Бейне файлын ауыстыру</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context>
           <context context-type="linenumber">28</context>
@@ -12131,6 +12227,7 @@
       </trans-unit>
       <trans-unit id="8306050839443016954" datatype="html">
         <source>Video updated.</source>
+        <target state="translated">Бейне жаңартылды.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context>
           <context context-type="linenumber">247</context>
@@ -12173,6 +12270,7 @@
       </trans-unit>
       <trans-unit id="9219888125536520293" datatype="html">
         <source>SHARE</source>
+        <target state="translated">БӨЛІСУ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.html</context>
           <context context-type="linenumber">18</context>
@@ -12180,6 +12278,7 @@
       </trans-unit>
       <trans-unit id="6671956963490165282" datatype="html">
         <source>SAVE</source>
+        <target state="translated">САҚТАУ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.html</context>
           <context context-type="linenumber">29</context>
@@ -12187,6 +12286,7 @@
       </trans-unit>
       <trans-unit id="647016352598204238" datatype="html">
         <source>DOWNLOAD</source>
+        <target state="translated">ЖҮКТЕП АЛУ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.html</context>
           <context context-type="linenumber">44</context>
@@ -12212,6 +12312,7 @@
       </trans-unit>
       <trans-unit id="677619204556459328" datatype="html">
         <source>Like this video</source>
+        <target state="translated">Бейнеге лүпіл қою</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">37</context>
@@ -12304,6 +12405,7 @@
       </trans-unit>
       <trans-unit id="2810844969104710423" datatype="html">
         <source>bold</source>
+        <target state="translated">жуан</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">28</context>
@@ -12311,6 +12413,7 @@
       </trans-unit>
       <trans-unit id="8497278965577453274" datatype="html">
         <source>italic</source>
+        <target state="translated">көлбеу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">28</context>
@@ -12787,6 +12890,7 @@
       </trans-unit>
       <trans-unit id="8928816882866356838" datatype="html">
         <source>Public</source>
+        <target state="translated">Жария</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/playlist/video-watch-playlist.component.html</context>
           <context context-type="linenumber">11</context>
@@ -12822,6 +12926,7 @@
       </trans-unit>
       <trans-unit id="1254111869788332501" datatype="html">
         <source>Other videos</source>
+        <target state="translated">Басқа бейнелер</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">4</context>
@@ -12903,6 +13008,7 @@
       </trans-unit>
       <trans-unit id="7116606560384080593" datatype="html">
         <source>This video is password protected</source>
+        <target state="translated">Бұл бейне құпиясөзбен қорғалған</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">413</context>
@@ -12910,6 +13016,7 @@
       </trans-unit>
       <trans-unit id="6566384659758828708" datatype="html">
         <source>Incorrect password, please enter a correct password</source>
+        <target state="translated">Қате құпиясөз, дұрыс құпиясөзді енгізіңіз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">414</context>
@@ -13033,6 +13140,7 @@
       </trans-unit>
       <trans-unit id="834805431202576194" datatype="html">
         <source>No results.</source>
+        <target state="translated">Нәтижелер жоқ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.html</context>
           <context context-type="linenumber">4</context>
@@ -13249,6 +13357,7 @@
       </trans-unit>
       <trans-unit id="1519954996184640001" datatype="html">
         <source>Error</source>
+        <target state="translated">Қате</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">109</context>
@@ -13295,6 +13404,7 @@
       </trans-unit>
       <trans-unit id="2821179408673282599" datatype="html">
         <source>Home</source>
+        <target state="translated">Басты бет</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">124</context>
@@ -13401,6 +13511,7 @@
       </trans-unit>
       <trans-unit id="6759205696902713848" datatype="html">
         <source>Warning</source>
+        <target state="translated">Ескерту</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/routing/can-deactivate-guard.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -13580,6 +13691,7 @@
       </trans-unit>
       <trans-unit id="2964653499524716819" datatype="html">
         <source>Help to translate PeerTube!</source>
+        <target state="translated">PeerTube-ті аударуға көмектесіңіз!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/language-chooser.component.html</context>
           <context context-type="linenumber">10,12</context>
@@ -13601,6 +13713,7 @@
       </trans-unit>
       <trans-unit id="1674139713929545659" datatype="html">
         <source>Videos:</source>
+        <target state="translated">Бейнелер:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">46</context>
@@ -13672,6 +13785,7 @@
       </trans-unit>
       <trans-unit id="7911416166208830577" datatype="html">
         <source>Help</source>
+        <target state="translated">Көмек</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">160</context>
@@ -13732,6 +13846,7 @@
       </trans-unit>
       <trans-unit id="4467323362722952678" datatype="html">
         <source>Unknown</source>
+        <target state="translated">Белгісіз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">206</context>
@@ -13739,6 +13854,7 @@
       </trans-unit>
       <trans-unit id="7939914198003891823" datatype="html">
         <source>any language</source>
+        <target state="translated">кез келген тіл</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">276</context>
@@ -13746,6 +13862,7 @@
       </trans-unit>
       <trans-unit id="5633144232269377096" datatype="html">
         <source>hide</source>
+        <target state="translated">жасыру</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">311</context>
@@ -13827,6 +13944,7 @@
       </trans-unit>
       <trans-unit id="2218100934178971211" datatype="html">
         <source>Don't show me this anymore</source>
+        <target state="translated">Қайта көрсетпеу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">25</context>
@@ -13834,6 +13952,7 @@
       </trans-unit>
       <trans-unit id="7819314041543176992" datatype="html">
         <source>Close</source>
+        <target state="translated">Жабу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">30</context>
@@ -13961,6 +14080,7 @@
       </trans-unit>
       <trans-unit id="5850698978356573024" datatype="html">
         <source>Confirm your password</source>
+        <target state="translated">Құпиясөзіңізді растаңыз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/confirm.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -14500,6 +14620,7 @@
       </trans-unit>
       <trans-unit id="4786141633412279939" datatype="html">
         <source>Username must be at least 1 character long.</source>
+        <target state="translated">Қолданушы аты кемінде 1 таңбадан тұруы керек.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -14507,6 +14628,7 @@
       </trans-unit>
       <trans-unit id="1019755749203839300" datatype="html">
         <source>Username cannot be more than 50 characters long.</source>
+        <target state="translated">Қолданушы аты 50 таңбадан аспауы керек.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -14719,6 +14841,7 @@
       </trans-unit>
       <trans-unit id="9191505323045740697" datatype="html">
         <source>Block reason must be at least 2 characters long.</source>
+        <target state="translated">Бұгаттау себебі кемінде 2 таңбадан тұруы керек.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -14726,6 +14849,7 @@
       </trans-unit>
       <trans-unit id="8581623418602419755" datatype="html">
         <source>Block reason cannot be more than 300 characters long.</source>
+        <target state="translated">Бұгаттау себебі 300 таңбадан аспауы керек.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -14915,6 +15039,7 @@
       </trans-unit>
       <trans-unit id="2807676084745266104" datatype="html">
         <source>Video name must be at least 3 characters long.</source>
+        <target state="translated">Бейне атауы кемінде 3 таңбадан тұруы керек.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -14922,6 +15047,7 @@
       </trans-unit>
       <trans-unit id="2155414141025589556" datatype="html">
         <source>Video name cannot be more than 120 characters long.</source>
+        <target state="translated">Бейне атауы 120 таңбадан аспауы керек.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">17</context>
@@ -14971,6 +15097,7 @@
       </trans-unit>
       <trans-unit id="3959376623771116873" datatype="html">
         <source>Video description must be at least 3 characters long.</source>
+        <target state="translated">Бейне сипаттамасы кемінде 3 таңбадан тұруы керек.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">68</context>
@@ -14978,6 +15105,7 @@
       </trans-unit>
       <trans-unit id="725195891739570830" datatype="html">
         <source>Video description cannot be more than 10000 characters long.</source>
+        <target state="translated">Бейне сипаттамасы 10000 таңбадан аспауы керек.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">69</context>
@@ -15127,6 +15255,7 @@
       </trans-unit>
       <trans-unit id="3776575731053010580" datatype="html">
         <source>Server rules</source>
+        <target state="translated">Сервер ережелері</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -15166,6 +15295,7 @@
       </trans-unit>
       <trans-unit id="3111569165173971676" datatype="html">
         <source>Deleted account</source>
+        <target state="translated">Жойылған тіркелгі</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">56,58</context>
@@ -15187,6 +15317,7 @@
       </trans-unit>
       <trans-unit id="1443698606045744844" datatype="html">
         <source>Video was deleted</source>
+        <target state="translated">Бейне жойылды</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">81</context>
@@ -15194,6 +15325,7 @@
       </trans-unit>
       <trans-unit id="945158208982640603" datatype="html">
         <source>(Deleted video)</source>
+        <target state="translated">(Жойылған бейне)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">86</context>
@@ -15208,6 +15340,7 @@
       </trans-unit>
       <trans-unit id="1530731524535521716" datatype="html">
         <source>Account deleted</source>
+        <target state="translated">Тіркелгі жойылды</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">115,117</context>
@@ -15408,6 +15541,7 @@
       </trans-unit>
       <trans-unit id="2909684945706361544" datatype="html">
         <source>Delete video</source>
+        <target state="translated">Бейнені жою</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">368</context>
@@ -15694,6 +15828,7 @@
       </trans-unit>
       <trans-unit id="2115592966120408375" datatype="html">
         <source>Copied</source>
+        <target state="translated">Көшірілді</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/input-text.component.html</context>
           <context context-type="linenumber">15</context>
@@ -15701,6 +15836,7 @@
       </trans-unit>
       <trans-unit id="8726695529938456424" datatype="html">
         <source>COPY</source>
+        <target state="translated">КӨШІРУ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/input-text.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -15771,6 +15907,7 @@
       </trans-unit>
       <trans-unit id="3393133458004181121" datatype="html">
         <source>All categories</source>
+        <target state="translated">Барлық санат</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-categories.component.ts</context>
           <context context-type="linenumber">23</context>
@@ -15806,6 +15943,7 @@
       </trans-unit>
       <trans-unit id="1233062525939746039" datatype="html">
         <source>Unknown language</source>
+        <target state="translated">Белгісіз тіл</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -15820,6 +15958,7 @@
       </trans-unit>
       <trans-unit id="6286037250766429054" datatype="html">
         <source>yes</source>
+        <target state="translated">иә</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/feature-boolean.component.html</context>
           <context context-type="linenumber">1</context>
@@ -15827,6 +15966,7 @@
       </trans-unit>
       <trans-unit id="2420525563530770652" datatype="html">
         <source>no</source>
+        <target state="translated">жоқ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/feature-boolean.component.html</context>
           <context context-type="linenumber">2</context>
@@ -15880,6 +16020,7 @@
       </trans-unit>
       <trans-unit id="6751395526297887552" datatype="html">
         <source>PeerTube version</source>
+        <target state="translated">PeerTube нұсқасы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">6</context>
@@ -16024,6 +16165,7 @@
       </trans-unit>
       <trans-unit id="996392855508119363" datatype="html">
         <source>Hidden</source>
+        <target state="translated">Жасырын</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">52</context>
@@ -16049,6 +16191,7 @@
       </trans-unit>
       <trans-unit id="5769292297914455214" datatype="html">
         <source>Disabled</source>
+        <target state="translated">Сөндірулі</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -16063,6 +16206,7 @@
       </trans-unit>
       <trans-unit id="4816216590591222133" datatype="html">
         <source>Enabled</source>
+        <target state="translated">Қосулы</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -16070,6 +16214,7 @@
       </trans-unit>
       <trans-unit id="3911025298999036211" datatype="html">
         <source>~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</source>
+        <target state="translated">~ {hours, plural, =1 {1 сағат} other {<x id="hours"/> сағат}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">75</context>
@@ -16077,6 +16222,7 @@
       </trans-unit>
       <trans-unit id="2819927377059070056" datatype="html">
         <source>~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</source>
+        <target state="translated">~ {minutes, plural, =1 {1 минут} other {<x id="minutes"/> минут}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -16133,6 +16279,7 @@
       </trans-unit>
       <trans-unit id="1191071088182425837" datatype="html">
         <source><x id="PH" equiv-text="hours"/>h</source>
+        <target state="translated"><x id="PH" equiv-text="hours"/>сағ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context>
           <context context-type="linenumber">14</context>
@@ -16140,6 +16287,7 @@
       </trans-unit>
       <trans-unit id="8981309282078866700" datatype="html">
         <source><x id="PH" equiv-text="minutes"/>min</source>
+        <target state="translated"><x id="PH" equiv-text="minutes"/>мин</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context>
           <context context-type="linenumber">16</context>
@@ -16151,6 +16299,7 @@
       </trans-unit>
       <trans-unit id="350798057497677761" datatype="html">
         <source><x id="PH" equiv-text="seconds"/>sec</source>
+        <target state="translated"><x id="PH" equiv-text="seconds"/>сек</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context>
           <context context-type="linenumber">17</context>
@@ -16158,6 +16307,7 @@
       </trans-unit>
       <trans-unit id="2222108104954671970" datatype="html">
         <source><x id="PH" equiv-text="seconds"/> sec</source>
+        <target state="translated"><x id="PH" equiv-text="seconds"/> сек</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context>
           <context context-type="linenumber">30</context>
@@ -16165,6 +16315,7 @@
       </trans-unit>
       <trans-unit id="8489397598480880903" datatype="html">
         <source>{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</source>
+        <target state="translated">{interval, plural, =1 {1 жыл бұрын} other {<x id="interval"/> жыл бұрын}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">14</context>
@@ -16172,6 +16323,7 @@
       </trans-unit>
       <trans-unit id="8392321423487952834" datatype="html">
         <source>1 year ago</source>
+        <target state="translated">1 жыл бұрын</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">20</context>
@@ -16179,6 +16331,7 @@
       </trans-unit>
       <trans-unit id="599762045687999334" datatype="html">
         <source>{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</source>
+        <target state="translated">{interval, plural, =1 {1 ай бұрын} other {<x id="interval"/> ай бұрын}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">23</context>
@@ -16186,6 +16339,7 @@
       </trans-unit>
       <trans-unit id="6874778750344205852" datatype="html">
         <source>1 month ago</source>
+        <target state="translated">1 ай бұрын</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">29</context>
@@ -16193,6 +16347,7 @@
       </trans-unit>
       <trans-unit id="4951459525104027759" datatype="html">
         <source>{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</source>
+        <target state="translated">{interval, plural, =1 {1 апта бұрын} other {<x id="interval"/> апта бұрын}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">32</context>
@@ -16200,6 +16355,7 @@
       </trans-unit>
       <trans-unit id="2471141982657856893" datatype="html">
         <source>{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</source>
+        <target state="translated">{interval, plural, =1 {1 күн бұрын} other {<x id="interval"/> күн бұрын}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">37</context>
@@ -16207,6 +16363,7 @@
       </trans-unit>
       <trans-unit id="8562677309401914974" datatype="html">
         <source>{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</source>
+        <target state="translated">{interval, plural, =1 {1 сағат бұрын} other {<x id="interval"/> сағат бұрын}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">42</context>
@@ -16214,6 +16371,7 @@
       </trans-unit>
       <trans-unit id="8256466313580256940" datatype="html">
         <source><x id="PH" equiv-text="interval"/> min ago</source>
+        <target state="translated"><x id="PH" equiv-text="interval"/> мин бұрын</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">46</context>
@@ -16277,6 +16435,7 @@
       </trans-unit>
       <trans-unit id="7565716024468232322" datatype="html">
         <source>Links</source>
+        <target state="translated">Сілтемелер</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -16631,6 +16790,7 @@
       </trans-unit>
       <trans-unit id="1378933246324202613" datatype="html">
         <source>Breaks server rules</source>
+        <target state="translated">Сервер ережелерін бұзады</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">151</context>
@@ -16987,6 +17147,7 @@
       </trans-unit>
       <trans-unit id="6325096236207614377" datatype="html">
         <source>Reason...</source>
+        <target state="translated">Себебі...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -17217,6 +17378,7 @@
       </trans-unit>
       <trans-unit id="7187838764371214919" datatype="html">
         <source>Edit user</source>
+        <target state="translated">Қолданушыны өңдеу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">340</context>
@@ -17231,6 +17393,7 @@
       </trans-unit>
       <trans-unit id="7913022656086109932" datatype="html">
         <source>Delete user</source>
+        <target state="translated">Қолданушыны жою</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">345</context>
@@ -17461,6 +17624,7 @@
       </trans-unit>
       <trans-unit id="1253396341165671470" datatype="html">
         <source>Share the video</source>
+        <target state="translated">Бейнені бөлісу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">100</context>
@@ -17524,6 +17688,7 @@
       </trans-unit>
       <trans-unit id="7482217084177855485" datatype="html">
         <source>P2P</source>
+        <target state="translated">P2P</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">259</context>
@@ -17580,6 +17745,7 @@
       </trans-unit>
       <trans-unit id="1219783168145776019" datatype="html">
         <source>LIVE ENDED</source>
+        <target state="translated">ЭФИР БІТТІ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context>
           <context context-type="linenumber">32</context>
@@ -17731,6 +17897,7 @@
       </trans-unit>
       <trans-unit id="1144407473317535723" datatype="html">
         <source>Subscribe</source>
+        <target state="translated">Жазылу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">8</context>
@@ -17948,6 +18115,7 @@
       </trans-unit>
       <trans-unit id="1677142486230902467" datatype="html">
         <source>Server error</source>
+        <target state="translated">Сервер қатесі</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -17976,6 +18144,7 @@
       </trans-unit>
       <trans-unit id="2657043015926552641" datatype="html">
         <source>Unknown error</source>
+        <target state="translated">Белгісіз қате</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -18060,6 +18229,7 @@
       </trans-unit>
       <trans-unit id="3099741642167775297" datatype="html">
         <source>Download</source>
+        <target state="translated">Жүктеп алу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">329</context>
@@ -18082,6 +18252,7 @@
       </trans-unit>
       <trans-unit id="4503408361537553733" datatype="html">
         <source>Mirror</source>
+        <target state="translated">Айна</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">371</context>
@@ -18089,6 +18260,7 @@
       </trans-unit>
       <trans-unit id="2631340539474479416" datatype="html">
         <source>Subtitles</source>
+        <target state="translated">Субтитрлер</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">9</context>
@@ -18131,6 +18303,7 @@
       </trans-unit>
       <trans-unit id="5910455707959454672" datatype="html">
         <source>Torrent (.torrent file)</source>
+        <target state="translated">Торрент (.torrent файлы)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">111</context>
@@ -18152,6 +18325,7 @@
       </trans-unit>
       <trans-unit id="5235042777215655908" datatype="html">
         <source>subtitles</source>
+        <target state="translated">субтитрлер</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -18317,6 +18491,7 @@
       </trans-unit>
       <trans-unit id="2343321245279384373" datatype="html">
         <source>Languages:</source>
+        <target state="translated">Тілдер:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">62</context>
@@ -18422,6 +18597,7 @@
       </trans-unit>
       <trans-unit id="1949800099101277248" datatype="html">
         <source>Languages</source>
+        <target state="translated">Тілдер</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">148</context>
@@ -18429,6 +18605,7 @@
       </trans-unit>
       <trans-unit id="1902100407096396858" datatype="html">
         <source>Categories</source>
+        <target state="translated">Санаттар</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">157</context>
@@ -18436,6 +18613,7 @@
       </trans-unit>
       <trans-unit id="3599150758014724057" datatype="html">
         <source>All videos</source>
+        <target state="translated">Барлық бейне</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">166</context>
@@ -18584,6 +18762,7 @@
       </trans-unit>
       <trans-unit id="4498682414491138092" datatype="html">
         <source>Yesterday</source>
+        <target state="translated">Кеше</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">143</context>
@@ -18687,6 +18866,7 @@
       </trans-unit>
       <trans-unit id="5643561794785412000" datatype="html">
         <source>Unavailable</source>
+        <target state="translated">Қолжетімсіз</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">47</context>

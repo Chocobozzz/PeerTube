@@ -10,10 +10,12 @@ import {
   prepareNotificationsTest,
   CheckerBaseParams,
   checkNewVideoFromSubscription,
-  checkVideoIsPublished,
+  checkMyVideoIsPublished,
   checkVideoStudioEditionIsFinished,
   checkMyVideoImportIsFinished,
-  checkNewActorFollow
+  checkNewActorFollow,
+  checkNewLiveFromSubscription,
+  waitUntilNotification
 } from '@tests/shared/notifications.js'
 import { FIXTURE_URLS } from '@tests/shared/tests.js'
 import { uploadRandomVideoOnServers } from '@tests/shared/videos.js'
@@ -203,11 +205,84 @@ describe('Test user notifications', function () {
         privacy: VideoPrivacy.PUBLIC,
         targetUrl: FIXTURE_URLS.goodVideo
       }
-      const { video } = await servers[0].imports.importVideo({ attributes })
+      const { video } = await servers[0].videoImports.importVideo({ attributes })
 
       await waitJobs(servers)
 
       await checkNewVideoFromSubscription({ ...baseParams, videoName: name, shortUUID: video.shortUUID, checkType: 'presence' })
+    })
+
+  })
+
+  describe('New live from my subscription notification', function () {
+    let baseParams: CheckerBaseParams
+
+    async function createAndStreamLive (server: PeerTubeServer) {
+      const name = 'video live ' + buildUUID()
+
+      const streamDate = new Date()
+      const { video } = await server.live.quickCreate({ name, permanentLive: true, saveReplay: false })
+      await waitJobs(servers)
+
+      const ffmpegCommand = await server.live.sendRTMPStreamInVideo({ videoId: video.uuid })
+
+      return { name, video, ffmpegCommand, streamDate }
+    }
+
+    before(async () => {
+      baseParams = {
+        server: servers[0],
+        emails,
+        socketNotifications: userNotifications,
+        token: userAccessToken
+      }
+
+      await servers[0].config.enableLive({ allowReplay: false })
+    })
+
+    it('Should not send a notification when a live is created', async function () {
+      this.timeout(100000)
+
+      const name = 'video live ' + buildUUID()
+
+      const { video } = await servers[0].live.quickCreate({ name, permanentLive: true, saveReplay: false })
+      await waitJobs(servers)
+      await checkNewLiveFromSubscription({ ...baseParams, videoName: name, shortUUID: video.shortUUID, checkType: 'absence' })
+    })
+
+    it('Should send a local notification when streaming in the live', async function () {
+      this.timeout(100000)
+
+      const { name, video, ffmpegCommand, streamDate } = await createAndStreamLive(servers[0])
+
+      await waitUntilNotification({
+        server: servers[0],
+        token: userAccessToken,
+        notificationType: UserNotificationType.NEW_LIVE_FROM_SUBSCRIPTION,
+        fromDate: streamDate
+      })
+
+      await checkNewLiveFromSubscription({ ...baseParams, videoName: name, shortUUID: video.shortUUID, checkType: 'presence' })
+
+      await stopFfmpeg(ffmpegCommand)
+      await waitJobs(servers)
+    })
+
+    it('Should send a remote notification when streaming in the live ', async function () {
+      this.timeout(100000)
+
+      const { name, video, ffmpegCommand, streamDate } = await createAndStreamLive(servers[1])
+
+      await waitUntilNotification({
+        server: servers[0],
+        token: userAccessToken,
+        notificationType: UserNotificationType.NEW_LIVE_FROM_SUBSCRIPTION,
+        fromDate: streamDate
+      })
+      await checkNewLiveFromSubscription({ ...baseParams, videoName: name, shortUUID: video.shortUUID, checkType: 'presence' })
+
+      await stopFfmpeg(ffmpegCommand)
+      await waitJobs(servers)
     })
   })
 
@@ -229,7 +304,7 @@ describe('Test user notifications', function () {
       const { name, shortUUID } = await uploadRandomVideoOnServers(servers, 1)
       await waitJobs(servers)
 
-      await checkVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'absence' })
+      await checkMyVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'absence' })
     })
 
     it('Should not send a notification if the wait transcoding is false', async function () {
@@ -250,7 +325,7 @@ describe('Test user notifications', function () {
       const { name, shortUUID } = await uploadRandomVideoOnServers(servers, 2, { waitTranscoding: true, fixture: 'video_short_240p.mp4' })
       await waitJobs(servers)
 
-      await checkVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
+      await checkMyVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
     })
 
     it('Should send a notification with a transcoded video', async function () {
@@ -259,7 +334,7 @@ describe('Test user notifications', function () {
       const { name, shortUUID } = await uploadRandomVideoOnServers(servers, 2, { waitTranscoding: true })
       await waitJobs(servers)
 
-      await checkVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
+      await checkMyVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
     })
 
     it('Should send a notification when an imported video is transcoded', async function () {
@@ -274,10 +349,10 @@ describe('Test user notifications', function () {
         targetUrl: FIXTURE_URLS.goodVideo,
         waitTranscoding: true
       }
-      const { video } = await servers[1].imports.importVideo({ attributes })
+      const { video } = await servers[1].videoImports.importVideo({ attributes })
 
       await waitJobs(servers)
-      await checkVideoIsPublished({ ...baseParams, videoName: name, shortUUID: video.shortUUID, checkType: 'presence' })
+      await checkMyVideoIsPublished({ ...baseParams, videoName: name, shortUUID: video.shortUUID, checkType: 'presence' })
     })
 
     it('Should send a notification when the scheduled update has been proceeded', async function () {
@@ -296,7 +371,7 @@ describe('Test user notifications', function () {
       const { name, shortUUID } = await uploadRandomVideoOnServers(servers, 2, data)
 
       await wait(6000)
-      await checkVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
+      await checkMyVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
     })
 
     it('Should not send a notification before the video is published', async function () {
@@ -314,7 +389,7 @@ describe('Test user notifications', function () {
       const { name, shortUUID } = await uploadRandomVideoOnServers(servers, 2, data)
 
       await wait(6000)
-      await checkVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'absence' })
+      await checkMyVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'absence' })
     })
   })
 
@@ -354,7 +429,7 @@ describe('Test user notifications', function () {
       await servers[1].live.waitUntilReplacedByReplay({ videoId: shortUUID })
 
       await waitJobs(servers)
-      await checkVideoIsPublished({ ...baseParams, videoName: 'non permanent live', shortUUID, checkType: 'presence' })
+      await checkMyVideoIsPublished({ ...baseParams, videoName: 'non permanent live', shortUUID, checkType: 'presence' })
     })
 
     it('Should send a notification is a live replay of a permanent live is published', async function () {
@@ -386,7 +461,7 @@ describe('Test user notifications', function () {
       const video = await findExternalSavedVideo(servers[1], liveDetails)
       expect(video).to.exist
 
-      await checkVideoIsPublished({ ...baseParams, videoName: video.name, shortUUID: video.shortUUID, checkType: 'presence' })
+      await checkMyVideoIsPublished({ ...baseParams, videoName: video.name, shortUUID: video.shortUUID, checkType: 'presence' })
     })
   })
 
@@ -408,7 +483,7 @@ describe('Test user notifications', function () {
       const { name, shortUUID, id } = await uploadRandomVideoOnServers(servers, 2, { waitTranscoding: true })
 
       await waitJobs(servers)
-      await checkVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
+      await checkMyVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
 
       const tasks: VideoStudioTask[] = [
         {
@@ -449,7 +524,7 @@ describe('Test user notifications', function () {
         privacy: VideoPrivacy.PRIVATE,
         targetUrl: FIXTURE_URLS.badVideo
       }
-      const { video: { shortUUID } } = await servers[0].imports.importVideo({ attributes })
+      const { video: { shortUUID } } = await servers[0].videoImports.importVideo({ attributes })
 
       await waitJobs(servers)
 
@@ -468,7 +543,7 @@ describe('Test user notifications', function () {
         privacy: VideoPrivacy.PRIVATE,
         targetUrl: FIXTURE_URLS.goodVideo
       }
-      const { video: { shortUUID } } = await servers[0].imports.importVideo({ attributes })
+      const { video: { shortUUID } } = await servers[0].videoImports.importVideo({ attributes })
 
       await waitJobs(servers)
 

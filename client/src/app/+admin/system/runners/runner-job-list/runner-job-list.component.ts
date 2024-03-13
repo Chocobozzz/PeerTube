@@ -1,15 +1,38 @@
-import { SortMeta } from 'primeng/api'
+import { SortMeta, SharedModule } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU } from '@app/helpers'
-import { DropdownAction } from '@app/shared/shared-main'
 import { RunnerJob, RunnerJobState } from '@peertube/peertube-models'
 import { RunnerJobFormatted, RunnerService } from '../runner.service'
-import { AdvancedInputFilter } from '@app/shared/shared-forms'
+import { AutoColspanDirective } from '../../../../shared/shared-main/angular/auto-colspan.directive'
+import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
+import { ButtonComponent } from '../../../../shared/shared-main/buttons/button.component'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../../shared/shared-forms/advanced-input-filter.component'
+import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
+import { NgIf, NgClass } from '@angular/common'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { TableModule } from 'primeng/table'
+import { RouterLink } from '@angular/router'
+import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-runner-job-list',
-  templateUrl: './runner-job-list.component.html'
+  templateUrl: './runner-job-list.component.html',
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    RouterLink,
+    TableModule,
+    SharedModule,
+    NgbTooltip,
+    NgIf,
+    ActionDropdownComponent,
+    AdvancedInputFilterComponent,
+    ButtonComponent,
+    TableExpanderIconComponent,
+    NgClass,
+    AutoColspanDirective
+  ]
 })
 export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnInit {
   runnerJobs: RunnerJobFormatted[] = []

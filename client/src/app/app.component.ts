@@ -1,9 +1,9 @@
 import { delay, forkJoin } from 'rxjs'
 import { filter, first, map } from 'rxjs/operators'
-import { DOCUMENT, getLocaleDirection, PlatformLocation } from '@angular/common'
+import { DOCUMENT, getLocaleDirection, PlatformLocation, NgIf, NgClass } from '@angular/common'
 import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
-import { Event, GuardsCheckStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router'
+import { Event, GuardsCheckStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterLink, RouterOutlet } from '@angular/router'
 import {
   AuthService,
   MarkdownService,
@@ -25,20 +25,45 @@ import { AdminWelcomeModalComponent } from '@app/modal/admin-welcome-modal.compo
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
 import { NgbConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { LoadingBarService } from '@ngx-loading-bar/core'
+import { LoadingBarService, LoadingBarModule } from '@ngx-loading-bar/core'
 import { getShortLocale } from '@peertube/peertube-core-utils'
 import { BroadcastMessageLevel, HTMLServerConfig, UserRole } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { MenuService } from './core/menu/menu.service'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
-import { GlobalIconName } from './shared/shared-icons'
-import { InstanceService } from './shared/shared-instance'
+import { SharedModule } from 'primeng/api'
+import { ToastModule } from 'primeng/toast'
+import { ConfirmComponent } from './modal/confirm.component'
+import { GlobalIconComponent, GlobalIconName } from './shared/shared-icons/global-icon.component'
+import { MenuComponent } from './menu/menu.component'
+import { HeaderComponent } from './header/header.component'
+import { HotkeysCheatSheetComponent } from './hotkeys/hotkeys-cheat-sheet.component'
+import { InstanceService } from './shared/shared-main/instance/instance.service'
 
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
-  styleUrls: [ './app.component.scss' ]
+  styleUrls: [ './app.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    HotkeysCheatSheetComponent,
+    NgClass,
+    RouterLink,
+    HeaderComponent,
+    MenuComponent,
+    GlobalIconComponent,
+    RouterOutlet,
+    LoadingBarModule,
+    ConfirmComponent,
+    ToastModule,
+    SharedModule,
+    AccountSetupWarningModalComponent,
+    AdminWelcomeModalComponent,
+    InstanceConfigWarningModalComponent,
+    CustomModalComponent
+  ]
 })
 export class AppComponent implements OnInit, AfterViewInit {
   private static BROADCAST_MESSAGE_KEY = 'app-broadcast-message-dismissed'

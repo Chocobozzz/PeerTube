@@ -111,7 +111,7 @@ describe('Test video passwords validator', function () {
 
     if (mode === 'import') {
       const attributes = { ...baseCorrectParams, targetUrl: FIXTURE_URLS.goodVideo, videoPasswords }
-      return server.imports.importVideo({ attributes, expectedStatus })
+      return server.videoImports.importVideo({ attributes, expectedStatus })
     }
 
     if (mode === 'updateVideo') {

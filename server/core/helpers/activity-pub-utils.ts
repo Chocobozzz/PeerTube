@@ -94,6 +94,10 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
       '@type': 'sc:Number',
       '@id': 'pt:tileDuration'
     },
+    aspectRatio: {
+      '@type': 'sc:Float',
+      '@id': 'pt:aspectRatio'
+    },
 
     originallyPublishedAt: 'sc:datePublished',
 
@@ -187,6 +191,9 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
       '@type': 'sc:Text',
       '@id': 'pt:support'
     },
+
+    lemmy: 'https://join-lemmy.org/ns#',
+    postingRestrictedToMods: 'lemmy:postingRestrictedToMods',
 
     // TODO: remove in a few versions, introduced in 4.2
     icons: 'as:icon'

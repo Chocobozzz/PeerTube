@@ -1,0 +1,82 @@
+<div class="pt-two-cols">
+
+  <div class="title-col">
+    <h2 i18n>IMPORT</h2>
+  </div>
+
+  <div class="content-col">
+
+    @if (isImportEnabled()) {
+      <p i18n>You can import an archive created by another PeerTube website.</p>
+
+      <p i18n>
+        This is an <strong>import</strong> tool and not a migration tool.
+        It's the reason why data (like channels or videos) is duplicated and not moved from your previous PeerTube website.
+      </p>
+
+      <p i18n>The import process will automatically:</p>
+
+      <ul>
+        <li i18n>Update your account metadata (display name, description, avatar...)</li>
+        <li i18n>Update your user settings (autoplay or P2P policy, notification settings...). It does not update your user email, username or password.</li>
+        <li i18n>Add accounts/servers in your mute list</li>
+        <li i18n>Add likes/dislikes</li>
+        <li i18n>Send a follow request to your subscriptions</li>
+        <li i18n>Create channels if they do not already exist</li>
+        <li i18n>Create playlists if they do not already exist</li>
+        <li i18n>Add watched videos in your video history</li>
+        <li i18n><strong>If the archive contains video files</strong>, create videos if they do not already exist</li>
+      </ul>
+
+      <p i18n>The following data objects are not imported:</p>
+
+      <ul>
+        <li i18n>Comments</li>
+        <li i18n>Followers (accounts will need to re-follow your channels)</li>
+      </ul>
+
+      <p *ngIf="isEmailEnabled()" i18n>An email will be sent when the import process is complete.</p>
+
+      <div class="mb-3" *ngIf="latestImport">
+        <div>
+          <strong>Latest import on:</strong> {{ latestImport.createdAt | date: 'medium' }}
+        </div>
+
+        <div>
+          <strong>Latest import state:</strong> {{ latestImport.state.label }}
+        </div>
+      </div>
+
+      @if (hasPendingImport()) {
+        <div i18n class="alert pt-alert-primary">
+          You can't re-import an archive because you already have an import that is currently being processed by PeerTube.
+        </div>
+      } @else {
+        <my-upload-progress
+          [isUploading]="uploadingArchive" [uploadPercents]="uploadPercents" [error]="error" [uploaded]="archiveUploadFinished"
+          [enableRetryAfterError]="enableRetryAfterError" (cancel)="cancelUpload()" (retry)="retryUpload()"
+        >
+        </my-upload-progress>
+
+        <div *ngIf="archiveUploadFinished && !error" class="alert pt-alert-primary" i18n>
+          Upload completed. Your archive import will be processed as soon as possible.
+        </div>
+
+        <div [hidden]="uploadingArchive || archiveUploadFinished" class="button-file form-control" i18n-ngbTooltip ngbTooltip="(extension: .zip)">
+          <span i18n>Select the archive file to import</span>
+          <input
+            aria-label="Select the file to import"
+            i18n-aria-label
+            accept=".zip"
+            (change)="onFileChange($event)"
+            id="importfile"
+            type="file"
+          />
+        </div>
+      }
+    } @else {
+      <p i18n>User import is not enabled by your administrator.</p>
+    }
+
+  </div>
+</div>

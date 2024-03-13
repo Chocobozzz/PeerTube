@@ -1,5 +1,7 @@
 export interface ActivityPubOrderedCollection<T> {
-  '@context': string[]
+  id: string
+
+  '@context': any[]
   type: 'OrderedCollection' | 'OrderedCollectionPage'
   totalItems: number
   orderedItems: T[]

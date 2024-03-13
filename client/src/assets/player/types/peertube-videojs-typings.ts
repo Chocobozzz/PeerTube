@@ -129,6 +129,8 @@ type PeerTubePluginOptions = {
   videoUUID: () => string
   subtitle: () => string
 
+  videoRatio: () => number
+
   poster: () => string
 }
 

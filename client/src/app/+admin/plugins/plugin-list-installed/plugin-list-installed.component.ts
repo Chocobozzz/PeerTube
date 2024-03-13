@@ -6,11 +6,29 @@ import { ComponentPagination, ConfirmService, hasMoreItems, Notifier } from '@ap
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { compareSemVer } from '@peertube/peertube-core-utils'
 import { PeerTubePlugin, PluginType, PluginType_Type } from '@peertube/peertube-models'
+import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { EditButtonComponent } from '../../../shared/shared-main/buttons/edit-button.component'
+import { PluginCardComponent } from '../shared/plugin-card.component'
+import { InfiniteScrollerDirective } from '../../../shared/shared-main/angular/infinite-scroller.directive'
+import { NgIf, NgFor } from '@angular/common'
+import { PluginNavigationComponent } from '../shared/plugin-navigation.component'
 
 @Component({
   selector: 'my-plugin-list-installed',
   templateUrl: './plugin-list-installed.component.html',
-  styleUrls: [ './plugin-list-installed.component.scss' ]
+  styleUrls: [ './plugin-list-installed.component.scss' ],
+  standalone: true,
+  imports: [
+    PluginNavigationComponent,
+    NgIf,
+    InfiniteScrollerDirective,
+    NgFor,
+    PluginCardComponent,
+    EditButtonComponent,
+    ButtonComponent,
+    DeleteButtonComponent
+  ]
 })
 export class PluginListInstalledComponent implements OnInit {
   pluginType: PluginType_Type

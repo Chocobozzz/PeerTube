@@ -1,9 +1,9 @@
-import { AllowNull, BelongsToMany, Column, CreatedAt, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsToMany, Column, CreatedAt, Table, UpdatedAt } from 'sequelize-typescript'
 import { Transaction } from 'sequelize'
 import { MTracker } from '@server/types/models/server/tracker.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { VideoModel } from '../video/video.js'
 import { VideoTrackerModel } from './video-tracker.js'
+import { SequelizeModel } from '../shared/sequelize-type.js'
 
 @Table({
   tableName: 'tracker',
@@ -14,7 +14,7 @@ import { VideoTrackerModel } from './video-tracker.js'
     }
   ]
 })
-export class TrackerModel extends Model<Partial<AttributesOnly<TrackerModel>>> {
+export class TrackerModel extends SequelizeModel<TrackerModel> {
 
   @AllowNull(false)
   @Column

@@ -3,15 +3,21 @@ import { map, switchMap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { HooksService, Notifier, PluginService } from '@app/core'
-import { BuildFormArgument } from '@app/shared/form-validators'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { PeerTubePlugin, RegisterServerSettingOptions } from '@peertube/peertube-models'
 import { PluginApiService } from '../shared/plugin-api.service'
+import { DynamicFormFieldComponent } from '../../../shared/shared-forms/dynamic-form-field.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgIf, NgFor } from '@angular/common'
+import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
 
 @Component({
   selector: 'my-plugin-show-installed',
   templateUrl: './plugin-show-installed.component.html',
-  styleUrls: [ './plugin-show-installed.component.scss' ]
+  styleUrls: [ './plugin-show-installed.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, FormsModule, ReactiveFormsModule, NgFor, DynamicFormFieldComponent ]
 })
 export class PluginShowInstalledComponent extends FormReactive implements OnInit, OnDestroy {
   plugin: PeerTubePlugin

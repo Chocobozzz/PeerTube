@@ -1,9 +1,8 @@
 import { FindOptions, literal } from 'sequelize'
-import { AllowNull, Column, CreatedAt, HasMany, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, Column, CreatedAt, HasMany, Table, UpdatedAt } from 'sequelize-typescript'
 import { MRunnerRegistrationToken } from '@server/types/models/runners/index.js'
 import { RunnerRegistrationToken } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
-import { getSort } from '../shared/index.js'
+import { SequelizeModel, getSort } from '../shared/index.js'
 import { RunnerModel } from './runner.js'
 
 /**
@@ -21,7 +20,7 @@ import { RunnerModel } from './runner.js'
     }
   ]
 })
-export class RunnerRegistrationTokenModel extends Model<Partial<AttributesOnly<RunnerRegistrationTokenModel>>> {
+export class RunnerRegistrationTokenModel extends SequelizeModel<RunnerRegistrationTokenModel> {
 
   @AllowNull(false)
   @Column

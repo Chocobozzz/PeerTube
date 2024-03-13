@@ -8,15 +8,23 @@ import {
   Input,
   LOCALE_ID,
   OnInit,
-  Output
+  Output,
+  numberAttribute
 } from '@angular/core'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { HTMLServerConfig, VideoExistInPlaylist, VideoPlaylistType, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { LinkType } from '../../../types/link.type'
-import { ActorAvatarSize } from '../shared-actor-image/actor-avatar.component'
-import { Video, VideoService } from '../shared-main'
-import { VideoPlaylistService } from '../shared-video-playlist'
-import { VideoActionsDisplayType } from './video-actions-dropdown.component'
+import { VideoActionsDisplayType, VideoActionsDropdownComponent } from './video-actions-dropdown.component'
+import { RouterLink } from '@angular/router'
+import { VideoViewsCounterComponent } from '../shared-video/video-views-counter.component'
+import { DateToggleComponent } from '../shared-main/date/date-toggle.component'
+import { LinkComponent } from '../shared-main/angular/link.component'
+import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
+import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.component'
+import { NgClass, NgIf, NgFor } from '@angular/common'
+import { Video } from '../shared-main/video/video.model'
+import { VideoService } from '../shared-main/video/video.service'
+import { VideoPlaylistService } from '../shared-video-playlist/video-playlist.service'
 
 export type MiniatureDisplayOptions = {
   date?: boolean
@@ -35,7 +43,20 @@ export type MiniatureDisplayOptions = {
   selector: 'my-video-miniature',
   styleUrls: [ './video-miniature.component.scss' ],
   templateUrl: './video-miniature.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgClass,
+    VideoThumbnailComponent,
+    NgIf,
+    ActorAvatarComponent,
+    LinkComponent,
+    DateToggleComponent,
+    VideoViewsCounterComponent,
+    RouterLink,
+    NgFor,
+    VideoActionsDropdownComponent
+  ]
 })
 export class VideoMiniatureComponent implements OnInit {
   @Input() user: User
@@ -68,7 +89,7 @@ export class VideoMiniatureComponent implements OnInit {
     stats: false
   }
 
-  @Input() actorImageSize: ActorAvatarSize = '40'
+  @Input({ transform: numberAttribute }) actorImageSize = 40
 
   @Input() displayAsRow = false
 

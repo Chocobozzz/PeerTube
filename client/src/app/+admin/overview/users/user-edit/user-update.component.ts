@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs'
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { AuthService, Notifier, ScreenService, ServerService, User, UserService } from '@app/core'
 import {
@@ -9,15 +9,46 @@ import {
   USER_VIDEO_QUOTA_DAILY_VALIDATOR,
   USER_VIDEO_QUOTA_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
-import { FormReactiveService } from '@app/shared/shared-forms'
-import { TwoFactorService, UserAdminService } from '@app/shared/shared-users'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { User as UserType, UserAdminFlag, UserRole, UserUpdate } from '@peertube/peertube-models'
 import { UserEdit } from './user-edit'
+import { BytesPipe } from '../../../../shared/shared-main/angular/bytes.pipe'
+import { UserPasswordComponent } from './user-password.component'
+import { PeertubeCheckboxComponent } from '../../../../shared/shared-forms/peertube-checkbox.component'
+import { UserRealQuotaInfoComponent } from '../../../shared/user-real-quota-info.component'
+import { SelectCustomValueComponent } from '../../../../shared/shared-forms/select/select-custom-value.component'
+import { InputTextComponent } from '../../../../shared/shared-forms/input-text.component'
+import { PeerTubeTemplateDirective } from '../../../../shared/shared-main/angular/peertube-template.directive'
+import { HelpComponent } from '../../../../shared/shared-main/misc/help.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { ActorAvatarEditComponent } from '../../../../shared/shared-actor-image-edit/actor-avatar-edit.component'
+import { NgIf, NgTemplateOutlet, NgClass, NgFor } from '@angular/common'
+import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
+import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
 
 @Component({
   selector: 'my-user-update',
   templateUrl: './user-edit.component.html',
-  styleUrls: [ './user-edit.component.scss' ]
+  styleUrls: [ './user-edit.component.scss' ],
+  standalone: true,
+  imports: [
+    RouterLink,
+    NgIf,
+    NgTemplateOutlet,
+    ActorAvatarEditComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    NgClass,
+    HelpComponent,
+    PeerTubeTemplateDirective,
+    InputTextComponent,
+    NgFor,
+    SelectCustomValueComponent,
+    UserRealQuotaInfoComponent,
+    PeertubeCheckboxComponent,
+    UserPasswordComponent,
+    BytesPipe
+  ]
 })
 export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   error: string

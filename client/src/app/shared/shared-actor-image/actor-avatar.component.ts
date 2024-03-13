@@ -1,35 +1,39 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core'
-import { VideoChannel } from '../shared-main'
+import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild, booleanAttribute, numberAttribute } from '@angular/core'
 import { Account } from '../shared-main/account/account.model'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
+import { RouterLink } from '@angular/router'
+import { NgIf, NgClass, NgTemplateOutlet } from '@angular/common'
+import { VideoChannel } from '../shared-main/video-channel/video-channel.model'
 
-type ActorInput = {
+export type ActorAvatarInput = {
   name: string
   avatars: { width: number, url?: string, path: string }[]
-  url: string
 }
-
-export type ActorAvatarSize = '18' | '25' | '28' | '32' | '34' | '35' | '36' | '40' | '48' | '75' | '80' | '100' | '120'
 
 @Component({
   selector: 'my-actor-avatar',
   styleUrls: [ './actor-avatar.component.scss' ],
-  templateUrl: './actor-avatar.component.html'
+  templateUrl: './actor-avatar.component.html',
+  standalone: true,
+  imports: [ NgIf, NgClass, NgTemplateOutlet, RouterLink ]
 })
 export class ActorAvatarComponent implements OnInit, OnChanges {
-  private _title: string
+  @ViewChild('avatarEl') avatarEl: ElementRef
 
-  @Input() actor: ActorInput
+  @Input() actor: ActorAvatarInput
   @Input() actorType: 'channel' | 'account' | 'unlogged'
 
   @Input() previewImage: string
 
-  @Input() size: ActorAvatarSize
+  @Input({ transform: numberAttribute }) size = 120
+  @Input({ transform: booleanAttribute }) responseSize = false
 
   // Use an external link
   @Input() href: string
   // Use routerLink
   @Input() internalHref: string | any[]
+
+  private _title: string
 
   @Input() set title (value) {
     this._title = value
@@ -47,6 +51,10 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
   defaultAvatarUrl: string
   avatarUrl: string
 
+  constructor (private el: ElementRef) {
+
+  }
+
   ngOnInit () {
     this.buildDefaultAvatarUrl()
 
@@ -60,10 +68,21 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
   }
 
   private buildClasses () {
+    let avatarSize = '100%'
+    let initialFontSize = '22px'
+
     this.classes = [ 'avatar' ]
 
-    if (this.size) {
-      this.classes.push(`avatar-${this.size}`)
+    if (this.size && !this.responseSize) {
+      avatarSize = `${this.size}px`
+
+      if (this.size <= 18) {
+        initialFontSize = '13px'
+      } else if (this.size >= 100) {
+        initialFontSize = '40px'
+      } else if (this.size >= 120) {
+        initialFontSize = '46px'
+      }
     }
 
     if (this.isChannel()) {
@@ -77,6 +96,10 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
       this.classes.push('initial')
       this.classes.push(this.getColorTheme())
     }
+
+    const elStyle = (this.el.nativeElement as HTMLElement).style
+    elStyle.setProperty('--avatarSize', avatarSize)
+    elStyle.setProperty('--initialFontSize', initialFontSize)
   }
 
   private buildDefaultAvatarUrl () {

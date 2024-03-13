@@ -1,10 +1,12 @@
 import { DestroyOptions, Op, Transaction } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, IsInt, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, IsInt, Table, UpdatedAt } from 'sequelize-typescript'
 import { ResultList } from '@peertube/peertube-models'
 import { MUserAccountId, MUserId } from '@server/types/models/index.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { VideoModel } from '../video/video.js'
 import { UserModel } from './user.js'
+import { SequelizeModel } from '../shared/sequelize-type.js'
+import { USER_EXPORT_MAX_ITEMS } from '@server/initializers/constants.js'
+import { getSort } from '../shared/sort.js'
 
 @Table({
   tableName: 'userVideoHistory',
@@ -21,7 +23,7 @@ import { UserModel } from './user.js'
     }
   ]
 })
-export class UserVideoHistoryModel extends Model<Partial<AttributesOnly<UserVideoHistoryModel>>> {
+export class UserVideoHistoryModel extends SequelizeModel<UserVideoHistoryModel> {
   @CreatedAt
   createdAt: Date
 
@@ -69,6 +71,26 @@ export class UserVideoHistoryModel extends Model<Partial<AttributesOnly<UserVide
       user,
       historyOfUser: user
     })
+  }
+
+  static async listForExport (user: MUserId) {
+    const rows = await UserVideoHistoryModel.findAll({
+      attributes: [ 'createdAt', 'updatedAt', 'currentTime' ],
+      where: {
+        userId: user.id
+      },
+      limit: USER_EXPORT_MAX_ITEMS,
+      include: [
+        {
+          attributes: [ 'url' ],
+          model: VideoModel.unscoped(),
+          required: true
+        }
+      ],
+      order: getSort('updatedAt')
+    })
+
+    return rows.map(r => ({ createdAt: r.createdAt, updatedAt: r.updatedAt, currentTime: r.currentTime, videoUrl: r.Video.url }))
   }
 
   static removeUserHistoryElement (user: MUserId, videoId: number) {

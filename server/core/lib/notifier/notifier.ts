@@ -1,7 +1,7 @@
 import { UserNotificationSettingValue, UserNotificationSettingValueType } from '@peertube/peertube-models'
 import { MRegistration, MUser, MUserDefault } from '@server/types/models/user/index.js'
 import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/models/video/video-blacklist.js'
-import { logger } from '../../helpers/logger.js'
+import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import {
   MAbuseFull,
@@ -35,7 +35,7 @@ import {
   NewCommentForVideoOwner,
   NewPeerTubeVersionForAdmins,
   NewPluginVersionForAdmins,
-  NewVideoForSubscribers,
+  NewVideoOrLiveForSubscribers,
   OwnedPublicationAfterAutoUnblacklist,
   OwnedPublicationAfterScheduleUpdate,
   OwnedPublicationAfterTranscoding,
@@ -44,10 +44,12 @@ import {
   UnblacklistForOwner
 } from './shared/index.js'
 
+const lTags = loggerTagsFactory('notifier')
+
 class Notifier {
 
   private readonly notificationModels = {
-    newVideo: [ NewVideoForSubscribers ],
+    newVideoOrLive: [ NewVideoOrLiveForSubscribers ],
     publicationAfterTranscoding: [ OwnedPublicationAfterTranscoding ],
     publicationAfterScheduleUpdate: [ OwnedPublicationAfterScheduleUpdate ],
     publicationAfterAutoUnblacklist: [ OwnedPublicationAfterAutoUnblacklist ],
@@ -74,8 +76,10 @@ class Notifier {
   private constructor () {
   }
 
-  notifyOnNewVideoIfNeeded (video: MVideoAccountLight): void {
-    const models = this.notificationModels.newVideo
+  notifyOnNewVideoOrLiveIfNeeded (video: MVideoAccountLight): void {
+    const models = this.notificationModels.newVideoOrLive
+
+    logger.debug('Notify on new video or live if needed', { video: video.url, ...lTags() })
 
     this.sendNotifications(models, video)
       .catch(err => logger.error('Cannot notify subscribers of new video %s.', video.url, { err }))
@@ -84,6 +88,8 @@ class Notifier {
   notifyOnVideoPublishedAfterTranscoding (video: MVideoFullLight): void {
     const models = this.notificationModels.publicationAfterTranscoding
 
+    logger.debug('Notify on published video after transcoding', { video: video.url, ...lTags() })
+
     this.sendNotifications(models, video)
       .catch(err => logger.error('Cannot notify owner that its video %s has been published after transcoding.', video.url, { err }))
   }
@@ -91,12 +97,16 @@ class Notifier {
   notifyOnVideoPublishedAfterScheduledUpdate (video: MVideoFullLight): void {
     const models = this.notificationModels.publicationAfterScheduleUpdate
 
+    logger.debug('Notify on published video after scheduled update', { video: video.url, ...lTags() })
+
     this.sendNotifications(models, video)
       .catch(err => logger.error('Cannot notify owner that its video %s has been published after scheduled update.', video.url, { err }))
   }
 
   notifyOnVideoPublishedAfterRemovedFromAutoBlacklist (video: MVideoFullLight): void {
     const models = this.notificationModels.publicationAfterAutoUnblacklist
+
+    logger.debug('Notify on published video after being removed from auto blacklist', { video: video.url, ...lTags() })
 
     this.sendNotifications(models, video)
       .catch(err => {
@@ -107,12 +117,16 @@ class Notifier {
   notifyOnNewComment (comment: MCommentOwnerVideo): void {
     const models = this.notificationModels.newComment
 
+    logger.debug('Notify on new comment', { comment: comment.url, ...lTags() })
+
     this.sendNotifications(models, comment)
       .catch(err => logger.error('Cannot notify of new comment %s.', comment.url, { err }))
   }
 
   notifyOnNewAbuse (payload: NewAbusePayload): void {
     const models = this.notificationModels.newAbuse
+
+    logger.debug('Notify on new abuse', { abuse: payload.abuseInstance.id, ...lTags() })
 
     this.sendNotifications(models, payload)
       .catch(err => logger.error('Cannot notify of new abuse %d.', payload.abuseInstance.id, { err }))
@@ -121,12 +135,16 @@ class Notifier {
   notifyOnVideoAutoBlacklist (videoBlacklist: MVideoBlacklistLightVideo): void {
     const models = this.notificationModels.newAutoBlacklist
 
+    logger.debug('Notify on video auto blacklist', { video: videoBlacklist?.Video?.url, ...lTags() })
+
     this.sendNotifications(models, videoBlacklist)
       .catch(err => logger.error('Cannot notify of auto-blacklist of video %s.', videoBlacklist.Video.url, { err }))
   }
 
   notifyOnVideoBlacklist (videoBlacklist: MVideoBlacklistVideo): void {
     const models = this.notificationModels.newBlacklist
+
+    logger.debug('Notify on video manual blacklist', { video: videoBlacklist?.Video?.url, ...lTags() })
 
     this.sendNotifications(models, videoBlacklist)
       .catch(err => logger.error('Cannot notify video owner of new video blacklist of %s.', videoBlacklist.Video.url, { err }))
@@ -135,12 +153,16 @@ class Notifier {
   notifyOnVideoUnblacklist (video: MVideoFullLight): void {
     const models = this.notificationModels.unblacklist
 
+    logger.debug('Notify on video unblacklist', { video: video.url, ...lTags() })
+
     this.sendNotifications(models, video)
         .catch(err => logger.error('Cannot notify video owner of unblacklist of %s.', video.url, { err }))
   }
 
   notifyOnFinishedVideoImport (payload: ImportFinishedForOwnerPayload): void {
     const models = this.notificationModels.importFinished
+
+    logger.debug('Notify on finished video import', { import: payload.videoImport.getTargetIdentifier(), ...lTags() })
 
     this.sendNotifications(models, payload)
         .catch(err => {
@@ -151,12 +173,16 @@ class Notifier {
   notifyOnNewDirectRegistration (user: MUserDefault): void {
     const models = this.notificationModels.directRegistration
 
+    logger.debug('Notify on new direct registration', { user: user.username, ...lTags() })
+
     this.sendNotifications(models, user)
       .catch(err => logger.error('Cannot notify moderators of new user registration (%s).', user.username, { err }))
   }
 
   notifyOnNewRegistrationRequest (registration: MRegistration): void {
     const models = this.notificationModels.registrationRequest
+
+    logger.debug('Notify on new registration request', { registration: registration.username, ...lTags() })
 
     this.sendNotifications(models, registration)
       .catch(err => logger.error('Cannot notify moderators of new registration request (%s).', registration.username, { err }))
@@ -165,19 +191,21 @@ class Notifier {
   notifyOfNewUserFollow (actorFollow: MActorFollowFull): void {
     const models = this.notificationModels.userFollow
 
+    const following = actorFollow?.ActorFollowing?.VideoChannel?.getDisplayName()
+    const follower = actorFollow?.ActorFollower?.Account?.getDisplayName()
+
+    logger.debug('Notify on new user follow', { following, follower, ...lTags() })
+
     this.sendNotifications(models, actorFollow)
       .catch(err => {
-        logger.error(
-          'Cannot notify owner of channel %s of a new follow by %s.',
-          actorFollow.ActorFollowing.VideoChannel.getDisplayName(),
-          actorFollow.ActorFollower.Account.getDisplayName(),
-          { err }
-        )
+        logger.error('Cannot notify owner of channel %s of a new follow by %s.', following, follower, { err })
       })
   }
 
   notifyOfNewInstanceFollow (actorFollow: MActorFollowFull): void {
     const models = this.notificationModels.instanceFollow
+
+    logger.debug('Notify on new instance follow', { follower: actorFollow.ActorFollower.url, ...lTags() })
 
     this.sendNotifications(models, actorFollow)
       .catch(err => logger.error('Cannot notify administrators of new follower %s.', actorFollow.ActorFollower.url, { err }))
@@ -186,12 +214,16 @@ class Notifier {
   notifyOfAutoInstanceFollowing (actorFollow: MActorFollowFull): void {
     const models = this.notificationModels.autoInstanceFollow
 
+    logger.debug('Notify on new instance auto following', { following: actorFollow.ActorFollowing.url, ...lTags() })
+
     this.sendNotifications(models, actorFollow)
       .catch(err => logger.error('Cannot notify administrators of auto instance following %s.', actorFollow.ActorFollowing.url, { err }))
   }
 
   notifyOnAbuseStateChange (abuse: MAbuseFull): void {
     const models = this.notificationModels.abuseStateChange
+
+    logger.debug('Notify on abuse state change', { abuse: abuse.id, ...lTags() })
 
     this.sendNotifications(models, abuse)
       .catch(err => logger.error('Cannot notify of abuse %d state change.', abuse.id, { err }))
@@ -200,6 +232,8 @@ class Notifier {
   notifyOnAbuseMessage (abuse: MAbuseFull, message: MAbuseMessage): void {
     const models = this.notificationModels.newAbuseMessage
 
+    logger.debug('Notify on abuse message', { abuse: abuse.id, message, ...lTags() })
+
     this.sendNotifications(models, { abuse, message })
       .catch(err => logger.error('Cannot notify on new abuse %d message.', abuse.id, { err }))
   }
@@ -207,12 +241,16 @@ class Notifier {
   notifyOfNewPeerTubeVersion (application: MApplication, latestVersion: string) {
     const models = this.notificationModels.newPeertubeVersion
 
+    logger.debug('Notify on new peertube version', { currentVersion: application.version, latestVersion, ...lTags() })
+
     this.sendNotifications(models, { application, latestVersion })
-      .catch(err => logger.error('Cannot notify on new PeerTubeb version %s.', latestVersion, { err }))
+      .catch(err => logger.error('Cannot notify on new PeerTube version %s.', latestVersion, { err }))
   }
 
   notifyOfNewPluginVersion (plugin: MPlugin) {
     const models = this.notificationModels.newPluginVersion
+
+    logger.debug('Notify on new plugin version', { plugin: plugin.name, ...lTags() })
 
     this.sendNotifications(models, plugin)
       .catch(err => logger.error('Cannot notify on new plugin version %s.', plugin.name, { err }))
@@ -220,6 +258,8 @@ class Notifier {
 
   notifyOfFinishedVideoStudioEdition (video: MVideoFullLight) {
     const models = this.notificationModels.videoStudioEditionFinished
+
+    logger.debug('Notify on finished video studio edition', { video: video.url, ...lTags() })
 
     this.sendNotifications(models, video)
       .catch(err => logger.error('Cannot notify on finished studio edition %s.', video.url, { err }))

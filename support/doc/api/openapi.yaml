@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: PeerTube
-  version: 5.2.0
+  version: 6.1.0
   contact:
     name: PeerTube Community
     url: https://joinpeertube.org
@@ -172,6 +172,12 @@ tags:
       Using some features of PeerTube require authentication, for which User
       provide different levels of permission as well as associated user
       information. Each user has a corresponding local Account for federation.
+  - name: User Exports
+    description: >
+      To create an archive of user data.
+  - name: User Imports
+    description: >
+      To import an archive of user data.
   - name: My User
     description: >
       Operations related to your own User, when logged-in.
@@ -320,6 +326,8 @@ x-tagGroups:
     tags:
       - Accounts
       - Users
+      - User Exports
+      - User Imports
       - My User
       - My Subscriptions
       - My Notifications
@@ -934,6 +942,96 @@ paths:
           - admin
       responses:
         '200':
+          description: successful operation
+
+  /api/v1/config/instance-banner/pick:
+    post:
+      summary: Update instance banner
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Config
+      responses:
+        '204':
+          description: successful operation
+        '413':
+          description: image file too large
+          headers:
+            X-File-Maximum-Size:
+              schema:
+                type: string
+                format: Nginx size
+              description: Maximum file size for the banner
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                bannerfile:
+                  description: The file to upload.
+                  type: string
+                  format: binary
+            encoding:
+              bannerfile:
+                contentType: image/png, image/jpeg
+
+  '/api/v1/config/instance-banner':
+    delete:
+      summary: Delete instance banner
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Config
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/config/instance-avatar/pick:
+    post:
+      summary: Update instance avatar
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Config
+      responses:
+        '204':
+          description: successful operation
+        '413':
+          description: image file too large
+          headers:
+            X-File-Maximum-Size:
+              schema:
+                type: string
+                format: Nginx size
+              description: Maximum file size for the avatar
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatarfile:
+                  description: The file to upload.
+                  type: string
+                  format: binary
+            encoding:
+              avatarfile:
+                contentType: image/png, image/jpeg
+
+  '/api/v1/config/instance-avatar':
+    delete:
+      summary: Delete instance avatar
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Config
+      responses:
+        '204':
           description: successful operation
 
   /api/v1/custom-pages/homepage/instance:
@@ -1561,6 +1659,8 @@ paths:
       summary: Request two factor auth
       operationId: requestTwoFactor
       description: Request two factor authentication for a user
+      security:
+        - OAuth2: []
       tags:
         - Users
       parameters:
@@ -1593,6 +1693,8 @@ paths:
       summary: Confirm two factor auth
       operationId: confirmTwoFactorRequest
       description: Confirm a two factor authentication request
+      security:
+        - OAuth2: []
       tags:
         - Users
       parameters:
@@ -1625,6 +1727,8 @@ paths:
       summary: Disable two factor auth
       operationId: disableTwoFactor
       description: Disable two factor authentication of a user
+      security:
+        - OAuth2: []
       tags:
         - Users
       parameters:
@@ -1645,6 +1749,214 @@ paths:
           description: invalid password
         '404':
           description: user not found
+
+  /api/v1/users/{userId}/imports/import-resumable:
+    post:
+      summary: Initialize the resumable user import
+      description: "**PeerTube >= 6.1** Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to initialize the import of the archive"
+      operationId: userImportResumableInit
+      security:
+        - OAuth2: []
+      tags:
+        - User Imports
+      parameters:
+        - $ref: '#/components/parameters/resumableUploadInitContentLengthHeader'
+        - $ref: '#/components/parameters/resumableUploadInitContentTypeHeader'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserImportResumable'
+      responses:
+        '201':
+          description: created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: url
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+    put:
+      summary: Send chunk for the resumable user import
+      description: "**PeerTube >= 6.1** Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to continue, pause or resume the import of the archive"
+      operationId: userImportResumable
+      security:
+        - OAuth2: []
+      tags:
+        - User Imports
+      parameters:
+        - $ref: '#/components/parameters/resumableUploadId'
+        - $ref: '#/components/parameters/resumableUploadChunkContentRangeHeader'
+        - $ref: '#/components/parameters/resumableUploadChunkContentLengthHeader'
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '204':
+          description: 'last chunk received: successful operation'
+        '308':
+          description: resume incomplete
+          headers:
+            Range:
+              schema:
+                type: string
+                example: bytes=0-262143
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+    delete:
+      summary: Cancel the resumable user import
+      description: "**PeerTube >= 6.1** Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the resumable user import"
+      operationId: userImportResumableCancel
+      security:
+        - OAuth2: []
+      tags:
+        - User Imports
+      parameters:
+        - $ref: '#/components/parameters/resumableUploadId'
+        - name: Content-Length
+          in: header
+          required: true
+          schema:
+            type: number
+            example: 0
+      responses:
+        '204':
+          description: import cancelled
+          headers:
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+
+  /api/v1/users/{userId}/imports/latest:
+    get:
+      summary: Get latest user import
+      description: "**PeerTube >= 6.1**"
+      operationId: getLatestUserImport
+      security:
+        - OAuth2: []
+      tags:
+        - User Imports
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  state:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/UserImportState'
+                      label:
+                        type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+
+  /api/v1/users/{userId}/exports/request:
+    post:
+      summary: Request user export
+      operationId: requestUserExport
+      description: Request an archive of user data. An email is sent when the archive is ready.
+      security:
+        - OAuth2: []
+      tags:
+        - User Exports
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                withVideoFiles:
+                  type: boolean
+                  description: Whether to include video files in the archive
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  export:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+
+  /api/v1/users/{userId}/exports:
+    get:
+      summary: List user exports
+      description: "**PeerTube >= 6.1**"
+      operationId: listUserExports
+      security:
+        - OAuth2: []
+      tags:
+        - User Exports
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  state:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/UserExportState'
+                      label:
+                        type: string
+                  size:
+                    type: integer
+                    description: Size of the archive file in bytes
+                  privateDownloadUrl:
+                    type: string
+                    description: This URL already contains the JWT token, so no additional authentication credentials are required
+                  createdAt:
+                    type: string
+                    format: date-time
+                  expiresOn:
+                    type: string
+                    format: date-time
+  /api/v1/users/{userId}/exports/{id}:
+    delete:
+      summary: Delete a user export
+      description: "**PeerTube >= 6.1**"
+      operationId: deleteUserExport
+      security:
+        - OAuth2: []
+      tags:
+        - User Exports
+      parameters:
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: successful operation
 
   /api/v1/users/me:
     get:
@@ -1774,7 +2086,7 @@ paths:
 
   /api/v1/users/me/videos:
     get:
-      summary: Get videos of my user
+      summary: List videos of my user
       security:
         - OAuth2:
           - user
@@ -3232,6 +3544,8 @@ paths:
     get:
       summary: Get video source file metadata
       operationId: getVideoSource
+      security:
+        - OAuth2: []
       tags:
         - Video
       parameters:
@@ -6430,6 +6744,13 @@ components:
       description: Entity id
       schema:
         $ref: '#/components/schemas/id'
+    userId:
+      name: userId
+      in: path
+      required: true
+      description: User id
+      schema:
+        $ref: '#/components/schemas/id'
     registrationId:
       name: registrationId
       in: path
@@ -7074,6 +7395,34 @@ components:
         label:
           type: string
 
+    UserExportState:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      description: |
+        The user export state:
+          - `1`: Pending
+          - `2`: Processing
+          - `3`: Completed
+          - `4`: Errored
+
+    UserImportState:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      description: |
+        The user import state:
+          - `1`: Pending
+          - `2`: Processing
+          - `3`: Completed
+          - `4`: Errored
+
     AbuseStateSet:
       type: integer
       enum:
@@ -7211,6 +7560,12 @@ components:
         fps:
           type: number
           description: Frames per second of the video file
+        width:
+          type: number
+          description: "**PeerTube >= 6.1** Video stream width"
+        height:
+          type: number
+          description: "**PeerTube >= 6.1** Video stream height"
         metadataUrl:
           type: string
           format: url
@@ -7327,6 +7682,11 @@ components:
           example: 1419
           format: seconds
           description: duration of the video in seconds
+        aspectRatio:
+          type: number
+          format: float
+          example: 1.778
+          description: "**PeerTube >= 6.1** Aspect ratio of the video stream"
         isLocal:
           type: boolean
         name:
@@ -7776,6 +8136,29 @@ components:
       properties:
         filename:
           type: string
+          deprecated: true
+          description: 'Deprecated in 6.1, use inputFilename instead'
+        inputFilename:
+          type: string
+          description: 'Uploaded/imported filename'
+        fileDownloadUrl:
+          type: string
+          description: "**PeerTube >= 6.1** If enabled by the admin, the video source file is kept on the server and can be downloaded by the owner"
+        resolution:
+          $ref: '#/components/schemas/VideoResolutionConstant'
+          description: "**PeerTube >= 6.1**"
+        size:
+          type: integer
+          description: "**PeerTube >= 6.1** Video file size in bytes"
+        fps:
+          type: number
+          description: "**PeerTube >= 6.1** Frames per second of the video file"
+        width:
+          type: number
+          description: "**PeerTube >= 6.1** Video stream width"
+        height:
+          type: number
+          description: "**PeerTube >= 6.1** Video stream height"
         createdAt:
           type: string
           format: date-time
@@ -7938,6 +8321,14 @@ components:
                   type: string
                 css:
                   type: string
+            avatars:
+              type: array
+              items:
+                $ref: '#/components/schemas/ActorImage'
+            banners:
+              type: array
+              items:
+                $ref: '#/components/schemas/ActorImage'
         search:
           type: object
           properties:
@@ -8023,6 +8414,25 @@ components:
               properties:
                 enabled:
                   type: boolean
+            users:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+        export:
+          type: object
+          properties:
+            users:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                exportExpiration:
+                  type: number
+                  description: In milliseconds
+                maxUserVideoQuota:
+                  type: number
+                  description: In bytes
         autoBlacklist:
           type: object
           properties:
@@ -8091,9 +8501,11 @@ components:
           properties:
             videoQuota:
               type: integer
+              description: In bytes
               example: 16810141515
             videoQuotaDaily:
               type: integer
+              description: In bytes
               example: 1681014151
         trending:
           type: object
@@ -8191,6 +8603,12 @@ components:
           type: number
         totalMonthlyActiveUsers:
           type: number
+        totalModerators:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled total moderators stats"
+        totalAdmins:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled total admins stats"
         totalLocalVideos:
           type: number
         totalLocalVideoViews:
@@ -8246,6 +8664,26 @@ components:
         totalActivityPubMessagesWaiting:
           type: number
 
+        averageRegistrationRequestResponseTimeMs:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled registration requests stats"
+        totalRegistrationRequestsProcessed:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled registration requests stats"
+        totalRegistrationRequests:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled registration requests stats"
+
+        averageAbuseResponseTimeMs:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled abuses stats"
+        totalAbusesProcessed:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled abuses stats"
+        totalAbuses:
+          type: number
+          description: "**PeerTube >= 6.1** Value is null if the admin disabled abuses stats"
+
     ServerConfigAbout:
       properties:
         instance:
@@ -8259,6 +8697,36 @@ components:
               type: string
             terms:
               type: string
+            codeOfConduct:
+              type: string
+            hardwareInformation:
+              type: string
+            creationReason:
+              type: string
+            moderationInformation:
+              type: string
+            administrator:
+              type: string
+            maintenanceLifetime:
+              type: string
+            businessModel:
+              type: string
+            languages:
+              type: array
+              items:
+                  type: string
+            categories:
+              type: array
+              items:
+                type: integer
+            avatars:
+              type: array
+              items:
+                $ref: '#/components/schemas/ActorImage'
+            banners:
+              type: array
+              items:
+                $ref: '#/components/schemas/ActorImage'
     ServerConfigCustom:
       properties:
         instance:
@@ -8298,8 +8766,6 @@ components:
               properties:
                 username:
                   type: string
-                whitelisted:
-                  type: boolean
         cache:
           type: object
           properties:
@@ -8349,8 +8815,11 @@ components:
           properties:
             enabled:
               type: boolean
-            keepOriginalFile:
-              type: boolean
+            originalFile:
+              type: object
+              properties:
+                keep:
+                  type: boolean
             allowAdditionalExtensions:
               type: boolean
               description: Allow your users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos
@@ -8667,6 +9136,13 @@ components:
           type: string
           format: filename
           example: what_is_peertube.mp4
+    UserImportResumable:
+      properties:
+        filename:
+          description: Archive filename including extension
+          type: string
+          format: filename
+          example: "user-export-6-2024-02-09T10_12_11.682Z"
     CommentThreadResponse:
       properties:
         total:

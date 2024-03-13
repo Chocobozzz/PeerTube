@@ -1,13 +1,40 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { HooksService, Notifier } from '@app/core'
-import { NgbAccordionDirective } from '@ng-bootstrap/ng-bootstrap'
+import {
+  NgbAccordionDirective,
+  NgbAccordionItem,
+  NgbAccordionHeader,
+  NgbAccordionToggle,
+  NgbAccordionButton,
+  NgbCollapse,
+  NgbAccordionCollapse,
+  NgbAccordionBody
+} from '@ng-bootstrap/ng-bootstrap'
 import { About, ClientFilterHookName, PluginClientScope } from '@peertube/peertube-models'
-import { InstanceService } from './instance.service'
+import { InstanceService } from '../shared-main/instance/instance.service'
+import { InstanceFeaturesTableComponent } from './instance-features-table.component'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { NgIf, NgFor } from '@angular/common'
 
 @Component({
   selector: 'my-instance-about-accordion',
   templateUrl: './instance-about-accordion.component.html',
-  styleUrls: [ './instance-about-accordion.component.scss' ]
+  styleUrls: [ './instance-about-accordion.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    NgbAccordionDirective,
+    NgbAccordionItem,
+    NgbAccordionHeader,
+    NgbAccordionToggle,
+    NgbAccordionButton,
+    GlobalIconComponent,
+    NgbCollapse,
+    NgbAccordionCollapse,
+    NgbAccordionBody,
+    InstanceFeaturesTableComponent,
+    NgFor
+  ]
 })
 export class InstanceAboutAccordionComponent implements OnInit {
   @ViewChild('accordion', { static: true }) accordion: NgbAccordionDirective

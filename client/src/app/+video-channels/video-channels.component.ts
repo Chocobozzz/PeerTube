@@ -1,17 +1,43 @@
 import { Subscription } from 'rxjs'
 import { catchError, distinctUntilChanged, map, switchMap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
 import { AuthService, MarkdownService, Notifier, RestExtractor, ScreenService, Hotkey, HotkeysService } from '@app/core'
-import { Account, ListOverflowItem, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
-import { BlocklistService } from '@app/shared/shared-moderation'
-import { SupportModalComponent } from '@app/shared/shared-support-modal'
-import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import { ListOverflowComponent, ListOverflowItem } from '../shared/shared-main/misc/list-overflow.component'
+import { CopyButtonComponent } from '../shared/shared-main/buttons/copy-button.component'
+import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account-block-badges.component'
+import { ActorAvatarComponent } from '../shared/shared-actor-image/actor-avatar.component'
+import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
+import { NgIf, NgTemplateOutlet, NgClass, DatePipe } from '@angular/common'
+import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { Account } from '@app/shared/shared-main/account/account.model'
+import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
+import { SupportModalComponent } from '@app/shared/shared-support-modal/support-modal.component'
+import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription/subscribe-button.component'
 
 @Component({
   templateUrl: './video-channels.component.html',
-  styleUrls: [ './video-channels.component.scss' ]
+  styleUrls: [ './video-channels.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    RouterLink,
+    SubscribeButtonComponent,
+    GlobalIconComponent,
+    ActorAvatarComponent,
+    AccountBlockBadgesComponent,
+    CopyButtonComponent,
+    NgTemplateOutlet,
+    NgClass,
+    RouterLinkActive,
+    ListOverflowComponent,
+    RouterOutlet,
+    SupportModalComponent,
+    DatePipe
+  ]
 })
 export class VideoChannelsComponent implements OnInit, OnDestroy {
   @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
@@ -100,6 +126,18 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
   isInSmallView () {
     return this.screenService.isInSmallView()
+  }
+
+  getAccountAvatarSize () {
+    if (this.isInSmallView()) return 64
+
+    return 48
+  }
+
+  getChannelAvatarSize () {
+    if (this.isInSmallView()) return 80
+
+    return 120
   }
 
   isUserLoggedIn () {

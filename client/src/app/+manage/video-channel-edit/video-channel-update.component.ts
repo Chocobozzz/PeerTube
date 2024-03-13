@@ -2,23 +2,43 @@ import { Subscription } from 'rxjs'
 import { HttpErrorResponse } from '@angular/common/http'
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, HooksService, Notifier, RedirectService, ServerService } from '@app/core'
+import { AuthService, HooksService, Notifier, RedirectService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
 import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
   VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
   VIDEO_CHANNEL_SUPPORT_VALIDATOR
 } from '@app/shared/form-validators/video-channel-validators'
-import { FormReactiveService } from '@app/shared/shared-forms'
-import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
-import { HTMLServerConfig, VideoChannelUpdate } from '@peertube/peertube-models'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { VideoChannelUpdate } from '@peertube/peertube-models'
 import { VideoChannelEdit } from './video-channel-edit'
 import { shallowCopy } from '@peertube/peertube-core-utils'
+import { PeertubeCheckboxComponent } from '../../shared/shared-forms/peertube-checkbox.component'
+import { MarkdownTextareaComponent } from '../../shared/shared-forms/markdown-textarea.component'
+import { HelpComponent } from '../../shared/shared-main/misc/help.component'
+import { ActorAvatarEditComponent } from '../../shared/shared-actor-image-edit/actor-avatar-edit.component'
+import { ActorBannerEditComponent } from '../../shared/shared-actor-image-edit/actor-banner-edit.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgIf, NgClass } from '@angular/common'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
 
 @Component({
   selector: 'my-video-channel-update',
   templateUrl: './video-channel-edit.component.html',
-  styleUrls: [ './video-channel-edit.component.scss' ]
+  styleUrls: [ './video-channel-edit.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    FormsModule,
+    ReactiveFormsModule,
+    ActorBannerEditComponent,
+    ActorAvatarEditComponent,
+    NgClass,
+    HelpComponent,
+    MarkdownTextareaComponent,
+    PeertubeCheckboxComponent
+  ]
 })
 export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnInit, AfterViewInit, OnDestroy {
   error: string
@@ -26,7 +46,6 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
 
   private paramsSub: Subscription
   private oldSupportField: string
-  private serverConfig: HTMLServerConfig
 
   constructor (
     protected formReactiveService: FormReactiveService,
@@ -34,7 +53,6 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
     private notifier: Notifier,
     private route: ActivatedRoute,
     private videoChannelService: VideoChannelService,
-    private serverService: ServerService,
     private redirectService: RedirectService,
     private hooks: HooksService
   ) {
@@ -42,8 +60,6 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getHTMLConfig()
-
     this.buildForm({
       'display-name': VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
       'description': VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
@@ -178,20 +194,12 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
                             })
   }
 
-  get maxAvatarSize () {
-    return this.serverConfig.avatar.file.size.max
-  }
-
-  get avatarExtensions () {
-    return this.serverConfig.avatar.file.extensions.join(',')
-  }
-
   isCreation () {
     return false
   }
 
   getFormButtonTitle () {
-    return $localize`Update`
+    return $localize`Update ${this.videoChannel?.name}`
   }
 
   isBulkUpdateVideosDisplayed () {

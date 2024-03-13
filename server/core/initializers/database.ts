@@ -60,6 +60,8 @@ import { VideoModel } from '../models/video/video.js'
 import { VideoViewModel } from '../models/view/video-view.js'
 import { CONFIG } from './config.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
+import { UserExportModel } from '@server/models/user/user-export.js'
+import { UserImportModel } from '@server/models/user/user-import.js'
 
 pg.defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -165,6 +167,7 @@ async function initDatabaseModels (silent: boolean) {
     VideoTrackerModel,
     PluginModel,
     ActorCustomPageModel,
+    UserImportModel,
     VideoJobInfoModel,
     VideoChannelSyncModel,
     UserRegistrationModel,
@@ -172,7 +175,8 @@ async function initDatabaseModels (silent: boolean) {
     RunnerRegistrationTokenModel,
     RunnerModel,
     RunnerJobModel,
-    StoryboardModel
+    StoryboardModel,
+    UserExportModel
   ])
 
   // Check extensions exist in the database

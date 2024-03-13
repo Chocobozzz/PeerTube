@@ -17,7 +17,7 @@
 
 @mixin show-more-description {
   @include margin(10px, auto, 45px);
-  
+
   color: pvar(--mainColor);
   cursor: pointer;
 }
@@ -72,16 +72,5 @@
     content: '•';
     margin: 0 10px;
     color: pvar(--mainColor);
-  }
-
-  .main-avatar {
-    @include actor-avatar-size(120px);
-  }
-
-  @media screen and (max-width: $mobile-view) {
-
-    .main-avatar {
-      @include actor-avatar-size(80px);
-    }
   }
 }

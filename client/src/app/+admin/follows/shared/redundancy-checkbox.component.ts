@@ -1,10 +1,14 @@
 import { Component, Input } from '@angular/core'
 import { Notifier } from '@app/core'
-import { RedundancyService } from '@app/shared/shared-main'
+import { FormsModule } from '@angular/forms'
+import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
+import { RedundancyService } from '@app/shared/shared-main/video/redundancy.service'
 
 @Component({
   selector: 'my-redundancy-checkbox',
-  templateUrl: './redundancy-checkbox.component.html'
+  templateUrl: './redundancy-checkbox.component.html',
+  standalone: true,
+  imports: [ PeertubeCheckboxComponent, FormsModule ]
 })
 export class RedundancyCheckboxComponent {
   @Input() redundancyAllowed: boolean

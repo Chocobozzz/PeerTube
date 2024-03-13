@@ -1,15 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
-import { expect } from 'chai'
-import { createReadStream } from 'fs'
-import { stat } from 'fs/promises'
-import got, { Response as GotResponse } from 'got'
 import validator from 'validator'
 import { getAllPrivacies, omit, pick, wait } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
-  HttpStatusCodeType,
-  ResultList,
+  HttpStatusCodeType, ResultList,
   UserVideoRateType,
   Video,
   VideoCreate,
@@ -429,7 +424,13 @@ export class VideosCommand extends AbstractCommand {
 
     const created = mode === 'legacy'
       ? await this.buildLegacyUpload({ ...options, attributes })
-      : await this.buildResumeUpload({ ...options, path: '/api/v1/videos/upload-resumable', attributes })
+      : await this.buildResumeVideoUpload({
+        ...options,
+        path: '/api/v1/videos/upload-resumable',
+        fixture: attributes.fixture,
+        attaches: this.buildUploadAttaches(attributes, false),
+        fields: this.buildUploadFields(attributes)
+      })
 
     // Wait torrent generation
     const expectedStatus = this.buildExpectedStatus({ ...options, defaultExpectedStatus: HttpStatusCode.OK_200 })
@@ -456,217 +457,10 @@ export class VideosCommand extends AbstractCommand {
 
       path,
       fields: this.buildUploadFields(options.attributes),
-      attaches: this.buildUploadAttaches(options.attributes),
+      attaches: this.buildUploadAttaches(options.attributes, true),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })).then(body => body.video || body as any)
-  }
-
-  async buildResumeUpload (options: OverrideCommandOptions & {
-    path: string
-    attributes: { fixture?: string } & { [id: string]: any }
-    completedExpectedStatus?: HttpStatusCodeType // When the upload is finished
-  }): Promise<VideoCreateResult> {
-    const { path, attributes, expectedStatus = HttpStatusCode.OK_200, completedExpectedStatus } = options
-
-    let size = 0
-    let videoFilePath: string
-    let mimetype = 'video/mp4'
-
-    if (attributes.fixture) {
-      videoFilePath = buildAbsoluteFixturePath(attributes.fixture)
-      size = (await stat(videoFilePath)).size
-
-      if (videoFilePath.endsWith('.mkv')) {
-        mimetype = 'video/x-matroska'
-      } else if (videoFilePath.endsWith('.webm')) {
-        mimetype = 'video/webm'
-      }
-    }
-
-    // Do not check status automatically, we'll check it manually
-    const initializeSessionRes = await this.prepareResumableUpload({
-      ...options,
-
-      path,
-      expectedStatus: null,
-      attributes,
-      size,
-      mimetype
-    })
-    const initStatus = initializeSessionRes.status
-
-    if (videoFilePath && initStatus === HttpStatusCode.CREATED_201) {
-      const locationHeader = initializeSessionRes.header['location']
-      expect(locationHeader).to.not.be.undefined
-
-      const pathUploadId = locationHeader.split('?')[1]
-
-      const result = await this.sendResumableChunks({
-        ...options,
-
-        path,
-        pathUploadId,
-        videoFilePath,
-        size,
-        expectedStatus: completedExpectedStatus
-      })
-
-      if (result.statusCode === HttpStatusCode.OK_200) {
-        await this.endResumableUpload({
-          ...options,
-
-          expectedStatus: HttpStatusCode.NO_CONTENT_204,
-          path,
-          pathUploadId
-        })
-      }
-
-      return result.body?.video || result.body as any
-    }
-
-    const expectedInitStatus = expectedStatus === HttpStatusCode.OK_200
-      ? HttpStatusCode.CREATED_201
-      : expectedStatus
-
-    expect(initStatus).to.equal(expectedInitStatus)
-
-    return initializeSessionRes.body.video || initializeSessionRes.body
-  }
-
-  async prepareResumableUpload (options: OverrideCommandOptions & {
-    path: string
-    attributes: { fixture?: string } & { [id: string]: any }
-    size: number
-    mimetype: string
-
-    originalName?: string
-    lastModified?: number
-  }) {
-    const { path, attributes, originalName, lastModified, size, mimetype } = options
-
-    const attaches = this.buildUploadAttaches(omit(options.attributes, [ 'fixture' ]))
-
-    const uploadOptions = {
-      ...options,
-
-      path,
-      headers: {
-        'X-Upload-Content-Type': mimetype,
-        'X-Upload-Content-Length': size.toString()
-      },
-      fields: {
-        filename: attributes.fixture,
-        originalName,
-        lastModified,
-
-        ...this.buildUploadFields(options.attributes)
-      },
-
-      // Fixture will be sent later
-      attaches: this.buildUploadAttaches(omit(options.attributes, [ 'fixture' ])),
-      implicitToken: true,
-
-      defaultExpectedStatus: null
-    }
-
-    if (Object.keys(attaches).length === 0) return this.postBodyRequest(uploadOptions)
-
-    return this.postUploadRequest(uploadOptions)
-  }
-
-  sendResumableChunks (options: OverrideCommandOptions & {
-    pathUploadId: string
-    path: string
-    videoFilePath: string
-    size: number
-    contentLength?: number
-    contentRangeBuilder?: (start: number, chunk: any) => string
-    digestBuilder?: (chunk: any) => string
-  }) {
-    const {
-      path,
-      pathUploadId,
-      videoFilePath,
-      size,
-      contentLength,
-      contentRangeBuilder,
-      digestBuilder,
-      expectedStatus = HttpStatusCode.OK_200
-    } = options
-
-    let start = 0
-
-    const token = this.buildCommonRequestToken({ ...options, implicitToken: true })
-
-    const readable = createReadStream(videoFilePath, { highWaterMark: 8 * 1024 })
-    const server = this.server
-    return new Promise<GotResponse<{ video: VideoCreateResult }>>((resolve, reject) => {
-      readable.on('data', async function onData (chunk) {
-        try {
-          readable.pause()
-
-          const byterangeStart = start + chunk.length - 1
-
-          const headers = {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/octet-stream',
-            'Content-Range': contentRangeBuilder
-              ? contentRangeBuilder(start, chunk)
-              : `bytes ${start}-${byterangeStart}/${size}`,
-            'Content-Length': contentLength ? contentLength + '' : chunk.length + ''
-          }
-
-          if (digestBuilder) {
-            Object.assign(headers, { digest: digestBuilder(chunk) })
-          }
-
-          const res = await got<{ video: VideoCreateResult }>({
-            url: new URL(path + '?' + pathUploadId, server.url).toString(),
-            method: 'put',
-            headers,
-            body: chunk,
-            responseType: 'json',
-            throwHttpErrors: false
-          })
-
-          start += chunk.length
-
-          // Last request, check final status
-          if (byterangeStart + 1 === size) {
-            if (res.statusCode === expectedStatus) {
-              return resolve(res)
-            }
-
-            if (res.statusCode !== HttpStatusCode.PERMANENT_REDIRECT_308) {
-              readable.off('data', onData)
-
-              // eslint-disable-next-line max-len
-              const message = `Incorrect transient behaviour sending intermediary chunks. Status code is ${res.statusCode} instead of ${expectedStatus}`
-              return reject(new Error(message))
-            }
-          }
-
-          readable.resume()
-        } catch (err) {
-          reject(err)
-        }
-      })
-    })
-  }
-
-  endResumableUpload (options: OverrideCommandOptions & {
-    path: string
-    pathUploadId: string
-  }) {
-    return this.deleteRequest({
-      ...options,
-
-      path: options.path,
-      rawQuery: options.pathUploadId,
-      implicitToken: true,
-      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
-    })
   }
 
   quickUpload (options: OverrideCommandOptions & {
@@ -675,12 +469,14 @@ export class VideosCommand extends AbstractCommand {
     privacy?: VideoPrivacyType
     fixture?: string
     videoPasswords?: string[]
+    channelId?: number
   }) {
     const attributes: VideoEdit = { name: options.name }
     if (options.nsfw) attributes.nsfw = options.nsfw
     if (options.privacy) attributes.privacy = options.privacy
     if (options.fixture) attributes.fixture = options.fixture
     if (options.videoPasswords) attributes.videoPasswords = options.videoPasswords
+    if (options.channelId) attributes.channelId = options.channelId
 
     return this.upload({ ...options, attributes })
   }
@@ -713,7 +509,7 @@ export class VideosCommand extends AbstractCommand {
       ...options,
 
       path: '/api/v1/videos/' + options.videoId + '/source/replace-resumable',
-      attributes: { fixture: options.fixture }
+      fixture: options.fixture
     })
   }
 
@@ -813,19 +609,40 @@ export class VideosCommand extends AbstractCommand {
     ])
   }
 
-  private buildUploadFields (attributes: VideoEdit) {
+  buildUploadFields (attributes: VideoEdit) {
     return omit(attributes, [ 'fixture', 'thumbnailfile', 'previewfile' ])
   }
 
-  private buildUploadAttaches (attributes: VideoEdit) {
+  buildUploadAttaches (attributes: VideoEdit, includeFixture: boolean) {
     const attaches: { [ name: string ]: string } = {}
 
     for (const key of [ 'thumbnailfile', 'previewfile' ]) {
       if (attributes[key]) attaches[key] = buildAbsoluteFixturePath(attributes[key])
     }
 
-    if (attributes.fixture) attaches.videofile = buildAbsoluteFixturePath(attributes.fixture)
+    if (includeFixture && attributes.fixture) attaches.videofile = buildAbsoluteFixturePath(attributes.fixture)
 
     return attaches
+  }
+
+  // Make these methods public, needed by some offensive tests
+  sendResumableVideoChunks (options: Parameters<AbstractCommand['sendResumableChunks']>[0]) {
+    return super.sendResumableChunks<{ video: VideoCreateResult }>(options)
+  }
+
+  async buildResumeVideoUpload (
+    options: Parameters<AbstractCommand['buildResumeUpload']>[0]
+  ): Promise<VideoCreateResult> {
+    const result = await super.buildResumeUpload<{ video: VideoCreateResult }>(options)
+
+    return result?.video || result as any
+  }
+
+  prepareVideoResumableUpload (options: Parameters<AbstractCommand['prepareResumableUpload']>[0]) {
+    return super.prepareResumableUpload(options)
+  }
+
+  endVideoResumableUpload (options: Parameters<AbstractCommand['endResumableUpload']>[0]) {
+    return super.endResumableUpload(options)
   }
 }

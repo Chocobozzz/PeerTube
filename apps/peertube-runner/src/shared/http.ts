@@ -61,7 +61,7 @@ export function downloadFile (options: {
 // ---------------------------------------------------------------------------
 
 function getRequest (url: string) {
-  if (url.startsWith('https://')) return https.request
+  if (url.startsWith('https://')) return https.request.bind(https)
 
-  return http.request
+  return http.request.bind(http)
 }

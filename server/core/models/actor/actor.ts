@@ -17,9 +17,7 @@ import {
   ForeignKey,
   HasMany,
   HasOne,
-  Is,
-  Model,
-  Scopes,
+  Is, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -58,11 +56,12 @@ import {
 import { AccountModel } from '../account/account.js'
 import { getServerActor } from '../application/application.js'
 import { ServerModel } from '../server/server.js'
-import { buildSQLAttributes, isOutdated, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, buildSQLAttributes, isOutdated, throwIfNotValid } from '../shared/index.js'
 import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoModel } from '../video/video.js'
 import { ActorFollowModel } from './actor-follow.js'
 import { ActorImageModel } from './actor-image.js'
+import maxBy from 'lodash-es/maxBy.js'
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -164,7 +163,7 @@ export const unusedActorAttributesForAPI: (keyof AttributesOnly<ActorModel>)[] =
     }
   ]
 })
-export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
+export class ActorModel extends SequelizeModel<ActorModel> {
 
   @AllowNull(false)
   @Column(DataType.ENUM(...Object.values(ACTIVITY_PUB_ACTOR_TYPES)))
@@ -662,6 +661,10 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     return this.Server ? `${this.preferredUsername}@${this.Server.host}` : this.preferredUsername
   }
 
+  getFullIdentifier (this: MActorHost) {
+    return `${this.preferredUsername}@${this.getHost()}`
+  }
+
   getHost (this: MActorHostOnly) {
     return this.Server ? this.Server.host : WEBSERVER.HOST
   }
@@ -676,6 +679,16 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       : this.Banners
 
     return Array.isArray(images) && images.length !== 0
+  }
+
+  getMaxQualityImage (type: ActorImageType_Type) {
+    if (!this.hasImage(type)) return undefined
+
+    const images = type === ActorImageType.AVATAR
+      ? this.Avatars
+      : this.Banners
+
+    return maxBy(images, 'height')
   }
 
   isOutdated () {

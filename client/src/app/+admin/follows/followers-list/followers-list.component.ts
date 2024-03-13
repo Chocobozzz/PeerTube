@@ -1,16 +1,37 @@
-import { SortMeta } from 'primeng/api'
+import { SortMeta, SharedModule } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU } from '@app/helpers'
-import { AdvancedInputFilter } from '@app/shared/shared-forms'
-import { InstanceFollowService } from '@app/shared/shared-instance'
-import { DropdownAction } from '@app/shared/shared-main'
 import { ActorFollow } from '@peertube/peertube-models'
+import { AutoColspanDirective } from '../../../shared/shared-main/angular/auto-colspan.directive'
+import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
+import { NgIf, DatePipe } from '@angular/common'
+import { TableModule } from 'primeng/table'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
 
 @Component({
   selector: 'my-followers-list',
   templateUrl: './followers-list.component.html',
-  styleUrls: [ './followers-list.component.scss' ]
+  styleUrls: [ './followers-list.component.scss' ],
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    TableModule,
+    SharedModule,
+    NgIf,
+    ActionDropdownComponent,
+    AdvancedInputFilterComponent,
+    NgbTooltip,
+    ButtonComponent,
+    DeleteButtonComponent,
+    AutoColspanDirective,
+    DatePipe
+  ]
 })
 export class FollowersListComponent extends RestTable <ActorFollow> implements OnInit {
   followers: ActorFollow[] = []

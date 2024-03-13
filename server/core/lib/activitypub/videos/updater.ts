@@ -49,14 +49,10 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     try {
       const channelActor = await this.getOrCreateVideoChannelFromVideoObject()
 
-      const thumbnailModel = await this.setThumbnail(this.video)
-
       this.checkChannelUpdateOrThrow(channelActor)
 
       const oldState = this.video.state
       const videoUpdated = await this.updateVideo(channelActor.VideoChannel, undefined, overrideTo)
-
-      if (thumbnailModel) await videoUpdated.addAndSaveThumbnail(thumbnailModel)
 
       await runInReadCommittedTransaction(async t => {
         await this.setWebVideoFiles(videoUpdated, t)
@@ -93,11 +89,12 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
 
       // Notify our users?
       if (this.wasPrivateVideo || this.wasUnlistedVideo) {
-        Notifier.Instance.notifyOnNewVideoIfNeeded(videoUpdated)
+        Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(videoUpdated)
       }
 
       if (videoUpdated.isLive && oldState !== videoUpdated.state) {
         PeerTubeSocket.Instance.sendVideoLiveNewState(videoUpdated)
+        Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(videoUpdated)
       }
 
       Hooks.runAction('action:activity-pub.remote-video.updated', { video: videoUpdated, videoAPObject: this.videoObject })
@@ -146,6 +143,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     this.video.channelId = videoData.channelId
     this.video.views = videoData.views
     this.video.isLive = videoData.isLive
+    this.video.aspectRatio = videoData.aspectRatio
 
     // Ensures we update the updatedAt attribute, even if main attributes did not change
     this.video.changed('updatedAt', true)

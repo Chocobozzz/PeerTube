@@ -1,16 +1,22 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { AbuseService } from '@app/shared/shared-moderation'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { AdminAbuse } from '@peertube/peertube-models'
 import { ABUSE_MODERATION_COMMENT_VALIDATOR } from '../form-validators/abuse-validators'
+import { NgClass, NgIf } from '@angular/common'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { GlobalIconComponent } from '../shared-icons/global-icon.component'
+import { AbuseService } from '../shared-moderation/abuse.service'
 
 @Component({
   selector: 'my-moderation-comment-modal',
   templateUrl: './moderation-comment-modal.component.html',
-  styleUrls: [ './moderation-comment-modal.component.scss' ]
+  styleUrls: [ './moderation-comment-modal.component.scss' ],
+  standalone: true,
+  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, NgIf ]
 })
 export class ModerationCommentModalComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal

@@ -1,14 +1,21 @@
 import { Subject, Subscription, switchMap } from 'rxjs'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Notifier, ScreenService, User, UserService } from '@app/core'
-import { Video } from '@app/shared/shared-main'
+import { Video } from '@app/shared/shared-main/video/video.model'
 import { OverviewService } from './overview.service'
 import { VideosOverview } from './videos-overview.model'
+import { ActorAvatarComponent } from '../../../shared/shared-actor-image/actor-avatar.component'
+import { VideoMiniatureComponent } from '../../../shared/shared-video-miniature/video-miniature.component'
+import { RouterLink } from '@angular/router'
+import { InfiniteScrollerDirective } from '../../../shared/shared-main/angular/infinite-scroller.directive'
+import { NgIf, NgFor } from '@angular/common'
 
 @Component({
   selector: 'my-video-overview',
   templateUrl: './video-overview.component.html',
-  styleUrls: [ './video-overview.component.scss' ]
+  styleUrls: [ './video-overview.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, InfiniteScrollerDirective, NgFor, RouterLink, VideoMiniatureComponent, ActorAvatarComponent ]
 })
 export class VideoOverviewComponent implements OnInit, OnDestroy {
   onDataSubject = new Subject<any>()

@@ -1,10 +1,15 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { VIDEO_CAPTION_FILE_CONTENT_VALIDATOR } from '@app/shared/form-validators/video-captions-validators'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { VideoCaptionEdit, VideoCaptionService, VideoCaptionWithPathEdit } from '@app/shared/shared-main'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig, VideoConstant } from '@peertube/peertube-models'
 import { ServerService } from '../../../../core'
+import { NgClass, NgIf } from '@angular/common'
+import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
+import { VideoCaptionWithPathEdit, VideoCaptionEdit } from '@app/shared/shared-main/video-caption/video-caption-edit.model'
 
 /**
  * https://github.com/valor-software/ngx-bootstrap/issues/3825
@@ -14,7 +19,9 @@ import { ServerService } from '../../../../core'
 @Component({
   selector: 'my-video-caption-edit-modal-content',
   styleUrls: [ './video-caption-edit-modal-content.component.scss' ],
-  templateUrl: './video-caption-edit-modal-content.component.html'
+  templateUrl: './video-caption-edit-modal-content.component.html',
+  standalone: true,
+  imports: [ FormsModule, ReactiveFormsModule, GlobalIconComponent, NgClass, NgIf ]
 })
 
 export class VideoCaptionEditModalContentComponent extends FormReactive implements OnInit {

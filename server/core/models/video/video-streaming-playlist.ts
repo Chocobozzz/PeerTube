@@ -1,13 +1,12 @@
 import {
-  VideoStorage,
+  FileStorage,
   VideoStreamingPlaylistType,
-  type VideoStorageType,
+  type FileStorageType,
   type VideoStreamingPlaylistType_Type
 } from '@peertube/peertube-models'
 import { sha1 } from '@peertube/peertube-node-utils'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { CONFIG } from '@server/initializers/config.js'
-import { getHLSPrivateFileUrl, getHLSPublicFileUrl } from '@server/lib/object-storage/index.js'
+import { getHLSPrivateFileUrl, getObjectStoragePublicFileUrl } from '@server/lib/object-storage/index.js'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename } from '@server/lib/paths.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
@@ -24,9 +23,7 @@ import {
   Default,
   ForeignKey,
   HasMany,
-  Is,
-  Model,
-  Table,
+  Is, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
@@ -41,7 +38,7 @@ import {
   WEBSERVER
 } from '../../initializers/constants.js'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy.js'
-import { doesExist, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, doesExist, throwIfNotValid } from '../shared/index.js'
 import { VideoModel } from './video.js'
 
 @Table({
@@ -60,7 +57,7 @@ import { VideoModel } from './video.js'
     }
   ]
 })
-export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<VideoStreamingPlaylistModel>>> {
+export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPlaylistModel> {
   @CreatedAt
   createdAt: Date
 
@@ -103,9 +100,9 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   videoId: number
 
   @AllowNull(false)
-  @Default(VideoStorage.FILE_SYSTEM)
+  @Default(FileStorage.FILE_SYSTEM)
   @Column
-  storage: VideoStorageType
+  storage: FileStorageType
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -132,7 +129,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   })
   RedundancyVideos: Awaited<VideoRedundancyModel>[]
 
-  static doesInfohashExistCached = memoizee(VideoStreamingPlaylistModel.doesInfohashExist, {
+  static doesInfohashExistCached = memoizee(VideoStreamingPlaylistModel.doesInfohashExist.bind(VideoStreamingPlaylistModel), {
     promise: true,
     max: MEMOIZE_LENGTH.INFO_HASH_EXISTS,
     maxAge: MEMOIZE_TTL.INFO_HASH_EXISTS
@@ -222,7 +219,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
       playlist = new VideoStreamingPlaylistModel({
         p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
         type: VideoStreamingPlaylistType.HLS,
-        storage: VideoStorage.FILE_SYSTEM,
+        storage: FileStorage.FILE_SYSTEM,
         p2pMediaLoaderInfohashes: [],
         playlistFilename: generateHLSMasterPlaylistFilename(video.isLive),
         segmentsSha256Filename: generateHlsSha256SegmentsFilename(video.isLive),
@@ -239,7 +236,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
     const query = `SELECT 1 FROM "videoStreamingPlaylist" ` +
       `INNER JOIN "video" ON "video"."id" = "videoStreamingPlaylist"."videoId" ` +
       `AND "video"."remote" IS FALSE AND "video"."uuid" = $videoUUID ` +
-      `AND "storage" = ${VideoStorage.FILE_SYSTEM} LIMIT 1`
+      `AND "storage" = ${FileStorage.FILE_SYSTEM} LIMIT 1`
 
     return doesExist(this.sequelize, query, { videoUUID })
   }
@@ -254,7 +251,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
 
   getMasterPlaylistUrl (video: MVideo) {
     if (video.isOwned()) {
-      if (this.storage === VideoStorage.OBJECT_STORAGE) {
+      if (this.storage === FileStorage.OBJECT_STORAGE) {
         return this.getMasterPlaylistObjectStorageUrl(video)
       }
 
@@ -269,14 +266,14 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
       return getHLSPrivateFileUrl(video, this.playlistFilename)
     }
 
-    return getHLSPublicFileUrl(this.playlistUrl)
+    return getObjectStoragePublicFileUrl(this.playlistUrl, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
   }
 
   // ---------------------------------------------------------------------------
 
   getSha256SegmentsUrl (video: MVideo) {
     if (video.isOwned()) {
-      if (this.storage === VideoStorage.OBJECT_STORAGE) {
+      if (this.storage === FileStorage.OBJECT_STORAGE) {
         return this.getSha256SegmentsObjectStorageUrl(video)
       }
 
@@ -291,7 +288,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
       return getHLSPrivateFileUrl(video, this.segmentsSha256Filename)
     }
 
-    return getHLSPublicFileUrl(this.segmentsSha256Url)
+    return getObjectStoragePublicFileUrl(this.segmentsSha256Url, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
   }
 
   // ---------------------------------------------------------------------------

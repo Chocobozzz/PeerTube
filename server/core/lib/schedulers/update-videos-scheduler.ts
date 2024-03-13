@@ -8,7 +8,7 @@ import { ScheduleVideoUpdateModel } from '../../models/video/schedule-video-upda
 import { Notifier } from '../notifier/index.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { setVideoPrivacy } from '../video-privacy.js'
-import { addVideoJobsAfterUpdate } from '../video.js'
+import { addVideoJobsAfterUpdate } from '../video-jobs.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
 export class UpdateVideosScheduler extends AbstractScheduler {

@@ -2,9 +2,9 @@ import { forkJoin, Observable } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { ServerService } from '@app/core'
-import { CustomMarkupService } from '@app/shared/shared-custom-markup'
-import { AboutHTML, InstanceService } from '@app/shared/shared-instance'
 import { About, ServerStats } from '@peertube/peertube-models'
+import { AboutHTML, InstanceService } from '@app/shared/shared-main/instance/instance.service'
+import { CustomMarkupService } from '@app/shared/shared-custom-markup/custom-markup.service'
 
 export type ResolverData = {
   serverStats: ServerStats

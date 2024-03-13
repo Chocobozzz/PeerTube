@@ -226,7 +226,7 @@ describe('Test video blacklist API validators', function () {
 
     it('Should fail with a non authenticated user', async function () {
       await command.remove({
-        token: 'fake token',
+        token: 'faketoken',
         videoId: servers[0].store.videoCreated.uuid,
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
@@ -258,7 +258,7 @@ describe('Test video blacklist API validators', function () {
     const basePath = '/api/v1/videos/blacklist/'
 
     it('Should fail with a non authenticated user', async function () {
-      await servers[0].blacklist.list({ token: 'fake token', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await servers[0].blacklist.list({ token: 'faketoken', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with a non admin user', async function () {

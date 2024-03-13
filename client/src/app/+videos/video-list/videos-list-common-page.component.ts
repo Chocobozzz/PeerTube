@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router'
 import { ComponentPaginationLight, DisableForReuseHook, MetaService, RedirectService, ServerService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
-import { VideoService } from '@app/shared/shared-main'
 import { VideoFilters, VideoFilterScope } from '@app/shared/shared-video-miniature/video-filters.model'
 import { ClientFilterHookName, VideoSortField } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
+import { VideosListComponent } from '../../shared/shared-video-miniature/videos-list.component'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
 
 export type VideosListCommonPageRouteData = {
   sort: VideoSortField
@@ -16,7 +17,9 @@ export type VideosListCommonPageRouteData = {
 }
 
 @Component({
-  templateUrl: './videos-list-common-page.component.html'
+  templateUrl: './videos-list-common-page.component.html',
+  standalone: true,
+  imports: [ VideosListComponent ]
 })
 export class VideosListCommonPageComponent implements OnInit, OnDestroy, DisableForReuseHook {
   getVideosObservableFunction = this.getVideosObservable.bind(this)
@@ -69,7 +72,7 @@ export class VideosListCommonPageComponent implements OnInit, OnDestroy, Disable
     const params = {
       ...filters.toVideosAPIObject(),
 
-      videoPagination: pagination,
+      videoPagination: { ...pagination },
       skipCount: true
     }
 

@@ -54,7 +54,9 @@ export const ServerErrorCode = {
   VIDEO_REQUIRES_PASSWORD:'video_requires_password',
   INCORRECT_VIDEO_PASSWORD:'incorrect_video_password',
 
-  VIDEO_ALREADY_BEING_TRANSCODED:'video_already_being_transcoded'
+  VIDEO_ALREADY_BEING_TRANSCODED:'video_already_being_transcoded',
+
+  MAX_USER_VIDEO_QUOTA_EXCEEDED_FOR_USER_EXPORT: 'max_user_video_quota_exceeded_for_user_export'
 } as const
 
 /**

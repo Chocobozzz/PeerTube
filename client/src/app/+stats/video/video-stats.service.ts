@@ -3,8 +3,8 @@ import { environment } from 'src/environments/environment'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor } from '@app/core'
-import { VideoService } from '@app/shared/shared-main'
 import { VideoStatsOverall, VideoStatsRetention, VideoStatsTimeserie, VideoStatsTimeserieMetric } from '@peertube/peertube-models'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
 
 @Injectable({
   providedIn: 'root'

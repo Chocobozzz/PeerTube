@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { testImageSize } from '@tests/shared/checks.js'
+import { testAvatarSize } from '@tests/shared/checks.js'
 import { AbuseState, HttpStatusCode, UserAdminFlag, UserRole, VideoPlaylistType } from '@peertube/peertube-models'
-import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@peertube/peertube-server-commands'
+import {
+  cleanupTests,
+  createSingleServer, PeerTubeServer,
+  setAccessTokensToServers
+} from '@peertube/peertube-server-commands'
 
 describe('Test users', function () {
   let server: PeerTubeServer
@@ -89,6 +93,8 @@ describe('Test users', function () {
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
       expect(user.nsfwPolicy).to.equal('display')
+
+      expect(user.totalVideoFileSize).to.equal(0)
 
       const rootUser = data[1]
       expect(rootUser.username).to.equal('root')
@@ -262,7 +268,7 @@ describe('Test users', function () {
 
       const user = await server.users.getMyInfo({ token: userToken })
       for (const avatar of user.account.avatars) {
-        await testImageSize(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, '.gif')
+        await testAvatarSize({ url: server.url, avatar, imageName: `avatar-resized-${avatar.width}x${avatar.width}` })
       }
     })
 
@@ -274,7 +280,7 @@ describe('Test users', function () {
 
         const user = await server.users.getMyInfo({ token: userToken })
         for (const avatar of user.account.avatars) {
-          await testImageSize(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, extension)
+          await testAvatarSize({ url: server.url, avatar, imageName: `avatar-resized-${avatar.width}x${avatar.width}` })
         }
       }
     })
@@ -484,6 +490,7 @@ describe('Test users', function () {
       expect(user.abusesCount).to.equal(0)
       expect(user.abusesCreatedCount).to.equal(0)
       expect(user.abusesAcceptedCount).to.equal(0)
+      expect(user.totalVideoFileSize).to.equal(0)
     })
 
     it('Should report correct videos count', async function () {
@@ -495,6 +502,7 @@ describe('Test users', function () {
 
       const user = await server.users.get({ userId: user17Id, withStats: true })
       expect(user.videosCount).to.equal(1)
+      expect(user.totalVideoFileSize).to.not.equal(0)
     })
 
     it('Should report correct video comments for user', async function () {

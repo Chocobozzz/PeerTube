@@ -23,14 +23,17 @@
         <div class="section-label" i18n>OWNER ACCOUNT</div>
 
         <div class="avatar-row">
-          <my-actor-avatar class="account-avatar" [actor]="ownerAccount" actorType="account" [internalHref]="getAccountUrl()"></my-actor-avatar>
+          <my-actor-avatar
+            class="account-avatar" [size]="getAccountAvatarSize()"
+            [actor]="ownerAccount" actorType="account" [internalHref]="getAccountUrl()"
+          ></my-actor-avatar>
 
           <div class="actor-info">
             <h4>
               <a [routerLink]="getAccountUrl()" title="View account" i18n-title>{{ ownerAccount.displayName }}</a>
             </h4>
 
-            <div class="actor-handle">@{{ videoChannel.ownerBy }}</div>
+            <div class="actor-handle">&#64;{{ videoChannel.ownerBy }}</div>
 
             <my-account-block-badges [account]="ownerAccount"></my-account-block-badges>
           </div>
@@ -51,7 +54,7 @@
     </ng-template>
 
     <div class="channel-avatar-row">
-      <my-actor-avatar class="main-avatar" [actor]="videoChannel" actorType="channel"></my-actor-avatar>
+      <my-actor-avatar [size]="getChannelAvatarSize()" [actor]="videoChannel" actorType="channel"></my-actor-avatar>
 
       <div>
         <div class="section-label" i18n>VIDEO CHANNEL</div>
@@ -63,7 +66,7 @@
             </div>
 
             <div class="actor-handle">
-              <span>@{{ videoChannel.nameWithHost }}</span>
+              <span>&#64;{{ videoChannel.nameWithHost }}</span>
 
               <my-copy-button
                 [value]="videoChannel.nameWithHostForced" i18n-notification notification="Handle copied"

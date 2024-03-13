@@ -128,7 +128,14 @@ class P2pMediaLoaderPlugin extends Plugin {
 
     this.runStats()
 
-    this.hlsjs.on(Hlsjs.Events.LEVEL_SWITCHED, () => this.player.trigger('engine-resolution-change'))
+    let initResolutionChange = true
+    this.hlsjs.on(Hlsjs.Events.LEVEL_SWITCHED, () => {
+      const level = this.getCurrentLevel()
+      const resolution = Math.min(level?.height || 0, level?.width || 0)
+
+      this.player.trigger('resolution-change', { resolution, initResolutionChange })
+      initResolutionChange = false
+    })
 
     this.hlsjs.on(Hlsjs.Events.MANIFEST_PARSED, (_event, data) => {
       if (Array.isArray(data.levels) && data.levels.length >= 1) {

@@ -1,10 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.video-channel-title {
-  @include settings-big-title;
-}
-
 my-actor-banner-edit {
   max-width: 500px;
 }
@@ -29,6 +25,6 @@ my-markdown-textarea {
   @include peertube-select-container(340px);
 }
 
-.breadcrumb {
-  @include breadcrumb;
+.pt-two-cols .content-col {
+  max-width: 500px;
 }

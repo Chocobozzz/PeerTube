@@ -2,8 +2,8 @@ import { forkJoin, of } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, Router } from '@angular/router'
-import { AccountService } from '../account'
-import { VideoChannelService } from '../video-channel'
+import { AccountService } from '../account/account.service'
+import { VideoChannelService } from '../video-channel/video-channel.service'
 
 @Injectable()
 export class ActorRedirectGuard {

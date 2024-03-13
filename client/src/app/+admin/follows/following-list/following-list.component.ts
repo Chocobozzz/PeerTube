@@ -1,16 +1,36 @@
-import { SortMeta } from 'primeng/api'
+import { SortMeta, SharedModule } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
-import { AdvancedInputFilter } from '@app/shared/shared-forms'
-import { InstanceFollowService } from '@app/shared/shared-instance'
 import { ActorFollow } from '@peertube/peertube-models'
 import { FollowModalComponent } from './follow-modal.component'
-import { DropdownAction } from '@app/shared/shared-main'
 import { formatICU } from '@app/helpers'
+import { AutoColspanDirective } from '../../../shared/shared-main/angular/auto-colspan.directive'
+import { RedundancyCheckboxComponent } from '../shared/redundancy-checkbox.component'
+import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
+import { NgIf, DatePipe } from '@angular/common'
+import { TableModule } from 'primeng/table'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
 
 @Component({
   templateUrl: './following-list.component.html',
-  styleUrls: [ './following-list.component.scss' ]
+  styleUrls: [ './following-list.component.scss' ],
+  standalone: true,
+  imports: [
+    GlobalIconComponent,
+    TableModule,
+    SharedModule,
+    NgIf,
+    ActionDropdownComponent,
+    AdvancedInputFilterComponent,
+    DeleteButtonComponent,
+    RedundancyCheckboxComponent,
+    AutoColspanDirective,
+    FollowModalComponent,
+    DatePipe
+  ]
 })
 export class FollowingListComponent extends RestTable <ActorFollow> implements OnInit {
   @ViewChild('followModal') followModal: FollowModalComponent

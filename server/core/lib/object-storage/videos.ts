@@ -1,14 +1,20 @@
-import { basename, join } from 'path'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MStreamingPlaylistVideo, MVideo, MVideoFile } from '@server/types/models/index.js'
+import { MVideoSource } from '@server/types/models/video/video-source.js'
+import { basename, join } from 'path'
 import { getHLSDirectory } from '../paths.js'
 import { VideoPathManager } from '../video-path-manager.js'
-import { generateHLSObjectBaseStorageKey, generateHLSObjectStorageKey, generateWebVideoObjectStorageKey } from './keys.js'
+import {
+  generateHLSObjectBaseStorageKey,
+  generateHLSObjectStorageKey,
+  generateOriginalVideoObjectStorageKey,
+  generateWebVideoObjectStorageKey
+} from './keys.js'
 import {
   createObjectReadStream,
-  listKeysOfPrefix,
   lTags,
+  listKeysOfPrefix,
   makeAvailable,
   removeObject,
   removeObjectByFullKey,
@@ -19,13 +25,13 @@ import {
   updatePrefixACL
 } from './shared/index.js'
 
-function listHLSFileKeysOf (playlist: MStreamingPlaylistVideo) {
+export function listHLSFileKeysOf (playlist: MStreamingPlaylistVideo) {
   return listKeysOfPrefix(generateHLSObjectBaseStorageKey(playlist), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
 // ---------------------------------------------------------------------------
 
-function storeHLSFileFromFilename (playlist: MStreamingPlaylistVideo, filename: string) {
+export function storeHLSFileFromFilename (playlist: MStreamingPlaylistVideo, filename: string) {
   return storeObject({
     inputPath: join(getHLSDirectory(playlist.Video), filename),
     objectStorageKey: generateHLSObjectStorageKey(playlist, filename),
@@ -34,7 +40,7 @@ function storeHLSFileFromFilename (playlist: MStreamingPlaylistVideo, filename: 
   })
 }
 
-function storeHLSFileFromPath (playlist: MStreamingPlaylistVideo, path: string) {
+export function storeHLSFileFromPath (playlist: MStreamingPlaylistVideo, path: string) {
   return storeObject({
     inputPath: path,
     objectStorageKey: generateHLSObjectStorageKey(playlist, basename(path)),
@@ -43,7 +49,7 @@ function storeHLSFileFromPath (playlist: MStreamingPlaylistVideo, path: string) 
   })
 }
 
-function storeHLSFileFromContent (playlist: MStreamingPlaylistVideo, path: string, content: string) {
+export function storeHLSFileFromContent (playlist: MStreamingPlaylistVideo, path: string, content: string) {
   return storeContent({
     content,
     inputPath: path,
@@ -55,7 +61,7 @@ function storeHLSFileFromContent (playlist: MStreamingPlaylistVideo, path: strin
 
 // ---------------------------------------------------------------------------
 
-function storeWebVideoFile (video: MVideo, file: MVideoFile) {
+export function storeWebVideoFile (video: MVideo, file: MVideoFile) {
   return storeObject({
     inputPath: VideoPathManager.Instance.getFSVideoFileOutputPath(video, file),
     objectStorageKey: generateWebVideoObjectStorageKey(file.filename),
@@ -66,7 +72,18 @@ function storeWebVideoFile (video: MVideo, file: MVideoFile) {
 
 // ---------------------------------------------------------------------------
 
-async function updateWebVideoFileACL (video: MVideo, file: MVideoFile) {
+export function storeOriginalVideoFile (inputPath: string, filename: string) {
+  return storeObject({
+    inputPath,
+    objectStorageKey: generateOriginalVideoObjectStorageKey(filename),
+    bucketInfo: CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES,
+    isPrivate: true
+  })
+}
+
+// ---------------------------------------------------------------------------
+
+export async function updateWebVideoFileACL (video: MVideo, file: MVideoFile) {
   await updateObjectACL({
     objectStorageKey: generateWebVideoObjectStorageKey(file.filename),
     bucketInfo: CONFIG.OBJECT_STORAGE.WEB_VIDEOS,
@@ -74,7 +91,7 @@ async function updateWebVideoFileACL (video: MVideo, file: MVideoFile) {
   })
 }
 
-async function updateHLSFilesACL (playlist: MStreamingPlaylistVideo) {
+export async function updateHLSFilesACL (playlist: MStreamingPlaylistVideo) {
   await updatePrefixACL({
     prefix: generateHLSObjectBaseStorageKey(playlist),
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
@@ -84,31 +101,37 @@ async function updateHLSFilesACL (playlist: MStreamingPlaylistVideo) {
 
 // ---------------------------------------------------------------------------
 
-function removeHLSObjectStorage (playlist: MStreamingPlaylistVideo) {
+export function removeHLSObjectStorage (playlist: MStreamingPlaylistVideo) {
   return removePrefix(generateHLSObjectBaseStorageKey(playlist), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
-function removeHLSFileObjectStorageByFilename (playlist: MStreamingPlaylistVideo, filename: string) {
+export function removeHLSFileObjectStorageByFilename (playlist: MStreamingPlaylistVideo, filename: string) {
   return removeObject(generateHLSObjectStorageKey(playlist, filename), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
-function removeHLSFileObjectStorageByPath (playlist: MStreamingPlaylistVideo, path: string) {
+export function removeHLSFileObjectStorageByPath (playlist: MStreamingPlaylistVideo, path: string) {
   return removeObject(generateHLSObjectStorageKey(playlist, basename(path)), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
-function removeHLSFileObjectStorageByFullKey (key: string) {
+export function removeHLSFileObjectStorageByFullKey (key: string) {
   return removeObjectByFullKey(key, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
 // ---------------------------------------------------------------------------
 
-function removeWebVideoObjectStorage (videoFile: MVideoFile) {
+export function removeWebVideoObjectStorage (videoFile: MVideoFile) {
   return removeObject(generateWebVideoObjectStorageKey(videoFile.filename), CONFIG.OBJECT_STORAGE.WEB_VIDEOS)
 }
 
 // ---------------------------------------------------------------------------
 
-async function makeHLSFileAvailable (playlist: MStreamingPlaylistVideo, filename: string, destination: string) {
+export function removeOriginalFileObjectStorage (videoSource: MVideoSource) {
+  return removeObject(generateOriginalVideoObjectStorageKey(videoSource.keptOriginalFilename), CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES)
+}
+
+// ---------------------------------------------------------------------------
+
+export async function makeHLSFileAvailable (playlist: MStreamingPlaylistVideo, filename: string, destination: string) {
   const key = generateHLSObjectStorageKey(playlist, filename)
 
   logger.info('Fetching HLS file %s from object storage to %s.', key, destination, lTags())
@@ -122,7 +145,7 @@ async function makeHLSFileAvailable (playlist: MStreamingPlaylistVideo, filename
   return destination
 }
 
-async function makeWebVideoFileAvailable (filename: string, destination: string) {
+export async function makeWebVideoFileAvailable (filename: string, destination: string) {
   const key = generateWebVideoObjectStorageKey(filename)
 
   logger.info('Fetching Web Video file %s from object storage to %s.', key, destination, lTags())
@@ -138,7 +161,7 @@ async function makeWebVideoFileAvailable (filename: string, destination: string)
 
 // ---------------------------------------------------------------------------
 
-function getWebVideoFileReadStream (options: {
+export function getWebVideoFileReadStream (options: {
   filename: string
   rangeHeader: string
 }) {
@@ -153,7 +176,7 @@ function getWebVideoFileReadStream (options: {
   })
 }
 
-function getHLSFileReadStream (options: {
+export function getHLSFileReadStream (options: {
   playlist: MStreamingPlaylistVideo
   filename: string
   rangeHeader: string
@@ -169,29 +192,17 @@ function getHLSFileReadStream (options: {
   })
 }
 
-// ---------------------------------------------------------------------------
+export function getOriginalFileReadStream (options: {
+  keptOriginalFilename: string
+  rangeHeader: string
+}) {
+  const { keptOriginalFilename, rangeHeader } = options
 
-export {
-  listHLSFileKeysOf,
+  const key = generateOriginalVideoObjectStorageKey(keptOriginalFilename)
 
-  storeWebVideoFile,
-  storeHLSFileFromFilename,
-  storeHLSFileFromPath,
-  storeHLSFileFromContent,
-
-  updateWebVideoFileACL,
-  updateHLSFilesACL,
-
-  removeHLSObjectStorage,
-  removeHLSFileObjectStorageByFilename,
-  removeHLSFileObjectStorageByPath,
-  removeHLSFileObjectStorageByFullKey,
-
-  removeWebVideoObjectStorage,
-
-  makeWebVideoFileAvailable,
-  makeHLSFileAvailable,
-
-  getWebVideoFileReadStream,
-  getHLSFileReadStream
+  return createObjectReadStream({
+    key,
+    bucketInfo: CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES,
+    rangeHeader
+  })
 }

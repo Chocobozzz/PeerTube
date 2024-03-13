@@ -1,15 +1,38 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core'
 import { MarkdownService, Notifier, UserService } from '@app/core'
 import { AuthService } from '@app/core/auth'
-import { Account, DropdownAction, Video } from '@app/shared/shared-main'
 import { CommentReportComponent } from '@app/shared/shared-moderation/report-modals/comment-report.component'
-import { VideoComment, VideoCommentThreadTree } from '@app/shared/shared-video-comment'
 import { User, UserRight } from '@peertube/peertube-models'
+import { FromNowPipe } from '../../../../shared/shared-main/angular/from-now.pipe'
+import { VideoCommentAddComponent } from './video-comment-add.component'
+import { UserModerationDropdownComponent } from '../../../../shared/shared-moderation/user-moderation-dropdown.component'
+import { TimestampRouteTransformerDirective } from '../timestamp-route-transformer.directive'
+import { RouterLink } from '@angular/router'
+import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
+import { NgIf, NgClass, NgFor } from '@angular/common'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { Account } from '@app/shared/shared-main/account/account.model'
+import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
+import { VideoComment } from '@app/shared/shared-video-comment/video-comment.model'
+import { VideoCommentThreadTree } from '@app/shared/shared-video-comment/video-comment-thread-tree.model'
 
 @Component({
   selector: 'my-video-comment',
   templateUrl: './video-comment.component.html',
-  styleUrls: [ './video-comment.component.scss' ]
+  styleUrls: [ './video-comment.component.scss' ],
+  standalone: true,
+  imports: [
+    NgIf,
+    NgClass,
+    ActorAvatarComponent,
+    RouterLink,
+    TimestampRouteTransformerDirective,
+    UserModerationDropdownComponent,
+    VideoCommentAddComponent,
+    NgFor,
+    CommentReportComponent,
+    FromNowPipe
+  ]
 })
 export class VideoCommentComponent implements OnInit, OnChanges {
   @ViewChild('commentReportModal') commentReportModal: CommentReportComponent

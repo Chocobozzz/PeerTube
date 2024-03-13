@@ -4,11 +4,12 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, ServerService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
-import { VideoPasswordService, VideoService } from '@app/shared/shared-main/video'
 import { peertubeTranslate, sortBy } from '@peertube/peertube-core-utils'
 import { ResultList, VideoCaption } from '@peertube/peertube-models'
 import { environment } from '../../../../environments/environment'
 import { VideoCaptionEdit } from './video-caption-edit.model'
+import { VideoPasswordService } from '../video/video-password.service'
+import { VideoService } from '../video/video.service'
 
 @Injectable()
 export class VideoCaptionService {

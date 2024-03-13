@@ -70,10 +70,11 @@ class PeerTubeMobilePlugin extends Plugin {
 
   private handleFullscreenRotation () {
     this.onFullScreenChangeHandler = () => {
-      if (!this.player.isFullscreen() || this.isPortraitVideo()) return
+      if (!this.player.isFullscreen() || this.isPortraitVideo()) return;
 
-      screen.orientation.lock('landscape')
-        .catch(err => logger.error('Cannot lock screen to landscape.', err))
+      // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1615
+      (screen.orientation as any).lock('landscape')
+        .catch((err: Error) => logger.error('Cannot lock screen to landscape.', err))
     }
 
     this.player.on('fullscreenchange', this.onFullScreenChangeHandler)

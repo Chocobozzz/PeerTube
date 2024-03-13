@@ -1,11 +1,11 @@
 <ng-template #img>
-  <img *ngIf="displayImage()" [class]="classes" [src]="previewImage || avatarUrl || defaultAvatarUrl" alt="" />
+  <img #avatarEl *ngIf="displayImage()" [ngClass]="classes" [src]="previewImage || avatarUrl || defaultAvatarUrl" alt="" />
 
-  <div *ngIf="displayActorInitial()" [ngClass]="classes">
+  <div #avatarEl *ngIf="displayActorInitial()" [ngClass]="classes">
     <span>{{ getActorInitial() }}</span>
   </div>
 
-  <div *ngIf="displayPlaceholder()" [ngClass]="classes"></div>
+  <div #avatarEl *ngIf="displayPlaceholder()" [ngClass]="classes"></div>
 </ng-template>
 
 <a *ngIf="actor && href" [href]="href" target="_blank" rel="noopener noreferrer" [title]="title">

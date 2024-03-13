@@ -31,7 +31,7 @@ class LiveQuotaStore {
     live.size += size
   }
 
-  getLiveQuotaOf (userId: number) {
+  getLiveQuotaOfUser (userId: number) {
     const currentLives = this.livesPerUser.get(userId)
     if (!currentLives) return 0
 

@@ -10,6 +10,9 @@ export interface ServerStats extends ActivityPubMessagesSuccess, ActivityPubMess
   totalWeeklyActiveUsers: number
   totalMonthlyActiveUsers: number
 
+  totalModerators: number
+  totalAdmins: number
+
   totalLocalVideos: number
   totalLocalVideoViews: number
   totalLocalVideoComments: number
@@ -36,6 +39,14 @@ export interface ServerStats extends ActivityPubMessagesSuccess, ActivityPubMess
 
   activityPubMessagesProcessedPerSecond: number
   totalActivityPubMessagesWaiting: number
+
+  averageRegistrationRequestResponseTimeMs: number
+  totalRegistrationRequestsProcessed: number
+  totalRegistrationRequests: number
+
+  averageAbuseResponseTimeMs: number
+  totalAbusesProcessed: number
+  totalAbuses: number
 }
 
 export interface VideosRedundancyStats {

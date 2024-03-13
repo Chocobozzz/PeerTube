@@ -12,25 +12,25 @@
     <div class="row">
       <div class="col-5">
 
-          <label i18n for="reportPredefinedReasons">What is the issue?</label>
+        <label i18n for="reportPredefinedReasons">What is the issue?</label>
 
-          <div class="ms-2 mt-2 d-flex flex-column">
-            <ng-container formGroupName="predefinedReasons">
+        <div class="ms-2 mt-2 d-flex flex-column">
+          <ng-container formGroupName="predefinedReasons">
 
-              <div class="form-group" *ngFor="let reason of predefinedReasons">
-                <my-peertube-checkbox [inputName]="reason.id" [formControlName]="reason.id" [labelText]="reason.label">
-                  <ng-template *ngIf="reason.help" ptTemplate="help">
-                    <div [innerHTML]="reason.help"></div>
-                  </ng-template>
+            <div class="form-group" *ngFor="let reason of predefinedReasons">
+              <my-peertube-checkbox [inputName]="reason.id" [formControlName]="reason.id" [labelText]="reason.label">
+                <ng-template *ngIf="reason.help" ptTemplate="help">
+                  <div [innerHTML]="reason.help"></div>
+                </ng-template>
 
-                  <ng-container *ngIf="reason.description" ngProjectAs="description">
-                    <div [innerHTML]="reason.description"></div>
-                  </ng-container>
-                </my-peertube-checkbox>
-              </div>
+                <ng-container *ngIf="reason.description" ngProjectAs="description">
+                  <div [innerHTML]="reason.description"></div>
+                </ng-container>
+              </my-peertube-checkbox>
+            </div>
 
-            </ng-container>
-          </div>
+          </ng-container>
+        </div>
       </div>
 
       <div class="col-7">

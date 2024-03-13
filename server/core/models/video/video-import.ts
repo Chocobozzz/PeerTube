@@ -1,5 +1,4 @@
 import { VideoImport, VideoImportState, type VideoImportStateType } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { MVideoImportDefault, MVideoImportFormattable } from '@server/types/models/video/video-import.js'
 import { IncludeOptions, Op, WhereOptions } from 'sequelize'
@@ -13,15 +12,13 @@ import {
   Default,
   DefaultScope,
   ForeignKey,
-  Is,
-  Model,
-  Table,
+  Is, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports.js'
 import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos.js'
 import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers/constants.js'
-import { getSort, searchAttribute, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, getSort, searchAttribute, throwIfNotValid } from '../shared/index.js'
 import { UserModel } from '../user/user.js'
 import { VideoChannelSyncModel } from './video-channel-sync.js'
 import { VideoModel, ScopeNames as VideoModelScopeNames } from './video.js'
@@ -63,7 +60,7 @@ const defaultVideoScope = () => {
     }
   ]
 })
-export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportModel>>> {
+export class VideoImportModel extends SequelizeModel<VideoImportModel> {
   @CreatedAt
   createdAt: Date
 
@@ -159,7 +156,7 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
   }) {
     const { userId, start, count, sort, targetUrl, videoChannelSyncId, search } = options
 
-    const where: WhereOptions = { userId }
+    const where: WhereOptions = [ { userId } ]
     const include: IncludeOptions[] = [
       {
         attributes: [ 'id' ],
@@ -172,14 +169,22 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
       }
     ]
 
-    if (targetUrl) where['targetUrl'] = targetUrl
-    if (videoChannelSyncId) where['videoChannelSyncId'] = videoChannelSyncId
+    if (targetUrl) where.push({ targetUrl })
+    if (videoChannelSyncId) where.push({ videoChannelSyncId })
 
     if (search) {
       include.push({
         model: defaultVideoScope(),
-        required: true,
-        where: searchAttribute(search, 'name')
+        required: false
+      })
+
+      where.push({
+        [Op.or]: [
+          searchAttribute(search, '$Video.name$'),
+          searchAttribute(search, 'targetUrl'),
+          searchAttribute(search, 'torrentName'),
+          searchAttribute(search, 'magnetUri')
+        ]
       })
     } else {
       include.push({

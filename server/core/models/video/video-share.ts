@@ -1,13 +1,12 @@
 import { literal, Op, QueryTypes, Transaction } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
 import { MActorDefault, MActorFollowersUrl, MActorId } from '../../types/models/index.js'
 import { MVideoShareActor, MVideoShareFull } from '../../types/models/video/index.js'
 import { ActorModel } from '../actor/actor.js'
-import { buildLocalActorIdsIn, throwIfNotValid } from '../shared/index.js'
+import { buildLocalActorIdsIn, SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { VideoModel } from './video.js'
 
 enum ScopeNames {
@@ -52,7 +51,7 @@ enum ScopeNames {
     }
   ]
 })
-export class VideoShareModel extends Model<Partial<AttributesOnly<VideoShareModel>>> {
+export class VideoShareModel extends SequelizeModel<VideoShareModel> {
 
   @AllowNull(false)
   @Is('VideoShareUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))

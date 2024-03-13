@@ -1,8 +1,8 @@
 <ng-container [formGroup]="form">
 
-  <div class="row mt-4"> <!-- transcoding grid -->
-    <div class="col-12 col-lg-4 col-xl-3"></div>
-    <div class="col-12 col-lg-8">
+  <div class="pt-two-cols mt-4">
+    <div class="title-col"></div>
+    <div class="content-col">
 
       <div class="callout callout-orange">
         <span i18n>
@@ -16,20 +16,21 @@
     </div>
   </div>
 
-  <div class="row mt-4"> <!-- transcoding grid -->
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="inner-form-title">TRANSCODING</h2>
+  <div class="pt-two-cols mt-4">
+    <div class="title-col">
+      <h2 i18n>TRANSCODING</h2>
+
       <div i18n class="inner-form-description">
         Process uploaded videos so that they are in a streamable form that any device can play. Though costly in
         resources, this is a critical part of PeerTube, so tread carefully.
       </div>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
 
       <ng-container formGroupName="transcoding">
 
-        <div class="col-12 col-xl-11">
+        <div>
           <my-peertube-checkbox inputName="transcodingEnabled" formControlName="enabled" [recommended]="true">
             <ng-template ptTemplate="label">
               <ng-container i18n>Transcoding enabled</ng-container>
@@ -38,7 +39,7 @@
             <ng-container ngProjectAs="extra">
 
               <div class="callout callout-light pt-2 pb-0">
-                <h3 class="callout-title" i18n>Input formats</h3>
+                <h3 class="callout-title" i18n>Input</h3>
 
                 <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
                   <my-peertube-checkbox
@@ -62,10 +63,21 @@
                     </ng-container>
                   </my-peertube-checkbox>
                 </div>
+
+                <div class="form-group" formGroupName="originalFile" [ngClass]="getTranscodingDisabledClass()">
+                  <my-peertube-checkbox
+                    inputName="transcodingOriginalFileKeep" formControlName="keep"
+                    i18n-labelText labelText="Keep a version of the input file"
+                  >
+                    <ng-container ngProjectAs="description">
+                      <div i18n>If enabled, the input file is not deleted after transcoding but moved in a dedicated folder or object storage</div>
+                    </ng-container>
+                  </my-peertube-checkbox>
+                </div>
               </div>
 
               <div class="callout callout-light pt-2 mt-2 pb-0">
-                <h3 class="callout-title" i18n>Output formats</h3>
+                <h3 class="callout-title" i18n>Output</h3>
 
                 <ng-container formGroupName="webVideos">
                   <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
@@ -209,15 +221,15 @@
     </div>
   </div>
 
-  <div class="row mt-2"> <!-- video studio grid -->
-    <div class="col-12 col-lg-4 col-xl-3">
-      <h2 i18n class="inner-form-title">VIDEO STUDIO</h2>
+  <div class="pt-two-cols mt-2">
+    <div class="title-col">
+      <h2 i18n>VIDEO STUDIO</h2>
       <div i18n class="inner-form-description">
         Allows your users to edit their video (cut, add intro/outro, add a watermark etc)
       </div>
     </div>
 
-    <div class="col-12 col-lg-8 col-xl-9">
+    <div class="content-col">
 
       <ng-container formGroupName="videoStudio">
         <div class="form-group" [ngClass]="getTranscodingDisabledClass()">

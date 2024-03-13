@@ -55,6 +55,8 @@ function getAverageBandwidthInStore () {
   return undefined
 }
 
+// ---------------------------------------------------------------------------
+
 function saveLastSubtitle (language: string) {
   return setLocalStorage('last-subtitle', language)
 }
@@ -62,6 +64,16 @@ function saveLastSubtitle (language: string) {
 function getStoredLastSubtitle () {
   return getLocalStorage('last-subtitle')
 }
+
+function savePreferredSubtitle (language: string) {
+  return setLocalStorage('preferred-subtitle', language)
+}
+
+function getStoredPreferredSubtitle () {
+  return getLocalStorage('preferred-subtitle')
+}
+
+// ---------------------------------------------------------------------------
 
 function saveVideoWatchHistory (videoUUID: string, duration: number) {
   return setLocalStorage(`video-watch-history`, JSON.stringify({
@@ -128,7 +140,9 @@ export {
   getStoredLastSubtitle,
   saveVideoWatchHistory,
   getStoredVideoWatchHistory,
-  cleanupVideoWatch
+  cleanupVideoWatch,
+  savePreferredSubtitle,
+  getStoredPreferredSubtitle
 }
 
 // ---------------------------------------------------------------------------

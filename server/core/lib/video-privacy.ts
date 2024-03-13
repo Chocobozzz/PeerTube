@@ -1,6 +1,6 @@
 import { move } from 'fs-extra/esm'
 import { join } from 'path'
-import { VideoPrivacy, VideoPrivacyType, VideoStorage } from '@peertube/peertube-models'
+import { VideoPrivacy, VideoPrivacyType, FileStorage } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { DIRECTORIES } from '@server/initializers/constants.js'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
@@ -66,7 +66,7 @@ async function moveFiles (options: {
   const { type, video } = options
 
   for (const file of video.VideoFiles) {
-    if (file.storage === VideoStorage.FILE_SYSTEM) {
+    if (file.storage === FileStorage.FILE_SYSTEM) {
       await moveWebVideoFileOnFS(type, video, file)
     } else {
       await updateWebVideoFileACL(video, file)
@@ -76,7 +76,7 @@ async function moveFiles (options: {
   const hls = video.getHLSPlaylist()
 
   if (hls) {
-    if (hls.storage === VideoStorage.FILE_SYSTEM) {
+    if (hls.storage === FileStorage.FILE_SYSTEM) {
       await moveHLSFilesOnFS(type, video)
     } else {
       await updateHLSFilesACL(hls)
@@ -101,10 +101,10 @@ async function moveWebVideoFileOnFS (type: MoveType, video: MVideo, file: MVideo
 
 function getWebVideoDirectories (moveType: MoveType) {
   if (moveType === 'private-to-public') {
-    return { old: DIRECTORIES.VIDEOS.PRIVATE, new: DIRECTORIES.VIDEOS.PUBLIC }
+    return { old: DIRECTORIES.WEB_VIDEOS.PRIVATE, new: DIRECTORIES.WEB_VIDEOS.PUBLIC }
   }
 
-  return { old: DIRECTORIES.VIDEOS.PUBLIC, new: DIRECTORIES.VIDEOS.PRIVATE }
+  return { old: DIRECTORIES.WEB_VIDEOS.PUBLIC, new: DIRECTORIES.WEB_VIDEOS.PRIVATE }
 }
 
 // ---------------------------------------------------------------------------

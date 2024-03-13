@@ -24,6 +24,7 @@ describe('Test video NSFW policy', function () {
     let promises: Promise<ResultList<Video>>[]
 
     if (token) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       promises = [
         server.search.advancedVideoSearch({ token, search: { search: 'n', sort: '-publishedAt', ...query } }),
         server.videos.listWithToken({ token, ...query }),
@@ -34,13 +35,14 @@ describe('Test video NSFW policy', function () {
       // Overviews do not support video filters
       if (!hasQuery) {
         const p = server.overviews.getVideos({ page: 1, token })
-                                         .then(res => createOverviewRes(res))
+          .then(res => createOverviewRes(res))
         promises.push(p)
       }
 
       return Promise.all(promises)
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     promises = [
       server.search.searchVideos({ search: 'n', sort: '-publishedAt' }),
       server.videos.list(),
@@ -51,7 +53,8 @@ describe('Test video NSFW policy', function () {
     // Overviews do not support video filters
     if (!hasQuery) {
       const p = server.overviews.getVideos({ page: 1 })
-                                       .then(res => createOverviewRes(res))
+        .then(res => createOverviewRes(res))
+
       promises.push(p)
     }
 

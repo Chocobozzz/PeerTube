@@ -41,12 +41,12 @@ export class VideoOwnershipService {
   acceptOwnership (id: number, input: VideoChangeOwnershipAccept) {
     const url = VideoOwnershipService.BASE_VIDEO_CHANGE_OWNERSHIP_URL + 'ownership/' + id + '/accept'
     return this.authHttp.post(url, input)
-      .pipe(catchError(this.restExtractor.handleError))
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   refuseOwnership (id: number) {
     const url = VideoOwnershipService.BASE_VIDEO_CHANGE_OWNERSHIP_URL + 'ownership/' + id + '/refuse'
     return this.authHttp.post(url, {})
-      .pipe(catchError(this.restExtractor.handleError))
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }

@@ -1,9 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core'
+import { RouterLink } from '@angular/router'
+import { NgIf, NgClass, NgTemplateOutlet } from '@angular/common'
 
 @Component({
   selector: 'my-link',
   styleUrls: [ './link.component.scss' ],
-  templateUrl: './link.component.html'
+  templateUrl: './link.component.html',
+  standalone: true,
+  imports: [ NgIf, RouterLink, NgClass, NgTemplateOutlet ]
 })
 export class LinkComponent implements OnInit {
   @Input() internalLink?: string | any[]

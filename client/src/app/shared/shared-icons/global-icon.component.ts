@@ -77,7 +77,8 @@ const icons = {
   'message-circle': require('!!raw-loader?!../../../assets/images/feather/message-circle.svg').default,
   'codesandbox': require('!!raw-loader?!../../../assets/images/feather/codesandbox.svg').default,
   'award': require('!!raw-loader?!../../../assets/images/feather/award.svg').default,
-  'stats': require('!!raw-loader?!../../../assets/images/feather/stats.svg').default
+  'stats': require('!!raw-loader?!../../../assets/images/feather/stats.svg').default,
+  'shield': require('!!raw-loader?!../../../assets/images/misc/shield.svg').default
 }
 
 export type GlobalIconName = keyof typeof icons
@@ -86,7 +87,8 @@ export type GlobalIconName = keyof typeof icons
   selector: 'my-global-icon',
   template: '',
   styleUrls: [ './global-icon.component.scss' ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true
 })
 export class GlobalIconComponent implements OnInit {
   @Input() iconName: GlobalIconName

@@ -66,7 +66,7 @@ function buildConfig (suiteFile: string = undefined) {
         publish: {
           download_enabled: false,
           comments_enabled: false,
-          privacy: 4,
+          privacy: 2,
           licence: 4
         },
         p2p: {

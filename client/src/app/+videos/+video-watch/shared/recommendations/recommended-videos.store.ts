@@ -1,7 +1,7 @@
 import { Observable, ReplaySubject } from 'rxjs'
 import { map, shareReplay, switchMap, take } from 'rxjs/operators'
 import { Inject, Injectable } from '@angular/core'
-import { Video } from '@app/shared/shared-main'
+import { Video } from '@app/shared/shared-main/video/video.model'
 import { RecentVideosRecommendationService } from './recent-videos-recommendation.service'
 import { RecommendationInfo } from './recommendation-info.model'
 import { RecommendationService } from './recommendations.service'

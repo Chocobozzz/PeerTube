@@ -7,7 +7,6 @@ import {
   type RunnerJobStateType,
   type RunnerJobType
 } from '@peertube/peertube-models'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isArray, isUUIDValid } from '@server/helpers/custom-validators/misc.js'
 import { CONSTRAINTS_FIELDS, RUNNER_JOB_STATES } from '@server/initializers/constants.js'
 import { MRunnerJob, MRunnerJobRunner, MRunnerJobRunnerParent } from '@server/types/models/runners/index.js'
@@ -20,13 +19,11 @@ import {
   DataType,
   Default,
   ForeignKey,
-  IsUUID,
-  Model,
-  Scopes,
+  IsUUID, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { getSort, searchAttribute } from '../shared/index.js'
+import { SequelizeModel, getSort, searchAttribute } from '../shared/index.js'
 import { RunnerModel } from './runner.js'
 
 enum ScopeNames {
@@ -68,7 +65,7 @@ enum ScopeNames {
     }
   ]
 })
-export class RunnerJobModel extends Model<Partial<AttributesOnly<RunnerJobModel>>> {
+export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
 
   @AllowNull(false)
   @IsUUID(4)

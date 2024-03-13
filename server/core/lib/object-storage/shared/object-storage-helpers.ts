@@ -3,7 +3,7 @@ import { isArray } from '@server/helpers/custom-validators/misc.js'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import Bluebird from 'bluebird'
-import { createReadStream, createWriteStream, ReadStream } from 'fs'
+import { createReadStream, createWriteStream } from 'fs'
 import { ensureDir } from 'fs-extra/esm'
 import { dirname } from 'path'
 import { Readable } from 'stream'
@@ -11,7 +11,7 @@ import { getInternalUrl } from '../urls.js'
 import { getClient } from './client.js'
 import { lTags } from './logger.js'
 
-import type { _Object, CompleteMultipartUploadCommandOutput, PutObjectCommandInput, S3Client } from '@aws-sdk/client-s3'
+import type { _Object, ObjectCannedACL, PutObjectCommandInput, S3Client } from '@aws-sdk/client-s3'
 
 type BucketInfo = {
   BUCKET_NAME: string
@@ -65,6 +65,19 @@ async function storeContent (options: {
   logger.debug('Uploading %s content to %s%s in bucket %s', inputPath, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
 
   return uploadToStorage({ objectStorageKey, content, bucketInfo, isPrivate })
+}
+
+async function storeStream (options: {
+  stream: Readable
+  objectStorageKey: string
+  bucketInfo: BucketInfo
+  isPrivate: boolean
+}): Promise<string> {
+  const { stream, objectStorageKey, bucketInfo, isPrivate } = options
+
+  logger.debug('Streaming file to %s%s in bucket %s', bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
+
+  return uploadToStorage({ objectStorageKey, content: stream, bucketInfo, isPrivate })
 }
 
 // ---------------------------------------------------------------------------
@@ -225,6 +238,27 @@ async function createObjectReadStream (options: {
 
 // ---------------------------------------------------------------------------
 
+async function getObjectStorageFileSize (options: {
+  key: string
+  bucketInfo: BucketInfo
+}) {
+  const { key, bucketInfo } = options
+
+  const { HeadObjectCommand } = await import('@aws-sdk/client-s3')
+
+  const command = new HeadObjectCommand({
+    Bucket: bucketInfo.BUCKET_NAME,
+    Key: buildKey(key, bucketInfo)
+  })
+
+  const client = await getClient()
+  const response = await client.send(command)
+
+  return response.ContentLength
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   type BucketInfo,
 
@@ -232,6 +266,7 @@ export {
 
   storeObject,
   storeContent,
+  storeStream,
 
   removeObject,
   removeObjectByFullKey,
@@ -243,13 +278,15 @@ export {
   updatePrefixACL,
 
   listKeysOfPrefix,
-  createObjectReadStream
+  createObjectReadStream,
+
+  getObjectStorageFileSize
 }
 
 // ---------------------------------------------------------------------------
 
 async function uploadToStorage (options: {
-  content: ReadStream | string
+  content: Readable | string
   objectStorageKey: string
   bucketInfo: BucketInfo
   isPrivate: boolean
@@ -280,7 +317,7 @@ async function uploadToStorage (options: {
     params: input
   })
 
-  const response = (await parallelUploads3.done()) as CompleteMultipartUploadCommandOutput
+  const response = await parallelUploads3.done()
   // Check is needed even if the HTTP status code is 200 OK
   // For more information, see https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html
   if (!response.Bucket) {
@@ -340,6 +377,6 @@ async function applyOnPrefix (options: {
 
 function getACL (isPrivate: boolean) {
   return isPrivate
-    ? CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PRIVATE
-    : CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PUBLIC
+    ? CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PRIVATE as ObjectCannedACL
+    : CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PUBLIC as ObjectCannedACL
 }

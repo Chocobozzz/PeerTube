@@ -1,17 +1,6 @@
-@use 'sass:color';
-
 @use '_variables' as *;
 @use '_mixins' as *;
-@use 'bootstrap/scss/functions' as *;
 
-.account-title {
-  @include settings-big-title;
-
-  &.account-title-danger {
-    color: color.adjust($color: #c54130, $lightness: 10%);
-  }
-}
-
-.row > div {
-  max-width: 500px;
+.content-col {
+  max-width: 500px;;
 }

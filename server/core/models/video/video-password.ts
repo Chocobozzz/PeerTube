@@ -1,9 +1,8 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, DefaultScope, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DefaultScope, ForeignKey, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import { VideoModel } from './video.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { ResultList, VideoPassword } from '@peertube/peertube-models'
-import { getSort, throwIfNotValid } from '../shared/index.js'
-import { FindOptions, Transaction } from 'sequelize'
+import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
+import { Transaction } from 'sequelize'
 import { MVideoPassword } from '@server/types/models/index.js'
 import { isPasswordValid } from '@server/helpers/custom-validators/videos.js'
 import { pick } from '@peertube/peertube-core-utils'
@@ -25,7 +24,7 @@ import { pick } from '@peertube/peertube-core-utils'
     }
   ]
 })
-export class VideoPasswordModel extends Model<Partial<AttributesOnly<VideoPasswordModel>>> {
+export class VideoPasswordModel extends SequelizeModel<VideoPasswordModel> {
 
   @AllowNull(false)
   @Is('VideoPassword', value => throwIfNotValid(value, isPasswordValid, 'videoPassword'))
@@ -51,7 +50,7 @@ export class VideoPasswordModel extends Model<Partial<AttributesOnly<VideoPasswo
   Video: Awaited<VideoModel>
 
   static async countByVideoId (videoId: number, t?: Transaction) {
-    const query: FindOptions = {
+    const query = {
       where: {
         videoId
       },
@@ -63,7 +62,7 @@ export class VideoPasswordModel extends Model<Partial<AttributesOnly<VideoPasswo
 
   static async loadByIdAndVideo (options: { id: number, videoId: number, t?: Transaction }): Promise<MVideoPassword> {
     const { id, videoId, t } = options
-    const query: FindOptions = {
+    const query = {
       where: {
         id,
         videoId

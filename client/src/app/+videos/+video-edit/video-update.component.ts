@@ -5,34 +5,49 @@ import { catchError, map, switchMap } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { HttpErrorResponse } from '@angular/common/http'
 import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, CanComponentDeactivate, ConfirmService, Notifier, ServerService, UserService } from '@app/core'
-import { genericUploadErrorHandler } from '@app/helpers'
-import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import {
-  Video,
-  VideoCaptionEdit,
-  VideoCaptionService,
-  VideoChapterService,
-  VideoChaptersEdit,
-  VideoDetails,
-  VideoEdit,
-  VideoService
-} from '@app/shared/shared-main'
-import { LiveVideoService } from '@app/shared/shared-video-live'
+import { buildHTTPErrorResponse, genericUploadErrorHandler } from '@app/helpers'
+import { FormReactive } from '@app/shared/shared-forms/form-reactive'
+import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { simpleObjectsDeepEqual } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, LiveVideo, LiveVideoUpdate, VideoPrivacy, VideoSource, VideoState } from '@peertube/peertube-models'
 import { hydrateFormFromVideo } from './shared/video-edit-utils'
 import { VideoUploadService } from './shared/video-upload.service'
 import { VideoEditComponent } from './shared/video-edit.component'
+import { ButtonComponent } from '../../shared/shared-main/buttons/button.component'
+import { ReactiveFileComponent } from '../../shared/shared-forms/reactive-file.component'
+import { NgIf } from '@angular/common'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { UploadProgressComponent } from '../../shared/standalone-upload/upload-progress.component'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
+import { VideoEdit } from '@app/shared/shared-main/video/video-edit.model'
+import { VideoCaptionEdit } from '@app/shared/shared-main/video-caption/video-caption-edit.model'
+import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
+import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
+import { VideoChaptersEdit } from '@app/shared/shared-main/video/video-chapters-edit.model'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 
 const debugLogger = debug('peertube:video-update')
 
 @Component({
   selector: 'my-videos-update',
   styleUrls: [ './shared/video-edit.component.scss' ],
-  templateUrl: './video-update.component.html'
+  templateUrl: './video-update.component.html',
+  standalone: true,
+  imports: [
+    RouterLink,
+    UploadProgressComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    VideoEditComponent,
+    NgIf,
+    ReactiveFileComponent,
+    ButtonComponent
+  ]
 })
 export class VideoUpdateComponent extends FormReactive implements OnInit, OnDestroy, CanComponentDeactivate {
   @ViewChild('videoEdit', { static: false }) videoEditComponent: VideoEditComponent
@@ -329,7 +344,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit, OnDest
           return this.refreshTokenAndRetryUpload()
         }
 
-        this.handleUploadError(this.videoUploadService.buildHTTPErrorResponse(state))
+        this.handleUploadError(buildHTTPErrorResponse(state))
         break
       }
 

@@ -11,7 +11,7 @@ import { VideoPathManager } from './video-path-manager.js'
 import { downloadImageFromWorker, processImageFromWorker } from './worker/parent-process.js'
 import { generateThumbnailFromVideo } from '@server/helpers/ffmpeg/ffmpeg-image.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { remove } from 'fs-extra'
+import { remove } from 'fs-extra/esm'
 import { FfprobeData } from 'fluent-ffmpeg'
 import Bluebird from 'bluebird'
 
@@ -100,7 +100,7 @@ function generateLocalVideoMiniature (options: {
   video: MVideoThumbnail
   videoFile: MVideoFile
   types: ThumbnailType_Type[]
-  ffprobe?: FfprobeData
+  ffprobe: FfprobeData
 }): Promise<MThumbnail[]> {
   const { video, videoFile, types, ffprobe } = options
 
@@ -223,7 +223,7 @@ function updateRemoteVideoThumbnail (options: {
 
 // ---------------------------------------------------------------------------
 
-async function regenerateMiniaturesIfNeeded (video: MVideoWithAllFiles) {
+async function regenerateMiniaturesIfNeeded (video: MVideoWithAllFiles, ffprobe: FfprobeData) {
   const thumbnailsToGenerate: ThumbnailType_Type[] = []
 
   if (video.getMiniature().automaticallyGenerated === true) {
@@ -237,6 +237,7 @@ async function regenerateMiniaturesIfNeeded (video: MVideoWithAllFiles) {
   const models = await generateLocalVideoMiniature({
     video,
     videoFile: video.getMaxQualityFile(),
+    ffprobe,
     types: thumbnailsToGenerate
   })
 
@@ -380,7 +381,7 @@ async function generateImageFromVideoFile (options: {
 
   try {
     const framesToAnalyze = CONFIG.THUMBNAILS.GENERATION_FROM_VIDEO.FRAMES_TO_ANALYZE
-    await generateThumbnailFromVideo({ fromPath, output: pendingImagePath, framesToAnalyze, ffprobe })
+    await generateThumbnailFromVideo({ fromPath, output: pendingImagePath, framesToAnalyze, ffprobe, scale: size })
 
     const destination = join(folder, imageName)
     await processImageFromWorker({ path: pendingImagePath, destination, newSize: size })

@@ -1,16 +1,25 @@
 import { Component, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
-import { ServerConfig } from '@peertube/peertube-models'
+import { ServerConfig, ServerStats } from '@peertube/peertube-models'
+import { BytesPipe } from '../shared-main/angular/bytes.pipe'
+import { PeerTubeTemplateDirective } from '../shared-main/angular/peertube-template.directive'
+import { HelpComponent } from '../shared-main/misc/help.component'
+import { FeatureBooleanComponent } from './feature-boolean.component'
+import { NgIf, NgFor } from '@angular/common'
+import { DaysDurationFormatterPipe } from '../shared-main/angular/days-duration-formatter.pipe'
 
 @Component({
   selector: 'my-instance-features-table',
   templateUrl: './instance-features-table.component.html',
-  styleUrls: [ './instance-features-table.component.scss' ]
+  styleUrls: [ './instance-features-table.component.scss' ],
+  standalone: true,
+  imports: [ NgIf, FeatureBooleanComponent, HelpComponent, PeerTubeTemplateDirective, NgFor, BytesPipe ]
 })
 export class InstanceFeaturesTableComponent implements OnInit {
   quotaHelpIndication = ''
   serverConfig: ServerConfig
+  serverStats: ServerStats
 
   constructor (
     private serverService: ServerService
@@ -42,8 +51,12 @@ export class InstanceFeaturesTableComponent implements OnInit {
     this.serverService.getConfig()
         .subscribe(config => {
           this.serverConfig = config
+
           this.buildQuotaHelpIndication()
         })
+
+    this.serverService.getServerStats()
+      .subscribe(stats => this.serverStats = stats)
   }
 
   buildNSFWLabel () {
@@ -58,7 +71,17 @@ export class InstanceFeaturesTableComponent implements OnInit {
     const config = this.serverConfig.signup
 
     if (config.allowed !== true) return $localize`Disabled`
-    if (config.requiresApproval === true) return $localize`Requires approval by moderators`
+
+    if (config.requiresApproval === true) {
+      const responseTimeMS = this.serverStats?.averageRegistrationRequestResponseTimeMs
+
+      if (!responseTimeMS) {
+        return $localize`Requires approval by moderators`
+      }
+
+      const responseTime = new DaysDurationFormatterPipe().transform(responseTimeMS)
+      return $localize`Requires approval by moderators (~ ${responseTime})`
+    }
 
     return $localize`Enabled`
   }
