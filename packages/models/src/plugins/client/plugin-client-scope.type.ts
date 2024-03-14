@@ -9,4 +9,5 @@ export type PluginClientScope =
   'admin-plugin' |
   'my-library' |
   'video-channel' |
-  'my-account'
+  'my-account' |
+  'admin-users'

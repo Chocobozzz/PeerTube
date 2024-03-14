@@ -97,7 +97,10 @@ export const clientFilterHookObject = {
   'filter:internal.player.videojs.options.result': true,
 
   // Filter p2p media loader options built for PeerTube player
-  'filter:internal.player.p2p-media-loader.options.result': true
+  'filter:internal.player.p2p-media-loader.options.result': true,
+
+  // Filter bulk actions in user list
+  'filter:admin-user-list.bulk-actions.create.result': true
 }
 
 export type ClientFilterHookName = keyof typeof clientFilterHookObject
