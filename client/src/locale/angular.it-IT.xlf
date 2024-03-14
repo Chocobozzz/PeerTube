@@ -1039,7 +1039,7 @@
       </trans-unit>
       <trans-unit id="4435640428611044716" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete Web Video files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
-        <target state="translated">Siete sicuri di voler eliminare i file Web Video di {count, plural, =1 {1 video} altri {<x id="count"/> video}}?</target>
+        <target state="translated">Siete sicuri di voler eliminare i file Web Video di {count, plural, =1 {1 video} other {<x id="count"/> video}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">314</context>
@@ -11706,17 +11706,17 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3068011377000255023" datatype="html">
+      <trans-unit id="3068011377000255023" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 videos} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 videos} other {<x id="INTERPOLATION"/> videos}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 video} other {<x id="INTERPOLATION"/> video}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8856905278208146821" datatype="html">
+      <trans-unit id="8856905278208146821" datatype="html" xml:space="preserve">
         <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
-        <target state="translated"><x id="ICU" xid="1730926218636655979" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}"/> </target>
+        <target state="translated"><x id="ICU" xid="1730926218636655979" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {Nessun video} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} video}}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">28</context>
@@ -15310,9 +15310,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2740531699780274491" datatype="html">
+      <trans-unit id="2740531699780274491" datatype="html" xml:space="preserve">
         <source>This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</source>
-        <target state="new">This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</target>
+        <target state="translated">In questo modo verranno cancellati tutti i dati, compresi i canali, i video, i commenti e non sarà possibile creare un altro utente su questa istanza con il nome utente "<x id="PH" equiv-text="this.user.username"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">26</context>
