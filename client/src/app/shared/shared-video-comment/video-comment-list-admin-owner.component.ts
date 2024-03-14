@@ -117,6 +117,7 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
         iconName: 'tick'
       }
     ]
+    this.bulkActions = await this.hooks.wrapObject(bulkActions, 'admin-comments', 'filter:admin-comment-list.bulk-actions.create.result')
 
     if (this.mode === 'admin') {
       this.inputFilters = [
