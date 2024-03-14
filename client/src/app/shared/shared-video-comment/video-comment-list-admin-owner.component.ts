@@ -1,7 +1,7 @@
 import { DatePipe, NgClass, NgIf } from '@angular/common'
 import { Component, Input, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { AuthService, ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
+import { AuthService, ConfirmService, HooksService, MarkdownService, Notifier, PluginService, RestPagination, RestTable } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { BulkService } from '@app/shared/shared-moderation/bulk.service'
 import { VideoCommentForAdminOrUser } from '@app/shared/shared-video-comment/video-comment.model'
@@ -68,11 +68,18 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
     private confirmService: ConfirmService,
     private videoCommentService: VideoCommentService,
     private markdownRenderer: MarkdownService,
-    private bulkService: BulkService
+    private bulkService: BulkService,
+    private hooks: HooksService,
+    private pluginService: PluginService
   ) {
     super()
+  }
 
-    this.videoCommentActions = [
+  async ngOnInit () {
+    this.initialize()
+    await this.pluginService.ensurePluginsAreLoaded('admin-comments')
+
+    const videoCommentActions: DropdownAction<VideoCommentForAdminOrUser>[][] = [
       [
         {
           label: $localize`Delete this comment`,
@@ -94,12 +101,9 @@ export class VideoCommentListAdminOwnerComponent extends RestTable <VideoComment
         }
       ]
     ]
-  }
+    this.videoCommentActions = await this.hooks.wrapObject(videoCommentActions, 'admin-comments', 'filter:admin-video-comment-list.actions.create.result')
 
-  ngOnInit () {
-    this.initialize()
-
-    this.bulkActions = [
+    const bulkActions: DropdownAction<VideoCommentForAdminOrUser[]>[] = [
       {
         label: $localize`Delete`,
         handler: comments => this.removeComments(comments),

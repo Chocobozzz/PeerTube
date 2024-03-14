@@ -72,7 +72,8 @@ class PluginsManager {
     'my-library': new ReplaySubject<boolean>(1),
     'video-channel': new ReplaySubject<boolean>(1),
     'my-account': new ReplaySubject<boolean>(1),
-    'admin-users': new ReplaySubject<boolean>(1)
+    'admin-users': new ReplaySubject<boolean>(1),
+    'admin-comments': new ReplaySubject<boolean>(1)
   }
 
   private readonly peertubeHelpersFactory: PeertubeHelpersFactory
