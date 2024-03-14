@@ -100,7 +100,10 @@ export const clientFilterHookObject = {
   'filter:internal.player.p2p-media-loader.options.result': true,
 
   // Filter bulk actions in user list
-  'filter:admin-user-list.bulk-actions.create.result': true
+  'filter:admin-user-list.bulk-actions.create.result': true,
+
+  // Filter user moderation actions
+  'filter:admin-user-moderation.actions.create.result': true
 }
 
 export type ClientFilterHookName = keyof typeof clientFilterHookObject
