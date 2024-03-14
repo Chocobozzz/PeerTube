@@ -517,7 +517,7 @@
       </trans-unit>
       <trans-unit id="906167214730624194" datatype="html" xml:space="preserve">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{views, plural, =0 {Nessuno spettatore} =1 {1 visualizzazione} other {<x id="viewers"/> visualizzazioni}}</target>
+        <target state="translated">{views, plural, =0 {Nessuna visualizzazione} =1 {1 visualizzazione} other {<x id="viewers"/> visualizzazioni}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">306</context>
@@ -949,17 +949,17 @@
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7688104409544625220" datatype="html">
+      <trans-unit id="7688104409544625220" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> visualizzazioni}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 visualizzazione} other {<x id="INTERPOLATION"/> visualizzazioni}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8562063050145802350" datatype="html">
+      <trans-unit id="8562063050145802350" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 visualizzazione} other {<x id="INTERPOLATION"/> visualizzazioni}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 spettatore} other {<x id="INTERPOLATION"/> spettatori}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">7</context>
@@ -5658,9 +5658,9 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6390009909920475335" datatype="html">
+      <trans-unit id="6390009909920475335" datatype="html" xml:space="preserve">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> and others </source>
-        <target state="translated">Visualizza <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> da <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> e altri </target>
+        <target state="translated">Visualizza <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 risposta} other {{{ comment.totalReplies }} risposte}}"/> da <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> e altri </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">76</context>
@@ -5682,17 +5682,17 @@
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="127329338495775339" datatype="html">
+      <trans-unit id="127329338495775339" datatype="html" xml:space="preserve">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="translated">Visualizza <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> da <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
+        <target state="translated">Visualizza <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 risposta} other {{{ comment.totalReplies }} risposte}}"/> da <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5535545444690528619" datatype="html">
+      <trans-unit id="5535545444690528619" datatype="html" xml:space="preserve">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/></source>
-        <target state="translated">Vista <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/></target>
+        <target state="translated">Vista <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 risposta} other {{{ comment.totalReplies }} risposte}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">84</context>
@@ -10588,9 +10588,9 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1142493792593089647" datatype="html">
+      <trans-unit id="1142493792593089647" datatype="html" xml:space="preserve">
         <source>Most viewed first</source>
-        <target state="new">Most viewed first</target>
+        <target state="translated">I più visti per primi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">29</context>
@@ -10978,9 +10978,9 @@
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6500762313951857695" datatype="html">
+      <trans-unit id="6500762313951857695" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Nessuna visualizzazione} =1 {1 visualizzazione} altro {<x id="INTERPOLATION"/> visualizzazioni}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">49</context>
@@ -11326,9 +11326,9 @@
           <context context-type="linenumber">293</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5382746022482410588" datatype="html">
+      <trans-unit id="5382746022482410588" datatype="html" xml:space="preserve">
         <source>A view means that someone watched the video for at least 30 seconds</source>
-        <target state="new">A view means that someone watched the video for at least 30 seconds</target>
+        <target state="translated">Una visualizzazione significa che qualcuno ha guardato il video per almeno 30 secondi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">312</context>
@@ -12947,9 +12947,9 @@
           <context context-type="linenumber">223</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2614607010577950577" datatype="html">
+      <trans-unit id="2614607010577950577" datatype="html" xml:space="preserve">
         <source>Overview</source>
-        <target state="new">Overview</target>
+        <target state="translated">Panoramica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -14310,9 +14310,9 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8079826195972333513" datatype="html">
+      <trans-unit id="8079826195972333513" datatype="html" xml:space="preserve">
         <source>Views may not be counted correctly (reduced compared to what they should be)</source>
-        <target state="new">Views may not be counted correctly (reduced compared to what they should be)</target>
+        <target state="translated">Le visualizzazioni potrebbero non essere conteggiate correttamente (ridotte rispetto a quanto dovrebbero essere)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">8</context>
@@ -15402,9 +15402,9 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5618790697446401830" datatype="html">
+      <trans-unit id="5618790697446401830" datatype="html" xml:space="preserve">
         <source>An automatically blocked video is awaiting review</source>
-        <target state="new">An automatically blocked video is awaiting review</target>
+        <target state="translated">Un video bloccato automaticamente è in attesa di revisione</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">41</context>
