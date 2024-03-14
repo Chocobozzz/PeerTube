@@ -517,7 +517,7 @@
       </trans-unit>
       <trans-unit id="906167214730624194" datatype="html" xml:space="preserve">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{views, plural, =0 {Nessuno spettatore} =1 {1 spettatore} other {<x id="viewers"/> spettatori}}</target>
+        <target state="translated">{views, plural, =0 {Nessuno spettatore} =1 {1 visualizzazione} other {<x id="viewers"/> visualizzazioni}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">306</context>
@@ -17147,9 +17147,9 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2471141982657856893" datatype="html">
+      <trans-unit id="2471141982657856893" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</source>
-        <target state="new">{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</target>
+        <target state="translated">{interval, plural, =1 {1 giorno fa} other {<x id="interval"/> giorni fa}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">40</context>
