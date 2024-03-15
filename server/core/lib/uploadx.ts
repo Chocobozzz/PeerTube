@@ -75,13 +75,13 @@ export function setupUploadResumableRoutes (options: {
     ...uploadInitBeforeMiddlewares,
     resumableInitValidator,
     ...uploadInitAfterMiddlewares,
-    (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitely tell to uploadx it's the end
+    (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitly tell to uploadx it's the end
   )
 
   router.delete(routePath,
     authenticate,
     ...uploadDeleteMiddlewares,
-    (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitely tell to uploadx it's the end
+    (req, res) => uploadx.upload(req, res) // Prevent next() call, explicitly tell to uploadx it's the end
   )
 
   router.put(routePath,

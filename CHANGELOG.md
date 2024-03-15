@@ -363,7 +363,7 @@ We have many important notes in this release. We know it's a pain for sysadmin, 
 
  * :tada: Implement user registration approval (https://docs.joinpeertube.org/admin/managing-users#registration-approval) [#5544](https://github.com/Chocobozzz/PeerTube/pull/5544)
    * If enabled, the user has to fill a *Registration reason* input
-   * Moderators have to to accept/reject the registration with a *Moderation response* that will be sent by email to the user
+   * Moderators have to accept/reject the registration with a *Moderation response* that will be sent by email to the user
    * If the registration is accepted, the user and its channel are automatically created
  * Add "back to live" button in player
    * The *Live* button is red when the player is synced with the live
@@ -1915,7 +1915,7 @@ A new endpoint to report videos will be created in PeerTube 2.4 and will also al
 
 ### Features
 
- * :tada: Add global search support (has to be explicitely enabled by admins)
+ * :tada: Add global search support (has to be explicitly enabled by admins)
  * :tada: Add ability for admins to display a banner on their instance
  * :tada: Support Vietnamese and Kabyle languages. Also re-establish Occitan language locale despite lack of support in Angular
  * Federation:

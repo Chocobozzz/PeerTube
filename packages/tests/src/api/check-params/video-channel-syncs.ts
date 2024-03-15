@@ -139,7 +139,7 @@ describe('Test video channel sync API validator', () => {
       })
     })
 
-    it('Should fail with a channelId refering nothing', async function () {
+    it('Should fail with a channelId referring nothing', async function () {
       const attributes: VideoChannelSyncCreate = {
         ...baseCorrectParams,
         videoChannelId: 42
