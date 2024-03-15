@@ -227,7 +227,7 @@ async function buildYoutubeDLImport (options: {
   })
 
   await sequelizeTypescript.transaction(async transaction => {
-    // Priority to explicitely set description
+    // Priority to explicitly set description
     if (importDataOverride?.description) {
       const inserted = await replaceChaptersFromDescriptionIfNeeded({ newDescription: importDataOverride.description, video, transaction })
       if (inserted) return
