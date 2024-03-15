@@ -320,6 +320,9 @@ function customConfig (): CustomConfig {
     },
     transcoding: {
       enabled: CONFIG.TRANSCODING.ENABLED,
+      originalFile: {
+        keep: CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP
+      },
       remoteRunners: {
         enabled: CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED
       },

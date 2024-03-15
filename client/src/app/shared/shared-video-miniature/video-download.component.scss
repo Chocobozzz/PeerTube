@@ -5,6 +5,13 @@
   margin-top: 30px;
 }
 
+my-global-icon[iconName=shield] {
+  @include margin-left(10px);
+
+  width: 16px;
+  margin-top: -3px;
+}
+
 .advanced-filters-button {
   display: flex;
   justify-content: center;
@@ -53,30 +60,12 @@
   display: block;
   margin-bottom: 12px;
 
-  .metadata-attribute-label {
+  > span:first-child {
     @include padding-right(5px);
 
     min-width: 142px;
     display: inline-block;
     color: pvar(--greyForegroundColor);
     font-weight: $font-bold;
-  }
-
-  a.metadata-attribute-value {
-    @include disable-default-a-behaviour;
-
-    color: pvar(--mainForegroundColor);
-
-    &:hover {
-      opacity: 0.9;
-    }
-  }
-
-  &.metadata-attribute-tags {
-    .metadata-attribute-value:not(:nth-child(2)) {
-      &::before {
-        content: ', ';
-      }
-    }
   }
 }

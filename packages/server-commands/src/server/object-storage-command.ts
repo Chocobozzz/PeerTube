@@ -1,5 +1,5 @@
-import { randomInt } from 'crypto'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { randomInt } from 'crypto'
 import { makePostBodyRequest } from '../requests/index.js'
 
 export class ObjectStorageCommand {
@@ -50,6 +50,14 @@ export class ObjectStorageCommand {
 
         web_videos: {
           bucket_name: this.getMockWebVideosBucketName()
+        },
+
+        user_exports: {
+          bucket_name: this.getMockUserExportBucketName()
+        },
+
+        original_video_files: {
+          bucket_name: this.getMockOriginalFileBucketName()
         }
       }
     }
@@ -61,6 +69,14 @@ export class ObjectStorageCommand {
 
   getMockPlaylistBaseUrl () {
     return `http://${this.getMockStreamingPlaylistsBucketName()}.${ObjectStorageCommand.getMockEndpointHost()}/`
+  }
+
+  getMockUserExportBaseUrl () {
+    return `http://${this.getMockUserExportBucketName()}.${ObjectStorageCommand.getMockEndpointHost()}/`
+  }
+
+  getMockOriginalFileBaseUrl () {
+    return `http://${this.getMockOriginalFileBucketName()}.${ObjectStorageCommand.getMockEndpointHost()}/`
   }
 
   async prepareDefaultMockBuckets () {
@@ -97,6 +113,14 @@ export class ObjectStorageCommand {
   }
 
   getMockWebVideosBucketName (name = 'web-videos') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockUserExportBucketName (name = 'user-exports') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockOriginalFileBucketName (name = 'original-video-files') {
     return this.getMockBucketName(name)
   }
 

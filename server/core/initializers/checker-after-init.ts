@@ -303,33 +303,67 @@ function checkLiveConfig () {
 }
 
 function checkObjectStorageConfig () {
-  if (CONFIG.OBJECT_STORAGE.ENABLED === true) {
+  if (CONFIG.OBJECT_STORAGE.ENABLED !== true) return
 
-    if (!CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME) {
-      throw new Error('videos_bucket should be set when object storage support is enabled.')
+  if (!CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME) {
+    throw new Error('videos_bucket should be set when object storage support is enabled.')
+  }
+
+  if (!CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME) {
+    throw new Error('streaming_playlists_bucket should be set when object storage support is enabled.')
+  }
+
+  // Check web videos and hls videos are not in the same bucket or directory
+  if (
+    CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME &&
+    CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX
+  ) {
+    if (CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === '') {
+      throw new Error('Bucket prefixes should be set when the same bucket is used for both types of video.')
     }
 
-    if (!CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME) {
-      throw new Error('streaming_playlists_bucket should be set when object storage support is enabled.')
+    throw new Error(
+      'Bucket prefixes should be set to different values when the same bucket is used for both types of video.'
+    )
+  }
+
+  if (CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) {
+
+    if (!CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME) {
+      throw new Error('original_video_files_bucket should be set when object storage support is enabled.')
     }
 
+    // Check web videos/hls videos are not in the same bucket or directory as original video files
     if (
-      CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME &&
-      CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX
+      CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME &&
+      CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.PREFIX
     ) {
       if (CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === '') {
-        throw new Error('Object storage bucket prefixes should be set when the same bucket is used for both types of video.')
+        throw new Error('Bucket prefixes should be set when the same bucket is used for both original and web video files.')
       }
 
       throw new Error(
-        'Object storage bucket prefixes should be set to different values when the same bucket is used for both types of video.'
+        'Bucket prefixes should be set to different values when the same bucket is used for both original and web video files.'
       )
     }
 
-    if (CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART > parseBytes('250MB')) {
-      // eslint-disable-next-line max-len
-      logger.warn(`Object storage max upload part seems to have a big value (${CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART} bytes). Consider using a lower one (like 100MB).`)
+    if (
+      CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME &&
+      CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.PREFIX
+    ) {
+      if (CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX === '') {
+        throw new Error('Bucket prefixes should be set when the same bucket is used for both original and hls files.')
+      }
+
+      throw new Error(
+        'Bucket prefixes should be set to different values when the same bucket is used for both original and hls files.'
+      )
     }
+  }
+
+  if (CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART > parseBytes('250MB')) {
+    // eslint-disable-next-line max-len
+    logger.warn(`Object storage max upload part seems to have a big value (${CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART} bytes). Consider using a lower one (like 100MB).`)
   }
 }
 

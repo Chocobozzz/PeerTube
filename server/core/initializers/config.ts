@@ -114,6 +114,7 @@ const CONFIG = {
     LOG_DIR: buildPath(config.get<string>('storage.logs')),
     WEB_VIDEOS_DIR: buildPath(config.get<string>('storage.web_videos')),
     STREAMING_PLAYLISTS_DIR: buildPath(config.get<string>('storage.streaming_playlists')),
+    ORIGINAL_VIDEO_FILES_DIR: buildPath(config.get<string>('storage.original_video_files')),
     REDUNDANCY_DIR: buildPath(config.get<string>('storage.redundancy')),
     THUMBNAILS_DIR: buildPath(config.get<string>('storage.thumbnails')),
     STORYBOARDS_DIR: buildPath(config.get<string>('storage.storyboards')),
@@ -159,6 +160,11 @@ const CONFIG = {
       BUCKET_NAME: config.get<string>('object_storage.user_exports.bucket_name'),
       PREFIX: config.get<string>('object_storage.user_exports.prefix'),
       BASE_URL: config.get<string>('object_storage.user_exports.base_url')
+    },
+    ORIGINAL_VIDEO_FILES: {
+      BUCKET_NAME: config.get<string>('object_storage.original_video_files.bucket_name'),
+      PREFIX: config.get<string>('object_storage.original_video_files.prefix'),
+      BASE_URL: config.get<string>('object_storage.original_video_files.base_url')
     }
   },
   WEBSERVER: {
@@ -412,6 +418,9 @@ const CONFIG = {
   },
   TRANSCODING: {
     get ENABLED () { return config.get<boolean>('transcoding.enabled') },
+    ORIGINAL_FILE: {
+      get KEEP () { return config.get<boolean>('transcoding.original_file.keep') }
+    },
     get ALLOW_ADDITIONAL_EXTENSIONS () { return config.get<boolean>('transcoding.allow_additional_extensions') },
     get ALLOW_AUDIO_FILES () { return config.get<boolean>('transcoding.allow_audio_files') },
     get THREADS () { return config.get<number>('transcoding.threads') },

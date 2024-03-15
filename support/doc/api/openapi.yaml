@@ -8136,6 +8136,29 @@ components:
       properties:
         filename:
           type: string
+          deprecated: true
+          description: 'Deprecated in 6.1, use inputFilename instead'
+        inputFilename:
+          type: string
+          description: 'Uploaded/imported filename'
+        fileDownloadUrl:
+          type: string
+          description: "**PeerTube >= 6.1** If enabled by the admin, the video source file is kept on the server and can be downloaded by the owner"
+        resolution:
+          $ref: '#/components/schemas/VideoResolutionConstant'
+          description: "**PeerTube >= 6.1**"
+        size:
+          type: integer
+          description: "**PeerTube >= 6.1** Video file size in bytes"
+        fps:
+          type: number
+          description: "**PeerTube >= 6.1** Frames per second of the video file"
+        width:
+          type: number
+          description: "**PeerTube >= 6.1** Video stream width"
+        height:
+          type: number
+          description: "**PeerTube >= 6.1** Video stream height"
         createdAt:
           type: string
           format: date-time
@@ -8792,6 +8815,11 @@ components:
           properties:
             enabled:
               type: boolean
+            originalFile:
+              type: object
+              properties:
+                keep:
+                  type: boolean
             allowAdditionalExtensions:
               type: boolean
               description: Allow your users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos

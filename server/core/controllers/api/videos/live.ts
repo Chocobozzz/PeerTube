@@ -184,9 +184,9 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
       duration: 0,
       state: VideoState.WAITING_FOR_LIVE,
       isLive: true,
-      filename: null
+      inputFilename: null
     },
-    videoFilePath: undefined,
+    videoFile: undefined,
     user: res.locals.oauth.token.User,
     thumbnails
   })

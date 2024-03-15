@@ -405,7 +405,7 @@ export class VideoService {
 
   getSource (videoId: number) {
     return this.authHttp
-               .get<{ source: VideoSource }>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/source')
+               .get<VideoSource>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/source')
                .pipe(
                  catchError(err => {
                    if (err.status === 404) {

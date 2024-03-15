@@ -1,6 +1,7 @@
 import { buildVideoEmbedPath, buildVideoWatchPath, pick, wait } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS, hasAudioStream } from '@peertube/peertube-ffmpeg'
 import {
+  FileStorage,
   ResultList,
   ThumbnailType,
   UserRight,
@@ -13,7 +14,6 @@ import {
   VideoPrivacy,
   VideoRateType,
   VideoState,
-  FileStorage,
   VideoStreamingPlaylistType,
   type VideoPrivacyType,
   type VideoStateType
@@ -25,6 +25,7 @@ import { LiveManager } from '@server/lib/live/live-manager.js'
 import {
   removeHLSFileObjectStorageByFilename,
   removeHLSObjectStorage,
+  removeOriginalFileObjectStorage,
   removeWebVideoObjectStorage
 } from '@server/lib/object-storage/index.js'
 import { tracer } from '@server/lib/opentelemetry/tracing.js'
@@ -34,6 +35,7 @@ import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { ModelCache } from '@server/models/shared/model-cache.js'
+import { MVideoSource } from '@server/types/models/video/video-source.js'
 import Bluebird from 'bluebird'
 import { remove } from 'fs-extra/esm'
 import maxBy from 'lodash-es/maxBy.js'
@@ -867,6 +869,12 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       for (const p of instance.VideoStreamingPlaylists) {
         tasks.push(instance.removeStreamingPlaylistFiles(p))
       }
+
+      // Remove source files
+      const promiseRemoveSources = VideoSourceModel.listAll(instance.id, options.transaction)
+        .then(sources => Promise.all(sources.map(s => instance.removeOriginalFile(s))))
+
+      tasks.push(promiseRemoveSources)
     }
 
     // Do not wait video deletion because we could be in a transaction
@@ -2019,6 +2027,17 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     if (streamingPlaylist.storage === FileStorage.OBJECT_STORAGE) {
       await removeHLSFileObjectStorageByFilename(streamingPlaylist.withVideo(this), filename)
+    }
+  }
+
+  async removeOriginalFile (videoSource: MVideoSource) {
+    if (!videoSource.keptOriginalFilename) return
+
+    const filePath = VideoPathManager.Instance.getFSOriginalVideoFilePath(videoSource.keptOriginalFilename)
+    await remove(filePath)
+
+    if (videoSource.storage === FileStorage.OBJECT_STORAGE) {
+      await removeOriginalFileObjectStorage(videoSource)
     }
   }
 

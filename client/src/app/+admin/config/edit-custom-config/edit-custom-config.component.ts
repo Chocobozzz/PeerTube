@@ -226,6 +226,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         concurrency: CONCURRENCY_VALIDATOR,
         resolutions: {},
         alwaysTranscodeOriginalResolution: null,
+        originalFile: {
+          keep: null
+        },
         hls: {
           enabled: null
         },

@@ -1,16 +1,20 @@
-import { FfprobeData } from 'fluent-ffmpeg'
-import { VideoFileMetadata, VideoResolution } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
-import { VideoFileModel } from '@server/models/video/video-file.js'
-import { MVideoWithAllFiles } from '@server/types/models/index.js'
-import { getFileSize, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS, isAudioFile } from '@peertube/peertube-ffmpeg'
+import { FileStorage, VideoFileMetadata, VideoResolution } from '@peertube/peertube-models'
+import { getFileSize, getLowercaseExtension } from '@peertube/peertube-node-utils'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
+import { MIMETYPES } from '@server/initializers/constants.js'
+import { VideoFileModel } from '@server/models/video/video-file.js'
+import { VideoSourceModel } from '@server/models/video/video-source.js'
+import { MVideo, MVideoFile, MVideoId, MVideoWithAllFiles } from '@server/types/models/index.js'
+import { FfprobeData } from 'fluent-ffmpeg'
+import { move, remove } from 'fs-extra'
 import { lTags } from './object-storage/shared/index.js'
+import { storeOriginalVideoFile } from './object-storage/videos.js'
 import { generateHLSVideoFilename, generateWebVideoFilename } from './paths.js'
 import { VideoPathManager } from './video-path-manager.js'
-import { MIMETYPES } from '@server/initializers/constants.js'
 
-async function buildNewFile (options: {
+export async function buildNewFile (options: {
   path: string
   mode: 'web-video' | 'hls'
   ffprobe?: FfprobeData
@@ -48,7 +52,7 @@ async function buildNewFile (options: {
 
 // ---------------------------------------------------------------------------
 
-async function removeHLSPlaylist (video: MVideoWithAllFiles) {
+export async function removeHLSPlaylist (video: MVideoWithAllFiles) {
   const hls = video.getHLSPlaylist()
   if (!hls) return
 
@@ -64,7 +68,7 @@ async function removeHLSPlaylist (video: MVideoWithAllFiles) {
   }
 }
 
-async function removeHLSFile (video: MVideoWithAllFiles, fileToDeleteId: number) {
+export async function removeHLSFile (video: MVideoWithAllFiles, fileToDeleteId: number) {
   logger.info('Deleting HLS file %d of %s.', fileToDeleteId, video.url, lTags(video.uuid))
 
   const hls = video.getHLSPlaylist()
@@ -92,7 +96,7 @@ async function removeHLSFile (video: MVideoWithAllFiles, fileToDeleteId: number)
 
 // ---------------------------------------------------------------------------
 
-async function removeAllWebVideoFiles (video: MVideoWithAllFiles) {
+export async function removeAllWebVideoFiles (video: MVideoWithAllFiles) {
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {
@@ -109,7 +113,7 @@ async function removeAllWebVideoFiles (video: MVideoWithAllFiles) {
   return video
 }
 
-async function removeWebVideoFile (video: MVideoWithAllFiles, fileToDeleteId: number) {
+export async function removeWebVideoFile (video: MVideoWithAllFiles, fileToDeleteId: number) {
   const files = video.VideoFiles
 
   if (files.length === 1) {
@@ -132,13 +136,13 @@ async function removeWebVideoFile (video: MVideoWithAllFiles, fileToDeleteId: nu
 
 // ---------------------------------------------------------------------------
 
-async function buildFileMetadata (path: string, existingProbe?: FfprobeData) {
+export async function buildFileMetadata (path: string, existingProbe?: FfprobeData) {
   const metadata = existingProbe || await ffprobePromise(path)
 
   return new VideoFileMetadata(metadata)
 }
 
-function getVideoFileMimeType (extname: string, isAudio: boolean) {
+export function getVideoFileMimeType (extname: string, isAudio: boolean) {
   return isAudio && extname === '.mp4' // We use .mp4 even for audio file only
     ? MIMETYPES.AUDIO.EXT_MIMETYPE['.m4a']
     : MIMETYPES.VIDEO.EXT_MIMETYPE[extname]
@@ -146,14 +150,84 @@ function getVideoFileMimeType (extname: string, isAudio: boolean) {
 
 // ---------------------------------------------------------------------------
 
-export {
-  buildNewFile,
+export async function createVideoSource (options: {
+  inputFilename: string
+  inputProbe: FfprobeData
+  inputPath: string
+  video: MVideoId
+  createdAt?: Date
+}) {
+  const { inputFilename, inputPath, inputProbe, video, createdAt } = options
 
-  removeHLSPlaylist,
-  removeHLSFile,
-  removeAllWebVideoFiles,
-  removeWebVideoFile,
+  const videoSource = new VideoSourceModel({
+    inputFilename,
+    videoId: video.id,
+    createdAt
+  })
 
-  buildFileMetadata,
-  getVideoFileMimeType
+  if (inputPath) {
+    const probe = inputProbe ?? await ffprobePromise(inputPath)
+
+    if (await isAudioFile(inputPath, probe)) {
+      videoSource.fps = 0
+      videoSource.resolution = VideoResolution.H_NOVIDEO
+      videoSource.width = 0
+      videoSource.height = 0
+    } else {
+      const dimensions = await getVideoStreamDimensionsInfo(inputPath, probe)
+      videoSource.fps = await getVideoStreamFPS(inputPath, probe)
+      videoSource.resolution = dimensions.resolution
+      videoSource.width = dimensions.width
+      videoSource.height = dimensions.height
+    }
+
+    videoSource.metadata = await buildFileMetadata(inputPath, probe)
+    videoSource.size = await getFileSize(inputPath)
+  }
+
+  return videoSource.save()
+}
+
+export async function saveNewOriginalFileIfNeeded (video: MVideo, videoFile: MVideoFile) {
+  if (!CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) return
+
+  const videoSource = await VideoSourceModel.loadLatest(video.id)
+
+  // Already have saved an original file
+  if (!videoSource || videoSource.keptOriginalFilename) return
+  videoSource.keptOriginalFilename = videoFile.filename
+
+  const lTags = loggerTagsFactory(video.uuid)
+
+  logger.info(`Storing original video file ${videoSource.keptOriginalFilename} of video ${video.name}`, lTags())
+
+  const sourcePath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
+
+  if (CONFIG.OBJECT_STORAGE.ENABLED) {
+    const fileUrl = await storeOriginalVideoFile(sourcePath, videoSource.keptOriginalFilename)
+    await remove(sourcePath)
+
+    videoSource.storage = FileStorage.OBJECT_STORAGE
+    videoSource.fileUrl = fileUrl
+  } else {
+    const destinationPath = VideoPathManager.Instance.getFSOriginalVideoFilePath(videoSource.keptOriginalFilename)
+    await move(sourcePath, destinationPath)
+
+    videoSource.storage = FileStorage.FILE_SYSTEM
+  }
+
+  await videoSource.save()
+
+  // Delete previously kept video files
+  const allSources = await VideoSourceModel.listAll(video.id)
+  for (const oldSource of allSources) {
+    if (!oldSource.keptOriginalFilename) continue
+    if (oldSource.id === videoSource.id) continue
+
+    try {
+      await video.removeOriginalFile(oldSource)
+    } catch (err) {
+      logger.error('Cannot delete old original file ' + oldSource.keptOriginalFilename, { err, ...lTags() })
+    }
+  }
 }

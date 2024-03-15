@@ -101,10 +101,10 @@ async function moveWebVideoFileOnFS (type: MoveType, video: MVideo, file: MVideo
 
 function getWebVideoDirectories (moveType: MoveType) {
   if (moveType === 'private-to-public') {
-    return { old: DIRECTORIES.VIDEOS.PRIVATE, new: DIRECTORIES.VIDEOS.PUBLIC }
+    return { old: DIRECTORIES.WEB_VIDEOS.PRIVATE, new: DIRECTORIES.WEB_VIDEOS.PUBLIC }
   }
 
-  return { old: DIRECTORIES.VIDEOS.PUBLIC, new: DIRECTORIES.VIDEOS.PRIVATE }
+  return { old: DIRECTORIES.WEB_VIDEOS.PUBLIC, new: DIRECTORIES.WEB_VIDEOS.PRIVATE }
 }
 
 // ---------------------------------------------------------------------------

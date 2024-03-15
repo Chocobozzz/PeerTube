@@ -150,6 +150,7 @@ storage:
   avatars: '/var/www/peertube/storage/avatars/'
   web_videos: '/var/www/peertube/storage/web-videos/'
   streaming_playlists: '/var/www/peertube/storage/streaming-playlists/'
+  original_video_files: '/var/www/peertube/storage/original-video-files/'
   redundancy: '/var/www/peertube/storage/redundancy/'
   logs: '/var/www/peertube/storage/logs/'
   previews: '/var/www/peertube/storage/previews/'
@@ -233,6 +234,12 @@ object_storage:
 
   user_exports:
     bucket_name: 'user-exports'
+    prefix: ''
+    base_url: ''
+
+  # Same settings but for original video files
+  original_video_files:
+    bucket_name: 'original-video-files'
     prefix: ''
     base_url: ''
 
@@ -535,6 +542,11 @@ video_channels:
 # Please, do not disable transcoding since many uploaded videos will not work
 transcoding:
   enabled: true
+
+  original_file:
+    # If false the uploaded file is deleted after transcoding
+    # If yes it is not deleted but moved in a dedicated folder or object storage
+    keep: false
 
   # Allow your users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos
   allow_additional_extensions: true

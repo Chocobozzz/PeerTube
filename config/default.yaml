@@ -152,6 +152,7 @@ storage:
   avatars: 'storage/avatars/'
   web_videos: 'storage/web-videos/'
   streaming_playlists: 'storage/streaming-playlists/'
+  original_video_files: 'storage/original-video-files/'
   redundancy: 'storage/redundancy/'
   logs: 'storage/logs/'
   previews: 'storage/previews/'
@@ -235,6 +236,12 @@ object_storage:
 
   user_exports:
     bucket_name: 'user-exports'
+    prefix: ''
+    base_url: ''
+
+  # Same settings but for original video files
+  original_video_files:
+    bucket_name: 'original-video-files'
     prefix: ''
     base_url: ''
 
@@ -525,6 +532,11 @@ video_channels:
 # Please, do not disable transcoding since many uploaded videos will not work
 transcoding:
   enabled: true
+
+  original_file:
+    # If false the uploaded file is deleted after transcoding
+    # If yes it is not deleted but moved in a dedicated folder or object storage
+    keep: false
 
   # Allow your users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos
   allow_additional_extensions: true
@@ -844,7 +856,7 @@ services:
   # Cards configuration to format video in Twitter/X
   # All other social media (Facebook, Mastodon, etc.) are supported out of the box
   twitter:
-    # Indicates the Twitter account for the website or platform where the content was published
+    # Indicates the Twitter/X account for the website or platform where the content was published
     # This is just an information injected in HTML that is required by Twitter/X
     username: '@Chocobozzz'
 

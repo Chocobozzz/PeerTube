@@ -1,8 +1,14 @@
 import { CONFIG } from '@server/initializers/config.js'
 import { MStreamingPlaylistVideo, MUserExport, MVideoFile } from '@server/types/models/index.js'
-import { generateHLSObjectStorageKey, generateUserExportObjectStorageKey, generateWebVideoObjectStorageKey } from './keys.js'
+import { MVideoSource } from '@server/types/models/video/video-source.js'
+import {
+  generateHLSObjectStorageKey,
+  generateOriginalVideoObjectStorageKey,
+  generateUserExportObjectStorageKey,
+  generateWebVideoObjectStorageKey
+} from './keys.js'
 import { buildKey, getClient } from './shared/index.js'
-import { getHLSPublicFileUrl, getWebVideoPublicFileUrl } from './urls.js'
+import { getObjectStoragePublicFileUrl } from './urls.js'
 
 export async function generateWebVideoPresignedUrl (options: {
   file: MVideoFile
@@ -16,7 +22,7 @@ export async function generateWebVideoPresignedUrl (options: {
     downloadFilename
   })
 
-  return getWebVideoPublicFileUrl(url)
+  return getObjectStoragePublicFileUrl(url, CONFIG.OBJECT_STORAGE.WEB_VIDEOS)
 }
 
 export async function generateHLSFilePresignedUrl (options: {
@@ -32,7 +38,7 @@ export async function generateHLSFilePresignedUrl (options: {
     downloadFilename
   })
 
-  return getHLSPublicFileUrl(url)
+  return getObjectStoragePublicFileUrl(url, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
 export async function generateUserExportPresignedUrl (options: {
@@ -47,7 +53,22 @@ export async function generateUserExportPresignedUrl (options: {
     downloadFilename
   })
 
-  return getHLSPublicFileUrl(url)
+  return getObjectStoragePublicFileUrl(url, CONFIG.OBJECT_STORAGE.USER_EXPORTS)
+}
+
+export async function generateOriginalFilePresignedUrl (options: {
+  videoSource: MVideoSource
+  downloadFilename: string
+}) {
+  const { videoSource, downloadFilename } = options
+
+  const url = await generatePresignedUrl({
+    bucket: CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME,
+    key: buildKey(generateOriginalVideoObjectStorageKey(videoSource.keptOriginalFilename), CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES),
+    downloadFilename
+  })
+
+  return getObjectStoragePublicFileUrl(url, CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES)
 }
 
 // ---------------------------------------------------------------------------

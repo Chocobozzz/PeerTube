@@ -166,7 +166,8 @@ async function saveReplayToExternalVideo (options: {
   const thumbnails = await generateLocalVideoMiniature({
     video: replayVideo,
     videoFile: replayVideo.getMaxQualityFile(),
-    types: [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ]
+    types: [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ],
+    ffprobe: undefined
   })
 
   for (const thumbnail of thumbnails) {
@@ -238,7 +239,7 @@ async function replaceLiveByReplay (options: {
   }
 
   // Regenerate the thumbnail & preview?
-  await regenerateMiniaturesIfNeeded(videoWithFiles)
+  await regenerateMiniaturesIfNeeded(videoWithFiles, undefined)
 
   // We consider this is a new video
   await moveToNextState({ video: videoWithFiles, isNewVideo: true })

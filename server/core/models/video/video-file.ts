@@ -1,15 +1,15 @@
-import { ActivityVideoUrlObject, VideoResolution, FileStorage, type FileStorageType } from '@peertube/peertube-models'
+import { ActivityVideoUrlObject, FileStorage, VideoResolution, type FileStorageType } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { buildRemoteUrl } from '@server/lib/activitypub/url.js'
 import {
   getHLSPrivateFileUrl,
-  getHLSPublicFileUrl,
-  getWebVideoPrivateFileUrl,
-  getWebVideoPublicFileUrl
+  getObjectStoragePublicFileUrl,
+  getWebVideoPrivateFileUrl
 } from '@server/lib/object-storage/index.js'
 import { getFSTorrentFilePath } from '@server/lib/paths.js'
+import { getVideoFileMimeType } from '@server/lib/video-file.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
 import { MStreamingPlaylistVideo, MVideo, MVideoWithHost, isStreamingPlaylist } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
@@ -51,7 +51,6 @@ import { VideoRedundancyModel } from '../redundancy/video-redundancy.js'
 import { SequelizeModel, doesExist, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
 import { VideoModel } from './video.js'
-import { getVideoFileMimeType } from '@server/lib/video-file.js'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO',
@@ -534,10 +533,10 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
 
   private getPublicObjectStorageUrl () {
     if (this.isHLS()) {
-      return getHLSPublicFileUrl(this.fileUrl)
+      return getObjectStoragePublicFileUrl(this.fileUrl, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
     }
 
-    return getWebVideoPublicFileUrl(this.fileUrl)
+    return getObjectStoragePublicFileUrl(this.fileUrl, CONFIG.OBJECT_STORAGE.WEB_VIDEOS)
   }
 
   // ---------------------------------------------------------------------------

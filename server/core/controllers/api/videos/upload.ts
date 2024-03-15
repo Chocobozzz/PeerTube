@@ -1,12 +1,14 @@
-import express from 'express'
+import { ffprobePromise, getChaptersFromContainer } from '@peertube/peertube-ffmpeg'
+import { HttpStatusCode, ThumbnailType, VideoCreate } from '@peertube/peertube-models'
+import { uuidToShort } from '@peertube/peertube-node-utils'
 import { getResumableUploadPath } from '@server/helpers/upload.js'
+import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
 import { Redis } from '@server/lib/redis.js'
 import { setupUploadResumableRoutes, uploadx } from '@server/lib/uploadx.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
-import { uuidToShort } from '@peertube/peertube-node-utils'
-import { HttpStatusCode, ThumbnailType, VideoCreate } from '@peertube/peertube-models'
-import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
+import express from 'express'
+import { VideoAuditView, auditLoggerFactory, getAuditIdFromRes } from '../../../helpers/audit-logger.js'
 import { createReqFiles } from '../../../helpers/express-utils.js'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
@@ -19,8 +21,6 @@ import {
   videosAddResumableInitValidator,
   videosAddResumableValidator
 } from '../../../middlewares/index.js'
-import { ffprobePromise, getChaptersFromContainer } from '@peertube/peertube-ffmpeg'
-import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -134,7 +134,12 @@ async function addVideo (options: {
 
   const localVideoCreator = new LocalVideoCreator({
     lTags,
-    videoFilePath: videoPhysicalFile.path,
+
+    videoFile: {
+      path: videoPhysicalFile.path,
+      probe: res.locals.ffprobe
+    },
+
     user: res.locals.oauth.token.User,
     channel: res.locals.videoChannel,
 
@@ -148,7 +153,7 @@ async function addVideo (options: {
       ...videoInfo,
 
       duration: videoPhysicalFile.duration,
-      filename: videoPhysicalFile.originalname,
+      inputFilename: videoPhysicalFile.originalname,
       state: buildNextVideoState(),
       isLive: false
     },

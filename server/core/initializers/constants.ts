@@ -45,7 +45,7 @@ import { cpus } from 'os'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 825
+const LAST_MIGRATION_VERSION = 830
 
 // ---------------------------------------------------------------------------
 
@@ -857,7 +857,8 @@ const STATIC_DOWNLOAD_PATHS = {
   TORRENTS: '/download/torrents/',
   VIDEOS: '/download/videos/',
   HLS_VIDEOS: '/download/streaming-playlists/hls/videos/',
-  USER_EXPORT: '/download/user-export/'
+  USER_EXPORTS: '/download/user-exports/',
+  ORIGINAL_VIDEO_FILE: '/download/original-video-files/'
 }
 const LAZY_STATIC_PATHS = {
   THUMBNAILS: '/lazy-static/thumbnails/',
@@ -981,10 +982,12 @@ const DIRECTORIES = {
     PRIVATE: join(CONFIG.STORAGE.STREAMING_PLAYLISTS_DIR, 'hls', 'private')
   },
 
-  VIDEOS: {
+  WEB_VIDEOS: {
     PUBLIC: CONFIG.STORAGE.WEB_VIDEOS_DIR,
     PRIVATE: join(CONFIG.STORAGE.WEB_VIDEOS_DIR, 'private')
   },
+
+  ORIGINAL_VIDEOS: CONFIG.STORAGE.ORIGINAL_VIDEO_FILES_DIR,
 
   HLS_REDUNDANCY: join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
 }

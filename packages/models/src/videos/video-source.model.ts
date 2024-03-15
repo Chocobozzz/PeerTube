@@ -1,4 +1,23 @@
+import { VideoFileMetadata } from './file/index.js'
+import { VideoConstant } from './video-constant.model.js'
+
 export interface VideoSource {
-  filename: string
+  inputFilename: string
+
+  resolution?: VideoConstant<number>
+  size?: number // Bytes
+
+  width?: number
+  height?: number
+
+  fileDownloadUrl: string
+
+  fps?: number
+
+  metadata?: VideoFileMetadata
+
   createdAt: string | Date
+
+  // TODO: remove, deprecated in 6.1
+  filename: string
 }

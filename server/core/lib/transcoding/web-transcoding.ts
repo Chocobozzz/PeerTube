@@ -1,22 +1,22 @@
-import { Job } from 'bullmq'
-import { move, remove } from 'fs-extra/esm'
-import { copyFile } from 'fs/promises'
-import { basename, join } from 'path'
+import { buildAspectRatio } from '@peertube/peertube-core-utils'
+import { TranscodeVODOptionsType, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
-import { getVideoStreamDuration, TranscodeVODOptionsType } from '@peertube/peertube-ffmpeg'
+import { Job } from 'bullmq'
+import { move, remove } from 'fs-extra/esm'
+import { copyFile } from 'fs/promises'
+import { basename, join } from 'path'
 import { CONFIG } from '../../initializers/config.js'
 import { VideoFileModel } from '../../models/video/video-file.js'
 import { JobQueue } from '../job-queue/index.js'
 import { generateWebVideoFilename } from '../paths.js'
-import { buildNewFile } from '../video-file.js'
+import { buildNewFile, saveNewOriginalFileIfNeeded } from '../video-file.js'
+import { buildStoryboardJobIfNeeded } from '../video-jobs.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
 import { buildOriginalFileResolution } from './transcoding-resolutions.js'
-import { buildStoryboardJobIfNeeded } from '../video-jobs.js'
-import { buildAspectRatio } from '@peertube/peertube-core-utils'
 
 // Optimize the original video file and replace it. The resolution is not changed.
 export async function optimizeOriginalVideofile (options: {
@@ -73,7 +73,7 @@ export async function optimizeOriginalVideofile (options: {
   }
 }
 
-// Transcode the original video file to a lower resolution compatible with web browsers
+// Transcode the original/old/source video file to a lower resolution compatible with web browsers
 export async function transcodeNewWebVideoResolution (options: {
   video: MVideoFullLight
   resolution: number
@@ -162,7 +162,6 @@ export async function mergeAudioVideofile (options: {
       try {
         await buildFFmpegVOD(job).transcode(transcodeOptions)
 
-        await remove(audioInputPath)
         await remove(tmpPreviewPath)
       } catch (err) {
         await remove(tmpPreviewPath)
@@ -213,13 +212,15 @@ export async function onWebVideoFileTranscoding (options: {
 
     await createTorrentAndSetInfoHash(video, videoFile)
 
-    const oldFile = await VideoFileModel.loadWebVideoFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })
-    if (oldFile) await video.removeWebVideoFile(oldFile)
-
     if (deleteWebInputVideoFile) {
+      await saveNewOriginalFileIfNeeded(video, deleteWebInputVideoFile)
+
       await video.removeWebVideoFile(deleteWebInputVideoFile)
       await deleteWebInputVideoFile.destroy()
     }
+
+    const existingFile = await VideoFileModel.loadWebVideoFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })
+    if (existingFile) await video.removeWebVideoFile(existingFile)
 
     await VideoFileModel.customUpsert(videoFile, 'video', undefined)
     video.VideoFiles = await video.$get('VideoFiles')
