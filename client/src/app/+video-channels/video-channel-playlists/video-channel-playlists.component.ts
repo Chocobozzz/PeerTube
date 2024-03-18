@@ -45,6 +45,8 @@ export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, On
 
         this.hooks.runAction('action:video-channel-playlists.video-channel.loaded', 'video-channel', { videoChannel })
 
+        this.videoPlaylists = []
+        this.pagination.currentPage = 1
         this.loadVideoPlaylists()
       })
   }
