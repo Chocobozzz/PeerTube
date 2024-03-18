@@ -15,7 +15,7 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { SQLCommand } from '@tests/shared/sql-command.js'
-import { FIXTURE_URLS } from '@tests/shared/tests.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 
 describe('Test channel synchronizations', function () {
   if (areHttpImportTestsDisabled()) return

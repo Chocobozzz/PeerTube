@@ -16,7 +16,7 @@ import {
 } from '@peertube/peertube-server-commands'
 import { expectStartWith } from '@tests/shared/checks.js'
 import { checkDirectoryIsEmpty } from '@tests/shared/directories.js'
-import { FIXTURE_URLS } from '@tests/shared/tests.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { checkSourceFile } from '@tests/shared/videos.js'
 import { expect } from 'chai'
 

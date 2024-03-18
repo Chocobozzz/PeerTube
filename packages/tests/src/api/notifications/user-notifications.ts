@@ -17,7 +17,7 @@ import {
   checkNewLiveFromSubscription,
   waitUntilNotification
 } from '@tests/shared/notifications.js'
-import { FIXTURE_URLS } from '@tests/shared/tests.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { uploadRandomVideoOnServers } from '@tests/shared/videos.js'
 
 describe('Test user notifications', function () {

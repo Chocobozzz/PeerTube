@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { readdir } from 'fs/promises'
 import { basename } from 'path'
-import { FIXTURE_URLS } from '@tests/shared/tests.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { areHttpImportTestsDisabled } from '@peertube/peertube-node-utils'
 import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import {

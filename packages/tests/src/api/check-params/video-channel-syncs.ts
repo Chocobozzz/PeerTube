@@ -1,5 +1,5 @@
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
-import { FIXTURE_URLS } from '@tests/shared/tests.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { HttpStatusCode, VideoChannelSyncCreate } from '@peertube/peertube-models'
 import {
   ChannelSyncsCommand,

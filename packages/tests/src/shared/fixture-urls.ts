@@ -1,4 +1,4 @@
-const FIXTURE_URLS = {
+export const FIXTURE_URLS = {
   peertube_long: 'https://peertube2.cpy.re/videos/watch/122d093a-1ede-43bd-bd34-59d2931ffc5e',
   peertube_short: 'https://peertube2.cpy.re/w/3fbif9S3WmtTP8gGsC5HBd',
 
@@ -30,14 +30,4 @@ const FIXTURE_URLS = {
   chatersVideo: 'https://download.cpy.re/peertube/video_chapters.mp4',
 
   file4K: 'https://download.cpy.re/peertube/4k_file.txt'
-}
-
-function buildRequestStub (): any {
-  return { }
-}
-
-export {
-  FIXTURE_URLS,
-
-  buildRequestStub
 }

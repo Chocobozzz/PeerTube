@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { expectStartWith } from '@tests/shared/checks.js'
-import { FIXTURE_URLS } from '@tests/shared/tests.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import {
