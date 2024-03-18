@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common'
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, viewChild } from '@angular/core'
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ComponentPaginationLight, DisableForReuseHook, HooksService, ScreenService } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
