@@ -819,7 +819,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     logger.info('Stopping live of video %s after video deletion.', instance.uuid)
 
-    LiveManager.Instance.stopSessionOf({ videoUUID: instance.uuid, error: null })
+    LiveManager.Instance.stopSessionOfVideo({ videoUUID: instance.uuid, error: null })
   }
 
   @BeforeDestroy

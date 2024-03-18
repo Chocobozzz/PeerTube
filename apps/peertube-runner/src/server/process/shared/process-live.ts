@@ -150,7 +150,7 @@ export class ProcessLiveRTMPHLSTranscoding {
 
     const type = ((err as any).res?.body as PeerTubeProblemDocument)?.code
     if (type === ServerErrorCode.RUNNER_JOB_NOT_IN_PROCESSING_STATE) {
-      logger.info({ err }, 'Stopping transcoding as the job is not in processing state anymore')
+      logger.info('Stopping transcoding as the job is not in processing state anymore')
 
       res()
     } else {
