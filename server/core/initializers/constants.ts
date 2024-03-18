@@ -1474,6 +1474,7 @@ async function buildLanguages () {
     sfs: true, // South African sign language
     swl: true, // Swedish sign language
     rsl: true, // Russian sign language
+    fse: true, // Finnish sign language
 
     kab: true, // Kabyle
     gcf: true, // Guadeloupean
