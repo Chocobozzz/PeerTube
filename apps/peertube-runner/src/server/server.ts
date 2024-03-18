@@ -201,8 +201,8 @@ export class RunnerServer {
       } catch (err) {
         const code = (err.res?.body as PeerTubeProblemDocument)?.code
 
-        if (code === ServerErrorCode.RUNNER_JOB_NOT_IN_PROCESSING_STATE) {
-          logger.debug({ err }, 'Runner job is not in processing state anymore, retry later')
+        if (code === ServerErrorCode.RUNNER_JOB_NOT_IN_PENDING_STATE) {
+          logger.debug({ err }, 'Runner job is not in pending state anymore, retry later')
           return
         }
 
