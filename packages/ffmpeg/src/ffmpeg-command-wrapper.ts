@@ -73,7 +73,7 @@ export class FFmpegCommandWrapper {
 
   // ---------------------------------------------------------------------------
 
-  debugLog (msg: string, meta: any) {
+  debugLog (msg: string, meta: any = {}) {
     this.logger.debug(msg, { ...meta, ...this.lTags })
   }
 
@@ -199,6 +199,7 @@ export class FFmpegCommandWrapper {
           'canCopyVideo',
           'resolution',
           'inputBitrate',
+          'inputProbe',
           'fps',
           'inputRatio',
           'streamNum'

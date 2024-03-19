@@ -107,7 +107,8 @@ export class ProcessLiveRTMPHLSTranscoding {
           bitrate,
           ratio,
 
-          hasAudio
+          hasAudio,
+          probe
         })
 
         logger.info(`Running live transcoding for ${payload.input.rtmpUrl}`)

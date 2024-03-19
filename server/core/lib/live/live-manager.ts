@@ -36,6 +36,7 @@ import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolu
 import { LiveQuotaStore } from './live-quota-store.js'
 import { cleanupAndDestroyPermanentLive, getLiveSegmentTime } from './live-utils.js'
 import { MuxingSession } from './shared/index.js'
+import { FfprobeData } from 'fluent-ffmpeg'
 
 // Disable node media server logs
 nodeMediaServerLogger.setLogType(0)
@@ -319,7 +320,8 @@ class LiveManager {
       bitrate,
       ratio,
       allResolutions,
-      hasAudio
+      hasAudio,
+      probe
     })
   }
 
@@ -337,6 +339,7 @@ class LiveManager {
     ratio: number
     allResolutions: number[]
     hasAudio: boolean
+    probe: FfprobeData
   }) {
     const { sessionId, videoLive, user, ratio } = options
     const videoUUID = videoLive.Video.uuid
@@ -352,7 +355,7 @@ class LiveManager {
       videoLive,
       user,
 
-      ...pick(options, [ 'inputLocalUrl', 'inputPublicUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio' ])
+      ...pick(options, [ 'inputLocalUrl', 'inputPublicUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio', 'probe' ])
     })
 
     muxingSession.on('live-ready', () => this.publishAndFederateLive({ live: videoLive, ratio, localLTags }))

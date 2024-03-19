@@ -1,5 +1,7 @@
 // Types used by plugins and ffmpeg-utils
 
+import { FfprobeData } from 'fluent-ffmpeg'
+
 export type EncoderOptionsBuilderParams = {
   input: string
 
@@ -14,6 +16,7 @@ export type EncoderOptionsBuilderParams = {
   // Could be undefined if we could not get input bitrate (some RTMP streams for example)
   inputBitrate: number
   inputRatio: number
+  inputProbe: FfprobeData
 
   // For lives
   streamNum?: number

@@ -1,8 +1,8 @@
-import { FilterSpecification } from 'fluent-ffmpeg'
-import { join } from 'path'
 import { pick } from '@peertube/peertube-core-utils'
+import { FfprobeData, FilterSpecification } from 'fluent-ffmpeg'
+import { join } from 'path'
 import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-command-wrapper.js'
-import { buildStreamSuffix, getScaleFilter, StreamType } from './ffmpeg-utils.js'
+import { StreamType, buildStreamSuffix, getScaleFilter } from './ffmpeg-utils.js'
 import { addDefaultEncoderGlobalParams, addDefaultEncoderParams, applyEncoderOptions } from './shared/index.js'
 
 export class FFmpegLive {
@@ -27,6 +27,7 @@ export class FFmpegLive {
     bitrate: number
     ratio: number
     hasAudio: boolean
+    probe: FfprobeData
 
     segmentListSize: number
     segmentDuration: number
@@ -38,7 +39,8 @@ export class FFmpegLive {
       bitrate,
       masterPlaylistName,
       ratio,
-      hasAudio
+      hasAudio,
+      probe
     } = options
     const command = this.commandWrapper.buildCommand(inputUrl)
 
@@ -69,6 +71,7 @@ export class FFmpegLive {
 
         inputBitrate: bitrate,
         inputRatio: ratio,
+        inputProbe: probe,
 
         resolution,
         fps,
@@ -79,6 +82,7 @@ export class FFmpegLive {
 
       {
         const streamType: StreamType = 'video'
+
         const builderResult = await this.commandWrapper.getEncoderBuilderResult({ ...baseEncoderBuilderParams, streamType })
         if (!builderResult) {
           throw new Error('No available live video encoder found')
@@ -108,6 +112,7 @@ export class FFmpegLive {
 
       if (hasAudio) {
         const streamType: StreamType = 'audio'
+
         const builderResult = await this.commandWrapper.getEncoderBuilderResult({ ...baseEncoderBuilderParams, streamType })
         if (!builderResult) {
           throw new Error('No available live audio encoder found')
