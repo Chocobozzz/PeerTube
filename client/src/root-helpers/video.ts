@@ -16,7 +16,7 @@ function buildVideoOrPlaylistEmbed (options: {
   iframe.src = embedUrl
   iframe.frameBorder = '0'
   iframe.allowFullscreen = true
-  iframe.sandbox.add('allow-same-origin', 'allow-scripts', 'allow-popups')
+  iframe.sandbox.add('allow-same-origin', 'allow-scripts', 'allow-popups', 'allow-forms')
 
   if (responsive) {
     const wrapper = document.createElement('div')
