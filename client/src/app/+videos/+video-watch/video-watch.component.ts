@@ -293,7 +293,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private loadRouteQuery () {
     this.queryParamsSub = this.route.queryParams.subscribe(queryParams => {
       // Handle the ?playlistPosition
-      const positionParam = queryParams['playlistPosition'] ?? 1
+      const positionParam = queryParams['playlistPosition']
+      if (!positionParam) return
 
       this.playlistPosition = positionParam === 'last'
         ? -1 // Handle the "last" index
@@ -307,7 +308,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.videoWatchPlaylist.updatePlaylistIndex(this.playlistPosition)
 
       const start = queryParams['start']
-      if (this.peertubePlayer && start) this.peertubePlayer.getPlayer().currentTime(parseInt(start, 10))
+      if (this.peertubePlayer?.getPlayer() && start) {
+        this.peertubePlayer.getPlayer().currentTime(parseInt(start, 10))
+      }
     })
   }
 
