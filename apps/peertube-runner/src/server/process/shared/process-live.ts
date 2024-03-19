@@ -152,6 +152,9 @@ export class ProcessLiveRTMPHLSTranscoding {
     if (type === ServerErrorCode.RUNNER_JOB_NOT_IN_PROCESSING_STATE) {
       logger.info('Stopping transcoding as the job is not in processing state anymore')
 
+      this.sendSuccess()
+        .catch(err => logger.error({ err }, 'Cannot send success'))
+
       res()
     } else {
       logger.error({ err }, 'Cannot send update after added/deleted chunk, stopping live transcoding')
