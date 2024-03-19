@@ -118,7 +118,6 @@ export class VideoWatchPlaylistComponent {
       if (position) this.updatePlaylistIndex(position)
 
       if (redirectToFirst) {
-        console.log(firstAvailableVideo)
         const extras = {
           queryParams: {
             start: firstAvailableVideo.startTimestamp,
