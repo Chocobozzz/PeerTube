@@ -15,8 +15,3 @@ a {
     color: pvar(--inputPlaceholderColor);
   }
 }
-
-.unblock-button {
-  @include peertube-button;
-  @include grey-button;
-}

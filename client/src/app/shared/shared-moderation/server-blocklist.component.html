@@ -36,7 +36,7 @@
   <ng-template pTemplate="body" let-serverBlock>
     <tr>
       <td class="action-cell">
-        <button class="unblock-button" (click)="unblockServer(serverBlock)" i18n>Unmute</button>
+        <button class="peertube-button grey-button" (click)="unblockServer(serverBlock)" i18n>Unmute</button>
       </td>
       <td>
         <a [href]="'https://' + serverBlock.blockedServer.host" i18n-title title="Open instance in a new tab" target="_blank" rel="noopener noreferrer">
