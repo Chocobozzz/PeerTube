@@ -278,9 +278,12 @@ export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
     return RunnerJobModel.update({ state: RunnerJobState.PENDING }, { where })
   }
 
-  static cancelAllJobs (options: { type: RunnerJobType }) {
+  static cancelAllNonFinishedJobs (options: { type: RunnerJobType }) {
     const where = {
-      type: options.type
+      type: options.type,
+      state: {
+        [Op.in]: [ RunnerJobState.COMPLETING, RunnerJobState.PENDING, RunnerJobState.PROCESSING, RunnerJobState.WAITING_FOR_PARENT_JOB ]
+      }
     }
 
     return RunnerJobModel.update({ state: RunnerJobState.CANCELLED }, { where })

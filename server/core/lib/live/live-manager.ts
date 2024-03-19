@@ -523,7 +523,7 @@ class LiveManager {
   }
 
   private async handleBrokenLives () {
-    await RunnerJobModel.cancelAllJobs({ type: 'live-rtmp-hls-transcoding' })
+    await RunnerJobModel.cancelAllNonFinishedJobs({ type: 'live-rtmp-hls-transcoding' })
 
     const videoUUIDs = await VideoModel.listPublishedLiveUUIDs()
 
