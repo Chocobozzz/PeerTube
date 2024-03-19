@@ -134,7 +134,7 @@ function buildOEmbed (options: {
     thumbnailUrl = undefined
   }
 
-  const html = `<iframe width="${embedWidth}" height="${embedHeight}" sandbox="allow-same-origin allow-scripts allow-popups" ` +
+  const html = `<iframe width="${embedWidth}" height="${embedHeight}" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" ` +
     `title="${embedTitle}" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`
 
   const json: any = {
