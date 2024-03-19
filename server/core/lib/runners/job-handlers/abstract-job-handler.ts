@@ -199,11 +199,12 @@ export abstract class AbstractJobHandler <C, U extends RunnerJobUpdatePayload, S
 
   async abort (options: {
     runnerJob: MRunnerJob
+    abortNotSupportedErrorMessage?: string
   }) {
-    const { runnerJob } = options
+    const { runnerJob, abortNotSupportedErrorMessage = 'Job has been aborted but it is not supported by this job type' } = options
 
     if (this.isAbortSupported() !== true) {
-      return this.error({ runnerJob, message: 'Job has been aborted but it is not supported by this job type' })
+      return this.error({ runnerJob, message: abortNotSupportedErrorMessage })
     }
 
     await this.specificAbort(options)
