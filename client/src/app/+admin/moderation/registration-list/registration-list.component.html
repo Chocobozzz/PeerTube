@@ -91,8 +91,14 @@
       </td>
 
       <td class="c-hand abuse-states" [pRowToggler]="registration">
-        <my-global-icon *ngIf="isRegistrationAccepted(registration)" [title]="registration.state.label" iconName="tick"></my-global-icon>
-        <my-global-icon *ngIf="isRegistrationRejected(registration)" [title]="registration.state.label" iconName="cross"></my-global-icon>
+
+        <div *ngIf="isRegistrationAccepted(registration)" [title]="registration.state.label" class="pt-badge badge-success">
+          <my-global-icon iconName="tick"></my-global-icon>
+        </div>
+
+        <div *ngIf="isRegistrationRejected(registration)" [title]="registration.state.label" class="pt-badge badge-danger">
+          <my-global-icon iconName="cross"></my-global-icon>
+        </div>
       </td>
 
       <td container="body" placement="left auto" [ngbTooltip]="registration.moderationResponse">

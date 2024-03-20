@@ -121,8 +121,13 @@
       <td class="c-hand" [pRowToggler]="abuse">{{ abuse.createdAt | date: 'short'  }}</td>
 
       <td class="c-hand abuse-states" [pRowToggler]="abuse">
-        <my-global-icon *ngIf="isAbuseAccepted(abuse)" [title]="abuse.state.label" iconName="tick"></my-global-icon>
-        <my-global-icon *ngIf="isAbuseRejected(abuse)" [title]="abuse.state.label" iconName="cross"></my-global-icon>
+        <div *ngIf="isAbuseAccepted(abuse)" [title]="abuse.state.label" class="pt-badge badge-success">
+          <my-global-icon iconName="tick"></my-global-icon>
+        </div>
+
+        <div *ngIf="isAbuseRejected(abuse)" [title]="abuse.state.label" class="pt-badge badge-danger">
+          <my-global-icon iconName="cross"></my-global-icon>
+        </div>
       </td>
 
       <td class="abuse-messages">
