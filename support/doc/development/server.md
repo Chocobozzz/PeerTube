@@ -61,7 +61,7 @@ Some of these may be optional (for example your new endpoint may not need to sen
    - Create the notification logic in `server/core/lib/notifier/shared`:
      + Email subject has a common prefix (defined by the admin in PeerTube configuration)
    - Add your notification to `server/core/lib/notifier/notifier.ts`
-   - Create the email template in `server/core/lib/emails`:
+   - Create the email template in `server/core/assets/email-templates`:
      + A text version is automatically generated from the HTML
      + The template usually extends `../common/grettings` that already says "Hi" and "Cheers". You just have to write the title and the content blocks that will be inserted in the appropriate places in the HTML template
    - If you need to associate a new table with `userNotification`:

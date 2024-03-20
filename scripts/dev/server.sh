@@ -20,6 +20,5 @@ npm run tsc -- -b -v --incremental server/tsconfig.json
 npm run resolve-tspaths:server
 
 cp -r ./server/core/static ./server/core/assets ./dist/core
-cp -r "./server/core/lib/emails" "./dist/core/lib"
 
 ./node_modules/.bin/tsc-watch --build --preserveWatchOutput --verbose --onSuccess 'sh -c "npm run resolve-tspaths:server && NODE_ENV=dev node dist/server"' server/tsconfig.json
