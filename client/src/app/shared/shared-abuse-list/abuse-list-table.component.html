@@ -131,10 +131,15 @@
       </td>
 
       <td class="abuse-messages">
-        <button class="button-unstyle" *ngIf="isLocalAbuse(abuse)" (click)="openAbuseMessagesModal(abuse)">
+        <button
+          *ngIf="isLocalAbuse(abuse)" (click)="openAbuseMessagesModal(abuse)"
+          class="peertube-button grey-button"
+          [ariaLabel]="getSendMessageButtonLabel(abuse)"
+          [title]="getSendMessageButtonLabel(abuse)"
+        >
           {{ abuse.countMessages }}
 
-          <my-global-icon iconName="message-circle"></my-global-icon>
+          <my-global-icon aria- iconName="message-circle"></my-global-icon>
         </button>
       </td>
 

@@ -27,6 +27,7 @@ import { AbuseService } from '../shared-moderation/abuse.service'
 import { BlocklistService } from '../shared-moderation/blocklist.service'
 import { VideoBlockService } from '../shared-moderation/video-block.service'
 import { VideoCommentService } from '../shared-video-comment/video-comment.service'
+import { formatICU } from '@app/helpers'
 
 const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
 
@@ -206,6 +207,20 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
     if (!abuse.reporterAccount) return false
 
     return Actor.IS_LOCAL(abuse.reporterAccount.host)
+  }
+
+  getSendMessageButtonLabel (abuse: AdminAbuse) {
+    if (this.viewType === 'admin') {
+      return formatICU(
+        $localize`Send a message to the reporter (currently {count, plural, =1 {{count} message} other {{count} messages}})`,
+        { count: abuse.countMessages }
+      )
+    }
+
+    return formatICU(
+      $localize`Send a message to the admins/moderators (currently {count, plural, =1 {{count} message} other {{count} messages}})`,
+      { count: abuse.countMessages }
+    )
   }
 
   protected reloadDataInternal () {
