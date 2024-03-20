@@ -74,7 +74,8 @@ export enum ScopeNames {
               '(' +
                 'SELECT count(*) ' +
                 'FROM "videoAbuse" ' +
-                'WHERE "videoId" = "VideoAbuse"."videoId" AND "videoId" IS NOT NULL' +
+                'WHERE "videoId" IN (SELECT "videoId" FROM "videoAbuse" WHERE "abuseId" = "AbuseModel"."id") ' +
+                'AND "videoId" IS NOT NULL' +
               ')'
             ),
             'countReportsForVideo'
@@ -85,11 +86,10 @@ export enum ScopeNames {
               '(' +
                 'SELECT t.nth ' +
                 'FROM ( ' +
-                  'SELECT id, ' +
-                         'row_number() OVER (PARTITION BY "videoId" ORDER BY "createdAt") AS nth ' +
+                  'SELECT id, "abuseId", row_number() OVER (PARTITION BY "videoId" ORDER BY "createdAt") AS nth ' +
                   'FROM "videoAbuse" ' +
                 ') t ' +
-                'WHERE t.id = "VideoAbuse".id AND t.id IS NOT NULL' +
+                'WHERE t."abuseId" = "AbuseModel"."id" ' +
               ')'
             ),
             'nthReportForVideo'
@@ -645,7 +645,8 @@ export class AbuseModel extends SequelizeModel<AbuseModel> {
                          id: {
                            [Op.in]: ids
                          }
-                       }
+                       },
+                       limit: parameters.count
                      })
   }
 
