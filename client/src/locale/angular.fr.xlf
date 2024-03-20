@@ -8124,9 +8124,9 @@
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3029923402309610616" datatype="html">
+      <trans-unit id="3029923402309610616" datatype="html" xml:space="preserve">
         <source>Token renewed. Update your client configuration accordingly.</source>
-        <target state="needs-translation">Jeton renouvelé. Mettez à jour la configuration de votre client en conséquence.</target>
+        <target state="translated">Jeton renouvelé. Mettez à jour la configuration de votre client en conséquence.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context>
           <context context-type="linenumber">49</context>
