@@ -101,7 +101,6 @@ function generateLocalVideoMiniature (options: {
   videoFile: MVideoFile
   types: ThumbnailType_Type[]
   ffprobe: FfprobeData
-  timecode?: number
 }): Promise<MThumbnail[]> {
   const { video, videoFile, types, ffprobe, timecode } = options
 
