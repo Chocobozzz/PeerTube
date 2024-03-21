@@ -48,7 +48,7 @@ export class UserExporter {
 
       if (exportModel.storage === FileStorage.FILE_SYSTEM) {
         output = createWriteStream(getFSUserExportFilePath(exportModel))
-        endPromise = new Promise<void>(res => output.on('close', () => res()))
+        endPromise = new Promise<string>(res => output.on('close', () => res('')))
       } else {
         output = new PassThrough()
         endPromise = storeUserExportFile(output as PassThrough, exportModel)
@@ -56,12 +56,16 @@ export class UserExporter {
 
       await this.createZip({ exportModel, user, output })
 
-      await endPromise
+      const fileUrl = await endPromise
+
+      if (exportModel.storage === FileStorage.OBJECT_STORAGE) {
+        exportModel.fileUrl = fileUrl
+        exportModel.size = await getUserExportFileObjectStorageSize(exportModel)
+      } else if (exportModel.storage === FileStorage.FILE_SYSTEM) {
+        exportModel.size = await getFileSize(getFSUserExportFilePath(exportModel))
+      }
 
       exportModel.state = UserExportState.COMPLETED
-      exportModel.size = exportModel.storage === FileStorage.FILE_SYSTEM
-        ? await getFileSize(getFSUserExportFilePath(exportModel))
-        : await getUserExportFileObjectStorageSize(exportModel)
 
       await saveInTransactionWithRetries(exportModel)
     } catch (err) {

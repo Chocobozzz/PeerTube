@@ -41,7 +41,10 @@ describe('Open Telemetry', function () {
       await server.run({
         open_telemetry: {
           metrics: {
-            enabled: true
+            enabled: true,
+            http_request_duration: {
+              enabled: true
+            }
           }
         }
       })

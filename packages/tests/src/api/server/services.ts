@@ -74,7 +74,7 @@ describe('Test services', function () {
         const oembedUrl = server.url + basePath + video.uuid + suffix.input
 
         const res = await server.services.getOEmbed({ oembedUrl })
-        const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts allow-popups" ' +
+        const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" ' +
           `title="${video.name}" src="http://${server.host}/videos/embed/${video.uuid}${suffix.output}" ` +
           'frameborder="0" allowfullscreen></iframe>'
 
@@ -98,7 +98,7 @@ describe('Test services', function () {
         const oembedUrl = server.url + basePath + playlistUUID + suffix.input
 
         const res = await server.services.getOEmbed({ oembedUrl })
-        const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts allow-popups" ' +
+        const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" ' +
           `title="${playlistDisplayName}" src="http://${server.host}/video-playlists/embed/${playlistUUID}${suffix.output}" ` +
           'frameborder="0" allowfullscreen></iframe>'
 
@@ -122,7 +122,7 @@ describe('Test services', function () {
       const maxWidth = 50
 
       const res = await server.services.getOEmbed({ oembedUrl, format, maxHeight, maxWidth })
-      const expectedHtml = '<iframe width="50" height="50" sandbox="allow-same-origin allow-scripts allow-popups" ' +
+      const expectedHtml = '<iframe width="50" height="50" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" ' +
         `title="${video.name}" src="http://${server.host}/videos/embed/${video.uuid}" ` +
         'frameborder="0" allowfullscreen></iframe>'
 

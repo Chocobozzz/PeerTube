@@ -30,6 +30,7 @@ export class FFmpegTranscodingWrapper extends AbstractTranscodingWrapper {
 
         bitrate: this.bitrate,
         ratio: this.ratio,
+        probe: this.probe,
 
         hasAudio: this.hasAudio
       })

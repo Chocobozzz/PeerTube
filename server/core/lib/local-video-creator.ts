@@ -1,4 +1,4 @@
-import { ffprobePromise } from '@peertube/peertube-ffmpeg'
+import { buildAspectRatio } from '@peertube/peertube-core-utils'
 import {
   LiveVideoCreate,
   LiveVideoLatencyMode,
@@ -9,37 +9,35 @@ import {
   VideoStateType
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { LoggerTagsFn, logger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
+import { ScheduleVideoUpdateModel } from '@server/models/video/schedule-video-update.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
 import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
-import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideoFullLight, MThumbnail, MChannel, MChannelAccountLight, MVideoFile, MUser } from '@server/types/models/index.js'
+import { MChannel, MChannelAccountLight, MThumbnail, MUser, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
+import { FilteredModelAttributes } from '@server/types/sequelize.js'
+import { FfprobeData } from 'fluent-ffmpeg'
 import { move } from 'fs-extra/esm'
 import { getLocalVideoActivityPubUrl } from './activitypub/url.js'
+import { federateVideoIfNeeded } from './activitypub/videos/federate.js'
+import { Hooks } from './plugins/hooks.js'
 import { generateLocalVideoMiniature, updateLocalVideoMiniatureFromExisting } from './thumbnail.js'
 import { autoBlacklistVideoIfNeeded } from './video-blacklist.js'
-import { buildNewFile } from './video-file.js'
+import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
+import { buildNewFile, createVideoSource } from './video-file.js'
 import { addVideoJobsAfterCreation } from './video-jobs.js'
 import { VideoPathManager } from './video-path-manager.js'
 import { setVideoTags } from './video.js'
-import { FilteredModelAttributes } from '@server/types/sequelize.js'
-import { CONFIG } from '@server/initializers/config.js'
-import { Hooks } from './plugins/hooks.js'
-import Ffmpeg from 'fluent-ffmpeg'
-import { ScheduleVideoUpdateModel } from '@server/models/video/schedule-video-update.js'
-import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
-import { LoggerTagsFn, logger } from '@server/helpers/logger.js'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { federateVideoIfNeeded } from './activitypub/videos/federate.js'
-import { buildAspectRatio } from '@peertube/peertube-core-utils'
 
 type VideoAttributes = Omit<VideoCreate, 'channelId'> & {
   duration: number
   isLive: boolean
   state: VideoStateType
-  filename: string
+  inputFilename: string
 }
 
 type LiveAttributes = Pick<LiveVideoCreate, 'permanentLive' | 'latencyMode' | 'saveReplay' | 'replaySettings'> & {
@@ -64,6 +62,8 @@ export class LocalVideoCreator {
   private readonly lTags: LoggerTagsFn
 
   private readonly videoFilePath: string | undefined
+  private readonly videoFileProbe: FfprobeData
+
   private readonly videoAttributes: VideoAttributes
   private readonly liveAttributes: LiveAttributes | undefined
 
@@ -72,12 +72,15 @@ export class LocalVideoCreator {
 
   private video: MVideoFullLight
   private videoFile: MVideoFile
-  private ffprobe: Ffmpeg.FfprobeData
+  private videoPath: string
 
   constructor (private readonly options: {
     lTags: LoggerTagsFn
 
-    videoFilePath: string
+    videoFile: {
+      path: string
+      probe: FfprobeData
+    }
 
     videoAttributes: VideoAttributes
     liveAttributes: LiveAttributes
@@ -93,7 +96,8 @@ export class LocalVideoCreator {
       finalFallback: ChaptersOption | undefined
     }
   }) {
-    this.videoFilePath = options.videoFilePath
+    this.videoFilePath = options.videoFile?.path
+    this.videoFileProbe = options.videoFile?.probe
 
     this.videoAttributes = options.videoAttributes
     this.liveAttributes = options.liveAttributes
@@ -112,11 +116,10 @@ export class LocalVideoCreator {
     this.video.url = getLocalVideoActivityPubUrl(this.video)
 
     if (this.videoFilePath) {
-      this.ffprobe = await ffprobePromise(this.videoFilePath)
-      this.videoFile = await buildNewFile({ path: this.videoFilePath, mode: 'web-video', ffprobe: this.ffprobe })
+      this.videoFile = await buildNewFile({ path: this.videoFilePath, mode: 'web-video', ffprobe: this.videoFileProbe })
 
-      const destination = VideoPathManager.Instance.getFSVideoFileOutputPath(this.video, this.videoFile)
-      await move(this.videoFilePath, destination)
+      this.videoPath = VideoPathManager.Instance.getFSVideoFileOutputPath(this.video, this.videoFile)
+      await move(this.videoFilePath, this.videoPath)
 
       this.video.aspectRatio = buildAspectRatio({ width: this.videoFile.width, height: this.videoFile.height })
     }
@@ -166,13 +169,6 @@ export class LocalVideoCreator {
           transaction
         })
 
-        if (this.videoAttributes.filename) {
-          await VideoSourceModel.create({
-            filename: this.videoAttributes.filename,
-            videoId: this.video.id
-          }, { transaction })
-        }
-
         if (this.videoAttributes.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
           await VideoPasswordModel.addPasswords(this.videoAttributes.videoPasswords, this.video.id, transaction)
         }
@@ -201,13 +197,32 @@ export class LocalVideoCreator {
         if (this.videoFile) {
           transaction.afterCommit(() => {
             addVideoJobsAfterCreation({ video: this.video, videoFile: this.videoFile })
-            .catch(err => logger.error('Cannot build new video jobs of %s.', this.video.uuid, { err, ...this.lTags(this.video.uuid) }))
+              .catch(err => logger.error('Cannot build new video jobs of %s.', this.video.uuid, { err, ...this.lTags(this.video.uuid) }))
           })
         } else {
           await federateVideoIfNeeded(this.video, true, transaction)
         }
+      }).catch(err => {
+        // Reset elements to reinsert them in the database
+        this.video.isNewRecord = true
+        this.videoFile.isNewRecord = true
+
+        for (const t of thumbnails) {
+          t.isNewRecord = true
+        }
+
+        throw err
       })
     })
+
+    if (this.videoAttributes.inputFilename) {
+      await createVideoSource({
+        inputFilename: this.videoAttributes.inputFilename,
+        inputPath: this.videoPath,
+        inputProbe: this.videoFileProbe,
+        video: this.video
+      })
+    }
 
     // Channel has a new content, set as updated
     await this.channel.setAsUpdated()
@@ -239,7 +254,12 @@ export class LocalVideoCreator {
     return [
       ...await Promise.all(promises),
 
-      ...await generateLocalVideoMiniature({ video: this.video, videoFile: this.videoFile, types: toGenerate, ffprobe: this.ffprobe })
+      ...await generateLocalVideoMiniature({
+        video: this.video,
+        videoFile: this.videoFile,
+        types: toGenerate,
+        ffprobe: this.videoFileProbe
+      })
     ]
   }
 

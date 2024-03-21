@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { FIXTURE_URLS } from '@tests/shared/tests.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { sortObjectComparator } from '@peertube/peertube-core-utils'
 import { UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@peertube/peertube-models'
 import {

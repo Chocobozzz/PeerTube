@@ -16,7 +16,7 @@ import {
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
-import { FIXTURE_URLS } from '@tests/shared/tests.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { checkUploadVideoParam } from '@tests/shared/videos.js'
 
 describe('Test video passwords validator', function () {

@@ -15,6 +15,7 @@ storage:
   avatars: 'test6/avatars/'
   web_videos: 'test6/web-videos/'
   streaming_playlists: 'test6/streaming-playlists/'
+  original_video_files: 'test6/original-video-files/'
   redundancy: 'test6/redundancy/'
   logs: 'test6/logs/'
   previews: 'test6/previews/'

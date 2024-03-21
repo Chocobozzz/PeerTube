@@ -3,7 +3,7 @@
 import { omit } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
-import { FIXTURE_URLS } from '@tests/shared/tests.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,

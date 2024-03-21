@@ -106,7 +106,7 @@ async function getConfig (req: express.Request, res: express.Response) {
 }
 
 async function getAbout (req: express.Request, res: express.Response) {
-  const { avatars, banners } = await ActorImageModel.listServerActorImages()
+  const serverActor = await getServerActor()
 
   const about: About = {
     instance: {
@@ -127,8 +127,8 @@ async function getAbout (req: express.Request, res: express.Response) {
       languages: CONFIG.INSTANCE.LANGUAGES,
       categories: CONFIG.INSTANCE.CATEGORIES,
 
-      banners: banners.map(b => b.toFormattedJSON()),
-      avatars: avatars.map(a => a.toFormattedJSON())
+      banners: serverActor.Banners.map(b => b.toFormattedJSON()),
+      avatars: serverActor.Avatars.map(a => a.toFormattedJSON())
     }
   }
 
@@ -320,6 +320,9 @@ function customConfig (): CustomConfig {
     },
     transcoding: {
       enabled: CONFIG.TRANSCODING.ENABLED,
+      originalFile: {
+        keep: CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP
+      },
       remoteRunners: {
         enabled: CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED
       },

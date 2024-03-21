@@ -1,6 +1,6 @@
 {
   "name": "@peertube/peertube-runner",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "type": "module",
   "main": "dist/peertube-runner.js",
   "bin": "dist/peertube-runner.js",

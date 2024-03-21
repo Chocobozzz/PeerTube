@@ -1,5 +1,6 @@
 import {
   LiveVideoLatencyModeType,
+  VideoFileMetadata,
   VideoPrivacyType,
   VideoStateType,
   VideoStreamingPlaylistType_Type
@@ -85,7 +86,17 @@ export interface VideoExportJSON {
     }[]
 
     source?: {
-      filename: string
+      inputFilename: string
+
+      resolution: number
+      size: number
+
+      width: number
+      height: number
+
+      fps: number
+
+      metadata: VideoFileMetadata
     }
 
     archiveFiles: {

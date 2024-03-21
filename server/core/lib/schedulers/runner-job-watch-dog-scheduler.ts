@@ -32,7 +32,11 @@ export class RunnerJobWatchDogScheduler extends AbstractScheduler {
       logger.info('Abort stalled runner job %s (%s)', stalled.uuid, stalled.type, lTags(stalled.uuid, stalled.type))
 
       const Handler = getRunnerJobHandlerClass(stalled)
-      await new Handler().abort({ runnerJob: stalled })
+
+      await new Handler().abort({
+        runnerJob: stalled,
+        abortNotSupportedErrorMessage: 'Stalled runner job'
+      })
     }
   }
 

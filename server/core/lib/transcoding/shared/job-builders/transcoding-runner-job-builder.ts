@@ -1,3 +1,4 @@
+import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS, hasAudioStream, isAudioFile } from '@peertube/peertube-ffmpeg'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -11,7 +12,6 @@ import {
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { MUserId, MVideoFile, MVideoFullLight, MVideoWithFileThumbnail } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
-import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS, hasAudioStream, isAudioFile } from '@peertube/peertube-ffmpeg'
 import { getTranscodingJobPriority } from '../../transcoding-priority.js'
 import { buildOriginalFileResolution, computeResolutionsToTranscode } from '../../transcoding-resolutions.js'
 import { AbstractJobBuilder } from './abstract-job-builder.js'
@@ -60,11 +60,7 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder {
         const fps = computeOutputFPS({ inputFPS, resolution: maxResolution })
         const priority = await getTranscodingJobPriority({ user, type: 'vod', fallback: 0 })
 
-        const deleteInputFileId = isAudioInput || maxResolution !== resolution
-          ? videoFile.id
-          : null
-
-        const jobPayload = { video, resolution: maxResolution, fps, isNewVideo, priority, deleteInputFileId }
+        const jobPayload = { video, resolution: maxResolution, fps, isNewVideo, priority, deleteInputFileId: videoFile.id }
 
         const mainRunnerJob = videoFile.isAudio()
           ? await new VODAudioMergeTranscodingJobHandler().create(jobPayload)

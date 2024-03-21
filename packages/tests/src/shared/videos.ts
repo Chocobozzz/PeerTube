@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
+import { uuidRegex } from '@peertube/peertube-core-utils'
+import { HttpStatusCode, HttpStatusCodeType, VideoCaption, VideoDetails, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
+import { buildAbsoluteFixturePath, getFileSize, getFilenameFromUrl, getLowercaseExtension } from '@peertube/peertube-node-utils'
+import { PeerTubeServer, VideoEdit, getRedirectionUrl, makeRawRequest, waitJobs } from '@peertube/peertube-server-commands'
+import {
+  VIDEO_CATEGORIES,
+  VIDEO_LANGUAGES,
+  VIDEO_LICENCES,
+  VIDEO_PRIVACIES,
+  loadLanguages
+} from '@peertube/peertube-server/core/initializers/constants.js'
 import { expect } from 'chai'
 import { pathExists } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
 import { basename, join } from 'path'
-import { uuidRegex } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, HttpStatusCodeType, VideoCaption, VideoDetails, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
-import {
-  loadLanguages,
-  VIDEO_CATEGORIES,
-  VIDEO_LANGUAGES,
-  VIDEO_LICENCES,
-  VIDEO_PRIVACIES
-} from '@peertube/peertube-server/core/initializers/constants.js'
-import { getLowercaseExtension } from '@peertube/peertube-node-utils'
-import { makeRawRequest, PeerTubeServer, VideoEdit, waitJobs } from '@peertube/peertube-server-commands'
 import { dateIsValid, expectStartWith, testImageGeneratedByFFmpeg } from './checks.js'
-import { checkWebTorrentWorks } from './webtorrent.js'
 import { completeCheckHlsPlaylist } from './streaming-playlists.js'
+import { checkWebTorrentWorks } from './webtorrent.js'
 
 export async function completeWebVideoFilesCheck (options: {
   server: PeerTubeServer
@@ -368,4 +368,41 @@ export async function uploadRandomVideoOnServers (
   await waitJobs(servers)
 
   return res
+}
+
+export async function checkSourceFile (options: {
+  server: PeerTubeServer
+  fsCount: number
+  uuid: string
+  fixture: string
+  objectStorageBaseUrl?: string // default false
+}) {
+  const { server, fsCount, fixture, uuid, objectStorageBaseUrl } = options
+
+  const source = await server.videos.getSource({ id: uuid })
+  const fixtureFileSize = await getFileSize(buildAbsoluteFixturePath(fixture))
+
+  if (fsCount > 0) {
+    expect(await server.servers.countFiles('original-video-files')).to.equal(fsCount)
+
+    const keptFilePath = join(server.servers.buildDirectory('original-video-files'), getFilenameFromUrl(source.fileDownloadUrl))
+    expect(await getFileSize(keptFilePath)).to.equal(fixtureFileSize)
+  }
+
+  expect(source.fileDownloadUrl).to.exist
+  if (objectStorageBaseUrl) {
+    const token = await server.videoToken.getVideoFileToken({ videoId: uuid })
+    expectStartWith(await getRedirectionUrl(source.fileDownloadUrl + '?videoFileToken=' + token), objectStorageBaseUrl)
+  }
+
+  const { body } = await makeRawRequest({
+    url: source.fileDownloadUrl,
+    token: server.accessToken,
+    redirects: 1,
+    expectedStatus: HttpStatusCode.OK_200
+  })
+
+  expect(body).to.have.lengthOf(fixtureFileSize)
+
+  return source
 }

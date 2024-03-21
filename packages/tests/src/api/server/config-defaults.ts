@@ -9,7 +9,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
-import { FIXTURE_URLS } from '@tests/shared/tests.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 
 describe('Test config defaults', function () {
   let server: PeerTubeServer

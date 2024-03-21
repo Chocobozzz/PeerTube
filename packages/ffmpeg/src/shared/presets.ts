@@ -45,6 +45,7 @@ export async function presetVOD (options: {
       input,
       inputBitrate: bitrate,
       inputRatio: videoStreamDimensions?.ratio || 0,
+      inputProbe: probe,
 
       resolution,
       fps,

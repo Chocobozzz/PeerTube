@@ -1,5 +1,3 @@
-import { OutgoingHttpHeaders } from 'http'
-import { Writable } from 'stream'
 import { HttpMethodType, PeerTubeProblemDocumentData, VideoCreate } from '@peertube/peertube-models'
 import { RegisterServerAuthExternalOptions } from '@server/types/index.js'
 import {
@@ -29,7 +27,10 @@ import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server.
 import { MVideoImportDefault } from '@server/types/models/video/video-import.js'
 import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/types/models/video/video-playlist-element.js'
 import { MAccountVideoRateAccountVideo } from '@server/types/models/video/video-rate.js'
-import { File as UploadXFile, Metadata } from '@uploadx/core'
+import { Metadata, File as UploadXFile } from '@uploadx/core'
+import { FfprobeData } from 'fluent-ffmpeg'
+import { OutgoingHttpHeaders } from 'http'
+import { Writable } from 'stream'
 import { RegisteredPlugin } from '../../lib/plugins/plugin-manager.js'
 import {
   MAccountDefault,
@@ -126,6 +127,8 @@ declare module 'express' {
       }
 
       docUrl?: string
+
+      ffprobe?: FfprobeData
 
       videoAPI?: MVideoFormattableDetails
       videoAll?: MVideoFullLight

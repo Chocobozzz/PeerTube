@@ -1,8 +1,6 @@
-import { FfprobeData } from 'fluent-ffmpeg'
 import { getAverageTheoreticalBitrate, getMaxTheoreticalBitrate, getMinTheoreticalBitrate } from '@peertube/peertube-core-utils'
 import {
   buildStreamSuffix,
-  ffprobePromise,
   getAudioStream,
   getMaxAudioBitrate,
   getVideoStream,
@@ -11,6 +9,7 @@ import {
   getVideoStreamFPS
 } from '@peertube/peertube-ffmpeg'
 import { EncoderOptionsBuilder, EncoderOptionsBuilderParams } from '@peertube/peertube-models'
+import { FfprobeData } from 'fluent-ffmpeg'
 
 const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOptionsBuilderParams) => {
   const { fps, inputRatio, inputBitrate, resolution } = options
@@ -41,14 +40,12 @@ const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOp
   }
 }
 
-const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNum, canCopyAudio }) => {
-  const probe = await ffprobePromise(input)
-
-  if (canCopyAudio && await canDoQuickAudioTranscode(input, probe)) {
+const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNum, canCopyAudio, inputProbe }) => {
+  if (canCopyAudio && await canDoQuickAudioTranscode(input, inputProbe)) {
     return { copy: true, outputOptions: [ ] }
   }
 
-  const parsedAudio = await getAudioStream(input, probe)
+  const parsedAudio = await getAudioStream(input, inputProbe)
 
   // We try to reduce the ceiling bitrate by making rough matches of bitrates
   // Of course this is far from perfect, but it might save some space in the end

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { FIXTURE_URLS } from '@tests/shared/tests.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { areHttpImportTestsDisabled } from '@peertube/peertube-node-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {

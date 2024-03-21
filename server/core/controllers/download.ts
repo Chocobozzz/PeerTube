@@ -1,12 +1,14 @@
-import cors from 'cors'
-import express from 'express'
+import { forceNumber } from '@peertube/peertube-core-utils'
+import { FileStorage, HttpStatusCode, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { VideoTorrentsSimpleFileCache } from '@server/lib/files-cache/index.js'
 import {
   generateHLSFilePresignedUrl,
+  generateOriginalFilePresignedUrl,
   generateUserExportPresignedUrl,
   generateWebVideoPresignedUrl
 } from '@server/lib/object-storage/index.js'
+import { getFSUserExportFilePath } from '@server/lib/paths.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import {
@@ -17,15 +19,16 @@ import {
   MVideoFile,
   MVideoFullLight
 } from '@server/types/models/index.js'
-import { forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, FileStorage, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import { MVideoSource } from '@server/types/models/video/video-source.js'
+import cors from 'cors'
+import express from 'express'
 import { STATIC_DOWNLOAD_PATHS } from '../initializers/constants.js'
 import {
   asyncMiddleware, optionalAuthenticate,
+  originalVideoFileDownloadValidator,
   userExportDownloadValidator,
   videosDownloadValidator
 } from '../middlewares/index.js'
-import { getFSUserExportFilePath } from '@server/lib/paths.js'
 
 const downloadRouter = express.Router()
 
@@ -40,7 +43,7 @@ downloadRouter.use(
   STATIC_DOWNLOAD_PATHS.VIDEOS + ':id-:resolution([0-9]+).:extension',
   optionalAuthenticate,
   asyncMiddleware(videosDownloadValidator),
-  asyncMiddleware(downloadVideoFile)
+  asyncMiddleware(downloadWebVideoFile)
 )
 
 downloadRouter.use(
@@ -51,9 +54,16 @@ downloadRouter.use(
 )
 
 downloadRouter.use(
-  STATIC_DOWNLOAD_PATHS.USER_EXPORT + ':filename',
+  STATIC_DOWNLOAD_PATHS.USER_EXPORTS + ':filename',
   asyncMiddleware(userExportDownloadValidator), // Include JWT token authentication
   asyncMiddleware(downloadUserExport)
+)
+
+downloadRouter.use(
+  STATIC_DOWNLOAD_PATHS.ORIGINAL_VIDEO_FILE + ':filename',
+  optionalAuthenticate,
+  asyncMiddleware(originalVideoFileDownloadValidator),
+  asyncMiddleware(downloadOriginalFile)
 )
 
 // ---------------------------------------------------------------------------
@@ -91,7 +101,7 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
   return res.download(result.path, result.downloadName)
 }
 
-async function downloadVideoFile (req: express.Request, res: express.Response) {
+async function downloadWebVideoFile (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
 
   const videoFile = getVideoFile(req, video.VideoFiles)
@@ -184,6 +194,19 @@ function downloadUserExport (req: express.Request, res: express.Response) {
   return Promise.resolve()
 }
 
+function downloadOriginalFile (req: express.Request, res: express.Response) {
+  const videoSource = res.locals.videoSource
+
+  const downloadFilename = videoSource.inputFilename
+
+  if (videoSource.storage === FileStorage.OBJECT_STORAGE) {
+    return redirectOriginalFileToObjectStorage({ res, videoSource, downloadFilename })
+  }
+
+  res.download(VideoPathManager.Instance.getFSOriginalVideoFilePath(videoSource.keptOriginalFilename), downloadFilename)
+  return Promise.resolve()
+}
+
 // ---------------------------------------------------------------------------
 
 function getVideoFile (req: express.Request, files: MVideoFile[]) {
@@ -259,6 +282,20 @@ async function redirectUserExportToObjectStorage (options: {
   const url = await generateUserExportPresignedUrl({ userExport, downloadFilename })
 
   logger.debug('Generating pre-signed URL %s for user export %s', url, userExport.filename)
+
+  return res.redirect(url)
+}
+
+async function redirectOriginalFileToObjectStorage (options: {
+  res: express.Response
+  downloadFilename: string
+  videoSource: MVideoSource
+}) {
+  const { res, downloadFilename, videoSource } = options
+
+  const url = await generateOriginalFilePresignedUrl({ videoSource, downloadFilename })
+
+  logger.debug('Generating pre-signed URL %s for original video file %s', url, videoSource.keptOriginalFilename)
 
   return res.redirect(url)
 }

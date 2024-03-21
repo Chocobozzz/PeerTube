@@ -1,5 +1,3 @@
-import express from 'express'
-import { body, param, query, ValidationChain } from 'express-validator'
 import { arrayify } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ServerErrorCode, UserRight, VideoState } from '@peertube/peertube-models'
 import { Redis } from '@server/lib/redis.js'
@@ -7,6 +5,8 @@ import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { ExpressPromiseHandler } from '@server/types/express-handler.js'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models/index.js'
+import express from 'express'
+import { ValidationChain, body, param, query } from 'express-validator'
 import {
   exists,
   isBooleanValid,
@@ -41,8 +41,7 @@ import { CONFIG } from '../../../initializers/config.js'
 import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants.js'
 import { VideoModel } from '../../../models/video/video.js'
 import {
-  areValidationErrors,
-  checkCanAccessVideoStaticFiles,
+  areValidationErrors, checkCanAccessVideoStaticFiles,
   checkCanSeeVideo,
   checkUserCanManageVideo,
   doesVideoChannelOfAccountExist,
@@ -501,23 +500,19 @@ const commonVideosFiltersValidator = [
 // ---------------------------------------------------------------------------
 
 export {
-  videosAddLegacyValidator,
-  videosAddResumableValidator,
-  videosAddResumableInitValidator,
-
-  videosUpdateValidator,
-  videosGetValidator,
-  videoFileMetadataGetValidator,
-  videosDownloadValidator,
   checkVideoFollowConstraints,
-  videosCustomGetValidator,
-  videosRemoveValidator,
-
-  getCommonVideoEditAttributes,
-
   commonVideosFiltersValidator,
-
-  videosOverviewValidator
+  getCommonVideoEditAttributes,
+  videoFileMetadataGetValidator,
+  videosAddLegacyValidator,
+  videosAddResumableInitValidator,
+  videosAddResumableValidator,
+  videosCustomGetValidator,
+  videosDownloadValidator,
+  videosGetValidator,
+  videosOverviewValidator,
+  videosRemoveValidator,
+  videosUpdateValidator
 }
 
 // ---------------------------------------------------------------------------

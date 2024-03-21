@@ -20,7 +20,7 @@ import {
 import { DeepPartial } from '@peertube/peertube-typescript-utils'
 import { testCaptionFile } from '@tests/shared/captions.js'
 import { testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
-import { FIXTURE_URLS } from '@tests/shared/tests.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 
 async function checkVideosServer1 (server: PeerTubeServer, idHttp: string, idMagnet: string, idTorrent: string) {
   const videoHttp = await server.videos.get({ id: idHttp })

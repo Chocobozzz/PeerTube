@@ -62,6 +62,10 @@ export class UserExportModel extends SequelizeModel<UserExportModel> {
   @Column
   storage: FileStorageType
 
+  @AllowNull(true)
+  @Column
+  fileUrl: string
+
   @ForeignKey(() => UserModel)
   @Column
   userId: number
@@ -188,7 +192,7 @@ export class UserExportModel extends SequelizeModel<UserExportModel> {
   getFileDownloadUrl () {
     if (this.state !== UserExportState.COMPLETED) return null
 
-    return WEBSERVER.URL + join(STATIC_DOWNLOAD_PATHS.USER_EXPORT, this.filename) + '?jwt=' + this.generateJWT()
+    return WEBSERVER.URL + join(STATIC_DOWNLOAD_PATHS.USER_EXPORTS, this.filename) + '?jwt=' + this.generateJWT()
   }
 
   // ---------------------------------------------------------------------------

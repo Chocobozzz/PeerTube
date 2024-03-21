@@ -38,8 +38,8 @@ async function run () {
   console.log('Detecting files to remove, it could take a while...')
 
   toDelete = toDelete.concat(
-    await pruneDirectory(DIRECTORIES.VIDEOS.PUBLIC, doesWebVideoFileExist()),
-    await pruneDirectory(DIRECTORIES.VIDEOS.PRIVATE, doesWebVideoFileExist()),
+    await pruneDirectory(DIRECTORIES.WEB_VIDEOS.PUBLIC, doesWebVideoFileExist()),
+    await pruneDirectory(DIRECTORIES.WEB_VIDEOS.PRIVATE, doesWebVideoFileExist()),
 
     await pruneDirectory(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, doesHLSPlaylistExist()),
     await pruneDirectory(DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC, doesHLSPlaylistExist()),
@@ -97,7 +97,7 @@ async function pruneDirectory (directory: string, existFun: ExistFun) {
 function doesWebVideoFileExist () {
   return (filePath: string) => {
     // Don't delete private directory
-    if (filePath === DIRECTORIES.VIDEOS.PRIVATE) return true
+    if (filePath === DIRECTORIES.WEB_VIDEOS.PRIVATE) return true
 
     return VideoFileModel.doesOwnedWebVideoFileExist(basename(filePath))
   }

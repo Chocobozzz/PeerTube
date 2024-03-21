@@ -1,20 +1,22 @@
-import Bluebird from 'bluebird'
-import { FSWatcher, watch } from 'chokidar'
-import { EventEmitter } from 'events'
-import { ensureDir } from 'fs-extra/esm'
-import { appendFile, readFile, stat } from 'fs/promises'
-import memoizee from 'memoizee'
-import PQueue from 'p-queue'
-import { basename, join } from 'path'
+import { wait } from '@peertube/peertube-core-utils'
+import { FileStorage, LiveVideoError, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
-import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger.js'
+import { LoggerTagsFn, logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE } from '@server/initializers/constants.js'
 import { removeHLSFileObjectStorageByPath, storeHLSFileFromContent, storeHLSFileFromPath } from '@server/lib/object-storage/index.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models/index.js'
-import { LiveVideoError, FileStorage, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import Bluebird from 'bluebird'
+import { FSWatcher, watch } from 'chokidar'
+import { EventEmitter } from 'events'
+import { FfprobeData } from 'fluent-ffmpeg'
+import { ensureDir } from 'fs-extra/esm'
+import { appendFile, readFile, stat } from 'fs/promises'
+import memoizee from 'memoizee'
+import PQueue from 'p-queue'
+import { basename, join } from 'path'
 import {
   generateHLSMasterPlaylistFilename,
   generateHlsSha256SegmentsFilename,
@@ -26,7 +28,6 @@ import { LiveQuotaStore } from '../live-quota-store.js'
 import { LiveSegmentShaStore } from '../live-segment-sha-store.js'
 import { buildConcatenatedName, getLiveSegmentTime } from '../live-utils.js'
 import { AbstractTranscodingWrapper, FFmpegTranscodingWrapper, RemoteTranscodingWrapper } from './transcoding-wrapper/index.js'
-import { wait } from '@peertube/peertube-core-utils'
 
 interface MuxingSessionEvents {
   'live-ready': (options: { videoUUID: string }) => void
@@ -70,6 +71,8 @@ class MuxingSession extends EventEmitter {
   private readonly ratio: number
 
   private readonly hasAudio: boolean
+
+  private readonly probe: FfprobeData
 
   private readonly videoUUID: string
   private readonly saveReplay: boolean
@@ -116,6 +119,7 @@ class MuxingSession extends EventEmitter {
     ratio: number
     allResolutions: number[]
     hasAudio: boolean
+    probe: FfprobeData
   }) {
     super()
 
@@ -131,6 +135,7 @@ class MuxingSession extends EventEmitter {
 
     this.bitrate = options.bitrate
     this.ratio = options.ratio
+    this.probe = options.probe
 
     this.hasAudio = options.hasAudio
 
@@ -510,6 +515,7 @@ class MuxingSession extends EventEmitter {
       bitrate: this.bitrate,
       ratio: this.ratio,
       hasAudio: this.hasAudio,
+      probe: this.probe,
 
       segmentListSize: VIDEO_LIVE.SEGMENTS_LIST_SIZE,
       segmentDuration: getLiveSegmentTime(this.videoLive.latencyMode),

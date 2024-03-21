@@ -128,3 +128,6 @@ geo_ip:
 
 video_studio:
   enabled: true
+
+transcoding:
+  keep_original_file: false

@@ -2,6 +2,7 @@ import { LiveVideoErrorType } from '@peertube/peertube-models'
 import { LoggerTagsFn } from '@server/helpers/logger.js'
 import { MStreamingPlaylistVideo, MVideoLiveVideo } from '@server/types/models/index.js'
 import EventEmitter from 'events'
+import { FfprobeData } from 'fluent-ffmpeg'
 
 interface TranscodingWrapperEvents {
   'end': () => void
@@ -38,6 +39,7 @@ interface AbstractTranscodingWrapperOptions {
   bitrate: number
   ratio: number
   hasAudio: boolean
+  probe: FfprobeData
 
   segmentListSize: number
   segmentDuration: number
@@ -61,6 +63,7 @@ abstract class AbstractTranscodingWrapper extends EventEmitter {
   protected readonly bitrate: number
   protected readonly ratio: number
   protected readonly hasAudio: boolean
+  protected readonly probe: FfprobeData
 
   protected readonly segmentListSize: number
   protected readonly segmentDuration: number
@@ -92,6 +95,7 @@ abstract class AbstractTranscodingWrapper extends EventEmitter {
     this.bitrate = options.bitrate
     this.ratio = options.ratio
     this.hasAudio = options.hasAudio
+    this.probe = options.probe
 
     this.segmentListSize = options.segmentListSize
     this.segmentDuration = options.segmentDuration

@@ -1,6 +1,6 @@
-import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
 import { pick, promisify0 } from '@peertube/peertube-core-utils'
 import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptionsBuilderParams, EncoderProfile } from '@peertube/peertube-models'
+import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
 
 type FFmpegLogger = {
   info: (msg: string, obj?: any) => void
@@ -73,7 +73,7 @@ export class FFmpegCommandWrapper {
 
   // ---------------------------------------------------------------------------
 
-  debugLog (msg: string, meta: any) {
+  debugLog (msg: string, meta: any = {}) {
     this.logger.debug(msg, { ...meta, ...this.lTags })
   }
 
@@ -199,6 +199,7 @@ export class FFmpegCommandWrapper {
           'canCopyVideo',
           'resolution',
           'inputBitrate',
+          'inputProbe',
           'fps',
           'inputRatio',
           'streamNum'

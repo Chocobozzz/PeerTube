@@ -1,11 +1,11 @@
-import { readdir, readFile } from 'fs/promises'
-import { createServer, Server } from 'net'
-import context from 'node-media-server/src/node_core_ctx.js'
-import nodeMediaServerLogger from 'node-media-server/src/node_core_logger.js'
-import NodeRtmpSession from 'node-media-server/src/node_rtmp_session.js'
-import { join } from 'path'
-import { createServer as createServerTLS, Server as ServerTLS } from 'tls'
 import { pick, wait } from '@peertube/peertube-core-utils'
+import {
+  ffprobePromise,
+  getVideoStreamBitrate,
+  getVideoStreamDimensionsInfo,
+  getVideoStreamFPS,
+  hasAudioStream
+} from '@peertube/peertube-ffmpeg'
 import { LiveVideoError, LiveVideoErrorType, VideoState } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config.js'
@@ -19,15 +19,16 @@ import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MUser, MVideo, MVideoLiveSession, MVideoLiveVideo, MVideoLiveVideoWithSetting } from '@server/types/models/index.js'
-import {
-  ffprobePromise,
-  getVideoStreamBitrate,
-  getVideoStreamDimensionsInfo,
-  getVideoStreamFPS,
-  hasAudioStream
-} from '@peertube/peertube-ffmpeg'
+import { readFile, readdir } from 'fs/promises'
+import { Server, createServer } from 'net'
+import context from 'node-media-server/src/node_core_ctx.js'
+import nodeMediaServerLogger from 'node-media-server/src/node_core_logger.js'
+import NodeRtmpSession from 'node-media-server/src/node_rtmp_session.js'
+import { join } from 'path'
+import { Server as ServerTLS, createServer as createServerTLS } from 'tls'
 import { federateVideoIfNeeded } from '../activitypub/videos/index.js'
 import { JobQueue } from '../job-queue/index.js'
+import { Notifier } from '../notifier/notifier.js'
 import { getLiveReplayBaseDirectory } from '../paths.js'
 import { PeerTubeSocket } from '../peertube-socket.js'
 import { Hooks } from '../plugins/hooks.js'
@@ -35,7 +36,7 @@ import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolu
 import { LiveQuotaStore } from './live-quota-store.js'
 import { cleanupAndDestroyPermanentLive, getLiveSegmentTime } from './live-utils.js'
 import { MuxingSession } from './shared/index.js'
-import { Notifier } from '../notifier/notifier.js'
+import { FfprobeData } from 'fluent-ffmpeg'
 
 // Disable node media server logs
 nodeMediaServerLogger.setLogType(0)
@@ -188,16 +189,26 @@ class LiveManager {
     return this.getContext().sessions.has(sessionId)
   }
 
-  stopSessionOf (options: {
+  stopSessionOfVideo (options: {
     videoUUID: string
     error: LiveVideoErrorType | null
+
+    expectedSessionId?: string // Prevent stopping another session of permanent live
     errorOnReplay?: boolean
   }) {
-    const { videoUUID, error } = options
+    const { videoUUID, expectedSessionId, error } = options
 
     const sessionId = this.videoSessions.get(videoUUID)
     if (!sessionId) {
       logger.debug('No live session to stop for video %s', videoUUID, lTags(sessionId, videoUUID))
+      return
+    }
+
+    if (expectedSessionId && expectedSessionId !== sessionId) {
+      logger.debug(
+        `No live session ${expectedSessionId} to stop for video ${videoUUID} (current session: ${sessionId})`,
+        lTags(sessionId, videoUUID)
+      )
       return
     }
 
@@ -309,7 +320,8 @@ class LiveManager {
       bitrate,
       ratio,
       allResolutions,
-      hasAudio
+      hasAudio,
+      probe
     })
   }
 
@@ -327,6 +339,7 @@ class LiveManager {
     ratio: number
     allResolutions: number[]
     hasAudio: boolean
+    probe: FfprobeData
   }) {
     const { sessionId, videoLive, user, ratio } = options
     const videoUUID = videoLive.Video.uuid
@@ -342,7 +355,7 @@ class LiveManager {
       videoLive,
       user,
 
-      ...pick(options, [ 'inputLocalUrl', 'inputPublicUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio' ])
+      ...pick(options, [ 'inputLocalUrl', 'inputPublicUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio', 'probe' ])
     })
 
     muxingSession.on('live-ready', () => this.publishAndFederateLive({ live: videoLive, ratio, localLTags }))
@@ -354,23 +367,23 @@ class LiveManager {
         localLTags
       )
 
-      this.stopSessionOf({ videoUUID, error: LiveVideoError.BAD_SOCKET_HEALTH })
+      this.stopSessionOfVideo({ videoUUID, error: LiveVideoError.BAD_SOCKET_HEALTH })
     })
 
     muxingSession.on('duration-exceeded', ({ videoUUID }) => {
       logger.info('Stopping session of %s: max duration exceeded.', videoUUID, localLTags)
 
-      this.stopSessionOf({ videoUUID, error: LiveVideoError.DURATION_EXCEEDED })
+      this.stopSessionOfVideo({ videoUUID, error: LiveVideoError.DURATION_EXCEEDED })
     })
 
     muxingSession.on('quota-exceeded', ({ videoUUID }) => {
       logger.info('Stopping session of %s: user quota exceeded.', videoUUID, localLTags)
 
-      this.stopSessionOf({ videoUUID, error: LiveVideoError.QUOTA_EXCEEDED })
+      this.stopSessionOfVideo({ videoUUID, error: LiveVideoError.QUOTA_EXCEEDED })
     })
 
     muxingSession.on('transcoding-error', ({ videoUUID }) => {
-      this.stopSessionOf({ videoUUID, error: LiveVideoError.FFMPEG_ERROR })
+      this.stopSessionOfVideo({ videoUUID, error: LiveVideoError.FFMPEG_ERROR })
     })
 
     muxingSession.on('transcoding-end', ({ videoUUID }) => {
@@ -397,7 +410,7 @@ class LiveManager {
         this.muxingSessions.delete(sessionId)
         muxingSession.destroy()
 
-        this.stopSessionOf({
+        this.stopSessionOfVideo({
           videoUUID,
           error: err.liveVideoErrorCode || LiveVideoError.UNKNOWN_ERROR,
           errorOnReplay: true // Replay cannot be processed as muxing session failed directly
@@ -513,7 +526,7 @@ class LiveManager {
   }
 
   private async handleBrokenLives () {
-    await RunnerJobModel.cancelAllJobs({ type: 'live-rtmp-hls-transcoding' })
+    await RunnerJobModel.cancelAllNonFinishedJobs({ type: 'live-rtmp-hls-transcoding' })
 
     const videoUUIDs = await VideoModel.listPublishedLiveUUIDs()
 

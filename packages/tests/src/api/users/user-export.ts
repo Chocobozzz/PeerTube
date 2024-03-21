@@ -1,14 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
-import {
-  cleanupTests, getRedirectionUrl, makeActivityPubRawRequest,
-  makeRawRequest,
-  ObjectStorageCommand,
-  PeerTubeServer,
-  waitJobs
-} from '@peertube/peertube-server-commands'
-import { expect } from 'chai'
+import { wait } from '@peertube/peertube-core-utils'
 import {
   AccountExportJSON, ActivityPubActor,
   ActivityPubOrderedCollection,
@@ -34,6 +26,15 @@ import {
   VideoPlaylistType,
   VideoPrivacy
 } from '@peertube/peertube-models'
+import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
+import {
+  cleanupTests, getRedirectionUrl, makeActivityPubRawRequest,
+  makeRawRequest,
+  ObjectStorageCommand,
+  PeerTubeServer,
+  waitJobs
+} from '@peertube/peertube-server-commands'
+import { expectStartWith } from '@tests/shared/checks.js'
 import {
   checkExportFileExists,
   checkFileExistsInZIP,
@@ -44,8 +45,8 @@ import {
   prepareImportExportTests,
   regenerateExport
 } from '@tests/shared/import-export.js'
-import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
-import { wait } from '@peertube/peertube-core-utils'
+import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
+import { expect } from 'chai'
 
 function runTest (withObjectStorage: boolean) {
   let server: PeerTubeServer
@@ -69,10 +70,12 @@ function runTest (withObjectStorage: boolean) {
 
   let noahExportId: number
 
+  let objectStorage: ObjectStorageCommand
+
   before(async function () {
     this.timeout(240000)
 
-    const objectStorage = withObjectStorage
+    objectStorage = withObjectStorage
       ? new ObjectStorageCommand()
       : undefined;
 
@@ -126,6 +129,10 @@ function runTest (withObjectStorage: boolean) {
       expect(data[0].size).to.be.greaterThan(0)
       expect(data[0].state.id).to.equal(UserExportState.COMPLETED)
       expect(data[0].state.label).to.equal('Completed')
+
+      if (objectStorage) {
+        expectStartWith(await getRedirectionUrl(data[0].privateDownloadUrl), objectStorage.getMockUserExportBaseUrl())
+      }
     }
 
     await waitJobs([ server ])
@@ -526,6 +533,14 @@ function runTest (withObjectStorage: boolean) {
         for (const url of urls) {
           await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
         }
+
+        expect(publicVideo.source.inputFilename).to.equal('video_short.webm')
+        expect(publicVideo.source.fps).to.equal(25)
+        expect(publicVideo.source.height).to.equal(720)
+        expect(publicVideo.source.width).to.equal(1280)
+        expect(publicVideo.source.metadata?.streams).to.exist
+        expect(publicVideo.source.resolution).to.equal(720)
+        expect(publicVideo.source.size).to.equal(218910)
       }
 
       {

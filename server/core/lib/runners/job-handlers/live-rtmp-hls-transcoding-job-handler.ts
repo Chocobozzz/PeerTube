@@ -7,6 +7,7 @@ import {
   RunnerJobStateType
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
+import { tryAtomicMove } from '@server/helpers/fs.js'
 import { logger } from '@server/helpers/logger.js'
 import { JOB_PRIORITY } from '@server/initializers/constants.js'
 import { LiveManager } from '@server/lib/live/index.js'
@@ -15,7 +16,6 @@ import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { AbstractJobHandler } from './abstract-job-handler.js'
-import { tryAtomicMove } from '@server/helpers/fs.js'
 
 type CreateOptions = {
   video: MVideo
@@ -165,7 +165,11 @@ export class LiveRTMPHLSTranscodingJobHandler extends AbstractJobHandler<CreateO
       cancelled: LiveVideoError.RUNNER_JOB_CANCEL
     }
 
-    LiveManager.Instance.stopSessionOf({ videoUUID: privatePayload.videoUUID, error: errorType[type] })
+    LiveManager.Instance.stopSessionOfVideo({
+      videoUUID: privatePayload.videoUUID,
+      expectedSessionId: privatePayload.sessionId,
+      error: errorType[type]
+    })
 
     logger.info('Runner live RTMP to HLS job %s for video %s %s.', runnerJob.uuid, videoUUID, type, this.lTags(runnerJob.uuid, videoUUID))
   }

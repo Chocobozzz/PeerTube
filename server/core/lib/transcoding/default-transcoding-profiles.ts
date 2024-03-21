@@ -70,18 +70,26 @@ class VideoTranscodingProfilesManager {
     const { type, encoder, profile } = options
 
     delete this.availableEncoders[type][encoder][profile]
+
     this.buildAvailableProfiles()
   }
 
   addEncoderPriority (type: 'vod' | 'live', streamType: 'audio' | 'video', encoder: string, priority: number) {
-    this.encodersPriorities[type][streamType].push({ name: encoder, priority })
+    this.encodersPriorities[type][streamType].push({ name: encoder, priority, isDefault: false })
 
     FFmpegCommandWrapper.resetSupportedEncoders()
   }
 
   removeEncoderPriority (type: 'vod' | 'live', streamType: 'audio' | 'video', encoder: string, priority: number) {
     this.encodersPriorities[type][streamType] = this.encodersPriorities[type][streamType]
-                                                    .filter(o => o.name !== encoder && o.priority !== priority)
+      .filter(o => {
+        // Don't remove default encoders
+        if (o.isDefault) return true
+        // Don't include this encoder anymore
+        if (o.name === encoder && o.priority === priority) return false
+
+        return true
+      })
 
     FFmpegCommandWrapper.resetSupportedEncoders()
   }
@@ -118,14 +126,14 @@ class VideoTranscodingProfilesManager {
   private buildDefaultEncodersPriorities () {
     return {
       video: [
-        { name: 'libx264', priority: 100 }
+        { name: 'libx264', priority: 100, isDefault: true }
       ],
 
       // Try the first one, if not available try the second one etc
       audio: [
         // we favor VBR, if a good AAC encoder is available
-        { name: 'libfdk_aac', priority: 200 },
-        { name: 'aac', priority: 100 }
+        { name: 'libfdk_aac', priority: 200, isDefault: true },
+        { name: 'aac', priority: 100, isDefault: true }
       ]
     }
   }

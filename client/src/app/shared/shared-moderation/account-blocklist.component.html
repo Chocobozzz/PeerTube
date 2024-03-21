@@ -28,7 +28,7 @@
   <ng-template pTemplate="body" let-accountBlock>
     <tr>
       <td class="action-cell">
-        <button class="unblock-button" (click)="unblockAccount(accountBlock)" i18n>Unmute</button>
+        <button class="peertube-button grey-button" (click)="unblockAccount(accountBlock)" i18n>Unmute</button>
       </td>
       <td>
         <a [href]="accountBlock.blockedAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">

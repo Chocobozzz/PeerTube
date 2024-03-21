@@ -463,7 +463,7 @@ export class VideoStatsComponent implements OnInit {
 
     for (const d of rawData.data) {
       labels.push(secondsToTime(d.second))
-      data.push(d.retentionPercent)
+      data.push(Math.round(d.retentionPercent))
     }
 
     return {

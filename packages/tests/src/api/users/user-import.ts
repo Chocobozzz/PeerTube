@@ -1,11 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
-import {
-  cleanupTests, makeRawRequest,
-  ObjectStorageCommand,
-  PeerTubeServer, waitJobs
-} from '@peertube/peertube-server-commands'
 import {
   HttpStatusCode,
   LiveVideoLatencyMode,
@@ -14,16 +8,23 @@ import {
   VideoCreateResult,
   VideoPlaylistPrivacy,
   VideoPlaylistType,
-  VideoPrivacy
+  VideoPrivacy,
+  VideoState
 } from '@peertube/peertube-models'
-import { prepareImportExportTests } from '@tests/shared/import-export.js'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
-import { writeFile } from 'fs/promises'
-import { join } from 'path'
-import { expect } from 'chai'
-import { testImage, testAvatarSize } from '@tests/shared/checks.js'
-import { completeVideoCheck } from '@tests/shared/videos.js'
+import {
+  ObjectStorageCommand,
+  PeerTubeServer,
+  cleanupTests,
+  waitJobs
+} from '@peertube/peertube-server-commands'
+import { testAvatarSize, testImage } from '@tests/shared/checks.js'
+import { prepareImportExportTests } from '@tests/shared/import-export.js'
+import { MockSmtpServer } from '@tests/shared/mock-servers/index.js'
 import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
+import { completeVideoCheck } from '@tests/shared/videos.js'
+import { expect } from 'chai'
+import { join } from 'path'
 
 function runTest (withObjectStorage: boolean) {
   let server: PeerTubeServer
@@ -114,17 +115,8 @@ function runTest (withObjectStorage: boolean) {
     await server.userExports.request({ userId: noahId, withVideoFiles: true })
     await server.userExports.waitForCreation({ userId: noahId })
 
-    const { data } = await server.userExports.list({ userId: noahId })
-
-    const res = await makeRawRequest({
-      url: data[0].privateDownloadUrl,
-      responseType: 'arraybuffer',
-      redirects: 1,
-      expectedStatus: HttpStatusCode.OK_200
-    })
-
     archivePath = join(server.getDirectoryPath('tmp'), 'archive.zip')
-    await writeFile(archivePath, res.body)
+    await server.userExports.downloadLatestArchive({ userId: noahId, destination: archivePath })
   })
 
   it('Should import an archive with video files', async function () {
@@ -443,6 +435,11 @@ function runTest (withObjectStorage: boolean) {
 
       const source = await remoteServer.videos.getSource({ id: otherVideo.uuid })
       expect(source.filename).to.equal('video_short.webm')
+      expect(source.inputFilename).to.equal('video_short.webm')
+      expect(source.fileDownloadUrl).to.not.exist
+
+      expect(source.metadata?.format).to.exist
+      expect(source.metadata?.streams).to.be.an('array')
     }
 
     {
@@ -466,6 +463,8 @@ function runTest (withObjectStorage: boolean) {
       expect(video.duration).to.equal(0)
       expect(video.files).to.have.lengthOf(0)
       expect(video.streamingPlaylists).to.have.lengthOf(0)
+
+      expect(video.state.id).to.equal(VideoState.WAITING_FOR_LIVE)
     }
   })
 
@@ -565,6 +564,57 @@ function runTest (withObjectStorage: boolean) {
 
       for (const video of data) {
         expect(video.blacklisted).to.be.true
+      }
+    }
+  })
+
+  it('Should import original file if included in the export', async function () {
+    this.timeout(120000)
+
+    await server.config.enableMinimumTranscoding({ keepOriginal: true })
+    await remoteServer.config.keepSourceFile()
+
+    const archivePath = join(server.getDirectoryPath('tmp'), 'archive2.zip')
+    const fixture = 'video_short1.webm'
+
+    {
+      const { token, userId } = await server.users.generate('claire')
+
+      await server.videos.quickUpload({ name: 'claire video', token, fixture })
+
+      await waitJobs([ server ])
+
+      await server.userExports.request({ userId, token, withVideoFiles: true })
+      await server.userExports.waitForCreation({ userId, token })
+
+      await server.userExports.downloadLatestArchive({ userId, token, destination: archivePath })
+    }
+
+    {
+      const { token, userId } = await remoteServer.users.generate('external_claire')
+
+      await remoteServer.userImports.importArchive({ fixture: archivePath, userId, token })
+      await waitJobs([ remoteServer ])
+
+      {
+        const { data } = await remoteServer.videos.listMyVideos({ token })
+        expect(data).to.have.lengthOf(1)
+
+        const source = await remoteServer.videos.getSource({ id: data[0].id })
+        expect(source.filename).to.equal(fixture)
+        expect(source.inputFilename).to.equal(fixture)
+        expect(source.fileDownloadUrl).to.exist
+
+        expect(source.metadata?.format).to.exist
+        expect(source.metadata?.streams).to.be.an('array')
+        expect(source.metadata.format['format_name']).to.include('webm')
+
+        expect(source.createdAt).to.exist
+        expect(source.fps).to.equal(25)
+        expect(source.height).to.equal(720)
+        expect(source.width).to.equal(1280)
+        expect(source.resolution.id).to.equal(720)
+        expect(source.size).to.equal(572456)
       }
     }
   })

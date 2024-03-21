@@ -13,7 +13,7 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { FIXTURE_URLS } from '@tests/shared/tests.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { expectStartWith, expectNotStartWith } from '@tests/shared/checks.js'
 import { MockProxy } from '@tests/shared/mock-servers/mock-proxy.js'
 

@@ -19,7 +19,7 @@ async function run () {
   console.log('Moving private video files in dedicated folders.')
 
   await ensureDir(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE)
-  await ensureDir(DIRECTORIES.VIDEOS.PRIVATE)
+  await ensureDir(DIRECTORIES.WEB_VIDEOS.PRIVATE)
 
   await initDatabaseModels(true)
 

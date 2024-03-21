@@ -379,6 +379,7 @@ export class PeerTubeServer {
         avatars: this.getDirectoryPath('avatars') + '/',
         web_videos: this.getDirectoryPath('web-videos') + '/',
         streaming_playlists: this.getDirectoryPath('streaming-playlists') + '/',
+        original_video_files: this.getDirectoryPath('original-video-files') + '/',
         redundancy: this.getDirectoryPath('redundancy') + '/',
         logs: this.getDirectoryPath('logs') + '/',
         previews: this.getDirectoryPath('previews') + '/',

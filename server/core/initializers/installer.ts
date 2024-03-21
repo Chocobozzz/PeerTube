@@ -96,8 +96,8 @@ function createDirectoriesIfNotExist () {
 
   tasks.push(ensureDir(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE))
   tasks.push(ensureDir(DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC))
-  tasks.push(ensureDir(DIRECTORIES.VIDEOS.PUBLIC))
-  tasks.push(ensureDir(DIRECTORIES.VIDEOS.PRIVATE))
+  tasks.push(ensureDir(DIRECTORIES.WEB_VIDEOS.PUBLIC))
+  tasks.push(ensureDir(DIRECTORIES.WEB_VIDEOS.PRIVATE))
 
   // Resumable upload directory
   tasks.push(ensureDir(DIRECTORIES.RESUMABLE_UPLOAD))

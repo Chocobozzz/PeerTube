@@ -84,6 +84,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.transcoding.alwaysTranscodeOriginalResolution).to.be.true
   expect(data.transcoding.webVideos.enabled).to.be.true
   expect(data.transcoding.hls.enabled).to.be.true
+  expect(data.transcoding.originalFile.keep).to.be.false
 
   expect(data.live.enabled).to.be.false
   expect(data.live.allowReplay).to.be.false
@@ -205,6 +206,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.transcoding.alwaysTranscodeOriginalResolution).to.be.false
   expect(data.transcoding.hls.enabled).to.be.false
   expect(data.transcoding.webVideos.enabled).to.be.true
+  expect(data.transcoding.originalFile.keep).to.be.true
 
   expect(data.live.enabled).to.be.true
   expect(data.live.allowReplay).to.be.true
@@ -348,6 +350,9 @@ const newCustomConfig: CustomConfig = {
     enabled: true,
     remoteRunners: {
       enabled: true
+    },
+    originalFile: {
+      keep: true
     },
     allowAdditionalExtensions: true,
     allowAudioFiles: true,

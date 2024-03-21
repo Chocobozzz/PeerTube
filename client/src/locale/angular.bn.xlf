@@ -443,9 +443,9 @@
           <context context-type="linenumber">128,129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3076079242537393946" datatype="html">
+      <trans-unit id="3076079242537393946" datatype="html" xml:space="preserve">
         <source>Moderation information</source>
-        <target/>
+        <target state="translated">মডারেশন তথ্য</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">140</context>
@@ -503,9 +503,9 @@
           <context context-type="linenumber">183,184</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4281738631669138686" datatype="html">
+      <trans-unit id="4281738631669138686" datatype="html" xml:space="preserve">
         <source>Hardware information</source>
-        <target/>
+        <target state="translated">হার্ডওয়্যার তথ্য</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">195</context>
@@ -535,9 +535,9 @@
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6613567056718289931" datatype="html">
+      <trans-unit id="6613567056718289931" datatype="html" xml:space="preserve">
         <source>Contact <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrator</source>
-        <target/>
+        <target state="translated">ব্যবস্থাপক <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> এর সাথে যোগাযোগ করো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -675,33 +675,33 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6979021199788941693" datatype="html">
+      <trans-unit id="6979021199788941693" datatype="html" xml:space="preserve">
         <source>Your message has been sent.</source>
-        <target/>
+        <target state="translated">তোমার বার্তা পাঠানো হয়েছে।</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.ts</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2072135752262464360" datatype="html">
+      <trans-unit id="2072135752262464360" datatype="html" xml:space="preserve">
         <source>You already sent this form recently</source>
-        <target/>
+        <target state="translated">তুমি সম্প্রতি এই ফর্ম পাঠিয়েছ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1045244999981860085" datatype="html">
+      <trans-unit id="1045244999981860085" datatype="html" xml:space="preserve">
         <source>Developed with ❤ by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target/>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>ফ্রামাসফট<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> দ্বারা ❤ সাথে তৈরি</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube-contributors.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8351124097389031348" datatype="html">
+      <trans-unit id="8351124097389031348" datatype="html" xml:space="preserve">
         <source>What is PeerTube?</source>
-        <target/>
+        <target state="translated">পিয়ারটিউব কী?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">3,4</context>
@@ -715,25 +715,25 @@
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="135286612733607700" datatype="html">
+      <trans-unit id="135286612733607700" datatype="html" xml:space="preserve">
         <source>It is free and open-source software, under <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE&quot;&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target/>
+        <target state="translated">এটা বিনামূল্যের ও মুক্ত সফটওয়্যার, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE&quot;&gt;"/>এজিপিএল সং৩ অনুমতিপত্র<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> এর অধীনে। </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">14,16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7257048945916143687" datatype="html">
+      <trans-unit id="7257048945916143687" datatype="html" xml:space="preserve">
         <source>For more information, please visit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target/>
+        <target state="translated">আরো তথ্যের জন্য, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> দেখো। </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8205344394429673413" datatype="html">
+      <trans-unit id="8205344394429673413" datatype="html" xml:space="preserve">
         <source>Use PeerTube documentation</source>
-        <target/>
+        <target state="translated">পিয়ারটিউব নির্দেশিকা দেখো</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">28,29</context>
@@ -9490,9 +9490,9 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6276792241563504067" datatype="html">
+      <trans-unit id="6276792241563504067" datatype="html" xml:space="preserve">
         <source>You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target/>
+        <target state="translated">তুমি যেকোনো টরেন্ট ফাইল যুক্ত করতে পারো যেটা কোনো মিডিয়া ফাইল কে নির্দেশ করে। খেয়াল রেখো যে বস্তুটাকে টরেন্ট ফাইল নির্দেশ করছে সেটা বিতরণের অনুমতি তোমার আছে, নতুবা তুমি ও তোমার ইনস্ট্যান্স আইনি ঝামেলায় জড়াতে পারো।</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">20,22</context>

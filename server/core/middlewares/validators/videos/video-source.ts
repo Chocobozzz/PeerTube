@@ -1,12 +1,19 @@
-import express from 'express'
+import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { getVideoWithAttributes } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { MVideoFullLight } from '@server/types/models/index.js'
-import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { Metadata as UploadXMetadata } from '@uploadx/core'
-import { areValidationErrors, checkUserCanManageVideo, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
+import express from 'express'
+import { param } from 'express-validator'
+import {
+  areValidationErrors,
+  checkCanAccessVideoSourceFile,
+  checkUserCanManageVideo,
+  doesVideoExist,
+  isValidVideoIdParam
+} from '../shared/index.js'
 import { addDurationToVideoFileIfNeeded, checkVideoFileCanBeEdited, commonVideoFileChecks, isVideoFileAccepted } from './shared/index.js'
 
 export const videoSourceGetLatestValidator = [
@@ -66,6 +73,28 @@ export const replaceVideoSourceResumableInitValidator = [
     const fileMetadata = res.locals.uploadVideoFileResumableMetadata
     const files = { videofile: [ fileMetadata ] }
     if (await commonVideoFileChecks({ res, user, videoFileSize: fileMetadata.size, files }) === false) return
+
+    return next()
+  }
+]
+
+export const originalVideoFileDownloadValidator = [
+  param('filename').exists(),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    const videoSource = await VideoSourceModel.loadByKeptOriginalFilename(req.params.filename)
+    if (!videoSource) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Original video file not found'
+      })
+    }
+
+    if (!await checkCanAccessVideoSourceFile({ req, res, videoId: videoSource.videoId })) return
+
+    res.locals.videoSource = videoSource
 
     return next()
   }

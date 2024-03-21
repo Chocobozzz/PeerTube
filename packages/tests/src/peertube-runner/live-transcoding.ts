@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
-import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, RunnerJobState, VideoPrivacy } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
+  ObjectStorageCommand,
+  PeerTubeServer,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   findExternalSavedVideo,
   makeRawRequest,
-  ObjectStorageCommand,
-  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
@@ -23,6 +22,7 @@ import { checkPeerTubeRunnerCacheIsEmpty } from '@tests/shared/directories.js'
 import { testLiveVideoResolutions } from '@tests/shared/live.js'
 import { PeerTubeRunnerProcess } from '@tests/shared/peertube-runner-process.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
+import { expect } from 'chai'
 
 describe('Test Live transcoding in peertube-runner program', function () {
   let servers: PeerTubeServer[] = []
@@ -54,8 +54,19 @@ describe('Test Live transcoding in peertube-runner program', function () {
       })
 
       await stopFfmpeg(ffmpegCommand)
-
       await waitUntilLiveWaitingOnAllServers(servers, video.uuid)
+
+      const { data } = await servers[0].runnerJobs.list({ sort: '-createdAt' })
+
+      while (true) {
+        const liveJob = data.find(d => d.type === 'live-rtmp-hls-transcoding')
+        expect(liveJob).to.exist
+
+        if (liveJob.state.id === RunnerJobState.COMPLETED) break
+
+        await wait(500)
+      }
+
       await servers[0].videos.remove({ id: video.id })
     })
 

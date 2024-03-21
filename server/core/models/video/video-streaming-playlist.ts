@@ -6,7 +6,7 @@ import {
 } from '@peertube/peertube-models'
 import { sha1 } from '@peertube/peertube-node-utils'
 import { CONFIG } from '@server/initializers/config.js'
-import { getHLSPrivateFileUrl, getHLSPublicFileUrl } from '@server/lib/object-storage/index.js'
+import { getHLSPrivateFileUrl, getObjectStoragePublicFileUrl } from '@server/lib/object-storage/index.js'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename } from '@server/lib/paths.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
@@ -266,7 +266,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
       return getHLSPrivateFileUrl(video, this.playlistFilename)
     }
 
-    return getHLSPublicFileUrl(this.playlistUrl)
+    return getObjectStoragePublicFileUrl(this.playlistUrl, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
   }
 
   // ---------------------------------------------------------------------------
@@ -288,7 +288,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
       return getHLSPrivateFileUrl(video, this.segmentsSha256Filename)
     }
 
-    return getHLSPublicFileUrl(this.segmentsSha256Url)
+    return getObjectStoragePublicFileUrl(this.segmentsSha256Url, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
   }
 
   // ---------------------------------------------------------------------------

@@ -117,6 +117,10 @@ export interface CustomConfig {
   transcoding: {
     enabled: boolean
 
+    originalFile: {
+      keep: boolean
+    }
+
     allowAdditionalExtensions: boolean
     allowAudioFiles: boolean
 

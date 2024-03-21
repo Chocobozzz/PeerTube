@@ -1,15 +1,14 @@
-import { Subscription } from 'rxjs'
-import { first } from 'rxjs/operators'
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
-import { ComponentPaginationLight, DisableForReuseHook, HooksService, ScreenService } from '@app/core'
-import { Video, VideoSortField } from '@peertube/peertube-models'
-import { VideosListComponent } from '../../shared/shared-video-miniature/videos-list.component'
 import { NgIf } from '@angular/common'
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { ComponentPaginationLight, DisableForReuseHook, HooksService, ScreenService } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
-import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature/video-miniature.component'
 import { VideoFilters } from '@app/shared/shared-video-miniature/video-filters.model'
+import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature/video-miniature.component'
+import { Video, VideoSortField } from '@peertube/peertube-models'
+import { Subscription } from 'rxjs'
+import { VideosListComponent } from '../../shared/shared-video-miniature/videos-list.component'
 
 @Component({
   selector: 'my-video-channel-videos',
@@ -18,6 +17,8 @@ import { VideoFilters } from '@app/shared/shared-video-miniature/video-filters.m
   imports: [ NgIf, VideosListComponent ]
 })
 export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDestroy, DisableForReuseHook {
+  @ViewChild('videosList') videosList: VideosListComponent
+
   getVideosObservableFunction = this.getVideosObservable.bind(this)
   getSyndicationItemsFunction = this.getSyndicationItems.bind(this)
 
@@ -39,6 +40,7 @@ export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDes
   disabled = false
 
   private videoChannelSub: Subscription
+  private alreadyLoaded = false
 
   constructor (
     private screenService: ScreenService,
@@ -50,11 +52,14 @@ export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDes
 
   ngOnInit () {
     // Parent get the video channel for us
-    this.videoChannelService.videoChannelLoaded.pipe(first())
+    this.videoChannelSub = this.videoChannelService.videoChannelLoaded
       .subscribe(videoChannel => {
         this.videoChannel = videoChannel
+        if (this.alreadyLoaded) this.videosList.reloadVideos()
 
         this.hooks.runAction('action:video-channel-videos.video-channel.loaded', 'video-channel', { videoChannel })
+
+        this.alreadyLoaded = true
       })
   }
 

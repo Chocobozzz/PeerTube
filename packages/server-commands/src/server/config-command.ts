@@ -106,6 +106,19 @@ export class ConfigCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
+  keepSourceFile () {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        transcoding: {
+          originalFile: {
+            keep: true
+          }
+        }
+      }
+    })
+  }
+  // ---------------------------------------------------------------------------
+
   enableChannelSync () {
     return this.setChannelSyncEnabled(true)
   }
@@ -234,13 +247,17 @@ export class ConfigCommand extends AbstractCommand {
     webVideo?: boolean // default true
     hls?: boolean // default true
     with0p?: boolean // default false
+    keepOriginal?: boolean // default false
   } = {}) {
-    const { webVideo = true, hls = true, with0p = false } = options
+    const { webVideo = true, hls = true, with0p = false, keepOriginal = false } = options
 
     return this.updateExistingSubConfig({
       newConfig: {
         transcoding: {
           enabled: true,
+          originalFile: {
+            keep: keepOriginal
+          },
 
           allowAudioFiles: true,
           allowAdditionalExtensions: true,
@@ -261,13 +278,17 @@ export class ConfigCommand extends AbstractCommand {
   enableMinimumTranscoding (options: {
     webVideo?: boolean // default true
     hls?: boolean // default true
+    keepOriginal?: boolean // default false
   } = {}) {
-    const { webVideo = true, hls = true } = options
+    const { webVideo = true, hls = true, keepOriginal = false } = options
 
     return this.updateExistingSubConfig({
       newConfig: {
         transcoding: {
           enabled: true,
+          originalFile: {
+            keep: keepOriginal
+          },
 
           allowAudioFiles: true,
           allowAdditionalExtensions: true,
@@ -560,6 +581,9 @@ export class ConfigCommand extends AbstractCommand {
       },
       transcoding: {
         enabled: true,
+        originalFile: {
+          keep: false
+        },
         remoteRunners: {
           enabled: false
         },

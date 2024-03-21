@@ -16,7 +16,7 @@
     </button>
   </div>
 
-  <div class="modal-body">
+  <div class="modal-body" [ngClass]="{ 'opacity-0': !loaded }">
     <div class="alert alert-warning" *ngIf="isConfidentialVideo()" i18n>
       The following link contains a private token and should not be shared with anyone.
     </div>
@@ -45,13 +45,30 @@
     <!-- Video tab -->
     <ng-container *ngIf="type === 'video'">
       <div ngbNav #resolutionNav="ngbNav" class="nav-tabs" [activeId]="resolutionId" (activeIdChange)="onResolutionIdChange($event)">
-        <ng-container *ngFor="let file of getVideoFiles()" [ngbNavItem]="file.resolution.id">
-          <a ngbNavLink i18n>{{ file.resolution.label }}</a>
+
+        <ng-template #rootNavContent>
+          <div class="nav-content">
+            <my-input-text [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getLink()"></my-input-text>
+          </div>
+        </ng-template>
+
+        <ng-container *ngIf="originalVideoFile" ngbNavItem="original">
+          <a ngbNavLink i18n>
+            <ng-container>Original file</ng-container>
+
+            <my-global-icon ngbTooltip="Other users cannot download the original file" iconName="shield"></my-global-icon>
+          </a>
 
           <ng-template ngbNavContent>
-            <div class="nav-content">
-              <my-input-text [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getLink()"></my-input-text>
-            </div>
+            <ng-template [ngTemplateOutlet]="rootNavContent"></ng-template>
+          </ng-template>
+        </ng-container>
+
+        <ng-container *ngFor="let file of getVideoFiles()" [ngbNavItem]="file.resolution.id">
+          <a ngbNavLink>{{ file.resolution.label }}</a>
+
+          <ng-template ngbNavContent>
+            <ng-template [ngTemplateOutlet]="rootNavContent"></ng-template>
           </ng-template>
         </ng-container>
       </div>
@@ -60,47 +77,59 @@
 
       <div class="advanced-filters" [ngbCollapse]="isAdvancedCustomizationCollapsed" [animation]="true">
         <div ngbNav #navMetadata="ngbNav" class="nav-tabs nav-metadata">
+
+          <ng-template #metadataInfo let-item>
+            <div class="metadata-attribute">
+              <span>{{ item.value.label }}</span>
+
+              @if (item.value.value) {
+                <span>{{ item.value.value }}</span>
+              } @else {
+                <span i18n>Unknown</span>
+              }
+            </div>
+          </ng-template>
+
           <ng-container ngbNavItem>
             <a ngbNavLink i18n>Format</a>
+
             <ng-template ngbNavContent>
               <div class="file-metadata">
-                <div class="metadata-attribute metadata-attribute-tags" *ngFor="let item of videoFileMetadataFormat | keyvalue">
-                  <span i18n class="metadata-attribute-label">{{ item.value.label }}</span>
-                  <span class="metadata-attribute-value">{{ item.value.value }}</span>
-                </div>
+                @for (item of videoFileMetadataFormat | keyvalue; track item) {
+                  <ng-template [ngTemplateOutlet]="metadataInfo" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
+                }
               </div>
             </ng-template>
+          </ng-container>
 
-            <ng-container ngbNavItem [disabled]="videoFileMetadataVideoStream === undefined">
-              <a ngbNavLink i18n>Video stream</a>
-              <ng-template ngbNavContent>
-                <div class="file-metadata">
-                  <div class="metadata-attribute metadata-attribute-tags" *ngFor="let item of videoFileMetadataVideoStream | keyvalue">
-                    <span i18n class="metadata-attribute-label">{{ item.value.label }}</span>
-                    <span class="metadata-attribute-value">{{ item.value.value }}</span>
-                  </div>
-                </div>
-              </ng-template>
-            </ng-container>
+          <ng-container ngbNavItem [disabled]="videoFileMetadataVideoStream === undefined">
+            <a ngbNavLink i18n>Video stream</a>
 
-            <ng-container ngbNavItem [disabled]="videoFileMetadataAudioStream === undefined">
-              <a ngbNavLink i18n>Audio stream</a>
-              <ng-template ngbNavContent>
-                <div class="file-metadata">
-                  <div class="metadata-attribute metadata-attribute-tags" *ngFor="let item of videoFileMetadataAudioStream | keyvalue">
-                    <span i18n class="metadata-attribute-label">{{ item.value.label }}</span>
-                    <span class="metadata-attribute-value">{{ item.value.value }}</span>
-                  </div>
-                </div>
-              </ng-template>
-            </ng-container>
+            <ng-template ngbNavContent>
+              <div class="file-metadata">
+                @for (item of videoFileMetadataVideoStream | keyvalue; track item) {
+                  <ng-template [ngTemplateOutlet]="metadataInfo" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
+                }
+              </div>
+            </ng-template>
+          </ng-container>
 
+          <ng-container ngbNavItem [disabled]="videoFileMetadataAudioStream === undefined">
+            <a ngbNavLink i18n>Audio stream</a>
+
+            <ng-template ngbNavContent>
+              <div class="file-metadata">
+                @for (item of videoFileMetadataAudioStream | keyvalue; track item) {
+                  <ng-template [ngTemplateOutlet]="metadataInfo" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
+                }
+              </div>
+            </ng-template>
           </ng-container>
         </div>
 
-        <div *ngIf="getFileMetadata()" [ngbNavOutlet]="navMetadata"></div>
+        <div *ngIf="hasMetadata()" [ngbNavOutlet]="navMetadata"></div>
 
-        <div class="download-type">
+        <div [hidden]="originalVideoFile" class="download-type">
           <div class="peertube-radio-container">
             <input type="radio" name="download" id="download-direct" [(ngModel)]="downloadType" value="direct">
             <label i18n for="download-direct">Direct download</label>
@@ -121,17 +150,13 @@
         <ng-container *ngIf="isAdvancedCustomizationCollapsed">
           <span class="chevron-down"></span>
 
-          <ng-container i18n>
-            Advanced
-          </ng-container>
+          <ng-container i18n>More information/options</ng-container>
         </ng-container>
 
         <ng-container *ngIf="!isAdvancedCustomizationCollapsed">
           <span class="chevron-up"></span>
 
-          <ng-container i18n>
-            Simple
-          </ng-container>
+          <ng-container i18n>Less information/options</ng-container>
         </ng-container>
       </button>
     </ng-container>

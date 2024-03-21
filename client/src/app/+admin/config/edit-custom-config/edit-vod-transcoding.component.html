@@ -39,7 +39,7 @@
             <ng-container ngProjectAs="extra">
 
               <div class="callout callout-light pt-2 pb-0">
-                <h3 class="callout-title" i18n>Input formats</h3>
+                <h3 class="callout-title" i18n>Input</h3>
 
                 <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
                   <my-peertube-checkbox
@@ -63,10 +63,21 @@
                     </ng-container>
                   </my-peertube-checkbox>
                 </div>
+
+                <div class="form-group" formGroupName="originalFile" [ngClass]="getTranscodingDisabledClass()">
+                  <my-peertube-checkbox
+                    inputName="transcodingOriginalFileKeep" formControlName="keep"
+                    i18n-labelText labelText="Keep a version of the input file"
+                  >
+                    <ng-container ngProjectAs="description">
+                      <div i18n>If enabled, the input file is not deleted after transcoding but moved in a dedicated folder or object storage</div>
+                    </ng-container>
+                  </my-peertube-checkbox>
+                </div>
               </div>
 
               <div class="callout callout-light pt-2 mt-2 pb-0">
-                <h3 class="callout-title" i18n>Output formats</h3>
+                <h3 class="callout-title" i18n>Output</h3>
 
                 <ng-container formGroupName="webVideos">
                   <div class="form-group" [ngClass]="getTranscodingDisabledClass()">

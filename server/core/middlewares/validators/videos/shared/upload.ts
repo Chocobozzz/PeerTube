@@ -1,6 +1,6 @@
 import express from 'express'
 import { logger } from '@server/helpers/logger.js'
-import { getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
+import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import { HttpStatusCode } from '@peertube/peertube-models'
 
 export async function addDurationToVideoFileIfNeeded (options: {
@@ -11,7 +11,7 @@ export async function addDurationToVideoFileIfNeeded (options: {
   const { res, middlewareName, videoFile } = options
 
   try {
-    if (!videoFile.duration) await addDurationToVideo(videoFile)
+    if (!videoFile.duration) await addDurationToVideo(res, videoFile)
   } catch (err) {
     logger.error('Invalid input file in ' + middlewareName, { err })
 
@@ -29,8 +29,11 @@ export async function addDurationToVideoFileIfNeeded (options: {
 // Private
 // ---------------------------------------------------------------------------
 
-async function addDurationToVideo (videoFile: { path: string, duration?: number }) {
-  const duration = await getVideoStreamDuration(videoFile.path)
+async function addDurationToVideo (res: express.Response, videoFile: { path: string, duration?: number }) {
+  const probe = await ffprobePromise(videoFile.path)
+  res.locals.ffprobe = probe
+
+  const duration = await getVideoStreamDuration(videoFile.path, probe)
 
   // FFmpeg may not be able to guess video duration
   // For example with m2v files: https://trac.ffmpeg.org/ticket/9726#comment:2

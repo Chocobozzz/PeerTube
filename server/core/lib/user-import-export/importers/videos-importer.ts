@@ -1,15 +1,12 @@
-import { LiveVideoLatencyMode, ThumbnailType, VideoExportJSON, VideoPrivacy } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { Hooks } from '@server/lib/plugins/hooks.js'
-import { buildNextVideoState } from '@server/lib/video-state.js'
-import { VideoModel } from '@server/models/video/video.js'
 import { pick } from '@peertube/peertube-core-utils'
-import { buildUUID, getFileSize } from '@peertube/peertube-node-utils'
-import { MChannelId, MVideoFullLight } from '@server/types/models/index.js'
 import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
-import { VideoChannelModel } from '@server/models/video/video-channel.js'
-import { AbstractUserImporter } from './abstract-user-importer.js'
-import { isUserQuotaValid } from '@server/lib/user.js'
+import { LiveVideoLatencyMode, ThumbnailType, VideoExportJSON, VideoPrivacy, VideoState } from '@peertube/peertube-models'
+import { buildUUID, getFileSize } from '@peertube/peertube-node-utils'
+import { isArray, isBooleanValid, isUUIDValid } from '@server/helpers/custom-validators/misc.js'
+import { isVideoCaptionLanguageValid } from '@server/helpers/custom-validators/video-captions.js'
+import { isVideoChannelUsernameValid } from '@server/helpers/custom-validators/video-channels.js'
+import { isVideoChapterTimecodeValid, isVideoChapterTitleValid } from '@server/helpers/custom-validators/video-chapters.js'
+import { isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
 import {
   isPasswordValid,
   isVideoCategoryValid,
@@ -25,17 +22,21 @@ import {
   isVideoSupportValid,
   isVideoTagValid
 } from '@server/helpers/custom-validators/videos.js'
-import { isVideoChannelUsernameValid } from '@server/helpers/custom-validators/video-channels.js'
-import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
-import { isArray, isBooleanValid, isUUIDValid } from '@server/helpers/custom-validators/misc.js'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { isVideoCaptionLanguageValid } from '@server/helpers/custom-validators/video-captions.js'
-import { isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
-import { parse } from 'path'
-import { isLocalVideoFileAccepted } from '@server/lib/moderation.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { LocalVideoCreator, ThumbnailOptions } from '@server/lib/local-video-creator.js'
-import { isVideoChapterTimecodeValid, isVideoChapterTitleValid } from '@server/helpers/custom-validators/video-chapters.js'
+import { isLocalVideoFileAccepted } from '@server/lib/moderation.js'
+import { Hooks } from '@server/lib/plugins/hooks.js'
+import { isUserQuotaValid } from '@server/lib/user.js'
 import { createLocalCaption } from '@server/lib/video-captions.js'
+import { buildNextVideoState } from '@server/lib/video-state.js'
+import { VideoChannelModel } from '@server/models/video/video-channel.js'
+import { VideoModel } from '@server/models/video/video.js'
+import { MChannelId, MVideoFullLight } from '@server/types/models/index.js'
+import { FfprobeData } from 'fluent-ffmpeg'
+import { parse } from 'path'
+import { AbstractUserImporter } from './abstract-user-importer.js'
 
 const lTags = loggerTagsFactory('user-import')
 
@@ -69,7 +70,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
     if (!isBooleanValid(o.downloadEnabled)) o.downloadEnabled = CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED
     if (!isBooleanValid(o.waitTranscoding)) o.waitTranscoding = true
 
-    if (!isVideoSourceFilenameValid(o.source?.filename)) o.source = undefined
+    if (!isVideoSourceFilenameValid(o.source?.inputFilename)) o.source = undefined
 
     if (!isVideoOriginallyPublishedAtValid(o.originallyPublishedAt)) o.originallyPublishedAt = null
 
@@ -149,6 +150,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
 
     let duration = 0
 
+    let ffprobe: FfprobeData
     if (videoFilePath) {
       if (await isUserQuotaValid({ userId: this.user.id, uploadSize: videoSize, checkDaily: false }) === false) {
         throw new Error(`Cannot import video ${videoImportData.name} for user ${this.user.username} because of exceeded quota`)
@@ -156,7 +158,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
 
       await this.checkVideoFileIsAcceptedOrThrow({ videoFilePath, size: videoSize, channel: videoChannel, videoImportData })
 
-      const ffprobe = await ffprobePromise(videoFilePath)
+      ffprobe = await ffprobePromise(videoFilePath)
       duration = await getVideoStreamDuration(videoFilePath, ffprobe)
     }
 
@@ -176,7 +178,11 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
 
     const localVideoCreator = new LocalVideoCreator({
       lTags,
-      videoFilePath,
+
+      videoFile: videoFilePath
+        ? { path: videoFilePath, probe: ffprobe }
+        : undefined,
+
       user: this.user,
       channel: videoChannel,
 
@@ -206,8 +212,12 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
 
         videoPasswords: videoImportData.passwords,
         duration,
-        filename: videoImportData.source?.filename,
-        state: buildNextVideoState()
+
+        inputFilename: videoImportData.source?.inputFilename,
+
+        state: videoImportData.isLive
+          ? VideoState.WAITING_FOR_LIVE
+          : buildNextVideoState()
       },
 
       liveAttributes: videoImportData.live,

@@ -1,7 +1,5 @@
-import { Mutex } from 'async-mutex'
-import { remove } from 'fs-extra/esm'
-import { extname, join } from 'path'
 import { FileStorage } from '@peertube/peertube-models'
+import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -13,7 +11,9 @@ import {
   MVideoFileStreamingPlaylistVideo,
   MVideoFileVideo
 } from '@server/types/models/index.js'
-import { buildUUID } from '@peertube/peertube-node-utils'
+import { Mutex } from 'async-mutex'
+import { remove } from 'fs-extra/esm'
+import { extname, join } from 'path'
 import { makeHLSFileAvailable, makeWebVideoFileAvailable } from './object-storage/index.js'
 import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from './paths.js'
 import { isVideoInPrivateDirectory } from './video-privacy.js'
@@ -56,10 +56,14 @@ class VideoPathManager {
     }
 
     if (isVideoInPrivateDirectory(video.privacy)) {
-      return join(DIRECTORIES.VIDEOS.PRIVATE, videoFile.filename)
+      return join(DIRECTORIES.WEB_VIDEOS.PRIVATE, videoFile.filename)
     }
 
-    return join(DIRECTORIES.VIDEOS.PUBLIC, videoFile.filename)
+    return join(DIRECTORIES.WEB_VIDEOS.PUBLIC, videoFile.filename)
+  }
+
+  getFSOriginalVideoFilePath (filename: string) {
+    return join(DIRECTORIES.ORIGINAL_VIDEOS, filename)
   }
 
   async makeAvailableVideoFile <T> (videoFile: MVideoFileVideo | MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {

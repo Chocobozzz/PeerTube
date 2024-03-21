@@ -23,7 +23,7 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { FIXTURE_URLS } from '../shared/tests.js'
+import { FIXTURE_URLS } from '../shared/fixture-urls.js'
 import { expectEndWith } from '@tests/shared/checks.js'
 
 describe('Test plugin filter hooks', function () {
