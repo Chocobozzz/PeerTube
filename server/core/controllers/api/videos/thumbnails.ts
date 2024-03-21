@@ -3,11 +3,12 @@ import { VideoModel } from '@server/models/video/video.js'
 import { generateLocalVideoMiniature } from '../../../lib/thumbnail.js'
 import { MThumbnail, MVideoWithAllFiles } from '@server/types/models/index.js'
 import { ThumbnailType } from '@peertube/peertube-models'
+import { asyncMiddleware } from '@server/middlewares/index.js'
 
 const thumbnailRouter = express.Router()
 
 thumbnailRouter.put('/:id/thumbnail/:timecode',
-  setThumbnailAtTimecode
+  asyncMiddleware(setThumbnailAtTimecode)
 )
 
 export {
@@ -34,15 +35,15 @@ async function setThumbnailAtTimecode (req: express.Request, res: express.Respon
 
   let url: string
 
-  thumbnails.forEach((thumbnail) => {
+  await Promise.all(thumbnails.map(async (thumbnail) => {
 
-    thumbnail.save()
+    await thumbnail.save()
 
     if (thumbnail.type === ThumbnailType.PREVIEW) {
       url = thumbnail.getOriginFileUrl(video)
     }
 
-  })
+  }))
 
   return res.json(url)
 }

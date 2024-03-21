@@ -1,5 +1,5 @@
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common'
 import { imageToDataURL } from '../../../../../root-helpers/images'
 import { BytesPipe } from '../../../../shared/shared-main/angular/bytes.pipe'
 
@@ -13,11 +13,10 @@ import {
 } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import {
-  AuthService,
   ConfirmService,
   Notifier,
   RestExtractor,
-  ServerService,
+  ServerService
 } from '../../../../core'
 import { VideoDetails } from '../../../../shared/shared-main/video/video-details.model'
 import { VideoFileTokenService } from '../../../../shared/shared-main/video/video-file-token.service'
@@ -29,12 +28,12 @@ import {
   ServerErrorCode
 } from '@peertube/peertube-models'
 import { videoRequiresFileToken } from '../../../../../root-helpers/video'
-import { FrameSelectorComponent } from './frame-selector.component';
-import { ReactiveFileComponent } from '@app/shared/shared-forms/reactive-file.component';
+import { FrameSelectorComponent } from './frame-selector.component'
+import { ReactiveFileComponent } from '@app/shared/shared-forms/reactive-file.component'
 
 @Component({
   selector: 'my-thumbnail-manager',
-  styleUrls: ['./thumbnail-manager.component.scss'],
+  styleUrls: [ './thumbnail-manager.component.scss' ],
   templateUrl: './thumbnail-manager.component.html',
   standalone: true,
   imports: [ CommonModule, FrameSelectorComponent, ReactiveFileComponent ],
@@ -48,8 +47,8 @@ import { ReactiveFileComponent } from '@app/shared/shared-forms/reactive-file.co
 })
 export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
 
-  previewWidth = "360px"
-  previewHeight = "200px"
+  previewWidth = '360px'
+  previewHeight = '200px'
 
   imageSrc: string
   allowedExtensionsMessage = ''
@@ -60,16 +59,16 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
   file: Blob
 
   // State Toggle (Upload, Select Frame)
-  selectingFromVideo: boolean = false
+  selectingFromVideo = false
 
   source: string
 
-  currentTime: number = 0
+  currentTime = 0
 
   videoId: string
   videoDetails: VideoDetails
 
-  constructor(
+  constructor (
     private confirmService: ConfirmService,
     private notifier: Notifier,
     private restExtractor: RestExtractor,
@@ -82,31 +81,30 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
     this.maxSizeText = $localize`max size`
   }
 
-
-  // Section - Upload 
-  get videoImageExtensions() {
+  // Section - Upload
+  get videoImageExtensions () {
     return this.serverConfig.video.image.extensions
   }
 
-  get maxVideoImageSize() {
+  get maxVideoImageSize () {
     return this.serverConfig.video.image.size.max
   }
 
-  get maxVideoImageSizeInBytes() {
+  get maxVideoImageSizeInBytes () {
     return this.bytesPipe.transform(this.maxVideoImageSize)
   }
 
-  getReactiveFileButtonTooltip() {
+  getReactiveFileButtonTooltip () {
     return $localize`(extensions: ${this.videoImageExtensions}, ${this.maxSizeText}\: ${this.maxVideoImageSizeInBytes})`
   }
 
-  ngOnInit() {
+  ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
     this.allowedExtensionsMessage = this.videoImageExtensions.join(', ')
   }
 
-  onFileChanged(file: Blob) {
+  onFileChanged (file: Blob) {
     this.file = file
 
     this.propagateChange(this.file)
@@ -115,20 +113,20 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
 
   propagateChange = (_: any) => { /* empty */ }
 
-  writeValue(file: any) {
+  writeValue (file: any) {
     this.file = file
     this.updatePreview()
   }
 
-  registerOnChange(fn: (_: any) => void) {
+  registerOnChange (fn: (_: any) => void) {
     this.propagateChange = fn
   }
 
-  registerOnTouched() {
+  registerOnTouched () {
     // Unused
   }
 
-  private updatePreview() {
+  private updatePreview () {
     if (this.file) {
       imageToDataURL(this.file).then(result => this.imageSrc = result)
     }
@@ -137,7 +135,7 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
 
   // Section - Select From Frame
 
-  selectFromVideo() {
+  selectFromVideo () {
 
     this.selectingFromVideo = true
 
@@ -153,33 +151,30 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
     })
   }
 
-  resetSelectFromVideo() {
+  resetSelectFromVideo () {
 
     this.selectingFromVideo = false
   }
 
-  selectFrame() {
+  selectFrame () {
 
     this.selectingFromVideo = false
 
-    this.videoService.setThumbnailAtTimecode(
-      this.videoDetails.id.toString(),
-       this.currentTime.toString()).subscribe((response) => { 
-
+    this.videoService.setThumbnailAtTimecode(this.videoDetails.id.toString(), this.currentTime.toString())
+      .subscribe((response) => {
         this.imageSrc = response
-        
       })
   }
 
-  getCurrentTime() {
+  getCurrentTime () {
     return this.currentTime
   }
 
-  setCurrentTime(value: number) {
-    this.currentTime = value;
+  setCurrentTime (value: number) {
+    this.currentTime = value
   }
 
-  private loadVideo(options: {
+  private loadVideo (options: {
     videoId: string
   }) {
     const { videoId } = options
@@ -191,22 +186,22 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
 
         return this.videoFileTokenService.getVideoFileToken({ videoUUID: video.uuid })
           .pipe(map((token) => ({ video, videoFileToken: token.token })))
-      })).subscribe({
+
+      }))
+      .subscribe({
         next: ({ video, videoFileToken }) => {
           this.onVideoFetched({
             video,
             videoFileToken
-          }).catch(err => {
-            this.handleGlobalError(err)
           })
         },
-        error: async err => {
+        error: err => {
           this.handleRequestError(err)
         }
       })
   }
 
-  private async onVideoFetched(options: {
+  private onVideoFetched (options: {
     video: VideoDetails
     videoFileToken: string
   }) {
@@ -217,10 +212,10 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
 
     this.videoDetails = video
 
-    let videoFiles = video.getFiles()
+    const videoFiles = video.getFiles()
 
     if (videoFiles == null) {
-      if (videoFiles.length == 0) {
+      if (videoFiles.length === 0) {
         return
       }
     }
@@ -228,10 +223,10 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
     let url: string = videoFiles[0].fileUrl
 
     if (videoFileToken != null) {
-      url = addQueryParams(url, { videoFileToken: videoFileToken })
+      url = addQueryParams(url, { videoFileToken })
     }
 
-    this.source =  url
+    this.source = url
 
     console.log(url)
   }
@@ -239,14 +234,14 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
 
   // Section - Helpers
 
-  private handleGlobalError(err: any) {
+  private handleGlobalError (err: any) {
     const errorMessage: string = typeof err === 'string' ? err : err.message
     if (!errorMessage) return
 
     this.notifier.error(errorMessage)
   }
 
-  private async handleRequestError(err: any) {
+  private async handleRequestError (err: any) {
     const errorBody = err.body as PeerTubeProblemDocument
 
     if (errorBody?.code === ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS && errorBody.originUrl) {
