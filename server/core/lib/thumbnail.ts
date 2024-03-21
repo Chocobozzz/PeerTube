@@ -101,6 +101,7 @@ function generateLocalVideoMiniature (options: {
   videoFile: MVideoFile
   types: ThumbnailType_Type[]
   ffprobe: FfprobeData
+  timecode?: number
 }): Promise<MThumbnail[]> {
   const { video, videoFile, types, ffprobe, timecode } = options
 
@@ -224,7 +225,7 @@ function updateRemoteVideoThumbnail (options: {
 
 // ---------------------------------------------------------------------------
 
-async function regenerateMiniaturesIfNeeded (video: MVideoWithAllFiles, ffprobe: FfprobeData) {
+async function regenerateMiniaturesIfNeeded (video: MVideoWithAllFiles) {
   const thumbnailsToGenerate: ThumbnailType_Type[] = []
 
   if (video.getMiniature().automaticallyGenerated === true) {
@@ -238,7 +239,6 @@ async function regenerateMiniaturesIfNeeded (video: MVideoWithAllFiles, ffprobe:
   const models = await generateLocalVideoMiniature({
     video,
     videoFile: video.getMaxQualityFile(),
-    ffprobe,
     types: thumbnailsToGenerate
   })
 
