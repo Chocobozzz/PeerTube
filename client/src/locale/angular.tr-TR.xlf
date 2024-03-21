@@ -451,17 +451,9 @@
           <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5354239156470982824" datatype="html">
+      <trans-unit id="5354239156470982824" datatype="html" xml:space="preserve">
         <source>Your instance has <x id="START_LINK"/>a new follower<x id="CLOSE_LINK"/> (<x id="INTERPOLATION"/>) <x id="START_TAG_NG_CONTAINER"/> awaiting your approval<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="new">
-          Your instance has 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>a new follower
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (
-          <x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>)
-          
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> awaiting your approval
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-        </target>
+        <target state="translated">Örneğinizde <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>yeni bir takipçi <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ( <x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> onayınızı bekliyor <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/standalone-notifications/user-notifications.component.html</context>
           <context context-type="linenumber">177</context>
@@ -847,9 +839,9 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1080230904501320275" datatype="html">
+      <trans-unit id="1080230904501320275" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user banned.} other {<x id="count"/> users banned.}}</source>
-        <target state="new">{count, plural, =1 {1 user banned.} other {<x id="count"/> users banned.}}</target>
+        <target state="translated">{count, plural, =1 {1 user banned.} other {<x id="count"/> yasaklanmış kullanıcılar.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">78</context>
@@ -1247,9 +1239,10 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8644431249513874405" datatype="html">
+      <trans-unit id="8644431249513874405" datatype="html" xml:space="preserve">
         <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</source>
-        <target state="new">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</target>
+        <target state="translated">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; destekleyen uyumlu
+:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -1415,17 +1408,17 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5211109801015470691" datatype="html">
+      <trans-unit id="5211109801015470691" datatype="html" xml:space="preserve">
         <source>can be redefined by the users</source>
-        <target state="new">can be redefined by the users</target>
+        <target state="translated">kullanıcılar tarafından yeniden tanımlanabilir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5842305303142677924" datatype="html">
+      <trans-unit id="5842305303142677924" datatype="html" xml:space="preserve">
         <source>User registration</source>
-        <target state="new">User registration</target>
+        <target state="translated">Kullanıcı kaydı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1475,17 +1468,18 @@
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7864066132065250510" datatype="html">
+      <trans-unit id="7864066132065250510" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION"/> per user / <x id="INTERPOLATION_1"/> per instance </source>
-        <target state="new"> <x id="INTERPOLATION"/> per user / <x id="INTERPOLATION_1"/> per instance </target>
+        <target state="translated"><x id="INTERPOLATION"/>
+kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2591172858390995209" datatype="html">
+      <trans-unit id="2591172858390995209" datatype="html" xml:space="preserve">
         <source>Video Import</source>
-        <target state="new">Video Import</target>
+        <target state="translated">Videoyu İçe Aktarma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">91</context>
@@ -1527,13 +1521,9 @@
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1502595455339510144" datatype="html">
+      <trans-unit id="1502595455339510144" datatype="html" xml:space="preserve">
         <source>Unlimited <x id="START_TAG_NG_CONTAINER"/>(<x id="INTERPOLATION"/> per day)<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="new">Unlimited 
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(
-          <x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> per day)
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-        </target>
+        <target state="translated">Sınırsız<x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>( <x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> günlük) <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">59</context>
@@ -1551,9 +1541,9 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6276792241563504067" datatype="html">
+      <trans-unit id="6276792241563504067" datatype="html" xml:space="preserve">
         <source>You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target state="new"> You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </target>
+        <target state="translated">Bir medya dosyasına işaret eden herhangi bir torrent dosyasını içe aktarabilirsiniz. İşaret ettiği içerik üzerinde dağıtım haklarına sahip olduğunuzdan emin olmalısınız, aksi takdirde kendiniz ve örneğiniz için yasal sorunlara neden olabilir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">19</context>
@@ -1583,25 +1573,25 @@
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4229153235358296216" datatype="html">
+      <trans-unit id="4229153235358296216" datatype="html" xml:space="preserve">
         <source>User Import/Export</source>
-        <target state="new">User Import/Export</target>
+        <target state="translated">Kullanıcıyı İçe/Dışa Aktarma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3384006887221192665" datatype="html">
+      <trans-unit id="3384006887221192665" datatype="html" xml:space="preserve">
         <source>Users can export their data</source>
-        <target state="new">Users can export their data</target>
+        <target state="translated">Kullanıcılar verilerini dışa aktarabilir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5552722059425094536" datatype="html">
+      <trans-unit id="5552722059425094536" datatype="html" xml:space="preserve">
         <source>Users can import their data</source>
-        <target state="new">Users can import their data</target>
+        <target state="translated">Kullanıcılar verilerini içe aktarabilir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">127</context>
@@ -1639,9 +1629,9 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5178138591256693636" datatype="html">
+      <trans-unit id="5178138591256693636" datatype="html" xml:space="preserve">
         <source>videos</source>
-        <target state="new">videos</target>
+        <target state="translated">videolar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1735,17 +1725,17 @@
           <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6994936570572804302" datatype="html">
+      <trans-unit id="6994936570572804302" datatype="html" xml:space="preserve">
         <source>Request an account</source>
-        <target state="new">Request an account</target>
+        <target state="translated">Bir hesap isteyin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/signup-label.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3242255798983858463" datatype="html">
+      <trans-unit id="3242255798983858463" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="days"/> days</source>
-        <target state="new"><x id="PH" equiv-text="days"/> days</target>
+        <target state="translated"><x id="PH" equiv-text="days"/> günler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/days-duration-formatter.pipe.ts</context>
           <context context-type="linenumber">14</context>
@@ -1767,41 +1757,41 @@
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="732935381486595265" datatype="html">
+      <trans-unit id="732935381486595265" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</target>
+        <target state="translated">Sizin <x id="PH" equiv-text="name"/> dosyanız, sunucu proxy zaman aşımından önce aktarılamadı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5950472748615640135" datatype="html">
+      <trans-unit id="5950472748615640135" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file was too large </source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file was too large </target>
+        <target state="translated">Sahip olduğunuz dosya <x id="PH" equiv-text="name"/>dosya çok büyüktü. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="232729887013001609" datatype="html">
+      <trans-unit id="232729887013001609" datatype="html" xml:space="preserve">
         <source>(max. size: <x id="PH" equiv-text="maxFileSize"/>)</source>
-        <target state="new"> (max. size: <x id="PH" equiv-text="maxFileSize"/>)</target>
+        <target state="translated">(max. boyut: <x id="PH" equiv-text="maxFileSize"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4892001398723483418" datatype="html">
+      <trans-unit id="4892001398723483418" datatype="html" xml:space="preserve">
         <source>Enable hotkeys in this web browser</source>
-        <target state="new">Enable hotkeys in this web browser</target>
+        <target state="translated">Bu web tarayıcısında kısayol tuşlarını etkinleştirin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/hotkeys/hotkeys-cheat-sheet.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4831075576673859232" datatype="html">
+      <trans-unit id="4831075576673859232" datatype="html" xml:space="preserve">
         <source>Keyboard Shortcuts</source>
-        <target state="new">Keyboard Shortcuts</target>
+        <target state="translated">Klavye kısayolları</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/hotkeys/hotkeys-cheat-sheet.component.ts</context>
           <context context-type="linenumber">16</context>
@@ -1815,19 +1805,17 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4526499522377118108" datatype="html">
+      <trans-unit id="4526499522377118108" datatype="html" xml:space="preserve">
         <source>Block video "<x id="INTERPOLATION"/>"</source>
-        <target state="new">Block video "
-          <x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"
-        </target>
+        <target state="translated">Blok video " <x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2992313729068029516" datatype="html">
+      <trans-unit id="2992313729068029516" datatype="html" xml:space="preserve">
         <source>Block live "<x id="INTERPOLATION"/>"</source>
-        <target state="new">Block live "<x id="INTERPOLATION"/>"</target>
+        <target state="translated">Canlı yayını blokla "<x id="INTERPOLATION"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">9</context>
@@ -1841,9 +1829,9 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9133713232258232158" datatype="html">
+      <trans-unit id="9133713232258232158" datatype="html" xml:space="preserve">
         <source>Unfederate</source>
-        <target state="needs-translation">Unfederate</target>
+        <target state="translated">Federe olmayan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">33</context>
@@ -1873,9 +1861,9 @@
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="901879091817013957" datatype="html">
+      <trans-unit id="901879091817013957" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> videos.}}</source>
-        <target state="new">{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> videos.}}</target>
+        <target state="translated">{count, plural, =1 {Blocked <x id="videoName"/>.} diğer {Blocked <x id="count"/> videos.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.ts</context>
           <context context-type="linenumber">92</context>
@@ -1909,14 +1897,9 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1909492071130899005" datatype="html">
+      <trans-unit id="1909492071130899005" datatype="html" xml:space="preserve">
         <source>Sorry but there was an issue with the external login process. Please <x id="START_LINK"/>contact an administrator<x id="CLOSE_LINK"/>. </source>
-        <target state="new">
-    Sorry but there was an issue with the external login process. Please 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>contact an administrator
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-  
-        </target>
+        <target state="translated">Üzgünüm ama harici oturum açma işleminde bir sorun oluştu. Lütfen <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>bir yöneticiyle iletişime geçin <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">34</context>
@@ -1962,17 +1945,17 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6512825581399429064" datatype="html">
+      <trans-unit id="6512825581399429064" datatype="html" xml:space="preserve">
         <source>Enter the two-factor code generated by your phone app:</source>
-        <target state="new">Enter the two-factor code generated by your phone app:</target>
+        <target state="translated">Telefon uygulamanız tarafından oluşturulan iki faktörlü kodu girin:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="42685862314953751" datatype="html">
+      <trans-unit id="42685862314953751" datatype="html" xml:space="preserve">
         <source>Two factor authentication token</source>
-        <target state="new">Two factor authentication token</target>
+        <target state="translated">İki faktörlü kimlik doğrulama jetonu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">79</context>
@@ -2022,9 +2005,9 @@
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7736587919193927267" datatype="html">
+      <trans-unit id="7736587919193927267" datatype="html" xml:space="preserve">
         <source>I forgot my password</source>
-        <target state="new"> I forgot my password </target>
+        <target state="translated">Şifremi unuttum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">91</context>
@@ -2038,17 +2021,17 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6584143415159913044" datatype="html">
+      <trans-unit id="6584143415159913044" datatype="html" xml:space="preserve">
         <source>This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Bu örnek kayda izin verir. Ancak kontrol etmeye dikkat edin <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Şartlar<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Şartlar<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> bir hesap oluşturmadan önce. İhtiyaçlarınızı tam olarak karşılayacak başka bir örneği de şu adreste arayabilirsiniz:: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1394326136451741248" datatype="html">
+      <trans-unit id="1394326136451741248" datatype="html" xml:space="preserve">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Şu anda bu örnek kullanıcı kaydına izin vermiyor; şurayı kontrol edebilirsiniz: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> daha fazla ayrıntı için veya size bir hesaba kaydolma ve videolarınızı oraya yükleme olanağı veren bir örnek bulun. Birden fazla örnek arasında kendinizinkini şu adreste bulabilirsiniz: <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">28</context>
@@ -2167,9 +2150,9 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8434369348784683733" datatype="html">
+      <trans-unit id="8434369348784683733" datatype="html" xml:space="preserve">
         <source>for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="new">for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">için<x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">10</context>
@@ -2220,41 +2203,41 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4502972592942341883" datatype="html">
+      <trans-unit id="4502972592942341883" datatype="html" xml:space="preserve">
         <source>As you probably noticed: creating an account is not necessary to watch video on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </source>
-        <target state="new"> As you probably noticed: creating an account is not necessary to watch video on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </target>
+        <target state="translated">Muhtemelen fark ettiğiniz gibi: videoyu izlemek için hesap oluşturmak gerekli değildir <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Ancak, bir hesap oluşturmak <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> şunları yapmanıza olanak tanır: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3514732276382852116" datatype="html">
+      <trans-unit id="3514732276382852116" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos</source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Yorum<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videolar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6928511254538021087" datatype="html">
+      <trans-unit id="6928511254538021087" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Subscribe<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to channels to be notified of new videos</source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Subscribe<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to channels to be notified of new videos</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Kanallara abone olun<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> yeni videolardan haberdar olmak için</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="269413964682905563" datatype="html">
+      <trans-unit id="269413964682905563" datatype="html" xml:space="preserve">
         <source>Have access to your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>watch history<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Have access to your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>watch history<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Erişin <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>izleme geçmişinize<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7760677303939127268" datatype="html">
+      <trans-unit id="7760677303939127268" datatype="html" xml:space="preserve">
         <source>Create your channel to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Create your channel to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Video yayınlamak için <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>kanal oluşturun<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">22</context>
@@ -2268,41 +2251,41 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1257029815550886575" datatype="html">
+      <trans-unit id="1257029815550886575" datatype="html" xml:space="preserve">
         <source>You can already follow <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> using your favorite tool.</source>
-        <target state="new">You can already follow <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> using your favorite tool.</target>
+        <target state="translated">Favori aracınızı kullanarak <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> takip edebilirsiniz.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7772973173091400795" datatype="html">
+      <trans-unit id="7772973173091400795" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> has been created using <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, a video creation platform developed by Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is a french non-profit organization that offers alternatives to Big Tech's digital tools </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> has been created using <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, a video creation platform developed by Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is a french non-profit organization that offers alternatives to Big Tech's digital tools </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>kullanılarak oluşturuldu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, Framasoft tarafından geliştirilen bir video oluşturma platformu.. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> Big Tech'in dijital araçlarına alternatifler sunan, kar amacı gütmeyen bir Fransız kuruluşudur </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2528596078796844503" datatype="html">
+      <trans-unit id="2528596078796844503" datatype="html" xml:space="preserve">
         <source>You want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Then you need to create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="new"> You want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Then you need to create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">Video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>yayınlamak istiyorsanız<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>ilk ihtiyacınız olacak şey <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>kanal oluşturmaktır<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">2,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1335686739562009265" datatype="html">
+      <trans-unit id="1335686739562009265" datatype="html" xml:space="preserve">
         <source>You might want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>create a channel by theme:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> for example, you can create a channel named "SweetMelodies" to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology. </source>
-        <target state="new"> You might want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>create a channel by theme:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> for example, you can create a channel named "SweetMelodies" to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology. </target>
+        <target state="translated">Örneğin temaya göre bir <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>kanal oluşturmak isteyebilirsiniz,:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>piyano konserlerinizi yayınlamak için "SweetMelodies" adında bir kanal ve ekolojiyle ilgili videolarınızı yayınladığınız "Ekoloji" adında bir kanal oluşturabilirsiniz. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">6,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5716290603546738313" datatype="html">
+      <trans-unit id="5716290603546738313" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators allow you to publish up to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> of videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on their website. </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators allow you to publish up to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> of videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on their website. </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> yöneticiler en fazla yayınlamanıza izin verir<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> videolarınızın<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> websitede </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -2454,9 +2437,9 @@
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5850698978356573024" datatype="html">
+      <trans-unit id="5850698978356573024" datatype="html" xml:space="preserve">
         <source>Confirm your password</source>
-        <target state="new">Confirm your password</target>
+        <target state="translated">Şifrenizi onaylayın</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/confirm.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -2562,17 +2545,9 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5330788940795142335" datatype="html">
+      <trans-unit id="5330788940795142335" datatype="html" xml:space="preserve">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG"/>the appropriate instance<x id="CLOSE_TAG_STRONG"/>. Without them, your instance may not be referenced on the <x id="START_LINK"/>JoinPeerTube website<x id="CLOSE_LINK"/>. </source>
-        <target state="new">
-      Please consider configuring these fields to help people to choose 
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate instance
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.
-      Without them, your instance may not be referenced on the 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>JoinPeerTube website
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-    
-        </target>
+        <target state="translated">İnsanların uygun örneği seçmesine yardımcı olmak için<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>lütfen bu alanları yapılandırmayı düşünün<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Bunlar olmadan, örneğinize şu adreste başvurulamayabilir: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>JoinPeerTube website <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">26</context>
@@ -2650,33 +2625,33 @@
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1327409825122054374" datatype="html">
+      <trans-unit id="1327409825122054374" datatype="html" xml:space="preserve">
         <source>Runner job cancelled</source>
-        <target state="new">Runner job cancelled</target>
+        <target state="translated">Yürütücü işi iptal edildi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2874360404134250412" datatype="html">
+      <trans-unit id="2874360404134250412" datatype="html" xml:space="preserve">
         <source>Error in runner job</source>
-        <target state="new">Error in runner job</target>
+        <target state="translated">Yürütücü işinde hata</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2657043015926552641" datatype="html">
+      <trans-unit id="2657043015926552641" datatype="html" xml:space="preserve">
         <source>Unknown error</source>
-        <target state="new">Unknown error</target>
+        <target state="translated">Bilinmeyen hata</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1439766333173070230" datatype="html">
+      <trans-unit id="1439766333173070230" datatype="html" xml:space="preserve">
         <source>Invalid input video stream</source>
-        <target state="new">Invalid input video stream</target>
+        <target state="translated">Geçersiz giriş video akışı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">68</context>
@@ -2766,9 +2741,9 @@
           <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1039157642448320025" datatype="html">
+      <trans-unit id="1039157642448320025" datatype="html" xml:space="preserve">
         <source>FAQ (Frequently Asked Questions) - about PeerTube</source>
-        <target state="new">FAQ (Frequently Asked Questions) - about PeerTube</target>
+        <target state="translated">SSS (Sıkça Sorulan Sorular) - PeerTube hakkında</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">166</context>
@@ -2942,25 +2917,25 @@
           <context context-type="linenumber">23,24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8246967116432095499" datatype="html">
+      <trans-unit id="8246967116432095499" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>I already have an account<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, I log in </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>I already have an account<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, I log in </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>Zaten bir hesabım var<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, Giriş yapıyorum </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6075115017891566450" datatype="html">
+      <trans-unit id="6075115017891566450" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Term"/>Terms<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Term"/>Terms<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Term"/>Şartlar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5788965650054506209" datatype="html">
+      <trans-unit id="5788965650054506209" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>Setup<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>your account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>Setup<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>your account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>Hesabınızı<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>oluşturun<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">66</context>
@@ -2974,9 +2949,9 @@
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3071761663064320665" datatype="html">
+      <trans-unit id="3071761663064320665" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>Create<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your first channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>Create<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your first channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>İlk kanalınızı<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>oluşturun<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">83</context>
@@ -3074,33 +3049,33 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5856432243446401016" datatype="html">
+      <trans-unit id="5856432243446401016" datatype="html" xml:space="preserve">
         <source>Uploading an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Uploading an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Bir avatar <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>yükleyin<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3221645359464920754" datatype="html">
+      <trans-unit id="3221645359464920754" datatype="html" xml:space="preserve">
         <source>Writing a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Writing a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">bir tanım <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>yazın<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2218100934178971211" datatype="html">
+      <trans-unit id="2218100934178971211" datatype="html" xml:space="preserve">
         <source>Don't show me this anymore</source>
-        <target state="translated">Artık bana bunu gösterme.</target>
+        <target state="translated">Artık bana bunu gösterme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4424964105331349857" datatype="html">
+      <trans-unit id="4424964105331349857" datatype="html" xml:space="preserve">
         <source>I'm a teapot</source>
-        <target state="new">I'm a teapot</target>
+        <target state="translated">Ben bir çaydanlığım</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -6543,9 +6518,9 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2622255144026150901" datatype="html">
+      <trans-unit id="2622255144026150901" datatype="html" xml:space="preserve">
         <source>Auth plugin</source>
-        <target state="new">Auth plugin</target>
+        <target state="translated">Kimlik doğrulama eklentisi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">187</context>
@@ -6559,9 +6534,9 @@
           <context context-type="linenumber">178</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="588099657508661970" datatype="html">
+      <trans-unit id="588099657508661970" datatype="html" xml:space="preserve">
         <source>None (local authentication)</source>
-        <target state="new">None (local authentication)</target>
+        <target state="translated">Hiçbiri (yerel kimlik doğrulama)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">191</context>
@@ -6571,9 +6546,9 @@
           <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3141984777339778129" datatype="html">
+      <trans-unit id="3141984777339778129" datatype="html" xml:space="preserve">
         <source>User bypasses video validation by moderators</source>
-        <target state="new">User bypasses video validation by moderators</target>
+        <target state="translated">Kullanıcı, moderatörlerin video doğrulamasını atlar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">200</context>
@@ -6583,9 +6558,9 @@
           <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8975798495439347971" datatype="html">
+      <trans-unit id="8975798495439347971" datatype="html" xml:space="preserve">
         <source>Enable this checkbox if this user doesn't need to have its videos reviewed by moderators.</source>
-        <target state="new"> Enable this checkbox if this user doesn't need to have its videos reviewed by moderators. </target>
+        <target state="translated">Bu kullanıcının videolarının moderatörler tarafından incelenmesi gerekmiyorsa bu onay kutusunu etkinleştirin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">202</context>
@@ -6595,9 +6570,9 @@
           <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6667250632809964191" datatype="html">
+      <trans-unit id="6667250632809964191" datatype="html" xml:space="preserve">
         <source>Send a link to reset the password by email to the user</source>
-        <target state="new">Send a link to reset the password by email to the user</target>
+        <target state="translated">Kullanıcıya e-posta yoluyla şifreyi sıfırlamak için bir bağlantı gönderin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">229</context>
@@ -6607,9 +6582,9 @@
           <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1412406834353485520" datatype="html">
+      <trans-unit id="1412406834353485520" datatype="html" xml:space="preserve">
         <source>Ask for new password</source>
-        <target state="new">Ask for new password</target>
+        <target state="translated">Yeni şifre iste</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">230</context>
@@ -6619,9 +6594,9 @@
           <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3791201588898094481" datatype="html">
+      <trans-unit id="3791201588898094481" datatype="html" xml:space="preserve">
         <source>Manually set the user password</source>
-        <target state="new">Manually set the user password</target>
+        <target state="translated">Kullanıcı şifresini manuel olarak ayarlayın</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">234</context>
@@ -6631,9 +6606,9 @@
           <context context-type="linenumber">234</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7217118144256898288" datatype="html">
+      <trans-unit id="7217118144256898288" datatype="html" xml:space="preserve">
         <source>This user has two factor authentication enabled</source>
-        <target state="new">This user has two factor authentication enabled</target>
+        <target state="translated">Bu kullanıcının iki faktörlü kimlik doğrulaması etkin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">239</context>
@@ -6643,9 +6618,9 @@
           <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1636606892066514698" datatype="html">
+      <trans-unit id="1636606892066514698" datatype="html" xml:space="preserve">
         <source>Disable two factor authentication</source>
-        <target state="new">Disable two factor authentication</target>
+        <target state="translated">İki faktörlü kimlik doğrulamayı devre dışı bırakın</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">240</context>
@@ -6691,9 +6666,9 @@
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7049348886126005391" datatype="html">
+      <trans-unit id="7049348886126005391" datatype="html" xml:space="preserve">
         <source>Batch actions</source>
-        <target state="new">Batch actions</target>
+        <target state="translated">Toplu işlemler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">17</context>
@@ -6731,9 +6706,9 @@
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2348557406282409966" datatype="html">
+      <trans-unit id="2348557406282409966" datatype="html" xml:space="preserve">
         <source>Open account in a new tab</source>
-        <target state="new">Open account in a new tab</target>
+        <target state="translated">Hesabı yeni bir sekmede aç</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context>
           <context context-type="linenumber">72</context>
@@ -6759,19 +6734,17 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3111569165173971676" datatype="html">
+      <trans-unit id="3111569165173971676" datatype="html" xml:space="preserve">
         <source>Deleted account</source>
-        <target state="new">
-          Deleted account
-        </target>
+        <target state="translated">Hesabı sil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="242888077027281874" datatype="html">
+      <trans-unit id="242888077027281874" datatype="html" xml:space="preserve">
         <source>Total daily video quota</source>
-        <target state="new">Total daily video quota</target>
+        <target state="translated">Toplam günlük video kotası</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">133</context>
@@ -6785,17 +6758,17 @@
           <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6124612368324200166" datatype="html">
+      <trans-unit id="6124612368324200166" datatype="html" xml:space="preserve">
         <source>Banned users</source>
-        <target state="new">Banned users</target>
+        <target state="translated">Yasaklanmış kullanıcılar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2049290282534091182" datatype="html">
+      <trans-unit id="2049290282534091182" datatype="html" xml:space="preserve">
         <source>Moderation</source>
-        <target state="new">Moderation</target>
+        <target state="translated">Moderasyon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">112</context>
@@ -6809,17 +6782,17 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="17234570072885140" datatype="html">
+      <trans-unit id="17234570072885140" datatype="html" xml:space="preserve">
         <source>Registrations</source>
-        <target state="new">Registrations</target>
+        <target state="translated">Kayıtlar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="746099155736913817" datatype="html">
+      <trans-unit id="746099155736913817" datatype="html" xml:space="preserve">
         <source>Video blocks</source>
-        <target state="new">Video blocks</target>
+        <target state="translated">Video blokları</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">134</context>
@@ -6829,9 +6802,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7815838401315213887" datatype="html">
+      <trans-unit id="7815838401315213887" datatype="html" xml:space="preserve">
         <source>Muted accounts</source>
-        <target state="new">Muted accounts</target>
+        <target state="translated">Sessiz hesaplar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">142</context>
@@ -6857,9 +6830,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5668793810321242853" datatype="html">
+      <trans-unit id="5668793810321242853" datatype="html" xml:space="preserve">
         <source>Muted servers</source>
-        <target state="new">Muted servers</target>
+        <target state="translated">Sessiz sunucular</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">150</context>
@@ -6881,12 +6854,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2343069726009080052" datatype="html">
+      <trans-unit id="2343069726009080052" datatype="html" xml:space="preserve">
         <source>Video <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="new">Video 
-          <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/>
-          <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
-        </target>
+        <target state="needs-translation">Video <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/> <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">32</context>
@@ -6908,59 +6878,57 @@
           <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4488103364313252005" datatype="html">
+      <trans-unit id="4488103364313252005" datatype="html" xml:space="preserve">
         <source>List redundancies</source>
-        <target state="new">List redundancies</target>
+        <target state="translated">Gereğinden fazla olanları listeleyin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7423116442791683693" datatype="html">
+      <trans-unit id="7423116442791683693" datatype="html" xml:space="preserve">
         <source>Your instance doesn't mirror any video.</source>
-        <target state="new">Your instance doesn't mirror any video.</target>
+        <target state="translated">Örneğiniz hiçbir videoyu yansıtmıyor.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1944582937285351613" datatype="html">
+      <trans-unit id="1944582937285351613" datatype="html" xml:space="preserve">
         <source>Your instance has no mirrored videos.</source>
-        <target state="new">Your instance has no mirrored videos.</target>
+        <target state="translated">Örneğinizde yansıtılmış video yok.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7292311893283564173" datatype="html">
+      <trans-unit id="7292311893283564173" datatype="html" xml:space="preserve">
         <source>Enabled strategies stats</source>
-        <target state="new">Enabled strategies stats</target>
+        <target state="translated">Etkinleştirilen strateji istatistikleri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7595922272001217567" datatype="html">
+      <trans-unit id="7595922272001217567" datatype="html" xml:space="preserve">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target state="new">
-      No redundancy strategy is enabled on your instance.
-    </target>
+        <target state="translated">Örneğinizde hiçbir gereksiz strateji etkin değil.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4824046935922837124" datatype="html">
+      <trans-unit id="4824046935922837124" datatype="html" xml:space="preserve">
         <source>Used (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</source>
-        <target state="new">Used (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</target>
+        <target state="translated">Kullanılan (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5874809640561431793" datatype="html">
+      <trans-unit id="5874809640561431793" datatype="html" xml:space="preserve">
         <source>Available (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</source>
-        <target state="new">Available (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</target>
+        <target state="translated">Mevcut(<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">128</context>
@@ -7189,9 +7157,9 @@
           <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="639328713281980021" datatype="html">
+      <trans-unit id="639328713281980021" datatype="html" xml:space="preserve">
         <source>No abuses found.</source>
-        <target state="new">No abuses found.</target>
+        <target state="translated">Herhangi bir suiistimal bulunamadı.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">158</context>
@@ -8330,12 +8298,9 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8953934448427251062" datatype="html">
+      <trans-unit id="8953934448427251062" datatype="html" xml:space="preserve">
         <source>The <x id="START_LINK"/>sharing system<x id="CLOSE_LINK"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</source>
-        <target state="new">The 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>sharing system
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.
-        </target>
+        <target state="translated">The <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>sharing system <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> sisteminizle ilgili bazı teknik bilgilerin (genel IP adresi gibi) diğer eşlere gönderilebileceğini ancak sunucu yükünün azaltılmasına büyük ölçüde yardımcı olduğunu belirtir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">45</context>
