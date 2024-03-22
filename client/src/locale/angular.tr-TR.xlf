@@ -9980,55 +9980,50 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7207368259170794965" datatype="html">
+      <trans-unit id="7207368259170794965" datatype="html" xml:space="preserve">
         <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write JavaScript code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="new"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write JavaScript code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equalv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>JavaScript kodunu doğrudan yazın. Örnek:<x id="CLOSE_PARAGRAPH" ctype="x-p" equalv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equalv-text="&lt;pre&gt; "/>console.log('örneğim muhteşem');<x id="CLOSE_TAG_PRE" ctype="x-pre" equalv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">91,92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="127946625874930162" datatype="html">
+      <trans-unit id="127946625874930162" datatype="html" xml:space="preserve">
         <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="new"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-  color: red;
-<x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-  color: red;
-<x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">&lt;x id="START_PARAGRAPH" ctype="x-p" equalv-text="&amp;lt;p class=&amp;quot;mb-2&amp;quot;&amp;gt;"/&gt;CSS kodunu doğrudan yazın. Örnek:&lt;x id = "CLOSE_PARAGRAPH" ctype = "x-p" equalv-text = "&amp;lt;/p&amp;gt;"/&gt;&lt;x id = "START_TAG_PRE" ctype = "x-pre" equalv-text = "&amp;lt;pre&amp;gt; "/&gt;#custom-css &lt;x id="INTERPOLATION" equalv-text="{{ '{' }}"/&gt; color: red; &lt;x id = "INTERPOLATION_1" equalv-text = "{{ '}' }}"/&gt; &lt;x id = "CLOSE_TAG_PRE" ctype = "x-pre" equalv-text = "&amp;lt;/pre&amp;gt;"/&gt;&lt;x
+id = "START_PARAGRAPH" ctype = "x-p" equal-text = "&amp;lt;p class=&amp;quot;mb-2&amp;quot;&amp;gt;"/&gt;Başına &lt;x id = "START_EMPHASISED_TEXT" ctype = "x-em" equalv- ile ekle stilleri geçersiz kılmak için text="&amp;lt;em&amp;gt;"/&gt;#custom-css&lt;x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equalv-text="&amp;lt;/em&amp;gt;"/&gt;. Örnek:&lt;x id = "CLOSE_PARAGRAPH" ctype = "x-p" equalv-text = "&amp;lt;/p&amp;gt;"/&gt;&lt;x id = "START_TAG_PRE" ctype = "x-pre" equalv-text = "&amp;lt;pre&amp;gt; "/&gt;#custom-css .logged-in-email &lt;x id="INTERPOLATION" equalv-text="{{ '{' }}"/&gt; color: red; &lt;x id = "INTERPOLATION_1" equalv-text = "{{ '}' }}"/&gt; &lt;x id = "CLOSE_TAG_PRE" ctype = "x-pre" equalv-text = "&amp;lt;/pre&amp;gt;"/&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">111,122</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="283725429207896837" datatype="html">
+      <trans-unit id="283725429207896837" datatype="html" xml:space="preserve">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
-        <target state="new"> You cannot allow live replay if you don't enable transcoding. </target>
+        <target state="translated">Kod dönüştürmeyi etkinleştirmezseniz canlı tekrar oynatmaya izin veremezsiniz.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4249062553881932496" datatype="html">
+      <trans-unit id="4249062553881932496" datatype="html" xml:space="preserve">
         <source>You cannot change the server configuration because it's managed externally.</source>
-        <target state="new"> You cannot change the server configuration because it's managed externally. </target>
+        <target state="translated">Harici olarak yönetildiği için sunucu yapılandırmasını değiştiremezsiniz.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">85,87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8167543029214637769" datatype="html">
+      <trans-unit id="8167543029214637769" datatype="html" xml:space="preserve">
         <source>There are errors in the form: <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;           "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let error of grabAllErrors()&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{ error }}"/> <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></source>
-        <target state="new"> There are errors in the form: <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;           "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let error of grabAllErrors()&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{ error }}"/> <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></target>
+        <target state="translated">Formda hatalar var: &lt;x id = "START_UNORDERED_LIST" ctype = "x-ul" equalv-text = "&amp;lt;ul &amp; gt; "/&gt;&lt;x id = "START_LIST_ITEM" ctype = "x-li" equalv-text ="&amp;lt;li *ngFor=&amp;quot;grabAllErrors()&amp;quot;&amp;gt;"/&gt; &lt;x id="INTERPOLATION" equalv-text="{{ error }}"/&gt; &lt;x id="CLOSE_LIST_ITEM" ctype = "x-li" equalv-text = "&amp;lt;/li&amp;gt;"/&gt;&lt;x id = "CLOSE_UNORDERED_LIST" ctype = "x-ul" equalv-text = "&amp;lt;/ul&amp;gt;"/&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1445676851449000175" datatype="html">
+      <trans-unit id="1445676851449000175" datatype="html" xml:space="preserve">
         <source>Update configuration</source>
-        <target state="new">Update configuration</target>
+        <target state="translated">Yapılandırmayı güncelle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">90</context>
@@ -10066,9 +10061,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3892825090402620438" datatype="html">
+      <trans-unit id="3892825090402620438" datatype="html" xml:space="preserve">
         <source>Two-factor authentication</source>
-        <target state="new">Two-factor authentication</target>
+        <target state="translated">İki faktörlü kimlik doğrulama</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">66</context>
@@ -10082,82 +10077,81 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4309045590850686400" datatype="html">
+      <trans-unit id="4309045590850686400" datatype="html" xml:space="preserve">
         <source>Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</source>
-        <target state="new">Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</target>
+        <target state="translated">İki faktörlü kimlik doğrulama, oturum açtığınızda başka bir cihazdan (çoğunlukla cep telefonlarından) sayısal bir kod alınmasını gerektirerek hesabınıza ek bir güvenlik katmanı ekler.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">3,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2955617286542082394" datatype="html">
+      <trans-unit id="2955617286542082394" datatype="html" xml:space="preserve">
         <source>Enable two-factor authentication</source>
-        <target state="new">Enable two-factor authentication</target>
+        <target state="translated">İki faktörlü kimlik doğrulamayı etkinleştir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2658424416565652268" datatype="html">
+      <trans-unit id="2658424416565652268" datatype="html" xml:space="preserve">
         <source>Disable two-factor authentication</source>
-        <target state="new">Disable two-factor authentication</target>
+        <target state="translated">İki faktörlü kimlik doğrulamayı devre dışı bırakın</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4561231095368496452" datatype="html">
+      <trans-unit id="4561231095368496452" datatype="html" xml:space="preserve">
         <source>Are you sure you want to disable two factor authentication of your account?</source>
-        <target state="new">Are you sure you want to disable two factor authentication of your account?</target>
+        <target state="translated">Hesabınızın iki faktörlü kimlik doğrulamasını devre dışı bırakmak istediğinizden emin misiniz?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3757273554886026258" datatype="html">
+      <trans-unit id="3757273554886026258" datatype="html" xml:space="preserve">
         <source>Disable two factor</source>
-        <target state="new">Disable two factor</target>
+        <target state="translated">İki faktörü devre dışı bırak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7121657131608757909" datatype="html">
+      <trans-unit id="7121657131608757909" datatype="html" xml:space="preserve">
         <source>Two factor authentication disabled</source>
-        <target state="new">Two factor authentication disabled</target>
+        <target state="translated">İki faktörlü kimlik doğrulama devre dışı bırakıldı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="872237557319890340" datatype="html">
+      <trans-unit id="872237557319890340" datatype="html" xml:space="preserve">
         <source>Two factor authentication is already enabled.</source>
-        <target state="new"> Two factor authentication is already enabled.
-</target>
+        <target state="translated">İki faktörlü kimlik doğrulama zaten etkin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">6,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4921687518561446633" datatype="html">
+      <trans-unit id="4921687518561446633" datatype="html" xml:space="preserve">
         <source>Your password</source>
-        <target state="new">Your password</target>
+        <target state="translated">Şifreniz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2990026202987449106" datatype="html">
+      <trans-unit id="2990026202987449106" datatype="html" xml:space="preserve">
         <source>Confirm your password to enable two factor authentication</source>
-        <target state="new">Confirm your password to enable two factor authentication</target>
+        <target state="translated">İki faktörlü kimlik doğrulamayı etkinleştirmek için şifrenizi onaylayın</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7752239348028675311" datatype="html">
+      <trans-unit id="7752239348028675311" datatype="html" xml:space="preserve">
         <source>DANGER ZONE</source>
-        <target state="new">DANGER ZONE</target>
+        <target state="translated">TEHLİKELİ BÖLGE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">222</context>
@@ -10187,89 +10181,89 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">332</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7814358426066520520" datatype="html">
+      <trans-unit id="7814358426066520520" datatype="html" xml:space="preserve">
         <source>Aspect ratio</source>
-        <target state="new">Aspect ratio</target>
+        <target state="translated">En boy oranı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">333</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="44862519224794374" datatype="html">
+      <trans-unit id="44862519224794374" datatype="html" xml:space="preserve">
         <source>Average frame rate</source>
-        <target state="new">Average frame rate</target>
+        <target state="translated">Ortalama kare hızı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">334</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5053683525387462246" datatype="html">
+      <trans-unit id="5053683525387462246" datatype="html" xml:space="preserve">
         <source>Pixel format</source>
-        <target state="new">Pixel format</target>
+        <target state="translated">Piksel formatı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">335</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7858676566953242358" datatype="html">
+      <trans-unit id="7858676566953242358" datatype="html" xml:space="preserve">
         <source>Sample rate</source>
-        <target state="new">Sample rate</target>
+        <target state="translated">Aynı oran</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">339</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5403856660543890284" datatype="html">
+      <trans-unit id="5403856660543890284" datatype="html" xml:space="preserve">
         <source>Channel Layout</source>
-        <target state="new">Channel Layout</target>
+        <target state="translated">Kanal Düzeni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">340</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6875053727982162254" datatype="html">
+      <trans-unit id="6875053727982162254" datatype="html" xml:space="preserve">
         <source>Update <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; [fragment]=&quot;fragment&quot;&gt;"/><x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;button-unstyle&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>your settings<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a   &gt;"/></source>
-        <target state="new"> Update <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; [fragment]=&quot;fragment&quot;&gt;"/><x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;button-unstyle&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>your settings<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a   &gt;"/></target>
+        <target state="translated">Güncelle <x id="START_LINK" ctype="x-a" equal-text="&lt;a routerLink=&quot;/my-account/settings&quot; [fragment]=&quot;fragment&quot;&gt;"/><x id=" START_TAG_BUTTON" ctype="x-button" equalv-text="&lt;button class=&quot;button-unstyle&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>ayarlarınız<x id=" CLOSE_TAG_BUTTON" ctype="x-button" equalv-text="&lt;/button&gt;"/><x id="CLOSE_LINK" ctype="x-a" equalv-text="&lt;/a &gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">2,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1405600824334286337" datatype="html">
+      <trans-unit id="1405600824334286337" datatype="html" xml:space="preserve">
         <source>More filters</source>
-        <target state="new">More filters</target>
+        <target state="translated">Daha fazla filtre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5797835178123017550" datatype="html">
+      <trans-unit id="5797835178123017550" datatype="html" xml:space="preserve">
         <source>Hide filters</source>
-        <target state="new">Hide filters</target>
+        <target state="translated">Filtreleri gizle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7028708681117573961" datatype="html">
+      <trans-unit id="7028708681117573961" datatype="html" xml:space="preserve">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Recently Added"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Recently Added"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Şuna göre sırala: <x id="START_TAG_STRONG" ctype="x-strong" equalv-text="&lt;strong&gt;"/>"Son Eklenenler"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equalv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="762510264401369759" datatype="html">
+      <trans-unit id="762510264401369759" datatype="html" xml:space="preserve">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Original Publication Date"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Original Publication Date"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">&lt;x id="START_TAG_STRONG" ctype="x-strong" equalv-text="&amp;lt;strong&amp;gt;"/&gt;"Orijinal Yayın Tarihi"&lt;x id="CLOSE_TAG_STRONG" ctype="x-strong" equalv-text'e göre sırala ="&amp;lt;/strong&amp;gt;"/&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4860917424154224190" datatype="html">
+      <trans-unit id="4860917424154224190" datatype="html" xml:space="preserve">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Name"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Name"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equalv-text="&lt;strong&gt;"/>"Ad"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equalv-text="'e göre sırala &lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">50</context>
