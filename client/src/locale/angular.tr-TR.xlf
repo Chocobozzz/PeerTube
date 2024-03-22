@@ -2166,9 +2166,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2501430660070156325" datatype="html">
+      <trans-unit id="2501430660070156325" datatype="html" xml:space="preserve">
         <source>Confirmed password</source>
-        <target state="needs-translation">Şifreyi doğrula</target>
+        <target state="translated">Şifre doğrulandı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context>
           <context context-type="linenumber">18</context>
@@ -7718,73 +7718,73 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9205443410527464015" datatype="html">
+      <trans-unit id="9205443410527464015" datatype="html" xml:space="preserve">
         <source>Plugins enabled</source>
-        <target state="new">Plugins enabled</target>
+        <target state="translated">Eklentiler etkin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5410940035535748578" datatype="html">
+      <trans-unit id="5410940035535748578" datatype="html" xml:space="preserve">
         <source>Close this message</source>
-        <target state="new">Close this message</target>
+        <target state="translated">Bu mesajı kapat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2144158274184161635" datatype="html">
+      <trans-unit id="2144158274184161635" datatype="html" xml:space="preserve">
         <source>Videos with the most interactions for recent videos</source>
-        <target state="new">Videos with the most interactions for recent videos</target>
+        <target state="translated">Son videolar için en fazla etkileşime sahip videolar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context>
           <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8312243926314494468" datatype="html">
+      <trans-unit id="8312243926314494468" datatype="html" xml:space="preserve">
         <source>Videos with the most views during the last 24 hours</source>
-        <target state="new">Videos with the most views during the last 24 hours</target>
+        <target state="translated">Son 24 saatte en çok izlenen videolar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context>
           <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8731139416455609016" datatype="html">
+      <trans-unit id="8731139416455609016" datatype="html" xml:space="preserve">
         <source>Videos with the most views during the last <x id="PH" equiv-text="this.trendingDays"/> days</source>
-        <target state="new">Videos with the most views during the last <x id="PH" equiv-text="this.trendingDays"/> days</target>
+        <target state="translated">Son dönemde en çok izlenen videolar <x id="PH" equiv-text="this.trendingDays"/>günler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context>
           <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1671858302647356245" datatype="html">
+      <trans-unit id="1671858302647356245" datatype="html" xml:space="preserve">
         <source>Videos that have the most likes</source>
-        <target state="new">Videos that have the most likes</target>
+        <target state="translated">En çok beğeni alan videolar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context>
           <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2006841089844688970" datatype="html">
+      <trans-unit id="2006841089844688970" datatype="html" xml:space="preserve">
         <source>To load your new installed plugins or themes, refresh the page.</source>
-        <target state="new">To load your new installed plugins or themes, refresh the page.</target>
+        <target state="translated">Yeni yüklediğiniz eklentileri veya temaları yüklemek için sayfayı yenileyin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7577430199525157466" datatype="html">
+      <trans-unit id="7577430199525157466" datatype="html" xml:space="preserve">
         <source>Popular plugins</source>
-        <target state="new">Popular plugins</target>
+        <target state="translated">Popüler eklentiler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="830877982972543118" datatype="html">
+      <trans-unit id="830877982972543118" datatype="html" xml:space="preserve">
         <source>Popular themes</source>
-        <target state="new">Popular themes</target>
+        <target state="translated">Popüler eklentiler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">11</context>
