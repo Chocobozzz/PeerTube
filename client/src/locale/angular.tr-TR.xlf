@@ -20192,57 +20192,57 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1215687357804737187" datatype="html">
+      <trans-unit id="1215687357804737187" datatype="html" xml:space="preserve">
         <source>You already have an active archive. Requesting a new export archive will remove the current one.</source>
-        <target state="new"> You already have an active archive. Requesting a new export archive will remove the current one. </target>
+        <target state="translated">Zaten aktif bir arşiviniz var. Yeni bir dışa aktarma arşivi talep etmek mevcut arşivi kaldıracaktır.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1865500141682414508" datatype="html">
+      <trans-unit id="1865500141682414508" datatype="html" xml:space="preserve">
         <source>Include video files in archive file</source>
-        <target state="new">Include video files in archive file</target>
+        <target state="translated">Video dosyalarını arşiv dosyasına dahil et</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8386580266736130510" datatype="html">
+      <trans-unit id="8386580266736130510" datatype="html" xml:space="preserve">
         <source>Including video files is required if you want to re-import your videos on another PeerTube website</source>
-        <target state="new">Including video files is required if you want to re-import your videos on another PeerTube website</target>
+        <target state="translated">Videolarınızı başka bir PeerTube web sitesine yeniden aktarmak istiyorsanız video dosyalarını eklemeniz gerekir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1795389819769599474" datatype="html">
+      <trans-unit id="1795389819769599474" datatype="html" xml:space="preserve">
         <source>If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Video dosyalarını eklerseniz arşiv dosyası ağırlaşacaktır <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1662178629537553910" datatype="html">
+      <trans-unit id="1662178629537553910" datatype="html" xml:space="preserve">
         <source>Request an archive</source>
-        <target state="new">Request an archive</target>
+        <target state="translated">Arşiv talebinde bulunun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6258670465000264011" datatype="html">
+      <trans-unit id="6258670465000264011" datatype="html" xml:space="preserve">
         <source>Video files cannot be included in the export because you have exceeded the maximum video quota allowed by your administrator to export this archive.</source>
-        <target state="new">Video files cannot be included in the export because you have exceeded the maximum video quota allowed by your administrator to export this archive.</target>
+        <target state="translated">Bu arşivi dışa aktarmak için yöneticinizin izin verdiği maksimum video kotasını aştığınız için video dosyaları dışa aktarma işlemine eklenemiyor.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.ts</context>
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1930863079234861089" datatype="html">
+      <trans-unit id="1930863079234861089" datatype="html" xml:space="preserve">
         <source>Import/Export</source>
-        <target state="new">Import/Export</target>
+        <target state="translated">al/aktar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import-export.component.html</context>
           <context context-type="linenumber">3</context>
@@ -20256,169 +20256,169 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2611126741793124345" datatype="html">
+      <trans-unit id="2611126741793124345" datatype="html" xml:space="preserve">
         <source>IMPORT</source>
-        <target state="new">IMPORT</target>
+        <target state="translated">İÇE AKTARMAK</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4737947753130898543" datatype="html">
+      <trans-unit id="4737947753130898543" datatype="html" xml:space="preserve">
         <source>You can import an archive created by another PeerTube website.</source>
-        <target state="new">You can import an archive created by another PeerTube website.</target>
+        <target state="translated">Başka bir PeerTube web sitesi tarafından oluşturulan bir arşivi içe aktarabilirsiniz.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7544701838241243416" datatype="html">
+      <trans-unit id="7544701838241243416" datatype="html" xml:space="preserve">
         <source>This is an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>import<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tool and not a migration tool. It's the reason why data (like channels or videos) is duplicated and not moved from your previous PeerTube website. </source>
-        <target state="new"> This is an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>import<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tool and not a migration tool. It's the reason why data (like channels or videos) is duplicated and not moved from your previous PeerTube website. </target>
+        <target state="translated">Bu bir<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>dışa aktarma<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> bir geçiş aracı değil, araçtır. Verilerin (kanallar veya videolar gibi) kopyalanmasının ve önceki PeerTube web sitenizden taşınmamasının nedeni budur. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">12,15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2367276729368583390" datatype="html">
+      <trans-unit id="2367276729368583390" datatype="html" xml:space="preserve">
         <source>The import process will automatically:</source>
-        <target state="new">The import process will automatically:</target>
+        <target state="translated">İçe aktarma işlemi otomatik olarak:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3383933587008035091" datatype="html">
+      <trans-unit id="3383933587008035091" datatype="html" xml:space="preserve">
         <source>Update your account metadata (display name, description, avatar...)</source>
-        <target state="new">Update your account metadata (display name, description, avatar...)</target>
+        <target state="translated">Hesabınızın meta verilerini güncelleyin (görünen ad, açıklama, avatar...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2996238463588374734" datatype="html">
+      <trans-unit id="2996238463588374734" datatype="html" xml:space="preserve">
         <source>Update your user settings (autoplay or P2P policy, notification settings...). It does not update your user email, username or password.</source>
-        <target state="new">Update your user settings (autoplay or P2P policy, notification settings...). It does not update your user email, username or password.</target>
+        <target state="translated">Kullanıcı ayarlarınızı güncelleyin (otomatik oynatma veya P2P politikası, bildirim ayarları...). Kullanıcı e-postanızı, kullanıcı adınızı veya şifrenizi güncellemez.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="80280139766520178" datatype="html">
+      <trans-unit id="80280139766520178" datatype="html" xml:space="preserve">
         <source>Add accounts/servers in your mute list</source>
-        <target state="new">Add accounts/servers in your mute list</target>
+        <target state="translated">Sessiz listenize hesapları/sunucuları ekleyin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="737889420694273353" datatype="html">
+      <trans-unit id="737889420694273353" datatype="html" xml:space="preserve">
         <source>Add likes/dislikes</source>
-        <target state="new">Add likes/dislikes</target>
+        <target state="translated">Beğenme/beğenmeme ekleme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6841230785530859987" datatype="html">
+      <trans-unit id="6841230785530859987" datatype="html" xml:space="preserve">
         <source>Send a follow request to your subscriptions</source>
-        <target state="new">Send a follow request to your subscriptions</target>
+        <target state="translated">Abonelerinize takip isteği gönderin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6364930312790587948" datatype="html">
+      <trans-unit id="6364930312790587948" datatype="html" xml:space="preserve">
         <source>Create channels if they do not already exist</source>
-        <target state="new">Create channels if they do not already exist</target>
+        <target state="translated">Henüz mevcut değilse kanallar oluşturun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3590744729573065939" datatype="html">
+      <trans-unit id="3590744729573065939" datatype="html" xml:space="preserve">
         <source>Create playlists if they do not already exist</source>
-        <target state="new">Create playlists if they do not already exist</target>
+        <target state="translated">Zaten mevcut değillerse oynatma listeleri oluşturun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7698974744701301198" datatype="html">
+      <trans-unit id="7698974744701301198" datatype="html" xml:space="preserve">
         <source>Add watched videos in your video history</source>
-        <target state="new">Add watched videos in your video history</target>
+        <target state="translated">İzlenen videoları video geçmişinize ekleyin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8379828414303668485" datatype="html">
+      <trans-unit id="8379828414303668485" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>If the archive contains video files<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, create videos if they do not already exist</source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>If the archive contains video files<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, create videos if they do not already exist</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Arşiv video dosyaları içeriyorsa<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, Henüz mevcut değilse videolar oluşturun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3920743519289818329" datatype="html">
+      <trans-unit id="3920743519289818329" datatype="html" xml:space="preserve">
         <source>The following data objects are not imported:</source>
-        <target state="new">The following data objects are not imported:</target>
+        <target state="translated">Aşağıdaki veri nesneleri içe aktarılmaz:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4177382096054023179" datatype="html">
+      <trans-unit id="4177382096054023179" datatype="html" xml:space="preserve">
         <source>Followers (accounts will need to re-follow your channels)</source>
-        <target state="new">Followers (accounts will need to re-follow your channels)</target>
+        <target state="translated">Takipçiler (hesapların kanallarınızı yeniden takip etmesi gerekir)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="558490183395886693" datatype="html">
+      <trans-unit id="558490183395886693" datatype="html" xml:space="preserve">
         <source>An email will be sent when the import process is complete.</source>
-        <target state="new">An email will be sent when the import process is complete.</target>
+        <target state="translated">İçe aktarma işlemi tamamlandığında bir e-posta gönderilecektir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5245328363134510565" datatype="html">
+      <trans-unit id="5245328363134510565" datatype="html" xml:space="preserve">
         <source>You can't re-import an archive because you already have an import that is currently being processed by PeerTube.</source>
-        <target state="new"> You can't re-import an archive because you already have an import that is currently being processed by PeerTube. </target>
+        <target state="translated">Halihazırda PeerTube tarafından işlenmekte olan bir içe aktarma işleminiz olduğundan, bir arşivi yeniden içe aktaramazsınız.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1473104874710475790" datatype="html">
+      <trans-unit id="1473104874710475790" datatype="html" xml:space="preserve">
         <source>Upload completed. Your archive import will be processed as soon as possible.</source>
-        <target state="new"> Upload completed. Your archive import will be processed as soon as possible. </target>
+        <target state="translated">Yükleme tamamlandı. Arşiv içe aktarma işleminiz en kısa sürede işleme alınacaktır.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2723142545112770414" datatype="html">
+      <trans-unit id="2723142545112770414" datatype="html" xml:space="preserve">
         <source>(extension: .zip)</source>
-        <target state="new">(extension: .zip)</target>
+        <target state="translated">(eklenti: .zip)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7690080704928394942" datatype="html">
+      <trans-unit id="7690080704928394942" datatype="html" xml:space="preserve">
         <source>Select the archive file to import</source>
-        <target state="new">Select the archive file to import</target>
+        <target state="translated">İçe aktarılacak arşiv dosyasını seçin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2185709317252805927" datatype="html">
+      <trans-unit id="2185709317252805927" datatype="html" xml:space="preserve">
         <source>Select the file to import</source>
-        <target state="new">Select the file to import</target>
+        <target state="translated">İçe aktarılacak dosyayı seçin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">68</context>
@@ -20432,33 +20432,33 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1842877412269588224" datatype="html">
+      <trans-unit id="1842877412269588224" datatype="html" xml:space="preserve">
         <source>Your archive file is not uploaded yet, are you sure you want to leave this page?</source>
-        <target state="new">Your archive file is not uploaded yet, are you sure you want to leave this page?</target>
+        <target state="translated">Arşiv dosyanız henüz yüklenmedi, bu sayfadan ayrılmak istediğinizden emin misiniz?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1335600007725669502" datatype="html">
+      <trans-unit id="1335600007725669502" datatype="html" xml:space="preserve">
         <source>Cannot import this file as your video quota would be exceeded (import size: <x id="PH" equiv-text="fileSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="new">Cannot import this file as your video quota would be exceeded (import size: <x id="PH" equiv-text="fileSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
+        <target state="translated">Video kotanız aşılacağından bu dosya içe aktarılamıyor (içe aktarma boyutu: <x id="PH" equiv-text="fileSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2956881256361598032" datatype="html">
+      <trans-unit id="2956881256361598032" datatype="html" xml:space="preserve">
         <source>archive</source>
-        <target state="new">archive</target>
+        <target state="translated">arşiv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
           <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7742520815129539114" datatype="html">
+      <trans-unit id="7742520815129539114" datatype="html" xml:space="preserve">
         <source>Bitrate</source>
-        <target state="new">Bitrate</target>
+        <target state="translated">Bit hızı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">300</context>
@@ -20468,9 +20468,9 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">323</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4094960161662677662" datatype="html">
+      <trans-unit id="4094960161662677662" datatype="html" xml:space="preserve">
         <source>Codec</source>
-        <target state="new">Codec</target>
+        <target state="translated">Kodlayıcı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">320</context>
@@ -20484,9 +20484,9 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8726695529938456424" datatype="html">
+      <trans-unit id="8726695529938456424" datatype="html" xml:space="preserve">
         <source>COPY</source>
-        <target state="new"> COPY </target>
+        <target state="translated">KOPYALA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/input-text.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -20524,17 +20524,17 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">414</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5072091387445907742" datatype="html">
+      <trans-unit id="5072091387445907742" datatype="html" xml:space="preserve">
         <source>Actions for the reporter</source>
-        <target state="new">Actions for the reporter</target>
+        <target state="translated">Muhabir için eylemler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">341</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6599069899275412095" datatype="html">
+      <trans-unit id="6599069899275412095" datatype="html" xml:space="preserve">
         <source>Mute reporter</source>
-        <target state="new">Mute reporter</target>
+        <target state="translated">Muhabirin sesini kapat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">347</context>
@@ -20556,25 +20556,25 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3285186377513578054" datatype="html">
+      <trans-unit id="3285186377513578054" datatype="html" xml:space="preserve">
         <source>This option is visible only to you</source>
-        <target state="new">This option is visible only to you</target>
+        <target state="translated">Bu seçeneği yalnızca siz görebilirsiniz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">385</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7672331870004528654" datatype="html">
+      <trans-unit id="7672331870004528654" datatype="html" xml:space="preserve">
         <source>Display live information</source>
-        <target state="new">Display live information</target>
+        <target state="translated">Canlı bilgileri görüntüle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">389</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4021752662928002901" datatype="html">
+      <trans-unit id="4021752662928002901" datatype="html" xml:space="preserve">
         <source>Update</source>
-        <target state="new">Update</target>
+        <target state="translated">Güncelle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context>
           <context context-type="linenumber">136</context>
@@ -20628,9 +20628,9 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">413</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6521421218398377925" datatype="html">
+      <trans-unit id="6521421218398377925" datatype="html" xml:space="preserve">
         <source>Run HLS transcoding</source>
-        <target state="new">Run HLS transcoding</target>
+        <target state="translated">HLS kod dönüştürmesini çalıştır</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">133</context>
@@ -20640,9 +20640,9 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">445</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6726093171366409167" datatype="html">
+      <trans-unit id="6726093171366409167" datatype="html" xml:space="preserve">
         <source>Run Web Video transcoding</source>
-        <target state="new">Run Web Video transcoding</target>
+        <target state="translated">Web Videosu kod dönüştürmesini çalıştırın</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -20652,9 +20652,9 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">451</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5972374600810542430" datatype="html">
+      <trans-unit id="5972374600810542430" datatype="html" xml:space="preserve">
         <source>Delete HLS files</source>
-        <target state="new">Delete HLS files</target>
+        <target state="translated">HLS dosyalarını silin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">145</context>
@@ -20664,9 +20664,9 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">457</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="72391380513979568" datatype="html">
+      <trans-unit id="72391380513979568" datatype="html" xml:space="preserve">
         <source>Delete Web Video files</source>
-        <target state="new">Delete Web Video files</target>
+        <target state="translated">Web Video dosyalarını silin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">151</context>
@@ -20676,41 +20676,41 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">463</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8315587636588243636" datatype="html">
+      <trans-unit id="8315587636588243636" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</source>
-        <target state="new">Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</target>
+        <target state="translated">Bunu silmek istediğinizden emin misiniz<x id="PH" equiv-text="file.resolution.label"/> ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">224</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6693349469471580292" datatype="html">
+      <trans-unit id="6693349469471580292" datatype="html" xml:space="preserve">
         <source>Delete file</source>
-        <target state="new">Delete file</target>
+        <target state="translated">Dosyayı sil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7016764388104297354" datatype="html">
+      <trans-unit id="7016764388104297354" datatype="html" xml:space="preserve">
         <source>File removed.</source>
-        <target state="new">File removed.</target>
+        <target state="translated">Dosya kaldırıldı.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1314383205093440631" datatype="html">
+      <trans-unit id="1314383205093440631" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</target>
+        <target state="translated">silmek istediğinizden emin misiniz? {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">260</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1950057220179636309" datatype="html">
+      <trans-unit id="1950057220179636309" datatype="html" xml:space="preserve">
         <source>Save to playlist</source>
-        <target state="new">Save to playlist</target>
+        <target state="translated">Çalma listesine kaydet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context>
           <context context-type="linenumber">87</context>
@@ -20720,33 +20720,33 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">365</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4503408361537553733" datatype="html">
+      <trans-unit id="4503408361537553733" datatype="html" xml:space="preserve">
         <source>Mirror</source>
-        <target state="new">Mirror</target>
+        <target state="translated">Ayna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">425</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5571441159247782289" datatype="html">
+      <trans-unit id="5571441159247782289" datatype="html" xml:space="preserve">
         <source>Unmute account</source>
-        <target state="new">Unmute account</target>
+        <target state="translated">Hesabın sesini aç</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">477</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2631340539474479416" datatype="html">
+      <trans-unit id="2631340539474479416" datatype="html" xml:space="preserve">
         <source>Subtitles</source>
-        <target state="new">Subtitles</target>
+        <target state="translated">Altyazılar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4814285799071780083" datatype="html">
+      <trans-unit id="4814285799071780083" datatype="html" xml:space="preserve">
         <source>Remove</source>
-        <target state="new">Remove</target>
+        <target state="translated">Sil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">146</context>
@@ -20760,129 +20760,129 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">209</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="754514708851972720" datatype="html">
+      <trans-unit id="754514708851972720" datatype="html" xml:space="preserve">
         <source>Job(s) removed.</source>
-        <target state="new">Job(s) removed.</target>
+        <target state="translated">İş(ler) kaldırıldı.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8527948211896740910" datatype="html">
+      <trans-unit id="8527948211896740910" datatype="html" xml:space="preserve">
         <source>Do you really want to delete this runner? It won't be able to process jobs anymore.</source>
-        <target state="new">Do you really want to delete this runner? It won't be able to process jobs anymore.</target>
+        <target state="translated">Bu koşucuyu gerçekten silmek istiyor musunuz? Artık işleri işleyemeyecektir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1331591430867610406" datatype="html">
+      <trans-unit id="1331591430867610406" datatype="html" xml:space="preserve">
         <source>Remove <x id="PH" equiv-text="runner.name"/></source>
-        <target state="new">Remove <x id="PH" equiv-text="runner.name"/></target>
+        <target state="translated">Sil<x id="PH" equiv-text="runner.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7401875498720294519" datatype="html">
+      <trans-unit id="7401875498720294519" datatype="html" xml:space="preserve">
         <source>Runner removed.</source>
-        <target state="new">Runner removed.</target>
+        <target state="translated">Haberci kaldırıldı.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3039940756451018621" datatype="html">
+      <trans-unit id="3039940756451018621" datatype="html" xml:space="preserve">
         <source>Token</source>
-        <target state="new">Token</target>
+        <target state="translated">Jeton</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5024831045497027714" datatype="html">
+      <trans-unit id="5024831045497027714" datatype="html" xml:space="preserve">
         <source>Associated runners</source>
-        <target state="new">Associated runners</target>
+        <target state="translated">İlgili haberciler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2344549567732505963" datatype="html">
+      <trans-unit id="2344549567732505963" datatype="html" xml:space="preserve">
         <source>Generate token</source>
-        <target state="new">Generate token</target>
+        <target state="translated">Belirteç oluştur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8075170500509574933" datatype="html">
+      <trans-unit id="8075170500509574933" datatype="html" xml:space="preserve">
         <source>Registration token copied</source>
-        <target state="new">Registration token copied</target>
+        <target state="translated">Kayıt jetonu kopyalandı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="320641639634758368" datatype="html">
+      <trans-unit id="320641639634758368" datatype="html" xml:space="preserve">
         <source>Copy registration token</source>
-        <target state="new">Copy registration token</target>
+        <target state="translated">Kayıt jetonunu kopyala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1952170121636976975" datatype="html">
+      <trans-unit id="1952170121636976975" datatype="html" xml:space="preserve">
         <source>No registration token found for remote runners.</source>
-        <target state="new">No registration token found for remote runners.</target>
+        <target state="translated">Uzak haberciler için kayıt jetonu bulunamadı.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.html</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8244506587463177080" datatype="html">
+      <trans-unit id="8244506587463177080" datatype="html" xml:space="preserve">
         <source>Remove this token</source>
-        <target state="new">Remove this token</target>
+        <target state="translated">Bu jetonu kaldır</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1188547334387666210" datatype="html">
+      <trans-unit id="1188547334387666210" datatype="html" xml:space="preserve">
         <source>Registration token generated.</source>
-        <target state="new">Registration token generated.</target>
+        <target state="translated">Kayıt jetonu oluşturuldu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="545462083274995239" datatype="html">
+      <trans-unit id="545462083274995239" datatype="html" xml:space="preserve">
         <source>Do you really want to remove this registration token? All associated runners will also be removed.</source>
-        <target state="new">Do you really want to remove this registration token? All associated runners will also be removed.</target>
+        <target state="translated">Bu kayıt jetonunu gerçekten kaldırmak istiyor musunuz? İlgili tüm koşucular da kaldırılacak.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4228223651959845668" datatype="html">
+      <trans-unit id="4228223651959845668" datatype="html" xml:space="preserve">
         <source>Remove registration token</source>
-        <target state="new">Remove registration token</target>
+        <target state="translated">Kayıt jetonunu kaldır</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3614410801173225581" datatype="html">
+      <trans-unit id="3614410801173225581" datatype="html" xml:space="preserve">
         <source>Registration token removed.</source>
-        <target state="new">Registration token removed.</target>
+        <target state="translated">Kayıt jetonu kaldırıldı.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6713730474908011769" datatype="html">
+      <trans-unit id="6713730474908011769" datatype="html" xml:space="preserve">
         <source>List runner jobs</source>
-        <target state="new">List runner jobs</target>
+        <target state="translated">Haberci işlerini listele</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runners.routes.ts</context>
           <context context-type="linenumber">27</context>
@@ -21230,33 +21230,33 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1795705931707209785" datatype="html">
+      <trans-unit id="1795705931707209785" datatype="html" xml:space="preserve">
         <source>Add to watch later</source>
-        <target state="new">Add to watch later</target>
+        <target state="translated">Daha sonra saat ekle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8498940878158860248" datatype="html">
+      <trans-unit id="8498940878158860248" datatype="html" xml:space="preserve">
         <source>Remove from watch later</source>
-        <target state="new">Remove from watch later</target>
+        <target state="translated">Daha sonra saatten kaldır</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="435589893738610428" datatype="html">
+      <trans-unit id="435589893738610428" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> default theme (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> default theme (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> Varsayılan tema (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5240556993302961443" datatype="html">
+      <trans-unit id="5240556993302961443" datatype="html" xml:space="preserve">
         <source>Save interface settings</source>
-        <target state="new">Save interface settings</target>
+        <target state="translated">Arayüz ayarlarını kaydet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">16</context>
