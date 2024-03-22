@@ -5639,7 +5639,7 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
       </trans-unit>
       <trans-unit id="4036338619293319383" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 reply} diğer{<x id="INTERPOLATION"/> cevaplar}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 cevap} diğer{<x id="INTERPOLATION"/> cevaplar}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">77</context>
@@ -5655,7 +5655,7 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html" xml:space="preserve">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="translated">Şuradan<x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> görüntüle<x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
+        <target state="translated">Şuradan<x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> görüntüle<x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'yazar' }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">79</context>
@@ -5689,7 +5689,7 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
       </trans-unit>
       <trans-unit id="982956590420630883" datatype="html" xml:space="preserve">
         <source>Markdown compatible</source>
-        <target state="translated">Markdown uyumlu</target>
+        <target state="translated">İndirim uyumlu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">17</context>
@@ -5827,24 +5827,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3516494528184217808" datatype="html">
+      <trans-unit id="3516494528184217808" datatype="html" xml:space="preserve">
         <source>1 host (without "http://") per line</source>
-        <target state="new">1 host (without "http://") per line</target>
+        <target state="translated">1 konuk (without "http://") satır başına</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/batch-domains-modal.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7651712714082200084" datatype="html">
+      <trans-unit id="7651712714082200084" datatype="html" xml:space="preserve">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the comment origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="new">
-          Your report will be sent to moderators of 
-          <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/>
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and will be forwarded to the comment origin (
-          <x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too
-          <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>.
-        
-        </target>
+        <target state="translated">Raporunuz moderatörlere gönderilecek <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/> <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> ve yorum kaynağına iletilecek ( <x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) fazla <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context>
           <context context-type="linenumber">37</context>
@@ -6038,9 +6031,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6086365181226161548" datatype="html">
+      <trans-unit id="6086365181226161548" datatype="html" xml:space="preserve">
         <source>Feed Token</source>
-        <target state="new">Feed Token</target>
+        <target state="translated">Besleme Jetonu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">24</context>
