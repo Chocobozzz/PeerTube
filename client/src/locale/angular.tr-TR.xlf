@@ -6339,33 +6339,33 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4667534933980942398" datatype="html">
+      <trans-unit id="4667534933980942398" datatype="html" xml:space="preserve">
         <source>Remote videos duplicated by my instance</source>
-        <target state="new">Remote videos duplicated by my instance</target>
+        <target state="translated">Örneğim tarafından kopyalanan uzak videolar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8363291180171434623" datatype="html">
+      <trans-unit id="8363291180171434623" datatype="html" xml:space="preserve">
         <source>Table parameters</source>
-        <target state="new">Table parameters</target>
+        <target state="translated">Tablo parametreleri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5230110096688656830" datatype="html">
+      <trans-unit id="5230110096688656830" datatype="html" xml:space="preserve">
         <source>Select columns</source>
-        <target state="new">Select columns</target>
+        <target state="translated">Sütunları seçin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5893518121808195081" datatype="html">
+      <trans-unit id="5893518121808195081" datatype="html" xml:space="preserve">
         <source>Highlight banned users</source>
-        <target state="new">Highlight banned users</target>
+        <target state="translated">Yasaklanan kullanıcıları vurgula</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">61</context>
@@ -6395,9 +6395,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6612230394519751963" datatype="html">
+      <trans-unit id="6612230394519751963" datatype="html" xml:space="preserve">
         <source>john</source>
-        <target state="new">john</target>
+        <target state="translated">John</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">92</context>
