@@ -21123,25 +21123,25 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3299576663551440736" datatype="html">
+      <trans-unit id="3299576663551440736" datatype="html" xml:space="preserve">
         <source>To import</source>
-        <target state="new">To import</target>
+        <target state="translated">İthal etmek</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">233</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6963802198225789806" datatype="html">
+      <trans-unit id="6963802198225789806" datatype="html" xml:space="preserve">
         <source>To edit</source>
-        <target state="new">To edit</target>
+        <target state="translated">Düzenlemek için</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">236</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="76275487642696165" datatype="html">
+      <trans-unit id="76275487642696165" datatype="html" xml:space="preserve">
         <source>Watch video <x id="PH" equiv-text="this.video.name"/></source>
-        <target state="new">Watch video <x id="PH" equiv-text="this.video.name"/></target>
+        <target state="translated">İzlenen video <x id="PH" equiv-text="this.video.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">243</context>
@@ -21151,9 +21151,9 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8492933894084361602" datatype="html">
+      <trans-unit id="8492933894084361602" datatype="html" xml:space="preserve">
         <source>Subscribe to RSS feed "<x id="INTERPOLATION" equiv-text="{{ title }}"/>"</source>
-        <target state="new">Subscribe to RSS feed "<x id="INTERPOLATION" equiv-text="{{ title }}"/>"</target>
+        <target state="translated">RSS beslemesine abone olun "<x id="INTERPOLATION" equiv-text="{{ title }}"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.html</context>
           <context context-type="linenumber">8</context>
