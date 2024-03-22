@@ -2373,17 +2373,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3109023679137193515" datatype="html">
+      <trans-unit id="3109023679137193515" datatype="html" xml:space="preserve">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> Official PeerTube website (news, support, contribute...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Resmi PeerTube sitesi (haberler, destek, katkı sağlama...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">41,42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="647900782867860768" datatype="html">
+      <trans-unit id="647900782867860768" datatype="html" xml:space="preserve">
         <source>Put your instance on the public PeerTube index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://instances.joinpeertube.org/instances&quot;&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> Put your instance on the public PeerTube index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://instances.joinpeertube.org/instances&quot;&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Örneğinizi herkese açık PeerTube dizinine yerleştirin: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://instances.joinpeertube.org/instances&quot;&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">45,46</context>
@@ -2405,9 +2405,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5329436244765769292" datatype="html">
+      <trans-unit id="5329436244765769292" datatype="html" xml:space="preserve">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="new"> If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </target>
+        <target state="translated">Kayıtları açmak istiyorsanız lütfen <x id="START_TAG_STRONG"/>moderasyon kurallarınızın<x id="CLOSE_TAG_STRONG"/> ve<x id="START_TAG_STRONG"/>örnek hizmet<x id="CLOSE_TAG_STRONG"/> şartlarınızın ne olduğuna karar verin, ayrıca kategorileri, dilleri ve <x id="START_TAG_STRONG"/>moderatörlerinizin konuştuğunu belirtin. Bu şekilde kullanıcıların uygun <x id="CLOSE_TAG_STRONG"/> PeerTube örneğine kaydolmalarına yardımcı olursunuz. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">64</context>
@@ -2909,9 +2909,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2948577454705183445" datatype="html">
+      <trans-unit id="2948577454705183445" datatype="html" xml:space="preserve">
         <source>on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">üzerinde<x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">23,24</context>
@@ -3041,9 +3041,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7239874680342223476" datatype="html">
+      <trans-unit id="7239874680342223476" datatype="html" xml:space="preserve">
         <source>Help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> by:</source>
-        <target state="new">Help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> by:</target>
+        <target state="translated">Kim olduğunuz konusunda <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>moderatörlerin ve diğer kullanıcıların bilmesine yardımcı olun<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> by:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">14</context>
@@ -3190,18 +3190,18 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7231414106228227962" datatype="html">
+      <trans-unit id="7231414106228227962" datatype="html" xml:space="preserve">
         <source>The requested entity body blends sweet bits with a mellow earthiness.</source>
-        <target state="new"> The requested entity body blends sweet bits with a mellow earthiness. </target>
+        <target state="translated">İstenilen varlık gövdesi, tatlı parçaları yumuşak bir dünyevilikle harmanlıyor.</target>
         <note priority="1" from="description">Description of a tea flavour, keeping the 'requested entity body' as a technical expression referring to a web request</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2933819425721221134" datatype="html">
+      <trans-unit id="2933819425721221134" datatype="html" xml:space="preserve">
         <source>Sepia seems to like it.</source>
-        <target state="new">Sepia seems to like it.</target>
+        <target state="translated">Sepia bundan hoşlanmış gibi görünüyor.</target>
         <note priority="1" from="description">This is about Sepia's tea</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
@@ -3696,26 +3696,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="354332809647287722" datatype="html">
+      <trans-unit id="354332809647287722" datatype="html" xml:space="preserve">
         <source>Tags could be used to suggest relevant recommendations. <x id="LINE_BREAK"/> There is a maximum of 5 tags. <x id="LINE_BREAK"/> Press <x id="START_TAG_KBD"/>Enter<x id="CLOSE_TAG_KBD"/> to add a new tag. </source>
-        <target state="new">
-                    Tags could be used to suggest relevant recommendations. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                    There is a maximum of 5 tags. 
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                    Press 
-          <x id="START_TAG_KBD" ctype="x-kbd" equiv-text="&lt;kbd&gt;"/>Enter
-          <x id="CLOSE_TAG_KBD" ctype="x-kbd" equiv-text="&lt;/kbd&gt;"/> to add a new tag.
-                  
-        </target>
+        <target state="translated">İlgili öneriler önermek için etiketler kullanılabilir. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Maksimum 5 etiket bulunmaktadır. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Basın<x id="START_TAG_KBD" ctype="x-kbd" equiv-text="&lt;kbd&gt;"/>Giriş<x id="CLOSE_TAG_KBD" ctype="x-kbd" equiv-text="&lt;/kbd&gt;"/> yeni bir etiket için. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6191471816002237724" datatype="html">
+      <trans-unit id="6191471816002237724" datatype="html" xml:space="preserve">
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target state="new">Video descriptions are truncated by default and require manual action to expand them.</target>
+        <target state="translated">Video açıklamaları varsayılan olarak kısaltılmıştır ve bunları genişletmek için manuel işlem yapılması gerekir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">48</context>
