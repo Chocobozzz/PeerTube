@@ -13670,41 +13670,41 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7182104881582756649" datatype="html">
+      <trans-unit id="7182104881582756649" datatype="html" xml:space="preserve">
         <source>Rejected {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="new">Rejected {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</target>
+        <target state="translated">Reddedilmiş {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4309656190692990192" datatype="html">
+      <trans-unit id="4309656190692990192" datatype="html" xml:space="preserve">
         <source>Deleted followers will be able to send again a follow request.</source>
-        <target state="new">Deleted followers will be able to send again a follow request.</target>
+        <target state="translated">Silinen takipçiler tekrar takip isteği gönderebilecektir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4187075675930483010" datatype="html">
+      <trans-unit id="4187075675930483010" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
-        <target state="new">Do you really want to delete {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</target>
+        <target state="translated">Gerçekten silmek istiyor musun? {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="805843790553313750" datatype="html">
+      <trans-unit id="805843790553313750" datatype="html" xml:space="preserve">
         <source>Removed {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="new">Removed {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</target>
+        <target state="translated">Kaldırıldı {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6018246591673612412" datatype="html">
+      <trans-unit id="6018246591673612412" datatype="html" xml:space="preserve">
         <source>Follow</source>
-        <target state="new">Follow</target>
+        <target state="translated">Takip</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -13718,19 +13718,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3596798855644241001" datatype="html">
+      <trans-unit id="3596798855644241001" datatype="html" xml:space="preserve">
         <source>1 host (without "http://"), account handle or channel handle per line</source>
-        <target state="new">1 host (without "http://"), account handle or channel handle per line</target>
+        <target state="translated">Her satıra 1 ana bilgisayar ("http://" olmadan), hesap tanıtıcısı veya kanal tanıtıcısı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2740793005745065895" datatype="html">
+      <trans-unit id="2740793005745065895" datatype="html" xml:space="preserve">
         <source><x id="PH"/> is not valid </source>
-        <target state="new">
-          <x id="PH"/> is not valid
-        </target>
+        <target state="translated"><x id="PH"/> geçerli değil </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">27</context>
@@ -13740,9 +13738,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3069073855436209848" datatype="html">
+      <trans-unit id="3069073855436209848" datatype="html" xml:space="preserve">
         <source>Subscriptions of your instance</source>
-        <target state="new">Subscriptions of your instance</target>
+        <target state="translated">Abonelikler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">3</context>
