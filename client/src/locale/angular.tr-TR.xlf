@@ -7720,7 +7720,7 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
       </trans-unit>
       <trans-unit id="9205443410527464015" datatype="html" xml:space="preserve">
         <source>Plugins enabled</source>
-        <target state="translated">Eklentiler etkin</target>
+        <target state="translated">Eklentiler etkinleşti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">158</context>
