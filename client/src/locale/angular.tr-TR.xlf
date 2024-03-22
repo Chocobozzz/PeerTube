@@ -6801,7 +6801,7 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
       </trans-unit>
       <trans-unit id="2343069726009080052" datatype="html" xml:space="preserve">
         <source>Video <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="needs-translation">Video <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/> <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">Video <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/> <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">32</context>
@@ -9296,9 +9296,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">665</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3448020426354063371" datatype="html">
+      <trans-unit id="3448020426354063371" datatype="html" xml:space="preserve">
         <source>TWITTER/X</source>
-        <target state="new">TWITTER/X</target>
+        <target state="translated">TWITTER/X</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">674</context>
@@ -9424,33 +9424,33 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8583623894789865917" datatype="html">
+      <trans-unit id="8583623894789865917" datatype="html" xml:space="preserve">
         <source>Allow your users to change live latency</source>
-        <target state="new">Allow your users to change live latency</target>
+        <target state="translated">Kullanıcılarınızın canlı gecikmeyi değiştirmesine izin verin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6422195560028891534" datatype="html">
+      <trans-unit id="6422195560028891534" datatype="html" xml:space="preserve">
         <source>Small latency disables P2P and high latency can increase P2P ratio</source>
-        <target state="new"> Small latency disables P2P and high latency can increase P2P ratio </target>
+        <target state="translated">Küçük gecikme P2P'yi devre dışı bırakır ve yüksek gecikme P2P oranını artırabilir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5191164170233238999" datatype="html">
+      <trans-unit id="5191164170233238999" datatype="html" xml:space="preserve">
         <source>Max simultaneous lives created on your instance</source>
-        <target state="new">Max simultaneous lives created on your instance</target>
+        <target state="translated">Örneğinizde oluşturulan maksimum eşzamanlı yaşam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6830777508073747241" datatype="html">
+      <trans-unit id="6830777508073747241" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {live} other {lives}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {live} other {lives}}</target>
+        <target state="translated">{VAR_PLURAL, çoğul, =1 {canlı} diğer {canlı}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">55</context>
@@ -9460,121 +9460,121 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1834362188086938736" datatype="html">
+      <trans-unit id="1834362188086938736" datatype="html" xml:space="preserve">
         <source>Max simultaneous lives created per user</source>
-        <target state="new">Max simultaneous lives created per user</target>
+        <target state="translated">Kullanıcı başına oluşturulan maksimum eşzamanlı yaşam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1521259619066122077" datatype="html">
+      <trans-unit id="1521259619066122077" datatype="html" xml:space="preserve">
         <source>Max live duration</source>
-        <target state="new">Max live duration</target>
+        <target state="translated">Maksimum canlı süre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5309195634424105927" datatype="html">
+      <trans-unit id="5309195634424105927" datatype="html" xml:space="preserve">
         <source>Live transcoding threads</source>
-        <target state="new">Live transcoding threads</target>
+        <target state="translated">Canlı kod dönüştürme konuları</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4240037618955024499" datatype="html">
+      <trans-unit id="4240037618955024499" datatype="html" xml:space="preserve">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
-        <target state="new"> will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </target>
+        <target state="translated">en fazla &lt;x id="INTERPOLATION" equalv-text="{{ getTotalTranscodingThreads().value }}"/&gt; &lt;x id="INTERPOLATION_1" equalv-text="{{ getTotalTranscodingThreads().unit }}" talebinde bulunacaktır /&gt; VOD kod dönüştürmesi ile </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8489317904250057957" datatype="html">
+      <trans-unit id="8489317904250057957" datatype="html" xml:space="preserve">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
-        <target state="new"> will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </target>
+        <target state="translated">en azından &lt;x id="INTERPOLATION" equalv-text="{{ getTotalTranscodingThreads().value }}"/&gt; &lt;x id="INTERPOLATION_1" equalv-text="{{ getTotalTranscodingThreads().unit }}" talep edecektir /&gt; VOD kod dönüştürmesi ile </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1417246074503129277" datatype="html">
+      <trans-unit id="1417246074503129277" datatype="html" xml:space="preserve">
         <source>Live transcoding profile</source>
-        <target state="new">Live transcoding profile</target>
+        <target state="translated">Canlı kod dönüştürme profili</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">186</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8294583621306221742" datatype="html">
+      <trans-unit id="8294583621306221742" datatype="html" xml:space="preserve">
         <source>new live transcoding profiles can be added by PeerTube plugins</source>
-        <target state="new">new live transcoding profiles can be added by PeerTube plugins</target>
+        <target state="translated">PeerTube eklentileri tarafından yeni canlı kod dönüştürme profilleri eklenebilir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6727057461851446921" datatype="html">
+      <trans-unit id="6727057461851446921" datatype="html" xml:space="preserve">
         <source>Live resolutions to generate</source>
-        <target state="new">Live resolutions to generate</target>
+        <target state="translated">Oluşturulacak canlı çözünürlükler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="594064951138382358" datatype="html">
+      <trans-unit id="594064951138382358" datatype="html" xml:space="preserve">
         <source>Also transcode original resolution</source>
-        <target state="new">Also transcode original resolution</target>
+        <target state="translated">Ayrıca orijinal çözünürlüğün kodunu dönüştürün</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5429376346987783852" datatype="html">
+      <trans-unit id="5429376346987783852" datatype="html" xml:space="preserve">
         <source>Even if it's above your maximum enabled resolution</source>
-        <target state="new"> Even if it's above your maximum enabled resolution </target>
+        <target state="translated">Maksimum etkin çözünürlüğünüzün üzerinde olsa bile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3283660108004661843" datatype="html">
+      <trans-unit id="3283660108004661843" datatype="html" xml:space="preserve">
         <source>Enable remote runners for lives</source>
-        <target state="new">Enable remote runners for lives</target>
+        <target state="translated">Uzaktan koşucuları ömür boyu etkinleştirin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2281161665447607254" datatype="html">
+      <trans-unit id="2281161665447607254" datatype="html" xml:space="preserve">
         <source>Allow live streaming</source>
-        <target state="new">Allow live streaming</target>
+        <target state="translated">Canlı yayına izin ver</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6759167469686242835" datatype="html">
+      <trans-unit id="6759167469686242835" datatype="html" xml:space="preserve">
         <source>Transcoding enabled for live streams</source>
-        <target state="new">Transcoding enabled for live streams</target>
+        <target state="translated">Canlı yayınlar için kod dönüştürme etkinleştirildi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2134381456844896041" datatype="html">
+      <trans-unit id="2134381456844896041" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </target>
+        <target state="translated">&lt;x id="START_LINK" ctype="x-a" equalv-text="&amp;lt;a routerLink=&amp;quot;/admin/system/runners/runners-list&amp;quot;&amp;gt;"/&gt;uzaktan koşucuları&lt;x id="CLOSE_LINK" kullanın Canlı kod dönüştürmeyi işlemek için ctype="x-a" equalv-text="&amp;lt;/a&amp;gt;"/&gt;. Uzak koşucuların öncelikle bulut sunucunuza kaydolması gerekir. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5975271795105968425" datatype="html">
+      <trans-unit id="5975271795105968425" datatype="html" xml:space="preserve">
         <source>Live streaming</source>
-        <target state="new">Live streaming</target>
+        <target state="translated">Canlı yayın</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">47</context>
@@ -9584,17 +9584,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6201638315245239510" datatype="html">
+      <trans-unit id="6201638315245239510" datatype="html" xml:space="preserve">
         <source>Advanced</source>
-        <target state="new">Advanced</target>
+        <target state="translated">Gelişmiş</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7911929966701561067" datatype="html">
+      <trans-unit id="7911929966701561067" datatype="html" xml:space="preserve">
         <source>TRANSCODING</source>
-        <target state="new">TRANSCODING</target>
+        <target state="translated">KOD DÖNÜŞÜMÜ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">93</context>
@@ -9604,369 +9604,369 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8212237880239644112" datatype="html">
+      <trans-unit id="8212237880239644112" datatype="html" xml:space="preserve">
         <source>Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some.</source>
-        <target state="new"> Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some. </target>
+        <target state="translated">VOD kod dönüştürmeyle aynı şekilde, canlı akışların kod dönüştürmesi yapılır, böylece herhangi bir cihazın oynatabileceği akışa uygun bir formda olurlar. Güçlü bir CPU ve daha sonra biraz gerektirir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4560217482714993155" datatype="html">
+      <trans-unit id="4560217482714993155" datatype="html" xml:space="preserve">
         <source>Transcoding enabled</source>
-        <target state="new">Transcoding enabled</target>
+        <target state="translated">Kod dönüştürme etkin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1386306711019304612" datatype="html">
+      <trans-unit id="1386306711019304612" datatype="html" xml:space="preserve">
         <source>Input</source>
-        <target state="new">Input</target>
+        <target state="translated">Giriş</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8646250517331978259" datatype="html">
+      <trans-unit id="8646250517331978259" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equalv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>VOD kod dönüştürmeyi işlemek için uzaktan koşucuları kullanın <x id="CLOSE_LINK" ctype="x-a" equalv-text="&lt;/a&gt;"/>. Uzak koşucuların öncelikle bulut sunucunuza kaydolması gerekir. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7452751710576287271" datatype="html">
+      <trans-unit id="7452751710576287271" datatype="html" xml:space="preserve">
         <source>Allow additional extensions</source>
-        <target state="new">Allow additional extensions</target>
+        <target state="translated">Ek uzantılara izin ver</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5698272164915890247" datatype="html">
+      <trans-unit id="5698272164915890247" datatype="html" xml:space="preserve">
         <source>Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</source>
-        <target state="new">Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</target>
+        <target state="translated">Kullanıcıların .mp4, .ogv ve .webm dışında ek uzantılara sahip videolar yüklemesine olanak tanır (örneğin: .avi, .mov, .mkv vb.).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1823941382992046371" datatype="html">
+      <trans-unit id="1823941382992046371" datatype="html" xml:space="preserve">
         <source>Allow audio files upload</source>
-        <target state="new">Allow audio files upload</target>
+        <target state="translated">Ses dosyalarının yüklenmesine izin ver</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8340360585610503574" datatype="html">
+      <trans-unit id="8340360585610503574" datatype="html" xml:space="preserve">
         <source>Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</source>
-        <target state="new">Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</target>
+        <target state="translated">Kullanıcıların .mp3, .ogg, .wma, .flac, .aac veya .ac3 ses dosyalarını yüklemesine olanak tanır.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5867513506373651775" datatype="html">
+      <trans-unit id="5867513506373651775" datatype="html" xml:space="preserve">
         <source>The file will be merged in a still image video with the preview file on upload.</source>
-        <target state="new">The file will be merged in a still image video with the preview file on upload.</target>
+        <target state="translated">Dosya, yükleme sırasında önizleme dosyasıyla birlikte hareketsiz bir görüntü videosunda birleştirilecektir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8718102504014634857" datatype="html">
+      <trans-unit id="8718102504014634857" datatype="html" xml:space="preserve">
         <source>Keep a version of the input file</source>
-        <target state="new">Keep a version of the input file</target>
+        <target state="translated">Giriş dosyasının bir sürümünü saklayın</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1143448052369512390" datatype="html">
+      <trans-unit id="1143448052369512390" datatype="html" xml:space="preserve">
         <source>If enabled, the input file is not deleted after transcoding but moved in a dedicated folder or object storage</source>
-        <target state="new">If enabled, the input file is not deleted after transcoding but moved in a dedicated folder or object storage</target>
+        <target state="translated">Etkinleştirilirse, giriş dosyası kod dönüştürme sonrasında silinmez ancak özel bir klasöre veya nesne deposuna taşınır</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8968030053137661433" datatype="html">
+      <trans-unit id="8968030053137661433" datatype="html" xml:space="preserve">
         <source>Output</source>
-        <target state="new">Output</target>
+        <target state="translated">Çıkış</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2093595615152706886" datatype="html">
+      <trans-unit id="2093595615152706886" datatype="html" xml:space="preserve">
         <source>Web Videos enabled</source>
-        <target state="new">Web Videos enabled</target>
+        <target state="translated">Web Videoları etkin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2036818807823848377" datatype="html">
+      <trans-unit id="2036818807823848377" datatype="html" xml:space="preserve">
         <source>Output formats</source>
-        <target state="new">Output formats</target>
+        <target state="translated">Çıkış formatları</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8373385486403101567" datatype="html">
+      <trans-unit id="8373385486403101567" datatype="html" xml:space="preserve">
         <source>If you also enabled HLS support, it will multiply videos storage by 2</source>
-        <target state="new">If you also enabled HLS support, it will multiply videos storage by 2</target>
+        <target state="translated">HLS desteğini de etkinleştirdiyseniz video depolama alanı 2 kat artacaktır</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3839590624406770455" datatype="html">
+      <trans-unit id="3839590624406770455" datatype="html" xml:space="preserve">
         <source>HLS with P2P support enabled</source>
-        <target state="new">HLS with P2P support enabled</target>
+        <target state="translated">P2P desteği etkinleştirilmiş HLS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4354548488369167450" datatype="html">
+      <trans-unit id="4354548488369167450" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with Web Videos:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled Web Videos support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated">&lt;x id="START_TAG_STRONG" ctype="x-strong" equalv-text="&amp;lt;strong&amp;gt;"/&gt;ffmpeg gerektirir&amp;gt;= 4,1&lt;x id="CLOSE_TAG_STRONG" ctype="x-strong" equalv-text= "&amp;lt;/strong&amp;gt;"/&gt;&lt;x id="START_PARAGRAPH" ctype="x-p" equalv-text="&amp;lt;p&amp;gt;"/&gt;HLS oynatma listeleri ve parçalanmış MP4 dosyaları oluşturarak Web Videolarından daha iyi bir oynatma elde edin: &lt;x id = "CLOSE_PARAGRAPH" ctype = "x-p" equalv-text = "&amp;lt;/p&amp;gt;"/&gt;&lt;x id = "START_UNORDERED_LIST" ctype = "x-ul" equalv-text = "&amp;lt;ul&amp;gt;"/ &gt;&lt;x id="START_LIST_ITEM" ctype="x-li" equalv-text="&amp;lt;li&amp;gt;"/&gt;Çözünürlük değişikliği daha düzgün&lt;x id="CLOSE_LIST_ITEM" ctype="x-li" equalv-text=" &amp;lt;/li&amp;gt;"/&gt;&lt;x id="START_LIST_ITEM" ctype="x-li" equalv-text="&amp;lt;li&amp;gt;"/&gt;Özellikle uzun videolarda daha hızlı oynatma&lt;x id="CLOSE_LIST_ITEM" ctype=" x-li" equalv-text="&amp;lt;/li&amp;gt;"/&gt;&lt;x id="START_LIST_ITEM" ctype="x-li" equalv-text="&amp;lt;li&amp;gt;"/&gt;Daha kararlı oynatma (daha az hata/ sonsuz yükleme)&lt;x id="CLOSE_LIST_ITEM" ctype="x-li" equalv-text="&amp;lt;/li&amp;gt;"/&gt;&lt;x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equalv-text="&amp;lt ;/ul&amp;gt;"/&gt;&lt;x id="START_PARAGRAPH" ctype="x-p" equalv-text="&amp;lt;p&amp;gt;"/&gt;Web Videoları desteğini de etkinleştirdiyseniz, video depolama alanı 2&lt;x id= ile çarpılır "CLOSE_PARAGRAPH" ctype="x-p" equalv-text="&amp;lt;/p&amp;gt;"/&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6698240176427495644" datatype="html">
+      <trans-unit id="6698240176427495644" datatype="html" xml:space="preserve">
         <source>Resolutions to generate</source>
-        <target state="new">Resolutions to generate</target>
+        <target state="translated">Üretilecek çözünürlükler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4437374135745051281" datatype="html">
+      <trans-unit id="4437374135745051281" datatype="html" xml:space="preserve">
         <source>Always transcode original resolution</source>
-        <target state="new">Always transcode original resolution</target>
+        <target state="translated">Her zaman orijinal çözünürlüğü dönüştürün</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5431196295724512251" datatype="html">
+      <trans-unit id="5431196295724512251" datatype="html" xml:space="preserve">
         <source>The original file resolution will be the default target if no option is selected.</source>
-        <target state="new"> The original file resolution will be the default target if no option is selected. </target>
+        <target state="translated">Hiçbir seçenek seçilmezse orijinal dosya çözünürlüğü varsayılan hedef olacaktır.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8056487097039524924" datatype="html">
+      <trans-unit id="8056487097039524924" datatype="html" xml:space="preserve">
         <source>Enable remote runners for VOD</source>
-        <target state="new">Enable remote runners for VOD</target>
+        <target state="translated">VOD için uzak koşucuları etkinleştir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1126867109775813762" datatype="html">
+      <trans-unit id="1126867109775813762" datatype="html" xml:space="preserve">
         <source>Transcoding threads</source>
-        <target state="new">Transcoding threads</target>
+        <target state="translated">Kod dönüştürme konuları</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7815122216882553289" datatype="html">
+      <trans-unit id="7815122216882553289" datatype="html" xml:space="preserve">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="new"> will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </target>
+        <target state="translated">en fazla &lt;x id="INTERPOLATION" equalv-text="{{ getTotalTranscodingThreads().value }}"/&gt; &lt;x id="INTERPOLATION_1" equalv-text="{{ getTotalTranscodingThreads().unit }}" talebinde bulunacaktır /&gt; canlı kod dönüştürme ile </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">174</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8685484763568827375" datatype="html">
+      <trans-unit id="8685484763568827375" datatype="html" xml:space="preserve">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="new"> will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </target>
+        <target state="translated">en azından &lt;x id="INTERPOLATION" equalv-text="{{ getTotalTranscodingThreads().value }}"/&gt; &lt;x id="INTERPOLATION_1" equalv-text="{{ getTotalTranscodingThreads().unit }}" talep edecektir /&gt; canlı kod dönüştürme ile </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">178</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7185278676178506632" datatype="html">
+      <trans-unit id="7185278676178506632" datatype="html" xml:space="preserve">
         <source>Transcoding jobs concurrency</source>
-        <target state="new">Transcoding jobs concurrency</target>
+        <target state="translated">İşlerin eşzamanlılığını dönüştürme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">194</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1969393594784140832" datatype="html">
+      <trans-unit id="1969393594784140832" datatype="html" xml:space="preserve">
         <source>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</source>
-        <target state="new">allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</target>
+        <target state="translated">birden fazla dosyanın paralel olarak dönüştürülmesine olanak tanır. ⚠️ PeerTube'un yeniden başlatılmasını gerektirir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2184317712452071847" datatype="html">
+      <trans-unit id="2184317712452071847" datatype="html" xml:space="preserve">
         <source>Transcoding profile</source>
-        <target state="new">Transcoding profile</target>
+        <target state="translated">Kod dönüştürme profili</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">206</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6289966287765074028" datatype="html">
+      <trans-unit id="6289966287765074028" datatype="html" xml:space="preserve">
         <source>new transcoding profiles can be added by PeerTube plugins</source>
-        <target state="new">new transcoding profiles can be added by PeerTube plugins</target>
+        <target state="translated">PeerTube eklentileri tarafından yeni kod dönüştürme profilleri eklenebilir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5843661880070076970" datatype="html">
+      <trans-unit id="5843661880070076970" datatype="html" xml:space="preserve">
         <source>VIDEO STUDIO</source>
-        <target state="new">VIDEO STUDIO</target>
+        <target state="translated">VİDEO STÜDYOSU</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">226</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4078329985026583770" datatype="html">
+      <trans-unit id="4078329985026583770" datatype="html" xml:space="preserve">
         <source>Allows your users to edit their video (cut, add intro/outro, add a watermark etc)</source>
-        <target state="new"> Allows your users to edit their video (cut, add intro/outro, add a watermark etc) </target>
+        <target state="translated">Kullanıcılarınızın videolarını düzenlemesine olanak tanır (kesme, giriş/çıkış ekleme, filigran ekleme vb.)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="252604800845369275" datatype="html">
+      <trans-unit id="252604800845369275" datatype="html" xml:space="preserve">
         <source>Enable video studio</source>
-        <target state="new">Enable video studio</target>
+        <target state="translated">Video stüdyosunu etkinleştir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3313548535394806921" datatype="html">
+      <trans-unit id="3313548535394806921" datatype="html" xml:space="preserve">
         <source>⚠️ You need to enable transcoding first to enable video studio</source>
-        <target state="new">⚠️ You need to enable transcoding first to enable video studio</target>
+        <target state="translated">⚠️ Video stüdyosunu etkinleştirmek için önce kod dönüştürmeyi etkinleştirmeniz gerekir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">241</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7185229240632050966" datatype="html">
+      <trans-unit id="7185229240632050966" datatype="html" xml:space="preserve">
         <source>Enable remote runners for studio</source>
-        <target state="new">Enable remote runners for studio</target>
+        <target state="translated">Stüdyo için uzak koşucuları etkinleştir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">249</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5552130276182854923" datatype="html">
+      <trans-unit id="5552130276182854923" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks. Remote runners has to register on your instance first. </target>
+        <target state="translated">&lt;x id="START_LINK" ctype="x-a" equalv-text="&amp;lt;a routerLink=&amp;quot;/admin/system/runners/runners-list&amp;quot;&amp;gt;"/&gt;uzaktan koşucuları&lt;x id="CLOSE_LINK" kullanın ctype="x-a" equalv-text="&amp;lt;/a&amp;gt;"/&gt; stüdyo kod dönüştürme görevlerini işlemek için. Uzak koşucuların öncelikle bulut sunucunuza kaydolması gerekir. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6879611446286948126" datatype="html">
+      <trans-unit id="6879611446286948126" datatype="html" xml:space="preserve">
         <source>CACHE</source>
-        <target state="new">CACHE</target>
+        <target state="translated">ÖNBELLEK</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5511334650211127631" datatype="html">
+      <trans-unit id="5511334650211127631" datatype="html" xml:space="preserve">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
-        <target state="new"> Some files are not federated, and fetched when necessary. Define their caching policies. </target>
+        <target state="translated">Bazı dosyalar birleştirilmez ve gerektiğinde getirilir. Önbelleğe alma politikalarını tanımlayın.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4382565260112874406" datatype="html">
+      <trans-unit id="4382565260112874406" datatype="html" xml:space="preserve">
         <source>Number of previews to keep in cache</source>
-        <target state="new">Number of previews to keep in cache</target>
+        <target state="translated">Önbellekte tutulacak önizleme sayısı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3710881484246327863" datatype="html">
+      <trans-unit id="3710881484246327863" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {önbelleğe alınmış resim} diğer {önbelleğe alınmış resimler}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2279905277031617076" datatype="html">
+      <trans-unit id="2279905277031617076" datatype="html" xml:space="preserve">
         <source>Number of video captions to keep in cache</source>
-        <target state="new">Number of video captions to keep in cache</target>
+        <target state="translated">Önbellekte tutulacak video altyazısı sayısı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6193666854590647323" datatype="html">
+      <trans-unit id="6193666854590647323" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {önbelleğe alınmış altyazı} other {önbelleğe alınmış altyazılar}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="330647913034301472" datatype="html">
+      <trans-unit id="330647913034301472" datatype="html" xml:space="preserve">
         <source>Number of video torrents to keep in cache</source>
-        <target state="new">Number of video torrents to keep in cache</target>
+        <target state="translated">Önbellekte tutulacak video torrentlerinin sayısı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4613961764793311850" datatype="html">
+      <trans-unit id="4613961764793311850" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {cached torrent} other {cached torrents}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached torrent} other {cached torrents}}</target>
+        <target state="translated">{VAR_PLURAL, çoğul, =1 {önbelleğe alınmış torrent} diğer {önbelleğe alınmış torrentler}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9180372875725189823" datatype="html">
+      <trans-unit id="9180372875725189823" datatype="html" xml:space="preserve">
         <source>Number of video storyboard images to keep in cache</source>
-        <target state="new">Number of video storyboard images to keep in cache</target>
+        <target state="translated">Önbellekte tutulacak video storyboard görsellerinin sayısı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="224402797620080356" datatype="html">
+      <trans-unit id="224402797620080356" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {cached storyboard} other {cached storyboards}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {cached storyboard} other {cached storyboards}}</target>
+        <target state="translated">{VAR_PLURAL, çoğul, =1 {önbelleğe alınmış storyboard} other {önbelleğe alınmış storyboard'lar}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2528135865630556778" datatype="html">
+      <trans-unit id="2528135865630556778" datatype="html" xml:space="preserve">
         <source>CUSTOMIZATIONS</source>
-        <target state="new">CUSTOMIZATIONS</target>
+        <target state="translated">ÖZELLEŞTİRMELER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1714039296068260295" datatype="html">
+      <trans-unit id="1714039296068260295" datatype="html" xml:space="preserve">
         <source>Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.</source>
-        <target state="new"> Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill. </target>
+        <target state="translated">Bir eklenti veya tema oluştururken PeerTube örneğinizde küçük değişiklikler yapmak gereksizdir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">78</context>
