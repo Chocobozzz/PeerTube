@@ -3712,9 +3712,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4621588014938487698" datatype="html">
+      <trans-unit id="4621588014938487698" datatype="html" xml:space="preserve">
         <source>A timestamp (<x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>00:05<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> for example) is automatically converted into a link to a part of the video.</source>
-        <target state="new">A timestamp (<x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>00:05<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> for example) is automatically converted into a link to a part of the video.</target>
+        <target state="translated">Bir zaman damgası(<x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>00:05<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> örneğin) otomatik olarak videonun bir bölümüne bağlantıya dönüştürülür.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">52</context>
@@ -3764,9 +3764,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7306351600905511107" datatype="html">
+      <trans-unit id="7306351600905511107" datatype="html" xml:space="preserve">
         <source>ratio 6/1, recommended size: 1920x317, max size: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, extensions: <x id="PH_1" equiv-text="this.bannerExtensions"/></source>
-        <target state="new">ratio 6/1, recommended size: 1920x317, max size: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, extensions: <x id="PH_1" equiv-text="this.bannerExtensions"/></target>
+        <target state="translated">ratio 6/1, önerilen boyut: 1920x317, max boyut: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, uzantılar: <x id="PH_1" equiv-text="this.bannerExtensions"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -3788,9 +3788,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="283609029522452529" datatype="html">
+      <trans-unit id="283609029522452529" datatype="html" xml:space="preserve">
         <source>Error in channel miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in channel miniature component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Kanal minyatür bileşeninde hata: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -3820,9 +3820,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7596115240533332749" datatype="html">
+      <trans-unit id="7596115240533332749" datatype="html" xml:space="preserve">
         <source>Open quick filters</source>
-        <target state="new">Open quick filters</target>
+        <target state="translated">Hızlı filtreleri aç</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">4</context>
@@ -3952,105 +3952,105 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8025853188527690631" datatype="html">
+      <trans-unit id="8025853188527690631" datatype="html" xml:space="preserve">
         <source>Registration reason</source>
-        <target state="new">Registration reason</target>
+        <target state="translated">Kayıt nedeni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5767444971673380379" datatype="html">
+      <trans-unit id="5767444971673380379" datatype="html" xml:space="preserve">
         <source>Moderation response</source>
-        <target state="new">Moderation response</target>
+        <target state="translated">Moderasyon yanıtı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2710484935079923248" datatype="html">
+      <trans-unit id="2710484935079923248" datatype="html" xml:space="preserve">
         <source>Requested on <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;     &lt;/"/></source>
-        <target state="new">Requested on <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;     &lt;/"/></target>
+        <target state="translated">Talep edilen <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/th&gt;     &lt;/"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7009543831499017491" datatype="html">
+      <trans-unit id="7009543831499017491" datatype="html" xml:space="preserve">
         <source>Registration reason:</source>
-        <target state="new">Registration reason:</target>
+        <target state="translated">Kayıt nedeni:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5199584494687692924" datatype="html">
+      <trans-unit id="5199584494687692924" datatype="html" xml:space="preserve">
         <source>Moderation response:</source>
-        <target state="new">Moderation response:</target>
+        <target state="translated">Moderasyon yanıtı:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7902116364830754147" datatype="html">
+      <trans-unit id="7902116364830754147" datatype="html" xml:space="preserve">
         <source>No registrations found matching current filters.</source>
-        <target state="new">No registrations found matching current filters.</target>
+        <target state="translated">Mevcut filtrelerle eşleşen kayıt bulunamadı.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="178076727880316864" datatype="html">
+      <trans-unit id="178076727880316864" datatype="html" xml:space="preserve">
         <source>No registrations found.</source>
-        <target state="new">No registrations found.</target>
+        <target state="translated">Hiçbir kayıt bulunamadı.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="977007520755394668" datatype="html">
+      <trans-unit id="977007520755394668" datatype="html" xml:space="preserve">
         <source>Accept this request</source>
-        <target state="new">Accept this request</target>
+        <target state="translated">Bu isteği kabul et</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2571315112879096897" datatype="html">
+      <trans-unit id="2571315112879096897" datatype="html" xml:space="preserve">
         <source>Reject this request</source>
-        <target state="new">Reject this request</target>
+        <target state="translated">Bu isteği reddet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2518898597119712407" datatype="html">
+      <trans-unit id="2518898597119712407" datatype="html" xml:space="preserve">
         <source>Remove this request</source>
-        <target state="new">Remove this request</target>
+        <target state="translated">Bu isteği kaldır</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5778734409199071482" datatype="html">
+      <trans-unit id="5778734409199071482" datatype="html" xml:space="preserve">
         <source>Remove the request from the list. The user can register again.</source>
-        <target state="new">Remove the request from the list. The user can register again.</target>
+        <target state="translated">İsteği listeden kaldırın. Kullanıcı tekrar kayıt olabilir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6096602245926393232" datatype="html">
+      <trans-unit id="6096602245926393232" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</source>
-        <target state="new">Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</target>
+        <target state="translated">Gerçekten silmek istiyor musunuz? {count, plural, =1 {<x id="username"/> kayıt talebi?} diğer{<x id="count"/> kayıt talepleri?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9152096266184328708" datatype="html">
+      <trans-unit id="9152096266184328708" datatype="html" xml:space="preserve">
         <source>Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</source>
-        <target state="new">Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</target>
+        <target state="translated">Kaldırılan{count, plural, =1 {<x id="username"/> kayıt talebi} diğer{<x id="count"/> kayıt talepleri}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">160</context>
@@ -4072,9 +4072,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">174</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7099354443826169799" datatype="html">
+      <trans-unit id="7099354443826169799" datatype="html" xml:space="preserve">
         <source>powered by PeerTube - CopyLeft 2015-2024</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2024</target>
+        <target state="translated">PeerTube tarafından desteklenmektedir - CopyLeft 2015-2024</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">183</context>
@@ -4216,25 +4216,25 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5096495468612049743" datatype="html">
+      <trans-unit id="5096495468612049743" datatype="html" xml:space="preserve">
         <source>Chapters</source>
-        <target state="new">Chapters</target>
+        <target state="translated">Bölümler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">234</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7840115150430999864" datatype="html">
+      <trans-unit id="7840115150430999864" datatype="html" xml:space="preserve">
         <source>Timecode</source>
-        <target state="new">Timecode</target>
+        <target state="translated">Zaman kodu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">244</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7423239318801197963" datatype="html">
+      <trans-unit id="7423239318801197963" datatype="html" xml:space="preserve">
         <source>Chapter name</source>
-        <target state="new">Chapter name</target>
+        <target state="translated">Bölüm adı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">246</context>
@@ -4256,9 +4256,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">338</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4964217545822568684" datatype="html">
+      <trans-unit id="4964217545822568684" datatype="html" xml:space="preserve">
         <source>Privacy of the new replay</source>
-        <target state="new">Privacy of the new replay</target>
+        <target state="translated">Yeni tekrarın gizliliği</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">344</context>
@@ -4300,10 +4300,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">385</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1037891113581600591" datatype="html">
+      <trans-unit id="1037891113581600591" datatype="html" xml:space="preserve">
         <source>Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt; When a video is uploaded in this channel, the video support field will be automatically filled by this text.</source>
-        <target state="new">Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt;
-      When a video is uploaded in this channel, the video support field will be automatically filled by this text.</target>
+        <target state="translated">İnsanlara kanalı nasıl destekleyebileceklerini anlatan kısa metin (üyelik platformu...).&lt;br /&gt; Bu kanala video yüklendiğinde video destek alanı otomatik olarak bu metinle doldurulacaktır.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">68</context>
@@ -4345,9 +4344,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3233726805394397544" datatype="html">
+      <trans-unit id="3233726805394397544" datatype="html" xml:space="preserve">
         <source>Handle copied</source>
-        <target state="new">Handle copied</target>
+        <target state="translated">Tanıtıcı kopyalandı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context>
           <context context-type="linenumber">72</context>
@@ -4509,9 +4508,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">367</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5407145687662795944" datatype="html">
+      <trans-unit id="5407145687662795944" datatype="html" xml:space="preserve">
         <source>Video thumbnail</source>
-        <target state="new">Video thumbnail</target>
+        <target state="translated">Video küçük resmi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">376</context>
@@ -4533,17 +4532,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6760671759540007434" datatype="html">
+      <trans-unit id="6760671759540007434" datatype="html" xml:space="preserve">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="new"> You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </target>
+        <target state="translated">Youtube tarafından desteklenen herhangi bir URL'yi <x id="START_LINK"/>veya<x id="CLOSE_LINK"/> bir medya dosyasına işaret eden URL'yi içe aktarabilirsiniz. İşaret ettiği içerik üzerinde dağıtım haklarına sahip olduğunuzdan emin olmalısınız, aksi takdirde kendiniz ve örneğiniz için yasal sorunlara neden olabilir. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="25952900092483482" datatype="html">
+      <trans-unit id="25952900092483482" datatype="html" xml:space="preserve">
         <source>You can also synchronize a remote channel in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>your library<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> You can also synchronize a remote channel in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>your library<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Ayrıca kitaplığınızdaki<x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>uzak bir kanalı da senkronize edebilirsiniz.<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">20</context>
@@ -4569,11 +4568,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5359075917564707730" datatype="html">
+      <trans-unit id="5359075917564707730" datatype="html" xml:space="preserve">
         <source>Congratulations, the video behind <x id="INTERPOLATION"/> will be imported! You can already add information about this video. </source>
-        <target state="new">Congratulations, the video behind 
-          <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> will be imported! You can already add information about this video. 
-        </target>
+        <target state="translated">Tebrikler, <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> arkadaki video içe aktarılacak! Bu video hakkında bilgi ekleyebilirsiniz. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">52</context>
@@ -4680,17 +4677,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3768339632235914548" datatype="html">
+      <trans-unit id="3768339632235914548" datatype="html" xml:space="preserve">
         <source>Publish will be available when upload is finished</source>
-        <target state="new">Publish will be available when upload is finished</target>
+        <target state="translated">Yükleme tamamlandığında yayınlama mümkün olacak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7430416142942514215" datatype="html">
+      <trans-unit id="7430416142942514215" datatype="html" xml:space="preserve">
         <source>Publish</source>
-        <target state="new">Publish</target>
+        <target state="translated">Yayınla</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">78</context>
@@ -4700,25 +4697,25 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6161604372916832458" datatype="html">
+      <trans-unit id="6161604372916832458" datatype="html" xml:space="preserve">
         <source>Upload on hold</source>
-        <target state="new">Upload on hold</target>
+        <target state="translated">Yükleme beklemede</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">196</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="285180972645018518" datatype="html">
+      <trans-unit id="285180972645018518" datatype="html" xml:space="preserve">
         <source>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</source>
-        <target state="new">Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</target>
+        <target state="translated">Üzgünüz, hesabınızda yükleme özelliği devre dışı bırakıldı. Video eklemek istiyorsanız bir yöneticinin kotanızı kaldırması gerekir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context>
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1138810463037464722" datatype="html">
+      <trans-unit id="1138810463037464722" datatype="html" xml:space="preserve">
         <source>Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.</source>
-        <target state="new">Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.</target>
+        <target state="translated">Yüklenen videolar hesabınız için yayınlanmadan önce incelenir. Denetleme incelemesi olmadan video eklemek istiyorsanız bir yöneticinin videolarınızın otomatik engellemesini kapatması gerekir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context>
           <context context-type="linenumber">127</context>
@@ -4740,25 +4737,25 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5757542293078916779" datatype="html">
+      <trans-unit id="5757542293078916779" datatype="html" xml:space="preserve">
         <source>Replace video file</source>
-        <target state="new">Replace video file</target>
+        <target state="translated">Video dosyasını değiştir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7042425445354775897" datatype="html">
+      <trans-unit id="7042425445354775897" datatype="html" xml:space="preserve">
         <source>⚠️ Uploading a new version of your video will completely erase the current version</source>
-        <target state="new">⚠️ Uploading a new version of your video will completely erase the current version</target>
+        <target state="translated">⚠️ Videonuzun yeni bir sürümünü yüklediğinizde mevcut sürüm tamamen silinir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7225855031009203336" datatype="html">
+      <trans-unit id="7225855031009203336" datatype="html" xml:space="preserve">
         <source>Your video is currently being updated. If you leave, your changes will be lost.</source>
-        <target state="new">Your video is currently being updated. If you leave, your changes will be lost.</target>
+        <target state="translated">Videonuz şu anda güncelleniyor. Ayrılırsanız değişiklikleriniz kaybolacak.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -4840,50 +4837,49 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">188</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8675588963276687921" datatype="html">
+      <trans-unit id="8675588963276687921" datatype="html" xml:space="preserve">
         <source>Stream only once, replay will replace your live</source>
-        <target state="new">Stream only once, replay will replace your live</target>
+        <target state="translated">Yalnızca bir kez yayın yapın, tekrar oynatma canlı yayınınızın yerini alacak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2360261543675520397" datatype="html">
+      <trans-unit id="2360261543675520397" datatype="html" xml:space="preserve">
         <source>Stream only once</source>
-        <target state="new">Stream only once</target>
+        <target state="translated">Yalnızca bir kez akış gerçekleştirin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">210</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3384650899171037827" datatype="html">
+      <trans-unit id="3384650899171037827" datatype="html" xml:space="preserve">
         <source>Stream multiple times, replays will be separate videos</source>
-        <target state="new">Stream multiple times, replays will be separate videos</target>
+        <target state="translated">Birden çok kez yayın yapın, tekrarlar ayrı videolar olacaktır</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">215</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="58134197356653483" datatype="html">
+      <trans-unit id="58134197356653483" datatype="html" xml:space="preserve">
         <source>Stream multiple times using the same URL</source>
-        <target state="new">Stream multiple times using the same URL</target>
+        <target state="translated">Aynı URL'yi kullanarak birden çok kez yayın yapın</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">218</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8218579597782287078" datatype="html">
+      <trans-unit id="8218579597782287078" datatype="html" xml:space="preserve">
         <source>Go Live</source>
-        <target state="new">Go Live</target>
+        <target state="translated">Canlı yayına git</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3282368691598224543" datatype="html">
+      <trans-unit id="3282368691598224543" datatype="html" xml:space="preserve">
         <source>Max live duration is <x id="INTERPOLATION"/>. If your live reaches this limit, it will be automatically terminated. </source>
-        <target state="new"> Max live duration is <x id="INTERPOLATION"/>. If your live reaches this limit, it will be automatically terminated.
-</target>
+        <target state="translated">Maksimum canlı süre: <x id="INTERPOLATION"/>. Canlı yayınınız bu limite ulaşırsa otomatik olarak sonlandırılacaktır. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">47</context>
@@ -4907,21 +4903,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="293476877021544115" datatype="html">
+      <trans-unit id="293476877021544115" datatype="html" xml:space="preserve">
         <source>Import <x id="INTERPOLATION"/></source>
-        <target state="new">Import 
-          <x id="INTERPOLATION" equiv-text="{{ videoName }}"/>
-        </target>
+        <target state="translated">İçeri al<x id="INTERPOLATION" equiv-text="{{ videoName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4766833966971572147" datatype="html">
+      <trans-unit id="4766833966971572147" datatype="html" xml:space="preserve">
         <source>Upload <x id="INTERPOLATION"/></source>
-        <target state="new">Upload 
-          <x id="INTERPOLATION" equiv-text="{{ videoName }}"/>
-        </target>
+        <target state="translated">Yükle<x id="INTERPOLATION" equiv-text="{{ videoName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">45</context>
@@ -4951,33 +4943,33 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6066940329544282265" datatype="html">
+      <trans-unit id="6066940329544282265" datatype="html" xml:space="preserve">
         <source>Go live</source>
-        <target state="new">Go live</target>
+        <target state="translated">Canlı yayına geç</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2913936134410914576" datatype="html">
+      <trans-unit id="2913936134410914576" datatype="html" xml:space="preserve">
         <source>AUTOPLAY</source>
-        <target state="new">AUTOPLAY</target>
+        <target state="translated">OTOMATİK OYNATMA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1274250938669222125" datatype="html">
+      <trans-unit id="1274250938669222125" datatype="html" xml:space="preserve">
         <source>Toggle autoplay next video</source>
-        <target state="new">Toggle autoplay next video</target>
+        <target state="translated">Sonraki videoyu otomatik oynatmayı aç/kapat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2738123251363312498" datatype="html">
+      <trans-unit id="2738123251363312498" datatype="html" xml:space="preserve">
         <source>Next video to be played</source>
-        <target state="new">Next video to be played</target>
+        <target state="translated">Oynatılacak sonraki video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">19</context>
@@ -5011,33 +5003,33 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="937533808893845780" datatype="html">
+      <trans-unit id="937533808893845780" datatype="html" xml:space="preserve">
         <source>This playlist is private so you won't be able to share it with external users</source>
-        <target state="new">This playlist is private so you won't be able to share it with external users</target>
+        <target state="translated">Bu oynatma listesi gizli olduğundan harici kullanıcılarla paylaşamayacaksınız</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5806907163449517166" datatype="html">
+      <trans-unit id="5806907163449517166" datatype="html" xml:space="preserve">
         <source>Update playlist privacy</source>
-        <target state="new"> Update playlist privacy </target>
+        <target state="translated">Çalma listesi gizliliğini güncelleyin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6460270615876918310" datatype="html">
+      <trans-unit id="6460270615876918310" datatype="html" xml:space="preserve">
         <source>Share the playlist at this video position</source>
-        <target state="new">Share the playlist at this video position</target>
+        <target state="translated">Oynatma listesini bu video konumunda paylaşın</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8920371331444717794" datatype="html">
+      <trans-unit id="8920371331444717794" datatype="html" xml:space="preserve">
         <source>Only display embed URL</source>
-        <target state="new">Only display embed URL</target>
+        <target state="translated">Yalnızca yerleştirme URL'sini görüntüle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">82</context>
@@ -5047,9 +5039,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8058748565866023802" datatype="html">
+      <trans-unit id="8058748565866023802" datatype="html" xml:space="preserve">
         <source>Responsive embed</source>
-        <target state="new">Responsive embed</target>
+        <target state="translated">Duyarlı yerleştirme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">89</context>
@@ -5067,33 +5059,33 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5254843797242866315" datatype="html">
+      <trans-unit id="5254843797242866315" datatype="html" xml:space="preserve">
         <source>This video is private so you won't be able to share it with external users</source>
-        <target state="new">This video is private so you won't be able to share it with external users</target>
+        <target state="translated">Bu video özel olduğundan harici kullanıcılarla paylaşamayacaksınız</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3201319007886576629" datatype="html">
+      <trans-unit id="3201319007886576629" datatype="html" xml:space="preserve">
         <source>Update video privacy</source>
-        <target state="new"> Update video privacy </target>
+        <target state="translated">Video gizliliğini güncelleyin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1097129970287496588" datatype="html">
+      <trans-unit id="1097129970287496588" datatype="html" xml:space="preserve">
         <source>This video is password protected, please note that recipients will require the corresponding password to access the content.</source>
-        <target state="new"> This video is password protected, please note that recipients will require the corresponding password to access the content. </target>
+        <target state="translated">Bu video şifre korumalıdır; lütfen alıcıların içeriğe erişmek için ilgili şifreye ihtiyaç duyacağını unutmayın.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">110,112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1845599966367432388" datatype="html">
+      <trans-unit id="1845599966367432388" datatype="html" xml:space="preserve">
         <source>QR-Code</source>
-        <target state="new">QR-Code</target>
+        <target state="translated">QR-Kod</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">37</context>
@@ -5103,11 +5095,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1122876732223594710" datatype="html">
+      <trans-unit id="1122876732223594710" datatype="html" xml:space="preserve">
         <source>The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).</source>
-        <target state="new">
-                The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
-              </target>
+        <target state="translated">URL güvenli değil (HTTPS yok), dolayısıyla yerleştirilen video HTTPS web sitelerinde çalışmaz (web tarayıcıları, HTTPS web sitelerindeki güvenli olmayan HTTP isteklerini engeller).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">56</context>
@@ -5153,17 +5143,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">302</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1290987288288099212" datatype="html">
+      <trans-unit id="1290987288288099212" datatype="html" xml:space="preserve">
         <source>Support <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></source>
-        <target state="new">Support <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></target>
+        <target state="translated">Destek<x id="INTERPOLATION" equiv-text="{{ displayName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-support-modal/support-modal.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1452803153270294110" datatype="html">
+      <trans-unit id="1452803153270294110" datatype="html" xml:space="preserve">
         <source>Autoplay</source>
-        <target state="new">Autoplay</target>
+        <target state="translated">Otomatik oynatma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">216</context>
@@ -5177,9 +5167,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3959826834147169200" datatype="html">
+      <trans-unit id="3959826834147169200" datatype="html" xml:space="preserve">
         <source>Muted</source>
-        <target state="new">Muted</target>
+        <target state="translated">Sessize alındı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">107</context>
@@ -5193,17 +5183,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">223</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2784956659778044823" datatype="html">
+      <trans-unit id="2784956659778044823" datatype="html" xml:space="preserve">
         <source>Loop</source>
-        <target state="new">Loop</target>
+        <target state="translated">Döngü</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5908032061347078472" datatype="html">
+      <trans-unit id="5908032061347078472" datatype="html" xml:space="preserve">
         <source>Use origin instance URL</source>
-        <target state="new">Use origin instance URL</target>
+        <target state="translated">Kaynak örnek URL'sini kullan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">237</context>
@@ -5233,17 +5223,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">266</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4583515246777381165" datatype="html">
+      <trans-unit id="4583515246777381165" datatype="html" xml:space="preserve">
         <source>Display player control bar</source>
-        <target state="new">Display player control bar</target>
+        <target state="translated">Oynatıcı kontrol çubuğunu görüntüle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">273</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="805456636864344681" datatype="html">
+      <trans-unit id="805456636864344681" datatype="html" xml:space="preserve">
         <source>Display PeerTube button link</source>
-        <target state="new">Display PeerTube button link</target>
+        <target state="translated">PeerTube düğmesi bağlantısını görüntüle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">280</context>
@@ -5265,82 +5255,81 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6357191571827015663" datatype="html">
+      <trans-unit id="6357191571827015663" datatype="html" xml:space="preserve">
         <source>This video is password protected.</source>
-        <target state="new"> This video is password protected.
-</target>
+        <target state="translated">Bu video şifre korumalıdır.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4659739156309424184" datatype="html">
+      <trans-unit id="4659739156309424184" datatype="html" xml:space="preserve">
         <source>The video is being transcoded, it may not work properly.</source>
-        <target state="new">The video is being transcoded, it may not work properly.</target>
+        <target state="translated">Videonun kodu dönüştürülüyor; düzgün çalışmayabilir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1380062134054846433" datatype="html">
+      <trans-unit id="1380062134054846433" datatype="html" xml:space="preserve">
         <source>The video is being imported, it will be available when the import is finished.</source>
-        <target state="new">The video is being imported, it will be available when the import is finished.</target>
+        <target state="translated">Video içe aktarılıyor; içe aktarma tamamlandığında kullanılabilir olacak.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5332079713007503082" datatype="html">
+      <trans-unit id="5332079713007503082" datatype="html" xml:space="preserve">
         <source>The video is being moved to server file system, it may not work properly</source>
-        <target state="new">The video is being moved to server file system, it may not work properly</target>
+        <target state="translated">Video sunucu dosya sistemine taşınıyor, düzgün çalışmayabilir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1670226671143418566" datatype="html">
+      <trans-unit id="1670226671143418566" datatype="html" xml:space="preserve">
         <source>Move to file system failed, this video may not work properly.</source>
-        <target state="new">Move to file system failed, this video may not work properly.</target>
+        <target state="translated">Dosya sistemine geçiş başarısız oldu, bu video düzgün çalışmayabilir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8421704878620521033" datatype="html">
+      <trans-unit id="8421704878620521033" datatype="html" xml:space="preserve">
         <source>The video is being moved to an external server, it may not work properly.</source>
-        <target state="new">The video is being moved to an external server, it may not work properly.</target>
+        <target state="translated">Video harici bir sunucuya taşınıyor; düzgün çalışmayabilir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1832806861457762248" datatype="html">
+      <trans-unit id="1832806861457762248" datatype="html" xml:space="preserve">
         <source>Move to external storage failed, this video may not work properly.</source>
-        <target state="new">Move to external storage failed, this video may not work properly.</target>
+        <target state="translated">Harici depolama birimine taşıma işlemi başarısız oldu. Bu video düzgün çalışmayabilir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4982143979847413207" datatype="html">
+      <trans-unit id="4982143979847413207" datatype="html" xml:space="preserve">
         <source>The video is being edited, it may not work properly.</source>
-        <target state="new">The video is being edited, it may not work properly.</target>
+        <target state="translated">Video düzenleniyor, düzgün çalışmayabilir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6421273530586507643" datatype="html">
+      <trans-unit id="6421273530586507643" datatype="html" xml:space="preserve">
         <source>Transcoding failed, this video may not work properly.</source>
-        <target state="new">Transcoding failed, this video may not work properly.</target>
+        <target state="translated">Kod dönüştürme başarısız oldu. Bu video düzgün çalışmayabilir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2482137713226830428" datatype="html">
+      <trans-unit id="2482137713226830428" datatype="html" xml:space="preserve">
         <source>Published <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/></source>
-        <target state="new">Published <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/></target>
+        <target state="translated">Yayınlandı<x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">32</context>
@@ -5378,9 +5367,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2392048495773035896" datatype="html">
+      <trans-unit id="2392048495773035896" datatype="html" xml:space="preserve">
         <source>Open the modal to support the video uploader</source>
-        <target state="new">Open the modal to support the video uploader</target>
+        <target state="translated">Video yükleyiciyi desteklemek için modeli açın</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -5402,11 +5391,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="687548610091961489" datatype="html">
+      <trans-unit id="687548610091961489" datatype="html" xml:space="preserve">
         <source>By <x id="INTERPOLATION"/></source>
-        <target state="new">By 
-          <x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/>
-        </target>
+        <target state="translated">İle<x id="INTERPOLATION" equiv-text="{{ video.byAccount }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">72</context>
@@ -5428,17 +5415,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7542242186854344789" datatype="html">
+      <trans-unit id="7542242186854344789" datatype="html" xml:space="preserve">
         <source>channels subscribed</source>
-        <target state="new">channels subscribed</target>
+        <target state="translated">abone olunan kanallar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8426539297729416784" datatype="html">
+      <trans-unit id="8426539297729416784" datatype="html" xml:space="preserve">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
-        <target state="new">{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</target>
+        <target state="translated">{VAR_SELECT, seç, tanımsız {Abonelikten çık} diğer {Tüm kanallardan aboneliği kaldır} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">29</context>
@@ -5460,43 +5447,41 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="66785722678644243" datatype="html">
+      <trans-unit id="66785722678644243" datatype="html" xml:space="preserve">
         <source>Origin</source>
-        <target state="new">Origin</target>
+        <target state="translated">Menşei</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6981359593518942576" datatype="html">
+      <trans-unit id="6981359593518942576" datatype="html" xml:space="preserve">
         <source>Open the video on the origin instance</source>
-        <target state="new">Open the video on the origin instance</target>
+        <target state="translated">Videoyu başlangıç örneğinde açın</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="795485832100313" datatype="html">
+      <trans-unit id="795485832100313" datatype="html" xml:space="preserve">
         <source>Video re-upload</source>
-        <target state="new">Video re-upload</target>
+        <target state="translated">Videonun yeniden yüklenmesi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5139892963394684487" datatype="html">
+      <trans-unit id="5139892963394684487" datatype="html" xml:space="preserve">
         <source>Originally published</source>
-        <target state="new">Originally published</target>
+        <target state="translated">Orijinal olarak yayınlandı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2935783216050341269" datatype="html">
+      <trans-unit id="2935783216050341269" datatype="html" xml:space="preserve">
         <source>the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.</source>
-        <target state="new">
-          the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.
-        </target>
+        <target state="translated">Bu video için kullanılan paylaşım sistemi, sisteminizle ilgili bazı teknik bilgilerin (genel IP adresi gibi) diğer eşlere gönderilebileceği anlamına gelir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context>
           <context context-type="linenumber">5</context>
@@ -5550,9 +5535,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3452334748875293295" datatype="html">
+      <trans-unit id="3452334748875293295" datatype="html" xml:space="preserve">
         <source>The video was blocked due to automatic blocking of new videos</source>
-        <target state="new">The video was blocked due to automatic blocking of new videos</target>
+        <target state="translated">Yeni videoların otomatik olarak engellenmesi nedeniyle video engellendi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">56</context>
@@ -5590,47 +5575,41 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8619499607322327082" datatype="html">
+      <trans-unit id="8619499607322327082" datatype="html" xml:space="preserve">
         <source>This video will be published on <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>. </source>
-        <target state="new"> This video will be published on <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>.
-</target>
+        <target state="translated">Bu video şu tarihte yayınlanacaktır:<x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4262297989675590582" datatype="html">
+      <trans-unit id="4262297989675590582" datatype="html" xml:space="preserve">
         <source>This live has not started yet.</source>
-        <target state="new"> This live has not started yet.
-</target>
+        <target state="translated">Bu canlı yayın henüz başlamadı.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4926204350710628499" datatype="html">
+      <trans-unit id="4926204350710628499" datatype="html" xml:space="preserve">
         <source>This live has ended.</source>
-        <target state="new"> This live has ended.
-</target>
+        <target state="translated">Bu canlı yayın henüz sona ermedi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7365478703093390233" datatype="html">
+      <trans-unit id="7365478703093390233" datatype="html" xml:space="preserve">
         <source>There are no videos available in this playlist.</source>
-        <target state="new"> There are no videos available in this playlist.
-</target>
+        <target state="translated">Bu oynatma listesinde video yok.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8518611938109939710" datatype="html">
+      <trans-unit id="8518611938109939710" datatype="html" xml:space="preserve">
         <source>SORT BY</source>
-        <target state="new">
-        SORT BY
-      </target>
+        <target state="translated">GÖRE SIRALA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">10</context>
@@ -5660,17 +5639,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6390009909920475335" datatype="html">
+      <trans-unit id="6390009909920475335" datatype="html" xml:space="preserve">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> and others </source>
-        <target state="new"> View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> and others </target>
+        <target state="translated">Şuradan <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> görüntüle<x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/>ve diğerleri </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4036338619293319383" datatype="html">
+      <trans-unit id="4036338619293319383" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 reply} diğer{<x id="INTERPOLATION"/> cevaplar}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">77</context>
@@ -5684,17 +5663,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="127329338495775339" datatype="html">
+      <trans-unit id="127329338495775339" datatype="html" xml:space="preserve">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="new"> View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
+        <target state="translated">Şuradan<x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> görüntüle<x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5535545444690528619" datatype="html">
+      <trans-unit id="5535545444690528619" datatype="html" xml:space="preserve">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/></source>
-        <target state="new">View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/></target>
+        <target state="translated">Görüntüle<x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">84</context>
@@ -5718,33 +5697,33 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="982956590420630883" datatype="html">
+      <trans-unit id="982956590420630883" datatype="html" xml:space="preserve">
         <source>Markdown compatible</source>
-        <target state="new">Markdown compatible</target>
+        <target state="translated">Markdown uyumlu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5793595564950675122" datatype="html">
+      <trans-unit id="5793595564950675122" datatype="html" xml:space="preserve">
         <source>Markdown compatible that supports:</source>
-        <target state="new">Markdown compatible that supports:</target>
+        <target state="translated">Aşağıdakileri destekleyen Markdown uyumlu:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8422216333877786919" datatype="html">
+      <trans-unit id="8422216333877786919" datatype="html" xml:space="preserve">
         <source>Auto generated links</source>
-        <target state="new">Auto generated links</target>
+        <target state="translated">Otomatik oluşturulan bağlantılar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6365822416124232422" datatype="html">
+      <trans-unit id="6365822416124232422" datatype="html" xml:space="preserve">
         <source>Break lines</source>
-        <target state="new">Break lines</target>
+        <target state="translated">Satırları kır</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">24</context>
@@ -5774,33 +5753,33 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6608581312644027413" datatype="html">
+      <trans-unit id="6608581312644027413" datatype="html" xml:space="preserve">
         <source>Emoji markup</source>
-        <target state="new">Emoji markup</target>
+        <target state="translated">Emoji işaretlemesi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="381522038671562286" datatype="html">
+      <trans-unit id="381522038671562286" datatype="html" xml:space="preserve">
         <source>See complete list</source>
-        <target state="new">See complete list</target>
+        <target state="translated">Tam listeye bakın</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2263890353858735493" datatype="html">
+      <trans-unit id="2263890353858735493" datatype="html" xml:space="preserve">
         <source>You are one step away from commenting</source>
-        <target state="new">You are one step away from commenting</target>
+        <target state="translated">Yorum yapmaya bir adım uzaktasınız</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7508177761852352782" datatype="html">
+      <trans-unit id="7508177761852352782" datatype="html" xml:space="preserve">
         <source>You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example).</source>
-        <target state="new"> You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example). </target>
+        <target state="translated">ActivityPub uyumlu herhangi bir örnekteki (örneğin PeerTube/Mastodon/Pleroma hesabı) bir hesabı kullanarak yorum yapabilirsiniz.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">69</context>
@@ -5814,25 +5793,25 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4817080330698362530" datatype="html">
+      <trans-unit id="4817080330698362530" datatype="html" xml:space="preserve">
         <source>Markdown Emoji List</source>
-        <target state="new">Markdown Emoji List</target>
+        <target state="translated">Markdown Emoji Listesi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3572897237443938692" datatype="html">
+      <trans-unit id="3572897237443938692" datatype="html" xml:space="preserve">
         <source>Highlighted comment</source>
-        <target state="new">Highlighted comment</target>
+        <target state="translated">Vurgulanan yorum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4502286564339177240" datatype="html">
+      <trans-unit id="4502286564339177240" datatype="html" xml:space="preserve">
         <source>Reply</source>
-        <target state="new">Reply</target>
+        <target state="translated">Cevap</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -5850,9 +5829,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9031514421077169181" datatype="html">
+      <trans-unit id="9031514421077169181" datatype="html" xml:space="preserve">
         <source>Video redundancies</source>
-        <target state="new">Video redundancies</target>
+        <target state="translated">Video yedekleri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -5885,41 +5864,41 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="658727060940996385" datatype="html">
+      <trans-unit id="658727060940996385" datatype="html" xml:space="preserve">
         <source>Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?</source>
-        <target state="new">Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?</target>
+        <target state="translated">Belirtecin yenilenmesi, önceden yapılandırılmış istemcilerin yeni belirteci kullanana kadar feed'i almasına izin vermeyecektir. Devam ediyor musunuz?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3029923402309610616" datatype="html">
+      <trans-unit id="3029923402309610616" datatype="html" xml:space="preserve">
         <source>Token renewed. Update your client configuration accordingly.</source>
-        <target state="new">Token renewed. Update your client configuration accordingly.</target>
+        <target state="translated">Jeton yenilendi. İstemci yapılandırmanızı buna göre güncelleyin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context>
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7996232964209657116" datatype="html">
+      <trans-unit id="7996232964209657116" datatype="html" xml:space="preserve">
         <source>EXPORT</source>
-        <target state="new">EXPORT</target>
+        <target state="translated">DIŞA AKTAR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6327599466774745087" datatype="html">
+      <trans-unit id="6327599466774745087" datatype="html" xml:space="preserve">
         <source>You can request an archive of your account containing:</source>
-        <target state="new">You can request an archive of your account containing:</target>
+        <target state="translated">Hesabınızın aşağıdakileri içeren bir arşivini talep edebilirsiniz:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5215128747477502320" datatype="html">
+      <trans-unit id="5215128747477502320" datatype="html" xml:space="preserve">
         <source>Your account settings with avatar file</source>
-        <target state="new">Your account settings with avatar file</target>
+        <target state="translated">Avatar dosyasıyla birlikte hesap ayarlarınız</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">14</context>
