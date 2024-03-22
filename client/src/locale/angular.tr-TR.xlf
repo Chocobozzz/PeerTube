@@ -6419,11 +6419,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8371296837649897723" datatype="html">
+      <trans-unit id="8371296837649897723" datatype="html" xml:space="preserve">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target state="new">
-              If you leave the password empty, an email will be sent to the user.
-            </target>
+        <target state="translated">Şifreyi boş bırakırsanız kullanıcıya e-posta gönderilecektir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">128</context>
@@ -6433,9 +6431,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4145496584631696119" datatype="html">
+      <trans-unit id="4145496584631696119" datatype="html" xml:space="preserve">
         <source>Role</source>
-        <target state="new">Role</target>
+        <target state="translated">Rol</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">138</context>
