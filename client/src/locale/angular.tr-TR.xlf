@@ -6801,7 +6801,7 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
       </trans-unit>
       <trans-unit id="2343069726009080052" datatype="html" xml:space="preserve">
         <source>Video <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Video <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/> <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="needs-translation">Video <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/> <x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">32</context>
@@ -13322,33 +13322,33 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7951488350851416577" datatype="html">
+      <trans-unit id="7951488350851416577" datatype="html" xml:space="preserve">
         <source>Hosts entered are invalid.</source>
-        <target state="new">Hosts entered are invalid.</target>
+        <target state="translated">Girilen ana makineler geçersiz.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1469559036084108672" datatype="html">
+      <trans-unit id="1469559036084108672" datatype="html" xml:space="preserve">
         <source>Hosts entered contain duplicates.</source>
-        <target state="new">Hosts entered contain duplicates.</target>
+        <target state="translated">Girilen ana bilgisayarlar kopyalar içeriyor.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5991533283446904296" datatype="html">
+      <trans-unit id="5991533283446904296" datatype="html" xml:space="preserve">
         <source>Hosts or handles are invalid.</source>
-        <target state="new">Hosts or handles are invalid.</target>
+        <target state="translated">Ana bilgisayarlar veya tanıtıcılar geçersiz.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6759198394434886237" datatype="html">
+      <trans-unit id="6759198394434886237" datatype="html" xml:space="preserve">
         <source>Hosts or handles contain duplicates.</source>
-        <target state="new">Hosts or handles contain duplicates.</target>
+        <target state="translated">Ana bilgisayarlar veya tanıtıcılar kopyalar içeriyor.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">103</context>
@@ -13382,9 +13382,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5504952199515017930" datatype="html">
+      <trans-unit id="5504952199515017930" datatype="html" xml:space="preserve">
         <source>None - no upload possible</source>
-        <target state="new">None - no upload possible</target>
+        <target state="translated">Yok - yükleme mümkün değil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">23</context>
@@ -13462,25 +13462,25 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5514849824631859021" datatype="html">
+      <trans-unit id="5514849824631859021" datatype="html" xml:space="preserve">
         <source>100GB</source>
-        <target state="new">100GB</target>
+        <target state="translated">100GB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8245180845645676506" datatype="html">
+      <trans-unit id="8245180845645676506" datatype="html" xml:space="preserve">
         <source>200GB</source>
-        <target state="new">200GB</target>
+        <target state="translated">200GB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5468089754278798237" datatype="html">
+      <trans-unit id="5468089754278798237" datatype="html" xml:space="preserve">
         <source>500GB</source>
-        <target state="new">500GB</target>
+        <target state="translated">500GB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">32</context>
@@ -13510,9 +13510,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7641416475804061087" datatype="html">
+      <trans-unit id="7641416475804061087" datatype="html" xml:space="preserve">
         <source>10GB</source>
-        <target state="new">10GB</target>
+        <target state="translated">10GB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">44</context>
@@ -13534,9 +13534,9 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7022070615528435141" datatype="html">
+      <trans-unit id="7022070615528435141" datatype="html" xml:space="preserve">
         <source>Delete</source>
-        <target state="new">Delete</target>
+        <target state="translated">Sil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -13654,17 +13654,17 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
           <context context-type="linenumber">431</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3145156821099755377" datatype="html">
+      <trans-unit id="3145156821099755377" datatype="html" xml:space="preserve">
         <source>Accepted {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="new">Accepted {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</target>
+        <target state="translated">Onayla {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8823680466537853782" datatype="html">
+      <trans-unit id="8823680466537853782" datatype="html" xml:space="preserve">
         <source>Do you really want to reject {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
-        <target state="new">Do you really want to reject {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</target>
+        <target state="translated">Gerçekten reddetmek istiyor musun? {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">103</context>
