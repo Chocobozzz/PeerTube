@@ -6289,7 +6289,7 @@ kullanıcı başına/ <x id="INTERPOLATION_1"/> örnek başına </target>
       </trans-unit>
       <trans-unit id="8168516547268350654" datatype="html" xml:space="preserve">
         <source>Do you really want to unfollow {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> entries?}}</source>
-        <target state="translated">Gerçekten takibi bırakmak istiyor musun? {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> entries?}}</target>
+        <target state="translated">Gerçekten takibi bırakmak istiyor musun? {count, plural, =1 {<x id="entryName"/>?} diğer {<x id="count"/> girdiler ?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">88</context>
