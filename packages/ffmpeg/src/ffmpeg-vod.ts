@@ -1,14 +1,14 @@
+import { pick } from '@peertube/peertube-core-utils'
+import { VideoResolution } from '@peertube/peertube-models'
 import { MutexInterface } from 'async-mutex'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { readFile, writeFile } from 'fs/promises'
 import { dirname } from 'path'
-import { pick } from '@peertube/peertube-core-utils'
-import { VideoResolution } from '@peertube/peertube-models'
 import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-command-wrapper.js'
 import { ffprobePromise, getVideoStreamDimensionsInfo } from './ffprobe.js'
 import { presetCopy, presetOnlyAudio, presetVOD } from './shared/presets.js'
 
-export type TranscodeVODOptionsType = 'hls' | 'hls-from-ts' | 'quick-transcode' | 'video' | 'merge-audio' | 'only-audio'
+export type TranscodeVODOptionsType = 'hls' | 'hls-from-ts' | 'quick-transcode' | 'video' | 'merge-audio'
 
 export interface BaseTranscodeVODOptions {
   type: TranscodeVODOptionsType
@@ -57,16 +57,11 @@ export interface MergeAudioTranscodeOptions extends BaseTranscodeVODOptions {
   audioPath: string
 }
 
-export interface OnlyAudioTranscodeOptions extends BaseTranscodeVODOptions {
-  type: 'only-audio'
-}
-
 export type TranscodeVODOptions =
   HLSTranscodeOptions
   | HLSFromTSTranscodeOptions
   | VideoTranscodeOptions
   | MergeAudioTranscodeOptions
-  | OnlyAudioTranscodeOptions
   | QuickTranscodeOptions
 
 // ---------------------------------------------------------------------------
@@ -88,8 +83,6 @@ export class FFmpegVOD {
       'hls': this.buildHLSVODCommand.bind(this),
       'hls-from-ts': this.buildHLSVODFromTSCommand.bind(this),
       'merge-audio': this.buildAudioMergeCommand.bind(this),
-      // TODO: remove, we merge this in buildWebVideoCommand
-      'only-audio': this.buildOnlyAudioCommand.bind(this),
       'video': this.buildWebVideoCommand.bind(this)
     }
 
@@ -184,10 +177,6 @@ export class FFmpegVOD {
     command.input(options.audioPath)
       .outputOption('-tune stillimage')
       .outputOption('-shortest')
-  }
-
-  private buildOnlyAudioCommand (_options: OnlyAudioTranscodeOptions) {
-    presetOnlyAudio(this.commandWrapper)
   }
 
   // Avoid "height not divisible by 2" error
