@@ -9104,7 +9104,7 @@
       </trans-unit>
       <trans-unit id="4091781230315618850" datatype="html" xml:space="preserve">
         <source>Video quota is checked on import so the user doesn't upload a too big archive file</source>
-        <target state="translated">Video quota is checked on import so the user doesn't upload a too big archive file</target>
+        <target state="translated">Kullanıcının çok büyük bir arşiv dosyası yüklememesi için video kotası içe aktarma sırasında kontrol edilir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">504</context>
@@ -10934,7 +10934,7 @@ id = "START_PARAGRAPH" ctype = "x-p" equal-text = "&amp;lt;p class=&amp;quot;mb-
       </trans-unit>
       <trans-unit id="9131836378905533756" datatype="html" xml:space="preserve">
         <source>Created by <x id="INTERPOLATION"/></source>
-        <target state="translated">Tarafından oluşturuldu<x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></target>
+        <target state="translated">Tarafından oluşturuldu&lt;x id="INTERPOLATION"/ &gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context>
           <context context-type="linenumber">28</context>
@@ -11338,7 +11338,7 @@ id = "START_PARAGRAPH" ctype = "x-p" equal-text = "&amp;lt;p class=&amp;quot;mb-
       </trans-unit>
       <trans-unit id="8536543691393468142" datatype="html" xml:space="preserve">
         <source>at <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></source>
-        <target state="translated"><x id="PH" equalv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/> adresinde</target>
+        <target state="translated"><x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/> adresinde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">333</context>
@@ -16421,7 +16421,7 @@ id = "START_PARAGRAPH" ctype = "x-p" equal-text = "&amp;lt;p class=&amp;quot;mb-
       </trans-unit>
       <trans-unit id="155510305759087510" datatype="html" xml:space="preserve">
         <source>Select watermark image file</source>
-        <target state="translated">Select watermark image file</target>
+        <target state="translated">Filigran resim dosyasını seçin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">58</context>
@@ -17104,7 +17104,7 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
       </trans-unit>
       <trans-unit id="599762045687999334" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</source>
-        <target state="translated">{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</target>
+        <target state="translated">{interval, plural, =1 {1 ay önce} other {<x id="interval"/> ay önce}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">26</context>
