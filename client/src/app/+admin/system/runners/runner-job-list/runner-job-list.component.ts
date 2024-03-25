@@ -1,19 +1,19 @@
-import { SortMeta, SharedModule } from 'primeng/api'
+import { NgClass, NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
+import { RouterLink } from '@angular/router'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU } from '@app/helpers'
-import { RunnerJob, RunnerJobState } from '@peertube/peertube-models'
-import { RunnerJobFormatted, RunnerService } from '../runner.service'
-import { AutoColspanDirective } from '../../../../shared/shared-main/angular/auto-colspan.directive'
-import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
-import { ButtonComponent } from '../../../../shared/shared-main/buttons/button.component'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../../shared/shared-forms/advanced-input-filter.component'
-import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
-import { NgIf, NgClass } from '@angular/common'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { RunnerJob, RunnerJobState } from '@peertube/peertube-models'
+import { SharedModule, SortMeta } from 'primeng/api'
 import { TableModule } from 'primeng/table'
-import { RouterLink } from '@angular/router'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../../shared/shared-icons/global-icon.component'
+import { AutoColspanDirective } from '../../../../shared/shared-main/angular/auto-colspan.directive'
+import { ActionDropdownComponent, DropdownAction } from '../../../../shared/shared-main/buttons/action-dropdown.component'
+import { ButtonComponent } from '../../../../shared/shared-main/buttons/button.component'
+import { TableExpanderIconComponent } from '../../../../shared/shared-tables/table-expander-icon.component'
+import { RunnerJobFormatted, RunnerService } from '../runner.service'
 
 @Component({
   selector: 'my-runner-job-list',
@@ -174,6 +174,14 @@ export class RunnerJobListComponent extends RestTable <RunnerJob> implements OnI
       default:
         return 'badge-info'
     }
+  }
+
+  getRandomRunnerNameBadge (value: string) {
+    return this.getRandomBadge('runner', value)
+  }
+
+  getRandomRunnerTypeBadge (value: string) {
+    return this.getRandomBadge('type', value)
   }
 
   protected reloadDataInternal () {

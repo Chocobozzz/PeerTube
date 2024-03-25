@@ -144,6 +144,10 @@ export class JobsComponent extends RestTable implements OnInit {
     this.reloadData()
   }
 
+  getRandomJobTypeBadge (type: string) {
+    return this.getRandomBadge('type', type)
+  }
+
   protected reloadDataInternal () {
     let jobState = this.jobState as JobState
     if (this.jobState === 'all') jobState = null

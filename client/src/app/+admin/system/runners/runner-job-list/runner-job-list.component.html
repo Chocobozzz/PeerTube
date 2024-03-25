@@ -30,11 +30,12 @@
       </th>
       <th scope="col" i18n>UUID</th>
       <th scope="col" i18n>Type</th>
-      <th scope="col" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
+      <th scope="col" style="width: 150px" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
       <th scope="col" style="width: 100px" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="priority">Priority <p-sortIcon field="priority"></p-sortIcon></th>
       <th scope="col" style="width: 100px" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="progress">Progress <p-sortIcon field="progress"></p-sortIcon></th>
-      <th scope="col" i18n>Runner</th>
+      <th scope="col" style="width: 100px;" i18n>Runner</th>
       <th scope="col" style="width: 200px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 230px;" i18n>Processed/Finished</th>
     </tr>
   </ng-template>
 
@@ -75,18 +76,32 @@
       </td>
 
       <td>{{ runnerJob.uuid }}</td>
-      <td>{{ runnerJob.type }}</td>
+
       <td>
-        <span class="pt-badge" [ngClass]="getStateBadgeColor(runnerJob)">{{ runnerJob.state.label }}</span>
+        <span class="pt-badge ellipsis" [ngClass]="getRandomRunnerTypeBadge(runnerJob.type)">{{ runnerJob.type }}</span>
       </td>
+
+      <td>
+        <span class="pt-badge ellipsis" [ngClass]="getStateBadgeColor(runnerJob)">{{ runnerJob.state.label }}</span>
+      </td>
+
       <td>{{ runnerJob.priority }}</td>
 
       <td>
         <ng-container *ngIf="runnerJob.progress">{{ runnerJob.progress }}%</ng-container>
       </td>
 
-      <td>{{ runnerJob.runner?.name }}</td>
+      <td>
+        <div *ngIf="runnerJob.runner?.name" class="pt-badge" [ngClass]="getRandomRunnerNameBadge(runnerJob.runner.name)">
+          {{ runnerJob.runner.name }}
+        </div>
+      </td>
       <td>{{ runnerJob.createdAt }}</td>
+
+      <td class="fs-7">
+        <div>{{ runnerJob.startedAt }}</div>
+        <div>{{ runnerJob.finishedAt}}</div>
+      </td>
     </tr>
   </ng-template>
 

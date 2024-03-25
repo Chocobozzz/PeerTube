@@ -53,7 +53,8 @@
       <th scope="col" style="width: 200px" class="job-priority" i18n>Priority <small>(1 = highest priority)</small></th>
       <th scope="col" style="width: 200px" class="job-state" i18n *ngIf="jobState === 'all'">State</th>
       <th scope="col" style="width: 100px" class="job-progress" i18n *ngIf="hasGlobalProgress()">Progress</th>
-      <th scope="col" style="width: 150px" class="job-date" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 200px" class="job-date" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th scope="col" style="width: 230px;" i18n>Processed/Finished</th>
     </tr>
   </ng-template>
 
@@ -64,11 +65,15 @@
       </td>
 
       <td class="job-id c-hand" [pRowToggler]="job" [title]="job.id">{{ job.id }}</td>
-      <td class="job-type c-hand" [pRowToggler]="job">{{ job.type }}</td>
+
+      <td class="job-type c-hand" [pRowToggler]="job">
+        <span class="pt-badge ellipsis" [ngClass]="getRandomJobTypeBadge(job.type)">{{ job.type }}</span>
+      </td>
+
       <td class="job-priority c-hand" [pRowToggler]="job">{{ job.priority }}</td>
 
       <td class="job-state c-hand" [pRowToggler]="job" *ngIf="jobState === 'all'">
-        <span class="pt-badge" [ngClass]="getJobStateClass(job.state)">{{ job.state }}</span>
+        <span class="pt-badge ellipsis" [ngClass]="getJobStateClass(job.state)">{{ job.state }}</span>
       </td>
 
       <td *ngIf="hasGlobalProgress()" class="job-progress c-hand" [pRowToggler]="job">
@@ -76,6 +81,11 @@
       </td>
 
       <td class="job-date c-hand" [pRowToggler]="job">{{ job.createdAt }}</td>
+
+      <td class="fs-7">
+        <div>{{ job.processedOn }}</div>
+        <div>{{ job.finishedOn}}</div>
+      </td>
     </tr>
   </ng-template>
 
