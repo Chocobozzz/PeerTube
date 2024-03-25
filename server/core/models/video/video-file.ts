@@ -479,7 +479,7 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
     return VideoFileModel.findOne({ where, transaction: options.transaction })
   }
 
-  static removeHLSFilesOfVideoId (videoStreamingPlaylistId: number) {
+  static removeHLSFilesOfStreamingPlaylistId (videoStreamingPlaylistId: number) {
     const options = {
       where: { videoStreamingPlaylistId }
     }

@@ -209,7 +209,7 @@ async function replaceLiveByReplay (options: {
   liveSession.replayVideoId = videoWithFiles.id
   await liveSession.save()
 
-  await VideoFileModel.removeHLSFilesOfVideoId(hlsPlaylist.id)
+  await VideoFileModel.removeHLSFilesOfStreamingPlaylistId(hlsPlaylist.id)
 
   // Reset playlist
   hlsPlaylist.VideoFiles = []
