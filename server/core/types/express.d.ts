@@ -1,4 +1,4 @@
-import { HttpMethodType, PeerTubeProblemDocumentData, VideoCreate } from '@peertube/peertube-models'
+import { HttpMethodType, PeerTubeProblemDocumentData, ServerLogLevel, VideoCreate } from '@peertube/peertube-models'
 import { RegisterServerAuthExternalOptions } from '@server/types/index.js'
 import {
   MAbuseMessage,
@@ -109,6 +109,7 @@ declare module 'express' {
 
       data?: PeerTubeProblemDocumentData
 
+      logLevel?: ServerLogLevel // Default debug
       tags?: string[]
     }) => void
 
