@@ -116,7 +116,9 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
 
     const successBody: VODHLSTranscodingSuccess = {
       resolutionPlaylistFile: outputPath,
-      videoFile: videoPath
+      videoFile: videoPath,
+      uploadVideoFileUrl: payload.output.videoFileUrl,
+      uploadResolutionPlaylistFileUrl: payload.output.playlistFileUrl
     }
 
     await server.runnerJobs.success({

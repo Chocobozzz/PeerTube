@@ -22,6 +22,7 @@ import {
   RunnerJobType,
   RunnerJobUpdateBody,
   RunnerJobVODPayload,
+  UploadTranscodingResult,
   VODHLSTranscodingSuccess,
   VODWebVideoTranscodingSuccess
 } from '@peertube/peertube-models'
@@ -177,7 +178,7 @@ export class RunnerJobsCommand extends AbstractCommand {
     })
   }
 
-  success (options: OverrideCommandOptions & RunnerJobSuccessBody & { jobUUID: string }) {
+  async success (options: OverrideCommandOptions & RunnerJobSuccessBody & { jobUUID: string }) {
     const { payload } = options
 
     const path = '/api/v1/runners/jobs/' + options.jobUUID + '/success'
@@ -185,15 +186,31 @@ export class RunnerJobsCommand extends AbstractCommand {
     let payloadWithoutFiles = payload
 
     if ((isWebVideoOrAudioMergeTranscodingPayloadSuccess(payload) || isHLSTranscodingPayloadSuccess(payload)) && payload.videoFile) {
-      attaches[`payload[videoFile]`] = payload.videoFile
-
-      payloadWithoutFiles = omit(payloadWithoutFiles as VODWebVideoTranscodingSuccess, [ 'videoFile' ])
+      if (payload.uploadVideoFileUrl) {
+        await this.uploadTranscodeResult({
+          uploadResultUrl: payload.uploadVideoFileUrl,
+          file: payload.videoFile,
+          runnerToken: options.runnerToken,
+          jobToken: options.jobToken
+        })
+      } else {
+        attaches[`payload[videoFile]`] = payload.videoFile
+        payloadWithoutFiles = omit(payloadWithoutFiles as VODWebVideoTranscodingSuccess, [ 'videoFile' ])
+      }
     }
 
     if (isHLSTranscodingPayloadSuccess(payload) && payload.resolutionPlaylistFile) {
-      attaches[`payload[resolutionPlaylistFile]`] = payload.resolutionPlaylistFile
-
-      payloadWithoutFiles = omit(payloadWithoutFiles as VODHLSTranscodingSuccess, [ 'resolutionPlaylistFile' ])
+      if (payload.uploadResolutionPlaylistFileUrl) {
+        await this.uploadTranscodeResult({
+          uploadResultUrl: payload.uploadResolutionPlaylistFileUrl,
+          file: payload.resolutionPlaylistFile,
+          runnerToken: options.runnerToken,
+          jobToken: options.jobToken
+        })
+      } else {
+        attaches[`payload[resolutionPlaylistFile]`] = payload.resolutionPlaylistFile
+        payloadWithoutFiles = omit(payloadWithoutFiles as VODHLSTranscodingSuccess, [ 'resolutionPlaylistFile' ])
+      }
     }
 
     return this.postUploadRequest({
@@ -206,6 +223,27 @@ export class RunnerJobsCommand extends AbstractCommand {
 
         payload: payloadWithoutFiles
       },
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  uploadTranscodeResult (options: UploadTranscodingResult) {
+    const { uploadResultUrl, file } = options
+    const parsedUrl = new URL(uploadResultUrl.url)
+    const attaches: { [id: string]: any } = {
+      file
+    }
+
+    return this.postUploadRequest({
+      url: parsedUrl.origin,
+      path: parsedUrl.pathname,
+      fields: {
+        ...uploadResultUrl.fields,
+        ...pick(options, [ 'jobToken', 'runnerToken' ]),
+        file
+      },
+      attaches,
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })

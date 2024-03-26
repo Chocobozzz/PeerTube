@@ -1,3 +1,5 @@
+import { UploadUrlTranscodingResultPayload } from '@peertube/peertube-models'
+
 export interface RunnerJobSuccessBody {
   runnerToken: string
   jobToken: string
@@ -5,6 +7,12 @@ export interface RunnerJobSuccessBody {
   payload: RunnerJobSuccessPayload
 }
 
+export interface UploadTranscodingResult {
+  runnerToken: string
+  jobToken: string
+  uploadResultUrl: UploadUrlTranscodingResultPayload
+  file: string | Blob
+}
 // ---------------------------------------------------------------------------
 
 export type RunnerJobSuccessPayload =
@@ -16,15 +24,19 @@ export type RunnerJobSuccessPayload =
 
 export interface VODWebVideoTranscodingSuccess {
   videoFile: Blob | string
+  uploadVideoFileUrl?: UploadUrlTranscodingResultPayload
 }
 
 export interface VODHLSTranscodingSuccess {
   videoFile: Blob | string
   resolutionPlaylistFile: Blob | string
+  uploadVideoFileUrl?: UploadUrlTranscodingResultPayload
+  uploadResolutionPlaylistFileUrl?: UploadUrlTranscodingResultPayload
 }
 
 export interface VODAudioMergeTranscodingSuccess {
   videoFile: Blob | string
+  uploadVideoFileUrl?: UploadUrlTranscodingResultPayload
 }
 
 export interface LiveRTMPHLSTranscodingSuccess {
@@ -33,6 +45,7 @@ export interface LiveRTMPHLSTranscodingSuccess {
 
 export interface VideoStudioTranscodingSuccess {
   videoFile: Blob | string
+  uploadVideoFileUrl?: UploadUrlTranscodingResultPayload
 }
 
 export function isWebVideoOrAudioMergeTranscodingPayloadSuccess (
