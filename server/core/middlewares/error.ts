@@ -1,11 +1,11 @@
+import { HttpStatusCode } from '@peertube/peertube-models'
+import { logger } from '@server/helpers/logger.js'
 import express from 'express'
 import { ProblemDocument, ProblemDocumentExtension } from 'http-problem-details'
-import { logger } from '@server/helpers/logger.js'
-import { HttpStatusCode } from '@peertube/peertube-models'
 
 function apiFailMiddleware (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.fail = options => {
-    const { status = HttpStatusCode.BAD_REQUEST_400, message, title, type, data, instance, tags } = options
+    const { status = HttpStatusCode.BAD_REQUEST_400, message, title, type, data, instance, tags, logLevel = 'debug' } = options
 
     const extension = new ProblemDocumentExtension({
       ...data,
@@ -29,7 +29,7 @@ function apiFailMiddleware (req: express.Request, res: express.Response, next: e
         : undefined
     }, extension)
 
-    logger.debug('Bad HTTP request.', { json, tags })
+    logger.log(logLevel, 'Bad HTTP request.', { json, tags })
 
     res.status(status)
 
