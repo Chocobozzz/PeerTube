@@ -14680,7 +14680,7 @@
       </trans-unit>
       <trans-unit id="2072636325858679364" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;&gt;"/>Accept <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINER_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;&gt;"/>Reject <x id="INTERPOLATION" equiv-text="{{ registration.username }}"/> registration<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></source>
-        <target state="translated"><x id="START_TAG_NG_CONTAINERS" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;&gt;"/>Kabul et <x id="INTERPOLATION" equiv-text="{{ kayıt.kullanıcı adı }}"/> kayıt<x id="CLOSE_TAG_NG_CONTAINERS" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINERS_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;&gt;"/>Reddet <x id="INTERPOLATION" equiv-text="{{ kayıt.kullanıcı adı} }"/> kayıt<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
+        <target state="translated"><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isAccept()&quot;&gt;"/>Kabul et <x id="INTERPOLATION" equiv-text="{{ kayıt.kullanıcı adı }}"/> kayıt<x id="CLOSE_TAG_NG_CONTAINERS" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/><x id="START_TAG_NG_CONTAINERS_1" ctype="x-ng_container_1" equiv-text="&lt;ng-container *ngIf=&quot;isReject()&quot;&gt;"/>Reddet <x id="INTERPOLATION" equiv-text="{{ kayıt.kullanıcı adı} }"/> kayıt<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">4,5</context>
@@ -14712,7 +14712,7 @@
       </trans-unit>
       <trans-unit id="6252848909934071768" datatype="html" xml:space="preserve">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created. </source>
-        <target state="translated">Bu örnekte e-postalar etkinleştirilmediğinden PeerTube <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id=" adresine e-posta gönderemeyecektir. INTERPOLATION" equiv-text="{{ kayıt.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> hesabının oluşturulduğunu açıklayan . </target>
+        <target state="translated">Bu örnekte e-postalar etkinleştirilmediğinden PeerTube <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> hesabının oluşturulduğunu açıklayan . </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">30</context>
@@ -14728,7 +14728,7 @@
       </trans-unit>
       <trans-unit id="2693506849974732500" datatype="html" xml:space="preserve">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been rejected. </source>
-        <target state="translated">Bu örnekte e-postalar etkinleştirilmediğinden PeerTube <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id=" adresine e-posta gönderemeyecektir. INTERPOLATION" equiv-text="{{ kayıt.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> kayıt talebini açıkladı reddedildi. </target>
+        <target state="translated">Bu örnekte e-postalar etkinleştirilmediğinden PeerTube <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> kayıt talebini açıkladı reddedildi. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">40</context>
