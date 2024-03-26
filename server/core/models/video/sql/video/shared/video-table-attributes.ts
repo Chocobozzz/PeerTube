@@ -168,6 +168,21 @@ export class VideoTableAttributes {
     ]
   }
 
+  getVideoSourceAttributes () {
+    return [
+      'id',
+      'inputFilename',
+      'keptOriginalFilename',
+      'resolution',
+      'size',
+      'width',
+      'height',
+      'fps',
+      'metadata',
+      'createdAt'
+    ]
+  }
+
   getTrackerAttributes () {
     return [ 'id', 'url' ]
   }

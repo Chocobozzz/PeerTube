@@ -1,32 +1,32 @@
-import { SortMeta, SharedModule } from 'primeng/api'
-import { finalize } from 'rxjs/operators'
+import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU, getAbsoluteAPIUrl } from '@app/helpers'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { VideoBlockComponent } from '@app/shared/shared-moderation/video-block.component'
+import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { getAllFiles } from '@peertube/peertube-core-utils'
 import { UserRight, VideoFile, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@peertube/peertube-models'
-import { VideoAdminService } from './video-admin.service'
-import { BytesPipe } from '../../../shared/shared-main/angular/bytes.pipe'
-import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
+import { SharedModule, SortMeta } from 'primeng/api'
+import { TableModule } from 'primeng/table'
+import { finalize } from 'rxjs/operators'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { AutoColspanDirective } from '../../../shared/shared-main/angular/auto-colspan.directive'
+import { BytesPipe } from '../../../shared/shared-main/angular/bytes.pipe'
+import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
+import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
+import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
+import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
 import { VideoCellComponent } from '../../../shared/shared-tables/video-cell.component'
 import {
   VideoActionsDisplayType,
   VideoActionsDropdownComponent
 } from '../../../shared/shared-video-miniature/video-actions-dropdown.component'
-import { TableExpanderIconComponent } from '../../../shared/shared-tables/table-expander-icon.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
-import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
-import { NgClass, NgIf, NgFor, DatePipe } from '@angular/common'
-import { TableModule } from 'primeng/table'
-import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
-import { VideoService } from '@app/shared/shared-main/video/video.service'
-import { Video } from '@app/shared/shared-main/video/video.model'
-import { VideoBlockComponent } from '@app/shared/shared-moderation/video-block.component'
-import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
+import { VideoAdminService } from './video-admin.service'
 
 @Component({
   selector: 'my-video-list',
@@ -187,6 +187,10 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
     return video.state.id === VideoState.TO_IMPORT
   }
 
+  hasOriginalFile (video: Video) {
+    return !!video.videoSource?.fileDownloadUrl
+  }
+
   hasHLS (video: Video) {
     const p = video.streamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
     if (!p) return false
@@ -211,13 +215,10 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
   }
 
   getFilesSize (video: Video) {
-    let files = video.files
+    let total = getAllFiles(video).reduce((p, f) => p += f.size, 0)
+    total += video.videoSource?.size || 0
 
-    if (this.hasHLS(video)) {
-      files = files.concat(video.streamingPlaylists[0].files)
-    }
-
-    return files.reduce((p, f) => p += f.size, 0)
+    return total
   }
 
   async removeVideoFile (video: Video, file: VideoFile, type: 'hls' | 'web-videos') {
@@ -229,6 +230,22 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
       .subscribe({
         next: () => {
           this.notifier.success($localize`File removed.`)
+          this.reloadData()
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  async removeVideoSourceFile (video: Video) {
+    const message = $localize`Are you sure you want to delete the original file of this video?`
+    const res = await this.confirmService.confirm(message, $localize`Delete original file`)
+    if (res === false) return
+
+    this.videoService.removeSourceFile(video.uuid)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Original file removed.`)
           this.reloadData()
         },
 

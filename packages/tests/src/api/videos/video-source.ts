@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 import { getAllFiles } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoInclude, VideoPrivacy } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   ObjectStorageCommand,
@@ -104,6 +104,20 @@ describe('Test video source management', function () {
       expect(source.metadata?.streams).to.be.an('array')
     })
 
+    it('Should include video source file when listing videos in admin', async function () {
+      const { total, data } = await servers[0].videos.listAllForAdmin({ include: VideoInclude.SOURCE, sort: 'publishedAt' })
+      expect(total).to.equal(2)
+      expect(data).to.have.lengthOf(2)
+
+      expect(data[0].videoSource).to.exist
+      expect(data[0].videoSource.inputFilename).to.equal(fixture1)
+      expect(data[0].videoSource.fileDownloadUrl).to.be.null
+
+      expect(data[1].videoSource).to.exist
+      expect(data[1].videoSource.inputFilename).to.equal(fixture2)
+      expect(data[1].videoSource.fileDownloadUrl).to.exist
+    })
+
     it('Should have kept original video file', async function () {
       await checkSourceFile({ server: servers[0], fsCount: 1, fixture: fixture2, uuid: uuids[uuids.length - 1] })
     })
@@ -133,6 +147,33 @@ describe('Test video source management', function () {
 
       expect(source.metadata?.format).to.exist
       expect(source.metadata?.streams).to.be.an('array')
+    })
+
+    it('Should delete video source file', async function () {
+      await servers[0].videos.deleteSource({ id: uuids[uuids.length - 1] })
+
+      const { total, data } = await servers[0].videos.listAllForAdmin({ include: VideoInclude.SOURCE, sort: 'publishedAt' })
+      expect(total).to.equal(3)
+      expect(data).to.have.lengthOf(3)
+
+      expect(data[0].videoSource).to.exist
+      expect(data[0].videoSource.inputFilename).to.equal(fixture1)
+      expect(data[0].videoSource.fileDownloadUrl).to.be.null
+
+      expect(data[1].videoSource).to.exist
+      expect(data[1].videoSource.inputFilename).to.equal(fixture2)
+      expect(data[1].videoSource.fileDownloadUrl).to.exist
+
+      expect(data[2].videoSource).to.exist
+      expect(data[2].videoSource.fileDownloadUrl).to.not.exist
+      expect(data[2].videoSource.createdAt).to.exist
+      expect(data[2].videoSource.fps).to.be.null
+      expect(data[2].videoSource.height).to.be.null
+      expect(data[2].videoSource.width).to.be.null
+      expect(data[2].videoSource.resolution.id).to.be.null
+      expect(data[2].videoSource.resolution.label).to.be.null
+      expect(data[2].videoSource.size).to.be.null
+      expect(data[2].videoSource.metadata).to.be.null
     })
 
     it('Should delete all videos and do not have original files anymore', async function () {

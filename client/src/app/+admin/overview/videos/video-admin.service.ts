@@ -112,7 +112,8 @@ export class VideoAdminService {
     let include = VideoInclude.BLACKLISTED |
       VideoInclude.BLOCKED_OWNER |
       VideoInclude.NOT_PUBLISHED_STATE |
-      VideoInclude.FILES
+      VideoInclude.FILES |
+      VideoInclude.SOURCE
 
     let privacyOneOf = getAllPrivacies()
 

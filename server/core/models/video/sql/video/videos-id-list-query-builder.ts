@@ -702,9 +702,11 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
               '(SELECT COALESCE(SUM(size), 0) FROM "videoFile" WHERE "videoFile"."videoId" = "video"."id")' +
               ' + ' +
               '(SELECT COALESCE(SUM(size), 0) FROM "videoFile" ' +
-                'INNER JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
-                'AND "videoStreamingPlaylist"."videoId" = "video"."id"' +
+              'INNER JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
+              'AND "videoStreamingPlaylist"."videoId" = "video"."id"' +
               ')' +
+              ' + ' +
+              '(SELECT COALESCE(SUM(size), 0) FROM "videoSource" WHERE "videoSource"."videoId" = "video"."id")' +
             ') END' +
         ') AS "localVideoFilesSize"'
       )

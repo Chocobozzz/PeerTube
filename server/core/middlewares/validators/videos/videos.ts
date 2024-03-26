@@ -472,7 +472,7 @@ const commonVideosFiltersValidator = [
       if (req.query.include || req.query.privacyOneOf) {
         return res.fail({
           status: HttpStatusCode.UNAUTHORIZED_401,
-          message: 'You are not allowed to see all videos.'
+          message: 'You are not allowed to see all videos or specify a custom include.'
         })
       }
     }

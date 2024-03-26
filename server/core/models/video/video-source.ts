@@ -117,7 +117,9 @@ export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
 
       resolution: {
         id: this.resolution,
-        label: getResolutionLabel(this.resolution)
+        label: this.resolution !== null
+          ? getResolutionLabel(this.resolution)
+          : null
       },
       size: this.size,
 

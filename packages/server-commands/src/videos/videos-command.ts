@@ -183,6 +183,20 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
+  deleteSource (options: OverrideCommandOptions & {
+    id: number | string
+  }) {
+    const path = '/api/v1/videos/' + options.id + '/source/file'
+
+    return this.deleteRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
   async getId (options: OverrideCommandOptions & {
     uuid: number | string
   }) {
@@ -273,11 +287,11 @@ export class VideosCommand extends AbstractCommand {
     const privacyOneOf = getAllPrivacies()
 
     return this.list({
-      ...options,
-
       include,
       nsfw,
       privacyOneOf,
+
+      ...options,
 
       token: this.buildCommonRequestToken({ ...options, implicitToken: true })
     })

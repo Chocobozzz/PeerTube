@@ -4,6 +4,7 @@ import { VideoFile } from './file/index.js'
 import { VideoConstant } from './video-constant.model.js'
 import { VideoPrivacyType } from './video-privacy.enum.js'
 import { VideoScheduleUpdate } from './video-schedule-update.model.js'
+import { VideoSource } from './video-source.model.js'
 import { VideoStateType } from './video-state.enum.js'
 import { VideoStreamingPlaylist } from './video-streaming-playlist.model.js'
 
@@ -75,6 +76,8 @@ export interface VideoAdditionalAttributes {
 
   files: VideoFile[]
   streamingPlaylists: VideoStreamingPlaylist[]
+
+  videoSource: VideoSource
 }
 
 export interface VideoDetails extends Video {

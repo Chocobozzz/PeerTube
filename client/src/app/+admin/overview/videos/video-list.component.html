@@ -70,14 +70,17 @@
       </td>
 
       <td>
-        <span class="pt-badge badge-blue" *ngIf="video.isLocal">Local</span>
-        <span class="pt-badge badge-purple" *ngIf="!video.isLocal">Remote</span>
+        @if (video.isLocal) {
+          <span class="pt-badge badge-blue" i18n>Local</span>
+        } @else {
+          <span class="pt-badge badge-purple" i18n>Remote</span>
+        }
 
         <span [ngClass]="getPrivacyBadgeClass(video)" class="pt-badge">{{ video.privacy.label }}</span>
 
         <span *ngIf="video.nsfw" class="pt-badge badge-red" i18n>NSFW</span>
 
-        <span *ngIf="isUnpublished(video)" class="pt-badge badge-yellow" i18n>{{ video.state.label }}</span>
+        <span *ngIf="isUnpublished(video)" class="pt-badge badge-yellow">{{ video.state.label }}</span>
 
         <span *ngIf="isAccountBlocked(video)" class="pt-badge badge-red" i18n>Account muted</span>
         <span *ngIf="isServerBlocked(video)" class="pt-badge badge-red" i18n>Server muted</span>
@@ -86,10 +89,11 @@
       </td>
 
       <td>
-        <span *ngIf="hasHLS(video)" class="pt-badge badge-blue">HLS</span>
-        <span *ngIf="hasWebVideos(video)" class="pt-badge badge-blue">Web Videos ({{ video.files.length }})</span>
-        <span i18n *ngIf="video.isLive" class="pt-badge badge-blue">Live</span>
-        <span i18n *ngIf="hasObjectStorage(video)" class="pt-badge badge-purple">Object storage</span>
+        <span *ngIf="hasOriginalFile(video)" class="pt-badge badge-blue" i18n>Original file</span>
+        <span *ngIf="hasHLS(video)" class="pt-badge badge-blue" i18n>HLS</span>
+        <span *ngIf="hasWebVideos(video)" class="pt-badge badge-blue" i18n>Web Videos ({{ video.files.length }})</span>
+        <span *ngIf="video.isLive" class="pt-badge badge-blue" i18n>Live</span>
+        <span *ngIf="hasObjectStorage(video)" class="pt-badge badge-purple" i18n>Object storage</span>
 
         <span *ngIf="!isImport(video) && !video.isLive && video.isLocal">{{ getFilesSize(video) | bytes: 1 }}</span>
       </td>
@@ -105,8 +109,26 @@
     <tr>
       <td class="video-info expand-cell" myAutoColspan>
         <div>
-          <div *ngIf="hasWebVideos(video)">
-            Web Videos:
+          <div class="me-3" *ngIf="hasOriginalFile(video)">
+            <ng-container i18n>Original file:</ng-container>
+
+            <ul>
+              <li>
+                {{ video.videoSource.inputFilename }}: {{ video.videoSource.size | bytes: 1 }}
+
+                <button
+                  *ngIf="canRemoveOneFile(video)" class="border-0 p-0"
+                  i18n-title title="Delete this file"
+                  (click)="removeVideoSourceFile(video)"
+                >
+                  <my-global-icon iconName="delete"></my-global-icon>
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <div class="me-3" *ngIf="hasWebVideos(video)">
+            <ng-container i18n>Web Videos:</ng-container>
 
             <ul>
               <li *ngFor="let file of video.files">
@@ -124,7 +146,7 @@
           </div>
 
           <div *ngIf="hasHLS(video)">
-            HLS:
+            <ng-container i18n>HLS:</ng-container>
 
             <ul>
               <li *ngFor="let file of video.streamingPlaylists[0].files">

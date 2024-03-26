@@ -48,7 +48,8 @@ describe('Test video filters validators', function () {
     const validIncludes = [
       VideoInclude.NONE,
       VideoInclude.BLOCKED_OWNER,
-      VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.BLACKLISTED
+      VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.BLACKLISTED,
+      VideoInclude.SOURCE
     ]
 
     async function testEndpoints (options: {

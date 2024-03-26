@@ -8,6 +8,7 @@ import { ServerBlocklistModel } from '@server/models/server/server-blocklist.js'
 import { ServerModel } from '@server/models/server/server.js'
 import { TrackerModel } from '@server/models/server/tracker.js'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history.js'
+import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { ScheduleVideoUpdateModel } from '../../../schedule-video-update.js'
 import { TagModel } from '../../../tag.js'
 import { ThumbnailModel } from '../../../thumbnail.js'
@@ -39,6 +40,7 @@ export class VideoModelBuilder {
   private accountBlocklistDone: Set<any>
   private serverBlocklistDone: Set<any>
   private liveDone: Set<any>
+  private sourceDone: Set<any>
   private redundancyDone: Set<any>
   private scheduleVideoUpdateDone: Set<any>
 
@@ -108,6 +110,10 @@ export class VideoModelBuilder {
           this.setBlockedOwner(row, videoModel)
           this.setBlockedServer(row, videoModel)
         }
+
+        if (include & VideoInclude.SOURCE) {
+          this.setSource(row, videoModel)
+        }
       }
     }
 
@@ -127,6 +133,7 @@ export class VideoModelBuilder {
     this.historyDone = new Set()
     this.blacklistDone = new Set()
     this.liveDone = new Set()
+    this.sourceDone = new Set()
     this.redundancyDone = new Set()
     this.scheduleVideoUpdateDone = new Set()
 
@@ -389,6 +396,16 @@ export class VideoModelBuilder {
     videoModel.VideoLive = new VideoLiveModel(attributes, this.buildOpts)
 
     this.liveDone.add(id)
+  }
+
+  private setSource (row: SQLRow, videoModel: VideoModel) {
+    const id = row['VideoSource.id']
+    if (!id || this.sourceDone.has(id)) return
+
+    const attributes = this.grab(row, this.tables.getVideoSourceAttributes(), 'VideoSource')
+    videoModel.VideoSource = new VideoSourceModel(attributes, this.buildOpts)
+
+    this.sourceDone.add(id)
   }
 
   private grab (row: SQLRow, attributes: string[], prefix: string) {

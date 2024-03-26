@@ -1,5 +1,5 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
-import { VideoState } from '@peertube/peertube-models'
+import { HttpStatusCode, UserRight, VideoState } from '@peertube/peertube-models'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { CreateJobArgument, CreateJobOptions, JobQueue } from '@server/lib/job-queue/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -19,6 +19,7 @@ import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import {
   asyncMiddleware,
   authenticate,
+  ensureUserHasRight,
   replaceVideoSourceResumableInitValidator,
   replaceVideoSourceResumableValidator,
   videoSourceGetLatestValidator
@@ -33,6 +34,14 @@ videoSourceRouter.get('/:id/source',
   authenticate,
   asyncMiddleware(videoSourceGetLatestValidator),
   getVideoLatestSource
+)
+
+videoSourceRouter.delete('/:id/source/file',
+  openapiOperationDoc({ operationId: 'deleteVideoSourceFile' }),
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_VIDEO_FILES),
+  asyncMiddleware(videoSourceGetLatestValidator),
+  asyncMiddleware(deleteVideoLatestSourceFile)
 )
 
 setupUploadResumableRoutes({
@@ -51,6 +60,24 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+async function deleteVideoLatestSourceFile (req: express.Request, res: express.Response) {
+  const videoSource = res.locals.videoSource
+  const video = res.locals.videoAll
+
+  await video.removeOriginalFile(videoSource)
+
+  videoSource.keptOriginalFilename = null
+  videoSource.fps = null
+  videoSource.resolution = null
+  videoSource.width = null
+  videoSource.height = null
+  videoSource.metadata = null
+  videoSource.size = null
+  await videoSource.save()
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
 
 function getVideoLatestSource (req: express.Request, res: express.Response) {
   return res.json(res.locals.videoSource.toFormattedJSON())

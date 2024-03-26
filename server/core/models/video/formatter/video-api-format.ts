@@ -27,6 +27,7 @@ export type VideoFormattingJSONOptions = {
     scheduledUpdate?: boolean
     blacklistInfo?: boolean
     files?: boolean
+    source?: boolean
     blockedOwner?: boolean
   }
 }
@@ -41,6 +42,7 @@ export function guessAdditionalAttributesFromQuery (query: VideosCommonQueryAfte
       scheduledUpdate: !!(query.include & VideoInclude.NOT_PUBLISHED_STATE),
       blacklistInfo: !!(query.include & VideoInclude.BLACKLISTED),
       files: !!(query.include & VideoInclude.FILES),
+      source: !!(query.include & VideoInclude.SOURCE),
       blockedOwner: !!(query.include & VideoInclude.BLOCKED_OWNER)
     }
   }
@@ -308,6 +310,10 @@ function buildAdditionalAttributes (video: MVideoFormattable, options: VideoForm
   if (add?.files === true) {
     result.streamingPlaylists = streamingPlaylistsModelToFormattedJSON(video, video.VideoStreamingPlaylists)
     result.files = videoFilesModelToFormattedJSON(video, video.VideoFiles)
+  }
+
+  if (add?.source === true) {
+    result.videoSource = video.VideoSource?.toFormattedJSON() || null
   }
 
   return result

@@ -16,7 +16,8 @@ import {
   VideoState,
   VideoStateType,
   VideoStreamingPlaylist,
-  VideoStreamingPlaylistType
+  VideoStreamingPlaylistType,
+  VideoSource
 } from '@peertube/peertube-models'
 
 export class Video implements VideoServerModel {
@@ -111,6 +112,8 @@ export class Video implements VideoServerModel {
   streamingPlaylists?: VideoStreamingPlaylist[]
   files?: VideoFile[]
 
+  videoSource?: VideoSource
+
   static buildWatchUrl (video: Partial<Pick<Video, 'uuid' | 'shortUUID'>>) {
     return buildVideoWatchPath({ shortUUID: video.shortUUID || video.uuid })
   }
@@ -192,6 +195,7 @@ export class Video implements VideoServerModel {
 
     this.streamingPlaylists = hash.streamingPlaylists
     this.files = hash.files
+    this.videoSource = hash.videoSource
 
     this.userHistory = hash.userHistory
 

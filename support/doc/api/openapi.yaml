@@ -3558,6 +3558,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoSource'
 
+  '/api/v1/videos/{id}/source/file':
+    delete:
+      summary: Delete video source file
+      operationId: deleteVideoSourceFile
+      tags:
+        - Video
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: video source not found
+
   '/api/v1/videos/{id}/source/replace-resumable':
     post:
       summary: Initialize the resumable replacement of a video
@@ -6988,6 +7006,8 @@ components:
         - 2
         - 4
         - 8
+        - 16
+        - 32
       description: >
         **PeerTube >= 4.0** Include additional videos in results (can be combined using bitwise or operator)
 
@@ -7000,6 +7020,10 @@ components:
         - `4` BLOCKED_OWNER
 
         - `8` FILES
+
+        - `16` CAPTIONS
+
+        - `32` VIDEO SOURCE
     subscriptionsUris:
       name: uris
       in: query

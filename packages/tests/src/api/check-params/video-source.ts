@@ -209,6 +209,38 @@ describe('Test video sources API validator', function () {
     })
   })
 
+  describe('When deleting video source file', function () {
+    let userAccessToken: string
+
+    let videoId: string
+
+    before(async function () {
+      userAccessToken = await server.users.generateUserAndToken('user56')
+
+      await server.config.enableMinimumTranscoding({ keepOriginal: true })
+      const { uuid } = await server.videos.quickUpload({ name: 'with source' })
+      videoId = uuid
+
+      await waitJobs([ server ])
+    })
+
+    it('Should fail without token', async function () {
+      await server.videos.deleteSource({ id: videoId, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should fail with another user', async function () {
+      await server.videos.deleteSource({ id: videoId, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail with an unknown video', async function () {
+      await server.videos.deleteSource({ id: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await server.videos.deleteSource({ id: videoId })
+    })
+  })
+
   after(async function () {
     await cleanupTests([ server ])
   })

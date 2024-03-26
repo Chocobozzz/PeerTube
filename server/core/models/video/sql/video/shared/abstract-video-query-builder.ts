@@ -247,6 +247,18 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     }
   }
 
+  protected includeVideoSource () {
+    this.addJoin(
+      'LEFT OUTER JOIN "videoSource" AS "VideoSource" ON "video"."id" = "VideoSource"."videoId"'
+    )
+
+    this.attributes = {
+      ...this.attributes,
+
+      ...this.buildAttributesObject('VideoSource', this.tables.getVideoSourceAttributes())
+    }
+  }
+
   protected includeTrackers () {
     this.addJoin(
       'LEFT OUTER JOIN (' +

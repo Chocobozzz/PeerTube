@@ -326,6 +326,11 @@ export class VideoService {
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
+  removeSourceFile (videoId: number | string) {
+    return this.authHttp.delete(VideoService.BASE_VIDEO_URL + '/' + videoId + '/source/file')
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
   runTranscoding (options: {
     videoIds: (number | string)[]
     type: 'hls' | 'web-video'

@@ -96,6 +96,10 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
       this.includeBlockedOwnerAndServer(options.serverAccountIdForBlock, options.user)
     }
 
+    if (options.include & VideoInclude.SOURCE) {
+      this.includeVideoSource()
+    }
+
     const select = this.buildSelect()
 
     this.query = `${select} FROM (${this.innerQuery}) AS "tmp" ${this.joins} ${this.innerSort}`
