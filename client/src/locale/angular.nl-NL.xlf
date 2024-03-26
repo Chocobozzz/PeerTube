@@ -2629,33 +2629,33 @@ Geen resultaten gevonden</target>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1327409825122054374" datatype="html">
+      <trans-unit id="1327409825122054374" datatype="html" xml:space="preserve">
         <source>Runner job cancelled</source>
-        <target state="new">Runner job cancelled</target>
+        <target state="translated">Externe taak geannuleerd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2874360404134250412" datatype="html">
+      <trans-unit id="2874360404134250412" datatype="html" xml:space="preserve">
         <source>Error in runner job</source>
-        <target state="new">Error in runner job</target>
+        <target state="translated">Storing in externe taak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2657043015926552641" datatype="html">
+      <trans-unit id="2657043015926552641" datatype="html" xml:space="preserve">
         <source>Unknown error</source>
-        <target state="new">Unknown error</target>
+        <target state="translated">Onbekende storing</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1439766333173070230" datatype="html">
+      <trans-unit id="1439766333173070230" datatype="html" xml:space="preserve">
         <source>Invalid input video stream</source>
-        <target state="new">Invalid input video stream</target>
+        <target state="translated">Ongeldig ingevoerde video stream</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">68</context>
@@ -2747,9 +2747,9 @@ Geen resultaten gevonden</target>
           <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1039157642448320025" datatype="html">
+      <trans-unit id="1039157642448320025" datatype="html" xml:space="preserve">
         <source>FAQ (Frequently Asked Questions) - about PeerTube</source>
-        <target state="new">FAQ (Frequently Asked Questions) - about PeerTube</target>
+        <target state="translated">FAQ (Veelgestelde vragen) - over PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">166</context>
@@ -3711,17 +3711,17 @@ Dit zal een bestaande ondertiteling vervangen!</target>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6191471816002237724" datatype="html">
+      <trans-unit id="6191471816002237724" datatype="html" xml:space="preserve">
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target state="new">Video descriptions are truncated by default and require manual action to expand them.</target>
+        <target state="translated">Videobeschrijvingen worden standaard ingekort en vereisen handmatige actie om ze uit te breiden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4621588014938487698" datatype="html">
+      <trans-unit id="4621588014938487698" datatype="html" xml:space="preserve">
         <source>A timestamp (<x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>00:05<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> for example) is automatically converted into a link to a part of the video.</source>
-        <target state="new">A timestamp (<x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>00:05<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> for example) is automatically converted into a link to a part of the video.</target>
+        <target state="translated">Een tijdstempel (<x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>00:05<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> bijvoorbeeld) wordt automatisch omgezet in een verwijzing naar een deel van de video.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">52</context>
@@ -3827,9 +3827,9 @@ Dit zal een bestaande ondertiteling vervangen!</target>
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7596115240533332749" datatype="html">
+      <trans-unit id="7596115240533332749" datatype="html" xml:space="preserve">
         <source>Open quick filters</source>
-        <target state="new">Open quick filters</target>
+        <target state="translated">Open snelfilter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">4</context>
@@ -4079,9 +4079,9 @@ Dit zal een bestaande ondertiteling vervangen!</target>
           <context context-type="linenumber">174</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7099354443826169799" datatype="html">
+      <trans-unit id="7099354443826169799" datatype="html" xml:space="preserve">
         <source>powered by PeerTube - CopyLeft 2015-2024</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2024</target>
+        <target state="translated">mogelijk gemaakt door PeerTube - Copyleft 2015-2024</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">183</context>
@@ -4224,9 +4224,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5096495468612049743" datatype="html">
+      <trans-unit id="5096495468612049743" datatype="html" xml:space="preserve">
         <source>Chapters</source>
-        <target state="new">Chapters</target>
+        <target state="translated">Videohoofdstukken</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">234</context>
@@ -4264,9 +4264,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">338</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4964217545822568684" datatype="html">
+      <trans-unit id="4964217545822568684" datatype="html" xml:space="preserve">
         <source>Privacy of the new replay</source>
-        <target state="new">Privacy of the new replay</target>
+        <target state="translated">Privacysetting van de nieuwe herhaling</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">344</context>
