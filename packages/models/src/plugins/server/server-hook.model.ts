@@ -137,7 +137,9 @@ export const serverFilterHookObject = {
   // Peertube >= 5.2
   'filter:feed.podcast.channel.create-custom-tags.result': true,
   // Peertube >= 5.2
-  'filter:feed.podcast.video.create-custom-tags.result': true
+  'filter:feed.podcast.video.create-custom-tags.result': true,
+  // Peertube >= 6.1
+  'filter:api.user.me.get.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject

@@ -160,7 +160,13 @@ async function getUserInformation (req: express.Request, res: express.Response) 
   // We did not load channels in res.locals.user
   const user = await UserModel.loadForMeAPI(res.locals.oauth.token.user.id)
 
-  return res.json(user.toMeFormattedJSON())
+  const result = await Hooks.wrapObject(
+    user.toMeFormattedJSON(),
+    'filter:api.user.me.get.result',
+    { user }
+  )
+
+  return res.json(result)
 }
 
 async function getUserVideoQuotaUsed (req: express.Request, res: express.Response) {
