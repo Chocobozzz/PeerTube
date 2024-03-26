@@ -3,6 +3,7 @@
 import { expect } from 'chai'
 import {
   HttpStatusCode,
+  MyUser,
   PeerTubeProblemDocument,
   VideoDetails,
   VideoImportState,
@@ -466,6 +467,14 @@ describe('Test plugin filter hooks', function () {
       await waitJobs(servers)
 
       await checkIsBlacklisted(uuid, true)
+    })
+  })
+
+  describe('Users', function () {
+    it('Should run filter:api.user.me.get.result', async function () {
+      const user = await servers[0].users.getMyInfo() as MyUser & { customParam: string }
+
+      expect(user.customParam).to.equal('Customized')
     })
   })
 
