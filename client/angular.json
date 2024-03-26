@@ -29,6 +29,10 @@
             "translation": "src/locale/angular.th-TH.xlf",
             "baseHref": "/client/th-TH/"
           },
+          "tr": {
+            "translation": "src/locale/angular.tr-TR.xlf",
+            "baseHref": "/client/tr-TR/"
+          },
           "fi": {
             "translation": "src/locale/angular.fi-FI.xlf",
             "baseHref": "/client/fi-FI/"

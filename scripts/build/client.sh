@@ -9,6 +9,7 @@ defaultLanguage="en-US"
 languages=(
     ["ar"]="ar"
     ["is"]="is"
+    ["tr"]="tr-TR"
     ["fa"]="fa-IR"
     ["en"]="en-US"
     ["vi"]="vi-VN"
