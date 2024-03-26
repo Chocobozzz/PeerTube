@@ -7,7 +7,7 @@ import { body, param } from 'express-validator'
 import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
 
-const getVideoLocalViewerValidator = [
+export const getVideoLocalViewerValidator = [
   param('localViewerId')
     .custom(isIdValid),
 
@@ -28,7 +28,7 @@ const getVideoLocalViewerValidator = [
   }
 ]
 
-const videoViewValidator = [
+export const videoViewValidator = [
   isValidVideoIdParam('videoId'),
 
   body('currentTime')
@@ -54,10 +54,3 @@ const videoViewValidator = [
     return next()
   }
 ]
-
-// ---------------------------------------------------------------------------
-
-export {
-  getVideoLocalViewerValidator, videoViewValidator
-}
-
