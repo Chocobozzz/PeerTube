@@ -5107,9 +5107,9 @@ Je kan nu al informatie toevoegen over deze video.
           <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8058748565866023802" datatype="html">
+      <trans-unit id="8058748565866023802" datatype="html" xml:space="preserve">
         <source>Responsive embed</source>
-        <target state="new">Responsive embed</target>
+        <target state="translated">Video insluiten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">89</context>
@@ -5143,9 +5143,9 @@ Je kan nu al informatie toevoegen over deze video.
           <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1097129970287496588" datatype="html">
+      <trans-unit id="1097129970287496588" datatype="html" xml:space="preserve">
         <source>This video is password protected, please note that recipients will require the corresponding password to access the content.</source>
-        <target state="new"> This video is password protected, please note that recipients will require the corresponding password to access the content. </target>
+        <target state="translated">Deze video is beveiligd met een wachtwoord. Houd er rekening mee dat ontvangers het bijbehorende wachtwoord nodig hebben om toegang te krijgen tot de inhoud.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">110,112</context>
@@ -5343,42 +5343,41 @@ Je kan nu al informatie toevoegen over deze video.
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6357191571827015663" datatype="html">
+      <trans-unit id="6357191571827015663" datatype="html" xml:space="preserve">
         <source>This video is password protected.</source>
-        <target state="new"> This video is password protected.
-</target>
+        <target state="translated">Deze video is beveiligd met een wachtwoord.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4659739156309424184" datatype="html">
+      <trans-unit id="4659739156309424184" datatype="html" xml:space="preserve">
         <source>The video is being transcoded, it may not work properly.</source>
-        <target state="new">The video is being transcoded, it may not work properly.</target>
+        <target state="translated">De video wordt getranscodeerd, mogelijk werkt deze niet goed.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1380062134054846433" datatype="html">
+      <trans-unit id="1380062134054846433" datatype="html" xml:space="preserve">
         <source>The video is being imported, it will be available when the import is finished.</source>
-        <target state="new">The video is being imported, it will be available when the import is finished.</target>
+        <target state="translated">De video wordt geïmporteerd, deze zal beschikbaar zijn wanneer het importeren voorbij is.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5332079713007503082" datatype="html">
+      <trans-unit id="5332079713007503082" datatype="html" xml:space="preserve">
         <source>The video is being moved to server file system, it may not work properly</source>
-        <target state="new">The video is being moved to server file system, it may not work properly</target>
+        <target state="translated">De video wordt verplaatst naar het server bestandssysteem, mogelijk werkt deze niet goed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1670226671143418566" datatype="html">
+      <trans-unit id="1670226671143418566" datatype="html" xml:space="preserve">
         <source>Move to file system failed, this video may not work properly.</source>
-        <target state="new">Move to file system failed, this video may not work properly.</target>
+        <target state="translated">Verplaatsen naar bestandssysteem mislukt, deze video werkt mogelijk niet goed.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.ts</context>
           <context context-type="linenumber">33</context>
