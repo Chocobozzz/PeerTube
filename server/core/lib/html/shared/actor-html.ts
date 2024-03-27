@@ -1,14 +1,13 @@
-import { escapeHTML } from '@peertube/peertube-core-utils'
+import { escapeHTML, maxBy } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
-import express from 'express'
-import { CONFIG } from '../../../initializers/config.js'
 import { AccountModel } from '@server/models/account/account.js'
+import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { MAccountHost, MChannelHost } from '@server/types/models/index.js'
-import { getBiggestActorImage } from '@server/lib/actor-image.js'
-import { ActorImageModel } from '@server/models/actor/actor-image.js'
-import { TagsHtml } from './tags-html.js'
+import express from 'express'
+import { CONFIG } from '../../../initializers/config.js'
 import { PageHtml } from './page-html.js'
+import { TagsHtml } from './tags-html.js'
 
 export class ActorHtml {
 
@@ -60,7 +59,7 @@ export class ActorHtml {
     const siteName = CONFIG.INSTANCE.NAME
     const title = entity.getDisplayName()
 
-    const avatar = getBiggestActorImage(entity.Actor.Avatars)
+    const avatar = maxBy(entity.Actor.Avatars, 'width')
     const image = {
       url: ActorImageModel.getImageUrl(avatar),
       width: avatar?.width,

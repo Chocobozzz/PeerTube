@@ -1,6 +1,7 @@
+import { NgClass, NgIf } from '@angular/common'
 import { Component, Input, OnInit, booleanAttribute } from '@angular/core'
 import { ServerService } from '@app/core'
-import { NgIf, NgClass } from '@angular/common'
+import { maxBy } from '@peertube/peertube-core-utils'
 
 @Component({
   selector: 'my-instance-banner',
@@ -20,6 +21,6 @@ export class InstanceBannerComponent implements OnInit {
   ngOnInit () {
     const { instance } = this.server.getHTMLConfig()
 
-    this.instanceBannerUrl = instance.banners?.[0]?.path
+    this.instanceBannerUrl = maxBy(instance.banners, 'width')?.path
   }
 }

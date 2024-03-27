@@ -1,23 +1,23 @@
-import { ChartData, ChartOptions, TooltipItem, TooltipModel } from 'chart.js'
-import { max, maxBy, min, minBy } from 'lodash-es'
-import { Subject, first, map, switchMap } from 'rxjs'
+import { NgFor, NgIf } from '@angular/common'
 import { Component } from '@angular/core'
-import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, ScreenService } from '@app/core'
-import { formatICU } from '@app/helpers'
-import { NumberFormatterPipe } from '../../shared/shared-main/angular/number-formatter.pipe'
-import { ChartModule } from 'primeng/chart'
-import { DeferLoadingDirective } from '../../shared/shared-main/angular/defer-loading.directive'
-import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
-import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
-import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
-import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
-import { ChannelsSetupMessageComponent } from '../../shared/shared-main/misc/channels-setup-message.component'
 import { RouterLink } from '@angular/router'
-import { NgIf, NgFor } from '@angular/common'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, hasMoreItems } from '@app/core'
+import { formatICU } from '@app/helpers'
 import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
+import { maxBy, minBy } from '@peertube/peertube-core-utils'
+import { ChartData, ChartOptions, TooltipItem, TooltipModel } from 'chart.js'
+import { ChartModule } from 'primeng/chart'
+import { Subject, first, map, switchMap } from 'rxjs'
+import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
+import { AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { DeferLoadingDirective } from '../../shared/shared-main/angular/defer-loading.directive'
+import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { NumberFormatterPipe } from '../../shared/shared-main/angular/number-formatter.pipe'
+import { DeleteButtonComponent } from '../../shared/shared-main/buttons/delete-button.component'
+import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
+import { ChannelsSetupMessageComponent } from '../../shared/shared-main/misc/channels-setup-message.component'
 
 @Component({
   templateUrl: './my-video-channels.component.html',
@@ -156,23 +156,8 @@ export class MyVideoChannelsComponent {
   }
 
   private buildChartOptions () {
-    // chart options that depend on chart data:
-    // we don't want to skew values and have min at 0, so we define what the floor/ceiling is here
-    const videoChannelsMinimumDailyViews = min(
-      // compute local minimum daily views for each channel, by their "views" attribute
-      this.videoChannels.map(v => minBy(
-        v.viewsPerDay,
-        day => day.views
-      ).views) // the object returned is a ViewPerDate, so we still need to get the views attribute
-    )
-
-    const videoChannelsMaximumDailyViews = max(
-      // compute local maximum daily views for each channel, by their "views" attribute
-      this.videoChannels.map(v => maxBy(
-        v.viewsPerDay,
-        day => day.views
-      ).views) // the object returned is a ViewPerDate, so we still need to get the views attribute
-    )
+    const channelsMinimumDailyViews = Math.min(...this.videoChannels.map(v => minBy(v.viewsPerDay, 'views').views))
+    const channelsMaximumDailyViews = Math.max(...this.videoChannels.map(v => maxBy(v.viewsPerDay, 'views').views))
 
     this.chartOptions = {
       plugins: {
@@ -199,8 +184,8 @@ export class MyVideoChannelsComponent {
         },
         y: {
           display: false,
-          min: Math.max(0, videoChannelsMinimumDailyViews - (3 * videoChannelsMaximumDailyViews / 100)),
-          max: Math.max(1, videoChannelsMaximumDailyViews)
+          min: Math.max(0, channelsMinimumDailyViews - (3 * channelsMaximumDailyViews / 100)),
+          max: Math.max(1, channelsMaximumDailyViews)
         }
       },
       layout: {

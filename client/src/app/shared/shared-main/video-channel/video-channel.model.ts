@@ -1,6 +1,7 @@
 import { getAbsoluteAPIUrl } from '@app/helpers'
 import { Account as ServerAccount, ActorImage, VideoChannel as ServerVideoChannel, ViewsPerDate } from '@peertube/peertube-models'
 import { Actor } from '../account/actor.model'
+import { maxBy } from '@peertube/peertube-core-utils'
 
 export class VideoChannel extends Actor implements ServerVideoChannel {
   displayName: string
@@ -35,7 +36,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
       return ''
     }
 
-    const banner = channel.banners[0]
+    const banner = maxBy(channel.banners, 'width')
     if (!banner) return ''
 
     if (banner.url) return banner.url

@@ -444,7 +444,7 @@ function runTest (withObjectStorage: boolean) {
         expect(secondaryChannel.support).to.equal('noah support')
 
         expect(secondaryChannel.avatars).to.have.lengthOf(4)
-        expect(secondaryChannel.banners).to.have.lengthOf(1)
+        expect(secondaryChannel.banners).to.have.lengthOf(2)
 
         const urls = [ ...secondaryChannel.avatars, ...secondaryChannel.banners ].map(a => a.url)
         for (const url of urls) {

@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { basename } from 'path'
-import { ACTOR_IMAGES_SIZE } from '@peertube/peertube-server/core/initializers/constants.js'
-import { testFileExistsOrNot, testImage } from '@tests/shared/checks.js'
-import { SQLCommand } from '@tests/shared/sql-command.js'
 import { wait } from '@peertube/peertube-core-utils'
 import { ActorImageType, User, VideoChannel } from '@peertube/peertube-models'
 import {
+  PeerTubeServer,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { ACTOR_IMAGES_SIZE } from '@peertube/peertube-server/core/initializers/constants.js'
+import { testFileExistsOnFSOrNot, testImage } from '@tests/shared/checks.js'
+import { SQLCommand } from '@tests/shared/sql-command.js'
+import { expect } from 'chai'
+import { basename } from 'path'
 
 async function findChannel (server: PeerTubeServer, channelId: number) {
   const body = await server.channels.list({ sort: '-name' })
@@ -294,7 +294,7 @@ describe('Test video channels', function () {
       for (const avatar of videoChannel.avatars) {
         avatarPaths[server.port] = avatar.path
         await testImage(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatarPaths[server.port], '.png')
-        await testFileExistsOrNot(server, 'avatars', basename(avatarPaths[server.port]), true)
+        await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarPaths[server.port]), true)
 
         const row = await sqlCommands[i].getActorImage(basename(avatarPaths[server.port]))
 
@@ -320,14 +320,18 @@ describe('Test video channels', function () {
       const server = servers[i]
 
       const videoChannel = await server.channels.get({ channelName: 'second_video_channel@' + servers[0].host })
+      const expectedSizes = ACTOR_IMAGES_SIZE[ActorImageType.BANNER]
 
-      bannerPaths[server.port] = videoChannel.banners[0].path
-      await testImage(server.url, 'banner-resized', bannerPaths[server.port])
-      await testFileExistsOrNot(server, 'avatars', basename(bannerPaths[server.port]), true)
+      expect(videoChannel.banners.length).to.equal(expectedSizes.length, 'Expected banners to be generated in all sizes')
 
-      const row = await sqlCommands[i].getActorImage(basename(bannerPaths[server.port]))
-      expect(row.height).to.equal(ACTOR_IMAGES_SIZE[ActorImageType.BANNER][0].height)
-      expect(row.width).to.equal(ACTOR_IMAGES_SIZE[ActorImageType.BANNER][0].width)
+      for (const banner of videoChannel.banners) {
+        bannerPaths[server.port] = banner.path
+        await testImage(server.url, `banner-resized-${banner.width}`, bannerPaths[server.port])
+        await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerPaths[server.port]), true)
+
+        const row = await sqlCommands[i].getActorImage(basename(bannerPaths[server.port]))
+        expect(expectedSizes.some(({ height, width }) => row.height === height && row.width === width)).to.equal(true)
+      }
     }
   })
 
@@ -357,7 +361,7 @@ describe('Test video channels', function () {
 
     for (const server of servers) {
       const videoChannel = await findChannel(server, secondVideoChannelId)
-      await testFileExistsOrNot(server, 'avatars', basename(avatarPaths[server.port]), false)
+      await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarPaths[server.port]), false)
 
       expect(videoChannel.avatars).to.be.empty
     }
@@ -372,7 +376,7 @@ describe('Test video channels', function () {
 
     for (const server of servers) {
       const videoChannel = await findChannel(server, secondVideoChannelId)
-      await testFileExistsOrNot(server, 'avatars', basename(bannerPaths[server.port]), false)
+      await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerPaths[server.port]), false)
 
       expect(videoChannel.banners).to.be.empty
     }

@@ -1,7 +1,8 @@
+import { NgClass, NgIf } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core'
-import { CustomMarkupComponent } from './shared'
 import { ServerService } from '@app/core'
-import { NgIf, NgClass } from '@angular/common'
+import { maxBy } from '@peertube/peertube-core-utils'
+import { CustomMarkupComponent } from './shared'
 
 /*
  * Markup component that creates the img HTML element containing the instance banner
@@ -28,7 +29,7 @@ export class InstanceBannerMarkupComponent implements OnInit, CustomMarkupCompon
   ngOnInit () {
     const { instance } = this.server.getHTMLConfig()
 
-    this.instanceBannerUrl = instance.banners?.[0]?.path
+    this.instanceBannerUrl = maxBy(instance.banners, 'width')?.path
     this.cd.markForCheck()
   }
 }

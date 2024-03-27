@@ -27,7 +27,7 @@ import { resolve } from 'path'
 import { MockSmtpServer } from './mock-servers/mock-email.js'
 import { getAllNotificationsSettings } from './notifications.js'
 import { getFilenameFromUrl } from '@peertube/peertube-node-utils'
-import { testFileExistsOrNot } from './checks.js'
+import { testFileExistsOnFSOrNot } from './checks.js'
 
 type ExportOutbox = ActivityPubOrderedCollection<ActivityCreate<VideoObject | VideoCommentObject>>
 
@@ -101,10 +101,10 @@ export async function checkExportFileExists (options: {
       return makeRawRequest({ url: redirectedUrl, expectedStatus: HttpStatusCode.OK_200 })
     }
 
-    return testFileExistsOrNot(server, 'tmp-persistent', filename, true)
+    return testFileExistsOnFSOrNot(server, 'tmp-persistent', filename, true)
   }
 
-  await testFileExistsOrNot(server, 'tmp-persistent', filename, false)
+  await testFileExistsOnFSOrNot(server, 'tmp-persistent', filename, false)
 
   if (withObjectStorage) {
     await makeRawRequest({ url: redirectedUrl, expectedStatus: HttpStatusCode.NOT_FOUND_404 })

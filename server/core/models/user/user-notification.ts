@@ -1,7 +1,6 @@
-import { forceNumber } from '@peertube/peertube-core-utils'
+import { forceNumber, maxBy } from '@peertube/peertube-core-utils'
 import { UserNotification, type UserNotificationType_Type } from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
-import { getBiggestActorImage } from '@server/lib/actor-image.js'
 import { UserNotificationIncludes, UserNotificationModelForApi } from '@server/types/models/user/index.js'
 import { ModelIndexesOptions, Op, WhereOptions } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Is, Table, UpdatedAt } from 'sequelize-typescript'
@@ -518,7 +517,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     if (!avatars || avatars.length === 0) return { avatar: undefined, avatars: [] }
 
     return {
-      avatar: this.formatAvatar(getBiggestActorImage(avatars)),
+      avatar: this.formatAvatar(maxBy(avatars, 'width')),
 
       avatars: avatars.map(a => this.formatAvatar(a))
     }

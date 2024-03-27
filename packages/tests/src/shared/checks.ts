@@ -114,7 +114,7 @@ async function testImage (url: string, imageName: string, imageHTTPPath: string,
   }
 }
 
-async function testFileExistsOrNot (server: PeerTubeServer, directory: string, filePath: string, exist: boolean) {
+async function testFileExistsOnFSOrNot (server: PeerTubeServer, directory: string, filePath: string, exist: boolean) {
   const base = server.servers.buildDirectory(directory)
 
   expect(await pathExists(join(base, filePath))).to.equal(exist)
@@ -182,7 +182,7 @@ export {
   testAvatarSize,
   testImage,
   expectLogDoesNotContain,
-  testFileExistsOrNot,
+  testFileExistsOnFSOrNot,
   expectStartWith,
   expectNotStartWith,
   expectEndWith,

@@ -1,21 +1,20 @@
-import express from 'express'
-import { extname } from 'path'
 import { Feed } from '@peertube/feed'
 import { CustomTag, CustomXMLNS, LiveItemStatus } from '@peertube/feed/lib/typings/index.js'
-import { getBiggestActorImage } from '@server/lib/actor-image.js'
+import { maxBy, sortObjectComparator } from '@peertube/peertube-core-utils'
+import { ActorImageType, VideoFile, VideoInclude, VideoResolution, VideoState } from '@peertube/peertube-models'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { getVideoFileMimeType } from '@server/lib/video-file.js'
 import { buildPodcastGroupsCache, cacheRouteFactory, videoFeedsPodcastSetCacheKey } from '@server/middlewares/index.js'
 import { MVideo, MVideoCaptionVideo, MVideoFullLight } from '@server/types/models/index.js'
-import { sortObjectComparator } from '@peertube/peertube-core-utils'
-import { ActorImageType, VideoFile, VideoInclude, VideoResolution, VideoState } from '@peertube/peertube-models'
+import express from 'express'
+import { extname } from 'path'
 import { buildNSFWFilter } from '../../helpers/express-utils.js'
 import { MIMETYPES, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
 import { asyncMiddleware, setFeedPodcastContentType, videoFeedsPodcastValidator } from '../../middlewares/index.js'
-import { VideoModel } from '../../models/video/video.js'
 import { VideoCaptionModel } from '../../models/video/video-caption.js'
+import { VideoModel } from '../../models/video/video.js'
 import { buildFeedMetadata, getCommonVideoFeedAttributes, getVideosForFeeds, initFeed } from './shared/index.js'
-import { getVideoFileMimeType } from '@server/lib/video-file.js'
 
 const videoPodcastFeedsRouter = express.Router()
 
@@ -151,7 +150,7 @@ async function generatePodcastItem (options: {
   let personImage: string
 
   if (account.Actor.hasImage(ActorImageType.AVATAR)) {
-    const avatar = getBiggestActorImage(account.Actor.Avatars)
+    const avatar = maxBy(account.Actor.Avatars, 'width')
     personImage = WEBSERVER.URL + avatar.getStaticPath()
   }
 

@@ -1,16 +1,17 @@
-import { ViewportScroller, NgIf, NgFor } from '@angular/common'
+import { NgFor, NgIf, ViewportScroller } from '@angular/common'
 import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { Notifier, ServerService } from '@app/core'
+import { AboutHTML } from '@app/shared/shared-main/instance/instance.service'
+import { maxBy } from '@peertube/peertube-core-utils'
 import { HTMLServerConfig, ServerStats } from '@peertube/peertube-models'
 import { copyToClipboard } from '@root-helpers/utils'
+import { CustomMarkupContainerComponent } from '../../shared/shared-custom-markup/custom-markup-container.component'
+import { InstanceFeaturesTableComponent } from '../../shared/shared-instance/instance-features-table.component'
+import { PluginSelectorDirective } from '../../shared/shared-main/plugins/plugin-selector.directive'
 import { ResolverData } from './about-instance.resolver'
 import { ContactAdminModalComponent } from './contact-admin-modal.component'
 import { InstanceStatisticsComponent } from './instance-statistics.component'
-import { InstanceFeaturesTableComponent } from '../../shared/shared-instance/instance-features-table.component'
-import { PluginSelectorDirective } from '../../shared/shared-main/plugins/plugin-selector.directive'
-import { CustomMarkupContainerComponent } from '../../shared/shared-custom-markup/custom-markup-container.component'
-import { AboutHTML } from '@app/shared/shared-main/instance/instance.service'
 
 @Component({
   selector: 'my-about-instance',
@@ -82,7 +83,7 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
     this.shortDescription = about.instance.shortDescription
 
     this.instanceBannerUrl = about.instance.banners.length !== 0
-      ? about.instance.banners[0].path
+      ? maxBy(about.instance.banners, 'width').path
       : undefined
 
     this.serverConfig = this.serverService.getHTMLConfig()

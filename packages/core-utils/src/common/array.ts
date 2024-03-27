@@ -43,3 +43,23 @@ export function sortBy (obj: any[], key1: string, key2?: string) {
     return 1
   })
 }
+
+export function maxBy <T> (arr: T[], property: keyof T) {
+  let result: T
+
+  for (const obj of arr) {
+    if (!result || result[property] < obj[property]) result = obj
+  }
+
+  return result
+}
+
+export function minBy <T> (arr: T[], property: keyof T) {
+  let result: T
+
+  for (const obj of arr) {
+    if (!result || result[property] > obj[property]) result = obj
+  }
+
+  return result
+}

@@ -1,4 +1,4 @@
-import { buildVideoEmbedPath, buildVideoWatchPath, pick, wait } from '@peertube/peertube-core-utils'
+import { buildVideoEmbedPath, buildVideoWatchPath, maxBy, minBy, pick, wait } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS, hasAudioStream } from '@peertube/peertube-ffmpeg'
 import {
   FileStorage,
@@ -38,8 +38,6 @@ import { ModelCache } from '@server/models/shared/model-cache.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 import Bluebird from 'bluebird'
 import { remove } from 'fs-extra/esm'
-import maxBy from 'lodash-es/maxBy.js'
-import minBy from 'lodash-es/minBy.js'
 import { FindOptions, IncludeOptions, Includeable, Op, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
   AfterCreate,
@@ -1711,9 +1709,9 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return this.VideoChannel.Account.Actor.Server?.isBlocked() || this.VideoChannel.Account.isBlocked()
   }
 
-  getQualityFileBy<T extends MVideoWithFile> (this: T, fun: (files: MVideoFile[], it: (file: MVideoFile) => number) => MVideoFile) {
+  getQualityFileBy<T extends MVideoWithFile> (this: T, fun: (files: MVideoFile[], property: 'resolution') => MVideoFile) {
     const files = this.getAllFiles()
-    const file = fun(files, file => file.resolution)
+    const file = fun(files, 'resolution')
     if (!file) return undefined
 
     if (file.videoId) {

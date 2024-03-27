@@ -13,7 +13,10 @@ export abstract class ActorExporter <T> extends AbstractUserExporter<T> {
 
       name: actor.preferredUsername,
 
-      avatars: this.exportActorImageJSON(actor.Avatars),
+      avatars: actor.hasImage(ActorImageType.AVATAR)
+        ? this.exportActorImageJSON(actor.Avatars)
+        : [],
+
       banners: actor.hasImage(ActorImageType.BANNER)
         ? this.exportActorImageJSON(actor.Banners)
         : []

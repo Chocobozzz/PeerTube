@@ -1,14 +1,13 @@
-import express from 'express'
 import { Feed } from '@peertube/feed'
 import { CustomTag, CustomXMLNS, Person } from '@peertube/feed/lib/typings/index.js'
+import { maxBy, pick } from '@peertube/peertube-core-utils'
+import { ActorImageType } from '@peertube/peertube-models'
 import { mdToOneLinePlainText } from '@server/helpers/markdown.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
-import { getBiggestActorImage } from '@server/lib/actor-image.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MAccountDefault, MChannelBannerAccountDefault, MUser, MVideoFullLight } from '@server/types/models/index.js'
-import { pick } from '@peertube/peertube-core-utils'
-import { ActorImageType } from '@peertube/peertube-models'
+import express from 'express'
 
 export function initFeed (parameters: {
   name: string
@@ -105,12 +104,12 @@ export async function buildFeedMetadata (options: {
     accountLink = videoChannel.Account.getClientUrl()
 
     if (videoChannel.Actor.hasImage(ActorImageType.AVATAR)) {
-      const videoChannelAvatar = getBiggestActorImage(videoChannel.Actor.Avatars)
+      const videoChannelAvatar = maxBy(videoChannel.Actor.Avatars, 'width')
       imageUrl = WEBSERVER.URL + videoChannelAvatar.getStaticPath()
     }
 
     if (videoChannel.Account.Actor.hasImage(ActorImageType.AVATAR)) {
-      const accountAvatar = getBiggestActorImage(videoChannel.Account.Actor.Avatars)
+      const accountAvatar = maxBy(videoChannel.Account.Actor.Avatars, 'width')
       accountImageUrl = WEBSERVER.URL + accountAvatar.getStaticPath()
     }
 
@@ -123,7 +122,7 @@ export async function buildFeedMetadata (options: {
     accountLink = link
 
     if (account.Actor.hasImage(ActorImageType.AVATAR)) {
-      const accountAvatar = getBiggestActorImage(account.Actor.Avatars)
+      const accountAvatar = maxBy(account.Actor.Avatars, 'width')
       imageUrl = WEBSERVER.URL + accountAvatar?.getStaticPath()
       accountImageUrl = imageUrl
     }

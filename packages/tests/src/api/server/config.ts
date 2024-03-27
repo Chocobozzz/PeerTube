@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { parallelTests } from '@peertube/peertube-node-utils'
 import { ActorImageType, CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
+import { parallelTests } from '@peertube/peertube-node-utils'
 import {
+  PeerTubeServer,
   cleanupTests,
   createSingleServer,
   killallServers,
   makeActivityPubGetRequest,
   makeGetRequest,
   makeRawRequest,
-  PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { testFileExistsOrNot, testImage, testAvatarSize } from '@tests/shared/checks.js'
+import { testAvatarSize, testFileExistsOnFSOrNot, testImage } from '@tests/shared/checks.js'
+import { expect } from 'chai'
 import { basename } from 'path'
 
 function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
@@ -703,18 +703,21 @@ describe('Test config', function () {
     }
 
     describe('Banner', function () {
-      let bannerPath: string
+      const bannerPaths: string[] = []
 
       it('Should update instance banner', async function () {
         await server.config.updateInstanceImage({ type: ActorImageType.BANNER, fixture: 'banner.jpg' })
 
         const { banners } = await checkAndGetServerImages()
 
-        expect(banners).to.have.lengthOf(1)
+        expect(banners).to.have.lengthOf(2)
 
-        bannerPath = banners[0].path
-        await testImage(server.url, 'banner-resized', bannerPath)
-        await testFileExistsOrNot(server, 'avatars', basename(bannerPath), true)
+        for (const banner of banners) {
+          await testImage(server.url, `banner-resized-${banner.width}`, banner.path)
+          await testFileExistsOnFSOrNot(server, 'avatars', basename(banner.path), true)
+
+          bannerPaths.push(banner.path)
+        }
       })
 
       it('Should re-update an existing instance banner', async function () {
@@ -727,12 +730,14 @@ describe('Test config', function () {
         const { banners } = await checkAndGetServerImages()
         expect(banners).to.have.lengthOf(0)
 
-        await testFileExistsOrNot(server, 'avatars', basename(bannerPath), false)
+        for (const bannerPath of bannerPaths) {
+          await testFileExistsOnFSOrNot(server, 'avatars', basename(bannerPath), false)
+        }
       })
     })
 
     describe('Avatar', function () {
-      let avatarPath: string
+      const avatarPaths: string[] = []
 
       it('Should update instance avatar', async function () {
         for (const extension of [ '.png', '.gif' ]) {
@@ -744,10 +749,10 @@ describe('Test config', function () {
 
           for (const avatar of avatars) {
             await testAvatarSize({ url: server.url, avatar, imageName: `avatar-resized-${avatar.width}x${avatar.width}` })
-          }
+            await testFileExistsOnFSOrNot(server, 'avatars', basename(avatar.path), true)
 
-          avatarPath = avatars[0].path
-          await testFileExistsOrNot(server, 'avatars', basename(avatarPath), true)
+            avatarPaths.push(avatar.path)
+          }
         }
       })
 
@@ -768,7 +773,9 @@ describe('Test config', function () {
         const { avatars } = await checkAndGetServerImages()
         expect(avatars).to.have.lengthOf(0)
 
-        await testFileExistsOrNot(server, 'avatars', basename(avatarPath), false)
+        for (const avatarPath of avatarPaths) {
+          await testFileExistsOnFSOrNot(server, 'avatars', basename(avatarPath), false)
+        }
       })
 
       it('Should not have the avatars anymore in the AP representation of the instance', async function () {

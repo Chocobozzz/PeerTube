@@ -1,3 +1,4 @@
+import { maxBy, minBy } from '@peertube/peertube-core-utils'
 import { ActorImageType } from '@peertube/peertube-models'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { getImageSize, processImage } from '@server/helpers/image-utils.js'
@@ -6,13 +7,11 @@ import { ACTOR_IMAGES_SIZE } from '@server/initializers/constants.js'
 import { initDatabaseModels } from '@server/initializers/database.js'
 import { updateActorImages } from '@server/lib/activitypub/actors/index.js'
 import { sendUpdateActor } from '@server/lib/activitypub/send/index.js'
-import { getBiggestActorImage } from '@server/lib/actor-image.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { MAccountDefault, MActorDefault, MChannelDefault } from '@server/types/models/index.js'
-import minBy from 'lodash-es/minBy.js'
 import { join } from 'path'
 
 run()
@@ -100,7 +99,7 @@ async function generateSmallerAvatarIfNeeded (accountOrChannel: MAccountDefault 
 }
 
 async function generateSmallerAvatar (actor: MActorDefault) {
-  const bigAvatar = getBiggestActorImage(actor.Avatars)
+  const bigAvatar = maxBy(actor.Avatars, 'width')
 
   const imageSize = minBy(ACTOR_IMAGES_SIZE[ActorImageType.AVATAR], 'width')
   const sourceFilename = bigAvatar.filename

@@ -1,22 +1,23 @@
-import { SelectOptionsItem } from 'src/types/select-options-item.model'
+import { NgClass, NgIf } from '@angular/common'
+import { HttpErrorResponse } from '@angular/common/http'
 import { Component, Input, OnInit } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { Notifier, ServerService } from '@app/core'
-import { HttpErrorResponse } from '@angular/common/http'
-import { genericUploadErrorHandler } from '@app/helpers'
-import { ActorImage, HTMLServerConfig } from '@peertube/peertube-models'
-import { HelpComponent } from '../../../shared/shared-main/misc/help.component'
-import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
-import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 import { RouterLink } from '@angular/router'
-import { SelectCheckboxComponent } from '../../../shared/shared-forms/select/select-checkbox.component'
-import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
-import { CustomMarkupHelpComponent } from '../../../shared/shared-custom-markup/custom-markup-help.component'
-import { NgClass, NgIf } from '@angular/common'
-import { ActorBannerEditComponent } from '../../../shared/shared-actor-image-edit/actor-banner-edit.component'
-import { ActorAvatarEditComponent } from '../../../shared/shared-actor-image-edit/actor-avatar-edit.component'
-import { InstanceService } from '@app/shared/shared-main/instance/instance.service'
+import { Notifier, ServerService } from '@app/core'
+import { genericUploadErrorHandler } from '@app/helpers'
 import { CustomMarkupService } from '@app/shared/shared-custom-markup/custom-markup.service'
+import { InstanceService } from '@app/shared/shared-main/instance/instance.service'
+import { maxBy } from '@peertube/peertube-core-utils'
+import { ActorImage, HTMLServerConfig } from '@peertube/peertube-models'
+import { SelectOptionsItem } from 'src/types/select-options-item.model'
+import { ActorAvatarEditComponent } from '../../../shared/shared-actor-image-edit/actor-avatar-edit.component'
+import { ActorBannerEditComponent } from '../../../shared/shared-actor-image-edit/actor-banner-edit.component'
+import { CustomMarkupHelpComponent } from '../../../shared/shared-custom-markup/custom-markup-help.component'
+import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
+import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
+import { SelectCheckboxComponent } from '../../../shared/shared-forms/select/select-checkbox.component'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
+import { HelpComponent } from '../../../shared/shared-main/misc/help.component'
 
 @Component({
   selector: 'my-edit-instance-information',
@@ -127,7 +128,7 @@ export class EditInstanceInformationComponent implements OnInit {
   }
 
   private updateActorImages () {
-    this.instanceBannerUrl = this.serverConfig.instance.banners?.[0]?.path
+    this.instanceBannerUrl = maxBy(this.serverConfig.instance.banners, 'width')?.path
     this.instanceAvatars = this.serverConfig.instance.avatars
   }
 
