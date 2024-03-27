@@ -140,6 +140,7 @@ videoChannelRouter.get('/:nameWithHost',
 )
 
 videoChannelRouter.get('/:nameWithHost/video-playlists',
+  optionalAuthenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
   paginationValidator,
   videoPlaylistsSortValidator,
@@ -372,7 +373,10 @@ async function listVideoChannelPlaylists (req: express.Request, res: express.Res
   const serverActor = await getServerActor()
 
   const resultList = await VideoPlaylistModel.listForApi({
-    followerActorId: serverActor.id,
+    followerActorId: isUserAbleToSearchRemoteURI(res)
+      ? null
+      : serverActor.id,
+
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,

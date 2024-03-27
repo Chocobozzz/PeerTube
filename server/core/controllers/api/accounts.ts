@@ -188,7 +188,11 @@ async function listAccountPlaylists (req: express.Request, res: express.Response
 
   const resultList = await VideoPlaylistModel.listForApi({
     search: req.query.search,
-    followerActorId: serverActor.id,
+
+    followerActorId: isUserAbleToSearchRemoteURI(res)
+      ? null
+      : serverActor.id,
+
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,

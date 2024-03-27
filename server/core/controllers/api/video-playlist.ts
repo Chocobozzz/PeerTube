@@ -1,4 +1,3 @@
-import express from 'express'
 import { forceNumber } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
@@ -12,11 +11,13 @@ import {
   VideoPlaylistReorder,
   VideoPlaylistUpdate
 } from '@peertube/peertube-models'
+import { uuidToShort } from '@peertube/peertube-node-utils'
 import { scheduleRefreshIfNeeded } from '@server/lib/activitypub/playlists/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { generateThumbnailForPlaylist } from '@server/lib/video-playlist.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MVideoPlaylistFull, MVideoPlaylistThumbnail } from '@server/types/models/index.js'
-import { uuidToShort } from '@peertube/peertube-node-utils'
+import express from 'express'
 import { resetSequelizeInstance } from '../../helpers/database-utils.js'
 import { createReqFiles } from '../../helpers/express-utils.js'
 import { logger } from '../../helpers/logger.js'
@@ -50,7 +51,6 @@ import {
 import { AccountModel } from '../../models/account/account.js'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element.js'
 import { VideoPlaylistModel } from '../../models/video/video-playlist.js'
-import { generateThumbnailForPlaylist } from '@server/lib/video-playlist.js'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 

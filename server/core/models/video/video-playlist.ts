@@ -12,7 +12,7 @@ import { buildUUID, uuidToShort } from '@peertube/peertube-node-utils'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
 import { MAccountId, MChannelId, MVideoPlaylistElement } from '@server/types/models/index.js'
 import { join } from 'path'
-import { FindOptions, Includeable, literal, Op, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, Includeable, Op, ScopeOptions, Sequelize, Transaction, WhereOptions, literal } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -47,8 +47,9 @@ import {
 import { MThumbnail } from '../../types/models/video/thumbnail.js'
 import {
   MVideoPlaylist,
+  MVideoPlaylistAP,
   MVideoPlaylistAccountThumbnail,
-  MVideoPlaylistAP, MVideoPlaylistFormattable,
+  MVideoPlaylistFormattable,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
   MVideoPlaylistSummaryWithElements
@@ -167,15 +168,15 @@ function getVideoLengthSelect () {
         privacy: VideoPlaylistPrivacy.PUBLIC
       })
 
-      // Only list local playlists
-      const whereActorOr: WhereOptions[] = [
-        {
-          serverId: null
-        }
-      ]
-
       // … OR playlists that are on an instance followed by actorId
       if (options.followerActorId) {
+        // Only list local playlists
+        const whereActorOr: WhereOptions[] = [
+          {
+            serverId: null
+          }
+        ]
+
         const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
 
         whereActorOr.push({
@@ -183,9 +184,9 @@ function getVideoLengthSelect () {
             [Op.in]: literal(inQueryInstanceFollow)
           }
         })
-      }
 
-      Object.assign(whereActor, { [Op.or]: whereActorOr })
+        Object.assign(whereActor, { [Op.or]: whereActorOr })
+      }
     }
 
     if (options.accountId) {
