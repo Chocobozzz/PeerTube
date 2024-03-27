@@ -49,7 +49,7 @@ export const timecodeRegexString = `(\\d+[h:])?(\\d+[m:])?\\d+s?`
 
 function timeToInt (time: number | string) {
   if (!time) return 0
-  if (typeof time === 'number') return time
+  if (typeof time === 'number') return Math.floor(time)
 
   // Try with 00h00m00s format first
   const reg = new RegExp(`^((?<hours>\\d+)h)?((?<minutes>\\d+)m)?((?<seconds>\\d+)s?)?$`)
