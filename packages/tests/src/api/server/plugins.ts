@@ -111,7 +111,7 @@ describe('Test plugins', function () {
   })
 
   it('Should update the default theme in the configuration', async function () {
-    await server.config.updateCustomSubConfig({
+    await server.config.updateExistingConfig({
       newConfig: {
         theme: { default: 'background-red' }
       }

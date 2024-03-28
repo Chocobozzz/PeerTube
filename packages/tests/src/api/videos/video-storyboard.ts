@@ -213,7 +213,7 @@ describe('Test video storyboard', function () {
   it('Should not generate storyboards if disabled by the admin', async function () {
     this.timeout(60000)
 
-    await servers[0].config.updateExistingSubConfig({
+    await servers[0].config.updateExistingConfig({
       newConfig: {
         storyboards: {
           enabled: false

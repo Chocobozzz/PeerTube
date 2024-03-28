@@ -236,7 +236,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
     it('Should not generate an upper resolution than original file', async function () {
       this.timeout(120_000)
 
-      await servers[0].config.updateExistingSubConfig({
+      await servers[0].config.updateExistingConfig({
         newConfig: {
           transcoding: {
             enabled: true,

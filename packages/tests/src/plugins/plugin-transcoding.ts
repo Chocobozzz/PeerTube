@@ -27,7 +27,7 @@ async function createLiveWrapper (server: PeerTubeServer) {
 }
 
 function updateConf (server: PeerTubeServer, vodProfile: string, liveProfile: string) {
-  return server.config.updateCustomSubConfig({
+  return server.config.updateExistingConfig({
     newConfig: {
       transcoding: {
         enabled: true,
@@ -46,6 +46,9 @@ function updateConf (server: PeerTubeServer, vodProfile: string, liveProfile: st
         }
       },
       live: {
+        enabled: true,
+        maxInstanceLives: -1,
+        maxUserLives: -1,
         transcoding: {
           profile: liveProfile,
           enabled: true,

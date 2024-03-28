@@ -162,3 +162,7 @@ open_telemetry:
   metrics:
     prometheus_exporter:
       port: 9092
+
+search:
+  search_index:
+    url: 'https://search.joinpeertube.org/'

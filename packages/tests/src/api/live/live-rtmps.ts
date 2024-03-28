@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { VideoPrivacy } from '@peertube/peertube-models'
+import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createSingleServer,
@@ -14,6 +13,7 @@ import {
   testFfmpegStreamError,
   waitUntilLivePublishedOnAllServers
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 describe('Test live RTMPS', function () {
   let server: PeerTubeServer
@@ -45,17 +45,8 @@ describe('Test live RTMPS', function () {
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    await server.config.updateCustomSubConfig({
-      newConfig: {
-        live: {
-          enabled: true,
-          allowReplay: true,
-          transcoding: {
-            enabled: false
-          }
-        }
-      }
-    })
+    await server.config.enableMinimumTranscoding()
+    await server.config.enableLive({ allowReplay: true, transcoding: false })
 
     rtmpUrl = 'rtmp://' + server.hostname + ':' + server.rtmpPort + '/live'
     rtmpsUrl = 'rtmps://' + server.hostname + ':' + server.rtmpsPort + '/live'

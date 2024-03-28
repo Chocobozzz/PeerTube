@@ -39,7 +39,7 @@ describe('Test video change ownership - nominal', function () {
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await servers[0].config.updateCustomSubConfig({
+    await servers[0].config.updateExistingConfig({
       newConfig: {
         transcoding: {
           enabled: false

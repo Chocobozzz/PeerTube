@@ -553,7 +553,7 @@ describe('Test video channels', function () {
   it('Should apply another default channel name', async function () {
     this.timeout(15000)
 
-    await servers[0].config.updateCustomSubConfig({
+    await servers[0].config.updateExistingConfig({
       newConfig: {
         user: {
           defaultChannelName: `$1's channel`

@@ -128,7 +128,7 @@ describe('Official plugin Akismet', function () {
   describe('Signup', function () {
 
     before(async function () {
-      await servers[0].config.updateExistingSubConfig({
+      await servers[0].config.updateExistingConfig({
         newConfig: {
           signup: {
             enabled: true

@@ -38,7 +38,7 @@ describe('Test index search', function () {
   describe('Default search', async function () {
 
     it('Should make a local videos search by default', async function () {
-      await server.config.updateCustomSubConfig({
+      await server.config.updateExistingConfig({
         newConfig: {
           search: {
             searchIndex: {
@@ -65,7 +65,7 @@ describe('Test index search', function () {
     })
 
     it('Should make an index videos search by default', async function () {
-      await server.config.updateCustomSubConfig({
+      await server.config.updateExistingConfig({
         newConfig: {
           search: {
             searchIndex: {
@@ -243,7 +243,7 @@ describe('Test index search', function () {
       let nsfwUUID: string
 
       {
-        await server.config.updateCustomSubConfig({
+        await server.config.updateExistingConfig({
           newConfig: {
             instance: { defaultNSFWPolicy: 'display' }
           }
@@ -259,7 +259,7 @@ describe('Test index search', function () {
       }
 
       {
-        await server.config.updateCustomSubConfig({
+        await server.config.updateExistingConfig({
           newConfig: {
             instance: { defaultNSFWPolicy: 'do_not_list' }
           }

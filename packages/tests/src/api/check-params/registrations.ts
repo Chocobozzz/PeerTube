@@ -152,7 +152,7 @@ describe('Test registrations API validators', function () {
       it('Should fail on a server with registration disabled', async function () {
         this.timeout(60000)
 
-        await server.config.updateExistingSubConfig({
+        await server.config.updateExistingConfig({
           newConfig: {
             signup: {
               enabled: false

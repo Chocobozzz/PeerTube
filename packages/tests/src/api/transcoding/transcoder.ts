@@ -26,7 +26,7 @@ import { generateVideoWithFramerate, generateHighBitrateVideo } from '@tests/sha
 import { checkWebTorrentWorks } from '@tests/shared/webtorrent.js'
 
 function updateConfigForTranscoding (server: PeerTubeServer) {
-  return server.config.updateCustomSubConfig({
+  return server.config.updateExistingConfig({
     newConfig: {
       transcoding: {
         enabled: true,
@@ -331,7 +331,7 @@ describe('Test video transcoding', function () {
     function runSuite (mode: 'legacy' | 'resumable') {
 
       before(async function () {
-        await servers[1].config.updateCustomSubConfig({
+        await servers[1].config.updateExistingConfig({
           newConfig: {
             transcoding: {
               hls: { enabled: true },
@@ -403,7 +403,7 @@ describe('Test video transcoding', function () {
       it('Should upload an audio file and create an audio version only', async function () {
         this.timeout(60_000)
 
-        await servers[1].config.updateCustomSubConfig({
+        await servers[1].config.updateExistingConfig({
           newConfig: {
             transcoding: {
               hls: { enabled: true },
@@ -592,7 +592,7 @@ describe('Test video transcoding', function () {
           hls: { enabled: true }
         }
       }
-      await servers[1].config.updateCustomSubConfig({ newConfig })
+      await servers[1].config.updateExistingConfig({ newConfig })
 
       const attributes = {
         name: 'low bitrate',
@@ -725,7 +725,7 @@ describe('Test video transcoding', function () {
     it('Should not generate an upper resolution than original file', async function () {
       this.timeout(120_000)
 
-      await servers[0].config.updateExistingSubConfig({
+      await servers[0].config.updateExistingConfig({
         newConfig: {
           transcoding: {
             enabled: true,
@@ -764,7 +764,7 @@ describe('Test video transcoding', function () {
     it('Should only keep the original resolution if all resolutions are disabled', async function () {
       this.timeout(120_000)
 
-      await servers[0].config.updateExistingSubConfig({
+      await servers[0].config.updateExistingConfig({
         newConfig: {
           transcoding: {
             resolutions: {

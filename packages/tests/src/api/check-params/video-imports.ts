@@ -299,7 +299,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should forbid to import http videos', async function () {
-      await server.config.updateCustomSubConfig({
+      await server.config.updateExistingConfig({
         newConfig: {
           import: {
             videos: {
@@ -324,7 +324,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should forbid to import torrent videos', async function () {
-      await server.config.updateCustomSubConfig({
+      await server.config.updateExistingConfig({
         newConfig: {
           import: {
             videos: {

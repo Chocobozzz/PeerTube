@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
 import { LiveVideoEventPayload, VideoPrivacy, VideoState, VideoStateType } from '@peertube/peertube-models'
 import {
+  PeerTubeServer,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
   waitJobs,
   waitUntilLivePublishedOnAllServers
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 describe('Test live socket messages', function () {
   let servers: PeerTubeServer[] = []
@@ -27,17 +27,8 @@ describe('Test live socket messages', function () {
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await servers[0].config.updateCustomSubConfig({
-      newConfig: {
-        live: {
-          enabled: true,
-          allowReplay: true,
-          transcoding: {
-            enabled: false
-          }
-        }
-      }
-    })
+    await servers[0].config.enableMinimumTranscoding()
+    await servers[0].config.enableLive({ allowReplay: true, transcoding: false })
 
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])

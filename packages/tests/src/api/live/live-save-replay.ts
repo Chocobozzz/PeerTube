@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { FfmpegCommand } from 'fluent-ffmpeg'
 import { wait } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
@@ -13,14 +11,13 @@ import {
   VideoState,
   VideoStateType
 } from '@peertube/peertube-models'
-import { checkLiveCleanup } from '@tests/shared/live.js'
 import {
-  cleanupTests,
   ConfigCommand,
+  PeerTubeServer,
+  cleanupTests,
   createMultipleServers,
   doubleFollow,
   findExternalSavedVideo,
-  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
@@ -30,6 +27,9 @@ import {
   waitUntilLiveReplacedByReplayOnAllServers,
   waitUntilLiveWaitingOnAllServers
 } from '@peertube/peertube-server-commands'
+import { checkLiveCleanup } from '@tests/shared/live.js'
+import { expect } from 'chai'
+import { FfmpegCommand } from 'fluent-ffmpeg'
 
 describe('Save replay setting', function () {
   let servers: PeerTubeServer[] = []
@@ -146,7 +146,8 @@ describe('Save replay setting', function () {
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
 
-    await servers[0].config.updateCustomSubConfig({
+    await servers[0].config.enableMinimumTranscoding()
+    await servers[0].config.updateExistingConfig({
       newConfig: {
         live: {
           enabled: true,

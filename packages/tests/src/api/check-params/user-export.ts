@@ -86,7 +86,7 @@ describe('Test user export API validators', function () {
     it('Should fail if user quota is too big', async function () {
       const { videoQuotaUsed } = await server.users.getMyQuotaUsed()
 
-      await server.config.updateExistingSubConfig({
+      await server.config.updateExistingConfig({
         newConfig: {
           export: {
             users: { maxUserVideoQuota: videoQuotaUsed - 1 }
@@ -101,7 +101,7 @@ describe('Test user export API validators', function () {
       await server.userExports.waitForCreation({ userId: rootId })
       await server.userExports.deleteAllArchives({ userId: rootId })
 
-      await server.config.updateExistingSubConfig({
+      await server.config.updateExistingConfig({
         newConfig: {
           export: {
             users: { maxUserVideoQuota: 1000 * 1000 * 1000 * 1000 }

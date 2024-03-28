@@ -791,7 +791,7 @@ function runTest (withObjectStorage: boolean) {
 
     await checkExportFileExists({ exists: true, server, userExport, withObjectStorage, redirectedUrl })
 
-    await server.config.updateCustomSubConfig({
+    await server.config.updateExistingConfig({
       newConfig: {
         export: {
           users: {

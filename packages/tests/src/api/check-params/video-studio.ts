@@ -41,7 +41,7 @@ describe('Test video studio API validator', function () {
     describe('Config settings', function () {
 
       it('Should fail if studio is disabled', async function () {
-        await server.config.updateExistingSubConfig({
+        await server.config.updateExistingConfig({
           newConfig: {
             videoStudio: {
               enabled: false
@@ -57,7 +57,7 @@ describe('Test video studio API validator', function () {
       })
 
       it('Should fail to enable studio if transcoding is disabled', async function () {
-        await server.config.updateExistingSubConfig({
+        await server.config.updateExistingConfig({
           newConfig: {
             videoStudio: {
               enabled: true
@@ -71,7 +71,7 @@ describe('Test video studio API validator', function () {
       })
 
       it('Should succeed to enable video studio', async function () {
-        await server.config.updateExistingSubConfig({
+        await server.config.updateExistingConfig({
           newConfig: {
             videoStudio: {
               enabled: true

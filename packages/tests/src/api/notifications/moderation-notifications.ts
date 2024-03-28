@@ -380,7 +380,7 @@ describe('Test moderation notifications', function () {
           }
         }
       }
-      await servers[0].config.updateCustomSubConfig({ newConfig: config })
+      await servers[0].config.updateExistingConfig({ newConfig: config })
 
       await servers[2].follows.follow({ hosts: [ servers[0].url ] })
 
@@ -394,7 +394,7 @@ describe('Test moderation notifications', function () {
       await checkAutoInstanceFollowing({ ...baseParams, ...userOverride, followerHost, followingHost, checkType: 'absence' })
 
       config.followings.instance.autoFollowBack.enabled = false
-      await servers[0].config.updateCustomSubConfig({ newConfig: config })
+      await servers[0].config.updateExistingConfig({ newConfig: config })
       await servers[0].follows.unfollow({ target: servers[2] })
       await servers[2].follows.unfollow({ target: servers[0] })
     })
@@ -403,7 +403,7 @@ describe('Test moderation notifications', function () {
       this.timeout(30000)
       await servers[0].follows.unfollow({ target: servers[1] })
 
-      await servers[0].config.updateCustomSubConfig({ newConfig: config })
+      await servers[0].config.updateExistingConfig({ newConfig: config })
 
       await wait(5000)
       await waitJobs(servers)
@@ -413,7 +413,7 @@ describe('Test moderation notifications', function () {
       await checkAutoInstanceFollowing({ ...baseParams, followerHost, followingHost, checkType: 'presence' })
 
       config.followings.instance.autoFollowIndex.enabled = false
-      await servers[0].config.updateCustomSubConfig({ newConfig: config })
+      await servers[0].config.updateExistingConfig({ newConfig: config })
       await servers[0].follows.unfollow({ target: servers[1] })
     })
   })

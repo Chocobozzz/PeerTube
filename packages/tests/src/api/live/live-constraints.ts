@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
 import { LiveVideoError, UserVideoQuota, VideoPrivacy } from '@peertube/peertube-models'
 import {
+  PeerTubeServer,
   cleanupTests, createMultipleServers,
   doubleFollow,
-  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
@@ -14,6 +13,7 @@ import {
   waitUntilLiveReplacedByReplayOnAllServers,
   waitUntilLiveWaitingOnAllServers
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 import { checkLiveCleanup } from '../../shared/live.js'
 
 describe('Test live constraints', function () {
@@ -65,17 +65,8 @@ describe('Test live constraints', function () {
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await servers[0].config.updateCustomSubConfig({
-      newConfig: {
-        live: {
-          enabled: true,
-          allowReplay: true,
-          transcoding: {
-            enabled: false
-          }
-        }
-      }
-    })
+    await servers[0].config.enableMinimumTranscoding()
+    await servers[0].config.enableLive({ allowReplay: true, transcoding: false })
 
     {
       const res = await servers[0].users.generate('user1')
@@ -203,7 +194,7 @@ describe('Test live constraints', function () {
   it('Should have max duration limit', async function () {
     this.timeout(240000)
 
-    await servers[0].config.updateCustomSubConfig({
+    await servers[0].config.updateExistingConfig({
       newConfig: {
         live: {
           enabled: true,

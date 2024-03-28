@@ -48,11 +48,13 @@ describe('Test live', function () {
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
-    await servers[0].config.updateCustomSubConfig({
+    await servers[0].config.enableMinimumTranscoding()
+    await servers[0].config.updateExistingConfig({
       newConfig: {
         live: {
           enabled: true,
           allowReplay: true,
+          maxUserLives: -1,
           latencySetting: {
             enabled: true
           },
@@ -396,7 +398,7 @@ describe('Test live', function () {
     }
 
     function updateConf (resolutions: number[]) {
-      return servers[0].config.updateCustomSubConfig({
+      return servers[0].config.updateExistingConfig({
         newConfig: {
           live: {
             enabled: true,
@@ -602,7 +604,7 @@ describe('Test live', function () {
       const resolutions = [ 240, 480 ]
       await updateConf(resolutions)
 
-      await servers[0].config.updateExistingSubConfig({
+      await servers[0].config.updateExistingConfig({
         newConfig: {
           live: {
             transcoding: {

@@ -276,7 +276,7 @@ describe('Test video studio', function () {
 
     before(async function () {
       // Disable Web Videos
-      await servers[0].config.updateExistingSubConfig({
+      await servers[0].config.updateExistingConfig({
         newConfig: {
           transcoding: {
             webVideos: {

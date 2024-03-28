@@ -1,18 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { pathExists, remove } from 'fs-extra/esm'
-import { readdir } from 'fs/promises'
-import { join } from 'path'
-import { areHttpImportTestsDisabled } from '@peertube/peertube-node-utils'
 import { CustomConfig, HttpStatusCode, Video, VideoImportState, VideoPrivacy, VideoResolution, VideoState } from '@peertube/peertube-models'
+import { areHttpImportTestsDisabled } from '@peertube/peertube-node-utils'
 import {
-  cleanupTests,
-  createMultipleServers,
+  PeerTubeServer,
+  cleanupTests, createMultipleServers,
   createSingleServer,
   doubleFollow,
   getServerImportConfig,
-  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
@@ -21,6 +16,10 @@ import { DeepPartial } from '@peertube/peertube-typescript-utils'
 import { testCaptionFile } from '@tests/shared/captions.js'
 import { testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { expect } from 'chai'
+import { pathExists, remove } from 'fs-extra/esm'
+import { readdir } from 'fs/promises'
+import { join } from 'path'
 
 async function checkVideosServer1 (server: PeerTubeServer, idHttp: string, idMagnet: string, idTorrent: string) {
   const videoHttp = await server.videos.get({ id: idHttp })
@@ -96,7 +95,7 @@ describe('Test video imports', function () {
         await setDefaultVideoChannel(servers)
 
         for (const server of servers) {
-          await server.config.updateExistingSubConfig({
+          await server.config.updateExistingConfig({
             newConfig: {
               transcoding: {
                 alwaysTranscodeOriginalResolution: false
@@ -346,7 +345,7 @@ describe('Test video imports', function () {
             hls: { enabled: false }
           }
         }
-        await servers[0].config.updateExistingSubConfig({ newConfig: config })
+        await servers[0].config.updateExistingConfig({ newConfig: config })
 
         const attributes = {
           name: 'hdr video',
@@ -386,7 +385,7 @@ describe('Test video imports', function () {
             alwaysTranscodeOriginalResolution: false
           }
         }
-        await servers[0].config.updateExistingSubConfig({ newConfig: config })
+        await servers[0].config.updateExistingConfig({ newConfig: config })
 
         const attributes = {
           name: 'small resolution video',
@@ -414,7 +413,7 @@ describe('Test video imports', function () {
             alwaysTranscodeOriginalResolution: true
           }
         }
-        await servers[0].config.updateExistingSubConfig({ newConfig: config })
+        await servers[0].config.updateExistingConfig({ newConfig: config })
 
         const attributes = {
           name: 'bigger resolution video',

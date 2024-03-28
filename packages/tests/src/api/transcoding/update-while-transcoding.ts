@@ -104,7 +104,7 @@ describe('Test update video privacy while transcoding', function () {
   describe('With only HLS enabled', function () {
 
     before(async function () {
-      await servers[0].config.updateCustomSubConfig({
+      await servers[0].config.updateExistingConfig({
         newConfig: {
           transcoding: {
             enabled: true,

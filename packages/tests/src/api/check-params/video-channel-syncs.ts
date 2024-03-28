@@ -36,7 +36,7 @@ describe('Test video channel sync API validator', () => {
   async function withMaxSyncsPerUser<T> (maxSync: number, callback: () => Promise<T>): Promise<void> {
     const origConfig = await server.config.getCustomConfig()
 
-    await server.config.updateExistingSubConfig({
+    await server.config.updateExistingConfig({
       newConfig: {
         import: {
           videoChannelSynchronization: {

@@ -212,7 +212,7 @@ describe('Test config defaults', function () {
 
   describe('Default user attributes', function () {
     it('Should create a user and register a user with the default config', async function () {
-      await server.config.updateCustomSubConfig({
+      await server.config.updateExistingConfig({
         newConfig: {
           user: {
             history: {
@@ -252,7 +252,7 @@ describe('Test config defaults', function () {
     })
 
     it('Should update config and create a user and register a user with the new default config', async function () {
-      await server.config.updateCustomSubConfig({
+      await server.config.updateExistingConfig({
         newConfig: {
           user: {
             history: {

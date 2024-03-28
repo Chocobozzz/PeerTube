@@ -192,7 +192,7 @@ describe('Test user videos', function () {
         config.transcoding.webVideos.enabled = false
         config.transcoding.hls.enabled = true
         config.transcoding.enabled = true
-        await server.config.updateCustomSubConfig({ newConfig: config })
+        await server.config.updateExistingConfig({ newConfig: config })
       }
 
       {

@@ -133,7 +133,7 @@ describe('Test follows moderation', function () {
         }
       }
 
-      await servers[1].config.updateCustomSubConfig({ newConfig: subConfig })
+      await servers[1].config.updateExistingConfig({ newConfig: subConfig })
 
       await commands[0].follow({ hosts: [ servers[1].url ] })
       await waitJobs(servers)
@@ -151,7 +151,7 @@ describe('Test follows moderation', function () {
         }
       }
 
-      await servers[1].config.updateCustomSubConfig({ newConfig: subConfig })
+      await servers[1].config.updateExistingConfig({ newConfig: subConfig })
 
       await commands[0].follow({ hosts: [ servers[1].url ] })
       await waitJobs(servers)
@@ -177,8 +177,8 @@ describe('Test follows moderation', function () {
         }
       }
 
-      await servers[1].config.updateCustomSubConfig({ newConfig: subConfig })
-      await servers[2].config.updateCustomSubConfig({ newConfig: subConfig })
+      await servers[1].config.updateExistingConfig({ newConfig: subConfig })
+      await servers[2].config.updateExistingConfig({ newConfig: subConfig })
 
       await commands[0].follow({ hosts: [ servers[1].url ] })
       await waitJobs(servers)
@@ -271,10 +271,10 @@ describe('Test follows moderation', function () {
         })
       }
 
-      await servers[2].config.updateExistingSubConfig({ newConfig: { followers: { instance: { manualApproval: false } } } })
+      await servers[2].config.updateExistingConfig({ newConfig: { followers: { instance: { manualApproval: false } } } })
       await run()
 
-      await servers[2].config.updateExistingSubConfig({ newConfig: { followers: { instance: { manualApproval: true } } } })
+      await servers[2].config.updateExistingConfig({ newConfig: { followers: { instance: { manualApproval: true } } } })
       await run()
     })
 

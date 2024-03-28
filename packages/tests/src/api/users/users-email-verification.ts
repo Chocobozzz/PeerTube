@@ -40,7 +40,7 @@ describe('Test users email verification', function () {
   it('Should register user and send verification email if verification required', async function () {
     this.timeout(30000)
 
-    await server.config.updateExistingSubConfig({
+    await server.config.updateExistingConfig({
       newConfig: {
         signup: {
           enabled: true,
@@ -126,7 +126,7 @@ describe('Test users email verification', function () {
 
   it('Should register user not requiring email verification if setting not enabled', async function () {
     this.timeout(5000)
-    await server.config.updateExistingSubConfig({
+    await server.config.updateExistingConfig({
       newConfig: {
         signup: {
           requiresEmailVerification: false
@@ -146,7 +146,7 @@ describe('Test users email verification', function () {
   })
 
   it('Should allow login for user with unverified email when setting later enabled', async function () {
-    await server.config.updateCustomSubConfig({
+    await server.config.updateExistingConfig({
       newConfig: {
         signup: {
           requiresEmailVerification: true

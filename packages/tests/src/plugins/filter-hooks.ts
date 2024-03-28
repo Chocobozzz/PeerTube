@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import {
   HttpStatusCode,
   MyUser,
@@ -12,20 +11,21 @@ import {
   VideoPrivacy
 } from '@peertube/peertube-models'
 import {
+  PeerTubeServer,
+  PluginsCommand,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   makeActivityPubGetRequest,
   makeGetRequest,
   makeRawRequest,
-  PeerTubeServer,
-  PluginsCommand,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { FIXTURE_URLS } from '../shared/fixture-urls.js'
 import { expectEndWith } from '@tests/shared/checks.js'
+import { expect } from 'chai'
+import { FIXTURE_URLS } from '../shared/fixture-urls.js'
 
 describe('Test plugin filter hooks', function () {
   let servers: PeerTubeServer[]
@@ -63,7 +63,7 @@ describe('Test plugin filter hooks', function () {
     const { data } = await servers[0].videos.list()
     videoUUID = data[0].uuid
 
-    await servers[0].config.updateCustomSubConfig({
+    await servers[0].config.updateExistingConfig({
       newConfig: {
         live: { enabled: true },
         signup: { enabled: true },
@@ -481,7 +481,7 @@ describe('Test plugin filter hooks', function () {
   describe('Should run filter:api.user.signup.allowed.result', function () {
 
     before(async function () {
-      await servers[0].config.updateExistingSubConfig({ newConfig: { signup: { requiresApproval: false } } })
+      await servers[0].config.updateExistingConfig({ newConfig: { signup: { requiresApproval: false } } })
     })
 
     it('Should run on config endpoint', async function () {
@@ -506,7 +506,7 @@ describe('Test plugin filter hooks', function () {
   describe('Should run filter:api.user.request-signup.allowed.result', function () {
 
     before(async function () {
-      await servers[0].config.updateExistingSubConfig({ newConfig: { signup: { requiresApproval: true } } })
+      await servers[0].config.updateExistingConfig({ newConfig: { signup: { requiresApproval: true } } })
     })
 
     it('Should run on config endpoint', async function () {
@@ -536,18 +536,7 @@ describe('Test plugin filter hooks', function () {
     before(async function () {
       this.timeout(120000)
 
-      await servers[0].config.updateCustomSubConfig({
-        newConfig: {
-          transcoding: {
-            webVideos: {
-              enabled: true
-            },
-            hls: {
-              enabled: true
-            }
-          }
-        }
-      })
+      await servers[0].config.enableMinimumTranscoding({ hls: true, webVideo: true })
 
       const uuids: string[] = []
 
@@ -675,7 +664,7 @@ describe('Test plugin filter hooks', function () {
   describe('Search filters', function () {
 
     before(async function () {
-      await servers[0].config.updateCustomSubConfig({
+      await servers[0].config.updateExistingConfig({
         newConfig: {
           search: {
             searchIndex: {

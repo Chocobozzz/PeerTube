@@ -11,7 +11,7 @@ import {
 } from '@peertube/peertube-server-commands'
 
 function updateSearchIndex (server: PeerTubeServer, enabled: boolean, disableLocalSearch = false) {
-  return server.config.updateCustomSubConfig({
+  return server.config.updateExistingConfig({
     newConfig: {
       search: {
         searchIndex: {

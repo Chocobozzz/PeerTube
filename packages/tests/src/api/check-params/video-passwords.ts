@@ -36,7 +36,7 @@ describe('Test video passwords validator', function () {
 
     await setAccessTokensToServers([ server ])
 
-    await server.config.updateCustomSubConfig({
+    await server.config.updateExistingConfig({
       newConfig: {
         live: {
           enabled: true,

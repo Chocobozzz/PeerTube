@@ -534,7 +534,7 @@ describe('Test videos search', function () {
         },
         live: { enabled: true }
       }
-      await server.config.updateCustomSubConfig({ newConfig })
+      await server.config.updateExistingConfig({ newConfig })
     }
 
     {

@@ -50,7 +50,7 @@ describe('Test index HTML generation', function () {
     })
 
     it('Should update the customized configuration and have the correct index html tags', async function () {
-      await servers[0].config.updateCustomSubConfig({
+      await servers[0].config.updateExistingConfig({
         newConfig: {
           instance: {
             name: 'PeerTube updated',

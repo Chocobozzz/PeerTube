@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
 import { LiveVideoCreate, VideoPrivacy, VideoState, VideoStateType } from '@peertube/peertube-models'
-import { checkLiveCleanup } from '@tests/shared/live.js'
 import {
-  cleanupTests,
   ConfigCommand,
+  PeerTubeServer,
+  cleanupTests,
   createMultipleServers,
   doubleFollow,
-  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { checkLiveCleanup } from '@tests/shared/live.js'
+import { expect } from 'chai'
 
 describe('Permanent live', function () {
   let servers: PeerTubeServer[] = []
@@ -52,7 +52,8 @@ describe('Permanent live', function () {
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
 
-    await servers[0].config.updateCustomSubConfig({
+    await servers[0].config.enableMinimumTranscoding()
+    await servers[0].config.updateExistingConfig({
       newConfig: {
         live: {
           enabled: true,
@@ -143,7 +144,7 @@ describe('Permanent live', function () {
   it('Should be able to stream again in the permanent live', async function () {
     this.timeout(60000)
 
-    await servers[0].config.updateCustomSubConfig({
+    await servers[0].config.updateExistingConfig({
       newConfig: {
         live: {
           enabled: true,
