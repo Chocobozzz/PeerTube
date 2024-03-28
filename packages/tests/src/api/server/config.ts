@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { ActorImageType, CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
-import { parallelTests } from '@peertube/peertube-node-utils'
 import {
   PeerTubeServer,
   cleanupTests,
@@ -135,127 +134,6 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.export.users.enabled).to.be.true
   expect(data.export.users.exportExpiration).to.equal(1000 * 3600 * 48)
   expect(data.export.users.maxUserVideoQuota).to.equal(10737418240)
-}
-
-function checkUpdatedConfig (data: CustomConfig) {
-  expect(data.instance.name).to.equal('PeerTube updated')
-  expect(data.instance.shortDescription).to.equal('my short description')
-  expect(data.instance.description).to.equal('my super description')
-
-  expect(data.instance.terms).to.equal('my super terms')
-  expect(data.instance.creationReason).to.equal('my super creation reason')
-  expect(data.instance.codeOfConduct).to.equal('my super coc')
-  expect(data.instance.moderationInformation).to.equal('my super moderation information')
-  expect(data.instance.administrator).to.equal('Kuja')
-  expect(data.instance.maintenanceLifetime).to.equal('forever')
-  expect(data.instance.businessModel).to.equal('my super business model')
-  expect(data.instance.hardwareInformation).to.equal('2vCore 3GB RAM')
-
-  expect(data.instance.languages).to.deep.equal([ 'en', 'es' ])
-  expect(data.instance.categories).to.deep.equal([ 1, 2 ])
-
-  expect(data.instance.defaultClientRoute).to.equal('/videos/recently-added')
-  expect(data.instance.isNSFW).to.be.true
-  expect(data.instance.defaultNSFWPolicy).to.equal('blur')
-  expect(data.instance.customizations.javascript).to.equal('alert("coucou")')
-  expect(data.instance.customizations.css).to.equal('body { background-color: red; }')
-
-  expect(data.services.twitter.username).to.equal('@Kuja')
-
-  expect(data.client.videos.miniature.preferAuthorDisplayName).to.be.true
-  expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.true
-
-  expect(data.cache.previews.size).to.equal(2)
-  expect(data.cache.captions.size).to.equal(3)
-  expect(data.cache.torrents.size).to.equal(4)
-  expect(data.cache.storyboards.size).to.equal(5)
-
-  expect(data.signup.enabled).to.be.false
-  expect(data.signup.limit).to.equal(5)
-  expect(data.signup.requiresApproval).to.be.false
-  expect(data.signup.requiresEmailVerification).to.be.false
-  expect(data.signup.minimumAge).to.equal(10)
-
-  // We override admin email in parallel tests, so skip this exception
-  if (parallelTests() === false) {
-    expect(data.admin.email).to.equal('superadmin1@example.com')
-  }
-
-  expect(data.contactForm.enabled).to.be.false
-
-  expect(data.user.history.videos.enabled).to.be.false
-  expect(data.user.videoQuota).to.equal(5242881)
-  expect(data.user.videoQuotaDaily).to.equal(318742)
-
-  expect(data.videoChannels.maxPerUser).to.equal(24)
-
-  expect(data.transcoding.enabled).to.be.true
-  expect(data.transcoding.remoteRunners.enabled).to.be.true
-  expect(data.transcoding.threads).to.equal(1)
-  expect(data.transcoding.concurrency).to.equal(3)
-  expect(data.transcoding.allowAdditionalExtensions).to.be.true
-  expect(data.transcoding.allowAudioFiles).to.be.true
-  expect(data.transcoding.profile).to.equal('vod_profile')
-  expect(data.transcoding.resolutions['144p']).to.be.false
-  expect(data.transcoding.resolutions['240p']).to.be.false
-  expect(data.transcoding.resolutions['360p']).to.be.true
-  expect(data.transcoding.resolutions['480p']).to.be.true
-  expect(data.transcoding.resolutions['720p']).to.be.false
-  expect(data.transcoding.resolutions['1080p']).to.be.false
-  expect(data.transcoding.resolutions['2160p']).to.be.false
-  expect(data.transcoding.alwaysTranscodeOriginalResolution).to.be.false
-  expect(data.transcoding.hls.enabled).to.be.false
-  expect(data.transcoding.webVideos.enabled).to.be.true
-  expect(data.transcoding.originalFile.keep).to.be.true
-
-  expect(data.live.enabled).to.be.true
-  expect(data.live.allowReplay).to.be.true
-  expect(data.live.latencySetting.enabled).to.be.false
-  expect(data.live.maxDuration).to.equal(5000)
-  expect(data.live.maxInstanceLives).to.equal(-1)
-  expect(data.live.maxUserLives).to.equal(10)
-  expect(data.live.transcoding.enabled).to.be.true
-  expect(data.live.transcoding.remoteRunners.enabled).to.be.true
-  expect(data.live.transcoding.threads).to.equal(4)
-  expect(data.live.transcoding.profile).to.equal('live_profile')
-  expect(data.live.transcoding.resolutions['144p']).to.be.true
-  expect(data.live.transcoding.resolutions['240p']).to.be.true
-  expect(data.live.transcoding.resolutions['360p']).to.be.true
-  expect(data.live.transcoding.resolutions['480p']).to.be.true
-  expect(data.live.transcoding.resolutions['720p']).to.be.true
-  expect(data.live.transcoding.resolutions['1080p']).to.be.true
-  expect(data.live.transcoding.resolutions['2160p']).to.be.true
-  expect(data.live.transcoding.alwaysTranscodeOriginalResolution).to.be.false
-
-  expect(data.videoStudio.enabled).to.be.true
-  expect(data.videoStudio.remoteRunners.enabled).to.be.true
-
-  expect(data.videoFile.update.enabled).to.be.true
-
-  expect(data.import.videos.concurrency).to.equal(4)
-  expect(data.import.videos.http.enabled).to.be.false
-  expect(data.import.videos.torrent.enabled).to.be.false
-  expect(data.import.videoChannelSynchronization.enabled).to.be.false
-  expect(data.import.users.enabled).to.be.false
-  expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.true
-
-  expect(data.followers.instance.enabled).to.be.false
-  expect(data.followers.instance.manualApproval).to.be.true
-
-  expect(data.followings.instance.autoFollowBack.enabled).to.be.true
-  expect(data.followings.instance.autoFollowIndex.enabled).to.be.true
-  expect(data.followings.instance.autoFollowIndex.indexUrl).to.equal('https://updated.example.com')
-
-  expect(data.broadcastMessage.enabled).to.be.true
-  expect(data.broadcastMessage.level).to.equal('error')
-  expect(data.broadcastMessage.message).to.equal('super bad message')
-  expect(data.broadcastMessage.dismissable).to.be.true
-
-  expect(data.storyboards.enabled).to.be.false
-
-  expect(data.export.users.enabled).to.be.false
-  expect(data.export.users.exportExpiration).to.equal(43)
-  expect(data.export.users.maxUserVideoQuota).to.equal(42)
 }
 
 const newCustomConfig: CustomConfig = {
@@ -589,7 +467,7 @@ describe('Test config', function () {
       await server.config.updateCustomConfig({ newCustomConfig })
 
       const data = await server.config.getCustomConfig()
-      checkUpdatedConfig(data)
+      expect(data).to.deep.equal(newCustomConfig)
     })
 
     it('Should have the correct updated video allowed extensions', async function () {
@@ -621,7 +499,7 @@ describe('Test config', function () {
 
       const data = await server.config.getCustomConfig()
 
-      checkUpdatedConfig(data)
+      expect(data).to.deep.equal(newCustomConfig)
     })
 
     it('Should fetch the about information', async function () {
