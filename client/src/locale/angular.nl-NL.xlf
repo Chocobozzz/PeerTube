@@ -17158,9 +17158,9 @@ Je kan nu al informatie toevoegen over deze video.
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6901018060567164184" datatype="html">
+      <trans-unit id="6901018060567164184" datatype="html" xml:space="preserve">
         <source>Plugins</source>
-        <target state="new">Plugins</target>
+        <target state="translated">Plugins</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-navigation.component.html</context>
           <context context-type="linenumber">8</context>
