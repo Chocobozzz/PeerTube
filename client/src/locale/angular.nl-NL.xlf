@@ -9396,9 +9396,9 @@ Je kan nu al informatie toevoegen over deze video.
           <context context-type="linenumber">617</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1206277798664538171" datatype="html">
+      <trans-unit id="1206277798664538171" datatype="html" xml:space="preserve">
         <source>Signup requires approval by moderators</source>
-        <target state="new">Signup requires approval by moderators</target>
+        <target state="translated">Aanmelden vereist goedkeuring van moderators</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">175</context>
@@ -9452,41 +9452,41 @@ Je kan nu al informatie toevoegen over deze video.
           <context context-type="linenumber">665</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3448020426354063371" datatype="html">
+      <trans-unit id="3448020426354063371" datatype="html" xml:space="preserve">
         <source>TWITTER/X</source>
-        <target state="new">TWITTER/X</target>
+        <target state="translated">TWITTER/X</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">674</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2502039689036410119" datatype="html">
+      <trans-unit id="2502039689036410119" datatype="html" xml:space="preserve">
         <source>Extra configuration required by Twitter/X. All other social media (Facebook, Mastodon, etc.) are supported out of the box.</source>
-        <target state="new"> Extra configuration required by Twitter/X. All other social media (Facebook, Mastodon, etc.) are supported out of the box. </target>
+        <target state="translated">Extra configuratie vereist voor Twitter/X. Alle andere sociale media (Facebook, Mastodon, enz.) werken zonder extra configuratie.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">676,678</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6966836698348768805" datatype="html">
+      <trans-unit id="6966836698348768805" datatype="html" xml:space="preserve">
         <source>Your Twitter/X username</source>
-        <target state="new">Your Twitter/X username</target>
+        <target state="translated">Je Twitter/X-gebruikersnaam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">687</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5402438532456058874" datatype="html">
+      <trans-unit id="5402438532456058874" datatype="html" xml:space="preserve">
         <source>Indicates the Twitter/X account for the website or platform where the content was published.</source>
-        <target state="new">Indicates the Twitter/X account for the website or platform where the content was published.</target>
+        <target state="translated">Geeft het Twitter/X account aan voor de website of het platform waar de inhoud is gepubliceerd.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">690</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8113899484555907381" datatype="html">
+      <trans-unit id="8113899484555907381" datatype="html" xml:space="preserve">
         <source>This is just an extra information injected in PeerTube HTML that is required by Twitter/X. If you don't have a Twitter/X account, just leave the default value.</source>
-        <target state="new">This is just an extra information injected in PeerTube HTML that is required by Twitter/X. If you don't have a Twitter/X account, just leave the default value.</target>
+        <target state="translated">Dit is gewoon extra informatie die in PeerTube HTML wordt geïnjecteerd en vereist wordt door Twitter/X. Als je geen Twitter/X account hebt, laat dan de standaardwaarde staan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">692</context>
@@ -9500,9 +9500,9 @@ Je kan nu al informatie toevoegen over deze video.
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4776429682428363094" datatype="html">
+      <trans-unit id="4776429682428363094" datatype="html" xml:space="preserve">
         <source>1 day</source>
-        <target state="new">1 day</target>
+        <target state="translated">1 dag</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">66</context>
@@ -9512,25 +9512,25 @@ Je kan nu al informatie toevoegen over deze video.
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5730801210509951539" datatype="html">
+      <trans-unit id="5730801210509951539" datatype="html" xml:space="preserve">
         <source>2 days</source>
-        <target state="new">2 days</target>
+        <target state="translated">2 dagen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8542568275115626925" datatype="html">
+      <trans-unit id="8542568275115626925" datatype="html" xml:space="preserve">
         <source>7 days</source>
-        <target state="new">7 days</target>
+        <target state="translated">7 dagen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7152095234138763013" datatype="html">
+      <trans-unit id="7152095234138763013" datatype="html" xml:space="preserve">
         <source>30 days</source>
-        <target state="new">30 days</target>
+        <target state="translated">30 dagen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -9696,9 +9696,9 @@ Je kan nu al informatie toevoegen over deze video.
           <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3283660108004661843" datatype="html">
+      <trans-unit id="3283660108004661843" datatype="html" xml:space="preserve">
         <source>Enable remote runners for lives</source>
-        <target state="new">Enable remote runners for lives</target>
+        <target state="translated">Externe taak uitvoerder inschakelen voor live-uitzendingen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">152</context>
@@ -9720,9 +9720,9 @@ Je kan nu al informatie toevoegen over deze video.
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2134381456844896041" datatype="html">
+      <trans-unit id="2134381456844896041" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding. Remote runners has to register on your instance first. </target>
+        <target state="translated">Gebruik <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>externe taak uitvoerders<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> om live uitzending te transcoderen. Externe taak uitvoerders moeten zich eerst registreren op je exemplaar van PeerTube. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">155</context>
@@ -9776,17 +9776,17 @@ Je kan nu al informatie toevoegen over deze video.
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1386306711019304612" datatype="html">
+      <trans-unit id="1386306711019304612" datatype="html" xml:space="preserve">
         <source>Input</source>
-        <target state="new">Input</target>
+        <target state="translated">Invoer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8646250517331978259" datatype="html">
+      <trans-unit id="8646250517331978259" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding. Remote runners has to register on your instance first. </target>
+        <target state="translated">Gebruik <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/system/runners/runners-list&quot;&gt;"/>externe taak uitvoerders<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> om video transcodes te verwerken. Externe taak uitvoerders moeten zich eerst registreren op je exemplaar van PeerTube. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">162</context>
