@@ -1,20 +1,20 @@
+import { NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core'
+import { RouterLink } from '@angular/router'
 import { MarkdownService, Notifier, UserService } from '@app/core'
 import { AuthService } from '@app/core/auth'
-import { CommentReportComponent } from '@app/shared/shared-moderation/report-modals/comment-report.component'
-import { User, UserRight } from '@peertube/peertube-models'
-import { FromNowPipe } from '../../../../shared/shared-main/angular/from-now.pipe'
-import { VideoCommentAddComponent } from './video-comment-add.component'
-import { UserModerationDropdownComponent } from '../../../../shared/shared-moderation/user-moderation-dropdown.component'
-import { TimestampRouteTransformerDirective } from '../timestamp-route-transformer.directive'
-import { RouterLink } from '@angular/router'
-import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
-import { NgIf, NgClass, NgFor } from '@angular/common'
-import { Video } from '@app/shared/shared-main/video/video.model'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
-import { VideoComment } from '@app/shared/shared-video-comment/video-comment.model'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { CommentReportComponent } from '@app/shared/shared-moderation/report-modals/comment-report.component'
 import { VideoCommentThreadTree } from '@app/shared/shared-video-comment/video-comment-thread-tree.model'
+import { VideoComment } from '@app/shared/shared-video-comment/video-comment.model'
+import { User, UserRight } from '@peertube/peertube-models'
+import { ActorAvatarComponent } from '../../../../shared/shared-actor-image/actor-avatar.component'
+import { FromNowPipe } from '../../../../shared/shared-main/angular/from-now.pipe'
+import { UserModerationDropdownComponent } from '../../../../shared/shared-moderation/user-moderation-dropdown.component'
+import { TimestampRouteTransformerDirective } from '../timestamp-route-transformer.directive'
+import { VideoCommentAddComponent } from './video-comment-add.component'
 
 @Component({
   selector: 'my-video-comment',
@@ -49,6 +49,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
   @Output() wantedToReply = new EventEmitter<VideoComment>()
   @Output() wantedToDelete = new EventEmitter<VideoComment>()
+  @Output() wantedToApprove = new EventEmitter<VideoComment>()
   @Output() wantedToRedraft = new EventEmitter<VideoComment>()
   @Output() threadCreated = new EventEmitter<VideoCommentThreadTree>()
   @Output() resetReply = new EventEmitter()
@@ -115,6 +116,10 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     this.wantedToRedraft.emit(comment || this.comment)
   }
 
+  onWantToApprove (comment?: VideoComment) {
+    this.wantedToApprove.emit(comment || this.comment)
+  }
+
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
   }
@@ -127,12 +132,12 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     this.timestampClicked.emit(timestamp)
   }
 
-  isRemovableByUser () {
+  canBeRemovedOrApprovedByUser () {
     return this.comment.account && this.isUserLoggedIn() &&
       (
         this.user.account.id === this.comment.account.id ||
         this.user.account.id === this.video.account.id ||
-        this.user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT)
+        this.user.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT)
       )
   }
 
@@ -196,6 +201,14 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
     this.prependModerationActions = []
 
+    if (this.canBeRemovedOrApprovedByUser() && this.comment.heldForReview) {
+      this.prependModerationActions.push({
+        label: $localize`Approve`,
+        iconName: 'tick',
+        handler: () => this.onWantToApprove()
+      })
+    }
+
     if (this.isReportableByUser()) {
       this.prependModerationActions.push({
         label: $localize`Report this comment`,
@@ -204,7 +217,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
       })
     }
 
-    if (this.isRemovableByUser()) {
+    if (this.canBeRemovedOrApprovedByUser()) {
       this.prependModerationActions.push({
         label: $localize`Remove`,
         iconName: 'delete',

@@ -1,6 +1,3 @@
-import { isBlockedByServerOrAccount } from '@server/lib/blocklist.js'
-import { isRedundancyAccepted } from '@server/lib/redundancy.js'
-import { VideoModel } from '@server/models/video/video.js'
 import {
   AbuseObject,
   ActivityCreate,
@@ -12,6 +9,10 @@ import {
   VideoObject,
   WatchActionObject
 } from '@peertube/peertube-models'
+import { isBlockedByServerOrAccount } from '@server/lib/blocklist.js'
+import { isRedundancyAccepted } from '@server/lib/redundancy.js'
+import { VideoCommentModel } from '@server/models/video/video-comment.js'
+import { VideoModel } from '@server/models/video/video.js'
 import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
@@ -22,6 +23,7 @@ import { fetchAPObjectIfNeeded } from '../activity.js'
 import { createOrUpdateCacheFile } from '../cache-file.js'
 import { createOrUpdateLocalVideoViewer } from '../local-video-viewer.js'
 import { createOrUpdateVideoPlaylist } from '../playlists/index.js'
+import { sendReplyApproval } from '../send/send-reply-approval.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
 import { resolveThread } from '../video-comments.js'
 import { canVideoBeFederated, getOrCreateAPVideo } from '../videos/index.js'
@@ -42,7 +44,7 @@ async function processCreateActivity (options: APProcessorOptions<ActivityCreate
     // Comments will be fetched from videos
     if (options.fromFetch) return
 
-    return retryTransactionWrapper(processCreateVideoComment, activity, activityObject, byActor, notify)
+    return retryTransactionWrapper(processCreateVideoComment, activity, activityObject, byActor, options.fromFetch)
   }
 
   if (activityType === 'WatchAction') {
@@ -118,8 +120,10 @@ async function processCreateVideoComment (
   activity: ActivityCreate<VideoCommentObject | string>,
   commentObject: VideoCommentObject,
   byActor: MActorSignature,
-  notify: boolean
+  fromFetch: false
 ) {
+  if (fromFetch) throw new Error('Processing create video comment from fetch is not supported')
+
   const byAccount = byActor.Account
 
   if (!byAccount) throw new Error('Cannot create video comment with the non account actor ' + byActor.url)
@@ -146,12 +150,24 @@ async function processCreateVideoComment (
 
   // Try to not forward unwanted comments on our videos
   if (video.isOwned()) {
+    if (!canVideoBeFederated(video)) {
+      logger.info('Skip comment forward on non federated video' + video.url)
+      return
+    }
+
     if (await isBlockedByServerOrAccount(comment.Account, video.VideoChannel.Account)) {
       logger.info('Skip comment forward from blocked account or server %s.', comment.Account.Actor.url)
       return
     }
 
-    if (created === true) {
+    // New non-moderated comment -> auto approve reply
+    if (comment.heldForReview === false && created) {
+      const reply = await VideoCommentModel.loadById(comment.inReplyToCommentId)
+      sendReplyApproval(Object.assign(comment, { InReplyToVideoComment: reply }), 'ApproveReply')
+    }
+
+    // New comment or re-sent after an approval -> forward comment
+    if (comment.heldForReview === false && (created || commentObject.replyApproval)) {
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
 
@@ -159,7 +175,7 @@ async function processCreateVideoComment (
     }
   }
 
-  if (created && notify) Notifier.Instance.notifyOnNewComment(comment)
+  if (created) Notifier.Instance.notifyOnNewComment(comment)
 }
 
 async function processCreatePlaylist (

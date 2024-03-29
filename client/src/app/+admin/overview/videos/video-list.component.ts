@@ -1,6 +1,6 @@
 import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU, getAbsoluteAPIUrl } from '@app/helpers'
 import { Video } from '@app/shared/shared-main/video/video.model'
@@ -51,6 +51,7 @@ import { VideoAdminService } from './video-admin.service'
     EmbedComponent,
     VideoBlockComponent,
     DatePipe,
+    RouterLink,
     BytesPipe
   ]
 })
@@ -254,6 +255,14 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
 
         error: err => this.notifier.error(err.message)
       })
+  }
+
+  buildSearchAutoTag (tag: string) {
+    const str = `autoTag:"${tag}"`
+
+    if (this.search) return this.search + ' ' + str
+
+    return str
   }
 
   protected reloadDataInternal () {

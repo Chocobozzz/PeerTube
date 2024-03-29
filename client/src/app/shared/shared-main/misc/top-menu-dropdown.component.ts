@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs'
 import { filter } from 'rxjs/operators'
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { NavigationEnd, Router, RouterLinkActive, RouterLink } from '@angular/router'
 import { MenuService, ScreenService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
@@ -42,7 +42,7 @@ export type TopMenuDropdownParam = {
     GlobalIconComponent
   ]
 })
-export class TopMenuDropdownComponent implements OnInit, OnDestroy {
+export class TopMenuDropdownComponent implements OnInit, OnChanges, OnDestroy {
   @Input() menuEntries: TopMenuDropdownParam[] = []
 
   @ViewChild('modal', { static: true }) modal: NgbModal
@@ -80,6 +80,10 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
     this.routeSub = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => this.updateChildLabels(window.location.pathname))
+  }
+
+  ngOnChanges () {
+    this.updateChildLabels(window.location.pathname)
   }
 
   ngOnDestroy () {

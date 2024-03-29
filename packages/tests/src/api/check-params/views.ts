@@ -10,7 +10,7 @@ import {
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
 
-describe('Test videos views', function () {
+describe('Test videos views API validators', function () {
   let servers: PeerTubeServer[]
   let liveVideoId: string
   let videoId: string

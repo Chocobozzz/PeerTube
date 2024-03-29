@@ -259,6 +259,24 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     }
   }
 
+  protected includeAutomaticTags (autoTagOfAccountId: number) {
+    this.addJoin(
+      'LEFT JOIN (' +
+        '"videoAutomaticTag" AS "VideoAutomaticTags" INNER JOIN "automaticTag" AS "VideoAutomaticTags->AutomaticTag" ' +
+          'ON "VideoAutomaticTags->AutomaticTag"."id" = "VideoAutomaticTags"."automaticTagId" ' +
+      ') ON "video"."id" = "VideoAutomaticTags"."videoId" AND "VideoAutomaticTags"."accountId" = :autoTagOfAccountId'
+    )
+
+    this.replacements.autoTagOfAccountId = autoTagOfAccountId
+
+    this.attributes = {
+      ...this.attributes,
+
+      ...this.buildAttributesObject('VideoAutomaticTags', this.tables.getVideoAutoTagAttributes()),
+      ...this.buildAttributesObject('VideoAutomaticTags->AutomaticTag', this.tables.getAutoTagAttributes())
+    }
+  }
+
   protected includeTrackers () {
     this.addJoin(
       'LEFT OUTER JOIN (' +

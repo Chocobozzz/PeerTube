@@ -5,6 +5,7 @@ import { VideoBlockListComponent } from '@app/+admin/moderation/video-block-list
 import { UserRightGuard } from '@app/core'
 import { UserRight } from '@peertube/peertube-models'
 import { RegistrationListComponent } from './registration-list'
+import { WatchedWordsListAdminComponent } from './watched-words-list/watched-words-list-admin.component'
 
 export const ModerationRoutes: Routes = [
   {
@@ -112,6 +113,18 @@ export const ModerationRoutes: Routes = [
           userRight: UserRight.MANAGE_SERVERS_BLOCKLIST,
           meta: {
             title: $localize`Muted instances`
+          }
+        }
+      },
+
+      {
+        path: 'watched-words/list',
+        component: WatchedWordsListAdminComponent,
+        canActivate: [ UserRightGuard ],
+        data: {
+          userRight: UserRight.MANAGE_INSTANCE_WATCHED_WORDS,
+          meta: {
+            title: $localize`Watched words`
           }
         }
       }

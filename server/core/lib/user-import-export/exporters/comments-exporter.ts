@@ -34,9 +34,9 @@ export class CommentsExporter extends AbstractUserExporter <CommentsExportJSON> 
 
   private formatCommentsAP (comments: MCommentExport[]) {
     return Bluebird.mapSeries(comments, async ({ url }) => {
-      const comment = await VideoCommentModel.loadByUrlAndPopulateReplyAndVideoUrlAndAccount(url)
+      const comment = await VideoCommentModel.loadByUrlAndPopulateReplyAndVideoImmutableAndAccount(url)
 
-      const threadParentComments = await VideoCommentModel.listThreadParentComments(comment, undefined)
+      const threadParentComments = await VideoCommentModel.listThreadParentComments({ comment })
       let commentObject = comment.toActivityPubObject(threadParentComments) as VideoCommentObject
 
       const isPublic = true // Comments are always public

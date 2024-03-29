@@ -85,6 +85,7 @@ export interface UserNotification {
     threadId: number
     account: ActorInfo
     video: VideoInfo
+    heldForReview: boolean
   }
 
   abuse?: {

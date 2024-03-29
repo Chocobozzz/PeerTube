@@ -1,6 +1,7 @@
 import {
   Video,
   VideoAdditionalAttributes,
+  VideoCommentPolicy,
   VideoDetails,
   VideoFile,
   VideoInclude,
@@ -13,7 +14,14 @@ import { tracer } from '@server/lib/opentelemetry/tracing.js'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager.js'
 import { isArray } from '../../../helpers/custom-validators/misc.js'
-import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES, VIDEO_STATES } from '../../../initializers/constants.js'
+import {
+  VIDEO_CATEGORIES,
+  VIDEO_COMMENTS_POLICY,
+  VIDEO_LANGUAGES,
+  VIDEO_LICENCES,
+  VIDEO_PRIVACIES,
+  VIDEO_STATES
+} from '../../../initializers/constants.js'
 import { MServer, MStreamingPlaylistRedundanciesOpt, MVideoFormattable, MVideoFormattableDetails } from '../../../types/models/index.js'
 import { MVideoFileRedundanciesOpt } from '../../../types/models/video/video-file.js'
 import { sortByResolutionDesc } from './shared/index.js'
@@ -29,6 +37,7 @@ export type VideoFormattingJSONOptions = {
     files?: boolean
     source?: boolean
     blockedOwner?: boolean
+    automaticTags?: boolean
   }
 }
 
@@ -43,7 +52,8 @@ export function guessAdditionalAttributesFromQuery (query: VideosCommonQueryAfte
       blacklistInfo: !!(query.include & VideoInclude.BLACKLISTED),
       files: !!(query.include & VideoInclude.FILES),
       source: !!(query.include & VideoInclude.SOURCE),
-      blockedOwner: !!(query.include & VideoInclude.BLOCKED_OWNER)
+      blockedOwner: !!(query.include & VideoInclude.BLOCKED_OWNER),
+      automaticTags: !!(query.include & VideoInclude.AUTOMATIC_TAGS)
     }
   }
 }
@@ -150,7 +160,14 @@ export function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetail
     channel: video.VideoChannel.toFormattedJSON(),
     account: video.VideoChannel.Account.toFormattedJSON(),
     tags,
-    commentsEnabled: video.commentsEnabled,
+
+    // TODO: remove, deprecated in PeerTube 6.2
+    commentsEnabled: video.commentsPolicy !== VideoCommentPolicy.DISABLED,
+    commentsPolicy: {
+      id: video.commentsPolicy,
+      label: VIDEO_COMMENTS_POLICY[video.commentsPolicy]
+    },
+
     downloadEnabled: video.downloadEnabled,
     waitTranscoding: video.waitTranscoding,
     inputFileUpdatedAt: video.inputFileUpdatedAt,
@@ -314,6 +331,10 @@ function buildAdditionalAttributes (video: MVideoFormattable, options: VideoForm
 
   if (add?.source === true) {
     result.videoSource = video.VideoSource?.toFormattedJSON() || null
+  }
+
+  if (add?.automaticTags === true) {
+    result.automaticTags = (video.VideoAutomaticTags || []).map(t => t.AutomaticTag.name)
   }
 
   return result

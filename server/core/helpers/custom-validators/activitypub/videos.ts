@@ -1,18 +1,20 @@
-import validator from 'validator'
 import {
   ActivityPubStoryboard,
   ActivityTrackerUrlObject,
   ActivityVideoFileMetadataUrlObject,
   LiveVideoLatencyMode,
+  VideoCommentPolicy,
   VideoObject,
   VideoState
 } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
+import validator from 'validator'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
 import { peertubeTruncate } from '../../core-utils.js'
 import { isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc.js'
 import { isLiveLatencyModeValid } from '../video-lives.js'
 import {
+  isVideoCommentsPolicyValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
   isVideoNameValid,
@@ -66,11 +68,20 @@ function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
   if (!isVideoStateValid(video.state)) video.state = VideoState.PUBLISHED
   if (!isBooleanValid(video.waitTranscoding)) video.waitTranscoding = false
   if (!isBooleanValid(video.downloadEnabled)) video.downloadEnabled = true
-  if (!isBooleanValid(video.commentsEnabled)) video.commentsEnabled = false
   if (!isBooleanValid(video.isLiveBroadcast)) video.isLiveBroadcast = false
   if (!isBooleanValid(video.liveSaveReplay)) video.liveSaveReplay = false
   if (!isBooleanValid(video.permanentLive)) video.permanentLive = false
   if (!isLiveLatencyModeValid(video.latencyMode)) video.latencyMode = LiveVideoLatencyMode.DEFAULT
+
+  if (video.commentsPolicy) {
+    if (!isVideoCommentsPolicyValid(video.commentsPolicy)) {
+      video.commentsPolicy = VideoCommentPolicy.DISABLED
+    }
+  } else if (video.commentsEnabled === true) { // Fallback to deprecated attribute
+    video.commentsPolicy = VideoCommentPolicy.ENABLED
+  } else {
+    video.commentsPolicy = VideoCommentPolicy.DISABLED
+  }
 
   return isActivityPubUrlValid(video.id) &&
     isVideoNameValid(video.name) &&
@@ -138,12 +149,12 @@ function isAPVideoTrackerUrlObject (url: any): url is ActivityTrackerUrlObject {
 // ---------------------------------------------------------------------------
 
 export {
-  sanitizeAndCheckVideoTorrentUpdateActivity,
-  isRemoteStringIdentifierValid,
-  sanitizeAndCheckVideoTorrentObject,
-  isRemoteVideoUrlValid,
   isAPVideoFileUrlMetadataObject,
-  isAPVideoTrackerUrlObject
+  isAPVideoTrackerUrlObject,
+  isRemoteStringIdentifierValid,
+  isRemoteVideoUrlValid,
+  sanitizeAndCheckVideoTorrentObject,
+  sanitizeAndCheckVideoTorrentUpdateActivity
 }
 
 // ---------------------------------------------------------------------------

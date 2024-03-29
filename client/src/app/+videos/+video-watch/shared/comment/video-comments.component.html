@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <ng-template [ngIf]="video.commentsEnabled === true">
+  @if (commentsEnabled) {
     <my-video-comment-add
       [video]="video"
       [videoPassword]="videoPassword"
@@ -43,6 +43,7 @@
           (wantedToReply)="onWantedToReply($event)"
           (wantedToDelete)="onWantedToDelete($event)"
           (wantedToRedraft)="onWantedToRedraft($event)"
+          (wantedToApprove)="onWantToApprove($event)"
           (threadCreated)="onThreadCreated($event)"
           (resetReply)="onResetReply()"
           (timestampClicked)="handleTimestampClicked($event)"
@@ -62,6 +63,7 @@
           (wantedToReply)="onWantedToReply($event)"
           (wantedToDelete)="onWantedToDelete($event)"
           (wantedToRedraft)="onWantedToRedraft($event)"
+          (wantedToApprove)="onWantToApprove($event)"
           (threadCreated)="onThreadCreated($event)"
           (resetReply)="onResetReply()"
           (timestampClicked)="handleTimestampClicked($event)"
@@ -89,9 +91,7 @@
 
       </div>
     </div>
-  </ng-template>
-
-  <div *ngIf="video.commentsEnabled === false" i18n>
-    Comments are disabled.
-  </div>
+  } @else {
+    <div i18n>Comments are disabled.</div>
+  }
 </div>

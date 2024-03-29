@@ -127,7 +127,7 @@ const videoKeysToKeep = new Set([
   'channel-uuid',
   'channel-name',
   'support',
-  'commentsEnabled',
+  'commentsPolicy',
   'downloadEnabled'
 ])
 class VideoAuditView extends EntityAuditView {

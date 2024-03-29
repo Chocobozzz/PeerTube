@@ -1,7 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
 import { uuidRegex } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, HttpStatusCodeType, VideoCaption, VideoDetails, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  HttpStatusCodeType,
+  VideoCaption,
+  VideoCommentPolicy,
+  VideoCommentPolicyType,
+  VideoDetails,
+  VideoPrivacy,
+  VideoResolution
+} from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath, getFileSize, getFilenameFromUrl, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { PeerTubeServer, VideoEdit, getRedirectionUrl, makeRawRequest, waitJobs } from '@peertube/peertube-server-commands'
 import {
@@ -139,7 +148,7 @@ export async function completeVideoCheck (options: {
     licence: number
     language: string
     nsfw: boolean
-    commentsEnabled: boolean
+    commentsPolicy: VideoCommentPolicyType
     downloadEnabled: boolean
     description: string
     support: string
@@ -214,7 +223,8 @@ export async function completeVideoCheck (options: {
   expect(video.url).to.contain(originServer.host)
   expect(video.tags).to.deep.equal(attributes.tags)
 
-  expect(video.commentsEnabled).to.equal(attributes.commentsEnabled)
+  expect(video.commentsEnabled).to.equal(attributes.commentsPolicy !== VideoCommentPolicy.DISABLED)
+  expect(video.commentsPolicy.id).to.equal(attributes.commentsPolicy)
   expect(video.downloadEnabled).to.equal(attributes.downloadEnabled)
 
   expect(dateIsValid(video.createdAt)).to.be.true

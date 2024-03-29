@@ -5,19 +5,25 @@ export interface VideoComment {
   id: number
   url: string
   text: string
+
   threadId: number
   inReplyToCommentId: number
   videoId: number
+
   createdAt: Date | string
   updatedAt: Date | string
   deletedAt: Date | string
+
   isDeleted: boolean
   totalRepliesFromVideoAuthor: number
   totalReplies: number
+
   account: Account
+
+  heldForReview: boolean
 }
 
-export interface VideoCommentAdmin {
+export interface VideoCommentForAdminOrUser {
   id: number
   url: string
   text: string
@@ -35,6 +41,10 @@ export interface VideoCommentAdmin {
     uuid: string
     name: string
   }
+
+  heldForReview: boolean
+
+  automaticTags: string[]
 }
 
 export type VideoCommentThreads = ResultList<VideoComment> & { totalNotDeletedComments: number }

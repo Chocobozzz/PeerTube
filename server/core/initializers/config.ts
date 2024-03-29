@@ -5,6 +5,7 @@ import { dirname, join } from 'path'
 import {
   BroadcastMessageLevel,
   NSFWPolicyType,
+  VideoCommentPolicyType,
   VideoPrivacyType,
   VideoRedundancyConfigFilter,
   VideosRedundancyStrategy
@@ -92,7 +93,7 @@ const CONFIG = {
   DEFAULTS: {
     PUBLISH: {
       DOWNLOAD_ENABLED: config.get<boolean>('defaults.publish.download_enabled'),
-      COMMENTS_ENABLED: config.get<boolean>('defaults.publish.comments_enabled'),
+      COMMENTS_POLICY: config.get<VideoCommentPolicyType>('defaults.publish.comments_policy'),
       PRIVACY: config.get<VideoPrivacyType>('defaults.publish.privacy'),
       LICENCE: config.get<number>('defaults.publish.licence')
     },

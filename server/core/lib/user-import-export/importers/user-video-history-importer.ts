@@ -1,14 +1,14 @@
-import { UserVideoHistoryExportJSON } from '@peertube/peertube-models'
-import { AbstractRatesImporter } from './abstract-rates-importer.js'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { pick } from '@peertube/peertube-core-utils'
+import { UserVideoHistoryExportJSON } from '@peertube/peertube-models'
+import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { loadOrCreateVideoIfAllowedForUser } from '@server/lib/model-loaders/video.js'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history.js'
+import { AbstractUserImporter } from './abstract-user-importer.js'
 
-type SanitizedObject = Pick<UserVideoHistoryExportJSON['watchedVideos'][0], 'videoUrl' | 'lastTimecode'>
+type SanitizedObject = Pick<UserVideoHistoryExportJSON['watchedVideos'][0], 'videoUrl' | 'lastTimecode' | 'archiveFiles'>
 
 // eslint-disable-next-line max-len
-export class UserVideoHistoryImporter extends AbstractRatesImporter <UserVideoHistoryExportJSON, UserVideoHistoryExportJSON['watchedVideos'][0]> {
+export class UserVideoHistoryImporter extends AbstractUserImporter <UserVideoHistoryExportJSON, UserVideoHistoryExportJSON['watchedVideos'][0], SanitizedObject> {
 
   protected getImportObjects (json: UserVideoHistoryExportJSON) {
     return json.watchedVideos

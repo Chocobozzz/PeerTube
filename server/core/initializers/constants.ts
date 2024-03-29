@@ -18,6 +18,8 @@ import {
   UserRegistrationStateType,
   VideoChannelSyncState,
   VideoChannelSyncStateType,
+  VideoCommentPolicy,
+  VideoCommentPolicyType,
   VideoImportState,
   VideoImportStateType,
   VideoPlaylistPrivacy,
@@ -133,6 +135,8 @@ const SORTABLE_COLUMNS = {
 
   ACCOUNTS_BLOCKLIST: [ 'createdAt' ],
   SERVERS_BLOCKLIST: [ 'createdAt' ],
+
+  WATCHED_WORDS_LISTS: [ 'createdAt', 'updatedAt', 'listName' ],
 
   USER_NOTIFICATIONS: [ 'createdAt', 'read' ],
 
@@ -498,6 +502,11 @@ const CONSTRAINTS_FIELDS = {
   },
   VIDEO_CHAPTERS: {
     TITLE: { min: 1, max: 100 } // Length
+  },
+  WATCHED_WORDS: {
+    LIST_NAME: { min: 1, max: 100 }, // Length
+    WORDS: { min: 1, max: 500 }, // Number of total words
+    WORD: { min: 1, max: 100 } // Length
   }
 }
 
@@ -661,6 +670,12 @@ const USER_IMPORT_STATES: { [ id in UserImportStateType ]: string } = {
   [UserImportState.PROCESSING]: 'Processing',
   [UserImportState.COMPLETED]: 'Completed',
   [UserImportState.ERRORED]: 'Failed'
+}
+
+const VIDEO_COMMENTS_POLICY: { [ id in VideoCommentPolicyType ]: string } = {
+  [VideoCommentPolicy.DISABLED]: 'Disabled',
+  [VideoCommentPolicy.ENABLED]: 'Enabled',
+  [VideoCommentPolicy.REQUIRES_APPROVAL]: 'Requires approval'
 }
 
 const MIMETYPES = {
@@ -973,6 +988,10 @@ const LRU_CACHE = {
     MAX_SIZE: 100_000,
     TTL: parseDurationToMs('8 hours')
   },
+  WATCHED_WORDS_REGEX: {
+    MAX_SIZE: 100,
+    TTL: parseDurationToMs('24 hours')
+  },
   TRACKER_IPS: {
     MAX_SIZE: 100_000
   }
@@ -1243,6 +1262,7 @@ export {
   ACCEPT_HEADERS,
   BCRYPT_SALT_SIZE,
   TRACKER_RATE_LIMITS,
+  VIDEO_COMMENTS_POLICY,
   FILES_CACHE,
   LOG_FILENAME,
   CONSTRAINTS_FIELDS,

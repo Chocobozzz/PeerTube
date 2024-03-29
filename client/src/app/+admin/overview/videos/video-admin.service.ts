@@ -113,7 +113,8 @@ export class VideoAdminService {
       VideoInclude.BLOCKED_OWNER |
       VideoInclude.NOT_PUBLISHED_STATE |
       VideoInclude.FILES |
-      VideoInclude.SOURCE
+      VideoInclude.SOURCE |
+      VideoInclude.AUTOMATIC_TAGS
 
     let privacyOneOf = getAllPrivacies()
 
@@ -143,6 +144,10 @@ export class VideoAdminService {
       excludePublic: {
         prefix: 'excludePublic',
         handler: () => true
+      },
+      autoTagOneOf: {
+        prefix: 'autoTag:',
+        multiple: true
       }
     })
 

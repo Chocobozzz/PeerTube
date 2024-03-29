@@ -1,6 +1,5 @@
-import cors from 'cors'
-import express from 'express'
 import {
+  HttpStatusCode,
   VideoChaptersObject,
   VideoCommentObject,
   VideoPlaylistPrivacy,
@@ -9,12 +8,17 @@ import {
 } from '@peertube/peertube-models'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
 import { getContextFilter } from '@server/lib/activitypub/context.js'
+import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
+import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { getServerActor } from '@server/models/application/application.js'
+import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import { MAccountId, MActorId, MChannelId, MVideoId } from '@server/types/models/index.js'
+import cors from 'cors'
+import express from 'express'
 import { activityPubContextify } from '../../helpers/activity-pub-utils.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
 import { audiencify, getAudience } from '../../lib/activitypub/audience.js'
-import { buildAnnounceWithVideoAudience, buildLikeActivity } from '../../lib/activitypub/send/index.js'
+import { buildAnnounceWithVideoAudience, buildApprovalActivity, buildLikeActivity } from '../../lib/activitypub/send/index.js'
 import { buildCreateActivity } from '../../lib/activitypub/send/send-create.js'
 import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike.js'
 import {
@@ -54,9 +58,6 @@ import { VideoCommentModel } from '../../models/video/video-comment.js'
 import { VideoPlaylistModel } from '../../models/video/video-playlist.js'
 import { VideoShareModel } from '../../models/video/video-share.js'
 import { activityPubResponse } from './utils.js'
-import { VideoChapterModel } from '@server/models/video/video-chapter.js'
-import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
-import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
 
 const activityPubClientRouter = express.Router()
 activityPubClientRouter.use(cors())
@@ -141,19 +142,28 @@ activityPubClientRouter.get('/videos/watch/:id/dislikes',
   asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
   asyncMiddleware(videoDislikesController)
 )
+
+// ---------------------------------------------------------------------------
+
 activityPubClientRouter.get('/videos/watch/:id/comments',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
   asyncMiddleware(videoCommentsController)
 )
-activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId',
+activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/approve-reply',
+  executeIfActivityPub,
+  activityPubRateLimiter,
+  asyncMiddleware(videoCommentGetValidator),
+  asyncMiddleware(videoCommentApprovedController)
+)
+activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videoCommentGetValidator),
   asyncMiddleware(videoCommentController)
 )
-activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity',
+activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(videoCommentGetValidator),
@@ -408,8 +418,10 @@ async function videoCommentController (req: express.Request, res: express.Respon
   const videoComment = res.locals.videoCommentFull
 
   if (redirectIfNotOwned(videoComment.url, res)) return
+  if (videoComment.Video.isOwned() && videoComment.heldForReview === true) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
-  const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, undefined)
+  const threadParentComments = await VideoCommentModel.listThreadParentComments({ comment: videoComment })
+
   const isPublic = true // Comments are always public
   let videoCommentObject = videoComment.toActivityPubObject(threadParentComments)
 
@@ -424,6 +436,16 @@ async function videoCommentController (req: express.Request, res: express.Respon
   }
 
   return activityPubResponse(activityPubContextify(videoCommentObject, 'Comment', getContextFilter()), res)
+}
+
+async function videoCommentApprovedController (req: express.Request, res: express.Response) {
+  const comment = res.locals.videoCommentFull
+
+  if (!comment.Video.isOwned() || comment.heldForReview === true) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+
+  const activity = buildApprovalActivity({ comment, type: 'ApproveReply' })
+
+  return activityPubResponse(activityPubContextify(activity, 'ApproveReply', getContextFilter()), res)
 }
 
 async function videoChaptersController (req: express.Request, res: express.Response) {

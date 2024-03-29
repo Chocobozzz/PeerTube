@@ -1,15 +1,16 @@
+import { NgClass, NgIf } from '@angular/common'
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
-import { splitAndGetNotEmpty, UNIQUE_HOSTS_OR_HANDLE_VALIDATOR } from '@app/shared/form-validators/host-validators'
+import { UNIQUE_HOSTS_OR_HANDLE_VALIDATOR } from '@app/shared/form-validators/host-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { NgClass, NgIf } from '@angular/common'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { splitAndGetNotEmpty } from '@root-helpers/string'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
-import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
 
 @Component({
   selector: 'my-follow-modal',

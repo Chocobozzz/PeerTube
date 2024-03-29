@@ -1,0 +1,15 @@
+<h1>
+  <my-global-icon iconName="no" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>Your automatic tag policies</ng-container>
+</h1>
+
+<strong class="d-block mb-3" i18n>Automatically block comments:</strong>
+
+@for (tag of tags; track tag; let i = $index) {
+  <div class="form-group ms-3">
+    <my-peertube-checkbox
+      [inputName]="'tag-' + i" [(ngModel)]="tag.review" [labelText]="getLabelText(tag)"
+      (ngModelChange)="updatePolicies()"
+    ></my-peertube-checkbox>
+  </div>
+}

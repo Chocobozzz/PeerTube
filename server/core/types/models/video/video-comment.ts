@@ -1,13 +1,16 @@
 import { PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import { MAccountDefault, MAccountFormattable, MAccountUrl } from '../account/index.js'
-import { MVideo, MVideoAccountIdUrl, MVideoAccountLight, MVideoFeed, MVideoIdUrl, MVideoUrl } from './video.js'
+import { MCommentAutomaticTagWithTag } from '../automatic-tag/comment-automatic-tag.js'
+import { MVideo, MVideoAccountIdUrl, MVideoAccountLight, MVideoFeed, MVideoIdUrl, MVideoImmutable, MVideoUUID } from './video.js'
 
 type Use<K extends keyof VideoCommentModel, M> = PickWith<VideoCommentModel, K, M>
 
 // ############################################################################
 
-export type MComment = Omit<VideoCommentModel, 'OriginVideoComment' | 'InReplyToVideoComment' | 'Video' | 'Account'>
+export type MComment =
+  Omit<VideoCommentModel, 'OriginVideoComment' | 'InReplyToVideoComment' | 'Video' | 'Account' | 'CommentAutomaticTags'>
+
 export type MCommentTotalReplies = MComment & { totalReplies?: number }
 export type MCommentId = Pick<MComment, 'id'>
 export type MCommentUrl = Pick<MComment, 'url'>
@@ -15,8 +18,8 @@ export type MCommentUrl = Pick<MComment, 'url'>
 // ---------------------------------------------------------------------------
 
 export type MCommentExport =
-  Pick<MComment, 'url' | 'text' | 'createdAt'> &
-  Use<'Video', MVideoAccountLight> &
+  Pick<MComment, 'id' | 'url' | 'text' | 'createdAt'> &
+  Use<'Video', MVideoIdUrl & MVideoUUID> &
   Use<'InReplyToVideoComment', MCommentUrl>
 
 // ############################################################################
@@ -44,11 +47,11 @@ export type MCommentOwnerVideoReply =
   Use<'Video', MVideoAccountIdUrl> &
   Use<'InReplyToVideoComment', MComment>
 
-export type MCommentOwnerReplyVideoLight =
+export type MCommentOwnerReplyVideoImmutable =
   MComment &
   Use<'Account', MAccountDefault> &
   Use<'InReplyToVideoComment', MComment> &
-  Use<'Video', MVideoIdUrl>
+  Use<'Video', MVideoImmutable>
 
 export type MCommentOwnerVideoFeed =
   MCommentOwner &
@@ -66,13 +69,14 @@ export type MCommentFormattable =
   MCommentTotalReplies &
   Use<'Account', MAccountFormattable>
 
-export type MCommentAdminFormattable =
+export type MCommentAdminOrUserFormattable =
   MComment &
   Use<'Account', MAccountFormattable> &
-  Use<'Video', MVideo>
+  Use<'Video', MVideo> &
+  Use<'CommentAutomaticTags', MCommentAutomaticTagWithTag[]>
 
 export type MCommentAP =
   MComment &
   Use<'Account', MAccountUrl> &
-  PickWithOpt<VideoCommentModel, 'Video', MVideoUrl> &
+  PickWithOpt<VideoCommentModel, 'Video', MVideoImmutable> &
   PickWithOpt<VideoCommentModel, 'InReplyToVideoComment', MCommentUrl>

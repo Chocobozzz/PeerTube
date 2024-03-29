@@ -4,20 +4,20 @@ import { forceNumber } from '@peertube/peertube-core-utils'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 
 // FIXME: have to specify the result type to not break peertube typings generation
-function buildLocalAccountIdsIn (): Literal {
+export function buildLocalAccountIdsIn (): Literal {
   return literal(
     '(SELECT "account"."id" FROM "account" INNER JOIN "actor" ON "actor"."id" = "account"."actorId" AND "actor"."serverId" IS NULL)'
   )
 }
 
 // FIXME: have to specify the result type to not break peertube typings generation
-function buildLocalActorIdsIn (): Literal {
+export function buildLocalActorIdsIn (): Literal {
   return literal(
     '(SELECT "actor"."id" FROM "actor" WHERE "actor"."serverId" IS NULL)'
   )
 }
 
-function buildBlockedAccountSQL (blockerIds: number[]) {
+export function buildBlockedAccountSQL (blockerIds: number[]) {
   const blockerIdsString = blockerIds.join(', ')
 
   return 'SELECT "targetAccountId" AS "id" FROM "accountBlocklist" WHERE "accountId" IN (' + blockerIdsString + ')' +
@@ -27,7 +27,7 @@ function buildBlockedAccountSQL (blockerIds: number[]) {
     'WHERE "serverBlocklist"."accountId" IN (' + blockerIdsString + ')'
 }
 
-function buildServerIdsFollowedBy (actorId: any) {
+export function buildServerIdsFollowedBy (actorId: any) {
   const actorIdNumber = forceNumber(actorId)
 
   return '(' +
@@ -37,18 +37,20 @@ function buildServerIdsFollowedBy (actorId: any) {
     ')'
 }
 
-function buildSQLAttributes<M extends Model> (options: {
+export function buildSQLAttributes<M extends Model> (options: {
   model: ModelStatic<M>
   tableName: string
 
   excludeAttributes?: Exclude<keyof AttributesOnly<M>, symbol>[]
   aliasPrefix?: string
+
+  idBuilder?: string[]
 }) {
-  const { model, tableName, aliasPrefix, excludeAttributes } = options
+  const { model, tableName, aliasPrefix = '', excludeAttributes, idBuilder } = options
 
   const attributes = Object.keys(model.getAttributes()) as Exclude<keyof AttributesOnly<M>, symbol>[]
 
-  return attributes
+  const builtAttributes = attributes
     .filter(a => {
       if (!excludeAttributes) return true
       if (excludeAttributes.includes(a)) return false
@@ -56,16 +58,15 @@ function buildSQLAttributes<M extends Model> (options: {
       return true
     })
     .map(a => {
-      return `"${tableName}"."${a}" AS "${aliasPrefix || ''}${a}"`
+      return `"${tableName}"."${a}" AS "${aliasPrefix}${a}"`
     })
-}
 
-// ---------------------------------------------------------------------------
+  if (idBuilder) {
+    const idSelect = idBuilder.map(a => `"${tableName}"."${a}"`)
+      .join(` || '-' || `)
 
-export {
-  buildSQLAttributes,
-  buildBlockedAccountSQL,
-  buildServerIdsFollowedBy,
-  buildLocalAccountIdsIn,
-  buildLocalActorIdsIn
+    builtAttributes.push(`${idSelect} AS "${aliasPrefix}id"`)
+  }
+
+  return builtAttributes
 }

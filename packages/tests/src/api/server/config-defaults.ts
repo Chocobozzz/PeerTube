@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { VideoDetails, VideoPrivacy } from '@peertube/peertube-models'
+import { VideoCommentPolicy, VideoDetails, VideoPrivacy } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -31,7 +31,7 @@ describe('Test config defaults', function () {
       const overrideConfig = {
         defaults: {
           publish: {
-            comments_enabled: false,
+            comments_policy: 2,
             download_enabled: false,
             privacy: VideoPrivacy.INTERNAL,
             licence: 4
@@ -46,13 +46,14 @@ describe('Test config defaults', function () {
     const attributes = {
       name: 'video',
       downloadEnabled: undefined,
-      commentsEnabled: undefined,
+      commentsPolicy: undefined,
       licence: undefined,
       privacy: VideoPrivacy.PUBLIC // Privacy is mandatory for server
     }
 
     function checkVideo (video: VideoDetails) {
       expect(video.downloadEnabled).to.be.false
+      expect(video.commentsPolicy.id).to.equal(VideoCommentPolicy.DISABLED)
       expect(video.commentsEnabled).to.be.false
       expect(video.licence.id).to.equal(4)
     }
@@ -67,6 +68,7 @@ describe('Test config defaults', function () {
       const config = await server.config.getConfig()
 
       expect(config.defaults.publish.commentsEnabled).to.be.false
+      expect(config.defaults.publish.commentsPolicy).to.equal(VideoCommentPolicy.DISABLED)
       expect(config.defaults.publish.downloadEnabled).to.be.false
       expect(config.defaults.publish.licence).to.equal(4)
       expect(config.defaults.publish.privacy).to.equal(VideoPrivacy.INTERNAL)

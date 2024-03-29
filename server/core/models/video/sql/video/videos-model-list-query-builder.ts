@@ -5,6 +5,8 @@ import { AbstractVideoQueryBuilder } from './shared/abstract-video-query-builder
 import { VideoFileQueryBuilder } from './shared/video-file-query-builder.js'
 import { VideoModelBuilder } from './shared/video-model-builder.js'
 import { BuildVideosListQueryOptions, VideosIdListQueryBuilder } from './videos-id-list-query-builder.js'
+import { getServerActor } from '@server/models/application/application.js'
+import { MActorAccount } from '@server/types/models/index.js'
 
 /**
  *
@@ -32,8 +34,10 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
   }
 
   async queryVideos (options: BuildVideosListQueryOptions) {
+    const serverActor = await getServerActor()
+
     this.buildInnerQuery(options)
-    this.buildMainQuery(options)
+    this.buildMainQuery(options, serverActor)
 
     const rows = await this.runQuery()
 
@@ -69,7 +73,7 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
     this.innerSort = sort
   }
 
-  private buildMainQuery (options: BuildVideosListQueryOptions) {
+  private buildMainQuery (options: BuildVideosListQueryOptions, serverActor: MActorAccount) {
     this.attributes = {
       '"video".*': ''
     }
@@ -98,6 +102,10 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
 
     if (options.include & VideoInclude.SOURCE) {
       this.includeVideoSource()
+    }
+
+    if (options.include & VideoInclude.AUTOMATIC_TAGS) {
+      this.includeAutomaticTags(serverActor.Account.id)
     }
 
     const select = this.buildSelect()

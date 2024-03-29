@@ -1,11 +1,13 @@
-import { Model, Sequelize, Transaction } from 'sequelize'
-import { AbstractRunQuery, ModelBuilder } from '@server/models/shared/index.js'
 import { ActorImageType, VideoPrivacy } from '@peertube/peertube-models'
+import { AbstractRunQuery, ModelBuilder } from '@server/models/shared/index.js'
+import { Model, Sequelize, Transaction } from 'sequelize'
 import { createSafeIn, getSort, parseRowCountResult } from '../../../shared/index.js'
 import { VideoCommentTableAttributes } from './video-comment-table-attributes.js'
 
 export interface ListVideoCommentsOptions {
   selectType: 'api' | 'feed' | 'comment-only'
+
+  autoTagOfAccountId?: number
 
   start?: number
   count?: number
@@ -14,16 +16,23 @@ export interface ListVideoCommentsOptions {
   videoId?: number
   threadId?: number
   accountId?: number
-  videoChannelId?: number
 
   blockerAccountIds?: number[]
 
   isThread?: boolean
   notDeleted?: boolean
+
   isLocal?: boolean
   onLocalVideo?: boolean
+
   onPublicVideo?: boolean
+  videoChannelOwnerId?: number
   videoAccountOwnerId?: number
+
+  heldForReview: boolean
+  heldForReviewAccountIdException?: number
+
+  autoTagOneOf?: string[]
 
   search?: string
   searchAccount?: string
@@ -52,7 +61,8 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
     accountJoin: false,
     videoJoin: false,
     videoChannelJoin: false,
-    avatarJoin: false
+    avatarJoin: false,
+    automaticTagsJoin: false
   }
 
   constructor (
@@ -142,14 +152,6 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
       where.push('"VideoCommentModel"."accountId" = :accountId')
     }
 
-    if (this.options.videoChannelId) {
-      this.buildVideoChannelJoin()
-
-      this.replacements.videoChannelId = this.options.videoChannelId
-
-      where.push('"Account->VideoChannel"."id" = :videoChannelId')
-    }
-
     if (this.options.blockerAccountIds) {
       this.buildVideoChannelJoin()
 
@@ -162,6 +164,27 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
 
     if (this.options.notDeleted === true) {
       where.push('"VideoCommentModel"."deletedAt" IS NULL')
+    }
+
+    if (this.options.heldForReview === true) {
+      where.push('"VideoCommentModel"."heldForReview" IS TRUE')
+    } else if (this.options.heldForReview === false) {
+      const base = '"VideoCommentModel"."heldForReview" IS FALSE'
+
+      if (this.options.heldForReviewAccountIdException) {
+        this.replacements.heldForReviewAccountIdException = this.options.heldForReviewAccountIdException
+
+        where.push(`(${base} OR "VideoCommentModel"."accountId" = :heldForReviewAccountIdException)`)
+      } else {
+        where.push(base)
+      }
+    }
+
+    if (this.options.autoTagOneOf) {
+      const tags = this.options.autoTagOneOf.map(t => t.toLowerCase())
+      this.buildAutomaticTagsJoin()
+
+      where.push('lower("CommentAutomaticTags->AutomaticTag"."name") IN (' + createSafeIn(this.sequelize, tags) + ')')
     }
 
     if (this.options.isLocal === true) {
@@ -196,6 +219,14 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
       this.replacements.videoAccountOwnerId = this.options.videoAccountOwnerId
 
       where.push(`"Video->VideoChannel"."accountId" = :videoAccountOwnerId`)
+    }
+
+    if (this.options.videoChannelOwnerId) {
+      this.buildVideoChannelJoin()
+
+      this.replacements.videoChannelOwnerId = this.options.videoChannelOwnerId
+
+      where.push(`"Video->VideoChannel"."id" = :videoChannelOwnerId`)
     }
 
     if (this.options.search) {
@@ -269,7 +300,6 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
   }
 
   private buildAvatarsJoin () {
-    if (this.options.selectType !== 'api' && this.options.selectType !== 'feed') return ''
     if (this.built.avatarJoin) return
 
     this.joins += `LEFT JOIN "actorImage" "Account->Actor->Avatars" ` +
@@ -277,6 +307,18 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
         `AND "Account->Actor->Avatars"."type" = ${ActorImageType.AVATAR}`
 
     this.built.avatarJoin = true
+  }
+
+  private buildAutomaticTagsJoin () {
+    if (this.built.automaticTagsJoin) return
+
+    this.innerJoins += 'LEFT JOIN (' +
+      '"commentAutomaticTag" AS "CommentAutomaticTags" INNER JOIN "automaticTag" AS "CommentAutomaticTags->AutomaticTag" ' +
+        'ON "CommentAutomaticTags->AutomaticTag"."id" = "CommentAutomaticTags"."automaticTagId" ' +
+    ') ON "VideoCommentModel"."id" = "CommentAutomaticTags"."commentId" AND "CommentAutomaticTags"."accountId" = :autoTagOfAccountId'
+
+    this.replacements.autoTagOfAccountId = this.options.autoTagOfAccountId
+    this.built.automaticTagsJoin = true
   }
 
   // ---------------------------------------------------------------------------
@@ -305,6 +347,15 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
         this.tableAttributes.getAccountAttributes(),
         this.tableAttributes.getActorAttributes(),
         this.tableAttributes.getServerAttributes()
+      ])
+    }
+
+    if (this.options.autoTagOfAccountId && this.options.selectType === 'api') {
+      this.buildAutomaticTagsJoin()
+
+      toSelect = toSelect.concat([
+        this.tableAttributes.getCommentAutomaticTagAttributes(),
+        this.tableAttributes.getAutomaticTagAttributes()
       ])
     }
 

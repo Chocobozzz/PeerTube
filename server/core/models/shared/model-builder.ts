@@ -1,6 +1,6 @@
-import isPlainObject from 'lodash-es/isPlainObject.js'
-import { Model as SequelizeModel, ModelStatic, Sequelize } from 'sequelize'
 import { logger } from '@server/helpers/logger.js'
+import isPlainObject from 'lodash-es/isPlainObject.js'
+import { ModelStatic, Sequelize, Model as SequelizeModel } from 'sequelize'
 
 /**
  *
@@ -49,7 +49,7 @@ export class ModelBuilder <T extends SequelizeModel> {
 
       // Child model
       if (isPlainObject(value)) {
-        const { created, model: subModel } = this.createModel(value, key, keyPath + '.' + json.id + '.' + key)
+        const { created, model: subModel } = this.createModel(value, key, `${keyPath}.${json.id}.${key}`)
         if (!created || !subModel) continue
 
         const Model = this.findModelBuilder(modelName)
@@ -108,6 +108,7 @@ export class ModelBuilder <T extends SequelizeModel> {
     if (modelName === 'ActorFollowing') return 'ActorModel'
     if (modelName === 'ActorFollower') return 'ActorModel'
     if (modelName === 'FlaggedAccount') return 'AccountModel'
+    if (modelName === 'CommentAutomaticTags') return 'CommentAutomaticTagModel'
 
     return modelName + 'Model'
   }

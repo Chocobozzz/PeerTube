@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { Video, VideoPrivacy } from '@peertube/peertube-models'
-import { cleanupTests, createMultipleServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@peertube/peertube-server-commands'
+import { Video, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
+import { PeerTubeServer, cleanupTests, createMultipleServers, setAccessTokensToServers, waitJobs } from '@peertube/peertube-server-commands'
 import { expectAccountFollows, expectChannelsFollows } from '@tests/shared/actors.js'
 import { testCaptionFile } from '@tests/shared/captions.js'
 import { dateIsValid } from '@tests/shared/checks.js'
 import { completeVideoCheck } from '@tests/shared/videos.js'
+import { expect } from 'chai'
 
 describe('Test follows', function () {
 
@@ -463,7 +463,7 @@ describe('Test follows', function () {
             name: 'root',
             host: servers[2].host
           },
-          commentsEnabled: true,
+          commentsPolicy: VideoCommentPolicy.ENABLED,
           downloadEnabled: true,
           duration: 5,
           tags: [ 'tag1', 'tag2', 'tag3' ],

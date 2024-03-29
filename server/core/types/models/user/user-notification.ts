@@ -45,7 +45,7 @@ export module UserNotificationIncludes {
     PickWith<AccountModel, 'Actor', ActorInclude>
 
   export type VideoCommentInclude =
-    Pick<VideoCommentModel, 'id' | 'originCommentId' | 'getThreadId'> &
+    Pick<VideoCommentModel, 'id' | 'originCommentId' | 'getThreadId' | 'heldForReview'> &
     PickWith<VideoCommentModel, 'Account', AccountIncludeActor> &
     PickWith<VideoCommentModel, 'Video', VideoInclude>
 

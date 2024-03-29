@@ -1,4 +1,4 @@
-import { LiveVideoLatencyModeType, VideoStateType } from '../../videos/index.js'
+import { LiveVideoLatencyModeType, VideoCommentPolicyType, VideoStateType } from '../../videos/index.js'
 import {
   ActivityIconObject,
   ActivityIdentifierObject,
@@ -29,7 +29,10 @@ export interface VideoObject {
   permanentLive: boolean
   latencyMode: LiveVideoLatencyModeType
 
-  commentsEnabled: boolean
+  commentsEnabled?: boolean
+  commentsPolicy: VideoCommentPolicyType
+  canReply: 'as:Public' | 'https://www.w3.org/ns/activitystreams#Public'
+
   downloadEnabled: boolean
   waitTranscoding: boolean
   state: VideoStateType

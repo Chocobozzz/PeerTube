@@ -63,8 +63,8 @@ async function sendDeleteVideoComment (videoComment: MCommentOwnerVideo, transac
     ? videoComment.Account.Actor
     : videoAccount.Actor
 
-  const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, transaction)
-  const threadParentCommentsFiltered = threadParentComments.filter(c => !c.isDeleted())
+  const threadParentComments = await VideoCommentModel.listThreadParentComments({ comment: videoComment, transaction })
+  const threadParentCommentsFiltered = threadParentComments.filter(c => !c.isDeleted() && !c.heldForReview)
 
   const actorsInvolvedInComment = await getActorsInvolvedInVideo(videoComment.Video, transaction)
   actorsInvolvedInComment.push(byActor) // Add the actor that commented the video

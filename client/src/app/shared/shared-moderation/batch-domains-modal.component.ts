@@ -1,11 +1,12 @@
+import { NgClass, NgIf } from '@angular/common'
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { splitAndGetNotEmpty, UNIQUE_HOSTS_VALIDATOR } from '../form-validators/host-validators'
-import { NgClass, NgIf } from '@angular/common'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { splitAndGetNotEmpty } from '@root-helpers/string'
+import { UNIQUE_HOSTS_VALIDATOR } from '../form-validators/host-validators'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 
 @Component({

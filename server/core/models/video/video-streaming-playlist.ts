@@ -136,7 +136,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     // Don't add a LIMIT 1 here to prevent seq scan by PostgreSQL (not sure why id doesn't use the index when we add a LIMIT)
     const query = 'SELECT 1 FROM "videoStreamingPlaylist" WHERE "p2pMediaLoaderInfohashes" @> $infoHash'
 
-    return doesExist(this.sequelize, query, { infoHash: `{${infoHash}}` }) // Transform infoHash in a PG array
+    return doesExist({ sequelize: this.sequelize, query, bind: { infoHash: `{${infoHash}}` } }) // Transform infoHash in a PG array
   }
 
   static buildP2PMediaLoaderInfoHashes (playlistUrl: string, files: unknown[]) {
@@ -235,7 +235,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
       `AND "video"."remote" IS FALSE AND "video"."uuid" = $videoUUID ` +
       `AND "storage" = ${FileStorage.FILE_SYSTEM} LIMIT 1`
 
-    return doesExist(this.sequelize, query, { videoUUID })
+    return doesExist({ sequelize: this.sequelize, query, bind: { videoUUID } })
   }
 
   assignP2PMediaLoaderInfoHashes (video: MVideo, files: unknown[]) {

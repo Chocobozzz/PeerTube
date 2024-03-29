@@ -36,6 +36,7 @@ export class UserNotification implements UserNotificationServer {
   comment?: {
     id: number
     threadId: number
+    heldForReview: boolean
     account: ActorInfo & { avatarUrl?: string }
     video: VideoInfo
   }
@@ -95,6 +96,9 @@ export class UserNotification implements UserNotificationServer {
   // Additional fields
   videoUrl?: string
   commentUrl?: any[]
+
+  commentReviewUrl?: string
+  commentReviewQueryParams?: { [id: string]: string } = {}
 
   abuseUrl?: string
   abuseQueryParams?: { [id: string]: string } = {}
@@ -163,6 +167,9 @@ export class UserNotification implements UserNotificationServer {
           if (!this.comment) break
           this.accountUrl = this.buildAccountUrl(this.comment.account)
           this.commentUrl = this.buildCommentUrl(this.comment)
+
+          this.commentReviewUrl = '/my-account/videos/comments'
+          this.commentReviewQueryParams.search = 'heldForReview:true'
           break
 
         case UserNotificationType.NEW_ABUSE_FOR_MODERATORS:

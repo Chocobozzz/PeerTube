@@ -23,6 +23,7 @@ import {
   isScheduleVideoUpdatePrivacyValid,
   isValidPasswordProtectedPrivacy,
   isVideoCategoryValid,
+  isVideoCommentsPolicyValid,
   isVideoDescriptionValid,
   isVideoImageValid,
   isVideoIncludeValid,
@@ -375,10 +376,15 @@ function getCommonVideoEditAttributes () {
         `Should have an array of up to ${CONSTRAINTS_FIELDS.VIDEOS.TAGS.max} tags between ` +
         `${CONSTRAINTS_FIELDS.VIDEOS.TAG.min} and ${CONSTRAINTS_FIELDS.VIDEOS.TAG.max} characters each`
       ),
+    // TODO: remove, deprecated in PeerTube 6.2
     body('commentsEnabled')
       .optional()
       .customSanitizer(toBooleanOrNull)
-      .custom(isBooleanValid).withMessage('Should have commentsEnabled boolean'),
+      .custom(isBooleanValid).withMessage('Should have valid commentsEnabled boolean'),
+    body('commentsPolicy')
+      .optional()
+      .custom(isVideoCommentsPolicyValid),
+
     body('downloadEnabled')
       .optional()
       .customSanitizer(toBooleanOrNull)
@@ -462,6 +468,10 @@ const commonVideosFiltersValidator = [
     .optional()
     .customSanitizer(toBooleanOrNull)
     .isBoolean().withMessage('Should be a valid excludeAlreadyWatched boolean'),
+  query('autoTagOneOf')
+    .optional()
+    .customSanitizer(arrayify)
+    .custom(isStringArray).withMessage('Should have a valid autoTagOneOf array'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -469,10 +479,10 @@ const commonVideosFiltersValidator = [
     const user = res.locals.oauth?.token.User
 
     if ((!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) !== true)) {
-      if (req.query.include || req.query.privacyOneOf) {
+      if (req.query.include || req.query.privacyOneOf || req.query.autoTagOneOf) {
         return res.fail({
           status: HttpStatusCode.UNAUTHORIZED_401,
-          message: 'You are not allowed to see all videos or specify a custom include.'
+          message: 'You are not allowed to see all videos, specify a custom include or auto tags filter.'
         })
       }
     }

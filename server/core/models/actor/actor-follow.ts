@@ -228,7 +228,7 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
       `WHERE "actorId" = $followerActorId AND "targetActorId" = $actorId AND "state" = 'accepted' ` +
       `LIMIT 1`
 
-    return doesExist(this.sequelize, query, { actorId, followerActorId })
+    return doesExist({ sequelize: this.sequelize, query, bind: { actorId, followerActorId } })
   }
 
   static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction): Promise<MActorFollowActorsDefault> {

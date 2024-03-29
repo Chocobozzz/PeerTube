@@ -273,6 +273,10 @@ tags:
       its root comment thread.
   - name: Video Blocks
     description: Operations dealing with blocking videos (removing them from view and preventing interactions).
+  - name: Automatic Tags
+    description: Automatic tags set on objects (like comments or videos) by specific rules (external link, watched words, etc.)
+  - name: Watched Words
+    description: Manage list of watched words to detect patterns on objects (like comments of videos)
   - name: Video Rates
     description: Like/dislike a video.
   - name: Video Playlists
@@ -359,6 +363,8 @@ x-tagGroups:
       - Video Blocks
       - Account Blocks
       - Server Blocks
+      - Automatic Tags
+      - Watched Words
   - name: Instance
     tags:
       - Config
@@ -467,27 +473,27 @@ paths:
               - json1
         - name: videoId
           in: query
-          description: 'limit listing to a specific video'
+          description: 'limit listing comments to a specific video'
           schema:
             type: string
         - name: accountId
           in: query
-          description: 'limit listing to a specific account'
+          description: 'limit listing comments to videos of a specific account'
           schema:
             type: string
         - name: accountName
           in: query
-          description: 'limit listing to a specific account'
+          description: 'limit listing comments to videos of a specific account'
           schema:
             type: string
         - name: videoChannelId
           in: query
-          description: 'limit listing to a specific video channel'
+          description: 'limit listing comments to videos of a specific video channel'
           schema:
             type: string
         - name: videoChannelName
           in: query
-          description: 'limit listing to a specific video channel'
+          description: 'limit listing comments to videos of a specific video channel'
           schema:
             type: string
       responses:
@@ -755,6 +761,7 @@ paths:
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/autoTagOneOfVideo'
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
@@ -1994,6 +2001,38 @@ paths:
               $ref: '#/components/schemas/UpdateMe'
         required: true
 
+  '/api/v1/users/me/videos/comments':
+    get:
+      summary: List comments on user's videos
+      description: "**PeerTube >= 6.2**"
+      security:
+        - OAuth2: []
+      tags:
+        - Video Comments
+      parameters:
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/searchAccountForComments'
+        - $ref: '#/components/parameters/searchVideoForComments'
+        - $ref: '#/components/parameters/videoId'
+        - $ref: '#/components/parameters/videoChannelId'
+        - $ref: '#/components/parameters/autoTagOneOfComment'
+        - $ref: '#/components/parameters/isHeldForReview'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoCommentForOwnerOrAdmin'
+
   /api/v1/users/me/videos/imports:
     get:
       summary: Get video imports of my user
@@ -2185,6 +2224,7 @@ paths:
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/autoTagOneOfVideo'
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
@@ -2730,6 +2770,7 @@ paths:
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/autoTagOneOfVideo'
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
@@ -2888,8 +2929,11 @@ paths:
                     minLength: 2
                     maxLength: 30
                 commentsEnabled:
-                  description: Enable or disable comments for this video
+                  deprecated: true
+                  description: 'Deprecated in 6.2, use commentsPolicy instead'
                   type: boolean
+                commentsPolicy:
+                  $ref: '#/components/schemas/VideoCommentsPolicySet'
                 downloadEnabled:
                   description: Enable or disable downloading for this video
                   type: boolean
@@ -3442,8 +3486,11 @@ paths:
                     minLength: 2
                     maxLength: 30
                 commentsEnabled:
-                  description: Enable or disable comments for this live video/replay
+                  deprecated: true
+                  description: 'Deprecated in 6.2, use commentsPolicy instead'
                   type: boolean
+                commentsPolicy:
+                  $ref: '#/components/schemas/VideoCommentsPolicySet'
                 downloadEnabled:
                   description: Enable or disable downloading for the replay of this live video
                   type: boolean
@@ -4389,6 +4436,7 @@ paths:
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/autoTagOneOfVideo'
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
@@ -5168,6 +5216,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoCommentThreadTree'
 
+  '/api/v1/videos/comments':
+    get:
+      summary: List instance comments
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      tags:
+        - Video Comments
+      parameters:
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/searchAccountForComments'
+        - $ref: '#/components/parameters/searchVideoForComments'
+        - $ref: '#/components/parameters/videoId'
+        - $ref: '#/components/parameters/videoChannelId'
+        - $ref: '#/components/parameters/autoTagOneOfComment'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/onLocalVideo'
+
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoCommentForOwnerOrAdmin'
+
   '/api/v1/videos/{id}/comments/{commentId}':
     post:
       summary: Reply to a thread of a video
@@ -5219,6 +5302,21 @@ paths:
           description: comment or video does not exist
         '409':
           description: comment is already deleted
+
+  '/api/v1/videos/{id}/comments/{commentId}/approve':
+    post:
+      summary: Approve a comment
+      description: "**PeerTube >= 6.2** Approve a comment that requires a review"
+      security:
+        - OAuth2: []
+      tags:
+        - Video Comments
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/commentId'
+      responses:
+        '204':
+          description: successful operation
 
   '/api/v1/videos/{id}/rate':
     put:
@@ -5341,6 +5439,7 @@ paths:
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/autoTagOneOfVideo'
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
@@ -6542,6 +6641,334 @@ paths:
                     items:
                       $ref: '#/components/schemas/RunnerJobAdmin'
 
+  /api/v1/automatic-tags/policies/accounts/{accountName}/comments:
+    get:
+      tags:
+        - Automatic Tags
+      summary: Get account auto tag policies on comments
+      description: "**PeerTube >= 6.2**"
+      security:
+        - OAuth2: []
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          description: account name to get auto tag policies
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentAutoTagPolicies'
+    put:
+      tags:
+        - Automatic Tags
+      summary: Update account auto tag policies on comments
+      description: "**PeerTube >= 6.2**"
+      security:
+        - OAuth2: []
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          description: account name to update auto tag policies
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                review:
+                  description: 'Auto tags that automatically set the comment in review state'
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/automatic-tags/accounts/{accountName}/available:
+    get:
+      tags:
+        - Automatic Tags
+      summary: Get account available auto tags
+      description: "**PeerTube >= 6.2**"
+      security:
+        - OAuth2: []
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          description: account name to get auto tag policies
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutomaticTagAvailable'
+  /api/v1/automatic-tags/server/available:
+    get:
+      tags:
+        - Automatic Tags
+      summary: Get server available auto tags
+      description: "**PeerTube >= 6.2**"
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutomaticTagAvailable'
+
+  /api/v1/watched-words/accounts/{accountName}/lists:
+    get:
+      tags:
+        - Watched Words
+      summary: List account watched words
+      description: "**PeerTube >= 6.2**"
+      security:
+        - OAuth2: []
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          description: account name to list watched words
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WatchedWordsLists'
+    post:
+      tags:
+        - Watched Words
+      summary: Add account watched words
+      description: "**PeerTube >= 6.2**"
+      security:
+        - OAuth2: []
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                listName:
+                  type: string
+                words:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  watchedWordsList:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+
+  /api/v1/watched-words/accounts/{accountName}/lists/{listId}:
+    put:
+      tags:
+        - Watched Words
+      summary: Update account watched words
+      description: "**PeerTube >= 6.2**"
+      security:
+        - OAuth2: []
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: listId
+          in: path
+          required: true
+          description: list of watched words to update
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                listName:
+                  type: string
+                words:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '204':
+          description: successful operation
+    delete:
+      tags:
+        - Watched Words
+      summary: Delete account watched words
+      description: "**PeerTube >= 6.2**"
+      security:
+        - OAuth2: []
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: listId
+          in: path
+          required: true
+          description: list of watched words to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/watched-words/server/lists:
+    get:
+      tags:
+        - Watched Words
+      summary: List server watched words
+      description: "**PeerTube >= 6.2**"
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WatchedWordsLists'
+    post:
+      tags:
+        - Watched Words
+      summary: Add server watched words
+      description: "**PeerTube >= 6.2**"
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                listName:
+                  type: string
+                words:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  watchedWordsList:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+
+  /api/v1/watched-words/server/lists/{listId}:
+    put:
+      tags:
+        - Watched Words
+      summary: Update server watched words
+      description: "**PeerTube >= 6.2**"
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      parameters:
+        - name: listId
+          in: path
+          required: true
+          description: list of watched words to update
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                listName:
+                  type: string
+                words:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '204':
+          description: successful operation
+    delete:
+      tags:
+        - Watched Words
+      summary: Delete server watched words
+      description: "**PeerTube >= 6.2**"
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      parameters:
+        - name: listId
+          in: path
+          required: true
+          description: list of watched words to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: successful operation
+
 servers:
   - url: 'https://peertube2.cpy.re'
     description: Live Test Server (live data - latest nightly version)
@@ -6926,6 +7353,39 @@ components:
             $ref: '#/components/schemas/VideoLanguageSet'
       style: form
       explode: true
+    autoTagOneOfVideo:
+      name: autoTagOneOf
+      in: query
+      required: false
+      description: "**PeerTube >= 6.2** **Admins and moderators only** filter on videos that contain one of these automatic tags"
+      schema:
+        oneOf:
+        - type: string
+        - type: array
+          items:
+            type: string
+      style: form
+      explode: true
+    autoTagOneOfComment:
+      name: autoTagOneOf
+      in: query
+      required: false
+      description: "**PeerTube >= 6.2** filter on comments that contain one of these automatic tags"
+      schema:
+        oneOf:
+        - type: string
+        - type: array
+          items:
+            type: string
+      style: form
+      explode: true
+    isHeldForReview:
+      name: isHeldForReview
+      in: query
+      required: false
+      description: only display comments that are held for review
+      schema:
+        type: boolean
     licenceOneOf:
       name: licenceOneOf
       in: query
@@ -6966,7 +7426,7 @@ components:
       required: false
       schema:
         type: boolean
-      description: '**PeerTube >= 4.0** Display only local or remote videos'
+      description: '**PeerTube >= 4.0** Display only local or remote objects'
     hasHLSFiles:
       name: hasHLSFiles
       in: query
@@ -7157,6 +7617,41 @@ components:
       description: The video password id
       schema:
         $ref: '#/components/schemas/id'
+    onLocalVideo:
+      name: onLocalVideo
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: 'Display only objects of local or remote videos'
+    videoChannelId:
+      name: videoChannelId
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: 'Limit results on this specific video channel'
+    videoId:
+      name: videoId
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: 'Limit results on this specific video'
+    searchVideoForComments:
+      name: searchVideo
+      in: query
+      required: false
+      description: Filter comments by searching on the video
+      schema:
+        type: string
+    searchAccountForComments:
+      name: searchAccount
+      in: query
+      required: false
+      description: Filter comments by searching on the account
+      schema:
+        type: string
     videoPasswordHeader:
       name: x-peertube-video-password
       description: Required on password protected video
@@ -7350,6 +7845,20 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/VideoPrivacySet'
+        label:
+          type: string
+
+    VideoCommentsPolicySet:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+      description: Comments policy of the video (Enabled = `1`, Disabled = `2`, Requires Approval = `3`)
+    VideoCommentsPolicyConstant:
+      properties:
+        id:
+          $ref: '#/components/schemas/VideoCommentsPolicySet'
         label:
           type: string
 
@@ -7822,7 +8331,11 @@ components:
                 minLength: 2
                 maxLength: 30
             commentsEnabled:
+              deprecated: true
+              description: 'Deprecated in 6.2, use commentsPolicy instead'
               type: boolean
+            commentsPolicy:
+              $ref: '#/components/schemas/VideoCommentsPolicyConstant'
             downloadEnabled:
               type: boolean
             inputFileUpdatedAt:
@@ -7903,6 +8416,30 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/FileRedundancyInformation'
+    CommentAutoTagPolicies:
+      properties:
+        review:
+          type: array
+          description: 'Auto tags that automatically set the comment in review state'
+          items:
+            type: string
+    AutomaticTagAvailable:
+      properties:
+        available:
+          type: array
+          description: 'Available auto tags that can be used to filter objects or set a comment in review state'
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: tag name
+              type:
+                type: string
+                enum:
+                  - 'core'
+                  - 'watched-words-list'
+
     VideoImportStateConstant:
       properties:
         id:
@@ -8135,6 +8672,8 @@ components:
         isDeleted:
           type: boolean
           default: false
+        heldForReview:
+          type: boolean
         totalRepliesFromVideoAuthor:
           type: integer
           minimum: 0
@@ -8151,6 +8690,33 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VideoCommentThreadTree'
+    VideoCommentForOwnerOrAdmin:
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        url:
+          $ref: '#/components/schemas/VideoComment/properties/url'
+        text:
+          $ref: '#/components/schemas/VideoComment/properties/text'
+        heldForReview:
+          $ref: '#/components/schemas/VideoComment/properties/heldForReview'
+        threadId:
+          $ref: '#/components/schemas/VideoComment/properties/threadId'
+        inReplyToCommentId:
+          $ref: '#/components/schemas/VideoComment/properties/inReplyToCommentId'
+        createdAt:
+          $ref: '#/components/schemas/VideoComment/properties/createdAt'
+        updatedAt:
+          $ref: '#/components/schemas/VideoComment/properties/updatedAt'
+        account:
+          $ref: '#/components/schemas/VideoComment/properties/account'
+        video:
+          $ref: '#/components/schemas/VideoInfo'
+        automaticTags:
+          type: array
+          items:
+            type: string
+
     Storyboard:
       properties:
         storyboardPath:
@@ -9118,8 +9684,11 @@ components:
             minLength: 2
             maxLength: 30
         commentsEnabled:
-          description: Enable or disable comments for this video
+          deprecated: true
+          description: 'Deprecated in 6.2, use commentsPolicy instead'
           type: boolean
+        commentsPolicy:
+          $ref: '#/components/schemas/VideoCommentsPolicySet'
         downloadEnabled:
           description: Enable or disable downloading for this video
           type: boolean
@@ -9997,6 +10566,12 @@ components:
             - `17` NEW_PLUGIN_VERSION
 
             - `18` NEW_PEERTUBE_VERSION
+
+            - `19` MY_VIDEO_STUDIO_EDITION_FINISHED
+
+            - `20` NEW_USER_REGISTRATION_REQUEST
+
+            - `21` NEW_LIVE_FROM_SUBSCRIPTION
         read:
           type: boolean
         video:
@@ -10037,6 +10612,8 @@ components:
               $ref: '#/components/schemas/VideoInfo'
             account:
               $ref: '#/components/schemas/ActorInfo'
+            heldForReview:
+              type: boolean
         videoAbuse:
           nullable: true
           type: object
@@ -10545,6 +11122,25 @@ components:
           properties:
             privatePayload:
               type: object
+
+    WatchedWordsLists:
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        listName:
+          type: string
+        words:
+          type: array
+          items:
+            type: string
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2021-05-04T08:01:01.502Z
+        createdAt:
+          type: string
+          format: date-time
+          example: 2021-05-04T08:01:01.502Z
 
     VideoPassword:
       properties:

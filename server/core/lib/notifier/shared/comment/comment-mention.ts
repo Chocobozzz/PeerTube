@@ -24,6 +24,10 @@ export class CommentMention extends AbstractNotification <MCommentOwnerVideo, MU
   private accountMutedHash: { [ id: number ]: boolean }
   private instanceMutedHash: { [ id: number ]: boolean }
 
+  isDisabled () {
+    return this.payload.heldForReview === true
+  }
+
   async prepare () {
     const extractedUsernames = this.payload.extractMentions()
     logger.debug(
@@ -52,7 +56,7 @@ export class CommentMention extends AbstractNotification <MCommentOwnerVideo, MU
   }
 
   log () {
-    logger.info('Notifying %d users of new comment %s.', this.users.length, this.payload.url)
+    logger.info('Notifying %d users of new comment mention %s.', this.users.length, this.payload.url)
   }
 
   getSetting (user: MUserNotifSettingAccount) {

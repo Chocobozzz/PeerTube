@@ -1,11 +1,10 @@
 import { FunctionProperties, PickWith, PickWithOpt } from '@peertube/peertube-typescript-utils'
 import { VideoChannelModel } from '../../../models/video/video-channel.js'
 import {
-  MAccountActor,
   MAccountAPI,
+  MAccountActor,
   MAccountDefault,
-  MAccountFormattable,
-  MAccountId,
+  MAccountFormattable, MAccountIdActorId,
   MAccountLight,
   MAccountSummaryBlocks,
   MAccountSummaryFormattable,
@@ -14,9 +13,9 @@ import {
 } from '../account/index.js'
 import {
   MActor,
-  MActorAccountChannelId,
   MActorAPChannel,
   MActorAPI,
+  MActorAccountChannelId,
   MActorDefault,
   MActorDefaultBanner,
   MActorDefaultLight,
@@ -54,7 +53,7 @@ export type MChannelUserId =
 export type MChannelAccountIdUrl =
   Pick<MChannel, 'id' | 'accountId'> &
   Use<'Actor', MActorUrl & MActorId> &
-  Use<'Account', MAccountId & MAccountUrl>
+  Use<'Account', MAccountIdActorId & MAccountUrl>
 
 export type MChannelActor =
   MChannel &

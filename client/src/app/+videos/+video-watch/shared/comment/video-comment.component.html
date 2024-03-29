@@ -27,6 +27,8 @@
           <a [routerLink]="['/w', video.shortUUID, { 'threadId': comment.threadId }]" class="comment-date" [title]="comment.createdAt">
             {{ comment.createdAt | myFromNow }}
           </a>
+
+          <span *ngIf="comment.heldForReview" class="pt-badge badge-red ms-2" i18n>Pending review</span>
         </div>
 
         <div
@@ -83,6 +85,7 @@
             (wantedToReply)="onWantToReply($event)"
             (wantedToDelete)="onWantToDelete($event)"
             (wantedToRedraft)="onWantToRedraft($event)"
+            (wantedToApprove)="onWantToApprove($event)"
             (resetReply)="onResetReply()"
             (timestampClicked)="handleTimestampClicked($event)"
             [redraftValue]="redraftValue"

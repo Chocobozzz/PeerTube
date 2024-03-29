@@ -1,10 +1,10 @@
-import { forkJoin } from 'rxjs'
-import { map } from 'rxjs/operators'
-import { SelectChannelItem, SelectOptionsItem } from 'src/types/select-options-item.model'
+import { DatePipe, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
 import { ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
-import { AbstractControl, FormArray, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { AbstractControl, FormArray, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { HooksService, PluginService, ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
+import { BuildFormArgument, BuildFormValidator } from '@app/shared/form-validators/form-validator.model'
+import { VIDEO_CHAPTERS_ARRAY_VALIDATOR, VIDEO_CHAPTER_TITLE_VALIDATOR } from '@app/shared/form-validators/video-chapter-validators'
 import {
   VIDEO_CATEGORY_VALIDATOR,
   VIDEO_CHANNEL_VALIDATOR,
@@ -19,8 +19,14 @@ import {
   VIDEO_SUPPORT_VALIDATOR,
   VIDEO_TAGS_ARRAY_VALIDATOR
 } from '@app/shared/form-validators/video-validators'
-import { VIDEO_CHAPTERS_ARRAY_VALIDATOR, VIDEO_CHAPTER_TITLE_VALIDATOR } from '@app/shared/form-validators/video-chapter-validators'
-import { NgbModal, NgbNav, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavContent, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
+import { FormReactiveErrors, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
+import { FormValidatorService } from '@app/shared/shared-forms/form-validator.service'
+import { InstanceService } from '@app/shared/shared-main/instance/instance.service'
+import { VideoCaptionEdit, VideoCaptionWithPathEdit } from '@app/shared/shared-main/video-caption/video-caption-edit.model'
+import { VideoChaptersEdit } from '@app/shared/shared-main/video/video-chapters-edit.model'
+import { VideoEdit } from '@app/shared/shared-main/video/video-edit.model'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { NgbModal, NgbNav, NgbNavContent, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
 import {
   HTMLServerConfig,
   LiveVideo,
@@ -28,6 +34,7 @@ import {
   RegisterClientFormFieldOptions,
   RegisterClientVideoFieldOptions,
   VideoChapter,
+  VideoCommentPolicyType,
   VideoConstant,
   VideoDetails,
   VideoPrivacy,
@@ -36,35 +43,29 @@ import {
 } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { PluginInfo } from '@root-helpers/plugins-manager'
+import { CalendarModule } from 'primeng/calendar'
+import { forkJoin } from 'rxjs'
+import { map } from 'rxjs/operators'
+import { SelectChannelItem, SelectOptionsItem } from 'src/types/select-options-item.model'
+import { DynamicFormFieldComponent } from '../../../shared/shared-forms/dynamic-form-field.component'
+import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
+import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
+import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
+import { PreviewUploadComponent } from '../../../shared/shared-forms/preview-upload.component'
+import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
+import { SelectTagsComponent } from '../../../shared/shared-forms/select/select-tags.component'
+import { TimestampInputComponent } from '../../../shared/shared-forms/timestamp-input.component'
+import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
+import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
+import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
+import { HelpComponent } from '../../../shared/shared-main/misc/help.component'
+import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
+import { LiveDocumentationLinkComponent } from '../../../shared/shared-video-live/live-documentation-link.component'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
 import { VideoCaptionEditModalContentComponent } from './video-caption-edit-modal-content/video-caption-edit-modal-content.component'
 import { VideoEditType } from './video-edit.type'
-import { PreviewUploadComponent } from '../../../shared/shared-forms/preview-upload.component'
-import { LiveDocumentationLinkComponent } from '../../../shared/shared-video-live/live-documentation-link.component'
-import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
-import { DeleteButtonComponent } from '../../../shared/shared-main/buttons/delete-button.component'
-import { TimestampInputComponent } from '../../../shared/shared-forms/timestamp-input.component'
-import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
-import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
-import { CalendarModule } from 'primeng/calendar'
-import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
-import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
-import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
-import { MarkdownTextareaComponent } from '../../../shared/shared-forms/markdown-textarea.component'
-import { SelectTagsComponent } from '../../../shared/shared-forms/select/select-tags.component'
-import { PeerTubeTemplateDirective } from '../../../shared/shared-main/angular/peertube-template.directive'
-import { HelpComponent } from '../../../shared/shared-main/misc/help.component'
-import { NgIf, NgFor, NgTemplateOutlet, NgClass, DatePipe } from '@angular/common'
-import { DynamicFormFieldComponent } from '../../../shared/shared-forms/dynamic-form-field.component'
-import { InstanceService } from '@app/shared/shared-main/instance/instance.service'
-import { VideoCaptionWithPathEdit, VideoCaptionEdit } from '@app/shared/shared-main/video-caption/video-caption-edit.model'
-import { VideoChaptersEdit } from '@app/shared/shared-main/video/video-chapters-edit.model'
-import { VideoEdit } from '@app/shared/shared-main/video/video-edit.model'
-import { VideoService } from '@app/shared/shared-main/video/video.service'
-import { BuildFormArgument, BuildFormValidator } from '@app/shared/form-validators/form-validator.model'
-import { FormReactiveErrors, FormReactiveValidationMessages } from '@app/shared/shared-forms/form-reactive.service'
-import { FormValidatorService } from '@app/shared/shared-forms/form-validator.service'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
 type PluginField = {
@@ -144,6 +145,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   replayPrivacies: VideoConstant<VideoPrivacyType> [] = []
   videoCategories: VideoConstant<number>[] = []
   videoLicences: VideoConstant<number>[] = []
+  commentPolicies: VideoConstant<VideoCommentPolicyType>[] = []
   videoLanguages: VideoLanguages[] = []
   latencyModes: SelectOptionsItem[] = [
     {
@@ -202,7 +204,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   updateForm () {
     const defaultValues: any = {
       nsfw: 'false',
-      commentsEnabled: this.serverConfig.defaults.publish.commentsEnabled,
+      commentsPolicy: this.serverConfig.defaults.publish.commentsPolicy,
       downloadEnabled: this.serverConfig.defaults.publish.downloadEnabled,
       waitTranscoding: true,
       licence: this.serverConfig.defaults.publish.licence,
@@ -214,7 +216,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       videoPassword: VIDEO_PASSWORD_VALIDATOR,
       channelId: VIDEO_CHANNEL_VALIDATOR,
       nsfw: null,
-      commentsEnabled: null,
+      commentsPolicy: null,
       downloadEnabled: null,
       waitTranscoding: null,
       category: VIDEO_CATEGORY_VALIDATOR,
@@ -271,6 +273,9 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
     this.serverService.getVideoLicences()
         .subscribe(res => this.videoLicences = res)
+
+    this.serverService.getCommentPolicies()
+      .subscribe(res => this.commentPolicies = res)
 
     forkJoin([
       this.instanceService.getAbout(),

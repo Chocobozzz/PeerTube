@@ -287,7 +287,6 @@ function assignVideoTokenIfNeeded (req: Request, res: Response, video: MVideoUUI
 // ---------------------------------------------------------------------------
 
 export function checkUserCanManageVideo (user: MUser, video: MVideoAccountLight, right: UserRightType, res: Response, onlyOwned = true) {
-  // Retrieve the user who did the request
   if (onlyOwned && video.isOwned() === false) {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
@@ -296,9 +295,6 @@ export function checkUserCanManageVideo (user: MUser, video: MVideoAccountLight,
     return false
   }
 
-  // Check if the user can delete the video
-  // The user can delete it if he has the right
-  // Or if s/he is the video's account
   const account = video.VideoChannel.Account
   if (user.hasRight(right) === false && account.userId !== user.id) {
     res.fail({

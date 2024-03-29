@@ -438,10 +438,14 @@
               </div>
             </div>
 
-            <my-peertube-checkbox
-              inputName="commentsEnabled" formControlName="commentsEnabled"
-              i18n-labelText labelText="Enable video comments"
-            ></my-peertube-checkbox>
+            <div class="form-group mb-4">
+              <label i18n for="commentsPolicy">Comments policy</label>
+              <my-select-options labelForId="commentsPolicy" [items]="commentPolicies" formControlName="commentsPolicy" [clearable]="false"></my-select-options>
+
+              <div *ngIf="formErrors.commentsPolicy" class="form-error" role="alert">
+                {{ formErrors.commentsPolicy }}
+              </div>
+            </div>
 
             <my-peertube-checkbox
               inputName="downloadEnabled" formControlName="downloadEnabled"

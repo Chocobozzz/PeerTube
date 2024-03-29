@@ -32,27 +32,6 @@ export class MyAccountComponent implements OnInit {
   private buildMenu () {
     const clientRoutes = this.pluginService.getAllRegisteredClientRoutesForParent('/my-account') || {}
 
-    const moderationEntries: TopMenuDropdownParam = {
-      label: $localize`Moderation`,
-      children: [
-        {
-          label: $localize`Muted accounts`,
-          routerLink: '/my-account/blocklist/accounts',
-          iconName: 'user-x'
-        },
-        {
-          label: $localize`Muted servers`,
-          routerLink: '/my-account/blocklist/servers',
-          iconName: 'peertube-x'
-        },
-        {
-          label: $localize`Abuse reports`,
-          routerLink: '/my-account/abuses',
-          iconName: 'flag'
-        }
-      ]
-    }
-
     this.menuEntries = [
       {
         label: $localize`Settings`,
@@ -74,7 +53,41 @@ export class MyAccountComponent implements OnInit {
         routerLink: '/my-account/applications'
       },
 
-      moderationEntries,
+      {
+        label: $localize`Moderation`,
+        children: [
+          {
+            label: $localize`Muted accounts`,
+            routerLink: '/my-account/blocklist/accounts',
+            iconName: 'user-x'
+          },
+          {
+            label: $localize`Muted servers`,
+            routerLink: '/my-account/blocklist/servers',
+            iconName: 'peertube-x'
+          },
+          {
+            label: $localize`Abuse reports`,
+            routerLink: '/my-account/abuses',
+            iconName: 'flag'
+          },
+          {
+            label: $localize`Comments on your videos`,
+            routerLink: '/my-account/videos/comments',
+            iconName: 'message-circle'
+          },
+          {
+            label: $localize`Watched words`,
+            routerLink: '/my-account/watched-words/list',
+            iconName: 'eye-open'
+          },
+          {
+            label: $localize`Auto tag policies`,
+            routerLink: '/my-account/auto-tag-policies',
+            iconName: 'no'
+          }
+        ]
+      },
 
       ...Object.values(clientRoutes)
         .map(clientRoute => ({

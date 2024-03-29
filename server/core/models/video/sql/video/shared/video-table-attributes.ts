@@ -18,6 +18,7 @@ export class VideoTableAttributes {
       'id',
       'name',
       'description',
+      'accountId',
       'actorId'
     ]
 
@@ -196,6 +197,14 @@ export class VideoTableAttributes {
     ]
   }
 
+  getVideoAutoTagAttributes () {
+    return [ 'videoId', 'accountId', 'automaticTagId' ]
+  }
+
+  getAutoTagAttributes () {
+    return [ 'id', 'name' ]
+  }
+
   getRedundancyAttributes () {
     return [ 'id', 'fileUrl' ]
   }
@@ -274,7 +283,7 @@ export class VideoTableAttributes {
       'isLive',
       'aspectRatio',
       'url',
-      'commentsEnabled',
+      'commentsPolicy',
       'downloadEnabled',
       'waitTranscoding',
       'state',

@@ -1,0 +1,6 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+textarea {
+  min-height: 300px;
+}

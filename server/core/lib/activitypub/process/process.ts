@@ -1,5 +1,5 @@
-import { StatsManager } from '@server/lib/stat-manager.js'
 import { Activity, ActivityType } from '@peertube/peertube-models'
+import { StatsManager } from '@server/lib/stat-manager.js'
 import { logger } from '../../../helpers/logger.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorDefault, MActorSignature } from '../../../types/models/index.js'
@@ -15,6 +15,7 @@ import { processFlagActivity } from './process-flag.js'
 import { processFollowActivity } from './process-follow.js'
 import { processLikeActivity } from './process-like.js'
 import { processRejectActivity } from './process-reject.js'
+import { processReplyApprovalFactory } from './process-reply-approval.js'
 import { processUndoActivity } from './process-undo.js'
 import { processUpdateActivity } from './process-update.js'
 import { processViewActivity } from './process-view.js'
@@ -31,7 +32,9 @@ const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Act
   Like: processLikeActivity,
   Dislike: processDislikeActivity,
   Flag: processFlagActivity,
-  View: processViewActivity
+  View: processViewActivity,
+  ApproveReply: processReplyApprovalFactory('ApproveReply'),
+  RejectReply: processReplyApprovalFactory('RejectReply')
 }
 
 export async function processActivities (

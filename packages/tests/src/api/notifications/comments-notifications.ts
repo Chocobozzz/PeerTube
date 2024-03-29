@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { UserNotification } from '@peertube/peertube-models'
-import { cleanupTests, PeerTubeServer, waitJobs } from '@peertube/peertube-server-commands'
+import { UserNotification, UserNotificationType, VideoCommentPolicy } from '@peertube/peertube-models'
+import { PeerTubeServer, cleanupTests, setDefaultAccountAvatar, waitJobs } from '@peertube/peertube-server-commands'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
-import { prepareNotificationsTest, CheckerBaseParams, checkNewCommentOnMyVideo, checkCommentMention } from '@tests/shared/notifications.js'
+import { CheckerBaseParams, checkCommentMention, checkNewCommentOnMyVideo, prepareNotificationsTest } from '@tests/shared/notifications.js'
+import { expect } from 'chai'
 
 describe('Test comments notifications', function () {
   let servers: PeerTubeServer[] = []
   let userToken: string
+  let userToken2: string
   let userNotifications: UserNotification[] = []
   let emails: object[] = []
 
@@ -24,6 +25,9 @@ describe('Test comments notifications', function () {
     userToken = res.userAccessToken
     servers = res.servers
     userNotifications = res.userNotifications
+
+    userToken2 = await servers[0].users.generateUserAndToken('user2')
+    await setDefaultAccountAvatar(servers[0], userToken2)
   })
 
   describe('Comment on my video notifications', function () {
@@ -94,11 +98,9 @@ describe('Test comments notifications', function () {
       this.timeout(60000)
 
       const { uuid, shortUUID } = await servers[0].videos.upload({ token: userToken, attributes: { name: 'super video' } })
-
       await waitJobs(servers)
 
       await servers[1].comments.createThread({ videoId: uuid, text: 'comment' })
-
       await waitJobs(servers)
 
       const { data } = await servers[0].comments.listThreads({ videoId: uuid })
@@ -145,6 +147,45 @@ describe('Test comments notifications', function () {
       const commentId = tree.children[0].comment.id
 
       await checkNewCommentOnMyVideo({ ...baseParams, shortUUID, threadId, commentId, checkType: 'presence' })
+    })
+
+    it('Should send a new comment notification of a comment that requires approval', async function () {
+      this.timeout(60000)
+
+      const { id: videoId, uuid, shortUUID } = await servers[0].videos.upload({
+        token: userToken,
+        attributes: { name: 'super video', commentsPolicy: VideoCommentPolicy.REQUIRES_APPROVAL }
+      })
+      await waitJobs(servers)
+
+      let localCommentId: number
+      {
+        const created = await servers[0].comments.createThread({ videoId: uuid, text: 'local approval', token: userToken2 })
+        const commentId = localCommentId = created.id
+
+        await waitJobs(servers)
+        await checkNewCommentOnMyVideo({ ...baseParams, shortUUID, threadId: commentId, commentId, checkType: 'presence', approval: true })
+      }
+
+      {
+        await servers[1].comments.createThread({ videoId: uuid, text: 'remote approval' })
+        await waitJobs(servers)
+
+        const commentId = await servers[0].comments.findCommentId({ token: userToken, videoId, text: 'remote approval' })
+
+        await checkNewCommentOnMyVideo({ ...baseParams, shortUUID, threadId: commentId, commentId, checkType: 'presence', approval: true })
+      }
+
+      // It should not re-notify on approval
+      {
+        await servers[0].comments.approve({ token: userToken, commentId: localCommentId, videoId: shortUUID })
+        await waitJobs(servers)
+
+        const notifications = baseParams.socketNotifications
+          .filter(n => n.type === UserNotificationType.NEW_COMMENT_ON_MY_VIDEO && n.comment?.video?.shortUUID === shortUUID)
+
+        expect(notifications).to.have.lengthOf(2)
+      }
     })
 
     it('Should convert markdown in comment to html', async function () {
@@ -274,6 +315,64 @@ describe('Test comments notifications', function () {
       const commentId = tree.children[0].comment.id
 
       await checkCommentMention({ ...baseParams, shortUUID, commentId, threadId, byAccountDisplayName, checkType: 'presence' })
+    })
+
+    it('Should not send a new mention notification before approval', async function () {
+      this.timeout(60000)
+
+      const { id: videoId, uuid, shortUUID } = await servers[0].videos.upload({
+        attributes: { name: 'super video', commentsPolicy: VideoCommentPolicy.REQUIRES_APPROVAL }
+      })
+      await waitJobs(servers)
+
+      const localText = '@user_1 local approval'
+      {
+        const { id: threadId } = await servers[0].comments.createThread({ videoId: uuid, text: localText, token: userToken2 })
+        await waitJobs(servers)
+
+        await checkCommentMention({
+          ...baseParams,
+          shortUUID,
+          threadId,
+          commentId: threadId,
+          byAccountDisplayName: 'user2',
+          checkType: 'absence'
+        })
+      }
+
+      const remoteText = `@user_1@${servers[0].host} remote approval`
+      {
+        await servers[1].comments.createThread({ videoId: uuid, text: remoteText })
+        await waitJobs(servers)
+
+        const threadId = await servers[0].comments.findCommentId({ token: userToken, videoId, text: remoteText })
+        const byAccountDisplayName = 'super root 2 name'
+        await checkCommentMention({ ...baseParams, shortUUID, threadId, commentId: threadId, byAccountDisplayName, checkType: 'absence' })
+      }
+
+      // It should notify on approval
+      {
+        const toTest = [
+          { text: localText, byAccountDisplayName: 'user2' },
+          { text: remoteText, byAccountDisplayName: 'super root 2 name' }
+        ]
+
+        for (const { text, byAccountDisplayName } of toTest) {
+          const localCommentId = await servers[0].comments.findCommentId({ token: userToken, videoId, text })
+
+          await servers[0].comments.approve({ commentId: localCommentId, videoId: shortUUID })
+          await waitJobs(servers)
+
+          await checkCommentMention({
+            ...baseParams,
+            shortUUID,
+            threadId: localCommentId,
+            commentId: localCommentId,
+            byAccountDisplayName,
+            checkType: 'presence'
+          })
+        }
+      }
     })
 
     it('Should convert markdown in comment to html', async function () {

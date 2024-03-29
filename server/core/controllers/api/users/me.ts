@@ -1,16 +1,17 @@
-import 'multer'
-import express from 'express'
 import { pick } from '@peertube/peertube-core-utils'
 import {
   ActorImageType,
+  UserVideoRate as FormattedUserVideoRate,
   HttpStatusCode,
   UserUpdateMe,
-  UserVideoQuota,
-  UserVideoRate as FormattedUserVideoRate
+  UserVideoQuota
 } from '@peertube/peertube-models'
-import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '@server/helpers/audit-logger.js'
-import { Hooks } from '@server/lib/plugins/hooks.js'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import { UserAuditView, auditLoggerFactory, getAuditIdFromRes } from '@server/helpers/audit-logger.js'
+import { Hooks } from '@server/lib/plugins/hooks.js'
+import { VideoCommentModel } from '@server/models/video/video-comment.js'
+import express from 'express'
+import 'multer'
 import { createReqFiles } from '../../../helpers/express-utils.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { CONFIG } from '../../../initializers/config.js'
@@ -34,6 +35,7 @@ import { updateAvatarValidator } from '../../../middlewares/validators/actor-ima
 import {
   deleteMeValidator,
   getMyVideoImportsValidator,
+  listCommentsOnUserVideosValidator,
   usersVideosValidator,
   videoImportsSortValidator,
   videosSortValidator
@@ -75,6 +77,16 @@ meRouter.get('/me/videos/imports',
   asyncMiddleware(getUserVideoImports)
 )
 
+meRouter.get('/me/videos/comments',
+  authenticate,
+  paginationValidator,
+  videosSortValidator,
+  setDefaultVideosSort,
+  setDefaultPagination,
+  asyncMiddleware(listCommentsOnUserVideosValidator),
+  asyncMiddleware(listCommentsOnUserVideos)
+)
+
 meRouter.get('/me/videos',
   authenticate,
   paginationValidator,
@@ -82,7 +94,7 @@ meRouter.get('/me/videos',
   setDefaultVideosSort,
   setDefaultPagination,
   asyncMiddleware(usersVideosValidator),
-  asyncMiddleware(getUserVideos)
+  asyncMiddleware(listUserVideos)
 )
 
 meRouter.get('/me/videos/:videoId/rating',
@@ -117,7 +129,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function getUserVideos (req: express.Request, res: express.Response) {
+async function listUserVideos (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
 
   const apiOptions = await Hooks.wrapObject({
@@ -143,6 +155,36 @@ async function getUserVideos (req: express.Request, res: express.Response) {
     blacklistInfo: true
   }
   return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
+}
+
+async function listCommentsOnUserVideos (req: express.Request, res: express.Response) {
+  const userAccount = res.locals.oauth.token.User.Account
+
+  const options = {
+    ...pick(req.query, [
+      'start',
+      'count',
+      'sort',
+      'search',
+      'searchAccount',
+      'searchVideo',
+      'autoTagOneOf'
+    ]),
+
+    autoTagOfAccountId: userAccount.id,
+    videoAccountOwnerId: userAccount.id,
+    heldForReview: req.query.isHeldForReview,
+
+    videoChannelOwnerId: res.locals.videoChannel?.id,
+    videoId: res.locals.videoAll?.id
+  }
+
+  const resultList = await VideoCommentModel.listCommentsForApi(options)
+
+  return res.json({
+    total: resultList.total,
+    data: resultList.data.map(c => c.toFormattedForAdminOrUserJSON())
+  })
 }
 
 async function getUserVideoImports (req: express.Request, res: express.Response) {

@@ -23,6 +23,7 @@ import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
 import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
+import { WatchedWordsListService } from '@app/shared/standalone-watched-words/watched-words-list.service'
 
 export default [
   {
@@ -52,7 +53,8 @@ export default [
       DynamicElementService,
       FindInBulkService,
       SearchService,
-      VideoPlaylistService
+      VideoPlaylistService,
+      WatchedWordsListService
     ],
     children: [
       {

@@ -1,6 +1,7 @@
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import {
+  VideoCommentPolicyType,
   VideoConstant,
   VideoDetails as VideoDetailsServerModel,
   VideoFile,
@@ -16,11 +17,13 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   channel: VideoChannel
   tags: string[]
   account: Account
-  commentsEnabled: boolean
   downloadEnabled: boolean
 
   waitTranscoding: boolean
   state: VideoConstant<VideoStateType>
+
+  commentsEnabled: never
+  commentsPolicy: VideoConstant<VideoCommentPolicyType>
 
   likesPercent: number
   dislikesPercent: number
@@ -40,7 +43,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.account = new Account(hash.account)
     this.tags = hash.tags
     this.support = hash.support
-    this.commentsEnabled = hash.commentsEnabled
+    this.commentsPolicy = hash.commentsPolicy
     this.downloadEnabled = hash.downloadEnabled
 
     this.inputFileUpdatedAt = hash.inputFileUpdatedAt

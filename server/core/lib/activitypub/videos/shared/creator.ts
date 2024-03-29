@@ -1,10 +1,10 @@
+import { VideoObject } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFullLight, MVideoThumbnail } from '@server/types/models/index.js'
-import { VideoObject } from '@peertube/peertube-models'
 import { APVideoAbstractBuilder } from './abstract-builder.js'
 import { getVideoAttributesFromObject } from './object-to-model-attributes.js'
 
@@ -40,6 +40,8 @@ export class APVideoCreator extends APVideoAbstractBuilder {
       await this.insertOrReplaceCaptions(videoCreated, t)
       await this.insertOrReplaceLive(videoCreated, t)
       await this.insertOrReplaceStoryboard(videoCreated, t)
+
+      await this.setAutomaticTags({ video: videoCreated, transaction: t })
 
       // We added a video in this channel, set it as updated
       await channel.setAsUpdated(t)

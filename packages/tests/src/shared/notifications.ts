@@ -437,8 +437,9 @@ async function checkNewCommentOnMyVideo (options: CheckerBaseParams & {
   commentId: number
   threadId: number
   checkType: CheckerType
+  approval?: boolean // default false
 }) {
-  const { server, shortUUID, commentId, threadId, checkType, emails } = options
+  const { server, shortUUID, commentId, threadId, checkType, emails, approval = false } = options
   const notificationType = UserNotificationType.NEW_COMMENT_ON_MY_VIDEO
 
   function notificationChecker (notification: UserNotification, checkType: CheckerType) {
@@ -449,6 +450,8 @@ async function checkNewCommentOnMyVideo (options: CheckerBaseParams & {
       checkComment(notification.comment, commentId, threadId)
       checkActor(notification.comment.account)
       checkVideo(notification.comment.video, undefined, shortUUID)
+
+      expect(notification.comment.heldForReview).to.equal(approval)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
         return n?.comment === undefined || n.comment.id !== commentId
@@ -456,10 +459,16 @@ async function checkNewCommentOnMyVideo (options: CheckerBaseParams & {
     }
   }
 
-  const commentUrl = `${server.url}/w/${shortUUID};threadId=${threadId}`
+  const commentUrl = approval
+    ? `${server.url}/my-account/videos/comments?search=heldForReview:true`
+    : `${server.url}/w/${shortUUID};threadId=${threadId}`
 
   function emailNotificationFinder (email: object) {
-    return email['text'].indexOf(commentUrl) !== -1
+    const text = email['text']
+
+    return text.includes(commentUrl) &&
+      (approval && text.includes('requires approval')) ||
+      (!approval && !text.includes('requires approval'))
   }
 
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })

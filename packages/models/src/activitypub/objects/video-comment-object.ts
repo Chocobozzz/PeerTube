@@ -13,4 +13,9 @@ export interface VideoCommentObject {
   url: string
   attributedTo: ActivityPubAttributedTo
   tag: ActivityTagObject[]
+
+  replyApproval: string | null
+
+  to?: string[]
+  cc?: string[]
 }

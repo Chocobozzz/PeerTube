@@ -1,6 +1,7 @@
 import { Account, AccountSummary } from '../actors/index.js'
 import { VideoChannel, VideoChannelSummary } from './channel/video-channel.model.js'
 import { VideoFile } from './file/index.js'
+import { VideoCommentPolicyType } from './index.js'
 import { VideoConstant } from './video-constant.model.js'
 import { VideoPrivacyType } from './video-privacy.enum.js'
 import { VideoScheduleUpdate } from './video-schedule-update.model.js'
@@ -78,17 +79,26 @@ export interface VideoAdditionalAttributes {
   streamingPlaylists: VideoStreamingPlaylist[]
 
   videoSource: VideoSource
+
+  automaticTags: string[]
 }
 
 export interface VideoDetails extends Video {
-  // Deprecated in 5.0
+  // TODO: remove, deprecated in 5.0
   descriptionPath: string
 
   support: string
   channel: VideoChannel
   account: Account
   tags: string[]
+
+  // TODO: remove, deprecated in 6.2
   commentsEnabled: boolean
+  commentsPolicy: {
+    id: VideoCommentPolicyType
+    label: string
+  }
+
   downloadEnabled: boolean
 
   // Not optional in details (unlike in parent Video)

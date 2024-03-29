@@ -1,3 +1,4 @@
+import { VideoCommentPolicyType } from './index.js'
 import { VideoPrivacyType } from './video-privacy.enum.js'
 import { VideoScheduleUpdate } from './video-schedule-update.model.js'
 
@@ -10,7 +11,11 @@ export interface VideoUpdate {
   support?: string
   privacy?: VideoPrivacyType
   tags?: string[]
+
+  // TODO: remove, deprecated in 6.2
   commentsEnabled?: boolean
+  commentsPolicy?: VideoCommentPolicyType
+
   downloadEnabled?: boolean
   nsfw?: boolean
   waitTranscoding?: boolean

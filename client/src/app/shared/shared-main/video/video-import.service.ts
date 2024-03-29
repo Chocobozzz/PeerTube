@@ -99,7 +99,7 @@ export class VideoImportService {
       tags: video.tags,
       nsfw: video.nsfw,
       waitTranscoding: video.waitTranscoding,
-      commentsEnabled: video.commentsEnabled,
+      commentsPolicy: video.commentsPolicy,
       downloadEnabled: video.downloadEnabled,
       thumbnailfile: video.thumbnailfile,
       previewfile: video.previewfile,

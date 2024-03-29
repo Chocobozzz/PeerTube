@@ -7,6 +7,7 @@ import {
   HttpStatusCodeType, ResultList,
   UserVideoRateType,
   Video,
+  VideoCommentPolicy,
   VideoCreate,
   VideoCreateResult,
   VideoDetails,
@@ -229,6 +230,7 @@ export class VideosCommand extends AbstractCommand {
     search?: string
     isLive?: boolean
     channelId?: number
+    autoTagOneOf?: string[]
   } = {}) {
     const path = '/api/v1/users/me/videos'
 
@@ -236,7 +238,7 @@ export class VideosCommand extends AbstractCommand {
       ...options,
 
       path,
-      query: pick(options, [ 'start', 'count', 'sort', 'search', 'isLive', 'channelId' ]),
+      query: pick(options, [ 'start', 'count', 'sort', 'search', 'isLive', 'channelId', 'autoTagOneOf' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
@@ -282,7 +284,7 @@ export class VideosCommand extends AbstractCommand {
   }
 
   listAllForAdmin (options: OverrideCommandOptions & VideosCommonQuery = {}) {
-    const include = VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.BLACKLISTED | VideoInclude.BLOCKED_OWNER
+    const include = VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.BLACKLISTED | VideoInclude.BLOCKED_OWNER | VideoInclude.AUTOMATIC_TAGS
     const nsfw = 'both'
     const privacyOneOf = getAllPrivacies()
 
@@ -429,7 +431,7 @@ export class VideosCommand extends AbstractCommand {
       support: 'my super support text',
       tags: [ 'tag' ],
       privacy: VideoPrivacy.PUBLIC,
-      commentsEnabled: true,
+      commentsPolicy: VideoCommentPolicy.ENABLED,
       downloadEnabled: true,
       fixture: 'video_short.webm',
 
@@ -619,7 +621,8 @@ export class VideosCommand extends AbstractCommand {
       'tagsAllOf',
       'isLocal',
       'include',
-      'skipCount'
+      'skipCount',
+      'autoTagOneOf'
     ])
   }
 

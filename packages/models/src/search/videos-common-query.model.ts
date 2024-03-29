@@ -21,8 +21,6 @@ export interface VideosCommonQuery {
 
   languageOneOf?: string[]
 
-  privacyOneOf?: VideoPrivacyType[]
-
   tagsOneOf?: string[]
   tagsAllOf?: string[]
 
@@ -36,6 +34,10 @@ export interface VideosCommonQuery {
   search?: string
 
   excludeAlreadyWatched?: boolean
+
+  // Only available with special user right
+  autoTagOneOf?: string[]
+  privacyOneOf?: VideoPrivacyType[]
 }
 
 export interface VideosCommonQueryAfterSanitize extends VideosCommonQuery {
