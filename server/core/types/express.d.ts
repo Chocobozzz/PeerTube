@@ -54,6 +54,7 @@ declare module 'express' {
   export interface Request {
     query: any
     method: HttpMethodType
+    rawBody: Buffer // Allow plugin routes to access the raw body
   }
 
   // ---------------------------------------------------------------------------

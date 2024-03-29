@@ -247,7 +247,7 @@ function register ({
   router.get('/ping', (req, res) => res.json({ message: 'pong' }))
 
   // Users are automatically authenticated
-  router.get('/auth', async (res, res) => {
+  router.get('/auth', async (req, res) => {
     const user = await peertubeHelpers.user.getAuthUser(res)
 
     const isAdmin = user.role === 0
@@ -261,6 +261,15 @@ function register ({
       isUser
     })
   })
+
+  router.post('/webhook', async (req, res) => {
+    const rawBody = req.rawBody // Buffer containing the raw body
+
+    handleRawBody(rawBody)
+
+    res.status(204)
+  })
+
 }
 ```
 

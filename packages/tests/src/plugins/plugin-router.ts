@@ -80,6 +80,24 @@ describe('Test plugin helpers', function () {
     }
   })
 
+  it('Should mirror the raw post body', async function () {
+    const body = {
+      torso: 'arms',
+      legs: 'feet'
+    }
+
+    for (const path of basePaths) {
+      const res = await makePostBodyRequest({
+        url: server.url,
+        path: path + 'form/post/mirror-raw-body',
+        fields: body,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(res.body).to.deep.equal(body)
+    }
+  })
+
   it('Should remove the plugin and remove the routes', async function () {
     await server.plugins.uninstall({ npmName: 'peertube-plugin-test-five' })
 

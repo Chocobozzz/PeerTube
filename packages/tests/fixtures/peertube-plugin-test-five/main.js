@@ -9,6 +9,10 @@ async function register ({
   router.post('/form/post/mirror', (req, res) => {
     res.json(req.body)
   })
+
+  router.post('/form/post/mirror-raw-body', (req, res) => {
+    res.json(JSON.parse(req.rawBody))
+  })
 }
 
 async function unregister () {
