@@ -27,6 +27,7 @@
     { "path": "./packages/models" },
     { "path": "./packages/node-utils" },
     { "path": "./packages/server-commands" },
+    { "path": "./packages/transcription" },
     { "path": "./packages/typescript-utils" }
   ]
 }

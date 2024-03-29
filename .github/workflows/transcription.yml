@@ -1,0 +1,30 @@
+name: Transcription
+
+on:
+  push:
+    branches:
+      - transcription-backend-workbench
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: './.github/actions/reusable-prepare-peertube-build'
+        with:
+          node-version: '18.x'
+
+      - uses: './.github/actions/reusable-prepare-peertube-run'
+
+      - name: Install Python libraries
+        run: |
+          pip3 install openai-whisper
+          pip3 install whisper-ctranslate2
+          pip3 install whisper-timestamped
+
+      - name: Run transcription tests
+        run: |
+          npm run mocha -- --exit --bail packages/tests/src/transcription/**/*.spec.ts
