@@ -122,6 +122,7 @@ export class RunnerServer {
       this.safeAsyncCheckAvailableJobs()
     })
     socket.on('disconnect', () => logger.warn(`Disconnected from ${url} socket`))
+    socket.io.on('ping', () => logger.debug(`Received a "ping" for ${url}`))
 
     this.sockets.set(server, socket)
   }
