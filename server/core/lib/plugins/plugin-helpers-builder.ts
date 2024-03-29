@@ -88,6 +88,10 @@ function buildVideosHelpers () {
       return VideoModel.load(id)
     },
 
+    loadByIdOrUUIDWithFiles: (id: number | string) => {
+      return VideoModel.loadWithFiles(id)
+    },
+
     removeVideo: (id: number) => {
       return sequelizeTypescript.transaction(async t => {
         const video = await VideoModel.loadFull(id, t)
