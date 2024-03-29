@@ -211,6 +211,10 @@ app.use(express.json({
         message: 'Invalid digest'
       })
     }
+
+    if (req.originalUrl.startsWith('/plugins/')) {
+      req.rawBody = buf
+    }
   }
 }))
 
