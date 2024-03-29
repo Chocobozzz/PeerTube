@@ -1,6 +1,13 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
-import { LiveVideoLatencyMode, ThumbnailType, VideoExportJSON, VideoPrivacy, VideoState } from '@peertube/peertube-models'
+import {
+  LiveVideoLatencyMode,
+  ThumbnailType,
+  VideoCommentPolicy,
+  VideoExportJSON,
+  VideoPrivacy,
+  VideoState
+} from '@peertube/peertube-models'
 import { buildUUID, getFileSize } from '@peertube/peertube-node-utils'
 import { isArray, isBooleanValid, isUUIDValid } from '@server/helpers/custom-validators/misc.js'
 import { isVideoCaptionLanguageValid } from '@server/helpers/custom-validators/video-captions.js'
@@ -10,6 +17,7 @@ import { isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-
 import {
   isPasswordValid,
   isVideoCategoryValid,
+  isVideoCommentsPolicyValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
   isVideoLanguageValid,
@@ -42,7 +50,7 @@ const lTags = loggerTagsFactory('user-import')
 
 type ImportObject = VideoExportJSON['videos'][0]
 type SanitizedObject = Pick<ImportObject, 'name' | 'duration' | 'channel' | 'privacy' | 'archiveFiles' | 'captions' | 'category' |
-'licence' | 'language' | 'description' | 'support' | 'nsfw' | 'isLive' | 'commentsEnabled' | 'downloadEnabled' | 'waitTranscoding' |
+'licence' | 'language' | 'description' | 'support' | 'nsfw' | 'isLive' | 'commentsPolicy' | 'downloadEnabled' | 'waitTranscoding' |
 'originallyPublishedAt' | 'tags' | 'live' | 'passwords' | 'source' | 'chapters'>
 
 export class VideosImporter extends AbstractUserImporter <VideoExportJSON, ImportObject, SanitizedObject> {
@@ -59,16 +67,26 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
     if (o.isLive !== true && !o.archiveFiles?.videoFile) return undefined
 
     if (!isVideoCategoryValid(o.category)) o.category = null
-    if (!isVideoLicenceValid(o.licence)) o.licence = CONFIG.DEFAULTS.PUBLISH.LICENCE
+    if (!o.licence || !isVideoLicenceValid(o.licence)) o.licence = CONFIG.DEFAULTS.PUBLISH.LICENCE
     if (!isVideoLanguageValid(o.language)) o.language = null
     if (!isVideoDescriptionValid(o.description)) o.description = null
     if (!isVideoSupportValid(o.support)) o.support = null
 
     if (!isBooleanValid(o.nsfw)) o.nsfw = false
     if (!isBooleanValid(o.isLive)) o.isLive = false
-    if (!isBooleanValid(o.commentsEnabled)) o.commentsEnabled = CONFIG.DEFAULTS.PUBLISH.COMMENTS_ENABLED
     if (!isBooleanValid(o.downloadEnabled)) o.downloadEnabled = CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED
     if (!isBooleanValid(o.waitTranscoding)) o.waitTranscoding = true
+
+    if (!o.commentsPolicy || !isVideoCommentsPolicyValid(o.commentsPolicy)) {
+      // Fallback to deprecated property
+      if (isBooleanValid(o.commentsEnabled)) {
+        o.commentsPolicy = o.commentsEnabled === true
+          ? VideoCommentPolicy.ENABLED
+          : VideoCommentPolicy.DISABLED
+      } else {
+        o.commentsPolicy = CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY
+      }
+    }
 
     if (!isVideoSourceFilenameValid(o.source?.inputFilename)) o.source = undefined
 
@@ -89,7 +107,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
       if (!isBooleanValid(o.live.saveReplay)) o.live.saveReplay = false
       if (o.live.saveReplay && !isVideoReplayPrivacyValid(o.live.replaySettings.privacy)) return undefined
 
-      if (!isLiveLatencyModeValid(o.live.latencyMode)) o.live.latencyMode = LiveVideoLatencyMode.DEFAULT
+      if (!o.live.latencyMode || !isLiveLatencyModeValid(o.live.latencyMode)) o.live.latencyMode = LiveVideoLatencyMode.DEFAULT
 
       if (!o.live.streamKey) o.live.streamKey = buildUUID()
       else if (!isUUIDValid(o.live.streamKey)) return undefined
@@ -114,7 +132,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
       'support',
       'nsfw',
       'isLive',
-      'commentsEnabled',
+      'commentsPolicy',
       'downloadEnabled',
       'waitTranscoding',
       'originallyPublishedAt',
@@ -204,7 +222,7 @@ export class VideosImporter extends AbstractUserImporter <VideoExportJSON, Impor
           'isLive',
           'nsfw',
           'tags',
-          'commentsEnabled',
+          'commentsPolicy',
           'downloadEnabled',
           'waitTranscoding',
           'originallyPublishedAt'

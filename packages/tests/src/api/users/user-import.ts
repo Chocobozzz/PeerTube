@@ -5,6 +5,7 @@ import {
   LiveVideoLatencyMode,
   UserImportState,
   UserNotificationSettingValue,
+  VideoCommentPolicy,
   VideoCreateResult,
   VideoPlaylistPrivacy,
   VideoPlaylistType,
@@ -336,6 +337,25 @@ function runTest (withObjectStorage: boolean) {
     expect(data[1].url).to.equal(server.url + '/videos/watch/' + noahVideo.uuid)
   })
 
+  it('Should have correctly imported watched words lists', async function () {
+    const { data } = await remoteServer.watchedWordsLists.listWordsLists({ token: remoteNoahToken, accountName: 'noah_remote' })
+
+    expect(data).to.have.lengthOf(2)
+
+    expect(data[0].listName).to.equal('allowed-list')
+    expect(data[0].words).to.have.members([ 'allowed', 'allowed2' ])
+
+    expect(data[1].listName).to.equal('forbidden-list')
+    expect(data[1].words).to.have.members([ 'forbidden' ])
+  })
+
+  it('Should have correctly imported auto tag policies', async function () {
+    const { review } = await remoteServer.autoTags.getCommentPolicies({ token: remoteNoahToken, accountName: 'noah_remote' })
+
+    expect(review).to.have.lengthOf(2)
+    expect(review).to.have.members([ 'external-link', 'forbidden-list' ])
+  })
+
   it('Should have correctly imported user videos', async function () {
     const { data } = await remoteServer.videos.listMyVideos({ token: remoteNoahToken })
     expect(data).to.have.lengthOf(5)
@@ -386,7 +406,7 @@ function runTest (withObjectStorage: boolean) {
             privacy: (VideoPrivacy.PUBLIC),
             category: (12),
             tags: [ 'tag1', 'tag2' ],
-            commentsEnabled: false,
+            commentsPolicy: VideoCommentPolicy.DISABLED,
             downloadEnabled: false,
             nsfw: false,
             description: ('video description'),
@@ -538,6 +558,18 @@ function runTest (withObjectStorage: boolean) {
     {
       const { data } = await remoteServer.videos.listMyVideos({ token: remoteNoahToken })
       expect(data).to.have.lengthOf(5)
+    }
+
+    // Watched words
+    {
+      const { data } = await remoteServer.watchedWordsLists.listWordsLists({ token: remoteNoahToken, accountName: 'noah_remote' })
+      expect(data).to.have.lengthOf(2)
+    }
+
+    // Auto tag policies
+    {
+      const { review } = await remoteServer.autoTags.getCommentPolicies({ token: remoteNoahToken, accountName: 'noah_remote' })
+      expect(review).to.have.lengthOf(2)
     }
   })
 

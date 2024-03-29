@@ -120,7 +120,7 @@ function getRemoteObjectOrDie (
   return { url, username, password }
 }
 
-function listOptions (val: any) {
+function listOptions (val: string) {
   return val.split(',')
 }
 

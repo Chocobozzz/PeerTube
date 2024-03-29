@@ -121,7 +121,8 @@ defaults:
   publish:
     download_enabled: true
 
-    comments_enabled: true
+    # enabled = 1, disabled = 2, requires_approval = 3
+    comments_policy: 1
 
     # public = 1, unlisted = 2, private = 3, internal = 4
     privacy: 1

@@ -24,6 +24,8 @@ import { FfprobeData } from 'fluent-ffmpeg'
 import { move } from 'fs-extra/esm'
 import { getLocalVideoActivityPubUrl } from './activitypub/url.js'
 import { federateVideoIfNeeded } from './activitypub/videos/federate.js'
+import { AutomaticTagger } from './automatic-tags/automatic-tagger.js'
+import { setAndSaveVideoAutomaticTags } from './automatic-tags/automatic-tags.js'
 import { Hooks } from './plugins/hooks.js'
 import { generateLocalVideoMiniature, updateLocalVideoMiniatureFromExisting } from './thumbnail.js'
 import { autoBlacklistVideoIfNeeded } from './video-blacklist.js'
@@ -31,7 +33,7 @@ import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video
 import { buildNewFile, createVideoSource } from './video-file.js'
 import { addVideoJobsAfterCreation } from './video-jobs.js'
 import { VideoPathManager } from './video-path-manager.js'
-import { setVideoTags } from './video.js'
+import { buildCommentsPolicy, setVideoTags } from './video.js'
 
 type VideoAttributes = Omit<VideoCreate, 'channelId'> & {
   duration: number
@@ -142,6 +144,9 @@ export class LocalVideoCreator {
         }
 
         await setVideoTags({ video: this.video, tags: this.videoAttributes.tags, transaction })
+
+        const automaticTags = await new AutomaticTagger().buildVideoAutomaticTags({ video: this.video, transaction })
+        await setAndSaveVideoAutomaticTags({ video: this.video, automaticTags, transaction })
 
         // Schedule an update in the future?
         if (this.videoAttributes.scheduleUpdate) {
@@ -271,7 +276,7 @@ export class LocalVideoCreator {
       category: videoInfo.category,
       licence: videoInfo.licence ?? CONFIG.DEFAULTS.PUBLISH.LICENCE,
       language: videoInfo.language,
-      commentsEnabled: videoInfo.commentsEnabled ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_ENABLED,
+      commentsPolicy: buildCommentsPolicy(videoInfo),
       downloadEnabled: videoInfo.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
       waitTranscoding: videoInfo.waitTranscoding || false,
       nsfw: videoInfo.nsfw || false,

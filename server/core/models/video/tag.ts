@@ -1,7 +1,7 @@
-import { col, fn, QueryTypes, Transaction } from 'sequelize'
-import { AllowNull, BelongsToMany, Column, CreatedAt, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import { VideoPrivacy, VideoState } from '@peertube/peertube-models'
-import { MTag } from '@server/types/models/index.js'
+import { MTag } from '@server/types/models/video/tag.js'
+import { QueryTypes, Transaction, col, fn } from 'sequelize'
+import { AllowNull, BelongsToMany, Column, Is, Table } from 'sequelize-typescript'
 import { isVideoTagValid } from '../../helpers/custom-validators/videos.js'
 import { SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { VideoTagModel } from './video-tag.js'
@@ -28,41 +28,12 @@ export class TagModel extends SequelizeModel<TagModel> {
   @Column
   name: string
 
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @BelongsToMany(() => VideoModel, {
     foreignKey: 'tagId',
     through: () => VideoTagModel,
     onDelete: 'CASCADE'
   })
   Videos: Awaited<VideoModel>[]
-
-  static findOrCreateTags (tags: string[], transaction: Transaction): Promise<MTag[]> {
-    if (tags === null) return Promise.resolve([])
-
-    const uniqueTags = new Set(tags)
-
-    const tasks = Array.from(uniqueTags).map(tag => {
-      const query = {
-        where: {
-          name: tag
-        },
-        defaults: {
-          name: tag
-        },
-        transaction
-      }
-
-      return TagModel.findOrCreate<MTag>(query)
-        .then(([ tagInstance ]) => tagInstance)
-    })
-
-    return Promise.all(tasks)
-  }
 
   // threshold corresponds to how many video the field should have to be returned
   static getRandomSamples (threshold: number, count: number): Promise<string[]> {
@@ -81,5 +52,33 @@ export class TagModel extends SequelizeModel<TagModel> {
 
     return TagModel.sequelize.query<{ name: string }>(query, options)
                     .then(data => data.map(d => d.name))
+  }
+
+  static findOrCreateMultiple (options: {
+    tags: string[]
+    transaction?: Transaction
+  }): Promise<MTag[]> {
+    const { tags, transaction } = options
+
+    if (tags === null) return Promise.resolve([])
+
+    const uniqueTags = new Set(tags)
+
+    const tasks = Array.from(uniqueTags).map(tag => {
+      const query = {
+        where: {
+          name: tag
+        },
+        defaults: {
+          name: tag
+        },
+        transaction
+      }
+
+      return this.findOrCreate(query)
+        .then(([ tagInstance ]) => tagInstance)
+    })
+
+    return Promise.all(tasks)
   }
 }

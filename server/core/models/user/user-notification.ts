@@ -383,7 +383,8 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
         id: this.VideoComment.id,
         threadId: this.VideoComment.getThreadId(),
         account: this.formatActor(this.VideoComment.Account),
-        video: this.formatVideo(this.VideoComment.Video)
+        video: this.formatVideo(this.VideoComment.Video),
+        heldForReview: this.VideoComment.heldForReview
       }
       : undefined
 

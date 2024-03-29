@@ -1,0 +1,86 @@
+<p-table
+  [value]="lists" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
+  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id"
+  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="false"
+  [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
+  [expandedRowKeys]="expandedRows"
+>
+  <ng-template pTemplate="caption">
+    <div class="caption">
+      <div class="left-buttons">
+        <button type="button" *ngIf="!isInSelectionMode()" class="peertube-create-button" (click)="openCreateOrUpdateList()">
+          <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
+          <ng-container i18n>Create a new list</ng-container>
+        </button>
+      </div>
+
+      <div class="ms-auto right-form">
+        <my-button i18n-label label="Refresh" icon="refresh" (click)="reloadData()"></my-button>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th scope="col" style="width: 40px;">
+        <span i18n class="visually-hidden">More information</span>
+      </th>
+      <th scope="col" style="width: 150px;">
+        <span i18n class="visually-hidden">Actions</span>
+      </th>
+      <th scope="col" style="width: 300px;" i18n>List name</th>
+      <th scope="col" style="width: 300px;" i18n>Words</th>
+      <th scope="col" style="width: 150px;" i18n [ngbTooltip]="sortTooltip" container="body" pSortableColumn="updatedAt">Date <p-sortIcon field="updatedAt"></p-sortIcon></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-list let-expanded="expanded">
+    <tr>
+
+      <td class="expand-cell">
+        <my-table-expander-icon [pRowToggler]="list" i18n-tooltip tooltip="See all words" [expanded]="expanded"></my-table-expander-icon>
+      </td>
+
+      <td class="action-cell">
+        <my-action-dropdown
+          [ngClass]="{ 'show': expanded }" placement="bottom-right" container="body"
+          i18n-label label="Actions" [actions]="actions" [entry]="list"
+        ></my-action-dropdown>
+      </td>
+
+      <td>
+        {{ list.listName }}
+      </td>
+
+      <td i18n>
+        {{ list.words.length }} words
+      </td>
+
+      <td>{{ list.updatedAt | date: 'short' }}</td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="rowexpansion" let-list>
+    <tr>
+      <td class="expand-cell" myAutoColspan>
+        <ul>
+          @for (word of list.words; track word) {
+            <li>{{ word }}</li>
+          }
+        </ul>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td myAutoColspan>
+        <div class="no-results">
+          <ng-container i18n>No watched word lists found.</ng-container>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<my-watched-words-list-save-modal #saveModal [accountName]="accountNameParam" (listAddedOrUpdated)="reloadData()"></my-watched-words-list-save-modal>

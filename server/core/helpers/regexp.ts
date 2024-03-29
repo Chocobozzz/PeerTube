@@ -1,5 +1,5 @@
 // Thanks to https://regex101.com
-function regexpCapture (str: string, regex: RegExp, maxIterations = 100) {
+export function regexpCapture (str: string, regex: RegExp, maxIterations = 100) {
   const result: RegExpExecArray[] = []
   let m: RegExpExecArray
   let i = 0
@@ -17,6 +17,20 @@ function regexpCapture (str: string, regex: RegExp, maxIterations = 100) {
   return result
 }
 
-export {
-  regexpCapture
+export function wordsToRegExp (words: string[]) {
+  if (words.length === 0) throw new Error('Need words with at least one element')
+
+  const innerRegex = words
+    .map(word => escapeForRegex(word.trim()))
+    .join('|')
+
+  return new RegExp(`(?:\\P{L}|^)(?:${innerRegex})(?=\\P{L}|$)`, 'iu')
+}
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
+function escapeForRegex (value: string) {
+  return value.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')
 }

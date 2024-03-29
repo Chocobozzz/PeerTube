@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { dateIsValid, testImage } from '@tests/shared/checks.js'
 import {
-  cleanupTests,
   CommentsCommand,
-  createSingleServer,
   PeerTubeServer,
+  cleanupTests,
+  createSingleServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
   setDefaultChannelAvatar
 } from '@peertube/peertube-server-commands'
+import { dateIsValid, testImage } from '@tests/shared/checks.js'
+import { expect } from 'chai'
 
 describe('Test video comments', function () {
   let server: PeerTubeServer
@@ -246,11 +246,16 @@ describe('Test video comments', function () {
     })
   })
 
-  describe('All instance comments', function () {
+  describe('Listing comments on my videos and in admin', function () {
 
-    it('Should list instance comments as admin', async function () {
-      {
-        const { data, total } = await command.listForAdmin({ start: 0, count: 1 })
+    const listFunctions = () => ([
+      command.listForAdmin.bind(command),
+      command.listCommentsOnMyVideos.bind(command)
+    ])
+
+    it('Should list comments', async function () {
+      for (const fn of listFunctions()) {
+        const { data, total } = await fn({ start: 0, count: 1 })
 
         expect(total).to.equal(7)
         expect(data).to.have.lengthOf(1)
@@ -260,8 +265,8 @@ describe('Test video comments', function () {
         expect(data[0].account.avatars).to.have.lengthOf(4)
       }
 
-      {
-        const { data, total } = await command.listForAdmin({ start: 1, count: 2 })
+      for (const fn of listFunctions()) {
+        const { data, total } = await fn({ start: 1, count: 2 })
 
         expect(total).to.equal(7)
         expect(data).to.have.lengthOf(2)
@@ -269,6 +274,10 @@ describe('Test video comments', function () {
         expect(data[0].account.avatars).to.have.lengthOf(4)
         expect(data[1].account.avatars).to.have.lengthOf(4)
       }
+
+      const { data, total } = await command.listCommentsOnMyVideos({ token: userAccessTokenServer1 })
+      expect(data).to.have.lengthOf(0)
+      expect(total).to.equal(0)
     })
 
     it('Should filter instance comments by isLocal', async function () {
@@ -294,39 +303,92 @@ describe('Test video comments', function () {
       }
     })
 
-    it('Should search instance comments by account', async function () {
-      const { total, data } = await command.listForAdmin({ searchAccount: 'user' })
+    it('Should search comments by account', async function () {
+      for (const fn of listFunctions()) {
+        const { total, data } = await fn({ searchAccount: 'user' })
 
-      expect(data).to.have.lengthOf(1)
-      expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+        expect(total).to.equal(1)
 
-      expect(data[0].text).to.equal('a first answer to thread 4 by a third party')
+        expect(data[0].text).to.equal('a first answer to thread 4 by a third party')
+      }
+
+      const { data, total } = await command.listCommentsOnMyVideos({ token: userAccessTokenServer1, searchAccount: 'user' })
+      expect(data).to.have.lengthOf(0)
+      expect(total).to.equal(0)
     })
 
-    it('Should search instance comments by video', async function () {
-      {
-        const { total, data } = await command.listForAdmin({ searchVideo: 'video' })
+    it('Should search comments by video', async function () {
+      for (const fn of listFunctions()) {
+        const { total, data } = await fn({ searchVideo: 'video' })
 
         expect(data).to.have.lengthOf(7)
         expect(total).to.equal(7)
       }
 
-      {
-        const { total, data } = await command.listForAdmin({ searchVideo: 'hello' })
+      for (const fn of listFunctions()) {
+        const { total, data } = await fn({ searchVideo: 'hello' })
 
+        expect(data).to.have.lengthOf(0)
+        expect(total).to.equal(0)
+      }
+
+      const { data, total } = await command.listCommentsOnMyVideos({ token: userAccessTokenServer1, searchVideo: 'video' })
+      expect(data).to.have.lengthOf(0)
+      expect(total).to.equal(0)
+    })
+
+    it('Should search comments', async function () {
+      for (const fn of listFunctions()) {
+        const { total, data } = await fn({ search: 'super thread 3' })
+
+        expect(total).to.equal(1)
+
+        expect(data).to.have.lengthOf(1)
+        expect(data[0].text).to.equal('super thread 3')
+      }
+
+      const { data, total } = await command.listCommentsOnMyVideos({ token: userAccessTokenServer1, search: 'super thread 3' })
+      expect(data).to.have.lengthOf(0)
+      expect(total).to.equal(0)
+    })
+
+    it('Should filter by videoId', async function () {
+      const { uuid: otherVideo } = await server.videos.upload()
+
+      {
+        const { total, data } = await command.listForAdmin({ videoId: videoUUID })
+        expect(data).to.have.lengthOf(7)
+        expect(total).to.equal(7)
+      }
+
+      {
+        const { total, data } = await command.listForAdmin({ videoId: otherVideo })
         expect(data).to.have.lengthOf(0)
         expect(total).to.equal(0)
       }
     })
 
-    it('Should search instance comments', async function () {
-      const { total, data } = await command.listForAdmin({ search: 'super thread 3' })
+    it('Should filter by channelId', async function () {
+      const { id: videoChannelId } = await server.channels.create({ attributes: { name: 'other_channel' } })
+      const { videoChannels: rootChannels } = await server.users.getMyInfo()
 
-      expect(total).to.equal(1)
+      await server.videos.upload({ attributes: { channelId: videoChannelId } })
 
-      expect(data).to.have.lengthOf(1)
-      expect(data[0].text).to.equal('super thread 3')
+      {
+        const { total, data } = await command.listForAdmin({ videoChannelId: rootChannels[0].id })
+        expect(data).to.have.lengthOf(7)
+        expect(total).to.equal(7)
+      }
+
+      {
+        const { total, data } = await command.listForAdmin({ videoChannelId })
+        expect(data).to.have.lengthOf(0)
+        expect(total).to.equal(0)
+      }
     })
+
+    // Auto tags filter is checked auto tags test file
   })
 
   after(async function () {

@@ -40,9 +40,13 @@ export type BuildVideosListQueryOptions = {
   categoryOneOf?: number[]
   licenceOneOf?: number[]
   languageOneOf?: string[]
+
   tagsOneOf?: string[]
   tagsAllOf?: string[]
+
   privacyOneOf?: VideoPrivacyType[]
+
+  autoTagOneOf?: string[]
 
   uuids?: string[]
 
@@ -195,6 +199,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     if (options.tagsAllOf) {
       this.whereTagsAllOf(options.tagsAllOf)
+    }
+
+    if (options.autoTagOneOf) {
+      this.whereAutoTagOneOf(options.autoTagOneOf)
     }
 
     if (options.privacyOneOf) {
@@ -446,6 +454,20 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     )
 
     this.joins.push('INNER JOIN "tagsOneOf" ON "video"."id" = "tagsOneOf"."videoId"')
+  }
+
+  private whereAutoTagOneOf (autoTagOneOf: string[]) {
+    const tags = autoTagOneOf.map(t => t.toLowerCase())
+
+    this.cte.push(
+      '"autoTagsOneOf" AS (' +
+      '  SELECT "videoAutomaticTag"."videoId" AS "videoId" FROM "videoAutomaticTag" ' +
+      '  INNER JOIN "automaticTag" ON "automaticTag"."id" = "videoAutomaticTag"."automaticTagId" ' +
+      '  WHERE lower("automaticTag"."name") IN (' + createSafeIn(this.sequelize, tags) + ') ' +
+      ')'
+    )
+
+    this.joins.push('INNER JOIN "autoTagsOneOf" ON "video"."id" = "autoTagsOneOf"."videoId"')
   }
 
   private whereTagsAllOf (tagsAllOf: string[]) {

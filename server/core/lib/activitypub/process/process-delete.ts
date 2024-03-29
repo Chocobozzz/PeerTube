@@ -44,7 +44,7 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
   }
 
   {
-    const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideo(objectUrl)
+    const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideoAndReply(objectUrl)
     if (videoCommentInstance) {
       return retryTransactionWrapper(processDeleteVideoComment, byActor, videoCommentInstance, activity)
     }

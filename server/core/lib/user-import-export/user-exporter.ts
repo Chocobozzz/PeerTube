@@ -1,6 +1,23 @@
+import { FileStorage, UserExportState } from '@peertube/peertube-models'
+import { getFileSize } from '@peertube/peertube-node-utils'
+import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
+import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { UserModel } from '@server/models/user/user.js'
+import { MUserDefault, MUserExport } from '@server/types/models/index.js'
+import archiver, { Archiver } from 'archiver'
+import { createWriteStream } from 'fs'
+import { remove } from 'fs-extra/esm'
 import { join, parse } from 'path'
+import { PassThrough, Readable, Writable } from 'stream'
+import { activityPubCollection } from '../activitypub/collection.js'
+import { getContextFilter } from '../activitypub/context.js'
+import { getUserExportFileObjectStorageSize, removeUserExportObjectStorage, storeUserExportFile } from '../object-storage/user-export.js'
+import { getFSUserExportFilePath } from '../paths.js'
 import {
+  AbstractUserExporter,
   AccountExporter,
+  AutoTagPoliciesExporter,
   BlocklistExporter,
   ChannelsExporter,
   CommentsExporter,
@@ -8,27 +25,13 @@ import {
   ExportResult,
   FollowersExporter,
   FollowingExporter,
-  LikesExporter, AbstractUserExporter,
+  LikesExporter,
   UserSettingsExporter,
+  UserVideoHistoryExporter,
   VideoPlaylistsExporter,
   VideosExporter,
-  UserVideoHistoryExporter
+  WatchedWordsListsExporter
 } from './exporters/index.js'
-import { MUserDefault, MUserExport } from '@server/types/models/index.js'
-import archiver, { Archiver } from 'archiver'
-import { createWriteStream } from 'fs'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { PassThrough, Readable, Writable } from 'stream'
-import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
-import { getContextFilter } from '../activitypub/context.js'
-import { activityPubCollection } from '../activitypub/collection.js'
-import { FileStorage, UserExportState } from '@peertube/peertube-models'
-import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
-import { UserModel } from '@server/models/user/user.js'
-import { getFSUserExportFilePath } from '../paths.js'
-import { getUserExportFileObjectStorageSize, removeUserExportObjectStorage, storeUserExportFile } from '../object-storage/user-export.js'
-import { getFileSize } from '@peertube/peertube-node-utils'
-import { remove } from 'fs-extra/esm'
 
 const lTags = loggerTagsFactory('user-export')
 
@@ -245,6 +248,14 @@ export class UserExporter {
       {
         jsonFilename: 'video-history.json',
         exporter: new UserVideoHistoryExporter(options)
+      },
+      {
+        jsonFilename: 'watched-words-lists.json',
+        exporter: new WatchedWordsListsExporter(options)
+      },
+      {
+        jsonFilename: 'automatic-tag-policies.json',
+        exporter: new AutoTagPoliciesExporter(options)
       }
     ] as { jsonFilename: string, exporter: AbstractUserExporter<any> }[]
   }

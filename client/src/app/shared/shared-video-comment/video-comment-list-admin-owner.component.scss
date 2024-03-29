@@ -1,0 +1,60 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+my-global-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.video {
+  display: flex;
+  flex-direction: column;
+
+  em {
+    font-size: 11px;
+  }
+
+  a {
+    @include ellipsis;
+
+    color: pvar(--mainForegroundColor);
+  }
+}
+
+.comment-content-cell {
+  > .pt-badge {
+    position: relative;
+    top: 2px;
+  }
+}
+
+.comment-html {
+  ::ng-deep {
+    > div {
+      max-height: 22px;
+    }
+
+    div,
+    p {
+      @include ellipsis;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+.right-form {
+  display: flex;
+
+  > *:not(:last-child) {
+    @include margin-right(10px);
+  }
+}
+
+@media screen and (max-width: $primeng-breakpoint) {
+  .video {
+    align-items: flex-start !important;
+  }
+}

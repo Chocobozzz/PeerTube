@@ -1,20 +1,20 @@
-import express from 'express'
+import { forceNumber } from '@peertube/peertube-core-utils'
+import { HttpStatusCode, UserRightType } from '@peertube/peertube-models'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { UserModel } from '@server/models/user/user.js'
-import { MUserDefault } from '@server/types/models/index.js'
-import { forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { MAccountId, MUserAccountId, MUserDefault } from '@server/types/models/index.js'
+import express from 'express'
 
-function checkUserIdExist (idArg: number | string, res: express.Response, withStats = false) {
+export function checkUserIdExist (idArg: number | string, res: express.Response, withStats = false) {
   const id = forceNumber(idArg)
   return checkUserExist(() => UserModel.loadByIdWithChannels(id, withStats), res)
 }
 
-function checkUserEmailExist (email: string, res: express.Response, abortResponse = true) {
+export function checkUserEmailExist (email: string, res: express.Response, abortResponse = true) {
   return checkUserExist(() => UserModel.loadByEmail(email), res, abortResponse)
 }
 
-async function checkUserNameOrEmailDoNotAlreadyExist (username: string, email: string, res: express.Response) {
+export async function checkUserNameOrEmailDoNotAlreadyExist (username: string, email: string, res: express.Response) {
   const user = await UserModel.loadByUsernameOrEmail(username, email)
 
   if (user) {
@@ -37,7 +37,7 @@ async function checkUserNameOrEmailDoNotAlreadyExist (username: string, email: s
   return true
 }
 
-async function checkUserExist (finder: () => Promise<MUserDefault>, res: express.Response, abortResponse = true) {
+export async function checkUserExist (finder: () => Promise<MUserDefault>, res: express.Response, abortResponse = true) {
   const user = await finder()
 
   if (!user) {
@@ -55,9 +55,30 @@ async function checkUserExist (finder: () => Promise<MUserDefault>, res: express
   return true
 }
 
-export {
-  checkUserIdExist,
-  checkUserEmailExist,
-  checkUserNameOrEmailDoNotAlreadyExist,
-  checkUserExist
+export function checkUserCanManageAccount (options: {
+  user: MUserAccountId
+  account: MAccountId
+  specialRight: UserRightType
+  res: express.Response
+}) {
+  const { user, account, specialRight, res } = options
+
+  if (account.id === user.Account.id) return true
+  if (specialRight && user.hasRight(specialRight) === true) return true
+
+  if (!specialRight) {
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'Only the owner of this account can manage this account resource.'
+    })
+
+    return false
+  }
+
+  res.fail({
+    status: HttpStatusCode.FORBIDDEN_403,
+    message: 'Only a user with sufficient right can access this account resource.'
+  })
+
+  return false
 }

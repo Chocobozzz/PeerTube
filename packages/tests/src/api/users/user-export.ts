@@ -4,6 +4,7 @@ import { wait } from '@peertube/peertube-core-utils'
 import {
   AccountExportJSON, ActivityPubActor,
   ActivityPubOrderedCollection,
+  AutoTagPoliciesJSON,
   BlocklistExportJSON,
   ChannelExportJSON,
   CommentsExportJSON,
@@ -24,7 +25,8 @@ import {
   VideoPlaylistPrivacy,
   VideoPlaylistsExportJSON,
   VideoPlaylistType,
-  VideoPrivacy
+  VideoPrivacy,
+  WatchedWordsListsJSON
 } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
@@ -172,7 +174,9 @@ function runTest (withObjectStorage: boolean) {
       'peertube/likes.json',
       'peertube/user-settings.json',
       'peertube/video-playlists.json',
-      'peertube/videos.json'
+      'peertube/videos.json',
+      'peertube/watched-words-lists.json',
+      'peertube/automatic-tag-policies.json'
     ]
 
     for (const file of files) {
@@ -573,6 +577,28 @@ function runTest (withObjectStorage: boolean) {
         const secondaryChannelVideo = json.videos.find(v => v.name === 'noah public video second channel')
         expect(secondaryChannelVideo.channel.name).to.equal('noah_second_channel')
       }
+    }
+
+    {
+      const json = await parseZIPJSONFile<WatchedWordsListsJSON>(zip, 'peertube/watched-words-lists.json')
+
+      expect(json.watchedWordLists).to.have.lengthOf(2)
+
+      expect(json.watchedWordLists[0].createdAt).to.exist
+      expect(json.watchedWordLists[0].updatedAt).to.exist
+      expect(json.watchedWordLists[0].listName).to.equal('forbidden-list')
+      expect(json.watchedWordLists[0].words).to.have.members([ 'forbidden' ])
+
+      expect(json.watchedWordLists[1].createdAt).to.exist
+      expect(json.watchedWordLists[1].updatedAt).to.exist
+      expect(json.watchedWordLists[1].listName).to.equal('allowed-list')
+      expect(json.watchedWordLists[1].words).to.have.members([ 'allowed', 'allowed2' ])
+    }
+
+    {
+      const json = await parseZIPJSONFile<AutoTagPoliciesJSON>(zip, 'peertube/automatic-tag-policies.json')
+      expect(json.reviewComments).to.have.lengthOf(2)
+      expect(json.reviewComments.map(r => r.name)).to.have.members([ 'external-link', 'forbidden-list' ])
     }
   })
 

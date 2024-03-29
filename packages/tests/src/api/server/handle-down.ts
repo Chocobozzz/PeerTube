@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, JobState, VideoCreateResult, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, JobState, VideoCommentPolicy, VideoCreateResult, VideoPrivacy } from '@peertube/peertube-models'
 import {
-  cleanupTests,
   CommentsCommand,
+  PeerTubeServer,
+  cleanupTests,
   createMultipleServers,
   killallServers,
-  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { completeVideoCheck } from '@tests/shared/videos.js'
+import { expect } from 'chai'
 
 describe('Test handle downs', function () {
   let servers: PeerTubeServer[] = []
@@ -59,7 +59,7 @@ describe('Test handle downs', function () {
     duration: 10,
     tags: [ 'tag1p1', 'tag2p1' ],
     privacy: VideoPrivacy.PUBLIC,
-    commentsEnabled: true,
+    commentsPolicy: VideoCommentPolicy.ENABLED,
     downloadEnabled: true,
     channel: {
       name: 'root_channel',

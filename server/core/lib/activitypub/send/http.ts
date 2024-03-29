@@ -6,6 +6,7 @@ import { MActor } from '@server/types/models/index.js'
 import { getContextFilter } from '../context.js'
 import { buildDigestFromWorker, signJsonLDObjectFromWorker } from '@server/lib/worker/parent-process.js'
 import { signAndContextify } from '@server/helpers/activity-pub-utils.js'
+import { logger } from '@server/helpers/logger.js'
 
 type Payload <T> = { body: T, contextType: ContextType, signatureActorId?: number }
 
@@ -18,13 +19,17 @@ export async function computeBody <T> (
     const actorSignature = await ActorModel.load(payload.signatureActorId)
     if (!actorSignature) throw new Error('Unknown signature actor id.')
 
-    body = await signAndContextify({
-      byActor: { url: actorSignature.url, privateKey: actorSignature.privateKey },
-      data: payload.body,
-      contextType: payload.contextType,
-      contextFilter: getContextFilter(),
-      signerFunction: signJsonLDObjectFromWorker
-    })
+    try {
+      body = await signAndContextify({
+        byActor: { url: actorSignature.url, privateKey: actorSignature.privateKey },
+        data: payload.body,
+        contextType: payload.contextType,
+        contextFilter: getContextFilter(),
+        signerFunction: signJsonLDObjectFromWorker
+      })
+    } catch (err) {
+      logger.error('Cannot sign and contextify body', { body, err })
+    }
   }
 
   return body

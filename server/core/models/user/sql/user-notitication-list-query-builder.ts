@@ -92,6 +92,7 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
       "Video->VideoChannel->Actor->Server"."host" AS "Video.VideoChannel.Actor.Server.host",
       "VideoComment"."id" AS "VideoComment.id",
       "VideoComment"."originCommentId" AS "VideoComment.originCommentId",
+      "VideoComment"."heldForReview" AS "VideoComment.heldForReview",
       "VideoComment->Account"."id" AS "VideoComment.Account.id",
       "VideoComment->Account"."name" AS "VideoComment.Account.name",
       "VideoComment->Account->Actor"."id" AS "VideoComment.Account.Actor.id",

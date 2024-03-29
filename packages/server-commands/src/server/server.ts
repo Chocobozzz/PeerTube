@@ -1,15 +1,15 @@
-import { ChildProcess, fork } from 'child_process'
-import { copy } from 'fs-extra/esm'
-import { join } from 'path'
 import { randomInt } from '@peertube/peertube-core-utils'
 import { Video, VideoChannel, VideoChannelSync, VideoCreateResult, VideoDetails } from '@peertube/peertube-models'
 import { parallelTests, root } from '@peertube/peertube-node-utils'
+import { ChildProcess, fork } from 'child_process'
+import { copy } from 'fs-extra/esm'
+import { join } from 'path'
 import { BulkCommand } from '../bulk/index.js'
 import { CLICommand } from '../cli/index.js'
 import { CustomPagesCommand } from '../custom-pages/index.js'
 import { FeedCommand } from '../feeds/index.js'
 import { LogsCommand } from '../logs/index.js'
-import { AbusesCommand } from '../moderation/index.js'
+import { AbusesCommand, AutomaticTagsCommand, WatchedWordsCommand } from '../moderation/index.js'
 import { OverviewsCommand } from '../overviews/index.js'
 import { RunnerJobsCommand, RunnerRegistrationTokensCommand, RunnersCommand } from '../runners/index.js'
 import { SearchCommand } from '../search/index.js'
@@ -17,35 +17,35 @@ import { SocketIOCommand } from '../socket/index.js'
 import {
   AccountsCommand,
   BlocklistCommand,
-  UserExportsCommand,
   LoginCommand,
   NotificationsCommand,
   RegistrationsCommand,
   SubscriptionsCommand,
   TwoFactorCommand,
-  UsersCommand,
-  UserImportsCommand
+  UserExportsCommand,
+  UserImportsCommand,
+  UsersCommand
 } from '../users/index.js'
 import {
   BlacklistCommand,
   CaptionsCommand,
   ChangeOwnershipCommand,
-  ChannelsCommand,
   ChannelSyncsCommand,
+  ChannelsCommand,
   ChaptersCommand,
   CommentsCommand,
   HistoryCommand,
-  VideoImportsCommand,
   LiveCommand,
   PlaylistsCommand,
   ServicesCommand,
   StoryboardCommand,
   StreamingPlaylistsCommand,
+  VideoImportsCommand,
   VideoPasswordsCommand,
-  VideosCommand,
   VideoStatsCommand,
   VideoStudioCommand,
   VideoTokenCommand,
+  VideosCommand,
   ViewsCommand
 } from '../videos/index.js'
 import { ConfigCommand } from './config-command.js'
@@ -162,6 +162,9 @@ export class PeerTubeServer {
   runners?: RunnersCommand
   runnerRegistrationTokens?: RunnerRegistrationTokensCommand
   runnerJobs?: RunnerJobsCommand
+
+  watchedWordsLists?: WatchedWordsCommand
+  autoTags?: AutomaticTagsCommand
 
   constructor (options: { serverNumber: number } | { url: string }) {
     if ((options as any).url) {
@@ -458,5 +461,8 @@ export class PeerTubeServer {
     this.runnerRegistrationTokens = new RunnerRegistrationTokensCommand(this)
     this.runnerJobs = new RunnerJobsCommand(this)
     this.videoPasswords = new VideoPasswordsCommand(this)
+
+    this.watchedWordsLists = new WatchedWordsCommand(this)
+    this.autoTags = new AutomaticTagsCommand(this)
   }
 }

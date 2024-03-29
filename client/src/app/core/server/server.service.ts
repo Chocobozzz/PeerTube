@@ -8,6 +8,7 @@ import {
   HTMLServerConfig,
   ServerConfig,
   ServerStats,
+  VideoCommentPolicy,
   VideoConstant,
   VideoPlaylistPrivacyType,
   VideoPrivacyType
@@ -102,6 +103,24 @@ export class ServerService {
 
   getHTMLConfig () {
     return this.htmlConfig
+  }
+
+  getCommentPolicies () {
+    return of([
+      {
+        id: VideoCommentPolicy.DISABLED,
+        label: $localize`Comments are disabled`
+      },
+      {
+        id: VideoCommentPolicy.ENABLED,
+        label: $localize`Comments are enabled`,
+        description: $localize`Comments may require approval depending on your auto tag policies`
+      },
+      {
+        id: VideoCommentPolicy.REQUIRES_APPROVAL,
+        label: $localize`Any new comment requires approval`
+      }
+    ])
   }
 
   getVideoCategories () {

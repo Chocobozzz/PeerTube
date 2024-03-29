@@ -1,5 +1,7 @@
 import { AbstractControl, ValidatorFn, Validators } from '@angular/forms'
+import { splitAndGetNotEmpty } from '@root-helpers/string'
 import { BuildFormValidator } from './form-validator.model'
+import { unique } from './shared/validator-utils'
 
 export function validateHost (value: string) {
   // Thanks to http://stackoverflow.com/a/106223
@@ -63,28 +65,6 @@ const validHostsOrHandles: ValidatorFn = (control: AbstractControl) => {
 }
 
 // ---------------------------------------------------------------------------
-
-export function splitAndGetNotEmpty (value: string) {
-  return value
-    .split('\n')
-    .filter(line => line && line.length !== 0) // Eject empty hosts
-}
-
-export const unique: ValidatorFn = (control: AbstractControl) => {
-  if (!control.value) return null
-
-  const hosts = splitAndGetNotEmpty(control.value)
-
-  if (hosts.every((host: string) => hosts.indexOf(host) === hosts.lastIndexOf(host))) {
-    return null
-  }
-
-  return {
-    unique: {
-      reason: 'invalid'
-    }
-  }
-}
 
 export const UNIQUE_HOSTS_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, validHosts, unique ],

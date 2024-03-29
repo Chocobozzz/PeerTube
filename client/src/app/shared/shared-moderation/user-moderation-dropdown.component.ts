@@ -407,7 +407,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       ])
     }
 
-    if (this.account && this.displayOptions.instanceAccount && authUser.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT)) {
+    if (this.account && this.displayOptions.instanceAccount && authUser.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT)) {
       instanceActions = instanceActions.concat([
         {
           label: $localize`Remove comments from your instance`,

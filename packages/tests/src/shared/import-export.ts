@@ -7,6 +7,7 @@ import {
   UserExport,
   UserNotificationSettingValue,
   VideoCommentObject,
+  VideoCommentPolicy,
   VideoObject,
   VideoPlaylistPrivacy,
   VideoPrivacy
@@ -202,7 +203,7 @@ export async function prepareImportExportTests (options: {
       name: 'noah public video second channel',
       category: 12,
       tags: [ 'tag1', 'tag2' ],
-      commentsEnabled: false,
+      commentsPolicy: VideoCommentPolicy.DISABLED,
       description: 'video description',
       downloadEnabled: false,
       language: 'fr',
@@ -314,6 +315,27 @@ export async function prepareImportExportTests (options: {
   // Views
   await server.views.view({ id: noahVideo.uuid, token: noahToken, currentTime: 4 })
   await server.views.view({ id: externalVideo.uuid, token: noahToken, currentTime: 2 })
+
+  // Watched words and auto tag policies
+  await servers[0].watchedWordsLists.createList({
+    token: noahToken,
+    listName: 'forbidden-list',
+    words: [ 'forbidden' ],
+    accountName: 'noah'
+  })
+
+  await servers[0].watchedWordsLists.createList({
+    token: noahToken,
+    listName: 'allowed-list',
+    words: [ 'allowed', 'allowed2' ],
+    accountName: 'noah'
+  })
+
+  await servers[0].autoTags.updateCommentPolicies({
+    accountName: 'noah',
+    review: [ 'external-link', 'forbidden-list' ],
+    token: noahToken
+  })
 
   return {
     rootId,

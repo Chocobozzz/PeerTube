@@ -1,22 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { join } from 'path'
 import { omit, randomInt } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, PeerTubeProblemDocument, VideoCreateResult, VideoPrivacy } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  PeerTubeProblemDocument,
+  VideoCommentPolicy,
+  VideoCreateResult,
+  VideoPrivacy
+} from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
+  PeerTubeServer,
   cleanupTests,
   createSingleServer,
   makeDeleteRequest,
   makeGetRequest,
   makePutBodyRequest,
   makeUploadRequest,
-  PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { checkBadStartPagination, checkBadCountPagination, checkBadSortPagination } from '@tests/shared/checks.js'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
 import { checkUploadVideoParam } from '@tests/shared/videos.js'
+import { expect } from 'chai'
+import { join } from 'path'
 
 describe('Test videos API validator', function () {
   const path = '/api/v1/videos/'
@@ -183,29 +189,30 @@ describe('Test videos API validator', function () {
   })
 
   describe('When adding a video', function () {
-    let baseCorrectParams
+    const baseCorrectParams = {
+      name: 'my super name',
+      category: 5,
+      licence: 1,
+      language: 'pt',
+      nsfw: false,
+      commentsPolicy: VideoCommentPolicy.ENABLED,
+      downloadEnabled: true,
+      waitTranscoding: true,
+      description: 'my super description',
+      support: 'my super support text',
+      tags: [ 'tag1', 'tag2' ],
+      privacy: VideoPrivacy.PUBLIC,
+      channelId: -1,
+      originallyPublishedAt: new Date().toISOString()
+    }
+
     const baseCorrectAttaches = {
       fixture: buildAbsoluteFixturePath('video_short.webm')
     }
 
     before(function () {
       // Put in before to have channelId
-      baseCorrectParams = {
-        name: 'my super name',
-        category: 5,
-        licence: 1,
-        language: 'pt',
-        nsfw: false,
-        commentsEnabled: true,
-        downloadEnabled: true,
-        waitTranscoding: true,
-        description: 'my super description',
-        support: 'my super support text',
-        tags: [ 'tag1', 'tag2' ],
-        privacy: VideoPrivacy.PUBLIC,
-        channelId,
-        originallyPublishedAt: new Date().toISOString()
-      }
+      baseCorrectParams.channelId = channelId
     })
 
     function runSuite (mode: 'legacy' | 'resumable') {
@@ -255,6 +262,13 @@ describe('Test videos API validator', function () {
 
       it('Should fail with a bad language', async function () {
         const fields = { ...baseCorrectParams, language: 'a'.repeat(15) }
+        const attaches = baseCorrectAttaches
+
+        await checkUploadVideoParam({ ...baseOptions(), attributes: { ...fields, ...attaches } })
+      })
+
+      it('Should fail with bad commentsPolicy', async function () {
+        const fields = { ...baseCorrectParams, commentsPolicy: 42 as any }
         const attaches = baseCorrectAttaches
 
         await checkUploadVideoParam({ ...baseOptions(), attributes: { ...fields, ...attaches } })
@@ -331,7 +345,7 @@ describe('Test videos API validator', function () {
       })
 
       it('Should fail with a bad schedule update (miss updateAt)', async function () {
-        const fields = { ...baseCorrectParams, scheduleUpdate: { privacy: VideoPrivacy.PUBLIC } }
+        const fields = { ...baseCorrectParams, scheduleUpdate: { privacy: VideoPrivacy.PUBLIC } as any }
         const attaches = baseCorrectAttaches
 
         await checkUploadVideoParam({ ...baseOptions(), attributes: { ...fields, ...attaches } })
@@ -509,7 +523,7 @@ describe('Test videos API validator', function () {
       licence: 2,
       language: 'pt',
       nsfw: false,
-      commentsEnabled: false,
+      commentsPolicy: VideoCommentPolicy.DISABLED,
       downloadEnabled: false,
       description: 'my super description',
       privacy: VideoPrivacy.PUBLIC,

@@ -1,14 +1,14 @@
-import express from 'express'
 import { toSafeHtml } from '@server/helpers/markdown.js'
 import { cacheRouteFactory } from '@server/middlewares/index.js'
+import express from 'express'
 import { CONFIG } from '../../initializers/config.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
 import {
   asyncMiddleware,
+  feedsAccountOrChannelFiltersValidator,
   feedsFormatValidator,
   setFeedFormatContentType,
-  videoCommentsFeedsValidator,
-  feedsAccountOrChannelFiltersValidator
+  videoCommentsFeedsValidator
 } from '../../middlewares/index.js'
 import { VideoCommentModel } from '../../models/video/video-comment.js'
 import { buildFeedMetadata, initFeed, sendFeed } from './shared/index.js'
@@ -49,9 +49,9 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
   const comments = await VideoCommentModel.listForFeed({
     start,
     count: CONFIG.FEEDS.COMMENTS.COUNT,
-    videoId: video ? video.id : undefined,
-    accountId: account ? account.id : undefined,
-    videoChannelId: videoChannel ? videoChannel.id : undefined
+    videoId: video?.id,
+    videoAccountOwnerId: account?.id,
+    videoChannelOwnerId: videoChannel?.id
   })
 
   const { name, description, imageUrl, link } = await buildFeedMetadata({ video, account, videoChannel })

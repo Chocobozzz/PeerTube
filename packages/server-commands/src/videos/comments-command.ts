@@ -1,7 +1,26 @@
 import { pick } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, ResultList, VideoComment, VideoCommentThreads, VideoCommentThreadTree } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  ResultList,
+  VideoComment,
+  VideoCommentForAdminOrUser,
+  VideoCommentThreads,
+  VideoCommentThreadTree
+} from '@peertube/peertube-models'
 import { unwrapBody } from '../requests/index.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
+
+type ListForAdminOrAccountCommonOptions = {
+  start?: number
+  count?: number
+  sort?: string
+  search?: string
+  searchAccount?: string
+  searchVideo?: string
+  videoId?: string | number
+  videoChannelId?: string | number
+  autoTagOneOf?: string[]
+}
 
 export class CommentsCommand extends AbstractCommand {
 
@@ -9,22 +28,18 @@ export class CommentsCommand extends AbstractCommand {
   private lastThreadId: number
   private lastReplyId: number
 
-  listForAdmin (options: OverrideCommandOptions & {
-    start?: number
-    count?: number
-    sort?: string
+  listForAdmin (options: OverrideCommandOptions & ListForAdminOrAccountCommonOptions & {
     isLocal?: boolean
     onLocalVideo?: boolean
-    search?: string
-    searchAccount?: string
-    searchVideo?: string
   } = {}) {
-    const { sort = '-createdAt' } = options
     const path = '/api/v1/videos/comments'
 
-    const query = { sort, ...pick(options, [ 'start', 'count', 'isLocal', 'onLocalVideo', 'search', 'searchAccount', 'searchVideo' ]) }
+    const query = {
+      ...this.buildListForAdminOrAccountQuery(options),
+      ...pick(options, [ 'isLocal', 'onLocalVideo' ])
+    }
 
-    return this.getRequestBody<ResultList<VideoComment>>({
+    return this.getRequestBody<ResultList<VideoCommentForAdminOrUser>>({
       ...options,
 
       path,
@@ -33,6 +48,35 @@ export class CommentsCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
+
+  listCommentsOnMyVideos (options: OverrideCommandOptions & ListForAdminOrAccountCommonOptions & {
+    isHeldForReview?: boolean
+  } = {}) {
+    const path = '/api/v1/users/me/videos/comments'
+
+    return this.getRequestBody<ResultList<VideoCommentForAdminOrUser>>({
+      ...options,
+
+      path,
+      query: {
+        ...this.buildListForAdminOrAccountQuery(options),
+
+        isHeldForReview: options.isHeldForReview
+      },
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  private buildListForAdminOrAccountQuery (options: ListForAdminOrAccountCommonOptions) {
+    return {
+      sort: '-createdAt',
+
+      ...pick(options, [ 'start', 'count', 'search', 'searchAccount', 'searchVideo', 'sort', 'videoId', 'videoChannelId', 'autoTagOneOf' ])
+    }
+  }
+
+  // ---------------------------------------------------------------------------
 
   listThreads (options: OverrideCommandOptions & {
     videoId: number | string
@@ -69,6 +113,16 @@ export class CommentsCommand extends AbstractCommand {
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
+  }
+
+  async getThreadOf (options: OverrideCommandOptions & {
+    videoId: number | string
+    text: string
+  }) {
+    const { videoId, text } = options
+    const threadId = await this.findCommentId({ videoId, text })
+
+    return this.getThread({ ...options, videoId, threadId })
   }
 
   async createThread (options: OverrideCommandOptions & {
@@ -136,10 +190,12 @@ export class CommentsCommand extends AbstractCommand {
     text: string
   }) {
     const { videoId, text } = options
-    const { data } = await this.listThreads({ videoId, count: 25, sort: '-createdAt' })
+    const { data } = await this.listForAdmin({ videoId, count: 25, sort: '-createdAt' })
 
     return data.find(c => c.text === text).id
   }
+
+  // ---------------------------------------------------------------------------
 
   delete (options: OverrideCommandOptions & {
     videoId: number | string
@@ -149,6 +205,36 @@ export class CommentsCommand extends AbstractCommand {
     const path = '/api/v1/videos/' + videoId + '/comments/' + commentId
 
     return this.deleteRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  async deleteAllComments (options: OverrideCommandOptions & {
+    videoUUID: string
+  }) {
+    const { data } = await this.listForAdmin({ ...options, start: 0, count: 20 })
+
+    for (const comment of data) {
+      if (comment?.video.uuid !== options.videoUUID) continue
+
+      await this.delete({ videoId: options.videoUUID, commentId: comment.id, ...options })
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+
+  approve (options: OverrideCommandOptions & {
+    videoId: number | string
+    commentId: number
+  }) {
+    const { videoId, commentId } = options
+    const path = '/api/v1/videos/' + videoId + '/comments/' + commentId + '/approve'
+
+    return this.postBodyRequest({
       ...options,
 
       path,

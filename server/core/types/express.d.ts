@@ -21,7 +21,8 @@ import {
   MVideoPassword,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
-  MVideoThumbnailBlacklist
+  MVideoThumbnailBlacklist,
+  MWatchedWordsList
 } from '@server/types/models/index.js'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
 import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server.js'
@@ -231,6 +232,8 @@ declare module 'express' {
       runnerJob?: MRunnerJobRunner
 
       userExport?: MUserExport
+
+      watchedWordsList?: MWatchedWordsList
     }
   }
 }

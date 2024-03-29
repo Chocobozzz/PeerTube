@@ -1,9 +1,9 @@
+import { Command } from '@commander-js/extra-typings'
+import { VideoCommentPolicy, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
+import { PeerTubeServer } from '@peertube/peertube-server-commands'
 import { access, constants } from 'fs/promises'
 import { isAbsolute } from 'path'
 import { inspect } from 'util'
-import { Command } from '@commander-js/extra-typings'
-import { VideoPrivacy } from '@peertube/peertube-models'
-import { PeerTubeServer } from '@peertube/peertube-server-commands'
 import { assignToken, buildServer, getServerCredentials, listOptions } from './shared/index.js'
 
 type UploadOptions = {
@@ -14,13 +14,13 @@ type UploadOptions = {
   preview?: string
   file?: string
   videoName?: string
-  category?: string
-  licence?: string
+  category?: number
+  licence?: number
   language?: string
-  tags?: string
+  tags?: string[]
   nsfw?: true
   videoDescription?: string
-  privacy?: number
+  privacy?: VideoPrivacyType
   channelName?: string
   noCommentsEnabled?: true
   support?: string
@@ -41,13 +41,13 @@ export function defineUploadProgram () {
     .option('--preview <previewPath>', 'Preview path')
     .option('-f, --file <file>', 'Video absolute file path')
     .option('-n, --video-name <name>', 'Video name')
-    .option('-c, --category <category_number>', 'Category number')
-    .option('-l, --licence <licence_number>', 'Licence number')
+    .option('-c, --category <category_number>', 'Category number', parseInt)
+    .option('-l, --licence <licence_number>', 'Licence number', parseInt)
     .option('-L, --language <language_code>', 'Language ISO 639 code (fr or en...)')
     .option('-t, --tags <tags>', 'Video tags', listOptions)
     .option('-N, --nsfw', 'Video is Not Safe For Work')
     .option('-d, --video-description <description>', 'Video description')
-    .option('-P, --privacy <privacy_number>', 'Privacy', parseInt)
+    .option('-P, --privacy <privacy_number>', 'Privacy', v => parseInt(v) as VideoPrivacyType)
     .option('-C, --channel-name <channel_name>', 'Channel name')
     .option('--no-comments-enabled', 'Disable video comments')
     .option('-s, --support <support>', 'Video support text')
@@ -120,10 +120,9 @@ async function run (options: UploadOptions) {
   }
 }
 
-async function buildVideoAttributesFromCommander (server: PeerTubeServer, options: UploadOptions, defaultAttributes: any = {}) {
+async function buildVideoAttributesFromCommander (server: PeerTubeServer, options: UploadOptions) {
   const defaultBooleanAttributes = {
     nsfw: false,
-    commentsEnabled: true,
     downloadEnabled: true,
     waitTranscoding: true
   }
@@ -133,25 +132,29 @@ async function buildVideoAttributesFromCommander (server: PeerTubeServer, option
   for (const key of Object.keys(defaultBooleanAttributes)) {
     if (options[key] !== undefined) {
       booleanAttributes[key] = options[key]
-    } else if (defaultAttributes[key] !== undefined) {
-      booleanAttributes[key] = defaultAttributes[key]
     } else {
       booleanAttributes[key] = defaultBooleanAttributes[key]
     }
   }
 
   const videoAttributes = {
-    name: options.videoName || defaultAttributes.name,
-    category: options.category || defaultAttributes.category || undefined,
-    licence: options.licence || defaultAttributes.licence || undefined,
-    language: options.language || defaultAttributes.language || undefined,
-    privacy: options.privacy || defaultAttributes.privacy || VideoPrivacy.PUBLIC,
-    support: options.support || defaultAttributes.support || undefined,
-    description: options.videoDescription || defaultAttributes.description || undefined,
-    tags: options.tags || defaultAttributes.tags || undefined
-  }
+    name: options.videoName,
+    category: options.category || undefined,
+    licence: options.licence || undefined,
+    language: options.language || undefined,
+    privacy: options.privacy || VideoPrivacy.PUBLIC,
+    support: options.support || undefined,
+    description: options.videoDescription || undefined,
+    tags: options.tags || undefined,
 
-  Object.assign(videoAttributes, booleanAttributes)
+    commentsPolicy: options.noCommentsEnabled !== undefined
+      ? options.noCommentsEnabled === true
+        ? VideoCommentPolicy.DISABLED
+        : VideoCommentPolicy.ENABLED
+      : undefined,
+
+    ...booleanAttributes
+  }
 
   if (options.channelName) {
     const videoChannel = await server.channels.get({ channelName: options.channelName })

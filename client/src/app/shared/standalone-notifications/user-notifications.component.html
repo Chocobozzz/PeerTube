@@ -94,6 +94,7 @@
 
           <div class="message" i18n>
             <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.comment.account.displayName }}</a> commented your video <a (click)="markAsRead(notification)" [routerLink]="notification.commentUrl">{{ notification.comment.video.name }}</a>
+            <ng-container *ngIf="notification.comment.heldForReview">. This comment requires <a (click)="markAsRead(notification)" [routerLink]="notification.commentReviewUrl" [queryParams]="notification.commentReviewQueryParams">your approval</a></ng-container>
           </div>
         </ng-container>
 

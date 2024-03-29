@@ -1,5 +1,5 @@
 import { pick } from '@peertube/peertube-core-utils'
-import { ActivityCreate, FileStorage, VideoExportJSON, VideoObject, VideoPrivacy } from '@peertube/peertube-models'
+import { ActivityCreate, FileStorage, VideoCommentPolicy, VideoExportJSON, VideoObject, VideoPrivacy } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
 import { USER_EXPORT_MAX_ITEMS } from '@server/initializers/constants.js'
 import { audiencify, getAudience } from '@server/lib/activitypub/audience.js'
@@ -151,7 +151,10 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
 
       nsfw: video.nsfw,
 
-      commentsEnabled: video.commentsEnabled,
+      commentsPolicy: video.commentsPolicy,
+      // TODO: remove, deprecated in 6.2
+      commentsEnabled: video.commentsPolicy !== VideoCommentPolicy.DISABLED,
+
       downloadEnabled: video.downloadEnabled,
 
       waitTranscoding: video.waitTranscoding,

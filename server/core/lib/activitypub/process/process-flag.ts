@@ -51,7 +51,7 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
         let videoComment: MCommentOwnerVideo
         let flaggedAccount: MAccountDefault
 
-        if (!video) videoComment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideo(uri, t)
+        if (!video) videoComment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideoAndReply(uri, t)
         if (!videoComment) flaggedAccount = await AccountModel.loadByUrl(uri, t)
 
         if (!video && !videoComment && !flaggedAccount) {

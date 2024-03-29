@@ -1,15 +1,16 @@
-import { isArray } from '@server/helpers/custom-validators/misc.js'
-import { generateMagnetUri } from '@server/helpers/webtorrent.js'
-import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
-import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'
 import {
   ActivityIconObject,
   ActivityPlaylistUrlObject,
   ActivityPubStoryboard,
   ActivityTagObject,
   ActivityTrackerUrlObject,
-  ActivityUrlObject, VideoObject
+  ActivityUrlObject, VideoCommentPolicy, VideoObject
 } from '@peertube/peertube-models'
+import { getAPPublicValue } from '@server/helpers/activity-pub-utils.js'
+import { isArray } from '@server/helpers/custom-validators/misc.js'
+import { generateMagnetUri } from '@server/helpers/webtorrent.js'
+import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
+import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'
 import { WEBSERVER } from '../../../initializers/constants.js'
 import {
   getLocalVideoChaptersActivityPubUrl,
@@ -64,7 +65,14 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     waitTranscoding: video.waitTranscoding,
 
     state: video.state,
-    commentsEnabled: video.commentsEnabled,
+
+    commentsEnabled: video.commentsPolicy !== VideoCommentPolicy.DISABLED,
+    canReply: video.commentsPolicy === VideoCommentPolicy.ENABLED
+      ? null
+      : getAPPublicValue(), // Requires approval
+
+    commentsPolicy: video.commentsPolicy,
+
     downloadEnabled: video.downloadEnabled,
     published: video.publishedAt.toISOString(),
 

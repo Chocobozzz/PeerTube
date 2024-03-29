@@ -10,35 +10,37 @@
 
     <ng-container *ngIf="!menuEntry.routerLink && isDisplayed(menuEntry)">
       <!-- On mobile, use a modal to display sub menu items -->
-      <li *ngIf="isInSmallView">
-        <button class="sub-menu-entry" [ngClass]="{ active: !!suffixLabels[menuEntry.label] }" (click)="openModal(id)">
-          {{ menuEntry.label }}
-
-          <span class="chevron-down"></span>
-        </button>
-      </li>
-
-      <!-- On desktop, use a classic dropdown -->
-      <div *ngIf="!isInSmallView" ngbDropdown #dropdown="ngbDropdown" autoClose="true" container="body">
+      @if (isInSmallView) {
         <li>
-          <button ngbDropdownToggle class="sub-menu-entry" [ngClass]="{ active: !!suffixLabels[menuEntry.label] }">{{ menuEntry.label }}</button>
+          <button class="sub-menu-entry" [ngClass]="{ active: !!suffixLabels[menuEntry.label] }" (click)="openModal(id)">
+            {{ menuEntry.label }}
+
+            <span class="chevron-down"></span>
+          </button>
         </li>
-
-        <ul ngbDropdownMenu>
-          <li *ngFor="let menuChild of menuEntry.children">
-            <a
-              *ngIf="isDisplayed(menuChild)" ngbDropdownItem
-              routerLinkActive="active" ariaCurrentWhenActive="page"
-              [routerLink]="menuChild.routerLink" #routerLink (click)="onActiveLinkScrollToTop(routerLink)"
-              [queryParams]="menuChild.queryParams"
-            >
-              <my-global-icon *ngIf="menuChild.iconName" [iconName]="menuChild.iconName" aria-hidden="true"></my-global-icon>
-
-              {{ menuChild.label }}
-            </a>
+      } @else {
+        <!-- On desktop, use a classic dropdown -->
+        <div ngbDropdown #dropdown="ngbDropdown" autoClose="true" container="body">
+          <li>
+            <button ngbDropdownToggle class="sub-menu-entry" [ngClass]="{ active: !!suffixLabels[menuEntry.label] }">{{ menuEntry.label }}</button>
           </li>
-        </ul>
-      </div>
+
+          <ul ngbDropdownMenu>
+            <li *ngFor="let menuChild of menuEntry.children">
+              <a
+                *ngIf="isDisplayed(menuChild)" ngbDropdownItem
+                routerLinkActive="active" ariaCurrentWhenActive="page"
+                [routerLink]="menuChild.routerLink" #routerLink (click)="onActiveLinkScrollToTop(routerLink)"
+                [queryParams]="menuChild.queryParams"
+              >
+                <my-global-icon *ngIf="menuChild.iconName" [iconName]="menuChild.iconName" aria-hidden="true"></my-global-icon>
+
+                {{ menuChild.label }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      }
     </ng-container>
   </ul>
 </div>

@@ -14,4 +14,6 @@ export type ContextType =
   'Actor' |
   'Collection' |
   'WatchAction' |
-  'Chapters'
+  'Chapters' |
+  'ApproveReply' |
+  'RejectReply'

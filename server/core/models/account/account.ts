@@ -1,9 +1,10 @@
-import { FindOptions, Includeable, IncludeOptions, Op, Transaction, WhereOptions } from 'sequelize'
+import { Account, AccountSummary } from '@peertube/peertube-models'
+import { ModelCache } from '@server/models/shared/model-cache.js'
+import { FindOptions, IncludeOptions, Includeable, Op, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
-  BelongsTo,
-  Column,
+  BelongsTo, Column,
   CreatedAt,
   DataType,
   Default,
@@ -14,8 +15,6 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { Account, AccountSummary } from '@peertube/peertube-models'
-import { ModelCache } from '@server/models/shared/model-cache.js'
 import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts.js'
 import { CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants.js'
 import { sendDeleteActor } from '../../lib/activitypub/send/send-delete.js'
@@ -31,9 +30,12 @@ import { ActorFollowModel } from '../actor/actor-follow.js'
 import { ActorImageModel } from '../actor/actor-image.js'
 import { ActorModel } from '../actor/actor.js'
 import { ApplicationModel } from '../application/application.js'
+import { AccountAutomaticTagPolicyModel } from '../automatic-tag/account-automatic-tag-policy.js'
+import { CommentAutomaticTagModel } from '../automatic-tag/comment-automatic-tag.js'
+import { VideoAutomaticTagModel } from '../automatic-tag/video-automatic-tag.js'
 import { ServerBlocklistModel } from '../server/server-blocklist.js'
 import { ServerModel } from '../server/server.js'
-import { buildSQLAttributes, getSort, SequelizeModel, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, buildSQLAttributes, getSort, throwIfNotValid } from '../shared/index.js'
 import { UserModel } from '../user/user.js'
 import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoCommentModel } from '../video/video-comment.js'
@@ -231,6 +233,27 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     onDelete: 'CASCADE'
   })
   BlockedBy: Awaited<AccountBlocklistModel>[]
+
+  @HasMany(() => AccountAutomaticTagPolicyModel, {
+    foreignKey: {
+      name: 'accountId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  AccountAutomaticTagPolicies: Awaited<AccountAutomaticTagPolicyModel>[]
+
+  @HasMany(() => CommentAutomaticTagModel, {
+    foreignKey: 'accountId',
+    onDelete: 'CASCADE'
+  })
+  CommentAutomaticTags: Awaited<CommentAutomaticTagModel>[]
+
+  @HasMany(() => VideoAutomaticTagModel, {
+    foreignKey: 'accountId',
+    onDelete: 'CASCADE'
+  })
+  VideoAutomaticTags: Awaited<VideoAutomaticTagModel>[]
 
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: AccountModel, options) {

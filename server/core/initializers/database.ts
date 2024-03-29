@@ -1,19 +1,22 @@
-import pg from 'pg'
-import { QueryTypes, Transaction } from 'sequelize'
-import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page.js'
+import { AutomaticTagModel } from '@server/models/automatic-tag/automatic-tag.js'
+import { VideoAutomaticTagModel } from '@server/models/automatic-tag/video-automatic-tag.js'
+import { CommentAutomaticTagModel } from '@server/models/automatic-tag/comment-automatic-tag.js'
 import { RunnerJobModel } from '@server/models/runner/runner-job.js'
 import { RunnerRegistrationTokenModel } from '@server/models/runner/runner-registration-token.js'
 import { RunnerModel } from '@server/models/runner/runner.js'
 import { TrackerModel } from '@server/models/server/tracker.js'
 import { VideoTrackerModel } from '@server/models/server/video-tracker.js'
+import { UserExportModel } from '@server/models/user/user-export.js'
+import { UserImportModel } from '@server/models/user/user-import.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history.js'
 import { UserModel } from '@server/models/user/user.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
+import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
@@ -21,6 +24,10 @@ import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-video-viewer-watch-section.js'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
+import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
+import pg from 'pg'
+import { QueryTypes, Transaction } from 'sequelize'
+import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
 import { logger } from '../helpers/logger.js'
 import { AbuseMessageModel } from '../models/abuse/abuse-message.js'
 import { AbuseModel } from '../models/abuse/abuse.js'
@@ -59,9 +66,7 @@ import { VideoTagModel } from '../models/video/video-tag.js'
 import { VideoModel } from '../models/video/video.js'
 import { VideoViewModel } from '../models/view/video-view.js'
 import { CONFIG } from './config.js'
-import { VideoChapterModel } from '@server/models/video/video-chapter.js'
-import { UserExportModel } from '@server/models/user/user-export.js'
-import { UserImportModel } from '@server/models/user/user-import.js'
+import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
 
 pg.defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -176,7 +181,12 @@ async function initDatabaseModels (silent: boolean) {
     RunnerModel,
     RunnerJobModel,
     StoryboardModel,
-    UserExportModel
+    UserExportModel,
+    VideoAutomaticTagModel,
+    CommentAutomaticTagModel,
+    AutomaticTagModel,
+    WatchedWordsListModel,
+    AccountAutomaticTagPolicyModel
   ])
 
   // Check extensions exist in the database
@@ -191,9 +201,7 @@ async function initDatabaseModels (silent: boolean) {
 // ---------------------------------------------------------------------------
 
 export {
-  initDatabaseModels,
-  checkDatabaseConnectionOrDie,
-  sequelizeTypescript
+  checkDatabaseConnectionOrDie, initDatabaseModels, sequelizeTypescript
 }
 
 // ---------------------------------------------------------------------------

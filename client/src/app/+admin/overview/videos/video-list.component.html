@@ -70,22 +70,34 @@
       </td>
 
       <td>
-        @if (video.isLocal) {
-          <span class="pt-badge badge-blue" i18n>Local</span>
-        } @else {
-          <span class="pt-badge badge-purple" i18n>Remote</span>
-        }
+        <div>
+          @if (video.isLocal) {
+            <span class="pt-badge badge-blue" i18n>Local</span>
+          } @else {
+            <span class="pt-badge badge-purple" i18n>Remote</span>
+          }
 
-        <span [ngClass]="getPrivacyBadgeClass(video)" class="pt-badge">{{ video.privacy.label }}</span>
+          <span [ngClass]="getPrivacyBadgeClass(video)" class="pt-badge">{{ video.privacy.label }}</span>
 
-        <span *ngIf="video.nsfw" class="pt-badge badge-red" i18n>NSFW</span>
+          <span *ngIf="video.nsfw" class="pt-badge badge-red" i18n>NSFW</span>
 
-        <span *ngIf="isUnpublished(video)" class="pt-badge badge-yellow">{{ video.state.label }}</span>
+          <span *ngIf="isUnpublished(video)" class="pt-badge badge-yellow">{{ video.state.label }}</span>
 
-        <span *ngIf="isAccountBlocked(video)" class="pt-badge badge-red" i18n>Account muted</span>
-        <span *ngIf="isServerBlocked(video)" class="pt-badge badge-red" i18n>Server muted</span>
+          <span *ngIf="isAccountBlocked(video)" class="pt-badge badge-red" i18n>Account muted</span>
+          <span *ngIf="isServerBlocked(video)" class="pt-badge badge-red" i18n>Server muted</span>
 
-        <span *ngIf="isVideoBlocked(video)" class="pt-badge badge-red" i18n>Blocked</span>
+          <span *ngIf="isVideoBlocked(video)" class="pt-badge badge-red" i18n>Blocked</span>
+        </div>
+
+        <div>
+          @for (tag of video.automaticTags; track tag) {
+            <a
+              i18n-title title="Only display videos with this tag"
+              class="pt-badge badge-secondary me-1"
+              [routerLink]="[ '.' ]" [queryParams]="{ 'search': buildSearchAutoTag(tag) }"
+            >{{ tag }}</a>
+          }
+        </div>
       </td>
 
       <td>

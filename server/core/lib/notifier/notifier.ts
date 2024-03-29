@@ -54,6 +54,7 @@ class Notifier {
     publicationAfterScheduleUpdate: [ OwnedPublicationAfterScheduleUpdate ],
     publicationAfterAutoUnblacklist: [ OwnedPublicationAfterAutoUnblacklist ],
     newComment: [ CommentMention, NewCommentForVideoOwner ],
+    commentApproval: [ CommentMention ],
     newAbuse: [ NewAbuseForModerators ],
     newBlacklist: [ NewBlacklistForOwner ],
     unblacklist: [ UnblacklistForOwner ],
@@ -121,6 +122,15 @@ class Notifier {
 
     this.sendNotifications(models, comment)
       .catch(err => logger.error('Cannot notify of new comment %s.', comment.url, { err }))
+  }
+
+  notifyOnNewCommentApproval (comment: MCommentOwnerVideo): void {
+    const models = this.notificationModels.commentApproval
+
+    logger.debug('Notify on comment approval', { comment: comment.url, ...lTags() })
+
+    this.sendNotifications(models, comment)
+      .catch(err => logger.error('Cannot notify on comment approval %s.', comment.url, { err }))
   }
 
   notifyOnNewAbuse (payload: NewAbusePayload): void {

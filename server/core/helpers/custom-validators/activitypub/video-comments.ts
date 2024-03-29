@@ -2,8 +2,9 @@ import { hasAPPublic } from '@server/helpers/activity-pub-utils.js'
 import validator from 'validator'
 import { exists, isArray, isDateValid } from '../misc.js'
 import { isActivityPubUrlValid } from './misc.js'
+import { ActivityTombstoneObject, VideoCommentObject } from '@peertube/peertube-models'
 
-function sanitizeAndCheckVideoCommentObject (comment: any) {
+function sanitizeAndCheckVideoCommentObject (comment: VideoCommentObject | ActivityTombstoneObject) {
   if (!comment) return false
 
   if (!isCommentTypeValid(comment)) return false
@@ -23,6 +24,7 @@ function sanitizeAndCheckVideoCommentObject (comment: any) {
     isDateValid(comment.published) &&
     isActivityPubUrlValid(comment.url) &&
     isArray(comment.to) &&
+    (!exists(comment.replyApproval) || isActivityPubUrlValid(comment.replyApproval)) &&
     (hasAPPublic(comment.to) || hasAPPublic(comment.cc)) // Only accept public comments
 }
 

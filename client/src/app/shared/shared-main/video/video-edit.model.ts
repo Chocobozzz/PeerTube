@@ -1,6 +1,13 @@
 import { getAbsoluteAPIUrl } from '@app/helpers'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
-import { VideoPassword, VideoPrivacy, VideoPrivacyType, VideoScheduleUpdate, VideoUpdate } from '@peertube/peertube-models'
+import {
+  VideoCommentPolicyType,
+  VideoPassword,
+  VideoPrivacy,
+  VideoPrivacyType,
+  VideoScheduleUpdate,
+  VideoUpdate
+} from '@peertube/peertube-models'
 import { VideoDetails } from './video-details.model'
 
 export class VideoEdit implements VideoUpdate {
@@ -13,7 +20,7 @@ export class VideoEdit implements VideoUpdate {
   name: string
   tags: string[]
   nsfw: boolean
-  commentsEnabled: boolean
+  commentsPolicy: VideoCommentPolicyType
   downloadEnabled: boolean
   waitTranscoding: boolean
   channelId: number
@@ -52,7 +59,7 @@ export class VideoEdit implements VideoUpdate {
 
     this.support = video.support
 
-    this.commentsEnabled = video.commentsEnabled
+    this.commentsPolicy = video.commentsPolicy.id
     this.downloadEnabled = video.downloadEnabled
 
     if (video.thumbnailPath) this.thumbnailUrl = getAbsoluteAPIUrl() + video.thumbnailPath
@@ -109,7 +116,7 @@ export class VideoEdit implements VideoUpdate {
       name: this.name,
       tags: this.tags,
       nsfw: this.nsfw,
-      commentsEnabled: this.commentsEnabled,
+      commentsPolicy: this.commentsPolicy,
       downloadEnabled: this.downloadEnabled,
       waitTranscoding: this.waitTranscoding,
       channelId: this.channelId,

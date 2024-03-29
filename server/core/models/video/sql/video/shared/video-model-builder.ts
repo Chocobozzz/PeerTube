@@ -3,6 +3,8 @@ import { AccountBlocklistModel } from '@server/models/account/account-blocklist.
 import { AccountModel } from '@server/models/account/account.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { ActorModel } from '@server/models/actor/actor.js'
+import { AutomaticTagModel } from '@server/models/automatic-tag/automatic-tag.js'
+import { VideoAutomaticTagModel } from '@server/models/automatic-tag/video-automatic-tag.js'
 import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy.js'
 import { ServerBlocklistModel } from '@server/models/server/server-blocklist.js'
 import { ServerModel } from '@server/models/server/server.js'
@@ -46,6 +48,7 @@ export class VideoModelBuilder {
 
   private trackersDone: Set<string>
   private tagsDone: Set<string>
+  private autoTagsDone: Set<string>
 
   private videos: VideoModel[]
 
@@ -114,6 +117,10 @@ export class VideoModelBuilder {
         if (include & VideoInclude.SOURCE) {
           this.setSource(row, videoModel)
         }
+
+        if (include & VideoInclude.AUTOMATIC_TAGS) {
+          this.addAutoTag(row, videoModel)
+        }
       }
     }
 
@@ -142,6 +149,7 @@ export class VideoModelBuilder {
 
     this.trackersDone = new Set()
     this.tagsDone = new Set()
+    this.autoTagsDone = new Set()
 
     this.videos = []
   }
@@ -184,6 +192,7 @@ export class VideoModelBuilder {
     videoModel.VideoFiles = []
     videoModel.VideoStreamingPlaylists = []
     videoModel.Tags = []
+    videoModel.VideoAutomaticTags = []
     videoModel.Trackers = []
 
     this.buildAccount(row, videoModel)
@@ -327,6 +336,23 @@ export class VideoModelBuilder {
     videoModel.Tags.push(tagModel)
 
     this.tagsDone.add(key)
+  }
+
+  private addAutoTag (row: SQLRow, videoModel: VideoModel) {
+    if (!row['VideoAutomaticTags.AutomaticTag.id']) return
+
+    const key = `${row['VideoAutomaticTags.videoId']}-${row['VideoAutomaticTags.accountId']}-${row['VideoAutomaticTags.automaticTagId']}`
+    if (this.autoTagsDone.has(key)) return
+
+    const videoAutomaticTagAttributes = this.grab(row, this.tables.getVideoAutoTagAttributes(), 'VideoAutomaticTags')
+    const automaticTagModel = new VideoAutomaticTagModel(videoAutomaticTagAttributes, this.buildOpts)
+
+    const automaticTagAttributes = this.grab(row, this.tables.getAutoTagAttributes(), 'VideoAutomaticTags.AutomaticTag')
+    automaticTagModel.AutomaticTag = new AutomaticTagModel(automaticTagAttributes, this.buildOpts)
+
+    videoModel.VideoAutomaticTags.push(automaticTagModel)
+
+    this.autoTagsDone.add(key)
   }
 
   private addTracker (row: SQLRow, videoModel: VideoModel) {

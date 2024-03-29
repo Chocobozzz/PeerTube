@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { omit } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
-import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { HttpStatusCode, VideoCommentPolicy, VideoImportCreate, VideoPrivacy } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
+  PeerTubeServer,
   cleanupTests,
   createSingleServer,
   makeGetRequest,
   makePostBodyRequest,
   makeUploadRequest,
-  PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@tests/shared/checks.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 
 describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'
@@ -74,7 +74,7 @@ describe('Test video imports API validator', function () {
   })
 
   describe('When adding a video import', function () {
-    let baseCorrectParams
+    let baseCorrectParams: VideoImportCreate
 
     before(function () {
       baseCorrectParams = {
@@ -84,7 +84,7 @@ describe('Test video imports API validator', function () {
         licence: 1,
         language: 'pt',
         nsfw: false,
-        commentsEnabled: true,
+        commentsPolicy: VideoCommentPolicy.ENABLED,
         downloadEnabled: true,
         waitTranscoding: true,
         description: 'my super description',
@@ -172,6 +172,12 @@ describe('Test video imports API validator', function () {
 
     it('Should fail with a bad language', async function () {
       const fields = { ...baseCorrectParams, language: 'a'.repeat(15) }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a bad commentsPolicy', async function () {
+      const fields = { ...baseCorrectParams, commentsPolicy: 42 }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })

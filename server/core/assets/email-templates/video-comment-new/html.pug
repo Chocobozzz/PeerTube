@@ -7,5 +7,10 @@ block content
   p.
     #[a(href=accountUrl title=handle) #{accountName}] added a comment on your video
     "#[a(href=videoUrl) #{video.name}]":
+
   blockquote !{commentHtml}
+
+  if requiresApproval
+    | This comment requires approval.
+
   br(style="display: none;")

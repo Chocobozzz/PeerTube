@@ -15,6 +15,7 @@ import {
   VideoRateType,
   VideoState,
   VideoStreamingPlaylistType,
+  type VideoCommentPolicyType,
   type VideoPrivacyType,
   type VideoStateType
 } from '@peertube/peertube-models'
@@ -111,6 +112,7 @@ import { AccountVideoRateModel } from '../account/account-video-rate.js'
 import { AccountModel } from '../account/account.js'
 import { ActorImageModel } from '../actor/actor-image.js'
 import { ActorModel } from '../actor/actor.js'
+import { VideoAutomaticTagModel } from '../automatic-tag/video-automatic-tag.js'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy.js'
 import { ServerModel } from '../server/server.js'
 import { TrackerModel } from '../server/tracker.js'
@@ -549,7 +551,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   @AllowNull(false)
   @Column
-  commentsEnabled: boolean
+  commentsPolicy: VideoCommentPolicyType
 
   @AllowNull(false)
   @Column
@@ -776,6 +778,12 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     onDelete: 'cascade'
   })
   VideoPasswords: Awaited<VideoPasswordModel>[]
+
+  @HasMany(() => VideoAutomaticTagModel, {
+    foreignKey: 'videoId',
+    onDelete: 'CASCADE'
+  })
+  VideoAutomaticTags: Awaited<VideoAutomaticTagModel>[]
 
   @HasOne(() => VideoJobInfoModel, {
     foreignKey: {
@@ -1172,6 +1180,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     search?: string
 
     excludeAlreadyWatched?: boolean
+
+    autoTagOneOf?: string[]
   }) {
     VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
     VideoModel.throwIfPrivacyOneOfWithoutUser(options.privacyOneOf, options.user)
@@ -1196,6 +1206,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'categoryOneOf',
         'licenceOneOf',
         'languageOneOf',
+        'autoTagOneOf',
         'tagsOneOf',
         'tagsAllOf',
         'privacyOneOf',
@@ -1264,6 +1275,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     excludeAlreadyWatched?: boolean
 
     countVideos?: boolean
+
+    autoTagOneOf?: string[]
   }) {
     VideoModel.throwIfPrivateIncludeWithoutUser(options.include, options.user)
     VideoModel.throwIfPrivacyOneOfWithoutUser(options.privacyOneOf, options.user)
@@ -1278,6 +1291,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'categoryOneOf',
         'licenceOneOf',
         'languageOneOf',
+        'autoTagOneOf',
         'tagsOneOf',
         'tagsAllOf',
         'privacyOneOf',

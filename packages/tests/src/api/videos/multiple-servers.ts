@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoCommentThreadTree, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoCommentPolicy, VideoCommentThreadTree, VideoPrivacy } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   PeerTubeServer,
@@ -107,7 +107,7 @@ describe('Test multiple servers', function () {
           duration: 10,
           tags: [ 'tag1p1', 'tag2p1' ],
           privacy: VideoPrivacy.PUBLIC,
-          commentsEnabled: true,
+          commentsPolicy: VideoCommentPolicy.ENABLED,
           downloadEnabled: true,
           channel: {
             displayName: 'my channel',
@@ -193,7 +193,7 @@ describe('Test multiple servers', function () {
             name: 'user1',
             host: servers[1].host
           },
-          commentsEnabled: true,
+          commentsPolicy: VideoCommentPolicy.ENABLED,
           downloadEnabled: true,
           duration: 5,
           tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
@@ -309,7 +309,7 @@ describe('Test multiple servers', function () {
             host: servers[2].host
           },
           duration: 5,
-          commentsEnabled: true,
+          commentsPolicy: VideoCommentPolicy.ENABLED,
           downloadEnabled: true,
           tags: [ 'tag1p3' ],
           privacy: VideoPrivacy.PUBLIC,
@@ -342,7 +342,7 @@ describe('Test multiple servers', function () {
             name: 'root',
             host: servers[2].host
           },
-          commentsEnabled: true,
+          commentsPolicy: VideoCommentPolicy.ENABLED,
           downloadEnabled: true,
           duration: 5,
           tags: [ 'tag2p3', 'tag3p3', 'tag4p3' ],
@@ -671,7 +671,7 @@ describe('Test multiple servers', function () {
             host: servers[2].host
           },
           duration: 5,
-          commentsEnabled: true,
+          commentsPolicy: VideoCommentPolicy.ENABLED,
           downloadEnabled: true,
           tags: [ 'tag_up_1', 'tag_up_2' ],
           privacy: VideoPrivacy.PUBLIC,
@@ -1022,7 +1022,7 @@ describe('Test multiple servers', function () {
       this.timeout(20000)
 
       const attributes = {
-        commentsEnabled: false,
+        commentsPolicy: VideoCommentPolicy.DISABLED,
         downloadEnabled: false
       }
 
@@ -1033,6 +1033,8 @@ describe('Test multiple servers', function () {
       for (const server of servers) {
         const video = await server.videos.get({ id: videoUUID })
         expect(video.commentsEnabled).to.be.false
+        expect(video.commentsPolicy.id).to.equal(VideoCommentPolicy.DISABLED)
+        expect(video.commentsPolicy.label).to.equal('Disabled')
         expect(video.downloadEnabled).to.be.false
 
         const text = 'my super forbidden comment'
@@ -1079,7 +1081,7 @@ describe('Test multiple servers', function () {
           },
           isLocal,
           duration: 5,
-          commentsEnabled: true,
+          commentsPolicy: VideoCommentPolicy.ENABLED,
           downloadEnabled: true,
           tags: [],
           privacy: VideoPrivacy.PUBLIC,

@@ -1,4 +1,4 @@
-import { ActorImage } from '../index.js'
+import { ActorImage, VideoCommentPolicyType } from '../index.js'
 import { ClientScriptJSON } from '../plugins/plugin-package-json.model.js'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type.js'
 import { VideoPrivacyType } from '../videos/video-privacy.enum.js'
@@ -57,7 +57,11 @@ export interface ServerConfig {
   defaults: {
     publish: {
       downloadEnabled: boolean
+
+      // TODO: remove, deprecated in 6.2
       commentsEnabled: boolean
+      commentsPolicy: VideoCommentPolicyType
+
       privacy: VideoPrivacyType
       licence: number
     }

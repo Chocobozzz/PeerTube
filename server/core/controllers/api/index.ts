@@ -1,9 +1,10 @@
+import { HttpStatusCode } from '@peertube/peertube-models'
+import { logger } from '@server/helpers/logger.js'
 import cors from 'cors'
 import express from 'express'
-import { logger } from '@server/helpers/logger.js'
-import { HttpStatusCode } from '@peertube/peertube-models'
 import { abuseRouter } from './abuse.js'
 import { accountsRouter } from './accounts.js'
+import { automaticTagRouter } from './automatic-tags.js'
 import { blocklistRouter } from './blocklist.js'
 import { bulkRouter } from './bulk.js'
 import { configRouter } from './config.js'
@@ -21,6 +22,7 @@ import { videoChannelSyncRouter } from './video-channel-sync.js'
 import { videoChannelRouter } from './video-channel.js'
 import { videoPlaylistRouter } from './video-playlist.js'
 import { videosRouter } from './videos/index.js'
+import { watchedWordsRouter } from './watched-words.js'
 
 const apiRouter = express.Router()
 
@@ -49,6 +51,8 @@ apiRouter.use('/plugins', pluginRouter)
 apiRouter.use('/custom-pages', customPageRouter)
 apiRouter.use('/blocklist', blocklistRouter)
 apiRouter.use('/runners', runnersRouter)
+apiRouter.use('/watched-words', watchedWordsRouter)
+apiRouter.use('/automatic-tags', automaticTagRouter)
 
 apiRouter.use('/ping', pong)
 apiRouter.use('/*', badRequest)

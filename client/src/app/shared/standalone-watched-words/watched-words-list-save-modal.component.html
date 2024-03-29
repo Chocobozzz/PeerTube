@@ -1,0 +1,49 @@
+<ng-template #modal>
+  <ng-container [formGroup]="form">
+
+    <div class="modal-header">
+      <h4 i18n class="modal-title">Save watched words list</h4>
+
+      <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
+        <my-global-icon iconName="cross"></my-global-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-group">
+        <label i18n for="listName">List name</label>
+
+        <input
+          type="text" id="listName" class="form-control"
+          formControlName="listName" [ngClass]="{ 'input-error': formErrors['listName'] }"
+        >
+
+        <div *ngIf="formErrors.listName" class="form-error" role="alert">{{ formErrors.listName }}</div>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="words">Words</label>
+
+        <div i18n class="form-group-description">One word or group of words per line.</div>
+
+        <textarea id="words" formControlName="words" class="form-control"[ngClass]="{ 'input-error': formErrors['words'] }"></textarea>
+
+        <div *ngIf="formErrors.words" class="form-error" role="alert">{{ formErrors.words }}</div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer inputs">
+      <input
+        type="button" role="button" i18n-value value="Cancel" class="peertube-button grey-button"
+        (click)="hide()" (key.enter)="hide()"
+      >
+
+      <input
+        type="submit" i18n-value value="Save" class="peertube-button orange-button"
+        [disabled]="!form.valid" (click)="addOrUpdate()"
+      >
+    </div>
+  </ng-container>
+</ng-template>

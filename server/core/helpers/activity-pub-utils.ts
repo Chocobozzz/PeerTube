@@ -49,7 +49,7 @@ export async function getApplicationActorOfHost (host: string) {
   return found?.href || undefined
 }
 
-export function getAPPublicValue () {
+export function getAPPublicValue (): 'https://www.w3.org/ns/activitystreams#Public' {
   return 'https://www.w3.org/ns/activitystreams#Public'
 }
 
@@ -137,10 +137,19 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
       '@type': 'sc:Number',
       '@id': 'pt:fps'
     },
+
+    // Keep for federation compatibility
     commentsEnabled: {
       '@type': 'sc:Boolean',
       '@id': 'pt:commentsEnabled'
     },
+
+    canReply: 'pt:canReply',
+    commentsPolicy: {
+      '@type': 'sc:Number',
+      '@id': 'pt:commentsPolicy'
+    },
+
     downloadEnabled: {
       '@type': 'sc:Boolean',
       '@id': 'pt:downloadEnabled'
@@ -261,9 +270,20 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
   Reject: buildContext(),
   Accept: buildContext(),
   Announce: buildContext(),
-  Comment: buildContext(),
+
+  Comment: buildContext({
+    replyApproval: 'pt:replyApproval'
+  }),
+
   Delete: buildContext(),
   Rate: buildContext(),
+
+  ApproveReply: buildContext({
+    ApproveReply: 'pt:ApproveReply'
+  }),
+  RejectReply: buildContext({
+    RejectReply: 'pt:RejectReply'
+  }),
 
   Chapters: buildContext({
     hasPart: 'sc:hasPart',

@@ -34,6 +34,7 @@ import {
   checkUserEmailExist,
   checkUserIdExist,
   checkUserNameOrEmailDoNotAlreadyExist,
+  checkUserCanManageAccount,
   doesVideoChannelIdExist,
   doesVideoExist,
   isValidVideoIdParam
@@ -421,12 +422,7 @@ const ensureAuthUserOwnsAccountValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
 
-    if (res.locals.account.id !== user.Account.id) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Only owner of this account can access this resource.'
-      })
-    }
+    if (!checkUserCanManageAccount({ user, account: res.locals.account, specialRight: null, res })) return
 
     return next()
   }
@@ -436,16 +432,8 @@ const ensureCanManageChannelOrAccount = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.user
     const account = res.locals.videoChannel?.Account ?? res.locals.account
-    const isUserOwner = account.userId === user.id
 
-    if (!isUserOwner && user.hasRight(UserRight.MANAGE_ANY_VIDEO_CHANNEL) === false) {
-      const message = `User ${user.username} does not have right this channel or account.`
-
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message
-      })
-    }
+    if (!checkUserCanManageAccount({ account, user, res, specialRight: UserRight.MANAGE_ANY_VIDEO_CHANNEL })) return
 
     return next()
   }
@@ -461,7 +449,7 @@ const ensureCanModerateUser = [
 
     return res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: 'A moderator can only manage users.'
+      message: 'Users can only be managed by moderators or admins.'
     })
   }
 ]

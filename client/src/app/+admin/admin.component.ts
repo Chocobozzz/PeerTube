@@ -153,6 +153,14 @@ export class AdminComponent implements OnInit {
       })
     }
 
+    if (this.hasServerWatchedWordsRight()) {
+      moderationItems.children.push({
+        label: $localize`Watched words`,
+        routerLink: '/admin/moderation/watched-words/list',
+        iconName: 'eye-open'
+      })
+    }
+
     if (moderationItems.children.length !== 0) this.menuEntries.push(moderationItems)
   }
 
@@ -239,6 +247,10 @@ export class AdminComponent implements OnInit {
 
   private hasServersBlocklistRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)
+  }
+
+  private hasServerWatchedWordsRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_INSTANCE_WATCHED_WORDS)
   }
 
   private hasConfigRight () {

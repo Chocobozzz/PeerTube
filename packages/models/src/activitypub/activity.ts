@@ -33,7 +33,9 @@ export type Activity =
   ActivityReject |
   ActivityView |
   ActivityDislike |
-  ActivityFlag
+  ActivityFlag |
+  ActivityApproveReply |
+  ActivityRejectReply
 
 export type ActivityType =
   'Create' |
@@ -47,7 +49,9 @@ export type ActivityType =
   'Reject' |
   'View' |
   'Dislike' |
-  'Flag'
+  'Flag' |
+  'ApproveReply' |
+  'RejectReply'
 
 export interface ActivityAudience {
   to: string[]
@@ -87,6 +91,18 @@ export interface ActivityFollow extends BaseActivity {
 export interface ActivityAccept extends BaseActivity {
   type: 'Accept'
   object: ActivityFollow
+}
+
+export interface ActivityApproveReply extends BaseActivity {
+  type: 'ApproveReply'
+  object: string
+  inReplyTo: string
+}
+
+export interface ActivityRejectReply extends BaseActivity {
+  type: 'RejectReply'
+  object: string
+  inReplyTo: string
 }
 
 export interface ActivityReject extends BaseActivity {

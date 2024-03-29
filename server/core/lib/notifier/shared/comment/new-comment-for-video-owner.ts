@@ -50,10 +50,15 @@ export class NewCommentForVideoOwner extends AbstractNotification <MCommentOwner
   }
 
   createEmail (to: string) {
-    const video = this.payload.Video
-    const videoUrl = WEBSERVER.URL + this.payload.Video.getWatchStaticPath()
-    const commentUrl = WEBSERVER.URL + this.payload.getCommentStaticPath()
-    const commentHtml = toSafeHtml(this.payload.text)
+    const comment = this.payload
+
+    const video = comment.Video
+    const videoUrl = WEBSERVER.URL + comment.Video.getWatchStaticPath()
+    const commentHtml = toSafeHtml(comment.text)
+
+    const commentUrl = comment.heldForReview
+      ? WEBSERVER.URL + comment.getCommentUserReviewPath()
+      : WEBSERVER.URL + comment.getCommentStaticPath()
 
     return {
       template: 'video-comment-new',
@@ -66,8 +71,11 @@ export class NewCommentForVideoOwner extends AbstractNotification <MCommentOwner
         commentHtml,
         video,
         videoUrl,
+        requiresApproval: this.payload.heldForReview,
         action: {
-          text: 'View comment',
+          text: comment.heldForReview
+            ? 'Review comment'
+            : 'View comment',
           url: commentUrl
         }
       }

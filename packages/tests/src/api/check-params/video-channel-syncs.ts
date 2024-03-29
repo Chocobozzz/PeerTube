@@ -285,7 +285,7 @@ describe('Test video channel sync API validator', () => {
       })
     })
 
-    it('should succeed when user delete a sync they own', async function () {
+    it('Should succeed when user delete a sync they own', async function () {
       const { videoChannelSync } = await command.create({
         attributes: {
           externalChannelUrl: FIXTURE_URLS.youtubeChannel,

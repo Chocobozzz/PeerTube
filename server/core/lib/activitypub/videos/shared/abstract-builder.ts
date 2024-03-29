@@ -1,4 +1,3 @@
-import { CreationAttributes, Transaction } from 'sequelize'
 import {
   ActivityTagObject,
   ThumbnailType,
@@ -6,9 +5,14 @@ import {
   VideoObject,
   VideoStreamingPlaylistType_Type
 } from '@peertube/peertube-models'
+import { isVideoChaptersObjectValid } from '@server/helpers/custom-validators/activitypub/video-chapters.js'
 import { deleteAllModels, filterNonExistingModels, retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { logger, LoggerTagsFn } from '@server/helpers/logger.js'
+import { LoggerTagsFn, logger } from '@server/helpers/logger.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
+import { AutomaticTagger } from '@server/lib/automatic-tags/automatic-tagger.js'
+import { setAndSaveVideoAutomaticTags } from '@server/lib/automatic-tags/automatic-tags.js'
 import { updateRemoteVideoThumbnail } from '@server/lib/thumbnail.js'
+import { replaceChapters } from '@server/lib/video-chapters.js'
 import { setVideoTags } from '@server/lib/video.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
@@ -18,11 +22,14 @@ import { VideoStreamingPlaylistModel } from '@server/models/video/video-streamin
 import {
   MStreamingPlaylistFiles,
   MStreamingPlaylistFilesVideo,
+  MVideo,
   MVideoCaption,
   MVideoFile,
   MVideoFullLight,
   MVideoThumbnail
 } from '@server/types/models/index.js'
+import { CreationAttributes, Transaction } from 'sequelize'
+import { fetchAP } from '../../activity.js'
 import { findOwner, getOrCreateAPActor } from '../../actors/index.js'
 import {
   getCaptionAttributesFromObject,
@@ -35,10 +42,6 @@ import {
   getThumbnailFromIcons
 } from './object-to-model-attributes.js'
 import { getTrackerUrls, setVideoTrackers } from './trackers.js'
-import { fetchAP } from '../../activity.js'
-import { isVideoChaptersObjectValid } from '@server/helpers/custom-validators/activitypub/video-chapters.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
-import { replaceChapters } from '@server/lib/video-chapters.js'
 
 export abstract class APVideoAbstractBuilder {
   protected abstract videoObject: VideoObject
@@ -216,5 +219,18 @@ export abstract class APVideoAbstractBuilder {
     // Update or add other one
     const upsertTasks = newVideoFiles.map(f => VideoFileModel.customUpsert(f, 'streaming-playlist', t))
     playlistModel.VideoFiles = await Promise.all(upsertTasks)
+  }
+
+  protected async setAutomaticTags (options: {
+    video: MVideo
+    oldVideo?: Pick<MVideo, 'name' | 'description'>
+    transaction: Transaction
+  }) {
+    const { video, transaction, oldVideo } = options
+
+    if (oldVideo && video.name === oldVideo.name && video.description === oldVideo.description) return
+
+    const automaticTags = await new AutomaticTagger().buildVideoAutomaticTags({ video, transaction })
+    await setAndSaveVideoAutomaticTags({ video, automaticTags, transaction })
   }
 }

@@ -1,6 +1,8 @@
-import { Job } from 'bullmq'
-import { move, remove } from 'fs-extra/esm'
-import { stat } from 'fs/promises'
+import { buildAspectRatio } from '@peertube/peertube-core-utils'
+import {
+  ffprobePromise,
+  getChaptersFromContainer, getVideoStreamDuration
+} from '@peertube/peertube-ffmpeg'
 import {
   ThumbnailType,
   ThumbnailType_Type,
@@ -15,20 +17,24 @@ import {
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { AutomaticTagger } from '@server/lib/automatic-tags/automatic-tagger.js'
+import { setAndSaveVideoAutomaticTags } from '@server/lib/automatic-tags/automatic-tags.js'
 import { isPostImportVideoAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { createOptimizeOrMergeAudioJobs } from '@server/lib/transcoding/create-transcoding-job.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
+import { replaceChaptersIfNotExist } from '@server/lib/video-chapters.js'
+import { buildNewFile } from '@server/lib/video-file.js'
+import { buildMoveJob, buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
-import { buildMoveJob, buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import { MVideoImport, MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import.js'
-import {
-  ffprobePromise,
-  getChaptersFromContainer, getVideoStreamDuration
-} from '@peertube/peertube-ffmpeg'
+import { Job } from 'bullmq'
+import { FfprobeData } from 'fluent-ffmpeg'
+import { move, remove } from 'fs-extra/esm'
+import { stat } from 'fs/promises'
 import { logger } from '../../../helpers/logger.js'
 import { getSecureTorrentName } from '../../../helpers/utils.js'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent.js'
@@ -41,10 +47,6 @@ import { federateVideoIfNeeded } from '../../activitypub/videos/index.js'
 import { Notifier } from '../../notifier/index.js'
 import { generateLocalVideoMiniature } from '../../thumbnail.js'
 import { JobQueue } from '../job-queue.js'
-import { replaceChaptersIfNotExist } from '@server/lib/video-chapters.js'
-import { FfprobeData } from 'fluent-ffmpeg'
-import { buildNewFile } from '@server/lib/video-file.js'
-import { buildAspectRatio } from '@peertube/peertube-core-utils'
 
 async function processVideoImport (job: Job): Promise<VideoImportPreventExceptionResult> {
   const payload = job.data as VideoImportPayload
@@ -208,6 +210,9 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
           }
 
           await replaceChaptersIfNotExist({ video, chapters: containerChapters, transaction: t })
+
+          const automaticTags = await new AutomaticTagger().buildVideoAutomaticTags({ video, transaction: t })
+          await setAndSaveVideoAutomaticTags({ video, automaticTags, transaction: t })
 
           // Now we can federate the video (reload from database, we need more attributes)
           const videoForFederation = await VideoModel.loadFull(video.uuid, t)

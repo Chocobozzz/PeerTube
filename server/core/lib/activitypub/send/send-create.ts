@@ -15,10 +15,9 @@ import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import {
   MActorLight,
-  MCommentOwnerVideo,
+  MCommentOwnerVideoReply,
   MLocalVideoViewerWithWatchSections,
-  MVideoAP,
-  MVideoAccountLight,
+  MVideoAP, MVideoAccountLight,
   MVideoPlaylistFull,
   MVideoRedundancyFileVideo,
   MVideoRedundancyStreamingPlaylistVideo
@@ -111,7 +110,7 @@ export async function sendCreateVideoPlaylist (playlist: MVideoPlaylistFull, tra
   })
 }
 
-export async function sendCreateVideoComment (comment: MCommentOwnerVideo, transaction: Transaction) {
+export async function sendCreateVideoCommentIfNeeded (comment: MCommentOwnerVideoReply, transaction: Transaction) {
   const isOrigin = comment.Video.isOwned()
 
   if (isOrigin) {
@@ -121,6 +120,11 @@ export async function sendCreateVideoComment (comment: MCommentOwnerVideo, trans
       logger.debug(`Do not send comment ${comment.url} on a video that cannot be federated`)
       return undefined
     }
+
+    if (comment.heldForReview) {
+      logger.debug(`Do not send comment ${comment.url} that requires approval`)
+      return undefined
+    }
   }
 
   logger.info('Creating job to send comment %s.', comment.url)
@@ -128,14 +132,14 @@ export async function sendCreateVideoComment (comment: MCommentOwnerVideo, trans
   const byActor = comment.Account.Actor
   const videoAccount = await AccountModel.load(comment.Video.VideoChannel.Account.id, transaction)
 
-  const threadParentComments = await VideoCommentModel.listThreadParentComments(comment, transaction)
+  const threadParentComments = await VideoCommentModel.listThreadParentComments({ comment, transaction })
   const commentObject = comment.toActivityPubObject(threadParentComments) as VideoCommentObject
 
   const actorsInvolvedInComment = await getActorsInvolvedInVideo(comment.Video, transaction)
   // Add the actor that commented too
   actorsInvolvedInComment.push(byActor)
 
-  const parentsCommentActors = threadParentComments.filter(c => !c.isDeleted())
+  const parentsCommentActors = threadParentComments.filter(c => !c.isDeleted() && !c.heldForReview)
                                                    .map(c => c.Account.Actor)
 
   let audience: ActivityAudience

@@ -30,6 +30,8 @@ export const videoRedundanciesSortValidator = checkSortFactory(SORTABLE_COLUMNS.
 export const videoChannelSyncsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_CHANNEL_SYNCS)
 export const videoPasswordsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_PASSWORDS)
 
+export const watchedWordsListsSortValidator = checkSortFactory(SORTABLE_COLUMNS.WATCHED_WORDS_LISTS)
+
 export const accountsFollowersSortValidator = checkSortFactory(SORTABLE_COLUMNS.ACCOUNT_FOLLOWERS)
 export const videoChannelsFollowersSortValidator = checkSortFactory(SORTABLE_COLUMNS.CHANNEL_FOLLOWERS)
 
