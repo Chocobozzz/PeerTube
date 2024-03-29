@@ -125,12 +125,20 @@ function secondsToTime (options: {
   else if (minutes >= 1) time += formatNumber(minutes) + minuteSymbol
   else if (format === 'full') time += '00' + minuteSymbol
 
-  seconds %= 60
+  seconds = Math.round(seconds) % 60
   if (seconds >= 1 && seconds < 10 && format === 'full') time += '0' + seconds + secondsSymbol
   else if (seconds >= 1) time += formatNumber(seconds) + secondsSymbol
   else if (format === 'full') time += '00'
 
   return time
+}
+
+function millisecondsToTime (options: {
+  seconds: number
+  format: 'short' | 'full' | 'locale-string' // default 'short'
+  symbol?: string
+} | number) {
+  return secondsToTime(typeof options === 'number' ? options / 1000 : { ...options, seconds: options.seconds / 1000 })
 }
 
 // ---------------------------------------------------------------------------
@@ -143,7 +151,8 @@ export {
   isLastMonth,
   isLastWeek,
   timeToInt,
-  secondsToTime
+  secondsToTime,
+  millisecondsToTime
 }
 
 // ---------------------------------------------------------------------------
