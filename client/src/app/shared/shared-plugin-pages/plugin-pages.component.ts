@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { MetaService, PluginService } from '@app/core'
 import { logger } from '@root-helpers/logger'
+import { Subscription } from 'rxjs/internal/Subscription'
 
 @Component({
   templateUrl: './plugin-pages.component.html',
@@ -9,6 +10,8 @@ import { logger } from '@root-helpers/logger'
 })
 export class SharedPluginPagesComponent implements AfterViewInit {
   @ViewChild('root') root: ElementRef
+
+  private urlSub: Subscription
 
   constructor (
     private metaService: MetaService,
@@ -19,9 +22,16 @@ export class SharedPluginPagesComponent implements AfterViewInit {
 
   }
 
-  ngAfterViewInit () {
-    this.pluginService.ensurePluginsAreLoaded(this.route.snapshot.data.pluginScope || 'common')
-      .then(() => this.loadRoute())
+  async ngAfterViewInit () {
+    await this.pluginService.ensurePluginsAreLoaded(this.route.snapshot.data.pluginScope || 'common')
+
+    this.urlSub = this.route.url.subscribe(() => {
+      this.loadRoute()
+    })
+  }
+
+  ngOnDestroy () {
+    if (this.urlSub) this.urlSub.unsubscribe()
   }
 
   private loadRoute () {
