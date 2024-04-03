@@ -40,7 +40,7 @@ export class TimestampInputComponent implements ControlValueAccessor, OnInit {
   writeValue (timestamp: number) {
     this.timestamp = timestamp
 
-    this.timestampString = secondsToTime({ seconds: this.timestamp, fullFormat: true, symbol: ':' })
+    this.timestampString = secondsToTime({ seconds: this.timestamp, format: 'full', symbol: ':' })
   }
 
   registerOnChange (fn: (_: any) => void) {

@@ -85,47 +85,54 @@ function timeToInt (time: number | string) {
 
 function secondsToTime (options: {
   seconds: number
-  fullFormat?: boolean // default false
+  format: 'short' | 'full' | 'locale-string' // default 'short'
   symbol?: string
 } | number) {
   let seconds: number
-  let fullFormat = false
+  let format: 'short' | 'full' | 'locale-string' = 'short'
   let symbol: string
 
   if (typeof options === 'number') {
     seconds = options
   } else {
     seconds = options.seconds
-    fullFormat = options.fullFormat ?? false
+    format = options.format ?? 'short'
     symbol = options.symbol
   }
 
   let time = ''
 
-  if (seconds === 0 && !fullFormat) return '0s'
+  if (seconds === 0 && format !== 'full') return '0s'
+
+  const formatNumber = (value: number) => {
+    if (format === 'locale-string') return value.toLocaleString()
+
+    return value
+  }
 
   const hourSymbol = (symbol || 'h')
   const minuteSymbol = (symbol || 'm')
-  const secondsSymbol = fullFormat ? '' : 's'
+  const secondsSymbol = format === 'full' ? '' : 's'
 
   const hours = Math.floor(seconds / 3600)
-  if (hours >= 1 && hours < 10 && fullFormat) time = '0' + hours + hourSymbol
-  else if (hours >= 1) time = hours + hourSymbol
-  else if (fullFormat) time = '00' + hourSymbol
+  if (hours >= 1 && hours < 10 && format === 'full') time = '0' + hours + hourSymbol
+  else if (hours >= 1) time = formatNumber(hours) + hourSymbol
+  else if (format === 'full') time = '00' + hourSymbol
 
   seconds %= 3600
   const minutes = Math.floor(seconds / 60)
-  if (minutes >= 1 && minutes < 10 && fullFormat) time += '0' + minutes + minuteSymbol
-  else if (minutes >= 1) time += minutes + minuteSymbol
-  else if (fullFormat) time += '00' + minuteSymbol
+  if (minutes >= 1 && minutes < 10 && format === 'full') time += '0' + minutes + minuteSymbol
+  else if (minutes >= 1) time += formatNumber(minutes) + minuteSymbol
+  else if (format === 'full') time += '00' + minuteSymbol
 
   seconds %= 60
-  if (seconds >= 1 && seconds < 10 && fullFormat) time += '0' + seconds + secondsSymbol
-  else if (seconds >= 1) time += seconds + secondsSymbol
-  else if (fullFormat) time += '00'
+  if (seconds >= 1 && seconds < 10 && format === 'full') time += '0' + seconds + secondsSymbol
+  else if (seconds >= 1) time += formatNumber(seconds) + secondsSymbol
+  else if (format === 'full') time += '00'
 
   return time
 }
+
 
 // ---------------------------------------------------------------------------
 
