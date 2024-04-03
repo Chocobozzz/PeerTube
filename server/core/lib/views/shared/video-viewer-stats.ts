@@ -160,7 +160,7 @@ export class VideoViewerStats {
 
             const statsModel = await this.saveViewerStats(video, stats, t)
 
-            if (video.remote) {
+            if (statsModel && video.remote) {
               await sendCreateWatchAction(statsModel, t)
             }
           })
@@ -178,6 +178,8 @@ export class VideoViewerStats {
   }
 
   private async saveViewerStats (video: MVideo, stats: LocalViewerStats, transaction: Transaction) {
+    if (stats.watchTime === 0) return
+
     const statsModel = new LocalVideoViewerModel({
       startDate: new Date(stats.firstUpdated),
       endDate: new Date(stats.lastUpdated),

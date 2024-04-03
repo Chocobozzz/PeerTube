@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { prepareViewsServers, prepareViewsVideos, processViewersStats } from '@tests/shared/views.js'
-import { cleanupTests, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { wait } from '@peertube/peertube-core-utils'
+import { PeerTubeServer, cleanupTests } from '@peertube/peertube-server-commands'
+import { prepareViewsServers, prepareViewsVideos, processViewersStats } from '@tests/shared/views.js'
+import { expect } from 'chai'
 
 describe('Test views retention stats', function () {
   let servers: PeerTubeServer[]
@@ -36,15 +36,20 @@ describe('Test views retention stats', function () {
     it('Should display appropriate retention metrics', async function () {
       await servers[0].views.simulateViewer({ xForwardedFor: '127.0.0.2,127.0.0.1', id: vodVideoId, currentTimes: [ 0, 1 ] })
       await servers[0].views.simulateViewer({ xForwardedFor: '127.0.0.3,127.0.0.1', id: vodVideoId, currentTimes: [ 1, 3 ] })
-      await servers[1].views.simulateViewer({ xForwardedFor: '127.0.0.2,127.0.0.1', id: vodVideoId, currentTimes: [ 4 ] })
+      await servers[1].views.simulateViewer({ xForwardedFor: '127.0.0.2,127.0.0.1', id: vodVideoId, currentTimes: [ 3, 4 ] })
       await servers[1].views.simulateViewer({ xForwardedFor: '127.0.0.3,127.0.0.1', id: vodVideoId, currentTimes: [ 0, 1 ] })
+
+      // Do not take into account empty section
+      await servers[1].views.simulateViewer({ xForwardedFor: '127.0.0.3,127.0.0.1', id: vodVideoId, currentTimes: [ 5, 5 ] })
+      await servers[0].views.simulateViewer({ xForwardedFor: '127.0.0.4,127.0.0.1', id: vodVideoId, currentTimes: [ 1, 1 ] })
+      await servers[1].views.simulateViewer({ xForwardedFor: '127.0.0.4,127.0.0.1', id: vodVideoId, currentTimes: [ 1, 1 ] })
 
       await processViewersStats(servers)
 
       const { data } = await servers[0].videoStats.getRetentionStats({ videoId: vodVideoId })
       expect(data).to.have.lengthOf(6)
 
-      expect(data.map(d => d.retentionPercent)).to.deep.equal([ 50, 75, 25, 25, 25, 0 ])
+      expect(data.map(d => d.retentionPercent)).to.deep.equal([ 50, 75, 25, 50, 25, 0 ])
     })
 
     it('Should display appropriate retention metrics after a server restart', async function () {

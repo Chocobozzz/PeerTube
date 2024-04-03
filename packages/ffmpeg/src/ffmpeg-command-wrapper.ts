@@ -3,10 +3,10 @@ import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptionsBuilderParams, 
 import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
 
 type FFmpegLogger = {
-  info: (msg: string, obj?: any) => void
-  debug: (msg: string, obj?: any) => void
-  warn: (msg: string, obj?: any) => void
-  error: (msg: string, obj?: any) => void
+  info: (msg: string, obj?: object) => void
+  debug: (msg: string, obj?: object) => void
+  warn: (msg: string, obj?: object) => void
+  error: (msg: string, obj?: object) => void
 }
 
 export interface FFmpegCommandWrapperOptions {

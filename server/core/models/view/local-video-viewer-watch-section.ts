@@ -1,8 +1,8 @@
+import { MLocalVideoViewerWatchSection } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Table } from 'sequelize-typescript'
-import { MLocalVideoViewerWatchSection } from '@server/types/models/index.js'
-import { LocalVideoViewerModel } from './local-video-viewer.js'
 import { SequelizeModel } from '../shared/index.js'
+import { LocalVideoViewerModel } from './local-video-viewer.js'
 
 @Table({
   tableName: 'localVideoViewerWatchSection',
@@ -49,9 +49,14 @@ export class LocalVideoViewerWatchSectionModel extends SequelizeModel<LocalVideo
     const models: MLocalVideoViewerWatchSection[] = []
 
     for (const section of watchSections) {
+      const watchStart = section.start || 0
+      const watchEnd = section.end || 0
+
+      if (watchStart === watchEnd) continue
+
       const model = await this.create({
-        watchStart: section.start || 0,
-        watchEnd: section.end || 0,
+        watchStart,
+        watchEnd,
         localVideoViewerId
       }, { transaction })
 
