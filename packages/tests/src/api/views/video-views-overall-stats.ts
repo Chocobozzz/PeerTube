@@ -334,9 +334,9 @@ describe('Test views overall stats', function () {
       const config = { geo_ip: { enabled: true, city: { database_url: '' } } }
       await Promise.all([ servers[0].run(config), servers[1].run(config) ])
 
-      await servers[0].views.view({ id: uuid, xForwardedFor: '8.8.8.8,127.0.0.1', currentTime: 1 })
-      await servers[1].views.view({ id: uuid, xForwardedFor: '8.8.8.4,127.0.0.1', currentTime: 3 })
-      await servers[1].views.view({ id: uuid, xForwardedFor: '80.67.169.12,127.0.0.1', currentTime: 2 })
+      await servers[0].views.simulateViewer({ id: uuid, xForwardedFor: '8.8.8.8,127.0.0.1', currentTimes: [ 1, 2 ] })
+      await servers[1].views.simulateViewer({ id: uuid, xForwardedFor: '8.8.8.4,127.0.0.1', currentTimes: [ 3, 4 ] })
+      await servers[1].views.simulateViewer({ id: uuid, xForwardedFor: '80.67.169.12,127.0.0.1', currentTimes: [ 2, 3 ] })
 
       await processViewersStats(servers)
 
@@ -364,9 +364,9 @@ describe('Test views overall stats', function () {
         servers[1].run(config)
       ])
 
-      await servers[0].views.view({ id: uuid, xForwardedFor: '8.8.8.8,127.0.0.1', currentTime: 1 })
-      await servers[1].views.view({ id: uuid, xForwardedFor: '8.8.8.4,127.0.0.1', currentTime: 3 })
-      await servers[1].views.view({ id: uuid, xForwardedFor: '80.67.169.12,127.0.0.1', currentTime: 2 })
+      await servers[0].views.simulateViewer({ id: uuid, xForwardedFor: '8.8.8.8,127.0.0.1', currentTimes: [ 1, 2 ] })
+      await servers[1].views.simulateViewer({ id: uuid, xForwardedFor: '8.8.8.4,127.0.0.1', currentTimes: [ 3, 4 ] })
+      await servers[1].views.simulateViewer({ id: uuid, xForwardedFor: '80.67.169.12,127.0.0.1', currentTimes: [ 2, 3 ] })
 
       await processViewersStats(servers)
 
