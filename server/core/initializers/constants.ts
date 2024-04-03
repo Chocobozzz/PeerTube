@@ -1510,6 +1510,10 @@ async function buildLanguages () {
   languages['pt'] = 'Portuguese (Brazilian)'
   languages['pt-PT'] = 'Portuguese (Portugal)'
 
+  // Override Spanish labels
+  languages['es'] = 'Spanish (Spain)'
+  languages['es-419'] = 'Spanish (Latin America)'
+
   // Chinese languages
   languages['zh-Hans'] = 'Simplified Chinese'
   languages['zh-Hant'] = 'Traditional Chinese'
