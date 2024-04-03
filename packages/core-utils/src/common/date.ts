@@ -133,7 +133,6 @@ function secondsToTime (options: {
   return time
 }
 
-
 // ---------------------------------------------------------------------------
 
 export {
