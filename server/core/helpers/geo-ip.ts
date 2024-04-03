@@ -25,9 +25,9 @@ export class GeoIP {
     const emptyResult = { country: null, subdivisionName: null }
     if (CONFIG.GEO_IP.ENABLED === false) return emptyResult
 
-    await this.initReadersIfNeeded()
-
     try {
+      await this.initReadersIfNeeded()
+
       const countryResult = this.countryReader?.get(ip)
       const cityResult = this.cityReader?.get(ip)
 
