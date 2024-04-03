@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { MetaService, PluginService } from '@app/core'
 import { logger } from '@root-helpers/logger'
@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs/internal/Subscription'
   templateUrl: './plugin-pages.component.html',
   standalone: true
 })
-export class SharedPluginPagesComponent implements AfterViewInit {
+export class PluginPagesComponent implements OnDestroy, AfterViewInit {
   @ViewChild('root') root: ElementRef
 
   private urlSub: Subscription
@@ -22,9 +22,7 @@ export class SharedPluginPagesComponent implements AfterViewInit {
 
   }
 
-  async ngAfterViewInit () {
-    await this.pluginService.ensurePluginsAreLoaded(this.route.snapshot.data.pluginScope || 'common')
-
+  ngAfterViewInit () {
     this.urlSub = this.route.url.subscribe(() => {
       this.loadRoute()
     })
@@ -34,12 +32,19 @@ export class SharedPluginPagesComponent implements AfterViewInit {
     if (this.urlSub) this.urlSub.unsubscribe()
   }
 
-  private loadRoute () {
+  private async loadRoute () {
+    await this.pluginService.ensurePluginsAreLoaded(this.route.snapshot.data.pluginScope || 'common')
+
+    if (!this.route.snapshot.data.parentRoute) {
+      logger.error('Missing "parentRoute" URL data to load plugin route ' + this.route.snapshot.url)
+      return
+    }
+
     const path = '/' + this.route.snapshot.url.map(u => u.path).join('/')
 
     const registered = this.pluginService.getRegisteredClientRoute(path, this.route.snapshot.data.parentRoute)
     if (!registered) {
-      logger.info(`Could not find registered route ${path}`, this.pluginService.getAllRegisteredClientRoutes())
+      logger.info(`Could not find registered route ${path}`, { routes: this.pluginService.getAllRegisteredClientRoutes() })
 
       return this.router.navigate([ '/404' ], { skipLocationChange: true })
     }

@@ -51,7 +51,7 @@ export class PluginService implements ClientHook {
   }
   private settingsScripts: { [ npmName: string ]: RegisterClientSettingsScriptOptions } = {}
   private clientRoutes: {
-    [ parentRoute: string ]: {
+    [ parentRoute in RegisterClientRouteOptions['parentRoute'] ]?: {
       [ route: string ]: RegisterClientRouteOptions
     }
   } = {}
@@ -130,7 +130,7 @@ export class PluginService implements ClientHook {
     return this.settingsScripts[npmName]
   }
 
-  getRegisteredClientRoute (route: string, parentRoute: string) {
+  getRegisteredClientRoute (route: string, parentRoute: RegisterClientRouteOptions['parentRoute']) {
     if (!this.clientRoutes[parentRoute]) {
       return undefined
     }
@@ -138,16 +138,21 @@ export class PluginService implements ClientHook {
     return this.clientRoutes[parentRoute][route]
   }
 
-  getRegisteredClientRouteSForParent (parentRoute: string) {
+  getAllRegisteredClientRoutesForParent (parentRoute: RegisterClientRouteOptions['parentRoute']) {
     return this.clientRoutes[parentRoute]
   }
 
   getAllRegisteredClientRoutes () {
     return Object.keys(this.clientRoutes)
-    .map((parentRoute) =>
-      Object.keys(this.clientRoutes[parentRoute]).map((route) => parentRoute === '/' ? route : parentRoute + route)
-    )
-    .flat()
+      .map((parentRoute: RegisterClientRouteOptions['parentRoute']) => {
+        return Object.keys(this.clientRoutes[parentRoute])
+          .map(route => {
+            if (parentRoute === '/') return route
+
+            return parentRoute + route
+          })
+      })
+      .flat()
   }
 
   async translateSetting (npmName: string, setting: RegisterClientFormFieldOptions) {
@@ -196,10 +201,11 @@ export class PluginService implements ClientHook {
   }
 
   private onClientRoute (options: RegisterClientRouteOptions) {
+    const parentRoute = options.parentRoute || '/'
+
     const route = options.route.startsWith('/')
       ? options.route
       : `/${options.route}`
-    const parentRoute = options.parentRoute || '/'
 
     if (!this.clientRoutes[parentRoute]) {
       this.clientRoutes[parentRoute] = {}

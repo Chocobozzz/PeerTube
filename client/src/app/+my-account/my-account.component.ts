@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core'
-import { AuthUser, PluginService, ScreenService } from '@app/core'
-import { TopMenuDropdownParam, TopMenuDropdownComponent } from '../shared/shared-main/misc/top-menu-dropdown.component'
-import { RouterOutlet } from '@angular/router'
 import { NgClass } from '@angular/common'
+import { Component, OnInit } from '@angular/core'
+import { RouterOutlet } from '@angular/router'
+import { AuthUser, PluginService, ScreenService } from '@app/core'
+import { TopMenuDropdownComponent, TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
 
 @Component({
   selector: 'my-my-account',
@@ -26,12 +26,12 @@ export class MyAccountComponent implements OnInit {
 
   ngOnInit (): void {
     this.pluginService.ensurePluginsAreLoaded('my-account')
-    .then(() => this.buildMenu())
-    this.buildMenu()
+      .then(() => this.buildMenu())
   }
 
   private buildMenu () {
-    const clientRoutes = this.pluginService.getRegisteredClientRouteSForParent('/my-account') || {}
+    const clientRoutes = this.pluginService.getAllRegisteredClientRoutesForParent('/my-account') || {}
+
     const moderationEntries: TopMenuDropdownParam = {
       label: $localize`Moderation`,
       children: [
@@ -77,11 +77,10 @@ export class MyAccountComponent implements OnInit {
       moderationEntries,
 
       ...Object.values(clientRoutes)
-      .filter((clientRoute) => clientRoute.menuItem?.label)
-      .map((clientRoute) => ({
-        label: clientRoute.menuItem.label,
-        routerLink: '/my-account/p/' + clientRoute.route
-      }))
+        .map(clientRoute => ({
+          label: clientRoute.menuItem?.label,
+          routerLink: '/my-account/p/' + clientRoute.route
+        }))
     ]
   }
 }
