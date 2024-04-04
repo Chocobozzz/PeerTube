@@ -1,6 +1,8 @@
 import { logger } from '@root-helpers/logger'
+import { peertubeLocalStorage, peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
+import { randomString } from '@root-helpers/string'
 
-function getStoredVolume () {
+export function getStoredVolume () {
   const value = getLocalStorage('volume')
   if (value !== null && value !== undefined) {
     const valueNumber = parseFloat(value)
@@ -12,38 +14,38 @@ function getStoredVolume () {
   return undefined
 }
 
-function getStoredMute () {
+export function getStoredMute () {
   const value = getLocalStorage('mute')
   if (value !== null && value !== undefined) return value === 'true'
 
   return undefined
 }
 
-function getStoredTheater () {
+export function getStoredTheater () {
   const value = getLocalStorage('theater-enabled')
   if (value !== null && value !== undefined) return value === 'true'
 
   return false
 }
 
-function saveVolumeInStore (value: number) {
+export function saveVolumeInStore (value: number) {
   return setLocalStorage('volume', value.toString())
 }
 
-function saveMuteInStore (value: boolean) {
+export function saveMuteInStore (value: boolean) {
   return setLocalStorage('mute', value.toString())
 }
 
-function saveTheaterInStore (enabled: boolean) {
+export function saveTheaterInStore (enabled: boolean) {
   return setLocalStorage('theater-enabled', enabled.toString())
 }
 
-function saveAverageBandwidth (value: number) {
+export function saveAverageBandwidth (value: number) {
   /** used to choose the most fitting resolution */
   return setLocalStorage('average-bandwidth', value.toString())
 }
 
-function getAverageBandwidthInStore () {
+export function getAverageBandwidthInStore () {
   const value = getLocalStorage('average-bandwidth')
   if (value !== null && value !== undefined) {
     const valueNumber = parseInt(value, 10)
@@ -57,25 +59,25 @@ function getAverageBandwidthInStore () {
 
 // ---------------------------------------------------------------------------
 
-function saveLastSubtitle (language: string) {
+export function saveLastSubtitle (language: string) {
   return setLocalStorage('last-subtitle', language)
 }
 
-function getStoredLastSubtitle () {
+export function getStoredLastSubtitle () {
   return getLocalStorage('last-subtitle')
 }
 
-function savePreferredSubtitle (language: string) {
+export function savePreferredSubtitle (language: string) {
   return setLocalStorage('preferred-subtitle', language)
 }
 
-function getStoredPreferredSubtitle () {
+export function getStoredPreferredSubtitle () {
   return getLocalStorage('preferred-subtitle')
 }
 
 // ---------------------------------------------------------------------------
 
-function saveVideoWatchHistory (videoUUID: string, duration: number) {
+export function saveVideoWatchHistory (videoUUID: string, duration: number) {
   return setLocalStorage(`video-watch-history`, JSON.stringify({
     ...getStoredVideoWatchHistory(),
 
@@ -86,7 +88,7 @@ function saveVideoWatchHistory (videoUUID: string, duration: number) {
   }))
 }
 
-function getStoredVideoWatchHistory (videoUUID?: string) {
+export function getStoredVideoWatchHistory (videoUUID?: string) {
   let data
 
   try {
@@ -105,7 +107,7 @@ function getStoredVideoWatchHistory (videoUUID?: string) {
   return data
 }
 
-function cleanupVideoWatch () {
+export function cleanupVideoWatch () {
   const data = getStoredVideoWatchHistory()
   if (!data) return
 
@@ -127,39 +129,36 @@ function cleanupVideoWatch () {
 
 // ---------------------------------------------------------------------------
 
-export {
-  getStoredVolume,
-  getStoredMute,
-  getStoredTheater,
-  saveVolumeInStore,
-  saveMuteInStore,
-  saveTheaterInStore,
-  saveAverageBandwidth,
-  getAverageBandwidthInStore,
-  saveLastSubtitle,
-  getStoredLastSubtitle,
-  saveVideoWatchHistory,
-  getStoredVideoWatchHistory,
-  cleanupVideoWatch,
-  savePreferredSubtitle,
-  getStoredPreferredSubtitle
+export function getPlayerSessionId () {
+  const key = 'session-id'
+
+  let sessionId = getSessionStorage(key)
+  if (sessionId) return sessionId
+
+  sessionId = randomString(32)
+  setSessionStorage(key, sessionId)
+
+  return sessionId
 }
 
+// ---------------------------------------------------------------------------
+// Private
 // ---------------------------------------------------------------------------
 
 const KEY_PREFIX = 'peertube-videojs-'
 
 function getLocalStorage (key: string) {
-  try {
-    return localStorage.getItem(KEY_PREFIX + key)
-  } catch {
-    return undefined
-  }
+  return peertubeLocalStorage.getItem(KEY_PREFIX + key)
 }
 
 function setLocalStorage (key: string, value: string) {
-  try {
-    localStorage.setItem(KEY_PREFIX + key, value)
-  } catch { /* empty */
-  }
+  peertubeLocalStorage.setItem(KEY_PREFIX + key, value)
+}
+
+function getSessionStorage (key: string) {
+  return peertubeSessionStorage.getItem(KEY_PREFIX + key)
+}
+
+function setSessionStorage (key: string, value: string) {
+  peertubeSessionStorage.setItem(KEY_PREFIX + key, value)
 }

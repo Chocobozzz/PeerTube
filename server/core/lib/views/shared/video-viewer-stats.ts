@@ -1,4 +1,3 @@
-import { Transaction } from 'sequelize'
 import { VideoViewEvent } from '@peertube/peertube-models'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { GeoIP } from '@server/helpers/geo-ip.js'
@@ -12,6 +11,7 @@ import { VideoModel } from '@server/models/video/video.js'
 import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-video-viewer-watch-section.js'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
+import { Transaction } from 'sequelize'
 
 const lTags = loggerTagsFactory('views')
 
@@ -37,7 +37,7 @@ export class VideoViewerStats {
   private processingRedisWrites = false
 
   private readonly viewerCache = new Map<string, LocalViewerStats>()
-  private readonly redisPendingWrites = new Map<string, { ip: string, videoId: number, stats: LocalViewerStats }>()
+  private readonly redisPendingWrites = new Map<string, { sessionId: string, videoId: number, stats: LocalViewerStats }>()
 
   constructor () {
     setInterval(() => this.processViewerStats(), VIEW_LIFETIME.VIEWER_STATS)
@@ -50,35 +50,19 @@ export class VideoViewerStats {
     video: MVideoImmutable
     currentTime: number
     ip: string
+    sessionId: string
     viewEvent?: VideoViewEvent
   }) {
-    const { video, ip, viewEvent, currentTime } = options
+    const { video, ip, viewEvent, currentTime, sessionId } = options
 
-    logger.debug('Adding local viewer to video stats %s.', video.uuid, { currentTime, viewEvent, ...lTags(video.uuid) })
+    logger.debug(
+      'Adding local viewer to video stats %s.', video.uuid,
+      { currentTime, viewEvent, sessionId, ...lTags(video.uuid) }
+    )
 
-    return this.updateLocalViewerStats({ video, viewEvent, currentTime, ip })
-  }
-
-  // ---------------------------------------------------------------------------
-
-  async getWatchTime (videoId: number, ip: string) {
-    const stats: LocalViewerStats = await this.getLocalVideoViewerByIP({ ip, videoId })
-
-    return stats?.watchTime || 0
-  }
-
-  // ---------------------------------------------------------------------------
-
-  private async updateLocalViewerStats (options: {
-    video: MVideoImmutable
-    ip: string
-    currentTime: number
-    viewEvent?: VideoViewEvent
-  }) {
-    const { video, ip, viewEvent, currentTime } = options
     const nowMs = new Date().getTime()
 
-    let stats: LocalViewerStats = await this.getLocalVideoViewerByIP({ ip, videoId: video.id })
+    let stats: LocalViewerStats = await this.getLocalVideoViewer({ sessionId, videoId: video.id })
 
     if (stats && stats.watchSections.length >= MAX_LOCAL_VIEWER_WATCH_SECTIONS) {
       logger.warn('Too much watch section to store for a viewer, skipping this one', { currentTime, viewEvent, ...lTags(video.uuid) })
@@ -129,8 +113,18 @@ export class VideoViewerStats {
 
     logger.debug('Set local video viewer stats for video %s.', video.uuid, { stats, ...lTags(video.uuid) })
 
-    this.setLocalVideoViewer(ip, video.id, stats)
+    this.setLocalVideoViewer(sessionId, video.id, stats)
   }
+
+  // ---------------------------------------------------------------------------
+
+  async getWatchTime (videoId: number, sessionId: string) {
+    const stats: LocalViewerStats = await this.getLocalVideoViewer({ sessionId, videoId })
+
+    return stats?.watchTime || 0
+  }
+
+  // ---------------------------------------------------------------------------
 
   async processViewerStats () {
     if (this.processingViewersStats) return
@@ -213,11 +207,11 @@ export class VideoViewerStats {
    *
    */
 
-  private getLocalVideoViewerByIP (options: {
-    ip: string
+  private getLocalVideoViewer (options: {
+    sessionId: string
     videoId: number
   }): Promise<LocalViewerStats> {
-    const { viewerKey } = Redis.Instance.generateLocalVideoViewerKeys(options.ip, options.videoId)
+    const { viewerKey } = Redis.Instance.generateLocalVideoViewerKeys(options.sessionId, options.videoId)
 
     return this.getLocalVideoViewerByKey(viewerKey)
   }
@@ -229,11 +223,11 @@ export class VideoViewerStats {
     return Redis.Instance.getLocalVideoViewer({ key })
   }
 
-  private setLocalVideoViewer (ip: string, videoId: number, stats: LocalViewerStats) {
-    const { viewerKey } = Redis.Instance.generateLocalVideoViewerKeys(ip, videoId)
+  private setLocalVideoViewer (sessionId: string, videoId: number, stats: LocalViewerStats) {
+    const { viewerKey } = Redis.Instance.generateLocalVideoViewerKeys(sessionId, videoId)
     this.viewerCache.set(viewerKey, stats)
 
-    this.redisPendingWrites.set(viewerKey, { ip, videoId, stats })
+    this.redisPendingWrites.set(viewerKey, { sessionId, videoId, stats })
   }
 
   private deleteLocalVideoViewersKeys (key: string) {
@@ -248,13 +242,13 @@ export class VideoViewerStats {
     this.processingRedisWrites = true
 
     for (const [ key, pendingWrite ] of this.redisPendingWrites) {
-      const { ip, videoId, stats } = pendingWrite
+      const { sessionId, videoId, stats } = pendingWrite
       this.redisPendingWrites.delete(key)
 
       try {
-        await Redis.Instance.setLocalVideoViewer(ip, videoId, stats)
+        await Redis.Instance.setLocalVideoViewer(sessionId, videoId, stats)
       } catch (err) {
-        logger.error('Cannot write viewer into redis', { ip, videoId, stats, err })
+        logger.error('Cannot write viewer into redis', { sessionId, videoId, stats, err })
       }
     }
 

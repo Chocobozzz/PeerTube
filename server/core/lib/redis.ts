@@ -176,12 +176,12 @@ class Redis {
 
   /* ************ Views per IP ************ */
 
-  setIPVideoView (ip: string, videoUUID: string) {
-    return this.setValue(this.generateIPViewKey(ip, videoUUID), '1', VIEW_LIFETIME.VIEW)
+  setSessionIdVideoView (ip: string, videoUUID: string) {
+    return this.setValue(this.generateSessionIdViewKey(ip, videoUUID), '1', VIEW_LIFETIME.VIEW)
   }
 
-  async doesVideoIPViewExist (ip: string, videoUUID: string) {
-    return this.exists(this.generateIPViewKey(ip, videoUUID))
+  async doesVideoSessionIdViewExist (sessionId: string, videoUUID: string) {
+    return this.exists(this.generateSessionIdViewKey(sessionId, videoUUID))
   }
 
   /* ************ Video views stats ************ */
@@ -281,8 +281,8 @@ class Redis {
     return this.getObject(viewerKey)
   }
 
-  setLocalVideoViewer (ip: string, videoId: number, object: any) {
-    const { setKey, viewerKey } = this.generateLocalVideoViewerKeys(ip, videoId)
+  setLocalVideoViewer (sessionId: string, videoId: number, object: any) {
+    const { setKey, viewerKey } = this.generateLocalVideoViewerKeys(sessionId, videoId)
 
     return Promise.all([
       this.addToSet(setKey, viewerKey),
@@ -338,12 +338,16 @@ class Redis {
     return { setKey: `local-video-views-buffer`, videoKey: `local-video-views-buffer-${videoId}` }
   }
 
-  generateLocalVideoViewerKeys (ip: string, videoId: number): { setKey: string, viewerKey: string }
+  generateLocalVideoViewerKeys (sessionId: string, videoId: number): { setKey: string, viewerKey: string }
   generateLocalVideoViewerKeys (): { setKey: string }
-  generateLocalVideoViewerKeys (ip?: string, videoId?: number) {
-    const anonymousIP = sha256(CONFIG.SECRETS + '-' + ip)
+  generateLocalVideoViewerKeys (sessionId?: string, videoId?: number) {
+    return {
+      setKey: `local-video-viewer-stats-keys`,
 
-    return { setKey: `local-video-viewer-stats-keys`, viewerKey: `local-video-viewer-stats-${anonymousIP}-${videoId}` }
+      viewerKey: sessionId && videoId
+        ? `local-video-viewer-stats-${sessionId}-${videoId}`
+        : undefined
+    }
   }
 
   private generateVideoViewStatsKeys (options: { videoId?: number, hour?: number }) {
@@ -370,8 +374,8 @@ class Redis {
     return 'verify-email-registration-' + registrationId
   }
 
-  generateIPViewKey (ip: string, videoUUID: string) {
-    return `views-${videoUUID}-${sha256(CONFIG.SECRETS.PEERTUBE + '-' + ip)}`
+  generateSessionIdViewKey (sessionId: string, videoUUID: string) {
+    return `views-${videoUUID}-${sessionId}`
   }
 
   private generateContactFormKey (ip: string) {

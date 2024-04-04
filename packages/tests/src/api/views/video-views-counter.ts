@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { wait } from '@peertube/peertube-core-utils'
+import { buildUUID } from '@peertube/peertube-node-utils'
+import { PeerTubeServer, cleanupTests, stopFfmpeg, waitJobs } from '@peertube/peertube-server-commands'
+import { prepareViewsServers, prepareViewsVideos, processViewsBuffer } from '@tests/shared/views.js'
 import { expect } from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
-import { prepareViewsServers, prepareViewsVideos, processViewsBuffer } from '@tests/shared/views.js'
-import { wait } from '@peertube/peertube-core-utils'
-import { cleanupTests, PeerTubeServer, stopFfmpeg, waitJobs } from '@peertube/peertube-server-commands'
 
 describe('Test video views/viewers counters', function () {
   let servers: PeerTubeServer[]
@@ -21,7 +22,14 @@ describe('Test video views/viewers counters', function () {
     }
   }
 
-  function runTests () {
+  function runTests (options: { useSessionId: boolean }) {
+
+    const generateSession = () => {
+      if (!options.useSessionId) return undefined
+
+      return buildUUID()
+    }
+
     describe('Test views counter on VOD', function () {
       let videoUUID: string
 
@@ -35,29 +43,35 @@ describe('Test video views/viewers counters', function () {
       })
 
       it('Should not view a video if watch time is below the threshold', async function () {
-        await servers[0].views.simulateViewer({ id: videoUUID, currentTimes: [ 1, 2 ] })
+        await servers[0].views.simulateViewer({ id: videoUUID, sessionId: generateSession(), currentTimes: [ 1, 2 ] })
         await processViewsBuffer(servers)
 
         await checkCounter('views', videoUUID, 0)
       })
 
       it('Should view a video if watch time is above the threshold', async function () {
-        await servers[0].views.simulateViewer({ id: videoUUID, currentTimes: [ 1, 4 ] })
+        await servers[0].views.simulateViewer({ id: videoUUID, sessionId: generateSession(), currentTimes: [ 1, 4 ] })
         await processViewsBuffer(servers)
 
         await checkCounter('views', videoUUID, 1)
       })
 
-      it('Should not view again this video with the same IP', async function () {
-        await servers[0].views.simulateViewer({ id: videoUUID, xForwardedFor: '0.0.0.1,127.0.0.1', currentTimes: [ 1, 4 ] })
-        await servers[0].views.simulateViewer({ id: videoUUID, xForwardedFor: '0.0.0.1,127.0.0.1', currentTimes: [ 1, 4 ] })
+      it('Should not view again this video with the same IP/session Id', async function () {
+        const sessionId = generateSession()
+        const xForwardedFor = '0.0.0.1,127.0.0.1'
+
+        await servers[0].views.simulateViewer({ id: videoUUID, sessionId, xForwardedFor, currentTimes: [ 1, 4 ] })
+        await servers[0].views.simulateViewer({ id: videoUUID, sessionId, xForwardedFor, currentTimes: [ 1, 4 ] })
         await processViewsBuffer(servers)
 
         await checkCounter('views', videoUUID, 2)
       })
 
       it('Should view the video from server 2 and send the event', async function () {
-        await servers[1].views.simulateViewer({ id: videoUUID, currentTimes: [ 1, 4 ] })
+        const sessionId = generateSession()
+
+        await servers[1].views.simulateViewer({ id: videoUUID, sessionId, currentTimes: [ 1, 4 ] })
+
         await waitJobs(servers)
         await processViewsBuffer(servers)
 
@@ -87,19 +101,28 @@ describe('Test video views/viewers counters', function () {
       it('Should view twice and display 1 view/viewer', async function () {
         this.timeout(30000)
 
-        for (let i = 0; i < 3; i++) {
-          await servers[0].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
-          await servers[0].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
-          await servers[0].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
-          await servers[0].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
+        const sessionId = generateSession()
 
-          await wait(1000)
+        for (let i = 0; i < 3; i++) {
+          await servers[0].views.simulateViewer({ id: liveVideoId, sessionId, currentTimes: [ 0, 35 ] })
+          await servers[0].views.simulateViewer({ id: liveVideoId, sessionId, currentTimes: [ 0, 35 ] })
+          await servers[0].views.simulateViewer({ id: vodVideoId, sessionId, currentTimes: [ 0, 5 ] })
+          await servers[0].views.simulateViewer({ id: vodVideoId, sessionId, currentTimes: [ 0, 5 ] })
         }
 
-        await waitJobs(servers)
+        let doWhile = true
+        while (doWhile) {
+          try {
+            await checkCounter('viewers', liveVideoId, 1)
+            await checkCounter('viewers', vodVideoId, 1)
 
-        await checkCounter('viewers', liveVideoId, 1)
-        await checkCounter('viewers', vodVideoId, 1)
+            doWhile = false
+          } catch {
+            await wait(1000)
+
+            doWhile = true
+          }
+        }
 
         await processViewsBuffer(servers)
 
@@ -121,7 +144,7 @@ describe('Test video views/viewers counters', function () {
             await checkCounter('viewers', vodVideoId, 0)
 
             error = false
-            await wait(2500)
+            await wait(1000)
           } catch {
             error = true
           }
@@ -131,21 +154,42 @@ describe('Test video views/viewers counters', function () {
       it('Should view on a remote and on local and display appropriate views/viewers', async function () {
         this.timeout(30000)
 
-        await servers[0].views.simulateViewer({ id: vodVideoId, xForwardedFor: '0.0.0.1,127.0.0.1', currentTimes: [ 0, 5 ] })
-        await servers[0].views.simulateViewer({ id: vodVideoId, xForwardedFor: '0.0.0.1,127.0.0.1', currentTimes: [ 0, 5 ] })
-        await servers[0].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
-        await servers[1].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
-        await servers[1].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
+        const xForwardedFor = '0.0.0.1,127.0.0.1'
+        const sessionId = generateSession()
+        const xForwardedFor2 = '0.0.0.2,127.0.0.1'
+        const sessionId2 = generateSession()
 
-        await servers[0].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
-        await servers[1].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
-        await servers[1].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35 ] })
+        {
+          const currentTimes = [ 0, 5 ]
 
-        await wait(3000) // Throttled federation
-        await waitJobs(servers)
+          await servers[0].views.simulateViewer({ id: vodVideoId, xForwardedFor, sessionId, currentTimes })
+          await servers[0].views.simulateViewer({ id: vodVideoId, xForwardedFor, sessionId, currentTimes })
+          await servers[0].views.simulateViewer({ id: vodVideoId, xForwardedFor: xForwardedFor2, sessionId: sessionId2, currentTimes })
+          await servers[1].views.simulateViewer({ id: vodVideoId, xForwardedFor, sessionId, currentTimes })
+          await servers[1].views.simulateViewer({ id: vodVideoId, xForwardedFor, sessionId, currentTimes })
+        }
 
-        await checkCounter('viewers', liveVideoId, 2)
-        await checkCounter('viewers', vodVideoId, 3)
+        {
+          const currentTimes = [ 0, 35 ]
+
+          await servers[0].views.simulateViewer({ id: liveVideoId, xForwardedFor: xForwardedFor2, sessionId: sessionId2, currentTimes })
+          await servers[1].views.simulateViewer({ id: liveVideoId, xForwardedFor, sessionId, currentTimes })
+          await servers[1].views.simulateViewer({ id: liveVideoId, xForwardedFor, sessionId, currentTimes })
+        }
+
+        let doWhile = true
+        while (doWhile) {
+          try {
+            await checkCounter('viewers', liveVideoId, 2)
+            await checkCounter('viewers', vodVideoId, 3)
+
+            doWhile = false
+          } catch {
+            await wait(1000)
+
+            doWhile = true
+          }
+        }
 
         await processViewsBuffer(servers)
 
@@ -167,7 +211,13 @@ describe('Test video views/viewers counters', function () {
       servers = await prepareViewsServers({ viewExpiration: '5 seconds', viewersFederationV2: false })
     })
 
-    runTests()
+    describe('Not using session id', function () {
+      runTests({ useSessionId: false })
+    })
+
+    describe('Using session id', function () {
+      runTests({ useSessionId: true })
+    })
 
     after(async function () {
       await cleanupTests(servers)
@@ -182,10 +232,74 @@ describe('Test video views/viewers counters', function () {
       servers = await prepareViewsServers({ viewExpiration: '5 seconds', viewersFederationV2: true })
     })
 
-    runTests()
+    describe('Not using session id', function () {
+      runTests({ useSessionId: false })
+    })
+
+    describe('Using session id', function () {
+      runTests({ useSessionId: true })
+    })
+
+    describe('View minimum duration config', function () {
+
+      it('Should update "count_view_after" config', async function () {
+        this.timeout(120000)
+
+        const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+
+        {
+          await servers[0].views.simulateViewer({ id: uuid, sessionId: buildUUID(), currentTimes: [ 1, 2 ] })
+          await processViewsBuffer(servers)
+
+          await checkCounter('views', uuid, 0)
+        }
+
+        await servers[0].kill()
+        await servers[0].run({ views: { videos: { count_view_after: '1 second' } } })
+
+        {
+          await servers[0].views.simulateViewer({ id: uuid, sessionId: buildUUID(), currentTimes: [ 1, 2 ] })
+          await processViewsBuffer(servers)
+
+          await checkCounter('views', uuid, 1)
+        }
+      })
+    })
 
     after(async function () {
       await cleanupTests(servers)
     })
   })
+
+  describe('Disabling session id trusting', function () {
+    let videoUUID: string
+
+    before(async function () {
+      this.timeout(120000)
+
+      servers = await prepareViewsServers({ viewExpiration: '5 seconds', viewersFederationV2: true, trustViewerSessionId: false });
+
+      ({ uuid: videoUUID } = await servers[0].videos.quickUpload({ name: 'video' }))
+      await waitJobs(servers)
+    })
+
+    it('Should not take into account session id if the server does not trust it', async function () {
+      await servers[0].views.simulateViewer({ id: videoUUID, sessionId: buildUUID(), currentTimes: [ 1, 4 ] })
+      await servers[0].views.simulateViewer({ id: videoUUID, sessionId: buildUUID(), currentTimes: [ 1, 4 ] })
+
+      await processViewsBuffer(servers)
+      await checkCounter('views', videoUUID, 1)
+
+      const xForwardedFor = '0.0.0.1,127.0.0.1'
+      await servers[0].views.simulateViewer({ id: videoUUID, xForwardedFor, sessionId: buildUUID(), currentTimes: [ 1, 4 ] })
+
+      await processViewsBuffer(servers)
+      await checkCounter('views', videoUUID, 2)
+    })
+
+    after(async function () {
+      await cleanupTests(servers)
+    })
+  })
+
 })

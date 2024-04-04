@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { SQLCommand } from '@tests/shared/sql-command.js'
 import { wait } from '@peertube/peertube-core-utils'
+import { buildUUID } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createMultipleServers,
@@ -12,6 +11,8 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { SQLCommand } from '@tests/shared/sql-command.js'
+import { expect } from 'chai'
 
 describe('Test video views cleaner', function () {
   let servers: PeerTubeServer[]
@@ -33,10 +34,12 @@ describe('Test video views cleaner', function () {
 
     await waitJobs(servers)
 
-    await servers[0].views.simulateView({ id: videoIdServer1 })
-    await servers[1].views.simulateView({ id: videoIdServer1 })
-    await servers[0].views.simulateView({ id: videoIdServer2 })
-    await servers[1].views.simulateView({ id: videoIdServer2 })
+    const sessionId = buildUUID()
+
+    await servers[0].views.simulateView({ id: videoIdServer1, sessionId })
+    await servers[1].views.simulateView({ id: videoIdServer1, sessionId })
+    await servers[0].views.simulateView({ id: videoIdServer2, sessionId })
+    await servers[1].views.simulateView({ id: videoIdServer2, sessionId })
 
     await waitJobs(servers)
 

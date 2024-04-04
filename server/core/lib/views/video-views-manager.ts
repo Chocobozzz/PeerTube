@@ -1,6 +1,8 @@
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { VideoViewEvent } from '@peertube/peertube-models'
+import { sha256 } from '@peertube/peertube-node-utils'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
+import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { VideoScope, VideoViewerCounters, VideoViewerStats, VideoViews, ViewerScope } from './shared/index.js'
 
 /**
@@ -44,20 +46,26 @@ export class VideoViewsManager {
     video: MVideoImmutable
     currentTime: number
     ip: string | null
+    sessionId?: string
     viewEvent?: VideoViewEvent
   }) {
     const { video, ip, viewEvent, currentTime } = options
 
-    logger.debug('Processing local view for %s and ip %s.', video.url, ip, lTags())
+    let sessionId = options.sessionId
+    if (!sessionId || CONFIG.VIEWS.VIDEOS.TRUST_VIEWER_SESSION_ID !== true) {
+      sessionId = sha256(CONFIG.SECRETS + '-' + ip)
+    }
 
-    await this.videoViewerStats.addLocalViewer({ video, ip, viewEvent, currentTime })
+    logger.debug(`Processing local view for ${video.url}, ip ${ip} and session id ${sessionId}.`, lTags())
 
-    const successViewer = await this.videoViewerCounters.addLocalViewer({ video, ip })
+    await this.videoViewerStats.addLocalViewer({ video, ip, sessionId, viewEvent, currentTime })
+
+    const successViewer = await this.videoViewerCounters.addLocalViewer({ video, sessionId })
 
     // Do it after added local viewer to fetch updated information
-    const watchTime = await this.videoViewerStats.getWatchTime(video.id, ip)
+    const watchTime = await this.videoViewerStats.getWatchTime(video.id, sessionId)
 
-    const successView = await this.videoViews.addLocalView({ video, watchTime, ip })
+    const successView = await this.videoViews.addLocalView({ video, watchTime, sessionId })
 
     return { successView, successViewer }
   }

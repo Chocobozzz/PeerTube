@@ -1,4 +1,4 @@
-import { buildUUID, isTestOrDevInstance, isUsingViewersFederationV2, sha256 } from '@peertube/peertube-node-utils'
+import { isTestOrDevInstance, isUsingViewersFederationV2 } from '@peertube/peertube-node-utils'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { VIEW_LIFETIME } from '@server/initializers/constants.js'
@@ -28,8 +28,6 @@ export class VideoViewerCounters {
   private readonly viewersPerVideo = new Map<number, Viewer[]>()
   private readonly idToViewer = new Map<string, Viewer>()
 
-  private readonly salt = buildUUID()
-
   private processingViewerCounters = false
 
   constructor () {
@@ -40,13 +38,13 @@ export class VideoViewerCounters {
 
   async addLocalViewer (options: {
     video: MVideoImmutable
-    ip: string
+    sessionId: string
   }) {
-    const { video, ip } = options
+    const { video, sessionId } = options
 
     logger.debug('Adding local viewer to video viewers counter %s.', video.uuid, { ...lTags(video.uuid) })
 
-    const viewerId = this.generateViewerId(ip, video.uuid)
+    const viewerId = sessionId + '-' + video.uuid
     const viewer = this.idToViewer.get(viewerId)
 
     if (viewer) {
@@ -215,10 +213,6 @@ export class VideoViewerCounters {
     PeerTubeSocket.Instance.sendVideoViewsUpdate(video, totalViewers)
 
     logger.debug('Video viewers update for %s is %d.', video.url, totalViewers, lTags())
-  }
-
-  private generateViewerId (ip: string, videoUUID: string) {
-    return sha256(this.salt + '-' + ip + '-' + videoUUID)
   }
 
   private async federateViewerIfNeeded (video: MVideoImmutable, viewer: Viewer) {

@@ -9,8 +9,9 @@ export class ViewsCommand extends AbstractCommand {
     currentTime: number
     viewEvent?: VideoViewEvent
     xForwardedFor?: string
+    sessionId?: string
   }) {
-    const { id, xForwardedFor, viewEvent, currentTime } = options
+    const { id, xForwardedFor, viewEvent, currentTime, sessionId } = options
     const path = '/api/v1/videos/' + id + '/views'
 
     return this.postBodyRequest({
@@ -20,7 +21,8 @@ export class ViewsCommand extends AbstractCommand {
       xForwardedFor,
       fields: {
         currentTime,
-        viewEvent
+        viewEvent,
+        sessionId
       },
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
@@ -30,6 +32,7 @@ export class ViewsCommand extends AbstractCommand {
   async simulateView (options: OverrideCommandOptions & {
     id: number | string
     xForwardedFor?: string
+    sessionId?: string
   }) {
     await this.view({ ...options, currentTime: 0 })
     await this.view({ ...options, currentTime: 5 })
@@ -39,6 +42,7 @@ export class ViewsCommand extends AbstractCommand {
     id: number | string
     currentTimes: number[]
     xForwardedFor?: string
+    sessionId?: string
   }) {
     let viewEvent: VideoViewEvent = 'seek'
 

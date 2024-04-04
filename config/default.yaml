@@ -381,7 +381,16 @@ views:
     # PeerTube buffers local video views before updating and federating the video
     local_buffer_update_interval: '30 minutes'
 
-    ip_view_expiration: '1 hour'
+    # How long does it take to count again a view from the same user
+    view_expiration: '1 hour'
+
+    # Minimum amount of time the viewer has to watch the video before PeerTube adds a view
+    count_view_after: '10 seconds'
+
+    # Player can send a session id string to track the user
+    # Since this can be spoofed by users to create fake views, you have the option to disable this feature
+    # If disabled, PeerTube will use the IP address to track the same user (default behavior before PeerTube 6.1)
+    trust_viewer_session_id: true
 
     # How often the web browser sends "is watching" information to the server
     # Increase the value or set null to disable it if you plan to have many viewers

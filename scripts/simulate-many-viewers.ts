@@ -59,7 +59,7 @@ async function prepare () {
     views: {
       videos: {
         local_buffer_update_interval: '30 minutes',
-        ip_view_expiration: '1 hour'
+        view_expiration: '1 hour'
       }
     }
   }

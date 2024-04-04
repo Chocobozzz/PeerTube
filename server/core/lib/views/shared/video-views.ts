@@ -1,12 +1,13 @@
+import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { VIEW_LIFETIME } from '@server/initializers/constants.js'
 import { sendView } from '@server/lib/activitypub/send/send-view.js'
 import { getCachedVideoDuration } from '@server/lib/video.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
-import { buildUUID } from '@peertube/peertube-node-utils'
-import { Redis } from '../../redis.js'
 import { LRUCache } from 'lru-cache'
-import { VIEW_LIFETIME } from '@server/initializers/constants.js'
+import { Redis } from '../../redis.js'
+import { CONFIG } from '@server/initializers/config.js'
 
 const lTags = loggerTagsFactory('views')
 
@@ -19,19 +20,19 @@ export class VideoViews {
 
   async addLocalView (options: {
     video: MVideoImmutable
-    ip: string
+    sessionId: string
     watchTime: number
   }) {
-    const { video, ip, watchTime } = options
+    const { video, sessionId, watchTime } = options
 
     logger.debug('Adding local view to video %s.', video.uuid, { watchTime, ...lTags(video.uuid) })
 
     if (!await this.hasEnoughWatchTime(video, watchTime)) return false
 
-    const viewExists = await this.doesVideoIPViewExist(ip, video.uuid)
+    const viewExists = await this.doesVideoSessionIdViewExist(sessionId, video.uuid)
     if (viewExists) return false
 
-    await this.setIPVideoView(ip, video.uuid)
+    await this.setSessionIdVideoView(sessionId, video.uuid)
 
     await this.addView(video)
 
@@ -69,24 +70,25 @@ export class VideoViews {
   private async hasEnoughWatchTime (video: MVideoImmutable, watchTime: number) {
     const { duration, isLive } = await getCachedVideoDuration(video.id)
 
-    if (isLive || duration >= 30) return watchTime >= 30
+    const countViewAfterSeconds = CONFIG.VIEWS.VIDEOS.COUNT_VIEW_AFTER / 1000 // Config is in ms
+    if (isLive || duration >= countViewAfterSeconds) return watchTime >= countViewAfterSeconds
 
     // Check more than 50% of the video is watched
     return duration / watchTime < 2
   }
 
-  private doesVideoIPViewExist (ip: string, videoUUID: string) {
-    const key = Redis.Instance.generateIPViewKey(ip, videoUUID)
+  private doesVideoSessionIdViewExist (sessionId: string, videoUUID: string) {
+    const key = Redis.Instance.generateSessionIdViewKey(sessionId, videoUUID)
     const value = this.viewsCache.has(key)
     if (value === true) return Promise.resolve(true)
 
-    return Redis.Instance.doesVideoIPViewExist(ip, videoUUID)
+    return Redis.Instance.doesVideoSessionIdViewExist(sessionId, videoUUID)
   }
 
-  private setIPVideoView (ip: string, videoUUID: string) {
-    const key = Redis.Instance.generateIPViewKey(ip, videoUUID)
+  private setSessionIdVideoView (sessionId: string, videoUUID: string) {
+    const key = Redis.Instance.generateSessionIdViewKey(sessionId, videoUUID)
     this.viewsCache.set(key, true)
 
-    return Redis.Instance.setIPVideoView(ip, videoUUID)
+    return Redis.Instance.setSessionIdVideoView(sessionId, videoUUID)
   }
 }

@@ -41,7 +41,8 @@ async function viewVideo (req: express.Request, res: express.Response) {
     video,
     ip,
     currentTime: body.currentTime,
-    viewEvent: body.viewEvent
+    viewEvent: body.viewEvent,
+    sessionId: body.sessionId
   })
 
   if (successView) {
