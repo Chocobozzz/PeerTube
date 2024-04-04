@@ -872,6 +872,11 @@ To create a client page, register a new client route:
 function register ({ registerClientRoute }) {
   registerClientRoute({
     route: 'my-super/route',
+    title: 'Page title for this route',
+    parentRoute: '/my-account', // Optional. The full path will be /my-account/p/my-super/route.
+    menuItem: { // Optional. This will add a menu item to this route. Only supported when parentRoute is '/my-account'.
+      label: 'Sub route',
+    },
     onMount: ({ rootEl }) => {
       rootEl.innerHTML = 'hello'
     }

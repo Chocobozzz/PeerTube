@@ -14,6 +14,7 @@ import { BlocklistService } from '@app/shared/shared-moderation/blocklist.servic
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
+import { PluginPagesComponent } from '@app/shared/shared-plugin-pages/plugin-pages.component'
 
 export default [
   {
@@ -160,6 +161,19 @@ export default [
             title: $localize`Import/Export`
           }
         }
+      },
+      {
+        path: 'p',
+        children: [
+          {
+            path: '**',
+            component: PluginPagesComponent,
+            data: {
+              parentRoute: '/my-account',
+              pluginScope: 'my-account'
+            }
+          }
+        ]
       }
     ]
   }
