@@ -30,6 +30,13 @@ async function register ({
 
         if (videoFromDB1.uuid !== videoFromDB2.uuid || videoFromDB2.uuid !== videoFromDB3.uuid) return
 
+        const videoWithFiles = await peertubeHelpers.videos.loadByIdOrUUIDWithFiles(video.id)
+
+        if (videoWithFiles.getHLSPlaylist().getMasterPlaylistUrl(videoWithFiles) === null) {
+          logger.error('Video with files could not be loaded.')
+          return
+        }
+
         logger.info('video from DB uuid is %s.', videoFromDB1.uuid)
 
         await peertubeHelpers.videos.removeVideo(video.id)
