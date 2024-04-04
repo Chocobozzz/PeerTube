@@ -1,8 +1,7 @@
 import { ListKeyManagerOption } from '@angular/cdk/a11y'
+import { NgIf } from '@angular/common'
 import { Component, Input, OnInit } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { HighlightPipe } from './highlight.pipe'
-import { NgIf } from '@angular/common'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 
 export type SuggestionPayload = {
@@ -19,7 +18,7 @@ export type SuggestionPayloadType = 'search-instance' | 'search-index'
   templateUrl: './suggestion.component.html',
   styleUrls: [ './suggestion.component.scss' ],
   standalone: true,
-  imports: [ GlobalIconComponent, NgIf, HighlightPipe ]
+  imports: [ GlobalIconComponent, NgIf ]
 })
 export class SuggestionComponent implements OnInit, ListKeyManagerOption {
   @Input() result: SuggestionPayload
