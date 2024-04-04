@@ -442,7 +442,7 @@ export class PlayerOptionsBuilder {
       : undefined
 
     const description = this.hasWarningTitle() && this.hasP2PEnabled()
-      ? '<span class="text">' + peertubeTranslate('Watching this video may reveal your IP address to others.') + '</span>'
+      ? peertubeTranslate('Watching this video may reveal your IP address to others.')
       : undefined
 
     if (!title && !description) return

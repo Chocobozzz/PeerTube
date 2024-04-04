@@ -7,7 +7,6 @@ class SettingsPanel extends Component {
   createEl () {
     return super.createEl('div', {
       className: 'vjs-settings-panel',
-      innerHTML: '',
       tabIndex: -1
     })
   }

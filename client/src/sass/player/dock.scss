@@ -60,15 +60,6 @@
   .peertube-dock-description {
     font-size: 11px;
     line-height: 1.5;
-
-    .text::before {
-      @include margin-right(4px);
-    }
-
-    .text::after {
-      @include margin-left(4px);
-      transform: scale(-1, 1);
-    }
   }
 
   &.vjs-playing.vjs-user-inactive .peertube-dock {

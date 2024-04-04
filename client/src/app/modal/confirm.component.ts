@@ -68,8 +68,8 @@ export class ConfirmComponent implements OnInit {
         this.confirmButtonText = confirmButtonText || $localize`Confirm`
 
         this.html.toSafeHtml(message)
-          .then(message => {
-            this.message = message
+          .then(html => {
+            this.message = html
 
             this.showModal()
           })

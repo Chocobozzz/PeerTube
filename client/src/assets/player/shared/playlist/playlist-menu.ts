@@ -73,7 +73,6 @@ class PlaylistMenu extends Component {
 
     const menu = super.createEl('div', {
       className: 'vjs-playlist-menu',
-      innerHTML: '',
       tabIndex: -1
     })
 
@@ -84,13 +83,13 @@ class PlaylistMenu extends Component {
     const headerLeft = super.createEl('div')
 
     const leftTitle = super.createEl('div', {
-      innerHTML: this.options_.playlist.displayName,
+      innerText: this.options_.playlist.displayName,
       className: 'title'
     })
 
     const playlistChannel = this.options_.playlist.videoChannel
     const leftSubtitle = super.createEl('div', {
-      innerHTML: playlistChannel
+      innerText: playlistChannel
         ? this.player().localize('By {1}', [ playlistChannel.displayName ])
         : '',
       className: 'channel'

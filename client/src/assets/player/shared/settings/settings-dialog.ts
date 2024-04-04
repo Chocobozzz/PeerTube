@@ -20,7 +20,6 @@ class SettingsDialog extends Component {
 
     return super.createEl('div', {
       className: 'vjs-settings-dialog vjs-modal-overlay',
-      innerHTML: '',
       tabIndex: -1
     }, {
       'role': 'dialog',
