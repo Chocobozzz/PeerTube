@@ -34,6 +34,9 @@ if [ "$branch" != "develop" ] && [[ "$branch" != release/* ]]; then
   exit -1
 fi
 
+yarn check --integrity --verify-tree
+(cd client && yarn check --integrity --verify-tree)
+
 version="v$1"
 github_prerelease_option=""
 if [[ "$version" = *"-alpha."* ]] || [[ "$version" = *"-beta."* ]] || [[ "$version" = *"-rc."* ]]; then
