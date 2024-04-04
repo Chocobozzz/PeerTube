@@ -1,5 +1,17 @@
 # Changelog
 
+## v6.0.4
+
+### IMPORTANT NOTES
+
+ * If you upgrade from PeerTube **< v6.0.0**, please follow v6.0.0 IMPORTANT NOTES
+ * If you upgrade from PeerTube **v6.0.0**, please follow v6.0.1 IMPORTANT NOTES
+
+### SECURITY
+
+ * **Important:** Prevent XSS injection in embed. Thanks [Syst3m0ver](https://www.linkedin.com/in/ahmed-hasnaoui-790618180)!
+
+
 ## v6.0.3
 
 ### IMPORTANT NOTES
