@@ -7,8 +7,10 @@
 
   <div
     class="flex-auto overflow-hidden text-start no-wrap css-truncate css-truncate-target"
-    [attr.aria-label]="result.text" [innerHTML]="result.text | highlight : highlight"
-  ></div>
+    [attr.aria-label]="result.text"
+  >
+    {{ result.text }}
+  </div>
 
   <div class="border rounded flex-shrink-0 px-1 bg-gray text-gray-light ms-1 f6">
     <span *ngIf="result.type === 'search-instance'" i18n>In this instance's network</span>

@@ -11,7 +11,6 @@ import { AppComponent } from './app.component'
 import { CoreModule, PluginService, RedirectService, ServerService } from './core'
 import { EmptyComponent } from './empty.component'
 import { HeaderComponent, SearchTypeaheadComponent, SuggestionComponent } from './header'
-import { HighlightPipe } from './header/highlight.pipe'
 import { polyfillICU } from './helpers'
 import { LanguageChooserComponent, MenuComponent, NotificationComponent } from './menu'
 import { AccountSetupWarningModalComponent } from './modal/account-setup-warning-modal.component'
@@ -58,7 +57,6 @@ export function loadConfigFactory (server: ServerService, pluginService: PluginS
     HeaderComponent,
     SearchTypeaheadComponent,
     SuggestionComponent,
-    HighlightPipe,
 
     AccountSetupWarningModalComponent,
     CustomModalComponent,
