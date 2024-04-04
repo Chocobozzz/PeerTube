@@ -200,18 +200,20 @@ export class RunnerServer {
 
         await this.tryToExecuteJobAsync(server, job)
       } catch (err) {
+        hadAvailableJob = false
+
         const code = (err.res?.body as PeerTubeProblemDocument)?.code
 
         if (code === ServerErrorCode.RUNNER_JOB_NOT_IN_PENDING_STATE) {
           logger.debug({ err }, 'Runner job is not in pending state anymore, retry later')
-          return
+          continue
         }
 
         if (code === ServerErrorCode.UNKNOWN_RUNNER_TOKEN) {
           logger.error({ err }, `Unregistering ${server.url} as the runner token ${server.runnerToken} is invalid`)
 
           await this.unregisterRunner({ url: server.url, runnerName: server.runnerName })
-          return
+          continue
         }
 
         logger.error({ err }, `Cannot request/accept job on ${server.url} for runner ${server.runnerName}`)
