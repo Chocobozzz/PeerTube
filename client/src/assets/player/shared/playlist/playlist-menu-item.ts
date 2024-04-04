@@ -36,8 +36,7 @@ class PlaylistMenuItem extends Component {
 
   createEl () {
     const li = super.createEl('li', {
-      className: 'vjs-playlist-menu-item',
-      innerHTML: ''
+      className: 'vjs-playlist-menu-item'
     }) as HTMLElement
 
     if (!this.options_.element.video) {
@@ -50,7 +49,7 @@ class PlaylistMenuItem extends Component {
 
     const position = super.createEl('div', {
       className: 'item-position',
-      innerHTML: this.options_.element.position
+      innerText: this.options_.element.position
     })
 
     positionBlock.appendChild(position)
@@ -92,12 +91,12 @@ class PlaylistMenuItem extends Component {
     })
 
     const title = super.createEl('div', {
-      innerHTML: videoElement.video.name,
+      innerText: videoElement.video.name,
       className: 'title'
     })
 
     const channel = super.createEl('div', {
-      innerHTML: videoElement.video.channel.displayName,
+      innerText: videoElement.video.channel.displayName,
       className: 'channel'
     })
 
@@ -111,7 +110,7 @@ class PlaylistMenuItem extends Component {
       if (videoElement.stopTimestamp) html += ' - ' + secondsToTime(videoElement.stopTimestamp)
 
       const timestamps = super.createEl('div', {
-        innerHTML: html,
+        innerText: html,
         className: 'timestamps'
       })
 
@@ -125,7 +124,7 @@ class PlaylistMenuItem extends Component {
   private buildUnavailableVideo (li: HTMLElement) {
     const block = super.createEl('div', {
       className: 'item-unavailable',
-      innerHTML: this.player().localize('Unavailable video')
+      innerTExt: this.player().localize('Unavailable video')
     })
 
     li.appendChild(block)

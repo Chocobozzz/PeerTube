@@ -37,7 +37,7 @@ class PeerTubeDockComponent extends Component {
       const title = videojs.dom.createEl('div', {
         className: 'peertube-dock-title',
         title: this.options_.title,
-        innerHTML: this.options_.title
+        innerText: this.options_.title
       })
 
       elWrapperTitleDescription.appendChild(title)
@@ -47,7 +47,7 @@ class PeerTubeDockComponent extends Component {
       const description = videojs.dom.createEl('div', {
         className: 'peertube-dock-description',
         title: this.options_.description,
-        innerHTML: this.options_.description
+        innerText: this.options_.description
       })
 
       elWrapperTitleDescription.appendChild(description)

@@ -285,15 +285,15 @@ class StatsCard extends Component {
     if (player.muted()) volume += player.localize(' (muted)')
 
     const networkActivity = playerNetworkInfo.downloadSpeed
-      ? `${playerNetworkInfo.downloadSpeed} &dArr; / ${playerNetworkInfo.uploadSpeed} &uArr;`
+      ? `${playerNetworkInfo.downloadSpeed} \u21D3 / ${playerNetworkInfo.uploadSpeed} \u21D1`
       : undefined
 
     let totalTransferred = playerNetworkInfo.totalDownloaded
-      ? `${playerNetworkInfo.totalDownloaded} &dArr;`
+      ? `${playerNetworkInfo.totalDownloaded} \u21D3`
       : ''
 
     if (playerNetworkInfo.totalUploaded) {
-      totalTransferred += `/ ${playerNetworkInfo.totalUploaded} &uArr;`
+      totalTransferred += `/ ${playerNetworkInfo.totalUploaded} \u21D1`
     }
 
     const downloadBreakdown = playerNetworkInfo.downloadedFromServer
@@ -337,16 +337,16 @@ class StatsCard extends Component {
 
     el.root.style.display = 'block'
 
-    if (el.value.innerHTML === value) return
-    el.value.innerHTML = value
+    if (el.value.innerText === value) return
+    el.value.innerText = value
   }
 
-  private buildInfoRow (labelText: string, valueHTML?: string) {
+  private buildInfoRow (labelText: string) {
     const root = videojs.dom.createEl('div') as HTMLElement
     root.style.display = 'none'
 
     const label = videojs.dom.createEl('div', { innerText: labelText }) as HTMLElement
-    const value = videojs.dom.createEl('span', { innerHTML: valueHTML }) as HTMLElement
+    const value = videojs.dom.createEl('span') as HTMLElement
 
     root.appendChild(label)
     root.appendChild(value)

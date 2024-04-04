@@ -121,7 +121,7 @@ export class EndCard extends Component {
     this.autoplayRing.setAttribute('stroke-dasharray', `${this.dashOffsetStart}`)
     this.autoplayRing.setAttribute('stroke-dashoffset', `${-this.dashOffsetStart}`)
 
-    this.title.innerHTML = this.options_.getTitle()
+    this.title.innerText = this.options_.getTitle()
 
     if (this.totalTicks === 0) {
       return cb(false)
