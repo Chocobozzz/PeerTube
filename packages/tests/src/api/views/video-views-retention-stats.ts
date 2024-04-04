@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { buildUUID } from '@peertube/peertube-node-utils'
 import { PeerTubeServer, cleanupTests } from '@peertube/peertube-server-commands'
 import { prepareViewsServers, prepareViewsVideos, processViewersStats } from '@tests/shared/views.js'
 import { expect } from 'chai'
