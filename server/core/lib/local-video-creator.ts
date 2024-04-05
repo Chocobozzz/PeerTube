@@ -205,7 +205,7 @@ export class LocalVideoCreator {
       }).catch(err => {
         // Reset elements to reinsert them in the database
         this.video.isNewRecord = true
-        this.videoFile.isNewRecord = true
+        if (this.videoFile) this.videoFile.isNewRecord = true
 
         for (const t of thumbnails) {
           t.isNewRecord = true
