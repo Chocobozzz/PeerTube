@@ -124,7 +124,7 @@ class PlaylistMenuItem extends Component {
   private buildUnavailableVideo (li: HTMLElement) {
     const block = super.createEl('div', {
       className: 'item-unavailable',
-      innerTExt: this.player().localize('Unavailable video')
+      innerText: this.player().localize('Unavailable video')
     })
 
     li.appendChild(block)
