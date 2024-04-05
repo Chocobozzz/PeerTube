@@ -1,7 +1,7 @@
 {
   "name": "@peertube/embed-api",
   "private": false,
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "API to communicate with the PeerTube player embed",
   "scripts": {
     "build": "../../../node_modules/.bin/tsc && ../../../node_modules/.bin/webpack --mode production --config ./webpack.config.js"
