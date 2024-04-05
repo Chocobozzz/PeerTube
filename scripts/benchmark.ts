@@ -272,7 +272,7 @@ async function prepare () {
         max: 5_000_000
       }
     }
-  })
+  }, { nodeArgs: [ '--inspect' ] })
   server = servers[0]
 
   await setAccessTokensToServers(servers)
