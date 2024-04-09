@@ -261,7 +261,7 @@ export class RunnerServer {
           .catch(err2 => logger.error({ err: err2 }, 'Cannot abort job after error'))
       })
       .finally(() => {
-        this.processingJobs = this.processingJobs.filter(p => p !== processingJob)
+        this.processingJobs = this.processingJobs.filter(p => p.job.uuid !== processingJob.job.uuid)
 
         return this.checkAvailableJobs()
       })
