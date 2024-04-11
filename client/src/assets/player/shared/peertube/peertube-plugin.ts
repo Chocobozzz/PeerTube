@@ -115,6 +115,8 @@ class PeerTubePlugin extends Plugin {
           return
         }
 
+        if (this.currentSubtitle === showing.language) return
+
         this.currentSubtitle = showing.language
         saveLastSubtitle(showing.language)
         savePreferredSubtitle(showing.language)

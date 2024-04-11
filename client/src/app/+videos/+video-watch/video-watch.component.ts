@@ -797,6 +797,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       startTime,
       stopTime: urlOptions.stopTime,
 
+      subtitle: urlOptions.subtitle,
+
       embedUrl: video.embedUrl,
       embedTitle: video.name,
 
