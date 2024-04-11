@@ -9,7 +9,7 @@
 
 ### SECURITY
 
- * **Important:** Prevent XSS injection in embed. Thanks [Syst3m0ver](https://www.linkedin.com/in/ahmed-hasnaoui-790618180)!
+ * **Important:** Prevent XSS injection in embed. Thanks [Syst3m0ver](https://www.linkedin.com/in/ahmed-hasnaoui-790618180) and [aramido GmbH](https://aramido.de/sicherheitspruefung/penetrationstest)!
 
 
 ## v6.0.3
