@@ -43,7 +43,7 @@ export function initFeed (parameters: {
     favicon: webserverUrl + '/client/assets/images/favicon.png',
     copyright: `All rights reserved, unless otherwise specified in the terms specified at ${webserverUrl}/about` +
     ` and potential licenses granted by each content's rightholder.`,
-    generator: `Toraifōsu`, // ^.~
+    generator: `PeerTube - ${webserverUrl}`,
     medium: medium || 'video',
     feedLinks: {
       json: `${webserverUrl}/feeds/${resourceType}.json${queryString}`,
