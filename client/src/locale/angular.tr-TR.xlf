@@ -7813,7 +7813,7 @@ Bu kanala video yüklendiğinde video destek alanı otomatik olarak bu metinle d
       </trans-unit>
       <trans-unit id="8731139416455609016" datatype="html" xml:space="preserve">
         <source>Videos with the most views during the last <x id="PH" equiv-text="this.trendingDays"/> days</source>
-        <target state="translated">Son dönemde en çok izlenen videolar <x id="PH" equiv-text="this.trendingDays"/>günler</target>
+        <target state="translated">Son dönemde en çok izlenen videolar <x id="PH" equiv-text="this.trendingDays"/>gün</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context>
           <context context-type="linenumber">231</context>
@@ -17210,7 +17210,7 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
       </trans-unit>
       <trans-unit id="4951459525104027759" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</source>
-        <target state="translated">{interval, plural, =1 {1 hafta önce} other {<x id="interval"/> haftalar önce}}</target>
+        <target state="translated">{interval, plural, =1 {1 hafta önce} other {<x id="interval"/> hafta önce}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">35</context>
@@ -17226,7 +17226,7 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
       </trans-unit>
       <trans-unit id="8562677309401914974" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</source>
-        <target state="translated">{interval, plural, =1 {1 saat önce} other {<x id="interval"/> saatler önce}}</target>
+        <target state="translated">{interval, plural, =1 {1 saat önce} other {<x id="interval"/> saat önce}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">45</context>
