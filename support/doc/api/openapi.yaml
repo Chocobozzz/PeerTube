@@ -7497,7 +7497,7 @@ components:
           $ref: '#/components/schemas/VideoPrivacySet'
         updateAt:
           type: string
-          format: date
+          format: date-time
           description: When to update the video
       required:
         - updateAt
