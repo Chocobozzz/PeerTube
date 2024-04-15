@@ -124,7 +124,7 @@
         </button>
         <div class="peertube-select-container">
           <select id="category" name="category" [(ngModel)]="advancedSearch.categoryOneOf" class="form-control">
-            <option [value]="undefined" i18n>Display all categories</option>
+            <option [ngValue]="undefined" i18n>Display all categories</option>
             <option *ngFor="let category of videoCategories" [value]="category.id">{{ category.label }}</option>
           </select>
         </div>
@@ -137,7 +137,7 @@
         </button>
         <div class="peertube-select-container">
           <select id="licence" name="licence" [(ngModel)]="advancedSearch.licenceOneOf" class="form-control">
-            <option [value]="undefined" i18n>Display all licenses</option>
+            <option [ngValue]="undefined" i18n>Display all licenses</option>
             <option *ngFor="let licence of videoLicences" [value]="licence.id">{{ licence.label }}</option>
           </select>
         </div>
@@ -150,7 +150,7 @@
         </button>
         <div class="peertube-select-container">
           <select id="language" name="language" [(ngModel)]="advancedSearch.languageOneOf" class="form-control">
-            <option [value]="undefined" i18n>Display all languages</option>
+            <option [ngValue]="undefined" i18n>Display all languages</option>
             <option *ngFor="let language of videoLanguages" [value]="language.id">{{ language.label }}</option>
           </select>
         </div>

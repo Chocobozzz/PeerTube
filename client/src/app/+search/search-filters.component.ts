@@ -109,6 +109,7 @@ export class SearchFiltersComponent implements OnInit {
 
   formUpdated () {
     this.onDurationOrPublishedUpdated()
+    console.log(this.advancedSearch)
     this.filtered.emit(this.advancedSearch)
   }
 
