@@ -1918,13 +1918,13 @@ The link will expire within 1 hour.</source>
       <trans-unit id="2468689683507870964" datatype="html">
         <source>In this instance's network</source>
         <target state="new">In this instance's network</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">14</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">16</context></context-group></trans-unit>
       <trans-unit id="4494942989613184609" datatype="html">
         <source>In the vidiverse</source>
         <target state="translated">No vídeoverso</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">15</context></context-group>
-      </trans-unit><trans-unit id="8151924435547335490" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">17</context></context-group></trans-unit><trans-unit id="8151924435547335490" datatype="html">
         <source>Upload failed</source><target state="new">Upload failed</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">13</context></context-group></trans-unit>
@@ -3803,7 +3803,7 @@ The link will expire within 1 hour.</source>
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">112</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">78</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">30</context></context-group></trans-unit><trans-unit id="17234570072885140" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">112</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">78</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">36</context></context-group></trans-unit><trans-unit id="17234570072885140" datatype="html">
         <source>Registrations</source><target state="new">Registrations</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">118</context></context-group></trans-unit>
@@ -3822,7 +3822,7 @@ The link will expire within 1 hour.</source>
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">142</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">103</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">33</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">109</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">3</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">142</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">103</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">39</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">110</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">3</context></context-group></trans-unit>
       <trans-unit id="5668793810321242853">
         <source>Muted servers</source>
         <target state="new">Muted servers</target>
@@ -3831,7 +3831,7 @@ The link will expire within 1 hour.</source>
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">150</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">38</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">118</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">3</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">150</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">44</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">119</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">3</context></context-group></trans-unit>
       <trans-unit id="2343069726009080052" datatype="html">
         <source>Video <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
         <target state="translated">Vídeo <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
@@ -6107,11 +6107,11 @@ The link will expire within 1 hour.</source>
         <source>Account settings</source>
         <target state="new">Account settings</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">42</context></context-group></trans-unit><trans-unit id="5863226045830598109" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">43</context></context-group></trans-unit><trans-unit id="5863226045830598109" datatype="html">
         <source>Two factor authentication</source><target state="new">Two factor authentication</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">52</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">53</context></context-group></trans-unit>
       <trans-unit id="2864486939135008600" datatype="html">
         <source>Playlist elements</source>
         <target state="new">Playlist elements</target>
@@ -9080,7 +9080,7 @@ The link will expire within 1 hour.</source>
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">1</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">57</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">132</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">28</context></context-group></trans-unit><trans-unit id="5767090948392236130" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">1</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">63</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">133</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">28</context></context-group></trans-unit><trans-unit id="5767090948392236130" datatype="html">
         <source>Notification preferences</source><target state="new">Notification preferences</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context>
@@ -9093,7 +9093,7 @@ The link will expire within 1 hour.</source>
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">67</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">150</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">73</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">151</context></context-group></trans-unit>
       <trans-unit id="104404386496394770" datatype="html">
         <source>Delete playlist</source>
         <target state="new">Delete playlist</target>
@@ -9204,7 +9204,7 @@ The link will expire within 1 hour.</source>
         <source>My abuse reports</source>
         <target state="new">My abuse reports</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">141</context></context-group></trans-unit><trans-unit id="5603224609929994288" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">142</context></context-group></trans-unit><trans-unit id="5603224609929994288" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> is awaiting email verification
 </source><target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> is awaiting email verification
 </target>
@@ -9303,7 +9303,7 @@ The link will expire within 1 hour.</source>
         <target state="new">Subscribe to the account</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">110</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">961</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">110</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">963</context></context-group></trans-unit>
       <trans-unit id="3131904093925601441" datatype="html">
         <source>PLAYLISTS</source>
         <target state="new">PLAYLISTS</target>
@@ -9760,7 +9760,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Abuse reports</source>
         <target state="new">Abuse reports</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">43</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">49</context></context-group></trans-unit>
       <trans-unit id="4930506384627295710" datatype="html">
         <source>Settings</source>
         <target state="new">Settings</target>
@@ -9768,7 +9768,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.html</context><context context-type="linenumber">12</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">49</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">1</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">52</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.html</context><context context-type="linenumber">12</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">49</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">1</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">58</context></context-group></trans-unit>
       <trans-unit id="9178182467454450952">
         <source>Confirm</source>
         <target>Confirmar</target>
@@ -11639,7 +11639,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import-export.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">62</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">160</context></context-group></trans-unit><trans-unit id="2611126741793124345" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import-export.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">68</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/routes.ts</context><context context-type="linenumber">161</context></context-group></trans-unit><trans-unit id="2611126741793124345" datatype="html">
         <source>IMPORT</source><target state="new">IMPORT</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
@@ -12389,67 +12389,67 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Enter/exit fullscreen</source>
         <target state="new">Enter/exit fullscreen</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">924</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">926</context></context-group></trans-unit>
       <trans-unit id="2971009377468404076" datatype="html">
         <source>Play/Pause the video</source>
         <target state="new">Play/Pause the video</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">925</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">927</context></context-group></trans-unit>
       <trans-unit id="4147087312411482964" datatype="html">
         <source>Mute/unmute the video</source>
         <target state="new">Mute/unmute the video</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">926</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">928</context></context-group></trans-unit>
       <trans-unit id="4791956574676305640" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90%</source>
         <target state="new">Skip to a percentage of the video: 0 is 0% and 9 is 90%</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">941</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">943</context></context-group></trans-unit>
       <trans-unit id="3887762369650091344" datatype="html">
         <source>Increase the volume</source>
         <target state="new">Increase the volume</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">928</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">930</context></context-group></trans-unit>
       <trans-unit id="1363382131573461910" datatype="html">
         <source>Decrease the volume</source>
         <target state="new">Decrease the volume</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">929</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">931</context></context-group></trans-unit>
       <trans-unit id="2541031516422557760" datatype="html">
         <source>Seek the video forward</source>
         <target state="new">Seek the video forward</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">943</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">945</context></context-group></trans-unit>
       <trans-unit id="8813023402019364882" datatype="html">
         <source>Seek the video backward</source>
         <target state="new">Seek the video backward</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">944</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">946</context></context-group></trans-unit>
       <trans-unit id="581757752202843950" datatype="html">
         <source>Increase playback rate</source>
         <target state="new">Increase playback rate</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">946</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">948</context></context-group></trans-unit>
       <trans-unit id="5467642834854681120" datatype="html">
         <source>Decrease playback rate</source>
         <target state="new">Decrease playback rate</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">947</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">949</context></context-group></trans-unit>
       <trans-unit id="3860402955823859506" datatype="html">
         <source>Navigate in the video to the previous frame</source>
         <target state="new">Navigate in the video to the previous frame</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">949</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">951</context></context-group></trans-unit>
       <trans-unit id="8232494782895420700" datatype="html">
         <source>Navigate in the video to the next frame</source>
         <target state="new">Navigate in the video to the next frame</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">950</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">952</context></context-group></trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
         <source>Toggle theater mode</source>
         <target state="new">Toggle theater mode</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">934</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">936</context></context-group></trans-unit>
       <trans-unit id="8025996572234182184">
         <source>Like the video</source>
         <target state="new">Like the video</target>
@@ -12565,12 +12565,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Upload a video</source>
         <target state="new">Upload a video</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/app.routes.ts</context><context context-type="linenumber">101</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/app.routes.ts</context><context context-type="linenumber">104</context></context-group></trans-unit>
       <trans-unit id="7590784934397800835" datatype="html">
         <source>Edit a video</source>
         <target state="new">Edit a video</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/app.routes.ts</context><context context-type="linenumber">111</context></context-group></trans-unit><trans-unit id="1914592173926880968" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/app.routes.ts</context><context context-type="linenumber">114</context></context-group></trans-unit><trans-unit id="1914592173926880968" datatype="html">
         <source>Skip to main content</source><target state="new">Skip to main content</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
