@@ -1,6 +1,6 @@
 {
   "name": "peertube-client",
-  "version": "6.0.4",
+  "version": "6.1.0-rc.1",
   "private": true,
   "license": "AGPL-3.0",
   "author": {
