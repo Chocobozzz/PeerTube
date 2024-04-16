@@ -18,7 +18,7 @@ export type TopMenuDropdownParam = {
     label: string
     routerLink: string
     queryParams?: { [id: string]: string }
-    iconName?: GlobalIconName
+    iconName: GlobalIconName
 
     isDisplayed?: () => boolean // Default: () => true
   }[]
@@ -80,10 +80,6 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
     this.routeSub = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => this.updateChildLabels(window.location.pathname))
-
-    this.hasIcons = this.menuEntries.some(
-      e => e.children?.some(c => !!c.iconName)
-    )
   }
 
   ngOnDestroy () {

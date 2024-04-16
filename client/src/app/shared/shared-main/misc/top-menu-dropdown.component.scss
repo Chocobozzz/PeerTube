@@ -16,7 +16,7 @@ ul {
   margin-top: 0 !important;
 }
 
-.icon {
+.dropdown-menu .dropdown-item {
   @include dropdown-with-icon-item;
 
   top: -1px;

@@ -28,7 +28,7 @@
           <li *ngFor="let menuChild of menuEntry.children">
             <a
               *ngIf="isDisplayed(menuChild)" ngbDropdownItem
-              [ngClass]="{ icon: hasIcons }" routerLinkActive="active" ariaCurrentWhenActive="page"
+              routerLinkActive="active" ariaCurrentWhenActive="page"
               [routerLink]="menuChild.routerLink" #routerLink (click)="onActiveLinkScrollToTop(routerLink)"
               [queryParams]="menuChild.queryParams"
             >
