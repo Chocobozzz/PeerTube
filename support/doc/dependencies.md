@@ -42,7 +42,7 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 2. It would be wise to disable root access and to continue this tutorial with a user with sudoers group access. You can see a guide for how to do this in Debian/Ubuntu [here](https://www.digitalocean.com/community/tutorials/how-to-add-and-delete-users-on-ubuntu-20-04).
 
 3. Install NodeJS 18.x:
-[https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
+[https://nodejs.org/en/download/package-manager/all#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/all#debian-and-ubuntu-based-linux-distributions)
 4. Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):
 [https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
 
@@ -97,7 +97,7 @@ sudo systemctl start redis postgresql
 ## CentOS 7
 
 1. Install NodeJS 18.x:
-[https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
+[https://nodejs.org/en/download/package-manager/all#centos-fedora-and-red-hat-enterprise-linux](https://nodejs.org/en/download/package-manager/all#centos-fedora-and-red-hat-enterprise-linux)
 
 2. Install yarn:
 [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
@@ -144,7 +144,7 @@ sudo systemctl enable --now postgresql
 ## Centos 8
 
 1. Install NodeJS 18.x:
-[https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
+[https://nodejs.org/en/download/package-manager/all#centos-fedora-and-red-hat-enterprise-linux](https://nodejs.org/en/download/package-manager/all#centos-fedora-and-red-hat-enterprise-linux)
 
 2. Install yarn:
 [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
@@ -253,7 +253,7 @@ su my-peertube-user
 [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
 
 4. Install NodeJS 18.x:
-[https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
+[https://nodejs.org/en/download/package-manager/all#centos-fedora-and-red-hat-enterprise-linux](https://nodejs.org/en/download/package-manager/all#centos-fedora-and-red-hat-enterprise-linux)
 
 5. Install yarn:
 [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
