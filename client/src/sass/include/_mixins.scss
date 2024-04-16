@@ -309,6 +309,7 @@
     @include margin-right($margin-right);
 
     position: relative;
+    display: inline-block;
     width: $width;
     top: $top;
   }
