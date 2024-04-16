@@ -92,7 +92,6 @@ export type GlobalIconName = keyof typeof icons
 })
 export class GlobalIconComponent implements OnInit {
   @Input() iconName: GlobalIconName
-  @Input() width: string
 
   constructor (
     private el: ElementRef,
@@ -101,6 +100,7 @@ export class GlobalIconComponent implements OnInit {
 
   async ngOnInit () {
     const nativeElement = this.el.nativeElement as HTMLElement
+
     nativeElement.innerHTML = await this.hooks.wrapFun(
       this.getSVGContent.bind(this),
       { name: this.iconName },
@@ -109,10 +109,6 @@ export class GlobalIconComponent implements OnInit {
       'filter:internal.common.svg-icons.get-content.result'
     )
     nativeElement.ariaHidden = 'true'
-
-    if (this.width) {
-      nativeElement.style.width = this.width
-    }
   }
 
   private getSVGContent (options: { name: GlobalIconName }) {
