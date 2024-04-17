@@ -8898,7 +8898,7 @@ Bu kanala video yüklendiğinde video destek alanı otomatik olarak bu metinle d
       </trans-unit>
       <trans-unit id="3094586852616580737" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Yorum} other {Yorumlar} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Yorum} other {Yorum} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">54</context>
@@ -20871,7 +20871,7 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
       </trans-unit>
       <trans-unit id="992317512448454409" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Yorumlar} =1 {1 Yorum} other {<x id="INTERPOLATION"/> Yorumlar}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Yorumlar} =1 {1 Yorum} other {<x id="INTERPOLATION"/> Yorum}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">4</context>
