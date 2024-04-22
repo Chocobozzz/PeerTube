@@ -68,12 +68,8 @@ async function deleteVideoLatestSourceFile (req: express.Request, res: express.R
   await video.removeOriginalFile(videoSource)
 
   videoSource.keptOriginalFilename = null
-  videoSource.fps = null
-  videoSource.resolution = null
-  videoSource.width = null
-  videoSource.height = null
-  videoSource.metadata = null
-  videoSource.size = null
+  videoSource.storage = null
+
   await videoSource.save()
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)

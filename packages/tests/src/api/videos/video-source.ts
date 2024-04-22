@@ -165,15 +165,17 @@ describe('Test video source management', function () {
       expect(data[1].videoSource.fileDownloadUrl).to.exist
 
       expect(data[2].videoSource).to.exist
+
       expect(data[2].videoSource.fileDownloadUrl).to.not.exist
+
       expect(data[2].videoSource.createdAt).to.exist
-      expect(data[2].videoSource.fps).to.be.null
-      expect(data[2].videoSource.height).to.be.null
-      expect(data[2].videoSource.width).to.be.null
-      expect(data[2].videoSource.resolution.id).to.be.null
-      expect(data[2].videoSource.resolution.label).to.be.null
-      expect(data[2].videoSource.size).to.be.null
-      expect(data[2].videoSource.metadata).to.be.null
+      expect(data[2].videoSource.fps).to.to.exist
+      expect(data[2].videoSource.height).to.to.exist
+      expect(data[2].videoSource.width).to.to.exist
+      expect(data[2].videoSource.resolution.id).to.to.exist
+      expect(data[2].videoSource.resolution.label).to.to.exist
+      expect(data[2].videoSource.size).to.to.exist
+      expect(data[2].videoSource.metadata).to.to.exist
     })
 
     it('Should delete all videos and do not have original files anymore', async function () {

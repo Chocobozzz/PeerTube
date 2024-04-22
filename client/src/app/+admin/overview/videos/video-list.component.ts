@@ -216,7 +216,10 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
 
   getFilesSize (video: Video) {
     let total = getAllFiles(video).reduce((p, f) => p += f.size, 0)
-    total += video.videoSource?.size || 0
+
+    if (video.videoSource?.fileDownloadUrl) {
+      total += video.videoSource.size || 0
+    }
 
     return total
   }
