@@ -1,21 +1,29 @@
-import { Subject, Subscription } from 'rxjs'
-import { filter } from 'rxjs/operators'
-import { Component, EventEmitter, Output, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { NavigationEnd, Router } from '@angular/router'
-import { Notifier, PeerTubeSocket, ScreenService } from '@app/core'
-import { NgbPopover, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap'
-import { UserNotificationsComponent } from '@app/shared/standalone-notifications/user-notifications.component'
-import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { CommonModule } from '@angular/common'
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router'
+import { Notifier, PeerTubeSocket, ScreenService } from '@app/core'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { LoaderComponent } from '@app/shared/shared-main/loaders/loader.component'
 import { UserNotificationService } from '@app/shared/shared-main/users/user-notification.service'
+import { UserNotificationsComponent } from '@app/shared/standalone-notifications/user-notifications.component'
+import { NgbPopover, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap'
+import { Subject, Subscription } from 'rxjs'
+import { filter } from 'rxjs/operators'
 
 @Component({
   selector: 'my-notification',
   templateUrl: './notification.component.html',
   styleUrls: [ './notification.component.scss' ],
   standalone: true,
-  imports: [ CommonModule, NgbPopoverModule, UserNotificationsComponent, GlobalIconComponent, LoaderComponent ]
+  imports: [
+    CommonModule,
+    NgbPopoverModule,
+    UserNotificationsComponent,
+    GlobalIconComponent,
+    LoaderComponent,
+    RouterLink,
+    RouterLinkActive
+  ]
 })
 export class NotificationComponent implements OnInit, OnDestroy {
   @ViewChild('popover', { static: true }) popover: NgbPopover
