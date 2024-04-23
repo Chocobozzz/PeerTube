@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="ro">
     <body>
@@ -106,33 +106,33 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.pagination.first-aria" datatype="html">
+      <trans-unit id="ngb.pagination.first-aria" datatype="html" xml:space="preserve">
         <source>First</source>
-        <target/>
+        <target state="translated">Primul</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.pagination.previous-aria" datatype="html">
+      <trans-unit id="ngb.pagination.previous-aria" datatype="html" xml:space="preserve">
         <source>Previous</source>
-        <target/>
+        <target state="translated">Anterior</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.pagination.next-aria" datatype="html">
+      <trans-unit id="ngb.pagination.next-aria" datatype="html" xml:space="preserve">
         <source>Next</source>
-        <target/>
+        <target state="translated">Următorul</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.pagination.last-aria" datatype="html">
+      <trans-unit id="ngb.pagination.last-aria" datatype="html" xml:space="preserve">
         <source>Last</source>
-        <target/>
+        <target state="translated">Ultimul</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">53</context>
@@ -146,9 +146,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.timepicker.increment-hours" datatype="html">
+      <trans-unit id="ngb.timepicker.increment-hours" datatype="html" xml:space="preserve">
         <source>Increment hours</source>
-        <target/>
+        <target state="translated">Adaugă ore</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">9</context>
@@ -170,17 +170,17 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
+      <trans-unit id="ngb.timepicker.decrement-hours" datatype="html" xml:space="preserve">
         <source>Decrement hours</source>
-        <target/>
+        <target state="translated">Scade ore</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
+      <trans-unit id="ngb.timepicker.increment-minutes" datatype="html" xml:space="preserve">
         <source>Increment minutes</source>
-        <target/>
+        <target state="translated">Adaugă minute</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">32</context>
@@ -202,17 +202,17 @@
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
+      <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html" xml:space="preserve">
         <source>Decrement minutes</source>
-        <target/>
+        <target state="translated">Scade minute</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
+      <trans-unit id="ngb.timepicker.increment-seconds" datatype="html" xml:space="preserve">
         <source>Increment seconds</source>
-        <target/>
+        <target state="translated">Adaugă secunde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">54</context>
@@ -234,9 +234,9 @@
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
+      <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html" xml:space="preserve">
         <source>Decrement seconds</source>
-        <target/>
+        <target state="translated">Scade secunde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">67</context>
@@ -298,17 +298,17 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="066903c4bc7d397c799979d64ce8c450792eb664" datatype="html">
+      <trans-unit id="066903c4bc7d397c799979d64ce8c450792eb664" datatype="html" xml:space="preserve">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been blacklisted </source>
-        <target/>
+        <target state="translated">Videoul tău  <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> a fost blocat. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="b5e2152dd5b4222093fcec9c8289f12308a598e7" datatype="html">
+      <trans-unit id="b5e2152dd5b4222093fcec9c8289f12308a598e7" datatype="html" xml:space="preserve">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>A new video abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created on video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoAbuse.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target/>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>A new video abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created on video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoAbuse.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">48</context>
@@ -438,9 +438,9 @@
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1394835141143590910" datatype="html">
+      <trans-unit id="1394835141143590910" datatype="html" xml:space="preserve">
         <source>Start at</source>
-        <target/>
+        <target state="translated">Începe la</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">17</context>
@@ -454,9 +454,9 @@
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5964984095397511808" datatype="html">
+      <trans-unit id="5964984095397511808" datatype="html" xml:space="preserve">
         <source>Stop at</source>
-        <target/>
+        <target state="translated">Oprește la</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">31</context>
@@ -766,17 +766,17 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8558962068274430520" datatype="html">
+      <trans-unit id="8558962068274430520" datatype="html" xml:space="preserve">
         <source>Unfederate the video</source>
-        <target/>
+        <target state="translated">Decuplați videoclipul</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-blacklist.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7539427273132299890" datatype="html">
+      <trans-unit id="7539427273132299890" datatype="html" xml:space="preserve">
         <source>Unlisted</source>
-        <target/>
+        <target state="translated">Nelistat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context>
           <context context-type="linenumber">6</context>
@@ -802,9 +802,9 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7688104409544625220" datatype="html">
+      <trans-unit id="7688104409544625220" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views} }</source>
-        <target/>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context>
           <context context-type="linenumber">23</context>
@@ -818,9 +818,9 @@
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3514509630940272440" datatype="html">
+      <trans-unit id="3514509630940272440" datatype="html" xml:space="preserve">
         <source>Sensitive</source>
-        <target/>
+        <target state="translated">Sensitiv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context>
           <context context-type="linenumber">45</context>
@@ -874,9 +874,9 @@
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5263519165976128456" datatype="html">
+      <trans-unit id="5263519165976128456" datatype="html" xml:space="preserve">
         <source>Edit starts/stops at</source>
-        <target/>
+        <target state="translated">Editarea începe/oprește la</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">50</context>
@@ -1182,9 +1182,9 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="c590f63488a5179f20a46930cf5e673f8136673d" datatype="html">
+      <trans-unit id="c590f63488a5179f20a46930cf5e673f8136673d" datatype="html" xml:space="preserve">
         <source>You can interact with this via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there. </source>
-        <target/>
+        <target state="translated">Poți interacționa cu acesta prin orice ActivityPub-compatibil instanță fediverse.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>De exemplu cu Mastodon sau Pleroma poți scrie URL-ul curent în cutia de căutare și interacționa cu el acolo. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">26</context>
