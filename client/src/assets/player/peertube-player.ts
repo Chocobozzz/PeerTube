@@ -361,7 +361,10 @@ export class PeerTubePlayer {
 
   getVideojsOptions (): videojs.PlayerOptions {
     const html5 = {
-      preloadTextTracks: false
+      preloadTextTracks: false,
+      // Prevent a bug on iOS where the text tracks added by peertube plugin are removed on play
+      // See https://github.com/Chocobozzz/PeerTube/issues/6351
+      nativeTextTracks: false
     }
 
     const plugins: VideoJSPluginOptions = {
