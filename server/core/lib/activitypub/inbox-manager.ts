@@ -6,7 +6,7 @@ import { Activity } from '@peertube/peertube-models'
 import { StatsManager } from '../stat-manager.js'
 import { processActivities } from './process/index.js'
 
-class InboxManager {
+export class InboxManager {
 
   private static instance: InboxManager
   private readonly inboxQueue: PQueue
@@ -38,10 +38,4 @@ class InboxManager {
   static get Instance () {
     return this.instance || (this.instance = new this())
   }
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  InboxManager
 }

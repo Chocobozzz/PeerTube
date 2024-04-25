@@ -258,7 +258,6 @@ function unicastTo (options: {
 export {
   broadcastToFollowers,
   unicastTo,
-  forwardActivity,
   broadcastToActors,
   sendVideoActivityToOrigin,
   forwardVideoRelatedActivity,

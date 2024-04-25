@@ -70,7 +70,7 @@ export function areVideoTagsValid (tags: string[]) {
   )
 }
 
-export function isVideoViewsValid (value: string) {
+export function isVideoViewsValid (value: string | number) {
   return exists(value) && validator.default.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.VIEWS)
 }
 

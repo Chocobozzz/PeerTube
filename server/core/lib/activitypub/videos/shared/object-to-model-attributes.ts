@@ -11,13 +11,14 @@ import {
   VideoPrivacy,
   VideoStreamingPlaylistType
 } from '@peertube/peertube-models'
+import { hasAPPublic } from '@server/helpers/activity-pub-utils.js'
 import { isAPVideoFileUrlMetadataObject } from '@server/helpers/custom-validators/activitypub/videos.js'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
 import { isVideoFileInfoHashValid } from '@server/helpers/custom-validators/videos.js'
 import { generateImageFilename } from '@server/helpers/image-utils.js'
 import { logger } from '@server/helpers/logger.js'
 import { getExtFromMimetype } from '@server/helpers/video.js'
-import { ACTIVITY_PUB, MIMETYPES, P2P_MEDIA_LOADER_PEER_VERSION, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '@server/initializers/constants.js'
+import { MIMETYPES, P2P_MEDIA_LOADER_PEER_VERSION, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '@server/initializers/constants.js'
 import { generateTorrentFileName } from '@server/lib/paths.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
@@ -191,7 +192,7 @@ export function getStoryboardAttributeFromObject (video: MVideoId, videoObject: 
 }
 
 export function getVideoAttributesFromObject (videoChannel: MChannelId, videoObject: VideoObject, to: string[] = []) {
-  const privacy = to.includes(ACTIVITY_PUB.PUBLIC)
+  const privacy = hasAPPublic(to)
     ? VideoPrivacy.PUBLIC
     : VideoPrivacy.UNLISTED
 

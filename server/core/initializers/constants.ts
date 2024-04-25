@@ -774,7 +774,6 @@ const ACTIVITY_PUB = {
     'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'
   ],
   ACCEPT_HEADER: 'application/activity+json, application/ld+json',
-  PUBLIC: 'https://www.w3.org/ns/activitystreams#Public',
   COLLECTION_ITEMS_PER_PAGE: 10,
   FETCH_PAGE_LIMIT: 2000,
   MAX_RECURSION_COMMENTS: 100,

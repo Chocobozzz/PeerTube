@@ -1,14 +1,14 @@
-import { NextFunction, Request, Response } from 'express'
+import { ActivityDelete, ActivityPubSignature, HttpStatusCode } from '@peertube/peertube-models'
 import { isActorDeleteActivityValid } from '@server/helpers/custom-validators/activitypub/actor.js'
 import { getAPId } from '@server/lib/activitypub/activity.js'
 import { wrapWithSpanAndContext } from '@server/lib/opentelemetry/tracing.js'
-import { ActivityDelete, ActivityPubSignature, HttpStatusCode } from '@peertube/peertube-models'
+import { NextFunction, Request, Response } from 'express'
 import { logger } from '../helpers/logger.js'
 import { isHTTPSignatureVerified, parseHTTPSignature } from '../helpers/peertube-crypto.js'
 import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE } from '../initializers/constants.js'
 import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../lib/activitypub/actors/index.js'
 
-async function checkSignature (req: Request, res: Response, next: NextFunction) {
+export async function checkSignature (req: Request, res: Response, next: NextFunction) {
   try {
     const httpSignatureChecked = await checkHttpSignature(req, res)
     if (httpSignatureChecked !== true) return
@@ -39,7 +39,7 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
   }
 }
 
-function executeIfActivityPub (req: Request, res: Response, next: NextFunction) {
+export function executeIfActivityPub (req: Request, res: Response, next: NextFunction) {
   const accepted = req.accepts(ACCEPT_HEADERS)
   if (accepted === false || ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS.includes(accepted) === false) {
     // Bypass this route
@@ -52,13 +52,7 @@ function executeIfActivityPub (req: Request, res: Response, next: NextFunction) 
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  checkSignature,
-  executeIfActivityPub,
-  checkHttpSignature
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 async function checkHttpSignature (req: Request, res: Response) {
@@ -123,7 +117,7 @@ async function checkHttpSignature (req: Request, res: Response) {
 
 async function checkJsonLDSignature (req: Request, res: Response) {
   // Lazy load the module as it's quite big with json.ld dependency
-  const { isJsonLDSignatureVerified } = await import('../helpers/peertube-jsonld.js')
+  const { compactJSONLDAndCheckSignature } = await import('../helpers/peertube-jsonld.js')
 
   return wrapWithSpanAndContext('peertube.activitypub.JSONLDSignature', async () => {
     const signatureObject: ActivityPubSignature = req.body.signature
@@ -141,7 +135,7 @@ async function checkJsonLDSignature (req: Request, res: Response) {
     logger.debug('Checking JsonLD signature of actor %s...', creator)
 
     const actor = await getOrCreateAPActor(creator)
-    const verified = await isJsonLDSignatureVerified(actor, req.body)
+    const verified = await compactJSONLDAndCheckSignature(actor, req)
 
     if (verified !== true) {
       logger.warn('Signature not verified.', req.body)

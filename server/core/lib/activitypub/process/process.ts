@@ -34,7 +34,7 @@ const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Act
   View: processViewActivity
 }
 
-async function processActivities (
+export async function processActivities (
   activities: Activity[],
   options: {
     signatureActor?: MActorSignature
@@ -85,8 +85,4 @@ async function processActivities (
       StatsManager.Instance.addInboxProcessedError(activity.type)
     }
   }
-}
-
-export {
-  processActivities
 }

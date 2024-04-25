@@ -1,17 +1,17 @@
 import { ActivityAudience } from '@peertube/peertube-models'
-import { ACTIVITY_PUB } from '../../initializers/constants.js'
+import { getAPPublicValue } from '@server/helpers/activity-pub-utils.js'
 import { MActorFollowersUrl } from '../../types/models/index.js'
 
-function getAudience (actorSender: MActorFollowersUrl, isPublic = true) {
+export function getAudience (actorSender: MActorFollowersUrl, isPublic = true) {
   return buildAudience([ actorSender.followersUrl ], isPublic)
 }
 
-function buildAudience (followerUrls: string[], isPublic = true) {
+export function buildAudience (followerUrls: string[], isPublic = true) {
   let to: string[] = []
   let cc: string[] = []
 
   if (isPublic) {
-    to = [ ACTIVITY_PUB.PUBLIC ]
+    to = [ getAPPublicValue() ]
     cc = followerUrls
   } else { // Unlisted
     to = []
@@ -21,14 +21,6 @@ function buildAudience (followerUrls: string[], isPublic = true) {
   return { to, cc }
 }
 
-function audiencify<T> (object: T, audience: ActivityAudience) {
+export function audiencify<T> (object: T, audience: ActivityAudience) {
   return { ...audience, ...object }
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  buildAudience,
-  getAudience,
-  audiencify
 }

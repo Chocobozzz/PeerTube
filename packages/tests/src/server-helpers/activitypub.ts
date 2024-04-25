@@ -3,7 +3,7 @@
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { signAndContextify } from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'
 import { isHTTPSignatureVerified, parseHTTPSignature } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
-import { isJsonLDSignatureVerified, signJsonLDObject } from '@peertube/peertube-server/core/helpers/peertube-jsonld.js'
+import { compactJSONLDAndCheckSignature, signJsonLDObject } from '@peertube/peertube-server/core/helpers/peertube-jsonld.js'
 import { expect } from 'chai'
 import { readJsonSync } from 'fs-extra/esm'
 import cloneDeep from 'lodash-es/cloneDeep.js'
@@ -24,6 +24,10 @@ function fakeFilter () {
   return (data: any) => Promise.resolve(data)
 }
 
+function fakeExpressReq (body: any) {
+  return { body }
+}
+
 describe('Test activity pub helpers', function () {
 
   describe('When checking the Linked Signature', function () {
@@ -33,7 +37,7 @@ describe('Test activity pub helpers', function () {
       const publicKey = readJsonSync(buildAbsoluteFixturePath('./ap-json/mastodon/public-key.json')).publicKey
       const fromActor = { publicKey, url: 'http://localhost:9002/accounts/peertube' }
 
-      const result = await isJsonLDSignatureVerified(fromActor as any, body)
+      const result = await compactJSONLDAndCheckSignature(fromActor as any, fakeExpressReq(body))
 
       expect(result).to.be.false
     })
@@ -43,7 +47,7 @@ describe('Test activity pub helpers', function () {
       const publicKey = readJsonSync(buildAbsoluteFixturePath('./ap-json/mastodon/bad-public-key.json')).publicKey
       const fromActor = { publicKey, url: 'http://localhost:9002/accounts/peertube' }
 
-      const result = await isJsonLDSignatureVerified(fromActor as any, body)
+      const result = await compactJSONLDAndCheckSignature(fromActor as any, fakeExpressReq(body))
 
       expect(result).to.be.false
     })
@@ -53,7 +57,7 @@ describe('Test activity pub helpers', function () {
       const publicKey = readJsonSync(buildAbsoluteFixturePath('./ap-json/mastodon/public-key.json')).publicKey
       const fromActor = { publicKey, url: 'http://localhost:9002/accounts/peertube' }
 
-      const result = await isJsonLDSignatureVerified(fromActor as any, body)
+      const result = await compactJSONLDAndCheckSignature(fromActor as any, fakeExpressReq(body))
 
       expect(result).to.be.true
     })
@@ -72,7 +76,7 @@ describe('Test activity pub helpers', function () {
       })
 
       const fromActor = { publicKey: keys.publicKey, url: 'http://localhost:9002/accounts/peertube' }
-      const result = await isJsonLDSignatureVerified(fromActor as any, signedBody)
+      const result = await compactJSONLDAndCheckSignature(fromActor as any, fakeExpressReq(signedBody))
 
       expect(result).to.be.false
     })
@@ -91,7 +95,7 @@ describe('Test activity pub helpers', function () {
       })
 
       const fromActor = { publicKey: keys.publicKey, url: 'http://localhost:9002/accounts/peertube' }
-      const result = await isJsonLDSignatureVerified(fromActor as any, signedBody)
+      const result = await compactJSONLDAndCheckSignature(fromActor as any, fakeExpressReq(signedBody))
 
       expect(result).to.be.true
     })

@@ -1,6 +1,6 @@
 import jsonld from 'jsonld'
 
-const CACHE = {
+const STATIC_CACHE = {
   'https://w3id.org/security/v1': {
     '@context': {
       id: '@id',
@@ -53,19 +53,29 @@ const CACHE = {
   }
 }
 
+const localCache = new Map<string, any>()
+
 const nodeDocumentLoader = (jsonld as any).documentLoaders.node();
 
 /* eslint-disable no-import-assign */
-(jsonld as any).documentLoader = (url) => {
-  if (url in CACHE) {
-    return Promise.resolve({
+(jsonld as any).documentLoader = async (url: string) => {
+  if (url in STATIC_CACHE) {
+    return {
       contextUrl: null,
-      document: CACHE[url],
+      document: STATIC_CACHE[url],
       documentUrl: url
-    })
+    }
   }
 
-  return nodeDocumentLoader(url)
+  if (localCache.has(url)) return localCache.get(url)
+
+  const remoteDoc = await nodeDocumentLoader(url)
+
+  if (localCache.size < 100) {
+    localCache.set(url, remoteDoc)
+  }
+
+  return remoteDoc
 }
 
 export { jsonld }

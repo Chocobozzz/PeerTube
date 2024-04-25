@@ -1,12 +1,12 @@
-import { ACTIVITY_PUB } from '@server/initializers/constants.js'
-import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
-import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
-import { MVideoId, MVideoPlaylistId } from '@server/types/models/index.js'
-import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { PlaylistElementObject, PlaylistObject, VideoPlaylistPrivacy } from '@peertube/peertube-models'
+import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import { hasAPPublic } from '@server/helpers/activity-pub-utils.js'
+import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
+import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
+import { MVideoId, MVideoPlaylistId } from '@server/types/models/index.js'
 
-function playlistObjectToDBAttributes (playlistObject: PlaylistObject, to: string[]) {
-  const privacy = to.includes(ACTIVITY_PUB.PUBLIC)
+export function playlistObjectToDBAttributes (playlistObject: PlaylistObject, to: string[]) {
+  const privacy = hasAPPublic(to)
     ? VideoPlaylistPrivacy.PUBLIC
     : VideoPlaylistPrivacy.UNLISTED
 
@@ -23,7 +23,11 @@ function playlistObjectToDBAttributes (playlistObject: PlaylistObject, to: strin
   } as AttributesOnly<VideoPlaylistModel>
 }
 
-function playlistElementObjectToDBAttributes (elementObject: PlaylistElementObject, videoPlaylist: MVideoPlaylistId, video: MVideoId) {
+export function playlistElementObjectToDBAttributes (
+  elementObject: PlaylistElementObject,
+  videoPlaylist: MVideoPlaylistId,
+  video: MVideoId
+) {
   return {
     position: elementObject.position,
     url: elementObject.id,
@@ -32,9 +36,4 @@ function playlistElementObjectToDBAttributes (elementObject: PlaylistElementObje
     videoPlaylistId: videoPlaylist.id,
     videoId: video.id
   } as AttributesOnly<VideoPlaylistElementModel>
-}
-
-export {
-  playlistObjectToDBAttributes,
-  playlistElementObjectToDBAttributes
 }

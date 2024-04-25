@@ -2,6 +2,7 @@ import { Transaction } from 'sequelize'
 import { MActorId, MVideoRedundancy, MVideoWithAllFiles } from '@server/types/models/index.js'
 import { CacheFileObject, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy.js'
+import { exists } from '@server/helpers/custom-validators/misc.js'
 
 async function createOrUpdateCacheFile (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId, t: Transaction) {
   const redundancyModel = await VideoRedundancyModel.loadByUrl(cacheFileObject.id, t)
@@ -65,11 +66,15 @@ function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject
   }
 
   const url = cacheFileObject.url
+  const urlFPS = exists(url.fps) // TODO: compat with < 6.1, remove in 7.0
+    ? url.fps
+    : url['_:fps']
+
   const videoFile = video.VideoFiles.find(f => {
-    return f.resolution === url.height && f.fps === url.fps
+    return f.resolution === url.height && f.fps === urlFPS
   })
 
-  if (!videoFile) throw new Error(`Cannot find video file ${url.height} ${url.fps} of video ${video.url}`)
+  if (!videoFile) throw new Error(`Cannot find video file ${url.height} ${urlFPS} of video ${video.url}`)
 
   return {
     expiresOn: cacheFileObject.expires ? new Date(cacheFileObject.expires) : null,

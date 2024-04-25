@@ -1,9 +1,9 @@
 import { ContextType } from '@peertube/peertube-models'
 import { ACTIVITY_PUB, REMOTE_SCHEME } from '@server/initializers/constants.js'
+import { isArray } from './custom-validators/misc.js'
 import { buildDigest } from './peertube-crypto.js'
 import type { signJsonLDObject } from './peertube-jsonld.js'
 import { doJSONRequest } from './requests.js'
-import { isArray } from './custom-validators/misc.js'
 
 export type ContextFilter = <T> (arg: T) => Promise<T>
 
@@ -49,6 +49,18 @@ export async function getApplicationActorOfHost (host: string) {
   return found?.href || undefined
 }
 
+export function getAPPublicValue () {
+  return 'https://www.w3.org/ns/activitystreams#Public'
+}
+
+export function hasAPPublic (toOrCC: string[]) {
+  if (!isArray(toOrCC)) return false
+
+  const publicValue = getAPPublicValue()
+
+  return toOrCC.some(f => f === 'as:Public' || publicValue)
+}
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
@@ -58,7 +70,6 @@ type ContextValue = { [ id: string ]: (string | { '@type': string, '@id': string
 const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string })[] } = {
   Video: buildContext({
     Hashtag: 'as:Hashtag',
-    uuid: 'sc:identifier',
     category: 'sc:category',
     licence: 'sc:license',
     subtitleLanguage: 'sc:subtitleLanguage',
@@ -97,6 +108,11 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
     aspectRatio: {
       '@type': 'sc:Float',
       '@id': 'pt:aspectRatio'
+    },
+
+    uuid: {
+      '@type': 'sc:identifier',
+      '@id': 'pt:uuid'
     },
 
     originallyPublishedAt: 'sc:datePublished',
@@ -170,12 +186,23 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
       '@type': 'sc:Number',
       '@id': 'pt:stopTimestamp'
     },
-    uuid: 'sc:identifier'
+    uuid: {
+      '@type': 'sc:identifier',
+      '@id': 'pt:uuid'
+    }
   }),
 
   CacheFile: buildContext({
     expires: 'sc:expires',
-    CacheFile: 'pt:CacheFile'
+    CacheFile: 'pt:CacheFile',
+    size: {
+      '@type': 'sc:Number',
+      '@id': 'pt:size'
+    },
+    fps: {
+      '@type': 'sc:Number',
+      '@id': 'pt:fps'
+    }
   }),
 
   Flag: buildContext({
@@ -205,15 +232,21 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
       '@type': 'sc:Number',
       '@id': 'pt:startTimestamp'
     },
-    stopTimestamp: {
+    endTimestamp: {
       '@type': 'sc:Number',
-      '@id': 'pt:stopTimestamp'
+      '@id': 'pt:endTimestamp'
     },
-    watchSection: {
-      '@type': 'sc:Number',
-      '@id': 'pt:stopTimestamp'
+    uuid: {
+      '@type': 'sc:identifier',
+      '@id': 'pt:uuid'
     },
-    uuid: 'sc:identifier'
+    actionStatus: 'sc:actionStatus',
+    watchSections: {
+      '@type': '@id',
+      '@id': 'pt:watchSections'
+    },
+    addressRegion: 'sc:addressRegion',
+    addressCountry: 'sc:addressCountry'
   }),
 
   View: buildContext({
@@ -233,11 +266,44 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
   Rate: buildContext(),
 
   Chapters: buildContext({
-    name: 'sc:name',
     hasPart: 'sc:hasPart',
     endOffset: 'sc:endOffset',
     startOffset: 'sc:startOffset'
   })
+}
+
+let allContext: (string | ContextValue)[]
+export function getAllContext () {
+  if (allContext) return allContext
+
+  const processed = new Set<string>()
+  allContext = []
+
+  let staticContext: ContextValue = {}
+
+  for (const v of Object.values(contextStore)) {
+    for (const item of v) {
+      if (typeof item === 'string') {
+        if (!processed.has(item)) {
+          allContext.push(item)
+        }
+
+        processed.add(item)
+      } else {
+        for (const subKey of Object.keys(item)) {
+          if (!processed.has(subKey)) {
+            staticContext = { ...staticContext, [subKey]: item[subKey] }
+          }
+
+          processed.add(subKey)
+        }
+      }
+    }
+  }
+
+  allContext = [ ...allContext, staticContext ]
+
+  return allContext
 }
 
 async function getContextData (type: ContextType, contextFilter: ContextFilter) {
