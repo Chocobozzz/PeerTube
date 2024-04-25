@@ -309,7 +309,7 @@ export class VideoStatsComponent implements OnInit {
       {
         label: $localize`Views`,
         value: this.numberFormatter.transform(this.video.views),
-        help: $localize`A view means that someone watched the video for at least 30 seconds`
+        help: $localize`A view means that someone watched the video for several seconds (10 seconds by default)`
       },
       {
         label: $localize`Likes`,
