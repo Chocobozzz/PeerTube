@@ -236,7 +236,7 @@
     "pngjs": "^7.0.0",
     "proxy": "^2.1.1",
     "socket.io-client": "^4.5.4",
-    "supertest": "^6.0.1",
+    "supertest": "^7.0.0",
     "swagger-cli": "^4.0.2",
     "tsc-watch": "^6.0.0",
     "tsx": "^4.7.1",
