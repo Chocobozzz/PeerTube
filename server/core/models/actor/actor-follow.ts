@@ -710,7 +710,7 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
       data: followers.map(f => ({ selectionUrl: f.selectionUrl, createdAt: f.createdAt })) as { selectionUrl: string, createdAt: string }[],
 
       total: selectTotal
-        ? parseInt(resDataTotal?.dataTotal?.[0]?.total || 0, 10)
+        ? parseInt(resDataTotal?.[0]?.total || 0, 10)
         : undefined
     }
   }
