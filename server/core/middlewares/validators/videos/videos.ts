@@ -243,7 +243,7 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
   })
 }
 
-const videosCustomGetValidator = (fetchType: 'for-api' | 'all' | 'only-video' | 'only-immutable-attributes') => {
+const videosCustomGetValidator = (fetchType: 'for-api' | 'all' | 'only-video-and-blacklist' | 'unsafe-only-immutable-attributes') => {
   return [
     isValidVideoIdParam('id'),
 
@@ -254,7 +254,7 @@ const videosCustomGetValidator = (fetchType: 'for-api' | 'all' | 'only-video' | 
       if (!await doesVideoExist(req.params.id, res, fetchType)) return
 
       // Controllers does not need to check video rights
-      if (fetchType === 'only-immutable-attributes') return next()
+      if (fetchType === 'unsafe-only-immutable-attributes') return next()
 
       const video = getVideoWithAttributes(res) as MVideoFullLight
 

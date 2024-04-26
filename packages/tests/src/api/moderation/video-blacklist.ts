@@ -3,12 +3,12 @@
 import { expect } from 'chai'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 import { sortObjectComparator } from '@peertube/peertube-core-utils'
-import { UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@peertube/peertube-models'
+import { HttpStatusCode, UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@peertube/peertube-models'
 import {
   BlacklistCommand,
   cleanupTests,
   createMultipleServers,
-  doubleFollow, PeerTubeServer,
+  doubleFollow, makeActivityPubGetRequest, PeerTubeServer,
   setAccessTokensToServers,
   setDefaultChannelAvatar,
   waitJobs
@@ -296,6 +296,13 @@ describe('Test video blacklist', function () {
 
       expect(video3Blacklisted.unfederated).to.be.false
       expect(video4Blacklisted.unfederated).to.be.true
+    })
+
+    it('Should not have AP comments/announces/likes/dislikes', async function () {
+      await makeActivityPubGetRequest(servers[0].url, `/videos/watch/${video3UUID}/comments`, HttpStatusCode.UNAUTHORIZED_401)
+      await makeActivityPubGetRequest(servers[0].url, `/videos/watch/${video3UUID}/announces`, HttpStatusCode.UNAUTHORIZED_401)
+      await makeActivityPubGetRequest(servers[0].url, `/videos/watch/${video3UUID}/likes`, HttpStatusCode.UNAUTHORIZED_401)
+      await makeActivityPubGetRequest(servers[0].url, `/videos/watch/${video3UUID}/dislikes`, HttpStatusCode.UNAUTHORIZED_401)
     })
 
     it('Should remove the video from blacklist and refederate the video', async function () {

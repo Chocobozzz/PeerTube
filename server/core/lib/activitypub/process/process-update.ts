@@ -20,7 +20,7 @@ import { APActorUpdater } from '../actors/updater.js'
 import { createOrUpdateCacheFile } from '../cache-file.js'
 import { createOrUpdateVideoPlaylist } from '../playlists/index.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
-import { APVideoUpdater, getOrCreateAPVideo } from '../videos/index.js'
+import { APVideoUpdater, canVideoBeFederated, getOrCreateAPVideo } from '../videos/index.js'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate<ActivityUpdateObject>>) {
   const { activity, byActor } = options
@@ -92,6 +92,11 @@ async function processUpdateCacheFile (
   }
 
   const { video } = await getOrCreateAPVideo({ videoObject: cacheFileObject.object })
+
+  if (video.isOwned() && !canVideoBeFederated(video)) {
+    logger.warn(`Do not process update cache file on video ${activity.object} that cannot be federated`)
+    return
+  }
 
   await sequelizeTypescript.transaction(async t => {
     await createOrUpdateCacheFile(cacheFileObject, video, byActor, t)

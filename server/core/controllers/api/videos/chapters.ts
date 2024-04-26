@@ -11,7 +11,7 @@ import { replaceChapters } from '@server/lib/video-chapters.js'
 const videoChaptersRouter = express.Router()
 
 videoChaptersRouter.get('/:id/chapters',
-  asyncMiddleware(videosCustomGetValidator('only-video')),
+  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
   asyncMiddleware(listVideoChapters)
 )
 

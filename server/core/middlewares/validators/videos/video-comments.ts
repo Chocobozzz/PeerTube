@@ -56,7 +56,7 @@ const listVideoCommentThreadsValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'only-video-and-blacklist')) return
 
     if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.onlyVideo })) return
 
@@ -73,7 +73,7 @@ const listVideoThreadCommentsValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'only-video-and-blacklist')) return
     if (!await doesVideoCommentThreadExist(req.params.threadId, res.locals.onlyVideo, res)) return
 
     if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.onlyVideo })) return

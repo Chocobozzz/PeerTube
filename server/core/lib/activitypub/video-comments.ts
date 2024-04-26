@@ -9,7 +9,7 @@ import { Hooks } from '../plugins/hooks.js'
 import { fetchAP } from './activity.js'
 import { getOrCreateAPActor } from './actors/index.js'
 import { checkUrlsSameHost } from './url.js'
-import { getOrCreateAPVideo } from './videos/index.js'
+import { canVideoBeFederated, getOrCreateAPVideo } from './videos/index.js'
 
 type ResolveThreadParams = {
   url: string
@@ -92,8 +92,8 @@ async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
   const syncParam = { rates: true, shares: true, comments: false, refreshVideo: false }
   const { video } = await getOrCreateAPVideo({ videoObject: url, syncParam })
 
-  if (video.isOwned() && !video.hasPrivacyForFederation()) {
-    throw new Error('Cannot resolve thread of video with privacy that is not compatible with federation')
+  if (video.isOwned() && !canVideoBeFederated(video)) {
+    throw new Error('Cannot resolve thread of video that is not compatible with federation')
   }
 
   let resultComment: MCommentOwnerVideo

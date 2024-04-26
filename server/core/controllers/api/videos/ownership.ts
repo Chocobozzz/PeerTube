@@ -1,6 +1,7 @@
-import express from 'express'
-import { HttpStatusCode, VideoChangeOwnershipStatus, VideoState } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoChangeOwnershipStatus } from '@peertube/peertube-models'
+import { canVideoBeFederated } from '@server/lib/activitypub/videos/federate.js'
 import { MVideoFullLight } from '@server/types/models/index.js'
+import express from 'express'
 import { logger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
@@ -113,7 +114,7 @@ function acceptOwnership (req: express.Request, res: express.Response) {
     const targetVideoUpdated = await targetVideo.save({ transaction: t }) as MVideoFullLight
     targetVideoUpdated.VideoChannel = channel
 
-    if (targetVideoUpdated.hasPrivacyForFederation() && targetVideoUpdated.state === VideoState.PUBLISHED) {
+    if (canVideoBeFederated(targetVideoUpdated)) {
       await changeVideoChannelShare(targetVideoUpdated, oldVideoChannel, t)
       await sendUpdateVideo(targetVideoUpdated, t, oldVideoChannel.Account.Actor)
     }

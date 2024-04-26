@@ -7,7 +7,7 @@ const tokenRouter = express.Router()
 
 tokenRouter.post('/:id/token',
   optionalAuthenticate,
-  asyncMiddleware(videosCustomGetValidator('only-video')),
+  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
   videoFileTokenValidator,
   generateToken
 )

@@ -24,7 +24,7 @@ import { createOrUpdateLocalVideoViewer } from '../local-video-viewer.js'
 import { createOrUpdateVideoPlaylist } from '../playlists/index.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
 import { resolveThread } from '../video-comments.js'
-import { getOrCreateAPVideo } from '../videos/index.js'
+import { canVideoBeFederated, getOrCreateAPVideo } from '../videos/index.js'
 
 async function processCreateActivity (options: APProcessorOptions<ActivityCreate<ActivityCreateObject>>) {
   const { activity, byActor } = options
@@ -86,6 +86,11 @@ async function processCreateCacheFile (
   if (await isRedundancyAccepted(activity, byActor) !== true) return
 
   const { video } = await getOrCreateAPVideo({ videoObject: cacheFile.object })
+
+  if (video.isOwned() && !canVideoBeFederated(video)) {
+    logger.warn(`Do not process create cache file ${cacheFile.object} on a video that cannot be federated`)
+    return
+  }
 
   await sequelizeTypescript.transaction(async t => {
     return createOrUpdateCacheFile(cacheFile, video, byActor, t)

@@ -6,57 +6,57 @@ import {
   MVideoFullLight,
   MVideoId,
   MVideoImmutable,
-  MVideoThumbnail
+  MVideoThumbnailBlacklist
 } from '@server/types/models/index.js'
 import { getOrCreateAPVideo } from '../activitypub/videos/get.js'
 
-type VideoLoadType = 'for-api' | 'all' | 'only-video' | 'id' | 'none' | 'only-immutable-attributes'
+type VideoLoadType = 'for-api' | 'all' | 'only-video-and-blacklist' | 'id' | 'none' | 'unsafe-only-immutable-attributes'
 
 function loadVideo (id: number | string, fetchType: 'for-api', userId?: number): Promise<MVideoFormattableDetails>
 function loadVideo (id: number | string, fetchType: 'all', userId?: number): Promise<MVideoFullLight>
-function loadVideo (id: number | string, fetchType: 'only-immutable-attributes'): Promise<MVideoImmutable>
-function loadVideo (id: number | string, fetchType: 'only-video', userId?: number): Promise<MVideoThumbnail>
+function loadVideo (id: number | string, fetchType: 'unsafe-only-immutable-attributes'): Promise<MVideoImmutable>
+function loadVideo (id: number | string, fetchType: 'only-video-and-blacklist', userId?: number): Promise<MVideoThumbnailBlacklist>
 function loadVideo (id: number | string, fetchType: 'id' | 'none', userId?: number): Promise<MVideoId>
 function loadVideo (
   id: number | string,
   fetchType: VideoLoadType,
   userId?: number
-): Promise<MVideoFullLight | MVideoThumbnail | MVideoId | MVideoImmutable>
+): Promise<MVideoFullLight | MVideoThumbnailBlacklist | MVideoId | MVideoImmutable>
 function loadVideo (
   id: number | string,
   fetchType: VideoLoadType,
   userId?: number
-): Promise<MVideoFullLight | MVideoThumbnail | MVideoId | MVideoImmutable> {
+): Promise<MVideoFullLight | MVideoThumbnailBlacklist | MVideoId | MVideoImmutable> {
 
   if (fetchType === 'for-api') return VideoModel.loadForGetAPI({ id, userId })
 
   if (fetchType === 'all') return VideoModel.loadFull(id, undefined, userId)
 
-  if (fetchType === 'only-immutable-attributes') return VideoModel.loadImmutableAttributes(id)
+  if (fetchType === 'unsafe-only-immutable-attributes') return VideoModel.loadImmutableAttributes(id)
 
-  if (fetchType === 'only-video') return VideoModel.load(id)
+  if (fetchType === 'only-video-and-blacklist') return VideoModel.loadWithBlacklist(id)
 
   if (fetchType === 'id' || fetchType === 'none') return VideoModel.loadOnlyId(id)
 }
 
-type VideoLoadByUrlType = 'all' | 'only-video' | 'only-immutable-attributes'
+type VideoLoadByUrlType = 'all' | 'only-video-and-blacklist' | 'unsafe-only-immutable-attributes'
 
 function loadVideoByUrl (url: string, fetchType: 'all'): Promise<MVideoAccountLightBlacklistAllFiles>
-function loadVideoByUrl (url: string, fetchType: 'only-immutable-attributes'): Promise<MVideoImmutable>
-function loadVideoByUrl (url: string, fetchType: 'only-video'): Promise<MVideoThumbnail>
+function loadVideoByUrl (url: string, fetchType: 'unsafe-only-immutable-attributes'): Promise<MVideoImmutable>
+function loadVideoByUrl (url: string, fetchType: 'only-video-and-blacklist'): Promise<MVideoThumbnailBlacklist>
 function loadVideoByUrl (
   url: string,
   fetchType: VideoLoadByUrlType
-): Promise<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable>
+): Promise<MVideoAccountLightBlacklistAllFiles | MVideoThumbnailBlacklist | MVideoImmutable>
 function loadVideoByUrl (
   url: string,
   fetchType: VideoLoadByUrlType
-): Promise<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable> {
+): Promise<MVideoAccountLightBlacklistAllFiles | MVideoThumbnailBlacklist | MVideoImmutable> {
   if (fetchType === 'all') return VideoModel.loadByUrlAndPopulateAccountAndFiles(url)
 
-  if (fetchType === 'only-immutable-attributes') return VideoModel.loadByUrlImmutableAttributes(url)
+  if (fetchType === 'unsafe-only-immutable-attributes') return VideoModel.loadByUrlImmutableAttributes(url)
 
-  if (fetchType === 'only-video') return VideoModel.loadByUrl(url)
+  if (fetchType === 'only-video-and-blacklist') return VideoModel.loadByUrlWithBlacklist(url)
 }
 
 async function loadOrCreateVideoIfAllowedForUser (videoUrl: string) {
@@ -64,7 +64,7 @@ async function loadOrCreateVideoIfAllowedForUser (videoUrl: string) {
     try {
       const res = await getOrCreateAPVideo({
         videoObject: videoUrl,
-        fetchType: 'only-immutable-attributes',
+        fetchType: 'unsafe-only-immutable-attributes',
         allowRefresh: false
       })
 
@@ -78,10 +78,8 @@ async function loadOrCreateVideoIfAllowedForUser (videoUrl: string) {
 }
 
 export {
-  type VideoLoadType,
-  type VideoLoadByUrlType,
-
-  loadVideo,
+  loadOrCreateVideoIfAllowedForUser, loadVideo,
   loadVideoByUrl,
-  loadOrCreateVideoIfAllowedForUser
+  type VideoLoadByUrlType,
+  type VideoLoadType
 }

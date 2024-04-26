@@ -1,10 +1,10 @@
-import { Transaction } from 'sequelize'
-import { getServerActor } from '@server/models/application/application.js'
 import { ActivityAudience, ActivityUpdate, ActivityUpdateObject, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
+import { getServerActor } from '@server/models/application/application.js'
+import { Transaction } from 'sequelize'
 import { logger } from '../../../helpers/logger.js'
 import { AccountModel } from '../../../models/account/account.js'
-import { VideoModel } from '../../../models/video/video.js'
 import { VideoShareModel } from '../../../models/video/video-share.js'
+import { VideoModel } from '../../../models/video/video.js'
 import {
   MAccountDefault,
   MActor,
@@ -16,11 +16,12 @@ import {
 } from '../../../types/models/index.js'
 import { audiencify, getAudience } from '../audience.js'
 import { getUpdateActivityPubUrl } from '../url.js'
+import { canVideoBeFederated } from '../videos/federate.js'
 import { getActorsInvolvedInVideo } from './shared/index.js'
 import { broadcastToFollowers, sendVideoRelatedActivity } from './shared/send-utils.js'
 
-async function sendUpdateVideo (videoArg: MVideoAPLight, transaction: Transaction, overriddenByActor?: MActor) {
-  if (!videoArg.hasPrivacyForFederation()) return undefined
+export async function sendUpdateVideo (videoArg: MVideoAPLight, transaction: Transaction, overriddenByActor?: MActor) {
+  if (!canVideoBeFederated(videoArg)) return undefined
 
   const video = await videoArg.lightAPToFullAP(transaction)
 
@@ -47,7 +48,7 @@ async function sendUpdateVideo (videoArg: MVideoAPLight, transaction: Transactio
   })
 }
 
-async function sendUpdateActor (accountOrChannel: MChannelDefault | MAccountDefault, transaction: Transaction) {
+export async function sendUpdateActor (accountOrChannel: MChannelDefault | MAccountDefault, transaction: Transaction) {
   const byActor = accountOrChannel.Actor
 
   logger.info('Creating job to update actor %s.', byActor.url)
@@ -77,7 +78,7 @@ async function sendUpdateActor (accountOrChannel: MChannelDefault | MAccountDefa
   })
 }
 
-async function sendUpdateCacheFile (byActor: MActorLight, redundancyModel: MVideoRedundancyVideo) {
+export async function sendUpdateCacheFile (byActor: MActorLight, redundancyModel: MVideoRedundancyVideo) {
   logger.info('Creating job to update cache file %s.', redundancyModel.url)
 
   const associatedVideo = redundancyModel.getVideo()
@@ -98,7 +99,7 @@ async function sendUpdateCacheFile (byActor: MActorLight, redundancyModel: MVide
   return sendVideoRelatedActivity(activityBuilder, { byActor, video, contextType: 'CacheFile' })
 }
 
-async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull, transaction: Transaction) {
+export async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull, transaction: Transaction) {
   if (videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) return undefined
 
   const byActor = videoPlaylist.OwnerAccount.Actor
@@ -127,14 +128,7 @@ async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull, trans
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  sendUpdateActor,
-  sendUpdateVideo,
-  sendUpdateCacheFile,
-  sendUpdateVideoPlaylist
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function buildUpdateActivity (

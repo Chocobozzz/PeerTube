@@ -37,7 +37,7 @@ export const videoViewValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, 'only-immutable-attributes')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'unsafe-only-immutable-attributes')) return
 
     const video = res.locals.onlyImmutableVideo
     const { duration } = await getCachedVideoDuration(video.id)

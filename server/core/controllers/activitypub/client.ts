@@ -120,7 +120,7 @@ activityPubClientRouter.get('/videos/watch/:id/activity',
 activityPubClientRouter.get('/videos/watch/:id/announces',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videosCustomGetValidator('only-immutable-attributes')),
+  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
   asyncMiddleware(videoAnnouncesController)
 )
 activityPubClientRouter.get('/videos/watch/:id/announces/:actorId',
@@ -132,19 +132,19 @@ activityPubClientRouter.get('/videos/watch/:id/announces/:actorId',
 activityPubClientRouter.get('/videos/watch/:id/likes',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videosCustomGetValidator('only-immutable-attributes')),
+  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
   asyncMiddleware(videoLikesController)
 )
 activityPubClientRouter.get('/videos/watch/:id/dislikes',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videosCustomGetValidator('only-immutable-attributes')),
+  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
   asyncMiddleware(videoDislikesController)
 )
 activityPubClientRouter.get('/videos/watch/:id/comments',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videosCustomGetValidator('only-immutable-attributes')),
+  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
   asyncMiddleware(videoCommentsController)
 )
 activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId',
@@ -175,7 +175,7 @@ activityPubClientRouter.get('/videos/watch/:id/chapters',
   activityPubRateLimiter,
   apVideoChaptersSetCacheKey,
   chaptersCacheRouteMiddleware(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
-  asyncMiddleware(videosCustomGetValidator('only-video')),
+  asyncMiddleware(videosCustomGetValidator('only-video-and-blacklist')),
   asyncMiddleware(videoChaptersController)
 )
 
@@ -330,7 +330,7 @@ async function videoAnnounceController (req: express.Request, res: express.Respo
 }
 
 async function videoAnnouncesController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyImmutableVideo
+  const video = res.locals.onlyVideo
 
   if (redirectIfNotOwned(video.url, res)) return
 
@@ -347,7 +347,7 @@ async function videoAnnouncesController (req: express.Request, res: express.Resp
 }
 
 async function videoLikesController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyImmutableVideo
+  const video = res.locals.onlyVideo
 
   if (redirectIfNotOwned(video.url, res)) return
 
@@ -357,7 +357,7 @@ async function videoLikesController (req: express.Request, res: express.Response
 }
 
 async function videoDislikesController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyImmutableVideo
+  const video = res.locals.onlyVideo
 
   if (redirectIfNotOwned(video.url, res)) return
 
@@ -367,7 +367,7 @@ async function videoDislikesController (req: express.Request, res: express.Respo
 }
 
 async function videoCommentsController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyImmutableVideo
+  const video = res.locals.onlyVideo
 
   if (redirectIfNotOwned(video.url, res)) return
 

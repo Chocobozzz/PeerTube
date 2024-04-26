@@ -1,6 +1,6 @@
+import { getServerActor } from '@server/models/application/application.js'
 import Bluebird from 'bluebird'
 import { Transaction } from 'sequelize'
-import { getServerActor } from '@server/models/application/application.js'
 import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants.js'
 import { VideoShareModel } from '../../models/video/video-share.js'
@@ -12,16 +12,7 @@ import { checkUrlsSameHost, getLocalVideoAnnounceActivityPubUrl } from './url.js
 
 const lTags = loggerTagsFactory('share')
 
-async function shareVideoByServerAndChannel (video: MVideoAccountLight, t: Transaction) {
-  if (!video.hasPrivacyForFederation()) return undefined
-
-  return Promise.all([
-    shareByServer(video, t),
-    shareByVideoChannel(video, t)
-  ])
-}
-
-async function changeVideoChannelShare (
+export async function changeVideoChannelShare (
   video: MVideoAccountLight,
   oldVideoChannel: MChannelActorLight,
   t: Transaction
@@ -36,7 +27,7 @@ async function changeVideoChannelShare (
   await shareByVideoChannel(video, t)
 }
 
-async function addVideoShares (shareUrls: string[], video: MVideoId) {
+export async function addVideoShares (shareUrls: string[], video: MVideoId) {
   await Bluebird.map(shareUrls, async shareUrl => {
     try {
       await addVideoShare(shareUrl, video)
@@ -46,12 +37,44 @@ async function addVideoShares (shareUrls: string[], video: MVideoId) {
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
 
-export {
-  changeVideoChannelShare,
-  addVideoShares,
-  shareVideoByServerAndChannel
+export async function shareByServer (video: MVideo, t: Transaction) {
+  const serverActor = await getServerActor()
+
+  const serverShareUrl = getLocalVideoAnnounceActivityPubUrl(serverActor, video)
+  const [ serverShare ] = await VideoShareModel.findOrCreate({
+    defaults: {
+      actorId: serverActor.id,
+      videoId: video.id,
+      url: serverShareUrl
+    },
+    where: {
+      url: serverShareUrl
+    },
+    transaction: t
+  })
+
+  return sendVideoAnnounce(serverActor, serverShare, video, t)
 }
 
+export async function shareByVideoChannel (video: MVideoAccountLight, t: Transaction) {
+  const videoChannelShareUrl = getLocalVideoAnnounceActivityPubUrl(video.VideoChannel.Actor, video)
+  const [ videoChannelShare ] = await VideoShareModel.findOrCreate({
+    defaults: {
+      actorId: video.VideoChannel.actorId,
+      videoId: video.id,
+      url: videoChannelShareUrl
+    },
+    where: {
+      url: videoChannelShareUrl
+    },
+    transaction: t
+  })
+
+  return sendVideoAnnounce(video.VideoChannel.Actor, videoChannelShare, video, t)
+}
+
+// ---------------------------------------------------------------------------
+// Private
 // ---------------------------------------------------------------------------
 
 async function addVideoShare (shareUrl: string, video: MVideoId) {
@@ -72,42 +95,6 @@ async function addVideoShare (shareUrl: string, video: MVideoId) {
   }
 
   await VideoShareModel.upsert(entry)
-}
-
-async function shareByServer (video: MVideo, t: Transaction) {
-  const serverActor = await getServerActor()
-
-  const serverShareUrl = getLocalVideoAnnounceActivityPubUrl(serverActor, video)
-  const [ serverShare ] = await VideoShareModel.findOrCreate({
-    defaults: {
-      actorId: serverActor.id,
-      videoId: video.id,
-      url: serverShareUrl
-    },
-    where: {
-      url: serverShareUrl
-    },
-    transaction: t
-  })
-
-  return sendVideoAnnounce(serverActor, serverShare, video, t)
-}
-
-async function shareByVideoChannel (video: MVideoAccountLight, t: Transaction) {
-  const videoChannelShareUrl = getLocalVideoAnnounceActivityPubUrl(video.VideoChannel.Actor, video)
-  const [ videoChannelShare ] = await VideoShareModel.findOrCreate({
-    defaults: {
-      actorId: video.VideoChannel.actorId,
-      videoId: video.id,
-      url: videoChannelShareUrl
-    },
-    where: {
-      url: videoChannelShareUrl
-    },
-    transaction: t
-  })
-
-  return sendVideoAnnounce(video.VideoChannel.Actor, videoChannelShare, video, t)
 }
 
 async function undoShareByVideoChannel (video: MVideo, oldVideoChannel: MChannelActorLight, t: Transaction) {

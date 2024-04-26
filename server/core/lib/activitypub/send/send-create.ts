@@ -1,5 +1,3 @@
-import { Transaction } from 'sequelize'
-import { getServerActor } from '@server/models/application/application.js'
 import {
   ActivityAudience,
   ActivityCreate,
@@ -9,19 +7,24 @@ import {
   VideoPlaylistPrivacy,
   VideoPrivacy
 } from '@peertube/peertube-models'
+import { AccountModel } from '@server/models/account/account.js'
+import { getServerActor } from '@server/models/application/application.js'
+import { VideoModel } from '@server/models/video/video.js'
+import { Transaction } from 'sequelize'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import {
   MActorLight,
   MCommentOwnerVideo,
   MLocalVideoViewerWithWatchSections,
-  MVideoAccountLight,
   MVideoAP,
+  MVideoAccountLight,
   MVideoPlaylistFull,
   MVideoRedundancyFileVideo,
   MVideoRedundancyStreamingPlaylistVideo
 } from '../../../types/models/index.js'
 import { audiencify, getAudience } from '../audience.js'
+import { canVideoBeFederated } from '../videos/federate.js'
 import {
   broadcastToActors,
   broadcastToFollowers,
@@ -32,12 +35,11 @@ import {
   sendVideoRelatedActivity,
   unicastTo
 } from './shared/index.js'
-import { AccountModel } from '@server/models/account/account.js'
 
 const lTags = loggerTagsFactory('ap', 'create')
 
-async function sendCreateVideo (video: MVideoAP, transaction: Transaction) {
-  if (!video.hasPrivacyForFederation()) return undefined
+export async function sendCreateVideo (video: MVideoAP, transaction: Transaction) {
+  if (!canVideoBeFederated(video)) return undefined
 
   logger.info('Creating job to send video creation of %s.', video.url, lTags(video.uuid))
 
@@ -56,7 +58,7 @@ async function sendCreateVideo (video: MVideoAP, transaction: Transaction) {
   })
 }
 
-async function sendCreateCacheFile (
+export async function sendCreateCacheFile (
   byActor: MActorLight,
   video: MVideoAccountLight,
   fileRedundancy: MVideoRedundancyStreamingPlaylistVideo | MVideoRedundancyFileVideo
@@ -72,7 +74,7 @@ async function sendCreateCacheFile (
   })
 }
 
-async function sendCreateWatchAction (stats: MLocalVideoViewerWithWatchSections, transaction: Transaction) {
+export async function sendCreateWatchAction (stats: MLocalVideoViewerWithWatchSections, transaction: Transaction) {
   logger.info('Creating job to send create watch action %s.', stats.url, lTags(stats.uuid))
 
   const byActor = await getServerActor()
@@ -84,7 +86,7 @@ async function sendCreateWatchAction (stats: MLocalVideoViewerWithWatchSections,
   return sendVideoActivityToOrigin(activityBuilder, { byActor, video: stats.Video, transaction, contextType: 'WatchAction' })
 }
 
-async function sendCreateVideoPlaylist (playlist: MVideoPlaylistFull, transaction: Transaction) {
+export async function sendCreateVideoPlaylist (playlist: MVideoPlaylistFull, transaction: Transaction) {
   if (playlist.privacy === VideoPlaylistPrivacy.PRIVATE) return undefined
 
   logger.info('Creating job to send create video playlist of %s.', playlist.url, lTags(playlist.uuid))
@@ -109,10 +111,19 @@ async function sendCreateVideoPlaylist (playlist: MVideoPlaylistFull, transactio
   })
 }
 
-async function sendCreateVideoComment (comment: MCommentOwnerVideo, transaction: Transaction) {
-  logger.info('Creating job to send comment %s.', comment.url)
-
+export async function sendCreateVideoComment (comment: MCommentOwnerVideo, transaction: Transaction) {
   const isOrigin = comment.Video.isOwned()
+
+  if (isOrigin) {
+    const videoWithBlacklist = await VideoModel.loadWithBlacklist(comment.Video.id)
+
+    if (!canVideoBeFederated(videoWithBlacklist)) {
+      logger.debug(`Do not send comment ${comment.url} on a video that cannot be federated`)
+      return undefined
+    }
+  }
+
+  logger.info('Creating job to send comment %s.', comment.url)
 
   const byActor = comment.Account.Actor
   const videoAccount = await AccountModel.load(comment.Video.VideoChannel.Account.id, transaction)
@@ -179,7 +190,7 @@ async function sendCreateVideoComment (comment: MCommentOwnerVideo, transaction:
   })
 }
 
-function buildCreateActivity <T extends ActivityCreateObject> (
+export function buildCreateActivity <T extends ActivityCreateObject> (
   url: string,
   byActor: MActorLight,
   object: T,
@@ -201,16 +212,7 @@ function buildCreateActivity <T extends ActivityCreateObject> (
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  sendCreateVideo,
-  buildCreateActivity,
-  sendCreateVideoComment,
-  sendCreateVideoPlaylist,
-  sendCreateCacheFile,
-  sendCreateWatchAction
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 async function sendVideoRelatedCreateActivity (options: {

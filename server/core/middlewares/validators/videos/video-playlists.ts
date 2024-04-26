@@ -205,7 +205,7 @@ const videoPlaylistsAddVideoValidator = [
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoPlaylistExist(req.params.playlistId, res, 'all')) return
-    if (!await doesVideoExist(req.body.videoId, res, 'only-video')) return
+    if (!await doesVideoExist(req.body.videoId, res, 'only-video-and-blacklist')) return
 
     const videoPlaylist = getPlaylist(res)
 

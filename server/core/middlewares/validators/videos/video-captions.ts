@@ -67,7 +67,7 @@ const listVideoCaptionsValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'only-video-and-blacklist')) return
 
     const video = res.locals.onlyVideo
     if (!await checkCanSeeVideo({ req, res, video, paramId: req.params.videoId })) return

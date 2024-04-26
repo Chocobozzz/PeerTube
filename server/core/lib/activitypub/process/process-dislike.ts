@@ -1,11 +1,12 @@
-import { VideoModel } from '@server/models/video/video.js'
 import { ActivityDislike } from '@peertube/peertube-models'
+import { logger } from '@server/helpers/logger.js'
+import { VideoModel } from '@server/models/video/video.js'
 import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature } from '../../../types/models/index.js'
-import { federateVideoIfNeeded, maybeGetOrCreateAPVideo } from '../videos/index.js'
+import { canVideoBeFederated, federateVideoIfNeeded, maybeGetOrCreateAPVideo } from '../videos/index.js'
 
 async function processDislikeActivity (options: APProcessorOptions<ActivityDislike>) {
   const { activity, byActor } = options
@@ -21,13 +22,18 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processDislike (activity: ActivityDislike, byActor: MActorSignature) {
-  const dislikeObject = activity.object
+  const videoUrl = activity.object
   const byAccount = byActor.Account
 
   if (!byAccount) throw new Error('Cannot create dislike with the non account actor ' + byActor.url)
 
-  const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: dislikeObject, fetchType: 'only-video' })
+  const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: videoUrl, fetchType: 'only-video-and-blacklist' })
   if (!onlyVideo?.isOwned()) return
+
+  if (!canVideoBeFederated(onlyVideo)) {
+    logger.warn(`Do not process dislike on video ${videoUrl} that cannot be federated`)
+    return
+  }
 
   return sequelizeTypescript.transaction(async t => {
     const video = await VideoModel.loadFull(onlyVideo.id, t)

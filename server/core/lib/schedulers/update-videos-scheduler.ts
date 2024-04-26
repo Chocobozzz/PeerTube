@@ -5,10 +5,11 @@ import { logger } from '../../helpers/logger.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { sequelizeTypescript } from '../../initializers/database.js'
 import { ScheduleVideoUpdateModel } from '../../models/video/schedule-video-update.js'
+import { isNewVideoPrivacyForFederation } from '../activitypub/videos/federate.js'
 import { Notifier } from '../notifier/index.js'
+import { addVideoJobsAfterUpdate } from '../video-jobs.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { setVideoPrivacy } from '../video-privacy.js'
-import { addVideoJobsAfterUpdate } from '../video-jobs.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
 export class UpdateVideosScheduler extends AbstractScheduler {
@@ -58,7 +59,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
       logger.info('Executing scheduled video update on %s.', video.uuid)
 
       if (schedule.privacy) {
-        isNewVideoForFederation = video.isNewVideoForFederation(schedule.privacy)
+        isNewVideoForFederation = isNewVideoPrivacyForFederation(video.privacy, schedule.privacy)
         oldPrivacy = video.privacy
 
         setVideoPrivacy(video, schedule.privacy)

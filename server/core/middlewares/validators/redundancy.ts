@@ -143,7 +143,7 @@ const addVideoRedundancyValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (!await doesVideoExist(req.body.videoId, res, 'only-video')) return
+    if (!await doesVideoExist(req.body.videoId, res, 'only-video-and-blacklist')) return
 
     if (res.locals.onlyVideo.remote === false) {
       return res.fail({ message: 'Cannot create a redundancy on a local video' })

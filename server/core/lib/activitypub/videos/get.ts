@@ -1,9 +1,14 @@
+import { APObjectId } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger } from '@server/helpers/logger.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { loadVideoByUrl, VideoLoadByUrlType } from '@server/lib/model-loaders/index.js'
-import { MVideoAccountLightBlacklistAllFiles, MVideoImmutable, MVideoThumbnail } from '@server/types/models/index.js'
-import { APObjectId } from '@peertube/peertube-models'
+import {
+  MVideoAccountLightBlacklistAllFiles,
+  MVideoImmutable,
+  MVideoThumbnail,
+  MVideoThumbnailBlacklist
+} from '@server/types/models/index.js'
 import { getAPId } from '../activity.js'
 import { refreshVideoIfNeeded } from './refresh.js'
 import { APVideoCreator, fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared/index.js'
@@ -24,23 +29,25 @@ type GetVideoParamAll = {
 type GetVideoParamImmutable = {
   videoObject: APObjectId
   syncParam?: SyncParam
-  fetchType: 'only-immutable-attributes'
+  fetchType: 'unsafe-only-immutable-attributes'
   allowRefresh: false
 }
 
 type GetVideoParamOther = {
   videoObject: APObjectId
   syncParam?: SyncParam
-  fetchType?: 'all' | 'only-video'
+  fetchType?: 'all' | 'only-video-and-blacklist'
   allowRefresh?: boolean
 }
 
 export function getOrCreateAPVideo (options: GetVideoParamAll): GetVideoResult<MVideoAccountLightBlacklistAllFiles>
 export function getOrCreateAPVideo (options: GetVideoParamImmutable): GetVideoResult<MVideoImmutable>
-export function getOrCreateAPVideo (options: GetVideoParamOther): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail>
+export function getOrCreateAPVideo (
+  options: GetVideoParamOther
+): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoThumbnailBlacklist>
 export async function getOrCreateAPVideo (
   options: GetVideoParamAll | GetVideoParamImmutable | GetVideoParamOther
-): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable> {
+): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoThumbnailBlacklist | MVideoImmutable> {
   // Default params
   const syncParam = options.syncParam || { rates: true, shares: true, comments: true, refreshVideo: false }
   const fetchType = options.fetchType || 'all'
@@ -52,7 +59,7 @@ export async function getOrCreateAPVideo (
 
   if (videoFromDatabase) {
     if (allowRefresh === true) {
-      // Typings ensure allowRefresh === false in only-immutable-attributes fetch type
+      // Typings ensure allowRefresh === false in unsafe-only-immutable-attributes fetch type
       videoFromDatabase = await scheduleRefresh(videoFromDatabase as MVideoThumbnail, fetchType, syncParam)
     }
 
@@ -87,7 +94,9 @@ export async function getOrCreateAPVideo (
 
 export function maybeGetOrCreateAPVideo (options: GetVideoParamAll): GetVideoResult<MVideoAccountLightBlacklistAllFiles>
 export function maybeGetOrCreateAPVideo (options: GetVideoParamImmutable): GetVideoResult<MVideoImmutable>
-export function maybeGetOrCreateAPVideo (options: GetVideoParamOther): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail>
+export function maybeGetOrCreateAPVideo (
+  options: GetVideoParamOther
+): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoThumbnailBlacklist>
 export async function maybeGetOrCreateAPVideo (options: GetVideoParamAll | GetVideoParamImmutable | GetVideoParamOther) {
   try {
     const result = await getOrCreateAPVideo(options as any)
