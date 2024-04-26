@@ -54,6 +54,8 @@ export class PeerTubePlugin {
           .then((obj: PublicServerSetting) => obj.publicSettings)
       },
 
+      getUser: unimplemented,
+
       isLoggedIn: () => this.http.isLoggedIn(),
       getAuthHeader: () => {
         if (!this.http.isLoggedIn()) return undefined

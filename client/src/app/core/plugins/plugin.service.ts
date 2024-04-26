@@ -250,6 +250,10 @@ export class PluginService implements ClientHook {
         return firstValueFrom(obs)
       },
 
+      getUser: () => {
+        return this.authService.getUser()
+      },
+
       getServerConfig: () => {
         const obs = this.server.getConfig()
           .pipe(catchError(res => this.restExtractor.handleError(res)))
