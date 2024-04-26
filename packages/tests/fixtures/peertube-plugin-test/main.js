@@ -1,5 +1,24 @@
 async function register ({ registerHook, registerSetting, settingsManager, storageManager, peertubeHelpers }) {
   {
+    registerSetting({
+      name: 'unique-setting',
+      label: 'Unique setting',
+      type: 'select',
+      options: []
+    })
+
+    registerSetting({
+      name: 'unique-setting',
+      label: 'Unique setting',
+      type: 'select',
+      options: [
+        {
+          value: 1,
+          label: 'One'
+        }
+      ]
+    })
+
     const actionHooks = [
       'action:application.listening',
       'action:notifier.notification.created',

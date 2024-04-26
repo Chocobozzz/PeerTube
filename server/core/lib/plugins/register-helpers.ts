@@ -44,7 +44,7 @@ export class RegisterHelpers {
     }[]
   } = {}
 
-  private readonly settings: RegisterServerSettingOptions[] = []
+  private settings: RegisterServerSettingOptions[] = []
 
   private idAndPassAuths: RegisterServerAuthPassOptions[] = []
   private externalAuths: RegisterServerAuthExternalOptions[] = []
@@ -203,7 +203,10 @@ export class RegisterHelpers {
 
   private buildRegisterSetting () {
     return (options: RegisterServerSettingOptions) => {
-      this.settings.push(options)
+      this.settings = [
+        ...this.settings.filter((s) => s.name !== options.name),
+        options
+      ]
     }
   }
 
