@@ -1392,6 +1392,12 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return queryBuilder.queryVideo({ id, transaction, type: 'thumbnails-blacklist' })
   }
 
+  static loadAndPopulateAccountAndFiles (id: number | string, transaction?: Transaction): Promise<MVideoAccountLightBlacklistAllFiles> {
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
+
+    return queryBuilder.queryVideo({ id, transaction, type: 'account-blacklist-files' })
+  }
+
   static loadImmutableAttributes (id: number | string, t?: Transaction): Promise<MVideoImmutable> {
     const fun = () => {
       const query = {

@@ -18,7 +18,7 @@ import {
   MVideoFullLight,
   MVideoId,
   MVideoImmutable,
-  MVideoThumbnail,
+  MVideoThumbnailBlacklist,
   MVideoUUID,
   MVideoWithRights
 } from '@server/types/models/index.js'
@@ -56,7 +56,7 @@ export async function doesVideoExist (id: number | string, res: Response, fetchT
       break
 
     case 'only-video-and-blacklist':
-      res.locals.onlyVideo = video as MVideoThumbnail
+      res.locals.onlyVideo = video as MVideoThumbnailBlacklist
       break
   }
 

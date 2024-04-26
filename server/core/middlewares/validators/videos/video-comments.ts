@@ -17,6 +17,7 @@ import {
   isValidVideoIdParam,
   isValidVideoPasswordHeader
 } from '../shared/index.js'
+import { canVideoBeFederated } from '@server/lib/activitypub/videos/federate.js'
 
 const listVideoCommentsValidator = [
   query('isLocal')
@@ -132,8 +133,11 @@ const videoCommentGetValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, 'id')) return
-    if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'only-video-and-blacklist')) return
+
+    if (!canVideoBeFederated(res.locals.onlyVideo)) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+
+    if (!await doesVideoCommentExist(req.params.commentId, res.locals.onlyVideo, res)) return
 
     return next()
   }

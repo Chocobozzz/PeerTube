@@ -1,19 +1,19 @@
+import { HttpStatusCode } from '@peertube/peertube-models'
+import { exists, isSafePeerTubeFilenameWithoutExtension, isUUIDValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
+import { logger } from '@server/helpers/logger.js'
+import { LRU_CACHE } from '@server/initializers/constants.js'
+import { VideoFileModel } from '@server/models/video/video-file.js'
+import { VideoModel } from '@server/models/video/video.js'
+import { MStreamingPlaylist, MVideoFile, MVideoThumbnailBlacklist } from '@server/types/models/index.js'
 import express from 'express'
 import { query } from 'express-validator'
 import { LRUCache } from 'lru-cache'
 import { basename, dirname } from 'path'
-import { exists, isSafePeerTubeFilenameWithoutExtension, isUUIDValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
-import { logger } from '@server/helpers/logger.js'
-import { LRU_CACHE } from '@server/initializers/constants.js'
-import { VideoModel } from '@server/models/video/video.js'
-import { VideoFileModel } from '@server/models/video/video-file.js'
-import { MStreamingPlaylist, MVideoFile, MVideoThumbnail } from '@server/types/models/index.js'
-import { HttpStatusCode } from '@peertube/peertube-models'
 import { areValidationErrors, checkCanAccessVideoStaticFiles, isValidVideoPasswordHeader } from './shared/index.js'
 
 type LRUValue = {
   allowed: boolean
-  video?: MVideoThumbnail
+  video?: MVideoThumbnailBlacklist
   file?: MVideoFile
   playlist?: MStreamingPlaylist }
 
@@ -122,8 +122,7 @@ const ensureCanAccessPrivateVideoHLSFiles = [
 ]
 
 export {
-  ensureCanAccessVideoPrivateWebVideoFiles,
-  ensureCanAccessPrivateVideoHLSFiles
+  ensureCanAccessPrivateVideoHLSFiles, ensureCanAccessVideoPrivateWebVideoFiles
 }
 
 // ---------------------------------------------------------------------------
@@ -139,7 +138,7 @@ async function isWebVideoAllowed (req: express.Request, res: express.Response) {
     return { allowed: false }
   }
 
-  const video = await VideoModel.load(file.getVideo().id)
+  const video = await VideoModel.loadWithBlacklist(file.getVideo().id)
 
   return {
     file,
@@ -151,7 +150,7 @@ async function isWebVideoAllowed (req: express.Request, res: express.Response) {
 async function isHLSAllowed (req: express.Request, res: express.Response, videoUUID: string) {
   const filename = basename(req.path)
 
-  const video = await VideoModel.loadWithFiles(videoUUID)
+  const video = await VideoModel.loadAndPopulateAccountAndFiles(videoUUID)
 
   if (!video) {
     logger.debug('Unknown static file %s to serve', req.originalUrl, { videoUUID })
