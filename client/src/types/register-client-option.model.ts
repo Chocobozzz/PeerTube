@@ -1,5 +1,5 @@
-import { AuthUser } from '@app/core'
 import {
+  MyUser,
   RegisterClientFormFieldOptions,
   RegisterClientHookOptions,
   RegisterClientRouteOptions,
@@ -36,7 +36,7 @@ export type RegisterClientHelpers = {
 
   getSettings: () => Promise<SettingEntries>
 
-  getUser: () => AuthUser
+  getUser: () => MyUser
 
   getServerConfig: () => Promise<ServerConfig>
 
