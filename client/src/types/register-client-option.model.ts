@@ -1,3 +1,4 @@
+import { AuthUser } from '@app/core'
 import {
   RegisterClientFormFieldOptions,
   RegisterClientHookOptions,
@@ -34,6 +35,8 @@ export type RegisterClientHelpers = {
   getAuthHeader: () => { 'Authorization': string } | undefined
 
   getSettings: () => Promise<SettingEntries>
+
+  getUser: () => AuthUser
 
   getServerConfig: () => Promise<ServerConfig>
 

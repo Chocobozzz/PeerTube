@@ -74,54 +74,12 @@ export class User implements UserServerModel {
   createdAt: Date
 
   constructor (hash: Partial<UserServerModel>) {
-    this.id = hash.id
-    this.username = hash.username
-    this.email = hash.email
+    const { account, ...mergeProps }: Partial<UserServerModel> = hash
 
-    this.role = hash.role
+    Object.assign(this, mergeProps)
 
-    this.videoChannels = hash.videoChannels
-
-    this.videoQuota = hash.videoQuota
-    this.videoQuotaDaily = hash.videoQuotaDaily
-    this.videoQuotaUsed = hash.videoQuotaUsed
-    this.videoQuotaUsedDaily = hash.videoQuotaUsedDaily
-    this.videosCount = hash.videosCount
-    this.abusesCount = hash.abusesCount
-    this.abusesAcceptedCount = hash.abusesAcceptedCount
-    this.abusesCreatedCount = hash.abusesCreatedCount
-    this.videoCommentsCount = hash.videoCommentsCount
-
-    this.nsfwPolicy = hash.nsfwPolicy
-    this.p2pEnabled = hash.p2pEnabled
-    this.autoPlayVideo = hash.autoPlayVideo
-    this.autoPlayNextVideo = hash.autoPlayNextVideo
-    this.autoPlayNextVideoPlaylist = hash.autoPlayNextVideoPlaylist
-    this.videosHistoryEnabled = hash.videosHistoryEnabled
-    this.videoLanguages = hash.videoLanguages
-
-    this.theme = hash.theme
-
-    this.adminFlags = hash.adminFlags
-
-    this.blocked = hash.blocked
-    this.blockedReason = hash.blockedReason
-
-    this.noInstanceConfigWarningModal = hash.noInstanceConfigWarningModal
-    this.noWelcomeModal = hash.noWelcomeModal
-    this.noAccountSetupWarningModal = hash.noAccountSetupWarningModal
-
-    this.notificationSettings = hash.notificationSettings
-
-    this.twoFactorEnabled = hash.twoFactorEnabled
-
-    this.createdAt = hash.createdAt
-
-    this.pluginAuth = hash.pluginAuth
-    this.lastLoginDate = hash.lastLoginDate
-
-    if (hash.account !== undefined) {
-      this.account = new Account(hash.account)
+    if (account !== undefined) {
+      this.account = new Account(account)
     }
   }
 
