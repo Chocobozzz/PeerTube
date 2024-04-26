@@ -192,7 +192,7 @@ async function updateVideoPrivacy (options: {
   transaction: Transaction
 }) {
   const { videoInstance, videoInfoToUpdate, hadPrivacyForFederation, transaction } = options
-  const isNewVideoForFederation = isNewVideoPrivacyForFederation(videoInfoToUpdate.privacy, videoInfoToUpdate.privacy)
+  const isNewVideoForFederation = isNewVideoPrivacyForFederation(videoInstance.privacy, videoInfoToUpdate.privacy)
 
   const newPrivacy = forceNumber(videoInfoToUpdate.privacy) as VideoPrivacyType
   setVideoPrivacy(videoInstance, newPrivacy)
