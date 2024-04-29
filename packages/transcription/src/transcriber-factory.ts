@@ -18,10 +18,7 @@ export class TranscriberFactory {
     logger: Logger = createLogger(),
     transcriptDirectory: string = AbstractTranscriber.DEFAULT_TRANSCRIPT_DIRECTORY
   ) {
-    const engine = this.engines.find(({ name }) => name === engineName)
-    if (!engine) {
-      throw new Error(`Unknow engine ${engineName}`)
-    }
+    const engine = this.getEngineByName(engineName)
 
     const transcriberArgs: ConstructorParameters<typeof AbstractTranscriber> = [
       engine,
@@ -39,5 +36,14 @@ export class TranscriberFactory {
       default:
         throw new Error(`Unimplemented engine ${engineName}`)
     }
+  }
+
+  getEngineByName (engineName: string) {
+    const engine = this.engines.find(({ name }) => name === engineName)
+    if (!engine) {
+      throw new Error(`Unknow engine ${engineName}`)
+    }
+
+    return engine
   }
 }

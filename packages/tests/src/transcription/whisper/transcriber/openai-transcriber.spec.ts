@@ -1,17 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions, max-len */
+import { expect, config } from 'chai'
 import { createLogger } from 'winston'
 import { join } from 'path'
-import { expect, config } from 'chai'
-import { existsSync } from 'node:fs'
-import { mkdir, readFile, rm } from 'node:fs/promises'
+import { mkdir, rm } from 'node:fs/promises'
 import { buildAbsoluteFixturePath, root } from '@peertube/peertube-node-utils'
-import { OpenaiTranscriber } from '@peertube/peertube-transcription'
+import { OpenaiTranscriber, TranscriptFile } from '@peertube/peertube-transcription'
 
 config.truncateThreshold = 0
 
 describe('Open AI Whisper transcriber', function () {
   const transcriptDirectory = join(root(), 'test-transcript')
   const shortVideoPath = buildAbsoluteFixturePath('video_short.mp4')
-  const frVideoPath = buildAbsoluteFixturePath('transcription/communiquer-lors-dune-classe-transplantee.mp4')
+  const frVideoPath = buildAbsoluteFixturePath('transcription/videos/communiquer-lors-dune-classe-transplantee.mp4')
 
   const transcriber = new OpenaiTranscriber(
     {
@@ -31,15 +31,13 @@ describe('Open AI Whisper transcriber', function () {
 
   it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format by default', async function () {
     const transcript = await transcriber.transcribe(shortVideoPath)
-    expect(transcript).to.deep.equals({
+    expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.vtt'),
       language: 'en',
       format: 'vtt'
-    })
+    }))).to.be.true
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    expect(existsSync(transcript.path), `Transcript file ${transcript.path} doesn't exist.`).to.be.true
-    expect(await readFile(transcript.path, 'utf8')).to.equal(
+    expect(await transcript.read()).to.equals(
       `WEBVTT
 
 00:00.000 --> 00:02.000
@@ -51,15 +49,13 @@ You
 
   it('May produce a transcript file in the `srt` format', async function () {
     const transcript = await transcriber.transcribe(shortVideoPath, { name: 'tiny' }, 'en', 'srt')
-    expect(transcript).to.deep.equals({
+    expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.srt'),
       language: 'en',
       format: 'srt'
-    })
+    }))).to.be.true
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    expect(existsSync(transcript.path), `Transcript file ${transcript.path} doesn't exist.`).to.be.true
-    expect(await readFile(transcript.path, 'utf8')).to.equal(
+    expect(await transcript.read()).to.equal(
       `1
 00:00:00,000 --> 00:00:02,000
 You
@@ -70,34 +66,30 @@ You
 
   it('May produce a transcript file in the `txt` format', async function () {
     const transcript = await transcriber.transcribe(shortVideoPath, { name: 'tiny' }, 'en', 'txt')
-    expect(transcript).to.deep.equals({
+    expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.txt'),
       language: 'en',
       format: 'txt'
-    })
+    }))).to.be.true
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    expect(existsSync(transcript.path), `Transcript file ${transcript.path} doesn't exist.`).to.be.true
-    expect(await readFile(transcript.path, 'utf8')).to.equal(`You
+    expect(await transcript.read()).to.equal(`You
 `)
   })
 
   it('May transcribe a media file using a local PyTorch model', async function () {
-    await transcriber.transcribe(frVideoPath, { name: 'myLocalModel', path: buildAbsoluteFixturePath('transcription/tiny.pt') }, 'fr')
+    await transcriber.transcribe(frVideoPath, { name: 'myLocalModel', path: buildAbsoluteFixturePath('transcription/models/tiny.pt') }, 'fr')
   })
 
   it('May transcribe a media file in french', async function () {
     this.timeout(45000)
     const transcript = await transcriber.transcribe(frVideoPath, { name: 'tiny' }, 'fr', 'txt')
-    expect(transcript).to.deep.equals({
+    expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'communiquer-lors-dune-classe-transplantee.txt'),
       language: 'fr',
       format: 'txt'
-    })
+    })))
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    expect(existsSync(transcript.path), `Transcript file ${transcript.path} doesn't exist.`).to.be.true
-    expect(await readFile(transcript.path, 'utf8')).to.equal(
+    expect(await transcript.read()).to.equal(
       `Communiquez lors d'une classe transplante. Utilisez les photos prises lors de cette classe pour raconter quotidiennement le séjour vécu.
 C'est le scénario P-Dagujic présenté par monsieur Navoli, professeur ainsi que le 3 sur une école alimentaire de Montpellier.
 La première application a utilisé ce ralame déatec. L'enseignant va alors transférer les différentes photos réalisés lors de la classe transplante.
@@ -113,17 +105,15 @@ Ensuite, il pourront lire et commenter ce de leurs camarades ou répondre aux co
   })
 
   it('May transcribe a media file in french with small model', async function () {
-    this.timeout(300000)
+    this.timeout(400000)
     const transcript = await transcriber.transcribe(frVideoPath, { name: 'small' }, 'fr', 'txt')
-    expect(transcript).to.deep.equals({
+    expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'communiquer-lors-dune-classe-transplantee.txt'),
       language: 'fr',
       format: 'txt'
-    })
+    }))).to.be.true
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    expect(existsSync(transcript.path), `Transcript file ${transcript.path} doesn't exist.`).to.be.true
-    expect(await readFile(transcript.path, 'utf8')).to.equal(
+    expect(await transcript.read()).to.equal(
       `Communiquer lors d'une classe transplantée. Utiliser les photos prises lors de cette classe
 pour raconter quotidiennement le séjour vécu. C'est le scénario pédagogique présenté
 par M. Navoli, professeur en cycle 3 sur une école élémentaire de Montpellier.

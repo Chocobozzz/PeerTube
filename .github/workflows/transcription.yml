@@ -24,7 +24,13 @@ jobs:
           pip3 install openai-whisper
           pip3 install whisper-ctranslate2
           pip3 install whisper-timestamped
+          pip3 install jiwer
 
       - name: Run transcription tests
         run: |
-          npm run mocha -- --exit --bail packages/tests/src/transcription/**/*.spec.ts
+          npm run mocha -- --exit --bail "packages/tests/src/transcription/**/*.spec.ts"
+          cat /proc/cpuinfo
+          lscpu
+          dmidecode --type processor
+          lshw -C CPU
+          hwinfo --cpu

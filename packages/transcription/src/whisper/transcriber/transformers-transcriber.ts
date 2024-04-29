@@ -1,6 +1,6 @@
 import { TranscriptionModel } from '../../transcription-model.js'
+import { TranscriptFile, TranscriptFormat } from '../../transcript/index.js'
 import { AbstractTranscriber } from '../../abstract-transcriber.js'
-import { Transcript, TranscriptFormat } from '../../transcript.js'
 import { $ } from 'execa'
 import { join } from 'path'
 
@@ -10,7 +10,7 @@ export class TransformersTranscriber extends AbstractTranscriber {
     model: TranscriptionModel,
     language: string,
     format: TranscriptFormat = 'vtt'
-  ): Promise<Transcript> {
+  ): Promise<TranscriptFile> {
     const $$ = $({ verbose: true })
     // const ffmpegChildProcess = $$`ffmpeg ${[
     //   '-i',
@@ -34,10 +34,10 @@ export class TransformersTranscriber extends AbstractTranscriber {
       mediaFilePath
     ]}`
 
-    return {
+    return new TranscriptFile({
       language,
       path: join(this.transcriptDirectory, `test.${format}`),
       format
-    }
+    })
   }
 }

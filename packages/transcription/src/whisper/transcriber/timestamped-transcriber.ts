@@ -1,10 +1,10 @@
+import { $ } from 'execa'
 import assert from 'node:assert'
 import { join } from 'node:path'
 import { existsSync } from 'node:fs'
 import { rename } from 'node:fs/promises'
-import { $ } from 'execa'
 import { TranscriptionModel } from '../../transcription-model.js'
-import { Transcript, TranscriptFormat } from '../../transcript.js'
+import { TranscriptFile, TranscriptFormat } from '../../transcript/index.js'
 import { getFileInfo } from '../../file-utils.js'
 import { OpenaiTranscriber } from './openai-transcriber.js'
 
@@ -14,7 +14,7 @@ export class WhisperTimestampedTranscriber extends OpenaiTranscriber {
     model: TranscriptionModel,
     language: string,
     format: TranscriptFormat = 'vtt'
-  ): Promise<Transcript> {
+  ): Promise<TranscriptFile> {
     this.createPerformanceMark()
 
     const $$ = $({ verbose: true })
@@ -37,10 +37,10 @@ export class WhisperTimestampedTranscriber extends OpenaiTranscriber {
 
     this.measurePerformanceMark()
 
-    return {
+    return new TranscriptFile({
       language,
       path: transcriptPath,
       format
-    }
+    })
   }
 }

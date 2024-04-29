@@ -7,7 +7,7 @@ import short from 'short-uuid'
 import { root } from '@peertube/peertube-node-utils'
 import { TranscriptionEngine } from './transcription-engine.js'
 import { TranscriptionModel } from './transcription-model.js'
-import { Transcript, TranscriptFormat } from './transcript.js'
+import { TranscriptFile, TranscriptFormat } from './transcript/index.js'
 
 export abstract class AbstractTranscriber {
   public static DEFAULT_TRANSCRIPT_DIRECTORY = join(root(), 'dist', 'transcripts')
@@ -72,14 +72,10 @@ export abstract class AbstractTranscriber {
     return `${this.runId}-ended`
   }
 
-  perf () {
-    // const transcriptionPerformanceObserver = new PerformanceObserver((items) => {
-    //   items
-    //     .getEntries()
-    //     .forEach((entry) => logger.debug(`Transcription n°${entry.name} took ${toHumanReadable(entry.duration)}`, entry))
-    //   performance.clearMarks()
-    // })
-  }
-
-  abstract transcribe (mediaFilePath: string, model: TranscriptionModel, language: string, format: TranscriptFormat): Promise<Transcript>
+  abstract transcribe (
+    mediaFilePath: string,
+    model: TranscriptionModel,
+    language: string,
+    format: TranscriptFormat
+  ): Promise<TranscriptFile>
 }

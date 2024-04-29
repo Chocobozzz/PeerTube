@@ -1,17 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions, max-len */
+import { expect, config } from 'chai'
 import { createLogger } from 'winston'
 import { join } from 'path'
-import { expect, config } from 'chai'
-import { existsSync } from 'node:fs'
-import { mkdir, readFile, rm } from 'node:fs/promises'
+import { mkdir, rm } from 'node:fs/promises'
 import { buildAbsoluteFixturePath, root } from '@peertube/peertube-node-utils'
-import { OpenaiTranscriber, WhisperTimestampedTranscriber } from '@peertube/peertube-transcription'
+import { OpenaiTranscriber, WhisperTimestampedTranscriber, TranscriptFile } from '@peertube/peertube-transcription'
 
 config.truncateThreshold = 0
 
 describe('Linto timestamped Whisper transcriber', function () {
   const transcriptDirectory = join(root(), 'test-transcript')
   const shortVideoPath = buildAbsoluteFixturePath('video_short.mp4')
-  const frVideoPath = buildAbsoluteFixturePath('transcription/communiquer-lors-dune-classe-transplantee.mp4')
+  const frVideoPath = buildAbsoluteFixturePath('transcription/videos/communiquer-lors-dune-classe-transplantee.mp4')
   const transcriber = new WhisperTimestampedTranscriber(
     {
       name: 'whisper-timestamped',
@@ -28,25 +28,20 @@ describe('Linto timestamped Whisper transcriber', function () {
     await mkdir(transcriptDirectory, { recursive: true })
   })
 
-  it('Should transcribe a media file and produce transcript file in th `vtt` format by default', async function () {
+  it('Should transcribe a media file and produce a transcript file in `vtt` with a ms precision', async function () {
     const transcript = await transcriber.transcribe(
       shortVideoPath,
       { name: 'tiny' },
-      'fr',
-      'vtt'
+      'fr'
     )
 
-    expect(transcript).to.deep.equals({
+    expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.vtt'),
       language: 'fr',
       format: 'vtt'
-    })
+    }))).to.be.true
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    expect(existsSync(transcript.path), `Transcript file ${transcript.path} doesn't exist.`).to.be.true
-
-    // Whisper timestamped should produce a transcript with micro seconds precisions.
-    expect(await readFile(transcript.path, 'utf8')).to.equal(
+    expect(await transcript.read()).to.equals(
       `WEBVTT
 
 00:02.480 --> 00:02.500
@@ -56,17 +51,15 @@ you
     )
   })
 
-  it('May produce a transcript file in the `srt` format', async function () {
+  it('May produce a transcript file in the `srt` format with a ms precision', async function () {
     const transcript = await transcriber.transcribe(shortVideoPath, { name: 'tiny' }, 'en', 'srt')
-    expect(transcript).to.deep.equals({
+    expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.srt'),
       language: 'en',
       format: 'srt'
-    })
+    }))).to.be.true
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    expect(existsSync(transcript.path), `Transcript file ${transcript.path} doesn't exist.`).to.be.true
-    expect(await readFile(transcript.path, 'utf8')).to.equal(
+    expect(await transcript.read()).to.equals(
       `1
 00:00:02,480 --> 00:00:02,500
 you
@@ -77,30 +70,26 @@ you
 
   it('May produce a transcript file in `txt` format', async function () {
     const transcript = await transcriber.transcribe(shortVideoPath, { name: 'tiny' }, 'en', 'txt')
-    expect(transcript).to.deep.equals({
+    expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.txt'),
       language: 'en',
       format: 'txt'
-    })
+    }))).to.be.true
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    expect(existsSync(transcript.path), `Transcript file ${transcript.path} doesn't exist.`).to.be.true
-    expect(await readFile(transcript.path, 'utf8')).to.equal(`you
+    expect(await transcript.read()).to.equals(`you
 `)
   })
 
   it('May transcribe a media file in french', async function () {
     this.timeout(45000)
     const transcript = await transcriber.transcribe(frVideoPath, { name: 'tiny' }, 'fr', 'txt')
-    expect(transcript).to.deep.equals({
+    expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'communiquer-lors-dune-classe-transplantee.txt'),
       language: 'fr',
       format: 'txt'
-    })
+    }))).to.be.true
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    expect(existsSync(transcript.path), `Transcript file ${transcript.path} doesn't exist.`).to.be.true
-    expect(await readFile(transcript.path, 'utf8')).to.equal(
+    expect(await transcript.read()).to.equal(
       `...
 Communiquez lors du ne class et transplanté.
 Utilisez les photos prises lors de cette classe pour raconter quotidiennement le seuil jour vécu.
@@ -146,7 +135,7 @@ Ensuite, il pourront lire et commenter ce de leur camarade, ou répondre au comm
     )
     const openaiTranscript = await openaiTranscriber.transcribe(...transcribeParameters)
 
-    expect(await readFile(transcript.path, 'utf8')).to.equal(await readFile(openaiTranscript.path, 'utf8'))
+    expect(await transcript.read()).to.equals(await openaiTranscript.read())
   })
 
   after(async function () {
