@@ -22,7 +22,7 @@ export class WhisperTimestampedTranscriber extends OpenaiTranscriber {
     await $$`${this.engine.binary} ${[
       mediaFilePath,
       '--model',
-      model.name,
+      model?.path || model.name,
       '--output_format',
       'all',
       '--output_dir',

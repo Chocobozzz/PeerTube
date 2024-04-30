@@ -80,6 +80,10 @@ you
 `)
   })
 
+  it('May transcribe a media file using a local PyTorch model file', async function () {
+    await transcriber.transcribe(frVideoPath, { name: 'myLocalModel', path: buildAbsoluteFixturePath('transcription/models/tiny.pt') }, 'fr')
+  })
+
   it('May transcribe a media file in french', async function () {
     this.timeout(45000)
     const transcript = await transcriber.transcribe(frVideoPath, { name: 'tiny' }, 'fr', 'txt')
