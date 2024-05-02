@@ -38,8 +38,15 @@ export class TranscriptFile implements TranscriptFileInterface {
     return new TranscriptFile({ path, language, format })
   }
 
-  async equals (transcript: TranscriptFile) {
-    return await transcript.read() === await this.read()
+  async equals (transcript: TranscriptFile, caseSensitive: boolean = true) {
+    const content = await this.read()
+    const transcriptContent = await transcript.read()
+
+    if (!caseSensitive) {
+      return String(content).toLowerCase() === String(transcriptContent).toLowerCase()
+    }
+
+    return content === transcriptContent
   }
 
   async evaluate (transcript: TranscriptFile) {

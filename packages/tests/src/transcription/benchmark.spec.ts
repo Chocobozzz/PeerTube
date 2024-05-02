@@ -91,7 +91,7 @@ describe('Transcribers benchmark', function () {
   })
 
   transcribers.forEach(function (transcriberName) {
-    describe(`Creates a ${transcriberName} transcriber for the benchmark`, function () {
+    describe(`Create ${transcriberName} transcriber for the benchmark`, function () {
       const transcriber = transcriberFactory.createFromEngineName(
         transcriberName,
         createLogger(),

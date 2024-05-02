@@ -60,7 +60,7 @@ export class TranscriptFileEvaluator {
   }
 
   async alignement () {
-    const { stdout: alignement } = await $`jiwer ${this.buildArgs('--align')}`
+    const { stdout: alignement } = await $`jiwer ${this.buildArgs('-g', '--align')}`
 
     return alignement
   }
