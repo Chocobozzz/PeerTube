@@ -247,7 +247,7 @@ log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
 
   rotation:
-    enabled : true # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
+    enabled: true # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
     max_file_size: 12MB
     max_files: 20
 
