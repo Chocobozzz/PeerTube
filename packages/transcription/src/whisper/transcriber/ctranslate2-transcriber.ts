@@ -1,20 +1,20 @@
 import { $ } from 'execa'
-import short, { SUUID } from 'short-uuid'
+import short from 'short-uuid'
 import { join } from 'path'
 import { lstat } from 'node:fs/promises'
-import { OpenaiTranscriber } from './openai-transcriber.js'
-import { TranscriptionModel } from '../../transcription-model.js'
-import { TranscriptFile, TranscriptFormat } from '../../transcript/index.js'
+import { OpenaiTranscriber, WhisperTranscribeArgs } from './openai-transcriber.js'
+import { TranscriptFile } from '../../transcript/index.js'
 import { getFileInfo } from '../../file-utils.js'
+import { WhisperBuiltinModel } from '../whisper-builtin-model.js'
 
 export class Ctranslate2Transcriber extends OpenaiTranscriber {
-  async transcribe (
-    mediaFilePath: string,
-    model: TranscriptionModel = { name: 'tiny' },
-    language: string = 'en',
-    format: TranscriptFormat = 'vtt',
-    runId: SUUID = short.generate()
-  ): Promise<TranscriptFile> {
+  async transcribe ({
+    mediaFilePath,
+    model = new WhisperBuiltinModel('tiny'),
+    language,
+    format = 'vtt',
+    runId = short.generate()
+  }: WhisperTranscribeArgs): Promise<TranscriptFile> {
     // Shall we run the command with `{ shell: true }` to get the same error as in sh ?
     // ex: ENOENT => Command not found
     const $$ = $({ verbose: true })
@@ -23,19 +23,20 @@ export class Ctranslate2Transcriber extends OpenaiTranscriber {
     if (model.path) {
       await lstat(model.path).then(stats => stats.isDirectory())
     }
-    const modelArgs = model.path ? [ '--model_directory', model.path ] : [ '--model', model.name ]
+
+    const modelArg = model.path ? [ '--model_directory', model.path ] : [ '--model', model.name ]
+    const languageArg = language ? [ '--language', language ] : []
 
     this.createRun(runId)
     this.startRun()
     await $$`${this.engine.binary} ${[
       mediaFilePath,
-      ...modelArgs,
+      ...modelArg,
       '--output_format',
       format,
       '--output_dir',
       this.transcriptDirectory,
-      '--language',
-      language
+      ...languageArg
     ]}`
     this.stopRun()
 

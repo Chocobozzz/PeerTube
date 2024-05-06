@@ -33,11 +33,10 @@ import { OpenaiTranscriber } from '@peertube/peertube-transcription'
     binary: 'whisper'
   });
 
-  const transcriptFile = await transcriber.transcribe(
-    './myVideo.mp4',
-    { name: 'tiny' },
-    'en', 'txt'
-  );
+  const transcriptFile = await transcriber.transcribe({
+    mediaFilePath: './myVideo.mp4',
+    format: 'txt'
+  });
 
   console.log(transcriptFile.path);
   console.log(await transcriptFile.read());
@@ -45,12 +44,15 @@ import { OpenaiTranscriber } from '@peertube/peertube-transcription'
 ```
 
 Using a local model file:
+
 ```typescript
-  const transcriptFile = await transcriber.transcribe(
-    './myVideo.mp4',
-    { name: 'my fine tuned large model', path: './models/large.pt' },
-    'en', 'txt'
-  );
+import { WhisperBuiltinModel } from '@peertube/peertube-transcription/dist'
+
+const transcriptFile = await transcriber.transcribe({
+  mediaFilePath: './myVideo.mp4',
+  model: WhisperBuiltinModel.fromPath('./models/large.pt'),
+  format: 'txt'
+});
 ```
 
 You may use the builtin Factory if you're happy with the default configuration:

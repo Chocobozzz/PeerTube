@@ -7,7 +7,7 @@ import { expect } from 'chai'
 
 describe('Transcript File Evaluator', function () {
   const transcriptDirectory = buildAbsoluteFixturePath('transcription/transcript-evaluator')
-  const referenceTranscriptFilepath = buildAbsoluteFixturePath('transcription/transcript/reference.txt')
+  const referenceTranscriptFilePath = buildAbsoluteFixturePath('transcription/transcript/reference.txt')
 
   before(async function () {
     await mkdir(transcriptDirectory, { recursive: true })
@@ -29,7 +29,7 @@ describe('Transcript File Evaluator', function () {
 
   it(`evaluation must return coherent wer & cer`, async function () {
     const reference = new TranscriptFile({
-      path: referenceTranscriptFilepath,
+      path: referenceTranscriptFilePath,
       language: 'fr',
       format: 'txt'
     })

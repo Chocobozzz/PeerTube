@@ -4,7 +4,7 @@ import { createLogger } from 'winston'
 import { join } from 'path'
 import { mkdir, rm } from 'node:fs/promises'
 import { buildAbsoluteFixturePath, root } from '@peertube/peertube-node-utils'
-import { OpenaiTranscriber, TranscriptFile } from '@peertube/peertube-transcription'
+import { OpenaiTranscriber, TranscriptFile, TranscriptionModel, WhisperBuiltinModel } from '@peertube/peertube-transcription'
 
 config.truncateThreshold = 0
 
@@ -12,7 +12,6 @@ describe('Open AI Whisper transcriber', function () {
   const transcriptDirectory = join(root(), 'test-transcript')
   const shortVideoPath = buildAbsoluteFixturePath('video_short.mp4')
   const frVideoPath = buildAbsoluteFixturePath('transcription/videos/communiquer-lors-dune-classe-transplantee.mp4')
-
   const transcriber = new OpenaiTranscriber(
     {
       name: 'openai-whisper',
@@ -30,7 +29,7 @@ describe('Open AI Whisper transcriber', function () {
   })
 
   it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format by default', async function () {
-    const transcript = await transcriber.transcribe(shortVideoPath)
+    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en' })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.vtt'),
       language: 'en',
@@ -48,7 +47,7 @@ You
   })
 
   it('May produce a transcript file in the `srt` format', async function () {
-    const transcript = await transcriber.transcribe(shortVideoPath, { name: 'tiny' }, 'en', 'srt')
+    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'srt' })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.srt'),
       language: 'en',
@@ -65,7 +64,7 @@ You
   })
 
   it('May produce a transcript file in the `txt` format', async function () {
-    const transcript = await transcriber.transcribe(shortVideoPath, { name: 'tiny' }, 'en', 'txt')
+    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'txt' })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.txt'),
       language: 'en',
@@ -77,12 +76,13 @@ You
   })
 
   it('May transcribe a media file using a local PyTorch model', async function () {
-    await transcriber.transcribe(frVideoPath, { name: 'myLocalModel', path: buildAbsoluteFixturePath('transcription/models/tiny.pt') }, 'fr')
+    this.timeout(2 * 1000 * 60)
+    await transcriber.transcribe({ mediaFilePath: frVideoPath, model: TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/tiny.pt')), language: 'en' })
   })
 
   it('May transcribe a media file in french', async function () {
-    this.timeout(45000)
-    const transcript = await transcriber.transcribe(frVideoPath, { name: 'tiny' }, 'fr', 'txt')
+    this.timeout(2 * 1000 * 60)
+    const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath, language: 'fr', format: 'txt' })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'communiquer-lors-dune-classe-transplantee.txt'),
       language: 'fr',
@@ -105,8 +105,8 @@ Ensuite, il pourront lire et commenter ce de leurs camarades ou répondre aux co
   })
 
   it('May transcribe a media file in french with small model', async function () {
-    this.timeout(400000)
-    const transcript = await transcriber.transcribe(frVideoPath, { name: 'small' }, 'fr', 'txt')
+    this.timeout(5 * 1000 * 60)
+    const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath, language: 'fr', format: 'txt', model: new WhisperBuiltinModel('small') })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'communiquer-lors-dune-classe-transplantee.txt'),
       language: 'fr',

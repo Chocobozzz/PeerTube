@@ -9,7 +9,8 @@ import {
   transcriberFactory,
   TranscriptFile,
   TranscriptFileEvaluator,
-  TranscriptionEngine
+  TranscriptionEngine,
+  TranscriptionModel
 } from '@peertube/peertube-transcription'
 
 interface TestResult {
@@ -101,9 +102,15 @@ describe('Transcribers benchmark', function () {
       models.forEach((modelName) => {
         it(`Run ${transcriberName} transcriber benchmark with ${modelName} model`, async function () {
           this.timeout(15 * 1000 * 60) // 15 minutes
-          const model = { name: modelName }
+          const model = new TranscriptionModel(modelName)
           const uuid = short.generate()
-          const transcriptFile = await transcriber.transcribe(mediaFilePath, model, 'fr', 'txt', uuid)
+          const transcriptFile = await transcriber.transcribe({
+            mediaFilePath,
+            model,
+            language: 'fr',
+            format: 'txt',
+            runId: uuid
+          })
           const evaluator = new TranscriptFileEvaluator(referenceTranscriptFile, transcriptFile)
           await new Promise(resolve => setTimeout(resolve, 1))
 

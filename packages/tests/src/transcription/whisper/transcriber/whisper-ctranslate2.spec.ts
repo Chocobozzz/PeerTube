@@ -4,7 +4,13 @@ import { createLogger } from 'winston'
 import { join } from 'path'
 import { mkdir, readFile, rm } from 'node:fs/promises'
 import { buildAbsoluteFixturePath, root } from '@peertube/peertube-node-utils'
-import { Ctranslate2Transcriber, OpenaiTranscriber, TranscriptFile, TranscriptFileEvaluator } from '@peertube/peertube-transcription'
+import {
+  Ctranslate2Transcriber,
+  OpenaiTranscriber,
+  TranscriptFile,
+  TranscriptFileEvaluator,
+  TranscriptionModel, WhisperTranscribeArgs
+} from '@peertube/peertube-transcription'
 
 config.truncateThreshold = 0
 
@@ -29,7 +35,7 @@ describe('Whisper CTranslate2 transcriber', function () {
   })
 
   it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format by default', async function () {
-    const transcript = await transcriber.transcribe(shortVideoPath, { name: 'tiny' })
+    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en' })
     expect(await transcript.equals(new TranscriptFile({ path: join(transcriptDirectory, 'video_short.vtt') }))).to.be.true
     expect(await readFile(transcript.path, 'utf8')).to.equal(
       `WEBVTT
@@ -42,7 +48,7 @@ You
   })
 
   it('May produce a transcript file in the `srt` format', async function () {
-    const transcript = await transcriber.transcribe(shortVideoPath, { name: 'tiny' }, 'en', 'srt')
+    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'srt' })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.srt'),
       format: 'srt'
@@ -58,7 +64,7 @@ You
   })
 
   it('May produce a transcript file in the `txt` format', async function () {
-    const transcript = await transcriber.transcribe(shortVideoPath, { name: 'tiny' }, 'en', 'txt')
+    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'txt' })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.txt'),
       format: 'txt'
@@ -69,12 +75,13 @@ You
   })
 
   it('May transcribe a media file using a local CTranslate2 model', async function () {
-    const transcript = await transcriber.transcribe(
-      shortVideoPath,
-      { name: 'myLocalModel', path: buildAbsoluteFixturePath('transcription/models/faster-whisper-tiny') },
-      'en',
-      'txt'
-    )
+    this.timeout(2 * 1000 * 60)
+    const transcript = await transcriber.transcribe({
+      mediaFilePath: shortVideoPath,
+      model: TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/faster-whisper-tiny')),
+      language: 'en',
+      format: 'txt'
+    })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.txt'),
       format: 'txt'
@@ -85,8 +92,8 @@ You
   })
 
   it('May transcribe a media file in french', async function () {
-    this.timeout(45000)
-    const transcript = await transcriber.transcribe(frVideoPath, { name: 'tiny' }, 'fr', 'txt')
+    this.timeout(5 * 1000 * 60)
+    const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath, language: 'fr', format: 'txt' })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'communiquer-lors-dune-classe-transplantee.txt'),
       language: 'fr',
@@ -109,13 +116,13 @@ Ensuite, il pourront lire et commenter ce de leur camarade, on répondra au comm
 
   it('Should produce a text transcript similar to openai-whisper implementation', async function () {
     this.timeout(5 * 1000 * 60)
-    const transcribeArguments: Parameters<typeof transcriber.transcribe> = [
-      frVideoPath,
-      { name: 'tiny' },
-      'fr',
-      'txt'
-    ]
-    const transcript = await transcriber.transcribe(...transcribeArguments)
+    const transcribeArgs: WhisperTranscribeArgs = {
+      mediaFilePath: frVideoPath,
+      model: TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/tiny.pt')),
+      language: 'fr',
+      format: 'txt'
+    }
+    const transcript = await transcriber.transcribe(transcribeArgs)
     const openaiTranscriber = new OpenaiTranscriber(
       {
         name: 'openai-whisper',
@@ -127,7 +134,7 @@ Ensuite, il pourront lire et commenter ce de leur camarade, on répondra au comm
       createLogger(),
       join(transcriptDirectory, 'openai-whisper')
     )
-    const openaiTranscript = await openaiTranscriber.transcribe(...transcribeArguments)
+    const openaiTranscript = await openaiTranscriber.transcribe(transcribeArgs)
 
     const transcriptFileEvaluator = new TranscriptFileEvaluator(openaiTranscript, transcript)
     expect(await transcriptFileEvaluator.wer()).to.be.below(20 / 100)

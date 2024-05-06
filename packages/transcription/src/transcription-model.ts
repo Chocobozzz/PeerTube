@@ -1,10 +1,13 @@
+import assert from 'node:assert'
+import { existsSync } from 'node:fs'
+import { parse } from 'node:path'
+
 export type ModelFormat = 'PyTorch' | 'GGML' | 'ONNX' | 'CTranslate2' // CoreML, OpenVino, Scikit-Learn, TensorFlow/Keras, PySpark
 
-export abstract class TranscriptionModel {
+export class TranscriptionModel {
   name: string
   format?: ModelFormat
   path?: string
-  url?: string
 
   // #  - hparams
   // #  - Number of dimensions (int)
@@ -16,4 +19,16 @@ export abstract class TranscriptionModel {
   // #  - mel filters
   // #  - tokenizer vocab
   // #  - model variables
+
+  constructor (name: string, path?: string, format?: ModelFormat) {
+    this.name = name
+    this.path = path
+    this.format = format
+  }
+
+  static fromPath (path: string) {
+    assert(existsSync(path), `${path} doesn't exist.`)
+
+    return new TranscriptionModel(parse(path).name, path)
+  }
 }

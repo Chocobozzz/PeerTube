@@ -21,12 +21,12 @@ export class TranscriptFileEvaluator {
     this.hypothesisTranscriptFile = hypothesisTranscriptFile
   }
 
-  static buildArgs (referenceTranscriptFilepath: string, hypothesisTranscriptFilepath: string, ...args: string[]) {
+  static buildArgs (referenceTranscriptFilePath: string, hypothesisTranscriptFilePath: string, ...args: string[]) {
     return [
       '--reference',
-      referenceTranscriptFilepath,
+      referenceTranscriptFilePath,
       '--hypothesis',
-      hypothesisTranscriptFilepath,
+      hypothesisTranscriptFilePath,
       ...args
     ]
   }

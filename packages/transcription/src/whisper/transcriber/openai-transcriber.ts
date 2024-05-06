@@ -1,23 +1,27 @@
 import { join } from 'path'
 import { $ } from 'execa'
-import short, { SUUID } from 'short-uuid'
-import { TranscriptionModel } from '../../transcription-model.js'
-import { TranscriptFile, TranscriptFormat } from '../../transcript/index.js'
-import { AbstractTranscriber } from '../../abstract-transcriber.js'
+import short from 'short-uuid'
+import { TranscriptFile } from '../../transcript/index.js'
+import { AbstractTranscriber, TranscribeArgs } from '../../abstract-transcriber.js'
 import { getFileInfo } from '../../file-utils.js'
+import { WhisperBuiltinModel } from '../whisper-builtin-model.js'
+import { TranscriptionModel } from '../../transcription-model.js'
+
+export type WhisperTranscribeArgs = Omit<TranscribeArgs, 'model'> & { model?: TranscriptionModel }
 
 export class OpenaiTranscriber extends AbstractTranscriber {
-  async transcribe (
-    mediaFilePath: string,
-    model: TranscriptionModel = { name: 'tiny' },
-    language: string = 'en',
-    format: TranscriptFormat = 'vtt',
-    runId: SUUID = short.generate()
-  ): Promise<TranscriptFile> {
+  async transcribe ({
+    mediaFilePath,
+    model = new WhisperBuiltinModel('tiny'),
+    language,
+    format = 'vtt',
+    runId = short.generate()
+  }: WhisperTranscribeArgs): Promise<TranscriptFile> {
     // Shall we run the command with `{ shell: true }` to get the same error as in sh ?
     // ex: ENOENT => Command not found
     const $$ = $({ verbose: true })
     const { baseName } = getFileInfo(mediaFilePath)
+    const languageArg = language ? [ '--language', language ] : []
 
     this.createRun(runId)
     this.startRun()
@@ -29,8 +33,7 @@ export class OpenaiTranscriber extends AbstractTranscriber {
       format,
       '--output_dir',
       this.transcriptDirectory,
-      '--language',
-      language
+      ...languageArg
     ]}`
     this.stopRun()
 

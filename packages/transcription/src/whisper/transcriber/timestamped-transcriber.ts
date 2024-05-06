@@ -1,24 +1,25 @@
 import { $ } from 'execa'
-import short, { SUUID } from 'short-uuid'
+import short from 'short-uuid'
 import assert from 'node:assert'
 import { join } from 'node:path'
 import { existsSync } from 'node:fs'
 import { rename } from 'node:fs/promises'
-import { TranscriptionModel } from '../../transcription-model.js'
-import { TranscriptFile, TranscriptFormat } from '../../transcript/index.js'
+import { TranscriptFile } from '../../transcript/index.js'
 import { getFileInfo } from '../../file-utils.js'
-import { OpenaiTranscriber } from './openai-transcriber.js'
+import { OpenaiTranscriber, WhisperTranscribeArgs } from './openai-transcriber.js'
+import { WhisperBuiltinModel } from '../whisper-builtin-model.js'
 
 export class WhisperTimestampedTranscriber extends OpenaiTranscriber {
-  async transcribe (
-    mediaFilePath: string,
-    model: TranscriptionModel,
-    language: string,
-    format: TranscriptFormat = 'vtt',
-    runId: SUUID = short.generate()
-  ): Promise<TranscriptFile> {
+  async transcribe ({
+    mediaFilePath,
+    model = new WhisperBuiltinModel('tiny'),
+    language,
+    format = 'vtt',
+    runId = short.generate()
+  }: WhisperTranscribeArgs): Promise<TranscriptFile> {
     const $$ = $({ verbose: true })
     const { baseName, name } = getFileInfo(mediaFilePath)
+    const languageArg = language ? [ '--language', language ] : []
 
     this.createRun(runId)
     this.startRun()
@@ -29,7 +30,8 @@ export class WhisperTimestampedTranscriber extends OpenaiTranscriber {
       '--output_format',
       'all',
       '--output_dir',
-      this.transcriptDirectory
+      this.transcriptDirectory,
+      ...languageArg
     ]}`
     this.stopRun()
 

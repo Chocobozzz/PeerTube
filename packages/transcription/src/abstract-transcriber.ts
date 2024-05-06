@@ -9,6 +9,14 @@ import { TranscriptionModel } from './transcription-model.js'
 import { TranscriptionRun } from './transcription-run.js'
 import { TranscriptFile, TranscriptFormat } from './transcript/index.js'
 
+export interface TranscribeArgs {
+  mediaFilePath: string
+  model: TranscriptionModel
+  language?: string
+  format?: TranscriptFormat
+  runId?: SUUID
+}
+
 export abstract class AbstractTranscriber {
   public static DEFAULT_TRANSCRIPT_DIRECTORY = join(root(), 'dist', 'transcripts')
 
@@ -55,11 +63,11 @@ export abstract class AbstractTranscriber {
     return model.format === 'PyTorch'
   }
 
-  abstract transcribe (
-    mediaFilePath: string,
-    model: TranscriptionModel,
-    language: string,
-    format: TranscriptFormat,
-    runId: SUUID
-  ): Promise<TranscriptFile>
+  abstract transcribe ({
+    mediaFilePath,
+    model,
+    language,
+    format = 'vtt',
+    runId = short.generate()
+  }: TranscribeArgs): Promise<TranscriptFile>
 }
