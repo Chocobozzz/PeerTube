@@ -1,9 +1,8 @@
 import { createLogger } from 'winston'
-import short, { SUUID } from 'short-uuid'
 import { performance, PerformanceObserver } from 'node:perf_hooks'
 // import { CpuInfo, CpuUsage } from 'node:os'
 import { rm, mkdir } from 'node:fs/promises'
-import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
+import { buildAbsoluteFixturePath, buildSUUID, SUUID } from '@peertube/peertube-node-utils'
 import {
   transcriberFactory,
   TranscriptFile,
@@ -103,7 +102,7 @@ describe('Transcribers benchmark', function () {
         it(`Run ${transcriberName} transcriber benchmark with ${modelName} model`, async function () {
           this.timeout(15 * 1000 * 60) // 15 minutes
           const model = new TranscriptionModel(modelName)
-          const uuid = short.generate()
+          const uuid = buildSUUID()
           const transcriptFile = await transcriber.transcribe({
             mediaFilePath,
             model,

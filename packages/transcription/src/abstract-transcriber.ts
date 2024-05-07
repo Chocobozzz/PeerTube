@@ -1,8 +1,7 @@
 import { createLogger, Logger } from 'winston'
-import short, { SUUID } from 'short-uuid'
 import { join } from 'node:path'
 import { PerformanceObserver } from 'node:perf_hooks'
-import { root } from '@peertube/peertube-node-utils'
+import { buildSUUID, SUUID, root } from '@peertube/peertube-node-utils'
 import { TranscriptionEngine } from './transcription-engine.js'
 import { TranscriptionModel } from './transcription-model.js'
 import { TranscriptionRun } from './transcription-run.js'
@@ -37,7 +36,7 @@ export abstract class AbstractTranscriber {
     this.performanceObserver = performanceObserver
   }
 
-  createRun (uuid: SUUID = short.generate()) {
+  createRun (uuid: SUUID = buildSUUID()) {
     this.run = new TranscriptionRun(this.logger, uuid)
   }
 
@@ -65,6 +64,6 @@ export abstract class AbstractTranscriber {
     model,
     language,
     format = 'vtt',
-    runId = short.generate()
+    runId = buildSUUID()
   }: TranscribeArgs): Promise<TranscriptFile>
 }

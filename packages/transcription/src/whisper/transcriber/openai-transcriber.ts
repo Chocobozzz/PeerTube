@@ -1,6 +1,6 @@
 import { join } from 'path'
 import { $ } from 'execa'
-import short from 'short-uuid'
+import { buildSUUID } from '@peertube/peertube-node-utils'
 import { TranscriptFile, TranscriptFormat } from '../../transcript/index.js'
 import { AbstractTranscriber, TranscribeArgs } from '../../abstract-transcriber.js'
 import { WhisperBuiltinModel } from '../whisper-builtin-model.js'
@@ -16,7 +16,7 @@ export class OpenaiTranscriber extends AbstractTranscriber {
     model = new WhisperBuiltinModel('tiny'),
     language,
     format = 'vtt',
-    runId = short.generate()
+    runId = buildSUUID()
   }: WhisperTranscribeArgs): Promise<TranscriptFile> {
     this.assertLanguageDetectionAvailable(language)
 

@@ -1,11 +1,11 @@
-import short, { SUUID } from 'short-uuid'
+import { buildSUUID, SUUID } from '@peertube/peertube-node-utils'
 import { createLogger, Logger } from 'winston'
 
 export class TranscriptionRun {
   uuid: SUUID
   logger: Logger
 
-  constructor (logger = createLogger(), uuid: SUUID = short.generate()) {
+  constructor (logger = createLogger(), uuid: SUUID = buildSUUID()) {
     this.uuid = uuid
     this.logger = logger
   }

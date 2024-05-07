@@ -1,9 +1,13 @@
-import short from 'short-uuid'
+import short, { SUUID } from 'short-uuid'
 
 const translator = short()
 
 function buildUUID () {
   return short.uuid()
+}
+
+function buildSUUID (): SUUID {
+  return short.generate()
 }
 
 function uuidToShort (uuid: string) {
@@ -26,7 +30,10 @@ function isShortUUID (value: string) {
 
 export {
   buildUUID,
+  buildSUUID,
   uuidToShort,
   shortToUUID,
   isShortUUID
 }
+
+export type { SUUID }

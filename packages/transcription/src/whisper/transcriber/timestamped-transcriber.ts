@@ -1,5 +1,5 @@
 import { $ } from 'execa'
-import short from 'short-uuid'
+import { buildSUUID } from '@peertube/peertube-node-utils'
 import assert from 'node:assert'
 import { join, parse } from 'node:path'
 import { existsSync } from 'node:fs'
@@ -14,7 +14,7 @@ export class WhisperTimestampedTranscriber extends OpenaiTranscriber {
     model = new WhisperBuiltinModel('tiny'),
     language,
     format = 'vtt',
-    runId = short.generate()
+    runId = buildSUUID()
   }: WhisperTranscribeArgs): Promise<TranscriptFile> {
     this.assertLanguageDetectionAvailable(language)
 
