@@ -1,7 +1,6 @@
 import { createLogger, Logger } from 'winston'
 import short, { SUUID } from 'short-uuid'
 import { join } from 'node:path'
-import { existsSync } from 'node:fs'
 import { PerformanceObserver } from 'node:perf_hooks'
 import { root } from '@peertube/peertube-node-utils'
 import { TranscriptionEngine } from './transcription-engine.js'
@@ -51,12 +50,10 @@ export abstract class AbstractTranscriber {
     delete this.run
   }
 
-  detectLanguage () {
-    return Promise.resolve('')
-  }
-
-  loadModel (model: TranscriptionModel) {
-    if (existsSync(model.path)) { /* empty */ }
+  assertLanguageDetectionAvailable (language?: string) {
+    if (!this.engine.languageDetection && !language) {
+      throw new Error(`Language detection isn't available in ${this.engine.name}. A language must me provided explicitly.`)
+    }
   }
 
   supports (model: TranscriptionModel) {

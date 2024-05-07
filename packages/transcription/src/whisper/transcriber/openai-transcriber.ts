@@ -1,11 +1,12 @@
 import { join } from 'path'
 import { $ } from 'execa'
 import short from 'short-uuid'
-import { TranscriptFile } from '../../transcript/index.js'
+import { TranscriptFile, TranscriptFormat } from '../../transcript/index.js'
 import { AbstractTranscriber, TranscribeArgs } from '../../abstract-transcriber.js'
-import { getFileInfo } from '../../file-utils.js'
 import { WhisperBuiltinModel } from '../whisper-builtin-model.js'
 import { TranscriptionModel } from '../../transcription-model.js'
+import { readFile } from 'node:fs/promises'
+import { parse } from 'node:path'
 
 export type WhisperTranscribeArgs = Omit<TranscribeArgs, 'model'> & { model?: TranscriptionModel }
 
@@ -17,11 +18,12 @@ export class OpenaiTranscriber extends AbstractTranscriber {
     format = 'vtt',
     runId = short.generate()
   }: WhisperTranscribeArgs): Promise<TranscriptFile> {
+    this.assertLanguageDetectionAvailable(language)
+
     // Shall we run the command with `{ shell: true }` to get the same error as in sh ?
     // ex: ENOENT => Command not found
     const $$ = $({ verbose: true })
-    const { baseName } = getFileInfo(mediaFilePath)
-    const languageArg = language ? [ '--language', language ] : []
+    const languageArgs = language ? [ '--language', language ] : []
 
     this.createRun(runId)
     this.startRun()
@@ -30,17 +32,31 @@ export class OpenaiTranscriber extends AbstractTranscriber {
       '--model',
       model?.path || model.name,
       '--output_format',
-      format,
+      'all',
       '--output_dir',
       this.transcriptDirectory,
-      ...languageArg
+      ...languageArgs
     ]}`
     this.stopRun()
 
     return new TranscriptFile({
-      language,
-      path: join(this.transcriptDirectory, `${baseName}.${format}`),
+      language: language || await this.getDetectedLanguage(mediaFilePath),
+      path: this.getTranscriptFilePath(mediaFilePath, format),
       format
     })
+  }
+
+  async getDetectedLanguage (mediaFilePath: string) {
+    const { language } = await this.readJsonTranscriptFile(mediaFilePath)
+
+    return language
+  }
+
+  async readJsonTranscriptFile (mediaFilePath: string) {
+    return JSON.parse(await readFile(this.getTranscriptFilePath(mediaFilePath, 'json'), 'utf8'))
+  }
+
+  getTranscriptFilePath (mediaFilePath: string, format: TranscriptFormat) {
+    return join(this.transcriptDirectory, `${parse(mediaFilePath).name}.${format}`)
   }
 }

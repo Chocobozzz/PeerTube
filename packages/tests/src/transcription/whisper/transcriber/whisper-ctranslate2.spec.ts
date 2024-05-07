@@ -24,7 +24,8 @@ describe('Whisper CTranslate2 transcriber', function () {
       requirements: [],
       type: 'binary',
       binary: 'whisper-ctranslate2',
-      supportedModelFormats: []
+      supportedModelFormats: [],
+      languageDetection: true
     },
     createLogger(),
     transcriptDirectory
@@ -36,7 +37,7 @@ describe('Whisper CTranslate2 transcriber', function () {
 
   it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format by default', async function () {
     const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en' })
-    expect(await transcript.equals(new TranscriptFile({ path: join(transcriptDirectory, 'video_short.vtt') }))).to.be.true
+    expect(await transcript.equals(new TranscriptFile({ path: join(transcriptDirectory, 'video_short.vtt'), language: 'en' }))).to.be.true
     expect(await readFile(transcript.path, 'utf8')).to.equal(
       `WEBVTT
 
@@ -51,7 +52,8 @@ You
     const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'srt' })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.srt'),
-      format: 'srt'
+      format: 'srt',
+      language: 'en'
     }))).to.be.true
 
     expect(await readFile(transcript.path, 'utf8')).to.equal(
@@ -67,7 +69,8 @@ You
     const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'txt' })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.txt'),
-      format: 'txt'
+      format: 'txt',
+      language: 'en'
     }))).to.be.true
 
     expect(await transcript.read()).to.equal(`You
@@ -84,7 +87,8 @@ You
     })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'video_short.txt'),
-      format: 'txt'
+      format: 'txt',
+      language: 'en'
     }))).to.be.true
 
     expect(await transcript.read()).to.equal(`You
@@ -112,6 +116,12 @@ Une fois leur article terminée, les élèves soumettront celui-ci au professeur
 Ensuite, il pourront lire et commenter ce de leur camarade, on répondra au commentaire de la veille.
 `
     )
+  })
+
+  it('Guesses the video language if not provided', async function () {
+    this.timeout(2 * 1000 * 60)
+    const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath })
+    expect(transcript.language).to.equals('fr')
   })
 
   it('Should produce a text transcript similar to openai-whisper implementation', async function () {

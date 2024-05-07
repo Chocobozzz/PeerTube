@@ -5,10 +5,10 @@ import { TranscriptFileEvaluator } from './transcript-file-evaluator.js'
 
 export class TranscriptFile implements TranscriptFileInterface {
   path: string
-  language: string = 'en'
+  language: string
   format: TranscriptFormat = 'vtt'
 
-  constructor ({ path, language = 'en', format = 'vtt' }: { path: string, language?: string, format?: TranscriptFormat }) {
+  constructor ({ path, language, format = 'vtt' }: { path: string, language: string, format?: TranscriptFormat }) {
     statSync(path)
 
     this.path = path

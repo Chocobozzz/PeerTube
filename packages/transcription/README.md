@@ -30,7 +30,8 @@ import { OpenaiTranscriber } from '@peertube/peertube-transcription'
   // create a transcriber powered by OpeanAI Whisper CLI
   const transcriber = new OpenaiTranscriber({
     name: 'openai-whisper',
-    binary: 'whisper'
+    binary: 'whisper',
+    languageDetection: true,
   });
 
   const transcriptFile = await transcriber.transcribe({

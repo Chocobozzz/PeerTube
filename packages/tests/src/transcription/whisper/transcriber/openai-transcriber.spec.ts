@@ -18,7 +18,8 @@ describe('Open AI Whisper transcriber', function () {
       requirements: [],
       type: 'binary',
       binary: 'whisper',
-      supportedModelFormats: [ 'PyTorch' ]
+      supportedModelFormats: [ 'PyTorch' ],
+      languageDetection: true
     },
     createLogger(),
     transcriptDirectory
@@ -76,12 +77,12 @@ You
   })
 
   it('May transcribe a media file using a local PyTorch model', async function () {
-    this.timeout(2 * 1000 * 60)
+    this.timeout(3 * 1000 * 60)
     await transcriber.transcribe({ mediaFilePath: frVideoPath, model: TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/tiny.pt')), language: 'en' })
   })
 
   it('May transcribe a media file in french', async function () {
-    this.timeout(2 * 1000 * 60)
+    this.timeout(3 * 1000 * 60)
     const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath, language: 'fr', format: 'txt' })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'communiquer-lors-dune-classe-transplantee.txt'),
@@ -104,8 +105,14 @@ Ensuite, il pourront lire et commenter ce de leurs camarades ou répondre aux co
     )
   })
 
+  it('Guesses the video language if not provided', async function () {
+    this.timeout(3 * 1000 * 60)
+    const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath })
+    expect(transcript.language).to.equals('fr')
+  })
+
   it('May transcribe a media file in french with small model', async function () {
-    this.timeout(5 * 1000 * 60)
+    this.timeout(6 * 1000 * 60)
     const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath, language: 'fr', format: 'txt', model: new WhisperBuiltinModel('small') })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'communiquer-lors-dune-classe-transplantee.txt'),

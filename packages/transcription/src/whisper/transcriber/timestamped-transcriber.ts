@@ -1,11 +1,10 @@
 import { $ } from 'execa'
 import short from 'short-uuid'
 import assert from 'node:assert'
-import { join } from 'node:path'
+import { join, parse } from 'node:path'
 import { existsSync } from 'node:fs'
 import { rename } from 'node:fs/promises'
-import { TranscriptFile } from '../../transcript/index.js'
-import { getFileInfo } from '../../file-utils.js'
+import { TranscriptFile, TranscriptFormat } from '../../transcript/index.js'
 import { OpenaiTranscriber, WhisperTranscribeArgs } from './openai-transcriber.js'
 import { WhisperBuiltinModel } from '../whisper-builtin-model.js'
 
@@ -17,9 +16,10 @@ export class WhisperTimestampedTranscriber extends OpenaiTranscriber {
     format = 'vtt',
     runId = short.generate()
   }: WhisperTranscribeArgs): Promise<TranscriptFile> {
+    this.assertLanguageDetectionAvailable(language)
+
     const $$ = $({ verbose: true })
-    const { baseName, name } = getFileInfo(mediaFilePath)
-    const languageArg = language ? [ '--language', language ] : []
+    const languageArgs = language ? [ '--language', language ] : []
 
     this.createRun(runId)
     this.startRun()
@@ -31,21 +31,25 @@ export class WhisperTimestampedTranscriber extends OpenaiTranscriber {
       'all',
       '--output_dir',
       this.transcriptDirectory,
-      ...languageArg
+      ...languageArgs
     ]}`
     this.stopRun()
 
-    const internalTranscriptPath = join(this.transcriptDirectory, `${name}.${format}`)
-    const transcriptPath = join(this.transcriptDirectory, `${baseName}.${format}`)
+    const internalTranscriptPath = this.getTranscriptFilePath(mediaFilePath, format, false)
+    const transcriptPath = join(this.transcriptDirectory, `${parse(mediaFilePath).name}.${format}`)
     // Whisper timestamped output files with the video file extension by defaults, ex: video.mp4.vtt
     // @see https://github.com/linto-ai/whisper-timestamped/issues/189
     assert(existsSync(internalTranscriptPath), `${internalTranscriptPath} file doesn't exist.`)
     await rename(internalTranscriptPath, transcriptPath)
-
+    // communiquer-lors-dune-classe-transplantee.mp4.words.json
     return new TranscriptFile({
-      language,
+      language: language || await this.getDetectedLanguage(mediaFilePath),
       path: transcriptPath,
       format
     })
+  }
+
+  getTranscriptFilePath (mediaFilePath: string, format: TranscriptFormat, words = true) {
+    return join(this.transcriptDirectory, `${parse(mediaFilePath).base}${words ? '.words' : ''}.${format}`)
   }
 }

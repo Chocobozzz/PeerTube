@@ -13,6 +13,7 @@ export class TranscriptionEngine {
   license?: string
   forgeURL?: string
   supportedModelFormats: ModelFormat[]
+  languageDetection?: true
   // There could be a default models.
   // There could be a list of default models
 

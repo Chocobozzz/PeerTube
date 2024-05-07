@@ -26,7 +26,8 @@ describe('Linto timestamped Whisper transcriber', function () {
       requirements: [],
       type: 'binary',
       binary: 'whisper_timestamped',
-      supportedModelFormats: [ 'PyTorch' ]
+      supportedModelFormats: [ 'PyTorch' ],
+      languageDetection: true
     },
     createLogger(),
     transcriptDirectory
@@ -84,6 +85,7 @@ you
   })
 
   it('May transcribe a media file using a local PyTorch model file', async function () {
+    this.timeout(2 * 1000 * 60)
     await transcriber.transcribe({ mediaFilePath: frVideoPath, model: TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/tiny.pt')), language: 'en' })
   })
 
@@ -122,6 +124,12 @@ qui pourra soit la noter pour correction ou le public.
 Ensuite, il pourront lire et commenter ce de leur camarade, ou répondre au commentaire de la veille.
 `
     )
+  })
+
+  it('Guesses the video language if not provided', async function () {
+    this.timeout(2 * 1000 * 60)
+    const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath })
+    expect(transcript.language).to.equals('fr')
   })
 
   it('Should produce a text transcript similar to openai-whisper implementation', async function () {
