@@ -148,6 +148,7 @@ Ensuite, il pourront lire et commenter ce de leur camarade, on répondra au comm
 
     const transcriptFileEvaluator = new TranscriptFileEvaluator(openaiTranscript, transcript)
     expect(await transcriptFileEvaluator.wer()).to.be.below(20 / 100)
+    expect(await transcriptFileEvaluator.cer()).to.be.below(10 / 100)
   })
 
   after(async function () {

@@ -17,8 +17,12 @@ Provide a common API to many transcription backend, currently :
 And at least one of the following transcription backend:
 - Python :
   - `openai-whisper`
-  - `whisper-ctranslate2`
-  - `whisper-timestamped`
+  - `whisper-ctranslate2>=0.4.3`
+  - `whisper-timestamped>=1.15.4`
+
+And to run the transcript evaluation tests :
+- Python
+  - `jiwer>=3.04`
 
 ## Usage
 

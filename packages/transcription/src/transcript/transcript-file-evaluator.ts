@@ -48,15 +48,9 @@ export class TranscriptFileEvaluator {
    * CER: Character Error Rate
    */
   async cer () {
-    // @see https://github.com/jitsi/jiwer/issues/87
-    let result = {
-      stdout: undefined
-    }
-    try {
-      result = await $`jiwer ${this.buildArgs('--cer')}`
-    } catch {}
+    const { stdout: cer } = await $`jiwer ${this.buildArgs('--cer', '-g')}`
 
-    return result.stdout ? Number(result.stdout) : undefined
+    return Number(cer)
   }
 
   async alignement () {

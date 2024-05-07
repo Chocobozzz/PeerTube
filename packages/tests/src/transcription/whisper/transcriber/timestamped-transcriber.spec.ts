@@ -157,6 +157,7 @@ Ensuite, il pourront lire et commenter ce de leur camarade, ou répondre au comm
 
     const transcriptFileEvaluator = new TranscriptFileEvaluator(openaiTranscript, transcript)
     expect(await transcriptFileEvaluator.wer()).to.be.below(25 / 100)
+    expect(await transcriptFileEvaluator.cer()).to.be.below(15 / 100)
   })
 
   after(async function () {
