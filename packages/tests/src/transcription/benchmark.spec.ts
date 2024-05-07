@@ -5,13 +5,13 @@ import { performance, PerformanceObserver } from 'node:perf_hooks'
 import { rm, mkdir } from 'node:fs/promises'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
-  toHumanReadable,
   transcriberFactory,
   TranscriptFile,
   TranscriptFileEvaluator,
   TranscriptionEngine,
   TranscriptionModel
 } from '@peertube/peertube-transcription'
+import { millisecondsToTime } from '@peertube/peertube-core-utils'
 
 interface TestResult {
   uuid: SUUID
@@ -49,7 +49,7 @@ interface FormattedTestResult {
 const formatTestResult = ({ WER, CER, duration, engine, model }: Partial<TestResult>): FormattedTestResult => ({
   WER: WER ? `${WER * 100}%` : undefined,
   CER: CER ? `${CER * 100}%` : undefined,
-  duration: duration ? toHumanReadable(duration) : undefined,
+  duration: duration ? millisecondsToTime(duration) : undefined,
   model,
   engine: engine.name
 })
