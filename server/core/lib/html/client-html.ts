@@ -54,6 +54,7 @@ class ClientHtml {
 
 function sendHTML (html: string, res: express.Response, localizedHTML: boolean = false) {
   res.set('Content-Type', 'text/html; charset=UTF-8')
+  res.set('Cache-Control', 'max-age=0, no-cache, must-revalidate')
 
   if (localizedHTML) {
     res.set('Vary', 'Accept-Language')
