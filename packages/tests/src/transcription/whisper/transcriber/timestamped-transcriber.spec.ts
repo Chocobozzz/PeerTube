@@ -19,7 +19,12 @@ config.truncateThreshold = 0
 describe('Linto timestamped Whisper transcriber', function () {
   const transcriptDirectory = join(root(), 'test-transcript')
   const shortVideoPath = buildAbsoluteFixturePath('video_short.mp4')
-  const frVideoPath = buildAbsoluteFixturePath('transcription/videos/communiquer-lors-dune-classe-transplantee.mp4')
+  const frVideoPath = buildAbsoluteFixturePath('transcription/videos/derive_sectaire.mp4')
+  const referenceTranscriptFile = new TranscriptFile({
+    path: buildAbsoluteFixturePath('transcription/videos/derive_sectaire.txt'),
+    language: 'fr',
+    format: 'txt'
+  })
   const transcriber = new WhisperTimestampedTranscriber(
     {
       name: 'whisper-timestamped',
@@ -98,32 +103,32 @@ you
       model: new WhisperBuiltinModel('tiny')
     })
     expect(await transcript.equals(new TranscriptFile({
-      path: join(transcriptDirectory, 'communiquer-lors-dune-classe-transplantee.txt'),
+      path: join(transcriptDirectory, 'derive_sectaire.txt'),
       language: 'fr',
       format: 'txt'
     }))).to.be.true
 
     expect(await transcript.read()).to.equal(
-      `...
-Communiquez lors du ne class et transplanté.
-Utilisez les photos prises lors de cette classe pour raconter quotidiennement le seuil jour vécu.
-C'est le scénario P.D. à Goujit présenté par M.I.N.A.Voli,
-professeur en cycle 3 sur une école émenteur de Montpellier.
-La première application a utilisé ce ralame de Yatek.
-L'enseignant va alors transférer les différentes photos réalisés lors de la classe transplantée dans un dossier,
-spécifique pour que les élèves puissent le retrouver plus facilement.
-Il t'éleverce donc ses photos dans le dossier, dans le venté, dans la médiatèque de la classe.
-Pour terminer, il s'assure que le dossier soit bien ouvert aux utilisateurs afin que tout le monde puisse l'utiliser.
-Les élèves par la suite utiliseront le blog.
-À partir de leur note, il pourront se loi de par poste rédigène article dans le reinté.
-Ils illustront ses articles à l'aide des photos de commun numérique mise à n'accélier dans la même thé.
-Pour se faire, il pourront utiliser les dites ravences qui les renvèrent directement dans la médiatèque de la classe,
-où ils pourront retrouver le dossier créé par leur enseignon.
-Une fois leur article terminée, les élèves soumétront se lui-ci au professeur,
-qui pourra soit la noter pour correction ou le public.
-Ensuite, il pourront lire et commenter ce de leur camarade, ou répondre au commentaire de la veille.
-`
-    )
+      `Bonjour et bienvenue sur Fennmook. Notre Mouk comment on parle à une victime d'emprissement
+à l'autre dérisse hectare, s'adraîche à tout professionnel du domaine de la santé
+de la sociatif du juridique qui pourrait être en contact avec une victime de telles
+dérives. Il sera composé de 14 leçons vidéo d'une dizaine de minutes,
+divisée en quatre blocs. Le premier bloc vous informera de ce qui est exactement l'emprisemental
+et une dérisse hectaire. Ça consiste toujours à une forme de manipulation et qui conduit
+à une dépendance, à une sorte de séalvision, le personne ne parle à ce désengagé
+d'un processus qui les conduit soit à donner de l'argent ou à ce livret à des actes
+quand il était une aurait pas acceptée, ou tout simplement à accéter de participer
+une organisation dont il ne partage pas toutes les méthodes ou tous les points de vue.
+Le deuxième bloc vous informera des bonnes techniques d'écoute d'une personne et
+y en vécu de telles traumatismes. C'est un sujet actuel parce que ce phénomène est en croissance.
+Il y a une augmentation très importante, un doublement, on les espace de quelques années,
+de moins de 10 ans.
+Le bloc 3, lui, sera conçu par nos juristes. Pour vous indiquer qu'elles sont les grandes
+infractions en lien avec l'emprisemental et surtout de pouvoir faire une analyse perspicace
+d'une situation individuelle.
+Enfin, le bloc 4, vous assistera à savoir comment éduyer une victime vers les bons
+professionnels. Bonne formation.
+`)
   })
 
   it('Guesses the video language if not provided', async function () {

@@ -65,9 +65,9 @@ describe('Transcribers benchmark', function () {
   ]
 
   const transcriptDirectory = buildAbsoluteFixturePath('transcription/benchmark/')
-  const mediaFilePath = buildAbsoluteFixturePath('transcription/videos/communiquer-lors-dune-classe-transplantee.mp4')
+  const mediaFilePath = buildAbsoluteFixturePath('transcription/videos/derive_sectaire.mp4')
   const referenceTranscriptFile = new TranscriptFile({
-    path: buildAbsoluteFixturePath('transcription/transcript/reference.txt'),
+    path: buildAbsoluteFixturePath('transcription/videos/derive_sectaire.txt'),
     language: 'fr',
     format: 'txt'
   })

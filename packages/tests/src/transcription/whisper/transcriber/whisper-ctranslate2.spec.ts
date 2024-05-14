@@ -17,7 +17,7 @@ config.truncateThreshold = 0
 describe('Whisper CTranslate2 transcriber', function () {
   const transcriptDirectory = join(root(), 'test-transcript')
   const shortVideoPath = buildAbsoluteFixturePath('video_short.mp4')
-  const frVideoPath = buildAbsoluteFixturePath('transcription/videos/communiquer-lors-dune-classe-transplantee.mp4')
+  const frVideoPath = buildAbsoluteFixturePath('transcription/videos/derive_sectaire.mp4')
   const transcriber = new Ctranslate2Transcriber(
     {
       name: 'anyNameShouldBeFineReally',
@@ -99,21 +99,36 @@ You
     this.timeout(5 * 1000 * 60)
     const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath, language: 'fr', format: 'txt' })
     expect(await transcript.equals(new TranscriptFile({
-      path: join(transcriptDirectory, 'communiquer-lors-dune-classe-transplantee.txt'),
+      path: join(transcriptDirectory, 'derive_sectaire.txt'),
       language: 'fr',
       format: 'txt'
     }))).to.be.true
 
     expect(await transcript.read()).to.equal(
-      `Communiquez lors d'une classe transplante. Utilisez les photos prises lors de cette classe pour raconter quotidiennement le séjour vécu.
-C'est le scénario P.Dagujic présenté par Monsieur Navoli, professeur ainsi que le 3 sur une école alimentaire de Montpellier.
-La première application utilisée sera la médiatique. L'enseignant va alors transférer les différentes photos réalisés lors de la classe transplante.
-Dans un dossier, spécifique pour que les élèves puissent le retrouver plus facilement. Il téléverse donc ses photos dans le dossier, dans le venté, dans la médiatique de la classe.
-Pour terminer, il s'assure que le dossier soit bien ouvert aux utilisateurs afin que tout le monde puisse l'utiliser.
-Les élèves par la suite utiliseront le blog, à partir de leur nante, il pourront se loi de parposte rédigeant un article d'un orienté.
-Ils illustront ces articles à l'aide des photos de commun numériques mises un accès libre dans leaineté. Pour se faire, il pourront utiliser les détecteurs avancés qui des renvers un directement dans la médiatique de la classe, où il pourront retrouver le dossier créé par leur enseignant.
-Une fois leur article terminée, les élèves soumettront celui-ci au professeur qui pourra soit la noté pour correction ou le public.
-Ensuite, il pourront lire et commenter ce de leur camarade, on répondra au commentaire de la veille.
+      `Bonjour et bienvenue sur FunMook.
+Notre Mook, comment on parlait à une victime d'emprisementale aux de Dérisectaires,
+s'adresse à tout professionnel du domaine de la santé, de la sociétif, du juridique
+qui pourrait être en contact avec une victime de telles dériffes.
+Il sera composé de 14 leçons vidéo d'une dizaine de minutes,
+divisé en quatre blocs.
+Le premier bloc, vous informera de ce qui est exactement l'emprisementale et une
+dériffe sectaire.
+Ça consiste toujours à une forme de manipulation et qui conduit à une dépendance
+à une sorte de séalvition, le personne ne part bien pas, à se désengager d'un processus
+qu'il est conduit soit à donner de l'argent ou à se livrer à des actes
+quand réelité n'aurait pas accepté, ou tout simplement à accepter de participer
+une organisation dont il ne partage pas toutes les méthodes ou tous les points de vue.
+Le deuxième bloc, vous informera des bonnes techniques d'écoute d'une personne et
+y'en vécue de telles traumatismes.
+C'est un sujet actuel parce que ce phénomène est en croissance.
+Il y a une augmentation très importante, un doublement, en l'espace de quelques années,
+devant moins de 10 ans.
+Le bloc 3, lui, sera conçu par nos juristes.
+Pour vous indiquer quelles sont les grandes infractions en lien avec l'emprisementale et surtout
+de pouvoir faire une analyse perspicace d'une situation individuelle.
+Enfin, le bloc 4, vous assistera à savoir comment éduyer une victime vers les bons
+professionnels.
+Bonne formation.
 `
     )
   })
