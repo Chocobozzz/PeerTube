@@ -4192,9 +4192,9 @@
           <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1124038634267013139" datatype="html">
+      <trans-unit id="1124038634267013139" datatype="html" xml:space="preserve">
         <source>The video may be unplayable during the transcoding process. It's the reason why we prefer to publish publicly the video after transcoding.</source>
-        <target state="translated">La vidéo peut-être injouable pendant le processus d'encodage. C'est la raison pour laquelle il est préférable de publier publiquement la vidéo son l'encodage.</target>
+        <target state="translated">La vidéo peut-être injouable pendant le processus d'encodage. C'est la raison pour laquelle il est préférable de publier publiquement la vidéo après son l'encodage.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">157</context>
