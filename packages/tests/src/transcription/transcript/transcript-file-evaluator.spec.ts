@@ -51,13 +51,13 @@ Ensuite, il pourront lire et commenter ce de leurs camarades ou répondre aux co
     })
     const evaluator = new TranscriptFileEvaluator(reference, hypothesis)
     const wer = await evaluator.wer()
-    expect(wer).to.be.below(1)
-    expect(wer).to.be.greaterThan(0.3)
+    expect(wer).to.be.greaterThan(0 / 100)
+    expect(wer).to.be.below(30 / 100)
 
     const cer = await evaluator.cer()
-    expect(cer).to.be.below(0.1)
-    expect(cer).to.be.greaterThan(0.09)
-    console.log(await evaluator.alignement())
+    expect(cer).to.be.greaterThan(9 / 100)
+    expect(cer).to.be.below(10 / 100)
+    console.log(await evaluator.alignment())
   })
 
   after(async function () {

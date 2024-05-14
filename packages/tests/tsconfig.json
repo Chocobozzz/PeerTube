@@ -7,12 +7,14 @@
     "paths": {
       "@tests/*": [ "./src/*" ],
       "@server/*": [ "../../server/core/*" ],
-      "@peertube/peertube-transcription": [ "../transcription" ]
+      "@peertube/peertube-transcription": [ "../transcription" ],
+      "@peertube/peertube-jiwer": [ "../jiwer" ],
     }
   },
   "references": [
     { "path": "../core-utils" },
     { "path": "../ffmpeg" },
+    { "path": "../jiwer" },
     { "path": "../models" },
     { "path": "../node-utils" },
     { "path": "../typescript-utils" },

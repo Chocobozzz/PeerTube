@@ -29,5 +29,7 @@ export const FIXTURE_URLS = {
 
   chatersVideo: 'https://download.cpy.re/peertube/video_chapters.mp4',
 
-  file4K: 'https://download.cpy.re/peertube/4k_file.txt'
+  file4K: 'https://download.cpy.re/peertube/4k_file.txt',
+
+  transcriptionModels: 'https://download.cpy.re/peertube/transcription-models.zip'
 }
