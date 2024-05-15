@@ -16,7 +16,7 @@ config.truncateThreshold = 0
 
 describe('Whisper CTranslate2 transcriber', function () {
   const transcriptDirectory = join(root(), 'test-transcript')
-  const shortVideoPath = buildAbsoluteFixturePath('video_short.mp4')
+  const shortVideoPath = buildAbsoluteFixturePath('transcription/videos/the_last_man_on_earth.mp4')
   const frVideoPath = buildAbsoluteFixturePath('transcription/videos/derive_sectaire.mp4')
   const transcriber = new Ctranslate2Transcriber(
     {
@@ -37,12 +37,12 @@ describe('Whisper CTranslate2 transcriber', function () {
 
   it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format by default', async function () {
     const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en' })
-    expect(await transcript.equals(new TranscriptFile({ path: join(transcriptDirectory, 'video_short.vtt'), language: 'en' }))).to.be.true
+    expect(await transcript.equals(new TranscriptFile({ path: join(transcriptDirectory, 'the_last_man_on_earth.vtt'), language: 'en' }))).to.be.true
     expect(await readFile(transcript.path, 'utf8')).to.equal(
       `WEBVTT
 
-00:00.000 --> 00:02.000
-You
+00:00.000 --> 00:12.000
+December 1965, is that all it has been since I inherited the world only three years, seems like a hundred million.
 
 `
     )
@@ -51,15 +51,15 @@ You
   it('May produce a transcript file in the `srt` format', async function () {
     const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'srt' })
     expect(await transcript.equals(new TranscriptFile({
-      path: join(transcriptDirectory, 'video_short.srt'),
+      path: join(transcriptDirectory, 'the_last_man_on_earth.srt'),
       format: 'srt',
       language: 'en'
     }))).to.be.true
 
     expect(await readFile(transcript.path, 'utf8')).to.equal(
       `1
-00:00:00,000 --> 00:00:02,000
-You
+00:00:00,000 --> 00:00:12,000
+December 1965, is that all it has been since I inherited the world only three years, seems like a hundred million.
 
 `
     )
@@ -68,12 +68,12 @@ You
   it('May produce a transcript file in the `txt` format', async function () {
     const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'txt' })
     expect(await transcript.equals(new TranscriptFile({
-      path: join(transcriptDirectory, 'video_short.txt'),
+      path: join(transcriptDirectory, 'the_last_man_on_earth.txt'),
       format: 'txt',
       language: 'en'
     }))).to.be.true
 
-    expect(await transcript.read()).to.equal(`You
+    expect(await transcript.read()).to.equal(`December 1965, is that all it has been since I inherited the world only three years, seems like a hundred million.
 `)
   })
 
@@ -86,12 +86,12 @@ You
       format: 'txt'
     })
     expect(await transcript.equals(new TranscriptFile({
-      path: join(transcriptDirectory, 'video_short.txt'),
+      path: join(transcriptDirectory, 'the_last_man_on_earth.txt'),
       format: 'txt',
       language: 'en'
     }))).to.be.true
 
-    expect(await transcript.read()).to.equal(`You
+    expect(await transcript.read()).to.equal(`December 1965, is that all it has been since I inherited the world only three years, seems like a hundred million.
 `)
   })
 

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-expressions, max-len */
 import { expect, config } from 'chai'
 import { createLogger } from 'winston'
 import { join } from 'path'
@@ -16,7 +16,7 @@ config.truncateThreshold = 0
 
 describe('Open AI Whisper transcriber', function () {
   const transcriptDirectory = join(root(), 'test-transcript')
-  const shortVideoPath = buildAbsoluteFixturePath('video_short.mp4')
+  const shortVideoPath = buildAbsoluteFixturePath('transcription/videos/the_last_man_on_earth.mp4')
   const frVideoPath = buildAbsoluteFixturePath('transcription/videos/derive_sectaire.mp4')
   const referenceTranscriptFile = new TranscriptFile({
     path: buildAbsoluteFixturePath('transcription/videos/derive_sectaire.txt'),
@@ -43,7 +43,7 @@ describe('Open AI Whisper transcriber', function () {
   it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format by default', async function () {
     const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en' })
     expect(await transcript.equals(new TranscriptFile({
-      path: join(transcriptDirectory, 'video_short.vtt'),
+      path: join(transcriptDirectory, 'the_last_man_on_earth.vtt'),
       language: 'en',
       format: 'vtt'
     }))).to.be.true
@@ -51,8 +51,8 @@ describe('Open AI Whisper transcriber', function () {
     expect(await transcript.read()).to.equals(
       `WEBVTT
 
-00:00.000 --> 00:02.000
-You
+00:00.000 --> 00:13.000
+December 1965, is that all it has been since I inherited the world only three years, seems like a hundred million.
 
 `
     )
@@ -61,15 +61,15 @@ You
   it('May produce a transcript file in the `srt` format', async function () {
     const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'srt' })
     expect(await transcript.equals(new TranscriptFile({
-      path: join(transcriptDirectory, 'video_short.srt'),
+      path: join(transcriptDirectory, 'the_last_man_on_earth.srt'),
       language: 'en',
       format: 'srt'
     }))).to.be.true
 
     expect(await transcript.read()).to.equal(
       `1
-00:00:00,000 --> 00:00:02,000
-You
+00:00:00,000 --> 00:00:13,000
+December 1965, is that all it has been since I inherited the world only three years, seems like a hundred million.
 
 `
     )
@@ -78,13 +78,14 @@ You
   it('May produce a transcript file in the `txt` format', async function () {
     const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'txt' })
     expect(await transcript.equals(new TranscriptFile({
-      path: join(transcriptDirectory, 'video_short.txt'),
+      path: join(transcriptDirectory, 'the_last_man_on_earth.txt'),
       language: 'en',
       format: 'txt'
     }))).to.be.true
 
-    expect(await transcript.read()).to.equal(`You
-`)
+    expect(await transcript.read()).to.equal(`December 1965, is that all it has been since I inherited the world only three years, seems like a hundred million.
+`
+    )
   })
 
   it('May transcribe a media file using a local PyTorch model', async function () {
