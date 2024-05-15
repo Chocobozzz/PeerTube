@@ -653,7 +653,7 @@ function register (...) {
 
 **PeerTube >= 3.2**
 
-To make your own HTTP requests using the current authenticated user, use an helper to automatically set appropriate headers:
+To make your own HTTP requests using the current authenticated user, use a helper to automatically set appropriate headers:
 
 ```js
 function register (...) {
