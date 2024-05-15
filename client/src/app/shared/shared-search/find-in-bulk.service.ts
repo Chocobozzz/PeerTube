@@ -136,7 +136,7 @@ export class FindInBulkService {
       notifier,
 
       result: buildBulkObservable({
-        time: 500,
+        time: 100,
         bulkGet,
         notifierObservable: notifier.asObservable()
       })

@@ -1,6 +1,6 @@
 // Thanks to https://github.com/brtnshrdr/angular2-hotkeys
 
-import { Injectable } from '@angular/core'
+import { Injectable, NgZone } from '@angular/core'
 import { Hotkey } from './hotkey.model'
 import { Subject } from 'rxjs'
 import { tinykeys } from 'tinykeys'
@@ -19,7 +19,7 @@ export class HotkeysService {
 
   private removeTinyKeysStore = new Map<Hotkey, (() => void)[]>()
 
-  constructor () {
+  constructor (private zone: NgZone) {
     this.initCheatSheet()
   }
 
@@ -54,31 +54,33 @@ export class HotkeysService {
     for (const combo of hotkey.combo) {
       debugLogger('Adding hotkey ' + hotkey.formatted)
 
-      const removeTinyKey = tinykeys(window, {
-        [combo]: event => {
-          if (this.disabled) return
+      this.zone.runOutsideAngular(() => {
+        const removeTinyKey = tinykeys(window, {
+          [combo]: event => {
+            if (this.disabled) return
 
-          const target = event.target as Element
-          const nodeName: string = target.nodeName.toUpperCase()
+            const target = event.target as Element
+            const nodeName: string = target.nodeName.toUpperCase()
 
-          if (this.preventIn.includes(nodeName)) {
-            return
+            if (this.preventIn.includes(nodeName)) {
+              return
+            }
+
+            const result = hotkey.callback.apply(this, [ event, combo ])
+
+            if (result === false) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
           }
+        })
 
-          const result = hotkey.callback.apply(this, [ event, combo ])
-
-          if (result === false) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
+        if (!this.removeTinyKeysStore.has(hotkey)) {
+          this.removeTinyKeysStore.set(hotkey, [])
         }
+
+        this.removeTinyKeysStore.get(hotkey).push(removeTinyKey)
       })
-
-      if (!this.removeTinyKeysStore.has(hotkey)) {
-        this.removeTinyKeysStore.set(hotkey, [])
-      }
-
-      this.removeTinyKeysStore.get(hotkey).push(removeTinyKey)
     }
 
     return hotkey
