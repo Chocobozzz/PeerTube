@@ -6,6 +6,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { logger, loggerTagsFactory } from './logger.js'
 import { isBinaryResponse, peertubeGot } from './requests.js'
 import { isArray } from './custom-validators/misc.js'
+import { throttle } from 'lodash-es'
 
 const lTags = loggerTagsFactory('geo-ip')
 
@@ -15,6 +16,7 @@ export class GeoIP {
   private countryReader: Reader<CountryResponse>
   private cityReader: Reader<CityResponse>
 
+  private readonly INIT_READERS_RETRY_INTERVAL = 1000 * 60 * 10 // 10 minutes
   private readonly countryDBPath = join(CONFIG.STORAGE.BIN_DIR, 'dbip-country-lite-latest.mmdb')
   private readonly cityDBPath = join(CONFIG.STORAGE.BIN_DIR, 'dbip-city-lite-latest.mmdb')
 
@@ -26,7 +28,7 @@ export class GeoIP {
     if (CONFIG.GEO_IP.ENABLED === false) return emptyResult
 
     try {
-      await this.initReadersIfNeeded()
+      await this.initReadersIfNeededThrottle()
 
       const countryResult = this.countryReader?.get(ip)
       const cityResult = this.cityReader?.get(ip)
@@ -134,6 +136,8 @@ export class GeoIP {
       }
     }
   }
+
+  private readonly initReadersIfNeededThrottle = throttle(this.initReadersIfNeeded.bind(this), this.INIT_READERS_RETRY_INTERVAL)
 
   // ---------------------------------------------------------------------------
 
