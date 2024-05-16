@@ -15,8 +15,9 @@ my-embed {
   display: flex;
 
   my-global-icon {
+    @include margin-left(3px);
+
     width: 16px;
-    margin-left: 3px;
     position: relative;
     top: -2px;
   }

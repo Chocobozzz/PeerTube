@@ -817,6 +817,8 @@
   }
 }
 
+// ---------------------------------------------------------------------------
+
 @mixin margin ($arg1: null, $arg2: null, $arg3: null, $arg4: null) {
   @if $arg2 == null and $arg3 == null and $arg4 == null {
     @include margin-original($arg1, $arg1, $arg1, $arg1);
@@ -844,6 +846,8 @@
   @include rfs($value, margin-inline-end);
 }
 
+// ---------------------------------------------------------------------------
+
 @mixin padding-original ($block-start, $inline-end, $block-end, $inline-start) {
   @include padding-left($inline-start);
   @include padding-right($inline-end);
@@ -870,3 +874,32 @@
 @mixin padding-right ($value) {
   @include rfs($value, padding-inline-end);
 }
+
+// ---------------------------------------------------------------------------
+
+
+/**
+ *
+ * inset-inline properties are not supported by iOS < 14.5
+ *
+ */
+
+@mixin right ($value) {
+  right: $value;
+
+  @supports (inset-inline-end: $value) {
+    inset-inline-end: $value;
+    right: unset;
+  }
+}
+
+
+@mixin left ($value) {
+  left: $value;
+
+  @supports (inset-inline-start: $value) {
+    inset-inline-start: $value;
+    left: unset;
+  }
+}
+

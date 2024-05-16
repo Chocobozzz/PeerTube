@@ -5,8 +5,9 @@
   display: flex;
 
   .information {
+    @include margin-left(50px);
+
     width: 100%;
-    margin-left: 50px;
 
     > div {
       margin-bottom: 30px;

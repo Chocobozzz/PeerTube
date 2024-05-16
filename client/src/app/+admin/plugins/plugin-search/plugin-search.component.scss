@@ -13,7 +13,7 @@
 }
 
 .search-bar {
-  margin-left: auto;
+  @include margin-left(auto);
 
   input {
     @include peertube-input-text(500px);

@@ -196,7 +196,7 @@ export class PlayerOptionsBuilder {
 
       authorizationHeader,
 
-      playerElement: () => this.playerHTML.getPlayerElement(),
+      playerElement: () => this.playerHTML.getInitVideoEl(),
       enableHotkeys: true,
 
       peertubeLink: () => this.peertubeLink,

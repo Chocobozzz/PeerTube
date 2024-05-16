@@ -7,7 +7,7 @@ import {
   type PluginType_Type
 } from '@peertube/peertube-models'
 import { MPlugin, MPluginFormattable } from '@server/types/models/index.js'
-import { FindAndCountOptions, json, QueryTypes } from 'sequelize'
+import { FindAndCountOptions, QueryTypes, json } from 'sequelize'
 import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import {
   isPluginDescriptionValid,
@@ -18,7 +18,6 @@ import {
   isPluginTypeValid
 } from '../../helpers/custom-validators/plugins.js'
 import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
-import { logger } from '@server/helpers/logger.js'
 
 @DefaultScope(() => ({
   attributes: {
@@ -174,7 +173,6 @@ export class PluginModel extends SequelizeModel<PluginModel> {
             result[name] = p.settings[name]
           }
         }
-        logger.error('internal', { result })
 
         return result
       })

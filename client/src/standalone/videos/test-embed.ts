@@ -32,6 +32,13 @@ window.addEventListener('load', async () => {
   await player.ready
   logger.info('Player is ready.')
 
+  const updatePlaylistPosition = () => {
+    player.getCurrentPosition()
+      .then(position => {
+        document.getElementById('playlist-position').innerHTML = position + ''
+      })
+  }
+
   const monitoredEvents = [
     'pause',
     'play',
@@ -40,15 +47,19 @@ window.addEventListener('load', async () => {
   ]
 
   monitoredEvents.forEach(e => {
-    player.addEventListener(e as PlayerEventType, (param) => logger.info(`PLAYER: event '${e}' received`, { param }))
-    logger.info(`PLAYER: now listening for event '${e}'`)
+    player.addEventListener(e as PlayerEventType, param => {
+      logger.info(`PLAYER: event '${e}' received`, { param })
+
+      if (e === 'playbackStatusChange' && isPlaylist) {
+        updatePlaylistPosition()
+      }
+    })
 
     if (isPlaylist) {
-      player.getCurrentPosition()
-        .then(position => {
-          document.getElementById('playlist-position').innerHTML = position + ''
-        })
+      updatePlaylistPosition()
     }
+
+    logger.info(`PLAYER: now listening for event '${e}'`)
   })
 
   let playbackRates: number[] = []

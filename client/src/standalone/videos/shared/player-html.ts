@@ -5,36 +5,32 @@ import { Translations } from './translations'
 export class PlayerHTML {
   private readonly wrapperElement: HTMLElement
 
-  private playerElement: HTMLVideoElement
+  private initVideoEl: HTMLVideoElement
   private informationElement: HTMLDivElement
 
   constructor (private readonly videoWrapperId: string) {
     this.wrapperElement = document.getElementById(this.videoWrapperId)
   }
 
-  getPlayerElement () {
-    return this.playerElement
+  getInitVideoEl () {
+    return this.initVideoEl
   }
 
-  setPlayerElement (playerElement: HTMLVideoElement) {
-    this.playerElement = playerElement
+  setInitVideoEl (playerElement: HTMLVideoElement) {
+    this.initVideoEl = playerElement
   }
 
-  removePlayerElement () {
-    this.playerElement = null
-  }
-
-  addPlayerElementToDOM () {
-    this.wrapperElement.appendChild(this.playerElement)
+  addInitVideoElToDOM () {
+    this.wrapperElement.appendChild(this.initVideoEl)
   }
 
   displayError (text: string, translations: Translations) {
     logger.error(text)
 
     // Remove video element
-    if (this.playerElement) {
-      this.removeElement(this.playerElement)
-      this.playerElement = undefined
+    if (this.initVideoEl) {
+      this.removeElement(this.initVideoEl)
+      this.initVideoEl = undefined
     }
 
     const translatedText = peertubeTranslate(text, translations)

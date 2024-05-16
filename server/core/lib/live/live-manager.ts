@@ -7,6 +7,7 @@ import {
   hasAudioStream
 } from '@peertube/peertube-ffmpeg'
 import { LiveVideoError, LiveVideoErrorType, VideoState } from '@peertube/peertube-models'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config.js'
 import { VIDEO_LIVE, WEBSERVER } from '@server/initializers/constants.js'
@@ -19,6 +20,7 @@ import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MUser, MVideo, MVideoLiveSession, MVideoLiveVideo, MVideoLiveVideoWithSetting } from '@server/types/models/index.js'
+import { FfprobeData } from 'fluent-ffmpeg'
 import { readFile, readdir } from 'fs/promises'
 import { Server, createServer } from 'net'
 import context from 'node-media-server/src/node_core_ctx.js'
@@ -36,7 +38,6 @@ import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolu
 import { LiveQuotaStore } from './live-quota-store.js'
 import { cleanupAndDestroyPermanentLive, getLiveSegmentTime } from './live-utils.js'
 import { MuxingSession } from './shared/index.js'
-import { FfprobeData } from 'fluent-ffmpeg'
 
 // Disable node media server logs
 nodeMediaServerLogger.setLogType(0)
@@ -84,7 +85,7 @@ class LiveManager {
       const inputPublicUrl = session.inputOriginPublicUrl + streamPath
 
       this.handleSession({ sessionId, inputPublicUrl, inputLocalUrl, streamKey: splittedPath[2] })
-        .catch(err => logger.error('Cannot handle sessions.', { err, ...lTags(sessionId) }))
+        .catch(err => logger.error('Cannot handle session', { err, ...lTags(sessionId) }))
     })
 
     events.on('donePublish', (sessionId: string) => {
@@ -558,25 +559,27 @@ class LiveManager {
     return resolutionsEnabled
   }
 
-  private async saveStartingSession (videoLive: MVideoLiveVideoWithSetting) {
+  private saveStartingSession (videoLive: MVideoLiveVideoWithSetting) {
     const replaySettings = videoLive.saveReplay
       ? new VideoLiveReplaySettingModel({
         privacy: videoLive.ReplaySetting.privacy
       })
       : null
 
-    return sequelizeTypescript.transaction(async t => {
-      if (videoLive.saveReplay) {
-        await replaySettings.save({ transaction: t })
-      }
+    return retryTransactionWrapper(() => {
+      return sequelizeTypescript.transaction(async t => {
+        if (videoLive.saveReplay) {
+          await replaySettings.save({ transaction: t })
+        }
 
-      return VideoLiveSessionModel.create({
-        startDate: new Date(),
-        liveVideoId: videoLive.videoId,
-        saveReplay: videoLive.saveReplay,
-        replaySettingId: videoLive.saveReplay ? replaySettings.id : null,
-        endingProcessed: false
-      }, { transaction: t })
+        return VideoLiveSessionModel.create({
+          startDate: new Date(),
+          liveVideoId: videoLive.videoId,
+          saveReplay: videoLive.saveReplay,
+          replaySettingId: videoLive.saveReplay ? replaySettings.id : null,
+          endingProcessed: false
+        }, { transaction: t })
+      })
     })
   }
 
