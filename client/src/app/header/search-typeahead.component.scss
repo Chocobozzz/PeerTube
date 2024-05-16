@@ -16,7 +16,8 @@
   display: inline-flex;
   align-self: center;
   position: absolute;
-  right: 5px;
+
+  @include right(5px);
 
   &:hover {
     opacity: 0.8;

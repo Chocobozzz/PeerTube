@@ -84,7 +84,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     studio: true,
     stats: true
   }
-  @Input() placement = 'left'
+  @Input() placement = 'left auto'
   @Input() moreActions: DropdownAction<{ video: Video }>[][] = []
   @Input({ transform: booleanAttribute }) actionAvailabilityHint = false
 

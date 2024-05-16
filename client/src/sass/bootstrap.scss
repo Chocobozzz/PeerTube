@@ -384,3 +384,13 @@ body {
   // Prevent invalid height in parent: https://stackoverflow.com/a/22425601
   vertical-align: top;
 }
+
+
+// ---------------------------------------------------------------------------
+// RTL compatibility
+// ---------------------------------------------------------------------------
+
+.modal .modal-header .modal-title {
+  margin-inline-end: auto;
+  margin-right: unset;
+}

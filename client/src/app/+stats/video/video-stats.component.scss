@@ -33,13 +33,14 @@
 }
 
 .stats-card {
+  @include margin-right(15px);
+
   display: flex;
   justify-content: center;
   align-items: center;
   height: fit-content;
   min-height: 100px;
   min-width: 200px;
-  margin-right: 15px;
   background-color: pvar(--submenuBackgroundColor);
   margin-bottom: 15px;
 

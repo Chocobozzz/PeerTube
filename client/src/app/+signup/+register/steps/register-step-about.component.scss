@@ -30,7 +30,7 @@ h4 {
   }
 
   .callout-content {
-    margin-left: 30px;
+    @include margin-left(30px);
 
     p {
       margin: 0;
@@ -47,7 +47,7 @@ h4 {
     }
 
     .callout-content {
-      margin-left: 0;
+      @include margin-left(0);
     }
   }
 }
