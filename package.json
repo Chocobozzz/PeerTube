@@ -25,6 +25,7 @@
   ],
   "scripts": {
     "benchmark-server": "tsx --conditions=peertube:tsx ./scripts/benchmark.ts",
+    "benchmark-transcription": "tsx --conditions=peertube:tsx --tsconfig ./packages/transcription/tsconfig.json ./packages/transcription/src/benchmark.ts",
     "build:client": "bash ./scripts/build/client.sh",
     "build:embed": "bash ./scripts/build/embed.sh",
     "build:peertube-cli": "bash ./scripts/build/peertube-cli.sh",

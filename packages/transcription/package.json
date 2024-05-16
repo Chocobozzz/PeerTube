@@ -13,7 +13,8 @@
   "devDependencies": {},
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "benchmark": "tsx --conditions=peertube:tsx --tsconfig ./tsconfig.json ./src/benchmark.ts"
   },
   "dependencies": {}
 }

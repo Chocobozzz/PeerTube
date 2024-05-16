@@ -35,7 +35,7 @@ import { OpenaiTranscriber } from '@peertube/peertube-transcription'
   const transcriber = new OpenaiTranscriber({
     name: 'openai-whisper',
     binary: 'whisper',
-    languageDetection: true,
+    languageDetection: true
   });
 
   const transcriptFile = await transcriber.transcribe({
@@ -66,6 +66,27 @@ import { transcriberFactory } from '@peertube/peertube-transcription'
 transcriberFactory.createFromEngineName('openai-whisper')
 ```
 > For further usage [../tests/src/transcription/whisper/transcriber/openai-transcriber.spec.ts](../tests/src/transcription/whisper/transcriber/openai-transcriber.spec.ts)
+
+## Benchmark
+
+A benchmark of available __transcribers__ might be run with:
+```sh
+npm run benchmark
+```
+```
+┌────────────────────────┬───────────────────────┬───────────────────────┬──────────┬────────┬───────────────────────┐
+│        (index)         │          WER          │          CER          │ duration │ model  │        engine         │
+├────────────────────────┼───────────────────────┼───────────────────────┼──────────┼────────┼───────────────────────┤
+│ 5yZGBYqojXe7nuhq1TuHvz │ '28.39506172839506%'  │  '9.62457337883959%'  │  '41s'   │ 'tiny' │   'openai-whisper'    │
+│ x6qREJ2AkTU4e5YmvfivQN │ '29.75206611570248%'  │ '10.46195652173913%'  │  '15s'   │ 'tiny' │ 'whisper-ctranslate2' │
+│ qbt6BekKMVzxq4KCSLCzt3 │ '31.020408163265305%' │ '10.784982935153584%' │  '20s'   │ 'tiny' │ 'whisper-timestamped' │
+└────────────────────────┴───────────────────────┴───────────────────────┴──────────┴────────┴───────────────────────┘
+```
+
+The benchmark may be run with multiple model builtin sizes:
+```sh
+MODELS=tiny,small,large npm run benchmark
+```
 
 ## Lexicon
 - ONNX: Open Neural Network eXchange. A specification, the ONNX Runtime run these models.
