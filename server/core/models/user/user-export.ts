@@ -55,7 +55,7 @@ export class UserExportModel extends SequelizeModel<UserExportModel> {
   error: string
 
   @AllowNull(true)
-  @Column
+  @Column(DataType.BIGINT)
   size: number
 
   @AllowNull(false)
