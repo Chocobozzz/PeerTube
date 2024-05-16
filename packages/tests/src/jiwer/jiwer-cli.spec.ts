@@ -7,7 +7,7 @@ import { JiwerClI } from '@peertube/peertube-jiwer'
 
 describe('Jiwer CLI', function () {
   const transcriptDirectory = buildAbsoluteFixturePath('transcription/transcript-evaluator')
-  const referenceTranscriptFilePath = buildAbsoluteFixturePath('transcription/transcript/reference.txt')
+  const referenceTranscriptFilePath = buildAbsoluteFixturePath('transcription/videos/communiquer-lors-dune-classe-transplantee.txt')
   const hypothesis = join(transcriptDirectory, 'openai.txt')
   const jiwerCLI = new JiwerClI(referenceTranscriptFilePath, hypothesis)
 

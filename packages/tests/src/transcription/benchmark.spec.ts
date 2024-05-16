@@ -1,6 +1,7 @@
 import { createLogger } from 'winston'
+import { join } from 'node:path'
 import { performance, PerformanceObserver } from 'node:perf_hooks'
-// import { CpuInfo, CpuUsage } from 'node:os'
+import { tmpdir } from 'node:os'
 import { rm, mkdir } from 'node:fs/promises'
 import { buildAbsoluteFixturePath, buildSUUID, SUUID } from '@peertube/peertube-node-utils'
 import {
@@ -19,12 +20,6 @@ interface TestResult {
   duration?: number
   engine?: TranscriptionEngine
   model?: string
-  // dataThroughput: number // relevant ?
-  // cpus: CpuInfo[] // https://nodejs.org/docs/latest-v18.x/api/os.html#oscpus
-  // cpuUsages: CpuUsage[] // https://nodejs.org/docs/latest-v18.x/api/process.html#processcpuusagepreviousvalue
-  // // os.totalmem()
-  // // os.freemem()
-  // memoryUsages: Record<number, MemoryUsage> // https://nodejs.org/docs/latest-v18.x/api/process.html#processmemoryusage
 }
 
 type Benchmark = Record<SUUID, TestResult>
@@ -64,7 +59,7 @@ describe('Transcribers benchmark', function () {
     'small'
   ]
 
-  const transcriptDirectory = buildAbsoluteFixturePath('transcription/benchmark/')
+  const transcriptDirectory = join(tmpdir(), 'peertube-transcription/benchmark/')
   const mediaFilePath = buildAbsoluteFixturePath('transcription/videos/derive_sectaire.mp4')
   const referenceTranscriptFile = new TranscriptFile({
     path: buildAbsoluteFixturePath('transcription/videos/derive_sectaire.txt'),

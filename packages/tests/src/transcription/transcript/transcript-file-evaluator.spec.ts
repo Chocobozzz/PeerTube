@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions, no-new, max-len */
 import { TranscriptFile, TranscriptFileEvaluator } from '@peertube/peertube-transcription'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
-import { join } from 'path'
+import { join } from 'node:path'
 import { mkdir, rm } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
 import { expect } from 'chai'
 
 describe('Transcript File Evaluator', function () {
-  const transcriptDirectory = buildAbsoluteFixturePath('transcription/transcript-evaluator')
-  const referenceTranscriptFilePath = buildAbsoluteFixturePath('transcription/transcript/reference.txt')
+  const transcriptDirectory = join(tmpdir(), 'peertube-transcription/transcript-file-evaluator')
+  const referenceTranscriptFilePath = buildAbsoluteFixturePath('transcription/videos/communiquer-lors-dune-classe-transplantee.txt')
 
   before(async function () {
     await mkdir(transcriptDirectory, { recursive: true })
