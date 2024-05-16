@@ -83,10 +83,6 @@ export class PeerTubeEmbed {
     await embed.init()
   }
 
-  getPlayerElement () {
-    return this.playerHTML.getPlayerElement()
-  }
-
   getScope () {
     return this.playerOptionsBuilder.getScope()
   }
@@ -420,8 +416,8 @@ export class PeerTubeEmbed {
     playerElement.className = 'video-js vjs-peertube-skin'
     playerElement.setAttribute('playsinline', 'true')
 
-    this.playerHTML.setPlayerElement(playerElement)
-    this.playerHTML.addPlayerElementToDOM()
+    this.playerHTML.setInitVideoEl(playerElement)
+    this.playerHTML.addInitVideoElToDOM()
 
     const [ { PeerTubePlayer } ] = await Promise.all([
       this.PeerTubePlayerManagerModulePromise,
