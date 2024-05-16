@@ -885,21 +885,23 @@
  */
 
 @mixin right ($value) {
-  right: $value;
-
   @supports (inset-inline-end: $value) {
     inset-inline-end: $value;
-    right: unset;
+  }
+
+  @supports not (inset-inline-end: $value) {
+    right: $value;
   }
 }
 
 
 @mixin left ($value) {
-  left: $value;
-
   @supports (inset-inline-start: $value) {
     inset-inline-start: $value;
-    left: unset;
+  }
+
+  @supports not (inset-inline-start: $value) {
+    left: $value;
   }
 }
 
