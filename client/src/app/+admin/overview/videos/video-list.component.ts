@@ -351,7 +351,7 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
   }
 
   private runTranscoding (videos: Video[], type: 'hls' | 'web-video') {
-    this.videoService.runTranscoding({ videoIds: videos.map(v => v.id), type, askForForceTranscodingIfNeeded: false })
+    this.videoService.runTranscoding({ videos, type, askForForceTranscodingIfNeeded: true })
       .subscribe({
         next: () => {
           this.notifier.success($localize`Transcoding jobs created.`)

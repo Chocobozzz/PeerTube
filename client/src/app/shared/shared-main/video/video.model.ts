@@ -270,7 +270,7 @@ export class Video implements VideoServerModel {
   }
 
   canRunTranscoding (user: AuthUser) {
-    return this.canRunForcedTranscoding(user) && this.state.id !== VideoState.TO_TRANSCODE
+    return this.canRunForcedTranscoding(user)
   }
 
   canRunForcedTranscoding (user: AuthUser) {

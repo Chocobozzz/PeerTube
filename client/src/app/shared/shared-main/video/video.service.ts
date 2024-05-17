@@ -1,6 +1,3 @@
-import { SortMeta } from 'primeng/api'
-import { from, Observable, of, throwError } from 'rxjs'
-import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthService, ComponentPaginationLight, ConfirmService, RestExtractor, RestService, ServerService, UserService } from '@app/core'
@@ -16,7 +13,6 @@ import {
   UserVideoRate,
   UserVideoRateType,
   UserVideoRateUpdate,
-  Video as VideoServerModel,
   VideoChannel as VideoChannelServerModel,
   VideoConstant,
   VideoDetails as VideoDetailsServerModel,
@@ -24,20 +20,24 @@ import {
   VideoIncludeType,
   VideoPrivacy,
   VideoPrivacyType,
+  Video as VideoServerModel,
   VideoSortField,
   VideoSource,
   VideoTranscodingCreate,
   VideoUpdate
 } from '@peertube/peertube-models'
+import { SortMeta } from 'primeng/api'
+import { from, Observable, of, throwError } from 'rxjs'
+import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account/account.model'
 import { AccountService } from '../account/account.service'
+import { VideoChannel } from '../video-channel/video-channel.model'
+import { VideoChannelService } from '../video-channel/video-channel.service'
 import { VideoDetails } from './video-details.model'
 import { VideoEdit } from './video-edit.model'
 import { VideoPasswordService } from './video-password.service'
 import { Video } from './video.model'
-import { VideoChannel } from '../video-channel/video-channel.model'
-import { VideoChannelService } from '../video-channel/video-channel.service'
 
 export type CommonVideoParams = {
   videoPagination?: ComponentPaginationLight
@@ -332,27 +332,23 @@ export class VideoService {
   }
 
   runTranscoding (options: {
-    videoIds: (number | string)[]
+    videos: Video[]
     type: 'hls' | 'web-video'
     askForForceTranscodingIfNeeded: boolean
     forceTranscoding?: boolean
   }): Observable<any> {
-    const { videoIds, type, askForForceTranscodingIfNeeded, forceTranscoding } = options
-
-    if (askForForceTranscodingIfNeeded && videoIds.length !== 1) {
-      throw new Error('Cannot ask to force transcoding on multiple videos')
-    }
+    const { videos, type, askForForceTranscodingIfNeeded, forceTranscoding } = options
 
     const body: VideoTranscodingCreate = { transcodingType: type, forceTranscoding }
 
-    return from(videoIds)
+    return from(videos)
       .pipe(
-        concatMap(id => {
-          return this.authHttp.post(VideoService.BASE_VIDEO_URL + '/' + id + '/transcoding', body)
+        concatMap(video => {
+          return this.authHttp.post(VideoService.BASE_VIDEO_URL + '/' + video.uuid + '/transcoding', body)
             .pipe(
               catchError(err => {
                 if (askForForceTranscodingIfNeeded && err.error?.code === ServerErrorCode.VIDEO_ALREADY_BEING_TRANSCODED) {
-                  const message = $localize`PeerTube considers this video is already being transcoded.` +
+                  const message = $localize`PeerTube considers video "${video.name}" is already being transcoded.` +
                     // eslint-disable-next-line max-len
                     $localize` If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcoding on this video.` +
                     ` Do you still want to run transcoding?`
@@ -362,7 +358,12 @@ export class VideoService {
                       switchMap(res => {
                         if (res === false) return throwError(() => err)
 
-                        return this.runTranscoding({ videoIds, type, askForForceTranscodingIfNeeded: false, forceTranscoding: true })
+                        return this.runTranscoding({
+                          videos: [ video ],
+                          type,
+                          askForForceTranscodingIfNeeded: false,
+                          forceTranscoding: true
+                        })
                       })
                     )
                 }
