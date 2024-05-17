@@ -1,3 +1,18 @@
+import {
+  ActivityVideoUrlObject,
+  CacheFileObject,
+  FileRedundancyInformation,
+  StreamingPlaylistRedundancyInformation,
+  VideoPrivacy,
+  VideoRedundanciesTarget,
+  VideoRedundancy,
+  VideoRedundancyStrategy,
+  VideoRedundancyStrategyWithManual
+} from '@peertube/peertube-models'
+import { isTestInstance } from '@peertube/peertube-node-utils'
+import { getVideoFileMimeType } from '@server/lib/video-file.js'
+import { getServerActor } from '@server/models/application/application.js'
+import { MActor, MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/types/models/index.js'
 import sample from 'lodash-es/sample.js'
 import { literal, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
 import {
@@ -12,21 +27,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import {
-  ActivityVideoUrlObject,
-  CacheFileObject,
-  FileRedundancyInformation,
-  StreamingPlaylistRedundancyInformation,
-  VideoPrivacy,
-  VideoRedundanciesTarget,
-  VideoRedundancy,
-  VideoRedundancyStrategy,
-  VideoRedundancyStrategyWithManual
-} from '@peertube/peertube-models'
-import { isTestInstance } from '@peertube/peertube-node-utils'
-import { getServerActor } from '@server/models/application/application.js'
-import { MActor, MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/types/models/index.js'
-import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
@@ -38,7 +39,6 @@ import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoFileModel } from '../video/video-file.js'
 import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist.js'
 import { VideoModel } from '../video/video.js'
-import { getVideoFileMimeType } from '@server/lib/video-file.js'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'
@@ -102,7 +102,6 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
   expiresOn: Date
 
   @AllowNull(false)
-  @Is('VideoRedundancyFileUrl', value => throwIfNotValid(value, isUrlValid, 'fileUrl'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS_REDUNDANCY.URL.max))
   fileUrl: string
 
