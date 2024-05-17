@@ -390,7 +390,7 @@ body {
 // RTL compatibility
 // ---------------------------------------------------------------------------
 
-.modal .modal-header .modal-title {
+:root[dir=rtl] .modal .modal-header .modal-title {
   margin-inline-end: auto;
   margin-right: unset;
 }

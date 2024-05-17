@@ -26,7 +26,6 @@ import {
   Is, Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { isArrayOf } from '../../helpers/custom-validators/misc.js'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos.js'
 import {
@@ -73,7 +72,6 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
   playlistFilename: string
 
   @AllowNull(true)
-  @Is('PlaylistUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'playlist url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.URL.max))
   playlistUrl: string
 
@@ -91,7 +89,6 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
   segmentsSha256Filename: string
 
   @AllowNull(true)
-  @Is('VideoStreamingSegmentsSha256Url', value => throwIfNotValid(value, isActivityPubUrlValid, 'segments sha256 url', true))
   @Column
   segmentsSha256Url: string
 

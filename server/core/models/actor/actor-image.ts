@@ -10,15 +10,13 @@ import {
   Column,
   CreatedAt,
   Default,
-  ForeignKey,
-  Is, Table,
+  ForeignKey, Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants.js'
-import { SequelizeModel, buildSQLAttributes, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, buildSQLAttributes } from '../shared/index.js'
 import { ActorModel } from './actor.js'
 
 @Table({
@@ -51,7 +49,6 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
   width: number
 
   @AllowNull(true)
-  @Is('ActorImageFileUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'fileUrl', true))
   @Column
   fileUrl: string
 
