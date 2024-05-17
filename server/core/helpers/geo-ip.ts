@@ -1,12 +1,12 @@
+import { CONFIG } from '@server/initializers/config.js'
 import { pathExists } from 'fs-extra/esm'
 import { writeFile } from 'fs/promises'
+import throttle from 'lodash-es/throttle.js'
 import maxmind, { CityResponse, CountryResponse, Reader } from 'maxmind'
 import { join } from 'path'
-import { CONFIG } from '@server/initializers/config.js'
+import { isArray } from './custom-validators/misc.js'
 import { logger, loggerTagsFactory } from './logger.js'
 import { isBinaryResponse, peertubeGot } from './requests.js'
-import { isArray } from './custom-validators/misc.js'
-import { throttle } from 'lodash-es'
 
 const lTags = loggerTagsFactory('geo-ip')
 
