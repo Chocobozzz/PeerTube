@@ -1,3 +1,8 @@
+import { pick } from '@peertube/peertube-core-utils'
+import { ActivityTagObject, ActivityTombstoneObject, VideoComment, VideoCommentAdmin, VideoCommentObject } from '@peertube/peertube-models'
+import { extractMentions } from '@server/helpers/mentions.js'
+import { getServerActor } from '@server/models/application/application.js'
+import { MAccount, MAccountId, MUserAccountId } from '@server/types/models/index.js'
 import { Op, Order, QueryTypes, Sequelize, Transaction } from 'sequelize'
 import {
   AllowNull,
@@ -11,17 +16,12 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { pick } from '@peertube/peertube-core-utils'
-import { ActivityTagObject, ActivityTombstoneObject, VideoComment, VideoCommentAdmin, VideoCommentObject } from '@peertube/peertube-models'
-import { extractMentions } from '@server/helpers/mentions.js'
-import { getServerActor } from '@server/models/application/application.js'
-import { MAccount, MAccountId, MUserAccountId } from '@server/types/models/index.js'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { CONSTRAINTS_FIELDS, USER_EXPORT_MAX_ITEMS } from '../../initializers/constants.js'
 import {
   MComment,
-  MCommentAdminFormattable,
   MCommentAP,
+  MCommentAdminFormattable,
   MCommentExport,
   MCommentFormattable,
   MCommentId,
@@ -480,7 +480,12 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
   }
 
   static async getStats () {
+    const where = {
+      deletedAt: null
+    }
+
     const totalLocalVideoComments = await VideoCommentModel.count({
+      where,
       include: [
         {
           model: AccountModel.unscoped(),
@@ -497,7 +502,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
         }
       ]
     })
-    const totalVideoComments = await VideoCommentModel.count()
+    const totalVideoComments = await VideoCommentModel.count({ where })
 
     return {
       totalLocalVideoComments,
