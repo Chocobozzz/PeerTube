@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
+import { RouterLink } from '@angular/router'
 import { Notifier, ServerService, User, UserService } from '@app/core'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
@@ -13,7 +14,7 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
   templateUrl: './account-setup-warning-modal.component.html',
   styleUrls: [ './account-setup-warning-modal.component.scss' ],
   standalone: true,
-  imports: [ CommonModule, GlobalIconComponent, PeertubeCheckboxComponent, FormsModule ]
+  imports: [ CommonModule, GlobalIconComponent, PeertubeCheckboxComponent, FormsModule, RouterLink ]
 })
 export class AccountSetupWarningModalComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef
