@@ -290,7 +290,8 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
         userId,
         id: {
           [Op.in]: notificationIds
-        }
+        },
+        read: false
       }
     }
 
@@ -298,7 +299,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
   }
 
   static markAllAsRead (userId: number) {
-    const query = { where: { userId } }
+    const query = { where: { userId, read: false } }
 
     return UserNotificationModel.update({ read: true }, query)
   }
