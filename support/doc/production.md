@@ -361,7 +361,7 @@ Check for configuration changes, and report them in your `config/production.yaml
 
 ```bash
 cd /var/www/peertube/versions
-diff -u "$(ls --sort=t | head -2 | tail -1)/config/production.yaml.example" "$(ls --sort=t | head -1)/config/production.yaml.example"
+diff -u "$(ls -t | head -2 | tail -1)/config/production.yaml.example" "$(ls -t | head -1)/config/production.yaml.example"
 ```
 
 ### Update nginx configuration
@@ -370,7 +370,7 @@ Check changes in nginx configuration:
 
 ```bash
 cd /var/www/peertube/versions
-diff -u "$(ls --sort=t | head -2 | tail -1)/support/nginx/peertube" "$(ls --sort=t | head -1)/support/nginx/peertube"
+diff -u "$(ls -t | head -2 | tail -1)/support/nginx/peertube" "$(ls -t | head -1)/support/nginx/peertube"
 ```
 
 ### Update systemd service
@@ -379,7 +379,7 @@ Check changes in systemd configuration:
 
 ```bash
 cd /var/www/peertube/versions
-diff -u "$(ls --sort=t | head -2 | tail -1)/support/systemd/peertube.service" "$(ls --sort=t | head -1)/support/systemd/peertube.service"
+diff -u "$(ls -t | head -2 | tail -1)/support/systemd/peertube.service" "$(ls -t | head -1)/support/systemd/peertube.service"
 ```
 
 ### Restart PeerTube
