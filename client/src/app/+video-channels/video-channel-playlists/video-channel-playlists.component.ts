@@ -2,7 +2,7 @@ import { Subject, Subscription } from 'rxjs'
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
 import { ComponentPagination, hasMoreItems, HooksService, ScreenService } from '@app/core'
 import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-miniature.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../shared/shared-main/angular/infinite-scroller.component'
 import { NgIf, NgFor } from '@angular/common'
 import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
@@ -14,7 +14,7 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
   templateUrl: './video-channel-playlists.component.html',
   styleUrls: [ './video-channel-playlists.component.scss' ],
   standalone: true,
-  imports: [ NgIf, InfiniteScrollerDirective, NgFor, VideoPlaylistMiniatureComponent ]
+  imports: [ NgIf, InfiniteScrollerComponent, NgFor, VideoPlaylistMiniatureComponent ]
 })
 export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, OnDestroy {
   videoPlaylists: VideoPlaylist[] = []

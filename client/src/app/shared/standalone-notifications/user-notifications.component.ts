@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { RouterLink } from '@angular/router'
 import { FromNowPipe } from '../shared-main/angular/from-now.pipe'
-import { InfiniteScrollerDirective } from '../shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../shared-main/angular/infinite-scroller.component'
 import { UserNotificationService } from '../shared-main/users/user-notification.service'
 import { UserNotification } from '../shared-main/users/user-notification.model'
 
@@ -15,7 +15,7 @@ import { UserNotification } from '../shared-main/users/user-notification.model'
   templateUrl: 'user-notifications.component.html',
   styleUrls: [ 'user-notifications.component.scss' ],
   standalone: true,
-  imports: [ CommonModule, GlobalIconComponent, RouterLink, FromNowPipe, InfiniteScrollerDirective ]
+  imports: [ CommonModule, GlobalIconComponent, RouterLink, FromNowPipe, InfiniteScrollerComponent ]
 })
 export class UserNotificationsComponent implements OnInit {
   @Input() ignoreLoadingBar = false

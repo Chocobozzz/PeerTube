@@ -2,19 +2,19 @@ import { NgFor, NgIf } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, ComponentPagination, Notifier } from '@app/core'
+import { InfiniteScrollerComponent } from '../../shared/shared-main/angular/infinite-scroller.component'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription/user-subscription.service'
 import { ActorFollow } from '@peertube/peertube-models'
 import { Subject } from 'rxjs'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
 
 @Component({
   templateUrl: './my-followers.component.html',
   styleUrls: [ './my-followers.component.scss' ],
   standalone: true,
-  imports: [ GlobalIconComponent, NgIf, AdvancedInputFilterComponent, InfiniteScrollerDirective, NgFor, ActorAvatarComponent ]
+  imports: [ GlobalIconComponent, NgIf, AdvancedInputFilterComponent, InfiniteScrollerComponent, NgFor, ActorAvatarComponent ]
 })
 export class MyFollowersComponent implements OnInit {
   follows: ActorFollow[] = []

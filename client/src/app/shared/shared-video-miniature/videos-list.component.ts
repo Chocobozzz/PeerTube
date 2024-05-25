@@ -19,7 +19,7 @@ import { logger } from '@root-helpers/logger'
 import debug from 'debug'
 import { Observable, Subject, Subscription, forkJoin, fromEvent, of } from 'rxjs'
 import { concatMap, debounceTime, map, switchMap } from 'rxjs/operators'
-import { InfiniteScrollerDirective } from '../shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerItem, InfiniteScrollerItemComponent } from '../shared-main/angular/infinite-scroller-item.component'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
 import { FeedComponent } from '../shared-main/feeds/feed.component'
 import { Syndication } from '../shared-main/feeds/syndication.model'
@@ -27,6 +27,7 @@ import { Video } from '../shared-main/video/video.model'
 import { VideoFiltersHeaderComponent } from './video-filters-header.component'
 import { VideoFilterScope, VideoFilters } from './video-filters.model'
 import { MiniatureDisplayOptions, VideoMiniatureComponent } from './video-miniature.component'
+import { InfiniteScrollerComponent } from '../shared-main/angular/infinite-scroller.component'
 
 const debugLogger = debug('peertube:videos:VideosListComponent')
 
@@ -65,9 +66,11 @@ enum GroupDate {
     NgTemplateOutlet,
     ButtonComponent,
     VideoFiltersHeaderComponent,
-    InfiniteScrollerDirective,
     VideoMiniatureComponent,
-    GlobalIconComponent
+    GlobalIconComponent,
+    InfiniteScrollerComponent,
+    InfiniteScrollerItemComponent,
+    VideoMiniatureComponent
   ]
 })
 export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
@@ -102,9 +105,10 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   @Output() filtersChanged = new EventEmitter<VideoFilters>()
   @Output() videosLoaded = new EventEmitter<Video[]>()
 
-  videos: Video[] = []
   highlightedLives: Video[] = []
 
+  isLoading = false
+  videos: InfiniteScrollerItem<Video>[] = []
   filters: VideoFilters
   syndicationItems: Syndication[]
 
@@ -112,6 +116,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   hasDoneFirstQuery = false
 
   userMiniature: User
+
+  hasLoadedAllResults = false
 
   private defaultDisplayOptions: MiniatureDisplayOptions = {
     date: true,
@@ -127,18 +133,18 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   private userSub: Subscription
   private resizeSub: Subscription
 
-  private pagination: ComponentPaginationLight = {
+  pagination: ComponentPaginationLight = {
     currentPage: 1,
-    itemsPerPage: 25
+    itemsPerPage: 3
   }
 
   private groupedDateLabels: { [id in GroupDate]: string }
   private groupedDates: { [id: number]: GroupDate } = {}
 
-  private lastQueryLength: number
+  lastQueryLength: number
 
   private videoRequests = new Subject<{
-    reset: boolean
+    direction: 'previous' | 'next' | 'reset'
     obsVideos: Observable<Pick<ResultList<Video>, 'data'>>
     obsHighlightedLives: Observable<Pick<ResultList<Video>, 'data'>>
   }>()
@@ -158,6 +164,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit () {
+    this.pagination.currentPage = +this.route.snapshot.queryParams.page || 1
     this.subscribeToVideoRequests()
 
     const hiddenFilters = this.hideScopeFilter
@@ -252,22 +259,38 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     return video.id
   }
 
-  onNearOfBottom () {
+  onNearOfTop (pageNumber: number) {
+    if (this.disabled) return
+    if (this.pagination.currentPage === 1) return
+
+    console.log('loadMoreVideos before', this.pagination.currentPage)
+    this.pagination.currentPage = pageNumber
+    console.log('loadMoreVideos', this.pagination.currentPage)
+
+    this.loadMoreVideos('previous')
+  }
+
+  onNearOfBottom (pageNumber: number) {
     if (this.disabled) return
 
     // No more results
-    if (this.lastQueryLength !== undefined && this.lastQueryLength < this.pagination.itemsPerPage) return
+    if (this.lastQueryLength !== undefined && this.lastQueryLength < this.pagination.itemsPerPage) {
+      this.hasLoadedAllResults = true
+      return
+    }
 
-    this.pagination.currentPage += 1
+    console.log('loadMoreVideos before', this.pagination.currentPage)
+    this.pagination.currentPage = pageNumber
+    console.log('loadMoreVideos', this.pagination.currentPage)
 
-    this.loadMoreVideos()
+    this.loadMoreVideos('next')
   }
 
-  loadMoreVideos (reset = false) {
+  loadMoreVideos (direction: 'previous' | 'next' | 'reset') {
     let liveFilters: VideoFilters
     let videoFilters: VideoFilters
 
-    if (reset) {
+    if (direction === 'reset') {
       this.hasDoneFirstQuery = false
       this.videos = []
       this.highlightedLives = []
@@ -281,8 +304,9 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
 
+    this.isLoading = true
     this.videoRequests.next({
-      reset,
+      direction,
       obsVideos: this.getVideosObservableFunction(this.pagination, videoFilters ?? this.filters),
 
       obsHighlightedLives: liveFilters
@@ -292,8 +316,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   reloadVideos () {
-    this.pagination.currentPage = 1
-    this.loadMoreVideos(true)
+    this.loadMoreVideos('reset')
   }
 
   removeVideoFromArray (video: Video) {
@@ -373,6 +396,10 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
   onFiltersChanged (customizedByUser: boolean) {
     debugLogger('Running on filters changed')
+
+    if (customizedByUser) {
+      this.pagination.currentPage = 1
+    }
 
     this.updateUrl(customizedByUser)
 
@@ -474,24 +501,36 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   private subscribeToVideoRequests () {
     this.videoRequests
       .pipe(
-        concatMap(({ reset, obsHighlightedLives, obsVideos }) => {
+        concatMap(({ direction, obsHighlightedLives, obsVideos }) => {
           return forkJoin([ obsHighlightedLives, obsVideos ])
             .pipe(
-              map(([ resHighlightedLives, resVideos ]) => ({ highlightedLives: resHighlightedLives.data, videos: resVideos.data, reset }))
+              map(([ resHighlightedLives, resVideos ]) =>
+                ({ highlightedLives: resHighlightedLives.data, videos: resVideos.data, direction }))
             )
         })
       )
       .subscribe({
-        next: ({ videos, highlightedLives, reset }) => {
+        next: ({ videos, highlightedLives, direction }) => {
+          this.isLoading = false
           this.hasDoneFirstQuery = true
           this.lastQueryLength = videos.length
 
-          if (reset) {
-            this.videos = []
-            this.highlightedLives = highlightedLives
-          }
+          const dataWithPage = videos.map((d: any) => {
+            d.page = this.pagination.currentPage
+            return d
+          }) as InfiniteScrollerItem<Video>[]
 
-          this.videos = this.videos.concat(videos)
+          switch (direction) {
+            case 'next':
+              this.videos = this.videos.concat(dataWithPage)
+              break
+            case 'previous':
+              this.videos = [ ...dataWithPage, ...this.videos ]
+              break
+            default:
+              this.videos = dataWithPage
+              this.highlightedLives = highlightedLives
+          }
 
           if (this.groupByDate) this.buildGroupedDateLabels()
 
@@ -500,6 +539,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
         },
 
         error: err => {
+          this.isLoading = false
           const message = $localize`Cannot load more videos. Try again later.`
 
           logger.error(message, err)

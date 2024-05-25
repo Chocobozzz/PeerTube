@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { ComponentPagination, ConfirmService, HooksService, Notifier, ScreenService } from '@app/core'
 import { VideoPlaylistType } from '@peertube/peertube-models'
 import { VideoPlaylistElementMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-element-miniature.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../shared/shared-main/angular/infinite-scroller.component'
 import { ActionDropdownComponent, DropdownAction } from '../../shared/shared-main/buttons/action-dropdown.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playlist/video-playlist-miniature.component'
@@ -24,7 +24,7 @@ import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-pl
     VideoPlaylistMiniatureComponent,
     GlobalIconComponent,
     ActionDropdownComponent,
-    InfiniteScrollerDirective,
+    InfiniteScrollerComponent,
     CdkDropList,
     NgFor,
     CdkDrag,

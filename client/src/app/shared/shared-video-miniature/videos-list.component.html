@@ -39,9 +39,15 @@
   ></my-video-filters-header>
 
   <div class="no-results" i18n *ngIf="hasDoneFirstQuery && videos.length === 0">No results.</div>
-  <div
-    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onVideosDataSubject.asObservable()"
-    [setAngularState]="true" [parentDisabled]="disabled"
+
+  <my-infinite-scroller
+    (nearOfTop)="onNearOfTop($event)"
+    (nearOfBottom)="onNearOfBottom($event)"
+    [dataObservable]="onVideosDataSubject.asObservable()"
+    [setAngularState]="true"
+    [parentDisabled]="disabled"
+    [hasMore]="!hasLoadedAllResults"
+    [isLoading]="!hasDoneFirstQuery || isLoading"
     class="videos" [ngClass]="{ 'display-as-row': displayAsRow }"
   >
     <ng-container *ngIf="highlightedLives.length !== 0">
@@ -65,11 +71,11 @@
       </h2>
     </ng-container>
 
-    <ng-container *ngFor="let video of videos; trackBy: videoById;">
+    <my-infinite-scroller-item [id]="video.id" [page]="video.page" *ngFor="let video of videos; trackBy: videoById;">
       <h2 class="date-title" *ngIf="getCurrentGroupedDateLabel(video)">
         {{ getCurrentGroupedDateLabel(video) }}
       </h2>
-
+      
       <div class="video-wrapper">
         <my-video-miniature
           [video]="video" [user]="userMiniature" [displayAsRow]="displayAsRow"
@@ -78,6 +84,6 @@
         >
         </my-video-miniature>
       </div>
-    </ng-container>
-  </div>
+    </my-infinite-scroller-item>
+  </my-infinite-scroller>
 </div>

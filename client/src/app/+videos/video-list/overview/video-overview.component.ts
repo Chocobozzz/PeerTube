@@ -7,7 +7,7 @@ import { VideosOverview } from './videos-overview.model'
 import { ActorAvatarComponent } from '../../../shared/shared-actor-image/actor-avatar.component'
 import { VideoMiniatureComponent } from '../../../shared/shared-video-miniature/video-miniature.component'
 import { RouterLink } from '@angular/router'
-import { InfiniteScrollerDirective } from '../../../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../../shared/shared-main/angular/infinite-scroller.component'
 import { NgIf, NgFor } from '@angular/common'
 
 @Component({
@@ -15,7 +15,7 @@ import { NgIf, NgFor } from '@angular/common'
   templateUrl: './video-overview.component.html',
   styleUrls: [ './video-overview.component.scss' ],
   standalone: true,
-  imports: [ NgIf, InfiniteScrollerDirective, NgFor, RouterLink, VideoMiniatureComponent, ActorAvatarComponent ]
+  imports: [ NgIf, InfiniteScrollerComponent, NgFor, RouterLink, VideoMiniatureComponent, ActorAvatarComponent ]
 })
 export class VideoOverviewComponent implements OnInit, OnDestroy {
   onDataSubject = new Subject<any>()

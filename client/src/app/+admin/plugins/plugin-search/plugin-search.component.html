@@ -28,7 +28,7 @@
   No results.
 </div>
 
-<div class="plugins" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
+<my-infinite-scroller class="plugins" (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
   <ng-container *ngFor="let plugin of plugins" >
     <my-plugin-card [plugin]="plugin" [version]="plugin.latestVersion" [pluginType]="pluginType">
       <div ngProjectAs="badges">
@@ -58,4 +58,4 @@
 
     </my-plugin-card>
   </ng-container>
-</div>
+</my-infinite-scroller>

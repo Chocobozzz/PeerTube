@@ -8,7 +8,7 @@ import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../../shared/s
 import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/subscribe-button.component'
 import { RouterLink } from '@angular/router'
 import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avatar.component'
-import { InfiniteScrollerDirective } from '../../shared/shared-main/angular/infinite-scroller.directive'
+import { InfiniteScrollerComponent } from '../../shared/shared-main/angular/infinite-scroller.component'
 import { NgIf, NgFor } from '@angular/common'
 import { AccountService } from '@app/shared/shared-main/account/account.service'
 import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
@@ -22,7 +22,7 @@ import { Video } from '@app/shared/shared-main/video/video.model'
   templateUrl: './account-video-channels.component.html',
   styleUrls: [ './account-video-channels.component.scss' ],
   standalone: true,
-  imports: [ NgIf, InfiniteScrollerDirective, NgFor, ActorAvatarComponent, RouterLink, SubscribeButtonComponent, VideoMiniatureComponent ]
+  imports: [ NgIf, InfiniteScrollerComponent, NgFor, ActorAvatarComponent, RouterLink, SubscribeButtonComponent, VideoMiniatureComponent ]
 })
 export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
   account: Account

@@ -31,6 +31,10 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
 
     this.storedRouteHandles.set(key, handle)
 
+    if (typeof (componentRef.instance as any).onDetach === 'function') {
+      (componentRef.instance as any).onDetach()
+    }
+
     this.gb()
   }
 
