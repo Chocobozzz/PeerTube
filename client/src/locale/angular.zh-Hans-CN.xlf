@@ -9918,9 +9918,9 @@
           <context context-type="linenumber">226</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4078329985026583770" datatype="html">
+      <trans-unit id="4078329985026583770" datatype="html" xml:space="preserve">
         <source>Allows your users to edit their video (cut, add intro/outro, add a watermark etc)</source>
-        <target state="translated">也许你的用户编辑他们的视频（剪辑、添加片头/片尾、添加水印等）</target>
+        <target state="translated">允许你的用户编辑他们的视频（剪辑、添加片头/片尾、添加水印等）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">227</context>
