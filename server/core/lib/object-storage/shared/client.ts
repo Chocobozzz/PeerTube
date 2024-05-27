@@ -45,7 +45,8 @@ function getClient () {
           secretAccessKey: OBJECT_STORAGE.CREDENTIALS.SECRET_ACCESS_KEY
         }
         : undefined,
-      requestHandler: await getProxyRequestHandler()
+      requestHandler: await getProxyRequestHandler(),
+      maxAttempts: CONFIG.OBJECT_STORAGE.MAX_REQUEST_ATTEMPTS
     })
 
     logger.info('Initialized S3 client %s with region %s.', getEndpoint(), OBJECT_STORAGE.REGION, lTags())
