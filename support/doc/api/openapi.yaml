@@ -6877,7 +6877,7 @@ components:
           items:
             $ref: '#/components/schemas/VideoCategorySet'
       style: form
-      explode: false
+      explode: true
     tagsOneOf:
       name: tagsOneOf
       in: query
@@ -6891,7 +6891,7 @@ components:
           items:
             type: string
       style: form
-      explode: false
+      explode: true
     tagsAllOf:
       name: tagsAllOf
       in: query
@@ -6904,7 +6904,7 @@ components:
           items:
             type: string
       style: form
-      explode: false
+      explode: true
     languageOneOf:
       name: languageOneOf
       in: query
@@ -6917,7 +6917,7 @@ components:
           items:
             $ref: '#/components/schemas/VideoLanguageSet'
       style: form
-      explode: false
+      explode: true
     licenceOneOf:
       name: licenceOneOf
       in: query
@@ -6930,7 +6930,7 @@ components:
           items:
             $ref: '#/components/schemas/VideoLicenceSet'
       style: form
-      explode: false
+      explode: true
     skipCount:
       name: skipCount
       in: query
