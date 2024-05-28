@@ -242,7 +242,7 @@ Otherwise, `resolutionId` should be the ID of an object returned by `getResoluti
 
 Get the available playback rates, where `1` represents normal speed, `0.5` is half speed, `2` is double speed, etc.
 
-### `getPlaybackRates() : Promise<number>`
+### `getPlaybackRate() : Promise<number>`
 
 Get the current playback rate. See `getPlaybackRates()` for more information.
 
