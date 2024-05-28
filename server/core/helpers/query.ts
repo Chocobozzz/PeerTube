@@ -43,8 +43,7 @@ function pickSearchVideoQuery (query: VideosSearchQueryAfterSanitize) {
       'originallyPublishedEndDate',
       'durationMin',
       'durationMax',
-      'uuids',
-      'excludeAlreadyWatched'
+      'uuids'
     ])
   }
 }
