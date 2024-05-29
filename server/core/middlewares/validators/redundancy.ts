@@ -74,9 +74,9 @@ const videoPlaylistRedundancyGetValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!canVideoBeFederated(res.locals.onlyVideo)) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
     const video = res.locals.videoAll
+    if (!canVideoBeFederated(video)) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
     const paramPlaylistType = req.params.streamingPlaylistType as unknown as number // We casted to int above
     const videoStreamingPlaylist = video.VideoStreamingPlaylists.find(p => p.type === paramPlaylistType)
