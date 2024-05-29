@@ -18,12 +18,14 @@ export function computeOutputFPS (options: {
     fps = getClosestFramerateStandard({ fps, type: 'STANDARD' })
   }
 
-  // Hard FPS limits
-  if (fps > VIDEO_TRANSCODING_FPS.MAX) fps = getClosestFramerateStandard({ fps, type: 'HD_STANDARD' })
-
-  if (fps < VIDEO_TRANSCODING_FPS.MIN) {
-    throw new Error(`Cannot compute FPS because ${fps} is lower than our minimum value ${VIDEO_TRANSCODING_FPS.MIN}`)
+  if (fps < VIDEO_TRANSCODING_FPS.HARD_MIN) {
+    throw new Error(`Cannot compute FPS because ${fps} is lower than our minimum value ${VIDEO_TRANSCODING_FPS.HARD_MIN}`)
   }
+
+  // Cap min FPS
+  if (fps < VIDEO_TRANSCODING_FPS.SOFT_MIN) fps = VIDEO_TRANSCODING_FPS.SOFT_MIN
+  // Cap max FPS
+  if (fps > VIDEO_TRANSCODING_FPS.SOFT_MAX) fps = getClosestFramerateStandard({ fps, type: 'HD_STANDARD' })
 
   return fps
 }

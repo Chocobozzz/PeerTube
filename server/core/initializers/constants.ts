@@ -513,12 +513,13 @@ const MAX_LOCAL_VIEWER_WATCH_SECTIONS = 100
 let CONTACT_FORM_LIFETIME = 60000 * 60 // 1 hour
 
 const VIDEO_TRANSCODING_FPS: VideoTranscodingFPS = {
-  MIN: 1,
+  HARD_MIN: 0.1,
+  SOFT_MIN: 1,
   STANDARD: [ 24, 25, 30 ],
   HD_STANDARD: [ 50, 60 ],
   AUDIO_MERGE: 25,
   AVERAGE: 30,
-  MAX: 60,
+  SOFT_MAX: 60,
   KEEP_ORIGIN_FPS_RESOLUTION_MIN: 720 // We keep the original FPS on high resolutions (720 minimum)
 }
 
