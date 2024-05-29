@@ -187,7 +187,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   isVideoStatsAvailable () {
-    return this.video.isOwnerOrHasSeeAllVideosRight(this.user)
+    return this.video.isLocal && this.video.isOwnerOrHasSeeAllVideosRight(this.user)
   }
 
   isVideoRemovable () {
