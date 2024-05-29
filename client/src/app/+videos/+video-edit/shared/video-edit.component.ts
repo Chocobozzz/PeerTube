@@ -66,6 +66,7 @@ import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
 import { VideoCaptionEditModalContentComponent } from './video-caption-edit-modal-content/video-caption-edit-modal-content.component'
 import { VideoEditType } from './video-edit.type'
+import { ThumbnailManagerComponent } from './thumbnail-manager/thumbnail-manager.component'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
 type PluginField = {
@@ -109,7 +110,8 @@ type PluginField = {
     PreviewUploadComponent,
     NgbNavOutlet,
     VideoCaptionAddModalComponent,
-    DatePipe
+    DatePipe,
+    ThumbnailManagerComponent
   ]
 })
 export class VideoEditComponent implements OnInit, OnDestroy {

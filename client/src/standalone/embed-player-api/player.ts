@@ -204,6 +204,13 @@ export class PeerTubePlayer {
     await this.sendMessage('setVideoPassword', password)
   }
 
+  /**
+   * Get video frame image as data url
+   */
+  async getImageDataUrl (): Promise<string> {
+    return this.sendMessage('getImageDataUrl')
+  }
+
   private constructChannel () {
     this.channel = Channel.build({
       window: this.embedElement.contentWindow,
