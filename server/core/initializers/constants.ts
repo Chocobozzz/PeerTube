@@ -903,14 +903,14 @@ const STATIC_MAX_AGE = {
 
 // Videos thumbnail size
 const THUMBNAILS_SIZE = {
-  width: 280,
-  height: 157,
-  minWidth: 150
+  width: CONFIG.THUMBNAILS.SIZE.WIDTH || 280,
+  height: CONFIG.THUMBNAILS.SIZE.HEIGHT || 157,
+  minWidth: CONFIG.THUMBNAILS.SIZE.MIN_WIDTH || 150
 }
 const PREVIEWS_SIZE = {
-  width: 850,
-  height: 480,
-  minWidth: 400
+  width: CONFIG.PREVIEWS.SIZE.WIDTH || 850,
+  height: CONFIG.PREVIEWS.SIZE.HEIGHT || 480,
+  minWidth: CONFIG.PREVIEWS.SIZE.MIN_WIDTH || 400
 }
 const ACTOR_IMAGES_SIZE: { [key in ActorImageType_Type]: { width: number, height: number }[] } = {
   [ActorImageType.AVATAR]: [ // 1/1 ratio
