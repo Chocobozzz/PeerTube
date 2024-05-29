@@ -408,7 +408,7 @@ export class AccountModel extends SequelizeModel<AccountModel> {
 
   toFormattedJSON (this: MAccountFormattable): Account {
     return {
-      ...this.Actor.toFormattedJSON(),
+      ...this.Actor.toFormattedJSON(false),
 
       id: this.id,
       displayName: this.getDisplayName(),

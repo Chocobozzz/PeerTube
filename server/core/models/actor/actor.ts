@@ -542,7 +542,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     }
   }
 
-  toFormattedJSON (this: MActorFormattable) {
+  toFormattedJSON (this: MActorFormattable, includeBanner = true) {
     return {
       ...this.toFormattedSummaryJSON(),
 
@@ -552,7 +552,9 @@ export class ActorModel extends SequelizeModel<ActorModel> {
       followersCount: this.followersCount,
       createdAt: this.getCreatedAt(),
 
-      banners: (this.Banners || []).map(b => b.toFormattedJSON())
+      banners: includeBanner
+        ? (this.Banners || []).map(b => b.toFormattedJSON())
+        : undefined
     }
   }
 
