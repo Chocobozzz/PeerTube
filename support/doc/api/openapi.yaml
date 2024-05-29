@@ -53,7 +53,7 @@ info:
     }
     ```
 
-    We provide error `type` values for [a growing number of cases](https://github.com/Chocobozzz/PeerTube/blob/develop/packages/models/src/server/server-error-code.enum.ts),
+    We provide error `type` (following RFC7807) and `code` (internal PeerTube code) values for [a growing number of cases](https://github.com/Chocobozzz/PeerTube/blob/develop/packages/models/src/server/server-error-code.enum.ts),
     but it is still optional. Types are used to disambiguate errors that bear the same status code
     and are non-obvious:
 
@@ -1505,15 +1505,16 @@ paths:
         '400':
           x-summary: client or credentials are invalid
           description: |
-            Disambiguate via `type`:
+            Disambiguate via `code`:
             - `invalid_client` for an unmatched `client_id`
             - `invalid_grant` for unmatched credentials
         '401':
-          x-summary: token expired
+          x-summary: token expired or two factor header is missing
           description: |
-            Disambiguate via `type`:
+            Disambiguate via `code`:
             - default value for a regular authentication failure
             - `invalid_token` for an expired token
+            - `missing_two_factor` if two factor header is missing
       x-codeSamples:
         - lang: Shell
           source: |
@@ -3106,7 +3107,7 @@ paths:
         '413':
           x-summary: video file too large, due to quota or max body size limit set by the reverse-proxy
           description: |
-            If the response has no body, it means the reverse-proxy didn't let it through. Otherwise disambiguate via `type`:
+            If the response has no body, it means the reverse-proxy didn't let it through. Otherwise disambiguate via `code`:
             - `quota_reached` for quota limits whether daily or global
           headers:
             X-File-Maximum-Size:
@@ -3196,7 +3197,7 @@ paths:
         '413':
           x-summary: video file too large, due to quota, absolute max file size or concurrent partial upload limit
           description: |
-            Disambiguate via `type`:
+            Disambiguate via `code`:
             - `max_file_size_reached` for the absolute file size limit
             - `quota_reached` for quota limits whether daily or global
         '415':
@@ -3370,13 +3371,13 @@ paths:
         '400':
           x-summary: validation error, or conflicting `saveReplay` and `permanentLive` parameter set
           description: |
-            Disambiguate via `type`:
+            Disambiguate via `code`:
             - default type for a validation error
             - `live_conflicting_permanent_and_save_replay` for conflicting parameters set
         '403':
           x-summary: live is not enabled, allow replay is not enabled, or max instance/user live videos limit is exceeded
           description: |
-            Disambiguate via `type`:
+            Disambiguate via `code`:
             - `live_not_enabled` for a disabled live feature
             - `live_not_allowing_replay` for a disabled replay feature
             - `max_instance_lives_limit_reached` for the absolute concurrent live limit
@@ -3610,7 +3611,7 @@ paths:
         '413':
           x-summary: video file too large, due to quota, absolute max file size or concurrent partial upload limit
           description: |
-            Disambiguate via `type`:
+            Disambiguate via `code`:
             - `max_file_size_reached` for the absolute file size limit
             - `quota_reached` for quota limits whether daily or global
         '415':
