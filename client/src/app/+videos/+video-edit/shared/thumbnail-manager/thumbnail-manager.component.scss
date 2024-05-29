@@ -1,0 +1,54 @@
+@use 'sass:math';
+@use '_variables' as *;
+
+.root {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+
+  .preview-container {
+    position: relative;
+
+    .preview {
+      object-fit: cover;
+      border-radius: 4px;
+      max-width: 100%;
+
+      &.no-image {
+        border: 2px solid #808080;
+        background-color: pvar(--mainBackgroundColor);
+      }
+    }
+  }
+
+  .inputs {
+
+    margin-top: 10px;
+
+    my-reactive-file {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    input {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+  }
+
+  .video-embed {
+
+    $video-default-height: 40vh;
+
+    --player-height: #{$video-default-height};
+    // Default player ratio, redefined by the player to automatically adapt player size
+    --player-ratio: #{math.div(16, 9)};
+
+    width: 100%;
+    height: var(--player-height);
+
+    // Can be recalculated by the player depending on video ratio
+    max-width: calc(var(--player-height) * var(--player-ratio));
+  }
+}

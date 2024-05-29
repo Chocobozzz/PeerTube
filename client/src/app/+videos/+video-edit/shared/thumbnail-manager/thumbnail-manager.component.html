@@ -1,0 +1,41 @@
+<div class="root">
+
+  <div id="embedContainer" class="" style="position: relative;"></div>
+
+  @if (!selectingFromVideo) {
+
+    <div class="preview-container">
+
+      @if (imageSrc) {
+        <img [ngStyle]="{ width: previewWidth, height: previewHeight }" [src]="imageSrc" class="preview" alt="Preview" i18n-alt />
+      }
+      @else {
+        <div class="preview no-image"></div>
+      }
+    </div>
+  }  
+
+  <div class="inputs">
+
+    @if (selectingFromVideo) {
+
+      <input type="button" i18n class="peertube-button orange-button" (click)="selectFrame()" value="Use frame" />
+
+      <input type="button" i18n class="peertube-button grey-button" (click)="resetSelectFromVideo()" value="Cancel" />
+
+    }
+    @else {
+
+      <my-reactive-file inputName="uploadNewThumbnail" inputLabel="Upload image" [extensions]="videoImageExtensions"
+        [maxFileSize]="maxVideoImageSize" placement="right" icon="upload" (fileChanged)="onFileChanged($event)"
+        [buttonTooltip]="getReactiveFileButtonTooltip()">
+      </my-reactive-file>
+
+      <input type="button" i18n class="peertube-button grey-button" (click)="selectFromVideo()"
+        value="Select from video" />
+
+    }
+
+  </div>
+
+</div>

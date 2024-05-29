@@ -67,6 +67,8 @@ export class PeerTubeEmbedApi {
     channel.bind('playPreviousVideo', (txn, params) => this.embed.playPreviousPlaylistVideo())
     channel.bind('getCurrentPosition', (txn, params) => this.embed.getCurrentPlaylistPosition())
 
+    channel.bind('getImageDataUrl', (txn, params) => this.embed.getImageDataUrl())
+
     this.channel = channel
   }
 
