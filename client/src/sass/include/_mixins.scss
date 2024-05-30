@@ -761,9 +761,11 @@
     > span > my-global-icon,
     > my-global-icon {
       @include margin-right(10px);
+
       width: 24px;
       height: 24px;
-      vertical-align: top;
+      position: relative;
+      top: -2px;
     }
 
     .pt-badge {
