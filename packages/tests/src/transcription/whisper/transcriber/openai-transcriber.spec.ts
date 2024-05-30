@@ -74,7 +74,7 @@ describe('Open AI Whisper transcriber', function () {
     this.timeout(3 * 1000 * 60)
     await transcriber.transcribe({
       mediaFilePath: frVideoPath,
-      model: TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/tiny.pt')),
+      model: await TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/tiny.pt')),
       language: 'en'
     })
   })

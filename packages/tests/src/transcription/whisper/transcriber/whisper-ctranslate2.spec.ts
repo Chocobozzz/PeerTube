@@ -75,7 +75,7 @@ describe('Whisper CTranslate2 transcriber', function () {
     this.timeout(2 * 1000 * 60)
     const transcript = await transcriber.transcribe({
       mediaFilePath: shortVideoPath,
-      model: TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/faster-whisper-tiny')),
+      model: await TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/faster-whisper-tiny')),
       language: 'en',
       format: 'txt'
     })
@@ -104,7 +104,7 @@ describe('Whisper CTranslate2 transcriber', function () {
     this.timeout(5 * 1000 * 60)
     const transcribeArgs: WhisperTranscribeArgs = {
       mediaFilePath: frVideoPath,
-      model: TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/tiny.pt')),
+      model: await TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/tiny.pt')),
       language: 'fr',
       format: 'txt'
     }
