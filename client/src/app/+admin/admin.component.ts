@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core'
-import { AuthService, ScreenService, ServerService } from '@app/core'
-import { TopMenuDropdownParam } from '@app/shared/shared-main/misc/top-menu-dropdown.component'
-import { UserRight } from '@peertube/peertube-models'
-import { RouterOutlet } from '@angular/router'
 import { NgClass } from '@angular/common'
-import { TopMenuDropdownComponent } from '../shared/shared-main/misc/top-menu-dropdown.component'
+import { Component, OnInit } from '@angular/core'
+import { RouterOutlet } from '@angular/router'
+import { AuthService, ScreenService, ServerService } from '@app/core'
 import { ListOverflowItem } from '@app/shared/shared-main/misc/list-overflow.component'
+import { TopMenuDropdownParam } from '@app/shared/shared-main/misc/top-menu-dropdown.component'
+import { UserRight, UserRightType } from '@peertube/peertube-models'
+import { TopMenuDropdownComponent } from '../shared/shared-main/misc/top-menu-dropdown.component'
 
 @Component({
   templateUrl: './admin.component.html',
@@ -50,7 +50,7 @@ export class AdminComponent implements OnInit {
       children: []
     }
 
-    if (this.hasUsersRight()) {
+    if (this.hasRight(UserRight.MANAGE_USERS)) {
       overviewItems.children.push({
         label: $localize`Users`,
         routerLink: '/admin/users',
@@ -58,7 +58,7 @@ export class AdminComponent implements OnInit {
       })
     }
 
-    if (this.hasVideosRight()) {
+    if (this.hasRight(UserRight.SEE_ALL_VIDEOS)) {
       overviewItems.children.push({
         label: $localize`Videos`,
         routerLink: '/admin/videos',
@@ -69,7 +69,7 @@ export class AdminComponent implements OnInit {
       })
     }
 
-    if (this.hasVideoCommentsRight()) {
+    if (this.hasRight(UserRight.SEE_ALL_COMMENTS)) {
       overviewItems.children.push({
         label: $localize`Comments`,
         routerLink: '/admin/comments',
@@ -83,7 +83,7 @@ export class AdminComponent implements OnInit {
   }
 
   private buildFederationItems () {
-    if (!this.hasServerFollowRight()) return
+    if (!this.hasRight(UserRight.MANAGE_SERVER_FOLLOW)) return
 
     this.menuEntries.push({
       label: $localize`Federation`,
@@ -113,7 +113,7 @@ export class AdminComponent implements OnInit {
       children: []
     }
 
-    if (this.hasRegistrationsRight()) {
+    if (this.hasRight(UserRight.MANAGE_REGISTRATIONS)) {
       moderationItems.children.push({
         label: $localize`Registrations`,
         routerLink: '/admin/moderation/registrations/list',
@@ -121,7 +121,7 @@ export class AdminComponent implements OnInit {
       })
     }
 
-    if (this.hasAbusesRight()) {
+    if (this.hasRight(UserRight.MANAGE_ABUSES)) {
       moderationItems.children.push({
         label: $localize`Reports`,
         routerLink: '/admin/moderation/abuses/list',
@@ -129,7 +129,7 @@ export class AdminComponent implements OnInit {
       })
     }
 
-    if (this.hasVideoBlocklistRight()) {
+    if (this.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)) {
       moderationItems.children.push({
         label: $localize`Video blocks`,
         routerLink: '/admin/moderation/video-blocks/list',
@@ -137,7 +137,7 @@ export class AdminComponent implements OnInit {
       })
     }
 
-    if (this.hasAccountsBlocklistRight()) {
+    if (this.hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST)) {
       moderationItems.children.push({
         label: $localize`Muted accounts`,
         routerLink: '/admin/moderation/blocklist/accounts',
@@ -145,7 +145,7 @@ export class AdminComponent implements OnInit {
       })
     }
 
-    if (this.hasServersBlocklistRight()) {
+    if (this.hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)) {
       moderationItems.children.push({
         label: $localize`Muted servers`,
         routerLink: '/admin/moderation/blocklist/servers',
@@ -153,7 +153,7 @@ export class AdminComponent implements OnInit {
       })
     }
 
-    if (this.hasServerWatchedWordsRight()) {
+    if (this.hasRight(UserRight.MANAGE_INSTANCE_WATCHED_WORDS)) {
       moderationItems.children.push({
         label: $localize`Watched words`,
         routerLink: '/admin/moderation/watched-words/list',
@@ -165,13 +165,13 @@ export class AdminComponent implements OnInit {
   }
 
   private buildConfigurationItems () {
-    if (this.hasConfigRight()) {
+    if (this.hasRight(UserRight.MANAGE_CONFIGURATION)) {
       this.menuEntries.push({ label: $localize`Configuration`, routerLink: '/admin/config' })
     }
   }
 
   private buildPluginItems () {
-    if (this.hasPluginsRight()) {
+    if (this.hasRight(UserRight.MANAGE_PLUGINS)) {
       this.menuEntries.push({ label: $localize`Plugins/Themes`, routerLink: '/admin/plugins' })
     }
   }
@@ -182,7 +182,7 @@ export class AdminComponent implements OnInit {
       children: []
     }
 
-    if (this.isRemoteRunnersEnabled() && this.hasRunnersRight()) {
+    if (this.isRemoteRunnersEnabled() && this.hasRight(UserRight.MANAGE_RUNNERS)) {
       systemItems.children.push({
         label: $localize`Remote runners`,
         iconName: 'codesandbox',
@@ -196,7 +196,7 @@ export class AdminComponent implements OnInit {
       })
     }
 
-    if (this.hasJobsRight()) {
+    if (this.hasRight(UserRight.MANAGE_JOBS)) {
       systemItems.children.push({
         label: $localize`Local jobs`,
         iconName: 'circle-tick',
@@ -204,7 +204,7 @@ export class AdminComponent implements OnInit {
       })
     }
 
-    if (this.hasLogsRight()) {
+    if (this.hasRight(UserRight.MANAGE_LOGS)) {
       systemItems.children.push({
         label: $localize`Logs`,
         iconName: 'playlists',
@@ -212,7 +212,7 @@ export class AdminComponent implements OnInit {
       })
     }
 
-    if (this.hasDebugRight()) {
+    if (this.hasRight(UserRight.MANAGE_DEBUG)) {
       systemItems.children.push({
         label: $localize`Debug`,
         iconName: 'cog',
@@ -225,68 +225,8 @@ export class AdminComponent implements OnInit {
     }
   }
 
-  private hasUsersRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_USERS)
-  }
-
-  private hasServerFollowRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_SERVER_FOLLOW)
-  }
-
-  private hasAbusesRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_ABUSES)
-  }
-
-  private hasVideoBlocklistRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
-  }
-
-  private hasAccountsBlocklistRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST)
-  }
-
-  private hasServersBlocklistRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)
-  }
-
-  private hasServerWatchedWordsRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_INSTANCE_WATCHED_WORDS)
-  }
-
-  private hasConfigRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_CONFIGURATION)
-  }
-
-  private hasPluginsRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_PLUGINS)
-  }
-
-  private hasLogsRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_LOGS)
-  }
-
-  private hasJobsRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_JOBS)
-  }
-
-  private hasRunnersRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_RUNNERS)
-  }
-
-  private hasDebugRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_DEBUG)
-  }
-
-  private hasVideoCommentsRight () {
-    return this.auth.getUser().hasRight(UserRight.SEE_ALL_COMMENTS)
-  }
-
-  private hasVideosRight () {
-    return this.auth.getUser().hasRight(UserRight.SEE_ALL_VIDEOS)
-  }
-
-  private hasRegistrationsRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_REGISTRATIONS)
+  private hasRight (right: UserRightType) {
+    return this.auth.getUser().hasRight(right)
   }
 
   private isRemoteRunnersEnabled () {
