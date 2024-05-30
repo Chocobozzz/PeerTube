@@ -11,13 +11,16 @@ import {
   TranscriptFileEvaluator,
   TranscriptionModel,
   WhisperTranscribeArgs,
-  levenshteinDistance
+  levenshteinDistance, downloadFile, unzip
 } from '@peertube/peertube-transcription'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 
 config.truncateThreshold = 0
 
 describe('Linto timestamped Whisper transcriber', function () {
-  const transcriptDirectory = join(tmpdir(), 'peertube-transcription', 'transcriber')
+  const tmpDirectory = join(tmpdir(), 'peertube-transcription')
+  const transcriptDirectory = join(tmpDirectory, 'transcriber')
+  const modelsDirectory = join(tmpDirectory, 'models')
   const shortVideoPath = buildAbsoluteFixturePath('transcription/videos/the_last_man_on_earth.mp4')
   const frVideoPath = buildAbsoluteFixturePath('transcription/videos/derive_sectaire.mp4')
   const transcriber = new WhisperTimestampedTranscriber(
@@ -35,6 +38,7 @@ describe('Linto timestamped Whisper transcriber', function () {
 
   before(async function () {
     await mkdir(transcriptDirectory, { recursive: true })
+    await unzip(await downloadFile(FIXTURE_URLS.transcriptionModels, tmpDirectory))
   })
 
   it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format by default', async function () {
@@ -69,7 +73,7 @@ describe('Linto timestamped Whisper transcriber', function () {
     this.timeout(2 * 1000 * 60)
     await transcriber.transcribe({
       mediaFilePath: frVideoPath,
-      model: await TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/tiny.pt')),
+      model: await TranscriptionModel.fromPath(join(modelsDirectory, 'tiny.pt')),
       language: 'en'
     })
   })
@@ -97,7 +101,7 @@ describe('Linto timestamped Whisper transcriber', function () {
     this.timeout(5 * 1000 * 60)
     const transcribeArgs: WhisperTranscribeArgs = {
       mediaFilePath: frVideoPath,
-      model: await TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/tiny.pt')),
+      model: await TranscriptionModel.fromPath(join(modelsDirectory, 'tiny.pt')),
       language: 'fr',
       format: 'txt'
     }

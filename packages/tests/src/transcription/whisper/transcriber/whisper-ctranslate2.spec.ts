@@ -6,19 +6,22 @@ import { mkdir, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
-  Ctranslate2Transcriber,
+  Ctranslate2Transcriber, downloadFile,
   levenshteinDistance,
   OpenaiTranscriber,
   TranscriptFile,
   TranscriptFileEvaluator,
-  TranscriptionModel,
+  TranscriptionModel, unzip,
   WhisperTranscribeArgs
 } from '@peertube/peertube-transcription'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 
 config.truncateThreshold = 0
 
 describe('Whisper CTranslate2 transcriber', function () {
-  const transcriptDirectory = join(tmpdir(), 'peertube-transcription', 'transcriber')
+  const tmpDirectory = join(tmpdir(), 'peertube-transcription')
+  const transcriptDirectory = join(tmpDirectory, 'transcriber')
+  const modelsDirectory = join(tmpDirectory, 'models')
   const shortVideoPath = buildAbsoluteFixturePath('transcription/videos/the_last_man_on_earth.mp4')
   const frVideoPath = buildAbsoluteFixturePath('transcription/videos/derive_sectaire.mp4')
   const transcriber = new Ctranslate2Transcriber(
@@ -36,6 +39,7 @@ describe('Whisper CTranslate2 transcriber', function () {
 
   before(async function () {
     await mkdir(transcriptDirectory, { recursive: true })
+    await unzip(await downloadFile(FIXTURE_URLS.transcriptionModels, tmpDirectory))
   })
 
   it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format by default', async function () {
@@ -75,7 +79,7 @@ describe('Whisper CTranslate2 transcriber', function () {
     this.timeout(2 * 1000 * 60)
     const transcript = await transcriber.transcribe({
       mediaFilePath: shortVideoPath,
-      model: await TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/faster-whisper-tiny')),
+      model: await TranscriptionModel.fromPath(join(modelsDirectory, 'faster-whisper-tiny')),
       language: 'en',
       format: 'txt'
     })

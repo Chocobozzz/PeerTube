@@ -6,18 +6,23 @@ import { mkdir, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
+  downloadFile,
   levenshteinDistance,
   OpenaiTranscriber,
   TranscriptFile,
   TranscriptFileEvaluator,
   TranscriptionModel,
+  unzip,
   WhisperBuiltinModel
 } from '@peertube/peertube-transcription'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 
 config.truncateThreshold = 0
 
 describe('Open AI Whisper transcriber', function () {
-  const transcriptDirectory = join(tmpdir(), 'peertube-transcription', 'transcriber')
+  const tmpDirectory = join(tmpdir(), 'peertube-transcription')
+  const transcriptDirectory = join(tmpDirectory, 'transcriber')
+  const modelsDirectory = join(tmpDirectory, 'models')
   const shortVideoPath = buildAbsoluteFixturePath('transcription/videos/the_last_man_on_earth.mp4')
   const frVideoPath = buildAbsoluteFixturePath('transcription/videos/derive_sectaire.mp4')
   const referenceTranscriptFile = new TranscriptFile({
@@ -40,6 +45,7 @@ describe('Open AI Whisper transcriber', function () {
 
   before(async function () {
     await mkdir(transcriptDirectory, { recursive: true })
+    await unzip(await downloadFile(FIXTURE_URLS.transcriptionModels, tmpDirectory))
   })
 
   it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format by default', async function () {
@@ -74,7 +80,7 @@ describe('Open AI Whisper transcriber', function () {
     this.timeout(3 * 1000 * 60)
     await transcriber.transcribe({
       mediaFilePath: frVideoPath,
-      model: await TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/tiny.pt')),
+      model: await TranscriptionModel.fromPath(join(modelsDirectory, 'tiny.pt')),
       language: 'en'
     })
   })

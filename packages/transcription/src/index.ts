@@ -7,6 +7,7 @@ export * from './subtitle.js'
 export * from './transcription-engine.js'
 export * from './transcription-model.js'
 export * from './transcription-run.js'
+export * from './utils.js'
 export * from './whisper/index.js'
 
 export const transcriberFactory = new TranscriberFactory(engines)

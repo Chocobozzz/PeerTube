@@ -59,6 +59,15 @@ export function makeRawRequest (options: {
   return makeGetRequest(reqOptions)
 }
 
+export const makeFileRequest = (url: string) => {
+  return makeRawRequest({
+    url,
+    responseType: 'arraybuffer',
+    redirects: 1,
+    expectedStatus: HttpStatusCode.OK_200
+  })
+}
+
 export function makeGetRequest (options: CommonRequestParams & {
   query?: any
   rawQuery?: string
