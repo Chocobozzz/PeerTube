@@ -13,9 +13,9 @@
       (avatarChange)="onAvatarChange($event)" (avatarDelete)="onAvatarDelete()"
     ></my-actor-avatar-edit>
 
-    <my-user-quota [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-quota>
+    <my-user-quota></my-user-quota>
 
-    <my-account-profile [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-profile>
+    <my-account-profile [user]="user"></my-account-profile>
   </div>
 </div>
 
@@ -47,7 +47,7 @@
   </div>
 
   <div class="content-col">
-    <my-account-notification-preferences [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-notification-preferences>
+    <my-account-notification-preferences [user]="user"></my-account-notification-preferences>
   </div>
 </div>
 
@@ -67,7 +67,7 @@
   </div>
 
   <div class="content-col">
-    <my-account-two-factor-button [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-two-factor-button>
+    <my-account-two-factor-button [user]="user"></my-account-two-factor-button>
   </div>
 </div>
 
@@ -77,7 +77,7 @@
   </div>
 
   <div class="content-col">
-    <my-account-email-preferences class="d-block mb-5" [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-email-preferences>
+    <my-account-email-preferences class="d-block mb-5" [user]="user"></my-account-email-preferences>
 
     <my-account-change-email></my-account-change-email>
   </div>

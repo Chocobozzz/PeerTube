@@ -1,13 +1,12 @@
-import { debounce } from 'lodash-es'
-import { Subject } from 'rxjs'
+import { NgFor, NgIf } from '@angular/common'
 import { Component, Input, OnInit } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 import { Notifier, ServerService, User } from '@app/core'
+import { UserNotificationService } from '@app/shared/shared-main/users/user-notification.service'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { UserNotificationSetting, UserNotificationSettingValue, UserRight, UserRightType } from '@peertube/peertube-models'
-import { FormsModule } from '@angular/forms'
+import { debounce } from 'lodash-es'
 import { InputSwitchComponent } from '../../../shared/shared-forms/input-switch.component'
-import { NgIf, NgFor } from '@angular/common'
-import { UserNotificationService } from '@app/shared/shared-main/users/user-notification.service'
 
 @Component({
   selector: 'my-account-notification-preferences',
@@ -18,7 +17,6 @@ import { UserNotificationService } from '@app/shared/shared-main/users/user-noti
 })
 export class MyAccountNotificationPreferencesComponent implements OnInit {
   @Input() user: User
-  @Input() userInformationLoaded: Subject<any>
 
   notificationSettingGroups: { label: string, keys: (keyof UserNotificationSetting)[] }[] = []
   emailNotifications: { [ id in keyof UserNotificationSetting ]?: boolean } = {}
@@ -111,7 +109,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     const serverConfig = this.serverService.getHTMLConfig()
     this.emailEnabled = serverConfig.email.enabled
 
-    this.userInformationLoaded.subscribe(() => this.loadNotificationSettings())
+    this.loadNotificationSettings()
   }
 
   hasUserRight (field: keyof UserNotificationSetting) {

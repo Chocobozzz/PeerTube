@@ -19,6 +19,7 @@ import { UserSubscriptionService } from '@app/shared/shared-user-subscription/us
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { AbuseService } from '@app/shared/shared-moderation/abuse.service'
+import { userResolver } from '@app/core/routing/user.resolver'
 
 export default [
   {
@@ -32,6 +33,9 @@ export default [
       LiveVideoService,
       UserSubscriptionService
     ],
+    resolve: {
+      user: userResolver
+    },
     canActivateChild: [ LoginGuard ],
     children: [
       {

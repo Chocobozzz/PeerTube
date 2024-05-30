@@ -21,8 +21,8 @@ import { NgIf } from '@angular/common'
   imports: [ NgIf, FormsModule, ReactiveFormsModule, InputTextComponent ]
 })
 export class MyAccountChangePasswordComponent extends FormReactive implements OnInit {
-  error: string = null
-  user: User = null
+  error: string
+  user: User
 
   constructor (
     protected formReactiveService: FormReactiveService,

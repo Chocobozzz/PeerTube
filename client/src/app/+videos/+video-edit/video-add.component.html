@@ -38,7 +38,7 @@
 </ng-container>
 
 <div *ngIf="!user.isUploadDisabled()" class="margin-content">
-  <my-user-quota *ngIf="!isInSecondStep() || secondStepType === 'go-live'" [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-quota>
+  <my-user-quota *ngIf="!isInSecondStep() || secondStepType === 'go-live'"></my-user-quota>
 
   <div class="title-page" *ngIf="isInSecondStep()">
     <ng-container *ngIf="secondStepType === 'import-url' || secondStepType === 'import-torrent'" i18n>Import {{ videoName }}</ng-container>

@@ -5,7 +5,6 @@ import { AuthUser, PluginService, ScreenService } from '@app/core'
 import { TopMenuDropdownComponent, TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
 
 @Component({
-  selector: 'my-my-account',
   templateUrl: './my-account.component.html',
   styleUrls: [ './my-account.component.scss' ],
   standalone: true,

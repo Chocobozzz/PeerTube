@@ -29,6 +29,7 @@ export class MyAccountApplicationsComponent implements OnInit {
 
   ngOnInit () {
     this.feedUrl = this.baseURL
+
     this.scopedTokensService.getScopedTokens()
       .subscribe({
         next: tokens => this.regenApplications(tokens),

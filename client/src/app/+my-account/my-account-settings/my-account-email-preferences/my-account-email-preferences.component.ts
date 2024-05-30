@@ -1,11 +1,10 @@
-import { Subject } from 'rxjs'
 import { Component, Input, OnInit } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, UserService } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { User, UserUpdateMe } from '@peertube/peertube-models'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 @Component({
   selector: 'my-account-email-preferences',
@@ -15,8 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
   imports: [ FormsModule, ReactiveFormsModule, PeertubeCheckboxComponent ]
 })
 export class MyAccountEmailPreferencesComponent extends FormReactive implements OnInit {
-  @Input() user: User = null
-  @Input() userInformationLoaded: Subject<any>
+  @Input() user: User
 
   constructor (
     protected formReactiveService: FormReactiveService,
@@ -31,9 +29,7 @@ export class MyAccountEmailPreferencesComponent extends FormReactive implements 
       'email-public': null
     })
 
-    this.userInformationLoaded.subscribe(() => {
-      this.form.patchValue({ 'email-public': this.user.emailPublic })
-    })
+    this.form.patchValue({ 'email-public': this.user.emailPublic })
   }
 
   updateEmailPublic () {

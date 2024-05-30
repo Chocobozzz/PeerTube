@@ -1,11 +1,10 @@
-import { Subject } from 'rxjs'
+import { NgClass, NgIf } from '@angular/common'
 import { Component, Input, OnInit } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, User, UserService } from '@app/core'
 import { USER_DESCRIPTION_VALIDATOR, USER_DISPLAY_NAME_REQUIRED_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { NgIf, NgClass } from '@angular/common'
 
 @Component({
   selector: 'my-account-profile',
@@ -16,7 +15,6 @@ import { NgIf, NgClass } from '@angular/common'
 })
 export class MyAccountProfileComponent extends FormReactive implements OnInit {
   @Input() user: User = null
-  @Input() userInformationLoaded: Subject<any>
 
   error: string = null
 
@@ -36,12 +34,10 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
     })
     this.form.controls['username'].disable()
 
-    this.userInformationLoaded.subscribe(() => {
-      this.form.patchValue({
-        'username': this.user.username,
-        'display-name': this.user.account.displayName,
-        'description': this.user.account.description
-      })
+    this.form.patchValue({
+      'username': this.user.username,
+      'display-name': this.user.account.displayName,
+      'description': this.user.account.description
     })
   }
 

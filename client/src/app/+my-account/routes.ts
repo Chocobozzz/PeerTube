@@ -20,6 +20,7 @@ import { MyAccountSettingsComponent } from './my-account-settings/my-account-set
 import { MyAccountTwoFactorComponent } from './my-account-settings/my-account-two-factor/my-account-two-factor.component'
 import { MyAccountWatchedWordsListComponent } from './my-account-watched-words-list/my-account-watched-words-list.component'
 import { MyAccountComponent } from './my-account.component'
+import { userResolver } from '@app/core/routing/user.resolver'
 
 export default [
   {
@@ -35,6 +36,9 @@ export default [
       BulkService,
       WatchedWordsListService
     ],
+    resolve: {
+      user: userResolver
+    },
     canActivateChild: [ LoginGuard ],
     children: [
       {

@@ -5,7 +5,6 @@ import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-che
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { AutomaticTagAvailableType } from '@peertube/peertube-models'
 import { forkJoin } from 'rxjs'
-import { first } from 'rxjs/operators'
 import { AutomaticTagService } from './automatic-tag.service'
 
 @Component({
@@ -29,9 +28,7 @@ export class MyAccountAutoTagPoliciesComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.authService.userInformationLoaded
-      .pipe(first())
-      .subscribe(() => this.loadAvailableTags())
+    this.loadAvailableTags()
   }
 
   getLabelText (tag: { name: string, type: AutomaticTagAvailableType }) {

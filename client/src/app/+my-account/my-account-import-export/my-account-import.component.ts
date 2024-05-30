@@ -1,15 +1,15 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
-import { AuthService, ServerService, CanComponentDeactivate, Notifier } from '@app/core'
-import { Subscription, first, switchMap } from 'rxjs'
-import { UserImportExportService } from './user-import-export.service'
+import { DatePipe, NgIf } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
+import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { AuthService, CanComponentDeactivate, Notifier, ServerService } from '@app/core'
 import { buildHTTPErrorResponse, genericUploadErrorHandler, getUploadXRetryConfig } from '@app/helpers'
-import { HttpStatusCode, UserImport, UserImportState } from '@peertube/peertube-models'
-import { UploadxService, UploadState, UploaderX } from 'ngx-uploadx'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { UploadProgressComponent } from '../../shared/standalone-upload/upload-progress.component'
-import { NgIf, DatePipe } from '@angular/common'
 import { BytesPipe } from '@app/shared/shared-main/angular/bytes.pipe'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { HttpStatusCode, UserImport, UserImportState } from '@peertube/peertube-models'
+import { UploadState, UploaderX, UploadxService } from 'ngx-uploadx'
+import { Subscription } from 'rxjs'
+import { UploadProgressComponent } from '../../shared/standalone-upload/upload-progress.component'
+import { UserImportExportService } from './user-import-export.service'
 
 @Component({
   selector: 'my-account-import',
@@ -43,11 +43,7 @@ export class MyAccountImportComponent implements OnInit, OnDestroy, CanComponent
   ) {}
 
   ngOnInit () {
-    this.authService.userInformationLoaded
-      .pipe(
-        first(),
-        switchMap(() => this.userImportExportService.getLatestImport({ userId: this.authService.getUser().id }))
-      )
+    this.userImportExportService.getLatestImport({ userId: this.authService.getUser().id })
       .subscribe(res => this.latestImport = res)
 
     this.uploadServiceSubscription = this.resumableUploadService.events

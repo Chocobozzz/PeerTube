@@ -1,26 +1,26 @@
-import { Subscription } from 'rxjs'
-import { catchError, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators'
+import { DatePipe, NgClass, NgIf } from '@angular/common'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
 import { AuthService, MarkdownService, Notifier, RedirectService, RestExtractor, ScreenService, UserService } from '@app/core'
-import { HttpStatusCode, User, UserRight } from '@peertube/peertube-models'
-import { SimpleSearchInputComponent } from '../shared/shared-main/misc/simple-search-input.component'
-import { ListOverflowComponent, ListOverflowItem } from '../shared/shared-main/misc/list-overflow.component'
-import { SubscribeButtonComponent } from '../shared/shared-user-subscription/subscribe-button.component'
-import { CopyButtonComponent } from '../shared/shared-main/buttons/copy-button.component'
-import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account-block-badges.component'
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
-import { UserModerationDropdownComponent } from '../shared/shared-moderation/user-moderation-dropdown.component'
-import { ActorAvatarComponent } from '../shared/shared-actor-image/actor-avatar.component'
-import { NgIf, NgClass, DatePipe } from '@angular/common'
+import { Account } from '@app/shared/shared-main/account/account.model'
 import { AccountService } from '@app/shared/shared-main/account/account.service'
 import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
+import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/video-channel/video-channel.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
-import { Account } from '@app/shared/shared-main/account/account.model'
-import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
 import { AccountReportComponent } from '@app/shared/shared-moderation/report-modals'
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { HttpStatusCode, User, UserRight } from '@peertube/peertube-models'
+import { Subscription } from 'rxjs'
+import { catchError, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators'
+import { ActorAvatarComponent } from '../shared/shared-actor-image/actor-avatar.component'
+import { CopyButtonComponent } from '../shared/shared-main/buttons/copy-button.component'
+import { ListOverflowComponent, ListOverflowItem } from '../shared/shared-main/misc/list-overflow.component'
+import { SimpleSearchInputComponent } from '../shared/shared-main/misc/simple-search-input.component'
+import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account-block-badges.component'
+import { UserModerationDropdownComponent } from '../shared/shared-moderation/user-moderation-dropdown.component'
+import { SubscribeButtonComponent } from '../shared/shared-user-subscription/subscribe-button.component'
 
 @Component({
   templateUrl: './accounts.component.html',
@@ -208,24 +208,19 @@ export class AccountsComponent implements OnInit, OnDestroy {
     this.prependModerationActions = []
 
     if (!this.authService.isLoggedIn()) return
+    if (this.isManageable()) return
 
-    this.authService.userInformationLoaded.subscribe(
-      () => {
-        if (this.isManageable()) return
-
-        // It's not our account, we can report it
-        this.prependModerationActions = [
-          {
-            label: $localize`Report`,
-            isHeader: true
-          },
-          {
-            label: $localize`Report this account`,
-            handler: () => this.showReportModal()
-          }
-        ]
+    // It's not our account, we can report it
+    this.prependModerationActions = [
+      {
+        label: $localize`Report`,
+        isHeader: true
+      },
+      {
+        label: $localize`Report this account`,
+        handler: () => this.showReportModal()
       }
-    )
+    ]
   }
 
   private loadAccountVideosCount () {

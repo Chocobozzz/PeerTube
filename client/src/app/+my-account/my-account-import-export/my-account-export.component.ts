@@ -1,14 +1,14 @@
+import { DatePipe, NgFor, NgIf } from '@angular/common'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
-import { AuthService, ServerService } from '@app/core'
-import { PeerTubeProblemDocument, ServerErrorCode, UserExport, UserExportState } from '@peertube/peertube-models'
-import { UserImportExportService } from './user-import-export.service'
-import { concatMap, first, from, of, switchMap, toArray } from 'rxjs'
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
-import { BytesPipe } from '../../shared/shared-main/angular/bytes.pipe'
 import { FormsModule } from '@angular/forms'
+import { AuthService, ServerService } from '@app/core'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { PeerTubeProblemDocument, ServerErrorCode, UserExport, UserExportState } from '@peertube/peertube-models'
+import { concatMap, from, of, switchMap, toArray } from 'rxjs'
 import { PeertubeCheckboxComponent } from '../../shared/shared-forms/peertube-checkbox.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
-import { NgIf, NgFor, DatePipe } from '@angular/common'
+import { BytesPipe } from '../../shared/shared-main/angular/bytes.pipe'
+import { UserImportExportService } from './user-import-export.service'
 
 @Component({
   selector: 'my-account-export',
@@ -41,9 +41,8 @@ export class MyAccountExportComponent implements OnInit {
 
   ngOnInit () {
     this.archiveWeightEstimation = this.videoQuotaUsed
-    this.authService.userInformationLoaded
-      .pipe(first())
-      .subscribe(() => this.reloadUserExports())
+
+    this.reloadUserExports()
   }
 
   isExportEnabled () {

@@ -1,8 +1,8 @@
-import { Subject } from 'rxjs'
-import { Component, Input, OnInit } from '@angular/core'
-import { User, UserService } from '@app/core'
 import { NgIf } from '@angular/common'
+import { Component, OnInit } from '@angular/core'
+import { AuthService, UserService } from '@app/core'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { first } from 'rxjs'
 import { BytesPipe } from '../angular/bytes.pipe'
 
 @Component({
@@ -14,9 +14,6 @@ import { BytesPipe } from '../angular/bytes.pipe'
 })
 
 export class UserQuotaComponent implements OnInit {
-  @Input() user: User = null
-  @Input() userInformationLoaded: Subject<any>
-
   userVideoQuota = '0'
   userVideoQuotaUsed = 0
   userVideoQuotaPercentage = 15
@@ -25,10 +22,17 @@ export class UserQuotaComponent implements OnInit {
   userVideoQuotaUsedDaily = 0
   userVideoQuotaDailyPercentage = 15
 
-  constructor (private userService: UserService) { }
+  constructor (
+    private userService: UserService,
+    private auth: AuthService
+  ) { }
+
+  get user () {
+    return this.auth.getUser()
+  }
 
   ngOnInit () {
-    this.userInformationLoaded.subscribe(
+    this.auth.userInformationLoaded.pipe(first()).subscribe(
       () => {
         if (this.user.videoQuota !== -1) {
           this.userVideoQuota = new BytesPipe().transform(this.user.videoQuota, 0).toString()

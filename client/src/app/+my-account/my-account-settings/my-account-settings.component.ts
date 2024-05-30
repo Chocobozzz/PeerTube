@@ -39,7 +39,7 @@ import { ActorAvatarEditComponent } from '../../shared/shared-actor-image-edit/a
   ]
 })
 export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
-  user: User = null
+  user: User
 
   private lastScrollHash: string
 

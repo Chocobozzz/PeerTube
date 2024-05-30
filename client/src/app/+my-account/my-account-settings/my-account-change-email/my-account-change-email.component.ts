@@ -18,9 +18,9 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   imports: [ NgIf, FormsModule, ReactiveFormsModule, NgClass, InputTextComponent ]
 })
 export class MyAccountChangeEmailComponent extends FormReactive implements OnInit {
-  error: string = null
-  success: string = null
-  user: User = null
+  error: string
+  success: string
+  user: User
 
   constructor (
     protected formReactiveService: FormReactiveService,

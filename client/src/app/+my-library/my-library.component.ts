@@ -1,9 +1,9 @@
+import { NgClass } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
+import { RouterOutlet } from '@angular/router'
 import { AuthService, AuthUser, ScreenService, ServerService } from '@app/core'
 import { HTMLServerConfig } from '@peertube/peertube-models'
-import { TopMenuDropdownParam, TopMenuDropdownComponent } from '../shared/shared-main/misc/top-menu-dropdown.component'
-import { RouterOutlet } from '@angular/router'
-import { NgClass } from '@angular/common'
+import { TopMenuDropdownComponent, TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
 
 @Component({
   templateUrl: './my-library.component.html',
@@ -31,10 +31,7 @@ export class MyLibraryComponent implements OnInit {
     this.serverConfig = this.serverService.getHTMLConfig()
 
     this.user = this.authService.getUser()
-
-    this.authService.userInformationLoaded.subscribe(
-      () => this.buildMenu()
-    )
+    this.buildMenu()
   }
 
   isVideoImportEnabled () {

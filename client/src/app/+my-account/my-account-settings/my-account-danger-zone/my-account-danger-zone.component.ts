@@ -8,7 +8,7 @@ import { AuthService, ConfirmService, Notifier, RedirectService, User, UserServi
   standalone: true
 })
 export class MyAccountDangerZoneComponent {
-  @Input() user: User = null
+  @Input() user: User
 
   constructor (
     private authService: AuthService,

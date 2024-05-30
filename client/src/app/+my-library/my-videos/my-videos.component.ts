@@ -1,30 +1,30 @@
-import { uniqBy } from 'lodash-es'
-import { concat, Observable } from 'rxjs'
-import { tap, toArray } from 'rxjs/operators'
+import { NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService, User } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
-import { immutableAssign, formatICU } from '@app/helpers'
-import { VideoChannel, VideoExistInPlaylist, VideosExistInPlaylists, VideoSortField } from '@peertube/peertube-models'
-import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
-import {
-  VideoActionsDisplayType,
-  VideoActionsDropdownComponent
-} from '../../shared/shared-video-miniature/video-actions-dropdown.component'
-import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
-import { PeerTubeTemplateDirective } from '../../shared/shared-main/angular/peertube-template.directive'
-import { FormsModule } from '@angular/forms'
-import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
-import { NgIf } from '@angular/common'
-import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { formatICU, immutableAssign } from '@app/helpers'
 import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { LiveStreamInformationComponent } from '@app/shared/shared-video-live/live-stream-information.component'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature/video-miniature.component'
-import { VideosSelectionComponent, SelectionType } from '@app/shared/shared-video-miniature/videos-selection.component'
+import { SelectionType, VideosSelectionComponent } from '@app/shared/shared-video-miniature/videos-selection.component'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
+import { VideoChannel, VideoExistInPlaylist, VideosExistInPlaylists, VideoSortField } from '@peertube/peertube-models'
+import { uniqBy } from 'lodash-es'
+import { concat, Observable } from 'rxjs'
+import { tap, toArray } from 'rxjs/operators'
+import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
+import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { PeerTubeTemplateDirective } from '../../shared/shared-main/angular/peertube-template.directive'
+import { EditButtonComponent } from '../../shared/shared-main/buttons/edit-button.component'
+import {
+  VideoActionsDisplayType,
+  VideoActionsDropdownComponent
+} from '../../shared/shared-video-miniature/video-actions-dropdown.component'
+import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
 @Component({
   templateUrl: './my-videos.component.html',
@@ -121,36 +121,34 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
       this.search = this.route.snapshot.queryParams['search']
     }
 
-    this.authService.userInformationLoaded.subscribe(() => {
-      this.user = this.authService.getUser()
-      this.userChannels = this.user.videoChannels
+    this.user = this.authService.getUser()
+    this.userChannels = this.user.videoChannels
 
-      const channelFilters = [ ...this.userChannels ]
-        .sort((a, b) => a.displayName.localeCompare(b.displayName))
-        .map(c => {
-          return {
-            value: 'channel:' + c.name,
-            label: c.displayName
-          }
-        })
-
-      this.inputFilters = [
-        {
-          title: $localize`Advanced filters`,
-          children: [
-            {
-              value: 'isLive:true',
-              label: $localize`Only live videos`
-            }
-          ]
-        },
-
-        {
-          title: $localize`Channel filters`,
-          children: channelFilters
+    const channelFilters = [ ...this.userChannels ]
+      .sort((a, b) => a.displayName.localeCompare(b.displayName))
+      .map(c => {
+        return {
+          value: 'channel:' + c.name,
+          label: c.displayName
         }
-      ]
-    })
+      })
+
+    this.inputFilters = [
+      {
+        title: $localize`Advanced filters`,
+        children: [
+          {
+            value: 'isLive:true',
+            label: $localize`Only live videos`
+          }
+        ]
+      },
+
+      {
+        title: $localize`Channel filters`,
+        children: channelFilters
+      }
+    ]
   }
 
   onSearch (search: string) {

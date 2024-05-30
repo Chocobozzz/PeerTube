@@ -16,7 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
   imports: [ FormsModule, ReactiveFormsModule, NgFor, NgIf ]
 })
 export class UserInterfaceSettingsComponent extends FormReactive implements OnInit, OnDestroy {
-  @Input() user: User = null
+  @Input() user: User
   @Input() reactiveUpdate = false
   @Input() notifyOnUpdate = true
   @Input() userInformationLoaded: Subject<any>

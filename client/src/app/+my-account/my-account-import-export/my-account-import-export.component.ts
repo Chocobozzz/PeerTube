@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { AuthService, CanComponentDeactivate, UserService } from '@app/core'
-import { MyAccountImportComponent } from './my-account-import.component'
-import { first } from 'rxjs'
-import { MyAccountExportComponent } from './my-account-export.component'
+import { CanComponentDeactivate, UserService } from '@app/core'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
+import { MyAccountExportComponent } from './my-account-export.component'
+import { MyAccountImportComponent } from './my-account-import.component'
 
 @Component({
   selector: 'my-account-import-export',
@@ -17,17 +16,12 @@ export class MyAccountImportExportComponent implements OnInit, CanComponentDeact
   videoQuotaUsed: number
 
   constructor (
-    private authService: AuthService,
     private userService: UserService
   ) {}
 
   ngOnInit () {
-    this.authService.userInformationLoaded
-      .pipe(first())
-      .subscribe(() => {
-        this.userService.getMyVideoQuotaUsed()
-          .subscribe(res => this.videoQuotaUsed = res.videoQuotaUsed)
-      })
+    this.userService.getMyVideoQuotaUsed()
+      .subscribe(res => this.videoQuotaUsed = res.videoQuotaUsed)
   }
 
   canDeactivate () {
