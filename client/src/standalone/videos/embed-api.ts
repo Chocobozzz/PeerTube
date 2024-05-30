@@ -166,9 +166,9 @@ export class PeerTubeEmbedApi {
   private disposeStateTracking () {
     if (!this.player) return
 
-    this.player.off('play', this.videoElPlayListener)
-    this.player.off('pause', this.videoElPauseListener)
-    this.player.off('ended', this.videoElEndedListener)
+    if (this.videoElPlayListener) this.player.off('play', this.videoElPlayListener)
+    if (this.videoElPauseListener) this.player.off('pause', this.videoElPauseListener)
+    if (this.videoElEndedListener) this.player.off('ended', this.videoElEndedListener)
 
     clearInterval(this.videoElInterval)
   }
