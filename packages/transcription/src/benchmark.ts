@@ -68,7 +68,7 @@ void (async () => {
     ? process.env.MODELS.trim().split(',').map(modelName => modelName.trim()).filter(modelName => modelName)
     : [ 'tiny' ]
 
-  const transcriptDirectory = join(tmpdir(), 'peertube-transcription/benchmark/')
+  const transcriptDirectory = join(tmpdir(), 'peertube-transcription', 'benchmark')
   const mediaFilePath = buildAbsoluteFixturePath('transcription/videos/derive_sectaire.mp4')
   const referenceTranscriptFile = new TranscriptFile({
     path: buildAbsoluteFixturePath('transcription/videos/derive_sectaire.txt'),

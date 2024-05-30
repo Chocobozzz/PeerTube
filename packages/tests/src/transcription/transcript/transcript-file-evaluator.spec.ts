@@ -7,7 +7,7 @@ import { tmpdir } from 'node:os'
 import { expect } from 'chai'
 
 describe('Transcript File Evaluator', function () {
-  const transcriptDirectory = join(tmpdir(), 'peertube-transcription/transcript-file-evaluator')
+  const transcriptDirectory = join(tmpdir(), 'peertube-transcription', 'transcript-file-evaluator')
   const referenceTranscriptFilePath = buildAbsoluteFixturePath('transcription/videos/communiquer-lors-dune-classe-transplantee.txt')
 
   before(async function () {

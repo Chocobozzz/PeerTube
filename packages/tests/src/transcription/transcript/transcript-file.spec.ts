@@ -7,7 +7,7 @@ import { tmpdir } from 'node:os'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 
 describe('Transcript File', function () {
-  const transcriptFileDirectory = join(tmpdir(), 'peertube-transcription/transcript-file/')
+  const transcriptFileDirectory = join(tmpdir(), 'peertube-transcription', 'transcript-file')
   before(async function () {
     await mkdir(transcriptFileDirectory, { recursive: true })
   })

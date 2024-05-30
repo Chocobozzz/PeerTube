@@ -17,7 +17,7 @@ import {
 config.truncateThreshold = 0
 
 describe('Linto timestamped Whisper transcriber', function () {
-  const transcriptDirectory = join(tmpdir(), 'peertube-transcription/transcriber')
+  const transcriptDirectory = join(tmpdir(), 'peertube-transcription', 'transcriber')
   const shortVideoPath = buildAbsoluteFixturePath('transcription/videos/the_last_man_on_earth.mp4')
   const frVideoPath = buildAbsoluteFixturePath('transcription/videos/derive_sectaire.mp4')
   const transcriber = new WhisperTimestampedTranscriber(
