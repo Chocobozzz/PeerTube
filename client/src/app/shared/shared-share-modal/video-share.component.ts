@@ -236,7 +236,7 @@ export class VideoShareComponent {
         embedUrl: await this.getPlaylistEmbedUrl(),
         embedTitle: this.playlist.displayName,
         responsive,
-        aspectRatio: this.video.aspectRatio
+        aspectRatio: this.video?.aspectRatio
       },
       'video-watch',
       'filter:share.video-playlist-embed-code.build.params',

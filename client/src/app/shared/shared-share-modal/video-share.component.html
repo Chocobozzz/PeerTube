@@ -11,7 +11,7 @@
   <div class="modal-body">
 
     <div class="playlist" *ngIf="playlist">
-      <h5 i18n *ngIf="video">Share the playlist</h5>
+      <h5 *ngIf="playlist" i18n class="text-center">Share the playlist</h5>
 
       <div *ngIf="isPrivatePlaylist()" class="alert-private alert alert-warning">
         <div i18n>This playlist is private so you won't be able to share it with external users</div>
@@ -97,7 +97,7 @@
 
 
     <div class="video" *ngIf="video">
-      <h5 *ngIf="playlist" i18n>Share the video</h5>
+      <h5 *ngIf="playlist" i18n class="text-center">Share the video</h5>
 
       <div *ngIf="isPrivateVideo()" class="alert-private alert alert-warning">
         <div i18n>This video is private so you won't be able to share it with external users</div>
@@ -185,12 +185,21 @@
           </div>
         </div>
 
-        <div class="form-group" *ngIf="isInVideoEmbedTab()">
+        @if (isInVideoEmbedTab()) {
+        <div class="form-group">
           <my-peertube-checkbox
             inputName="onlyEmbedUrl" [(ngModel)]="customizations.onlyEmbedUrl"
             i18n-labelText labelText="Only display embed URL"
           ></my-peertube-checkbox>
         </div>
+
+          <div class="form-group">
+            <my-peertube-checkbox
+              inputName="responsive" [(ngModel)]="customizations.responsive"
+              i18n-labelText labelText="Responsive embed"
+            ></my-peertube-checkbox>
+          </div>
+        }
 
         <my-plugin-placeholder pluginId="share-modal-video-settings"></my-plugin-placeholder>
 
@@ -239,13 +248,6 @@
           </div>
 
           <ng-container *ngIf="isInVideoEmbedTab()">
-            <div class="form-group">
-              <my-peertube-checkbox
-                inputName="responsive" [(ngModel)]="customizations.responsive"
-                i18n-labelText labelText="Responsive embed"
-              ></my-peertube-checkbox>
-            </div>
-
             <div class="form-group">
               <my-peertube-checkbox
                 inputName="title" [(ngModel)]="customizations.title"
