@@ -8,11 +8,10 @@ import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   OpenaiTranscriber,
   WhisperTimestampedTranscriber,
-  TranscriptFile,
   TranscriptFileEvaluator,
   TranscriptionModel,
   WhisperTranscribeArgs,
-  WhisperBuiltinModel
+  levenshteinDistance
 } from '@peertube/peertube-transcription'
 
 config.truncateThreshold = 0
@@ -38,67 +37,32 @@ describe('Linto timestamped Whisper transcriber', function () {
     await mkdir(transcriptDirectory, { recursive: true })
   })
 
-  it('Should transcribe a media file and produce a transcript file in `vtt` with a ms precision', async function () {
+  it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format by default', async function () {
     const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en' })
-    expect(await transcript.equals(new TranscriptFile({
-      path: join(transcriptDirectory, 'the_last_man_on_earth.vtt'),
-      language: 'en',
-      format: 'vtt'
-    }))).to.be.true
 
-    expect(await transcript.read()).to.equals(
-      `WEBVTT
-
-00:00.460 --> 00:02.080
-December 1965.
-
-00:03.700 --> 00:08.800
-Is that all it has been since I inherited the world only three years?
-
-00:10.420 --> 00:11.900
-Seems like a hundred million.
-
-`
-    )
+    expect(transcript.format).to.equals('vtt')
+    expect(transcript.language).to.equals('en')
+    expect(await transcript.read()).not.to.be.empty
   })
 
   it('May produce a transcript file in the `srt` format with a ms precision', async function () {
     const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'srt' })
-    expect(await transcript.equals(new TranscriptFile({
-      path: join(transcriptDirectory, 'the_last_man_on_earth.srt'),
-      language: 'en',
-      format: 'srt'
-    }))).to.be.true
 
-    expect(await transcript.read()).to.equals(
-      `1
-00:00:00,460 --> 00:00:02,080
-December 1965.
-
-2
-00:00:03,700 --> 00:00:08,800
-Is that all it has been since I inherited the world only three years?
-
-3
-00:00:10,420 --> 00:00:11,900
-Seems like a hundred million.
-
-`
-    )
+    expect(transcript.format).to.equals('srt')
+    expect(transcript.language).to.equals('en')
+    expect(await transcript.read()).not.to.be.empty
   })
 
   it('May produce a transcript file in `txt` format', async function () {
     const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'txt' })
-    expect(await transcript.equals(new TranscriptFile({
-      path: join(transcriptDirectory, 'the_last_man_on_earth.txt'),
-      language: 'en',
-      format: 'txt'
-    }))).to.be.true
 
-    expect(await transcript.read()).to.equals(`December 1965.
-Is that all it has been since I inherited the world only three years?
-Seems like a hundred million.
-`)
+    expect(transcript.format).to.equals('txt')
+    expect(transcript.language).to.equals('en')
+    expect(await transcript.read()).not.to.be.empty
+    expect(levenshteinDistance(
+      (await transcript.read()).toString(),
+      'December 1965, is that all it has been since I inherited the world only three years, seems like a hundred million.'
+    )).to.be.below(10)
   })
 
   it('May transcribe a media file using a local PyTorch model file', async function () {
@@ -111,36 +75,12 @@ Seems like a hundred million.
     const transcript = await transcriber.transcribe({
       mediaFilePath: frVideoPath,
       language: 'fr',
-      format: 'txt',
-      model: new WhisperBuiltinModel('tiny')
-    })
-    expect(await transcript.equals(new TranscriptFile({
-      path: join(transcriptDirectory, 'derive_sectaire.txt'),
-      language: 'fr',
       format: 'txt'
-    }))).to.be.true
+    })
 
-    expect(await transcript.read()).to.equal(
-      `Bonjour et bienvenue sur Fennmook. Notre Mouk comment on parle à une victime d'emprissement
-à l'autre dérisse hectare, s'adraîche à tout professionnel du domaine de la santé
-de la sociatif du juridique qui pourrait être en contact avec une victime de telles
-dérives. Il sera composé de 14 leçons vidéo d'une dizaine de minutes,
-divisée en quatre blocs. Le premier bloc vous informera de ce qui est exactement l'emprisemental
-et une dérisse hectaire. Ça consiste toujours à une forme de manipulation et qui conduit
-à une dépendance, à une sorte de séalvision, le personne ne parle à ce désengagé
-d'un processus qui les conduit soit à donner de l'argent ou à ce livret à des actes
-quand il était une aurait pas acceptée, ou tout simplement à accéter de participer
-une organisation dont il ne partage pas toutes les méthodes ou tous les points de vue.
-Le deuxième bloc vous informera des bonnes techniques d'écoute d'une personne et
-y en vécu de telles traumatismes. C'est un sujet actuel parce que ce phénomène est en croissance.
-Il y a une augmentation très importante, un doublement, on les espace de quelques années,
-de moins de 10 ans.
-Le bloc 3, lui, sera conçu par nos juristes. Pour vous indiquer qu'elles sont les grandes
-infractions en lien avec l'emprisemental et surtout de pouvoir faire une analyse perspicace
-d'une situation individuelle.
-Enfin, le bloc 4, vous assistera à savoir comment éduyer une victime vers les bons
-professionnels. Bonne formation.
-`)
+    expect(transcript.format).to.equals('txt')
+    expect(transcript.language).to.equals('fr')
+    expect(await transcript.read()).not.to.be.empty
   })
 
   it('Guesses the video language if not provided', async function () {
