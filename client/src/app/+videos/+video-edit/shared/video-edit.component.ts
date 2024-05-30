@@ -119,7 +119,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() formErrors: FormReactiveErrors & { chapters?: { title: string }[] } = {}
   @Input() validationMessages: FormReactiveValidationMessages = {}
 
-  @Input() videoToUpdate: VideoDetails
+  @Input() publishedVideo: VideoDetails
 
   @Input() userVideoChannels: SelectChannelItem[] = []
   @Input() forbidScheduledPublication = true
@@ -418,7 +418,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
     return pluginField.commonOptions.hidden({
       formValues: this.form.value,
-      videoToUpdate: this.videoToUpdate,
+      videoToUpdate: this.publishedVideo,
       liveVideo: this.liveVideo
     })
   }

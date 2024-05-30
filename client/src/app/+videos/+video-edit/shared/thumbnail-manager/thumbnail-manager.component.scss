@@ -5,50 +5,27 @@
   height: auto;
   display: flex;
   flex-direction: column;
+}
 
-  .preview-container {
-    position: relative;
+.preview-container {
+  position: relative;
 
-    .preview {
-      object-fit: cover;
-      border-radius: 4px;
-      max-width: 100%;
+  .preview {
+    object-fit: cover;
+    border-radius: 4px;
 
-      &.no-image {
-        border: 2px solid #808080;
-        background-color: pvar(--mainBackgroundColor);
-      }
+    &.no-image {
+      border: 2px solid #808080;
+      background-color: pvar(--mainBackgroundColor);
     }
   }
+}
 
-  .inputs {
+.preview,
+my-embed {
+  max-width: 500px;
+  width: 500px;
 
-    margin-top: 10px;
-
-    my-reactive-file {
-      display: inline-block;
-      margin-right: 10px;
-    }
-
-    input {
-      display: inline-block;
-      margin-right: 10px;
-    }
-
-  }
-
-  .video-embed {
-
-    $video-default-height: 40vh;
-
-    --player-height: #{$video-default-height};
-    // Default player ratio, redefined by the player to automatically adapt player size
-    --player-ratio: #{math.div(16, 9)};
-
-    width: 100%;
-    height: var(--player-height);
-
-    // Can be recalculated by the player depending on video ratio
-    max-width: calc(var(--player-height) * var(--player-ratio));
-  }
+  max-height: 280px;
+  height: 280px;
 }

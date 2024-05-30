@@ -1,28 +1,28 @@
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { CommonModule } from '@angular/common'
-import { imageToDataURL } from '@root-helpers/images'
-import { BytesPipe } from '@app/shared/shared-main/angular/bytes.pipe'
-
 import {
   Component,
-  forwardRef,
   Input,
-  OnInit
+  OnInit,
+  ViewChild,
+  forwardRef
 } from '@angular/core'
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import {
   ServerService
 } from '@app/core'
-import { HTMLServerConfig } from '@peertube/peertube-models'
 import { ReactiveFileComponent } from '@app/shared/shared-forms/reactive-file.component'
-import { PeerTubePlayer } from 'src/standalone/embed-player-api/player'
-import { getAbsoluteAPIUrl } from '@app/helpers'
+import { BytesPipe } from '@app/shared/shared-main/angular/bytes.pipe'
+import { EmbedComponent, EmbedVideoInput } from '@app/shared/shared-main/video/embed.component'
+import { HTMLServerConfig } from '@peertube/peertube-models'
+import { imageToDataURL } from '@root-helpers/images'
+import { PeerTubePlayer } from '../../../../../standalone/embed-player-api/player'
 
 @Component({
   selector: 'my-thumbnail-manager',
   styleUrls: [ './thumbnail-manager.component.scss' ],
   templateUrl: './thumbnail-manager.component.html',
   standalone: true,
-  imports: [ CommonModule, ReactiveFileComponent ],
+  imports: [ CommonModule, ReactiveFileComponent, EmbedComponent ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -32,11 +32,9 @@ import { getAbsoluteAPIUrl } from '@app/helpers'
   ]
 })
 export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
+  @ViewChild('embed') embed: EmbedComponent
 
-  @Input() uuid: string
-
-  previewWidth = '360px'
-  previewHeight = '200px'
+  @Input() video: EmbedVideoInput
 
   imageSrc: string
   allowedExtensionsMessage = ''
@@ -46,7 +44,6 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
   bytesPipe: BytesPipe
   imageFile: Blob
 
-  // State Toggle (Upload, Select Frame)
   selectingFromVideo = false
 
   player: PeerTubePlayer
@@ -58,7 +55,10 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
     this.maxSizeText = $localize`max size`
   }
 
-  // Section - Upload
+  // ---------------------------------------------------------------------------
+  // Upload
+  // ---------------------------------------------------------------------------
+
   get videoImageExtensions () {
     return this.serverConfig.video.image.extensions
   }
@@ -108,44 +108,29 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
       imageToDataURL(this.imageFile).then(result => this.imageSrc = result)
     }
   }
-  // End Section - Upload
 
-  // Section - Select From Frame
+  // ---------------------------------------------------------------------------
+  // Select from frame
+  // ---------------------------------------------------------------------------
+
   selectFromVideo () {
-
     this.selectingFromVideo = true
 
-    const url = getAbsoluteAPIUrl()
-
-    const iframe = document.createElement('iframe')
-    iframe.src = `${url}/videos/embed/${this.uuid}?api=1&waitPasswordFromEmbedAPI=1&muted=1&title=0&peertubeLink=0`
-
-    iframe.sandbox.add('allow-same-origin', 'allow-scripts', 'allow-popups')
-
-    iframe.height = '100%'
-    iframe.width = '100%'
-
-    const mainElement = document.querySelector('#embedContainer')
-    mainElement.appendChild(iframe)
-
-    mainElement.classList.add('video-embed')
-
-    this.player = new PeerTubePlayer(iframe)
+    setTimeout(() => {
+      this.player = new PeerTubePlayer(this.embed.getIframe())
+    })
   }
 
   resetSelectFromVideo () {
-
-    if (this.player) this.player.destroy()
-
-    const mainElement = document.querySelector('#embedContainer')
-
-    mainElement.classList.remove('video-embed')
+    if (this.player) {
+      this.player.destroy()
+      this.player = undefined
+    }
 
     this.selectingFromVideo = false
   }
 
   async selectFrame () {
-
     const dataUrl: string = await this.player.getImageDataUrl()
 
     // Checking for an empty data URL
@@ -157,42 +142,28 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
 
     const blob: Blob = this.dataURItoBlob(dataUrl)
 
-    const file = new File([ blob ], 'PreviewFile.jpg', { type: 'image/jpeg' })
+    const file = new File([ blob ], 'preview-file-from-frame.jpg', { type: 'image/jpeg' })
 
     this.imageFile = file
 
     this.propagateChange(this.imageFile)
 
     this.resetSelectFromVideo()
-
   }
 
-  /*
-   * Credit: https://stackoverflow.com/a/7261048/1030669
-   */
+  // Credit: https://stackoverflow.com/a/7261048/1030669
   dataURItoBlob (dataURI: string) {
-    // convert base64 to raw binary data held in a string
-    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
     const byteString = atob(dataURI.split(',')[1])
-
-    // separate out the mime component
     const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
 
-    // write the bytes of the string to an ArrayBuffer
     const ab = new ArrayBuffer(byteString.length)
 
-    // create a view into the buffer
     const ia = new Uint8Array(ab)
 
-    // set the bytes of the buffer to the correct values
     for (let i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i)
     }
 
-    // write the ArrayBuffer to a blob, and you're done
-    const blob = new Blob([ ab ], { type: mimeString })
-    return blob
-
+    return new Blob([ ab ], { type: mimeString })
   }
-  // End Section - Upload
 }
