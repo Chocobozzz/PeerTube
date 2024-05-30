@@ -287,6 +287,13 @@ Set the video password so the user doesn't have to manually fill it.
 `waitPasswordFromEmbedAPI=1` is required in embed URL.
 
 
+### `getImageDataUrl(): Promise<string>`
+
+**PeerTube >= 6.2**
+
+Get the current frame as JPEG image data URL.
+
+
 ## Embed events
 
 You can subscribe to events by using `addEventListener()`. See above for details.
