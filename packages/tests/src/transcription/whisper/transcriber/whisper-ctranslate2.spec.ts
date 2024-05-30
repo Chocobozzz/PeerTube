@@ -104,7 +104,6 @@ describe('Whisper CTranslate2 transcriber', function () {
     this.timeout(5 * 1000 * 60)
     const transcribeArgs: WhisperTranscribeArgs = {
       mediaFilePath: frVideoPath,
-      model: await TranscriptionModel.fromPath(buildAbsoluteFixturePath('transcription/models/tiny.pt')),
       language: 'fr',
       format: 'txt'
     }

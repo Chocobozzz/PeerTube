@@ -4,6 +4,7 @@ import { lstat } from 'node:fs/promises'
 import { OpenaiTranscriber, WhisperTranscribeArgs } from './openai-transcriber.js'
 import { TranscriptFile } from '../../transcript/index.js'
 import { WhisperBuiltinModel } from '../whisper-builtin-model.js'
+import assert from 'node:assert'
 
 export class Ctranslate2Transcriber extends OpenaiTranscriber {
   async transcribe ({
@@ -20,7 +21,7 @@ export class Ctranslate2Transcriber extends OpenaiTranscriber {
     const $$ = $({ verbose: true })
 
     if (model.path) {
-      await lstat(model.path).then(stats => stats.isDirectory())
+      assert(await lstat(model.path).then(stats => stats.isDirectory()), 'Model path must be a path to a directory.')
     }
 
     const modelArgs = model.path ? [ '--model_directory', model.path ] : [ '--model', model.name ]
