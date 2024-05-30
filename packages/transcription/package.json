@@ -12,6 +12,7 @@
   "type": "module",
   "devDependencies": {},
   "scripts": {
+    "preinstall": "pip install -r requirements.txt",
     "build": "tsc",
     "watch": "tsc -w",
     "benchmark": "tsx --conditions=peertube:tsx --tsconfig ./tsconfig.json ./src/benchmark.ts"

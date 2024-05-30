@@ -12,6 +12,7 @@
   "type": "module",
   "devDependencies": {},
   "scripts": {
+    "preinstall": "pip install -r requirements.txt",
     "build": "tsc",
     "watch": "tsc -w"
   },
