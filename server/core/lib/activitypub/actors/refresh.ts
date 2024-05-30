@@ -57,8 +57,10 @@ async function doRefresh <T extends MActorFull | MActorAccountChannelId> (option
 
     return { refreshed: true, actor }
   } catch (err) {
-    if ((err as PeerTubeRequestError).statusCode === HttpStatusCode.NOT_FOUND_404) {
-      logger.info('Deleting actor %s because there is a 404 in refresh actor.', actor.url, lTags())
+    const statusCode = (err as PeerTubeRequestError).statusCode
+
+    if (statusCode === HttpStatusCode.NOT_FOUND_404 || statusCode === HttpStatusCode.GONE_410) {
+      logger.info('Deleting actor %s because there is a 404/410 in refresh actor.', actor.url, lTags())
 
       actor.Account
         ? await actor.Account.destroy()

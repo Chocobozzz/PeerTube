@@ -33,8 +33,10 @@ async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner)
 
     return videoPlaylist
   } catch (err) {
-    if ((err as PeerTubeRequestError).statusCode === HttpStatusCode.NOT_FOUND_404) {
-      logger.info('Cannot refresh not existing playlist %s. Deleting it.', videoPlaylist.url, lTags())
+    const statusCode = (err as PeerTubeRequestError).statusCode
+
+    if (statusCode === HttpStatusCode.NOT_FOUND_404 || statusCode === HttpStatusCode.GONE_410) {
+      logger.info('Cannot refresh not existing playlist (404/410 error code) %s. Deleting it.', videoPlaylist.url, lTags())
 
       await videoPlaylist.destroy()
       return undefined
