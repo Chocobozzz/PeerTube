@@ -1538,7 +1538,7 @@ paths:
               --data client_secret="$client_secret" \
               --data grant_type=password \
               --data username="$USERNAME" \
-              --data password="$PASSWORD" \
+              --data-urlencode password="$PASSWORD" \
               | jq -r ".access_token"
 
   /api/v1/users/revoke-token:
@@ -2941,6 +2941,7 @@ paths:
                   description: Date when the content was originally published
                   type: string
                   format: date-time
+                  nullable: true
                 scheduleUpdate:
                   $ref: '#/components/schemas/VideoScheduledUpdate'
                 videoPasswords:
@@ -8205,6 +8206,7 @@ components:
           description: last time the video's metadata was modified
         originallyPublishedAt:
           type: string
+          nullable: true
           format: date-time
           example: 2010-10-01T10:52:46.396Z
           description: used to represent a date of first publication, prior to the practical publication date of `publishedAt`
@@ -8224,8 +8226,9 @@ components:
           allOf:
             - $ref: '#/components/schemas/VideoPrivacyConstant'
           description: privacy policy used to distribute the video
-        description:
+        truncatedDescription:
           type: string
+          nullable: true
           example: |
             **[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n
             **Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**\r\n*A decentralized video hosting network, based on fr...
@@ -8233,7 +8236,6 @@ components:
           maxLength: 250
           description: |
             truncated description of the video, written in Markdown.
-            Resolve `descriptionPath` to get the full description of maximum `10000` characters.
         duration:
           type: integer
           example: 1419
@@ -8241,6 +8243,7 @@ components:
           description: duration of the video in seconds
         aspectRatio:
           type: number
+          nullable: true
           format: float
           example: 1.778
           description: "**PeerTube >= 6.1** Aspect ratio of the video stream"
@@ -8307,12 +8310,23 @@ components:
             viewers:
               type: integer
               description: If the video is a live, you have the amount of current viewers
-            descriptionPath:
+            description:
               type: string
-              example: /api/v1/videos/9c9de5e8-0a1e-484a-b099-e80766180a6d/description
-              description: path at which to get the full description of maximum `10000` characters
+              nullable: true
+              example: |
+               	"**[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n
+                **Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**\r\n*A decentralized video hosting network, 
+                based on free/libre software!*\r\n\r\n**Animation Produced by:** [LILA](https://libreart.info) - [ZeMarmot Team](https://film.zemarmot.net)\r\n
+                *Directed by* Aryeom\r\n*Assistant* Jehan\r\n**Licence**: [CC-By-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)\r\n\r\n
+                **Sponsored by** [Framasoft](https://framasoft.org)\r\n\r\n**Music**: [Red Step Forward](http://play.dogmazic.net/song.php?song_id=52491) - CC-By Ken Bushima\r\n\r\n
+                **Movie Clip**: [Caminades 3: Llamigos](http://www.caminandes.com/) CC-By Blender Institute\r\n\r\n**Video sources**: https://gitlab.gnome.org/Jehan/what-is-peertube/"
+              minLength: 3
+              maxLength: 1000
+              description: |
+                full description of the video, written in Markdown.
             support:
               type: string
+              nullable: true
               description: A text tell the audience how to support the video creator
               example: Please support our work on https://soutenir.framasoft.org/en/ <3
               minLength: 3
@@ -8814,6 +8828,10 @@ components:
           description: immutable name of the actor, used to find or mention it
           allOf:
             - $ref: '#/components/schemas/username'
+        avatars:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActorImage'
         host:
           type: string
           format: hostname
@@ -8841,6 +8859,7 @@ components:
         - properties:
             userId:
               description: object id for the user tied to this account
+              nullable: true
               allOf:
                 - $ref: '#/components/schemas/User/properties/id'
             displayName:
@@ -8850,6 +8869,7 @@ components:
               maxLength: 120
             description:
               type: string
+              nullable: true
               description: text or bio displayed on the account's profile
     UserViewingVideo:
       required:
@@ -10199,11 +10219,13 @@ components:
               maxLength: 120
             description:
               type: string
+              nullable: true
               example: Videos made with <3 by Framasoft
               minLength: 3
               maxLength: 1000
             support:
               type: string
+              nullable: true
               description: text shown by default on all videos of this channel, to tell the audience how to support it
               example: Please support our work on https://soutenir.framasoft.org/en/ <3
               minLength: 3
@@ -10220,14 +10242,7 @@ components:
               items:
                 $ref: '#/components/schemas/ActorImage'
             ownerAccount:
-              readOnly: true
-              nullable: true
-              type: object
-              properties:
-                id:
-                  type: integer
-                uuid:
-                  $ref: '#/components/schemas/UUIDv4'
+              $ref: '#/components/schemas/Account'
 
     VideoChannelEdit:
       properties:
