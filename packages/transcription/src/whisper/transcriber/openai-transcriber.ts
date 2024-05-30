@@ -29,6 +29,8 @@ export class OpenaiTranscriber extends AbstractTranscriber {
     this.startRun()
     await $$`${this.engine.binary} ${[
       mediaFilePath,
+      '--word_timestamps',
+      'True',
       '--model',
       model?.path || model.name,
       '--output_format',

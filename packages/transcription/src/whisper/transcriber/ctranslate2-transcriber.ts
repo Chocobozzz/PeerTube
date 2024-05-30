@@ -31,6 +31,8 @@ export class Ctranslate2Transcriber extends OpenaiTranscriber {
     await $$`${this.engine.binary} ${[
       mediaFilePath,
       ...modelArgs,
+      '--word_timestamps',
+      'True',
       '--output_format',
       'all',
       '--output_dir',
