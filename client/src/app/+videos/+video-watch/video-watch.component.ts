@@ -1,25 +1,34 @@
-import { forkJoin, map, Observable, of, Subscription, switchMap } from 'rxjs'
-import { PlatformLocation, NgClass, NgIf, NgTemplateOutlet } from '@angular/common'
+import { NgClass, NgIf, NgTemplateOutlet, PlatformLocation } from '@angular/common'
 import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import {
   AuthService,
   AuthUser,
   ConfirmService,
+  Hotkey,
+  HotkeysService,
+  MetaService,
   Notifier,
   PeerTubeSocket,
   PluginService,
   RestExtractor,
   ScreenService,
   ServerService,
-  Hotkey,
-  HotkeysService,
   User,
-  UserService,
-  MetaService
+  UserService
 } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { isXPercentInViewport, scrollToTop, toBoolean } from '@app/helpers'
+import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
+import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
+import { VideoFileTokenService } from '@app/shared/shared-main/video/video-file-token.service'
+import { Video } from '@app/shared/shared-main/video/video.model'
+import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription/subscribe-button.component'
+import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
+import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { timeToInt } from '@peertube/peertube-core-utils'
 import {
   HTMLServerConfig,
@@ -36,6 +45,7 @@ import {
 } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { isP2PEnabled, videoRequiresFileToken, videoRequiresUserAuth } from '@root-helpers/video'
+import { forkJoin, map, Observable, of, Subscription, switchMap } from 'rxjs'
 import {
   HLSOptions,
   PeerTubePlayer,
@@ -46,29 +56,19 @@ import {
 } from '../../../assets/player'
 import { cleanupVideoWatch, getStoredTheater, getStoredVideoWatchHistory } from '../../../assets/player/peertube-player-local-storage'
 import { environment } from '../../../environments/environment'
-import { VideoWatchPlaylistComponent } from './shared'
-import { PlayerStylesComponent } from './player-styles.component'
-import { PrivacyConcernsComponent } from './shared/information/privacy-concerns.component'
-import { RecommendedVideosComponent } from './shared/recommendations/recommended-videos.component'
-import { VideoCommentsComponent } from './shared/comment/video-comments.component'
-import { VideoAttributesComponent } from './shared/metadata/video-attributes.component'
-import { VideoDescriptionComponent } from './shared/metadata/video-description.component'
-import { VideoAvatarChannelComponent } from './shared/metadata/video-avatar-channel.component'
-import { ActionButtonsComponent } from './shared/action-buttons/action-buttons.component'
-import { VideoViewsCounterComponent } from '../../shared/shared-video/video-views-counter.component'
 import { DateToggleComponent } from '../../shared/shared-main/date/date-toggle.component'
-import { VideoAlertComponent } from './shared/information/video-alert.component'
 import { PluginPlaceholderComponent } from '../../shared/shared-main/plugins/plugin-placeholder.component'
-import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
-import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
-import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
-import { VideoFileTokenService } from '@app/shared/shared-main/video/video-file-token.service'
-import { VideoService } from '@app/shared/shared-main/video/video.service'
-import { Video } from '@app/shared/shared-main/video/video.model'
-import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
-import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription/subscribe-button.component'
-import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
+import { VideoViewsCounterComponent } from '../../shared/shared-video/video-views-counter.component'
+import { PlayerStylesComponent } from './player-styles.component'
+import { VideoWatchPlaylistComponent } from './shared'
+import { ActionButtonsComponent } from './shared/action-buttons/action-buttons.component'
+import { VideoCommentsComponent } from './shared/comment/video-comments.component'
+import { PrivacyConcernsComponent } from './shared/information/privacy-concerns.component'
+import { VideoAlertComponent } from './shared/information/video-alert.component'
+import { VideoAttributesComponent } from './shared/metadata/video-attributes.component'
+import { VideoAvatarChannelComponent } from './shared/metadata/video-avatar-channel.component'
+import { VideoDescriptionComponent } from './shared/metadata/video-description.component'
+import { RecommendedVideosComponent } from './shared/recommendations/recommended-videos.component'
 
 type URLOptions = {
   playerMode: PlayerMode

@@ -102,7 +102,7 @@
 
     <my-recommended-videos
       [displayAsRow]="displayOtherVideosAsRow()"
-      [inputRecommendation]="{ uuid: video.uuid, tags: video.tags }"
+      [currentVideo]="video"
       [playlist]="playlist"
       (gotRecommendations)="onRecommendations($event)"
     ></my-recommended-videos>

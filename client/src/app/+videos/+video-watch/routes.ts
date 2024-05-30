@@ -9,7 +9,7 @@ import { VideoCommentService } from '@app/shared/shared-video-comment/video-comm
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { OverviewService } from '../video-list'
-import { RecentVideosRecommendationService, RecommendedVideosStore } from './shared'
+import { VideoRecommendationService } from './shared'
 import { VideoWatchComponent } from './video-watch.component'
 import { BulkService } from '@app/shared/shared-moderation/bulk.service'
 
@@ -24,8 +24,7 @@ export default [
       VideoBlockService,
       LiveVideoService,
       VideoCommentService,
-      RecentVideosRecommendationService,
-      RecommendedVideosStore,
+      VideoRecommendationService,
       SearchService,
       AbuseService,
       UserAdminService,

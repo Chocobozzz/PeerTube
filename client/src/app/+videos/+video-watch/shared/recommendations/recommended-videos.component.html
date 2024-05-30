@@ -1,12 +1,14 @@
 <div class="other-videos" [ngClass]="{ 'display-as-row': displayAsRow }">
-  <ng-container *ngIf="hasVideos$ | async">
+  @if (videos.length !== 0) {
     <div class="title-page-container">
       <h2 i18n class="title-page">Other videos</h2>
 
-      <div *ngIf="!playlist" class="title-page-autoplay"
+      <div
+        *ngIf="!playlist" class="title-page-autoplay"
         [ngbTooltip]="autoPlayNextVideoTooltip" placement="bottom-right auto"
       >
         <span i18n>AUTOPLAY</span>
+
         <my-input-switch
           i18n-label label="Toggle autoplay next video"
           class="small" inputName="autoplay-next-video"
@@ -15,8 +17,9 @@
       </div>
     </div>
 
-    <ng-container *ngFor="let video of (videos$ | async); let i = index; let length = count">
+    <ng-container *ngFor="let video of videos; let i = index; let length = count">
       <span i18n *ngIf="!playlist && i === 0 && length !== 0 && autoPlayNextVideo" class="title-page-next-video-label">Next video to be played</span>
+
       <my-video-miniature
         [displayOptions]="displayOptions" [video]="video" [user]="user" [displayAsRow]="displayAsRow"
         (videoBlocked)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()" (videoAccountMuted)="onVideoRemoved()"
@@ -26,5 +29,5 @@
 
       <hr *ngIf="!playlist && i === 0 && length > 1 && autoPlayNextVideo" />
     </ng-container>
-  </ng-container>
+  }
 </div>
