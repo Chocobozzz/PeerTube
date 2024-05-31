@@ -198,14 +198,15 @@ type WebVideoPluginOptions = {
 }
 
 type P2PMediaLoaderPluginOptions = {
-  redundancyUrlManager: RedundancyUrlManager
+  redundancyUrlManager: RedundancyUrlManager | null
+  segmentValidator: SegmentValidator | null
+
   type: string
   src: string
 
   p2pEnabled: boolean
 
   loader: P2PMediaLoader
-  segmentValidator: SegmentValidator
 
   requiresUserAuth: boolean
   videoFileToken: () => string

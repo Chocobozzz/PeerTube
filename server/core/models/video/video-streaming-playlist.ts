@@ -84,7 +84,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
   @Column
   p2pMediaLoaderPeerVersion: number
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   segmentsSha256Filename: string
 
@@ -270,6 +270,8 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
 
   getSha256SegmentsUrl (video: MVideo) {
     if (video.isOwned()) {
+      if (!this.segmentsSha256Filename) return null
+
       if (this.storage === FileStorage.OBJECT_STORAGE) {
         return this.getSha256SegmentsObjectStorageUrl(video)
       }

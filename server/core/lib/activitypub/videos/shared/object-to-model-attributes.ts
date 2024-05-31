@@ -16,7 +16,6 @@ import { isAPVideoFileUrlMetadataObject } from '@server/helpers/custom-validator
 import { isArray } from '@server/helpers/custom-validators/misc.js'
 import { isVideoFileInfoHashValid } from '@server/helpers/custom-validators/videos.js'
 import { generateImageFilename } from '@server/helpers/image-utils.js'
-import { logger } from '@server/helpers/logger.js'
 import { getExtFromMimetype } from '@server/helpers/video.js'
 import { MIMETYPES, P2P_MEDIA_LOADER_PEER_VERSION, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '@server/initializers/constants.js'
 import { generateTorrentFileName } from '@server/lib/paths.js'
@@ -58,21 +57,6 @@ export function getFileAttributesFromUrl (
 
   const attributes: FilteredModelAttributes<VideoFileModel>[] = []
   for (const fileUrl of fileUrls) {
-    // Fetch associated magnet uri
-    const magnet = urls.filter(isAPMagnetUrlObject)
-                       .find(u => u.height === fileUrl.height)
-
-    if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.href)
-
-    const parsed = magnetUriDecode(magnet.href)
-    if (!parsed || isVideoFileInfoHashValid(parsed.infoHash) === false) {
-      throw new Error('Cannot parse magnet URI ' + magnet.href)
-    }
-
-    const torrentUrl = Array.isArray(parsed.xs)
-      ? parsed.xs[0]
-      : parsed.xs
-
     // Fetch associated metadata url, if any
     const metadata = urls.filter(isAPVideoFileUrlMetadataObject)
                          .find(u => {
@@ -84,14 +68,20 @@ export function getFileAttributesFromUrl (
     const extname = getExtFromMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT, fileUrl.mediaType)
     const resolution = fileUrl.height
     const videoId = isStreamingPlaylist(videoOrPlaylist) ? null : videoOrPlaylist.id
-    const videoStreamingPlaylistId = isStreamingPlaylist(videoOrPlaylist) ? videoOrPlaylist.id : null
+
+    const videoStreamingPlaylistId = isStreamingPlaylist(videoOrPlaylist)
+      ? videoOrPlaylist.id
+      : null
+
+    const { torrentFilename, infoHash, torrentUrl } = getTorrentRelatedInfo({ videoOrPlaylist, urls, fileUrl })
 
     const attribute = {
       extname,
-      infoHash: parsed.infoHash,
       resolution,
+
       size: fileUrl.size,
       fps: fileUrl.fps || -1,
+
       metadataUrl: metadata?.href,
 
       width: fileUrl.width,
@@ -101,9 +91,9 @@ export function getFileAttributesFromUrl (
       filename: basename(fileUrl.href),
       fileUrl: fileUrl.href,
 
+      infoHash,
+      torrentFilename,
       torrentUrl,
-      // Use our own torrent name since we proxify torrent requests
-      torrentFilename: generateTorrentFileName(videoOrPlaylist, resolution),
 
       // This is a video file owned by a video or by a streaming playlist
       videoId,
@@ -126,19 +116,17 @@ export function getStreamingPlaylistAttributesFromObject (video: MVideoId, video
 
     const files: unknown[] = playlistUrlObject.tag.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
 
-    if (!segmentsSha256UrlObject) {
-      logger.warn('No segment sha256 URL found in AP playlist object.', { playlistUrl: playlistUrlObject })
-      continue
-    }
-
     const attribute = {
       type: VideoStreamingPlaylistType.HLS,
 
       playlistFilename: basename(playlistUrlObject.href),
       playlistUrl: playlistUrlObject.href,
 
-      segmentsSha256Filename: basename(segmentsSha256UrlObject.href),
-      segmentsSha256Url: segmentsSha256UrlObject.href,
+      segmentsSha256Filename: segmentsSha256UrlObject
+        ? basename(segmentsSha256UrlObject.href)
+        : null,
+
+      segmentsSha256Url: segmentsSha256UrlObject?.href ?? null,
 
       p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrlObject.href, files),
       p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
@@ -269,4 +257,42 @@ function isAPMagnetUrlObject (url: any): url is ActivityMagnetUrlObject {
 
 function isAPHashTagObject (url: any): url is ActivityHashTagObject {
   return url && url.type === 'Hashtag'
+}
+
+function getTorrentRelatedInfo (options: {
+  videoOrPlaylist: MVideo | MStreamingPlaylistVideo
+  urls: (ActivityTagObject | ActivityUrlObject)[]
+  fileUrl: ActivityVideoUrlObject
+}) {
+  const { urls, fileUrl, videoOrPlaylist } = options
+
+  // Fetch associated magnet uri
+  const magnet = urls.filter(isAPMagnetUrlObject)
+    .find(u => u.height === fileUrl.height)
+
+  if (!magnet) {
+    return {
+      torrentUrl: null,
+      torrentFilename: null,
+      infoHash: null
+    }
+  }
+
+  const magnetParsed = magnetUriDecode(magnet.href)
+  if (magnetParsed && isVideoFileInfoHashValid(magnetParsed.infoHash) === false) {
+    throw new Error('Info hash is not valid in magnet URI ' + magnet.href)
+  }
+
+  const torrentUrl = Array.isArray(magnetParsed.xs)
+    ? magnetParsed.xs[0]
+    : magnetParsed.xs
+
+  return {
+    torrentUrl,
+
+    // Use our own torrent name since we proxify torrent requests
+    torrentFilename: generateTorrentFileName(videoOrPlaylist, fileUrl.height),
+
+    infoHash: magnetParsed.infoHash
+  }
 }

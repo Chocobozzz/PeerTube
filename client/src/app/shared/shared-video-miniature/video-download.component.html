@@ -129,7 +129,7 @@
 
         <div *ngIf="hasMetadata()" [ngbNavOutlet]="navMetadata"></div>
 
-        <div [hidden]="originalVideoFile" class="download-type">
+        <div [hidden]="originalVideoFile || !getVideoFile()?.torrentDownloadUrl" class="download-type">
           <div class="peertube-radio-container">
             <input type="radio" name="download" id="download-direct" [(ngModel)]="downloadType" value="direct">
             <label i18n for="download-direct">Direct download</label>

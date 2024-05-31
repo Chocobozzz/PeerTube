@@ -121,10 +121,16 @@ class P2pMediaLoaderPlugin extends Plugin {
 
       logger.error(`Segment ${segment.id} error.`, err)
 
-      this.options.redundancyUrlManager.removeBySegmentUrl(segment.requestUrl)
+      if (this.options.redundancyUrlManager) {
+        this.options.redundancyUrlManager.removeBySegmentUrl(segment.requestUrl)
+      }
     })
 
-    this.statsP2PBytes.peersWithWebSeed = 1 + this.options.redundancyUrlManager.countBaseUrls()
+    const redundancyUrlsCount = this.options.redundancyUrlManager
+      ? this.options.redundancyUrlManager.countBaseUrls()
+      : 0
+
+    this.statsP2PBytes.peersWithWebSeed = 1 + redundancyUrlsCount
 
     this.runStats()
 
