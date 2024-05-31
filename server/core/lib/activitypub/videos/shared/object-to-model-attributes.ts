@@ -30,7 +30,7 @@ import { basename, extname } from 'path'
 import { getDurationFromActivityStream } from '../../activity.js'
 
 export function getThumbnailFromIcons (videoObject: VideoObject) {
-  let validIcons = videoObject.icon.filter(i => i.width > THUMBNAILS_SIZE.minWidth)
+  let validIcons = videoObject.icon.filter(i => i.width > THUMBNAILS_SIZE.minRemoteWidth)
   // Fallback if there are not valid icons
   if (validIcons.length === 0) validIcons = videoObject.icon
 
@@ -38,7 +38,7 @@ export function getThumbnailFromIcons (videoObject: VideoObject) {
 }
 
 export function getPreviewFromIcons (videoObject: VideoObject) {
-  const validIcons = videoObject.icon.filter(i => i.width > PREVIEWS_SIZE.minWidth)
+  const validIcons = videoObject.icon.filter(i => i.width > PREVIEWS_SIZE.minRemoteWidth)
 
   return maxBy(validIcons, 'width')
 }

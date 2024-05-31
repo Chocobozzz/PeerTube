@@ -377,4 +377,8 @@ function checkThumbnailsConfig () {
   if (CONFIG.THUMBNAILS.GENERATION_FROM_VIDEO.FRAMES_TO_ANALYZE < 2) {
     throw new Error('thumbnails.generation_from_video.frames_to_analyze must be a number greater than 1')
   }
+
+  if (!isArray(CONFIG.THUMBNAILS.SIZES) || CONFIG.THUMBNAILS.SIZES.length !== 2) {
+    throw new Error('thumbnails.sizes must be an array of 2 sizes')
+  }
 }

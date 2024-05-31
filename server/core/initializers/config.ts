@@ -372,18 +372,7 @@ const CONFIG = {
     GENERATION_FROM_VIDEO: {
       FRAMES_TO_ANALYZE: config.get<number>('thumbnails.generation_from_video.frames_to_analyze')
     },
-    SIZE: {
-      WIDTH: config.get<number>('thumbnails.size.width'),
-      HEIGHT: config.get<number>('thumbnails.size.height'),
-      MIN_WIDTH: config.get<number>('thumbnails.size.min_width'),
-    }
-  },
-  PREVIEWS: {
-    SIZE: {
-      WIDTH: config.get<number>('previews.size.width'),
-      HEIGHT: config.get<number>('previews.size.height'),
-      MIN_WIDTH: config.get<number>('previews.size.min_width'),
-    }
+    SIZES: config.get<{ width: number, height: number }[]>('thumbnails.sizes')
   },
   STATS: {
     REGISTRATION_REQUESTS: {

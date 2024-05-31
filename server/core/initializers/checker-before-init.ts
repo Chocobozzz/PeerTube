@@ -40,7 +40,7 @@ function checkMissedConfig () {
     'video_studio.enabled', 'video_studio.remote_runners.enabled',
     'video_file.update.enabled',
     'remote_runners.stalled_jobs.vod', 'remote_runners.stalled_jobs.live',
-    'thumbnails.generation_from_video.frames_to_analyze',
+    'thumbnails.generation_from_video.frames_to_analyze', 'thumbnails.sizes',
     'import.videos.http.enabled', 'import.videos.torrent.enabled', 'import.videos.concurrency', 'import.videos.timeout',
     'import.video_channel_synchronization.enabled', 'import.video_channel_synchronization.max_per_user',
     'import.video_channel_synchronization.check_interval', 'import.video_channel_synchronization.videos_limit_per_synchronization',

@@ -468,6 +468,18 @@ thumbnails:
     # Minimum value is 2
     frames_to_analyze: 50
 
+  # Only two sizes are currently supported for now (not less, not more)
+  # 1 size for the thumbnail (displayed in video miniatures)
+  # 1 size for the preview (displayed in the video player)
+  sizes:
+    -
+      width: 280
+      height: 157
+
+    -
+      width: 850
+      height: 480
+
 stats:
   # Display registration requests stats (average response time, total requests...)
   registration_requests:
