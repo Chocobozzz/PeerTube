@@ -224,7 +224,7 @@ export class VideosExporter extends AbstractUserExporter <VideoExportJSON> {
     return streamingPlaylists.map(p => ({
       type: p.type,
       playlistUrl: p.getMasterPlaylistUrl(video),
-      segmentsSha256Url: p.getMasterPlaylistUrl(video),
+      segmentsSha256Url: p.getSha256SegmentsUrl(video),
       files: this.exportFilesJSON(video, p.VideoFiles)
     }))
   }
