@@ -229,13 +229,13 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return Object.assign(playlist, { Video: video })
   }
 
-  static doesOwnedHLSPlaylistExist (videoUUID: string) {
+  static doesOwnedVideoUUIDExist (videoUUID: string, storage: FileStorageType) {
     const query = `SELECT 1 FROM "videoStreamingPlaylist" ` +
       `INNER JOIN "video" ON "video"."id" = "videoStreamingPlaylist"."videoId" ` +
       `AND "video"."remote" IS FALSE AND "video"."uuid" = $videoUUID ` +
-      `AND "storage" = ${FileStorage.FILE_SYSTEM} LIMIT 1`
+      `AND "storage" = $storage LIMIT 1`
 
-    return doesExist({ sequelize: this.sequelize, query, bind: { videoUUID } })
+    return doesExist({ sequelize: this.sequelize, query, bind: { videoUUID, storage } })
   }
 
   assignP2PMediaLoaderInfoHashes (video: MVideo, files: unknown[]) {

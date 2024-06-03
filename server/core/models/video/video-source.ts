@@ -1,12 +1,12 @@
-import type { FileStorageType, VideoSource } from '@peertube/peertube-models'
+import { type FileStorageType, type VideoSource } from '@peertube/peertube-models'
 import { STATIC_DOWNLOAD_PATHS, WEBSERVER } from '@server/initializers/constants.js'
+import { MVideoSource } from '@server/types/models/video/video-source.js'
 import { join } from 'path'
 import { Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
-import { SequelizeModel, getSort } from '../shared/index.js'
+import { SequelizeModel, doesExist, getSort } from '../shared/index.js'
 import { getResolutionLabel } from './formatter/video-api-format.js'
 import { VideoModel } from './video.js'
-import { MVideoSource } from '@server/types/models/video/video-source.js'
 
 @Table({
   tableName: 'videoSource',
@@ -102,6 +102,18 @@ export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
       transaction
     })
   }
+
+  // ---------------------------------------------------------------------------
+
+  static async doesOwnedFileExist (filename: string, storage: FileStorageType) {
+    const query = 'SELECT 1 FROM "videoSource" ' +
+      'INNER JOIN "video" ON "video"."id" = "videoSource"."videoId" AND "video"."remote" IS FALSE ' +
+      `WHERE "keptOriginalFilename" = $filename AND "storage" = $storage LIMIT 1`
+
+    return doesExist({ sequelize: this.sequelize, query, bind: { filename, storage } })
+  }
+
+  // ---------------------------------------------------------------------------
 
   getFileDownloadUrl () {
     if (!this.keptOriginalFilename) return null

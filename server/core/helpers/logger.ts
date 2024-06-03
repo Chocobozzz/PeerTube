@@ -1,11 +1,11 @@
+import { context } from '@opentelemetry/api'
+import { getSpanContext } from '@opentelemetry/api/build/src/trace/context-utils.js'
+import { omit } from '@peertube/peertube-core-utils'
 import { stat } from 'fs/promises'
 import { join } from 'path'
 import { format as sqlFormat } from 'sql-formatter'
 import { createLogger, format, transports } from 'winston'
 import { FileTransportOptions } from 'winston/lib/winston/transports'
-import { context } from '@opentelemetry/api'
-import { getSpanContext } from '@opentelemetry/api/build/src/trace/context-utils.js'
-import { omit } from '@peertube/peertube-core-utils'
 import { CONFIG } from '../initializers/config.js'
 import { LOG_FILENAME } from '../initializers/constants.js'
 
@@ -60,7 +60,7 @@ if (CONFIG.LOG.ROTATION.ENABLED) {
 
 function buildLogger (labelSuffix?: string) {
   return createLogger({
-    level: CONFIG.LOG.LEVEL,
+    level: process.env.LOGGER_LEVEL ?? CONFIG.LOG.LEVEL,
     defaultMeta: {
       get traceId () { return getSpanContext(context.active())?.traceId },
       get spanId () { return getSpanContext(context.active())?.spanId },
@@ -154,18 +154,10 @@ async function mtimeSortFilesDesc (files: string[], basePath: string) {
 // ---------------------------------------------------------------------------
 
 export {
-  type LoggerTagsFn,
-  type LoggerTags,
 
-  buildLogger,
-  timestampFormatter,
-  labelFormatter,
-  consoleLoggerFormat,
-  jsonLoggerFormat,
-  mtimeSortFilesDesc,
-  logger,
-  loggerTagsFactory,
-  bunyanLogger
+  buildLogger, bunyanLogger, consoleLoggerFormat,
+  jsonLoggerFormat, labelFormatter, logger,
+  loggerTagsFactory, mtimeSortFilesDesc, timestampFormatter, type LoggerTags, type LoggerTagsFn
 }
 
 // ---------------------------------------------------------------------------

@@ -1,23 +1,25 @@
-import { FindOptions, Op } from 'sequelize'
-import { AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
-import { MUserAccountId, MUserExport } from '@server/types/models/index.js'
-import { UserModel } from './user.js'
-import { getSort } from '../shared/sort.js'
-import { UserExportState, type UserExport, type UserExportStateType, type FileStorageType, FileStorage } from '@peertube/peertube-models'
+import { FileStorage, UserExportState, type FileStorageType, type UserExport, type UserExportStateType } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
-import { remove } from 'fs-extra/esm'
-import { getFSUserExportFilePath } from '@server/lib/paths.js'
+import { CONFIG } from '@server/initializers/config.js'
 import {
   JWT_TOKEN_USER_EXPORT_FILE_LIFETIME,
   STATIC_DOWNLOAD_PATHS,
+  USER_EXPORT_FILE_PREFIX,
   USER_EXPORT_STATES,
   WEBSERVER
 } from '@server/initializers/constants.js'
-import { join } from 'path'
-import jwt from 'jsonwebtoken'
-import { CONFIG } from '@server/initializers/config.js'
 import { removeUserExportObjectStorage } from '@server/lib/object-storage/user-export.js'
+import { getFSUserExportFilePath } from '@server/lib/paths.js'
+import { MUserAccountId, MUserExport } from '@server/types/models/index.js'
+import { remove } from 'fs-extra/esm'
+import jwt from 'jsonwebtoken'
+import { join } from 'path'
+import { FindOptions, Op } from 'sequelize'
+import { AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
+import { doesExist } from '../shared/query.js'
 import { SequelizeModel } from '../shared/sequelize-type.js'
+import { getSort } from '../shared/sort.js'
+import { UserModel } from './user.js'
 
 @Table({
   tableName: 'userExport',
@@ -147,11 +149,20 @@ export class UserExportModel extends SequelizeModel<UserExportModel> {
 
   // ---------------------------------------------------------------------------
 
+  static async doesOwnedFileExist (filename: string, storage: FileStorageType) {
+    const query = 'SELECT 1 FROM "userExport" ' +
+      `WHERE "filename" = $filename AND "storage" = $storage LIMIT 1`
+
+    return doesExist({ sequelize: this.sequelize, query, bind: { filename, storage } })
+  }
+
+  // ---------------------------------------------------------------------------
+
   generateAndSetFilename () {
     if (!this.userId) throw new Error('Cannot generate filename without userId')
     if (!this.createdAt) throw new Error('Cannot generate filename without createdAt')
 
-    this.filename = `user-export-${this.userId}-${this.createdAt.toISOString()}.zip`
+    this.filename = `${USER_EXPORT_FILE_PREFIX}${this.userId}-${this.createdAt.toISOString()}.zip`
   }
 
   canBeSafelyRemoved () {

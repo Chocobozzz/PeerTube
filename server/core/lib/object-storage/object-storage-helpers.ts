@@ -7,9 +7,9 @@ import { createReadStream, createWriteStream } from 'fs'
 import { ensureDir } from 'fs-extra/esm'
 import { dirname } from 'path'
 import { Readable } from 'stream'
-import { getInternalUrl } from '../urls.js'
-import { getClient } from './client.js'
-import { lTags } from './logger.js'
+import { getInternalUrl } from './urls.js'
+import { getClient } from './shared/client.js'
+import { lTags } from './shared/logger.js'
 
 import type { _Object, ObjectCannedACL, PutObjectCommandInput, S3Client } from '@aws-sdk/client-s3'
 
@@ -18,7 +18,7 @@ type BucketInfo = {
   PREFIX?: string
 }
 
-async function listKeysOfPrefix (prefix: string, bucketInfo: BucketInfo) {
+async function listKeysOfPrefix (prefix: string, bucketInfo: BucketInfo, continuationToken?: string) {
   const s3Client = await getClient()
 
   const { ListObjectsV2Command } = await import('@aws-sdk/client-s3')
@@ -26,14 +26,21 @@ async function listKeysOfPrefix (prefix: string, bucketInfo: BucketInfo) {
   const commandPrefix = bucketInfo.PREFIX + prefix
   const listCommand = new ListObjectsV2Command({
     Bucket: bucketInfo.BUCKET_NAME,
-    Prefix: commandPrefix
+    Prefix: commandPrefix,
+    ContinuationToken: continuationToken
   })
 
   const listedObjects = await s3Client.send(listCommand)
 
   if (isArray(listedObjects.Contents) !== true) return []
 
-  return listedObjects.Contents.map(c => c.Key)
+  let keys = listedObjects.Contents.map(c => c.Key)
+
+  if (listedObjects.IsTruncated) {
+    keys = keys.concat(await listKeysOfPrefix(prefix, bucketInfo, listedObjects.NextContinuationToken))
+  }
+
+  return keys
 }
 
 // ---------------------------------------------------------------------------
@@ -145,7 +152,7 @@ function removeObject (objectStorageKey: string, bucketInfo: BucketInfo) {
   return removeObjectByFullKey(key, bucketInfo)
 }
 
-async function removeObjectByFullKey (fullKey: string, bucketInfo: BucketInfo) {
+async function removeObjectByFullKey (fullKey: string, bucketInfo: Pick<BucketInfo, 'BUCKET_NAME'>) {
   logger.debug('Removing file %s in bucket %s', fullKey, bucketInfo.BUCKET_NAME, lTags())
 
   const { DeleteObjectCommand } = await import('@aws-sdk/client-s3')

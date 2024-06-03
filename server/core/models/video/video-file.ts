@@ -289,11 +289,11 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
     return doesExist({ sequelize: this.sequelize, query, bind: { filename } })
   }
 
-  static async doesOwnedWebVideoFileExist (filename: string) {
+  static async doesOwnedFileExist (filename: string, storage: FileStorageType) {
     const query = 'SELECT 1 FROM "videoFile" INNER JOIN "video" ON "video"."id" = "videoFile"."videoId" AND "video"."remote" IS FALSE ' +
-                  `WHERE "filename" = $filename AND "storage" = ${FileStorage.FILE_SYSTEM} LIMIT 1`
+      `WHERE "filename" = $filename AND "storage" = $storage LIMIT 1`
 
-    return doesExist({ sequelize: this.sequelize, query, bind: { filename } })
+    return doesExist({ sequelize: this.sequelize, query, bind: { filename, storage } })
   }
 
   static loadByFilename (filename: string) {

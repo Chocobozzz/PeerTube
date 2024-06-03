@@ -845,6 +845,7 @@ const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
 // ---------------------------------------------------------------------------
 
 const USER_EXPORT_MAX_ITEMS = 1000
+const USER_EXPORT_FILE_PREFIX = 'user-export-'
 
 // ---------------------------------------------------------------------------
 
@@ -1268,6 +1269,7 @@ export {
   CONSTRAINTS_FIELDS,
   EMBED_SIZE,
   REDUNDANCY,
+  USER_EXPORT_FILE_PREFIX,
   JOB_CONCURRENCY,
   JOB_ATTEMPTS,
   AP_CLEANER,
