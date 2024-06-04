@@ -159,6 +159,20 @@ export async function makeWebVideoFileAvailable (filename: string, destination: 
   return destination
 }
 
+export async function makeOriginalFileAvailable (keptOriginalFilename: string, destination: string) {
+  const key = generateOriginalVideoObjectStorageKey(keptOriginalFilename)
+
+  logger.info('Fetching Original Video file %s from object storage to %s.', key, destination, lTags())
+
+  await makeAvailable({
+    key,
+    destination,
+    bucketInfo: CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES
+  })
+
+  return destination
+}
+
 // ---------------------------------------------------------------------------
 
 export function getWebVideoFileReadStream (options: {

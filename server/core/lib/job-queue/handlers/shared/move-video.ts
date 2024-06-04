@@ -1,8 +1,10 @@
 import { LoggerTags, logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
+import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoWithAllFiles } from '@server/types/models/index.js'
+import { MVideoSource } from '@server/types/models/video/video-source.js'
 
 export async function moveToJob (options: {
   jobId: string
@@ -11,10 +13,20 @@ export async function moveToJob (options: {
 
   moveWebVideoFiles: (video: MVideoWithAllFiles) => Promise<void>
   moveHLSFiles: (video: MVideoWithAllFiles) => Promise<void>
+  moveVideoSourceFile: (source: MVideoSource) => Promise<void>
   moveToFailedState: (video: MVideoWithAllFiles) => Promise<void>
   doAfterLastMove: (video: MVideoWithAllFiles) => Promise<void>
 }) {
-  const { jobId, loggerTags, videoUUID, moveHLSFiles, moveWebVideoFiles, moveToFailedState, doAfterLastMove } = options
+  const {
+    jobId,
+    loggerTags,
+    videoUUID,
+    moveVideoSourceFile,
+    moveHLSFiles,
+    moveWebVideoFiles,
+    moveToFailedState,
+    doAfterLastMove
+  } = options
 
   const lTagsBase = loggerTagsFactory(...loggerTags)
 
@@ -31,6 +43,13 @@ export async function moveToJob (options: {
   const lTags = lTagsBase(video.uuid, video.url)
 
   try {
+    const source = await VideoSourceModel.loadLatest(video.id)
+    if (source) {
+      logger.debug(`Moving video source ${source.keptOriginalFilename} file of video ${video.uuid}`, lTags)
+
+      await moveVideoSourceFile(source)
+    }
+
     if (video.VideoFiles) {
       logger.debug('Moving %d web video files for video %s.', video.VideoFiles.length, video.uuid, lTags)
 

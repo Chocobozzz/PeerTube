@@ -1,15 +1,16 @@
-import { Job } from 'bullmq'
-import { remove } from 'fs-extra/esm'
-import { join } from 'path'
-import { MoveStoragePayload, VideoStateType, FileStorage } from '@peertube/peertube-models'
+import { FileStorage, MoveStoragePayload, VideoStateType } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { updateTorrentMetadata } from '@server/helpers/webtorrent.js'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants.js'
-import { storeHLSFileFromFilename, storeWebVideoFile } from '@server/lib/object-storage/index.js'
+import { storeHLSFileFromFilename, storeOriginalVideoFile, storeWebVideoFile } from '@server/lib/object-storage/index.js'
 import { getHLSDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { moveToFailedMoveToObjectStorageState, moveToNextState } from '@server/lib/video-state.js'
 import { MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoWithAllFiles } from '@server/types/models/index.js'
+import { MVideoSource } from '@server/types/models/video/video-source.js'
+import { Job } from 'bullmq'
+import { remove } from 'fs-extra/esm'
+import { join } from 'path'
 import { moveToJob, onMoveToStorageFailure } from './shared/move-video.js'
 
 const lTagsBase = loggerTagsFactory('move-object-storage')
@@ -25,6 +26,7 @@ export async function processMoveToObjectStorage (job: Job) {
 
     moveWebVideoFiles,
     moveHLSFiles,
+    moveVideoSourceFile,
     doAfterLastMove: video => doAfterLastMove({ video, previousVideoState: payload.previousVideoState, isNewVideo: payload.isNewVideo }),
     moveToFailedState: moveToFailedMoveToObjectStorageState
   })
@@ -43,6 +45,21 @@ export async function onMoveToObjectStorageFailure (job: Job, err: any) {
 
 // ---------------------------------------------------------------------------
 
+async function moveVideoSourceFile (source: MVideoSource) {
+  if (source.storage !== FileStorage.FILE_SYSTEM) return
+
+  const sourcePath = VideoPathManager.Instance.getFSOriginalVideoFilePath(source.keptOriginalFilename)
+  const fileUrl = await storeOriginalVideoFile(sourcePath, source.keptOriginalFilename)
+
+  source.storage = FileStorage.OBJECT_STORAGE
+  source.fileUrl = fileUrl
+  await source.save()
+
+  logger.debug('Removing original video file ' + sourcePath + ' because it\'s now on object storage', lTagsBase())
+
+  await remove(sourcePath)
+}
+
 async function moveWebVideoFiles (video: MVideoWithAllFiles) {
   for (const file of video.VideoFiles) {
     if (file.storage !== FileStorage.FILE_SYSTEM) continue
@@ -50,7 +67,7 @@ async function moveWebVideoFiles (video: MVideoWithAllFiles) {
     const fileUrl = await storeWebVideoFile(video, file)
 
     const oldPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, file)
-    await onFileMoved({ videoOrPlaylist: video, file, fileUrl, oldPath })
+    await onVideoFileMoved({ videoOrPlaylist: video, file, fileUrl, oldPath })
   }
 }
 
@@ -70,12 +87,12 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
 
       const oldPath = join(getHLSDirectory(video), file.filename)
 
-      await onFileMoved({ videoOrPlaylist: Object.assign(playlist, { Video: video }), file, fileUrl, oldPath })
+      await onVideoFileMoved({ videoOrPlaylist: Object.assign(playlist, { Video: video }), file, fileUrl, oldPath })
     }
   }
 }
 
-async function onFileMoved (options: {
+async function onVideoFileMoved (options: {
   videoOrPlaylist: MVideo | MStreamingPlaylistVideo
   file: MVideoFile
   fileUrl: string

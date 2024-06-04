@@ -166,9 +166,10 @@ export function makePutBodyRequest (options: {
 
 // ---------------------------------------------------------------------------
 
-export async function getRedirectionUrl (url: string) {
+export async function getRedirectionUrl (url: string, token?: string) {
   const res = await makeRawRequest({
     url,
+    token,
     redirects: 0,
     expectedStatus: HttpStatusCode.FOUND_302
   })

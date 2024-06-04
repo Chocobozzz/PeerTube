@@ -1,23 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { join } from 'path'
-import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
+import { getAllFiles } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoDetails } from '@peertube/peertube-models'
+import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
+  ObjectStorageCommand,
+  PeerTubeServer,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  getRedirectionUrl,
   makeRawRequest,
-  ObjectStorageCommand,
-  PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { expectStartWith } from '../shared/checks.js'
 import { checkDirectoryIsEmpty } from '@tests/shared/directories.js'
-import { getAllFiles } from '@peertube/peertube-core-utils'
+import { join } from 'path'
+import { expectStartWith } from '../shared/checks.js'
 
 async function checkFiles (origin: PeerTubeServer, video: VideoDetails, objectStorage?: ObjectStorageCommand) {
+
+  // Web videos
   for (const file of video.files) {
     const start = objectStorage
       ? objectStorage.getMockWebVideosBaseUrl()
@@ -28,18 +31,36 @@ async function checkFiles (origin: PeerTubeServer, video: VideoDetails, objectSt
     await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 
-  const start = objectStorage
-    ? objectStorage.getMockPlaylistBaseUrl()
-    : origin.url
+  // Playlists
+  {
+    const start = objectStorage
+      ? objectStorage.getMockPlaylistBaseUrl()
+      : origin.url
 
-  const hls = video.streamingPlaylists[0]
-  expectStartWith(hls.playlistUrl, start)
-  expectStartWith(hls.segmentsSha256Url, start)
+    const hls = video.streamingPlaylists[0]
+    expectStartWith(hls.playlistUrl, start)
+    expectStartWith(hls.segmentsSha256Url, start)
 
-  for (const file of hls.files) {
-    expectStartWith(file.fileUrl, start)
+    for (const file of hls.files) {
+      expectStartWith(file.fileUrl, start)
 
-    await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+    }
+  }
+
+  // Original file
+  {
+    const source = await origin.videos.getSource({ id: video.uuid })
+
+    if (objectStorage) {
+      await makeRawRequest({ url: source.fileDownloadUrl, token: origin.accessToken, expectedStatus: HttpStatusCode.FOUND_302 })
+
+      const redirected = await getRedirectionUrl(source.fileDownloadUrl, origin.accessToken)
+      expectStartWith(redirected, objectStorage.getMockOriginalFileBaseUrl())
+    } else {
+      await makeRawRequest({ url: source.fileDownloadUrl, token: origin.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+      expectStartWith(source.fileDownloadUrl, origin.url)
+    }
   }
 }
 
@@ -61,10 +82,10 @@ describe('Test create move video storage job', function () {
 
     await objectStorage.prepareDefaultMockBuckets()
 
-    await servers[0].config.enableTranscoding()
+    await servers[0].config.enableMinimumTranscoding({ keepOriginal: true })
 
     for (let i = 0; i < 3; i++) {
-      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video' + i } })
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' + i })
       uuids.push(uuid)
     }
 
