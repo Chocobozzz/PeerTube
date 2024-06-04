@@ -4455,9 +4455,9 @@
           <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5941489410560989457" datatype="html">
+      <trans-unit id="5941489410560989457" datatype="html" xml:space="preserve">
         <source>Moderation response is required.</source>
-        <target state="translated">Potreban je odgovor moderacije.</target>
+        <target state="translated">Odgovor moderacije se mora navesti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -17165,9 +17165,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1312213389883835455" datatype="html">
+      <trans-unit id="1312213389883835455" datatype="html" xml:space="preserve">
         <source>Words are required.</source>
-        <target state="new">Words are required.</target>
+        <target state="translated">Riječi se moraju navesti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">47</context>
