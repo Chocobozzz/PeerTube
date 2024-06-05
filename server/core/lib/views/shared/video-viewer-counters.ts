@@ -31,7 +31,7 @@ export class VideoViewerCounters {
   private processingViewerCounters = false
 
   constructor () {
-    setInterval(() => this.cleanViewerCounters(), VIEW_LIFETIME.VIEWER_COUNTER)
+    setInterval(() => this.updateVideoViewersCount(), VIEW_LIFETIME.VIEWER_COUNTER)
   }
 
   // ---------------------------------------------------------------------------
@@ -163,11 +163,13 @@ export class VideoViewerCounters {
     return viewer
   }
 
-  private async cleanViewerCounters () {
+  private async updateVideoViewersCount () {
     if (this.processingViewerCounters) return
     this.processingViewerCounters = true
 
-    if (!isTestOrDevInstance()) logger.info('Cleaning video viewers.', lTags())
+    if (!isTestOrDevInstance()) {
+      logger.debug('Updating video viewer counters.', lTags())
+    }
 
     try {
       for (const videoId of this.viewersPerVideo.keys()) {

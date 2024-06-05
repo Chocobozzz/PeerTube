@@ -27,10 +27,6 @@ export function wordsToRegExp (words: string[]) {
   return new RegExp(`(?:\\P{L}|^)(?:${innerRegex})(?=\\P{L}|$)`, 'iu')
 }
 
-// ---------------------------------------------------------------------------
-// Private
-// ---------------------------------------------------------------------------
-
-function escapeForRegex (value: string) {
+export function escapeForRegex (value: string) {
   return value.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')
 }

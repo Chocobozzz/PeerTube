@@ -47,6 +47,7 @@
     "plugin:install": "node ./dist/scripts/plugin/install.js",
     "plugin:uninstall": "node ./dist/scripts/plugin/uninstall.js",
     "reset-password": "node ./dist/scripts/reset-password.js",
+    "update-object-storage-url": "LOGGER_LEVEL=warn node ./dist/scripts/update-object-storage-url.js",
     "update-host": "node ./dist/scripts/update-host.js",
     "regenerate-thumbnails": "node ./dist/scripts/regenerate-thumbnails.js",
     "create-import-video-file-job": "node ./dist/scripts/create-import-video-file-job.js",

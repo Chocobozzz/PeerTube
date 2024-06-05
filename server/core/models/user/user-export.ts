@@ -219,6 +219,7 @@ export class UserExportModel extends SequelizeModel<UserExportModel> {
 
       size: this.size,
 
+      fileUrl: this.fileUrl,
       privateDownloadUrl: this.getFileDownloadUrl(),
       createdAt: this.createdAt.toISOString(),
       expiresOn: new Date(this.createdAt.getTime() + CONFIG.EXPORT.USERS.EXPORT_EXPIRATION).toISOString()

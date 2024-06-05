@@ -125,6 +125,8 @@ export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
     return {
       filename: this.inputFilename,
       inputFilename: this.inputFilename,
+
+      fileUrl: this.fileUrl,
       fileDownloadUrl: this.getFileDownloadUrl(),
 
       resolution: {

@@ -472,6 +472,24 @@ docker compose exec -u peertube peertube npm run create-move-video-storage-job -
 
 :::
 
+### Update object storage URLs
+
+**PeerTube >= 6.2**
+
+Use this script after you migrated to another object storage provider so PeerTube updates its internal object URLs.
+
+::: code-group
+
+```bash [Classic installation]
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run update-object-storage-url -- --from 'https://region.old-s3-provider.example.com' --to 'https://region.new-s3-provider.example.com'
+```
+
+```bash [Docker]
+cd /var/www/peertube-docker
+docker compose exec -u peertube peertube npm run update-object-storage-url -- --from 'https://region.old-s3-provider.example.com' --to 'https://region.new-s3-provider.example.com'
+```
+
 ### Generate storyboard
 
 **PeerTube >= 6.0**
