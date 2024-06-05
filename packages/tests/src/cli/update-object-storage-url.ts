@@ -8,7 +8,6 @@ import {
   PeerTubeServer,
   cleanupTests,
   createSingleServer,
-  getRedirectionUrl,
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
