@@ -15,7 +15,7 @@ import {
 import { parseTorrentVideo } from '@tests/shared/webtorrent.js'
 import { VideoPlaylistPrivacy } from '@peertube/peertube-models'
 
-describe('Test update host scripts', function () {
+describe('Test update host CLI', function () {
   let server: PeerTubeServer
 
   before(async function () {

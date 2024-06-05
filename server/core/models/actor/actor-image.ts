@@ -3,6 +3,7 @@ import { getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { MActorId, MActorImage, MActorImageFormattable } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
+import { Op } from 'sequelize'
 import {
   AfterDestroy,
   AllowNull,
@@ -76,10 +77,10 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
     },
     onDelete: 'CASCADE'
   })
-  Actor: Awaited<ActorModel> // Remove awaited: https://github.com/sequelize/sequelize-typescript/issues/825
+  Actor: Awaited<ActorModel> // TODO: Remove awaited: https://github.com/sequelize/sequelize-typescript/issues/825
 
   @AfterDestroy
-  static removeFilesAndSendDelete (instance: ActorImageModel) {
+  static removeFile (instance: ActorImageModel) {
     logger.info('Removing actor image file %s.', instance.filename)
 
     // Don't block the transaction
@@ -128,11 +129,33 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
     return { avatars, banners }
   }
 
+  static listRemoteOnDisk () {
+    return this.findAll<MActorImage>({
+      where: {
+        onDisk: true
+      },
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          where: {
+            serverId: {
+              [Op.ne]: null
+            }
+          }
+        }
+      ]
+    })
+  }
+
   static getImageUrl (image: MActorImage) {
     if (!image) return undefined
 
     return WEBSERVER.URL + image.getStaticPath()
   }
+
+  // ---------------------------------------------------------------------------
 
   toFormattedJSON (this: MActorImageFormattable): ActorImage {
     return {

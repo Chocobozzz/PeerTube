@@ -1,6 +1,7 @@
+import { arrayify } from '@peertube/peertube-core-utils'
 import { PeerTubeServer } from '../server/server.js'
 
-function setDefaultVideoChannel (servers: PeerTubeServer[]) {
+export function setDefaultVideoChannel (servers: PeerTubeServer[]) {
   const tasks: Promise<any>[] = []
 
   for (const server of servers) {
@@ -13,17 +14,10 @@ function setDefaultVideoChannel (servers: PeerTubeServer[]) {
   return Promise.all(tasks)
 }
 
-async function setDefaultChannelAvatar (serversArg: PeerTubeServer | PeerTubeServer[], channelName: string = 'root_channel') {
-  const servers = Array.isArray(serversArg)
-    ? serversArg
-    : [ serversArg ]
+export async function setDefaultChannelAvatar (serversArg: PeerTubeServer | PeerTubeServer[], channelName: string = 'root_channel') {
+  const servers = arrayify(serversArg)
 
   for (const server of servers) {
     await server.channels.updateImage({ channelName, fixture: 'avatar.png', type: 'avatar' })
   }
-}
-
-export {
-  setDefaultVideoChannel,
-  setDefaultChannelAvatar
 }

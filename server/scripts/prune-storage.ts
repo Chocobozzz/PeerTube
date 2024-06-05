@@ -10,7 +10,6 @@ import Bluebird from 'bluebird'
 import { remove } from 'fs-extra/esm'
 import { readdir, stat } from 'fs/promises'
 import { basename, dirname, join } from 'path'
-import prompt from 'prompt'
 import { getUUIDFromFilename } from '../core/helpers/utils.js'
 import { CONFIG } from '../core/initializers/config.js'
 import { initDatabaseModels } from '../core/initializers/database.js'
@@ -18,6 +17,7 @@ import { ActorImageModel } from '../core/models/actor/actor-image.js'
 import { VideoRedundancyModel } from '../core/models/redundancy/video-redundancy.js'
 import { ThumbnailModel } from '../core/models/video/thumbnail.js'
 import { VideoModel } from '../core/models/video/video.js'
+import { askConfirmation, displayPeerTubeMustBeStoppedWarning } from './shared/common.js'
 
 run()
   .then(() => process.exit(0))
@@ -28,6 +28,8 @@ run()
 
 async function run () {
   await initDatabaseModels(true)
+
+  displayPeerTubeMustBeStoppedWarning()
 
   await new FSPruner().prune()
 
@@ -61,7 +63,7 @@ class ObjectStoragePruner {
     const formattedKeysToDelete = this.keysToDelete.map(({ bucket, key }) => ` In bucket ${bucket}: ${key}`).join('\n')
     console.log(`${this.keysToDelete.length} unknown files from object storage can be deleted:\n${formattedKeysToDelete}\n`)
 
-    const res = await askConfirmation()
+    const res = await askPruneConfirmation()
     if (res !== true) {
       console.log('Exiting without deleting object storage files.')
       return
@@ -183,7 +185,7 @@ class FSPruner {
     const formattedKeysToDelete = this.pathsToDelete.map(p => ` ${p}`).join('\n')
     console.log(`${this.pathsToDelete.length} unknown files from filesystem can be deleted:\n${formattedKeysToDelete}\n`)
 
-    const res = await askConfirmation()
+    const res = await askPruneConfirmation()
     if (res !== true) {
       console.log('Exiting without deleting filesystem files.')
       return
@@ -299,29 +301,9 @@ class FSPruner {
   }
 }
 
-async function askConfirmation () {
-  return new Promise((res, rej) => {
-    prompt.start()
-
-    const schema = {
-      properties: {
-        confirm: {
-          type: 'string',
-          description: 'These unknown files can be deleted, but please check your backups first (bugs happen).' +
-            ' Notice PeerTube must have been stopped when your ran this script.' +
-            ' Can we delete these files? (y/n)',
-          default: 'n',
-          validator: /y[es]*|n[o]?/,
-          warning: 'Must respond yes or no',
-          required: true
-        }
-      }
-    }
-
-    prompt.get(schema, function (err, result) {
-      if (err) return rej(err)
-
-      return res(result.confirm?.match(/y/) !== null)
-    })
-  })
+async function askPruneConfirmation () {
+  return askConfirmation(
+    'These unknown files can be deleted, but please check your backups first (bugs happen). ' +
+    'Can we delete these files?'
+  )
 }

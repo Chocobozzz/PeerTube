@@ -14,7 +14,7 @@ import {
 import { expectStartWith } from '@tests/shared/checks.js'
 import { expect } from 'chai'
 
-describe('Update object storage URL', function () {
+describe('Update object storage URL CLI', function () {
   if (areMockObjectStorageTestsDisabled()) return
 
   let server: PeerTubeServer

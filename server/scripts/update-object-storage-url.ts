@@ -4,7 +4,7 @@ import { FileStorage } from '@peertube/peertube-models'
 import { escapeForRegex } from '@server/helpers/regexp.js'
 import { initDatabaseModels, sequelizeTypescript } from '@server/initializers/database.js'
 import { QueryTypes } from 'sequelize'
-import prompt from 'prompt'
+import { askConfirmation, displayPeerTubeMustBeStoppedWarning } from './shared/common.js'
 
 const program = createCommand()
   .description('Update PeerTube object file URLs after an object storage migration.')
@@ -23,6 +23,8 @@ run()
 
 async function run () {
   await initDatabaseModels(true)
+
+  displayPeerTubeMustBeStoppedWarning()
 
   const fromRegexp = `^${escapeForRegex(options.from)}`
   const to = options.to
@@ -58,7 +60,7 @@ async function run () {
     }
   }
 
-  const res = await askConfirmation()
+  const res = await askUpdateConfirmation()
   if (res !== true) {
     console.log('Exiting without updating URLs.')
     process.exit(0)
@@ -90,29 +92,9 @@ function parseUrl (value: string) {
   return value
 }
 
-async function askConfirmation () {
-  return new Promise((res, rej) => {
-    prompt.start()
-
-    const schema = {
-      properties: {
-        confirm: {
-          type: 'string',
-          description: 'These URLs can be updated, but please check your backups first (bugs happen).' +
-            ' Notice PeerTube must have been stopped when your ran this script.' +
-            ' Can we update these URLs? (y/n)',
-          default: 'n',
-          validator: /y[es]*|n[o]?/,
-          warning: 'Must respond yes or no',
-          required: true
-        }
-      }
-    }
-
-    prompt.get(schema, function (err, result) {
-      if (err) return rej(err)
-
-      return res(result.confirm?.match(/y/) !== null)
-    })
-  })
+async function askUpdateConfirmation () {
+  return askConfirmation(
+    'These URLs can be updated, but please check your backups first (bugs happen). ' +
+    'Can we update these URLs?'
+  )
 }

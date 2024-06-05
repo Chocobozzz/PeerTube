@@ -23,7 +23,7 @@ import { createFile } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
 import { join } from 'path'
 
-describe('Test prune storage scripts', function () {
+describe('Test prune storage CLI', function () {
   let servers: PeerTubeServer[]
 
   before(async function () {

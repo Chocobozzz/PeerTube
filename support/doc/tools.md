@@ -494,6 +494,25 @@ docker compose exec -u peertube peertube npm run update-object-storage-url -- --
 
 :::
 
+### Cleanup remote files
+
+**PeerTube >= 6.2**
+
+Use this script to recover disk space by removing remote files (thumbnails, avatars...) that can be re-fetched later by your PeerTube instance on-demand:
+
+```bash [Classic installation]
+cd /var/www/peertube/peertube-latest
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run house-keeping -- --delete-remote-files
+```
+
+```bash [Docker]
+cd /var/www/peertube-docker
+docker compose exec -u peertube peertube npm run house-keeping -- --delete-remote-files
+```
+
+:::
+
+
 ### Generate storyboard
 
 **PeerTube >= 6.0**

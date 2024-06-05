@@ -10,7 +10,7 @@ import {
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
 
-describe('Test plugin scripts', function () {
+describe('Test plugin CLI', function () {
   let server: PeerTubeServer
 
   before(async function () {

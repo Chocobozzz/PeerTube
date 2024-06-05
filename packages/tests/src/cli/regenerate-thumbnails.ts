@@ -26,7 +26,7 @@ async function testThumbnail (server: PeerTubeServer, videoId: number | string) 
   }
 }
 
-describe('Test regenerate thumbnails script', function () {
+describe('Test regenerate thumbnails CLI', function () {
   let servers: PeerTubeServer[]
 
   let video1: Video

@@ -22,7 +22,7 @@ function listStoryboardFiles (server: PeerTubeServer) {
   return readdir(storage)
 }
 
-describe('Test create generate storyboard job', function () {
+describe('Test create generate storyboard job CLI', function () {
   let servers: PeerTubeServer[] = []
   const uuids: string[] = []
   let sql: SQLCommand

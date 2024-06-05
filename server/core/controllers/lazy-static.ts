@@ -123,6 +123,5 @@ async function getTorrent (req: express.Request, res: express.Response) {
   const result = await VideoTorrentsSimpleFileCache.Instance.getFilePath(req.params.filename)
   if (!result) return res.status(HttpStatusCode.NOT_FOUND_404).end()
 
-  // Torrents still use the old naming convention (video uuid + .torrent)
   return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE.SERVER })
 }

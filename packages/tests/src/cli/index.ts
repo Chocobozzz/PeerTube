@@ -2,6 +2,7 @@
 import './create-import-video-file-job'
 import './create-generate-storyboard-job'
 import './create-move-video-storage-job'
+import './house-keeping.js'
 import './peertube'
 import './plugins'
 import './prune-storage'

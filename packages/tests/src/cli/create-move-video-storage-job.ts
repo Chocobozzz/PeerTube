@@ -64,7 +64,7 @@ async function checkFiles (origin: PeerTubeServer, video: VideoDetails, objectSt
   }
 }
 
-describe('Test create move video storage job', function () {
+describe('Test create move video storage job CLI', function () {
   if (areMockObjectStorageTestsDisabled()) return
 
   let servers: PeerTubeServer[] = []

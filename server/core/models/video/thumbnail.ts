@@ -160,11 +160,33 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     return ThumbnailModel.findOne(query)
   }
 
+  static listRemoteOnDisk () {
+    return this.findAll<MThumbnail>({
+      where: {
+        onDisk: true
+      },
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: VideoModel.unscoped(),
+          required: true,
+          where: {
+            remote: true
+          }
+        }
+      ]
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   static buildPath (type: ThumbnailType_Type, filename: string) {
     const directory = ThumbnailModel.types[type].directory
 
     return join(directory, filename)
   }
+
+  // ---------------------------------------------------------------------------
 
   getOriginFileUrl (videoOrPlaylist: MVideo | MVideoPlaylist) {
     const staticPath = ThumbnailModel.types[this.type].staticPath + this.filename

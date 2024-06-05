@@ -154,7 +154,7 @@ function runTests (enableObjectStorage: boolean) {
   })
 }
 
-describe('Test create import video jobs', function () {
+describe('Test create import video jobs CLI', function () {
 
   describe('On filesystem', function () {
     runTests(false)
