@@ -43,7 +43,13 @@ describe('Test prune storage CLI', function () {
       await server.videos.quickUpload({ name: 'video 1', privacy: VideoPrivacy.PUBLIC })
       await server.videos.quickUpload({ name: 'video 2', privacy: VideoPrivacy.PUBLIC })
 
-      await server.videos.quickUpload({ name: 'video 3', privacy: VideoPrivacy.PRIVATE })
+      const { uuid } = await server.videos.quickUpload({ name: 'video 3', privacy: VideoPrivacy.PRIVATE })
+
+      await server.captions.add({
+        language: 'ar',
+        videoId: uuid,
+        fixture: 'subtitle-good1.vtt'
+      })
 
       await server.users.updateMyAvatar({ fixture: 'avatar.png' })
 
@@ -137,6 +143,12 @@ describe('Test prune storage CLI', function () {
         const originalVideoFilesCount = await server.servers.countFiles(join('original-video-files'))
         expect(originalVideoFilesCount).to.equal(3)
 
+        const storyboardsCount = await server.servers.countFiles(join('storyboards'))
+        expect(storyboardsCount).to.equal(3)
+
+        const captionsCount = await server.servers.countFiles(join('captions'))
+        expect(captionsCount).to.equal(1)
+
         const userExportFilesCount = await server.servers.countFiles(join('tmp-persistent'))
         expect(userExportFilesCount).to.equal(1)
       }
@@ -175,32 +187,8 @@ describe('Test prune storage CLI', function () {
           badNames['torrents'] = [ n1, n2 ]
         }
 
-        {
-          const base = servers[0].servers.buildDirectory('thumbnails')
-
-          const n1 = buildUUID() + '.jpg'
-          const n2 = buildUUID() + '.jpg'
-
-          await createFile(join(base, n1))
-          await createFile(join(base, n2))
-
-          badNames['thumbnails'] = [ n1, n2 ]
-        }
-
-        {
-          const base = servers[0].servers.buildDirectory('previews')
-
-          const n1 = buildUUID() + '.jpg'
-          const n2 = buildUUID() + '.jpg'
-
-          await createFile(join(base, n1))
-          await createFile(join(base, n2))
-
-          badNames['previews'] = [ n1, n2 ]
-        }
-
-        {
-          const base = servers[0].servers.buildDirectory('avatars')
+        for (const name of [ 'thumbnails', 'previews', 'avatars', 'storyboards' ]) {
+          const base = servers[0].servers.buildDirectory(name)
 
           const n1 = buildUUID() + '.png'
           const n2 = buildUUID() + '.jpg'
@@ -208,7 +196,7 @@ describe('Test prune storage CLI', function () {
           await createFile(join(base, n1))
           await createFile(join(base, n2))
 
-          badNames['avatars'] = [ n1, n2 ]
+          badNames[name] = [ n1, n2 ]
         }
 
         {
@@ -229,6 +217,18 @@ describe('Test prune storage CLI', function () {
           await createFile(join(base, n1))
 
           badNames['original-video-files'] = [ n1 ]
+        }
+
+        {
+          const base = servers[0].servers.buildDirectory('captions')
+
+          const n1 = buildUUID() + '.vtt'
+          const n2 = buildUUID() + '.srt'
+
+          await createFile(join(base, n1))
+          await createFile(join(base, n2))
+
+          badNames['captions'] = [ n1, n2 ]
         }
 
         {

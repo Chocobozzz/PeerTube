@@ -11,7 +11,7 @@ export class AvatarPermanentFileCache extends AbstractPermanentFileCache<MActorI
   }
 
   protected loadModel (filename: string) {
-    return ActorImageModel.loadByName(filename)
+    return ActorImageModel.loadByFilename(filename)
   }
 
   protected getImageSize (image: MActorImage): { width: number, height: number } {

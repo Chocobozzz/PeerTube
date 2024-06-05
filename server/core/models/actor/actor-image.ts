@@ -100,7 +100,7 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
 
   // ---------------------------------------------------------------------------
 
-  static loadByName (filename: string) {
+  static loadByFilename (filename: string) {
     const query = {
       where: {
         filename

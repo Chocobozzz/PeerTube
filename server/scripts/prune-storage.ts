@@ -3,6 +3,8 @@ import { FileStorage, ThumbnailType, ThumbnailType_Type } from '@peertube/peertu
 import { DIRECTORIES, USER_EXPORT_FILE_PREFIX } from '@server/initializers/constants.js'
 import { listKeysOfPrefix, removeObjectByFullKey } from '@server/lib/object-storage/object-storage-helpers.js'
 import { UserExportModel } from '@server/models/user/user-export.js'
+import { StoryboardModel } from '@server/models/video/storyboard.js'
+import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
@@ -170,6 +172,10 @@ class FSPruner {
     await this.findFilesToDelete(CONFIG.STORAGE.PREVIEWS_DIR, this.doesThumbnailExistFactory(true, ThumbnailType.PREVIEW))
     await this.findFilesToDelete(CONFIG.STORAGE.THUMBNAILS_DIR, this.doesThumbnailExistFactory(false, ThumbnailType.MINIATURE))
 
+    await this.findFilesToDelete(CONFIG.STORAGE.CAPTIONS_DIR, this.doesCaptionExistFactory())
+
+    await this.findFilesToDelete(CONFIG.STORAGE.STORYBOARDS_DIR, this.doesStoryboardExistFactory())
+
     await this.findFilesToDelete(CONFIG.STORAGE.ACTOR_IMAGES_DIR, this.doesActorImageExistFactory())
 
     await this.findFilesToDelete(CONFIG.STORAGE.TMP_PERSISTENT_DIR, this.doesUserExportExistFactory())
@@ -256,9 +262,25 @@ class FSPruner {
 
   private doesActorImageExistFactory () {
     return async (filePath: string) => {
-      const image = await ActorImageModel.loadByName(basename(filePath))
+      const image = await ActorImageModel.loadByFilename(basename(filePath))
 
       return !!image
+    }
+  }
+
+  private doesStoryboardExistFactory () {
+    return async (filePath: string) => {
+      const storyboard = await StoryboardModel.loadByFilename(basename(filePath))
+
+      return !!storyboard
+    }
+  }
+
+  private doesCaptionExistFactory () {
+    return async (filePath: string) => {
+      const caption = await VideoCaptionModel.loadWithVideoByFilename(basename(filePath))
+
+      return !!caption
     }
   }
 
