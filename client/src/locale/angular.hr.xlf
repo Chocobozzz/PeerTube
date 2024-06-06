@@ -18581,9 +18581,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6827125739942610231" datatype="html">
+      <trans-unit id="6827125739942610231" datatype="html" xml:space="preserve">
         <source>In this instance federation</source>
-        <target state="translated">U ovoj instanci federacije</target>
+        <target state="translated">U ovoj federaciji instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">58</context>
