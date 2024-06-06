@@ -2,6 +2,7 @@ import { createCommand } from '@commander-js/extra-typings'
 import { initDatabaseModels } from '@server/initializers/database.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { ThumbnailModel } from '@server/models/video/thumbnail.js'
+import Bluebird from 'bluebird'
 import { askConfirmation, displayPeerTubeMustBeStoppedWarning } from './shared/common.js'
 
 const program = createCommand()
@@ -45,8 +46,8 @@ async function deleteRemoteFiles () {
   }
 
   const res = await askConfirmation(
-    `${thumbnails.length} thumbnails and ${actorImages.length} avatars/banners can be locally deleted. ` +
-    `PeerTube will download them again on-demand.` +
+    `${thumbnails.length.toLocaleString()} thumbnails and ${actorImages.length.toLocaleString()} avatars/banners can be locally deleted. ` +
+    `PeerTube will download them again on-demand. ` +
     `Do you want to delete these remote files?`
   )
 
@@ -59,33 +60,33 @@ async function deleteRemoteFiles () {
 
   console.log('Deleting remote thumbnails...')
 
-  for (const thumbnail of thumbnails) {
+  await Bluebird.map(thumbnails, async thumbnail => {
     if (!thumbnail.fileUrl) {
       console.log(`Skipping thumbnail removal of ${thumbnail.getPath()} as we don't have its remote file URL in the database.`)
-      continue
+      return
     }
 
     await thumbnail.removeThumbnail()
 
     thumbnail.onDisk = false
     await thumbnail.save()
-  }
+  }, { concurrency: 20 })
 
   // ---------------------------------------------------------------------------
 
   console.log('Deleting remote avatars/banners...')
 
-  for (const actorImage of actorImages) {
+  await Bluebird.map(actorImages, async actorImage => {
     if (!actorImage.fileUrl) {
       console.log(`Skipping avatar/banner removal of ${actorImage.getPath()} as we don't have its remote file URL in the database.`)
-      continue
+      return
     }
 
     await actorImage.removeImage()
 
     actorImage.onDisk = false
     await actorImage.save()
-  }
+  }, { concurrency: 20 })
 
   console.log('Remote files deleted!')
 }
