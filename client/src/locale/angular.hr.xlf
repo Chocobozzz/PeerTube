@@ -835,9 +835,9 @@
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="442017645619017020" datatype="html">
+      <trans-unit id="442017645619017020" datatype="html" xml:space="preserve">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
-        <target state="translated">PeerTube standardno koristi BitTorrent protokol za dijeljenje propusnosti između korisnika kako bi se smanjilo opterećenje poslužitelja, ali ti u konačnici ostavlja izbor da se vratiš na regularni prijenos isključivo s poslužitelja videa. Ono što slijedi vrijedi samo ako želiš nastaviti koristiti P2P modus PeerTubea.</target>
+        <target state="translated">PeerTube standardno koristi BitTorrent protokol za dijeljenje propusnosti između korisnika kako bi se smanjilo opterećenje servera, ali ti u konačnici ostavlja izbor da se vratiš na regularni prijenos isključivo sa servera videa. Ono što slijedi vrijedi samo ako želiš nastaviti koristiti P2P modus PeerTubea.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">68</context>
@@ -2095,9 +2095,9 @@
           <context context-type="linenumber">292</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2095604754338363597" datatype="html">
+      <trans-unit id="2095604754338363597" datatype="html" xml:space="preserve">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="translated">⚠️ Ako je uključeno, preporučujemo koristiti <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTP posrednika<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> za sprečavanje pristupa privatnom URL-u s tvog PeerTube poslužitelja</target>
+        <target state="translated">⚠️ Ako je uključeno, preporučujemo koristiti <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTP posrednika<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> za sprečavanje pristupa privatnom URL-u s tvog PeerTube servera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">295</context>
@@ -2707,9 +2707,9 @@
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4249062553881932496" datatype="html">
+      <trans-unit id="4249062553881932496" datatype="html" xml:space="preserve">
         <source>You cannot change the server configuration because it's managed externally.</source>
-        <target state="translated">Ne možeš promijeniti konfiguraciju poslužitelja jer se njime upravlja izvana.</target>
+        <target state="translated">Ne možeš promijeniti konfiguraciju servera jer se njime upravlja eksterno.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">85,87</context>
@@ -3011,9 +3011,9 @@
           <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8362291348781958428" datatype="html">
+      <trans-unit id="8362291348781958428" datatype="html" xml:space="preserve">
         <source>How will you finance the PeerTube server?</source>
-        <target state="translated">Kako ćeš financirati PeerTube poslužitelj?</target>
+        <target state="translated">Kako ćeš financirati PeerTube server?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">221</context>
@@ -3035,17 +3035,17 @@
           <context context-type="linenumber">235</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3447208665089679283" datatype="html">
+      <trans-unit id="3447208665089679283" datatype="html" xml:space="preserve">
         <source>What server/hardware does the instance run on?</source>
-        <target state="translated">Na kojem poslužitelju/hardveru radi instanca?</target>
+        <target state="translated">Na kojem serveru/hardveru radi instanca?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">241</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4739907951373047958" datatype="html">
+      <trans-unit id="4739907951373047958" datatype="html" xml:space="preserve">
         <source>i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</source>
-        <target state="translated">npr. 2vCore 2 GB RAM, izravna poveznica na iznajmljeni poslužitelj itd.</target>
+        <target state="translated">npr. 2vCore 2 GB RAM, izravna poveznica na iznajmljeni server itd.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">242</context>
@@ -3087,9 +3087,9 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5205613575147327732" datatype="html">
+      <trans-unit id="5205613575147327732" datatype="html" xml:space="preserve">
         <source>If enabled, your server needs to accept incoming TCP traffic on port <x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/></source>
-        <target state="translated">Ako je uključeno, tvoj poslužitelj mora prihvatiti dolazni TCP promet na priključku <x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/></target>
+        <target state="translated">Ako je uključeno, tvoj server mora prihvatiti dolazni TCP promet na priključku <x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">24</context>
@@ -3315,9 +3315,9 @@
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1473738049081128420" datatype="html">
+      <trans-unit id="1473738049081128420" datatype="html" xml:space="preserve">
         <source>Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically.</source>
-        <target state="translated">Procjenjivanje kapaciteta poslužitelja za prekodiranje i prijenose videa nije laka i ne možemo automatski podesiti PeerTube.</target>
+        <target state="translated">Procjenjivanje kapaciteta servera za prekodiranje i prijenose videa nije laka i ne možemo automatski podesiti PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">8</context>
@@ -4091,9 +4091,9 @@
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4917252294930256268" datatype="html">
+      <trans-unit id="4917252294930256268" datatype="html" xml:space="preserve">
         <source>It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.</source>
-        <target state="translated">Čini se da nisi na HTTPS poslužitelju. Tvoj web-poslužitelj mora imati aktiviran TLS kako bi mogao pratiti poslužitelje.</target>
+        <target state="translated">Čini se da nisi na HTTPS serveru. Tvoj web server mora imati aktiviran TLS kako bi mogao pratiti servere.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">29</context>
@@ -7773,9 +7773,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5422897685524094185" datatype="html">
+      <trans-unit id="5422897685524094185" datatype="html" xml:space="preserve">
         <source>Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="translated">Brisanje sadržaja koji su predmemorirali drugi poslužitelji i druge treće strane moglo bi potrajati duže.</target>
+        <target state="translated">Brisanje sadržaja koji su predmemorirali drugi serveri i druge treće strane moglo bi potrajati duže.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">28</context>
@@ -14881,9 +14881,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1684597533616494551" datatype="html">
+      <trans-unit id="1684597533616494551" datatype="html" xml:space="preserve">
         <source>Server muted</source>
-        <target state="translated">Isključen zvuk poslužitelju</target>
+        <target state="translated">Isključen zvuk serveru</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">87</context>
@@ -14901,9 +14901,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2971365540217107489" datatype="html">
+      <trans-unit id="2971365540217107489" datatype="html" xml:space="preserve">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target state="translated">Medij je prevelik za poslužitelj. Obrati se svom administratoru ako želiš povećati ograničenje veličine.</target>
+        <target state="translated">Medij je prevelik za server. Obrati se svom administratoru ako želiš povećati ograničenje veličine.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">122</context>
@@ -14925,9 +14925,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1693549688987384699" datatype="html">
+      <trans-unit id="1693549688987384699" datatype="html" xml:space="preserve">
         <source>Server error. Please retry later.</source>
-        <target state="translated">Greška poslužitelja. Pokušaj ponovo kasnije.</target>
+        <target state="translated">Greška servera. Pokušaj ponovo kasnije.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">137</context>
@@ -14941,9 +14941,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7436975022198908854" datatype="html">
+      <trans-unit id="7436975022198908854" datatype="html" xml:space="preserve">
         <source>Unknown server error</source>
-        <target state="translated">Nepoznata greška poslužitelja</target>
+        <target state="translated">Nepoznata greška servera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">144</context>
@@ -15153,17 +15153,17 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4499233456830047129" datatype="html">
+      <trans-unit id="4499233456830047129" datatype="html" xml:space="preserve">
         <source>The server encountered an error</source>
-        <target state="translated">Poslužitelj je naišao na grešku</target>
+        <target state="translated">Server je naišao na grešku</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="732935381486595265" datatype="html">
+      <trans-unit id="732935381486595265" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
-        <target state="translated">Tvoja se datoteka <x id="PH" equiv-text="name"/> nije mogla prenijeti prije isteka vremena rada posredničkog poslužitelja</target>
+        <target state="translated">Tvoja se datoteka <x id="PH" equiv-text="name"/> nije mogla prenijeti prije isteka vremena rada posredničkog servera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">59</context>
@@ -17349,9 +17349,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3776575731053010580" datatype="html">
+      <trans-unit id="3776575731053010580" datatype="html" xml:space="preserve">
         <source>Server rules</source>
-        <target state="translated">Pravila poslužitelja</target>
+        <target state="translated">Pravila servera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">32</context>
@@ -17637,9 +17637,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">471</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3719503424625455635" datatype="html">
+      <trans-unit id="3719503424625455635" datatype="html" xml:space="preserve">
         <source>Mute server account</source>
-        <target state="translated">Isključi zvuk računa poslužitelja</target>
+        <target state="translated">Isključi zvuk računa servera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">344</context>
@@ -17661,9 +17661,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">362</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1595779426198793580" datatype="html">
+      <trans-unit id="1595779426198793580" datatype="html" xml:space="preserve">
         <source>Mute server</source>
-        <target state="translated">Isključi zvuk poslužitelja</target>
+        <target state="translated">Isključi zvuk servera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">368</context>
@@ -17745,9 +17745,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8014491157078444256" datatype="html">
+      <trans-unit id="8014491157078444256" datatype="html" xml:space="preserve">
         <source>Server <x id="PH" equiv-text="host"/> muted by the instance.</source>
-        <target state="translated">Instanca je isključila zvuk poslužitelja <x id="PH" equiv-text="host"/>.</target>
+        <target state="translated">Instanca je isključila zvuk servera <x id="PH" equiv-text="host"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">492</context>
@@ -19357,25 +19357,25 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="380450014369168564" datatype="html">
+      <trans-unit id="380450014369168564" datatype="html" xml:space="preserve">
         <source>Infringes your copyright wrt. the regional laws with which the server must comply.</source>
-        <target state="translated">Krši tvoja autorska prava ili regionalne zakone kojih se poslužitelj mora pridržavati.</target>
+        <target state="translated">Krši tvoja autorska prava ili regionalne zakone kojih se server mora pridržavati.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1378933246324202613" datatype="html">
+      <trans-unit id="1378933246324202613" datatype="html" xml:space="preserve">
         <source>Breaks server rules</source>
-        <target state="translated">Krči pravila poslužitelja</target>
+        <target state="translated">Krši pravila servera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7930601470861156366" datatype="html">
+      <trans-unit id="7930601470861156366" datatype="html" xml:space="preserve">
         <source>Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.</source>
-        <target state="translated">Sve što nije gore navedeno, a krši uvjete usluge, pravila ponašanja ili opća pravila koja vrijede na poslužitelju.</target>
+        <target state="translated">Sve što nije gore navedeno, a krši uvjete usluge, pravila ponašanja ili opća pravila koja vrijede na serveru.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">153</context>
@@ -19669,9 +19669,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5668793810321242853" datatype="html">
+      <trans-unit id="5668793810321242853" datatype="html" xml:space="preserve">
         <source>Muted servers</source>
-        <target state="translated">Poslužitelji s isključenim zvukom</target>
+        <target state="translated">Serveri s isključenim zvukom</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">150</context>
@@ -19721,9 +19721,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6728985502447585050" datatype="html">
+      <trans-unit id="6728985502447585050" datatype="html" xml:space="preserve">
         <source>No server found matching current filters.</source>
-        <target state="translated">Nije pronađen nijedan poslužitelj koji se poklapa s aktualnim filtrima.</target>
+        <target state="translated">Nije pronađen nijedan server koji se poklapa s aktualnim filtrima.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context>
           <context context-type="linenumber">55</context>
@@ -19733,9 +19733,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="299774363533169870" datatype="html">
+      <trans-unit id="299774363533169870" datatype="html" xml:space="preserve">
         <source>No server found.</source>
-        <target state="translated">Nije pronađen nijedan poslužitelj.</target>
+        <target state="translated">Nije pronađen nijedan server.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context>
           <context context-type="linenumber">56</context>
@@ -20565,9 +20565,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8953934448427251062" datatype="html">
+      <trans-unit id="8953934448427251062" datatype="html" xml:space="preserve">
         <source>The <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/peertube&quot; fragment=&quot;privacy&quot;&gt;"/>sharing system<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/peertube&quot; fragment=&quot;privacy&quot;&gt;"/>Sustav dijeljenja<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> implicira da se neke tehničke informacije o tvom sustavu (kao što je javna IP adresa) mogu poslati drugim sudionicima, ali uvelike pomaže smanjiti opterećenje poslužitelja.</target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/peertube&quot; fragment=&quot;privacy&quot;&gt;"/>Sustav dijeljenja<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> implicira da se neke tehničke informacije o tvom sustavu (kao što je javna IP adresa) mogu poslati drugim sudionicima, ali uvelike pomaže smanjiti opterećenje servera.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">45</context>
@@ -20909,9 +20909,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1254225561962113354" datatype="html">
+      <trans-unit id="1254225561962113354" datatype="html" xml:space="preserve">
         <source>Server too slow</source>
-        <target state="translated">Poslužitelj je prespor</target>
+        <target state="translated">Server je prespor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -20933,9 +20933,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1677142486230902467" datatype="html">
+      <trans-unit id="1677142486230902467" datatype="html" xml:space="preserve">
         <source>Server error</source>
-        <target state="translated">Greška poslužitelja</target>
+        <target state="translated">Greška servera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">63</context>
