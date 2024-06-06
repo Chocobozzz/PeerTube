@@ -552,11 +552,11 @@ docker compose exec -u peertube peertube npm run create-generate-storyboard-job 
 ### Prune filesystem storage
 
 Some transcoded videos or shutdown at a bad time can leave some unused files on your storage.
-Stop PeerTube and delete these files (a confirmation will be demanded first):
+To delete these files (a confirmation will be demanded first):
 
 ```bash
 cd /var/www/peertube/peertube-latest
-sudo systemctl stop peertube && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
+sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
 ```
 
 ### Update PeerTube instance domain name
