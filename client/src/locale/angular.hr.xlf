@@ -295,9 +295,9 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8438752523256358076" datatype="html">
+      <trans-unit id="8438752523256358076" datatype="html" xml:space="preserve">
         <source>Show full list</source>
-        <target state="translated">Prikaži cijeli popis</target>
+        <target state="translated">Prikaži cijelu listu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1243,9 +1243,9 @@
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1247256698916587400" datatype="html">
+      <trans-unit id="1247256698916587400" datatype="html" xml:space="preserve">
         <source>Error in videos list component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="translated">Greška u komponenti popisa videa: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Greška u komponenti liste videa: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
           <context context-type="linenumber">88</context>
@@ -4867,9 +4867,9 @@
           <context context-type="linenumber">429</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7293356040886494773" datatype="html">
+      <trans-unit id="7293356040886494773" datatype="html" xml:space="preserve">
         <source>Do you really want to unblock this video? It will be available again in the videos list.</source>
-        <target state="translated">Stvarno želiš deblokirati ovaj video? Bit će ponovo dostupan na popisu videa.</target>
+        <target state="translated">Stvarno želiš deblokirati ovaj video? Bit će ponovo dostupan u listi videa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">159</context>
@@ -5223,9 +5223,9 @@
           <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3204306399736151644" datatype="html">
+      <trans-unit id="3204306399736151644" datatype="html" xml:space="preserve">
         <source>Comments list</source>
-        <target state="translated">Popis komentara</target>
+        <target state="translated">Lista komentara</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment.routes.ts</context>
           <context context-type="linenumber">24</context>
@@ -6884,9 +6884,9 @@
           <context context-type="linenumber">314</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7483807629538115183" datatype="html">
+      <trans-unit id="7483807629538115183" datatype="html" xml:space="preserve">
         <source>Users list</source>
-        <target state="translated">Popis korisnika</target>
+        <target state="translated">Lista korisnika</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/users.routes.ts</context>
           <context context-type="linenumber">25</context>
@@ -7245,9 +7245,9 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2645809032917283525" datatype="html">
+      <trans-unit id="2645809032917283525" datatype="html" xml:space="preserve">
         <source>Use third-party feed aggregators to retrieve the list of videos from channels you subscribed to.</source>
-        <target state="translated">Koristi agregatore feedova trećih strana za dohvaćanje popis videa s kanala na koje si pretplaćen/a.</target>
+        <target state="translated">Koristi agregatore feedova trećih strana za dohvaćanje liste videa s kanala na koje si pretplaćen/a.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">11</context>
@@ -8917,9 +8917,9 @@
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2015493719998914454" datatype="html">
+      <trans-unit id="2015493719998914454" datatype="html" xml:space="preserve">
         <source>List imports</source>
-        <target state="translated">Uvozi popisa</target>
+        <target state="translated">Uvozi lista</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -9249,9 +9249,9 @@
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5778734409199071482" datatype="html">
+      <trans-unit id="5778734409199071482" datatype="html" xml:space="preserve">
         <source>Remove the request from the list. The user can register again.</source>
-        <target state="translated">Ukloni zahtjev iz popisa. Korisnik se može ponovo registrirati.</target>
+        <target state="translated">Ukloni zahtjev iz liste. Korisnik se može ponovo registrirati.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -17151,7 +17151,7 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
       </trans-unit>
       <trans-unit id="4341509997126306236" datatype="html" xml:space="preserve">
         <source>List name must be at least 1 character long.</source>
-        <target state="translated">Ime popisa mora sadržati barem 1 znak.</target>
+        <target state="translated">Ime liste mora sadržati barem 1 znak.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">39</context>
@@ -17159,7 +17159,7 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
       </trans-unit>
       <trans-unit id="55815482589008245" datatype="html" xml:space="preserve">
         <source>List name cannot be more than 100 characters long.</source>
-        <target state="translated">Ime popisa ne smije sadržati više od 100 znakova.</target>
+        <target state="translated">Ime liste ne smije sadržati više od 100 znakova.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">40</context>
@@ -17937,17 +17937,17 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7523440000124910081" datatype="html">
+      <trans-unit id="7523440000124910081" datatype="html" xml:space="preserve">
         <source>Use this frame</source>
-        <target state="new">Use this frame</target>
+        <target state="translated">Koristi ovu sličicu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/thumbnail-manager/thumbnail-manager.component.html</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3301133267961171237" datatype="html">
+      <trans-unit id="3301133267961171237" datatype="html" xml:space="preserve">
         <source>Select from video</source>
-        <target state="new">Select from video</target>
+        <target state="translated">Odaberi iz videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/thumbnail-manager/thumbnail-manager.component.html</context>
           <context context-type="linenumber">31</context>
@@ -22045,9 +22045,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3021884317141422270" datatype="html">
+      <trans-unit id="3021884317141422270" datatype="html" xml:space="preserve">
         <source>Display all videos (private, unlisted, password protected or not yet published)</source>
-        <target state="translated">Prikaži sva videa (privatna videa, videa koji nisu u popisu, videa zaštićena lozinkom ili još neobjavljena videa)</target>
+        <target state="translated">Prikaži sva videa (privatna videa, videa koji nisu u listi, videa zaštićena lozinkom ili još neobjavljena videa)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">128</context>
