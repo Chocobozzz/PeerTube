@@ -17125,9 +17125,9 @@ Kada se video prenese na ovaj kanal, polje za video podršku će se automatski i
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4708973013815646385" datatype="html">
+      <trans-unit id="4708973013815646385" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="word"/> is not valid (min 1 character/max 100 characters)</source>
-        <target state="new"><x id="PH" equiv-text="word"/> is not valid (min 1 character/max 100 characters)</target>
+        <target state="translated"><x id="PH" equiv-text="word"/> ne valja (barem 1 znak/najviše 100 znakova)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">14</context>
