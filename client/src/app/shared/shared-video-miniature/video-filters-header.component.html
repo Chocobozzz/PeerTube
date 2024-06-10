@@ -23,8 +23,8 @@
         <my-global-icon iconName="chevrons-up"></my-global-icon>
       </button>
 
-      <button
-        *ngFor="let activeFilter of filters.getActiveFilters()" (click)="resetFilter(activeFilter.key, activeFilter.canRemove)"
+      <div
+        *ngFor="let activeFilter of filters.getActiveFilters()"
         class="active-filter pastille button-unstyle" [ngClass]="{ 'can-remove': activeFilter.canRemove }" [title]="getFilterTitle(activeFilter.canRemove)"
       >
         <span>
@@ -33,8 +33,14 @@
           <ng-container *ngIf="activeFilter.value">: {{ activeFilter.value }}</ng-container>
         </span>
 
-        <my-global-icon *ngIf="activeFilter.canRemove" iconName="cross"></my-global-icon>
-      </button>
+        <button
+          *ngIf="activeFilter.canRemove" type="button" class="remove-button"
+          (click)="resetFilter(activeFilter.key, activeFilter.canRemove)"
+          i18n-title title="Remove this filter"
+        >
+          <my-global-icon iconName="cross"></my-global-icon>
+        </button>
+      </div>
     </div>
 
     <ng-select

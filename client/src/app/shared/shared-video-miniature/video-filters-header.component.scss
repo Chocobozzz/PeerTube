@@ -94,11 +94,16 @@
     opacity: 0.9;
   }
 
-  my-global-icon {
+  > .remove-button {
     @include margin-left(10px);
 
-    width: 16px;
-    color: pvar(--greyForegroundColor);
+    border: 0;
+    padding: 0;
+
+    my-global-icon {
+      width: 16px;
+      color: pvar(--greyForegroundColor);
+    }
   }
 }
 
