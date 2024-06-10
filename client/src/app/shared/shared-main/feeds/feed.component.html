@@ -1,8 +1,8 @@
 <button
   *ngIf="syndicationItems && syndicationItems.length !== 0"
+  #popover="ngbPopover"
   [ngbPopover]="feedsList" [autoClose]="true" placement="bottom left auto"
-  class="feed border-0 p-0"
-  title="Open syndication dropdown" i18n-title
+  class="feed border-0 p-0" [title]="getTitle()"
 >
   <my-global-icon iconName="syndication"></my-global-icon>
 
