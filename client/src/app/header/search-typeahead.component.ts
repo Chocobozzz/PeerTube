@@ -70,10 +70,6 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewChecked, OnDes
     if (this.keyboardEventsManager) this.keyboardEventsManager.change.unsubscribe()
   }
 
-  areInstructionsDisplayed () {
-    return !this.search
-  }
-
   showSearchGlobalHelp () {
     return this.search && this.areSuggestionsOpened && this.keyboardEventsManager?.activeItem?.result?.type === 'search-index'
   }

@@ -17,11 +17,8 @@ a {
   }
 }
 
-.bg-gray {
+.result-type {
   background-color: pvar(--mainBackgroundColor);
-}
-
-.text-gray-light {
   color: pvar(--mainForegroundColor);
 }
 
@@ -30,6 +27,5 @@ my-global-icon {
 
   width: 17px;
   position: relative;
-  top: -2px;
-  margin: 5px;
+  top: -1px;
 }

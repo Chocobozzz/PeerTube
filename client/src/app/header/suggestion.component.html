@@ -1,18 +1,18 @@
-<a tabindex="-1" class="d-flex flex-auto flex-items-center p-2" [class.focus-visible]="active">
-  <div class="flex-shrink-0 me-2 text-center">
-    <my-global-icon iconName="search"></my-global-icon>
-  </div>
-
-  <img class="avatar me-2 flex-shrink-0 d-none" alt="" aria-label="Team" src="" width="28" height="28">
+<a
+  tabindex="-1" class="d-flex flex-auto align-center p-2" [class.focus-visible]="active"
+  [title]="getTitle()"
+  [attr.aria-describedby]="describedby"
+>
+  <my-global-icon class="me-2" iconName="search"></my-global-icon>
 
   <div
-    class="flex-auto overflow-hidden text-start no-wrap css-truncate css-truncate-target"
+    class="flex-auto overflow-hidden no-wrap d-flex align-center"
     [attr.aria-label]="result.text"
   >
     {{ result.text }}
   </div>
 
-  <div class="border rounded flex-shrink-0 px-1 bg-gray text-gray-light ms-1 f6">
+  <div class="result-type border rounded flex-shrink-0 px-1 ms-1 f6">
     <span *ngIf="result.type === 'search-instance'" i18n>In this instance's network</span>
     <span *ngIf="result.type === 'search-index'" i18n>In the vidiverse</span>
   </div>

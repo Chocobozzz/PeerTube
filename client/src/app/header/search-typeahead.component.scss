@@ -37,27 +37,25 @@
   width: 100%;
 }
 
-#typeahead-help,
-#typeahead-instructions,
-li.suggestion {
+#typeahead-suggestion-help,
+#typeahead-input-help,
+.suggestion {
   border: 1px solid pvar(--mainBackgroundColor);
   background: pvar(--mainBackgroundColor);
   transition: .3s ease;
   transition-property: box-shadow;
   cursor: pointer;
-
-  // soft border-radius for the last suggestion and the link inside
-  &:last-of-type {
-    &,
-    ::ng-deep a {
-      border-bottom-right-radius: 3px;
-      border-bottom-left-radius: 3px;
-    }
-  }
 }
 
-#typeahead-help,
-#typeahead-instructions {
+#typeahead-suggestion-help,
+#typeahead-input-help,
+.suggestion:last-of-type {
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+#typeahead-suggestion-help,
+#typeahead-input-help {
   margin-top: 9px;
   width: 100%;
   padding: .5rem 1rem;
@@ -110,21 +108,20 @@ li.suggestion {
     display: none;
   }
 
-  &:focus,
-  ::ng-deep &:focus-within {
+  &:focus-within {
     > div:last-child {
       @media screen and (min-width: $mobile-view) {
         display: initial !important;
       }
 
-      #typeahead-help,
-      #typeahead-instructions,
-      li.suggestion {
+      #typeahead-suggestion-help,
+      #typeahead-input-help,
+      .suggestion {
         box-shadow: rgba(0, 0, 0, 0.2) 0 10px 20px -5px;
       }
     }
 
-    ::ng-deep input {
+    input {
       box-shadow: rgba(0, 0, 0, 0.2) 0 1px 20px 0;
       border-end-start-radius: 0;
       border-end-end-radius: 0;
@@ -136,21 +133,10 @@ li.suggestion {
   }
 }
 
-.advanced-search-status {
-  height: max-content;
-  cursor: default;
-
-  &.c-help {
-    cursor: help;
-  }
-}
-
 .small-title {
   @include in-content-small-title;
-
-  margin-bottom: .5rem;
 }
 
-::ng-deep my-suggestion {
+my-suggestion {
   width: 100%;
 }
