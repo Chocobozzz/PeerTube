@@ -206,7 +206,9 @@ class SettingsMenuItem extends MenuItem {
   createBackButton () {
     const button = this.subMenu.menu.addChild('MenuItem', {}, 0)
 
+    button.setAttribute('aria-label', this.player().localize('Go back'))
     button.addClass('vjs-back-button');
+
     (button.el() as HTMLElement).innerHTML = this.player().localize(this.subMenu.controlText())
   }
 
