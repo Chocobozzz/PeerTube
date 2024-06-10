@@ -453,6 +453,10 @@
     font-size: $form-input-font-size;
   }
 
+  [type=radio]:focus-visible + label::before {
+    outline: 2px solid;
+  }
+
   [type=radio]:checked,
   [type=radio]:not(:checked) {
     position: absolute;
