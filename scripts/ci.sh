@@ -146,4 +146,12 @@ elif [ "$1" = "lint" ]; then
     npm run swagger-cli -- validate support/doc/api/openapi.yaml
 
     ( cd client && npm run lint )
+elif [ "$1" = "transcription" ]; then
+    npm run build:server
+    npm run build:tests
+
+    transcriptionFiles=$(findTestFiles ./packages/tests/dist/transcription)
+    jiwerFiles=$(findTestFiles ./packages/tests/dist/jiwer)
+
+    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $transcriptionFiles $jiwerFiles
 fi

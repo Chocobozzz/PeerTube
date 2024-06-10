@@ -11,6 +11,7 @@
     { "path": "../../packages/ffmpeg" },
     { "path": "../../packages/models" },
     { "path": "../../packages/node-utils" },
-    { "path": "../../packages/server-commands" }
+    { "path": "../../packages/server-commands" },
+    { "path": "../../packages/transcription" },
   ]
 }
