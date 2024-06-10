@@ -69,7 +69,7 @@
     }
   }
 
-  &.focus-visible {
+  &:focus-visible {
     box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
     outline: none;
   }

@@ -12,13 +12,13 @@
     text-decoration: none !important;
   }
 
-  &:focus:not(.focus-visible) {
+  &:focus:not(:focus-visible) {
     outline: none !important;
   }
 }
 
 @mixin disable-outline {
-  &:focus:not(.focus-visible) {
+  &:focus:not(:focus-visible) {
     outline: none !important;
   }
 }
@@ -77,7 +77,7 @@
 
 @mixin button-focus($color) {
   &:focus,
-  &.focus-visible {
+  &:focus-visible {
     box-shadow: #{$focus-box-shadow-form} $color;
   }
 }

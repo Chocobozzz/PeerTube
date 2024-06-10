@@ -525,7 +525,7 @@ p-table {
       }
     }
 
-    &.focus-visible {
+    &:focus-visible {
       border: 1px solid pvar(--mainForegroundColor) !important
     }
   }
@@ -580,7 +580,7 @@ p-table {
       background-color: pvar(--submenuBackgroundColor) !important;
     }
 
-    &.p-sortable-column.focus-visible {
+    &.p-sortable-column:focus-visible {
       border: 1px solid pvar(--mainForegroundColor) !important
     }
 

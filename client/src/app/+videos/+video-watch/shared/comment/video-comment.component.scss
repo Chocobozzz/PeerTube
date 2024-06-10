@@ -32,8 +32,8 @@
 
 .highlighted-comment {
   display: inline-block;
-  background-color: #F5F5F5;
-  color: #3d3d3d;
+  background-color: pvar(--greySecondaryBackgroundColor);
+  color: pvar(--mainForegroundColor);
   padding: 0 5px;
   font-size: 13px;
   margin-bottom: 5px;
@@ -78,7 +78,7 @@
   }
 
   .comment-account-fid {
-    opacity: .6;
+    color: pvar(--greyForegroundColor);
   }
 }
 

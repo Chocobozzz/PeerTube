@@ -65,7 +65,7 @@ body {
       background-image: url('#{$assets-path}/player/images/big-play-button.svg');
     }
 
-    &.focus-visible,
+    &:focus-visible,
     &:hover {
       background-color: var(--mainColor, #696969);
     }

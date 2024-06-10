@@ -7,7 +7,7 @@
 
   border-radius: 0;
 
-  &.focus-visible,
+  &:focus-visible,
   &:focus {
     box-shadow: none;
   }
