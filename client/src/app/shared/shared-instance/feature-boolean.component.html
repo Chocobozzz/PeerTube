@@ -1,2 +1,7 @@
-<my-global-icon *ngIf="value === true" iconName="tick" i18n-aria-label aria-label="yes"></my-global-icon>
-<my-global-icon *ngIf="value === false" iconName="cross" i18n-aria-label aria-label="no"></my-global-icon>
+@if (value === true) {
+  <span class="visually-hidden" i18n>yes</span>
+  <my-global-icon iconName="tick"></my-global-icon>
+} @else {
+  <span class="visually-hidden" i18n>no</span>
+  <my-global-icon iconName="cross"></my-global-icon>
+}
