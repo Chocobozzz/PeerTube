@@ -136,7 +136,7 @@ See the production guide ["What now" section](https://docs.joinpeertube.org/inst
 ## Upgrade
 
 ::: warning
-Check the changelog (in particular the *IMPORTANT NOTES* section):** https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
+Check the changelog (in particular the *IMPORTANT NOTES* section): https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
 :::
 
 Pull the latest images:
