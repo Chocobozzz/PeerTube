@@ -16,6 +16,7 @@ class MenuFocusFixed extends Menu {
       return
     }
 
+    // FIXME: super misses handleKeyDown
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     return super.handleKeyDown(event)

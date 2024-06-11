@@ -1,9 +1,8 @@
 <ng-template #updateSettings let-fragment>
   <div class="label-description muted" i18n>
     Update
-    <a routerLink="/my-account/settings" [fragment]="fragment">
-      <button class="button-unstyle" (click)="onAccountSettingsClick($event)">your settings</button>
-    </a
+
+    <a routerLink="/my-account/settings" [fragment]="fragment" (click)="onAccountSettingsClick($event)">your settings</a
   ></div>
 </ng-template>
 
@@ -17,8 +16,11 @@
         [attr.aria-expanded]="!areFiltersCollapsed" aria-controls="collapseBasic"
         [ngClass]="{ active: !areFiltersCollapsed }"
       >
-        <ng-container i18n *ngIf="areFiltersCollapsed">More filters</ng-container>
-        <ng-container i18n *ngIf="!areFiltersCollapsed">Hide filters</ng-container>
+        @if (areFiltersCollapsed) {
+          <ng-container i18n>More filters</ng-container>
+        } @else {
+          <ng-container i18n>Hide filters</ng-container>
+        }
 
         <my-global-icon iconName="chevrons-up"></my-global-icon>
       </button>
@@ -54,9 +56,15 @@
       <ng-option i18n value="-originallyPublishedAt">Sort by <strong>"Original Publication Date"</strong></ng-option>
 
       <ng-option i18n value="name">Sort by <strong>"Name"</strong></ng-option>
-      <ng-option i18n *ngIf="isTrendingSortEnabled('most-viewed')" value="-trending">Sort by <strong>"Recent Views"</strong></ng-option>
-      <ng-option i18n *ngIf="isTrendingSortEnabled('hot')" value="-hot">Sort by <strong>"Hot"</strong></ng-option>
-      <ng-option i18n *ngIf="isTrendingSortEnabled('most-liked')" value="-likes">Sort by <strong>"Likes"</strong></ng-option>
+
+      @if (isTrendingSortEnabled('most-viewed')) {
+        <ng-option i18n value="-trending">Sort by <strong>"Recent Views"</strong></ng-option>
+      } @else if (isTrendingSortEnabled('hot')) {
+        <ng-option i18n value="-hot">Sort by <strong>"Hot"</strong></ng-option>
+      } @else if (isTrendingSortEnabled('most-liked')) {
+        <ng-option i18n value="-likes">Sort by <strong>"Likes"</strong></ng-option>
+      }
+
       <ng-option i18n value="-views">Sort by <strong>"Global Views"</strong></ng-option>
     </ng-select>
 
