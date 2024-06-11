@@ -7,8 +7,9 @@
         (ngModelChange)="onModelChange()"
         [id]="inputName"
         [disabled]="disabled"
+        [attr.aria-describedby]="inputName + '-description'"
       />
-      <span role="checkbox" [attr.aria-checked]="checked" [attr.aria-label]="labelText || labelInnerHTML"></span>
+      <span></span>
       <span *ngIf="labelText">{{ labelText }}</span>
       <span
         *ngIf="!labelText && labelInnerHTML"
@@ -34,7 +35,7 @@
   </div>
 
   <div class="ms-4 d-flex flex-column">
-    <div class="wrapper form-group-description">
+    <div class="wrapper form-group-description" [id]="inputName + '-description'">
       <ng-content select="description"></ng-content>
     </div>
 

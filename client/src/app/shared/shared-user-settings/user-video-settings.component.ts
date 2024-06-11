@@ -136,7 +136,7 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
         next: () => {
           this.authService.refreshUserInformation()
 
-          if (this.notifyOnUpdate) this.notifier.success($localize`Video settings updated.`)
+          if (this.notifyOnUpdate) this.notifier.success($localize`Video settings updated.`, 'toto', 15000)
         },
 
         error: err => this.notifier.error(err.message)
