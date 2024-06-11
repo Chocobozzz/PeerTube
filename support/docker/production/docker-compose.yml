@@ -1,5 +1,3 @@
-version: "3.3"
-
 services:
 
   # You can comment this webserver section if you want to use another webserver/proxy or test PeerTube in local
