@@ -208,8 +208,8 @@ export class PluginListInstalledComponent implements OnInit {
   private isMajorUpgrade (plugin: PeerTubePlugin) {
     if (!plugin.latestVersion) return false
 
-    const latestMajor = plugin.latestVersion.split('.')[0]
-    const currentMajor = plugin.version.split('.')[0]
+    const latestMajor = parseInt(plugin.latestVersion.split('.')[0])
+    const currentMajor = parseInt(plugin.version.split('.')[0])
 
     return latestMajor > currentMajor
   }
