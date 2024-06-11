@@ -147,6 +147,7 @@ elif [ "$1" = "lint" ]; then
 
     ( cd client && npm run lint )
 elif [ "$1" = "transcription" ]; then
+    npm run preinstall --workspace=@peertube/peertube-transcription --workspace=@peertube/peertube-jiwer
     npm run build:server
     npm run build:tests
 
