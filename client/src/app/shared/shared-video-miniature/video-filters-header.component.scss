@@ -129,13 +129,13 @@ my-select-categories {
   display: inline-block;
 }
 
-.label-description {
+.update-your-settings {
   font-size: 12px;
-  font-style: italic;
   margin-bottom: 10px;
 
   a {
     color: pvar(--mainColor);
+    text-decoration: underline;
   }
 }
 
