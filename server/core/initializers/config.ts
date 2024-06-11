@@ -133,6 +133,7 @@ const CONFIG = {
   OBJECT_STORAGE: {
     ENABLED: config.get<boolean>('object_storage.enabled'),
     MAX_UPLOAD_PART: bytes.parse(config.get<string>('object_storage.max_upload_part')),
+    MAX_REQUEST_ATTEMPTS: config.get<number>('object_storage.max_request_attempts'),
     ENDPOINT: config.get<string>('object_storage.endpoint'),
     REGION: config.get<string>('object_storage.region'),
     UPLOAD_ACL: {

@@ -212,6 +212,11 @@ object_storage:
   # Maximum amount to upload in one request to object storage
   max_upload_part: 100MB
 
+  # Maximum number of attempts to make a request to object storage
+  # Some object storage providers (for instance Backblaze) expects the client to retry upload upon 5xx errors
+  # If you're using such a provider then you can increase this value
+  max_request_attempts: 3
+
   streaming_playlists:
     bucket_name: 'streaming-playlists'
 
