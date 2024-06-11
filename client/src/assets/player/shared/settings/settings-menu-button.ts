@@ -4,9 +4,9 @@ import { SettingsDialog } from './settings-dialog'
 import { SettingsMenuItem } from './settings-menu-item'
 import { SettingsPanel } from './settings-panel'
 import { SettingsPanelChild } from './settings-panel-child'
+import { MenuFocusFixed } from './menu-focus-fixed'
 
 const Button = videojs.getComponent('Button')
-const Menu = videojs.getComponent('Menu')
 const Component = videojs.getComponent('Component')
 
 export interface SettingsButtonOptions extends videojs.ComponentOptions {
@@ -19,7 +19,7 @@ export interface SettingsButtonOptions extends videojs.ComponentOptions {
 class SettingsButton extends Button {
   dialog: SettingsDialog
   dialogEl: HTMLElement
-  menu: videojs.Menu
+  menu: MenuFocusFixed
   panel: SettingsPanel
   panelChild: SettingsPanelChild
 
@@ -122,6 +122,7 @@ class SettingsButton extends Button {
 
   bindEvents () {
     document.addEventListener('click', this.documentClickHandler)
+
     if (this.isInIframe()) {
       window.addEventListener('blur', this.documentClickHandler)
     }
@@ -153,8 +154,7 @@ class SettingsButton extends Button {
 
     this.setDialogSize(this.getComponentSize(this.menu))
 
-    const firstChild = this.menu.children()[0]
-    if (firstChild) firstChild.focus()
+    this.menu.focus()
   }
 
   hideDialog () {
@@ -209,7 +209,12 @@ class SettingsButton extends Button {
   }
 
   buildMenu () {
-    this.menu = new Menu(this.player())
+    this.menu = new MenuFocusFixed(this.player())
+    this.menu.on('escaped-key', () => {
+      this.hideDialog()
+      this.focus()
+    })
+
     this.menu.addClass('vjs-main-menu')
     const entries = this.settingsButtonOptions.entries
 
