@@ -124,8 +124,8 @@
           <li i18n class="block-title">{{ menuSection.title }}</li>
 
           <ul>
-            <li>
-              <a class="menu-link" *ngFor="let link of menuSection.links" [routerLink]="link.path" routerLinkActive="active">
+            <li *ngFor="let link of menuSection.links">
+              <a class="menu-link" [routerLink]="link.path" routerLinkActive="active">
                 <my-global-icon *ngIf="link.icon" [iconName]="link.icon" [ngClass]="link.iconClass" aria-hidden="true"></my-global-icon>
                 <ng-container>{{ link.shortLabel }}</ng-container>
               </a>
