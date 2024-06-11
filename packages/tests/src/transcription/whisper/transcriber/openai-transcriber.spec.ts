@@ -44,6 +44,7 @@ describe('Open AI Whisper transcriber', function () {
   )
 
   before(async function () {
+    this.timeout(1 * 1000 * 60)
     await mkdir(transcriptDirectory, { recursive: true })
     await unzip(await downloadFile(FIXTURE_URLS.transcriptionModels, tmpDirectory))
   })
