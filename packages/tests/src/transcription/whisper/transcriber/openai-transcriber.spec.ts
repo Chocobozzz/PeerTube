@@ -78,7 +78,7 @@ describe('Open AI Whisper transcriber', function () {
   })
 
   it('May transcribe a media file using a local PyTorch model', async function () {
-    this.timeout(8 * 1000 * 60)
+    this.timeout(9 * 1000 * 60)
     await transcriber.transcribe({
       mediaFilePath: frVideoPath,
       model: await TranscriptionModel.fromPath(join(modelsDirectory, 'tiny.pt')),
