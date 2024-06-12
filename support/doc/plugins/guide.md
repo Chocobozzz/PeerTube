@@ -793,10 +793,10 @@ async function register ({
   // Store data associated to this video
   registerHook({
     target: 'action:api.video.updated',
-    handler: ({ video, body }) => {
-      if (!body.pluginData) return
+    handler: ({ video, req }) => {
+      if (!req.body.pluginData) return
 
-      const value = body.pluginData[fieldName]
+      const value = req.body.pluginData[fieldName]
       if (!value) return
 
       storageManager.storeData(fieldName + '-' + video.id, value)
