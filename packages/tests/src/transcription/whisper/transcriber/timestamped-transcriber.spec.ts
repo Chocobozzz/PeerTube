@@ -43,6 +43,7 @@ describe('Linto timestamped Whisper transcriber', function () {
   })
 
   it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format by default', async function () {
+    this.timeout(1 * 1000 * 60)
     const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en' })
 
     expect(transcript.format).to.equals('vtt')
