@@ -73,7 +73,7 @@ describe('Linto timestamped Whisper transcriber', function () {
   it('May transcribe a media file using a local PyTorch model file', async function () {
     this.timeout(2 * 1000 * 60)
     await transcriber.transcribe({
-      mediaFilePath: frVideoPath,
+      mediaFilePath: shortVideoPath,
       model: await TranscriptionModel.fromPath(join(modelsDirectory, 'tiny.pt')),
       language: 'en'
     })
