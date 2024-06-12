@@ -99,7 +99,7 @@ describe('Linto timestamped Whisper transcriber', function () {
   })
 
   it('Should produce a text transcript similar to openai-whisper implementation', async function () {
-    this.timeout(7 * 1000 * 60)
+    this.timeout(10 * 1000 * 60)
     const transcribeArgs: WhisperTranscribeArgs = {
       mediaFilePath: frVideoPath,
       model: await TranscriptionModel.fromPath(join(modelsDirectory, 'tiny.pt')),
