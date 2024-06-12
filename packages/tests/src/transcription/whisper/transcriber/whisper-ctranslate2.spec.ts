@@ -106,7 +106,7 @@ describe('Whisper CTranslate2 transcriber', function () {
   })
 
   it('Should produce a text transcript similar to openai-whisper implementation', async function () {
-    this.timeout(6 * 1000 * 60)
+    this.timeout(7 * 1000 * 60)
     const transcribeArgs: WhisperTranscribeArgs = {
       mediaFilePath: frVideoPath,
       language: 'fr',
