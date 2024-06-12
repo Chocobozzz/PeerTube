@@ -55,7 +55,8 @@ $setting-transition-easing: ease-out;
 
     .vjs-settings-panel {
       position: absolute;
-      right: 0;
+      @include right(0);
+
       overflow-y: auto;
       overflow-x: hidden;
     }
@@ -145,7 +146,7 @@ $setting-transition-easing: ease-out;
               @include icon(15px);
 
               position: absolute;
-              left: 15px;
+              @include left(15px);
               content: ' ';
               margin-top: 1px;
               background-image: url('#{$assets-path}/player/images/tick-white.svg');
@@ -180,5 +181,11 @@ $setting-transition-easing: ease-out;
         }
       }
     }
+  }
+}
+
+:root[dir=rtl] {
+  .vjs-back-button::before {
+    transform: rotate(45deg) !important;
   }
 }
