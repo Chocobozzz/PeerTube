@@ -16,9 +16,7 @@ export class Ctranslate2Transcriber extends OpenaiTranscriber {
   }: WhisperTranscribeArgs): Promise<TranscriptFile> {
     this.assertLanguageDetectionAvailable(language)
 
-    // Shall we run the command with `{ shell: true }` to get the same error as in sh ?
-    // ex: ENOENT => Command not found
-    const $$ = $({ verbose: true })
+    const $$ = $({ verbose: process.env.NODE_ENV !== 'production' })
 
     if (model.path) {
       assert(await lstat(model.path).then(stats => stats.isDirectory()), 'Model path must be a path to a directory.')

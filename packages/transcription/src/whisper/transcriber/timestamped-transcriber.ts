@@ -18,7 +18,7 @@ export class WhisperTimestampedTranscriber extends OpenaiTranscriber {
   }: WhisperTranscribeArgs): Promise<TranscriptFile> {
     this.assertLanguageDetectionAvailable(language)
 
-    const $$ = $({ verbose: true })
+    const $$ = $({ verbose: process.env.NODE_ENV !== 'production' })
     const languageArgs = language ? [ '--language', language ] : []
 
     this.createRun(runId)
