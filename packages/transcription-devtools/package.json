@@ -1,5 +1,5 @@
 {
-  "name": "@peertube/peertube-jiwer",
+  "name": "@peertube/peertube-transcription-devtools",
   "private": true,
   "version": "0.0.0",
   "main": "dist/index.js",
@@ -12,9 +12,9 @@
   "type": "module",
   "devDependencies": {},
   "scripts": {
-    "preinstall": "pip install -r requirements.txt",
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "benchmark": "tsx --conditions=peertube:tsx --tsconfig ./tsconfig.json ./src/benchmark.ts"
   },
   "dependencies": {}
 }

@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions, no-new, max-len */
-import { TranscriptFile, TranscriptFileEvaluator } from '@peertube/peertube-transcription'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
-import { join } from 'node:path'
-import { mkdir, rm } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
+import { TranscriptFile } from '@peertube/peertube-transcription'
+import { TranscriptFileEvaluator } from '@peertube/peertube-transcription-devtools'
 import { expect } from 'chai'
+import { ensureDir, remove } from 'fs-extra/esm'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 
 describe('Transcript File Evaluator', function () {
   const transcriptDirectory = join(tmpdir(), 'peertube-transcription', 'transcript-file-evaluator')
   const referenceTranscriptFilePath = buildAbsoluteFixturePath('transcription/videos/communiquer-lors-dune-classe-transplantee.txt')
 
   before(async function () {
-    await mkdir(transcriptDirectory, { recursive: true })
+    await ensureDir(transcriptDirectory)
   })
 
   it(`may not compare files in another format than txt`, async function () {
@@ -62,6 +63,6 @@ Ensuite, il pourront lire et commenter ce de leurs camarades ou répondre aux co
   })
 
   after(async function () {
-    await rm(transcriptDirectory, { recursive: true, force: true })
+    await remove(transcriptDirectory)
   })
 })

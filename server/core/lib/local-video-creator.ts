@@ -107,6 +107,8 @@ export class LocalVideoCreator {
     this.channel = options.channel
 
     this.videoAttributeResultHook = options.videoAttributeResultHook
+
+    this.lTags = options.lTags
   }
 
   async create () {
@@ -201,8 +203,11 @@ export class LocalVideoCreator {
 
         if (this.videoFile) {
           transaction.afterCommit(() => {
-            addVideoJobsAfterCreation({ video: this.video, videoFile: this.videoFile })
-              .catch(err => logger.error('Cannot build new video jobs of %s.', this.video.uuid, { err, ...this.lTags(this.video.uuid) }))
+            addVideoJobsAfterCreation({
+              video: this.video,
+              videoFile: this.videoFile,
+              generateTranscription: this.videoAttributes.generateTranscription ?? true
+            }).catch(err => logger.error('Cannot build new video jobs of %s.', this.video.uuid, { err, ...this.lTags(this.video.uuid) }))
           })
         } else {
           await federateVideoIfNeeded(this.video, true, transaction)

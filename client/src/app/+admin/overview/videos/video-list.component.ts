@@ -1,7 +1,7 @@
 import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { AuthService, ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
+import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { formatICU, getAbsoluteAPIUrl } from '@app/helpers'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoFileTokenService } from '@app/shared/shared-main/video/video-file-token.service'
@@ -30,6 +30,7 @@ import {
   VideoActionsDropdownComponent
 } from '../../../shared/shared-video-miniature/video-actions-dropdown.component'
 import { VideoAdminService } from './video-admin.service'
+import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
 
 @Component({
   selector: 'my-video-list',
@@ -84,7 +85,8 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
     removeFiles: true,
     transcoding: true,
     studio: true,
-    stats: true
+    stats: true,
+    generateTranscription: true
   }
 
   loading = true
@@ -100,6 +102,8 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
     private videoService: VideoService,
     private videoAdminService: VideoAdminService,
     private videoBlockService: VideoBlockService,
+    private videoCaptionService: VideoCaptionService,
+    private server: ServerService,
     private videoFileTokenService: VideoFileTokenService
   ) {
     super()
@@ -107,6 +111,10 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
 
   get authUser () {
     return this.auth.getUser()
+  }
+
+  get serverConfig () {
+    return this.server.getHTMLConfig()
   }
 
   ngOnInit () {
@@ -159,6 +167,14 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
           handler: videos => this.removeVideoFiles(videos, 'web-videos'),
           isDisplayed: videos => videos.every(v => v.canRemoveFiles(this.authUser)),
           iconName: 'delete'
+        }
+      ],
+      [
+        {
+          label: $localize`Generate caption`,
+          handler: videos => this.generateCaption(videos),
+          isDisplayed: videos => videos.every(v => v.canGenerateTranscription(this.authUser, this.serverConfig.videoTranscription.enabled)),
+          iconName: 'video-lang'
         }
       ]
     ]
@@ -394,6 +410,17 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
           this.notifier.success($localize`Transcoding jobs created.`)
 
           this.reloadData()
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  private generateCaption (videos: Video[]) {
+    this.videoCaptionService.generateCaption(videos.map(v => v.id))
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Transcription jobs created.`)
         },
 
         error: err => this.notifier.error(err.message)

@@ -1,10 +1,10 @@
+import { forceNumber } from '@peertube/peertube-core-utils'
 import { Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, IsInt, Table, Unique, UpdatedAt } from 'sequelize-typescript'
-import { forceNumber } from '@peertube/peertube-core-utils'
-import { VideoModel } from './video.js'
 import { SequelizeModel } from '../shared/sequelize-type.js'
+import { VideoModel } from './video.js'
 
-export type VideoJobInfoColumnType = 'pendingMove' | 'pendingTranscode'
+export type VideoJobInfoColumnType = 'pendingMove' | 'pendingTranscode' | 'pendingTranscription'
 
 @Table({
   tableName: 'videoJobInfo',
@@ -38,6 +38,12 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
   @IsInt
   @Column
   pendingTranscode: number
+
+  @AllowNull(false)
+  @Default(0)
+  @IsInt
+  @Column
+  pendingTranscription: number
 
   @ForeignKey(() => VideoModel)
   @Unique

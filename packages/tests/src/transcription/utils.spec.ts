@@ -1,14 +1,16 @@
-import { cp, lstat, mkdir, rm } from 'node:fs/promises'
-import { join } from 'node:path'
-import { tmpdir } from 'node:os'
-import { expect } from 'chai'
-import { downloadFile, unzip } from '@peertube/peertube-transcription'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
+import { downloadFile, unzip } from '@peertube/peertube-transcription-devtools'
+import { expect } from 'chai'
+import { ensureDir, remove } from 'fs-extra/esm'
+import { cp, lstat } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 
 describe('downloadFile', function () {
   const testDirectory = join(tmpdir(), 'peertube-transcription', 'utils')
+
   before(async function () {
-    await mkdir(testDirectory, { recursive: true })
+    await ensureDir(testDirectory)
   })
 
   it(`Downloads a file and write it to the disk `, async function () {
@@ -18,7 +20,7 @@ describe('downloadFile', function () {
   })
 
   after(async function () {
-    await rm(testDirectory, { recursive: true, force: true })
+    await remove(testDirectory)
   })
 })
 
@@ -26,8 +28,9 @@ describe('unzip', function () {
   const zipFixtureFileName = 'hello_world.zip'
   const zipFixtureFilePath = buildAbsoluteFixturePath(`transcription/${zipFixtureFileName}`)
   const testDirectory = join(tmpdir(), 'peertube-transcription', 'utils')
+
   before(async function () {
-    await mkdir(testDirectory, { recursive: true })
+    await ensureDir(testDirectory)
   })
 
   it(`Extract zip archive to directory`, async function () {
@@ -39,6 +42,6 @@ describe('unzip', function () {
   })
 
   after(async function () {
-    await rm(testDirectory, { recursive: true, force: true })
+    await remove(testDirectory)
   })
 })

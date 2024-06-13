@@ -108,6 +108,9 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.videoStudio.enabled).to.be.false
   expect(data.videoStudio.remoteRunners.enabled).to.be.false
 
+  expect(data.videoTranscription.enabled).to.be.false
+  expect(data.videoTranscription.remoteRunners.enabled).to.be.false
+
   expect(data.videoFile.update.enabled).to.be.false
 
   expect(data.import.videos.concurrency).to.equal(2)
@@ -287,6 +290,12 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       }
     },
     videoStudio: {
+      enabled: true,
+      remoteRunners: {
+        enabled: true
+      }
+    },
+    videoTranscription: {
       enabled: true,
       remoteRunners: {
         enabled: true

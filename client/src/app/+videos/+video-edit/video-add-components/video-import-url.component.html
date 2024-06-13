@@ -57,8 +57,9 @@
 <form [hidden]="!hasImportedVideo" novalidate [formGroup]="form">
   <my-video-edit
     #videoEdit
-    [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions" [forbidScheduledPublication]="true"
+    [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions"
     [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"
+    forbidScheduledPublication="true"
     type="import-url"
   ></my-video-edit>
 

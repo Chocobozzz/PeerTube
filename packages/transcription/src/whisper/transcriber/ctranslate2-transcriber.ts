@@ -1,22 +1,26 @@
-import { $ } from 'execa'
 import { buildSUUID } from '@peertube/peertube-node-utils'
-import { lstat } from 'node:fs/promises'
-import { OpenaiTranscriber, WhisperTranscribeArgs } from './openai-transcriber.js'
-import { TranscriptFile } from '../../transcript/index.js'
-import { WhisperBuiltinModel } from '../whisper-builtin-model.js'
+import { $ } from 'execa'
 import assert from 'node:assert'
+import { lstat } from 'node:fs/promises'
+import { TranscribeArgs } from '../../abstract-transcriber.js'
+import { TranscriptFile } from '../../transcript-file.js'
+import { TranscriptionModel } from '../../transcription-model.js'
+import { WhisperBuiltinModel } from '../whisper-builtin-model.js'
+import { OpenaiTranscriber } from './openai-transcriber.js'
 
 export class Ctranslate2Transcriber extends OpenaiTranscriber {
+
   async transcribe ({
     mediaFilePath,
     model = new WhisperBuiltinModel('tiny'),
     language,
-    format = 'vtt',
+    format,
+    transcriptDirectory,
     runId = buildSUUID()
-  }: WhisperTranscribeArgs): Promise<TranscriptFile> {
+  }: TranscribeArgs): Promise<TranscriptFile> {
     this.assertLanguageDetectionAvailable(language)
 
-    const $$ = $({ verbose: process.env.NODE_ENV !== 'production' })
+    const $$ = $({ verbose: process.env.NODE_ENV !== 'production', env: this.getExecEnv() })
 
     if (model.path) {
       assert(await lstat(model.path).then(stats => stats.isDirectory()), 'Model path must be a path to a directory.')
@@ -27,7 +31,7 @@ export class Ctranslate2Transcriber extends OpenaiTranscriber {
 
     this.createRun(runId)
     this.startRun()
-    await $$`${this.engine.binary} ${[
+    await $$`${this.getEngineBinary()} ${[
       mediaFilePath,
       ...modelArgs,
       '--word_timestamps',
@@ -35,15 +39,25 @@ export class Ctranslate2Transcriber extends OpenaiTranscriber {
       '--output_format',
       'all',
       '--output_dir',
-      this.transcriptDirectory,
+      transcriptDirectory,
       ...languageArgs
     ]}`
     this.stopRun()
 
     return new TranscriptFile({
-      language: language || await this.getDetectedLanguage(mediaFilePath),
-      path: this.getTranscriptFilePath(mediaFilePath, format),
+      language: language || await this.getDetectedLanguage(transcriptDirectory, mediaFilePath),
+      path: this.getTranscriptFilePath(transcriptDirectory, mediaFilePath, format),
       format
     })
+  }
+
+  supports (model: TranscriptionModel) {
+    return model.format === 'CTranslate2'
+  }
+
+  async install (directory: string) {
+    const $$ = $({ verbose: true })
+
+    await $$`pip3 install -U -t ${directory} whisper-ctranslate2==${this.engine.version}`
   }
 }

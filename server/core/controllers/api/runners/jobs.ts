@@ -1,4 +1,25 @@
-import express, { UploadFiles } from 'express'
+import {
+  AbortRunnerJobBody,
+  AcceptRunnerJobResult,
+  ErrorRunnerJobBody,
+  HttpStatusCode,
+  ListRunnerJobsQuery,
+  LiveRTMPHLSTranscodingUpdatePayload,
+  RequestRunnerJobResult,
+  RunnerJobState,
+  RunnerJobSuccessBody,
+  RunnerJobSuccessPayload,
+  RunnerJobType,
+  RunnerJobUpdateBody,
+  RunnerJobUpdatePayload,
+  ServerErrorCode,
+  TranscriptionSuccess,
+  UserRight,
+  VODAudioMergeTranscodingSuccess,
+  VODHLSTranscodingSuccess,
+  VODWebVideoTranscodingSuccess,
+  VideoStudioTranscodingSuccess
+} from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { createReqFiles } from '@server/helpers/express-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
@@ -28,33 +49,13 @@ import {
   successRunnerJobValidator,
   updateRunnerJobValidator
 } from '@server/middlewares/validators/runners/index.js'
-import { RunnerModel } from '@server/models/runner/runner.js'
 import { RunnerJobModel } from '@server/models/runner/runner-job.js'
-import {
-  AbortRunnerJobBody,
-  AcceptRunnerJobResult,
-  ErrorRunnerJobBody,
-  HttpStatusCode,
-  ListRunnerJobsQuery,
-  LiveRTMPHLSTranscodingUpdatePayload,
-  RequestRunnerJobResult,
-  RunnerJobState,
-  RunnerJobSuccessBody,
-  RunnerJobSuccessPayload,
-  RunnerJobType,
-  RunnerJobUpdateBody,
-  RunnerJobUpdatePayload,
-  ServerErrorCode,
-  UserRight,
-  VideoStudioTranscodingSuccess,
-  VODAudioMergeTranscodingSuccess,
-  VODHLSTranscodingSuccess,
-  VODWebVideoTranscodingSuccess
-} from '@peertube/peertube-models'
+import { RunnerModel } from '@server/models/runner/runner.js'
+import express, { UploadFiles } from 'express'
 
 const postRunnerJobSuccessVideoFiles = createReqFiles(
-  [ 'payload[videoFile]', 'payload[resolutionPlaylistFile]' ],
-  { ...MIMETYPES.VIDEO.MIMETYPE_EXT, ...MIMETYPES.M3U8.MIMETYPE_EXT }
+  [ 'payload[videoFile]', 'payload[resolutionPlaylistFile]', 'payload[vttFile]' ],
+  { ...MIMETYPES.VIDEO.MIMETYPE_EXT, ...MIMETYPES.M3U8.MIMETYPE_EXT, ...MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT }
 )
 
 const runnerJobUpdateVideoFiles = createReqFiles(
@@ -345,7 +346,15 @@ const jobSuccessPayloadBuilders: {
     }
   },
 
-  'live-rtmp-hls-transcoding': () => ({})
+  'live-rtmp-hls-transcoding': () => ({}),
+
+  'video-transcription': (payload: TranscriptionSuccess, files) => {
+    return {
+      ...payload,
+
+      vttFile: files['payload[vttFile]'][0].path
+    }
+  }
 }
 
 async function postRunnerJobSuccess (req: express.Request, res: express.Response) {

@@ -1,10 +1,6 @@
-import { Logger, createLogger } from 'winston'
-import { TranscriptionEngine } from './transcription-engine.js'
-import {
-  Ctranslate2Transcriber,
-  OpenaiTranscriber, WhisperTimestampedTranscriber
-} from './whisper/index.js'
-import { AbstractTranscriber } from './abstract-transcriber.js'
+import { SimpleLogger } from '@peertube/peertube-models'
+import { TranscriptionEngine, TranscriptionEngineName } from './transcription-engine.js'
+import { Ctranslate2Transcriber, OpenaiTranscriber } from './whisper/index.js'
 
 export class TranscriberFactory {
   engines: TranscriptionEngine[]
@@ -13,26 +9,28 @@ export class TranscriberFactory {
     this.engines = engines
   }
 
-  createFromEngineName (
-    engineName: string,
-    logger: Logger = createLogger(),
-    transcriptDirectory: string = AbstractTranscriber.DEFAULT_TRANSCRIPT_DIRECTORY
-  ) {
-    const engine = this.getEngineByName(engineName)
+  createFromEngineName (options: {
+    engineName: TranscriptionEngineName
+    enginePath?: string
+    binDirectory?: string
 
-    const transcriberArgs: ConstructorParameters<typeof AbstractTranscriber> = [
-      engine,
-      logger,
-      transcriptDirectory
-    ]
+    logger: SimpleLogger
+  }) {
+    const { engineName } = options
+
+    const transcriberArgs = {
+      ...options,
+
+      engine: this.getEngineByName(engineName)
+    }
 
     switch (engineName) {
       case 'openai-whisper':
-        return new OpenaiTranscriber(...transcriberArgs)
+        return new OpenaiTranscriber(transcriberArgs)
+
       case 'whisper-ctranslate2':
-        return new Ctranslate2Transcriber(...transcriberArgs)
-      case 'whisper-timestamped':
-        return new WhisperTimestampedTranscriber(...transcriberArgs)
+        return new Ctranslate2Transcriber(transcriberArgs)
+
       default:
         throw new Error(`Unimplemented engine ${engineName}`)
     }

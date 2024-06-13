@@ -5,7 +5,7 @@ import { RunnerJob, RunnerJobPayload } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'
 import { ConfigManager, downloadFile, logger } from '../../../shared/index.js'
-import { getTranscodingLogger } from './transcoding-logger.js'
+import { getWinstonLogger } from './winston-logger.js'
 
 export type JobWithToken <T extends RunnerJobPayload = RunnerJobPayload> = RunnerJob<T> & { jobToken: string }
 
@@ -101,6 +101,6 @@ function getCommonFFmpegOptions () {
       available: getDefaultAvailableEncoders(),
       encodersToTry: getDefaultEncodersToTry()
     },
-    logger: getTranscodingLogger()
+    logger: getWinstonLogger()
   }
 }

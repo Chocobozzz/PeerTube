@@ -1,57 +1,59 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions, max-len */
-import { expect, config } from 'chai'
-import { createLogger } from 'winston'
-import { join } from 'node:path'
-import { mkdir, rm } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
-  downloadFile,
-  levenshteinDistance,
   OpenaiTranscriber,
   TranscriptFile,
-  TranscriptFileEvaluator,
   TranscriptionModel,
-  unzip,
   WhisperBuiltinModel
 } from '@peertube/peertube-transcription'
-import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { TranscriptFileEvaluator, levenshteinDistance } from '@peertube/peertube-transcription-devtools'
+import { downloadCustomModelsIfNeeded, getCustomModelPath } from '@tests/shared/transcription.js'
+import { config, expect } from 'chai'
+import { ensureDir, remove } from 'fs-extra/esm'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { createLogger } from 'winston'
 
 config.truncateThreshold = 0
 
 describe('Open AI Whisper transcriber', function () {
   const tmpDirectory = join(tmpdir(), 'peertube-transcription')
   const transcriptDirectory = join(tmpDirectory, 'transcriber', 'openai')
-  const modelsDirectory = join(tmpDirectory, 'models')
+
   const shortVideoPath = buildAbsoluteFixturePath('transcription/videos/the_last_man_on_earth.mp4')
   const frVideoPath = buildAbsoluteFixturePath('transcription/videos/derive_sectaire.mp4')
+
   const referenceTranscriptFile = new TranscriptFile({
     path: buildAbsoluteFixturePath('transcription/videos/derive_sectaire.txt'),
     language: 'fr',
     format: 'txt'
   })
-  const transcriber = new OpenaiTranscriber(
-    {
+
+  const transcriber = new OpenaiTranscriber({
+    engine: {
       name: 'openai-whisper',
-      requirements: [],
       type: 'binary',
-      binary: 'whisper',
+      command: 'whisper',
       supportedModelFormats: [ 'PyTorch' ],
-      languageDetection: true
+      languageDetection: true,
+      version: ''
     },
-    createLogger(),
-    transcriptDirectory
-  )
+    logger: createLogger()
+  })
+  const model = new TranscriptionModel('tiny')
 
   before(async function () {
-    this.timeout(1 * 1000 * 60)
-    await mkdir(transcriptDirectory, { recursive: true })
-    await unzip(await downloadFile(FIXTURE_URLS.transcriptionModels, tmpDirectory))
+    this.timeout(120000)
+
+    await ensureDir(transcriptDirectory)
+
+    await downloadCustomModelsIfNeeded('tiny.pt')
   })
 
-  it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format by default', async function () {
+  it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format', async function () {
     this.timeout(3 * 1000 * 60)
-    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en' })
+
+    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'vtt', model, transcriptDirectory })
 
     expect(transcript.format).to.equals('vtt')
     expect(transcript.language).to.equals('en')
@@ -59,7 +61,7 @@ describe('Open AI Whisper transcriber', function () {
   })
 
   it('May produce a transcript file in the `srt` format', async function () {
-    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'srt' })
+    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'srt', model, transcriptDirectory })
 
     expect(transcript.format).to.equals('srt')
     expect(transcript.language).to.equals('en')
@@ -67,7 +69,7 @@ describe('Open AI Whisper transcriber', function () {
   })
 
   it('May produce a transcript file in the `txt` format', async function () {
-    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'txt' })
+    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'txt', model, transcriptDirectory })
 
     expect(transcript.format).to.equals('txt')
     expect(transcript.language).to.equals('en')
@@ -80,16 +82,20 @@ describe('Open AI Whisper transcriber', function () {
 
   it('May transcribe a media file using a local PyTorch model', async function () {
     this.timeout(2 * 1000 * 60)
+
     await transcriber.transcribe({
       mediaFilePath: shortVideoPath,
-      model: await TranscriptionModel.fromPath(join(modelsDirectory, 'tiny.pt')),
-      language: 'en'
+      model: await TranscriptionModel.fromPath(getCustomModelPath('tiny.pt')),
+      language: 'en',
+      format: 'vtt',
+      transcriptDirectory
     })
   })
 
   it('May transcribe a media file in french', async function () {
     this.timeout(3 * 1000 * 60)
-    const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath, language: 'fr', format: 'txt' })
+
+    const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath, language: 'fr', format: 'txt', model, transcriptDirectory })
 
     expect(transcript.format).to.equals('txt')
     expect(transcript.language).to.equals('fr')
@@ -98,18 +104,21 @@ describe('Open AI Whisper transcriber', function () {
 
   it('Guesses the video language if not provided', async function () {
     this.timeout(3 * 1000 * 60)
-    const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath })
+
+    const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath, model, format: 'vtt', transcriptDirectory })
 
     expect(transcript.language).to.equals('fr')
   })
 
-  it('May transcribe a media file in french with small model', async function () {
+  it('May transcribe a media file in french with small model (can be long)', async function () {
     this.timeout(6 * 1000 * 60)
+
     const transcript = await transcriber.transcribe({
       mediaFilePath: frVideoPath,
       language: 'fr',
       format: 'txt',
-      model: new WhisperBuiltinModel('small')
+      model: new WhisperBuiltinModel('small'),
+      transcriptDirectory
     })
 
     expect(transcript.language).to.equals('fr')
@@ -120,6 +129,6 @@ describe('Open AI Whisper transcriber', function () {
   })
 
   after(async function () {
-    await rm(transcriptDirectory, { recursive: true, force: true })
+    await remove(transcriptDirectory)
   })
 })

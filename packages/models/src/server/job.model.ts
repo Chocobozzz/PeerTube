@@ -33,6 +33,7 @@ export type JobType =
   | 'generate-video-storyboard'
   | 'create-user-export'
   | 'import-user-archive'
+  | 'video-transcription'
 
 export interface Job {
   id: number | string
@@ -101,11 +102,16 @@ export interface VideoImportYoutubeDLPayload {
   type: VideoImportYoutubeDLPayloadType
   videoImportId: number
 
+  generateTranscription: boolean
+
   fileExt?: string
 }
 
 export interface VideoImportTorrentPayload {
   type: VideoImportTorrentPayloadType
+
+  generateTranscription: boolean
+
   videoImportId: number
 }
 
@@ -315,4 +321,10 @@ export interface CreateUserExportPayload {
 
 export interface ImportUserArchivePayload {
   userImportId: number
+}
+
+// ---------------------------------------------------------------------------
+
+export interface VideoTranscriptionPayload {
+  videoUUID: string
 }

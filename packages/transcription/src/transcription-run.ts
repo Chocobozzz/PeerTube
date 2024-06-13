@@ -1,11 +1,12 @@
+import { SimpleLogger } from '@peertube/peertube-models'
 import { buildSUUID, SUUID } from '@peertube/peertube-node-utils'
-import { createLogger, Logger } from 'winston'
+import { createLogger } from 'winston'
 
 export class TranscriptionRun {
   uuid: SUUID
-  logger: Logger
+  logger: SimpleLogger
 
-  constructor (logger = createLogger(), uuid: SUUID = buildSUUID()) {
+  constructor (logger: SimpleLogger = createLogger(), uuid: SUUID = buildSUUID()) {
     this.uuid = uuid
     this.logger = logger
   }
@@ -26,8 +27,8 @@ export class TranscriptionRun {
         this.getStartPerformanceMarkName(),
         this.getEndPerformanceMarkName()
       )
-    } catch (e) {
-      this.logger.log({ level: 'error', message: e })
+    } catch (err) {
+      this.logger.error(err.message, { err })
     }
   }
 

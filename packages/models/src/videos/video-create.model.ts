@@ -27,4 +27,7 @@ export interface VideoCreate {
 
   thumbnailfile?: Blob | string
   previewfile?: Blob | string
+
+  // Default is true if the feature is enabled by the instance admin
+  generateTranscription?: boolean
 }

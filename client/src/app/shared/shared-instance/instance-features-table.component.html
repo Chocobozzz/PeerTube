@@ -35,6 +35,13 @@
     </tr>
 
     <tr>
+      <th i18n class="sub-label" scope="row">Automatic transcription</th>
+      <td>
+        <my-feature-boolean [value]="serverConfig.videoTranscription.enabled"></my-feature-boolean>
+      </td>
+    </tr>
+
+    <tr>
       <th i18n class="sub-label" scope="row">Video uploads</th>
       <td>
         <span i18n *ngIf="serverConfig.autoBlacklist.videos.ofUsers.enabled">Requires manual validation by moderators</span>

@@ -1,3 +1,0 @@
-openai-whisper==20231117
-whisper-ctranslate2==0.4.4
-whisper-timestamped==1.15.4

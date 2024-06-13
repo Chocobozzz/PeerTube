@@ -112,10 +112,21 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
     return undefined
   }
 
+  static async insertOrReplaceLanguage (caption: MVideoCaption, transaction: Transaction) {
+    const existing = await VideoCaptionModel.loadByVideoIdAndLanguage(caption.videoId, caption.language, transaction)
+
+    // Delete existing file
+    if (existing) await existing.destroy({ transaction })
+
+    return caption.save({ transaction })
+  }
+
+  // ---------------------------------------------------------------------------
+
   static loadByVideoIdAndLanguage (videoId: string | number, language: string, transaction?: Transaction): Promise<MVideoCaptionVideo> {
     const videoInclude = {
       model: VideoModel.unscoped(),
-      attributes: [ 'id', 'remote', 'uuid' ],
+      attributes: [ 'id', 'name', 'remote', 'uuid', 'url' ],
       where: buildWhereIdOrUUID(videoId)
     }
 
@@ -148,13 +159,18 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
     return VideoCaptionModel.findOne(query)
   }
 
-  static async insertOrReplaceLanguage (caption: MVideoCaption, transaction: Transaction) {
-    const existing = await VideoCaptionModel.loadByVideoIdAndLanguage(caption.videoId, caption.language, transaction)
+  // ---------------------------------------------------------------------------
 
-    // Delete existing file
-    if (existing) await existing.destroy({ transaction })
+  static async hasVideoCaption (videoId: number) {
+    const query = {
+      where: {
+        videoId
+      }
+    }
 
-    return caption.save({ transaction })
+    const result = await VideoCaptionModel.unscoped().findOne(query)
+
+    return !!result
   }
 
   static listVideoCaptions (videoId: number, transaction?: Transaction): Promise<MVideoCaptionVideo[]> {
@@ -194,27 +210,14 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
     return result
   }
 
+  // ---------------------------------------------------------------------------
+
   static getLanguageLabel (language: string) {
     return VIDEO_LANGUAGES[language] || 'Unknown'
   }
 
-  static deleteAllCaptionsOfRemoteVideo (videoId: number, transaction: Transaction) {
-    const query = {
-      where: {
-        videoId
-      },
-      transaction
-    }
-
-    return VideoCaptionModel.destroy(query)
-  }
-
   static generateCaptionName (language: string) {
     return `${buildUUID()}-${language}.vtt`
-  }
-
-  isOwned () {
-    return this.Video.remote === false
   }
 
   // ---------------------------------------------------------------------------
@@ -239,6 +242,10 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
   }
 
   // ---------------------------------------------------------------------------
+
+  isOwned () {
+    return this.Video.remote === false
+  }
 
   getCaptionStaticPath (this: MVideoCaptionLanguageUrl) {
     return join(LAZY_STATIC_PATHS.VIDEO_CAPTIONS, this.filename)

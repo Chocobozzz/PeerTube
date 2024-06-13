@@ -131,6 +131,8 @@ elif [ "$1" = "api-5" ]; then
 
     MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $transcodingFiles $runnersFiles
 elif [ "$1" = "external-plugins" ]; then
+    npm run install-dependencies:transcription --workspace=@peertube/tests
+
     npm run build:server
     npm run build:tests
     npm run build:peertube-runner
@@ -147,12 +149,13 @@ elif [ "$1" = "lint" ]; then
 
     ( cd client && npm run lint )
 elif [ "$1" = "transcription" ]; then
-    npm run preinstall --workspace=@peertube/peertube-transcription --workspace=@peertube/peertube-jiwer
+    npm run install-dependencies:transcription --workspace=@peertube/tests
+
     npm run build:server
     npm run build:tests
 
     transcriptionFiles=$(findTestFiles ./packages/tests/dist/transcription)
-    jiwerFiles=$(findTestFiles ./packages/tests/dist/jiwer)
+    transcriptionDevToolsFiles=$(findTestFiles ./packages/tests/dist/transcription-devtools)
 
-    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $transcriptionFiles $jiwerFiles
+    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $transcriptionFiles $transcriptionDevToolsFiles
 fi

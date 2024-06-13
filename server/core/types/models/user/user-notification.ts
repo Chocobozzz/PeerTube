@@ -16,6 +16,7 @@ import { VideoBlacklistModel } from '../../../models/video/video-blacklist.js'
 import { VideoChannelModel } from '../../../models/video/video-channel.js'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import { VideoImportModel } from '../../../models/video/video-import.js'
+import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 
 type Use<K extends keyof UserNotificationModel, M> = PickWith<UserNotificationModel, K, M>
 
@@ -98,13 +99,17 @@ export module UserNotificationIncludes {
 
   export type UserRegistrationInclude =
     Pick<UserRegistrationModel, 'id' | 'username'>
+
+  export type VideoCaptionInclude =
+    Pick<VideoCaptionModel, 'id' | 'language'> &
+    PickWith<VideoCaptionModel, 'Video', VideoInclude>
 }
 
 // ############################################################################
 
 export type MUserNotification =
   Omit<UserNotificationModel, 'User' | 'Video' | 'VideoComment' | 'Abuse' | 'VideoBlacklist' |
-  'VideoImport' | 'Account' | 'ActorFollow' | 'Plugin' | 'Application' | 'UserRegistration'>
+  'VideoImport' | 'Account' | 'ActorFollow' | 'Plugin' | 'Application' | 'UserRegistration' | 'VideoCaption'>
 
 // ############################################################################
 
@@ -119,4 +124,5 @@ export type UserNotificationModelForApi =
   Use<'Plugin', UserNotificationIncludes.PluginInclude> &
   Use<'Application', UserNotificationIncludes.ApplicationInclude> &
   Use<'Account', UserNotificationIncludes.AccountIncludeActor> &
-  Use<'UserRegistration', UserNotificationIncludes.UserRegistrationInclude>
+  Use<'UserRegistration', UserNotificationIncludes.UserRegistrationInclude> &
+  Use<'VideoCaption', UserNotificationIncludes.VideoCaptionInclude>

@@ -1,13 +1,12 @@
 import { pick, promisify0 } from '@peertube/peertube-core-utils'
-import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptionsBuilderParams, EncoderProfile } from '@peertube/peertube-models'
+import {
+  AvailableEncoders,
+  EncoderOptionsBuilder,
+  EncoderOptionsBuilderParams,
+  EncoderProfile,
+  SimpleLogger
+} from '@peertube/peertube-models'
 import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
-
-type FFmpegLogger = {
-  info: (msg: string, obj?: object) => void
-  debug: (msg: string, obj?: object) => void
-  warn: (msg: string, obj?: object) => void
-  error: (msg: string, obj?: object) => void
-}
 
 export interface FFmpegCommandWrapperOptions {
   availableEncoders?: AvailableEncoders
@@ -17,7 +16,7 @@ export interface FFmpegCommandWrapperOptions {
   tmpDirectory: string
   threads: number
 
-  logger: FFmpegLogger
+  logger: SimpleLogger
   lTags?: { tags: string[] }
 
   updateJobProgress?: (progress?: number) => void
@@ -35,7 +34,7 @@ export class FFmpegCommandWrapper {
   private readonly tmpDirectory: string
   private readonly threads: number
 
-  private readonly logger: FFmpegLogger
+  private readonly logger: SimpleLogger
   private readonly lTags: { tags: string[] }
 
   private readonly updateJobProgress: (progress?: number) => void

@@ -1,3 +1,11 @@
+import { pick } from '@peertube/peertube-core-utils'
+import {
+  RunnerJobUpdatePayload,
+  RunnerJobVODHLSTranscodingPayload,
+  RunnerJobVODHLSTranscodingPrivatePayload,
+  VODHLSTranscodingSuccess
+} from '@peertube/peertube-models'
+import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js'
 import { onHLSVideoFileTranscoding } from '@server/lib/transcoding/hls-transcoding.js'
@@ -5,17 +13,9 @@ import { removeAllWebVideoFiles } from '@server/lib/video-file.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { MVideo } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
-import { pick } from '@peertube/peertube-core-utils'
-import { buildUUID } from '@peertube/peertube-node-utils'
-import {
-  RunnerJobUpdatePayload,
-  RunnerJobVODHLSTranscodingPayload,
-  RunnerJobVODHLSTranscodingPrivatePayload,
-  VODHLSTranscodingSuccess
-} from '@peertube/peertube-models'
 import { generateRunnerTranscodingVideoInputFileUrl } from '../runner-urls.js'
 import { AbstractVODTranscodingJobHandler } from './abstract-vod-transcoding-job-handler.js'
-import { loadTranscodingRunnerVideo } from './shared/index.js'
+import { loadRunnerVideo } from './shared/utils.js'
 
 type CreateOptions = {
   video: MVideo
@@ -74,7 +74,7 @@ export class VODHLSTranscodingJobHandler extends AbstractVODTranscodingJobHandle
     const { runnerJob, resultPayload } = options
     const privatePayload = runnerJob.privatePayload as RunnerJobVODHLSTranscodingPrivatePayload
 
-    const video = await loadTranscodingRunnerVideo(runnerJob, this.lTags)
+    const video = await loadRunnerVideo(runnerJob, this.lTags)
     if (!video) return
 
     const videoFilePath = resultPayload.videoFile as string

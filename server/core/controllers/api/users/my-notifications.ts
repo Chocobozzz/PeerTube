@@ -76,6 +76,7 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
     abuseStateChange: body.abuseStateChange,
     newPeerTubeVersion: body.newPeerTubeVersion,
     newPluginVersion: body.newPluginVersion,
+    myVideoTranscriptionGenerated: body.myVideoTranscriptionGenerated,
     myVideoStudioEditionFinished: body.myVideoStudioEditionFinished
   }
 

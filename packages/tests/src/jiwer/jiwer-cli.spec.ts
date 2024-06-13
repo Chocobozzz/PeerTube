@@ -3,7 +3,7 @@ import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { join } from 'path'
 import { mkdir, rm, writeFile } from 'node:fs/promises'
 import { expect } from 'chai'
-import { JiwerClI } from '@peertube/peertube-jiwer'
+import { JiwerClI } from '@peertube/peertube-transcription-devtools'
 
 describe('Jiwer CLI', function () {
   const transcriptDirectory = buildAbsoluteFixturePath('transcription/transcript-evaluator')

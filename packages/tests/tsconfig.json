@@ -8,13 +8,13 @@
       "@tests/*": [ "./src/*" ],
       "@server/*": [ "../../server/core/*" ],
       "@peertube/peertube-transcription": [ "../transcription" ],
-      "@peertube/peertube-jiwer": [ "../jiwer" ],
+      "@peertube/peertube-transcription-devtools": [ "../transcription-devtools" ],
     }
   },
   "references": [
     { "path": "../core-utils" },
     { "path": "../ffmpeg" },
-    { "path": "../jiwer" },
+    { "path": "../transcription-devtools" },
     { "path": "../models" },
     { "path": "../node-utils" },
     { "path": "../typescript-utils" },

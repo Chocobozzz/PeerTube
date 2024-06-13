@@ -19,7 +19,7 @@ import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { basename } from 'path'
 import { generateRunnerEditionTranscodingVideoInputFileUrl, generateRunnerTranscodingVideoInputFileUrl } from '../runner-urls.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
-import { loadTranscodingRunnerVideo } from './shared/index.js'
+import { loadRunnerVideo } from './shared/utils.js'
 
 type CreateOptions = {
   video: MVideo
@@ -108,7 +108,7 @@ export class VideoStudioTranscodingJobHandler extends AbstractJobHandler<CreateO
     const { runnerJob, resultPayload } = options
     const privatePayload = runnerJob.privatePayload as RunnerJobVideoStudioTranscodingPrivatePayload
 
-    const video = await loadTranscodingRunnerVideo(runnerJob, this.lTags)
+    const video = await loadRunnerVideo(runnerJob, this.lTags)
     if (!video) {
       await safeCleanupStudioTMPFiles(privatePayload.originalTasks)
 
@@ -149,7 +149,7 @@ export class VideoStudioTranscodingJobHandler extends AbstractJobHandler<CreateO
     const payload = runnerJob.privatePayload as RunnerJobVideoStudioTranscodingPrivatePayload
     await safeCleanupStudioTMPFiles(payload.originalTasks)
 
-    const video = await loadTranscodingRunnerVideo(options.runnerJob, this.lTags)
+    const video = await loadRunnerVideo(options.runnerJob, this.lTags)
     if (!video) return
 
     return video.setNewState(VideoState.PUBLISHED, false, undefined)

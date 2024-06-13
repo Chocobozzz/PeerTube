@@ -166,3 +166,6 @@ open_telemetry:
 search:
   search_index:
     url: 'https://search.joinpeertube.org/'
+
+video_transcription:
+  model: 'tiny'

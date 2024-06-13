@@ -346,6 +346,10 @@ export interface ServerConfig {
   storyboards: {
     enabled: boolean
   }
+
+  videoTranscription: {
+    enabled: boolean
+  }
 }
 
 export type HTMLServerConfig = Omit<ServerConfig, 'signup'>

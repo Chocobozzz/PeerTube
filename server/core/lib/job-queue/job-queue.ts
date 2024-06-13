@@ -1,15 +1,3 @@
-import {
-  FlowJob,
-  FlowProducer,
-  Job,
-  JobsOptions,
-  Queue,
-  QueueEvents,
-  QueueEventsOptions,
-  QueueOptions,
-  Worker,
-  WorkerOptions
-} from 'bullmq'
 import { pick, timeoutPromise } from '@peertube/peertube-core-utils'
 import {
   ActivitypubFollowPayload,
@@ -37,12 +25,25 @@ import {
   VideoLiveEndingPayload,
   VideoRedundancyPayload,
   VideoStudioEditionPayload,
-  VideoTranscodingPayload
+  VideoTranscodingPayload,
+  VideoTranscriptionPayload
 } from '@peertube/peertube-models'
 import { parseDurationToMs } from '@server/helpers/core-utils.js'
 import { jobStates } from '@server/helpers/custom-validators/jobs.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { processVideoRedundancy } from '@server/lib/job-queue/handlers/video-redundancy.js'
+import {
+  FlowJob,
+  FlowProducer,
+  Job,
+  JobsOptions,
+  Queue,
+  QueueEvents,
+  QueueEventsOptions,
+  QueueOptions,
+  Worker,
+  WorkerOptions
+} from 'bullmq'
 import { logger } from '../../helpers/logger.js'
 import { JOB_ATTEMPTS, JOB_CONCURRENCY, JOB_REMOVAL_OPTIONS, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants.js'
 import { Hooks } from '../plugins/hooks.js'
@@ -58,10 +59,13 @@ import { processActivityPubHttpUnicast } from './handlers/activitypub-http-unica
 import { refreshAPObject } from './handlers/activitypub-refresher.js'
 import { processActorKeys } from './handlers/actor-keys.js'
 import { processAfterVideoChannelImport } from './handlers/after-video-channel-import.js'
+import { processCreateUserExport } from './handlers/create-user-export.js'
 import { processEmail } from './handlers/email.js'
 import { processFederateVideo } from './handlers/federate-video.js'
 import { processGenerateStoryboard } from './handlers/generate-storyboard.js'
+import { processImportUserArchive } from './handlers/import-user-archive.js'
 import { processManageVideoTorrent } from './handlers/manage-video-torrent.js'
+import { onMoveToFileSystemFailure, processMoveToFileSystem } from './handlers/move-to-file-system.js'
 import { onMoveToObjectStorageFailure, processMoveToObjectStorage } from './handlers/move-to-object-storage.js'
 import { processNotify } from './handlers/notify.js'
 import { processTranscodingJobBuilder } from './handlers/transcoding-job-builder.js'
@@ -71,10 +75,8 @@ import { processVideoImport } from './handlers/video-import.js'
 import { processVideoLiveEnding } from './handlers/video-live-ending.js'
 import { processVideoStudioEdition } from './handlers/video-studio-edition.js'
 import { processVideoTranscoding } from './handlers/video-transcoding.js'
+import { processVideoTranscription } from './handlers/video-transcription.js'
 import { processVideosViewsStats } from './handlers/video-views-stats.js'
-import { onMoveToFileSystemFailure, processMoveToFileSystem } from './handlers/move-to-file-system.js'
-import { processCreateUserExport } from './handlers/create-user-export.js'
-import { processImportUserArchive } from './handlers/import-user-archive.js'
 
 export type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -104,7 +106,8 @@ export type CreateJobArgument =
   { type: 'federate-video', payload: FederateVideoPayload } |
   { type: 'create-user-export', payload: CreateUserExportPayload } |
   { type: 'generate-video-storyboard', payload: GenerateStoryboardPayload } |
-  { type: 'import-user-archive', payload: ImportUserArchivePayload }
+  { type: 'import-user-archive', payload: ImportUserArchivePayload } |
+  { type: 'video-transcription', payload: VideoTranscriptionPayload }
 
 export type CreateJobOptions = {
   delay?: number
@@ -139,7 +142,8 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'videos-views-stats': processVideosViewsStats,
   'generate-video-storyboard': processGenerateStoryboard,
   'create-user-export': processCreateUserExport,
-  'import-user-archive': processImportUserArchive
+  'import-user-archive': processImportUserArchive,
+  'video-transcription': processVideoTranscription
 }
 
 const errorHandlers: { [id in JobType]?: (job: Job, err: any) => Promise<any> } = {
@@ -171,10 +175,11 @@ const jobTypes: JobType[] = [
   'video-live-ending',
   'video-redundancy',
   'video-studio-edition',
-  'video-transcoding',
+  'video-transcription',
   'videos-views-stats',
   'create-user-export',
-  'import-user-archive'
+  'import-user-archive',
+  'video-transcoding'
 ]
 
 const silentFailure = new Set<JobType>([ 'activitypub-http-unicast' ])
@@ -561,6 +566,5 @@ class JobQueue {
 // ---------------------------------------------------------------------------
 
 export {
-  jobTypes,
-  JobQueue
+  JobQueue, jobTypes
 }

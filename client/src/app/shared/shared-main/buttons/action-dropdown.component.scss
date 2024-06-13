@@ -63,6 +63,10 @@
 
     &.with-icon {
       @include dropdown-with-icon-item;
+
+      .icon-video-lang {
+        top: 0;
+      }
     }
 
     a,

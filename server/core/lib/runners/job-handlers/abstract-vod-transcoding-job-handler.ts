@@ -11,7 +11,7 @@ import { moveToFailedTranscodingState, moveToNextState } from '@server/lib/video
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
-import { loadTranscodingRunnerVideo } from './shared/index.js'
+import { loadRunnerVideo } from './shared/utils.js'
 
 // eslint-disable-next-line max-len
 export abstract class AbstractVODTranscodingJobHandler <C, U extends RunnerJobUpdatePayload, S extends RunnerJobSuccessPayload> extends AbstractJobHandler<C, U, S> {
@@ -38,7 +38,7 @@ export abstract class AbstractVODTranscodingJobHandler <C, U extends RunnerJobUp
   }) {
     if (options.nextState !== RunnerJobState.ERRORED) return
 
-    const video = await loadTranscodingRunnerVideo(options.runnerJob, this.lTags)
+    const video = await loadRunnerVideo(options.runnerJob, this.lTags)
     if (!video) return
 
     await moveToFailedTranscodingState(video)
@@ -51,7 +51,7 @@ export abstract class AbstractVODTranscodingJobHandler <C, U extends RunnerJobUp
   }) {
     const { runnerJob } = options
 
-    const video = await loadTranscodingRunnerVideo(options.runnerJob, this.lTags)
+    const video = await loadRunnerVideo(options.runnerJob, this.lTags)
     if (!video) return
 
     const pending = await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')

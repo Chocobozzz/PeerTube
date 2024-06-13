@@ -318,7 +318,7 @@
             >
             <ng-container ngProjectAs="description">
               <span i18n [hidden]="isImportVideosHttpEnabled()">
-                  ⛔ You need to allow  import with HTTP URL to be able to activate this feature.
+                ⛔ You need to allow  import with HTTP URL to be able to activate this feature.
               </span>
             </ng-container>
             </my-peertube-checkbox>
@@ -359,7 +359,6 @@
       </ng-container>
 
       <ng-container formGroupName="storyboards">
-
         <div class="form-group">
           <my-peertube-checkbox
             inputName="storyboardsEnabled" formControlName="enabled"
@@ -370,7 +369,35 @@
             </ng-container>
           </my-peertube-checkbox>
         </div>
+      </ng-container>
 
+      <ng-container formGroupName="videoTranscription">
+        <div class="form-group">
+          <my-peertube-checkbox
+            inputName="videoTranscriptionEnabled" formControlName="enabled"
+            i18n-labelText labelText="Enable video transcription"
+          >
+            <ng-container ngProjectAs="description">
+              <span i18n>Automatically create a subtitle file of uploaded/imported VOD videos</span>
+            </ng-container>
+
+            <ng-container ngProjectAs="extra">
+              <div class="form-group" formGroupName="remoteRunners" [ngClass]="getTranscriptionRunnerDisabledClass()">
+                <my-peertube-checkbox
+                  inputName="videoTranscriptionRemoteRunnersEnabled" formControlName="enabled"
+                  i18n-labelText labelText="Enable remote runners for transcription"
+                >
+                  <ng-container ngProjectAs="description">
+                    <span i18n>
+                      Use <a routerLink="/admin/system/runners/runners-list">remote runners</a> to process transcription tasks.
+                      Remote runners has to register on your instance first.
+                    </span>
+                  </ng-container>
+                </my-peertube-checkbox>
+              </div>
+            </ng-container>
+          </my-peertube-checkbox>
+        </div>
       </ng-container>
     </div>
   </div>

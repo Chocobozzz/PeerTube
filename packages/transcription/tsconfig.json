@@ -9,7 +9,6 @@
     { "path": "../models" },
     { "path": "../core-utils" },
     { "path": "../node-utils" },
-    { "path": "../jiwer" },
     { "path": "../server-commands" }
   ]
 }

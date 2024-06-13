@@ -3,6 +3,9 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "src",
-    "tsBuildInfoFile": "./dist/.tsbuildinfo"
-  }
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
+  },
+  "references": [
+    { "path": "../transcription" }
+  ]
 }

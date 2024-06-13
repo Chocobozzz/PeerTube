@@ -355,6 +355,29 @@ export class ConfigCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
+  enableTranscription ({ remote = false }: { remote?: boolean } = {}) {
+    return this.setTranscriptionEnabled(true, remote)
+  }
+
+  disableTranscription () {
+    return this.setTranscriptionEnabled(false, false)
+  }
+
+  private setTranscriptionEnabled (enabled: boolean, remoteEnabled: boolean) {
+    return this.updateExistingConfig({
+      newConfig: {
+        videoTranscription: {
+          enabled,
+          remoteRunners: {
+            enabled: remoteEnabled
+          }
+        }
+      }
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   getConfig (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/config'
 

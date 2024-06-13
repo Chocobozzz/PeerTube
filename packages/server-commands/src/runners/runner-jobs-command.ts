@@ -5,9 +5,6 @@ import {
   AcceptRunnerJobResult,
   ErrorRunnerJobBody,
   HttpStatusCode,
-  isHLSTranscodingPayloadSuccess,
-  isLiveRTMPHLSTranscodingUpdatePayload,
-  isWebVideoOrAudioMergeTranscodingPayloadSuccess,
   ListRunnerJobsQuery,
   RequestRunnerJobBody,
   RequestRunnerJobResult,
@@ -22,8 +19,13 @@ import {
   RunnerJobType,
   RunnerJobUpdateBody,
   RunnerJobVODPayload,
+  TranscriptionSuccess,
   VODHLSTranscodingSuccess,
-  VODWebVideoTranscodingSuccess
+  VODWebVideoTranscodingSuccess,
+  isHLSTranscodingPayloadSuccess,
+  isLiveRTMPHLSTranscodingUpdatePayload,
+  isTranscriptionPayloadSuccess,
+  isWebVideoOrAudioMergeTranscodingPayloadSuccess
 } from '@peertube/peertube-models'
 import { unwrapBody } from '../requests/index.js'
 import { waitJobs } from '../server/jobs.js'
@@ -194,6 +196,12 @@ export class RunnerJobsCommand extends AbstractCommand {
       attaches[`payload[resolutionPlaylistFile]`] = payload.resolutionPlaylistFile
 
       payloadWithoutFiles = omit(payloadWithoutFiles as VODHLSTranscodingSuccess, [ 'resolutionPlaylistFile' ])
+    }
+
+    if (isTranscriptionPayloadSuccess(payload) && payload.vttFile) {
+      attaches[`payload[vttFile]`] = payload.vttFile
+
+      payloadWithoutFiles = omit(payloadWithoutFiles as TranscriptionSuccess, [ 'vttFile' ])
     }
 
     return this.postUploadRequest({

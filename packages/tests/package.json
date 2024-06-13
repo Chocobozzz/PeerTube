@@ -6,7 +6,8 @@
   "devDependencies": {},
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "install-dependencies:transcription": "pip install -r ./requirements.txt ../transcription-devtools/requirements.txt"
   },
   "dependencies": {}
 }

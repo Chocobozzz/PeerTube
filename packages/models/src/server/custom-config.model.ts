@@ -179,6 +179,14 @@ export interface CustomConfig {
     }
   }
 
+  videoTranscription: {
+    enabled: boolean
+
+    remoteRunners: {
+      enabled: boolean
+    }
+  }
+
   videoFile: {
     update: {
       enabled: boolean

@@ -13,7 +13,8 @@
     { "path": "../packages/models" },
     { "path": "../packages/node-utils" },
     { "path": "../packages/server-commands" },
-    { "path": "../packages/typescript-utils" }
+    { "path": "../packages/typescript-utils" },
+    { "path": "../packages/transcription" }
   ],
   "exclude": [
     "tests/"

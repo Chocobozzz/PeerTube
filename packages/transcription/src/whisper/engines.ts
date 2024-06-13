@@ -2,50 +2,27 @@ import { TranscriptionEngine } from '../transcription-engine.js'
 
 export const engines: TranscriptionEngine[] = [
   {
-    name : 'whisper-cpp',
-    description : 'High-performance inference of OpenAI\'s Whisper automatic speech recognition model',
-    type: 'binary',
-    binary: 'main',
-    language : 'cpp',
-    requirements : [],
-    forgeURL : 'https://github.com/ggerganov/whisper.cpp',
-    license : 'MIT',
-    supportedModelFormats: [ 'ONNX' ]
-  },
-  {
     name: 'openai-whisper',
     description: 'High-performance inference of OpenAI\'s Whisper automatic speech recognition model',
-    requirements: [ 'python', 'pyTorch', 'ffmpeg' ],
     language: 'python',
     type: 'binary',
-    binary: 'whisper',
+    command: 'whisper',
     forgeURL: 'https://github.com/openai/whisper',
     license: 'MIT',
     supportedModelFormats: [ 'PyTorch' ],
-    languageDetection: true
+    languageDetection: true,
+    version: '20231117'
   },
   {
     name: 'whisper-ctranslate2',
-    description: '',
-    requirements: [ 'python' ],
+    description: 'Whisper command line client compatible with original OpenAI client based on CTranslate2.',
     language: 'python',
     type: 'binary',
-    binary: 'whisper-ctranslate2',
-    forgeURL: 'https://github.com/openai/whisper',
+    command: 'whisper-ctranslate2',
+    forgeURL: 'https://github.com/Softcatala/whisper-ctranslate2',
     license: 'MIT',
     supportedModelFormats: [ 'CTranslate2' ],
-    languageDetection: true
-  },
-  {
-    name: 'whisper-timestamped',
-    description: '',
-    requirements: [ 'python' ],
-    language: 'python',
-    type: 'binary',
-    binary: 'whisper_timestamped',
-    forgeURL: 'https://github.com/openai/whisper',
-    license: 'MIT',
-    supportedModelFormats: [ 'CTranslate2' ],
-    languageDetection: true
+    languageDetection: true,
+    version: '0.4.4'
   }
 ]

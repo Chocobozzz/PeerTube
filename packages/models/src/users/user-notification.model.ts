@@ -1,6 +1,7 @@
 import { FollowState } from '../actors/index.js'
 import { AbuseStateType } from '../moderation/index.js'
 import { PluginType_Type } from '../plugins/index.js'
+import { VideoConstant } from '../videos/video-constant.model.js'
 
 export const UserNotificationType = {
   NEW_VIDEO_FROM_SUBSCRIPTION: 1,
@@ -36,7 +37,9 @@ export const UserNotificationType = {
 
   NEW_USER_REGISTRATION_REQUEST: 20,
 
-  NEW_LIVE_FROM_SUBSCRIPTION: 21
+  NEW_LIVE_FROM_SUBSCRIPTION: 21,
+
+  MY_VIDEO_TRANSCRIPTION_GENERATED: 22
 } as const
 
 export type UserNotificationType_Type = typeof UserNotificationType[keyof typeof UserNotificationType]
@@ -136,6 +139,12 @@ export interface UserNotification {
   registration?: {
     id: number
     username: string
+  }
+
+  videoCaption?: {
+    id: number
+    language: VideoConstant<string>
+    video: VideoInfo
   }
 
   createdAt: string

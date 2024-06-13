@@ -181,6 +181,15 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
   @Column
   myVideoStudioEditionFinished: UserNotificationSettingValueType
 
+  @AllowNull(false)
+  @Default(null)
+  @Is(
+    'UserNotificationSettingTranscriptionGeneratedForOwner',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'myVideoTranscriptionGenerated')
+  )
+  @Column
+  myVideoTranscriptionGenerated: UserNotificationSettingValueType
+
   @ForeignKey(() => UserModel)
   @Column
   userId: number
@@ -233,6 +242,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
       abuseStateChange: this.abuseStateChange,
       newPeerTubeVersion: this.newPeerTubeVersion,
       myVideoStudioEditionFinished: this.myVideoStudioEditionFinished,
+      myVideoTranscriptionGenerated: this.myVideoTranscriptionGenerated,
       newPluginVersion: this.newPluginVersion
     }
   }

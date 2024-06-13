@@ -11,6 +11,7 @@ import {
   UserNotificationType,
   UserNotificationType_Type,
   UserRight,
+  VideoConstant,
   VideoInfo
 } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
@@ -90,6 +91,12 @@ export class UserNotification implements UserNotificationServer {
     username: string
   }
 
+  videoCaption?: {
+    id: number
+    language: VideoConstant<string>
+    video: VideoInfo
+  }
+
   createdAt: string
   updatedAt: string
 
@@ -148,6 +155,8 @@ export class UserNotification implements UserNotificationServer {
       this.plugin = hash.plugin
       this.peertube = hash.peertube
       this.registration = hash.registration
+
+      this.videoCaption = hash.videoCaption
 
       this.createdAt = hash.createdAt
       this.updatedAt = hash.updatedAt
@@ -248,6 +257,10 @@ export class UserNotification implements UserNotificationServer {
         case UserNotificationType.NEW_PLUGIN_VERSION:
           this.pluginUrl = `/admin/plugins/list-installed`
           this.pluginQueryParams.pluginType = this.plugin.type + ''
+          break
+
+        case UserNotificationType.MY_VIDEO_TRANSCRIPTION_GENERATED:
+          this.videoUrl = this.buildVideoUrl(this.videoCaption.video)
           break
 
         case UserNotificationType.MY_VIDEO_STUDIO_EDITION_FINISHED:

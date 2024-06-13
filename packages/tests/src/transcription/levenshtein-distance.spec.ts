@@ -1,5 +1,5 @@
+import { levenshteinDistance } from '@peertube/peertube-transcription-devtools'
 import { expect } from 'chai'
-import { levenshteinDistance } from '@peertube/peertube-transcription'
 
 describe('Levenshtein distance', function () {
   it(`equals 1 when there is only one character difference`, function () {

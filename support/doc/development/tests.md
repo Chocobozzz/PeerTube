@@ -36,11 +36,17 @@ Ensure you also have these commands:
 ```bash
 exiftool --help
 parallel --help
+
+# For transcription tests
+whisper --help
+whisper-ctranslate2 --help
+jiwer --help
 ```
 
 Otherwise, install the packages. On Debian-based systems (like Debian, Ubuntu or Mint):
 ```bash
 sudo apt-get install parallel libimage-exiftool-perl
+sudo pip install -r packages/tests/requirements.txt -r packages/transcription-devtools/requirements.txt
 ```
 
 ### Test

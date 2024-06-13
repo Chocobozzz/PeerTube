@@ -1,5 +1,16 @@
 import { DatePipe, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common'
-import { ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  booleanAttribute
+} from '@angular/core'
 import { AbstractControl, FormArray, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { HooksService, PluginService, ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
@@ -63,10 +74,10 @@ import { HelpComponent } from '../../../shared/shared-main/misc/help.component'
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
 import { LiveDocumentationLinkComponent } from '../../../shared/shared-video-live/live-documentation-link.component'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
+import { ThumbnailManagerComponent } from './thumbnail-manager/thumbnail-manager.component'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
 import { VideoCaptionEditModalContentComponent } from './video-caption-edit-modal-content/video-caption-edit-modal-content.component'
 import { VideoEditType } from './video-edit.type'
-import { ThumbnailManagerComponent } from './thumbnail-manager/thumbnail-manager.component'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
 type PluginField = {
@@ -122,15 +133,17 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() publishedVideo: VideoDetails
 
   @Input() userVideoChannels: SelectChannelItem[] = []
-  @Input() forbidScheduledPublication = true
+
+  @Input({ transform: booleanAttribute }) forbidScheduledPublication = true
+  @Input({ transform: booleanAttribute }) displayTranscriptionInfo = true
 
   @Input() videoCaptions: VideoCaptionWithPathEdit[] = []
   @Input() videoSource: VideoSource
 
   @Input() videoChapters: VideoChapter[] = []
 
-  @Input() hideWaitTranscoding = false
-  @Input() updateVideoFileEnabled = false
+  @Input({ transform: booleanAttribute }) hideWaitTranscoding = false
+  @Input({ transform: booleanAttribute }) updateVideoFileEnabled = false
 
   @Input() type: VideoEditType
   @Input() liveVideo: LiveVideo
@@ -403,6 +416,10 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   hasPublicationDate () {
     return !!this.form.value['originallyPublishedAt']
+  }
+
+  isTranscriptionEnabled () {
+    return this.serverConfig.videoTranscription.enabled
   }
 
   // ---------------------------------------------------------------------------

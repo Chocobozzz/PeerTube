@@ -4,11 +4,18 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class VideoImportsCommand extends AbstractCommand {
 
-  importVideo (options: OverrideCommandOptions & {
-    attributes: (VideoImportCreate | { torrentfile?: string, previewfile?: string, thumbnailfile?: string })
+  async importVideo (options: OverrideCommandOptions & {
+    attributes: (Partial<VideoImportCreate> | { torrentfile?: string, previewfile?: string, thumbnailfile?: string })
   }) {
     const { attributes } = options
     const path = '/api/v1/videos/imports'
+
+    let defaultChannelId = 1
+
+    try {
+      const { videoChannels } = await this.server.users.getMyInfo({ token: options.token })
+      defaultChannelId = videoChannels[0].id
+    } catch (e) { /* empty */ }
 
     let attaches: any = {}
     if (attributes.torrentfile) attaches = { torrentfile: attributes.torrentfile }
@@ -20,7 +27,11 @@ export class VideoImportsCommand extends AbstractCommand {
 
       path,
       attaches,
-      fields: options.attributes,
+      fields: {
+        channelId: defaultChannelId,
+
+        ...options.attributes
+      },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))

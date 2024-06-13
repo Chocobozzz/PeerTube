@@ -4127,7 +4127,7 @@ paths:
   /api/v1/videos/{id}/storyboards:
     get:
       summary: List storyboards of a video
-      description: "**PeerTube** >= 6.0"
+      description: "**PeerTube >= 6.0**"
       operationId: listVideoStoryboards
       tags:
         - Video
@@ -4170,6 +4170,32 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/VideoCaption'
+
+  /api/v1/videos/{id}/captions/generate:
+    post:
+      summary: Generate a video caption
+      operationId: generateVideoCaption
+      description: "**PeerTube >= 6.2** This feature has to be enabled by the administrator"
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - Video Captions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                forceTranscription:
+                  type: boolean
+                  default: false
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: video not found
+
 
   /api/v1/videos/{id}/captions/{captionLanguage}:
     put:
@@ -4221,7 +4247,7 @@ paths:
   /api/v1/videos/{id}/chapters:
     get:
       summary: Get chapters of a video
-      description: "**PeerTube** >= 6.0"
+      description: "**PeerTube >= 6.0**"
       operationId: getVideoChapters
       tags:
         - Video Chapters
@@ -4237,7 +4263,7 @@ paths:
                 $ref: '#/components/schemas/VideoChapters'
     put:
       summary: Replace video chapters
-      description: "**PeerTube** >= 6.0"
+      description: "**PeerTube >= 6.0**"
       operationId: replaceVideoChapters
       security:
         - OAuth2:
@@ -4270,7 +4296,7 @@ paths:
   /api/v1/videos/{id}/passwords:
     get:
       summary: List video passwords
-      description: "**PeerTube** >= 6.0"
+      description: "**PeerTube >= 6.0**"
       security:
         - OAuth2:
           - user
@@ -4292,7 +4318,7 @@ paths:
           description: video is not password protected
     put:
       summary: Update video passwords
-      description: "**PeerTube** >= 6.0"
+      description: "**PeerTube >= 6.0**"
       security:
         - OAuth2:
           - user
@@ -4317,7 +4343,7 @@ paths:
   /api/v1/videos/{id}/passwords/{videoPasswordId}:
     delete:
       summary: Delete a video password
-      description: "**PeerTube** >= 6.0"
+      description: "**PeerTube >= 6.0**"
       security:
         - OAuth2:
           - user
@@ -8315,7 +8341,7 @@ components:
               nullable: true
               example: |
                	"**[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n
-                **Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**\r\n*A decentralized video hosting network, 
+                **Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**\r\n*A decentralized video hosting network,
                 based on free/libre software!*\r\n\r\n**Animation Produced by:** [LILA](https://libreart.info) - [ZeMarmot Team](https://film.zemarmot.net)\r\n
                 *Directed by* Aryeom\r\n*Assistant* Jehan\r\n**Licence**: [CC-By-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)\r\n\r\n
                 **Sponsored by** [Framasoft](https://framasoft.org)\r\n\r\n**Music**: [Red Step Forward](http://play.dogmazic.net/song.php?song_id=52491) - CC-By Ken Bushima\r\n\r\n
@@ -9682,6 +9708,9 @@ components:
             **[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n**Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**
         waitTranscoding:
           description: Whether or not we wait transcoding before publish the video
+          type: boolean
+        generateTranscription:
+          description: "**PeerTube >= 6.2** If enabled by the admin, automatically generate a subtitle of the video"
           type: boolean
         support:
           description: A text tell the audience how to support the video creator

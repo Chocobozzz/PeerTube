@@ -726,6 +726,34 @@ video_studio:
   remote_runners:
     enabled: false
 
+video_transcription:
+  # Enable automatic transcription of videos
+  enabled: false
+
+  # Choose engine for local transcription
+  # Supported: 'openai-whisper' or 'whisper-ctranslate2'
+  engine: 'whisper-ctranslate2'
+
+  # You can set a custom engine path for local transcription
+  # If not provided, PeerTube will try to automatically install it in the PeerTube bin directory
+  engine_path: null
+
+  # Choose engine model for local transcription
+  # Available for 'openai-whisper' and 'whisper-ctranslate2': 'tiny', 'base', 'small', 'medium' or 'large-v3'
+  model: 'small'
+
+  # Or specify the model path:
+  #  * PyTorch model file path for 'openai-whisper'
+  #  * CTranslate2 Whisper model directory path for 'whisper-ctranslate2'
+  # If not provided, PeerTube will automatically download the model
+  model_path: null
+
+  # Enable remote runners to transcribe videos
+  # If enabled, your instance won't transcribe the videos itself
+  # At least 1 remote runner must be configured to transcribe your videos
+  remote_runners:
+    enabled: false
+
 video_file:
   update:
     # Add ability for users to replace the video file of an existing video

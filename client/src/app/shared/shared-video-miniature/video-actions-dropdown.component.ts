@@ -11,6 +11,7 @@ import {
   DropdownButtonSize,
   DropdownDirection
 } from '../shared-main/buttons/action-dropdown.component'
+import { VideoCaptionService } from '../shared-main/video-caption/video-caption.service'
 import { RedundancyService } from '../shared-main/video/redundancy.service'
 import { VideoDetails } from '../shared-main/video/video-details.model'
 import { Video } from '../shared-main/video/video.model'
@@ -37,6 +38,7 @@ export type VideoActionsDisplayType = {
   transcoding?: boolean
   studio?: boolean
   stats?: boolean
+  generateTranscription?: boolean
 }
 
 @Component({
@@ -115,6 +117,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     private videoBlocklistService: VideoBlockService,
     private screenService: ScreenService,
     private videoService: VideoService,
+    private videoCaptionService: VideoCaptionService,
     private redundancyService: RedundancyService,
     private serverService: ServerService
   ) { }
@@ -204,6 +207,10 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   isVideoLiveInfoAvailable () {
     return this.video.isLiveInfoAvailableBy(this.user)
+  }
+
+  canGenerateTranscription () {
+    return this.video.canGenerateTranscription(this.user, this.serverService.getHTMLConfig().videoTranscription.enabled)
   }
 
   isVideoDownloadableByAnonymous () {
@@ -338,8 +345,19 @@ export class VideoActionsDropdownComponent implements OnChanges {
     this.videoService.runTranscoding({ videos: [ video ], type, askForForceTranscodingIfNeeded: true })
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Transcoding jobs created for "${video.name}".`)
+          this.notifier.success($localize`Transcoding job created for "${video.name}".`)
           this.transcodingCreated.emit()
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  generateCaption (video: Video) {
+    this.videoCaptionService.generateCaption([ video.id ])
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Transcription job created for "${video.name}".`)
         },
 
         error: err => this.notifier.error(err.message)
@@ -464,6 +482,14 @@ export class VideoActionsDropdownComponent implements OnChanges {
           handler: ({ video }) => this.removeVideoFiles(video, 'web-videos'),
           isDisplayed: () => this.displayOptions.removeFiles && this.canRemoveVideoFiles(),
           iconName: 'delete'
+        }
+      ],
+      [
+        {
+          label: $localize`Generate caption`,
+          handler: ({ video }) => this.generateCaption(video),
+          isDisplayed: () => this.displayOptions.generateTranscription && this.canGenerateTranscription(),
+          iconName: 'video-lang'
         }
       ],
       [ // actions regarding the account/its server

@@ -1,3 +1,4 @@
+import { pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ResultList, VideoCaption } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
@@ -27,6 +28,23 @@ export class CaptionsCommand extends AbstractCommand {
       attaches: {
         captionfile: captionfileAttach
       },
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  runGenerate (options: OverrideCommandOptions & {
+    videoId: string | number
+    forceTranscription?: boolean
+  }) {
+    const { videoId } = options
+    const path = '/api/v1/videos/' + videoId + '/captions/generate'
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      fields: pick(options, [ 'forceTranscription' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })

@@ -192,6 +192,9 @@ class ServerConfigManager {
           enabled: CONFIG.VIDEO_FILE.UPDATE.ENABLED
         }
       },
+      videoTranscription: {
+        enabled: CONFIG.VIDEO_TRANSCRIPTION.ENABLED
+      },
       import: {
         videos: {
           http: {

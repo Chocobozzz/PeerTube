@@ -31,4 +31,6 @@ export interface UserNotificationSetting {
   newPluginVersion: UserNotificationSettingValueType
 
   myVideoStudioEditionFinished: UserNotificationSettingValueType
+
+  myVideoTranscriptionGenerated: UserNotificationSettingValueType
 }

@@ -54,6 +54,7 @@ function getAllNotificationsSettings (): UserNotificationSetting {
     autoInstanceFollowing: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newPeerTubeVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     myVideoStudioEditionFinished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    myVideoTranscriptionGenerated: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newPluginVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
   }
 }
@@ -758,6 +759,40 @@ async function checkNewPluginVersion (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
+async function checkMyVideoTranscriptionGenerated (options: CheckerBaseParams & {
+  videoName: string
+  shortUUID: string
+  language: {
+    id: string
+    label: string
+  }
+  checkType: CheckerType
+}) {
+  const { videoName, shortUUID, language } = options
+  const notificationType = UserNotificationType.MY_VIDEO_TRANSCRIPTION_GENERATED
+
+  function notificationChecker (notification: UserNotification, checkType: CheckerType) {
+    if (checkType === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      expect(notification.videoCaption).to.exist
+      expect(notification.videoCaption.language.id).to.equal(language.id)
+      expect(notification.videoCaption.language.label).to.equal(language.label)
+      checkVideo(notification.videoCaption.video, videoName, shortUUID)
+    } else {
+      expect(notification.videoCaption).to.satisfy(c => c === undefined || c.Video.shortUUID !== shortUUID)
+    }
+  }
+
+  function emailNotificationFinder (email: object) {
+    const text: string = email['text']
+    return text.includes(shortUUID) && text.includes('Transcription in ' + language.label)
+  }
+
+  await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
+}
+
 async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: any = {}) {
   const userNotifications: UserNotification[] = []
   const adminNotifications: UserNotification[] = []
@@ -863,7 +898,8 @@ export {
   checkNewPeerTubeVersion,
   checkNewPluginVersion,
   checkVideoStudioEditionIsFinished,
-  checkRegistrationRequest
+  checkRegistrationRequest,
+  checkMyVideoTranscriptionGenerated
 }
 
 // ---------------------------------------------------------------------------

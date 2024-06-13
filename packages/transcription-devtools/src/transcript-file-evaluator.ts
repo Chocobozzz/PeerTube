@@ -1,14 +1,14 @@
 import assert from 'node:assert'
-import { JiwerClI } from '@peertube/peertube-jiwer'
 import { TranscriptFileEvaluatorInterface } from './transcript-file-evaluator-interface.js'
-import { TranscriptFileInterface } from './index.js'
+import { TranscriptFile } from '@peertube/peertube-transcription'
+import { JiwerClI } from './jiwer-cli.js'
 
 export class TranscriptFileEvaluator implements TranscriptFileEvaluatorInterface {
-  referenceTranscriptFile: TranscriptFileInterface
-  hypothesisTranscriptFile: TranscriptFileInterface
+  referenceTranscriptFile: TranscriptFile
+  hypothesisTranscriptFile: TranscriptFile
   jiwerCLI: JiwerClI
 
-  constructor (referenceTranscriptFile: TranscriptFileInterface, hypothesisTranscriptFile: TranscriptFileInterface) {
+  constructor (referenceTranscriptFile: TranscriptFile, hypothesisTranscriptFile: TranscriptFile) {
     assert(referenceTranscriptFile.format === 'txt', 'Can only evaluate txt transcript file')
     assert(hypothesisTranscriptFile.format === 'txt', 'Can only evaluate txt transcript file')
 

@@ -23,12 +23,12 @@ export async function onVODWebVideoOrAudioMergeTranscodingJob (options: {
   await onTranscodingEnded({ isNewVideo: privatePayload.isNewVideo, moveVideoToNextState: true, video })
 }
 
-export async function loadTranscodingRunnerVideo (runnerJob: MRunnerJob, lTags: LoggerTagsFn) {
+export async function loadRunnerVideo (runnerJob: MRunnerJob, lTags: LoggerTagsFn) {
   const videoUUID = runnerJob.privatePayload.videoUUID
 
   const video = await VideoModel.loadFull(videoUUID)
   if (!video) {
-    logger.info('Video %s does not exist anymore after transcoding runner job.', videoUUID, lTags(videoUUID))
+    logger.info('Video %s does not exist anymore after runner job.', videoUUID, lTags(videoUUID))
     return undefined
   }
 

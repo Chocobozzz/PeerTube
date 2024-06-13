@@ -244,6 +244,10 @@ export class Video implements VideoServerModel {
       this.isUpdatableBy(user)
   }
 
+  canGenerateTranscription (user: AuthUser, transcriptionEnabled: boolean) {
+    return transcriptionEnabled && this.isLocal && user.hasRight(UserRight.UPDATE_ANY_VIDEO)
+  }
+
   // ---------------------------------------------------------------------------
 
   isOwner (user: AuthUser) {

@@ -2,13 +2,15 @@
 
 :warning: **Warning**: dependencies guide is maintained by the community. Some parts may be outdated! :warning:
 
-Main dependencies version supported by PeerTube:
+Main dependencies supported by PeerTube:
 
  * `node` >=18.x
  * `yarn` 1.x (**must not be >=2.x**)
  * `postgres` >=10.x
  * `redis-server` >=6.x
  * `ffmpeg` >=4.3 (using a ffmpeg static build [is not recommended](https://github.com/Chocobozzz/PeerTube/issues/6308))
+ * `python` >=3.x
+ * `pip`
 
 
 _note_: only **LTS** versions of external dependencies are supported. If no LTS version matching the version constraint is available, only **release** versions are supported.
@@ -48,20 +50,12 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 
 5. Install Python:
 
-On Ubuntu <= bionic (18.04 LTS) or Debian <= Buster:
-
-```
-sudo apt update
-sudo apt install python-dev
-python --version # Should be >= 2.x or >= 3.x
-```
-
 On Ubuntu >= focal (20.04 LTS) or Debian >= Bullseye:
 
 ```
 sudo apt update
-sudo apt install python3-dev python-is-python3 # python-is-python2 should also work
-python --version # Should be >= 2.x or >= 3.x
+sudo apt install python3-dev python3-pip python-is-python3
+python --version # Should be >= 3.x
 ```
 
 6. Install common dependencies:
@@ -85,7 +79,7 @@ sudo systemctl start redis postgresql
 1. Run:
 
 ```
-sudo pacman -S nodejs-lts-fermium yarn ffmpeg postgresql openssl redis git wget unzip python base-devel npm nginx
+sudo pacman -S nodejs-lts-fermium yarn ffmpeg postgresql openssl redis git wget unzip python python-pip base-devel npm nginx
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
@@ -214,7 +208,7 @@ sudo dnf update -y
 
 5. Install PostgreSQL and Python3 and other stuff:
 ```
-sudo dnf install -y nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git python3
+sudo dnf install -y nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git python3 python3-pip
 sudo ln -s /usr/bin/python3 /usr/bin/python
 sudo PGSETUP_INITDB_OPTIONS='--auth-host=md5' postgresql-setup --initdb --unit postgresql
 sudo systemctl enable --now redis

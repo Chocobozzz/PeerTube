@@ -1,20 +1,16 @@
-import { statSync } from 'node:fs'
+import assert from 'node:assert'
 import { readFile, writeFile } from 'node:fs/promises'
 import { extname } from 'node:path'
-import assert from 'node:assert'
-import { TranscriptFileInterface, TranscriptFormat } from './transcript-file-interface.js'
-import { TranscriptFileEvaluator } from './transcript-file-evaluator.js'
-import { srtToTxt } from '../subtitle.js'
-import { levenshteinDistance } from '../levenshtein.js'
+import { srtToTxt } from './subtitle.js'
 
-export class TranscriptFile implements TranscriptFileInterface {
+export type TranscriptFormat = 'txt' | 'vtt' | 'srt' | 'json'
+
+export class TranscriptFile {
   path: string
   language: string
   format: TranscriptFormat = 'vtt'
 
   constructor ({ path, language, format = 'vtt' }: { path: string, language: string, format?: TranscriptFormat }) {
-    statSync(path)
-
     this.path = path
     this.language = language
     this.format = format
@@ -25,7 +21,7 @@ export class TranscriptFile implements TranscriptFileInterface {
    * @see https://nodejs.org/docs/latest-v18.x/api/fs.html#filehandlereadfileoptions for options
    */
   async read (options: Parameters<typeof readFile>[1] = 'utf8') {
-    return await readFile(this.path, options)
+    return readFile(this.path, options)
   }
 
   static fromPath (path: string, language = 'en') {
@@ -68,21 +64,7 @@ export class TranscriptFile implements TranscriptFileInterface {
     return content === transcriptContent
   }
 
-  cer (transcript: TranscriptFile) {
-    return (new TranscriptFileEvaluator(this, transcript)).cer()
-  }
-
-  async evaluate (transcript: TranscriptFile) {
-    const evaluator = new TranscriptFileEvaluator(this, transcript)
-
-    return evaluator.evaluate()
-  }
-
   async readAsTxt () {
     return srtToTxt(String(await this.read()))
-  }
-
-  async distance (transcript: TranscriptFile) {
-    return levenshteinDistance(await this.readAsTxt(), await transcript.readAsTxt())
   }
 }

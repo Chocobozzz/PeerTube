@@ -13,6 +13,7 @@ import {
 import { decacheModule } from '@server/helpers/decache.js'
 import { buildPath, root } from '@peertube/peertube-node-utils'
 import { parseBytes, parseDurationToMs } from '../helpers/core-utils.js'
+import { TranscriptionEngineName, WhisperBuiltinModelName } from '@peertube/peertube-transcription'
 
 const require = createRequire(import.meta.url)
 let config: IConfig = require('config')
@@ -513,6 +514,16 @@ const CONFIG = {
   VIDEO_FILE: {
     UPDATE: {
       get ENABLED () { return config.get<boolean>('video_file.update.enabled') }
+    }
+  },
+  VIDEO_TRANSCRIPTION: {
+    get ENABLED () { return config.get<boolean>('video_transcription.enabled') },
+    get ENGINE () { return config.get<TranscriptionEngineName>('video_transcription.engine') },
+    get ENGINE_PATH () { return config.get<string>('video_transcription.engine_path') },
+    get MODEL () { return config.get<WhisperBuiltinModelName>('video_transcription.model') },
+    get MODEL_PATH () { return config.get<string>('video_transcription.model_path') },
+    REMOTE_RUNNERS: {
+      get ENABLED () { return config.get<boolean>('video_transcription.remote_runners.enabled') }
     }
   },
   IMPORT: {

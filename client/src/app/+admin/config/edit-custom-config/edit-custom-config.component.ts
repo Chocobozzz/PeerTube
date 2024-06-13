@@ -267,6 +267,12 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           enabled: null
         }
       },
+      videoTranscription: {
+        enabled: null,
+        remoteRunners: {
+          enabled: null
+        }
+      },
       videoFile: {
         update: {
           enabled: null

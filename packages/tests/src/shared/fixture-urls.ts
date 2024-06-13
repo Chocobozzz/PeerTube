@@ -26,6 +26,7 @@ export const FIXTURE_URLS = {
   badVideo: 'https://download.cpy.re/peertube/bad_video.mp4',
   goodVideo: 'https://download.cpy.re/peertube/good_video.mp4',
   goodVideo720: 'https://download.cpy.re/peertube/good_video_720.mp4',
+  transcriptionVideo: 'https://download.cpy.re/peertube/the_last_man_on_earth.mp4',
 
   chatersVideo: 'https://download.cpy.re/peertube/video_chapters.mp4',
 

@@ -137,6 +137,18 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
     return { 'disabled-checkbox-extra': !this.isSearchIndexEnabled() }
   }
 
+  // ---------------------------------------------------------------------------
+
+  isTranscriptionEnabled () {
+    return this.form.value['videoTranscription']['enabled'] === true
+  }
+
+  getTranscriptionRunnerDisabledClass () {
+    return { 'disabled-checkbox-extra': !this.isTranscriptionEnabled() }
+  }
+
+  // ---------------------------------------------------------------------------
+
   isAutoFollowIndexEnabled () {
     return this.form.value['followings']['instance']['autoFollowIndex']['enabled'] === true
   }

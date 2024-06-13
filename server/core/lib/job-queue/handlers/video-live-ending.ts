@@ -1,9 +1,7 @@
-import { Job } from 'bullmq'
-import { remove } from 'fs-extra/esm'
-import { readdir } from 'fs/promises'
-import { join } from 'path'
+import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@peertube/peertube-models'
 import { peertubeTruncate } from '@server/helpers/core-utils.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
@@ -16,7 +14,10 @@ import {
 } from '@server/lib/paths.js'
 import { generateLocalVideoMiniature, regenerateMiniaturesIfNeeded } from '@server/lib/thumbnail.js'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/hls-transcoding.js'
+import { createTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
+import { buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
+import { isVideoInPublicDirectory } from '@server/lib/video-privacy.js'
 import { moveToNextState } from '@server/lib/video-state.js'
 import { VideoBlacklistModel } from '@server/models/video/video-blacklist.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
@@ -26,11 +27,12 @@ import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoLive, MVideoLiveSession, MVideoWithAllFiles } from '@server/types/models/index.js'
-import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
+import { Job } from 'bullmq'
+import { remove } from 'fs-extra/esm'
+import { readdir } from 'fs/promises'
+import { join } from 'path'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { JobQueue } from '../job-queue.js'
-import { isVideoInPublicDirectory } from '@server/lib/video-privacy.js'
-import { buildStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 
 const lTags = loggerTagsFactory('live', 'job')
 
@@ -174,9 +176,13 @@ async function saveReplayToExternalVideo (options: {
     await replayVideo.addAndSaveThumbnail(thumbnail)
   }
 
-  await moveToNextState({ video: replayVideo, isNewVideo: true })
-
   await createStoryboardJob(replayVideo)
+
+  if (CONFIG.VIDEO_TRANSCRIPTION.ENABLED === true) {
+    await createTranscriptionTaskIfNeeded(replayVideo)
+  }
+
+  await moveToNextState({ video: replayVideo, isNewVideo: true })
 }
 
 async function replaceLiveByReplay (options: {
@@ -245,6 +251,10 @@ async function replaceLiveByReplay (options: {
   await moveToNextState({ video: videoWithFiles, isNewVideo: true })
 
   await createStoryboardJob(videoWithFiles)
+
+  if (CONFIG.VIDEO_TRANSCRIPTION.ENABLED === true) {
+    await createTranscriptionTaskIfNeeded(videoWithFiles)
+  }
 }
 
 async function assignReplayFilesToVideo (options: {

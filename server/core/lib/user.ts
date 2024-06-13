@@ -274,7 +274,8 @@ function createDefaultUserNotificationSettings (user: MUserId, t: Transaction | 
     autoInstanceFollowing: UserNotificationSettingValue.WEB,
     newPeerTubeVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newPluginVersion: UserNotificationSettingValue.WEB,
-    myVideoStudioEditionFinished: UserNotificationSettingValue.WEB
+    myVideoStudioEditionFinished: UserNotificationSettingValue.WEB,
+    myVideoTranscriptionGenerated: UserNotificationSettingValue.WEB
   }
 
   return UserNotificationSettingModel.create(values, { transaction: t })

@@ -49,7 +49,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       abuseStateChange: $localize`One of your abuse reports has been accepted or rejected by moderators`,
       newPeerTubeVersion: $localize`A new PeerTube version is available`,
       newPluginVersion: $localize`One of your plugin/theme has a new available version`,
-      myVideoStudioEditionFinished: $localize`Video studio edition has finished`
+      myVideoStudioEditionFinished: $localize`Video studio edition has finished`,
+      myVideoTranscriptionGenerated: $localize`The transcription of your video has been generated`
     }
     this.notificationSettingGroups = [
       {
@@ -68,7 +69,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
           'blacklistOnMyVideo',
           'myVideoPublished',
           'myVideoImportFinished',
-          'myVideoStudioEditionFinished'
+          'myVideoStudioEditionFinished',
+          'myVideoTranscriptionGenerated'
         ]
       },
 

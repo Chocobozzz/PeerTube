@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import { expect } from 'chai'
-import { join } from 'node:path'
-import { mkdir, rm } from 'node:fs/promises'
-import { TranscriptFile } from '@peertube/peertube-transcription'
-import { tmpdir } from 'node:os'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
+import { TranscriptFile } from '@peertube/peertube-transcription'
+import { expect } from 'chai'
+import { ensureDir, remove } from 'fs-extra/esm'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 
 describe('Transcript File', function () {
   const transcriptFileDirectory = join(tmpdir(), 'peertube-transcription', 'transcript-file')
+
   before(async function () {
-    await mkdir(transcriptFileDirectory, { recursive: true })
+    await ensureDir(transcriptFileDirectory)
   })
 
   it(`may creates a new transcript file from scratch`, async function () {
@@ -33,12 +34,11 @@ describe('Transcript File', function () {
   })
 
   it(`fails when loading a file which is obviously not a transcript`, function () {
-
     expect(() => TranscriptFile.fromPath(buildAbsoluteFixturePath('transcription/videos/the_last_man_on_earth.mp4'), 'en'))
       .to.throw(`Couldn't guess transcript format from extension "mp4". Valid formats are: txt, vtt, srt.`)
   })
 
   after(async function () {
-    await rm(transcriptFileDirectory, { recursive: true, force: true })
+    await remove(transcriptFileDirectory)
   })
 })

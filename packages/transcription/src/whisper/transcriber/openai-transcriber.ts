@@ -1,31 +1,30 @@
-import { join } from 'path'
-import { $ } from 'execa'
 import { buildSUUID } from '@peertube/peertube-node-utils'
-import { TranscriptFile, TranscriptFormat } from '../../transcript/index.js'
-import { AbstractTranscriber, TranscribeArgs } from '../../abstract-transcriber.js'
-import { WhisperBuiltinModel } from '../whisper-builtin-model.js'
-import { TranscriptionModel } from '../../transcription-model.js'
-import { readFile } from 'node:fs/promises'
+import { $ } from 'execa'
+import { readJSON } from 'fs-extra/esm'
 import { parse } from 'node:path'
-
-export type WhisperTranscribeArgs = Omit<TranscribeArgs, 'model'> & { model?: TranscriptionModel }
+import { join, resolve } from 'path'
+import { AbstractTranscriber, TranscribeArgs } from '../../abstract-transcriber.js'
+import { TranscriptFile, TranscriptFormat } from '../../transcript-file.js'
 
 export class OpenaiTranscriber extends AbstractTranscriber {
+
   async transcribe ({
     mediaFilePath,
-    model = new WhisperBuiltinModel('tiny'),
+    model,
     language,
-    format = 'vtt',
+    format,
+    transcriptDirectory,
     runId = buildSUUID()
-  }: WhisperTranscribeArgs): Promise<TranscriptFile> {
+  }: TranscribeArgs): Promise<TranscriptFile> {
     this.assertLanguageDetectionAvailable(language)
 
-    const $$ = $({ verbose: process.env.NODE_ENV !== 'production' })
+    const $$ = $({ verbose: process.env.NODE_ENV !== 'production', env: this.getExecEnv() })
     const languageArgs = language ? [ '--language', language ] : []
 
     this.createRun(runId)
     this.startRun()
-    await $$`${this.engine.binary} ${[
+
+    await $$`${this.getEngineBinary()} ${[
       mediaFilePath,
       '--word_timestamps',
       'True',
@@ -34,29 +33,45 @@ export class OpenaiTranscriber extends AbstractTranscriber {
       '--output_format',
       'all',
       '--output_dir',
-      this.transcriptDirectory,
+      transcriptDirectory,
       ...languageArgs
     ]}`
     this.stopRun()
 
     return new TranscriptFile({
-      language: language || await this.getDetectedLanguage(mediaFilePath),
-      path: this.getTranscriptFilePath(mediaFilePath, format),
+      language: language || await this.getDetectedLanguage(transcriptDirectory, mediaFilePath),
+      path: this.getTranscriptFilePath(transcriptDirectory, mediaFilePath, format),
       format
     })
   }
 
-  async getDetectedLanguage (mediaFilePath: string) {
-    const { language } = await this.readJsonTranscriptFile(mediaFilePath)
+  // ---------------------------------------------------------------------------
+
+  protected async getDetectedLanguage (transcriptDirectory: string, mediaFilePath: string) {
+    const { language } = await this.readJsonTranscriptFile(transcriptDirectory, mediaFilePath)
 
     return language
   }
 
-  async readJsonTranscriptFile (mediaFilePath: string) {
-    return JSON.parse(await readFile(this.getTranscriptFilePath(mediaFilePath, 'json'), 'utf8'))
+  protected async readJsonTranscriptFile (transcriptDirectory: string, mediaFilePath: string) {
+    return readJSON(this.getTranscriptFilePath(transcriptDirectory, mediaFilePath, 'json'), 'utf8')
   }
 
-  getTranscriptFilePath (mediaFilePath: string, format: TranscriptFormat) {
-    return join(this.transcriptDirectory, `${parse(mediaFilePath).name}.${format}`)
+  protected getTranscriptFilePath (transcriptDirectory: string, mediaFilePath: string, format: TranscriptFormat) {
+    return join(transcriptDirectory, `${parse(mediaFilePath).name}.${format}`)
+  }
+
+  // ---------------------------------------------------------------------------
+
+  async install (directory: string) {
+    const $$ = $({ verbose: true })
+
+    await $$`pip3 install -U -t ${[ directory ]} openai-whisper==${this.engine.version}`
+  }
+
+  protected getExecEnv () {
+    if (!this.binDirectory) return undefined
+
+    return { PYTHONPATH: resolve(this.binDirectory, '../') }
   }
 }

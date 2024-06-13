@@ -142,7 +142,8 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
       ? 'torrent-file'
       : 'magnet-uri',
     videoImportId: videoImport.id,
-    preventException: false
+    preventException: false,
+    generateTranscription: body.generateTranscription
   }
   await JobQueue.Instance.createJob({ type: 'video-import', payload })
 

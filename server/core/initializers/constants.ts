@@ -47,7 +47,7 @@ import { cpus } from 'os'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 850
+const LAST_MIGRATION_VERSION = 855
 
 // ---------------------------------------------------------------------------
 
@@ -213,7 +213,8 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'notify': 1,
   'federate-video': 1,
   'create-user-export': 1,
-  'import-user-archive': 1
+  'import-user-archive': 1,
+  'video-transcription': 1
 }
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
@@ -241,7 +242,8 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'notify': 5,
   'federate-video': 3,
   'create-user-export': 1,
-  'import-user-archive': 1
+  'import-user-archive': 1,
+  'video-transcription': 1
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -270,7 +272,8 @@ const JOB_TTL: { [id in JobType]: number } = {
   'notify': 60000 * 5, // 5 minutes
   'federate-video': 60000 * 5, // 5 minutes,
   'create-user-export': 60000 * 60 * 24, // 24 hours
-  'import-user-archive': 60000 * 60 * 24 // 24 hours
+  'import-user-archive': 60000 * 60 * 24, // 24 hours
+  'video-transcription': 1000 * 3600 * 6 // 6 hours
 }
 const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
   'videos-views-stats': {
@@ -282,7 +285,8 @@ const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
 }
 const JOB_PRIORITY = {
   TRANSCODING: 100,
-  VIDEO_STUDIO: 150
+  VIDEO_STUDIO: 150,
+  TRANSCRIPTION: 200
 }
 
 const JOB_REMOVAL_OPTIONS = {
@@ -1013,7 +1017,9 @@ const DIRECTORIES = {
 
   ORIGINAL_VIDEOS: CONFIG.STORAGE.ORIGINAL_VIDEO_FILES_DIR,
 
-  HLS_REDUNDANCY: join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
+  HLS_REDUNDANCY: join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls'),
+
+  LOCAL_PIP_DIRECTORY: join(CONFIG.STORAGE.BIN_DIR, 'pip')
 }
 
 const RESUMABLE_UPLOAD_SESSION_LIFETIME = SCHEDULER_INTERVALS_MS.REMOVE_DANGLING_RESUMABLE_UPLOADS

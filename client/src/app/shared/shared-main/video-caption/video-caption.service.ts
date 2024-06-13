@@ -1,15 +1,15 @@
-import { Observable, of } from 'rxjs'
-import { catchError, map, switchMap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, ServerService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import { peertubeTranslate, sortBy } from '@peertube/peertube-core-utils'
 import { ResultList, VideoCaption } from '@peertube/peertube-models'
+import { Observable, from, of } from 'rxjs'
+import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { environment } from '../../../../environments/environment'
-import { VideoCaptionEdit } from './video-caption-edit.model'
 import { VideoPasswordService } from '../video/video-password.service'
 import { VideoService } from '../video/video.service'
+import { VideoCaptionEdit } from './video-caption-edit.model'
 
 @Injectable()
 export class VideoCaptionService {
@@ -73,5 +73,14 @@ export class VideoCaptionService {
 
   getCaptionContent ({ captionPath }: Pick<VideoCaption, 'captionPath'>) {
     return this.authHttp.get(environment.originServerUrl + captionPath, { responseType: 'text' })
+  }
+
+  generateCaption (videoIds: (number | string)[]) {
+    return from(videoIds)
+      .pipe(
+        concatMap(videoId => this.authHttp.post(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions/generate`, {})),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 }

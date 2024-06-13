@@ -8,7 +8,8 @@ export type RunnerJobVODPayload =
 export type RunnerJobPayload =
   RunnerJobVODPayload |
   RunnerJobLiveRTMPHLSTranscodingPayload |
-  RunnerJobStudioTranscodingPayload
+  RunnerJobStudioTranscodingPayload |
+  RunnerJobTranscriptionPayload
 
 // ---------------------------------------------------------------------------
 
@@ -52,6 +53,12 @@ export interface RunnerJobStudioTranscodingPayload {
   }
 
   tasks: VideoStudioTaskPayload[]
+}
+
+export interface RunnerJobTranscriptionPayload {
+  input: {
+    videoFileUrl: string
+  }
 }
 
 // ---------------------------------------------------------------------------

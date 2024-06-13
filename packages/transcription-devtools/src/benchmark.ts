@@ -1,17 +1,18 @@
-import { createLogger, transports, format } from 'winston'
-import { join } from 'node:path'
-import { performance, PerformanceObserver } from 'node:perf_hooks'
-import { tmpdir } from 'node:os'
-import { rm, mkdir } from 'node:fs/promises'
-import { buildAbsoluteFixturePath, buildSUUID, SUUID } from '@peertube/peertube-node-utils'
-import {
-  transcriberFactory,
-  TranscriptFile,
-  TranscriptFileEvaluator,
-  TranscriptionEngine,
-  TranscriptionModel
-} from '@peertube/peertube-transcription'
 import { millisecondsToTime } from '@peertube/peertube-core-utils'
+import { SUUID, buildAbsoluteFixturePath, buildSUUID } from '@peertube/peertube-node-utils'
+import {
+  TranscriptFile,
+  TranscriptionEngine,
+  TranscriptionEngineName,
+  TranscriptionModel,
+  transcriberFactory
+} from '@peertube/peertube-transcription'
+import { ensureDir, remove } from 'fs-extra/esm'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { PerformanceObserver, performance } from 'node:perf_hooks'
+import { createLogger, format, transports } from 'winston'
+import { TranscriptFileEvaluator } from './transcript-file-evaluator.js'
 
 interface BenchmarkResult {
   uuid: SUUID
@@ -59,16 +60,15 @@ const formatBenchmarkResult = ({ WER, CER, duration, engine, model }: Partial<Be
 void (async () => {
   const logger = createLogger()
   logger.add(new transports.Console({ format: format.printf(log => log.message) }))
-  const transcribers = [
-    'openai-whisper',
-    'whisper-ctranslate2',
-    'whisper-timestamped'
-  ]
+
+  const transcribers: TranscriptionEngineName[] = [ 'openai-whisper', 'whisper-ctranslate2' ]
   const models = process.env.MODELS
     ? process.env.MODELS.trim().split(',').map(modelName => modelName.trim()).filter(modelName => modelName)
     : [ 'tiny' ]
 
   const transcriptDirectory = join(tmpdir(), 'peertube-transcription', 'benchmark')
+  const pipDirectory = join(tmpdir(), 'peertube-transcription', 'pip')
+
   const mediaFilePath = buildAbsoluteFixturePath('transcription/videos/derive_sectaire.mp4')
   const referenceTranscriptFile = new TranscriptFile({
     path: buildAbsoluteFixturePath('transcription/videos/derive_sectaire.txt'),
@@ -79,7 +79,7 @@ void (async () => {
   let benchmarkResults: Record<string, BenchmarkResult> = {}
 
   // before
-  await mkdir(transcriptDirectory, { recursive: true })
+  await ensureDir(transcriptDirectory)
   const performanceObserver = new PerformanceObserver((items) => {
     items
       .getEntries()
@@ -97,11 +97,13 @@ void (async () => {
   for (const transcriberName of transcribers) {
     logger.info(`Create "${transcriberName}" transcriber for the benchmark...`)
 
-    const transcriber = transcriberFactory.createFromEngineName(
-      transcriberName,
-      createLogger(),
-      transcriptDirectory
-    )
+    const transcriber = transcriberFactory.createFromEngineName({
+      engineName: transcriberName,
+      logger: createLogger(),
+      binDirectory: join(pipDirectory, 'bin')
+    })
+
+    await transcriber.install(pipDirectory)
 
     for (const modelName of models) {
       logger.info(`Run benchmark with "${modelName}" model:`)
@@ -110,6 +112,7 @@ void (async () => {
       const transcriptFile = await transcriber.transcribe({
         mediaFilePath,
         model,
+        transcriptDirectory,
         language: 'fr',
         format: 'txt',
         runId: uuid
@@ -134,6 +137,6 @@ void (async () => {
   Object.values(benchmarkResultsGroupedByModel).forEach(benchmark => console.table(benchmark))
 
   // after
-  await rm(transcriptDirectory, { recursive: true, force: true })
+  await remove(transcriptDirectory)
   performance.clearMarks()
 })()

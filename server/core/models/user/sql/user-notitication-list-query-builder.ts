@@ -183,7 +183,12 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
       "Account->Actor->Server"."id" AS "Account.Actor.Server.id",
       "Account->Actor->Server"."host" AS "Account.Actor.Server.host",
       "UserRegistration"."id" AS "UserRegistration.id",
-      "UserRegistration"."username" AS "UserRegistration.username"`
+      "UserRegistration"."username" AS "UserRegistration.username",
+      "VideoCaption"."id" AS "VideoCaption.id",
+      "VideoCaption"."language" AS "VideoCaption.language",
+      "VideoCaption->Video"."id" AS "VideoCaption.Video.id",
+      "VideoCaption->Video"."uuid" AS "VideoCaption.Video.uuid",
+      "VideoCaption->Video"."name" AS "VideoCaption.Video.name"`
   }
 
   private getJoins () {
@@ -269,6 +274,11 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
       LEFT JOIN "server" AS "Account->Actor->Server" ON "Account->Actor"."serverId" = "Account->Actor->Server"."id"
     ) ON "UserNotificationModel"."accountId" = "Account"."id"
 
-    LEFT JOIN "userRegistration" as "UserRegistration" ON "UserNotificationModel"."userRegistrationId" = "UserRegistration"."id"`
+    LEFT JOIN "userRegistration" as "UserRegistration" ON "UserNotificationModel"."userRegistrationId" = "UserRegistration"."id"
+
+    LEFT JOIN (
+      "videoCaption" AS "VideoCaption"
+      INNER JOIN "video" AS "VideoCaption->Video" ON "VideoCaption"."videoId" = "VideoCaption->Video"."id"
+    ) ON "UserNotificationModel"."videoCaptionId" = "VideoCaption"."id"`
   }
 }

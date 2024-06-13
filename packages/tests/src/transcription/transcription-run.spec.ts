@@ -1,1 +1,0 @@
-describe('Transcription run', function () {})

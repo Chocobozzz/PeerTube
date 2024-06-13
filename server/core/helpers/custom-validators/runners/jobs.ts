@@ -1,83 +1,74 @@
-import { UploadFilesForCheck } from 'express'
-import validator from 'validator'
-import { CONSTRAINTS_FIELDS, RUNNER_JOB_STATES } from '@server/initializers/constants.js'
 import {
   LiveRTMPHLSTranscodingSuccess,
   RunnerJobSuccessPayload,
   RunnerJobType,
   RunnerJobUpdatePayload,
-  VideoStudioTranscodingSuccess,
+  TranscriptionSuccess,
   VODAudioMergeTranscodingSuccess,
   VODHLSTranscodingSuccess,
-  VODWebVideoTranscodingSuccess
+  VODWebVideoTranscodingSuccess,
+  VideoStudioTranscodingSuccess
 } from '@peertube/peertube-models'
+import { CONSTRAINTS_FIELDS, RUNNER_JOB_STATES } from '@server/initializers/constants.js'
+import { UploadFilesForCheck } from 'express'
+import validator from 'validator'
 import { exists, isArray, isFileValid, isSafeFilename } from '../misc.js'
 
 const RUNNER_JOBS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.RUNNER_JOBS
 
 const runnerJobTypes = new Set([ 'vod-hls-transcoding', 'vod-web-video-transcoding', 'vod-audio-merge-transcoding' ])
-function isRunnerJobTypeValid (value: RunnerJobType) {
+export function isRunnerJobTypeValid (value: RunnerJobType) {
   return runnerJobTypes.has(value)
 }
 
-function isRunnerJobSuccessPayloadValid (value: RunnerJobSuccessPayload, type: RunnerJobType, files: UploadFilesForCheck) {
+export function isRunnerJobSuccessPayloadValid (value: RunnerJobSuccessPayload, type: RunnerJobType, files: UploadFilesForCheck) {
   return isRunnerJobVODWebVideoResultPayloadValid(value as VODWebVideoTranscodingSuccess, type, files) ||
     isRunnerJobVODHLSResultPayloadValid(value as VODHLSTranscodingSuccess, type, files) ||
     isRunnerJobVODAudioMergeResultPayloadValid(value as VODHLSTranscodingSuccess, type, files) ||
     isRunnerJobLiveRTMPHLSResultPayloadValid(value as LiveRTMPHLSTranscodingSuccess, type) ||
-    isRunnerJobVideoStudioResultPayloadValid(value as VideoStudioTranscodingSuccess, type, files)
+    isRunnerJobVideoStudioResultPayloadValid(value as VideoStudioTranscodingSuccess, type, files) ||
+    isRunnerJobTranscriptionResultPayloadValid(value as TranscriptionSuccess, type, files)
 }
 
 // ---------------------------------------------------------------------------
 
-function isRunnerJobProgressValid (value: string) {
+export function isRunnerJobProgressValid (value: string) {
   return validator.default.isInt(value + '', RUNNER_JOBS_CONSTRAINTS_FIELDS.PROGRESS)
 }
 
-function isRunnerJobUpdatePayloadValid (value: RunnerJobUpdatePayload, type: RunnerJobType, files: UploadFilesForCheck) {
+export function isRunnerJobUpdatePayloadValid (value: RunnerJobUpdatePayload, type: RunnerJobType, files: UploadFilesForCheck) {
   return isRunnerJobVODWebVideoUpdatePayloadValid(value, type, files) ||
     isRunnerJobVODHLSUpdatePayloadValid(value, type, files) ||
     isRunnerJobVideoStudioUpdatePayloadValid(value, type, files) ||
     isRunnerJobVODAudioMergeUpdatePayloadValid(value, type, files) ||
-    isRunnerJobLiveRTMPHLSUpdatePayloadValid(value, type, files)
+    isRunnerJobLiveRTMPHLSUpdatePayloadValid(value, type, files) ||
+    isRunnerJobTranscriptionUpdatePayloadValid(value, type, files)
 }
 
 // ---------------------------------------------------------------------------
 
-function isRunnerJobTokenValid (value: string) {
+export function isRunnerJobTokenValid (value: string) {
   return exists(value) && validator.default.isLength(value, RUNNER_JOBS_CONSTRAINTS_FIELDS.TOKEN)
 }
 
-function isRunnerJobAbortReasonValid (value: string) {
+export function isRunnerJobAbortReasonValid (value: string) {
   return validator.default.isLength(value, RUNNER_JOBS_CONSTRAINTS_FIELDS.REASON)
 }
 
-function isRunnerJobErrorMessageValid (value: string) {
+export function isRunnerJobErrorMessageValid (value: string) {
   return validator.default.isLength(value, RUNNER_JOBS_CONSTRAINTS_FIELDS.ERROR_MESSAGE)
 }
 
-function isRunnerJobStateValid (value: any) {
+export function isRunnerJobStateValid (value: any) {
   return exists(value) && RUNNER_JOB_STATES[value] !== undefined
 }
 
-function isRunnerJobArrayOfStateValid (value: any) {
+export function isRunnerJobArrayOfStateValid (value: any) {
   return isArray(value) && value.every(v => isRunnerJobStateValid(v))
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  isRunnerJobTypeValid,
-  isRunnerJobSuccessPayloadValid,
-  isRunnerJobUpdatePayloadValid,
-  isRunnerJobTokenValid,
-  isRunnerJobErrorMessageValid,
-  isRunnerJobProgressValid,
-  isRunnerJobAbortReasonValid,
-  isRunnerJobArrayOfStateValid,
-  isRunnerJobStateValid
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 function isRunnerJobVODWebVideoResultPayloadValid (
@@ -124,6 +115,15 @@ function isRunnerJobVideoStudioResultPayloadValid (
     isFileValid({ files, field: 'payload[videoFile]', mimeTypeRegex: null, maxSize: null })
 }
 
+function isRunnerJobTranscriptionResultPayloadValid (
+  value: TranscriptionSuccess,
+  type: RunnerJobType,
+  files: UploadFilesForCheck
+) {
+  return type === 'video-transcription' &&
+    isFileValid({ files, field: 'payload[vttFile]', mimeTypeRegex: null, maxSize: null })
+}
+
 // ---------------------------------------------------------------------------
 
 function isRunnerJobVODWebVideoUpdatePayloadValid (
@@ -150,6 +150,15 @@ function isRunnerJobVODAudioMergeUpdatePayloadValid (
   _files: UploadFilesForCheck
 ) {
   return type === 'vod-audio-merge-transcoding' &&
+    (!value || (typeof value === 'object' && Object.keys(value).length === 0))
+}
+
+function isRunnerJobTranscriptionUpdatePayloadValid (
+  value: RunnerJobUpdatePayload,
+  type: RunnerJobType,
+  _files: UploadFilesForCheck
+) {
+  return type === 'video-transcription' &&
     (!value || (typeof value === 'object' && Object.keys(value).length === 0))
 }
 

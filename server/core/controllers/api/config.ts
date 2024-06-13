@@ -1,10 +1,16 @@
+import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import { createReqFiles } from '@server/helpers/express-utils.js'
+import { MIMETYPES } from '@server/initializers/constants.js'
+import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '@server/lib/local-actor.js'
+import { ServerConfigManager } from '@server/lib/server-config-manager.js'
+import { ActorImageModel } from '@server/models/actor/actor-image.js'
+import { getServerActor } from '@server/models/application/application.js'
+import { ModelCache } from '@server/models/shared/model-cache.js'
 import express from 'express'
 import { remove, writeJSON } from 'fs-extra/esm'
 import snakeCase from 'lodash-es/snakeCase.js'
 import validator from 'validator'
-import { ServerConfigManager } from '@server/lib/server-config-manager.js'
-import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, UserRight } from '@peertube/peertube-models'
-import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '../../helpers/audit-logger.js'
+import { CustomConfigAuditView, auditLoggerFactory, getAuditIdFromRes } from '../../helpers/audit-logger.js'
 import { objectConverter } from '../../helpers/core-utils.js'
 import { CONFIG, reloadConfig } from '../../initializers/config.js'
 import { ClientHtml } from '../../lib/html/client-html.js'
@@ -18,12 +24,6 @@ import {
   updateBannerValidator
 } from '../../middlewares/index.js'
 import { customConfigUpdateValidator, ensureConfigIsEditable } from '../../middlewares/validators/config.js'
-import { createReqFiles } from '@server/helpers/express-utils.js'
-import { MIMETYPES } from '@server/initializers/constants.js'
-import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '@server/lib/local-actor.js'
-import { getServerActor } from '@server/models/application/application.js'
-import { ActorImageModel } from '@server/models/actor/actor-image.js'
-import { ModelCache } from '@server/models/shared/model-cache.js'
 
 const configRouter = express.Router()
 
@@ -383,6 +383,12 @@ function customConfig (): CustomConfig {
       enabled: CONFIG.VIDEO_STUDIO.ENABLED,
       remoteRunners: {
         enabled: CONFIG.VIDEO_STUDIO.REMOTE_RUNNERS.ENABLED
+      }
+    },
+    videoTranscription: {
+      enabled: CONFIG.VIDEO_TRANSCRIPTION.ENABLED,
+      remoteRunners: {
+        enabled: CONFIG.VIDEO_TRANSCRIPTION.REMOTE_RUNNERS.ENABLED
       }
     },
     videoFile: {

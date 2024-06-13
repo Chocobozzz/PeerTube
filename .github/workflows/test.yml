@@ -71,6 +71,20 @@ jobs:
             ${{ runner.OS }}-fixtures-
             ${{ runner.OS }}-
 
+      - name: Cache PeerTube pip directory
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+          key: ${{ runner.OS }}-${{ matrix.test_suite }}-pip-v1
+
+      - name: Cache Hugging Face models
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/huggingface
+          key: ${{ runner.OS }}-${{ matrix.test_suite }}-hugging-face-v1
+
       - name: Set env test variable (schedule)
         if: github.event_name != 'schedule'
         run: |

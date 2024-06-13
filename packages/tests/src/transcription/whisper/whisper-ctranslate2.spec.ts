@@ -1,50 +1,58 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions, max-len */
-import { expect, config } from 'chai'
-import { createLogger } from 'winston'
-import { join } from 'node:path'
-import { mkdir, rm } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
-  Ctranslate2Transcriber, downloadFile,
-  levenshteinDistance,
+  Ctranslate2Transcriber,
   OpenaiTranscriber,
   TranscriptFile,
-  TranscriptFileEvaluator,
-  TranscriptionModel, unzip,
-  WhisperTranscribeArgs
+  TranscriptionModel
 } from '@peertube/peertube-transcription'
-import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { TranscriptFileEvaluator, levenshteinDistance } from '@peertube/peertube-transcription-devtools'
+import { downloadCustomModelsIfNeeded, getCustomModelPath } from '@tests/shared/transcription.js'
+import { config, expect } from 'chai'
+import { ensureDir, remove } from 'fs-extra/esm'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { createLogger } from 'winston'
 
 config.truncateThreshold = 0
 
 describe('Whisper CTranslate2 transcriber', function () {
   const tmpDirectory = join(tmpdir(), 'peertube-transcription')
   const transcriptDirectory = join(tmpDirectory, 'transcriber', 'ctranslate2')
-  const modelsDirectory = join(tmpDirectory, 'models')
+
   const shortVideoPath = buildAbsoluteFixturePath('transcription/videos/the_last_man_on_earth.mp4')
   const frVideoPath = buildAbsoluteFixturePath('transcription/videos/derive_sectaire.mp4')
-  const transcriber = new Ctranslate2Transcriber(
-    {
-      name: 'anyNameShouldBeFineReally',
-      requirements: [],
-      type: 'binary',
-      binary: 'whisper-ctranslate2',
-      supportedModelFormats: [],
-      languageDetection: true
-    },
-    createLogger(),
-    transcriptDirectory
-  )
 
-  before(async function () {
-    this.timeout(1 * 1000 * 60)
-    await mkdir(transcriptDirectory, { recursive: true })
-    await unzip(await downloadFile(FIXTURE_URLS.transcriptionModels, tmpDirectory))
+  const transcriber = new Ctranslate2Transcriber({
+    engine: {
+      name: 'whisper-ctranslate2',
+      type: 'binary',
+      command: 'whisper-ctranslate2',
+      supportedModelFormats: [ 'CTranslate2' ],
+      languageDetection: true,
+      version: '0.4.4'
+    },
+    logger: createLogger()
   })
 
-  it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format by default', async function () {
-    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en' })
+  const model = new TranscriptionModel('tiny')
+
+  before(async function () {
+    this.timeout(120000)
+
+    await ensureDir(transcriptDirectory)
+
+    await downloadCustomModelsIfNeeded('faster-whisper-tiny')
+  })
+
+  it('Should transcribe a media file and provide a valid path to a transcript file in `vtt` format', async function () {
+    const transcript = await transcriber.transcribe({
+      mediaFilePath: shortVideoPath,
+      language: 'en',
+      format: 'vtt',
+      model,
+      transcriptDirectory
+    })
 
     expect(transcript.format).to.equals('vtt')
     expect(transcript.language).to.equals('en')
@@ -52,7 +60,13 @@ describe('Whisper CTranslate2 transcriber', function () {
   })
 
   it('May produce a transcript file in the `srt` format', async function () {
-    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'srt' })
+    const transcript = await transcriber.transcribe({
+      mediaFilePath: shortVideoPath,
+      language: 'en',
+      format: 'srt',
+      model,
+      transcriptDirectory
+    })
 
     expect(transcript.format).to.equals('srt')
     expect(transcript.language).to.equals('en')
@@ -60,7 +74,13 @@ describe('Whisper CTranslate2 transcriber', function () {
   })
 
   it('May produce a transcript file in the `txt` format', async function () {
-    const transcript = await transcriber.transcribe({ mediaFilePath: shortVideoPath, language: 'en', format: 'txt' })
+    const transcript = await transcriber.transcribe({
+      mediaFilePath: shortVideoPath,
+      language: 'en',
+      format: 'txt',
+      model,
+      transcriptDirectory
+    })
     expect(await transcript.equals(new TranscriptFile({
       path: join(transcriptDirectory, 'the_last_man_on_earth.txt'),
       format: 'txt',
@@ -78,10 +98,12 @@ describe('Whisper CTranslate2 transcriber', function () {
 
   it('May transcribe a media file using a local CTranslate2 model', async function () {
     this.timeout(2 * 1000 * 60)
+
     const transcript = await transcriber.transcribe({
       mediaFilePath: shortVideoPath,
-      model: await TranscriptionModel.fromPath(join(modelsDirectory, 'faster-whisper-tiny')),
+      model: await TranscriptionModel.fromPath(getCustomModelPath('faster-whisper-tiny')),
       language: 'en',
+      transcriptDirectory,
       format: 'txt'
     })
 
@@ -92,7 +114,14 @@ describe('Whisper CTranslate2 transcriber', function () {
 
   it('May transcribe a media file in french', async function () {
     this.timeout(5 * 1000 * 60)
-    const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath, language: 'fr', format: 'txt' })
+
+    const transcript = await transcriber.transcribe({
+      mediaFilePath: frVideoPath,
+      language: 'fr',
+      format: 'txt',
+      model,
+      transcriptDirectory
+    })
 
     expect(transcript.format).to.equals('txt')
     expect(transcript.language).to.equals('fr')
@@ -101,30 +130,39 @@ describe('Whisper CTranslate2 transcriber', function () {
 
   it('Guesses the video language if not provided', async function () {
     this.timeout(2 * 1000 * 60)
-    const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath })
+
+    const transcript = await transcriber.transcribe({ mediaFilePath: frVideoPath, format: 'vtt', model, transcriptDirectory })
     expect(transcript.language).to.equals('fr')
   })
 
   it('Should produce a text transcript similar to openai-whisper implementation', async function () {
     this.timeout(10 * 1000 * 60)
-    const transcribeArgs: WhisperTranscribeArgs = {
+
+    const transcribeArgs = {
       mediaFilePath: frVideoPath,
       language: 'fr',
-      format: 'txt'
+      format: 'txt' as 'txt',
+      transcriptDirectory,
+      model
     }
+
     const transcript = await transcriber.transcribe(transcribeArgs)
-    const openaiTranscriber = new OpenaiTranscriber(
-      {
+
+    const openaiTranscriber = new OpenaiTranscriber({
+      engine: {
         name: 'openai-whisper',
-        requirements: [],
         type: 'binary',
-        binary: 'whisper',
-        supportedModelFormats: [ 'PyTorch' ]
+        command: 'whisper',
+        supportedModelFormats: [ 'PyTorch' ],
+        version: '0.4.4'
       },
-      createLogger(),
-      join(transcriptDirectory, 'openai-whisper')
-    )
-    const openaiTranscript = await openaiTranscriber.transcribe(transcribeArgs)
+      logger: createLogger()
+    })
+    const openaiTranscript = await openaiTranscriber.transcribe({
+      ...transcribeArgs,
+
+      transcriptDirectory: join(transcriptDirectory, 'openai-whisper')
+    })
 
     const transcriptFileEvaluator = new TranscriptFileEvaluator(openaiTranscript, transcript)
     expect(await transcriptFileEvaluator.wer()).to.be.below(20 / 100)
@@ -132,6 +170,6 @@ describe('Whisper CTranslate2 transcriber', function () {
   })
 
   after(async function () {
-    await rm(transcriptDirectory, { recursive: true, force: true })
+    await remove(transcriptDirectory)
   })
 })

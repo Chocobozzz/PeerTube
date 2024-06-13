@@ -53,8 +53,8 @@
 <form [hidden]="!isInUpdateForm" novalidate [formGroup]="form">
   <my-video-edit
     [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions"
-    [forbidScheduledPublication]="true" [hideWaitTranscoding]="true"
     [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels" [liveVideo]="liveVideo"
+    forbidScheduledPublication="true" hideWaitTranscoding="true" displayTranscriptionInfo="false"
     type="go-live"
   ></my-video-edit>
 
