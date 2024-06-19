@@ -12,7 +12,7 @@ export function handlesToNameAndHost (handles: string[]) {
   return handles.map(h => handleToNameAndHost(h))
 }
 
-const accountType = new Set([ 'Person', 'Application', 'Group', 'Service', 'Organization' ])
+const accountType = new Set([ 'Person', 'Application', 'Service', 'Organization' ])
 export function isAccountActor (type: ActivityPubActorType) {
   return accountType.has(type)
 }
