@@ -427,12 +427,19 @@ export class PluginManager implements ServerHook {
 
     // Use the latest version from DB, to not upgrade to a version that does not support our PeerTube version
     let version: string
+    const plugin = await PluginModel.loadByNpmName(toUpdate)
+
     if (!fromDisk) {
-      const plugin = await PluginModel.loadByNpmName(toUpdate)
       version = plugin.latestVersion
     }
 
-    return this.install({ toInstall: toUpdate, version, fromDisk })
+    try {
+      return this.install({ toInstall: toUpdate, version, fromDisk })
+    } catch (err) {
+      logger.info('Reinstalling last installed version.', { err })
+
+      return this.install({ toInstall: toUpdate, version: plugin.version })
+    }
   }
 
   async uninstall (options: {
