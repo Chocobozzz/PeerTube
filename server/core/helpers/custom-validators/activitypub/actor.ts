@@ -20,8 +20,9 @@ function isActorPublicKeyObjectValid (publicKeyObject: any) {
     isActorPublicKeyValid(publicKeyObject.publicKeyPem)
 }
 
+const actorTypes = new Set([ 'Person', 'Application', 'Group', 'Service', 'Organization' ])
 function isActorTypeValid (type: string) {
-  return type === 'Person' || type === 'Application' || type === 'Group' || type === 'Service' || type === 'Organization'
+  return actorTypes.has(type)
 }
 
 function isActorPublicKeyValid (publicKey: string) {

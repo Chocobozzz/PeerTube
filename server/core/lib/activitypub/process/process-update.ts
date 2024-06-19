@@ -1,11 +1,13 @@
 import {
   ActivityPubActor,
+  ActivityPubActorType,
   ActivityUpdate,
   ActivityUpdateObject,
   CacheFileObject,
   PlaylistObject,
   VideoObject
 } from '@peertube/peertube-models'
+import { isAccountActor } from '@server/helpers/actors.js'
 import { isRedundancyAccepted } from '@server/lib/redundancy.js'
 import { isCacheFileObjectValid } from '../../../helpers/custom-validators/activitypub/cache-file.js'
 import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-validators/activitypub/videos.js'
@@ -32,7 +34,7 @@ async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate
     return retryTransactionWrapper(processUpdateVideo, activity)
   }
 
-  if (objectType === 'Person' || objectType === 'Application' || objectType === 'Group') {
+  if (isAccountActor(objectType as ActivityPubActorType)) {
     // We need more attributes
     const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
     return retryTransactionWrapper(processUpdateActor, byActorFull, object)

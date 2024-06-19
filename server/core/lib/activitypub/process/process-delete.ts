@@ -1,4 +1,5 @@
 import { ActivityDelete } from '@peertube/peertube-models'
+import { isAccountActor, isChannelActor } from '@server/helpers/actors.js'
 import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
@@ -27,14 +28,14 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
     // We need more attributes (all the account and channel)
     const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
 
-    if (byActorFull.type === 'Person') {
+    if (isAccountActor(byActorFull.type)) {
       if (!byActorFull.Account) throw new Error('Actor ' + byActorFull.url + ' is a person but we cannot find it in database.')
 
       const accountToDelete = byActorFull.Account as MAccountActor
       accountToDelete.Actor = byActorFull
 
       return retryTransactionWrapper(processDeleteAccount, accountToDelete)
-    } else if (byActorFull.type === 'Group') {
+    } else if (isChannelActor(byActorFull.type)) {
       if (!byActorFull.VideoChannel) throw new Error('Actor ' + byActorFull.url + ' is a group but we cannot find it in database.')
 
       const channelToDelete = byActorFull.VideoChannel as MChannelAccountActor & { Actor: MActorFull }

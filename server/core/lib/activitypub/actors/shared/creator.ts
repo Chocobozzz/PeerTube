@@ -18,6 +18,7 @@ import {
 import { updateActorImages } from '../image.js'
 import { getActorAttributesFromObject, getActorDisplayNameFromObject, getImagesInfoFromObject } from './object-to-model-attributes.js'
 import { fetchActorFollowsCount } from './url-to-object.js'
+import { isAccountActor, isChannelActor } from '@server/helpers/actors.js'
 
 export class APActorCreator {
 
@@ -43,12 +44,12 @@ export class APActorCreator {
 
       await this.tryToFixActorUrlIfNeeded(actorCreated, actorInstance, created, t)
 
-      if (actorCreated.type === 'Person' || actorCreated.type === 'Application') { // Account or PeerTube instance
+      if (isAccountActor(actorCreated.type)) {
         actorCreated.Account = await this.saveAccount(actorCreated, t) as MAccountDefault
         actorCreated.Account.Actor = actorCreated
       }
 
-      if (actorCreated.type === 'Group') { // Video channel
+      if (isChannelActor(actorCreated.type)) {
         const channel = await this.saveVideoChannel(actorCreated, t)
         actorCreated.VideoChannel = Object.assign(channel, { Actor: actorCreated, Account: this.ownerActor.Account })
       }
