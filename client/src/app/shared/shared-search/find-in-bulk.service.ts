@@ -60,7 +60,7 @@ export class FindInBulkService {
 
     return this.getData({
       observableObject: this.getPlaylistInBulk,
-      finder: p => p.uuid === uuid,
+      finder: p => p.uuid === uuid || p.shortUUID === uuid,
       param: uuid
     })
   }
