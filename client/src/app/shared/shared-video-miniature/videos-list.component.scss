@@ -76,6 +76,11 @@ $margin-top: 2rem;
   }
 }
 
+my-global-icon[iconname=live] {
+  position: relative;
+  top: -1px;
+}
+
 @media screen and (max-width: $mobile-view) {
   my-video-filters-header {
     @include margin-left(1rem);

@@ -4,21 +4,24 @@
   *ngIf="videoChannel"
 
   [title]="title"
-  [displayTitle]="false"
+  displayTitle="false"
 
   [getVideosObservableFunction]="getVideosObservableFunction"
   [getSyndicationItemsFunction]="getSyndicationItemsFunction"
 
   [defaultSort]="defaultSort"
 
-  [displayFilters]="true"
-  [displayModerationBlock]="true"
+  displayFilters="true"
+  displayModerationBlock="true"
+
   [displayOptions]="displayOptions"
   [displayAsRow]="displayAsRow()"
 
-  [hideScopeFilter]="true"
+  hideScopeFilter="true"
 
-  [loadUserVideoPreferences]="true"
+  loadUserVideoPreferences="true"
+
+  highlightLives="true"
 
   [disabled]="disabled"
 

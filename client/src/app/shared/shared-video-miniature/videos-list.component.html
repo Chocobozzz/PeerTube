@@ -40,10 +40,31 @@
 
   <div class="no-results" i18n *ngIf="hasDoneFirstQuery && videos.length === 0">No results.</div>
   <div
-    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()"
+    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onVideosDataSubject.asObservable()"
     [setAngularState]="true" [parentDisabled]="disabled"
     class="videos" [ngClass]="{ 'display-as-row': displayAsRow }"
   >
+    <ng-container *ngIf="highlightedLives.length !== 0">
+      <h2 class="date-title">
+        <my-global-icon iconName="live"></my-global-icon> Current lives
+      </h2>
+
+      <ng-container *ngFor="let live of highlightedLives; trackBy: videoById;">
+        <div class="video-wrapper">
+          <my-video-miniature
+            [video]="live" [user]="userMiniature" [displayAsRow]="displayAsRow"
+            [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
+            (videoBlocked)="removeVideoFromArray(live)" (liveRemoved)="removeVideoFromArray(live)"
+          >
+          </my-video-miniature>
+        </div>
+      </ng-container>
+
+      <h2 *ngIf="!groupByDate" class="date-title">
+        <my-global-icon iconName="videos"></my-global-icon> Videos
+      </h2>
+    </ng-container>
+
     <ng-container *ngFor="let video of videos; trackBy: videoById;">
       <h2 class="date-title" *ngIf="getCurrentGroupedDateLabel(video)">
         {{ getCurrentGroupedDateLabel(video) }}

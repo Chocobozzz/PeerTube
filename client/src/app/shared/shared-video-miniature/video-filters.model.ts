@@ -57,6 +57,8 @@ export class VideoFilters {
     this.reset()
   }
 
+  // ---------------------------------------------------------------------------
+
   onChange (cb: () => void) {
     this.onChangeCallbacks.push(cb)
   }
@@ -73,6 +75,8 @@ export class VideoFilters {
     }
   }
 
+  // ---------------------------------------------------------------------------
+
   setDefaultScope (scope: VideoFilterScope) {
     this.defaultValues.set('scope', scope)
   }
@@ -85,6 +89,8 @@ export class VideoFilters {
     this.updateDefaultNSFW(nsfwPolicy)
   }
 
+  // ---------------------------------------------------------------------------
+
   reset (specificKey?: string) {
     for (const [ key, value ] of this.defaultValues) {
       if (specificKey && specificKey !== key) continue
@@ -94,6 +100,8 @@ export class VideoFilters {
 
     this.buildActiveFilters()
   }
+
+  // ---------------------------------------------------------------------------
 
   load (obj: Partial<AttributesOnly<VideoFilters>>) {
     // FIXME: We may use <ng-option> that doesn't escape HTML so prefer to escape things
@@ -121,6 +129,16 @@ export class VideoFilters {
 
     this.buildActiveFilters()
   }
+
+  clone () {
+    const cloned = new VideoFilters(this.defaultValues.get('sort'), this.defaultValues.get('scope'), this.hiddenFields)
+
+    cloned.load(this.toUrlObject())
+
+    return cloned
+  }
+
+  // ---------------------------------------------------------------------------
 
   buildActiveFilters () {
     this.activeFilters = []
@@ -189,6 +207,8 @@ export class VideoFilters {
     return this.activeFilters
   }
 
+  // ---------------------------------------------------------------------------
+
   toFormObject (): VideoFiltersKeys {
     const result: Partial<VideoFiltersKeys> = {}
 
@@ -241,6 +261,8 @@ export class VideoFilters {
       isLive
     }
   }
+
+  // ---------------------------------------------------------------------------
 
   getNSFWDisplayLabel () {
     if (this.defaultNSFWPolicy === 'blur') return $localize`Blurred`
