@@ -59,9 +59,13 @@
 
       @if (isTrendingSortEnabled('most-viewed')) {
         <ng-option i18n value="-trending">Sort by <strong>"Recent Views"</strong></ng-option>
-      } @else if (isTrendingSortEnabled('hot')) {
+      }
+
+      @if (isTrendingSortEnabled('hot')) {
         <ng-option i18n value="-hot">Sort by <strong>"Hot"</strong></ng-option>
-      } @else if (isTrendingSortEnabled('most-liked')) {
+      }
+
+      @if (isTrendingSortEnabled('most-liked')) {
         <ng-option i18n value="-likes">Sort by <strong>"Likes"</strong></ng-option>
       }
 
