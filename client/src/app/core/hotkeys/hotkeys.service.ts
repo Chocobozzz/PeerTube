@@ -1,10 +1,10 @@
 // Thanks to https://github.com/brtnshrdr/angular2-hotkeys
 
 import { Injectable, NgZone } from '@angular/core'
-import { Hotkey } from './hotkey.model'
+import debug from 'debug'
 import { Subject } from 'rxjs'
 import { tinykeys } from 'tinykeys'
-import debug from 'debug'
+import { Hotkey } from './hotkey.model'
 
 const debugLogger = debug('peertube:hotkeys')
 
@@ -13,7 +13,8 @@ export class HotkeysService {
   cheatSheetToggle = new Subject<boolean>()
 
   private hotkeys: Hotkey[] = []
-  private preventIn = [ 'INPUT', 'SELECT', 'TEXTAREA' ]
+  private readonly preventIn = new Set([ 'INPUT', 'SELECT', 'TEXTAREA' ])
+  private readonly preventAttribute = new Set([ 'INPUT', 'SELECT', 'TEXTAREA' ])
 
   private disabled = false
 
@@ -59,10 +60,10 @@ export class HotkeysService {
           [combo]: event => {
             if (this.disabled) return
 
-            const target = event.target as Element
+            const target = event.target as HTMLElement
             const nodeName: string = target.nodeName.toUpperCase()
 
-            if (this.preventIn.includes(nodeName)) {
+            if (target.isContentEditable || this.preventIn.has(nodeName)) {
               return
             }
 
