@@ -150,11 +150,11 @@ function listVideoPrivacies (_req: express.Request, res: express.Response) {
   res.json(VIDEO_PRIVACIES)
 }
 
-async function getVideo (_req: express.Request, res: express.Response) {
+async function getVideo (req: express.Request, res: express.Response) {
   const videoId = res.locals.videoAPI.id
   const userId = res.locals.oauth?.token.User.id
 
-  const video = await Hooks.wrapObject(res.locals.videoAPI, 'filter:api.video.get.result', { id: videoId, userId })
+  const video = await Hooks.wrapObject(res.locals.videoAPI, 'filter:api.video.get.result', { req, id: videoId, userId })
   // Filter may return null/undefined value to forbid video access
   if (!video) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
