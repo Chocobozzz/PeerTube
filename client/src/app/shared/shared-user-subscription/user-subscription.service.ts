@@ -39,7 +39,7 @@ export class UserSubscriptionService {
   ) {
     this.existsObservable = merge(
       buildBulkObservable({
-        time: 500,
+        time: 200,
         notifierObservable: this.existsSubject,
         bulkGet: this.doSubscriptionsExist.bind(this)
       }).pipe(map(r => r.response)),

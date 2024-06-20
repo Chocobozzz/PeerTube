@@ -58,7 +58,7 @@ export class VideoPlaylistService {
   ) {
     this.videoExistsInPlaylistObservable = merge(
       buildBulkObservable({
-        time: 5000,
+        time: 200,
         bulkGet: (videoIds: number[]) => {
           // We added a delay to the request, so ensure the user is still logged in
           if (this.auth.isLoggedIn()) {
