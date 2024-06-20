@@ -14,7 +14,6 @@ export class HotkeysService {
 
   private hotkeys: Hotkey[] = []
   private readonly preventIn = new Set([ 'INPUT', 'SELECT', 'TEXTAREA' ])
-  private readonly preventAttribute = new Set([ 'INPUT', 'SELECT', 'TEXTAREA' ])
 
   private disabled = false
 
