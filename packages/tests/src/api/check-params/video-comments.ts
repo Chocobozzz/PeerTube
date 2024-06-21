@@ -502,10 +502,14 @@ describe('Test video comments API validator', function () {
     let videoId: string
     let commentId: number
     let deletedCommentId: number
+    let userAccessToken3: string
 
     before(async function () {
+      userAccessToken3 = await server.users.generateUserAndToken('user3')
+
       {
         const res = await server.videos.upload({
+          token: userAccessToken,
           attributes: {
             name: 'review policy',
             commentsPolicy: VideoCommentPolicy.REQUIRES_APPROVAL
@@ -516,12 +520,12 @@ describe('Test video comments API validator', function () {
       }
 
       {
-        const res = await server.comments.createThread({ text: 'thread', videoId, token: userAccessToken })
+        const res = await server.comments.createThread({ text: 'thread', videoId, token: userAccessToken2 })
         commentId = res.id
       }
 
       {
-        const res = await server.comments.createThread({ text: 'deleted', videoId, token: userAccessToken })
+        const res = await server.comments.createThread({ text: 'deleted', videoId, token: userAccessToken2 })
         deletedCommentId = res.id
 
         await server.comments.delete({ commentId: deletedCommentId, videoId })
@@ -533,15 +537,19 @@ describe('Test video comments API validator', function () {
     })
 
     it('Should fail with another user', async function () {
+      await server.comments.approve({ token: userAccessToken3, commentId, videoId, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail with the owner', async function () {
       await server.comments.approve({ token: userAccessToken2, commentId, videoId, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with an incorrect video', async function () {
-      await server.comments.approve({ token: userAccessToken2, commentId, videoId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await server.comments.approve({ token: userAccessToken, commentId, videoId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should fail with an incorrect comment', async function () {
-      await server.comments.approve({ token: userAccessToken2, commentId: 42, videoId, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await server.comments.approve({ token: userAccessToken, commentId: 42, videoId, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
     it('Should fail with a deleted comment', async function () {

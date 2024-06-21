@@ -237,7 +237,21 @@ function checkUserCanDeleteVideoComment (user: MUserAccountUrl, videoComment: MC
     return false
   }
 
-  return checkUserCanManageVideoComment(user, videoComment, res)
+  const userAccount = user.Account
+
+  if (
+    user.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT) === false && // Not a moderator
+    videoComment.accountId !== userAccount.id && // Not the comment owner
+    videoComment.Video.VideoChannel.accountId !== userAccount.id // Not the video owner
+  ) {
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'Cannot remove video comment of another user'
+    })
+    return false
+  }
+
+  return true
 }
 
 function checkUserCanApproveVideoComment (user: MUserAccountUrl, videoComment: MCommentOwnerVideoReply, res: express.Response) {
@@ -257,20 +271,15 @@ function checkUserCanApproveVideoComment (user: MUserAccountUrl, videoComment: M
     return false
   }
 
-  return checkUserCanManageVideoComment(user, videoComment, res)
-}
-
-function checkUserCanManageVideoComment (user: MUserAccountUrl, videoComment: MCommentOwnerVideoReply, res: express.Response) {
   const userAccount = user.Account
 
   if (
     user.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT) === false && // Not a moderator
-    videoComment.accountId !== userAccount.id && // Not the comment owner
     videoComment.Video.VideoChannel.accountId !== userAccount.id // Not the video owner
   ) {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot remove video comment of another user'
+      message: 'Cannot approve video comment of another user'
     })
     return false
   }

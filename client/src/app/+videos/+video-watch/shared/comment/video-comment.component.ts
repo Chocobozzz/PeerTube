@@ -132,10 +132,18 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     this.timestampClicked.emit(timestamp)
   }
 
-  canBeRemovedOrApprovedByUser () {
+  canBeRemovedUser () {
     return this.comment.account && this.isUserLoggedIn() &&
       (
         this.user.account.id === this.comment.account.id ||
+        this.user.account.id === this.video.account.id ||
+        this.user.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT)
+      )
+  }
+
+  canBeApprovedByUser () {
+    return this.comment.account && this.isUserLoggedIn() &&
+      (
         this.user.account.id === this.video.account.id ||
         this.user.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT)
       )
@@ -201,7 +209,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
     this.prependModerationActions = []
 
-    if (this.canBeRemovedOrApprovedByUser() && this.comment.heldForReview) {
+    if (this.canBeApprovedByUser() && this.comment.heldForReview) {
       this.prependModerationActions.push({
         label: $localize`Approve`,
         iconName: 'tick',
@@ -217,7 +225,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
       })
     }
 
-    if (this.canBeRemovedOrApprovedByUser()) {
+    if (this.canBeRemovedUser()) {
       this.prependModerationActions.push({
         label: $localize`Remove`,
         iconName: 'delete',
