@@ -8,7 +8,7 @@
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
   [(selection)]="selectedRows" [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
   [showCurrentPageReport]="true" [currentPageReportTemplate]="getPaginationTemplate()"
-  [expandedRowKeys]="expandedRows" [ngClass]="{ loading: loading }"
+  [expandedRowKeys]="expandedRows" [ngClass]="{ loading: loading }" (onRowExpand)="onVideoPanelOpened($event)"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
@@ -49,7 +49,7 @@
 
   <ng-template pTemplate="body" let-expanded="expanded" let-video>
 
-    <tr [pSelectableRow]="video">
+    <tr [pSelectableRow]="video" (onRowExpand)="onVideoPanelOpened(video)">
       <td class="checkbox-cell">
         <p-tableCheckbox [value]="video" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
       </td>
@@ -126,7 +126,7 @@
 
             <ul>
               <li>
-                {{ video.videoSource.inputFilename }}: {{ video.videoSource.size | bytes: 1 }}
+                <a title="Download this file" i18n-title [href]="getDownloadUrl(video, video.videoSource.fileDownloadUrl)">{{ video.videoSource.inputFilename }}</a>: {{ video.videoSource.size | bytes: 1 }}
 
                 <button
                   *ngIf="canRemoveOneFile(video)" class="border-0 p-0"
@@ -144,7 +144,7 @@
 
             <ul>
               <li *ngFor="let file of video.files">
-                <a target="_blank" rel="noopener noreferrer" [href]="file.fileUrl">{{ file.resolution.label }}</a>: {{ file.size | bytes: 1 }}
+                <a title="Download this file" i18n-title [href]="getDownloadUrl(video, file.fileDownloadUrl)">{{ file.resolution.label }}</a>: {{ file.size | bytes: 1 }}
 
                 <button
                   *ngIf="canRemoveOneFile(video)" class="border-0 p-0"
@@ -162,7 +162,7 @@
 
             <ul>
               <li *ngFor="let file of video.streamingPlaylists[0].files">
-                <a target="_blank" rel="noopener noreferrer" [href]="file.fileUrl">{{ file.resolution.label }}</a>: {{ file.size | bytes: 1 }}
+                <a title="Download this file" i18n-title [href]="getDownloadUrl(video, file.fileDownloadUrl)">{{ file.resolution.label }}</a>: {{ file.size | bytes: 1 }}
 
                 <button
                   *ngIf="canRemoveOneFile(video)" class="border-0 p-0"

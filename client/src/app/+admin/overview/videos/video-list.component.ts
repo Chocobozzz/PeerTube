@@ -3,6 +3,8 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
 import { formatICU, getAbsoluteAPIUrl } from '@app/helpers'
+import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
+import { VideoFileTokenService } from '@app/shared/shared-main/video/video-file-token.service'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoBlockComponent } from '@app/shared/shared-moderation/video-block.component'
@@ -10,8 +12,9 @@ import { VideoBlockService } from '@app/shared/shared-moderation/video-block.ser
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { getAllFiles } from '@peertube/peertube-core-utils'
 import { UserRight, VideoFile, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import { videoRequiresFileToken } from '@root-helpers/video'
 import { SharedModule, SortMeta } from 'primeng/api'
-import { TableModule } from 'primeng/table'
+import { TableModule, TableRowExpandEvent } from 'primeng/table'
 import { finalize } from 'rxjs/operators'
 import { AdvancedInputFilter, AdvancedInputFilterComponent } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
@@ -86,6 +89,8 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
 
   loading = true
 
+  private videoFileTokens: { [ videoId: number ]: string } = {}
+
   constructor (
     protected route: ActivatedRoute,
     protected router: Router,
@@ -94,7 +99,8 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
     private notifier: Notifier,
     private videoService: VideoService,
     private videoAdminService: VideoAdminService,
-    private videoBlockService: VideoBlockService
+    private videoBlockService: VideoBlockService,
+    private videoFileTokenService: VideoFileTokenService
   ) {
     super()
   }
@@ -264,6 +270,28 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
 
     return str
   }
+
+  // ---------------------------------------------------------------------------
+
+  onVideoPanelOpened (event: TableRowExpandEvent) {
+    const video = event.data as VideoDetails
+
+    if (!video.videoSource?.filename && !videoRequiresFileToken(video)) return
+
+    this.videoFileTokenService.getVideoFileToken({ videoUUID: video.uuid })
+      .subscribe(({ token }) => {
+        this.videoFileTokens[video.id] = token
+      })
+  }
+
+  getDownloadUrl (video: VideoDetails, downloadUrl: string) {
+    const token = this.videoFileTokens[video.id]
+    if (!token) return downloadUrl
+
+    return downloadUrl + `?videoFileToken=${token}`
+  }
+
+  // ---------------------------------------------------------------------------
 
   protected reloadDataInternal () {
     this.loading = true
