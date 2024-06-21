@@ -13,7 +13,7 @@
     <ng-container *ngFor="let actions of getActions()">
 
       <ng-container *ngFor="let action of actions">
-        <div [ngClass]="action.class" *ngIf="action.isDisplayed === undefined || action.isDisplayed(entry) === true">
+        <div [ngClass]="action.class" *ngIf="isBlockDisplayed(actions, action, entry)">
 
           <ng-template #templateActionLabel let-action>
             <my-global-icon *ngIf="action.iconName" [iconName]="action.iconName" [ngClass]="'icon-' + action.iconName" aria-hidden="true"></my-global-icon>

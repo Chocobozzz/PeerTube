@@ -80,4 +80,11 @@ export class ActionDropdownComponent<T> {
       return a.isHeader !== true && (a.isDisplayed === undefined || a.isDisplayed(entry))
     })
   }
+
+  isBlockDisplayed (allActions: (DropdownAction<T> | DropdownAction<T>[])[], action: DropdownAction<T>, entry: T) {
+    // Do not display only the header
+    if (action.isHeader && !this.areActionsDisplayed(allActions, entry)) return false
+
+    return action.isDisplayed === undefined || action.isDisplayed(entry) === true
+  }
 }
