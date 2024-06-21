@@ -15,7 +15,7 @@
     "@types/follow-redirects": "1.14.4",
     "env-paths": "^3.0.0",
     "follow-redirects": "^1.15.5",
-    "pino": "^8.11.0",
-    "pino-pretty": "^10.0.0"
+    "pino": "^9.2.0",
+    "pino-pretty": "^11.2.1"
   }
 }

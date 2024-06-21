@@ -22,7 +22,5 @@
     "url": "https://github.com/Chocobozzz/PeerTube/issues"
   },
   "homepage": "https://github.com/Chocobozzz/PeerTube#readme",
-  "dependencies": {
-    "jschannel": "^1.0.2"
-  }
+  "dependencies": {}
 }
