@@ -40,7 +40,7 @@ export class PluginPagesComponent implements OnDestroy, AfterViewInit {
     if (!a) return
 
     // Get the href attribute set by the dev, not the one calculated by JS to detect if it's a relative/external link
-    const href = a.getAttribute('href')
+    const href = a.getAttribute('href') || ''
 
     if (!a.target && href.startsWith('/')) {
       event.preventDefault()
