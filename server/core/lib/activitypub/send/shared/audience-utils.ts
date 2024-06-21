@@ -59,7 +59,7 @@ export async function getActorsInvolvedInVideo (video: MVideoId, t: Transaction)
     ? alreadyLoadedActor
     : await ActorModel.loadAccountActorFollowerUrlByVideoId(video.id, t)
 
-  actors.push(videoActor)
+  if (videoActor) actors.push(videoActor)
 
   return actors
 }
