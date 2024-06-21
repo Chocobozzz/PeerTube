@@ -1,5 +1,5 @@
 import { join } from 'path'
-import Piscina from 'piscina'
+import { Piscina } from 'piscina'
 import { JOB_CONCURRENCY, WORKER_THREADS } from '@server/initializers/constants.js'
 import type httpBroadcast from './workers/http-broadcast.js'
 import type downloadImage from './workers/image-downloader.js'

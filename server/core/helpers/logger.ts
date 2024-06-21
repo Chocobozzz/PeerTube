@@ -1,5 +1,4 @@
-import { context } from '@opentelemetry/api'
-import { getSpanContext } from '@opentelemetry/api/build/src/trace/context-utils.js'
+import { context, trace } from '@opentelemetry/api'
 import { omit } from '@peertube/peertube-core-utils'
 import { stat } from 'fs/promises'
 import { join } from 'path'
@@ -62,9 +61,9 @@ function buildLogger (labelSuffix?: string) {
   return createLogger({
     level: process.env.LOGGER_LEVEL ?? CONFIG.LOG.LEVEL,
     defaultMeta: {
-      get traceId () { return getSpanContext(context.active())?.traceId },
-      get spanId () { return getSpanContext(context.active())?.spanId },
-      get traceFlags () { return getSpanContext(context.active())?.traceFlags }
+      get traceId () { return trace.getSpanContext(context.active())?.traceId },
+      get spanId () { return trace.getSpanContext(context.active())?.spanId },
+      get traceFlags () { return trace.getSpanContext(context.active())?.traceFlags }
     },
     format: format.combine(
       labelFormatter(labelSuffix),

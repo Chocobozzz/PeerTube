@@ -10,7 +10,7 @@ import { Transaction } from 'sequelize'
 
 const lTags = loggerTagsFactory('automatic-tags')
 
-const linkifyit = Linkifyit()
+const linkifyit = new Linkifyit()
 
 export class AutomaticTagger {
 

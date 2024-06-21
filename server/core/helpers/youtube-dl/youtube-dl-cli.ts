@@ -1,4 +1,4 @@
-import { execa, NodeOptions as ExecaNodeOptions } from 'execa'
+import { execa, Options as ExecaNodeOptions } from 'execa'
 import { ensureDir, pathExists } from 'fs-extra/esm'
 import { writeFile } from 'fs/promises'
 import { OptionsOfBufferResponseBody } from 'got'
@@ -8,6 +8,8 @@ import { CONFIG } from '@server/initializers/config.js'
 import { logger, loggerTagsFactory } from '../logger.js'
 import { getProxy, isProxyEnabled } from '../proxy.js'
 import { isBinaryResponse, peertubeGot } from '../requests.js'
+
+type ProcessOptions = Pick<ExecaNodeOptions, 'cwd' | 'maxBuffer'>
 
 const lTags = loggerTagsFactory('youtube-dl')
 
@@ -111,7 +113,7 @@ export class YoutubeDLCLI {
     url: string
     format: string
     output: string
-    processOptions: ExecaNodeOptions
+    processOptions: ProcessOptions
     timeout?: number
     additionalYoutubeDLArgs?: string[]
   }) {
@@ -129,7 +131,7 @@ export class YoutubeDLCLI {
   async getInfo (options: {
     url: string
     format: string
-    processOptions: ExecaNodeOptions
+    processOptions: ProcessOptions
     additionalYoutubeDLArgs?: string[]
   }) {
     const { url, format, additionalYoutubeDLArgs = [], processOptions } = options
@@ -149,7 +151,7 @@ export class YoutubeDLCLI {
   async getListInfo (options: {
     url: string
     latestVideosCount?: number
-    processOptions: ExecaNodeOptions
+    processOptions: ProcessOptions
   }): Promise<{ upload_date: string, webpage_url: string }[]> {
     const additionalYoutubeDLArgs = [ '--skip-download', '--playlist-reverse' ]
 
@@ -178,7 +180,7 @@ export class YoutubeDLCLI {
   async getSubs (options: {
     url: string
     format: 'vtt'
-    processOptions: ExecaNodeOptions
+    processOptions: ProcessOptions
   }) {
     const { url, format, processOptions } = options
 
@@ -204,7 +206,7 @@ export class YoutubeDLCLI {
     url: string
     args: string[]
     timeout?: number
-    processOptions: ExecaNodeOptions
+    processOptions: ProcessOptions
   }) {
     const { url, args, timeout, processOptions } = options
 
@@ -216,7 +218,7 @@ export class YoutubeDLCLI {
     const subProcess = execa(PYTHON_PATH, [ youtubeDLBinaryPath, ...completeArgs, url ], processOptions)
 
     if (timeout) {
-      setTimeout(() => subProcess.cancel(), timeout)
+      setTimeout(() => subProcess.kill(), timeout)
     }
 
     const output = await subProcess
