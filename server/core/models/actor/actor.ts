@@ -354,7 +354,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     const options = {
       type: QueryTypes.SELECT as QueryTypes.SELECT,
       replacements: { videoId },
-      plain: true as true,
+      plain: true,
       transaction
     }
 

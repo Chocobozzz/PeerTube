@@ -52,7 +52,7 @@ export function getFileAttributesFromUrl (
   videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
   urls: (ActivityTagObject | ActivityUrlObject)[]
 ) {
-  const fileUrls = urls.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
+  const fileUrls = urls.filter(u => isAPVideoUrlObject(u))
   if (fileUrls.length === 0) return []
 
   const attributes: FilteredModelAttributes<VideoFileModel>[] = []
@@ -107,14 +107,14 @@ export function getFileAttributesFromUrl (
 }
 
 export function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject: VideoObject) {
-  const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u)) as ActivityPlaylistUrlObject[]
+  const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u))
   if (playlistUrls.length === 0) return []
 
   const attributes: (FilteredModelAttributes<VideoStreamingPlaylistModel> & { tagAPObject?: ActivityTagObject[] })[] = []
   for (const playlistUrlObject of playlistUrls) {
     const segmentsSha256UrlObject = playlistUrlObject.tag.find(isAPPlaylistSegmentHashesUrlObject)
 
-    const files: unknown[] = playlistUrlObject.tag.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
+    const files: unknown[] = playlistUrlObject.tag.filter(u => isAPVideoUrlObject(u))
 
     const attribute = {
       type: VideoStreamingPlaylistType.HLS,

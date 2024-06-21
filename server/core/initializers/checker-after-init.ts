@@ -1,10 +1,11 @@
-import config from 'config'
-import { readFileSync, writeFileSync } from 'fs'
-import { URL } from 'url'
 import { uniqify } from '@peertube/peertube-core-utils'
 import { getFFmpegVersion } from '@peertube/peertube-ffmpeg'
-import { RecentlyAddedStrategy, VideoRedundancyConfigFilter } from '@peertube/peertube-models'
+import { VideoRedundancyConfigFilter } from '@peertube/peertube-models'
 import { isProdInstance } from '@peertube/peertube-node-utils'
+import config from 'config'
+import { readFileSync, writeFileSync } from 'fs'
+import { basename } from 'path'
+import { URL } from 'url'
 import { parseBytes, parseSemVersion } from '../helpers/core-utils.js'
 import { isArray } from '../helpers/custom-validators/misc.js'
 import { logger } from '../helpers/logger.js'
@@ -13,7 +14,6 @@ import { OAuthClientModel } from '../models/oauth/oauth-client.js'
 import { UserModel } from '../models/user/user.js'
 import { CONFIG, getLocalConfigFilePath, isEmailEnabled, reloadConfig } from './config.js'
 import { WEBSERVER } from './constants.js'
-import { basename } from 'path'
 
 async function checkActivityPubUrls () {
   const actor = await getServerActor()
@@ -101,12 +101,8 @@ async function checkFFmpegVersion () {
 // ---------------------------------------------------------------------------
 
 export {
-  checkConfig,
-  clientsExist,
-  checkFFmpegVersion,
-  usersExist,
   applicationExist,
-  checkActivityPubUrls
+  checkActivityPubUrls, checkConfig, checkFFmpegVersion, clientsExist, usersExist
 }
 
 // ---------------------------------------------------------------------------
@@ -194,7 +190,7 @@ function checkLocalRedundancyConfig () {
       throw new Error('Redundancy video entries should have unique strategies')
     }
 
-    const recentlyAddedStrategy = redundancyVideos.find(r => r.strategy === 'recently-added') as RecentlyAddedStrategy
+    const recentlyAddedStrategy = redundancyVideos.find(r => r.strategy === 'recently-added')
     if (recentlyAddedStrategy && isNaN(recentlyAddedStrategy.minViews)) {
       throw new Error('Min views in recently added strategy is not a number')
     }
