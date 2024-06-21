@@ -34,16 +34,15 @@ export class PluginPagesComponent implements OnDestroy, AfterViewInit {
 
   onRootClick (event: Event) {
     const target = event.target as HTMLElement
-
     if (!target) return
-    if (target.tagName !== 'A') return
 
-    const a = target as HTMLAnchorElement
+    const a = target.closest('a')
+    if (!a) return
 
     // Get the href attribute set by the dev, not the one calculated by JS to detect if it's a relative/external link
     const href = a.getAttribute('href')
 
-    if (a.target !== '_blank' && href.startsWith('/')) {
+    if (!a.target && href.startsWith('/')) {
       event.preventDefault()
       event.stopPropagation()
 
