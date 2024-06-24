@@ -76,7 +76,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function addVideoLegacy (req: express.Request, res: express.Response) {
-    const videoPhysicalFile = req.files['videofile'][0]
+  const videoPhysicalFile = req.files['videofile'][0]
   const videoInfo: VideoCreate = req.body
   const files = req.files
 
