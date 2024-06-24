@@ -1,4 +1,4 @@
-import * as debug from 'debug'
+import debug from 'debug'
 import { Observable, Subject } from 'rxjs'
 import { filter, first, map } from 'rxjs/operators'
 import { Injectable } from '@angular/core'

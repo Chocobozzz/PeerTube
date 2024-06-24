@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-implied-eval */
-import * as debug from 'debug'
+import debug from 'debug'
 import { firstValueFrom, ReplaySubject } from 'rxjs'
 import { first, shareReplay } from 'rxjs/operators'
 import { RegisterClientHelpers } from 'src/types/register-client-option.model'

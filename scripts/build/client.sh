@@ -62,7 +62,7 @@ if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); t
     for key in "${!languages[@]}"; do
         lang=${languages[$key]}
 
-        mv "dist/build/$key" "dist/$lang"
+        mv "dist/build/browser/$key" "dist/$lang"
 
         if [ "$lang" != "en-US" ]; then
             # Do not duplicate assets
@@ -72,21 +72,20 @@ if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); t
 
     mv "./dist/$defaultLanguage/assets" "./dist"
 
-    rmdir "dist/build"
+    rm -r "dist/build"
+    cp "./dist/$defaultLanguage/manifest.webmanifest" "./dist/manifest.webmanifest"
 else
     additionalParams=""
     if [ ! -z ${1+x} ] && [ "$1" == "--analyze-bundle" ]; then
         additionalParams="--named-chunks=true --output-hashing=none"
 
-        # For webpack
+        # For Vite
         export ANALYZE_BUNDLE=true
     fi
 
     node --max_old_space_size=8192 node_modules/.bin/ng build --localize=false --output-path "dist/$defaultLanguage/" \
                                                               --configuration production --stats-json $additionalParams
 fi
-
-cp "./dist/$defaultLanguage/manifest.webmanifest" "./dist/manifest.webmanifest"
 
 cd ../ && npm run build:embed && cd client/
 

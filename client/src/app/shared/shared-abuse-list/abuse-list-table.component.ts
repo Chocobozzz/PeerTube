@@ -1,4 +1,4 @@
-import * as debug from 'debug'
+import debug from 'debug'
 import { SortMeta, SharedModule } from 'primeng/api'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'

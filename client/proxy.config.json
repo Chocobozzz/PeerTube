@@ -31,15 +31,5 @@
   "/client/locales": {
     "target": "http://127.0.0.1:9000",
     "secure": false
-  },
-  "/!(client)**": {
-    "target": "http://127.0.0.1:3000/client/index.html",
-    "secure": false,
-    "logLevel": "debug"
-  },
-  "/!(client)**/**": {
-    "target": "http://127.0.0.1:3000/client/index.html",
-    "secure": false,
-    "logLevel": "debug"
   }
 }

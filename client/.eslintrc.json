@@ -28,7 +28,6 @@
         "lines-between-class-members": "off",
         "@typescript-eslint/lines-between-class-members": [ "off" ],
         "arrow-body-style": "off",
-        "import/no-webpack-loader-syntax": "off",
         "no-underscore-dangle": "off",
         "n/no-callback-literal": "off",
         "@angular-eslint/component-selector": [

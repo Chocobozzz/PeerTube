@@ -4,7 +4,7 @@
   "version": "0.0.7",
   "description": "API to communicate with the PeerTube player embed",
   "scripts": {
-    "build": "../../../node_modules/.bin/tsc && ../../../node_modules/.bin/webpack --mode production --config ./webpack.config.js"
+    "build": "rm -rf ./build ./dist && ../../../node_modules/.bin/tsc && ../../../node_modules/.bin/vite build --mode production --config ./vite.config.mjs"
   },
   "repository": {
     "type": "git",

@@ -1,4 +1,4 @@
-import * as debug from 'debug'
+import debug from 'debug'
 import { Observable } from 'rxjs'
 import { Injectable } from '@angular/core'
 import { ConfirmService } from '@app/core/confirm'

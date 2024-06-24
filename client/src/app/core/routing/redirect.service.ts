@@ -1,4 +1,4 @@
-import * as debug from 'debug'
+import debug from 'debug'
 import { Injectable } from '@angular/core'
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router'
 import { logger } from '@root-helpers/logger'

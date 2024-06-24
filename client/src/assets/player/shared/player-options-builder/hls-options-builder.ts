@@ -1,5 +1,5 @@
 import { HybridLoaderSettings } from '@peertube/p2p-media-loader-core'
-import { HlsJsEngineSettings } from '@peertube/p2p-media-loader-hlsjs'
+import { Engine, HlsJsEngineSettings } from '@peertube/p2p-media-loader-hlsjs'
 import { LiveVideoLatencyMode } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
@@ -17,10 +17,7 @@ type ConstructorOptions =
 
 export class HLSOptionsBuilder {
 
-  constructor (
-    private options: ConstructorOptions,
-    private p2pMediaLoaderModule?: any
-  ) {
+  constructor (private options: ConstructorOptions) {
 
   }
 
@@ -50,7 +47,7 @@ export class HLSOptionsBuilder {
       'filter:internal.player.p2p-media-loader.options.result',
       this.getP2PMediaLoaderOptions({ redundancyUrlManager, segmentValidator })
     )
-    const loader = new this.p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass() as P2PMediaLoader
+    const loader = new Engine(p2pMediaLoaderConfig).createLoaderClass() as unknown as P2PMediaLoader
 
     const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
       requiresUserAuth: this.options.requiresUserAuth,
@@ -212,7 +209,8 @@ export class HLSOptionsBuilder {
       backBufferLength: 90,
       startLevel: -1,
       testBandwidth: false,
-      debug: false
+      debug: false,
+      enableWorker: false
     }
   }
 

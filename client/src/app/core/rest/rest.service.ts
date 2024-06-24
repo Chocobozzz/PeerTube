@@ -1,4 +1,4 @@
-import * as debug from 'debug'
+import debug from 'debug'
 import { SortMeta } from 'primeng/api'
 import { HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'

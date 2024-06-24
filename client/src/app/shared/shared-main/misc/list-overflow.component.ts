@@ -15,7 +15,7 @@ import {
 } from '@angular/core'
 import { ScreenService } from '@app/core'
 import { NgbDropdown, NgbModal, NgbDropdownAnchor, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
-import * as debug from 'debug'
+import debug from 'debug'
 import { RouterLinkActive, RouterLink } from '@angular/router'
 import { NgFor, NgTemplateOutlet, NgIf, NgClass, SlicePipe } from '@angular/common'
 

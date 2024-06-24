@@ -1,4 +1,4 @@
-import * as debug from 'debug'
+import debug from 'debug'
 import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
 import { catchError, filter, map, switchMap, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'

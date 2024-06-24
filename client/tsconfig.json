@@ -1,19 +1,18 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "downlevelIteration": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
     "module": "es2020",
+    "esModuleInterop": true,
     "experimentalDecorators": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
     "allowJs": true,
     "importHelpers": true,
-    "allowSyntheticDefaultImports": true,
     "strictBindCallApply": true,
     "target": "ES2022",
     "typeRoots": [
@@ -43,9 +42,6 @@
       ],
       "fs": [
         "src/shims/noop.ts"
-      ],
-      "path": [
-        "src/shims/path.ts"
       ],
       "crypto": [
         "src/shims/noop.ts"

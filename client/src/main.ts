@@ -1,31 +1,32 @@
-import { ApplicationRef, enableProdMode, APP_INITIALIZER, importProvidersFrom } from '@angular/core'
-import { enableDebugTools, BrowserModule, bootstrapApplication } from '@angular/platform-browser'
-import { environment } from './environments/environment'
-import { logger } from './root-helpers'
-import { AppComponent } from './app/app.component'
-import routes from './app/app.routes'
-import { ServiceWorkerModule } from '@angular/service-worker'
-import { polyfillICU } from './app/helpers'
-import { tap } from 'rxjs/operators'
-import {
-  ServerService,
-  PluginService,
-  RedirectService, PreloadSelectedModulesList,
-  MenuGuards,
-  CustomReuseStrategy,
-  getCoreProviders
-} from './app/core'
 import { APP_BASE_HREF, registerLocaleData } from '@angular/common'
-import localeOc from '@app/helpers/locales/oc'
-import { RouteReuseStrategy, provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router'
 import { provideHttpClient } from '@angular/common/http'
+import { APP_INITIALIZER, ApplicationRef, enableProdMode, importProvidersFrom, provideZoneChangeDetection } from '@angular/core'
+import { BrowserModule, bootstrapApplication, enableDebugTools } from '@angular/platform-browser'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { RouteReuseStrategy, provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router'
+import { ServiceWorkerModule } from '@angular/service-worker'
+import localeOc from '@app/helpers/locales/oc'
+import { getFormProviders } from '@app/shared/shared-forms/shared-form-providers'
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarModule } from '@ngx-loading-bar/core'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { ToastModule } from 'primeng/toast'
+import { tap } from 'rxjs/operators'
+import { AppComponent } from './app/app.component'
+import routes from './app/app.routes'
+import {
+  CustomReuseStrategy,
+  MenuGuards,
+  PluginService,
+  PreloadSelectedModulesList,
+  RedirectService,
+  ServerService,
+  getCoreProviders
+} from './app/core'
+import { polyfillICU } from './app/helpers'
 import { getMainProviders } from './app/shared/shared-main/main-providers'
-import { getFormProviders } from '@app/shared/shared-forms/shared-form-providers'
+import { environment } from './environments/environment'
+import { logger } from './root-helpers'
 
 registerLocaleData(localeOc, 'oc')
 
@@ -51,6 +52,8 @@ logger.registerServerSending(environment.apiUrl)
 
 const bootstrap = () => bootstrapApplication(AppComponent, {
   providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+
     importProvidersFrom(
       BrowserModule,
       BrowserAnimationsModule,

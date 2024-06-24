@@ -23,7 +23,7 @@ import { LoginLinkComponent } from '@app/shared/shared-main/angular/login-link.c
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
 import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig, ServerConfig, UserRight, UserRightType, VideoConstant } from '@peertube/peertube-models'
-import * as debug from 'debug'
+import debug from 'debug'
 import { forkJoin, Subscription } from 'rxjs'
 import { first, switchMap } from 'rxjs/operators'
 import { LanguageChooserComponent } from './language-chooser.component'

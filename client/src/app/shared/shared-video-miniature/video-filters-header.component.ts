@@ -1,4 +1,4 @@
-import * as debug from 'debug'
+import debug from 'debug'
 import { Subscription } from 'rxjs'
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'

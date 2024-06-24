@@ -1,4 +1,4 @@
-import * as debug from 'debug'
+import debug from 'debug'
 import { pairwise } from 'rxjs'
 import { ViewportScroller } from '@angular/common'
 import { Injectable } from '@angular/core'

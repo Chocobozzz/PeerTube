@@ -35,7 +35,7 @@ export class PageHtml {
   static async getEmbedHTML () {
     const path = this.getEmbedHTMLPath()
 
-    // Disable HTML cache in dev mode because webpack can regenerate JS files
+    // Disable HTML cache in dev mode because Vite can regenerate JS files
     if (!isTestOrDevInstance() && this.htmlCache[path]) {
       return this.htmlCache[path]
     }

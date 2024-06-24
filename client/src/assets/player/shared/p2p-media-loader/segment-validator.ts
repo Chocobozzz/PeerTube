@@ -1,4 +1,3 @@
-import { basename } from 'path'
 import { Segment } from '@peertube/p2p-media-loader-core'
 import { logger } from '@root-helpers/logger'
 import { wait } from '@root-helpers/utils'
@@ -32,7 +31,7 @@ export class SegmentValidator {
 
     this.loadSha256SegmentsPromiseIfNeeded()
 
-    const filename = basename(removeQueryParams(segment.url))
+    const filename = removeQueryParams(segment.url).split('/').pop()
 
     const segmentValue = (await this.segmentJSONPromise)[filename]
 

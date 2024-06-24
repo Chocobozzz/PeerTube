@@ -1,4 +1,4 @@
-import * as debug from 'debug'
+import debug from 'debug'
 import { Subject } from 'rxjs'
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'

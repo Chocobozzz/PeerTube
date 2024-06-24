@@ -276,7 +276,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (this.serverConfig.instance.customizations.javascript) {
       try {
         /* eslint-disable no-eval */
-        eval(this.serverConfig.instance.customizations.javascript)
+        window.eval(this.serverConfig.instance.customizations.javascript)
       } catch (err) {
         logger.error('Cannot eval custom JavaScript.', err)
       }

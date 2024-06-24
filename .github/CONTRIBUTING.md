@@ -192,7 +192,7 @@ npm run dev
 
 ### Embed
 
-The embed is a standalone application built using Webpack.
+The embed is a standalone application built using Vite.
 The generated files (HTML entrypoint and multiple JS and CSS files) are served by the PeerTube server (behind `localhost:9000/videos/embed/:videoUUID` or `localhost:9000/video-playlists/embed/:playlistUUID`).
 The following command will compile embed files and run the PeerTube server:
 

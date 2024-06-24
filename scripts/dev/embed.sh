@@ -5,5 +5,5 @@ set -eu
 npm run build:server
 
 npm run concurrently -- -k \
-  "cd client && npm run webpack -- --config webpack/webpack.video-embed.js --mode development --watch" \
+  "cd client && ./node_modules/.bin/vite -c ./src/standalone/videos/vite.config.mjs build -w --mode=development" \
   "NODE_ENV=dev npm start"

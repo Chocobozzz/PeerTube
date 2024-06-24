@@ -20,6 +20,7 @@ import { WebVideoPlugin } from '../shared/web-video/web-video-plugin'
 import { PlayerMode } from './peertube-player-options'
 import { SegmentValidator } from '../shared/p2p-media-loader/segment-validator'
 import { ChaptersPlugin } from '../shared/control-bar/chapters-plugin'
+import { ContextMenuPlugin } from '../shared/context-menu'
 
 declare module 'video.js' {
 
@@ -51,7 +52,7 @@ declare module 'video.js' {
 
     peertubeResolutions (): PeerTubeResolutionsPlugin
 
-    contextmenuUI (options?: any): any
+    contextMenu (options?: ContextMenuPluginOptions): ContextMenuPlugin
 
     bezels (): BezelsPlugin
     peertubeMobile (): PeerTubeMobilePlugin
@@ -139,6 +140,19 @@ type MetricsPluginOptions = {
   metricsUrl: () => string
   metricsInterval: () => number
   videoUUID: () => string
+}
+
+type ContextMenuPluginOptions = {
+  content: () => {
+    icon?: string
+    label: string
+    listener: () => void
+  }[]
+}
+
+type ContextMenuItemOptions = {
+  listener: (e: videojs.EventTarget.Event) => void
+  label: string
 }
 
 type StoryboardOptions = {
@@ -294,8 +308,10 @@ export {
   PeerTubePluginOptions,
   WebVideoPluginOptions,
   P2PMediaLoaderPluginOptions,
+  ContextMenuItemOptions,
   PeerTubeResolution,
   VideoJSPluginOptions,
+  ContextMenuPluginOptions,
   UpNextPluginOptions,
   LoadedQualityData,
   StoryboardOptions,
